@@ -2,36 +2,47 @@ syntax = "proto3";
 
 package ag.ros;
 
-import "PointField.proto";
 import "Header.proto";
 
 /**
- * This message holds a collection of N-dimensional points, which may
- * contain additional information such as normals, intensity, etc. The
- * point data is stored as a binary blob, its layout described by the
- * contents of the "fields" array.
- *
- * The point cloud data may be organized 2d (image-like) or 1d
- * (unordered). Point clouds organized as 2d images may be produced by
- * camera depth sensors such as stereo or time-of-flight.
- *
- * Time of sensor data acquisition, and the coordinate frame ID (for 3d
- * points).
+ * This message contains an uncompressed image
+ * (0, 0) is at top-left corner of image
  */
 
-message PointCloud2 {
+message Image {
+
+  /*
+   * Header timestamp should be acquisition time of image
+   * Header frame_id should be optical frame of camera
+   * origin of frame should be optical center of camera
+   * +x should point to the right in the image
+   * +y should point down in the image
+   * +z should point into to plane of the image
+   * If the frame_id here and the frame_id of the CameraInfo
+   * message associated with the image conflict
+   * the behavior is undefined
+   */
   ag.ros.Header header = 1;
 
+  // image height, that is, number of rows
   uint32 height = 2;
+
+  // image width, that is, number of columns
   uint32 width = 3;
 
-  repeated ag.ros.PointField fields = 4;
+  /*
+   * Encoding of pixels -- channel meaning, ordering, size, e.g. rgb8, rgba8, bgr8, bgra8, mono8, mono16
+   * see http://docs.ros.org/en/diamondback/api/sensor_msgs/html/image__encodings_8cpp_source.html
+   */
+  string encoding = 4;
 
+  // is this data bigendian?
   bool is_bigendian = 5;
-  uint32 point_step = 6;
+
+  // Full row length in bytes
+  uint32 step = 6;
   uint32 row_step = 7;
 
-  // the point cloud data
+  // actual matrix data, size is (step * rows)
   bytes data = 8;
-  bool is_dense = 9;
 }
