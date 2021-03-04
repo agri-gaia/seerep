@@ -11,9 +11,10 @@ include_directories(
 PROTOBUF_GENERATE_CPP(
 	PROTO_SRC PROTO_HEADER 
 	
-	proto_msgs/Header.proto 
-	proto_msgs/PointField.proto
-	proto_msgs/PointCloud2.proto
+	proto/Header.proto
+	proto/PointField.proto
+	proto/PointCloud2.proto
+	proto/Image.proto
 )
 
 add_library(${PROJECT_NAME}
