@@ -1,18 +1,20 @@
 #ifndef AGRI_GAIA_ROS_CONVERSIONS
 #define AGRI_GAIA_ROS_CONVERSIONS
 
+// ROS messages
 #include <std_msgs/Header.h>
-#include "Header.pb.h"
-
 #include <sensor_msgs/PointField.h>
-#include "PointField.pb.h"
-
 #include <sensor_msgs/PointCloud2.h>
-#include "PointCloud2.pb.h"
+#include <sensor_msgs/Image.h>
+
+// Agri-Gaia messages
+#include <agri_gaia_msgs/Header.pb.h>
+#include <agri_gaia_msgs/PointField.pb.h>
+#include <agri_gaia_msgs/PointCloud2.pb.h>
+#include <agri_gaia_msgs/Image.pb.h>
 
 namespace agri_gaia_ros
 {
-
   /**
    * @brief Converts a ROS std_msgs/Header message to the corresponding
    * Protobuf Header message
@@ -61,6 +63,21 @@ namespace agri_gaia_ros
    */
   sensor_msgs::PointCloud2 toROS(const ag::ros::PointCloud2& cloud);
 
+  /**
+   * @brief Converts a ROS sensor_msgs/Image message to the corresponding
+   * Protobuf Image message
+   * @param image sensor_msgs/Image
+   * @return Protobuf Image message
+   */
+  ag::ros::Image toProto(const sensor_msgs::Image& image);
+
+  /**
+   * @brief Converts a Protobuf Image message to the corresponding
+   * ROS sensor_msgs/Image message
+   * @param cloud Protobuf Image
+   * @return ROS std_sensor_msgs/Image
+   */
+  sensor_msgs::Image toROS(const ag::ros::Image& image);
 } /* namespace agri_gaia_ros */
 
 #endif /* AGRI_GAIA_ROS_CONVERSIONS */

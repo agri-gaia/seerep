@@ -83,5 +83,33 @@ namespace agri_gaia_ros
     return ret;
   }
 
+  /*
+   * Image
+   */
+  ag::ros::Image toProto(const sensor_msgs::Image& image)
+  {
+    ag::ros::Image ret;
+    *ret.mutable_header() = toProto(image.header);
+    ret.set_height(image.height);
+    ret.set_width(image.width);
+    ret.set_encoding(image.encoding);
+    ret.set_is_bigendian(image.is_bigendian);
+    ret.set_step(image.step);
+    ret.set_data(&image.data.front(), image.data.size());
+    return ret;
+  }
+
+  sensor_msgs::Image toROS(const ag::ros::Image& image)
+  {
+    sensor_msgs::Image ret;
+    ret.header = toROS(image.header());
+    ret.height = image.height();
+    ret.width = image.width();
+    ret.encoding = image.encoding();
+    ret.is_bigendian = image.is_bigendian();
+    ret.step = image.step();
+    std::copy(image.data().begin(), image.data().end(), std::back_inserter(ret.data));
+    return ret;
+  }
 
 } /* namespace agri_gaia_ros */
