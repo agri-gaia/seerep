@@ -10,9 +10,9 @@
 
   <author email="spuetz@uos.de">Sebastian Pütz</author>
 
-  <build_depend>std_msgs</build_depend>
-  <build_depend>geometry_msgs</build_depend>
-  <build_depend>sensor_msgs</build_depend>
+  <depend>std_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>sensor_msgs</depend>
   <buildtool_depend>catkin</buildtool_depend>
 
 </package>

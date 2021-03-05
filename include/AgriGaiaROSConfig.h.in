@@ -1,0 +1,8 @@
+#ifndef AGRI_GAIA_ROS_CONFIG_H_
+#define AGRI_GAIA_ROS_CONFIG_H_
+
+// the configured options and settings for AgriGaiaROS
+#define AgriGaiaROS_VERSION_MAJOR @agri_gaia_ros_VERSION_MAJOR@
+#define AgriGaiaROS_VERSION_MINOR @agri_gaia_ros_VERSION_MINOR@
+
+#endif // AGRI_GAIA_ROS_CONFIG_H_
