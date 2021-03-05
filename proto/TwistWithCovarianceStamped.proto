@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package ag.ros;
+
+import "Header.proto";
+import "TwistWithCovariance.proto";
+
+message TwistWithCovarianceStamped{
+  Header header = 1;
+  TwistWithCovariance twist = 2;
+}

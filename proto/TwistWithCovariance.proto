@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package ag.ros;
+
+import "Twist.proto";
+
+/**
+ * This expresses velocity in free space with uncertainty.
+ */
+message TwistWithCovariance{
+  Twist twist = 1;
+
+  /*
+   * Row-major representation of the 6x6 covariance matrix
+   * The orientation parameters use a fixed-axis representation.
+   * In order, the parameters are: x, y, z, roll (x), pitch (y), yaw (z)
+   */
+  repeated double covariance = 2;
+}

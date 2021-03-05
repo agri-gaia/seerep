@@ -29,6 +29,8 @@ PROTOBUF_GENERATE_CPP(
 	proto/TransformStamped.proto
 	proto/Twist.proto
 	proto/TwistStamped.proto
+	proto/TwistWithCovariance.proto
+	proto/TwistWithCovarianceStamped.proto
 )
 
 add_library(${PROJECT_NAME}
