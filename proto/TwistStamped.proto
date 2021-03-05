@@ -3,9 +3,9 @@ syntax = "proto3";
 package ag.ros;
 
 import "Header.proto";
-import "Pose.proto";
+import "Twist.proto";
 
-message PoseStamped{
+message TwistStamped{
   Header header = 1;
-  Pose pose = 2;
+  Twist twist = 2;
 }
