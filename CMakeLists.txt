@@ -25,6 +25,8 @@ PROTOBUF_GENERATE_CPP(
 	proto/PoseStamped.proto
 	proto/Polygon.proto
 	proto/PolygonStamped.proto
+	proto/Transform.proto
+	proto/TransformStamped.proto
 )
 
 add_library(${PROJECT_NAME}

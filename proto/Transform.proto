@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package ag.ros;
+
+import "Vector3.proto";
+import "Quaternion.proto";
+
+message Transform{
+  Vector3 translation = 1;
+  Quaternion rotation = 2;
+}
