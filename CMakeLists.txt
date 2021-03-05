@@ -17,6 +17,8 @@ PROTOBUF_GENERATE_CPP(
 	proto/Image.proto
 	proto/Vector3.proto
 	proto/Vector3Stamped.proto
+	proto/Quaternion.proto
+	proto/QuaternionStamped.proto
 )
 
 add_library(${PROJECT_NAME}
