@@ -15,6 +15,8 @@ PROTOBUF_GENERATE_CPP(
 	proto/PointField.proto
 	proto/PointCloud2.proto
 	proto/Image.proto
+	proto/Vector3.proto
+	proto/Vector3Stamped.proto
 )
 
 add_library(${PROJECT_NAME}

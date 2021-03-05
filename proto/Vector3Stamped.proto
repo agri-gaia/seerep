@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package ag.ros;
+
+import "Header.proto";
+import "Vector3.proto";
+
+message Vector3Stamped{
+  Header header = 1;
+  Vector3 vector = 2;
+}
