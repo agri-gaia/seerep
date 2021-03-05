@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package ag.ros;
+
+import "Header.proto";
+import "Point.proto";
+
+message PointStamped{
+  Header header = 1;
+  Point point = 2;
+}
