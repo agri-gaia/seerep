@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package ag.ros;
+
+import "Point.proto";
+import "Quaternion.proto";
+
+message Pose{
+  Point position = 1;
+  Quaternion orientation = 2;
+}

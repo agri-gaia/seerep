@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package ag.ros;
+
+import "Header.proto";
+import "Pose.proto";
+
+message QuaternionStamped{
+  Header header = 1;
+  Pose pose = 2;
+}

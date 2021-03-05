@@ -21,6 +21,8 @@ PROTOBUF_GENERATE_CPP(
 	proto/PointStamped.proto
 	proto/Quaternion.proto
 	proto/QuaternionStamped.proto
+	proto/Pose.proto
+	proto/PoseStamped.proto
 )
 
 add_library(${PROJECT_NAME}
