@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package ag.ros;
+
+import "Point.proto";
+
+message Polygon {
+  repeated ag.ros.Point points = 1;
+}

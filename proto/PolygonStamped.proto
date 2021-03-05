@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package ag.ros;
+
+import "Header.proto";
+import "Polygon.proto";
+
+message PolygonStamped{
+  Header header = 1;
+  Polygon polygon = 2;
+}
