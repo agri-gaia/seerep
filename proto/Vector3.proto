@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package ag.ros;
+package ag;
 
 message Vector3{
   double x = 1;

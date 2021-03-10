@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package ag.ros;
+package ag;
 
 import "Vector3.proto";
 

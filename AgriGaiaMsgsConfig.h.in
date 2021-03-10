@@ -1,8 +1,0 @@
-#ifndef AgriGaiaMsgs_CONFIG_H_
-#define AgriGaiaMsgs_CONFIG_H_
-
-// the configured options and settings for AgriGaiaMsgs
-#define AgriGaiaMsgs_VERSION_MAJOR @AgriGaiaMsgs_VERSION_MAJOR@
-#define AgriGaiaMsgs_VERSION_MINOR @AgriGaiaMsgs_VERSION_MINOR@
-
-#endif // AgriGaiaMsgs_CONFIG_H_

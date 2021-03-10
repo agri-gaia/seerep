@@ -1,0 +1,8 @@
+#ifndef AGProtoMsgs_CONFIG_H_
+#define AGProtoMsgs_CONFIG_H_
+
+// the configured options and settings for ag_proto_msgs
+#define AG_PROTO_MSGS_VERSION_MAJOR @ag_proto_msgs_VERSION_MAJOR@
+#define AG_PROTO_MSGS_VERSION_MINOR @ag_proto_msgs_VERSION_MINOR@
+
+#endif /* AgriGaiaMsgs_CONFIG_H_ */

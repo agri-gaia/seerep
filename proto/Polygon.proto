@@ -1,9 +1,9 @@
 syntax = "proto3";
 
-package ag.ros;
+package ag;
 
 import "Point.proto";
 
 message Polygon {
-  repeated ag.ros.Point points = 1;
+  repeated ag.Point points = 1;
 }

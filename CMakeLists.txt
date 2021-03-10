@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(AgriGaiaMsgs VERSION 0.1)
+project(ag_proto_msgs VERSION 0.1)
 
 include(FindProtobuf)
 find_package(Protobuf REQUIRED)
@@ -33,20 +33,20 @@ PROTOBUF_GENERATE_CPP(
 	proto/TwistWithCovarianceStamped.proto
 )
 
-configure_file(AgriGaiaMsgsConfig.h.in AgriGaiaMsgsConfig.h)
+configure_file(AGProtoMsgsConfig.h.in AGProtoMsgsConfig.h)
 
-add_library(${PROJECT_NAME}
+add_library(agprotomsgs
 	${PROTO_HEADER}
 	${PROTO_SRC}
 )
 
-set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${PROTO_HEADER}")
+set_target_properties(agprotomsgs PROPERTIES PUBLIC_HEADER "${PROTO_HEADER}")
 
 set(CMAKE_INSTALL_INCLUDEDIR include)
 set(CMAKE_INSTALL_LIBDIR lib)
 set(CMAKE_INSTALL_BINDIR bin)
 
-install(TARGETS ${PROJECT_NAME} 
+install(TARGETS agprotomsgs
 	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 	PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
@@ -55,36 +55,27 @@ install(TARGETS ${PROJECT_NAME}
 include(CMakePackageConfigHelpers)
 
 configure_package_config_file(
-	${CMAKE_CURRENT_SOURCE_DIR}/AgriGaiaMsgsConfig.cmake.in
-  ${CMAKE_CURRENT_BINARY_DIR}/AgriGaiaMsgsConfig.cmake
+	${CMAKE_CURRENT_SOURCE_DIR}/AGProtoMsgsConfig.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/AGProtoMsgsConfig.cmake
 	INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 	PATH_VARS CMAKE_INSTALL_INCLUDEDIR CMAKE_INSTALL_LIBDIR
 )
 
 # generate the version file for the config file
 write_basic_package_version_file(
-  "${CMAKE_CURRENT_BINARY_DIR}/AgriGaiaMsgsConfigVersion.cmake"
-  VERSION "${AgriGaiaMsgs_VERSION_MAJOR}.${AgriGaiaMsgs_VERSION_MINOR}"
+  "${CMAKE_CURRENT_BINARY_DIR}/AGProtoMsgsConfigVersion.cmake"
+  VERSION "${ag_proto_msgs_VERSION_MAJOR}.${ag_proto_msgs_VERSION_MINOR}"
   COMPATIBILITY AnyNewerVersion
 )
 
 # install the configuration file
 install(FILES
-  ${CMAKE_CURRENT_BINARY_DIR}/AgriGaiaMsgsConfig.cmake
-	${CMAKE_CURRENT_BINARY_DIR}/AgriGaiaMsgsConfigVersion.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/AGProtoMsgsConfig.cmake
+	${CMAKE_CURRENT_BINARY_DIR}/AGProtoMsgsConfigVersion.cmake
 	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 )
 
-
-#install(EXPORT AgriGaiaMsgsTargets
-#  FILE AgriGaiaMsgsTargets.cmake
-#  DESTINATION "lib/cmake/${PROJECT_NAME}"
-#)
-
 install(FILES
-	"${PROJECT_BINARY_DIR}/AgriGaiaMsgsConfig.h"
+	"${PROJECT_BINARY_DIR}/AGProtoMsgsConfig.h"
 	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
 )
-
-#install(FILES ${PROTO_HEADER} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
-
