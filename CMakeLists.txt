@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(agri_gaia_ros VERSION 0.1)
+project(ag_proto_ros VERSION 0.1)
 
 find_package(catkin REQUIRED
 	COMPONENTS
@@ -8,20 +8,20 @@ find_package(catkin REQUIRED
 	sensor_msgs
 )
 
-find_package(AgriGaiaMsgs REQUIRED)
+find_package(AGProtoMsgs REQUIRED)
 
-configure_file(include/AgriGaiaROSConfig.h.in AgriGaiaROSConfig.h)
+configure_file(include/AGProtoROSConfig.h.in AGProtoROSConfig.h)
 
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES agri_gaia_ros
+  LIBRARIES ag_proto_ros
 	CATKIN_DEPENDS std_msgs geometry_msgs sensor_msgs
-  DEPENDS AgriGaiaMsgs
+  DEPENDS AGProtoMsgs
 )
 
 include_directories(
 	include
-	${AgriGaiaMsgs_INCLUDE_DIRS}
+	${AGProtoMsgs_INCLUDE_DIRS}
 	${catkin_INCLUDE_DIRS}
 )
 
@@ -43,6 +43,6 @@ install(DIRECTORY include/${PROJECT_NAME}/
 )
 
 install(FILES
-	"${PROJECT_BINARY_DIR}/AgriGaiaROSConfig.h"
+	"${PROJECT_BINARY_DIR}/AGProtoROSConfig.h"
 	DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 )
