@@ -4,43 +4,62 @@ project(ag_proto_msgs VERSION 0.1)
 include(FindProtobuf)
 find_package(Protobuf REQUIRED)
 
-include_directories(
-	${PROTOBUF_INCLUDE_DIR}
-)
+#find_package(gRPC REQUIRED)
+
+LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
+include(ProtobufGenerateGrpcCpp)
+
 
 PROTOBUF_GENERATE_CPP(
-	PROTO_SRC PROTO_HEADER 
-	
-	proto/Header.proto
-	proto/PointField.proto
-	proto/PointCloud2.proto
-	proto/Image.proto
-	proto/Vector3.proto
-	proto/Vector3Stamped.proto
-	proto/Point.proto
-	proto/PointStamped.proto
-	proto/Quaternion.proto
-	proto/QuaternionStamped.proto
-	proto/Pose.proto
-	proto/PoseStamped.proto
-	proto/Polygon.proto
-	proto/PolygonStamped.proto
-	proto/Transform.proto
-	proto/TransformStamped.proto
-	proto/Twist.proto
-	proto/TwistStamped.proto
-	proto/TwistWithCovariance.proto
-	proto/TwistWithCovarianceStamped.proto
+	PROTO_SOURCES PROTO_HEADERS
+	protos/Header.proto
+	protos/PointField.proto
+	protos/PointCloud2.proto
+	protos/Image.proto
+	protos/Vector3.proto
+	protos/Vector3Stamped.proto
+	protos/Point.proto
+	protos/PointStamped.proto
+	protos/Quaternion.proto
+	protos/QuaternionStamped.proto
+	protos/Pose.proto
+	protos/PoseStamped.proto
+	protos/Polygon.proto
+	protos/PolygonStamped.proto
+	protos/Transform.proto
+	protos/TransformStamped.proto
+	protos/Twist.proto
+	protos/TwistStamped.proto
+	protos/TwistWithCovariance.proto
+	protos/TwistWithCovarianceStamped.proto
+	protos/ServerResponse.proto
+	protos/SendPointCloud2.proto
+)
+
+PROTOBUF_GENERATE_GRPC_CPP(
+	GRPC_SOURCES GRPC_HEADERS
+	protos/SendPointCloud2.proto
+)
+
+include_directories(
+	${CMAKE_BUILD_RPATH}
+	${PROTOBUF_INCLUDE_DIR}
 )
 
 configure_file(AGProtoMsgsConfig.h.in AGProtoMsgsConfig.h)
 
 add_library(agprotomsgs
-	${PROTO_HEADER}
-	${PROTO_SRC}
+	${PROTO_SOURCES}
+	${GRPC_SOURCES}
 )
 
-set_target_properties(agprotomsgs PROPERTIES PUBLIC_HEADER "${PROTO_HEADER}")
+message("Hallo: ${GRPC_HEADERS}")
+message("Hallo: ${PROTO_HEADERS}")
+
+set(INSTALL_HEADERS ${PROTO_HEADERS})
+list(APPEND INSTALL_HEADERS ${GRPC_HEADERS})
+
+set_target_properties(agprotomsgs PROPERTIES PUBLIC_HEADER "${INSTALL_HEADERS}")
 
 set(CMAKE_INSTALL_INCLUDEDIR include)
 set(CMAKE_INSTALL_LIBDIR lib)

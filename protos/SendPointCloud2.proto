@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package ag;
+
+import "PointCloud2.proto";
+import "ServerResponse.proto";
+
+service SendPointCloud2 {
+  rpc SendPointCloud2(PointCloud2) returns (ServerResponse);
+}
+

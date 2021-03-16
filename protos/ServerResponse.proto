@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package ag;
+
+import "google/protobuf/timestamp.proto";
+
+message ServerResponse{
+  // sequence id, consecutively increasing id
+  uint32 seq = 1;
+
+  google.protobuf.Timestamp stamp = 2;
+
+  string message = 3;
+
+  enum TRANSMISSION_STATE {
+    SUCCESS = 0;
+    FAILURE = 1;
+  }
+
+  TRANSMISSION_STATE transmission_state = 4;
+}
