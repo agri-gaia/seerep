@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>ag_grpc_ros</name>
+  <version>0.0.1</version>
+  <description>
+    Converts incoming ROS messages to ProtoBuf messages and use grpc to transfer the data to a configured server
+  </description>
+
+  <maintainer email="spuetz@uos.de">Sebastian Pütz</maintainer>
+
+  <license>BSD-3</license>
+
+  <author email="spuetz@uos.de">Sebastian Pütz</author>
+
+  <depend>roscpp</depend>
+  <depend>std_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>ag_proto_ros</depend>
+  <buildtool_depend>catkin</buildtool_depend>
+
+</package>

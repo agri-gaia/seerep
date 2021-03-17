@@ -1,0 +1,4 @@
+#ifndef AG_GRPC_ROS_CLIENT_H_
+#define AG_GRPC_ROS_CLIENT_H_
+
+#endif // AG_GRPC_ROS_CLIENT_H_
