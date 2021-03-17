@@ -9,6 +9,7 @@
 // ag
 #include <ag_proto_msgs/SendPointCloud2.grpc.pb.h>
 #include <ag_proto_ros/conversions.h>
+
 // ros
 #include <ros/ros.h>
 #include <sensor_msgs/PointCloud2.h>
@@ -27,9 +28,12 @@ namespace ag_grpc_ros
       {
         grpc::ClientContext context;
         sensor_msgs::PointCloud2 ros_cloud;
+        ros_cloud.header.frame_id = "test_frame";
+        ros_cloud.header.stamp = ros::Time::now();
         ag::PointCloud2 ag_cloud = ag_proto_ros::toProto(ros_cloud);
         ag::ServerResponse response;
         stub_->SendPointCloud2(&context, ag_cloud, &response);
+        ROS_INFO_STREAM("Response:" << response.message());
       }
 
     private:

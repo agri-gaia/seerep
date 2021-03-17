@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<launch>
+    <node name="ag_grpc_client" pkg="ag_grpc_ros" type="ag_grpc_ros_client" output="screen">
+
+    </node>
+</launch>
