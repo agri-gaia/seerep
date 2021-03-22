@@ -2,8 +2,8 @@ syntax = "proto3";
 
 package ag;
 
-import "Header.proto";
-import "Transform.proto";
+import "header.proto";
+import "transform.proto";
 
 message TransformStamped{
   Header header = 1;

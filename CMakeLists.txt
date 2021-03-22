@@ -12,35 +12,35 @@ include(ProtobufGenerateGrpcCpp)
 
 PROTOBUF_GENERATE_CPP(
 	PROTO_SOURCES PROTO_HEADERS
-	protos/Header.proto
-	protos/PointField.proto
-	protos/PointCloud2.proto
-	protos/Image.proto
-	protos/Vector3.proto
-	protos/Vector3Stamped.proto
-	protos/Point.proto
-	protos/PointStamped.proto
-	protos/Quaternion.proto
-	protos/QuaternionStamped.proto
-	protos/Pose.proto
-	protos/PoseStamped.proto
-	protos/Polygon.proto
-	protos/PolygonStamped.proto
-	protos/Transform.proto
-	protos/TransformStamped.proto
-	protos/Twist.proto
-	protos/TwistStamped.proto
-	protos/TwistWithCovariance.proto
-	protos/TwistWithCovarianceStamped.proto
-	protos/ServerResponse.proto
+	protos/header.proto
+	protos/point_field.proto
+	protos/point_cloud_2.proto
+	protos/image.proto
+	protos/vector3.proto
+	protos/vector3_stamped.proto
+	protos/point.proto
+	protos/point_stamped.proto
+	protos/quaternion.proto
+	protos/quaternion_stamped.proto
+	protos/pose.proto
+	protos/pose_stamped.proto
+	protos/polygon.proto
+	protos/polygon_stamped.proto
+	protos/transform.proto
+	protos/transform_stamped.proto
+	protos/twist.proto
+	protos/twist_stamped.proto
+	protos/twist_with_covariance.proto
+	protos/twist_with_covariance_stamped.proto
+	protos/server_response.proto
 
 	# grpc
-	protos/TransferSensorMsgs.proto
+	protos/transfer_sensor_msgs.proto
 )
 
 PROTOBUF_GENERATE_GRPC_CPP(
 	GRPC_SOURCES GRPC_HEADERS
-	protos/TransferSensorMsgs.proto
+	protos/transfer_sensor_msgs.proto
 )
 
 include_directories(

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package ag;
 
-import "Vector3.proto";
+import "vector3.proto";
 
 message Twist{
   Vector3 linear = 1;

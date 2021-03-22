@@ -2,8 +2,8 @@ syntax = "proto3";
 
 package ag;
 
-import "Point.proto";
-import "Quaternion.proto";
+import "point.proto";
+import "quaternion.proto";
 
 message Pose{
   Point position = 1;

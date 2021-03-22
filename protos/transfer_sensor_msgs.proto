@@ -2,8 +2,8 @@ syntax = "proto3";
 
 package ag;
 
-import "PointCloud2.proto";
-import "ServerResponse.proto";
+import "point_cloud_2.proto";
+import "server_response.proto";
 
 service TransferSensorMsgs {
   rpc TransferPointCloud2(PointCloud2) returns (ServerResponse);

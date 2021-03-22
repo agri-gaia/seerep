@@ -2,8 +2,8 @@ syntax = "proto3";
 
 package ag;
 
-import "Header.proto";
-import "Polygon.proto";
+import "header.proto";
+import "polygon.proto";
 
 message PolygonStamped{
   Header header = 1;

@@ -2,8 +2,8 @@ syntax = "proto3";
 
 package ag;
 
-import "Header.proto";
-import "Point.proto";
+import "header.proto";
+import "point.proto";
 
 message PointStamped{
   Header header = 1;

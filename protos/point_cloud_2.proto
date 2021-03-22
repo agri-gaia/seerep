@@ -2,8 +2,8 @@ syntax = "proto3";
 
 package ag;
 
-import "PointField.proto";
-import "Header.proto";
+import "point_field.proto";
+import "header.proto";
 
 /**
  * This message holds a collection of N-dimensional points, which may

@@ -2,8 +2,8 @@ syntax = "proto3";
 
 package ag;
 
-import "Header.proto";
-import "Vector3.proto";
+import "header.proto";
+import "vector3.proto";
 
 message Vector3Stamped{
   Header header = 1;

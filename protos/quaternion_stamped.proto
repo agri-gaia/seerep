@@ -2,8 +2,8 @@ syntax = "proto3";
 
 package ag;
 
-import "Header.proto";
-import "Quaternion.proto";
+import "header.proto";
+import "quaternion.proto";
 
 message QuaternionStamped{
   Header header = 1;

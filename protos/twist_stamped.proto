@@ -2,8 +2,8 @@ syntax = "proto3";
 
 package ag;
 
-import "Header.proto";
-import "Twist.proto";
+import "header.proto";
+import "twist.proto";
 
 message TwistStamped{
   Header header = 1;

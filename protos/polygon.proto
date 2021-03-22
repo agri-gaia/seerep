@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package ag;
 
-import "Point.proto";
+import "point.proto";
 
 message Polygon {
   repeated ag.Point points = 1;

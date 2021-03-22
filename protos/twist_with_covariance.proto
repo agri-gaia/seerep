@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package ag;
 
-import "Twist.proto";
+import "twist.proto";
 
 /**
  * This expresses velocity in free space with uncertainty.

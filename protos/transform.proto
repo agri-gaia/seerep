@@ -2,8 +2,8 @@ syntax = "proto3";
 
 package ag;
 
-import "Vector3.proto";
-import "Quaternion.proto";
+import "vector3.proto";
+import "quaternion.proto";
 
 message Transform{
   Vector3 translation = 1;
