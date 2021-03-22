@@ -8,7 +8,7 @@
 #include <grpcpp/security/server_credentials.h>
 
 // ag
-#include <ag_proto_msgs/TransferSensorMsgs.grpc.pb.h>
+#include <ag_proto_msgs/transfer_sensor_msgs.grpc.pb.h>
 #include <ag_proto_ros/conversions.h>
 
 // ros
