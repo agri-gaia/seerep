@@ -7,7 +7,7 @@
 #include <grpcpp/security/credentials.h>
 
 // ag
-#include <ag_proto_msgs/SendPointCloud2.grpc.pb.h>
+#include <ag_proto_msgs/TransferSensorMsgs.grpc.pb.h>
 #include <ag_proto_ros/conversions.h>
 
 // ros
@@ -17,12 +17,12 @@
 namespace ag_grpc_ros
 {
 
-  class SendPointCloud2
+  class TransferSensorMsgs
   {
 
     public:
-      SendPointCloud2(std::shared_ptr<grpc::Channel> channel_ptr)
-        : stub_(ag::SendPointCloud2::NewStub(channel_ptr)) {}
+      TransferSensorMsgs(std::shared_ptr<grpc::Channel> channel_ptr)
+        : stub_(ag::TransferSensorMsgs::NewStub(channel_ptr)) {}
 
       void sendTestCloud()
       {
@@ -32,12 +32,12 @@ namespace ag_grpc_ros
         ros_cloud.header.stamp = ros::Time::now();
         ag::PointCloud2 ag_cloud = ag_proto_ros::toProto(ros_cloud);
         ag::ServerResponse response;
-        stub_->SendPointCloud2(&context, ag_cloud, &response);
+        stub_->TransferPointCloud2(&context, ag_cloud, &response);
         ROS_INFO_STREAM("Response:" << response.message());
       }
 
     private:
-      std::unique_ptr<ag::SendPointCloud2::Stub> stub_;
+      std::unique_ptr<ag::TransferSensorMsgs::Stub> stub_;
   };
 
 
@@ -51,10 +51,10 @@ int main(int argc, char** argv)
   std::string server_address;
   private_nh.param<std::string>("server_address", server_address, "localhost:9090");
 
-  ag_grpc_ros::SendPointCloud2 send_point_cloud_2(
+  ag_grpc_ros::TransferSensorMsgs transfer_sensor_msgs(
       grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()));
 
-  send_point_cloud_2.sendTestCloud();
+  transfer_sensor_msgs.sendTestCloud();
 
   return EXIT_SUCCESS;
 }
