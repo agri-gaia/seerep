@@ -33,12 +33,14 @@ PROTOBUF_GENERATE_CPP(
 	protos/TwistWithCovariance.proto
 	protos/TwistWithCovarianceStamped.proto
 	protos/ServerResponse.proto
-	protos/SendPointCloud2.proto
+
+	# grpc
+	protos/TransferSensorMsgs.proto
 )
 
 PROTOBUF_GENERATE_GRPC_CPP(
 	GRPC_SOURCES GRPC_HEADERS
-	protos/SendPointCloud2.proto
+	protos/TransferSensorMsgs.proto
 )
 
 include_directories(

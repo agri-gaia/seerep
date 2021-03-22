@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package ag;
+
+import "PointCloud2.proto";
+import "ServerResponse.proto";
+
+service TransferSensorMsgs {
+  rpc TransferPointCloud2(PointCloud2) returns (ServerResponse);
+}
