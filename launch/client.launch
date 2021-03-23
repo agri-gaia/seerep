@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <launch>
+    <arg name="topics" default=""/>
     <node name="ag_grpc_client" pkg="ag_grpc_ros" type="ag_grpc_ros_client" output="screen">
-
+        <rosparam param="topics" subst_value="True">$(arg topics)</rosparam>
     </node>
 </launch>

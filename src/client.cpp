@@ -44,7 +44,6 @@ int main(int argc, char** argv)
 
   std::map<std::string, ros::Subscriber> subscribers;
   std::vector<std::string> topics;
-  nh.getParam("topics", topics);
 
   std::string server_address;
   private_nh.param<std::string>("server_address", server_address, "localhost:9090");
@@ -55,7 +54,18 @@ int main(int argc, char** argv)
   ros::master::V_TopicInfo topic_info;
   ros::master::getTopics(topic_info);
 
+  if(!private_nh.getParam("topics", topics))
+  {
+    ROS_WARN_STREAM("Use topics parameter to specify the ROS topics which should be transferred!");
+  }
+
   ROS_INFO_STREAM("Type names: " << ag_grpc_ros::names());
+
+
+  for(auto topic : topics)
+  {
+    ROS_INFO_STREAM("Try to subscribe to topic \"" << topic << "\".");
+  }
 
   for(auto info : topic_info)
   {
@@ -65,10 +75,14 @@ int main(int argc, char** argv)
     {
       auto sub_opt = transfer_sensor_msgs.getSubscriber(info.datatype, info.name);
       if (sub_opt) {
-        ROS_INFO_STREAM("Subscribe to topic: " << info.name << " of type:" << info.datatype);
+        ROS_INFO_STREAM("Subscribe to topic: \"" << info.name << "\" of type:\"" << info.datatype << "\".");
         subscribers[info.name] = *sub_opt;
       }
       topics.erase(find_iter);
+    }
+    else
+    {
+      ROS_INFO_STREAM("Available Topics: \"" << info.name << "\"" );
     }
   }
 
