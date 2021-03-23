@@ -19,7 +19,6 @@ void ag_grpc_ros::TransferSensorMsgs::send(const sensor_msgs::PointCloud2& ros_c
 
 
 
-
 } /* namespace ag_grpc_client */
 
 int main(int argc, char** argv)

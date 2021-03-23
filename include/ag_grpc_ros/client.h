@@ -17,40 +17,19 @@
 #include <ros/ros.h>
 #include <ros/master.h>
 
+// pkg
+#include "types.h"
 
 namespace ag_grpc_ros
 {
-
 class TransferSensorMsgs
 {
 public:
 
-  using StubPtr = std::unique_ptr<ag::TransferSensorMsgs::Stub>;
 
   TransferSensorMsgs(std::shared_ptr<grpc::Channel> channel_ptr);
 
-
- // template <typename Message>
-  void send(const sensor_msgs::PointCloud2& ros_cloud)
-  //void send(const Message& msg)
-  {
-    ag::PointCloud2 ag_cloud = ag_proto_ros::toProto(ros_cloud);
-    grpc::ClientContext context;
-    ag::ServerResponse response;
-    stub_->TransferPointCloud2(&context, ag_proto_cloud, &response);
-    ROS_INFO_STREAM("Response:" << response.message());
-  }
-
-
-  template <class T>
-  struct grpcServiceFunctionBlub{
-    const std::function<::grpc::Status(::grpc::ClientContext*, const ::ag::PointCloud2& request)> send_function = std::bind(&ag::TransferSensorMsgs::sendPointCloud2, stub_, _1, _2, _3);
-  };
-
-  template <>
-  struct grpcServiceFunctionBlub<sensor_msgs::PointCloud2>{
-    const std::function<::grpc::Status(::grpc::ClientContext*, const ::ag::PointCloud2& request)> send_function = std::bind(&ag::TransferSensorMsgs::sendPointCloud2, stub_, _1, _2, _3);
-  };
+  void send(const sensor_msgs::PointCloud2& ros_cloud);
 
 private:
   StubPtr stub_;
