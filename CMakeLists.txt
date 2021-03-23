@@ -3,11 +3,13 @@ project(ag_grpc_ros VERSION 0.1)
 
 find_package(catkin REQUIRED
 	COMPONENTS
+	topic_tools
 	std_msgs
 	geometry_msgs
 	sensor_msgs
 	ag_proto_ros
 	roscpp
+
 )
 
 find_package(Protobuf REQUIRED)

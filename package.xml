@@ -16,6 +16,7 @@
   <depend>std_msgs</depend>
   <depend>geometry_msgs</depend>
   <depend>sensor_msgs</depend>
+  <depend>topic_tools</depend>
   <depend>ag_proto_ros</depend>
   <buildtool_depend>catkin</buildtool_depend>
 
