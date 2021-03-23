@@ -1,5 +1,6 @@
 #include "ag_grpc_ros/client.h"
 #include "ag_grpc_ros/types.h"
+#include <grpc/status.h>
 
 namespace ag_grpc_ros
 {
@@ -11,16 +12,30 @@ void ag_grpc_ros::TransferSensorMsgs::send(const std_msgs::Header::ConstPtr& msg
 {
   grpc::ClientContext context;
   ag::ServerResponse response;
-  stub_->TransferHeader(&context, ag_proto_ros::toProto(*msg), &response);
-  ROS_INFO_STREAM("Response:" << response.message());
+  grpc::Status status = stub_->TransferHeader(&context, ag_proto_ros::toProto(*msg), &response);
+  if(!status.ok())
+  {
+    ROS_ERROR_STREAM("gGRPC status error code: " << status.error_code() << " " <<  status.error_message());
+  }
+  else
+  {
+    ROS_INFO_STREAM("Response:" << response.message());
+  }
 }
 
 void ag_grpc_ros::TransferSensorMsgs::send(const sensor_msgs::PointCloud2::ConstPtr& msg) const
 {
   grpc::ClientContext context;
   ag::ServerResponse response;
-  stub_->TransferPointCloud2(&context, ag_proto_ros::toProto(*msg), &response);
-  ROS_INFO_STREAM("Response:" << response.message());
+  grpc::Status status = stub_->TransferPointCloud2(&context, ag_proto_ros::toProto(*msg), &response);
+  if(!status.ok())
+  {
+    ROS_ERROR_STREAM("gRPC status error code: " << status.error_code() << " " <<  status.error_message());
+  }
+  else
+  {
+    ROS_INFO_STREAM("Response:" << response.message());
+  }
 }
 
 std::optional<ros::Subscriber> TransferSensorMsgs::getSubscriber(const std::string& message_type, const std::string& topic) {
