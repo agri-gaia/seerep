@@ -37,20 +37,6 @@ using StubPtr = std::unique_ptr<ag::TransferSensorMsgs::Stub>;
 template<typename Type>
 void send(StubPtr& stub, grpc::ClientContext* c, ag::ServerResponse* r, Type msg){}
 
-#define AG_MSG_TYPE(p, t) p ## :: t
-#define AG_FUNC_NAME(p, t) Transfer ## t
-
-#define AG_M(p, t) template<> void send(StubPtr& stub, grpc::ClientContext* c, ag::ServerResponse* r,  AG_MSG_TYPE(p, t)  msg){stub-> AG_FUNC_NAME(p, t), (c, ag_proto_ros::toProto(msg), r);}
-AG_MESSAGE_TYPES(M)
-#undef AG_M
-#undef AG_MSG_TYPE
-#undef AG_FUNC_NAME
-
-// Create switch case
-//#define AG_M(e) case e: send()
-//namespace ag_grppc_ros{
-//}
-
 std::string names()
 {
   std::string s;
