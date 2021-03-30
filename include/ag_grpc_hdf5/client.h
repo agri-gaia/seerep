@@ -1,5 +1,5 @@
-#ifndef AG_GRPC_ROS_CLIENT_H_
-#define AG_GRPC_ROS_CLIENT_H_
+#ifndef AG_GRPC_HDF5_CLIENT_H_
+#define AG_GRPC_HDF5_CLIENT_H_
 
 #include <functional>
 #include <optional>
@@ -19,4 +19,4 @@ namespace ag_grpc_hdf5
 
 } /* namespace ag_grpc_hdf5 */
 
-#endif // AG_GRPC_ROS_CLIENT_H_
+#endif // AG_GRPC_HDF5_CLIENT_H_
