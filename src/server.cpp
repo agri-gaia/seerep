@@ -17,32 +17,29 @@
 
 namespace ag_grpc_ros
 {
-  class ReceiveSensorMsgs final : public ag::TransferSensorMsgs::Service
-  {
-  public:
-    ReceiveSensorMsgs() {}
-    ~ReceiveSensorMsgs() {}
+ReceiveSensorMsgs::ReceiveSensorMsgs() {}
 
-    grpc::Status transferPointCloud2(grpc::ServerContext* context, const ag::PointCloud2* point_cloud_2, ag::ServerResponse* response)
-    {
-      sensor_msgs::PointCloud2 cloud = ag_proto_ros::toROS(*point_cloud_2);
-      ROS_INFO_STREAM("Incoming PointCloud2 message" << std::endl << cloud);
-      response->set_message("okidoki");
-      response->set_transmission_state(ag::ServerResponse::SUCCESS);
-      return grpc::Status::OK;
-    }
-  };
+grpc::Status ReceiveSensorMsgs::transferPointCloud2(
+    grpc::ServerContext* context,
+    const ag::PointCloud2* point_cloud_2,
+    ag::ServerResponse* response)
+{
+  sensor_msgs::PointCloud2 cloud = ag_proto_ros::toROS(*point_cloud_2);
+  ROS_INFO_STREAM("Incoming PointCloud2 message" << std::endl << cloud);
+  response->set_message("okidoki");
+  response->set_transmission_state(ag::ServerResponse::SUCCESS);
+  return grpc::Status::OK;
+}
 
-  std::shared_ptr<grpc::Server> createServer(
-      const std::string& server_address,
-      ag_grpc_ros::ReceiveSensorMsgs* receive_sensor_msgs)
-  {
-    grpc::ServerBuilder server_builder;
-    server_builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
-    server_builder.RegisterService(receive_sensor_msgs);
-    return std::shared_ptr<grpc::Server>(server_builder.BuildAndStart());
-  }
-
+std::shared_ptr<grpc::Server> createServer(
+    const std::string& server_address,
+    ag_grpc_ros::ReceiveSensorMsgs* receive_sensor_msgs)
+{
+  grpc::ServerBuilder server_builder;
+  server_builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
+  server_builder.RegisterService(receive_sensor_msgs);
+  return std::shared_ptr<grpc::Server>(server_builder.BuildAndStart());
+}
 
 } /* namespace ag_grpc_ros */
 
