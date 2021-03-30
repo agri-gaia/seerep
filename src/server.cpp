@@ -4,13 +4,37 @@ namespace ag_grpc_ros
 {
 ReceiveSensorMsgs::ReceiveSensorMsgs() {}
 
-grpc::Status ReceiveSensorMsgs::transferPointCloud2(
+grpc::Status ReceiveSensorMsgs::TransferPointCloud2(
     grpc::ServerContext* context,
-    const ag::PointCloud2* point_cloud_2,
+    const ag::PointCloud2* msg,
     ag::ServerResponse* response)
 {
-  sensor_msgs::PointCloud2 cloud = ag_proto_ros::toROS(*point_cloud_2);
+  sensor_msgs::PointCloud2 cloud = ag_proto_ros::toROS(*msg);
   ROS_INFO_STREAM("Incoming PointCloud2 message" << std::endl << cloud);
+  response->set_message("okidoki");
+  response->set_transmission_state(ag::ServerResponse::SUCCESS);
+  return grpc::Status::OK;
+}
+
+grpc::Status ReceiveSensorMsgs::TransferHeader(
+    grpc::ServerContext* context,
+    const ag::Header* msg,
+    ag::ServerResponse* response)
+{
+  std_msgs::Header header = ag_proto_ros::toROS(*msg);
+  ROS_INFO_STREAM("Incoming Header message" << std::endl << header);
+  response->set_message("okidoki");
+  response->set_transmission_state(ag::ServerResponse::SUCCESS);
+  return grpc::Status::OK;
+}
+
+grpc::Status ReceiveSensorMsgs::TransferImage(
+    grpc::ServerContext* context,
+    const ag::Image* msg,
+    ag::ServerResponse* response)
+{
+  sensor_msgs::Image image = ag_proto_ros::toROS(*msg);
+  ROS_INFO_STREAM("Incoming Image message" << std::endl << image);
   response->set_message("okidoki");
   response->set_transmission_state(ag::ServerResponse::SUCCESS);
   return grpc::Status::OK;

@@ -22,7 +22,9 @@ class ReceiveSensorMsgs final : public ag::TransferSensorMsgs::Service
 {
 public:
   ReceiveSensorMsgs();
-  grpc::Status transferPointCloud2(grpc::ServerContext* context, const ag::PointCloud2* point_cloud_2, ag::ServerResponse* response);
+  grpc::Status TransferPointCloud2(grpc::ServerContext* context, const ag::PointCloud2* point_cloud_2, ag::ServerResponse* response);
+  grpc::Status TransferImage(grpc::ServerContext* context, const ag::Image* image, ag::ServerResponse* response);
+  grpc::Status TransferHeader(grpc::ServerContext context, const ag::Header* header, ag::ServerResponse* response);
 
 };
 

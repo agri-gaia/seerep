@@ -15,7 +15,7 @@ void ag_grpc_ros::TransferSensorMsgs::send(const std_msgs::Header::ConstPtr& msg
   grpc::Status status = stub_->TransferHeader(&context, ag_proto_ros::toProto(*msg), &response);
   if(!status.ok())
   {
-    ROS_ERROR_STREAM("gGRPC status error code: " << status.error_code() << " " <<  status.error_message());
+    ROS_ERROR_STREAM("gRPC status error code: " << status.error_code() << " " <<  status.error_message());
   }
   else
   {
