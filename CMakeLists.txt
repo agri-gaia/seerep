@@ -1,10 +1,17 @@
 cmake_minimum_required(VERSION 3.10)
 project(ag_proto_hdf5 VERSION 0.1)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 include(FindProtobuf)
+include(cmake/FindHighFive.cmake)
+
 find_package(Protobuf REQUIRED)
 find_package(AGProtoMsgs REQUIRED)
 find_package(HighFive REQUIRED)
+
+message("HighFive Include Dirs: ${HighFive_INCLUDE_DIRS} Libraries: ${HighFive_LIBRARIES}")
 
 include_directories(
 	include
@@ -14,7 +21,7 @@ include_directories(
 )
 
 add_library(agprotohdf5
-	src/conversions.cpp
+	src/io.cpp
 )
 
 target_link_libraries(agprotohdf5
