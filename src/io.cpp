@@ -62,7 +62,7 @@ std::optional<ag::Image> AGProtoHDF5IO::readImage(const std::string& id)
 
   ag::Image image;
   data_set.read(image.mutable_data());
-  *image.mutable_header() = readHeaderAttributes(data_set, HighFive::DataType());
+  *image.mutable_header() = readHeaderAttributes(data_set);
   return image;
 }
 

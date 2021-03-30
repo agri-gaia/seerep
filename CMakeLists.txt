@@ -11,6 +11,8 @@ find_package(Protobuf REQUIRED)
 find_package(AGProtoMsgs REQUIRED)
 find_package(HighFive REQUIRED)
 
+configure_file(include/AGProtoHDF5Config.h.in AGProtoHDF5Config.h)
+
 message("HighFive Include Dirs: ${HighFive_INCLUDE_DIRS} Libraries: ${HighFive_LIBRARIES}")
 
 include_directories(
@@ -30,7 +32,7 @@ target_link_libraries(agprotohdf5
 	${HighFive_LIBRARIES}
 )
 
-set(INSTALL_HEADERS "")
+set(INSTALL_HEADERS include/ag_proto_hdf5/io.h)
 
 set_target_properties(agprotohdf5 PROPERTIES PUBLIC_HEADER "${INSTALL_HEADERS}")
 
@@ -48,7 +50,7 @@ include(CMakePackageConfigHelpers)
 
 configure_package_config_file(
 	${CMAKE_CURRENT_SOURCE_DIR}/AGProtoHDF5Config.cmake.in
-  ${CMAKE_CURRENT_BINARY_DIR}/AGProtoMDF5Config.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/AGProtoHDF5Config.cmake
 	INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 	PATH_VARS CMAKE_INSTALL_INCLUDEDIR CMAKE_INSTALL_LIBDIR
 )
@@ -68,7 +70,7 @@ install(FILES
 )
 
 install(FILES
-	"${PROJECT_BINARY_DIR}/AGProtoMsgsConfig.h"
+	"${PROJECT_BINARY_DIR}/AGProtoHDF5Config.h"
 	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
 )
 

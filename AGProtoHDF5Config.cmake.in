@@ -3,8 +3,8 @@
 set(AGProtoHDF5_INCLUDE_DIRS @PACKAGE_CMAKE_INSTALL_INCLUDEDIR@)
 
 find_package(PkgConfig REQUIRED)
-find_library(AGProtoMsgs_LIBRARY NAMES agprotohdf5)
-set(AGProtoMsgs_LIBRARIES ${AGProtoHDF5_LIBRARY})
+find_library(AGProtoHDF5_LIBRARY NAMES agprotohdf5)
+set(AGProtoHDF5_LIBRARIES ${AGProtoHDF5_LIBRARY})
 
 find_package(Protobuf REQUIRED)
 list(APPEND AGProtoHDF5_INCLUDE_DIRS ${Protobuf_INCLUDE_DIR})
