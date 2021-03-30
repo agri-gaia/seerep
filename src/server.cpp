@@ -1,20 +1,5 @@
 #include "ag_grpc_ros/server.h"
 
-// grpc
-#include <grpc/grpc.h>
-#include <grpcpp/server.h>
-#include <grpcpp/server_builder.h>
-#include <grpcpp/server_context.h>
-#include <grpcpp/security/server_credentials.h>
-
-// ag
-#include <ag_proto_msgs/transfer_sensor_msgs.grpc.pb.h>
-#include <ag_proto_ros/conversions.h>
-
-// ros
-#include <ros/ros.h>
-#include <sensor_msgs/PointCloud2.h>
-
 namespace ag_grpc_ros
 {
 ReceiveSensorMsgs::ReceiveSensorMsgs() {}
