@@ -38,18 +38,35 @@ void ag_grpc_ros::TransferSensorMsgs::send(const sensor_msgs::PointCloud2::Const
   }
 }
 
+void ag_grpc_ros::TransferSensorMsgs::send(const sensor_msgs::Image::ConstPtr& msg) const
+{
+  grpc::ClientContext context;
+  ag::ServerResponse response;
+  grpc::Status status = stub_->TransferImage(&context, ag_proto_ros::toProto(*msg), &response);
+  if(!status.ok())
+  {
+    ROS_ERROR_STREAM("gRPC status error code: " << status.error_code() << " " <<  status.error_message());
+  }
+  else
+  {
+    ROS_INFO_STREAM("Response:" << response.message());
+  }
+}
+
 std::optional<ros::Subscriber> TransferSensorMsgs::getSubscriber(const std::string& message_type, const std::string& topic) {
   switch (ag_grpc_ros::type(message_type)) {
-  case ag_grpc_ros::sensor_msgs_PointCloud2:
-    return nh.subscribe<sensor_msgs::PointCloud2>(topic, 0, &TransferSensorMsgs::send, this);
   case ag_grpc_ros::std_msgs_Header:
     return nh.subscribe<std_msgs::Header>(topic, 0, &TransferSensorMsgs::send, this);
+  case ag_grpc_ros::sensor_msgs_Image:
+    return nh.subscribe<sensor_msgs::Image>(topic, 0, &TransferSensorMsgs::send, this);
+  case ag_grpc_ros::sensor_msgs_PointCloud2:
+    return nh.subscribe<sensor_msgs::PointCloud2>(topic, 0, &TransferSensorMsgs::send, this);
   default:
     ROS_ERROR_STREAM("Type \"" << message_type << "\" not supported");
     return std::nullopt;
   }
 }
-} /* namespace ag_grpc_client */
+} /* namespace ag_grpc_ros */
 
 int main(int argc, char** argv)
 {

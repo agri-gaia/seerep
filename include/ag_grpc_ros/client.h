@@ -31,16 +31,17 @@ public:
 
   std::optional<ros::Subscriber> getSubscriber(const std::string& message_type, const std::string& topic);
 
-  void send(const sensor_msgs::PointCloud2::ConstPtr& msg) const;
-
   void send(const std_msgs::Header::ConstPtr& msg) const;
 
+  void send(const sensor_msgs::PointCloud2::ConstPtr& msg) const;
+
+  void send(const sensor_msgs::Image::ConstPtr& msg) const;
 
 private:
   StubPtr stub_;
   ros::NodeHandle nh;
 };
 
-} /* namespace ag_grpc_client */
+} /* namespace ag_grpc_ros */
 
 #endif // AG_GRPC_ROS_CLIENT_H_

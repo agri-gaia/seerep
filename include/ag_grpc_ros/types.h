@@ -11,8 +11,9 @@
 
 // Supported ROS message types
 #define AG_MESSAGE_TYPES(M) \
+  AG_M(std_msgs, Header), \
   AG_M(sensor_msgs, PointCloud2), \
-  AG_M(std_msgs, Header)
+  AG_M(sensor_msgs, Image)
 
 namespace ag_grpc_ros{
 
