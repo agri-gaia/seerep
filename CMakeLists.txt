@@ -4,7 +4,8 @@ project(ag_proto_hdf5 VERSION 0.1)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-include(FindProtobuf)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
 include(cmake/FindHighFive.cmake)
 
 find_package(Protobuf REQUIRED)
@@ -49,7 +50,7 @@ install(TARGETS agprotohdf5
 include(CMakePackageConfigHelpers)
 
 configure_package_config_file(
-	${CMAKE_CURRENT_SOURCE_DIR}/AGProtoHDF5Config.cmake.in
+	cmake/AGProtoHDF5Config.cmake.in
   ${CMAKE_CURRENT_BINARY_DIR}/AGProtoHDF5Config.cmake
 	INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 	PATH_VARS CMAKE_INSTALL_INCLUDEDIR CMAKE_INSTALL_LIBDIR
@@ -72,6 +73,11 @@ install(FILES
 install(FILES
 	"${PROJECT_BINARY_DIR}/AGProtoHDF5Config.h"
 	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+)
+
+install(FILES
+	cmake/FindHighFive.cmake
+	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/AGProtoHDF5/Modules
 )
 
 
