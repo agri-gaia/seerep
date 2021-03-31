@@ -25,7 +25,6 @@ public:
   grpc::Status TransferPointCloud2(grpc::ServerContext* context, const ag::PointCloud2* point_cloud_2, ag::ServerResponse* response);
   grpc::Status TransferImage(grpc::ServerContext* context, const ag::Image* image, ag::ServerResponse* response);
   grpc::Status TransferHeader(grpc::ServerContext* context, const ag::Header* header, ag::ServerResponse* response);
-
 };
 
 std::shared_ptr<grpc::Server> createServer(const std::string& server_address, ag_grpc_ros::ReceiveSensorMsgs* receive_sensor_msgs);
