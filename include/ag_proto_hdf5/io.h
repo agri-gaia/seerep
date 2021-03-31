@@ -44,6 +44,7 @@ private:
   const std::string HEADER_SEQ = "header_seq";
 
   HighFive::File file;
+  std::mutex write_mtx;
 
 };
 
