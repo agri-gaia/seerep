@@ -1,0 +1,8 @@
+#ifndef AGProtoHDF5CONFIG_H_
+#define AGProtoHDF5CONFIG_H_
+
+// the configured options and settings for ag_proto_hdf5
+#define AG_PROTO_HDF5_VERSION_MAJOR @ag_proto_hdf5_VERSION_MAJOR@
+#define AG_PROTO_HDF5_VERSION_MINOR @ag_proto_hdf5_VERSION_MINOR@
+
+#endif /* AGProtoHDF5CONFIG_H_ */
