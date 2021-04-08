@@ -11,8 +11,8 @@
 #include <grpcpp/security/credentials.h>
 
 // ag
-#include <seerep_msgs/transfer_sensor_msgs.grpc.pb.h>
-#include <seerep_ros_conversions/conversions.h>
+#include <seerep-msgs/transfer_sensor_msgs.grpc.pb.h>
+#include <seerep-ros-conversions/conversions.h>
 
 // ros
 #include <ros/ros.h>

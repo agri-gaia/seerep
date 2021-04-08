@@ -19,5 +19,4 @@
   <depend>topic_tools</depend>
   <depend>seerep-ros-conversions</depend>
   <buildtool_depend>catkin</buildtool_depend>
-  <buildtool_depend>seerep-ros-conversions</buildtool_depend>
 </package>

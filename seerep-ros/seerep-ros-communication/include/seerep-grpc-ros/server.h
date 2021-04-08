@@ -9,8 +9,8 @@
 #include <grpcpp/security/server_credentials.h>
 
 // ag
-#include <seerep_msgs/transfer_sensor_msgs.grpc.pb.h>
-#include <seerep_ros_conversions/conversions.h>
+#include <seerep-msgs/transfer_sensor_msgs.grpc.pb.h>
+#include <seerep-ros-conversions/conversions.h>
 
 // ros
 #include <ros/ros.h>
@@ -18,13 +18,13 @@
 
 namespace seerep_grpc_ros
 {
-class ReceiveSensorMsgs final : public ag::TransferSensorMsgs::Service
+class ReceiveSensorMsgs final : public seerep::TransferSensorMsgs::Service
 {
 public:
   ReceiveSensorMsgs();
-  grpc::Status TransferPointCloud2(grpc::ServerContext* context, const ag::PointCloud2* point_cloud_2, ag::ServerResponse* response);
-  grpc::Status TransferImage(grpc::ServerContext* context, const ag::Image* image, ag::ServerResponse* response);
-  grpc::Status TransferHeader(grpc::ServerContext* context, const ag::Header* header, ag::ServerResponse* response);
+  grpc::Status TransferPointCloud2(grpc::ServerContext* context, const seerep::PointCloud2* point_cloud_2, seerep::ServerResponse* response);
+  grpc::Status TransferImage(grpc::ServerContext* context, const seerep::Image* image, seerep::ServerResponse* response);
+  grpc::Status TransferHeader(grpc::ServerContext* context, const seerep::Header* header, seerep::ServerResponse* response);
 };
 
 std::shared_ptr<grpc::Server> createServer(const std::string& server_address, seerep_grpc_ros::ReceiveSensorMsgs* receive_sensor_msgs);

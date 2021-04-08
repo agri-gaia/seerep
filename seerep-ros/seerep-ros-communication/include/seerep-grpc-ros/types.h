@@ -6,8 +6,8 @@
 #include <algorithm>
 
 // ag
-#include <ag_proto_msgs/transfer_sensor_msgs.grpc.pb.h>
-#include <ag_proto_ros/conversions.h>
+#include <seerep-msgs/transfer_sensor_msgs.grpc.pb.h>
+#include <seerep-ros-conversions/conversions.h>
 
 // Supported ROS message types
 #define SEEREP_MESSAGE_TYPES(M) \
@@ -33,10 +33,10 @@ enum SEEREP_MESSAGE_TYPE { SEEREP_MESSAGE_TYPES(M), NumTypes };
   std::string MessageTypeNames[] = { SEEREP_MESSAGE_TYPES(M) };
 #undef SEEREP_M
 
-using StubPtr = std::unique_ptr<ag::TransferSensorMsgs::Stub>;
+using StubPtr = std::unique_ptr<seerep::TransferSensorMsgs::Stub>;
 
 template<typename Type>
-void send(StubPtr& stub, grpc::ClientContext* c, ag::ServerResponse* r, Type msg){}
+void send(StubPtr& stub, grpc::ClientContext* c, seerep::ServerResponse* r, Type msg){}
 
 std::string names()
 {

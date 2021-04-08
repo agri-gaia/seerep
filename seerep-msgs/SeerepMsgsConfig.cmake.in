@@ -3,7 +3,7 @@
 set(SeerepMsgs_INCLUDE_DIRS @PACKAGE_CMAKE_INSTALL_INCLUDEDIR@)
 
 find_package(PkgConfig REQUIRED)
-find_library(SeerepMsgs_LIBRARY NAMES agprotomsgs)
+find_library(SeerepMsgs_LIBRARY NAMES seerepmsgs)
 set(SeerepMsgs_LIBRARIES ${SeerepMsgs_LIBRARY})
 
 find_package(Protobuf REQUIRED)

@@ -1,18 +1,18 @@
-#include "seerep_grpc_ros/client.h"
-#include "seerep_grpc_ros/types.h"
+#include "seerep-grpc-ros/client.h"
+#include "seerep-grpc-ros/types.h"
 #include <grpc/status.h>
 
 namespace seerep_grpc_ros
 {
 TransferSensorMsgs::TransferSensorMsgs(std::shared_ptr<grpc::Channel> channel_ptr)
-    : stub_(ag::TransferSensorMsgs::NewStub(channel_ptr)) {}
+    : stub_(seerep::TransferSensorMsgs::NewStub(channel_ptr)) {}
 
 
 void seerep_grpc_ros::TransferSensorMsgs::send(const std_msgs::Header::ConstPtr& msg) const
 {
   grpc::ClientContext context;
-  ag::ServerResponse response;
-  grpc::Status status = stub_->TransferHeader(&context, ag_proto_ros::toProto(*msg), &response);
+  seerep::ServerResponse response;
+  grpc::Status status = stub_->TransferHeader(&context, seerep_ros_conversions::toProto(*msg), &response);
   if(!status.ok())
   {
     ROS_ERROR_STREAM("gRPC status error code: " << status.error_code() << " " <<  status.error_message());
@@ -26,8 +26,8 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const std_msgs::Header::ConstPtr&
 void seerep_grpc_ros::TransferSensorMsgs::send(const sensor_msgs::PointCloud2::ConstPtr& msg) const
 {
   grpc::ClientContext context;
-  ag::ServerResponse response;
-  grpc::Status status = stub_->TransferPointCloud2(&context, ag_proto_ros::toProto(*msg), &response);
+  seerep::ServerResponse response;
+  grpc::Status status = stub_->TransferPointCloud2(&context, seerep_ros_conversions::toProto(*msg), &response);
   if(!status.ok())
   {
     ROS_ERROR_STREAM("gRPC status error code: " << status.error_code() << " " <<  status.error_message());
@@ -41,8 +41,8 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const sensor_msgs::PointCloud2::C
 void seerep_grpc_ros::TransferSensorMsgs::send(const sensor_msgs::Image::ConstPtr& msg) const
 {
   grpc::ClientContext context;
-  ag::ServerResponse response;
-  grpc::Status status = stub_->TransferImage(&context, ag_proto_ros::toProto(*msg), &response);
+  seerep::ServerResponse response;
+  grpc::Status status = stub_->TransferImage(&context, seerep_ros_conversions::toProto(*msg), &response);
   if(!status.ok())
   {
     ROS_ERROR_STREAM("gRPC status error code: " << status.error_code() << " " <<  status.error_message());

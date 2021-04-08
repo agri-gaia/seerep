@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(seerep-ros-conversions VERSION 0.1)
 
-find_package(SeerepMsgs REQUIRED)
-
 find_package(catkin REQUIRED
 	COMPONENTS
 	std_msgs

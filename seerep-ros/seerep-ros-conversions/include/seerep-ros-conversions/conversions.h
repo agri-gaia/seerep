@@ -13,7 +13,7 @@
 #include <seerep-msgs/point_cloud_2.pb.h>
 #include <seerep-msgs/image.pb.h>
 
-namespace ag_proto_ros
+namespace seerep_ros_conversions
 {
   /**
    * @brief Converts a ROS std_msgs/Header message to the corresponding
@@ -78,6 +78,6 @@ namespace ag_proto_ros
    * @return ROS std_sensor_msgs/Image
    */
   sensor_msgs::Image toROS(const seerep::Image& image);
-} /* namespace ag_proto_ros */
+} /* namespace seerep_ros_conversions */
 
 #endif /* SEEREP_ROS_CONVERSIONS */
