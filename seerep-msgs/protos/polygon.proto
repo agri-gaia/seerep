@@ -1,9 +1,9 @@
 syntax = "proto3";
 
-package ag;
+package seerep;
 
 import "point.proto";
 
 message Polygon {
-  repeated ag.Point points = 1;
+  repeated Point points = 1;
 }

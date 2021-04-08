@@ -1,5 +1,5 @@
-#ifndef AG_GRPC_ROS_SERVER_H_
-#define AG_GRPC_ROS_SERVER_H_
+#ifndef SEEREP_GRPC_ROS_SERVER_H_
+#define SEEREP_GRPC_ROS_SERVER_H_
 
 // grpc
 #include <grpc/grpc.h>
@@ -9,14 +9,14 @@
 #include <grpcpp/security/server_credentials.h>
 
 // ag
-#include <ag_proto_msgs/transfer_sensor_msgs.grpc.pb.h>
-#include <ag_proto_ros/conversions.h>
+#include <seerep_msgs/transfer_sensor_msgs.grpc.pb.h>
+#include <seerep_ros_conversions/conversions.h>
 
 // ros
 #include <ros/ros.h>
 #include <sensor_msgs/PointCloud2.h>
 
-namespace ag_grpc_ros
+namespace seerep_grpc_ros
 {
 class ReceiveSensorMsgs final : public ag::TransferSensorMsgs::Service
 {
@@ -27,8 +27,8 @@ public:
   grpc::Status TransferHeader(grpc::ServerContext* context, const ag::Header* header, ag::ServerResponse* response);
 };
 
-std::shared_ptr<grpc::Server> createServer(const std::string& server_address, ag_grpc_ros::ReceiveSensorMsgs* receive_sensor_msgs);
+std::shared_ptr<grpc::Server> createServer(const std::string& server_address, seerep_grpc_ros::ReceiveSensorMsgs* receive_sensor_msgs);
 
-} /* namespace ag_grpc_ros */
+} /* namespace seerep_grpc_ros */
 
-#endif // AG_GRPC_ROS_SERVER_H_
+#endif // SEEREP_GRPC_ROS_SERVER_H_

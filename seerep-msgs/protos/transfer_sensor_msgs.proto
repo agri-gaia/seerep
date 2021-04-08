@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package ag;
+package seerep;
 
 import "point_cloud_2.proto";
 import "header.proto";

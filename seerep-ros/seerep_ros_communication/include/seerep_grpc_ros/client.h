@@ -1,5 +1,5 @@
-#ifndef AG_GRPC_ROS_CLIENT_H_
-#define AG_GRPC_ROS_CLIENT_H_
+#ifndef SEEREP_GRPC_ROS_CLIENT_H_
+#define SEEREP_GRPC_ROS_CLIENT_H_
 
 #include <functional>
 #include <optional>
@@ -11,8 +11,8 @@
 #include <grpcpp/security/credentials.h>
 
 // ag
-#include <ag_proto_msgs/transfer_sensor_msgs.grpc.pb.h>
-#include <ag_proto_ros/conversions.h>
+#include <seerep_msgs/transfer_sensor_msgs.grpc.pb.h>
+#include <seerep_ros_conversions/conversions.h>
 
 // ros
 #include <ros/ros.h>
@@ -21,7 +21,7 @@
 // pkg
 #include "types.h"
 
-namespace ag_grpc_ros
+namespace seerep_grpc_ros
 {
 class TransferSensorMsgs
 {
@@ -42,6 +42,6 @@ private:
   ros::NodeHandle nh;
 };
 
-} /* namespace ag_grpc_ros */
+} /* namespace seerep_grpc_ros */
 
-#endif // AG_GRPC_ROS_CLIENT_H_
+#endif // SEEREP_GRPC_ROS_CLIENT_H_

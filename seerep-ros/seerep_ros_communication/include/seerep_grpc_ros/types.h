@@ -1,5 +1,5 @@
-#ifndef AG_GRPC_ROS_TYPES_H_
-#define AG_GRPC_ROS_TYPES_H_
+#ifndef SEEREP_GRPC_ROS_TYPES_H_
+#define SEEREP_GRPC_ROS_TYPES_H_
 
 // std
 #include <string>
@@ -10,17 +10,17 @@
 #include <ag_proto_ros/conversions.h>
 
 // Supported ROS message types
-#define AG_MESSAGE_TYPES(M) \
-  AG_M(std_msgs, Header), \
-  AG_M(sensor_msgs, PointCloud2), \
-  AG_M(sensor_msgs, Image)
+#define SEEREP_MESSAGE_TYPES(M) \
+  SEEREP_M(std_msgs, Header), \
+  SEEREP_M(sensor_msgs, PointCloud2), \
+  SEEREP_M(sensor_msgs, Image)
 
-namespace ag_grpc_ros{
+namespace seerep_grpc_ros{
 
 // Create enum types
-#define AG_M(p, t) p ## _ ## t
-enum AG_MESSAGE_TYPE { AG_MESSAGE_TYPES(M), NumTypes };
-#undef AG_M
+#define SEEREP_M(p, t) p ## _ ## t
+enum SEEREP_MESSAGE_TYPE { SEEREP_MESSAGE_TYPES(M), NumTypes };
+#undef SEEREP_M
 
 #define PPCAT_NX(A, B) A ## _ ## B
 #define PPCAT(A, B) PPCAT_NX(A, B)
@@ -29,9 +29,9 @@ enum AG_MESSAGE_TYPE { AG_MESSAGE_TYPES(M), NumTypes };
 
 // Create the strings
 #define STR_CONCAT (STR1 STR2
-#define AG_M(p, t) STRINGIZE(PPCAT(p, t))
-  std::string MessageTypeNames[] = { AG_MESSAGE_TYPES(M) };
-#undef AG_M
+#define SEEREP_M(p, t) STRINGIZE(PPCAT(p, t))
+  std::string MessageTypeNames[] = { SEEREP_MESSAGE_TYPES(M) };
+#undef SEEREP_M
 
 using StubPtr = std::unique_ptr<ag::TransferSensorMsgs::Stub>;
 
@@ -46,13 +46,13 @@ std::string names()
   return s;
 }
 
-AG_MESSAGE_TYPE type( std::string name )
+SEEREP_MESSAGE_TYPE type( std::string name )
 {
   std::replace( name.begin(), name.end(), '/', '_');
-  return AG_MESSAGE_TYPE( std::find( MessageTypeNames, MessageTypeNames + NumTypes, name ) - MessageTypeNames );
+  return SEEREP_MESSAGE_TYPE( std::find( MessageTypeNames, MessageTypeNames + NumTypes, name ) - MessageTypeNames );
 }
 
-std::string name( AG_MESSAGE_TYPE type )
+std::string name( SEEREP_MESSAGE_TYPE type )
 {
   return (type < NumTypes) ? MessageTypeNames[ type ] : "";
 }
@@ -61,4 +61,4 @@ std::string name( AG_MESSAGE_TYPE type )
 
 }
 
-#endif // AG_GRPC_ROS_TYPES_H_
+#endif // SEEREP_GRPC_ROS_TYPES_H_
