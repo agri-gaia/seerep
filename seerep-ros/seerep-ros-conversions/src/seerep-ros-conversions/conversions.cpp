@@ -1,4 +1,4 @@
-#include "seerep_ros_conversions/conversions.h"
+#include "seerep-ros-conversions/conversions.h"
 
 namespace seerep_ros_conversions
 {
@@ -112,4 +112,4 @@ namespace seerep_ros_conversions
     return ret;
   }
 
-} /* namespace ag_proto_ros */
+} /* namespace seerep_ros_conversions */

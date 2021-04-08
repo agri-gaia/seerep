@@ -8,10 +8,10 @@
 #include <sensor_msgs/Image.h>
 
 // Agri-Gaia proto messages
-#include <seerep_msgs/header.pb.h>
-#include <seerep_msgs/point_field.pb.h>
-#include <seerep_msgs/point_cloud_2.pb.h>
-#include <seerep_msgs/image.pb.h>
+#include <seerep-msgs/header.pb.h>
+#include <seerep-msgs/point_field.pb.h>
+#include <seerep-msgs/point_cloud_2.pb.h>
+#include <seerep-msgs/image.pb.h>
 
 namespace ag_proto_ros
 {
