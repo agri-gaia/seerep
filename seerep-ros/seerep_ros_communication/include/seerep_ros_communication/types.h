@@ -7,7 +7,7 @@
 
 // ag
 #include <seerep-msgs/transfer_sensor_msgs.grpc.pb.h>
-#include <seerep-ros-conversions/conversions.h>
+#include <seerep_ros_conversions/conversions.h>
 
 // Supported ROS message types
 #define SEEREP_MESSAGE_TYPES(M) \

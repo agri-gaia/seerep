@@ -1,5 +1,5 @@
-#include "seerep-grpc-ros/client.h"
-#include "seerep-grpc-ros/types.h"
+#include "seerep_ros_communication/client.h"
+#include "seerep_ros_communication/types.h"
 #include <grpc/status.h>
 
 namespace seerep_grpc_ros
@@ -70,7 +70,7 @@ std::optional<ros::Subscriber> TransferSensorMsgs::getSubscriber(const std::stri
 
 int main(int argc, char** argv)
 {
-  ros::init(argc, argv, "seerep_grpc_ros_client");
+  ros::init(argc, argv, "seerep_ros_communication_client");
   ros::NodeHandle nh;
   ros::NodeHandle private_nh("~");
 

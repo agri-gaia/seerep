@@ -1,4 +1,4 @@
-#include "seerep-grpc-ros/server.h"
+#include "seerep_ros_communication/server.h"
 
 namespace seerep_grpc_ros
 {
@@ -55,7 +55,7 @@ std::shared_ptr<grpc::Server> createServer(
 
 int main(int argc, char** argv)
 {
-  ros::init(argc, argv, "seerep_grpc_ros_server");
+  ros::init(argc, argv, "seerep_ros_communication_server");
   ros::NodeHandle private_nh("~");
 
   std::string server_address;

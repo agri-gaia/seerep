@@ -1,14 +1,14 @@
-#include "ag_proto_hdf5/io.h"
+#include "seerep-hdf5/io.h"
 
 #include <highfive/H5DataSet.hpp>
 
-namespace ag_proto_hdf5{
+namespace seerep_hdf5{
 
-AGProtoHDF5IO::AGProtoHDF5IO(HighFive::File& file)
+SeerepHDF5IO::SeerepHDF5IO(HighFive::File& file)
     : file(file){}
 
 
-void AGProtoHDF5IO::writeHeaderAttributes(HighFive::DataSet& data_set, const ag::Header& header)
+void SeerepHDF5IO::writeHeaderAttributes(HighFive::DataSet& data_set, const seerep::Header& header)
 {
   if(!data_set.hasAttribute(HEADER_STAMP_SECONDS))
     data_set.createAttribute(HEADER_STAMP_SECONDS, header.stamp().seconds());
@@ -32,9 +32,9 @@ void AGProtoHDF5IO::writeHeaderAttributes(HighFive::DataSet& data_set, const ag:
 
 }
 
-ag::Header AGProtoHDF5IO::readHeaderAttributes(HighFive::DataSet& data_set)
+seerep::Header SeerepHDF5IO::readHeaderAttributes(HighFive::DataSet& data_set)
 {
-  ag::Header header;
+  seerep::Header header;
 
   int64_t seconds;
   int32_t nanos;
@@ -53,7 +53,7 @@ ag::Header AGProtoHDF5IO::readHeaderAttributes(HighFive::DataSet& data_set)
   return header;
 }
 
-void AGProtoHDF5IO::writeImage(const std::string& id, const ag::Image& image)
+void SeerepHDF5IO::writeImage(const std::string& id, const seerep::Image& image)
 {
   std::shared_ptr<HighFive::DataSet> data_set_ptr;
   HighFive::DataSpace data_space({image.height(), image.step()});
@@ -93,16 +93,16 @@ void AGProtoHDF5IO::writeImage(const std::string& id, const ag::Image& image)
 }
 
 
-std::optional<ag::Image> AGProtoHDF5IO::readImage(const std::string& id)
+std::optional<seerep::Image> SeerepHDF5IO::readImage(const std::string& id)
 {
   if(!file.exist(id)) return std::nullopt;
 
   HighFive::DataSet data_set = file.getDataSet(id);
 
-  ag::Image image;
+  seerep::Image image;
   data_set.read(image.mutable_data());
   *image.mutable_header() = readHeaderAttributes(data_set);
   return image;
 }
 
-} /* namespace ag_proto_hdf5 */
+} /* namespace seerep_hdf5 */

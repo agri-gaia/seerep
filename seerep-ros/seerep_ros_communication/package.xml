@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>seerep-ros-conversions</name>
+  <name>seerep_ros_communication</name>
   <version>0.0.1</version>
   <description>
-    Provides conversion methods to convert messages from ROS to ag_proto_msgs and from ag_proto_msgs to ROS
+    Converts incoming ROS messages to ProtoBuf messages and use grpc to transfer the data to a configured server
   </description>
 
   <maintainer email="spuetz@uos.de">Sebastian Pütz</maintainer>
@@ -12,9 +12,11 @@
 
   <author email="spuetz@uos.de">Sebastian Pütz</author>
 
+  <depend>roscpp</depend>
   <depend>std_msgs</depend>
   <depend>geometry_msgs</depend>
   <depend>sensor_msgs</depend>
+  <depend>topic_tools</depend>
+  <depend>seerep_ros_conversions</depend>
   <buildtool_depend>catkin</buildtool_depend>
-
 </package>

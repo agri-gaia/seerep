@@ -1,32 +1,32 @@
-#ifndef AG_PROTO_HDF5__IO_H_
-#define AG_PROTO_HDF5__IO_H_
+#ifndef SEEREP_HDF5__IO_H_
+#define SEEREP_HDF5__IO_H_
 
 // highfive
 #include <highfive/H5File.hpp>
 
-// ag_proto_msgs
-#include <ag_proto_msgs/image.pb.h>
+// seerep-msgs
+#include <seerep-msgs/image.pb.h>
 
 // std
 #include <optional>
 
 
-namespace ag_proto_hdf5
+namespace seerep_hdf5
 {
 
-class AGProtoHDF5IO
+class SeerepHDF5IO
 {
 public:
 
-  AGProtoHDF5IO(HighFive::File& file);
+  SeerepHDF5IO(HighFive::File& file);
 
-  void writeHeaderAttributes(HighFive::DataSet& data_set, const ag::Header& header);
+  void writeHeaderAttributes(HighFive::DataSet& data_set, const seerep::Header& header);
 
-  ag::Header readHeaderAttributes(HighFive::DataSet& data_set);
+  seerep::Header readHeaderAttributes(HighFive::DataSet& data_set);
 
-  void writeImage(const std::string& id, const ag::Image& image);
+  void writeImage(const std::string& id, const seerep::Image& image);
 
-  std::optional<ag::Image> readImage(const std::string& id);
+  std::optional<seerep::Image> readImage(const std::string& id);
 
 private:
 
@@ -49,6 +49,6 @@ private:
 };
 
 
-} /* namespace ag_proto_hdf5 */
+} /* namespace seerep_hdf5 */
 
-#endif /* AG_PROTO_HDF5__IO_H_ */
+#endif /* SEEREP_HDF5__IO_H_ */

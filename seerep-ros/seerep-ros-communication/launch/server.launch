@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<launch>
-    <node name="seerep_grpc_server" pkg="seerep_grpc_ros" type="seerep_grpc_ros_server" output="screen">
-
-    </node>
-</launch>
