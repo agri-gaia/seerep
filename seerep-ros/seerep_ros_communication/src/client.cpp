@@ -1,18 +1,18 @@
-#include "ag_grpc_ros/client.h"
-#include "ag_grpc_ros/types.h"
+#include "seerep_ros_communication/client.h"
+#include "seerep_ros_communication/types.h"
 #include <grpc/status.h>
 
-namespace ag_grpc_ros
+namespace seerep_grpc_ros
 {
 TransferSensorMsgs::TransferSensorMsgs(std::shared_ptr<grpc::Channel> channel_ptr)
-    : stub_(ag::TransferSensorMsgs::NewStub(channel_ptr)) {}
+    : stub_(seerep::TransferSensorMsgs::NewStub(channel_ptr)) {}
 
 
-void ag_grpc_ros::TransferSensorMsgs::send(const std_msgs::Header::ConstPtr& msg) const
+void seerep_grpc_ros::TransferSensorMsgs::send(const std_msgs::Header::ConstPtr& msg) const
 {
   grpc::ClientContext context;
-  ag::ServerResponse response;
-  grpc::Status status = stub_->TransferHeader(&context, ag_proto_ros::toProto(*msg), &response);
+  seerep::ServerResponse response;
+  grpc::Status status = stub_->TransferHeader(&context, seerep_ros_conversions::toProto(*msg), &response);
   if(!status.ok())
   {
     ROS_ERROR_STREAM("gRPC status error code: " << status.error_code() << " " <<  status.error_message());
@@ -23,11 +23,11 @@ void ag_grpc_ros::TransferSensorMsgs::send(const std_msgs::Header::ConstPtr& msg
   }
 }
 
-void ag_grpc_ros::TransferSensorMsgs::send(const sensor_msgs::PointCloud2::ConstPtr& msg) const
+void seerep_grpc_ros::TransferSensorMsgs::send(const sensor_msgs::PointCloud2::ConstPtr& msg) const
 {
   grpc::ClientContext context;
-  ag::ServerResponse response;
-  grpc::Status status = stub_->TransferPointCloud2(&context, ag_proto_ros::toProto(*msg), &response);
+  seerep::ServerResponse response;
+  grpc::Status status = stub_->TransferPointCloud2(&context, seerep_ros_conversions::toProto(*msg), &response);
   if(!status.ok())
   {
     ROS_ERROR_STREAM("gRPC status error code: " << status.error_code() << " " <<  status.error_message());
@@ -38,11 +38,11 @@ void ag_grpc_ros::TransferSensorMsgs::send(const sensor_msgs::PointCloud2::Const
   }
 }
 
-void ag_grpc_ros::TransferSensorMsgs::send(const sensor_msgs::Image::ConstPtr& msg) const
+void seerep_grpc_ros::TransferSensorMsgs::send(const sensor_msgs::Image::ConstPtr& msg) const
 {
   grpc::ClientContext context;
-  ag::ServerResponse response;
-  grpc::Status status = stub_->TransferImage(&context, ag_proto_ros::toProto(*msg), &response);
+  seerep::ServerResponse response;
+  grpc::Status status = stub_->TransferImage(&context, seerep_ros_conversions::toProto(*msg), &response);
   if(!status.ok())
   {
     ROS_ERROR_STREAM("gRPC status error code: " << status.error_code() << " " <<  status.error_message());
@@ -54,23 +54,23 @@ void ag_grpc_ros::TransferSensorMsgs::send(const sensor_msgs::Image::ConstPtr& m
 }
 
 std::optional<ros::Subscriber> TransferSensorMsgs::getSubscriber(const std::string& message_type, const std::string& topic) {
-  switch (ag_grpc_ros::type(message_type)) {
-  case ag_grpc_ros::std_msgs_Header:
+  switch (seerep_grpc_ros::type(message_type)) {
+  case seerep_grpc_ros::std_msgs_Header:
     return nh.subscribe<std_msgs::Header>(topic, 0, &TransferSensorMsgs::send, this);
-  case ag_grpc_ros::sensor_msgs_Image:
+  case seerep_grpc_ros::sensor_msgs_Image:
     return nh.subscribe<sensor_msgs::Image>(topic, 0, &TransferSensorMsgs::send, this);
-  case ag_grpc_ros::sensor_msgs_PointCloud2:
+  case seerep_grpc_ros::sensor_msgs_PointCloud2:
     return nh.subscribe<sensor_msgs::PointCloud2>(topic, 0, &TransferSensorMsgs::send, this);
   default:
     ROS_ERROR_STREAM("Type \"" << message_type << "\" not supported");
     return std::nullopt;
   }
 }
-} /* namespace ag_grpc_ros */
+} /* namespace seerep_grpc_ros */
 
 int main(int argc, char** argv)
 {
-  ros::init(argc, argv, "ag_grpc_ros_client");
+  ros::init(argc, argv, "seerep_ros_communication_client");
   ros::NodeHandle nh;
   ros::NodeHandle private_nh("~");
 
@@ -80,7 +80,7 @@ int main(int argc, char** argv)
   std::string server_address;
   private_nh.param<std::string>("server_address", server_address, "localhost:9090");
 
-  ag_grpc_ros::TransferSensorMsgs transfer_sensor_msgs(
+  seerep_grpc_ros::TransferSensorMsgs transfer_sensor_msgs(
       grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()));
 
   ros::master::V_TopicInfo topic_info;
@@ -91,7 +91,7 @@ int main(int argc, char** argv)
     ROS_WARN_STREAM("Use the \"topics\" parameter to specify the ROS topics which should be transferred! The \"topics\" parameter should be a list of strings.");
   }
 
-  ROS_INFO_STREAM("Type names: " << ag_grpc_ros::names());
+  ROS_INFO_STREAM("Type names: " << seerep_grpc_ros::names());
 
 
   for(auto topic : topics)

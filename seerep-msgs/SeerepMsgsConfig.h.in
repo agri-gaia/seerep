@@ -1,0 +1,8 @@
+#ifndef SeerepMsgs_CONFIG_H_
+#define SeerepMsgs_CONFIG_H_
+
+// the configured options and settings for seerep_msgs
+#define SEEREP_MSGS_VERSION_MAJOR @seerep_msgs_VERSION_MAJOR@
+#define SEEREP_MSGS_VERSION_MINOR @seerep_msgs_VERSION_MINOR@
+
+#endif /* SeerepMsgs_CONFIG_H_ */

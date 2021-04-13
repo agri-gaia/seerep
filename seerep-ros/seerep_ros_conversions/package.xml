@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>ag_proto_ros</name>
+  <name>seerep_ros_conversions</name>
   <version>0.0.1</version>
   <description>
     Provides conversion methods to convert messages from ROS to ag_proto_msgs and from ag_proto_msgs to ROS

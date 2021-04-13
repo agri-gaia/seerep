@@ -1,13 +1,13 @@
-#include "ag_proto_ros/conversions.h"
+#include "seerep_ros_conversions/conversions.h"
 
-namespace ag_proto_ros
+namespace seerep_ros_conversions
 {
   /*
    * Header
    */
-  ag::Header toProto(const std_msgs::Header& header)
+  seerep::Header toProto(const std_msgs::Header& header)
   {
-    ag::Header ret;
+    seerep::Header ret;
     ret.set_seq(header.seq);
     ret.set_frame_id(header.frame_id);
     ret.mutable_stamp()->set_seconds(header.stamp.sec);
@@ -15,7 +15,7 @@ namespace ag_proto_ros
     return ret;
   }
 
-  std_msgs::Header toROS(const ag::Header& header)
+  std_msgs::Header toROS(const seerep::Header& header)
   {
     std_msgs::Header ret;
     ret.seq = header.seq();
@@ -28,17 +28,17 @@ namespace ag_proto_ros
   /*
    * PointField
    */
-  ag::PointField toProto(const sensor_msgs::PointField& point_field)
+  seerep::PointField toProto(const sensor_msgs::PointField& point_field)
   {
-    ag::PointField ret;
+    seerep::PointField ret;
     ret.set_name(point_field.name);
     ret.set_offset(point_field.offset);
-    ret.set_datatype(ag::PointField_Datatype(point_field.datatype));
+    ret.set_datatype(seerep::PointField_Datatype(point_field.datatype));
     ret.set_count(point_field.count);
     return ret;
   }
 
-  sensor_msgs::PointField toROS(const ag::PointField& point_field)
+  sensor_msgs::PointField toROS(const seerep::PointField& point_field)
   {
     sensor_msgs::PointField ret;
     ret.name = point_field.name();
@@ -51,9 +51,9 @@ namespace ag_proto_ros
   /*
    * PointCloud2
    */
-  ag::PointCloud2 toProto(const sensor_msgs::PointCloud2& cloud)
+  seerep::PointCloud2 toProto(const sensor_msgs::PointCloud2& cloud)
   {
-    ag::PointCloud2 ret;
+    seerep::PointCloud2 ret;
     *ret.mutable_header() = toProto(cloud.header);
     ret.set_height(cloud.height);
     ret.set_width(cloud.width);
@@ -67,7 +67,7 @@ namespace ag_proto_ros
     return ret;
   }
 
-  sensor_msgs::PointCloud2 toROS(const ag::PointCloud2& cloud)
+  sensor_msgs::PointCloud2 toROS(const seerep::PointCloud2& cloud)
   {
     sensor_msgs::PointCloud2 ret;
     ret.header = toROS(cloud.header());
@@ -86,9 +86,9 @@ namespace ag_proto_ros
   /*
    * Image
    */
-  ag::Image toProto(const sensor_msgs::Image& image)
+  seerep::Image toProto(const sensor_msgs::Image& image)
   {
-    ag::Image ret;
+    seerep::Image ret;
     *ret.mutable_header() = toProto(image.header);
     ret.set_height(image.height);
     ret.set_width(image.width);
@@ -99,7 +99,7 @@ namespace ag_proto_ros
     return ret;
   }
 
-  sensor_msgs::Image toROS(const ag::Image& image)
+  sensor_msgs::Image toROS(const seerep::Image& image)
   {
     sensor_msgs::Image ret;
     ret.header = toROS(image.header());
@@ -112,4 +112,4 @@ namespace ag_proto_ros
     return ret;
   }
 
-} /* namespace ag_proto_ros */
+} /* namespace seerep_ros_conversions */

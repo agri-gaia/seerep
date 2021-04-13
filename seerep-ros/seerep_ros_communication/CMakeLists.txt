@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(ag_grpc_ros VERSION 0.1)
+project(seerep_ros_communication VERSION 0.1)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+find_package(SeerepMsgs REQUIRED)
 
 find_package(catkin REQUIRED
 	COMPONENTS
@@ -10,24 +12,25 @@ find_package(catkin REQUIRED
 	std_msgs
 	geometry_msgs
 	sensor_msgs
-	ag_proto_ros
+	seerep_ros_conversions
 	roscpp
-
 )
 
 find_package(Protobuf REQUIRED)
 find_package(gRPC CONFIG REQUIRED)
 
+
+
 catkin_package(
   INCLUDE_DIRS include
   # LIBRARIES
-	CATKIN_DEPENDS std_msgs geometry_msgs sensor_msgs roscpp ag_proto_ros roscpp
+	CATKIN_DEPENDS std_msgs geometry_msgs sensor_msgs roscpp seerep_ros_conversions roscpp
   # DEPENDS
 )
 
 include_directories(
 	include
-	${AGProtoMsgs_INCLUDE_DIRS}
+	${SeerepMsgs_INCLUDE_DIRS}
 	${catkin_INCLUDE_DIRS}
 )
 

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(ag_proto_msgs VERSION 0.1)
+project(seerep-msgs VERSION 0.1)
 
 include(FindProtobuf)
 find_package(Protobuf REQUIRED)
@@ -48,27 +48,25 @@ include_directories(
 	${PROTOBUF_INCLUDE_DIR}
 )
 
-configure_file(AGProtoMsgsConfig.h.in AGProtoMsgsConfig.h)
+configure_file(SeerepMsgsConfig.h.in SeerepMsgsConfig.h)
 
-add_library(agprotomsgs
+add_library(seerepmsgs
 	${PROTO_SOURCES}
 	${GRPC_SOURCES}
 )
 
-message("Hallo: ${GRPC_HEADERS}")
-message("Hallo: ${PROTO_HEADERS}")
-
 set(INSTALL_HEADERS ${PROTO_HEADERS})
 list(APPEND INSTALL_HEADERS ${GRPC_HEADERS})
 
-set_target_properties(agprotomsgs PROPERTIES PUBLIC_HEADER "${INSTALL_HEADERS}")
+set_target_properties(seerepmsgs PROPERTIES PUBLIC_HEADER "${INSTALL_HEADERS}")
 
 set(CMAKE_INSTALL_INCLUDEDIR include)
 set(CMAKE_INSTALL_LIBDIR lib)
 set(CMAKE_INSTALL_BINDIR bin)
 
-install(TARGETS agprotomsgs
+install(TARGETS seerepmsgs
 	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+	ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 	PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
 )
@@ -76,27 +74,27 @@ install(TARGETS agprotomsgs
 include(CMakePackageConfigHelpers)
 
 configure_package_config_file(
-	${CMAKE_CURRENT_SOURCE_DIR}/AGProtoMsgsConfig.cmake.in
-  ${CMAKE_CURRENT_BINARY_DIR}/AGProtoMsgsConfig.cmake
+	${CMAKE_CURRENT_SOURCE_DIR}/SeerepMsgsConfig.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/SeerepMsgsConfig.cmake
 	INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 	PATH_VARS CMAKE_INSTALL_INCLUDEDIR CMAKE_INSTALL_LIBDIR
 )
 
 # generate the version file for the config file
 write_basic_package_version_file(
-  "${CMAKE_CURRENT_BINARY_DIR}/AGProtoMsgsConfigVersion.cmake"
-  VERSION "${ag_proto_msgs_VERSION_MAJOR}.${ag_proto_msgs_VERSION_MINOR}"
+  "${CMAKE_CURRENT_BINARY_DIR}/SeerepMsgsConfigVersion.cmake"
+  VERSION "${seerep-msgs_VERSION_MAJOR}.${seerep-msgs_VERSION_MINOR}"
   COMPATIBILITY AnyNewerVersion
 )
 
 # install the configuration file
 install(FILES
-  ${CMAKE_CURRENT_BINARY_DIR}/AGProtoMsgsConfig.cmake
-	${CMAKE_CURRENT_BINARY_DIR}/AGProtoMsgsConfigVersion.cmake
-	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/AGProtoMsgs
+  ${CMAKE_CURRENT_BINARY_DIR}/SeerepMsgsConfig.cmake
+	${CMAKE_CURRENT_BINARY_DIR}/SeerepMsgsConfigVersion.cmake
+	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/SeerepMsgs
 )
 
 install(FILES
-	"${PROJECT_BINARY_DIR}/AGProtoMsgsConfig.h"
+	"${PROJECT_BINARY_DIR}/SeerepMsgsConfig.h"
 	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
 )

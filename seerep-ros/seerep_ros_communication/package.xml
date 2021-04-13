@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>ag_grpc_ros</name>
+  <name>seerep_ros_communication</name>
   <version>0.0.1</version>
   <description>
     Converts incoming ROS messages to ProtoBuf messages and use grpc to transfer the data to a configured server
@@ -17,7 +17,6 @@
   <depend>geometry_msgs</depend>
   <depend>sensor_msgs</depend>
   <depend>topic_tools</depend>
-  <depend>ag_proto_ros</depend>
+  <depend>seerep_ros_conversions</depend>
   <buildtool_depend>catkin</buildtool_depend>
-
 </package>

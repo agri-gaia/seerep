@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package ag;
+package seerep;
 
 import "header.proto";
 import "polygon.proto";

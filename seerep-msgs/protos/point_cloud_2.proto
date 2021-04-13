@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package ag;
+package seerep;
 
 import "point_field.proto";
 import "header.proto";
@@ -20,12 +20,12 @@ import "header.proto";
  */
 
 message PointCloud2 {
-  ag.Header header = 1;
+  Header header = 1;
 
   uint32 height = 2;
   uint32 width = 3;
 
-  repeated ag.PointField fields = 4;
+  repeated PointField fields = 4;
 
   bool is_bigendian = 5;
   uint32 point_step = 6;

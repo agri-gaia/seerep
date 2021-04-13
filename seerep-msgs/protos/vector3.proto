@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package ag;
+package seerep;
 
 message Vector3{
   double x = 1;

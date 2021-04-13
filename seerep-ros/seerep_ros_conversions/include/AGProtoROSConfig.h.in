@@ -1,8 +1,0 @@
-#ifndef AG_PROTO_ROS_CONFIG_H_
-#define AG_PROTO_ROS_CONFIG_H_
-
-// the configured options and settings for AgriGaiaROS
-#define AgriGaiaROS_VERSION_MAJOR @AG_PROTO_ROS_VERSION_MAJOR@
-#define AgriGaiaROS_VERSION_MINOR @AG_PROTO_ROS_VERSION_MINOR@
-
-#endif // AG_PROTO_ROS_CONFIG_H_

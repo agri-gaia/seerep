@@ -1,0 +1,11 @@
+@PACKAGE_INIT@
+
+set(SeerepMsgs_INCLUDE_DIRS @PACKAGE_CMAKE_INSTALL_INCLUDEDIR@)
+
+find_package(PkgConfig REQUIRED)
+find_library(SeerepMsgs_LIBRARY NAMES seerepmsgs)
+set(SeerepMsgs_LIBRARIES ${SeerepMsgs_LIBRARY})
+
+find_package(Protobuf REQUIRED)
+list(APPEND SeerepMsgs_INCLUDE_DIRS ${Protobuf_INCLUDE_DIR})
+list(APPEND SeerepMsgs_LIBRARIES ${Protobuf_LIBRARY})

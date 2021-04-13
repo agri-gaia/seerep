@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(ag_proto_ros VERSION 0.1)
+project(seerep_ros_conversions VERSION 0.1)
 
 find_package(catkin REQUIRED
 	COMPONENTS
@@ -8,20 +8,20 @@ find_package(catkin REQUIRED
 	sensor_msgs
 )
 
-find_package(AGProtoMsgs REQUIRED)
+find_package(SeerepMsgs REQUIRED)
 
-configure_file(include/AGProtoROSConfig.h.in AGProtoROSConfig.h)
+configure_file(include/SeerepRosConversionsConfig.h.in SeerepRosConversionsConfig.h)
 
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES ag_proto_ros
+  LIBRARIES seerep_ros_conversions
 	CATKIN_DEPENDS std_msgs geometry_msgs sensor_msgs
-  DEPENDS AGProtoMsgs
+  DEPENDS SeerepMsgs
 )
 
 include_directories(
 	include
-	${AGProtoMsgs_INCLUDE_DIRS}
+	${SeerepMsgs_INCLUDE_DIRS}
 	${catkin_INCLUDE_DIRS}
 )
 
@@ -43,6 +43,6 @@ install(DIRECTORY include/${PROJECT_NAME}/
 )
 
 install(FILES
-	"${PROJECT_BINARY_DIR}/AGProtoROSConfig.h"
+	"${PROJECT_BINARY_DIR}/SeerepRosConversionsConfig.h"
 	DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 )

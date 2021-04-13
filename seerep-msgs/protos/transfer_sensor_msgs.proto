@@ -1,13 +1,15 @@
 syntax = "proto3";
 
-package ag;
+package seerep;
 
+import "image.proto";
 import "point_cloud_2.proto";
 import "header.proto";
 
 import "server_response.proto";
 
 service TransferSensorMsgs {
+  rpc TransferImage(Image) returns (ServerResponse);
   rpc TransferPointCloud2(PointCloud2) returns (ServerResponse);
   rpc TransferHeader(Header) returns (ServerResponse);
 }

@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package ag;
+package seerep;
 
 import "header.proto";
 
@@ -22,7 +22,7 @@ message Image {
    * message associated with the image conflict
    * the behavior is undefined
    */
-  ag.Header header = 1;
+  Header header = 1;
 
   // image height, that is, number of rows
   uint32 height = 2;
