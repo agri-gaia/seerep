@@ -1,0 +1,8 @@
+#ifndef SeerepCom_CONFIG_H_
+#define SeerepCom_CONFIG_H_
+
+// the configured options and settings for seerep_com
+#define SEEREP_COM_VERSION_MAJOR @seerep_com_VERSION_MAJOR@
+#define SEEREP_COM_VERSION_MINOR @seerep_com_VERSION_MINOR@
+
+#endif /* SeerepCom_CONFIG_H_ */

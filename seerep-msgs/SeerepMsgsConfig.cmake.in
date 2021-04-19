@@ -1,6 +1,7 @@
 @PACKAGE_INIT@
 
 set(SeerepMsgs_INCLUDE_DIRS @PACKAGE_CMAKE_INSTALL_INCLUDEDIR@)
+set(SeerepMsgs_PROTOBUF_IMPORT_DIRS @PACKAGE_PROTOBUF_IMPORT_DIR@)
 
 find_package(PkgConfig REQUIRED)
 find_library(SeerepMsgs_LIBRARY NAMES seerepmsgs)

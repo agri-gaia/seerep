@@ -21,7 +21,7 @@ function(PROTOBUF_GENERATE_GRPC_CPP SRCS HDRS)
   endif()
 
   if(DEFINED PROTOBUF_IMPORT_DIRS)
-    foreach(DIR ${Protobuf_IMPORT_DIRS})
+    foreach(DIR ${PROTOBUF_IMPORT_DIRS})
       get_filename_component(ABS_PATH ${DIR} ABSOLUTE)
       list(FIND _protobuf_include_path ${ABS_PATH} _contains_already)
       if(${_contains_already} EQUAL -1)
@@ -32,6 +32,7 @@ function(PROTOBUF_GENERATE_GRPC_CPP SRCS HDRS)
 
   set(${SRCS})
   set(${HDRS})
+
   foreach(FIL ${ARGN})
     get_filename_component(ABS_FIL ${FIL} ABSOLUTE)
     get_filename_component(FIL_WE ${FIL} NAME_WE)

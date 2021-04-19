@@ -4,11 +4,6 @@ project(seerep-msgs VERSION 0.1)
 include(FindProtobuf)
 find_package(Protobuf REQUIRED)
 
-#find_package(gRPC REQUIRED)
-
-LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
-include(ProtobufGenerateGrpcCpp)
-
 
 PROTOBUF_GENERATE_CPP(
 	PROTO_SOURCES PROTO_HEADERS
@@ -33,15 +28,8 @@ PROTOBUF_GENERATE_CPP(
 	protos/twist_with_covariance.proto
 	protos/twist_with_covariance_stamped.proto
 	protos/server_response.proto
-
-	# grpc
-	protos/transfer_sensor_msgs.proto
 )
 
-PROTOBUF_GENERATE_GRPC_CPP(
-	GRPC_SOURCES GRPC_HEADERS
-	protos/transfer_sensor_msgs.proto
-)
 
 include_directories(
 	${CMAKE_BUILD_RPATH}
@@ -52,15 +40,14 @@ configure_file(SeerepMsgsConfig.h.in SeerepMsgsConfig.h)
 
 add_library(seerepmsgs
 	${PROTO_SOURCES}
-	${GRPC_SOURCES}
 )
 
 set(INSTALL_HEADERS ${PROTO_HEADERS})
-list(APPEND INSTALL_HEADERS ${GRPC_HEADERS})
 
 set_target_properties(seerepmsgs PROPERTIES PUBLIC_HEADER "${INSTALL_HEADERS}")
 
 set(CMAKE_INSTALL_INCLUDEDIR include)
+set(PROTOBUF_IMPORT_DIR ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
 set(CMAKE_INSTALL_LIBDIR lib)
 set(CMAKE_INSTALL_BINDIR bin)
 
@@ -77,7 +64,7 @@ configure_package_config_file(
 	${CMAKE_CURRENT_SOURCE_DIR}/SeerepMsgsConfig.cmake.in
   ${CMAKE_CURRENT_BINARY_DIR}/SeerepMsgsConfig.cmake
 	INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
-	PATH_VARS CMAKE_INSTALL_INCLUDEDIR CMAKE_INSTALL_LIBDIR
+	PATH_VARS CMAKE_INSTALL_INCLUDEDIR CMAKE_INSTALL_LIBDIR PROTOBUF_IMPORT_DIR
 )
 
 # generate the version file for the config file
@@ -98,3 +85,6 @@ install(FILES
 	"${PROJECT_BINARY_DIR}/SeerepMsgsConfig.h"
 	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
 )
+
+install(DIRECTORY protos/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+        FILES_MATCHING PATTERN "*.proto")

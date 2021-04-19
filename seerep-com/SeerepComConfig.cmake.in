@@ -1,0 +1,15 @@
+@PACKAGE_INIT@
+
+set(SeerepCom_INCLUDE_DIRS @PACKAGE_CMAKE_INSTALL_INCLUDEDIR@)
+
+find_package(PkgConfig REQUIRED)
+find_library(SeerepCom_LIBRARY NAMES seerepcom)
+set(SeerepCom_LIBRARIES ${SeerepCom_LIBRARY})
+
+find_package(SeerepMsgs REQUIRED)
+list(APPEND SeerepCom_INCLUDE_DIRS ${SeerepMsgs_INCLUDE_DIR})
+list(APPEND SeerepCom_LIBRARIES ${SeerepMsgs_LIBRARY})
+
+find_package(Protobuf REQUIRED)
+list(APPEND SeerepCom_INCLUDE_DIRS ${Protobuf_INCLUDE_DIR})
+list(APPEND SeerepCom_LIBRARIES ${Protobuf_LIBRARY})
