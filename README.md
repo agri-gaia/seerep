@@ -6,22 +6,25 @@ The server stores the received data in an HDF5 file. The data can later be acces
 
 ## Installation
 
-Clone the repo: `git clone git@github.com:agri-gaia/seerep.git` 
+First, you will need the dependencies. To install ProtoBuf, gRPC, and HighFive please follow the script: https://github.com/agri-gaia/seerep-docker/blob/main/Docker/installGRPC.sh or use the corresponding docker container.
 
 We provide two ways to build seerep: First, manuel to the system with cmake and make, and second, with catkin build.
-
 
 ### Catkin Build
 ```
 source /opt/ros/melodic/setup.bash
 mkdir -p seerep_ws/src
 cd seerep_ws/src
+git clone git@github.com:agri-gaia/seerep.git
 catkin_init_workspace
+cd ..
 catkin build
 ```
 
-
 ### System Installation
+
+Clone the repo: `git clone git@github.com:agri-gaia/seerep.git` 
+
 First, the messages have to be compiled as they are used as basis for all communications.
 
 #### seerep-msgs
