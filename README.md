@@ -1,5 +1,8 @@
-# seerep - SEmantic Environment REPresentation
-Sensor and environment data communication and storage
+# seerep 
+seerep stands for SEmantic Environment REPresentation and represents a system that efficiently implements communication and storage layers for sensor and environmental data.
+
+In the current version, ROS (Robot Operating System) messages of configured topics are converted to Protobuf and transmitted to a server using grpc.
+The server stores the received data in an HDF5 file. The data can later be accessed efficiently enabling goal-orinted access to specific datasets and data ranges.
 
 ## Installation
 
