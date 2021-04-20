@@ -12,6 +12,8 @@
 
   <author email="spuetz@uos.de">Sebastian Pütz</author>
 
+  <depend>seerep-msgs</depend>
+  <depend>seerep-com</depend>
   <depend>roscpp</depend>
   <depend>std_msgs</depend>
   <depend>geometry_msgs</depend>
