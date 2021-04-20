@@ -8,9 +8,23 @@ The server stores the received data in an HDF5 file. The data can later be acces
 
 Clone the repo: `git clone git@github.com:agri-gaia/seerep.git` 
 
+We provide two ways to build seerep: First, manuel to the system with cmake and make, and second, with catkin build.
+
+
+### Catkin Build
+```
+source /opt/ros/melodic/setup.bash
+mkdir -p seerep_ws/src
+cd seerep_ws/src
+catkin_init_workspace
+catkin build
+```
+
+
+### System Installation
 First, the messages have to be compiled as they are used as basis for all communications.
 
-### seerep-msgs
+#### seerep-msgs
 ```
 cd seerep/seerep-msgs
 mkdir build
@@ -34,7 +48,7 @@ In conclusion the following files will be installed to the system:
 sudo make install
 ```
 
-### seerep-com
+#### seerep-com
 To build the communication interfaces, i.e., the grpc servie interfaces which communicate data from a grpc client to a server and vice versa, we will build the seerep-com package.
 ```
 cd seerep-com
