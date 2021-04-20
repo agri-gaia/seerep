@@ -20,18 +20,19 @@ protobuf_generate_grpc_cpp(
 	protos/transfer_sensor_msgs.proto
 )
 
+message("seerep msgs include dir" ${SeerepMsgs_INCLUDE_DIRS})
+
 include_directories(
-	${CMAKE_BUILD_RPATH}
-	"${SeerepMsgs_INCLUDE_DIRS}/seerep-msgs"
-	${SeerepMsgs_INCLUDE_DIRS}
-	${PROTOBUF_INCLUDE_DIR}
+  ${CMAKE_BUILD_PATH}
+  ${SeerepMsgs_INCLUDE_DIRS}
+  ${PROTOBUF_INCLUDE_DIR}
 )
 
 configure_file(SeerepComConfig.h.in SeerepComConfig.h)
 
 add_library(seerepcom
-	${PROTO_SOURCES}
-	${GRPC_SOURCES}
+  ${PROTO_SOURCES}
+  ${GRPC_SOURCES}
 )
 
 set(INSTALL_HEADERS ${PROTO_HEADERS})
@@ -44,19 +45,19 @@ set(CMAKE_INSTALL_LIBDIR lib)
 set(CMAKE_INSTALL_BINDIR bin)
 
 install(TARGETS seerepcom
-	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-	ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-	PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
 )
 
 include(CMakePackageConfigHelpers)
 
 configure_package_config_file(
-	${CMAKE_CURRENT_SOURCE_DIR}/SeerepComConfig.cmake.in
+  ${CMAKE_CURRENT_SOURCE_DIR}/SeerepComConfig.cmake.in
   ${CMAKE_CURRENT_BINARY_DIR}/SeerepComConfig.cmake
-	INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
-	PATH_VARS CMAKE_INSTALL_INCLUDEDIR CMAKE_INSTALL_LIBDIR
+  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+  PATH_VARS CMAKE_INSTALL_INCLUDEDIR CMAKE_INSTALL_LIBDIR
 )
 
 # generate the version file for the config file
@@ -69,11 +70,11 @@ write_basic_package_version_file(
 # install the configuration file
 install(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/SeerepComConfig.cmake
-	${CMAKE_CURRENT_BINARY_DIR}/SeerepComConfigVersion.cmake
-	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/SeerepCom
+  ${CMAKE_CURRENT_BINARY_DIR}/SeerepComConfigVersion.cmake
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/SeerepCom
 )
 
 install(FILES
-	"${PROJECT_BINARY_DIR}/SeerepComConfig.h"
-	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+  "${PROJECT_BINARY_DIR}/SeerepComConfig.h"
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
 )

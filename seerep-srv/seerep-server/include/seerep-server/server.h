@@ -9,7 +9,7 @@
 #include <grpcpp/security/server_credentials.h>
 
 // seerep
-#include <seerep-msgs/transfer_sensor_msgs.grpc.pb.h>
+#include <seerep-com/transfer_sensor_msgs.grpc.pb.h>
 #include <seerep-hdf5/io.h>
 
 namespace seerep_server {

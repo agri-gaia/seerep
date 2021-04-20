@@ -9,7 +9,7 @@
 #include <grpcpp/security/server_credentials.h>
 
 // ag
-#include <seerep-msgs/transfer_sensor_msgs.grpc.pb.h>
+#include <seerep-com/transfer_sensor_msgs.grpc.pb.h>
 #include <seerep_ros_conversions/conversions.h>
 
 // ros

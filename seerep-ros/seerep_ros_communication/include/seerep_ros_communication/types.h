@@ -6,7 +6,7 @@
 #include <algorithm>
 
 // ag
-#include <seerep-msgs/transfer_sensor_msgs.grpc.pb.h>
+#include <seerep-com/transfer_sensor_msgs.grpc.pb.h>
 #include <seerep_ros_conversions/conversions.h>
 
 // Supported ROS message types

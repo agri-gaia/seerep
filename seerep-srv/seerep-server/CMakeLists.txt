@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Protobuf REQUIRED)
 find_package(gRPC CONFIG REQUIRED)
 find_package(SeerepHDF5 REQUIRED)
+find_package(SeerepCom REQUIRED)
 find_package(HighFive REQUIRED)
 message("LIBS" ${SeerepHDF5_LIBRARIES})
 message("INCS" ${SeerepHDF5_INCLUDE_DIRS})
@@ -14,6 +15,7 @@ message("INCS2" ${HighFive_INCLUDE_DIRS})
 
 include_directories(
 	include
+	${SeerepCom_INCLUDE_DIRS}
 	${SeerepHDF5_INCLUDE_DIRS}
 	${HighFive_INCLUDE_DIRS}
 	${catkin_INCLUDE_DIRS}
@@ -29,11 +31,13 @@ add_executable(${PROJECT_NAME}_client
 
 target_link_libraries(${PROJECT_NAME}_server
 	${SeerepHDF5_LIBRARIES}
+	${SeerepCom_LIBRARIES}
 	gRPC::grpc++_reflection
 )
 
 target_link_libraries(${PROJECT_NAME}_client
 	${SeerepHDF5_LIBRARIES}
+	${SeerepCom_LIBRARIES}
 	gRPC::grpc++_reflection
 )
 

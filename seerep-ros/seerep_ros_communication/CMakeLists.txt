@@ -4,7 +4,7 @@ project(seerep_ros_communication VERSION 0.1)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(SeerepMsgs REQUIRED)
+find_package(SeerepCom REQUIRED)
 
 find_package(catkin REQUIRED
 	COMPONENTS
@@ -30,7 +30,7 @@ catkin_package(
 
 include_directories(
 	include
-	${SeerepMsgs_INCLUDE_DIRS}
+	${SeerepCom_INCLUDE_DIRS}
 	${catkin_INCLUDE_DIRS}
 )
 
@@ -46,11 +46,13 @@ add_dependencies(${PROJECT_NAME}_server ${${PROJECT_NAME}_EXPORTED_TARGETS} ${ca
 add_dependencies(${PROJECT_NAME}_client ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 target_link_libraries(${PROJECT_NAME}_server
+	${SeerepCom_LIBRARIES}
 	${catkin_LIBRARIES}
 	gRPC::grpc++_reflection
 )
 
 target_link_libraries(${PROJECT_NAME}_client
+	${SeerepCom_LIBRARIES}
 	${catkin_LIBRARIES}
 	gRPC::grpc++_reflection
 )
