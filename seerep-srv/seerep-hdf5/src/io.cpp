@@ -92,7 +92,6 @@ void SeerepHDF5IO::writeImage(const std::string& id, const seerep::Image& image)
   file.flush();
 }
 
-
 std::optional<seerep::Image> SeerepHDF5IO::readImage(const std::string& id)
 {
   if(!file.exist(id)) return std::nullopt;
@@ -103,6 +102,98 @@ std::optional<seerep::Image> SeerepHDF5IO::readImage(const std::string& id)
   data_set.read(image.mutable_data());
   *image.mutable_header() = readHeaderAttributes(data_set);
   return image;
+}
+
+void SeerepHDF5IO::writePointAttributes(HighFive::DataSet& data_set, const seerep::Point& point, const std::string &prefix)
+{
+  if(!data_set.hasAttribute(prefix + X))
+    data_set.createAttribute(prefix + X, point.x());
+  else
+    data_set.getAttribute(prefix + X).write(point.x());
+
+  if(!data_set.hasAttribute(prefix + Y))
+    data_set.createAttribute(prefix + Y, point.y());
+  else
+    data_set.getAttribute(prefix + Y).write(point.y());
+
+  if(!data_set.hasAttribute(prefix + Z))
+    data_set.createAttribute(prefix + Z, point.z());
+  else
+    data_set.getAttribute(prefix + Z).write(point.z());
+}
+
+void SeerepHDF5IO::writePoint(const std::string& id, const seerep::Point& point)
+{
+  std::shared_ptr<HighFive::DataSet> data_set_ptr;
+  HighFive::DataSpace data_space(0);
+  if(!file.exist(id))
+    data_set_ptr = std::make_shared<HighFive::DataSet>(file.createDataSet<uint8_t>(id, data_space));
+  else
+    data_set_ptr = std::make_shared<HighFive::DataSet>(file.getDataSet(id));
+  writePointAttributes(*data_set_ptr, point);
+  file.flush();
+}
+
+void SeerepHDF5IO::writeQuaternionAttributes(HighFive::DataSet& data_set, const seerep::Quaternion& quaternion, const std::string &prefix)
+{
+  if(!data_set.hasAttribute(prefix + X))
+    data_set.createAttribute(prefix + X, quaternion.x());
+  else
+    data_set.getAttribute(prefix + X).write(quaternion.x());
+
+  if(!data_set.hasAttribute(prefix + Y))
+    data_set.createAttribute(prefix + Y, quaternion.y());
+  else
+    data_set.getAttribute(prefix + Y).write(quaternion.y());
+
+  if(!data_set.hasAttribute(prefix + Z))
+    data_set.createAttribute(prefix + Z, quaternion.z());
+  else
+    data_set.getAttribute(prefix + Z).write(quaternion.z());
+
+  if(!data_set.hasAttribute(prefix + W))
+    data_set.createAttribute(prefix + W, quaternion.w());
+  else
+    data_set.getAttribute(prefix + W).write(quaternion.w());
+}
+
+void SeerepHDF5IO::writeQuaternion(const std::string& id, const seerep::Quaternion& quaternion)
+{
+  std::shared_ptr<HighFive::DataSet> data_set_ptr;
+  HighFive::DataSpace data_space(0);
+  if(!file.exist(id))
+    data_set_ptr = std::make_shared<HighFive::DataSet>(file.createDataSet<uint8_t>(id, data_space));
+  else
+    data_set_ptr = std::make_shared<HighFive::DataSet>(file.getDataSet(id));
+  writeQuaternionAttributes(*data_set_ptr, quaternion);
+  file.flush();
+}
+
+void SeerepHDF5IO::writePose(const std::string& id, const seerep::Pose& pose)
+{
+  std::shared_ptr<HighFive::DataSet> data_set_ptr;
+  HighFive::DataSpace data_space(0);
+  if(!file.exist(id))
+    data_set_ptr = std::make_shared<HighFive::DataSet>(file.createDataSet<uint8_t>(id, data_space));
+  else
+    data_set_ptr = std::make_shared<HighFive::DataSet>(file.getDataSet(id));
+  writePointAttributes(*data_set_ptr, pose.position(), POSITION + "/");
+  writeQuaternionAttributes(*data_set_ptr, pose.orientation(), ORIENTATION + "/");
+  file.flush();
+}
+
+void SeerepHDF5IO::writePoseStamped(const std::string& id, const seerep::PoseStamped& pose)
+{
+  std::shared_ptr<HighFive::DataSet> data_set_ptr;
+  HighFive::DataSpace data_space(0);
+  if(!file.exist(id))
+    data_set_ptr = std::make_shared<HighFive::DataSet>(file.createDataSet<uint8_t>(id, data_space));
+  else
+    data_set_ptr = std::make_shared<HighFive::DataSet>(file.getDataSet(id));
+  writeHeaderAttributes(*data_set_ptr, pose.header());
+  writePointAttributes(*data_set_ptr, pose.pose().position(), POSE + "/" + POSITION + "/");
+  writeQuaternionAttributes(*data_set_ptr, pose.pose().orientation(), POSE + "/" + ORIENTATION + "/");
+  file.flush();
 }
 
 } /* namespace seerep_hdf5 */

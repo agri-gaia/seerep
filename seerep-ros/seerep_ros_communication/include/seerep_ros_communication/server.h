@@ -25,6 +25,10 @@ public:
   grpc::Status TransferPointCloud2(grpc::ServerContext* context, const seerep::PointCloud2* point_cloud_2, seerep::ServerResponse* response);
   grpc::Status TransferImage(grpc::ServerContext* context, const seerep::Image* image, seerep::ServerResponse* response);
   grpc::Status TransferHeader(grpc::ServerContext* context, const seerep::Header* header, seerep::ServerResponse* response);
+  grpc::Status TransferPoint(grpc::ServerContext* context, const seerep::Point* point , seerep::ServerResponse* response);
+  grpc::Status TransferQuaternion(grpc::ServerContext* context, const seerep::Quaternion* quaternion, seerep::ServerResponse* response);
+  grpc::Status TransferPose(grpc::ServerContext* context, const seerep::Pose* pose, seerep::ServerResponse* response);
+  grpc::Status TransferPoseStamped(grpc::ServerContext* context, const seerep::PoseStamped* pose, seerep::ServerResponse* response);
 };
 
 std::shared_ptr<grpc::Server> createServer(const std::string& server_address, seerep_grpc_ros::ReceiveSensorMsgs* receive_sensor_msgs);

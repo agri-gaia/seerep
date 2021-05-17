@@ -6,12 +6,14 @@
 #include <sensor_msgs/PointField.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <sensor_msgs/Image.h>
+#include <geometry_msgs/PoseStamped.h>
 
 // Agri-Gaia proto messages
 #include <seerep-msgs/header.pb.h>
 #include <seerep-msgs/point_field.pb.h>
 #include <seerep-msgs/point_cloud_2.pb.h>
 #include <seerep-msgs/image.pb.h>
+#include <seerep-msgs/pose_stamped.pb.h>
 
 namespace seerep_ros_conversions
 {
@@ -78,6 +80,70 @@ namespace seerep_ros_conversions
    * @return ROS std_sensor_msgs/Image
    */
   sensor_msgs::Image toROS(const seerep::Image& image);
+
+  /**
+   * @brief Converts a ROS geometry_msgs::Point message to the corresponding
+   * Protobuf Image message
+   * @param point geometry_msgs::Point
+   * @return Protobuf Point message
+   */
+  seerep::Point toProto(const geometry_msgs::Point& point);
+
+  /**
+   * @brief Converts a Protobuf Image message to the corresponding
+   * ROS geometry_msgs::Point message
+   * @param point Protobuf Point
+   * @return ROS geometry_msgs::Point
+   */
+  geometry_msgs::Point toROS(const seerep::Point& point);
+
+  /**
+   * @brief Converts a ROS geometry_msgs::Quaternion message to the corresponding
+   * Protobuf Quaternion message
+   * @param quaternion geometry_msgs::Quaternion
+   * @return Protobuf Quaternion message
+   */
+  seerep::Quaternion toProto(const geometry_msgs::Quaternion& quaternion);
+
+  /**
+   * @brief Converts a Protobuf Quaternion message to the corresponding
+   * ROS geometry_msgs::Quaternion message
+   * @param quaternion Protobuf Quaternion
+   * @return ROS geometry_msgs::Quaternion
+   */
+  geometry_msgs::Quaternion toROS(const seerep::Quaternion& quaternion);
+
+  /**
+   * @brief Converts a ROS geometry_msgs::Pose message to the corresponding
+   * Protobuf Pose message
+   * @param pose geometry_msgs::Pose
+   * @return Protobuf Pose message
+   */
+  seerep::Pose toProto(const geometry_msgs::Pose& pose);
+
+  /**
+   * @brief Converts a Protobuf Pose message to the corresponding
+   * ROS geometry_msgs::Pose message
+   * @param pose Protobuf Pose
+   * @return ROS geometry_msgs::Pose
+   */
+  geometry_msgs::Pose toROS(const seerep::Pose& pose);
+
+  /**
+   * @brief Converts a ROS geometry_msgs::PoseStamped message to the corresponding
+   * Protobuf PoseStamped message
+   * @param pose geometry_msgs::PoseStamped
+   * @return Protobuf PoseStamped message
+   */
+  seerep::PoseStamped toProto(const geometry_msgs::PoseStamped& pose);
+
+  /**
+   * @brief Converts a Protobuf PoseStamped message to the corresponding
+   * ROS geometry_msgs::PoseStamped message
+   * @param pose Protobuf PoseStamped
+   * @return ROS geometry_msgs::PoseStamped
+   */
+  geometry_msgs::PoseStamped toROS(const seerep::PoseStamped& pose);
 } /* namespace seerep_ros_conversions */
 
 #endif /* SEEREP_ROS_CONVERSIONS */
