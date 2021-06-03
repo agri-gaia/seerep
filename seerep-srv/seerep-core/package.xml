@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>seerep-core</name>
+  <version>0.0.1</version>
+  <description> The seerep-core package </description>
+
+  <maintainer email="mark.hoellmann@dfki.de">Sebastian Pütz</maintainer>
+
+  <license>TODO</license>
+
+  <url type="website">TODO</url>
+
+  <author email="mark.hoellmann@dfki.de">Sebastian Pütz</author>
+
+  <buildtool_depend>cmake</buildtool_depend>
+
+  <export>
+    <build_type>cmake</build_type>
+  </export>
+</package>
