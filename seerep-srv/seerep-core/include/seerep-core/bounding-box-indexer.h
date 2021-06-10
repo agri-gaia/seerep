@@ -10,11 +10,12 @@ class BoundingBoxIndexer
 {
 public:
   BoundingBoxIndexer();
-  virtual
+  virtual getData(boundingBox BB, labels labels) = 0;
 
-      private:
+private:
+private:
 };
 
 } /* namespace seerep_core */
 
-#endif  // SEEREP_SERVER_SEEREP_CORE_BB_INDEXER_H_HDF5_CLIENT_H_
+#endif  // SEEREP_CORE_BB_INDEXER_H_
