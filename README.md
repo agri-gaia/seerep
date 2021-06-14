@@ -2,11 +2,11 @@
 
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 
-seerep stands for SEmantic Environment REPresentation and represents a system that efficiently implements communication 
+seerep stands for SEmantic Environment REPresentation and represents a system that efficiently implements communication
 and storage layers for sensor and environmental data.
 
-In the current version, ROS (Robot Operating System) messages of configured topics are converted to Protobuf and 
-transmitted to a server using grpc. The server stores the received data in an HDF5 file. The data can later be accessed 
+In the current version, ROS (Robot Operating System) messages of configured topics are converted to Protobuf and
+transmitted to a server using grpc. The server stores the received data in an HDF5 file. The data can later be accessed
 efficiently enabling goal-oriented access to specific datasets and data ranges.
 
 ![](workflow.svg)
@@ -65,11 +65,11 @@ cmake ..
 make
 ```
 
-In the next step we will install the generated protobuf message C++ header files  (`*.pb.h?`) and protbuf files 
-(`*.proto`), as well as the built library  (`libseerepmsgs.a`) to the system. In addition, the package will install a 
-package configuration file (`SeerepMsgsConfig.cmake`) for cmake. This file will point to all the necessary resources to 
-be found by the other cmake projects. Also, a cmake version file (`SeerepMsgsConfigVersion.cmake`) will be installed to 
-control the versioning. To check the correct version and definitions in C++, a separate header file 
+In the next step we will install the generated protobuf message C++ header files  (`*.pb.h?`) and protbuf files
+(`*.proto`), as well as the built library  (`libseerepmsgs.a`) to the system. In addition, the package will install a
+package configuration file (`SeerepMsgsConfig.cmake`) for cmake. This file will point to all the necessary resources to
+be found by the other cmake projects. Also, a cmake version file (`SeerepMsgsConfigVersion.cmake`) will be installed to
+control the versioning. To check the correct version and definitions in C++, a separate header file
 (`SeerepMsgsConfig.h`) is also installed.
 
 In conclusion the following files will be installed to the system:
@@ -85,7 +85,7 @@ In conclusion the following files will be installed to the system:
 sudo make install
 ```
 
-To build the communication interfaces (`seerep-com`), i.e., the grpc service interfaces which communicate data from a 
+To build the communication interfaces (`seerep-com`), i.e., the grpc service interfaces which communicate data from a
 grpc client to a server and vice versa, we will build the seerep-com package.
 
 ```
@@ -106,4 +106,26 @@ As above, the package will install several files to the system.
 
 ```
 sudo make install
+```
+
+## pre-commit Formatting Checks
+
+This repo has a [pre-commit](https://pre-commit.com/) check that runs in CI.
+You can use this locally and set it up to run automatically before you commit
+something. To install, use pip:
+
+```bash
+pip3 install --user pre-commit
+```
+
+To run over all the files in the repo manually:
+
+```bash
+pre-commit run -a
+```
+
+To run pre-commit automatically before committing in the local repo, install the git hooks:
+
+```bash
+pre-commit install
 ```
