@@ -4,7 +4,8 @@ package seerep;
 
 import "vector3.proto";
 
-message Twist{
+message Twist
+{
   Vector3 linear = 1;
   Vector3 angular = 2;
 }

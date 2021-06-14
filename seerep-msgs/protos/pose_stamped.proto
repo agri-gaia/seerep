@@ -5,7 +5,8 @@ package seerep;
 import "header.proto";
 import "pose.proto";
 
-message PoseStamped{
+message PoseStamped
+{
   Header header = 1;
   Pose pose = 2;
 }

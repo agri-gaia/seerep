@@ -4,7 +4,8 @@ package seerep;
 
 import "google/protobuf/timestamp.proto";
 
-message ServerResponse{
+message ServerResponse
+{
   // sequence id, consecutively increasing id
   uint32 seq = 1;
 
@@ -12,7 +13,8 @@ message ServerResponse{
 
   string message = 3;
 
-  enum TRANSMISSION_STATE {
+  enum TRANSMISSION_STATE
+  {
     SUCCESS = 0;
     FAILURE = 1;
   }

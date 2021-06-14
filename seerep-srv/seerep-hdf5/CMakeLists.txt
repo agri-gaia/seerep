@@ -79,5 +79,3 @@ install(FILES
 	cmake/FindHighFive.cmake
 	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/SeerepHDF5/Modules
 )
-
-

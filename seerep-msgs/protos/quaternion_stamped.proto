@@ -5,7 +5,8 @@ package seerep;
 import "header.proto";
 import "quaternion.proto";
 
-message QuaternionStamped{
+message QuaternionStamped
+{
   Header header = 1;
   Quaternion quaternion = 2;
 }

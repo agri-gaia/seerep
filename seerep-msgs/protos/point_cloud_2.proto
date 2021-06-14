@@ -19,7 +19,8 @@ import "header.proto";
  * points).
  */
 
-message PointCloud2 {
+message PointCloud2
+{
   Header header = 1;
 
   uint32 height = 2;

@@ -14,14 +14,11 @@
 // std
 #include <optional>
 
-
 namespace seerep_hdf5
 {
-
 class SeerepHDF5IO
 {
 public:
-
   SeerepHDF5IO(HighFive::File& file);
 
   void writeHeaderAttributes(HighFive::DataSet& data_set, const seerep::Header& header);
@@ -32,11 +29,12 @@ public:
 
   std::optional<seerep::Image> readImage(const std::string& id);
 
-  void writePointAttributes(HighFive::DataSet& data_set, const seerep::Point& point, const std::string &prefix = "");
+  void writePointAttributes(HighFive::DataSet& data_set, const seerep::Point& point, const std::string& prefix = "");
 
   void writePoint(const std::string& id, const seerep::Point& point);
 
-  void writeQuaternionAttributes(HighFive::DataSet& data_set, const seerep::Quaternion& quaternion, const std::string &prefix = "");
+  void writeQuaternionAttributes(HighFive::DataSet& data_set, const seerep::Quaternion& quaternion,
+                                 const std::string& prefix = "");
 
   void writeQuaternion(const std::string& id, const seerep::Quaternion& quaternion);
 
@@ -45,11 +43,10 @@ public:
   void writePoseStamped(const std::string& id, const seerep::PoseStamped& pose);
 
 private:
-
   // image attribute keys
   const std::string IMAGE_HEIGHT = "height";
   const std::string IMAGE_WIDTH = "width";
-  const std::string IMAGE_ENCODING ="encoding";
+  const std::string IMAGE_ENCODING = "encoding";
   const std::string IMAGE_IS_BIGENDIAN = "is_bigendian";
   const std::string IMAGE_STEP = "step";
 
@@ -72,9 +69,7 @@ private:
 
   HighFive::File file;
   std::mutex write_mtx;
-
 };
-
 
 } /* namespace seerep_hdf5 */
 

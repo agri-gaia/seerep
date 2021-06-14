@@ -26,7 +26,6 @@ namespace seerep_grpc_ros
 class TransferSensorMsgs
 {
 public:
-
   TransferSensorMsgs(std::shared_ptr<grpc::Channel> channel_ptr);
 
   std::optional<ros::Subscriber> getSubscriber(const std::string& message_type, const std::string& topic);
@@ -52,4 +51,4 @@ private:
 
 } /* namespace seerep_grpc_ros */
 
-#endif // SEEREP_GRPC_ROS_CLIENT_H_
+#endif  // SEEREP_GRPC_ROS_CLIENT_H_

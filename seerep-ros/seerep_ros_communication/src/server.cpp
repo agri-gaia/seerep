@@ -2,12 +2,12 @@
 
 namespace seerep_grpc_ros
 {
-ReceiveSensorMsgs::ReceiveSensorMsgs() {}
+ReceiveSensorMsgs::ReceiveSensorMsgs()
+{
+}
 
-grpc::Status ReceiveSensorMsgs::TransferPointCloud2(
-    grpc::ServerContext* context,
-    const seerep::PointCloud2* msg,
-    seerep::ServerResponse* response)
+grpc::Status ReceiveSensorMsgs::TransferPointCloud2(grpc::ServerContext* context, const seerep::PointCloud2* msg,
+                                                    seerep::ServerResponse* response)
 {
   sensor_msgs::PointCloud2 cloud = seerep_ros_conversions::toROS(*msg);
   ROS_INFO_STREAM("Incoming PointCloud2 message" << std::endl << cloud);
@@ -16,10 +16,8 @@ grpc::Status ReceiveSensorMsgs::TransferPointCloud2(
   return grpc::Status::OK;
 }
 
-grpc::Status ReceiveSensorMsgs::TransferHeader(
-    grpc::ServerContext* context,
-    const seerep::Header* msg,
-    seerep::ServerResponse* response)
+grpc::Status ReceiveSensorMsgs::TransferHeader(grpc::ServerContext* context, const seerep::Header* msg,
+                                               seerep::ServerResponse* response)
 {
   std_msgs::Header header = seerep_ros_conversions::toROS(*msg);
   ROS_INFO_STREAM("Incoming Header message" << std::endl << header);
@@ -28,10 +26,8 @@ grpc::Status ReceiveSensorMsgs::TransferHeader(
   return grpc::Status::OK;
 }
 
-grpc::Status ReceiveSensorMsgs::TransferImage(
-    grpc::ServerContext* context,
-    const seerep::Image* msg,
-    seerep::ServerResponse* response)
+grpc::Status ReceiveSensorMsgs::TransferImage(grpc::ServerContext* context, const seerep::Image* msg,
+                                              seerep::ServerResponse* response)
 {
   sensor_msgs::Image image = seerep_ros_conversions::toROS(*msg);
   ROS_INFO_STREAM("Incoming Image message" << std::endl << image);
@@ -40,10 +36,8 @@ grpc::Status ReceiveSensorMsgs::TransferImage(
   return grpc::Status::OK;
 }
 
-grpc::Status ReceiveSensorMsgs::TransferPoint(
-    grpc::ServerContext* context,
-    const seerep::Point* msg,
-    seerep::ServerResponse* response)
+grpc::Status ReceiveSensorMsgs::TransferPoint(grpc::ServerContext* context, const seerep::Point* msg,
+                                              seerep::ServerResponse* response)
 {
   geometry_msgs::Point point = seerep_ros_conversions::toROS(*msg);
   ROS_INFO_STREAM("Incoming Point message" << std::endl << point);
@@ -52,10 +46,8 @@ grpc::Status ReceiveSensorMsgs::TransferPoint(
   return grpc::Status::OK;
 }
 
-grpc::Status ReceiveSensorMsgs::TransferQuaternion(
-    grpc::ServerContext* context,
-    const seerep::Quaternion* msg,
-    seerep::ServerResponse* response)
+grpc::Status ReceiveSensorMsgs::TransferQuaternion(grpc::ServerContext* context, const seerep::Quaternion* msg,
+                                                   seerep::ServerResponse* response)
 {
   geometry_msgs::Quaternion quaternion = seerep_ros_conversions::toROS(*msg);
   ROS_INFO_STREAM("Incoming Quaternion message" << std::endl << quaternion);
@@ -64,10 +56,8 @@ grpc::Status ReceiveSensorMsgs::TransferQuaternion(
   return grpc::Status::OK;
 }
 
-grpc::Status ReceiveSensorMsgs::TransferPose(
-    grpc::ServerContext* context,
-    const seerep::Pose* msg,
-    seerep::ServerResponse* response)
+grpc::Status ReceiveSensorMsgs::TransferPose(grpc::ServerContext* context, const seerep::Pose* msg,
+                                             seerep::ServerResponse* response)
 {
   geometry_msgs::Pose pose = seerep_ros_conversions::toROS(*msg);
   ROS_INFO_STREAM("Incoming Pose message" << std::endl << pose);
@@ -76,10 +66,8 @@ grpc::Status ReceiveSensorMsgs::TransferPose(
   return grpc::Status::OK;
 }
 
-grpc::Status ReceiveSensorMsgs::TransferPoseStamped(
-    grpc::ServerContext* context,
-    const seerep::PoseStamped* msg,
-    seerep::ServerResponse* response)
+grpc::Status ReceiveSensorMsgs::TransferPoseStamped(grpc::ServerContext* context, const seerep::PoseStamped* msg,
+                                                    seerep::ServerResponse* response)
 {
   geometry_msgs::PoseStamped pose = seerep_ros_conversions::toROS(*msg);
   ROS_INFO_STREAM("Incoming PoseStamped message" << std::endl << pose);
@@ -88,9 +76,8 @@ grpc::Status ReceiveSensorMsgs::TransferPoseStamped(
   return grpc::Status::OK;
 }
 
-std::shared_ptr<grpc::Server> createServer(
-    const std::string& server_address,
-    seerep_grpc_ros::ReceiveSensorMsgs* receive_sensor_msgs)
+std::shared_ptr<grpc::Server> createServer(const std::string& server_address,
+                                           seerep_grpc_ros::ReceiveSensorMsgs* receive_sensor_msgs)
 {
   grpc::ServerBuilder server_builder;
   server_builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
@@ -99,7 +86,6 @@ std::shared_ptr<grpc::Server> createServer(
 }
 
 } /* namespace seerep_grpc_ros */
-
 
 int main(int argc, char** argv)
 {

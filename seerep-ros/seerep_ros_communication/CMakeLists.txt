@@ -24,7 +24,7 @@ find_package(gRPC CONFIG REQUIRED)
 catkin_package(
   INCLUDE_DIRS include
   # LIBRARIES
-	CATKIN_DEPENDS std_msgs geometry_msgs sensor_msgs roscpp seerep_ros_conversions roscpp
+	CATKIN_DEPENDS std_msgs geometry_msgs sensor_msgs roscpp seerep_ros_conversions roscpp topic_tools
   # DEPENDS
 )
 
@@ -63,3 +63,5 @@ install(TARGETS ${PROJECT_NAME}_server ${PROJECT_NAME}_client
   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
 )
 
+install(DIRECTORY include/${PROJECT_NAME}/
+        DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})

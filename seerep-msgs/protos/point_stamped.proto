@@ -5,7 +5,8 @@ package seerep;
 import "header.proto";
 import "point.proto";
 
-message PointStamped{
+message PointStamped
+{
   Header header = 1;
   Point point = 2;
 }

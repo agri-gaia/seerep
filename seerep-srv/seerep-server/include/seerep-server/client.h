@@ -16,7 +16,6 @@
 
 namespace seerep_server
 {
-
 } /* namespace seerep_server */
 
-#endif // SEEREP_SERVER_HDF5_CLIENT_H_
+#endif  // SEEREP_SERVER_HDF5_CLIENT_H_
