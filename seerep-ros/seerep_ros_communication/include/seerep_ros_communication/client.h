@@ -37,6 +37,14 @@ public:
 
   void send(const sensor_msgs::Image::ConstPtr& msg) const;
 
+  void send(const geometry_msgs::Point::ConstPtr& msg) const;
+
+  void send(const geometry_msgs::Quaternion::ConstPtr& msg) const;
+
+  void send(const geometry_msgs::Pose::ConstPtr& msg) const;
+
+  void send(const geometry_msgs::PoseStamped::ConstPtr& msg) const;
+
 private:
   StubPtr stub_;
   ros::NodeHandle nh;

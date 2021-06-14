@@ -40,6 +40,54 @@ grpc::Status ReceiveSensorMsgs::TransferImage(
   return grpc::Status::OK;
 }
 
+grpc::Status ReceiveSensorMsgs::TransferPoint(
+    grpc::ServerContext* context,
+    const seerep::Point* msg,
+    seerep::ServerResponse* response)
+{
+  geometry_msgs::Point point = seerep_ros_conversions::toROS(*msg);
+  ROS_INFO_STREAM("Incoming Point message" << std::endl << point);
+  response->set_message("okidoki");
+  response->set_transmission_state(seerep::ServerResponse::SUCCESS);
+  return grpc::Status::OK;
+}
+
+grpc::Status ReceiveSensorMsgs::TransferQuaternion(
+    grpc::ServerContext* context,
+    const seerep::Quaternion* msg,
+    seerep::ServerResponse* response)
+{
+  geometry_msgs::Quaternion quaternion = seerep_ros_conversions::toROS(*msg);
+  ROS_INFO_STREAM("Incoming Quaternion message" << std::endl << quaternion);
+  response->set_message("okidoki");
+  response->set_transmission_state(seerep::ServerResponse::SUCCESS);
+  return grpc::Status::OK;
+}
+
+grpc::Status ReceiveSensorMsgs::TransferPose(
+    grpc::ServerContext* context,
+    const seerep::Pose* msg,
+    seerep::ServerResponse* response)
+{
+  geometry_msgs::Pose pose = seerep_ros_conversions::toROS(*msg);
+  ROS_INFO_STREAM("Incoming Pose message" << std::endl << pose);
+  response->set_message("okidoki");
+  response->set_transmission_state(seerep::ServerResponse::SUCCESS);
+  return grpc::Status::OK;
+}
+
+grpc::Status ReceiveSensorMsgs::TransferPoseStamped(
+    grpc::ServerContext* context,
+    const seerep::PoseStamped* msg,
+    seerep::ServerResponse* response)
+{
+  geometry_msgs::PoseStamped pose = seerep_ros_conversions::toROS(*msg);
+  ROS_INFO_STREAM("Incoming PoseStamped message" << std::endl << pose);
+  response->set_message("okidoki");
+  response->set_transmission_state(seerep::ServerResponse::SUCCESS);
+  return grpc::Status::OK;
+}
+
 std::shared_ptr<grpc::Server> createServer(
     const std::string& server_address,
     seerep_grpc_ros::ReceiveSensorMsgs* receive_sensor_msgs)

@@ -28,6 +28,22 @@ public:
                                    const seerep::PointCloud2 *point_cloud_2,
                                    seerep::ServerResponse *response);
 
+  grpc::Status TransferPoint(grpc::ServerContext *context,
+                             const seerep::Point *point,
+                             seerep::ServerResponse *response);
+
+  grpc::Status TransferQuaternion(grpc::ServerContext *context,
+                                  const seerep::Quaternion *quaternion,
+                                  seerep::ServerResponse *response);
+
+  grpc::Status TransferPose(grpc::ServerContext *context,
+                            const seerep::Pose *pose,
+                            seerep::ServerResponse *response);
+
+  grpc::Status TransferPoseStamped(grpc::ServerContext *context,
+                                   const seerep::PoseStamped *pose,
+                                   seerep::ServerResponse *response);
+
 private:
   seerep_hdf5::SeerepHDF5IO hdf5_io;
 };

@@ -53,6 +53,66 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const sensor_msgs::Image::ConstPt
   }
 }
 
+void seerep_grpc_ros::TransferSensorMsgs::send(const geometry_msgs::Point::ConstPtr& msg) const
+{
+  grpc::ClientContext context;
+  seerep::ServerResponse response;
+  grpc::Status status = stub_->TransferPoint(&context, seerep_ros_conversions::toProto(*msg), &response);
+  if(!status.ok())
+  {
+    ROS_ERROR_STREAM("gRPC status error code: " << status.error_code() << " " <<  status.error_message());
+  }
+  else
+  {
+    ROS_INFO_STREAM("Response:" << response.message());
+  }
+}
+
+void seerep_grpc_ros::TransferSensorMsgs::send(const geometry_msgs::Quaternion::ConstPtr& msg) const
+{
+  grpc::ClientContext context;
+  seerep::ServerResponse response;
+  grpc::Status status = stub_->TransferQuaternion(&context, seerep_ros_conversions::toProto(*msg), &response);
+  if(!status.ok())
+  {
+    ROS_ERROR_STREAM("gRPC status error code: " << status.error_code() << " " <<  status.error_message());
+  }
+  else
+  {
+    ROS_INFO_STREAM("Response:" << response.message());
+  }
+}
+
+void seerep_grpc_ros::TransferSensorMsgs::send(const geometry_msgs::Pose::ConstPtr& msg) const
+{
+  grpc::ClientContext context;
+  seerep::ServerResponse response;
+  grpc::Status status = stub_->TransferPose(&context, seerep_ros_conversions::toProto(*msg), &response);
+  if(!status.ok())
+  {
+    ROS_ERROR_STREAM("gRPC status error code: " << status.error_code() << " " <<  status.error_message());
+  }
+  else
+  {
+    ROS_INFO_STREAM("Response:" << response.message());
+  }
+}
+
+void seerep_grpc_ros::TransferSensorMsgs::send(const geometry_msgs::PoseStamped::ConstPtr& msg) const
+{
+  grpc::ClientContext context;
+  seerep::ServerResponse response;
+  grpc::Status status = stub_->TransferPoseStamped(&context, seerep_ros_conversions::toProto(*msg), &response);
+  if(!status.ok())
+  {
+    ROS_ERROR_STREAM("gRPC status error code: " << status.error_code() << " " <<  status.error_message());
+  }
+  else
+  {
+    ROS_INFO_STREAM("Response:" << response.message());
+  }
+}
+
 std::optional<ros::Subscriber> TransferSensorMsgs::getSubscriber(const std::string& message_type, const std::string& topic) {
   switch (seerep_grpc_ros::type(message_type)) {
   case seerep_grpc_ros::std_msgs_Header:
@@ -61,6 +121,14 @@ std::optional<ros::Subscriber> TransferSensorMsgs::getSubscriber(const std::stri
     return nh.subscribe<sensor_msgs::Image>(topic, 0, &TransferSensorMsgs::send, this);
   case seerep_grpc_ros::sensor_msgs_PointCloud2:
     return nh.subscribe<sensor_msgs::PointCloud2>(topic, 0, &TransferSensorMsgs::send, this);
+  case seerep_grpc_ros::geometry_msgs_Point:
+    return nh.subscribe<geometry_msgs::Point>(topic, 0, &TransferSensorMsgs::send, this);
+  case seerep_grpc_ros::geometry_msgs_Quaternion:
+    return nh.subscribe<geometry_msgs::Quaternion>(topic, 0, &TransferSensorMsgs::send, this);
+  case seerep_grpc_ros::geometry_msgs_Pose:
+    return nh.subscribe<geometry_msgs::Pose>(topic, 0, &TransferSensorMsgs::send, this);
+  case seerep_grpc_ros::geometry_msgs_PoseStamped:
+    return nh.subscribe<geometry_msgs::PoseStamped>(topic, 0, &TransferSensorMsgs::send, this);
   default:
     ROS_ERROR_STREAM("Type \"" << message_type << "\" not supported");
     return std::nullopt;
@@ -122,5 +190,3 @@ int main(int argc, char** argv)
 
   return EXIT_SUCCESS;
 }
-
-

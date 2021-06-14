@@ -112,4 +112,85 @@ namespace seerep_ros_conversions
     return ret;
   }
 
+  /*
+   * Point
+   */
+  seerep::Point toProto(const geometry_msgs::Point& point)
+  {
+    seerep::Point ret;
+    ret.set_x(point.x);
+    ret.set_y(point.y);
+    ret.set_z(point.z);
+    return ret;
+  }
+
+  geometry_msgs::Point toROS(const seerep::Point& point)
+  {
+    geometry_msgs::Point ret;
+    ret.x = point.x();
+    ret.y = point.y();
+    ret.z = point.z();
+    return ret;
+  }
+
+  /*
+   * Quaternion
+   */
+  seerep::Quaternion toProto(const geometry_msgs::Quaternion& quaternion)
+  {
+    seerep::Quaternion ret;
+    ret.set_x(quaternion.x);
+    ret.set_y(quaternion.y);
+    ret.set_z(quaternion.z);
+    ret.set_w(quaternion.w);
+    return ret;
+  }
+
+  geometry_msgs::Quaternion toROS(const seerep::Quaternion& quaternion)
+  {
+    geometry_msgs::Quaternion ret;
+    ret.x = quaternion.x();
+    ret.y = quaternion.y();
+    ret.z = quaternion.z();
+    ret.w = quaternion.w();
+    return ret;
+  }
+
+  /*
+   * Pose
+   */
+  seerep::Pose toProto(const geometry_msgs::Pose& pose)
+  {
+    seerep::Pose ret;
+    *ret.mutable_position() = toProto(pose.position);
+    *ret.mutable_orientation() = toProto(pose.orientation);
+    return ret;
+  }
+
+  geometry_msgs::Pose toROS(const seerep::Pose& pose)
+  {
+    geometry_msgs::Pose ret;
+    ret.position = toROS(pose.position());
+    ret.orientation = toROS(pose.orientation());
+    return ret;
+  }
+
+  /*
+   * PoseStamped
+   */
+  seerep::PoseStamped toProto(const geometry_msgs::PoseStamped& pose)
+  {
+    seerep::PoseStamped ret;
+    *ret.mutable_header() = toProto(pose.header);
+    *ret.mutable_pose() = toProto(pose.pose);
+    return ret;
+  }
+
+  geometry_msgs::PoseStamped toROS(const seerep::PoseStamped& pose)
+  {
+    geometry_msgs::PoseStamped ret;
+    ret.header = toROS(pose.header());
+    ret.pose = toROS(pose.pose());
+    return ret;
+  }
 } /* namespace seerep_ros_conversions */
