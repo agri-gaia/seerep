@@ -7,7 +7,8 @@ import "twist.proto";
 /**
  * This expresses velocity in free space with uncertainty.
  */
-message TwistWithCovariance{
+message TwistWithCovariance
+{
   Twist twist = 1;
 
   /*

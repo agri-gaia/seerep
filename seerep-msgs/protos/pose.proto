@@ -5,7 +5,8 @@ package seerep;
 import "point.proto";
 import "quaternion.proto";
 
-message Pose{
+message Pose
+{
   Point position = 1;
   Quaternion orientation = 2;
 }

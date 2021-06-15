@@ -2,12 +2,13 @@ syntax = "proto3";
 
 package seerep;
 
-message PointField {
-
+message PointField
+{
   string name = 1;
   uint32 offset = 2;
 
-  enum Datatype {
+  enum Datatype
+  {
     UNSET = 0;
     INT8 = 1;
     UINT8 = 2;
@@ -20,5 +21,4 @@ message PointField {
   }
   Datatype datatype = 3;
   uint32 count = 4;
-
 }

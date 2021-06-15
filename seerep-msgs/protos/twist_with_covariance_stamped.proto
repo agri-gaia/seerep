@@ -5,7 +5,8 @@ package seerep;
 import "header.proto";
 import "twist_with_covariance.proto";
 
-message TwistWithCovarianceStamped{
+message TwistWithCovarianceStamped
+{
   Header header = 1;
   TwistWithCovariance twist = 2;
 }

@@ -9,7 +9,8 @@ import "google/protobuf/timestamp.proto";
  * This is generally used to communicate timestamped data
  * in a particular coordinate frame.
  */
-message Header{
+message Header
+{
   // sequence id, consecutively increasing id
   uint32 seq = 1;
 

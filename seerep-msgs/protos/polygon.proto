@@ -4,6 +4,7 @@ package seerep;
 
 import "point.proto";
 
-message Polygon {
+message Polygon
+{
   repeated Point points = 1;
 }
