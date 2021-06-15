@@ -77,7 +77,7 @@
 
 ### Header
 
-Standard metadata for higher-level stamped data types. This is generally used to communicate timestamped data in a 
+Standard metadata for higher-level stamped data types. This is generally used to communicate timestamped data in a
 particular coordinate frame.
 
 | Field | Type | Label | Description |

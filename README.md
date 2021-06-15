@@ -1,6 +1,20 @@
 # seerep
 
+<a name="top"></a>
+
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
+
+## Table of Contents
+
+- [General](#general)
+- [Quick Start](#quickstart)
+- [Installation](#installation)
+- [pre-commit formatting checks](#precommit)
+
+<a name="general"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## General
 
 seerep stands for SEmantic Environment REPresentation and represents a system that efficiently implements communication
 and storage layers for sensor and environmental data.
@@ -11,6 +25,9 @@ efficiently enabling goal-oriented access to specific datasets and data ranges.
 
 ![](workflow.svg)
 
+<a name="quickstart"></a>
+<p align="right"><a href="#top">Top</a></p>
+
 ## Quick Start
 
 For the impatient people, we set up a docker images with all requirements and dependencies already set up.
@@ -19,6 +36,9 @@ For the impatient people, we set up a docker images with all requirements and de
 1. Inside seerep-docker run the createContainer.sh script to pull the latest container
 1. Start by running the run.sh
 1. Happy coding!
+
+<a name="installation"></a>
+<p align="right"><a href="#top">Top</a></p>
 
 ## Installation
 
@@ -108,7 +128,10 @@ As above, the package will install several files to the system.
 sudo make install
 ```
 
-## pre-commit Formatting Checks
+<a name="precommit"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## pre-commit formatting checks
 
 This repo has a [pre-commit](https://pre-commit.com/) check that runs in CI.
 You can use this locally and set it up to run automatically before you commit
