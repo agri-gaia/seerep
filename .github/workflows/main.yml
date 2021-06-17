@@ -34,4 +34,4 @@ jobs:
 
       # build workspace
       - name: Build the ros workspace
-        run: catkin build --workspace $GITHUB_WORKSPACE
+        run: catkin build --workspace $GITHUB_WORKSPACE/..
