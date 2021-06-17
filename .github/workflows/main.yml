@@ -34,8 +34,11 @@ jobs:
 
       # Move the code in a "src" folder for catkin build
       - name: Move code to src folder
-        run: mkdir $GITHUB_WORKSPACE/src; cd $GITHUB_WORKSPACE; mv !(src) src
-        shell: bash
+        run: |
+          mkdir $GITHUB_WORKSPACE/../tmp
+          mv $GITHUB_WORKSPACE/* $GITHUB_WORKSPACE/../tmp
+          mkdir $GITHUB_WORKSPACE/src
+          mv $GITHUB_WORKSPACE/../tmp/* $GITHUB_WORKSPACE/src
 
       # build workspace
       - name: Build the ros workspace
@@ -44,4 +47,5 @@ jobs:
 
       #pre-commit checks
       - name: run pre-commit tests
-        run: cd $GITHUB_WORKSPACE/src/ && pre-commit run -a
+        run: pre-commit run -a
+        working-directory: $GITHUB_WORKSPACE/src/
