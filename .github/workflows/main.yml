@@ -38,4 +38,5 @@ jobs:
 
       # build workspace
       - name: Build the ros workspace
-        run: source /opt/ros/noetic/setup.sh && catkin build --workspace $GITHUB_WORKSPACE/..
+        run: source /opt/ros/noetic/setup.bash && catkin build --workspace $GITHUB_WORKSPACE/..
+        shell: bash
