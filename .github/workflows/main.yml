@@ -54,3 +54,4 @@ jobs:
           source $GITHUB_WORKSPACE/devel/setup.bash
           cd $GITHUB_WORKSPACE/src
           pre-commit run -a
+        shell: bash
