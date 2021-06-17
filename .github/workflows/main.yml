@@ -34,9 +34,14 @@ jobs:
 
       # Move the code in a "src" folder for catkin build
       - name: Move code to src folder
-        run: mkdir $GITHUB_WORKSPACE/../src; mv $GITHUB_WORKSPACE/* $GITHUB_WORKSPACE/../src/
+        run: mkdir $GITHUB_WORKSPACE/src; cd $GITHUB_WORKSPACE; mv !(src) src
+        shell: bash
 
       # build workspace
       - name: Build the ros workspace
-        run: source /opt/ros/noetic/setup.bash && catkin build --workspace $GITHUB_WORKSPACE/..
+        run: source /opt/ros/noetic/setup.bash && catkin build --workspace $GITHUB_WORKSPACE/
         shell: bash
+
+      #pre-commit checks
+      - name: run pre-commit tests
+        run: cd $GITHUB_WORKSPACE/src/ && pre-commit run -a
