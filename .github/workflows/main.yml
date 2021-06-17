@@ -34,7 +34,7 @@ jobs:
 
       # Move the code in a "src" folder for catkin build
       - name: Move code to src folder
-        run: cd $GITHUB_WORKSPACE; mkdir src; mv !(src) src
+        run: mkdir $GITHUB_WORKSPACE/src; mv $GITHUB_WORKSPACE/* $GITHUB_WORKSPACE/src
 
       # build workspace
       - name: Build the ros workspace
