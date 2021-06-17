@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: seerep/dev-image:latest
-      options: --user 1001
+      options: --user docker --workdir /home/docker
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
