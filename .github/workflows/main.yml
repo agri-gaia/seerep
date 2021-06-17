@@ -32,6 +32,10 @@ jobs:
       - name: Run a one-line script
         run: echo Hello, world!
 
+      # Move the code in a "src" folder for catkin build
+      - name: Move code to src folder
+        run: mv $GITHUB_WORKSPACE $GITHUB_WORKSPACE/../src
+
       # build workspace
       - name: Build the ros workspace
         run: catkin build --workspace $GITHUB_WORKSPACE/..
