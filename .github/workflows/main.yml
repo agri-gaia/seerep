@@ -50,5 +50,5 @@ jobs:
       #pre-commit checks
       - name: run pre-commit tests
         run: |
-          mv $GITHUB_WORKSPACE/src
+          cd $GITHUB_WORKSPACE/src
           pre-commit run -a
