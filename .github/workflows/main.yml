@@ -43,7 +43,7 @@ jobs:
         shell: bash
 
       - name: debug
-        run: cd $GITHUB_WORKSPACE/src/seerep; ll
+        run: cd $GITHUB_WORKSPACE/src/seerep; ls -alFh
 
       # build workspace
       # - name: Build the ros workspace
