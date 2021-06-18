@@ -36,7 +36,7 @@ jobs:
       - name: Move code to src folder
         run: |
           mkdir $GITHUB_WORKSPACE/../tmp
-          mv $GITHUB_WORKSPACE $GITHUB/_WORKSPACE/../tmp/
+          mv $GITHUB_WORKSPACE $GITHUB_WORKSPACE/../tmp/
           mkdir -p $GITHUB_WORKSPACE/src/seerep
           mv $GITHUB_WORKSPACE/../tmp/ $GITHUB_WORKSPACE/src/seerep/
 
