@@ -29,24 +29,28 @@ jobs:
       # Move the code in a "src" folder for catkin build
       - name: Move code to src folder
         run: |
-          shopt -s dotglob
-          mkdir $GITHUB_WORKSPACE/../tmp
-          mv $GITHUB_WORKSPACE/* $GITHUB_WORKSPACE/../tmp/
           mkdir -p $GITHUB_WORKSPACE/src/seerep
-          mv $GITHUB_WORKSPACE/../tmp/* $GITHUB_WORKSPACE/src/seerep/
+          shopt -s dotglob
+          mv !(src) src/seerep
+          ls -alF $GITHUB_WORKSPACE/src/seerep
+          # shopt -s dotglob
+          # mkdir $GITHUB_WORKSPACE/../tmp
+          # mv $GITHUB_WORKSPACE/* $GITHUB_WORKSPACE/../tmp/
+          # mkdir -p $GITHUB_WORKSPACE/src/seerep
+          # mv $GITHUB_WORKSPACE/../tmp/* $GITHUB_WORKSPACE/src/seerep/
         shell: bash
 
-      #build workspace
-      - name: Build the ros workspace
-        run: |
-          source /opt/ros/noetic/setup.bash
-          catkin build --workspace $GITHUB_WORKSPACE/
-        shell: bash
+      # #build workspace
+      # - name: Build the ros workspace
+      #   run: |
+      #     source /opt/ros/noetic/setup.bash
+      #     catkin build --workspace $GITHUB_WORKSPACE/
+      #   shell: bash
 
-      #pre-commit checks
-      - name: run pre-commit tests
-        run: |
-          source /opt/ros/noetic/setup.bash
-          source $GITHUB_WORKSPACE/devel/setup.bash
-          cd $GITHUB_WORKSPACE/src/seerep; pwd; ls -alFh ; pre-commit run -a
-        shell: bash
+      # #pre-commit checks
+      # - name: run pre-commit tests
+      #   run: |
+      #     source /opt/ros/noetic/setup.bash
+      #     source $GITHUB_WORKSPACE/devel/setup.bash
+      #     cd $GITHUB_WORKSPACE/src/seerep; pwd; ls -alFh ; pre-commit run -a
+      #   shell: bash
