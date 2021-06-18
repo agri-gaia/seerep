@@ -36,21 +36,24 @@ jobs:
       - name: Move code to src folder
         run: |
           mkdir $GITHUB_WORKSPACE/../tmp
-          mv $GITHUB_WORKSPACE/* $GITHUB_WORKSPACE/../tmp
+          mv $GITHUB_WORKSPACE $GITHUB/_WORKSPACE/../tmp/
           mkdir -p $GITHUB_WORKSPACE/src/seerep
-          mv $GITHUB_WORKSPACE/../tmp/* $GITHUB_WORKSPACE/src/seerep
+          mv $GITHUB_WORKSPACE/../tmp/ $GITHUB_WORKSPACE/src/seerep/
+
+      - name: debug
+        run: cd $GITHUB_WORKSPACE/src/seerep; ll
 
       # build workspace
-      - name: Build the ros workspace
-        run: |
-          source /opt/ros/noetic/setup.bash
-          catkin build --workspace $GITHUB_WORKSPACE/
-        shell: bash
+      # - name: Build the ros workspace
+      #   run: |
+      #     source /opt/ros/noetic/setup.bash
+      #     catkin build --workspace $GITHUB_WORKSPACE/
+      #   shell: bash
 
-      #pre-commit checks
-      - name: run pre-commit tests
-        run: |
-          source /opt/ros/noetic/setup.bash
-          source $GITHUB_WORKSPACE/devel/setup.bash
-          cd $GITHUB_WORKSPACE/src/seerep; pwd; ls -alFh ; pre-commit run -a
-        shell: bash
+      # #pre-commit checks
+      # - name: run pre-commit tests
+      #   run: |
+      #     source /opt/ros/noetic/setup.bash
+      #     source $GITHUB_WORKSPACE/devel/setup.bash
+      #     cd $GITHUB_WORKSPACE/src/seerep; pwd; ls -alFh ; pre-commit run -a
+      #   shell: bash
