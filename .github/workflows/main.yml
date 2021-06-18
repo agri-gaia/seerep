@@ -4,9 +4,7 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches:
-      - master
-      - feature/add_github_action
+    branches: [ master ]
   pull_request:
     branches: [ master ]
 
