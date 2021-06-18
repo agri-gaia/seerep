@@ -35,8 +35,9 @@ jobs:
       # Move the code in a "src" folder for catkin build
       - name: Move code to src folder
         run: |
+          shopt -s dotglob
           mkdir $GITHUB_WORKSPACE/../tmp
-          mv $GITHUB_WORKSPACE $GITHUB_WORKSPACE/../tmp/
+          mv $GITHUB_WORKSPACE* $GITHUB_WORKSPACE/../tmp/
           mkdir -p $GITHUB_WORKSPACE/src/seerep
           mv $GITHUB_WORKSPACE/../tmp/ $GITHUB_WORKSPACE/src/seerep/
 
