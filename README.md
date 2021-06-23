@@ -31,12 +31,15 @@ efficiently enabling goal-oriented access to specific datasets and data ranges.
 
 ## Quick Start
 
-For the impatient people, we set up a docker images with all requirements and dependencies already set up.
+### VS Code devcontainer
 
-1. Clone seerep-docker at <https://github.com/agri-gaia/seerep-docker>
-1. Inside seerep-docker run the createContainer.sh script to pull the latest container
-1. Start by running the run.sh
-1. Happy coding!
+1. Open this repo with VS Code.
+2. Install the extensions `ms-vscode-remote.remote-containers` and `ms-azuretools.vscode-docker`.
+3. Press `F1` or `CTRL + SHIFT + P` and enter `Remote-Containers: Reopen Folder in Container`
+4. This creates a docker container based on
+   [seerep/dev-image](https://hub.docker.com/repository/docker/seerep/dev-image), installs all necessary VS Code
+   extensions, builds the workspace a first time, sets up Intellisense, install the pre-commit hook and opens it in VS Code.
+5. default user: `docker` with password: `docker`
 
 <a name="installation"></a>
 <p align="right"><a href="#top">Top</a></p>
@@ -54,7 +57,8 @@ First, you will need the dependencies.
 - HighFive
 
 Therefore, please follow along the script:
-<https://github.com/agri-gaia/seerep-docker/blob/main/Docker/installDependencies.sh>
+[installDependecies.sh](https://github.com/agri-gaia/seerep/blob/master/installDependencies.sh). It is not recommended
+to install this globally. Some of the dependencies are really hard to uninstall.
 
 ### Build seerep
 
@@ -63,11 +67,10 @@ We provide two ways to build seerep: First, manuel to the system with cmake and 
 #### Catkin Build
 
 ```
-source /opt/ros/melodic/setup.bash
+source /opt/ros/$ROS_DISTRO/setup.bash
 mkdir -p seerep_ws/src
 cd seerep_ws/src
 git clone git@github.com:agri-gaia/seerep.git
-catkin_init_workspace
 cd ..
 catkin build
 ```

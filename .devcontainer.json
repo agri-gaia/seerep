@@ -1,0 +1,25 @@
+{
+    // "build": { "dockerfile": "Dockerfile" },
+    "image": "seerep/dev-image:latest",
+    "name": "seerep-dev",
+    "extensions": [
+        "ms-vscode.cpptools",
+        "betwo.b2-catkin-tools",
+        "compulim.compulim-vscode-closetag",
+        "twxs.cmake",
+        "ms-vscode.cmake-tools",
+        "ms-azuretools.vscode-docker",
+        "mhutchie.git-graph",
+        "ms-iot.vscode-ros",
+        "zxh404.vscode-proto3",
+        "vscode-icons-team.vscode-icons"
+    ],
+    "postCreateCommand": "/home/docker/workspace/src/.devcontainerPostCreateCommand.sh",
+    "containerUser": "docker",
+    "workspaceMount": "source=${localWorkspaceFolder},target=/home/docker/workspace/src,type=bind,consistency=cached",
+    "workspaceFolder": "/home/docker/workspace",
+    "runArgs": [ "--network=host" ],
+    "containerEnv": {
+        "ROS_HOSTNAME": "$(hostname)"
+    }
+}
