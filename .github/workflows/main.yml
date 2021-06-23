@@ -23,9 +23,9 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 2
-      # get the list of changed file
+      # check if Dockerfile or installDependencies have changed
       - name: Get changed files
-        id: changed-files
+        id: changed-files-specific
         uses: tj-actions/changed-files@v8.1
         with:
           files: |
