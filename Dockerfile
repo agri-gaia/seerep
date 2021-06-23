@@ -1,5 +1,7 @@
 FROM ros:noetic
 
+RUN echo "test"
+
 #add non root user
 RUN useradd -u 1001 --create-home --shell /bin/bash docker && echo "docker:docker" | chpasswd
 USER docker
