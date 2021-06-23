@@ -52,11 +52,6 @@ apt-get -qq update && apt-get -qq install -y -o=Dpkg::Use-Pty=0 \
         libboost-all-dev \
         libeigen3-dev
 HDF5_REL="https://github.com/BlueBrain/HighFive"
-# HDF5_VER="2.2.2"
-# curl -LO $HDF5_REL/archive/refs/tags/v$HDF5_VER.zip
-# unzip v$HDF5_VER.zip
-# mkdir HighFive-$HDF5_VER/build
-# cd HighFive-$HDF5_VER/build
 git clone --depth 1 $HDF5_REL.git
 mkdir HighFive/build
 cd HighFive/build || exit 1
@@ -66,8 +61,6 @@ make install
 
 echo '#remove HighFive Code'
 cd ../..
-# rm v$HDF5_VER.zip
-# rm -rf HighFive-$HDF5_VER
 rm -rf HighFive
 
 echo '####################################################'
