@@ -13,7 +13,6 @@ public:
   virtual getData(boundingBox BB, labels labels) = 0;
 
 private:
-private:
 };
 
 } /* namespace seerep_core */
