@@ -12,7 +12,7 @@ USER root
 RUN mkdir -p /tmp/pre-commit
 COPY .pre-commit-config.yaml /tmp/pre-commit/
 COPY installDependencies.sh .
-#RUN ./installDependencies.sh
+RUN ./installDependencies.sh
 
 USER docker
 RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
