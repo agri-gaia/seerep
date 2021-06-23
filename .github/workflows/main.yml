@@ -31,18 +31,14 @@ jobs:
           files: |
             Dockerfile
             installDependencies.sh
-      # only build the image if the Dockerfile or the Dependencies changed
-      - name: Build the latest Docker image
+      - uses: whoan/docker-build-with-cache-action@v5
         if: steps.changed-files-specific.outputs.any_changed == 'true'
-        run: docker build . --file Dockerfile --tag seerep/dev-image:latest
-      #login if on master and image was build
-      - name: Login to DockerHub Registry
-        if: ${{ steps.changed-files-specific.outputs.any_changed == 'true' && GitHub.event_name != 'pull_request' }}
-        run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-      # push image if on master and image was build
-      - name: Push the latest Docker image
-        if: ${{ steps.changed-files-specific.outputs.any_changed == 'true' && GitHub.event_name != 'pull_request' }}
-        run: docker push seerep/dev-image:latest
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: "${{ secrets.DOCKERHUB_PASSWORD }}"
+          image_name: seerep/dev-image
+          image_tag: latest
+          push_image_and_stages: on:push
 
   # This workflow contains a single job called "build"
   build:
