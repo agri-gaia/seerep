@@ -27,25 +27,21 @@ jobs:
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@v8.1
+        with:
+          files: |
+            Dockerfile
+            installDependencies.sh
       # only build the image if the Dockerfile or the Dependencies changed
       - name: Build the latest Docker image
-        if: |
-          contains(steps.changed-files.outputs.modified_files, 'Dockerfile') ||
-          contains(steps.changed-files.outputs.modified_files, 'installDependencies.sh')
+        if: steps.changed-files-specific.outputs.any_changed == 'true'
         run: docker build . --file Dockerfile --tag seerep/dev-image:latest
       #login if on master and image was build
       - name: Login to DockerHub Registry
-        if: |
-          ( contains(steps.changed-files.outputs.modified_files, 'Dockerfile') ||
-          contains(steps.changed-files.outputs.modified_files, 'installDependencies.sh') ) &&
-          GitHub.event_name != 'pull_request'
+        if: ${{ steps.changed-files-specific.outputs.any_changed == 'true' && GitHub.event_name != 'pull_request' }}
         run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
       # push image if on master and image was build
       - name: Push the latest Docker image
-        if: |
-          ( contains(steps.changed-files.outputs.modified_files, 'Dockerfile') ||
-          contains(steps.changed-files.outputs.modified_files, 'installDependencies.sh') ) &&
-          GitHub.event_name != 'pull_request'
+        if: ${{ steps.changed-files-specific.outputs.any_changed == 'true' && GitHub.event_name != 'pull_request' }}
         run: docker push seerep/dev-image:latest
 
   # This workflow contains a single job called "build"
