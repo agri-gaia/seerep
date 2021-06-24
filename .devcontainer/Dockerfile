@@ -20,3 +20,5 @@ USER docker
 RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
 
 ENTRYPOINT [ "/bin/sh", "-c", "while sleep 1000; do :; done" ]
+
+RUN echo "test"
