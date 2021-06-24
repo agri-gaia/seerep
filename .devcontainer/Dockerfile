@@ -4,6 +4,8 @@ FROM ros:noetic
 RUN useradd -u 1001 --create-home --shell /bin/bash docker && echo "docker:docker" | chpasswd
 USER docker
 WORKDIR /home/docker
+#folder for caching of VS Code extensions
+RUN mkdir -p /home/docker/.vscode-server
 #workspace to be used for code
 RUN mkdir -p /home/docker/workspace/src
 

@@ -1,5 +1,4 @@
 {
-    // "build": { "dockerfile": "Dockerfile" },
     "image": "seerep/dev-image:latest",
     "name": "seerep-dev",
     "extensions": [
@@ -14,12 +13,17 @@
         "zxh404.vscode-proto3",
         "vscode-icons-team.vscode-icons"
     ],
-    "postCreateCommand": "/home/docker/workspace/src/.devcontainerPostCreateCommand.sh",
     "containerUser": "docker",
-    "workspaceMount": "source=${localWorkspaceFolder},target=/home/docker/workspace/src,type=bind,consistency=cached",
+    "mounts": [
+        "source=vscode-extensions,target=/home/docker/.vscode-server,type=volume"
+    ],
+    "workspaceMount": "source=seerep-ws,target=/home/docker/workspace/src,type=volume",
     "workspaceFolder": "/home/docker/workspace",
-    "runArgs": [ "--network=host" ],
+    "runArgs": [
+        "--network=host"
+    ],
     "containerEnv": {
         "ROS_HOSTNAME": "$(hostname)"
-    }
+    },
+    "postStartCommand": "git -C ./src pull || git clone git@github.com:agri-gaia/seerep.git ./src; ./src/.devcontainer/postCreateCommand.sh"
 }
