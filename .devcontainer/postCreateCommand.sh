@@ -1,7 +1,7 @@
 #! /bin/bash
 
 #copy vs code config to root
-cp -r /home/docker/workspace/src/.vscode /home/docker/workspace/.vscode
+cp -r /home/docker/workspace/src/.devcontainer/.vscode /home/docker/workspace/.vscode
 
 #build the workspace with catkin
 catkin config  --workspace /home/docker/workspace --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON

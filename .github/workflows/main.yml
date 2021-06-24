@@ -47,7 +47,7 @@ jobs:
         if: steps.changed-files-specific.outputs.any_changed == 'true'
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./.devcontainer
           push: ${{ GitHub.event_name != 'pull_request'}}
           tags: seerep/dev-image:latest
           cache-from: type=registry,ref=seerep/dev-image:latest
