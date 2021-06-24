@@ -29,8 +29,8 @@ jobs:
         uses: tj-actions/changed-files@v8.1
         with:
           files: |
-            Dockerfile
-            installDependencies.sh
+            .devcontainer/Dockerfile
+            .devcontainer/installDependencies.sh
       -
         name: Set up Docker Buildx
         if: steps.changed-files-specific.outputs.any_changed == 'true'
