@@ -14,12 +14,16 @@
         "vscode-icons-team.vscode-icons"
     ],
     "containerUser": "docker",
-    "mounts": ["source=vscode-extensions,target=/home/docker/.vscode-server,type=volume"],
+    "mounts": [
+        "source=vscode-extensions,target=/home/docker/.vscode-server,type=volume"
+    ],
     "workspaceMount": "source=seerep-ws,target=/home/docker/workspace/src,type=volume",
     "workspaceFolder": "/home/docker/workspace",
-    "runArgs": [ "--network=host" ],
+    "runArgs": [
+        "--network=host"
+    ],
     "containerEnv": {
         "ROS_HOSTNAME": "$(hostname)"
     },
-    "postCreateCommand": "{git -C ./seerep pull || git clone git@github.com:agri-gaia/seerep.git} && ./seerep/.devcontainer/postCreateCommand.sh"
+    "postStartCommand": "git -C ./src pull || git clone git@github.com:agri-gaia/seerep.git ./src; ./src/.devcontainer/postCreateCommand.sh"
 }
