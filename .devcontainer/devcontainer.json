@@ -1,6 +1,6 @@
 {
     "image": "seerep/dev-image:latest",
-    "name": "seerep-dev",
+    "name": "seerep_dev",
     "extensions": [
         "ms-vscode.cpptools",
         "betwo.b2-catkin-tools",
@@ -23,8 +23,5 @@
     "runArgs": [
         "--network=host"
     ],
-    "containerEnv": {
-        "ROS_HOSTNAME": "$(hostname)"
-    },
     "postStartCommand": "git -C ./src pull || git clone git@github.com:agri-gaia/seerep.git ./src; ./src/.devcontainer/postCreateCommand.sh"
 }
