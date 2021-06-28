@@ -5,6 +5,7 @@ export DEBIAN_FRONTEND="noninteractive"
 
 echo '#Install other required tools'
 apt-get -qq update && apt-get -qq install -y -o=Dpkg::Use-Pty=0 \
+        bash-completion \
         autoconf \
         automake \
         libtool \
