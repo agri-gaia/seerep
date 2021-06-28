@@ -9,4 +9,4 @@ catkin build --workspace /home/docker/workspace
 
 #install pre-commit in the git repo
 cd /home/docker/workspace/src || exit 1
-pre-commit install
+pre-commit install --install-hooks

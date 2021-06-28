@@ -11,8 +11,6 @@ RUN mkdir -p /home/docker/workspace/src
 
 #install stuff
 USER root
-RUN mkdir -p /tmp/pre-commit
-COPY .pre-commit-config.yaml /tmp/pre-commit/
 COPY installDependencies.sh .
 RUN ./installDependencies.sh
 

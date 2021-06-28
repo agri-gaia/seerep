@@ -22,17 +22,13 @@ apt-get -qq update && apt-get -qq install -y -o=Dpkg::Use-Pty=0 \
         python3-osrf-pycommon
 
 echo '# Install pre-commit hooks to /root/.cache/pre-commit/'
-apt-get update -qq \
-    && apt-get install -y -qq --no-install-recommends git python3-pip ruby shellcheck clang-format-10 python3-catkin-lint \
-    && rm -rf /var/lib/apt/lists/*
+apt-get update -qq && apt-get install -y -qq --no-install-recommends \
+    git \
+    python3-pip \
+    ruby shellcheck \
+    clang-format-10 \
+    python3-catkin-lint
 pip3 install pre-commit
-cd /tmp/pre-commit \
-    && git init \
-    && pre-commit install-hooks \
-    && rm -rf /tmp/pre-commit
-
-cd /home/docker || exit 1
-
 
 echo '####################################################'
 echo '#Install cmake'
