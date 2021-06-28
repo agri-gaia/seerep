@@ -193,4 +193,82 @@ geometry_msgs::PoseStamped toROS(const seerep::PoseStamped& pose)
   ret.pose = toROS(pose.pose());
   return ret;
 }
+
+/*
+ * Vector3
+ */
+seerep::Vector3 toProto(const geometry_msgs::Vector3& vector)
+{
+  seerep::Vector3 ret;
+  ret.set_x(vector.x);
+  ret.set_y(vector.y);
+  ret.set_z(vector.z);
+  return ret;
+}
+
+geometry_msgs::Vector3 toROS(const seerep::Vector3& vector)
+{
+  geometry_msgs::Vector3 ret;
+  ret.x = vector.x();
+  ret.y = vector.y();
+  ret.z = vector.z();
+  return ret;
+}
+
+/*
+ * Vector3Stamped
+ */
+seerep::Vector3Stamped toProto(const geometry_msgs::Vector3Stamped& vector)
+{
+  seerep::Vector3Stamped ret;
+  *ret.mutable_header() = toProto(vector.header);
+  *ret.mutable_vector() = toProto(vector.vector);
+  return ret;
+}
+
+geometry_msgs::Vector3Stamped toROS(const seerep::Vector3Stamped& vector)
+{
+  geometry_msgs::Vector3Stamped ret;
+  ret.header = toROS(vector.header());
+  ret.vector = toROS(vector.vector());
+  return ret;
+}
+
+/*
+ * Transform
+ */
+seerep::Transform toProto(const geometry_msgs::Transform& transform)
+{
+  seerep::Transform ret;
+  *ret.mutable_translation() = toProto(transform.translation);
+  *ret.mutable_rotation() = toProto(transform.rotation);
+  return ret;
+}
+
+geometry_msgs::Transform toROS(const seerep::Transform& transform)
+{
+  geometry_msgs::Transform ret;
+  ret.translation = toROS(transform.translation());
+  ret.rotation = toROS(transform.rotation());
+  return ret;
+}
+
+/*
+ * TransformStamped
+ */
+seerep::TransformStamped toProto(const geometry_msgs::TransformStamped& transform)
+{
+  seerep::TransformStamped ret;
+  *ret.mutable_header() = toProto(transform.header);
+  *ret.mutable_transform() = toProto(transform.transform);
+  return ret;
+}
+
+geometry_msgs::TransformStamped toROS(const seerep::TransformStamped& transform)
+{
+  geometry_msgs::TransformStamped ret;
+  ret.header = toROS(transform.header());
+  ret.transform = toROS(transform.transform());
+  return ret;
+}
 } /* namespace seerep_ros_conversions */
