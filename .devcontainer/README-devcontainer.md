@@ -7,6 +7,8 @@ This folder contains all files needed for the development container:
   the previously created image
 3. .vscode: The VS Code settings folder. To be used in the devcontainer to create a out of the box working Intellisense
 
+## Remote Host
+
 If you want to use a devcontainer on a remote host add the following to the settings.json of your VS Code config in your
 local workspace and replace the placeholder with your values:
 

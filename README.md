@@ -2,14 +2,14 @@
 
 <a name="top"></a>
 
-[![catkin build workflow](https://github.com/agri-gaia/seerep/actions/workflows/main.yml/badge.svg)](https://github.com/agri-gaia/seerep/actions/workflows/main.yml/badge.svg)
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
+![catkin build workflow](https://github.com/agri-gaia/seerep/actions/workflows/main.yml/badge.svg)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://pre-commit.com/)
 
 ## Table of Contents
 
 - [General](#general)
 - [Quick Start](#quickstart)
-- [Installation](#installation)
+- [Manual Installation](#installation)
 - [pre-commit formatting checks](#precommit)
 
 <a name="general"></a>
@@ -24,7 +24,7 @@ In the current version, ROS (Robot Operating System) messages of configured topi
 transmitted to a server using grpc. The server stores the received data in an HDF5 file. The data can later be accessed
 efficiently enabling goal-oriented access to specific datasets and data ranges.
 
-![](workflow.svg)
+![](docs/workflow.svg)
 
 <a name="quickstart"></a>
 <p align="right"><a href="#top">Top</a></p>
@@ -33,113 +33,39 @@ efficiently enabling goal-oriented access to specific datasets and data ranges.
 
 ### VS Code devcontainer
 
-1. Open this repo with VS Code.
+1. Clone this repo and open it in VS Code.
 2. Install the extensions `ms-vscode-remote.remote-containers` and `ms-azuretools.vscode-docker`.
 3. Press `F1` or `CTRL + SHIFT + P` and enter `Remote-Containers: Reopen Folder in Container`
 4. This creates a docker container based on
    [seerep/dev-image](https://hub.docker.com/repository/docker/seerep/dev-image), installs all necessary VS Code
-   extensions, builds the workspace a first time, sets up Intellisense, install the pre-commit hook and opens it in VS Code.
+   extensions, builds the workspace a first time, sets up Intellisense, installs the [pre-commit](#precommit) hooks and
+   opens it in VS Code.
+
+   There current folder will not be mounted in the docker container! During the setup a persistent Docker Volume gets
+   created and the workspace of the container is saved in this persistent volume. Therefore, Code changes in the
+   devcontainer will not appear directly in the cloned repo from step 1. With the persistent volume the devcontainer can
+   be easily used on remote host. For more information see [.devcontainer/README-devcontainer.md](.devcontainer/README-devcontainer.md)
+
+   Use `pre-commit run -a` in the workspace folder to check the code style before commiting. In the Docker image the
+   pre-commit checks are installed in the git so a commit is just possible if the checks succeed.
+
 5. default user: `docker` with password: `docker`
 
 <a name="installation"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## Installation
+## Manual Installation
 
-In case you want to install seerep on your system, the following presents guidance.
-
-### Dependencies
-
-First, you will need the dependencies.
-
-- ProtoBuf
-- gRPC
-- HighFive
-
-Therefore, please follow along the script:
-[installDependecies.sh](https://github.com/agri-gaia/seerep/blob/master/installDependencies.sh). It is not recommended
-to install this globally. Some of the dependencies are really hard to uninstall.
-
-### Build seerep
-
-We provide two ways to build seerep: First, manuel to the system with cmake and make, and second, with catkin build.
-
-#### Catkin Build
-
-```
-source /opt/ros/$ROS_DISTRO/setup.bash
-mkdir -p seerep_ws/src
-cd seerep_ws/src
-git clone git@github.com:agri-gaia/seerep.git
-cd ..
-catkin build
-```
-
-#### System Installation
-
-Clone the repo: `git clone git@github.com:agri-gaia/seerep.git`
-
-First, the messages (`seerep-msg`) have to be compiled as they are used as basis for all communications.
-
-```
-cd seerep/seerep-msgs
-mkdir build
-cd build
-cmake ..
-make
-```
-
-In the next step we will install the generated protobuf message C++ header files  (`*.pb.h?`) and protbuf files
-(`*.proto`), as well as the built library  (`libseerepmsgs.a`) to the system. In addition, the package will install a
-package configuration file (`SeerepMsgsConfig.cmake`) for cmake. This file will point to all the necessary resources to
-be found by the other cmake projects. Also, a cmake version file (`SeerepMsgsConfigVersion.cmake`) will be installed to
-control the versioning. To check the correct version and definitions in C++, a separate header file
-(`SeerepMsgsConfig.h`) is also installed.
-
-In conclusion the following files will be installed to the system:
-
-- `*.proto`, message definitions in the folder protos
-- `*.pb.h`, thegenerated header files
-- `libseerepmsgs.a` the corresponding library
-- `SeerepMsgsConfig.cmake` CMake package file
-- `SeerepMsgsConfigVersion.cmake` Cmake package version file
-- `SeerepMsgsConfig.h` C++ generated version and definition header
-
-```
-sudo make install
-```
-
-To build the communication interfaces (`seerep-com`), i.e., the grpc service interfaces which communicate data from a
-grpc client to a server and vice versa, we will build the seerep-com package.
-
-```
-cd seerep-com
-mkdir build
-cd build
-cmake ..
-make
-```
-
-As above, the package will install several files to the system.
-
-- `*.pb.h` and `*.grpc.pb.h`
-- `libseerepcom.a` the corresponding library
-- `SeerepComConfig.cmake` CMake package file
-- `SeerepComConfigVersion.cmake` Cmake package version file
-- `SeerepComConfig.h` C++ generated version and definition header
-
-```
-sudo make install
-```
+If you prefer a native installation without docker take a look at
+[docs/manualInstallation.md](docs/manualInstallation.md).
 
 <a name="precommit"></a>
 <p align="right"><a href="#top">Top</a></p>
 
 ## pre-commit formatting checks
 
-This repo has a [pre-commit](https://pre-commit.com/) check that runs in CI.
-You can use this locally and set it up to run automatically before you commit
-something. To install, use pip:
+This repo has a [pre-commit](https://pre-commit.com/) check that runs in CI. You can use this locally and set it up to
+run automatically before you commit something. In the devcontainer it is already pre-installed. To install, use pip:
 
 ```bash
 pip3 install --user pre-commit

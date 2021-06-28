@@ -13,6 +13,7 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  # builds the docker image if the corresponding files changed
   build-docker:
     # run on ubuntu
     runs-on: ubuntu-20.04
@@ -53,7 +54,7 @@ jobs:
           cache-from: type=registry,ref=seerep/dev-image:latest
           cache-to: type=inline
 
-  # This workflow contains a single job called "build"
+  # builds the code
   build:
     needs: build-docker
     # run in docker container on ubuntu
