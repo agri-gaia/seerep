@@ -16,6 +16,12 @@ local workspace and replace the placeholder with your values:
 "docker.host": "ssh://your-remote-user@your-remote-machine-fqdn-or-ip-here",
 ```
 
+Also update the workspace mount to a volume in the [devcontainer.json](devcontainer.json) file:
+
+```
+"workspaceMount": "source=seerep-ws,target=/home/docker/workspace/src,type=volume",
+```
+
 Make sure that your SSH agent is running and knows about the keys needed to connect to the remote host. (Following
 instructions copied from [here](https://code.visualstudio.com/docs/remote/containers#_using-ssh-keys))
 

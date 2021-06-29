@@ -17,7 +17,7 @@
     "mounts": [
         "source=vscode-extensions,target=/home/docker/.vscode-server,type=volume"
     ],
-    "workspaceMount": "source=seerep-ws,target=/home/docker/workspace/src,type=volume",
+    "workspaceMount": "source=${localWorkspaceFolder},target=/home/docker/workspace/src,type=bind,consistency=cached",
     "workspaceFolder": "/home/docker/workspace",
     "runArgs": [
         "--network=host"
