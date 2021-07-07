@@ -41,10 +41,9 @@ efficiently enabling goal-oriented access to specific datasets and data ranges.
    extensions, builds the workspace a first time, sets up Intellisense, installs the [pre-commit](#precommit) hooks and
    opens it in VS Code.
 
-   There current folder will not be mounted in the docker container! During the setup a persistent Docker Volume gets
-   created and the workspace of the container is saved in this persistent volume. Therefore, Code changes in the
-   devcontainer will not appear directly in the cloned repo from step 1. With the persistent volume the devcontainer can
-   be easily used on remote host. For more information see [.devcontainer/README-devcontainer.md](.devcontainer/README-devcontainer.md)
+   There current folder will be mounted in the docker container. If you want to connect to a remote host take a look
+   at [.devcontainer/README-devcontainer.md](.devcontainer/README-devcontainer.md). There all necessary adjustments are
+   documented.
 
    Use `pre-commit run -a` in the workspace folder to check the code style before commiting. In the Docker image the
    pre-commit checks are installed in the git so a commit is just possible if the checks succeed.
