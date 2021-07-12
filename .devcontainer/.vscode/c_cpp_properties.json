@@ -7,7 +7,7 @@
                 "limitSymbolsToIncludedHeaders": true
             },
             "includePath": [
-                "${workspaceFolder}/devel/include/**",
+                "${workspaceFolder}/devel/include/seerep-msgs/*",
                 "${workspaceFolder}/src/**",
                 "/opt/ros/noetic/include/**",
                 "/usr/include/**",
