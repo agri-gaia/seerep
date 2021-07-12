@@ -6,6 +6,7 @@
 
 // seerep-msgs
 #include <seerep-msgs/image.pb.h>
+#include <seerep-msgs/point_cloud_2.pb.h>
 #include <seerep-msgs/point.pb.h>
 #include <seerep-msgs/quaternion.pb.h>
 #include <seerep-msgs/pose.pb.h>
@@ -29,6 +30,10 @@ public:
 
   std::optional<seerep::Image> readImage(const std::string& id);
 
+  void writePointCloud2(const std::string& id, const seerep::PointCloud2& pointcloud2);
+
+  std::optional<seerep::PointCloud2> readPointCloud2(const std::string& id);
+
   void writePointAttributes(HighFive::DataSet& data_set, const seerep::Point& point, const std::string& prefix = "");
 
   void writePoint(const std::string& id, const seerep::Point& point);
@@ -43,12 +48,20 @@ public:
   void writePoseStamped(const std::string& id, const seerep::PoseStamped& pose);
 
 private:
-  // image attribute keys
-  const std::string IMAGE_HEIGHT = "height";
-  const std::string IMAGE_WIDTH = "width";
-  const std::string IMAGE_ENCODING = "encoding";
-  const std::string IMAGE_IS_BIGENDIAN = "is_bigendian";
-  const std::string IMAGE_STEP = "step";
+  // image / pointcloud attribute keys
+  const std::string HEIGHT = "height";
+  const std::string WIDTH = "width";
+  const std::string ENCODING = "encoding";
+  const std::string IS_BIGENDIAN = "is_bigendian";
+  const std::string ROW_STEP = "row_step";
+  const std::string POINT_STEP = "point_step";
+  const std::string IS_DENSE = "is_dense";
+
+  // pointcloud fields attribute keys
+  const std::string FIELD_NAME = "field_name_";
+  const std::string FIELD_OFFSET = "field_offset_";
+  const std::string FIELD_DATATYPE = "field_datatype_";
+  const std::string FIELD_COUNT = "field_count_";
 
   // header attribute keys
   const std::string HEADER_STAMP_SECONDS = "header_stamp_seconds";
