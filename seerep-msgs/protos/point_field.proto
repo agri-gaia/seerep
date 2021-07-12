@@ -4,7 +4,9 @@ package seerep;
 
 message PointField
 {
+  // Name of the field
   string name = 1;
+  // Offset from the start of the point struct
   uint32 offset = 2;
 
   enum Datatype
@@ -20,5 +22,6 @@ message PointField
     FLOAT64 = 8;
   }
   Datatype datatype = 3;
+  // number of elements in the field
   uint32 count = 4;
 }
