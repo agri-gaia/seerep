@@ -130,14 +130,26 @@ SeerepHDF5IO::readPointFieldAttributes(HighFive::DataSet& data_set)
 {
   google::protobuf::RepeatedPtrField<seerep::PointField> repeatedPointField;
 
-  // for (int i = 0; i < pointcloud2.fields_size(); i++)
-  // {
-  //   data_set.getAttribute(FIELD_NAME + std::to_string(i)).write(pointcloud2.fields().at(i).name());
-  //   data_set.getAttribute(FIELD_OFFSET + std::to_string(i)).write(pointcloud2.fields().at(i).offset());
-  //   data_set.getAttribute(FIELD_DATATYPE + std::to_string(i))
-  //       .write(static_cast<int>(pointcloud2.fields().at(i).datatype()));
-  //   data_set.getAttribute(FIELD_COUNT + std::to_string(i)).write(pointcloud2.fields().at(i).count());
-  // }
+  std::vector<std::string> names;
+  std::vector<uint32_t> offsets, counts;
+  std::vector<uint8_t> datatypes;
+
+  data_set.getAttribute(FIELD_NAME).read(names);
+  data_set.getAttribute(FIELD_OFFSET).read(offsets);
+  data_set.getAttribute(FIELD_DATATYPE).read(datatypes);
+  data_set.getAttribute(FIELD_COUNT).read(counts);
+
+  for (int i = 0; i < names.size(); i++)
+  {
+    seerep::PointField point_field;
+
+    point_field.set_name(names.at(i));
+    point_field.set_offset(offsets.at(i));
+    point_field.set_datatype(static_cast<seerep::PointField::Datatype>(datatypes.at(i)));
+    point_field.set_count(counts.at(i));
+
+    *repeatedPointField.Add() = point_field;
+  }
 
   return repeatedPointField;
 }
@@ -192,17 +204,27 @@ std::optional<seerep::PointCloud2> SeerepHDF5IO::readPointCloud2(const std::stri
   if (!file.exist(id))
     return std::nullopt;
 
-  HighFive::DataSet& data_set = file.getDataSet(id);
+  HighFive::DataSet data_set = file.getDataSet(id);
 
   seerep::PointCloud2 pointcloud2;
   data_set.read(pointcloud2.mutable_data());
   *pointcloud2.mutable_header() = readHeaderAttributes(data_set);
-  data_set.getAttribute(HEIGHT).read(pointcloud2.height());
-  data_set.getAttribute(WIDTH).write(pointcloud2.width());
-  data_set.getAttribute(IS_BIGENDIAN).write(pointcloud2.is_bigendian());
-  data_set.getAttribute(POINT_STEP).write(pointcloud2.point_step());
-  data_set.getAttribute(ROW_STEP).write(pointcloud2.row_step());
-  data_set.getAttribute(IS_DENSE).write(pointcloud2.is_dense());
+
+  uint32_t height, width, point_step, row_step;
+  bool is_bigendian, is_dense;
+  data_set.getAttribute(HEIGHT).read(height);
+  data_set.getAttribute(WIDTH).read(width);
+  data_set.getAttribute(IS_BIGENDIAN).read(is_bigendian);
+  data_set.getAttribute(POINT_STEP).read(point_step);
+  data_set.getAttribute(ROW_STEP).read(row_step);
+  data_set.getAttribute(IS_DENSE).read(is_dense);
+
+  pointcloud2.set_height(height);
+  pointcloud2.set_width(width);
+  pointcloud2.set_is_bigendian(is_bigendian);
+  pointcloud2.set_point_step(point_step);
+  pointcloud2.set_row_step(row_step);
+  pointcloud2.set_is_dense(is_dense);
 
   *pointcloud2.mutable_fields() = readPointFieldAttributes(data_set);
 

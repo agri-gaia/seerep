@@ -30,6 +30,11 @@ public:
 
   std::optional<seerep::Image> readImage(const std::string& id);
 
+  void writePointFieldAttributes(HighFive::DataSet& data_set,
+                                 const google::protobuf::RepeatedPtrField<seerep::PointField> repeatedPointField);
+
+  google::protobuf::RepeatedPtrField<seerep::PointField> readPointFieldAttributes(HighFive::DataSet& data_set);
+
   void writePointCloud2(const std::string& id, const seerep::PointCloud2& pointcloud2);
 
   std::optional<seerep::PointCloud2> readPointCloud2(const std::string& id);
