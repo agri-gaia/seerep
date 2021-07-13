@@ -31,7 +31,7 @@ grpc::Status ReceiveSensorMsgs::TransferPointCloud2(grpc::ServerContext* context
 {
   std::cout << "received point clouds... " << std::endl;
   // TODO implement hdf5_io function
-  // hdf5_io.writePointCloud2  ("test_id", *point_cloud_2);
+  hdf5_io.writePointCloud2("test_id", *point_cloud_2);
   response->set_message("okidoki");
   response->set_transmission_state(seerep::ServerResponse::SUCCESS);
   return grpc::Status::OK;
