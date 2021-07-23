@@ -7,5 +7,13 @@
     ],
     "editor.formatOnSave": true,
     "editor.formatOnType": true,
-    "git-graph.maxDepthOfRepoSearch": 1
+    "git-graph.maxDepthOfRepoSearch": 1,
+    "protoc": {
+        "compile_on_save": false,
+        "options": [
+            "--proto_path=protos/v3",
+            "--proto_path=protos/v2",
+            "--proto_path=${workspaceRoot}/src/seerep-msgs/protos"
+        ]
+    }
 }
