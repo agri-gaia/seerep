@@ -15,7 +15,8 @@
     ],
     "containerUser": "docker",
     "mounts": [
-        "source=vscode-extensions,target=/home/docker/.vscode-server,type=volume"
+        "source=vscode-extensions,target=/home/docker/.vscode-server,type=volume",
+        "source=${localWorkspaceFolder}/../seerep-data,target=/home/docker/workspace/seerep-data,type=bind,consistency=cached"
     ],
     "workspaceMount": "source=${localWorkspaceFolder},target=/home/docker/workspace/src,type=bind,consistency=cached",
     "workspaceFolder": "/home/docker/workspace",

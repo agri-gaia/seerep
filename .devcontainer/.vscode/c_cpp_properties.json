@@ -1,23 +1,23 @@
 {
-  "configurations": [
-      {
-          "name": "Linux",
-          "browse": {
-              "databaseFilename": "",
-              "limitSymbolsToIncludedHeaders": true
-          },
-          "includePath": [
-              "${workspaceFolder}/devel/include/**",
-              "/opt/ros/noetic/include/**",
-              "/usr/include/**",
-              "/usr/local/include/**"
-          ],
-          "intelliSenseMode": "linux-gcc-x64",
-          "compilerPath": "/usr/bin/g++",
-          "cStandard": "c11",
-          "cppStandard": "c++17",
-          "configurationProvider": "b2.catkin_tools"
-      }
-  ],
-  "version": 4
+    "configurations": [
+        {
+            "name": "Linux",
+            "browse": {
+                "databaseFilename": "",
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "includePath": [
+                "${workspaceFolder}/devel/include/**",
+                "${workspaceFolder}/src/**",
+                "/opt/ros/noetic/include/**",
+                "/usr/include/**",
+                "/usr/local/include/**"
+            ],
+            "intelliSenseMode": "linux-gcc-x64",
+            "compilerPath": "/usr/bin/g++",
+            "cStandard": "c11",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
 }
