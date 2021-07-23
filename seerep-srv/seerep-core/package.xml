@@ -4,13 +4,16 @@
   <version>0.0.1</version>
   <description> The seerep-core package </description>
 
-  <maintainer email="mark.hoellmann@dfki.de">Sebastian Pütz</maintainer>
+  <maintainer email="mark.hoellmann@dfki.de">Mark Höllmann</maintainer>
 
   <license>TODO</license>
 
   <url type="website">TODO</url>
 
-  <author email="mark.hoellmann@dfki.de">Sebastian Pütz</author>
+  <author email="mark.hoellmann@dfki.de">Mark Höllmann</author>
+
+  <depend>seerep-msgs</depend>
+  <depend>seerep-hdf5</depend>
 
   <buildtool_depend>cmake</buildtool_depend>
 
