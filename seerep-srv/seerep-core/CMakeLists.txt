@@ -4,15 +4,39 @@ project(seerep-server VERSION 0.1)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+find_package(SeerepHDF5 REQUIRED)
+find_package(Protobuf REQUIRED)
+find_package(SeerepMsgs REQUIRED)
+find_package(HighFive REQUIRED)
+
 
 include_directories(
 	include
-	${catkin_INCLUDE_DIRS}
+	${SeerepMsgs_INCLUDE_DIRS}
+	${SeerepHDF5_INCLUDE_DIRS}
+	${PROTOBUF_INCLUDE_DIR}
+	${HighFive_INCLUDE_DIRS}
 )
 
+add_library(seerepcore
+	src/pointcloud.cpp
+)
 
-install(TARGETS ${PROJECT_NAME}_server ${PROJECT_NAME}_client
-  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
+target_link_libraries(seerepcore
+	${SeerepMsgs_LIBRARIES}
+	${SeerepHDF5_LIBRARIES}
+	${PROTOBUF_LIBRARIES}
+	${HighFive_LIBRARIES}
+)
+
+set_target_properties(seerepcore PROPERTIES PUBLIC_HEADER "${INSTALL_HEADERS}")
+
+set(CMAKE_INSTALL_INCLUDEDIR include)
+set(CMAKE_INSTALL_LIBDIR lib)
+set(CMAKE_INSTALL_BINDIR bin)
+
+install(TARGETS seerepcore
+	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+	PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
 )

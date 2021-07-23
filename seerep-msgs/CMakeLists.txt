@@ -7,6 +7,7 @@ find_package(Protobuf REQUIRED)
 
 PROTOBUF_GENERATE_CPP(
 	PROTO_SOURCES PROTO_HEADERS
+	protos/boundingbox.proto
 	protos/header.proto
 	protos/point_field.proto
 	protos/point_cloud_2.proto
