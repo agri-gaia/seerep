@@ -1,7 +1,7 @@
 FROM ros:noetic
 
 #add non root user
-RUN useradd -u 1001 --create-home --shell /bin/bash docker && echo "docker:docker" | chpasswd
+RUN useradd -u 1001 --create-home --shell /bin/bash docker && echo "docker:docker" | chpasswd && adduser docker sudo
 USER docker
 WORKDIR /home/docker
 #folder for caching of VS Code extensions

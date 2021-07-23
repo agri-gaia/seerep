@@ -46,12 +46,12 @@ repos:
         exclude: *excludes
 
   - repo: https://github.com/psf/black
-    rev: 19.3b0
+    rev: 21.7b0
     hooks:
       - id: black
 
   - repo: git://github.com/detailyang/pre-commit-shell
-    rev: v1.0.6
+    rev: 1.0.5
     hooks:
     - id: shell-lint
       args: [--external-sources]
