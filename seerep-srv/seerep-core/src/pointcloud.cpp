@@ -11,12 +11,17 @@ Pointcloud::~Pointcloud()
 std::optional<seerep::PointCloud2> Pointcloud::getData(seerep_hdf5::SeerepHDF5IO& hdf5_io, const std::string& id,
                                                        const seerep::Boundingbox bb)
 {
-  Pointcloud::BoundingBox BoundingBox = getBoundingBox(bb);
+  // Pointcloud::BoundingBox BoundingBox = getBoundingBox(bb);
   std::optional<seerep::PointCloud2> pc = hdf5_io.readPointCloud2(id);
 
   if (pc)
   {
-    pc.value().data();
+    // sensor_msgs::PointCloud2 pc_ros = seerep_ros_conversions::toROS(pc.value());
+
+    // pcl::PCLPointCloud2 pcl_pc2;
+    // pcl_conversions::toPCL(pc_ros, pcl_pc2);
+    // pcl::PointCloud<pcl::PointXYZ>::Ptr temp_cloud(new pcl::PointCloud<pcl::PointXYZ>);
+    // pcl::fromPCLPointCloud2(pcl_pc2, *temp_cloud);
 
     return pc;
   }
