@@ -19,7 +19,8 @@ apt-get -qq update && apt-get -qq install -y -o=Dpkg::Use-Pty=0 \
         build-essential \
         pkg-config \
         python3-catkin-tools \
-        python3-osrf-pycommon
+        python3-osrf-pycommon \
+        libpcl-dev
 
 echo '# Install pre-commit hooks to /root/.cache/pre-commit/'
 apt-get update -qq && apt-get install -y -qq --no-install-recommends \
