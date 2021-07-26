@@ -17,6 +17,7 @@
 #include <pcl/point_types.h>
 #include <pcl/PCLPointCloud2.h>
 #include <pcl/conversions.h>
+#include <pcl/filters/crop_box.h>
 
 #include <pcl_conversions/pcl_conversions.h>
 
@@ -31,11 +32,7 @@ public:
                                              const seerep::Boundingbox bb);
 
 private:
-  struct BoundingBox
-  {
-    double xmax, xmin, ymax, ymin, zmax, zmin;
-  };
-  BoundingBox getBoundingBox(const seerep::Boundingbox bb);
+  void getBoundingBox(Eigen::Vector4f& minPt, Eigen::Vector4f& maxPt, const seerep::Boundingbox& bb);
 };
 
 } /* namespace seerep_core */
