@@ -65,7 +65,7 @@ write_basic_package_version_file(
 
 # install the configuration file
 install(FILES
-  ${CMAKE_CURRENT_BINARY_DIR}/SeerepHDF5Config.cmake
+	${CMAKE_CURRENT_BINARY_DIR}/SeerepHDF5Config.cmake
 	${CMAKE_CURRENT_BINARY_DIR}/SeerepHDF5ConfigVersion.cmake
 	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/SeerepHDF5
 )

@@ -10,12 +10,15 @@ import "quaternion.proto";
 import "pose.proto";
 import "pose_stamped.proto";
 
+import "boundingbox.proto";
+
 import "server_response.proto";
 
 service TransferSensorMsgs
 {
   rpc TransferImage(Image) returns (ServerResponse);
   rpc TransferPointCloud2(PointCloud2) returns (ServerResponse);
+  rpc GetPointCloud2(Boundingbox) returns (PointCloud2);
   rpc TransferHeader(Header) returns (ServerResponse);
   rpc TransferPoint(Point) returns (ServerResponse);
   rpc TransferQuaternion(Quaternion) returns (ServerResponse);
