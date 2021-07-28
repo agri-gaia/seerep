@@ -37,6 +37,19 @@ grpc::Status ReceiveSensorMsgs::TransferPointCloud2(grpc::ServerContext* context
   return grpc::Status::OK;
 }
 
+grpc::Status ReceiveSensorMsgs::GetPointCloud2(grpc::ServerContext* context, const seerep::Boundingbox* request,
+                                               seerep::PointCloud2* response)
+{
+  std::cout << "sending point clouds... " << std::endl;
+  // TODO implement hdf5_io function
+  std::optional<seerep::PointCloud2> pc = seerep_core::Pointcloud::getData(hdf5_io, "test_id", *request);
+  if (pc)
+  {
+    *response = pc.value();
+  }
+  return grpc::Status::OK;
+}
+
 grpc::Status ReceiveSensorMsgs::TransferPoint(grpc::ServerContext* context, const seerep::Point* point,
                                               seerep::ServerResponse* response)
 {

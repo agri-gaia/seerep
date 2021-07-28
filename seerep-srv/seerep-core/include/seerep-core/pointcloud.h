@@ -28,11 +28,10 @@ class Pointcloud
 public:
   Pointcloud();
   ~Pointcloud();
-  std::optional<seerep::PointCloud2> getData(seerep_hdf5::SeerepHDF5IO& hdf5_io, const std::string& id,
-                                             const seerep::Boundingbox bb);
+  static std::optional<seerep::PointCloud2> getData(seerep_hdf5::SeerepHDF5IO& hdf5_io, const std::string& id,
+                                                    const seerep::Boundingbox bb);
 
-private:
-  void getBoundingBox(Eigen::Vector4f& minPt, Eigen::Vector4f& maxPt, const seerep::Boundingbox& bb);
+  static void getBoundingBox(Eigen::Vector4f& minPt, Eigen::Vector4f& maxPt, const seerep::Boundingbox& bb);
 };
 
 } /* namespace seerep_core */

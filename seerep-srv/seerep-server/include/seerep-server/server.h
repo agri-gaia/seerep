@@ -12,6 +12,8 @@
 #include <seerep-com/transfer_sensor_msgs.grpc.pb.h>
 #include <seerep-hdf5/io.h>
 
+#include <seerep-core/pointcloud.h>
+
 namespace seerep_server
 {
 class ReceiveSensorMsgs final : public seerep::TransferSensorMsgs::Service
@@ -25,6 +27,8 @@ public:
 
   grpc::Status TransferPointCloud2(grpc::ServerContext* context, const seerep::PointCloud2* point_cloud_2,
                                    seerep::ServerResponse* response);
+  grpc::Status GetPointCloud2(grpc::ServerContext* context, const seerep::Boundingbox* request,
+                              seerep::PointCloud2* response);
 
   grpc::Status TransferPoint(grpc::ServerContext* context, const seerep::Point* point, seerep::ServerResponse* response);
 
