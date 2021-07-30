@@ -41,9 +41,13 @@ add_executable(${PROJECT_NAME}_server
 add_executable(${PROJECT_NAME}_client
 	src/client.cpp
 )
+add_executable(${PROJECT_NAME}_querier
+	src/querier.cpp
+)
 
 add_dependencies(${PROJECT_NAME}_server ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(${PROJECT_NAME}_client ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(${PROJECT_NAME}_querier ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 target_link_libraries(${PROJECT_NAME}_server
 	${SeerepCom_LIBRARIES}
@@ -56,8 +60,13 @@ target_link_libraries(${PROJECT_NAME}_client
 	${catkin_LIBRARIES}
 	gRPC::grpc++_reflection
 )
+target_link_libraries(${PROJECT_NAME}_querier
+	${SeerepCom_LIBRARIES}
+	${catkin_LIBRARIES}
+	gRPC::grpc++_reflection
+)
 
-install(TARGETS ${PROJECT_NAME}_server ${PROJECT_NAME}_client
+install(TARGETS ${PROJECT_NAME}_server ${PROJECT_NAME}_client ${PROJECT_NAME}_querier
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
