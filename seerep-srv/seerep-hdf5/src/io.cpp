@@ -218,21 +218,32 @@ void SeerepHDF5IO::writePointCloud2(const std::string& id, const seerep::PointCl
 std::optional<seerep::PointCloud2> SeerepHDF5IO::readPointCloud2(const std::string& id)
 {
   if (!file.exist(id))
+  {
+    std::cout << "id " << id << " does not exist in file " << file.getName() << std::endl;
     return std::nullopt;
-
+  }
+  std::cout << "get Dataset" << std::endl;
   HighFive::DataSet data_set = file.getDataSet(id);
 
   seerep::PointCloud2 pointcloud2;
-  data_set.read(pointcloud2.mutable_data());
+
+  std::cout << "read header attributes" << std::endl;
   *pointcloud2.mutable_header() = readHeaderAttributes(data_set);
 
+  std::cout << "get attributes" << std::endl;
   uint32_t height, width, point_step, row_step;
   bool is_bigendian, is_dense;
+  std::cout << "read height" << std::endl;
   data_set.getAttribute(HEIGHT).read(height);
+  std::cout << "read width" << std::endl;
   data_set.getAttribute(WIDTH).read(width);
+  std::cout << "read is_bigendian" << std::endl;
   data_set.getAttribute(IS_BIGENDIAN).read(is_bigendian);
+  std::cout << "read point_step" << std::endl;
   data_set.getAttribute(POINT_STEP).read(point_step);
+  std::cout << "read row_step" << std::endl;
   data_set.getAttribute(ROW_STEP).read(row_step);
+  std::cout << "read is_dense" << std::endl;
   data_set.getAttribute(IS_DENSE).read(is_dense);
 
   pointcloud2.set_height(height);
@@ -242,7 +253,15 @@ std::optional<seerep::PointCloud2> SeerepHDF5IO::readPointCloud2(const std::stri
   pointcloud2.set_row_step(row_step);
   pointcloud2.set_is_dense(is_dense);
 
+  std::cout << "read point field attributes" << std::endl;
   *pointcloud2.mutable_fields() = readPointFieldAttributes(data_set);
+
+  std::cout << "read Dataset" << std::endl;
+
+  const uint8_t* begin = reinterpret_cast<const uint8_t*>(pointcloud2.data().c_str());
+  std::vector<uint8_t> read_data;
+  data_set.read(read_data);
+  pointcloud2.set_data(&read_data.front(), read_data.size());
 
   return pointcloud2;
 }

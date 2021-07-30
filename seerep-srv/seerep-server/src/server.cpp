@@ -40,12 +40,19 @@ grpc::Status ReceiveSensorMsgs::TransferPointCloud2(grpc::ServerContext* context
 grpc::Status ReceiveSensorMsgs::GetPointCloud2(grpc::ServerContext* context, const seerep::Boundingbox* request,
                                                seerep::PointCloud2* response)
 {
-  std::cout << "sending point clouds... " << std::endl;
+  std::cout << "sending point cloud in bounding box min(" << request->point_min().x() << "/" << request->point_min().y()
+            << "/" << request->point_min().z() << "), max(" << request->point_max().x() << "/"
+            << request->point_max().y() << "/" << request->point_max().z() << ")" << std::endl;
   // TODO implement hdf5_io function
   std::optional<seerep::PointCloud2> pc = seerep_core::Pointcloud::getData(hdf5_io, "test_id", *request);
   if (pc)
   {
+    std::cout << "Found something that matches the query" << std::endl;
     *response = pc.value();
+  }
+  else
+  {
+    std::cout << "Found NOTHING that matches the query" << std::endl;
   }
   return grpc::Status::OK;
 }
@@ -104,7 +111,9 @@ std::shared_ptr<grpc::Server> createServer(const std::string& server_address,
 int main(int argc, char** argv)
 {
   std::string server_address = "localhost:9090";
-  HighFive::File hdf5_file("test.h5", HighFive::File::ReadWrite | HighFive::File::Create | HighFive::File::Truncate);
+  HighFive::File hdf5_file(
+      "test.h5",
+      HighFive::File::ReadOnly);  //, HighFive::File::ReadWrite | HighFive::File::Create | HighFive::File::Truncate);
   seerep_server::ReceiveSensorMsgs receive_sensor_msgs_service(hdf5_file);
   std::shared_ptr<grpc::Server> server = seerep_server::createServer(server_address, &receive_sensor_msgs_service);
   std::cout << "serving on \"" << server_address << "\"..." << std::endl;
