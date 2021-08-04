@@ -16,5 +16,9 @@ RUN ./installDependencies.sh
 
 USER docker
 RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
+RUN echo "source /opt/ros/noetic/setup.zshrc" >> ~/.zshrc
+
+RUN echo "[[ -e /home/docker/workspace/devel/setup.bash ]] && source /home/docker/workspace/devel/setup.bash" >> ~/.bashrc
+RUN echo "[[ -e /home/docker/workspace/devel/setup.zshrc ]] && source /home/docker/workspace/devel/setup.zshrc" >> ~/.zshrc
 
 ENTRYPOINT [ "/bin/sh", "-c", "while sleep 1000; do :; done" ]
