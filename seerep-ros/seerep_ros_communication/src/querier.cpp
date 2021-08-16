@@ -42,9 +42,9 @@ int main(int argc, char** argv)
   bb.mutable_point_min()->set_x(0);
   bb.mutable_point_min()->set_y(0);
   bb.mutable_point_min()->set_z(0);
-  bb.mutable_point_max()->set_x(1);
-  bb.mutable_point_max()->set_y(1);
-  bb.mutable_point_max()->set_z(1);
+  bb.mutable_point_max()->set_x(10);
+  bb.mutable_point_max()->set_y(10);
+  bb.mutable_point_max()->set_z(10);
   sensor_msgs::PointCloud2 queriedPc;
   query_data.queryPointcloud(bb, queriedPc);
   queriedPc.header.frame_id = "map";
