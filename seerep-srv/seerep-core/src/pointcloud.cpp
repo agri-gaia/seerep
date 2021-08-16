@@ -15,6 +15,7 @@ std::optional<seerep::PointCloud2> Pointcloud::getData(seerep_hdf5::SeerepHDF5IO
   Eigen::Vector4f minPt, maxPt;
   getBoundingBox(minPt, maxPt, bb);
   std::optional<seerep::PointCloud2> pc = hdf5_io.readPointCloud2(id);
+  return pc;
 
   if (pc)
   {

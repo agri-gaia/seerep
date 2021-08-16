@@ -48,10 +48,16 @@ int main(int argc, char** argv)
   sensor_msgs::PointCloud2 queriedPc;
   query_data.queryPointcloud(bb, queriedPc);
   queriedPc.header.frame_id = "map";
-  // ROS_INFO_STREAM("publish pointcloud" << queriedPc);
+  ROS_INFO_STREAM("publish pointcloud" << queriedPc);
   pc2_pub.publish(queriedPc);
 
-  ros::spinOnce();
+  while (ros::ok())
+  {
+    pc2_pub.publish(queriedPc);
+
+    ros::spinOnce();
+    ros::Duration(2.0).sleep();
+  }
 
   return EXIT_SUCCESS;
 }

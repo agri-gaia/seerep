@@ -259,8 +259,20 @@ std::optional<seerep::PointCloud2> SeerepHDF5IO::readPointCloud2(const std::stri
   std::cout << "read Dataset" << std::endl;
 
   const uint8_t* begin = reinterpret_cast<const uint8_t*>(pointcloud2.data().c_str());
-  std::vector<uint8_t> read_data;
+  std::cout << "pointcloud c_str" << std::endl
+            << reinterpret_cast<const uint8_t*>(pointcloud2.data().c_str()) << std::endl;
+
+  std::vector<u_int8_t> read_data;
   data_set.read(read_data);
+  std::cout << "read_data:" << std::endl;
+  int j = 0;
+  for (const auto& i : read_data)
+  {
+    std::cout << unsigned(i) << ' ';
+    j++;
+    // if (j > 50)
+    // break;
+  }
   pointcloud2.set_data(&read_data.front(), read_data.size());
 
   return pointcloud2;

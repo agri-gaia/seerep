@@ -111,9 +111,8 @@ std::shared_ptr<grpc::Server> createServer(const std::string& server_address,
 int main(int argc, char** argv)
 {
   std::string server_address = "localhost:9090";
-  HighFive::File hdf5_file(
-      "test.h5",
-      HighFive::File::ReadOnly);  //, HighFive::File::ReadWrite | HighFive::File::Create | HighFive::File::Truncate);
+  HighFive::File hdf5_file("test.h5", HighFive::File::ReadOnly);
+  // HighFive::File::ReadWrite | HighFive::File::Create | HighFive::File::Truncate);
   seerep_server::ReceiveSensorMsgs receive_sensor_msgs_service(hdf5_file);
   std::shared_ptr<grpc::Server> server = seerep_server::createServer(server_address, &receive_sensor_msgs_service);
   std::cout << "serving on \"" << server_address << "\"..." << std::endl;
