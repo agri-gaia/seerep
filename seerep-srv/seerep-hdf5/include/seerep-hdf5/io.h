@@ -52,6 +52,8 @@ public:
 
   void writePoseStamped(const std::string& id, const seerep::PoseStamped& pose);
 
+  std::vector<std::string> getGroupDatasets(const std::string& id);
+
 private:
   // image / pointcloud attribute keys
   const std::string HEIGHT = "height";

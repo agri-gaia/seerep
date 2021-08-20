@@ -372,4 +372,9 @@ void SeerepHDF5IO::writePoseStamped(const std::string& id, const seerep::PoseSta
   file.flush();
 }
 
+std::vector<std::string> SeerepHDF5IO::getGroupDatasets(const std::string& id)
+{
+  return file.getGroup(id).listObjectNames();
+}
+
 } /* namespace seerep_hdf5 */
