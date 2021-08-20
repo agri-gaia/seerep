@@ -2,7 +2,7 @@
 
 namespace seerep_server
 {
-ReceiveSensorMsgs::ReceiveSensorMsgs(HighFive::File& file) : hdf5_io(file)
+ReceiveSensorMsgs::ReceiveSensorMsgs(HighFive::File& file) : hdf5_io(file), pcOverview("testProject")
 {
 }
 
@@ -31,7 +31,8 @@ grpc::Status ReceiveSensorMsgs::TransferPointCloud2(grpc::ServerContext* context
 {
   std::cout << "received point clouds... " << std::endl;
   // TODO implement hdf5_io function
-  hdf5_io.writePointCloud2("test_id", *point_cloud_2);
+  // hdf5_io.writePointCloud2("test_id", *point_cloud_2);
+  pcOverview.addDataset("test_id", *point_cloud_2);
   response->set_message("okidoki");
   response->set_transmission_state(seerep::ServerResponse::SUCCESS);
   return grpc::Status::OK;
@@ -44,11 +45,12 @@ grpc::Status ReceiveSensorMsgs::GetPointCloud2(grpc::ServerContext* context, con
             << "/" << request->point_min().z() << "), max(" << request->point_max().x() << "/"
             << request->point_max().y() << "/" << request->point_max().z() << ")" << std::endl;
   // TODO implement hdf5_io function
-  std::optional<seerep::PointCloud2> pc = seerep_core::Pointcloud::getData(hdf5_io, "test_id", *request);
-  if (pc)
+  std::vector<std::unique_ptr<seerep::PointCloud2>> pc = pcOverview.getData("test_id", *request);
+  if (!pc.empty())
   {
     std::cout << "Found something that matches the query" << std::endl;
-    *response = pc.value();
+    // TODO: loop over vector for streamed response
+    *response = *pc.at(0).get();
   }
   else
   {
@@ -111,7 +113,7 @@ std::shared_ptr<grpc::Server> createServer(const std::string& server_address,
 int main(int argc, char** argv)
 {
   std::string server_address = "localhost:9090";
-  HighFive::File hdf5_file("test.h5", HighFive::File::ReadOnly);
+  HighFive::File hdf5_file("test.h5", HighFive::File::ReadWrite | HighFive::File::Create);
   // HighFive::File::ReadWrite | HighFive::File::Create | HighFive::File::Truncate);
   seerep_server::ReceiveSensorMsgs receive_sensor_msgs_service(hdf5_file);
   std::shared_ptr<grpc::Server> server = seerep_server::createServer(server_address, &receive_sensor_msgs_service);

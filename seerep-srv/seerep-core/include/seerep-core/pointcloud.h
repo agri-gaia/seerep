@@ -26,12 +26,21 @@ namespace seerep_core
 class Pointcloud
 {
 public:
-  Pointcloud();
+  Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io,
+             const seerep::PointCloud2& pointcloud2, const std::string& id);
+  Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io,
+             const std::string& id);
   ~Pointcloud();
-  static std::optional<seerep::PointCloud2> getData(seerep_hdf5::SeerepHDF5IO& hdf5_io, const std::string& id,
-                                                    const seerep::Boundingbox bb);
+  void addData(const std::string& id, const seerep::PointCloud2& pointcloud2);
+  std::optional<seerep::PointCloud2> getData(const std::string& id, const seerep::Boundingbox bb);
 
-  static void getBoundingBox(Eigen::Vector4f& minPt, Eigen::Vector4f& maxPt, const seerep::Boundingbox& bb);
+  void getBoundingBox(Eigen::Vector4f& minPt, Eigen::Vector4f& maxPt, const seerep::Boundingbox& bb);
+
+private:
+  std::string coordinatesystem;
+  std::string coordinatesystemParent;
+  std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io;
+  const std::string id;
 };
 
 } /* namespace seerep_core */

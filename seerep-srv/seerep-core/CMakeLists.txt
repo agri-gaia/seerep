@@ -32,6 +32,7 @@ include_directories(
 
 add_library(seerepcore
 	src/pointcloud.cpp
+	src/pointcloud-overview.cpp
 )
 
 target_link_libraries(seerepcore
@@ -43,7 +44,7 @@ target_link_libraries(seerepcore
 	${PCL_LIBRARIES}
 )
 
-set(INSTALL_HEADERS include/seerep-core/pointcloud.h)
+set(INSTALL_HEADERS include/seerep-core/pointcloud.h include/seerep-core/pointcloud-overview.h)
 
 set_target_properties(seerepcore PROPERTIES PUBLIC_HEADER "${INSTALL_HEADERS}")
 

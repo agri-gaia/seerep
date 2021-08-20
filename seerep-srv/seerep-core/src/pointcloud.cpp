@@ -2,19 +2,26 @@
 
 namespace seerep_core
 {
-Pointcloud::Pointcloud()
+Pointcloud::Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io,
+                       const seerep::PointCloud2& pointcloud2, const std::string& id)
+  : coordinatesystemParent(coordinatesystemParent), hdf5_io(hdf5_io), id(id)
+{
+  hdf5_io->writePointCloud2("pointclouds/" + id, pointcloud2);
+}
+Pointcloud::Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io,
+                       const std::string& id)
+  : coordinatesystemParent(coordinatesystemParent), hdf5_io(hdf5_io), id(id)
 {
 }
 Pointcloud::~Pointcloud()
 {
 }
-std::optional<seerep::PointCloud2> Pointcloud::getData(seerep_hdf5::SeerepHDF5IO& hdf5_io, const std::string& id,
-                                                       const seerep::Boundingbox bb)
+std::optional<seerep::PointCloud2> Pointcloud::getData(const std::string& id, const seerep::Boundingbox bb)
 {
-  std::cout << "loading PC from " << id << std::endl;
+  std::cout << "loading PC from pointclouds/" << id << std::endl;
   Eigen::Vector4f minPt, maxPt;
   getBoundingBox(minPt, maxPt, bb);
-  std::optional<seerep::PointCloud2> pc = hdf5_io.readPointCloud2(id);
+  std::optional<seerep::PointCloud2> pc = hdf5_io->readPointCloud2("pointclouds/" + id);
 
   if (pc)
   {

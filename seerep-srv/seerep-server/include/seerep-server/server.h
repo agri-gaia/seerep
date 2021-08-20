@@ -13,6 +13,7 @@
 #include <seerep-hdf5/io.h>
 
 #include <seerep-core/pointcloud.h>
+#include <seerep-core/pointcloud-overview.h>
 
 namespace seerep_server
 {
@@ -41,7 +42,9 @@ public:
                                    seerep::ServerResponse* response);
 
 private:
+  // TODO: move into corresponding classes!
   seerep_hdf5::SeerepHDF5IO hdf5_io;
+  seerep_core::PointcloudOverview pcOverview;
 };
 
 std::shared_ptr<grpc::Server> createServer(const std::string& server_address,
