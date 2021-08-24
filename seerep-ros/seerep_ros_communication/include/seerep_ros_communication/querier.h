@@ -28,7 +28,7 @@ class QueryData
 public:
   QueryData(std::shared_ptr<grpc::Channel> channel_ptr);
 
-  void queryPointcloud(const seerep::Boundingbox& bb, sensor_msgs::PointCloud2& pc2) const;
+  void queryPointcloud(const seerep::Boundingbox& bb, ros::Publisher& pc2_pub) const;
 
 private:
   StubPtr stub_;
