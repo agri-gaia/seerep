@@ -39,18 +39,21 @@ grpc::Status ReceiveSensorMsgs::TransferPointCloud2(grpc::ServerContext* context
 }
 
 grpc::Status ReceiveSensorMsgs::GetPointCloud2(grpc::ServerContext* context, const seerep::Boundingbox* request,
-                                               seerep::PointCloud2* response)
+                                               grpc::ServerWriter<seerep::PointCloud2>* writer)
 {
   std::cout << "sending point cloud in bounding box min(" << request->point_min().x() << "/" << request->point_min().y()
             << "/" << request->point_min().z() << "), max(" << request->point_max().x() << "/"
             << request->point_max().y() << "/" << request->point_max().z() << ")" << std::endl;
   // TODO implement hdf5_io function
-  std::vector<std::unique_ptr<seerep::PointCloud2>> pc = pcOverview.getData("test_id", *request);
-  if (!pc.empty())
+  std::vector<std::unique_ptr<seerep::PointCloud2>> pointclouds = pcOverview.getData("test_id", *request);
+  if (!pointclouds.empty())
   {
-    std::cout << "Found something that matches the query" << std::endl;
-    // TODO: loop over vector for streamed response
-    *response = *pc.at(0).get();
+    std::cout << "Found " << pointclouds.size() + "pointclouds that match the query" << std::endl;
+
+    for (const std::unique_ptr<seerep::PointCloud2>& pc : pointclouds)
+    {
+      writer->Write(*pc.get());
+    }
   }
   else
   {

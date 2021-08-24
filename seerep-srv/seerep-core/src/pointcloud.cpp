@@ -6,7 +6,7 @@ Pointcloud::Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seere
                        const seerep::PointCloud2& pointcloud2, const std::string& id)
   : coordinatesystemParent(coordinatesystemParent), hdf5_io(hdf5_io), id(id)
 {
-  hdf5_io->writePointCloud2("pointclouds/" + id, pointcloud2);
+  hdf5_io->writePointCloud2("pointclouds/" + id + "/rawdata", pointcloud2);
 }
 Pointcloud::Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io,
                        const std::string& id)
@@ -21,7 +21,7 @@ std::optional<seerep::PointCloud2> Pointcloud::getData(const std::string& id, co
   std::cout << "loading PC from pointclouds/" << id << std::endl;
   Eigen::Vector4f minPt, maxPt;
   getBoundingBox(minPt, maxPt, bb);
-  std::optional<seerep::PointCloud2> pc = hdf5_io->readPointCloud2("pointclouds/" + id);
+  std::optional<seerep::PointCloud2> pc = hdf5_io->readPointCloud2("pointclouds/" + id + "/rawdata");
 
   if (pc)
   {

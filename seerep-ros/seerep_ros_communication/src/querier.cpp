@@ -9,19 +9,22 @@ QueryData::QueryData(std::shared_ptr<grpc::Channel> channel_ptr)
 {
 }
 
-void seerep_grpc_ros::QueryData::queryPointcloud(const seerep::Boundingbox& bb, sensor_msgs::PointCloud2& pc2) const
+void QueryData::queryPointcloud(const seerep::Boundingbox& bb, ros::Publisher& pc2_pub) const
 {
   grpc::ClientContext context;
   seerep::PointCloud2 response;
-  grpc::Status status = stub_->GetPointCloud2(&context, bb, &response);
-  if (!status.ok())
+  std::unique_ptr<grpc::ClientReader<seerep::PointCloud2>> reader = stub_->GetPointCloud2(&context, bb);
+
+  while (reader->Read(&response))
   {
-    ROS_ERROR_STREAM("gRPC status error code: " << status.error_code() << " " << status.error_message());
+    sensor_msgs::PointCloud2 pc2 = seerep_ros_conversions::toROS(response);
+    pc2.header.frame_id = "map";
+
+    pc2_pub.publish(pc2);
+
+    ros::spinOnce();
   }
-  else
-  {
-    pc2 = seerep_ros_conversions::toROS(response);
-  }
+  grpc::Status status = reader->Finish();
 }
 
 } /* namespace seerep_grpc_ros */
@@ -46,7 +49,7 @@ int main(int argc, char** argv)
   bb.mutable_point_max()->set_y(10);
   bb.mutable_point_max()->set_z(10);
   sensor_msgs::PointCloud2 queriedPc;
-  query_data.queryPointcloud(bb, queriedPc);
+  query_data.queryPointcloud(bb, pc2_pub);
   queriedPc.header.frame_id = "map";
   ROS_INFO_STREAM("publish pointcloud" << queriedPc);
   pc2_pub.publish(queriedPc);
