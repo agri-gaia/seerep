@@ -20,20 +20,23 @@ namespace seerep_core
 class PointcloudOverview
 {
 public:
-  PointcloudOverview(std::string projectname);
+  PointcloudOverview(std::string datafolder, std::string projectname);
   ~PointcloudOverview();
-  std::vector<std::unique_ptr<seerep::PointCloud2>> getData(const std::string& id, const seerep::Boundingbox& bb);
+  std::vector<std::shared_ptr<seerep::PointCloud2>> getData(const seerep::Boundingbox& bb);
 
-  void addDataset(const std::string& id, const seerep::PointCloud2& pointcloud2);
+  void addDataset(const seerep::PointCloud2& pointcloud2);
 
 private:
   void recreateDatasets();
 
+  uint64_t data_count;
+
+  std::string datafolder;
   std::string projectname;
   std::string coordinatesystem;
   std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io;
 
-  std::unordered_map<std::string, std::shared_ptr<seerep_core::Pointcloud>> datasets;
+  std::unordered_map<uint64_t, std::shared_ptr<seerep_core::Pointcloud>> datasets;
 };
 
 } /* namespace seerep_core */

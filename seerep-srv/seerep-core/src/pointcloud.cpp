@@ -3,25 +3,25 @@
 namespace seerep_core
 {
 Pointcloud::Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io,
-                       const seerep::PointCloud2& pointcloud2, const std::string& id)
+                       const seerep::PointCloud2& pointcloud2, const uint64_t& id)
   : coordinatesystemParent(coordinatesystemParent), hdf5_io(hdf5_io), id(id)
 {
-  hdf5_io->writePointCloud2("pointclouds/" + id + "/rawdata", pointcloud2);
+  hdf5_io->writePointCloud2("pointclouds/" + std::to_string(id) + "/rawdata", pointcloud2);
 }
 Pointcloud::Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io,
-                       const std::string& id)
+                       const uint64_t& id)
   : coordinatesystemParent(coordinatesystemParent), hdf5_io(hdf5_io), id(id)
 {
 }
 Pointcloud::~Pointcloud()
 {
 }
-std::optional<seerep::PointCloud2> Pointcloud::getData(const std::string& id, const seerep::Boundingbox bb)
+std::optional<std::shared_ptr<seerep::PointCloud2>> Pointcloud::getData(const seerep::Boundingbox bb)
 {
   std::cout << "loading PC from pointclouds/" << id << std::endl;
   Eigen::Vector4f minPt, maxPt;
   getBoundingBox(minPt, maxPt, bb);
-  std::optional<seerep::PointCloud2> pc = hdf5_io->readPointCloud2("pointclouds/" + id + "/rawdata");
+  std::optional<seerep::PointCloud2> pc = hdf5_io->readPointCloud2("pointclouds/" + std::to_string(id) + "/rawdata");
 
   if (pc)
   {
@@ -50,7 +50,7 @@ std::optional<seerep::PointCloud2> Pointcloud::getData(const std::string& id, co
     sensor_msgs::PointCloud2 pc2_msg;
     pcl_conversions::fromPCL(pcl_pc2, pc2_msg);
     std::cout << "ROS filtered size: " << pc2_msg.height * pc2_msg.row_step << std::endl;
-    return seerep_ros_conversions::toProto(pc2_msg);
+    return std::make_shared<seerep::PointCloud2>(seerep_ros_conversions::toProto(pc2_msg));
   }
 
   return std::nullopt;

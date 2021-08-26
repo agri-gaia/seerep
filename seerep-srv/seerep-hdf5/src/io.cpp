@@ -374,7 +374,17 @@ void SeerepHDF5IO::writePoseStamped(const std::string& id, const seerep::PoseSta
 
 std::vector<std::string> SeerepHDF5IO::getGroupDatasets(const std::string& id)
 {
-  return file.getGroup(id).listObjectNames();
+  std::vector<std::string> rootObjects = file.listObjectNames();
+
+  // check if rootObjects contains the group "pointclouds"
+  if (std::find(rootObjects.begin(), rootObjects.end(), "pointclouds") != rootObjects.end())
+  {
+    return file.getGroup(id).listObjectNames();
+  }
+  else
+  {
+    return std::vector<std::string>();
+  }
 }
 
 } /* namespace seerep_hdf5 */
