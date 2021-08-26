@@ -12,6 +12,7 @@ apt-get -qq update && apt-get -qq install -y -o=Dpkg::Use-Pty=0 \
         curl \
         make \
         g++ \
+        gdb \
         unzip \
         git \
         sudo \
