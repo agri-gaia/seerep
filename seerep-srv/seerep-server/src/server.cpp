@@ -2,7 +2,8 @@
 
 namespace seerep_server
 {
-ReceiveSensorMsgs::ReceiveSensorMsgs(HighFive::File& file) : hdf5_io(file), pcOverview("testProject")
+ReceiveSensorMsgs::ReceiveSensorMsgs(HighFive::File& file, std::string datafolder)
+  : hdf5_io(file), pcOverview(datafolder, "testProject"), datafolder(datafolder)
 {
 }
 
@@ -32,7 +33,7 @@ grpc::Status ReceiveSensorMsgs::TransferPointCloud2(grpc::ServerContext* context
   std::cout << "received point clouds... " << std::endl;
   // TODO implement hdf5_io function
   // hdf5_io.writePointCloud2("test_id", *point_cloud_2);
-  pcOverview.addDataset("test_id", *point_cloud_2);
+  pcOverview.addDataset(*point_cloud_2);
   response->set_message("okidoki");
   response->set_transmission_state(seerep::ServerResponse::SUCCESS);
   return grpc::Status::OK;
@@ -45,12 +46,12 @@ grpc::Status ReceiveSensorMsgs::GetPointCloud2(grpc::ServerContext* context, con
             << "/" << request->point_min().z() << "), max(" << request->point_max().x() << "/"
             << request->point_max().y() << "/" << request->point_max().z() << ")" << std::endl;
   // TODO implement hdf5_io function
-  std::vector<std::unique_ptr<seerep::PointCloud2>> pointclouds = pcOverview.getData("test_id", *request);
+  std::vector<std::shared_ptr<seerep::PointCloud2>> pointclouds = pcOverview.getData(*request);
   if (!pointclouds.empty())
   {
-    std::cout << "Found " << pointclouds.size() + "pointclouds that match the query" << std::endl;
+    std::cout << "Found " << pointclouds.size() << " pointclouds that match the query" << std::endl;
 
-    for (const std::unique_ptr<seerep::PointCloud2>& pc : pointclouds)
+    for (const std::shared_ptr<seerep::PointCloud2>& pc : pointclouds)
     {
       writer->Write(*pc.get());
     }
@@ -115,10 +116,21 @@ std::shared_ptr<grpc::Server> createServer(const std::string& server_address,
 
 int main(int argc, char** argv)
 {
+  std::string datafolder;
+  if (argc == 2)
+  {
+    datafolder = argv[1];
+    // append '/' if not path does not end with it
+    if (!datafolder.empty() && datafolder.back() != '/')
+    {
+      datafolder += '/';
+    }
+    std::cout << "The used data folder is: " << datafolder << std::endl;
+  }
   std::string server_address = "localhost:9090";
   HighFive::File hdf5_file("test.h5", HighFive::File::ReadWrite | HighFive::File::Create);
   // HighFive::File::ReadWrite | HighFive::File::Create | HighFive::File::Truncate);
-  seerep_server::ReceiveSensorMsgs receive_sensor_msgs_service(hdf5_file);
+  seerep_server::ReceiveSensorMsgs receive_sensor_msgs_service(hdf5_file, datafolder);
   std::shared_ptr<grpc::Server> server = seerep_server::createServer(server_address, &receive_sensor_msgs_service);
   std::cout << "serving on \"" << server_address << "\"..." << std::endl;
   server->Wait();

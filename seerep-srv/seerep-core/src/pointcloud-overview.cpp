@@ -2,10 +2,11 @@
 
 namespace seerep_core
 {
-PointcloudOverview::PointcloudOverview(std::string projectname) : projectname(projectname)
+PointcloudOverview::PointcloudOverview(std::string datafolder, std::string projectname)
+  : datafolder(datafolder), projectname(projectname), data_count(0)
 {
   coordinatesystem = "test";
-  HighFive::File hdf5_file(projectname + ".h5", HighFive::File::ReadWrite | HighFive::File::Create);
+  HighFive::File hdf5_file(datafolder + projectname + ".h5", HighFive::File::ReadWrite | HighFive::File::Create);
   // HighFive::File::ReadOnly);
   // HighFive::File::ReadWrite | HighFive::File::Create | HighFive::File::Truncate);
   hdf5_io = std::make_shared<seerep_hdf5::SeerepHDF5IO>(hdf5_file);
@@ -22,30 +23,33 @@ void PointcloudOverview::recreateDatasets()
   {
     std::cout << "found " << name << " in HDF5 file." << std::endl;
 
-    auto pc = std::make_shared<Pointcloud>(coordinatesystem, hdf5_io, name);
-    datasets.insert(std::make_pair(name, pc));
+    uint64_t id;
+    std::istringstream(name) >> id;
+    auto pc = std::make_shared<Pointcloud>(coordinatesystem, hdf5_io, id);
+    datasets.insert(std::make_pair(id, pc));
   }
 }
 
-std::vector<std::unique_ptr<seerep::PointCloud2>> PointcloudOverview::getData(const std::string& id,
-                                                                              const seerep::Boundingbox& bb)
+std::vector<std::shared_ptr<seerep::PointCloud2>> PointcloudOverview::getData(const seerep::Boundingbox& bb)
 {
-  std::vector<std::unique_ptr<seerep::PointCloud2>> result;
+  std::vector<std::shared_ptr<seerep::PointCloud2>> result;
   for (auto& dataset : datasets)
   {
-    std::optional<seerep::PointCloud2> pc = dataset.second->getData(id, bb);
+    std::optional<std::shared_ptr<seerep::PointCloud2>> pc = dataset.second->getData(bb);
 
     if (pc)
     {
-      result.push_back(std::make_unique<seerep::PointCloud2>(pc.value()));
+      std::cout << "checked " << pc.value()->data() << std::endl;
+      result.push_back(pc.value());
     }
   }
 
   return result;
 }
 
-void PointcloudOverview::addDataset(const std::string& id, const seerep::PointCloud2& pointcloud2)
+void PointcloudOverview::addDataset(const seerep::PointCloud2& pointcloud2)
 {
+  uint64_t id = data_count++;
   auto pc = std::make_shared<Pointcloud>(coordinatesystem, hdf5_io, pointcloud2, id);
   datasets.insert(std::make_pair(id, pc));
 }
