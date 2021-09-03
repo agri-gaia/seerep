@@ -46,14 +46,14 @@ grpc::Status ReceiveSensorMsgs::GetPointCloud2(grpc::ServerContext* context, con
             << "/" << request->point_min().z() << "), max(" << request->point_max().x() << "/"
             << request->point_max().y() << "/" << request->point_max().z() << ")" << std::endl;
   // TODO implement hdf5_io function
-  std::vector<std::shared_ptr<seerep::PointCloud2>> pointclouds = pcOverview.getData(*request);
+  std::vector<std::optional<seerep::PointCloud2>> pointclouds = pcOverview.getData(*request);
   if (!pointclouds.empty())
   {
     std::cout << "Found " << pointclouds.size() << " pointclouds that match the query" << std::endl;
 
-    for (const std::shared_ptr<seerep::PointCloud2>& pc : pointclouds)
+    for (const std::optional<seerep::PointCloud2>& pc : pointclouds)
     {
-      writer->Write(*pc.get());
+      writer->Write(pc.value());
     }
   }
   else

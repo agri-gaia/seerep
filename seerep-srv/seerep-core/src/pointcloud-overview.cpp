@@ -30,17 +30,17 @@ void PointcloudOverview::recreateDatasets()
   }
 }
 
-std::vector<std::shared_ptr<seerep::PointCloud2>> PointcloudOverview::getData(const seerep::Boundingbox& bb)
+std::vector<std::optional<seerep::PointCloud2>> PointcloudOverview::getData(const seerep::Boundingbox& bb)
 {
-  std::vector<std::shared_ptr<seerep::PointCloud2>> result;
+  std::vector<std::optional<seerep::PointCloud2>> result;
   for (auto& dataset : datasets)
   {
-    std::optional<std::shared_ptr<seerep::PointCloud2>> pc = dataset.second->getData(bb);
+    std::optional<seerep::PointCloud2> pc = dataset.second->getData(bb);
 
     if (pc)
     {
-      std::cout << "checked " << pc.value()->data() << std::endl;
-      result.push_back(pc.value());
+      std::cout << "checked " << pc.value().data() << std::endl;
+      result.push_back(pc);
     }
   }
 

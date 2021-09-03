@@ -20,6 +20,7 @@ void QueryData::queryPointcloud(const seerep::Boundingbox& bb, ros::Publisher& p
     sensor_msgs::PointCloud2 pc2 = seerep_ros_conversions::toROS(response);
     pc2.header.frame_id = "map";
 
+    ROS_INFO_STREAM("publish pointcloud" << pc2);
     pc2_pub.publish(pc2);
 
     ros::spinOnce();
@@ -48,19 +49,8 @@ int main(int argc, char** argv)
   bb.mutable_point_max()->set_x(10);
   bb.mutable_point_max()->set_y(10);
   bb.mutable_point_max()->set_z(10);
-  sensor_msgs::PointCloud2 queriedPc;
+
   query_data.queryPointcloud(bb, pc2_pub);
-  queriedPc.header.frame_id = "map";
-  ROS_INFO_STREAM("publish pointcloud" << queriedPc);
-  pc2_pub.publish(queriedPc);
-
-  while (ros::ok())
-  {
-    pc2_pub.publish(queriedPc);
-
-    ros::spinOnce();
-    ros::Duration(2.0).sleep();
-  }
 
   return EXIT_SUCCESS;
 }

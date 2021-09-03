@@ -16,7 +16,7 @@ Pointcloud::Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seere
 Pointcloud::~Pointcloud()
 {
 }
-std::optional<std::shared_ptr<seerep::PointCloud2>> Pointcloud::getData(const seerep::Boundingbox bb)
+std::optional<seerep::PointCloud2> Pointcloud::getData(const seerep::Boundingbox bb)
 {
   std::cout << "loading PC from pointclouds/" << id << std::endl;
   Eigen::Vector4f minPt, maxPt;
@@ -50,7 +50,7 @@ std::optional<std::shared_ptr<seerep::PointCloud2>> Pointcloud::getData(const se
     sensor_msgs::PointCloud2 pc2_msg;
     pcl_conversions::fromPCL(pcl_pc2, pc2_msg);
     std::cout << "ROS filtered size: " << pc2_msg.height * pc2_msg.row_step << std::endl;
-    return std::make_shared<seerep::PointCloud2>(seerep_ros_conversions::toProto(pc2_msg));
+    return seerep_ros_conversions::toProto(pc2_msg);
   }
 
   return std::nullopt;
