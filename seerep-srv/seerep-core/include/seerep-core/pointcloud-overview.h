@@ -22,7 +22,7 @@ class PointcloudOverview
 public:
   PointcloudOverview(std::string datafolder, std::string projectname);
   ~PointcloudOverview();
-  std::vector<std::shared_ptr<seerep::PointCloud2>> getData(const seerep::Boundingbox& bb);
+  std::vector<std::optional<seerep::PointCloud2>> getData(const seerep::Boundingbox& bb);
 
   void addDataset(const seerep::PointCloud2& pointcloud2);
 

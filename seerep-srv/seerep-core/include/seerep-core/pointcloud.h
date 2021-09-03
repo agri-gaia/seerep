@@ -31,7 +31,7 @@ public:
   Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io, const uint64_t& id);
   ~Pointcloud();
 
-  std::optional<std::shared_ptr<seerep::PointCloud2>> getData(const seerep::Boundingbox bb);
+  std::optional<seerep::PointCloud2> getData(const seerep::Boundingbox bb);
 
   void getBoundingBox(Eigen::Vector4f& minPt, Eigen::Vector4f& maxPt, const seerep::Boundingbox& bb);
 
