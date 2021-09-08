@@ -1,0 +1,50 @@
+#ifndef SEEREP_CORE_PROJECT_H_
+#define SEEREP_CORE_PROJECT_H_
+
+#include <functional>
+#include <optional>
+
+#include <boost/uuid/uuid.hpp>             // uuid class
+#include <boost/uuid/uuid_generators.hpp>  // generators
+#include <boost/uuid/uuid_io.hpp>          // streaming operators etc.
+
+// seerep-msgs
+#include <seerep-msgs/boundingbox.pb.h>
+#include <seerep-msgs/point_cloud_2.pb.h>
+// seerep-hdf5
+#include <seerep-hdf5/io.h>
+// seerep-conversion
+#include <seerep_ros_conversions/conversions.h>
+
+// seerep-core
+#include "pointcloud.h"
+
+namespace seerep_core
+{
+class Project
+{
+public:
+  Project(boost::uuids::uuid& uuid, std::string path);
+  ~Project();
+  std::vector<std::optional<seerep::PointCloud2>> getPointCloud(const seerep::Boundingbox& bb);
+
+  void addPointCloud(const seerep::PointCloud2& pointcloud2);
+
+private:
+  void recreateDatatypes();
+
+  boost::uuids::uuid id;
+
+  uint64_t data_count;
+
+  std::string path;
+  std::string projectname;
+  std::string coordinatesystem;
+  std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io;
+
+  std::unordered_map<uint64_t, std::shared_ptr<seerep_core::Pointcloud>> datasets;
+};
+
+} /* namespace seerep_core */
+
+#endif  // SEEREP_CORE_PROJECT_H_
