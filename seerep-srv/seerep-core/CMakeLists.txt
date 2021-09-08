@@ -11,7 +11,12 @@ find_package(seerep_ros_conversions REQUIRED)
 find_package(Protobuf REQUIRED)
 find_package(SeerepMsgs REQUIRED)
 find_package(HighFive REQUIRED)
-find_package(PCL 1.10 REQUIRED )
+find_package(PCL 1.10 REQUIRED)
+
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+find_package(Boost REQUIRED)
 
 find_package(catkin REQUIRED
 	COMPONENTS
@@ -28,9 +33,12 @@ include_directories(
 	${PROTOBUF_INCLUDE_DIR}
 	${HighFive_INCLUDE_DIRS}
 	${PCL_INCLUDE_DIRS}
+	${Boost_INCLUDE_DIRS}
 )
 
 add_library(seerepcore
+	src/project.cpp
+	src/project-overview.cpp
 	src/pointcloud.cpp
 	src/pointcloud-overview.cpp
 )
@@ -42,9 +50,15 @@ target_link_libraries(seerepcore
 	${PROTOBUF_LIBRARIES}
 	${HighFive_LIBRARIES}
 	${PCL_LIBRARIES}
+	${Boost_LIBRARIES}
 )
 
-set(INSTALL_HEADERS include/seerep-core/pointcloud.h include/seerep-core/pointcloud-overview.h)
+set(INSTALL_HEADERS
+	include/seerep-core/project.h
+	include/seerep-core/project-overview.h
+	include/seerep-core/pointcloud.h
+	include/seerep-core/pointcloud-overview.h
+)
 
 set_target_properties(seerepcore PROPERTIES PUBLIC_HEADER "${INSTALL_HEADERS}")
 
