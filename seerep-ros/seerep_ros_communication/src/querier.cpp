@@ -50,6 +50,9 @@ int main(int argc, char** argv)
   bb.mutable_point_max()->set_y(10);
   bb.mutable_point_max()->set_z(10);
 
+  ROS_INFO("Topic is published. Connect to it now. Press enter to resume.");
+  std::cin.get();
+  // ros::Duration(10.0).sleep();
   query_data.queryPointcloud(bb, pc2_pub);
 
   return EXIT_SUCCESS;
