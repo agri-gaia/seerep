@@ -12,8 +12,7 @@
 #include <seerep-com/transfer_sensor_msgs.grpc.pb.h>
 #include <seerep-hdf5/io.h>
 
-#include <seerep-core/pointcloud.h>
-#include <seerep-core/pointcloud-overview.h>
+#include <seerep-core/project-overview.h>
 
 namespace seerep_server
 {
@@ -40,11 +39,13 @@ public:
 
   grpc::Status TransferPoseStamped(grpc::ServerContext* context, const seerep::PoseStamped* pose,
                                    seerep::ServerResponse* response);
+  grpc::Status CreateProject(grpc::ServerContext* context, const seerep::ProjectCreation* request,
+                             seerep::ProjectCreated* response);
 
 private:
   // TODO: move into corresponding classes!
   seerep_hdf5::SeerepHDF5IO hdf5_io;
-  seerep_core::PointcloudOverview pcOverview;
+  seerep_core::ProjectOverview projectOverview;
   std::string datafolder;
 };
 

@@ -376,15 +376,44 @@ std::vector<std::string> SeerepHDF5IO::getGroupDatasets(const std::string& id)
 {
   std::vector<std::string> rootObjects = file.listObjectNames();
 
-  // check if rootObjects contains the group "pointclouds"
-  if (std::find(rootObjects.begin(), rootObjects.end(), "pointclouds") != rootObjects.end())
+  if (id.empty())
   {
-    return file.getGroup(id).listObjectNames();
+    return rootObjects;
   }
   else
   {
-    return std::vector<std::string>();
+    // check if rootObjects contains the group id
+    if (std::find(rootObjects.begin(), rootObjects.end(), id) != rootObjects.end())
+    {
+      return file.getGroup(id).listObjectNames();
+    }
+    else
+    {
+      return std::vector<std::string>();
+    }
   }
+}
+
+void SeerepHDF5IO::writeProjectname(const std::string& projectname)
+{
+  if (!file.hasAttribute(PROJECTNAME))
+  {
+    file.createAttribute<std::string>(PROJECTNAME, projectname);
+  }
+  else
+  {
+    file.getAttribute(PROJECTNAME).write(projectname);
+  }
+}
+
+std::string SeerepHDF5IO::readProjectname()
+{
+  std::string projectname;
+  if (file.hasAttribute(PROJECTNAME))
+  {
+    file.getAttribute(PROJECTNAME).read(projectname);
+  }
+  return projectname;
 }
 
 } /* namespace seerep_hdf5 */

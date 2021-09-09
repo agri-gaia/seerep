@@ -18,6 +18,7 @@
 
 // seerep-core
 #include "pointcloud.h"
+#include "pointcloud-overview.h"
 
 namespace seerep_core
 {
@@ -25,6 +26,7 @@ class Project
 {
 public:
   Project(boost::uuids::uuid& uuid, std::string path);
+  Project(boost::uuids::uuid& uuid, std::string path, std::string projectname);
   ~Project();
   std::vector<std::optional<seerep::PointCloud2>> getPointCloud(const seerep::Boundingbox& bb);
 
@@ -35,14 +37,12 @@ private:
 
   boost::uuids::uuid id;
 
-  uint64_t data_count;
-
   std::string path;
   std::string projectname;
   std::string coordinatesystem;
   std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io;
 
-  std::unordered_map<uint64_t, std::shared_ptr<seerep_core::Pointcloud>> datasets;
+  seerep_core::PointcloudOverview pointcloudOverview;
 };
 
 } /* namespace seerep_core */

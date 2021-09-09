@@ -3,7 +3,7 @@
 namespace seerep_server
 {
 ReceiveSensorMsgs::ReceiveSensorMsgs(HighFive::File& file, std::string datafolder)
-  : hdf5_io(file), pcOverview(datafolder, "testProject"), datafolder(datafolder)
+  : hdf5_io(file), projectOverview(datafolder), datafolder(datafolder)
 {
 }
 
@@ -33,7 +33,8 @@ grpc::Status ReceiveSensorMsgs::TransferPointCloud2(grpc::ServerContext* context
   std::cout << "received point clouds... " << std::endl;
   // TODO implement hdf5_io function
   // hdf5_io.writePointCloud2("test_id", *point_cloud_2);
-  pcOverview.addDataset(*point_cloud_2);
+  boost::uuids::uuid uuid;
+  projectOverview.addPointCloud(*point_cloud_2, uuid);
   response->set_message("okidoki");
   response->set_transmission_state(seerep::ServerResponse::SUCCESS);
   return grpc::Status::OK;
@@ -45,15 +46,20 @@ grpc::Status ReceiveSensorMsgs::GetPointCloud2(grpc::ServerContext* context, con
   std::cout << "sending point cloud in bounding box min(" << request->point_min().x() << "/" << request->point_min().y()
             << "/" << request->point_min().z() << "), max(" << request->point_max().x() << "/"
             << request->point_max().y() << "/" << request->point_max().z() << ")" << std::endl;
-  // TODO implement hdf5_io function
-  std::vector<std::optional<seerep::PointCloud2>> pointclouds = pcOverview.getData(*request);
+
+  std::vector<std::vector<std::optional<seerep::PointCloud2>>> pointclouds = projectOverview.getPointCloud(*request);
   if (!pointclouds.empty())
   {
-    std::cout << "Found " << pointclouds.size() << " pointclouds that match the query" << std::endl;
+    std::cout << "Found pointclouds in " << pointclouds.size() << " projects that match the query" << std::endl;
 
-    for (const std::optional<seerep::PointCloud2>& pc : pointclouds)
+    for (const std::vector<std::optional<seerep::PointCloud2>>& resultPerProject : pointclouds)
     {
-      writer->Write(pc.value());
+      std::cout << "Found " << resultPerProject.size() << " pointclouds in this projects that match the query"
+                << std::endl;
+      for (const std::optional<seerep::PointCloud2>& pc : resultPerProject)
+      {
+        writer->Write(pc.value());
+      }
     }
   }
   else
@@ -103,9 +109,19 @@ grpc::Status ReceiveSensorMsgs::TransferPoseStamped(grpc::ServerContext* context
   return grpc::Status::OK;
 }
 
+grpc::Status ReceiveSensorMsgs::CreateProject(grpc::ServerContext* context, const seerep::ProjectCreation* request,
+                                              seerep::ProjectCreated* response)
+{
+  std::cout << "create new project... " << std::endl;
+  response->set_uuid(projectOverview.newProject(request->name()));
+
+  return grpc::Status::OK;
+}
+
 std::shared_ptr<grpc::Server> createServer(const std::string& server_address,
                                            seerep_server::ReceiveSensorMsgs* receive_sensor_msgs)
 {
+  std::cout << "Create the server..." << std::endl;
   grpc::ServerBuilder server_builder;
   server_builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
   server_builder.RegisterService(receive_sensor_msgs);
@@ -125,8 +141,12 @@ int main(int argc, char** argv)
     {
       datafolder += '/';
     }
-    std::cout << "The used data folder is: " << datafolder << std::endl;
   }
+  else
+  {
+    datafolder = std::filesystem::current_path();
+  }
+  std::cout << "The used data folder is: " << datafolder << std::endl;
   std::string server_address = "localhost:9090";
   HighFive::File hdf5_file("test.h5", HighFive::File::ReadWrite | HighFive::File::Create);
   // HighFive::File::ReadWrite | HighFive::File::Create | HighFive::File::Truncate);

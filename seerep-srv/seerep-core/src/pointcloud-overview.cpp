@@ -2,14 +2,14 @@
 
 namespace seerep_core
 {
-PointcloudOverview::PointcloudOverview(std::string datafolder, std::string projectname)
-  : datafolder(datafolder), projectname(projectname), data_count(0)
+PointcloudOverview::PointcloudOverview()
+{
+}
+PointcloudOverview::PointcloudOverview(std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io)
+  : hdf5_io(hdf5_io), data_count(0)
 {
   coordinatesystem = "test";
-  HighFive::File hdf5_file(datafolder + projectname + ".h5", HighFive::File::ReadWrite | HighFive::File::Create);
-  // HighFive::File::ReadOnly);
-  // HighFive::File::ReadWrite | HighFive::File::Create | HighFive::File::Truncate);
-  hdf5_io = std::make_shared<seerep_hdf5::SeerepHDF5IO>(hdf5_file);
+
   recreateDatasets();
 }
 PointcloudOverview::~PointcloudOverview()

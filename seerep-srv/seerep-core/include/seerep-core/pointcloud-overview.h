@@ -20,7 +20,8 @@ namespace seerep_core
 class PointcloudOverview
 {
 public:
-  PointcloudOverview(std::string datafolder, std::string projectname);
+  PointcloudOverview();
+  PointcloudOverview(std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io);
   ~PointcloudOverview();
   std::vector<std::optional<seerep::PointCloud2>> getData(const seerep::Boundingbox& bb);
 
@@ -31,8 +32,6 @@ private:
 
   uint64_t data_count;
 
-  std::string datafolder;
-  std::string projectname;
   std::string coordinatesystem;
   std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io;
 
