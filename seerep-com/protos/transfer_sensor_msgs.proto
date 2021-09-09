@@ -9,6 +9,8 @@ import "point.proto";
 import "quaternion.proto";
 import "pose.proto";
 import "pose_stamped.proto";
+import "projectCreated.proto";
+import "projectCreation.proto";
 
 import "boundingbox.proto";
 
@@ -24,4 +26,6 @@ service TransferSensorMsgs
   rpc TransferQuaternion(Quaternion) returns (ServerResponse);
   rpc TransferPose(Pose) returns (ServerResponse);
   rpc TransferPoseStamped(PoseStamped) returns (ServerResponse);
+
+  rpc CreateProject(ProjectCreation) returns (ProjectCreated);
 }

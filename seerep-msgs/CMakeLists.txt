@@ -29,6 +29,8 @@ PROTOBUF_GENERATE_CPP(
 	protos/twist_with_covariance.proto
 	protos/twist_with_covariance_stamped.proto
 	protos/server_response.proto
+	protos/projectCreated.proto
+	protos/projectCreation.proto
 )
 
 
