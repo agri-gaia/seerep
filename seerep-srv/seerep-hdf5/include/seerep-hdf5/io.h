@@ -54,6 +54,10 @@ public:
 
   std::vector<std::string> getGroupDatasets(const std::string& id);
 
+  void writeProjectname(const std::string& projectname);
+
+  std::string readProjectname();
+
 private:
   // image / pointcloud attribute keys
   const std::string HEIGHT = "height";
@@ -86,6 +90,8 @@ private:
   const std::string POSE = "pose";
   const std::string POSITION = "position";
   const std::string ORIENTATION = "orientation";
+
+  const std::string PROJECTNAME = "projectname";
 
   HighFive::File file;
   std::mutex write_mtx;

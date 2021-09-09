@@ -29,10 +29,10 @@ class ProjectOverview
 public:
   ProjectOverview(std::string datafolder);
   ~ProjectOverview();
-  std::vector<std::optional<seerep::PointCloud2>> getPointCloud(const seerep::Boundingbox& bb);
+  std::vector<std::vector<std::optional<seerep::PointCloud2>>> getPointCloud(const seerep::Boundingbox& bb);
 
-  void addPointCloud(const seerep::PointCloud2& pointcloud2);
-  std::string newProject();
+  void addPointCloud(const seerep::PointCloud2& pointcloud2, boost::uuids::uuid uuid);
+  std::string newProject(std::string projectname);
 
 private:
   void recreateProjects();
