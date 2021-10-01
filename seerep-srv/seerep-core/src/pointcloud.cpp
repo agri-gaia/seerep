@@ -13,6 +13,14 @@ Pointcloud::Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seere
   : coordinatesystemParent(coordinatesystemParent), hdf5_io(hdf5_io), id(id)
 {
 }
+Pointcloud::Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io,
+                       const seerep::PointCloud2Labeled& pointcloud2labeled, const uint64_t& id)
+  : coordinatesystemParent(coordinatesystemParent), hdf5_io(hdf5_io), id(id)
+{
+  hdf5_io->writePointCloud2("pointclouds/" + std::to_string(id) + "/rawdata", pointcloud2labeled.pointcloud());
+  // TODO
+  std::cout << "labels to hdf5 not implemented!" << std::endl;
+}
 Pointcloud::~Pointcloud()
 {
 }

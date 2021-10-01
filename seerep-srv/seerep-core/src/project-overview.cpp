@@ -66,4 +66,9 @@ void ProjectOverview::addPointCloud(const seerep::PointCloud2& pointcloud2, boos
   projects.at(uuid)->addPointCloud(pointcloud2);
 }
 
+void ProjectOverview::addPointCloudLabeled(const seerep::PointCloud2Labeled& pointcloud2labeled, boost::uuids::uuid uuid)
+{
+  projects.at(uuid)->addPointCloudLabeled(pointcloud2labeled);
+}
+
 } /* namespace seerep_core */

@@ -40,6 +40,20 @@ grpc::Status ReceiveSensorMsgs::TransferPointCloud2(grpc::ServerContext* context
   return grpc::Status::OK;
 }
 
+grpc::Status ReceiveSensorMsgs::TransferPointCloud2Labeled(grpc::ServerContext* context,
+                                                           const seerep::PointCloud2Labeled* point_cloud_2_labeled,
+                                                           seerep::ServerResponse* response)
+{
+  std::cout << "received point clouds... " << std::endl;
+  // TODO implement hdf5_io function
+  // hdf5_io.writePointCloud2("test_id", *point_cloud_2);
+  boost::uuids::uuid uuid;
+  projectOverview.addPointCloudLabeled(*point_cloud_2_labeled, uuid);
+  response->set_message("okidoki");
+  response->set_transmission_state(seerep::ServerResponse::SUCCESS);
+  return grpc::Status::OK;
+}
+
 grpc::Status ReceiveSensorMsgs::GetPointCloud2(grpc::ServerContext* context, const seerep::Boundingbox* request,
                                                grpc::ServerWriter<seerep::PointCloud2>* writer)
 {

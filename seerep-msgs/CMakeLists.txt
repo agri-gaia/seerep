@@ -8,9 +8,11 @@ find_package(Protobuf REQUIRED)
 PROTOBUF_GENERATE_CPP(
 	PROTO_SOURCES PROTO_HEADERS
 	protos/boundingbox.proto
+	protos/boundingbox3D_labeled.proto
 	protos/header.proto
 	protos/point_field.proto
 	protos/point_cloud_2.proto
+	protos/point_cloud_2_labeled.proto
 	protos/image.proto
 	protos/vector3.proto
 	protos/vector3_stamped.proto

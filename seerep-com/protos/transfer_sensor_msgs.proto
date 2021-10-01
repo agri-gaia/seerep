@@ -4,6 +4,7 @@ package seerep;
 
 import "image.proto";
 import "point_cloud_2.proto";
+import "point_cloud_2_labeled.proto";
 import "header.proto";
 import "point.proto";
 import "quaternion.proto";
@@ -20,6 +21,7 @@ service TransferSensorMsgs
 {
   rpc TransferImage(Image) returns (ServerResponse);
   rpc TransferPointCloud2(PointCloud2) returns (ServerResponse);
+  rpc TransferPointCloud2Labeled(PointCloud2Labeled) returns (ServerResponse);
   rpc GetPointCloud2(Boundingbox) returns (stream PointCloud2);
   rpc TransferHeader(Header) returns (ServerResponse);
   rpc TransferPoint(Point) returns (ServerResponse);

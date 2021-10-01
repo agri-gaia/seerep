@@ -27,6 +27,9 @@ public:
 
   grpc::Status TransferPointCloud2(grpc::ServerContext* context, const seerep::PointCloud2* point_cloud_2,
                                    seerep::ServerResponse* response);
+  grpc::Status TransferPointCloud2Labeled(grpc::ServerContext* context,
+                                          const seerep::PointCloud2Labeled* point_cloud_2_labeled,
+                                          seerep::ServerResponse* response);
   grpc::Status GetPointCloud2(grpc::ServerContext* context, const seerep::Boundingbox* request,
                               grpc::ServerWriter<seerep::PointCloud2>* writer);
 
