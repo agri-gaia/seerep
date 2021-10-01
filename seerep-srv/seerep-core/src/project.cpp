@@ -54,4 +54,9 @@ void Project::addPointCloud(const seerep::PointCloud2& pointcloud2)
   pointcloudOverview.addDataset(pointcloud2);
 }
 
+void Project::addPointCloudLabeled(const seerep::PointCloud2Labeled& pointcloud2Labeled)
+{
+  pointcloudOverview.addDatasetLabeled(pointcloud2Labeled);
+}
+
 } /* namespace seerep_core */

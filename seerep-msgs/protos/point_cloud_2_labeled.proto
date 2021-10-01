@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package seerep;
+
+import "point_cloud_2.proto";
+import "boundingbox3D_labeled.proto";
+
+message PointCloud2Labeled
+{
+  PointCloud2 pointcloud = 1;
+  repeated BoundingBox3DLabeled labels = 2;
+}

@@ -54,4 +54,11 @@ void PointcloudOverview::addDataset(const seerep::PointCloud2& pointcloud2)
   datasets.insert(std::make_pair(id, pc));
 }
 
+void PointcloudOverview::addDatasetLabeled(const seerep::PointCloud2Labeled& pointcloud2labeled)
+{
+  uint64_t id = data_count++;
+  auto pc = std::make_shared<Pointcloud>(coordinatesystem, hdf5_io, pointcloud2labeled, id);
+  datasets.insert(std::make_pair(id, pc));
+}
+
 } /* namespace seerep_core */
