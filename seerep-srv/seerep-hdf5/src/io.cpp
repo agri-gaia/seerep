@@ -170,6 +170,38 @@ SeerepHDF5IO::readPointFieldAttributes(HighFive::DataSet& data_set)
   return repeatedPointField;
 }
 
+void SeerepHDF5IO::writePointCloud2Labeled(const std::string& id, const seerep::PointCloud2Labeled& pointcloud2Labeled)
+{
+  writePointCloud2(id + "/rawdata", pointcloud2Labeled.pointcloud());
+
+  writeBoundingBox3DLabeled(id, pointcloud2Labeled.labels());
+}
+
+void SeerepHDF5IO::writeBoundingBox3DLabeled(
+    const std::string& id,
+    const google::protobuf::RepeatedPtrField<::seerep::BoundingBox3DLabeled>& boundingbox3DLabeled)
+{
+  std::vector<std::string> labels;
+  std::vector<std::vector<double>> boundingBoxes;
+  for (auto label : boundingbox3DLabeled)
+  {
+    labels.push_back(label.label());
+    std::vector<double> box{ label.boundingbox().point_min().x(), label.boundingbox().point_min().y(),
+                             label.boundingbox().point_min().z(), label.boundingbox().point_max().x(),
+                             label.boundingbox().point_max().y(), label.boundingbox().point_max().z() };
+    boundingBoxes.push_back(box);
+  }
+
+  HighFive::DataSet datasetLabels = file.createDataSet<std::string>(id + "/labels", HighFive::DataSpace::From(labels));
+  datasetLabels.write(labels);
+
+  HighFive::DataSet datasetBoxes =
+      file.createDataSet<double>(id + "/labelBoxes", HighFive::DataSpace::From(boundingBoxes));
+  datasetBoxes.write(boundingBoxes);
+
+  file.flush();
+}
+
 void SeerepHDF5IO::writePointCloud2(const std::string& id, const seerep::PointCloud2& pointcloud2)
 {
   std::shared_ptr<HighFive::DataSet> data_set_ptr;
