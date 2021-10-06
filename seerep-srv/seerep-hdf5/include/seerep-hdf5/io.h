@@ -7,6 +7,8 @@
 // seerep-msgs
 #include <seerep-msgs/image.pb.h>
 #include <seerep-msgs/point_cloud_2.pb.h>
+#include <seerep-msgs/point_cloud_2_labeled.pb.h>
+#include <seerep-msgs/boundingbox3D_labeled.pb.h>
 #include <seerep-msgs/point.pb.h>
 #include <seerep-msgs/quaternion.pb.h>
 #include <seerep-msgs/pose.pb.h>
@@ -36,6 +38,12 @@ public:
   google::protobuf::RepeatedPtrField<seerep::PointField> readPointFieldAttributes(HighFive::DataSet& data_set);
 
   void writePointCloud2(const std::string& id, const seerep::PointCloud2& pointcloud2);
+
+  void writePointCloud2Labeled(const std::string& id, const seerep::PointCloud2Labeled& pointcloud2Labeled);
+
+  void writeBoundingBox3DLabeled(
+      const std::string& id,
+      const google::protobuf::RepeatedPtrField< ::seerep::BoundingBox3DLabeled>& boundingbox3DLabeled);
 
   std::optional<seerep::PointCloud2> readPointCloud2(const std::string& id);
 
