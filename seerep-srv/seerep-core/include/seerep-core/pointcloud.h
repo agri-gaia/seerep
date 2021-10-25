@@ -13,6 +13,9 @@
 // seerep-conversion
 #include <seerep_ros_conversions/conversions.h>
 
+// seerep-core
+#include "aabb-hierarchy.h"
+
 // pcl
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
@@ -21,6 +24,7 @@
 #include <pcl/filters/crop_box.h>
 
 #include <pcl_conversions/pcl_conversions.h>
+#include <pcl/features/moment_of_inertia_estimation.h>
 
 namespace seerep_core
 {
@@ -37,13 +41,18 @@ public:
 
   std::optional<seerep::PointCloud2> getData(const seerep::Boundingbox bb);
 
-  void getBoundingBox(Eigen::Vector4f& minPt, Eigen::Vector4f& maxPt, const seerep::Boundingbox& bb);
+  void getMinMaxFromBundingBox(Eigen::Vector4f& minPt, Eigen::Vector4f& maxPt, const seerep::Boundingbox& bb);
+
+  void protoToPcl(const seerep::PointCloud2& pc_proto, pcl::PointCloud<pcl::PointXYZ>::Ptr& pc_pcl);
+  void pclToProto(const pcl::PointCloud<pcl::PointXYZ>::Ptr& pc_pcl, seerep::PointCloud2& pc_proto);
 
 private:
   std::string coordinatesystem;
   std::string coordinatesystemParent;
   std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io;
   const uint64_t id;
+  // axis aligned bounding box
+  AabbHierarchy::AABB aabb;
 };
 
 } /* namespace seerep_core */
