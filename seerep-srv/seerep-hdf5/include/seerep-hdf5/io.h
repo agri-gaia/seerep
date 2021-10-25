@@ -17,6 +17,8 @@
 // std
 #include <optional>
 
+#include <boost/geometry.hpp>
+
 namespace seerep_hdf5
 {
 class SeerepHDF5IO
@@ -41,9 +43,13 @@ public:
 
   void writePointCloud2Labeled(const std::string& id, const seerep::PointCloud2Labeled& pointcloud2Labeled);
 
+  void writeAABB(
+      const std::string& id,
+      const boost::geometry::model::box<boost::geometry::model::point<float, 3, boost::geometry::cs::cartesian>> aabb);
+
   void writeBoundingBox3DLabeled(
       const std::string& id,
-      const google::protobuf::RepeatedPtrField< ::seerep::BoundingBox3DLabeled>& boundingbox3DLabeled);
+      const google::protobuf::RepeatedPtrField<::seerep::BoundingBox3DLabeled>& boundingbox3DLabeled);
 
   std::optional<seerep::PointCloud2> readPointCloud2(const std::string& id);
 

@@ -7,6 +7,17 @@ Pointcloud::Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seere
   : coordinatesystemParent(coordinatesystemParent), hdf5_io(hdf5_io), id(id)
 {
   hdf5_io->writePointCloud2("pointclouds/" + std::to_string(id) + "/rawdata", pointcloud2);
+
+  pcl::PointCloud<pcl::PointXYZ>::Ptr temp_cloud(new pcl::PointCloud<pcl::PointXYZ>);
+  protoToPcl(pointcloud2, temp_cloud);
+  pcl::MomentOfInertiaEstimation<pcl::PointXYZ> feature_extractor;
+  feature_extractor.setInputCloud(temp_cloud);
+  feature_extractor.compute();
+
+  pcl::PointXYZ min_point_AABB, max_point_AABB;
+  feature_extractor.getAABB(min_point_AABB, max_point_AABB);
+  AabbHierarchy::AABB(AabbHierarchy::Point(min_point_AABB.x, min_point_AABB.y, min_point_AABB.z),
+                      AabbHierarchy::Point(max_point_AABB.x, max_point_AABB.y, max_point_AABB.z));
 }
 Pointcloud::Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io,
                        const uint64_t& id)
@@ -26,21 +37,13 @@ std::optional<seerep::PointCloud2> Pointcloud::getData(const seerep::Boundingbox
 {
   std::cout << "loading PC from pointclouds/" << id << std::endl;
   Eigen::Vector4f minPt, maxPt;
-  getBoundingBox(minPt, maxPt, bb);
+  getMinMaxFromBundingBox(minPt, maxPt, bb);
   std::optional<seerep::PointCloud2> pc = hdf5_io->readPointCloud2("pointclouds/" + std::to_string(id) + "/rawdata");
 
   if (pc)
   {
-    std::cout << "converting PC to ROS" << std::endl;
-    sensor_msgs::PointCloud2 pc_ros = seerep_ros_conversions::toROS(pc.value());
-    std::cout << "ROS size: " << pc_ros.height * pc_ros.row_step << std::endl;
-
-    std::cout << "converting PC to PCL" << std::endl;
-    pcl::PCLPointCloud2 pcl_pc2;
-    pcl_conversions::toPCL(pc_ros, pcl_pc2);
     pcl::PointCloud<pcl::PointXYZ>::Ptr temp_cloud(new pcl::PointCloud<pcl::PointXYZ>);
-    pcl::fromPCLPointCloud2(pcl_pc2, *temp_cloud);
-    std::cout << "PCL size: " << temp_cloud->size() << std::endl;
+    protoToPcl(pc.value(), temp_cloud);
 
     std::cout << "filtering PC" << std::endl;
     pcl::CropBox<pcl::PointXYZ> boxFilter;
@@ -51,18 +54,15 @@ std::optional<seerep::PointCloud2> Pointcloud::getData(const seerep::Boundingbox
     boxFilter.filter(*filtered_cloud);
     std::cout << "PCL filtered size: " << filtered_cloud->size() << std::endl;
 
-    std::cout << "converting PC to Proto" << std::endl;
-    pcl::toPCLPointCloud2(*filtered_cloud, pcl_pc2);
-    sensor_msgs::PointCloud2 pc2_msg;
-    pcl_conversions::fromPCL(pcl_pc2, pc2_msg);
-    std::cout << "ROS filtered size: " << pc2_msg.height * pc2_msg.row_step << std::endl;
-    return seerep_ros_conversions::toProto(pc2_msg);
+    seerep::PointCloud2 result_pc;
+    pclToProto(filtered_cloud, result_pc);
+    return result_pc;
   }
 
   return std::nullopt;
 }
 
-void Pointcloud::getBoundingBox(Eigen::Vector4f& minPt, Eigen::Vector4f& maxPt, const seerep::Boundingbox& bb)
+void Pointcloud::getMinMaxFromBundingBox(Eigen::Vector4f& minPt, Eigen::Vector4f& maxPt, const seerep::Boundingbox& bb)
 {
   if (bb.point_max().x() < bb.point_min().x())
   {
@@ -97,5 +97,29 @@ void Pointcloud::getBoundingBox(Eigen::Vector4f& minPt, Eigen::Vector4f& maxPt, 
 
   maxPt(3) = 1.0f;
   minPt(3) = 1.0f;
+}
+
+void Pointcloud::protoToPcl(const seerep::PointCloud2& pc_proto, pcl::PointCloud<pcl::PointXYZ>::Ptr& pc_pcl)
+{
+  std::cout << "converting PC to ROS" << std::endl;
+  sensor_msgs::PointCloud2 pc_ros = seerep_ros_conversions::toROS(pc_proto);
+  std::cout << "ROS size: " << pc_ros.height * pc_ros.row_step << std::endl;
+
+  std::cout << "converting PC to PCL" << std::endl;
+  pcl::PCLPointCloud2 pcl_pc2;
+  pcl_conversions::toPCL(pc_ros, pcl_pc2);
+  pcl::fromPCLPointCloud2(pcl_pc2, *pc_pcl);
+  std::cout << "PCL size: " << pc_pcl->size() << std::endl;
+}
+
+void Pointcloud::pclToProto(const pcl::PointCloud<pcl::PointXYZ>::Ptr& pc_pcl, seerep::PointCloud2& pc_proto)
+{
+  std::cout << "converting PC to Proto" << std::endl;
+  pcl::PCLPointCloud2 pcl_pc2;
+  pcl::toPCLPointCloud2(*pc_pcl, pcl_pc2);
+  sensor_msgs::PointCloud2 pc2_msg;
+  pcl_conversions::fromPCL(pcl_pc2, pc2_msg);
+  std::cout << "ROS filtered size: " << pc2_msg.height * pc2_msg.row_step << std::endl;
+  pc_proto = seerep_ros_conversions::toProto(pc2_msg);
 }
 } /* namespace seerep_core */

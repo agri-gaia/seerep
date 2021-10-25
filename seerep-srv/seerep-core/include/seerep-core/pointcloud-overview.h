@@ -15,6 +15,7 @@
 
 // seerep-core
 #include "pointcloud.h"
+#include "aabb-hierarchy.h"
 
 namespace seerep_core
 {
@@ -38,6 +39,8 @@ private:
   std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io;
 
   std::unordered_map<uint64_t, std::shared_ptr<seerep_core::Pointcloud>> datasets;
+
+  AabbHierarchy::rtree rt;
 };
 
 } /* namespace seerep_core */

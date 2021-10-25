@@ -58,6 +58,7 @@ set(INSTALL_HEADERS
 	include/seerep-core/project-overview.h
 	include/seerep-core/pointcloud.h
 	include/seerep-core/pointcloud-overview.h
+	include/seerep-core/aabb-hierarchy.h
 )
 
 set_target_properties(seerepcore PROPERTIES PUBLIC_HEADER "${INSTALL_HEADERS}")

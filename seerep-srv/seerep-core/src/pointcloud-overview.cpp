@@ -33,9 +33,18 @@ void PointcloudOverview::recreateDatasets()
 std::vector<std::optional<seerep::PointCloud2>> PointcloudOverview::getData(const seerep::Boundingbox& bb)
 {
   std::vector<std::optional<seerep::PointCloud2>> result;
-  for (auto& dataset : datasets)
+
+  AabbHierarchy::AABB aabb(AabbHierarchy::Point(bb.point_min().x(), bb.point_min().y(), bb.point_min().z()),
+                           AabbHierarchy::Point(bb.point_max().x(), bb.point_max().y(), bb.point_max().z()));
+
+  std::vector<AabbHierarchy::AabbIdPair> rt_result;
+
+  // do the semantic query first and extend this query parameter by check if id is in semantic result
+  rt.query(boost::geometry::index::intersects(aabb), std::back_inserter(rt_result));
+
+  for (auto& r : rt_result)
   {
-    std::optional<seerep::PointCloud2> pc = dataset.second->getData(bb);
+    std::optional<seerep::PointCloud2> pc = datasets.at(r.second)->getData(bb);
 
     if (pc)
     {
@@ -52,6 +61,7 @@ void PointcloudOverview::addDataset(const seerep::PointCloud2& pointcloud2)
   uint64_t id = data_count++;
   auto pc = std::make_shared<Pointcloud>(coordinatesystem, hdf5_io, pointcloud2, id);
   datasets.insert(std::make_pair(id, pc));
+  // rt.insert(std::make_pair(,pc))
 }
 
 void PointcloudOverview::addDatasetLabeled(const seerep::PointCloud2Labeled& pointcloud2labeled)

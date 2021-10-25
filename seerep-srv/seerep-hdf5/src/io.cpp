@@ -177,6 +177,12 @@ void SeerepHDF5IO::writePointCloud2Labeled(const std::string& id, const seerep::
   writeBoundingBox3DLabeled(id, pointcloud2Labeled.labels());
 }
 
+void SeerepHDF5IO::writeAABB(
+    const std::string& id,
+    const boost::geometry::model::box<boost::geometry::model::point<float, 3, boost::geometry::cs::cartesian>> aabb)
+{
+}
+
 void SeerepHDF5IO::writeBoundingBox3DLabeled(
     const std::string& id,
     const google::protobuf::RepeatedPtrField<::seerep::BoundingBox3DLabeled>& boundingbox3DLabeled)
