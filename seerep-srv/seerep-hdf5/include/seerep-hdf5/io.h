@@ -45,7 +45,11 @@ public:
 
   void writeAABB(
       const std::string& id,
-      const boost::geometry::model::box<boost::geometry::model::point<float, 3, boost::geometry::cs::cartesian>> aabb);
+      const boost::geometry::model::box<boost::geometry::model::point<float, 3, boost::geometry::cs::cartesian>>& aabb);
+
+  void
+  readAABB(const std::string& id,
+           boost::geometry::model::box<boost::geometry::model::point<float, 3, boost::geometry::cs::cartesian>>& aabb);
 
   void writeBoundingBox3DLabeled(
       const std::string& id,
@@ -105,10 +109,12 @@ private:
   const std::string POSITION = "position";
   const std::string ORIENTATION = "orientation";
 
+  const std::string AABB_FIELD = "AABB";
+
   const std::string PROJECTNAME = "projectname";
 
-  HighFive::File file;
-  std::mutex write_mtx;
+  HighFive::File m_file;
+  std::mutex m_write_mtx;
 };
 
 } /* namespace seerep_hdf5 */

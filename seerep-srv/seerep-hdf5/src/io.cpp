@@ -4,7 +4,7 @@
 
 namespace seerep_hdf5
 {
-SeerepHDF5IO::SeerepHDF5IO(HighFive::File& file) : file(file)
+SeerepHDF5IO::SeerepHDF5IO(HighFive::File& file) : m_file(file)
 {
 }
 
@@ -57,10 +57,10 @@ void SeerepHDF5IO::writeImage(const std::string& id, const seerep::Image& image)
   std::shared_ptr<HighFive::DataSet> data_set_ptr;
   HighFive::DataSpace data_space({ image.height(), image.step() });
 
-  if (!file.exist(id))
+  if (!m_file.exist(id))
   {
     std::cout << "data id " << id << " does not exist! Creat new dataset in hdf5" << std::endl;
-    data_set_ptr = std::make_shared<HighFive::DataSet>(file.createDataSet<uint8_t>(id, data_space));
+    data_set_ptr = std::make_shared<HighFive::DataSet>(m_file.createDataSet<uint8_t>(id, data_space));
     data_set_ptr->createAttribute(HEIGHT, image.height());
     data_set_ptr->createAttribute(WIDTH, image.width());
     data_set_ptr->createAttribute(ENCODING, image.encoding());
@@ -70,7 +70,7 @@ void SeerepHDF5IO::writeImage(const std::string& id, const seerep::Image& image)
   else
   {
     std::cout << "data id " << id << " already exists!" << std::endl;
-    data_set_ptr = std::make_shared<HighFive::DataSet>(file.getDataSet(id));
+    data_set_ptr = std::make_shared<HighFive::DataSet>(m_file.getDataSet(id));
     data_set_ptr->getAttribute(HEIGHT).write(image.height());
     data_set_ptr->getAttribute(WIDTH).write(image.width());
     data_set_ptr->getAttribute(ENCODING).write(image.encoding());
@@ -90,15 +90,15 @@ void SeerepHDF5IO::writeImage(const std::string& id, const seerep::Image& image)
   }
   data_set_ptr->write(tmp);
   writeHeaderAttributes(*data_set_ptr, image.header());
-  file.flush();
+  m_file.flush();
 }
 
 std::optional<seerep::Image> SeerepHDF5IO::readImage(const std::string& id)
 {
-  if (!file.exist(id))
+  if (!m_file.exist(id))
     return std::nullopt;
 
-  HighFive::DataSet data_set = file.getDataSet(id);
+  HighFive::DataSet data_set = m_file.getDataSet(id);
 
   seerep::Image image;
   data_set.read(image.mutable_data());
@@ -179,8 +179,51 @@ void SeerepHDF5IO::writePointCloud2Labeled(const std::string& id, const seerep::
 
 void SeerepHDF5IO::writeAABB(
     const std::string& id,
-    const boost::geometry::model::box<boost::geometry::model::point<float, 3, boost::geometry::cs::cartesian>> aabb)
+    const boost::geometry::model::box<boost::geometry::model::point<float, 3, boost::geometry::cs::cartesian>>& aabb)
 {
+  if (!m_file.exist(id))
+  {
+    std::cout << "id " << id << " does not exist in file " << m_file.getName() << std::endl;
+    return;
+  }
+  std::cout << "get group " << id << std::endl;
+  HighFive::Group group = m_file.getGroup(id);
+
+  std::vector<float> aabbPoints{ aabb.min_corner().get<0>(), aabb.min_corner().get<1>(), aabb.min_corner().get<2>(),
+                                 aabb.max_corner().get<0>(), aabb.max_corner().get<1>(), aabb.max_corner().get<2>() };
+
+  std::cout << "write AABB as attribute" << std::endl;
+  if (!group.hasAttribute(AABB_FIELD))
+    group.createAttribute(AABB_FIELD, aabbPoints);
+  else
+    group.getAttribute(AABB_FIELD).write(aabbPoints);
+
+  m_file.flush();
+}
+
+void SeerepHDF5IO::readAABB(
+    const std::string& id,
+    boost::geometry::model::box<boost::geometry::model::point<float, 3, boost::geometry::cs::cartesian>>& aabb)
+{
+  if (!m_file.exist(id))
+  {
+    std::cout << "id " << id << " does not exist in file " << m_file.getName() << std::endl;
+    return;
+  }
+  std::cout << "get group " << id << std::endl;
+  HighFive::Group group = m_file.getGroup(id);
+  if (group.hasAttribute(AABB_FIELD))
+  {
+    std::vector<float> aabbPoints;
+    group.getAttribute(AABB_FIELD).read(aabbPoints);
+
+    aabb.min_corner().set<0>(aabbPoints.at(0));
+    aabb.min_corner().set<1>(aabbPoints.at(1));
+    aabb.min_corner().set<2>(aabbPoints.at(2));
+    aabb.max_corner().set<0>(aabbPoints.at(3));
+    aabb.max_corner().set<1>(aabbPoints.at(4));
+    aabb.max_corner().set<2>(aabbPoints.at(5));
+  }
 }
 
 void SeerepHDF5IO::writeBoundingBox3DLabeled(
@@ -198,14 +241,15 @@ void SeerepHDF5IO::writeBoundingBox3DLabeled(
     boundingBoxes.push_back(box);
   }
 
-  HighFive::DataSet datasetLabels = file.createDataSet<std::string>(id + "/labels", HighFive::DataSpace::From(labels));
+  HighFive::DataSet datasetLabels =
+      m_file.createDataSet<std::string>(id + "/labels", HighFive::DataSpace::From(labels));
   datasetLabels.write(labels);
 
   HighFive::DataSet datasetBoxes =
-      file.createDataSet<double>(id + "/labelBoxes", HighFive::DataSpace::From(boundingBoxes));
+      m_file.createDataSet<double>(id + "/labelBoxes", HighFive::DataSpace::From(boundingBoxes));
   datasetBoxes.write(boundingBoxes);
 
-  file.flush();
+  m_file.flush();
 }
 
 void SeerepHDF5IO::writePointCloud2(const std::string& id, const seerep::PointCloud2& pointcloud2)
@@ -213,10 +257,10 @@ void SeerepHDF5IO::writePointCloud2(const std::string& id, const seerep::PointCl
   std::shared_ptr<HighFive::DataSet> data_set_ptr;
   HighFive::DataSpace data_space({ pointcloud2.height(), pointcloud2.row_step() });
 
-  if (!file.exist(id))
+  if (!m_file.exist(id))
   {
     std::cout << "data id " << id << " does not exist! Creat new dataset in hdf5" << std::endl;
-    data_set_ptr = std::make_shared<HighFive::DataSet>(file.createDataSet<uint8_t>(id, data_space));
+    data_set_ptr = std::make_shared<HighFive::DataSet>(m_file.createDataSet<uint8_t>(id, data_space));
     data_set_ptr->createAttribute(HEIGHT, pointcloud2.height());
     data_set_ptr->createAttribute(WIDTH, pointcloud2.width());
     data_set_ptr->createAttribute(IS_BIGENDIAN, pointcloud2.is_bigendian());
@@ -227,7 +271,7 @@ void SeerepHDF5IO::writePointCloud2(const std::string& id, const seerep::PointCl
   else
   {
     std::cout << "data id " << id << " already exists!" << std::endl;
-    data_set_ptr = std::make_shared<HighFive::DataSet>(file.getDataSet(id));
+    data_set_ptr = std::make_shared<HighFive::DataSet>(m_file.getDataSet(id));
     data_set_ptr->getAttribute(HEIGHT).write(pointcloud2.height());
     data_set_ptr->getAttribute(WIDTH).write(pointcloud2.width());
     data_set_ptr->getAttribute(IS_BIGENDIAN).write(pointcloud2.is_bigendian());
@@ -250,18 +294,18 @@ void SeerepHDF5IO::writePointCloud2(const std::string& id, const seerep::PointCl
   }
   data_set_ptr->write(tmp);
   writeHeaderAttributes(*data_set_ptr, pointcloud2.header());
-  file.flush();
+  m_file.flush();
 }
 
 std::optional<seerep::PointCloud2> SeerepHDF5IO::readPointCloud2(const std::string& id)
 {
-  if (!file.exist(id))
+  if (!m_file.exist(id))
   {
-    std::cout << "id " << id << " does not exist in file " << file.getName() << std::endl;
+    std::cout << "id " << id << " does not exist in file " << m_file.getName() << std::endl;
     return std::nullopt;
   }
   std::cout << "get Dataset" << std::endl;
-  HighFive::DataSet data_set = file.getDataSet(id);
+  HighFive::DataSet data_set = m_file.getDataSet(id);
 
   seerep::PointCloud2 pointcloud2;
 
@@ -339,12 +383,12 @@ void SeerepHDF5IO::writePoint(const std::string& id, const seerep::Point& point)
 {
   std::shared_ptr<HighFive::DataSet> data_set_ptr;
   HighFive::DataSpace data_space(0);
-  if (!file.exist(id))
-    data_set_ptr = std::make_shared<HighFive::DataSet>(file.createDataSet<uint8_t>(id, data_space));
+  if (!m_file.exist(id))
+    data_set_ptr = std::make_shared<HighFive::DataSet>(m_file.createDataSet<uint8_t>(id, data_space));
   else
-    data_set_ptr = std::make_shared<HighFive::DataSet>(file.getDataSet(id));
+    data_set_ptr = std::make_shared<HighFive::DataSet>(m_file.getDataSet(id));
   writePointAttributes(*data_set_ptr, point);
-  file.flush();
+  m_file.flush();
 }
 
 void SeerepHDF5IO::writeQuaternionAttributes(HighFive::DataSet& data_set, const seerep::Quaternion& quaternion,
@@ -375,44 +419,44 @@ void SeerepHDF5IO::writeQuaternion(const std::string& id, const seerep::Quaterni
 {
   std::shared_ptr<HighFive::DataSet> data_set_ptr;
   HighFive::DataSpace data_space(0);
-  if (!file.exist(id))
-    data_set_ptr = std::make_shared<HighFive::DataSet>(file.createDataSet<uint8_t>(id, data_space));
+  if (!m_file.exist(id))
+    data_set_ptr = std::make_shared<HighFive::DataSet>(m_file.createDataSet<uint8_t>(id, data_space));
   else
-    data_set_ptr = std::make_shared<HighFive::DataSet>(file.getDataSet(id));
+    data_set_ptr = std::make_shared<HighFive::DataSet>(m_file.getDataSet(id));
   writeQuaternionAttributes(*data_set_ptr, quaternion);
-  file.flush();
+  m_file.flush();
 }
 
 void SeerepHDF5IO::writePose(const std::string& id, const seerep::Pose& pose)
 {
   std::shared_ptr<HighFive::DataSet> data_set_ptr;
   HighFive::DataSpace data_space(0);
-  if (!file.exist(id))
-    data_set_ptr = std::make_shared<HighFive::DataSet>(file.createDataSet<uint8_t>(id, data_space));
+  if (!m_file.exist(id))
+    data_set_ptr = std::make_shared<HighFive::DataSet>(m_file.createDataSet<uint8_t>(id, data_space));
   else
-    data_set_ptr = std::make_shared<HighFive::DataSet>(file.getDataSet(id));
+    data_set_ptr = std::make_shared<HighFive::DataSet>(m_file.getDataSet(id));
   writePointAttributes(*data_set_ptr, pose.position(), POSITION + "/");
   writeQuaternionAttributes(*data_set_ptr, pose.orientation(), ORIENTATION + "/");
-  file.flush();
+  m_file.flush();
 }
 
 void SeerepHDF5IO::writePoseStamped(const std::string& id, const seerep::PoseStamped& pose)
 {
   std::shared_ptr<HighFive::DataSet> data_set_ptr;
   HighFive::DataSpace data_space(0);
-  if (!file.exist(id))
-    data_set_ptr = std::make_shared<HighFive::DataSet>(file.createDataSet<uint8_t>(id, data_space));
+  if (!m_file.exist(id))
+    data_set_ptr = std::make_shared<HighFive::DataSet>(m_file.createDataSet<uint8_t>(id, data_space));
   else
-    data_set_ptr = std::make_shared<HighFive::DataSet>(file.getDataSet(id));
+    data_set_ptr = std::make_shared<HighFive::DataSet>(m_file.getDataSet(id));
   writeHeaderAttributes(*data_set_ptr, pose.header());
   writePointAttributes(*data_set_ptr, pose.pose().position(), POSE + "/" + POSITION + "/");
   writeQuaternionAttributes(*data_set_ptr, pose.pose().orientation(), POSE + "/" + ORIENTATION + "/");
-  file.flush();
+  m_file.flush();
 }
 
 std::vector<std::string> SeerepHDF5IO::getGroupDatasets(const std::string& id)
 {
-  std::vector<std::string> rootObjects = file.listObjectNames();
+  std::vector<std::string> rootObjects = m_file.listObjectNames();
 
   if (id.empty())
   {
@@ -423,7 +467,7 @@ std::vector<std::string> SeerepHDF5IO::getGroupDatasets(const std::string& id)
     // check if rootObjects contains the group id
     if (std::find(rootObjects.begin(), rootObjects.end(), id) != rootObjects.end())
     {
-      return file.getGroup(id).listObjectNames();
+      return m_file.getGroup(id).listObjectNames();
     }
     else
     {
@@ -434,22 +478,22 @@ std::vector<std::string> SeerepHDF5IO::getGroupDatasets(const std::string& id)
 
 void SeerepHDF5IO::writeProjectname(const std::string& projectname)
 {
-  if (!file.hasAttribute(PROJECTNAME))
+  if (!m_file.hasAttribute(PROJECTNAME))
   {
-    file.createAttribute<std::string>(PROJECTNAME, projectname);
+    m_file.createAttribute<std::string>(PROJECTNAME, projectname);
   }
   else
   {
-    file.getAttribute(PROJECTNAME).write(projectname);
+    m_file.getAttribute(PROJECTNAME).write(projectname);
   }
 }
 
 std::string SeerepHDF5IO::readProjectname()
 {
   std::string projectname;
-  if (file.hasAttribute(PROJECTNAME))
+  if (m_file.hasAttribute(PROJECTNAME))
   {
-    file.getAttribute(PROJECTNAME).read(projectname);
+    m_file.getAttribute(PROJECTNAME).read(projectname);
   }
   return projectname;
 }

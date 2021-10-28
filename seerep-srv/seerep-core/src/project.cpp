@@ -2,13 +2,12 @@
 
 namespace seerep_core
 {
-Project::Project(boost::uuids::uuid& uuid, std::string path) : id(uuid), projectname(projectname)
+Project::Project(boost::uuids::uuid& uuid, std::string path) : id(uuid)
 {
   coordinatesystem = "test";
-  HighFive::File hdf5_file(path, HighFive::File::ReadWrite | HighFive::File::Create);
-  // HighFive::File::ReadOnly);
-  // HighFive::File::ReadWrite | HighFive::File::Create | HighFive::File::Truncate);
-  hdf5_io = std::make_shared<seerep_hdf5::SeerepHDF5IO>(hdf5_file);
+
+  createHdf5Io(uuid, path);
+  pointcloudOverview = seerep_core::PointcloudOverview(hdf5_io);
 
   projectname = hdf5_io->readProjectname();
 
@@ -18,8 +17,10 @@ Project::Project(boost::uuids::uuid& uuid, std::string path) : id(uuid), project
 Project::Project(boost::uuids::uuid& uuid, std::string path, std::string projectname)
   : id(uuid), projectname(projectname)
 {
-  Project(uuid, path);
+  createHdf5Io(uuid, path);
   hdf5_io->writeProjectname(projectname);
+  pointcloudOverview = seerep_core::PointcloudOverview(hdf5_io);
+  recreateDatatypes();
 }
 
 Project::~Project()
@@ -29,6 +30,12 @@ Project::~Project()
 std::vector<std::optional<seerep::PointCloud2>> Project::getPointCloud(const seerep::Boundingbox& bb)
 {
   return pointcloudOverview.getData(bb);
+}
+
+void Project::createHdf5Io(boost::uuids::uuid& uuid, std::string path)
+{
+  HighFive::File hdf5_file(path, HighFive::File::ReadWrite | HighFive::File::Create);
+  hdf5_io = std::make_shared<seerep_hdf5::SeerepHDF5IO>(hdf5_file);
 }
 
 void Project::recreateDatatypes()

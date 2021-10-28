@@ -13,7 +13,8 @@ namespace seerep_core
 class AabbHierarchy
 {
 public:
-  typedef bgm::point<float, 3, bg::cs::cartesian> Point;
+  typedef float PointDatatype;
+  typedef bgm::point<PointDatatype, 3, bg::cs::cartesian> Point;
   typedef bgm::box<Point> AABB;
   typedef std::pair<AABB, uint64_t> AabbIdPair;
   typedef bgi::rtree<AabbIdPair, bgi::rstar<32>> rtree;

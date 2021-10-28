@@ -19,7 +19,7 @@ namespace seerep_server
 class ReceiveSensorMsgs final : public seerep::TransferSensorMsgs::Service
 {
 public:
-  ReceiveSensorMsgs(HighFive::File& file, std::string datafolder);
+  ReceiveSensorMsgs(std::string datafolder);
   grpc::Status TransferHeader(grpc::ServerContext* context, const seerep::Header* header,
                               seerep::ServerResponse* response);
 
@@ -47,7 +47,7 @@ public:
 
 private:
   // TODO: move into corresponding classes!
-  seerep_hdf5::SeerepHDF5IO hdf5_io;
+  // seerep_hdf5::SeerepHDF5IO hdf5_io;
   seerep_core::ProjectOverview projectOverview;
   std::string datafolder;
 };
