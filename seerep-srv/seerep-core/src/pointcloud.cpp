@@ -4,9 +4,9 @@ namespace seerep_core
 {
 Pointcloud::Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io,
                        const seerep::PointCloud2& pointcloud2, const uint64_t& id)
-  : coordinatesystemParent(coordinatesystemParent), hdf5_io(hdf5_io), id(id)
+  : coordinatesystemParent(coordinatesystemParent), m_hdf5_io(hdf5_io), m_id(id)
 {
-  hdf5_io->writePointCloud2("pointclouds/" + std::to_string(id) + "/rawdata", pointcloud2);
+  m_hdf5_io->writePointCloud2("pointclouds/" + std::to_string(m_id) + "/rawdata", pointcloud2);
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr temp_cloud(new pcl::PointCloud<pcl::PointXYZ>);
   protoToPcl(pointcloud2, temp_cloud);
@@ -16,29 +16,33 @@ Pointcloud::Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seere
 
   pcl::PointXYZ min_point_AABB, max_point_AABB;
   feature_extractor.getAABB(min_point_AABB, max_point_AABB);
-  AabbHierarchy::AABB(AabbHierarchy::Point(min_point_AABB.x, min_point_AABB.y, min_point_AABB.z),
-                      AabbHierarchy::Point(max_point_AABB.x, max_point_AABB.y, max_point_AABB.z));
+  AabbHierarchy::AABB aabb(AabbHierarchy::Point(min_point_AABB.x, min_point_AABB.y, min_point_AABB.z),
+                           AabbHierarchy::Point(max_point_AABB.x, max_point_AABB.y, max_point_AABB.z));
+
+  m_hdf5_io->writeAABB("pointclouds/" + std::to_string(m_id), aabb);
 }
 Pointcloud::Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io,
                        const uint64_t& id)
-  : coordinatesystemParent(coordinatesystemParent), hdf5_io(hdf5_io), id(id)
+  : coordinatesystemParent(coordinatesystemParent), m_hdf5_io(hdf5_io), m_id(id)
 {
+  m_hdf5_io->readAABB("pointclouds/" + std::to_string(m_id), m_aabb);
 }
 Pointcloud::Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io,
                        const seerep::PointCloud2Labeled& pointcloud2labeled, const uint64_t& id)
-  : coordinatesystemParent(coordinatesystemParent), hdf5_io(hdf5_io), id(id)
+  : coordinatesystemParent(coordinatesystemParent), m_hdf5_io(hdf5_io), m_id(id)
 {
-  hdf5_io->writePointCloud2Labeled("pointclouds/" + std::to_string(id), pointcloud2labeled);
+  m_hdf5_io->writePointCloud2Labeled("pointclouds/" + std::to_string(m_id), pointcloud2labeled);
 }
 Pointcloud::~Pointcloud()
 {
 }
 std::optional<seerep::PointCloud2> Pointcloud::getData(const seerep::Boundingbox bb)
 {
-  std::cout << "loading PC from pointclouds/" << id << std::endl;
+  std::cout << "loading PC from pointclouds/" << m_id << std::endl;
   Eigen::Vector4f minPt, maxPt;
   getMinMaxFromBundingBox(minPt, maxPt, bb);
-  std::optional<seerep::PointCloud2> pc = hdf5_io->readPointCloud2("pointclouds/" + std::to_string(id) + "/rawdata");
+  std::optional<seerep::PointCloud2> pc =
+      m_hdf5_io->readPointCloud2("pointclouds/" + std::to_string(m_id) + "/rawdata");
 
   if (pc)
   {
@@ -121,5 +125,15 @@ void Pointcloud::pclToProto(const pcl::PointCloud<pcl::PointXYZ>::Ptr& pc_pcl, s
   pcl_conversions::fromPCL(pcl_pc2, pc2_msg);
   std::cout << "ROS filtered size: " << pc2_msg.height * pc2_msg.row_step << std::endl;
   pc_proto = seerep_ros_conversions::toProto(pc2_msg);
+}
+
+AabbHierarchy::AABB Pointcloud::getAABB()
+{
+  return m_aabb;
+}
+
+uint64_t Pointcloud::getID()
+{
+  return m_id;
 }
 } /* namespace seerep_core */

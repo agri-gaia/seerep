@@ -46,13 +46,16 @@ public:
   void protoToPcl(const seerep::PointCloud2& pc_proto, pcl::PointCloud<pcl::PointXYZ>::Ptr& pc_pcl);
   void pclToProto(const pcl::PointCloud<pcl::PointXYZ>::Ptr& pc_pcl, seerep::PointCloud2& pc_proto);
 
+  AabbHierarchy::AABB getAABB();
+  uint64_t getID();
+
 private:
-  std::string coordinatesystem;
+  std::string m_coordinatesystem;
   std::string coordinatesystemParent;
-  std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io;
-  const uint64_t id;
+  std::shared_ptr<seerep_hdf5::SeerepHDF5IO> m_hdf5_io;
+  const uint64_t m_id;
   // axis aligned bounding box
-  AabbHierarchy::AABB aabb;
+  AabbHierarchy::AABB m_aabb;
 };
 
 } /* namespace seerep_core */

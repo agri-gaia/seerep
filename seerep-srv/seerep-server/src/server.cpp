@@ -2,8 +2,7 @@
 
 namespace seerep_server
 {
-ReceiveSensorMsgs::ReceiveSensorMsgs(HighFive::File& file, std::string datafolder)
-  : hdf5_io(file), projectOverview(datafolder), datafolder(datafolder)
+ReceiveSensorMsgs::ReceiveSensorMsgs(std::string datafolder) : projectOverview(datafolder), datafolder(datafolder)
 {
 }
 
@@ -20,7 +19,7 @@ grpc::Status ReceiveSensorMsgs::TransferImage(grpc::ServerContext* context, cons
                                               seerep::ServerResponse* response)
 {
   std::cout << "received image... " << std::endl;
-  hdf5_io.writeImage("test_id", *image);
+  // hdf5_io.writeImage("test_id", *image);
   response->set_message("okidoki");
   response->set_transmission_state(seerep::ServerResponse::SUCCESS);
   return grpc::Status::OK;
@@ -33,7 +32,10 @@ grpc::Status ReceiveSensorMsgs::TransferPointCloud2(grpc::ServerContext* context
   std::cout << "received point clouds... " << std::endl;
   // TODO implement hdf5_io function
   // hdf5_io.writePointCloud2("test_id", *point_cloud_2);
-  boost::uuids::uuid uuid;
+
+  boost::uuids::string_generator gen;
+  boost::uuids::uuid uuid = gen(projectOverview.newProject("testproject"));
+
   projectOverview.addPointCloud(*point_cloud_2, uuid);
   response->set_message("okidoki");
   response->set_transmission_state(seerep::ServerResponse::SUCCESS);
@@ -87,7 +89,7 @@ grpc::Status ReceiveSensorMsgs::TransferPoint(grpc::ServerContext* context, cons
                                               seerep::ServerResponse* response)
 {
   std::cout << "received point... " << std::endl;
-  hdf5_io.writePoint("test_id", *point);
+  // hdf5_io.writePoint("test_id", *point);
   response->set_message("okidoki");
   response->set_transmission_state(seerep::ServerResponse::SUCCESS);
   return grpc::Status::OK;
@@ -97,7 +99,7 @@ grpc::Status ReceiveSensorMsgs::TransferQuaternion(grpc::ServerContext* context,
                                                    seerep::ServerResponse* response)
 {
   std::cout << "received quaternion... " << std::endl;
-  hdf5_io.writeQuaternion("test_id", *quaternion);
+  // hdf5_io.writeQuaternion("test_id", *quaternion);
   response->set_message("okidoki");
   response->set_transmission_state(seerep::ServerResponse::SUCCESS);
   return grpc::Status::OK;
@@ -107,7 +109,7 @@ grpc::Status ReceiveSensorMsgs::TransferPose(grpc::ServerContext* context, const
                                              seerep::ServerResponse* response)
 {
   std::cout << "received pose... " << std::endl;
-  hdf5_io.writePose("test_id", *pose);
+  // hdf5_io.writePose("test_id", *pose);
   response->set_message("okidoki");
   response->set_transmission_state(seerep::ServerResponse::SUCCESS);
   return grpc::Status::OK;
@@ -117,7 +119,7 @@ grpc::Status ReceiveSensorMsgs::TransferPoseStamped(grpc::ServerContext* context
                                                     seerep::ServerResponse* response)
 {
   std::cout << "received pose_stamped... " << std::endl;
-  hdf5_io.writePoseStamped("test_id", *pose);
+  // hdf5_io.writePoseStamped("test_id", *pose);
   response->set_message("okidoki");
   response->set_transmission_state(seerep::ServerResponse::SUCCESS);
   return grpc::Status::OK;
@@ -162,9 +164,9 @@ int main(int argc, char** argv)
   }
   std::cout << "The used data folder is: " << datafolder << std::endl;
   std::string server_address = "localhost:9090";
-  HighFive::File hdf5_file("test.h5", HighFive::File::ReadWrite | HighFive::File::Create);
+  // HighFive::File hdf5_file("test.h5", HighFive::File::ReadWrite | HighFive::File::Create);
   // HighFive::File::ReadWrite | HighFive::File::Create | HighFive::File::Truncate);
-  seerep_server::ReceiveSensorMsgs receive_sensor_msgs_service(hdf5_file, datafolder);
+  seerep_server::ReceiveSensorMsgs receive_sensor_msgs_service(datafolder);
   std::shared_ptr<grpc::Server> server = seerep_server::createServer(server_address, &receive_sensor_msgs_service);
   std::cout << "serving on \"" << server_address << "\"..." << std::endl;
   server->Wait();

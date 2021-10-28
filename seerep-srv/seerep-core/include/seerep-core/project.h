@@ -35,6 +35,7 @@ public:
   void addPointCloudLabeled(const seerep::PointCloud2Labeled& pointcloud2Labeled);
 
 private:
+  void createHdf5Io(boost::uuids::uuid& uuid, std::string path);
   void recreateDatatypes();
 
   boost::uuids::uuid id;
