@@ -36,11 +36,11 @@ private:
   uint64_t data_count;
 
   std::string coordinatesystem;
-  std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io;
+  std::shared_ptr<seerep_hdf5::SeerepHDF5IO> m_hdf5_io;
 
-  std::unordered_map<uint64_t, std::shared_ptr<seerep_core::Pointcloud>> datasets;
+  std::unordered_map<uint64_t, std::shared_ptr<seerep_core::Pointcloud>> m_datasets;
 
-  AabbHierarchy::rtree rt;
+  AabbHierarchy::rtree m_rt;
 };
 
 } /* namespace seerep_core */

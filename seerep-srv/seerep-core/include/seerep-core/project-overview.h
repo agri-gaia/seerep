@@ -39,11 +39,12 @@ public:
 private:
   void recreateProjects();
 
-  std::string datafolder;
+  std::string m_datafolder;
 
-  std::string coordinatesystem;
+  std::string m_coordinatesystem;
 
-  std::unordered_map<boost::uuids::uuid, std::shared_ptr<seerep_core::Project>, boost::hash<boost::uuids::uuid>> projects;
+  std::unordered_map<boost::uuids::uuid, std::shared_ptr<seerep_core::Project>, boost::hash<boost::uuids::uuid>>
+      m_projects;
 };
 
 } /* namespace seerep_core */

@@ -4,7 +4,7 @@ namespace seerep_core
 {
 Pointcloud::Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io,
                        const seerep::PointCloud2& pointcloud2, const uint64_t& id)
-  : coordinatesystemParent(coordinatesystemParent), m_hdf5_io(hdf5_io), m_id(id)
+  : m_coordinatesystemParent(coordinatesystemParent), m_hdf5_io(hdf5_io), m_id(id)
 {
   m_hdf5_io->writePointCloud2("pointclouds/" + std::to_string(m_id) + "/rawdata", pointcloud2);
 
@@ -23,13 +23,13 @@ Pointcloud::Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seere
 }
 Pointcloud::Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io,
                        const uint64_t& id)
-  : coordinatesystemParent(coordinatesystemParent), m_hdf5_io(hdf5_io), m_id(id)
+  : m_coordinatesystemParent(coordinatesystemParent), m_hdf5_io(hdf5_io), m_id(id)
 {
   m_hdf5_io->readAABB("pointclouds/" + std::to_string(m_id), m_aabb);
 }
 Pointcloud::Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io,
                        const seerep::PointCloud2Labeled& pointcloud2labeled, const uint64_t& id)
-  : coordinatesystemParent(coordinatesystemParent), m_hdf5_io(hdf5_io), m_id(id)
+  : m_coordinatesystemParent(coordinatesystemParent), m_hdf5_io(hdf5_io), m_id(id)
 {
   m_hdf5_io->writePointCloud2Labeled("pointclouds/" + std::to_string(m_id), pointcloud2labeled);
 }

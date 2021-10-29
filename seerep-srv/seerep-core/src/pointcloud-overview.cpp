@@ -6,7 +6,7 @@ PointcloudOverview::PointcloudOverview()
 {
 }
 PointcloudOverview::PointcloudOverview(std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io)
-  : hdf5_io(hdf5_io), data_count(0)
+  : m_hdf5_io(hdf5_io), data_count(0)
 {
   coordinatesystem = "test";
 
@@ -18,16 +18,16 @@ PointcloudOverview::~PointcloudOverview()
 
 void PointcloudOverview::recreateDatasets()
 {
-  std::vector<std::string> pcs = hdf5_io->getGroupDatasets("pointclouds");
+  std::vector<std::string> pcs = m_hdf5_io->getGroupDatasets("pointclouds");
   for (auto name : pcs)
   {
     std::cout << "found " << name << " in HDF5 file." << std::endl;
 
     uint64_t id;
     std::istringstream(name) >> id;
-    auto pc = std::make_shared<Pointcloud>(coordinatesystem, hdf5_io, id);
-    datasets.insert(std::make_pair(id, pc));
-    rt.insert(std::make_pair(pc->getAABB(), pc->getID()));
+    auto pc = std::make_shared<Pointcloud>(coordinatesystem, m_hdf5_io, id);
+    m_datasets.insert(std::make_pair(id, pc));
+    m_rt.insert(std::make_pair(pc->getAABB(), pc->getID()));
   }
 }
 
@@ -41,11 +41,11 @@ std::vector<std::optional<seerep::PointCloud2>> PointcloudOverview::getData(cons
   std::vector<AabbHierarchy::AabbIdPair> rt_result;
 
   // do the semantic query first and extend this query parameter by check if id is in semantic result
-  rt.query(boost::geometry::index::intersects(aabb), std::back_inserter(rt_result));
+  m_rt.query(boost::geometry::index::intersects(aabb), std::back_inserter(rt_result));
 
   for (auto& r : rt_result)
   {
-    std::optional<seerep::PointCloud2> pc = datasets.at(r.second)->getData(bb);
+    std::optional<seerep::PointCloud2> pc = m_datasets.at(r.second)->getData(bb);
 
     if (pc)
     {
@@ -60,18 +60,18 @@ std::vector<std::optional<seerep::PointCloud2>> PointcloudOverview::getData(cons
 void PointcloudOverview::addDataset(const seerep::PointCloud2& pointcloud2)
 {
   uint64_t id = data_count++;
-  auto pc = std::make_shared<Pointcloud>(coordinatesystem, hdf5_io, pointcloud2, id);
-  datasets.insert(std::make_pair(id, pc));
-  rt.insert(std::make_pair(pc->getAABB(), pc->getID()));
+  auto pc = std::make_shared<Pointcloud>(coordinatesystem, m_hdf5_io, pointcloud2, id);
+  m_datasets.insert(std::make_pair(id, pc));
+  m_rt.insert(std::make_pair(pc->getAABB(), pc->getID()));
 }
 
 void PointcloudOverview::addDatasetLabeled(const seerep::PointCloud2Labeled& pointcloud2labeled)
 {
   uint64_t id = data_count++;
-  auto pc = std::make_shared<Pointcloud>(coordinatesystem, hdf5_io, pointcloud2labeled, id);
-  datasets.insert(std::make_pair(id, pc));
+  auto pc = std::make_shared<Pointcloud>(coordinatesystem, m_hdf5_io, pointcloud2labeled, id);
+  m_datasets.insert(std::make_pair(id, pc));
 
-  rt.insert(std::make_pair(pc->getAABB(), pc->getID()));
+  m_rt.insert(std::make_pair(pc->getAABB(), pc->getID()));
 }
 
 } /* namespace seerep_core */
