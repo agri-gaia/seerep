@@ -2,24 +2,24 @@
 
 namespace seerep_core
 {
-Project::Project(boost::uuids::uuid& uuid, std::string path) : id(uuid)
+Project::Project(boost::uuids::uuid& uuid, std::string path) : m_id(uuid), m_path(path)
 {
-  coordinatesystem = "test";
+  m_coordinatesystem = "test";
 
-  createHdf5Io(uuid, path);
-  pointcloudOverview = seerep_core::PointcloudOverview(hdf5_io);
+  createHdf5Io(m_id, m_path);
+  m_pointcloudOverview = seerep_core::PointcloudOverview(m_hdf5_io);
 
-  projectname = hdf5_io->readProjectname();
+  m_projectname = m_hdf5_io->readProjectname();
 
   recreateDatatypes();
 }
 
 Project::Project(boost::uuids::uuid& uuid, std::string path, std::string projectname)
-  : id(uuid), projectname(projectname)
+  : m_id(uuid), m_path(path), m_projectname(projectname)
 {
-  createHdf5Io(uuid, path);
-  hdf5_io->writeProjectname(projectname);
-  pointcloudOverview = seerep_core::PointcloudOverview(hdf5_io);
+  createHdf5Io(uuid, m_path);
+  m_hdf5_io->writeProjectname(m_projectname);
+  m_pointcloudOverview = seerep_core::PointcloudOverview(m_hdf5_io);
   recreateDatatypes();
 }
 
@@ -29,25 +29,25 @@ Project::~Project()
 
 std::vector<std::optional<seerep::PointCloud2>> Project::getPointCloud(const seerep::Boundingbox& bb)
 {
-  return pointcloudOverview.getData(bb);
+  return m_pointcloudOverview.getData(bb);
 }
 
 void Project::createHdf5Io(boost::uuids::uuid& uuid, std::string path)
 {
   HighFive::File hdf5_file(path, HighFive::File::ReadWrite | HighFive::File::Create);
-  hdf5_io = std::make_shared<seerep_hdf5::SeerepHDF5IO>(hdf5_file);
+  m_hdf5_io = std::make_shared<seerep_hdf5::SeerepHDF5IO>(hdf5_file);
 }
 
 void Project::recreateDatatypes()
 {
-  std::vector<std::string> datatypeNames = hdf5_io->getGroupDatasets("");
+  std::vector<std::string> datatypeNames = m_hdf5_io->getGroupDatasets("");
   for (auto datatypeName : datatypeNames)
   {
     std::cout << "found datatype" << datatypeName << " in HDF5 file." << std::endl;
 
     if (datatypeName == "pointclouds")
     {
-      pointcloudOverview = seerep_core::PointcloudOverview(hdf5_io);
+      m_pointcloudOverview = seerep_core::PointcloudOverview(m_hdf5_io);
     }
     else
     {
@@ -58,12 +58,12 @@ void Project::recreateDatatypes()
 
 void Project::addPointCloud(const seerep::PointCloud2& pointcloud2)
 {
-  pointcloudOverview.addDataset(pointcloud2);
+  m_pointcloudOverview.addDataset(pointcloud2);
 }
 
 void Project::addPointCloudLabeled(const seerep::PointCloud2Labeled& pointcloud2Labeled)
 {
-  pointcloudOverview.addDatasetLabeled(pointcloud2Labeled);
+  m_pointcloudOverview.addDatasetLabeled(pointcloud2Labeled);
 }
 
 } /* namespace seerep_core */

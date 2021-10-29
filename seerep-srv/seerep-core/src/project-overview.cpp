@@ -2,9 +2,9 @@
 
 namespace seerep_core
 {
-ProjectOverview::ProjectOverview(std::string datafolder) : datafolder(datafolder)
+ProjectOverview::ProjectOverview(std::string datafolder) : m_datafolder(datafolder)
 {
-  coordinatesystem = "test";
+  m_coordinatesystem = "test";
 
   recreateProjects();
 }
@@ -16,7 +16,7 @@ std::vector<std::vector<std::optional<seerep::PointCloud2>>>
 ProjectOverview::getPointCloud(const seerep::Boundingbox& bb)
 {
   std::vector<std::vector<std::optional<seerep::PointCloud2>>> result;
-  for (auto& it : projects)
+  for (auto& it : m_projects)
   {
     result.push_back(it.second->getPointCloud(bb));
   }
@@ -26,7 +26,7 @@ ProjectOverview::getPointCloud(const seerep::Boundingbox& bb)
 
 void ProjectOverview::recreateProjects()
 {
-  for (const auto& entry : std::filesystem::directory_iterator(datafolder))
+  for (const auto& entry : std::filesystem::directory_iterator(m_datafolder))
   {
     if (entry.path().filename().extension() == ".h5")
     {
@@ -38,7 +38,7 @@ void ProjectOverview::recreateProjects()
         boost::uuids::uuid uuid = gen(entry.path().filename().stem().string());
 
         auto project = std::make_shared<Project>(uuid, entry.path().string());
-        projects.insert(std::make_pair(uuid, project));
+        m_projects.insert(std::make_pair(uuid, project));
       }
       catch (const std::runtime_error& e)
       {
@@ -53,22 +53,22 @@ std::string ProjectOverview::newProject(std::string projectname)
   boost::uuids::uuid uuid = boost::uuids::random_generator()();
 
   std::string filename = boost::lexical_cast<std::string>(uuid);
-  std::string path = datafolder + "/" + filename + ".h5";
+  std::string path = m_datafolder + "/" + filename + ".h5";
 
   auto project = std::make_shared<Project>(uuid, path, projectname);
-  projects.insert(std::make_pair(uuid, project));
+  m_projects.insert(std::make_pair(uuid, project));
 
   return filename;
 }
 
 void ProjectOverview::addPointCloud(const seerep::PointCloud2& pointcloud2, boost::uuids::uuid uuid)
 {
-  projects.at(uuid)->addPointCloud(pointcloud2);
+  m_projects.at(uuid)->addPointCloud(pointcloud2);
 }
 
 void ProjectOverview::addPointCloudLabeled(const seerep::PointCloud2Labeled& pointcloud2labeled, boost::uuids::uuid uuid)
 {
-  projects.at(uuid)->addPointCloudLabeled(pointcloud2labeled);
+  m_projects.at(uuid)->addPointCloudLabeled(pointcloud2labeled);
 }
 
 } /* namespace seerep_core */

@@ -38,14 +38,14 @@ private:
   void createHdf5Io(boost::uuids::uuid& uuid, std::string path);
   void recreateDatatypes();
 
-  boost::uuids::uuid id;
+  boost::uuids::uuid m_id;
 
-  std::string path;
-  std::string projectname;
-  std::string coordinatesystem;
-  std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io;
+  std::string m_path;
+  std::string m_projectname;
+  std::string m_coordinatesystem;
+  std::shared_ptr<seerep_hdf5::SeerepHDF5IO> m_hdf5_io;
 
-  seerep_core::PointcloudOverview pointcloudOverview;
+  seerep_core::PointcloudOverview m_pointcloudOverview;
 };
 
 } /* namespace seerep_core */

@@ -51,7 +51,7 @@ public:
 
 private:
   std::string m_coordinatesystem;
-  std::string coordinatesystemParent;
+  std::string m_coordinatesystemParent;
   std::shared_ptr<seerep_hdf5::SeerepHDF5IO> m_hdf5_io;
   const uint64_t m_id;
   // axis aligned bounding box
