@@ -1,0 +1,43 @@
+#!/usr/bin/env python
+# PointCloud2 color cube
+# https://answers.ros.org/question/289576/understanding-the-bytes-in-a-pcl2-message/
+import rospy
+import numpy as np
+
+from sensor_msgs.msg import Image
+from std_msgs.msg import Header
+
+
+rospy.init_node("create_image_rgb")
+pub = rospy.Publisher("image", Image, queue_size=2)
+
+rgb = []
+lim = 8
+for i in range(lim):
+    for j in range(lim):
+        x = float(i) / lim
+        y = float(j) / lim
+        z = float(j) / lim
+        r = np.ubyte((x * 255.0) % 255)
+        g = np.ubyte((y * 255.0) % 255)
+        b = np.ubyte((z * 255.0) % 255)
+        a = 255
+        print(r, g, b, a)
+        rgb.append(r)
+        rgb.append(g)
+        rgb.append(b)
+        rgb.append(a)
+
+header = Header()
+header.frame_id = "map"
+theImage = Image()
+theImage.height = lim
+theImage.width = lim
+theImage.encoding = "rgba8"
+theImage.step = 4 * lim
+theImage.data = rgb
+
+while not rospy.is_shutdown():
+    theImage.header.stamp = rospy.Time.now()
+    pub.publish(theImage)
+    rospy.sleep(1.0)
