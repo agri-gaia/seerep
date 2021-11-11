@@ -12,10 +12,10 @@ find_package(catkin REQUIRED
 	std_msgs
 	geometry_msgs
 	sensor_msgs
-	seerep_ros_conversions
 	roscpp
 )
-
+find_package(SeerepHDF5 REQUIRED)
+find_package(seerep_ros_conversions REQUIRED)
 find_package(Protobuf REQUIRED)
 find_package(gRPC CONFIG REQUIRED)
 
@@ -31,6 +31,9 @@ catkin_package(
 include_directories(
 	include
 	${SeerepCom_INCLUDE_DIRS}
+	${SeerepMsgs_INCLUDE_DIRS}
+	${SeerepHDF5_INCLUDE_DIRS}
+	${seerep_ros_conversions_INCLUDE_DIRS}
 	${catkin_INCLUDE_DIRS}
 )
 
@@ -41,32 +44,45 @@ add_executable(${PROJECT_NAME}_server
 add_executable(${PROJECT_NAME}_client
 	src/client.cpp
 )
+add_executable(${PROJECT_NAME}_hdf5dump
+	src/hdf5dump.cpp
+)
 add_executable(${PROJECT_NAME}_querier
 	src/querier.cpp
 )
 
 add_dependencies(${PROJECT_NAME}_server ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(${PROJECT_NAME}_client ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(${PROJECT_NAME}_hdf5dump ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(${PROJECT_NAME}_querier ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 target_link_libraries(${PROJECT_NAME}_server
 	${SeerepCom_LIBRARIES}
+	${seerep_ros_conversions_LIBRARIES}
 	${catkin_LIBRARIES}
 	gRPC::grpc++_reflection
 )
 
 target_link_libraries(${PROJECT_NAME}_client
 	${SeerepCom_LIBRARIES}
+	${seerep_ros_conversions_LIBRARIES}
 	${catkin_LIBRARIES}
 	gRPC::grpc++_reflection
 )
+target_link_libraries(${PROJECT_NAME}_hdf5dump
+	${SeerepCom_LIBRARIES}
+	${seerep_ros_conversions_LIBRARIES}
+	${SeerepHDF5_LIBRARIES}
+	${catkin_LIBRARIES}
+)
 target_link_libraries(${PROJECT_NAME}_querier
 	${SeerepCom_LIBRARIES}
+	${seerep_ros_conversions_LIBRARIES}
 	${catkin_LIBRARIES}
 	gRPC::grpc++_reflection
 )
 
-install(TARGETS ${PROJECT_NAME}_server ${PROJECT_NAME}_client ${PROJECT_NAME}_querier
+install(TARGETS ${PROJECT_NAME}_server ${PROJECT_NAME}_client ${PROJECT_NAME}_hdf5dump ${PROJECT_NAME}_querier
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
