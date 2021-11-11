@@ -26,18 +26,9 @@ class SeerepHDF5IO
 public:
   SeerepHDF5IO(HighFive::File& file);
 
-  void writeHeaderAttributes(HighFive::DataSet& data_set, const seerep::Header& header);
-
-  seerep::Header readHeaderAttributes(HighFive::DataSet& data_set);
-
   void writeImage(const std::string& id, const seerep::Image& image);
 
   std::optional<seerep::Image> readImage(const std::string& id);
-
-  void writePointFieldAttributes(HighFive::DataSet& data_set,
-                                 const google::protobuf::RepeatedPtrField<seerep::PointField> repeatedPointField);
-
-  google::protobuf::RepeatedPtrField<seerep::PointField> readPointFieldAttributes(HighFive::DataSet& data_set);
 
   void writePointCloud2(const std::string& id, const seerep::PointCloud2& pointcloud2);
 
@@ -57,12 +48,7 @@ public:
 
   std::optional<seerep::PointCloud2> readPointCloud2(const std::string& id);
 
-  void writePointAttributes(HighFive::DataSet& data_set, const seerep::Point& point, const std::string& prefix = "");
-
   void writePoint(const std::string& id, const seerep::Point& point);
-
-  void writeQuaternionAttributes(HighFive::DataSet& data_set, const seerep::Quaternion& quaternion,
-                                 const std::string& prefix = "");
 
   void writeQuaternion(const std::string& id, const seerep::Quaternion& quaternion);
 
@@ -77,6 +63,21 @@ public:
   std::string readProjectname();
 
 private:
+  void writeHeaderAttributes(HighFive::DataSet& data_set, const seerep::Header& header);
+
+  seerep::Header readHeaderAttributes(HighFive::DataSet& data_set);
+
+  void writePointFieldAttributes(HighFive::DataSet& data_set,
+                                 const google::protobuf::RepeatedPtrField<seerep::PointField> repeatedPointField);
+
+  google::protobuf::RepeatedPtrField<seerep::PointField> readPointFieldAttributes(HighFive::DataSet& data_set);
+
+  void writeQuaternionAttributes(HighFive::DataSet& data_set, const seerep::Quaternion& quaternion,
+                                 const std::string& prefix = "");
+
+  void writePointAttributes(HighFive::DataSet& data_set, const seerep::Point& point, const std::string& prefix = "");
+
+  const std::string CLASS = "CLASS";
   // image / pointcloud attribute keys
   const std::string HEIGHT = "height";
   const std::string WIDTH = "width";
@@ -112,6 +113,10 @@ private:
   const std::string AABB_FIELD = "AABB";
 
   const std::string PROJECTNAME = "projectname";
+
+  // datatype group names in hdf5
+  const std::string HDF5_GROUP_IMAGE = "images";
+  const std::string HDF5_GROUP_POINTCLOUD = "pointclouds";
 
   HighFive::File m_file;
   std::mutex m_write_mtx;

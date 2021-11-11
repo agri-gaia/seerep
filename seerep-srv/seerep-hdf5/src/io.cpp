@@ -54,13 +54,23 @@ seerep::Header SeerepHDF5IO::readHeaderAttributes(HighFive::DataSet& data_set)
 
 void SeerepHDF5IO::writeImage(const std::string& id, const seerep::Image& image)
 {
+  std::string hdf5DatasetPath = HDF5_GROUP_IMAGE + "/" + id;
+  std::string hdf5DatasetRawDataPath = hdf5DatasetPath + "/rawdata";
+
   std::shared_ptr<HighFive::DataSet> data_set_ptr;
   HighFive::DataSpace data_space({ image.height(), image.step() });
 
-  if (!m_file.exist(id))
+  if (!m_file.exist(hdf5DatasetRawDataPath))
   {
-    std::cout << "data id " << id << " does not exist! Creat new dataset in hdf5" << std::endl;
-    data_set_ptr = std::make_shared<HighFive::DataSet>(m_file.createDataSet<uint8_t>(id, data_space));
+    std::cout << "data id " << hdf5DatasetRawDataPath << " does not exist! Creat new dataset in hdf5" << std::endl;
+    data_set_ptr =
+        std::make_shared<HighFive::DataSet>(m_file.createDataSet<uint8_t>(hdf5DatasetRawDataPath, data_space));
+    if (image.encoding() == "rgb8" || image.encoding() == "8UC3")
+    {
+      data_set_ptr->createAttribute(CLASS, "PALETTE");
+      data_set_ptr->createAttribute("PAL_COLORMODEL", "RGB");
+      data_set_ptr->createAttribute("PAL_VERSION", "1.2");
+    }
     data_set_ptr->createAttribute(HEIGHT, image.height());
     data_set_ptr->createAttribute(WIDTH, image.width());
     data_set_ptr->createAttribute(ENCODING, image.encoding());
@@ -69,8 +79,20 @@ void SeerepHDF5IO::writeImage(const std::string& id, const seerep::Image& image)
   }
   else
   {
-    std::cout << "data id " << id << " already exists!" << std::endl;
-    data_set_ptr = std::make_shared<HighFive::DataSet>(m_file.getDataSet(id));
+    std::cout << "data id " << hdf5DatasetRawDataPath << " already exists!" << std::endl;
+    data_set_ptr = std::make_shared<HighFive::DataSet>(m_file.getDataSet(hdf5DatasetRawDataPath));
+    if (image.encoding() == "rgb8" || image.encoding() == "8UC3")
+    {
+      data_set_ptr->getAttribute(CLASS).write("PALETTE");
+      data_set_ptr->getAttribute("PAL_COLORMODEL").write("RGB");
+      data_set_ptr->getAttribute("PAL_VERSION").write("1.2");
+    }
+    else
+    {
+      data_set_ptr->deleteAttribute(CLASS);
+      data_set_ptr->deleteAttribute("PAL_COLORMODEL");
+      data_set_ptr->deleteAttribute("PAL_VERSION");
+    }
     data_set_ptr->getAttribute(HEIGHT).write(image.height());
     data_set_ptr->getAttribute(WIDTH).write(image.width());
     data_set_ptr->getAttribute(ENCODING).write(image.encoding());
@@ -95,10 +117,13 @@ void SeerepHDF5IO::writeImage(const std::string& id, const seerep::Image& image)
 
 std::optional<seerep::Image> SeerepHDF5IO::readImage(const std::string& id)
 {
-  if (!m_file.exist(id))
+  std::string hdf5DatasetPath = HDF5_GROUP_IMAGE + "/" + id;
+  std::string hdf5DatasetRawDataPath = hdf5DatasetPath + "/rawdata";
+
+  if (!m_file.exist(hdf5DatasetRawDataPath))
     return std::nullopt;
 
-  HighFive::DataSet data_set = m_file.getDataSet(id);
+  HighFive::DataSet data_set = m_file.getDataSet(hdf5DatasetRawDataPath);
 
   seerep::Image image;
   data_set.read(image.mutable_data());
