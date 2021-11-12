@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <launch>
     <arg name="topics" default=""/>
+    <arg name="hdf5FilePath" default=""/>
     <node name="seerep_ros_communication_hdf5dump" pkg="seerep_ros_communication" type="seerep_ros_communication_hdf5dump" output="screen">
         <rosparam param="topics" subst_value="True">$(arg topics)</rosparam>
+        <rosparam param="hdf5FilePath" subst_value="True">$(arg hdf5FilePath)</rosparam>
     </node>
 </launch>

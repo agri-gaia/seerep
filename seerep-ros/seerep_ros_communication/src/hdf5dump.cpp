@@ -4,7 +4,7 @@ namespace seerep_grpc_ros
 {
 DumpSensorMsgs::DumpSensorMsgs(std::string hdf5FilePath)
 {
-  HighFive::File hdf5_file(hdf5FilePath, HighFive::File::ReadWrite | HighFive::File::Create);
+  HighFive::File hdf5_file(hdf5FilePath, HighFive::File::OpenOrCreate);
   m_hdf5_io = std::make_shared<seerep_hdf5::SeerepHDF5IO>(hdf5_file);
 }
 
@@ -78,7 +78,11 @@ int main(int argc, char** argv)
   std::vector<std::string> topics;
 
   std::string hdf5FilePath;
-  private_nh.param<std::string>("hdf5_file_path", hdf5FilePath, "./sensordata.h5");
+  if (!private_nh.getParam("hdf5FilePath", hdf5FilePath))
+  {
+    ROS_WARN_STREAM("Use the \"hdf5FilePath\" parameter to specify the HDF5 file!");
+    return EXIT_FAILURE;
+  }
 
   seerep_grpc_ros::DumpSensorMsgs dumpSensorMsgs = seerep_grpc_ros::DumpSensorMsgs(hdf5FilePath);
 

@@ -58,58 +58,105 @@ void SeerepHDF5IO::writeImage(const std::string& id, const seerep::Image& image)
   std::string hdf5DatasetRawDataPath = hdf5DatasetPath + "/rawdata";
 
   std::shared_ptr<HighFive::DataSet> data_set_ptr;
-  HighFive::DataSpace data_space({ image.height(), image.step() });
+  HighFive::DataSpace data_space({ image.height(), image.width(), image.step() / image.width() });
 
   if (!m_file.exist(hdf5DatasetRawDataPath))
   {
     std::cout << "data id " << hdf5DatasetRawDataPath << " does not exist! Creat new dataset in hdf5" << std::endl;
     data_set_ptr =
         std::make_shared<HighFive::DataSet>(m_file.createDataSet<uint8_t>(hdf5DatasetRawDataPath, data_space));
-    if (image.encoding() == "rgb8" || image.encoding() == "8UC3")
-    {
-      data_set_ptr->createAttribute(CLASS, "PALETTE");
-      data_set_ptr->createAttribute("PAL_COLORMODEL", "RGB");
-      data_set_ptr->createAttribute("PAL_VERSION", "1.2");
-    }
-    data_set_ptr->createAttribute(HEIGHT, image.height());
-    data_set_ptr->createAttribute(WIDTH, image.width());
-    data_set_ptr->createAttribute(ENCODING, image.encoding());
-    data_set_ptr->createAttribute(IS_BIGENDIAN, image.is_bigendian());
-    data_set_ptr->createAttribute(ROW_STEP, image.step());
   }
   else
   {
     std::cout << "data id " << hdf5DatasetRawDataPath << " already exists!" << std::endl;
     data_set_ptr = std::make_shared<HighFive::DataSet>(m_file.getDataSet(hdf5DatasetRawDataPath));
-    if (image.encoding() == "rgb8" || image.encoding() == "8UC3")
-    {
-      data_set_ptr->getAttribute(CLASS).write("PALETTE");
-      data_set_ptr->getAttribute("PAL_COLORMODEL").write("RGB");
-      data_set_ptr->getAttribute("PAL_VERSION").write("1.2");
-    }
+  }
+
+  if (!data_set_ptr->hasAttribute(HEIGHT))
+    data_set_ptr->createAttribute(HEIGHT, image.height());
+  else
+    data_set_ptr->getAttribute(HEIGHT).write(image.height());
+
+  if (!data_set_ptr->hasAttribute(WIDTH))
+    data_set_ptr->createAttribute(WIDTH, image.width());
+  else
+    data_set_ptr->getAttribute(WIDTH).write(image.width());
+
+  if (!data_set_ptr->hasAttribute(ENCODING))
+    data_set_ptr->createAttribute(ENCODING, image.encoding());
+  else
+    data_set_ptr->getAttribute(ENCODING).write(image.encoding());
+
+  if (!data_set_ptr->hasAttribute(IS_BIGENDIAN))
+    data_set_ptr->createAttribute(IS_BIGENDIAN, image.is_bigendian());
+  else
+    data_set_ptr->getAttribute(IS_BIGENDIAN).write(image.is_bigendian());
+
+  if (!data_set_ptr->hasAttribute(ROW_STEP))
+    data_set_ptr->createAttribute(ROW_STEP, image.step());
+  else
+    data_set_ptr->getAttribute(ROW_STEP).write(image.step());
+
+  if (image.encoding() == "rgb8" || image.encoding() == "8UC3")
+  {
+    if (!data_set_ptr->hasAttribute(CLASS))
+      data_set_ptr->createAttribute(CLASS, std::string("IMAGE"));
     else
+      data_set_ptr->getAttribute(CLASS).write(std::string("IMAGE"));
+
+    if (!data_set_ptr->hasAttribute("IMAGE_VERSION"))
+      data_set_ptr->createAttribute("IMAGE_VERSION", std::string("1.2"));
+    else
+      data_set_ptr->getAttribute("IMAGE_VERSION").write(std::string("1.2"));
+
+    if (!data_set_ptr->hasAttribute("IMAGE_SUBCLASS"))
+      data_set_ptr->createAttribute("IMAGE_SUBCLASS", std::string("IMAGE_TRUECOLOR"));
+    else
+      data_set_ptr->getAttribute("IMAGE_SUBCLASS").write(std::string("IMAGE_TRUECOLOR"));
+
+    if (!data_set_ptr->hasAttribute("INTERLACE_MODE"))
+      data_set_ptr->createAttribute("INTERLACE_MODE", std::string("INTERLACE_PIXEL"));
+    else
+      data_set_ptr->getAttribute("INTERLACE_MODE").write(std::string("INTERLACE_PIXEL"));
+  }
+  else
+  {
+    if (data_set_ptr->hasAttribute(CLASS))
     {
       data_set_ptr->deleteAttribute(CLASS);
-      data_set_ptr->deleteAttribute("PAL_COLORMODEL");
-      data_set_ptr->deleteAttribute("PAL_VERSION");
     }
-    data_set_ptr->getAttribute(HEIGHT).write(image.height());
-    data_set_ptr->getAttribute(WIDTH).write(image.width());
-    data_set_ptr->getAttribute(ENCODING).write(image.encoding());
-    data_set_ptr->getAttribute(IS_BIGENDIAN).write(image.is_bigendian());
-    data_set_ptr->getAttribute(ROW_STEP).write(image.step());
+    if (data_set_ptr->hasAttribute("IMAGE_VERSION"))
+    {
+      data_set_ptr->deleteAttribute("IMAGE_VERSION");
+    }
+    if (data_set_ptr->hasAttribute("IMAGE_SUBCLASS"))
+    {
+      data_set_ptr->deleteAttribute("IMAGE_SUBCLASS");
+    }
+    if (data_set_ptr->hasAttribute("INTERLACE_MODE"))
+    {
+      data_set_ptr->deleteAttribute("INTERLACE_MODE");
+    }
   }
 
   const uint8_t* begin = reinterpret_cast<const uint8_t*>(image.data().c_str());
-  std::vector<std::vector<uint8_t>> tmp;
+
+  std::vector<std::vector<std::vector<uint8_t>>> tmp;
   tmp.resize(image.height());
 
-  for (int i = 0; i < image.height(); i++)
+  int pixel_step = image.step() / image.width();
+
+  for (int row = 0; row < image.height(); row++)
   {
-    const uint8_t* row = begin + i * image.step();
-    tmp[i].reserve(image.step());
-    std::copy_n(row, image.step(), std::back_inserter(tmp[i]));
+    tmp.at(row).resize(image.width());
+    for (int col = 0; col < image.width(); col++)
+    {
+      const uint8_t* pxl = begin + row * image.step() + col * pixel_step;
+      tmp.at(row).at(col).reserve(pixel_step);
+      std::copy_n(pxl, pixel_step, std::back_inserter(tmp.at(row).at(col)));
+    }
   }
+
   data_set_ptr->write(tmp);
   writeHeaderAttributes(*data_set_ptr, image.header());
   m_file.flush();
