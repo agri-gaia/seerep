@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # PointCloud2 color cube
 # https://answers.ros.org/question/289576/understanding-the-bytes-in-a-pcl2-message/
 import rospy

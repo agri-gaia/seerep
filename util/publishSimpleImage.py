@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # PointCloud2 color cube
 # https://answers.ros.org/question/289576/understanding-the-bytes-in-a-pcl2-message/
 import rospy
@@ -21,20 +21,18 @@ for i in range(lim):
         r = np.ubyte((x * 255.0) % 255)
         g = np.ubyte((y * 255.0) % 255)
         b = np.ubyte((z * 255.0) % 255)
-        a = 255
-        print(r, g, b, a)
+        print(r, g, b)
         rgb.append(r)
         rgb.append(g)
         rgb.append(b)
-        rgb.append(a)
 
 header = Header()
 header.frame_id = "map"
 theImage = Image()
 theImage.height = lim
 theImage.width = lim
-theImage.encoding = "rgba8"
-theImage.step = 4 * lim
+theImage.encoding = "rgb8"
+theImage.step = 3 * lim
 theImage.data = rgb
 
 while not rospy.is_shutdown():
