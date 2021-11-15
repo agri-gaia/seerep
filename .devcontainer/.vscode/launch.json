@@ -2,7 +2,21 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "cpp - Build and debug active file",
+            "name": "ROS: Launch hdf5dump",
+            "type": "ros",
+            "request": "launch",
+            "target": "${workspaceFolder}/src/seerep-ros/seerep_ros_communication/launch/hdf5dump.launch",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "cpp - Build and debug seerep server",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/devel/bin/seerep-server_server",
