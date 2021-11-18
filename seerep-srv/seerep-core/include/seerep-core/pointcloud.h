@@ -50,6 +50,8 @@ public:
   uint64_t getID();
 
 private:
+  AabbHierarchy::AABB calcAABB(const seerep::PointCloud2& pointcloud2);
+
   std::string m_coordinatesystem;
   std::string m_coordinatesystemParent;
   std::shared_ptr<seerep_hdf5::SeerepHDF5IO> m_hdf5_io;

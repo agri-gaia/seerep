@@ -15,12 +15,14 @@ void DumpSensorMsgs::dump(const std_msgs::Header::ConstPtr& msg) const
 
 void DumpSensorMsgs::dump(const sensor_msgs::PointCloud2::ConstPtr& msg) const
 {
-  m_hdf5_io->writePointCloud2("testid", seerep_ros_conversions::toProto(*msg));
+  boost::uuids::uuid uuid = boost::uuids::random_generator()();
+  m_hdf5_io->writePointCloud2(boost::lexical_cast<std::string>(uuid), seerep_ros_conversions::toProto(*msg));
 }
 
 void DumpSensorMsgs::dump(const sensor_msgs::Image::ConstPtr& msg) const
 {
-  m_hdf5_io->writeImage("testid", seerep_ros_conversions::toProto(*msg));
+  boost::uuids::uuid uuid = boost::uuids::random_generator()();
+  m_hdf5_io->writeImage(boost::lexical_cast<std::string>(uuid), seerep_ros_conversions::toProto(*msg));
 }
 
 void DumpSensorMsgs::dump(const geometry_msgs::Point::ConstPtr& msg) const

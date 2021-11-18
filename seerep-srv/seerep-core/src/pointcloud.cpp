@@ -8,18 +8,8 @@ Pointcloud::Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seere
 {
   m_hdf5_io->writePointCloud2("pointclouds/" + std::to_string(m_id) + "/rawdata", pointcloud2);
 
-  pcl::PointCloud<pcl::PointXYZ>::Ptr temp_cloud(new pcl::PointCloud<pcl::PointXYZ>);
-  protoToPcl(pointcloud2, temp_cloud);
-  pcl::MomentOfInertiaEstimation<pcl::PointXYZ> feature_extractor;
-  feature_extractor.setInputCloud(temp_cloud);
-  feature_extractor.compute();
-
-  pcl::PointXYZ min_point_AABB, max_point_AABB;
-  feature_extractor.getAABB(min_point_AABB, max_point_AABB);
-  AabbHierarchy::AABB aabb(AabbHierarchy::Point(min_point_AABB.x, min_point_AABB.y, min_point_AABB.z),
-                           AabbHierarchy::Point(max_point_AABB.x, max_point_AABB.y, max_point_AABB.z));
-
-  m_hdf5_io->writeAABB("pointclouds/" + std::to_string(m_id), aabb);
+  m_aabb = calcAABB(pointcloud2);
+  m_hdf5_io->writeAABB("pointclouds/" + std::to_string(m_id), m_aabb);
 }
 Pointcloud::Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io,
                        const uint64_t& id)
@@ -32,6 +22,9 @@ Pointcloud::Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seere
   : m_coordinatesystemParent(coordinatesystemParent), m_hdf5_io(hdf5_io), m_id(id)
 {
   m_hdf5_io->writePointCloud2Labeled("pointclouds/" + std::to_string(m_id), pointcloud2labeled);
+
+  m_aabb = calcAABB(pointcloud2labeled.pointcloud());
+  m_hdf5_io->writeAABB("pointclouds/" + std::to_string(m_id), m_aabb);
 }
 Pointcloud::~Pointcloud()
 {
@@ -136,4 +129,19 @@ uint64_t Pointcloud::getID()
 {
   return m_id;
 }
+
+AabbHierarchy::AABB Pointcloud::calcAABB(const seerep::PointCloud2& pointcloud2)
+{
+  pcl::PointCloud<pcl::PointXYZ>::Ptr temp_cloud(new pcl::PointCloud<pcl::PointXYZ>);
+  protoToPcl(pointcloud2, temp_cloud);
+  pcl::MomentOfInertiaEstimation<pcl::PointXYZ> feature_extractor;
+  feature_extractor.setInputCloud(temp_cloud);
+  feature_extractor.compute();
+
+  pcl::PointXYZ min_point_AABB, max_point_AABB;
+  feature_extractor.getAABB(min_point_AABB, max_point_AABB);
+  return AabbHierarchy::AABB(AabbHierarchy::Point(min_point_AABB.x, min_point_AABB.y, min_point_AABB.z),
+                             AabbHierarchy::Point(max_point_AABB.x, max_point_AABB.y, max_point_AABB.z));
+}
+
 } /* namespace seerep_core */

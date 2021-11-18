@@ -4,7 +4,7 @@ package seerep;
 
 import "boundingbox.proto";
 
-message BoundingBox3DLabeled
+message BoundingBoxLabeled
 {
   string label = 1;
   Boundingbox boundingBox = 2;

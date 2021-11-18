@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package seerep;
+
+import "image.proto";
+import "boundingbox2d_labeled.proto";
+
+message ImageLabeled
+{
+  Image image = 1;
+  repeated BoundingBox2DLabeled labels = 2;
+}

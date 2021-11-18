@@ -162,6 +162,12 @@ void SeerepHDF5IO::writeImage(const std::string& id, const seerep::Image& image)
   m_file.flush();
 }
 
+void SeerepHDF5IO::writeImageLabeled(const std::string& id, const seerep::ImageLabeled& imageLabeled)
+{
+  writeImage(id, imageLabeled.image());
+  writeBoundingBox2DLabeled(id, imageLabeled.labels());
+}
+
 std::optional<seerep::Image> SeerepHDF5IO::readImage(const std::string& id)
 {
   std::string hdf5DatasetPath = HDF5_GROUP_IMAGE + "/" + id;
@@ -246,7 +252,7 @@ void SeerepHDF5IO::writePointCloud2Labeled(const std::string& id, const seerep::
 {
   writePointCloud2(id + "/rawdata", pointcloud2Labeled.pointcloud());
 
-  writeBoundingBox3DLabeled(id, pointcloud2Labeled.labels());
+  writeBoundingBoxLabeled(id, pointcloud2Labeled.labels());
 }
 
 void SeerepHDF5IO::writeAABB(
@@ -298,18 +304,54 @@ void SeerepHDF5IO::readAABB(
   }
 }
 
-void SeerepHDF5IO::writeBoundingBox3DLabeled(
-    const std::string& id,
-    const google::protobuf::RepeatedPtrField<::seerep::BoundingBox3DLabeled>& boundingbox3DLabeled)
+bool SeerepHDF5IO::hasAABB(const std::string& id)
+{
+  if (!m_file.exist(id))
+  {
+    std::cout << "id " << id << " does not exist in file " << m_file.getName() << std::endl;
+    return false;
+  }
+  std::cout << "get group " << id << std::endl;
+  HighFive::Group group = m_file.getGroup(id);
+  return group.hasAttribute(AABB_FIELD);
+}
+
+void SeerepHDF5IO::writeBoundingBoxLabeled(
+    const std::string& id, const google::protobuf::RepeatedPtrField<::seerep::BoundingBoxLabeled>& boundingboxLabeled)
 {
   std::vector<std::string> labels;
   std::vector<std::vector<double>> boundingBoxes;
-  for (auto label : boundingbox3DLabeled)
+  for (auto label : boundingboxLabeled)
   {
     labels.push_back(label.label());
     std::vector<double> box{ label.boundingbox().point_min().x(), label.boundingbox().point_min().y(),
                              label.boundingbox().point_min().z(), label.boundingbox().point_max().x(),
                              label.boundingbox().point_max().y(), label.boundingbox().point_max().z() };
+    boundingBoxes.push_back(box);
+  }
+
+  HighFive::DataSet datasetLabels =
+      m_file.createDataSet<std::string>(id + "/labels", HighFive::DataSpace::From(labels));
+  datasetLabels.write(labels);
+
+  HighFive::DataSet datasetBoxes =
+      m_file.createDataSet<double>(id + "/labelBoxes", HighFive::DataSpace::From(boundingBoxes));
+  datasetBoxes.write(boundingBoxes);
+
+  m_file.flush();
+}
+
+void SeerepHDF5IO::writeBoundingBox2DLabeled(
+    const std::string& id,
+    const google::protobuf::RepeatedPtrField<::seerep::BoundingBox2DLabeled>& boundingbox2DLabeled)
+{
+  std::vector<std::string> labels;
+  std::vector<std::vector<double>> boundingBoxes;
+  for (auto label : boundingbox2DLabeled)
+  {
+    labels.push_back(label.label());
+    std::vector<double> box{ label.boundingbox().point_min().x(), label.boundingbox().point_min().y(),
+                             label.boundingbox().point_max().x(), label.boundingbox().point_max().y() };
     boundingBoxes.push_back(box);
   }
 

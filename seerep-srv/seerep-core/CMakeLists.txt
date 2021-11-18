@@ -41,6 +41,8 @@ add_library(seerepcore
 	src/project-overview.cpp
 	src/pointcloud.cpp
 	src/pointcloud-overview.cpp
+	src/image.cpp
+	src/image-overview.cpp
 )
 
 target_link_libraries(seerepcore
@@ -58,6 +60,8 @@ set(INSTALL_HEADERS
 	include/seerep-core/project-overview.h
 	include/seerep-core/pointcloud.h
 	include/seerep-core/pointcloud-overview.h
+	include/seerep-core/image.h
+	include/seerep-core/image-overview.h
 	include/seerep-core/aabb-hierarchy.h
 )
 

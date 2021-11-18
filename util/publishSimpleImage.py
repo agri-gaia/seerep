@@ -12,7 +12,7 @@ rospy.init_node("create_image_rgb")
 pub = rospy.Publisher("image", Image, queue_size=2)
 
 rgb = []
-lim = 8
+lim = 256
 for i in range(lim):
     for j in range(lim):
         x = float(i) / lim

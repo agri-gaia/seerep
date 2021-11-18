@@ -6,9 +6,10 @@
 
 // seerep-msgs
 #include <seerep-msgs/image.pb.h>
+#include <seerep-msgs/image_labeled.pb.h>
 #include <seerep-msgs/point_cloud_2.pb.h>
 #include <seerep-msgs/point_cloud_2_labeled.pb.h>
-#include <seerep-msgs/boundingbox3D_labeled.pb.h>
+#include <seerep-msgs/boundingbox_labeled.pb.h>
 #include <seerep-msgs/point.pb.h>
 #include <seerep-msgs/quaternion.pb.h>
 #include <seerep-msgs/pose.pb.h>
@@ -28,11 +29,21 @@ public:
 
   void writeImage(const std::string& id, const seerep::Image& image);
 
+  void writeImageLabeled(const std::string& id, const seerep::ImageLabeled& imageLabeled);
+
   std::optional<seerep::Image> readImage(const std::string& id);
 
   void writePointCloud2(const std::string& id, const seerep::PointCloud2& pointcloud2);
 
   void writePointCloud2Labeled(const std::string& id, const seerep::PointCloud2Labeled& pointcloud2Labeled);
+
+  void
+  writeBoundingBoxLabeled(const std::string& id,
+                          const google::protobuf::RepeatedPtrField<::seerep::BoundingBoxLabeled>& boundingboxLabeled);
+
+  void writeBoundingBox2DLabeled(
+      const std::string& id,
+      const google::protobuf::RepeatedPtrField<::seerep::BoundingBox2DLabeled>& boundingbox2DLabeled);
 
   void writeAABB(
       const std::string& id,
@@ -42,9 +53,7 @@ public:
   readAABB(const std::string& id,
            boost::geometry::model::box<boost::geometry::model::point<float, 3, boost::geometry::cs::cartesian>>& aabb);
 
-  void writeBoundingBox3DLabeled(
-      const std::string& id,
-      const google::protobuf::RepeatedPtrField<::seerep::BoundingBox3DLabeled>& boundingbox3DLabeled);
+  bool hasAABB(const std::string& id);
 
   std::optional<seerep::PointCloud2> readPointCloud2(const std::string& id);
 

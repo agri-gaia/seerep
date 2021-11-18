@@ -7,32 +7,36 @@ find_package(Protobuf REQUIRED)
 
 PROTOBUF_GENERATE_CPP(
 	PROTO_SOURCES PROTO_HEADERS
+	protos/boundingbox_labeled.proto
 	protos/boundingbox.proto
-	protos/boundingbox3D_labeled.proto
+	protos/boundingbox2d_labeled.proto
+	protos/boundingbox2d.proto
 	protos/header.proto
-	protos/point_field.proto
-	protos/point_cloud_2.proto
-	protos/point_cloud_2_labeled.proto
+	protos/image_labeled.proto
 	protos/image.proto
-	protos/vector3.proto
-	protos/vector3_stamped.proto
-	protos/point.proto
+	protos/point_cloud_2_labeled.proto
+	protos/point_cloud_2.proto
+	protos/point_field.proto
 	protos/point_stamped.proto
-	protos/quaternion.proto
-	protos/quaternion_stamped.proto
-	protos/pose.proto
-	protos/pose_stamped.proto
-	protos/polygon.proto
+	protos/point.proto
+	protos/point2d.proto
 	protos/polygon_stamped.proto
-	protos/transform.proto
-	protos/transform_stamped.proto
-	protos/twist.proto
-	protos/twist_stamped.proto
-	protos/twist_with_covariance.proto
-	protos/twist_with_covariance_stamped.proto
-	protos/server_response.proto
+	protos/polygon.proto
+	protos/pose_stamped.proto
+	protos/pose.proto
 	protos/projectCreated.proto
 	protos/projectCreation.proto
+	protos/quaternion_stamped.proto
+	protos/quaternion.proto
+	protos/server_response.proto
+	protos/transform_stamped.proto
+	protos/transform.proto
+	protos/twist_stamped.proto
+	protos/twist_with_covariance_stamped.proto
+	protos/twist_with_covariance.proto
+	protos/twist.proto
+	protos/vector3_stamped.proto
+	protos/vector3.proto
 )
 
 

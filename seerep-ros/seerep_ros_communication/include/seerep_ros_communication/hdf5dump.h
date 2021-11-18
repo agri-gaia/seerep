@@ -8,6 +8,13 @@
 #include <seerep_ros_conversions/conversions.h>
 #include <seerep-hdf5/io.h>
 
+// uuid
+#include <boost/uuid/uuid.hpp>             // uuid class
+#include <boost/uuid/uuid_generators.hpp>  // generators
+#include <boost/uuid/uuid_io.hpp>          // streaming operators etc.
+#include <boost/lexical_cast.hpp>
+#include <boost/functional/hash.hpp>
+
 // ros
 #include <ros/ros.h>
 #include <ros/master.h>

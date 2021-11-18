@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package seerep;
+
+import "boundingbox2d.proto";
+
+message BoundingBox2DLabeled
+{
+  string label = 1;
+  Boundingbox2D boundingBox = 2;
+}
