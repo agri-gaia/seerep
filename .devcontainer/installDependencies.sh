@@ -110,5 +110,8 @@ echo '#remove gRPC code'
 cd .. || exit 1
 rm -rf grpc
 
+echo '#Install python3 grpcio_tools'
+pip3 install grpcio-tools
+
 # remove apt lists so that they are not saved in the image layers
 rm -rf /var/lib/apt/lists/*
