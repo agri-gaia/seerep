@@ -79,12 +79,15 @@ int main(int argc, char** argv)
   std::map<std::string, ros::Subscriber> subscribers;
   std::vector<std::string> topics;
 
-  std::string hdf5FilePath;
-  if (!private_nh.getParam("hdf5FilePath", hdf5FilePath))
+  std::string hdf5FolderPath;
+  if (!private_nh.getParam("hdf5FolderPath", hdf5FolderPath))
   {
-    ROS_WARN_STREAM("Use the \"hdf5FilePath\" parameter to specify the HDF5 file!");
+    ROS_WARN_STREAM("Use the \"hdf5FolderPath\" parameter to specify the HDF5 file!");
     return EXIT_FAILURE;
   }
+
+  std::string hdf5FilePath =
+      hdf5FolderPath + "/" + boost::lexical_cast<std::string>(boost::uuids::random_generator()()) + ".h5";
 
   seerep_grpc_ros::DumpSensorMsgs dumpSensorMsgs = seerep_grpc_ros::DumpSensorMsgs(hdf5FilePath);
 
