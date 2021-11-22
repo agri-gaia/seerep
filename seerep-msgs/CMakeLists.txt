@@ -4,9 +4,7 @@ project(seerep-msgs VERSION 0.1)
 include(FindProtobuf)
 find_package(Protobuf REQUIRED)
 
-
-PROTOBUF_GENERATE_CPP(
-	PROTO_SOURCES PROTO_HEADERS
+set(MY_PROTO_FILES
 	protos/boundingbox_labeled.proto
 	protos/boundingbox.proto
 	protos/boundingbox2d_labeled.proto
@@ -39,6 +37,20 @@ PROTOBUF_GENERATE_CPP(
 	protos/vector3.proto
 )
 
+
+PROTOBUF_GENERATE_CPP(
+	PROTO_SOURCES PROTO_HEADERS
+	${MY_PROTO_FILES}
+)
+
+protobuf_generate_python(
+	PY_SOURCES
+	${MY_PROTO_FILES}
+)
+
+add_custom_target(protoPythonTarget ALL
+	DEPENDS ${PY_SOURCES}
+)
 
 include_directories(
 	${CMAKE_BUILD_RPATH}
