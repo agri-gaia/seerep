@@ -28,7 +28,9 @@ for i in range(lim):
 
 header = Header()
 header.frame_id = "map"
+
 theImage = Image()
+theImage.header = header
 theImage.height = lim
 theImage.width = lim
 theImage.encoding = "rgb8"
