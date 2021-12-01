@@ -32,6 +32,7 @@ void ImageOverview::recreateDatasets()
       auto img = std::make_shared<Image>(coordinatesystem, m_hdf5_io, id, uuid);
       m_datasets.insert(std::make_pair(id, img));
       m_rt.insert(std::make_pair(img->getAABB(), img->getID()));
+      m_timetree.insert(std::make_pair(img->getAABBTime(), img->getID()));
     }
     catch (const std::runtime_error& e)
     {
@@ -40,12 +41,15 @@ void ImageOverview::recreateDatasets()
   }
 }
 
-std::vector<std::optional<seerep::Image>> ImageOverview::getData(const seerep::Boundingbox& bb)
+std::vector<std::optional<seerep::Image>> ImageOverview::getData(const seerep::Query& query)
 {
   std::vector<std::optional<seerep::Image>> result;
 
-  AabbHierarchy::AABB aabb(AabbHierarchy::Point(bb.point_min().x(), bb.point_min().y(), bb.point_min().z()),
-                           AabbHierarchy::Point(bb.point_max().x(), bb.point_max().y(), bb.point_max().z()));
+  AabbHierarchy::AABB aabb(
+      AabbHierarchy::Point(query.boundingbox().point_min().x(), query.boundingbox().point_min().y(),
+                           query.boundingbox().point_min().z()),
+      AabbHierarchy::Point(query.boundingbox().point_max().x(), query.boundingbox().point_max().y(),
+                           query.boundingbox().point_max().z()));
 
   std::vector<AabbHierarchy::AabbIdPair> rt_result;
 
@@ -54,7 +58,7 @@ std::vector<std::optional<seerep::Image>> ImageOverview::getData(const seerep::B
 
   for (auto& r : rt_result)
   {
-    std::optional<seerep::Image> img = m_datasets.at(r.second)->getData(bb);
+    std::optional<seerep::Image> img = m_datasets.at(r.second)->getData(query);
 
     if (img)
     {

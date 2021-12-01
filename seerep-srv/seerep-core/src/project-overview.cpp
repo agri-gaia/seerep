@@ -24,6 +24,17 @@ ProjectOverview::getPointCloud(const seerep::Boundingbox& bb)
   return result;
 }
 
+std::vector<std::vector<std::optional<seerep::Image>>> ProjectOverview::getImage(const seerep::Query& query)
+{
+  std::vector<std::vector<std::optional<seerep::Image>>> result;
+  for (auto& it : m_projects)
+  {
+    result.push_back(it.second->getImage(query));
+  }
+
+  return result;
+}
+
 void ProjectOverview::recreateProjects()
 {
   for (const auto& entry : std::filesystem::directory_iterator(m_datafolder))

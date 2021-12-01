@@ -10,6 +10,7 @@
 
 // seerep-msgs
 #include <seerep-msgs/boundingbox.pb.h>
+#include <seerep-msgs/query.pb.h>
 #include <seerep-msgs/point_cloud_2.pb.h>
 #include <seerep-msgs/point_cloud_2_labeled.pb.h>
 // seerep-hdf5
@@ -20,6 +21,8 @@
 // seerep-core
 #include "pointcloud.h"
 #include "pointcloud-overview.h"
+#include "image.h"
+#include "image-overview.h"
 
 namespace seerep_core
 {
@@ -30,6 +33,7 @@ public:
   Project(boost::uuids::uuid& uuid, std::string path, std::string projectname);
   ~Project();
   std::vector<std::optional<seerep::PointCloud2>> getPointCloud(const seerep::Boundingbox& bb);
+  std::vector<std::optional<seerep::Image>> getImage(const seerep::Query& query);
 
   void addPointCloud(const seerep::PointCloud2& pointcloud2);
   void addPointCloudLabeled(const seerep::PointCloud2Labeled& pointcloud2Labeled);
@@ -46,6 +50,7 @@ private:
   std::shared_ptr<seerep_hdf5::SeerepHDF5IO> m_hdf5_io;
 
   seerep_core::PointcloudOverview m_pointcloudOverview;
+  seerep_core::ImageOverview m_imageOverview;
 };
 
 } /* namespace seerep_core */

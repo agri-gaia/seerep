@@ -13,8 +13,10 @@
 
 // seerep-msgs
 #include <seerep-msgs/boundingbox.pb.h>
+#include <seerep-msgs/query.pb.h>
 #include <seerep-msgs/point_cloud_2.pb.h>
 #include <seerep-msgs/point_cloud_2_labeled.pb.h>
+#include <seerep-msgs/image.pb.h>
 // seerep-hdf5
 #include <seerep-hdf5/io.h>
 // seerep-conversion
@@ -34,6 +36,9 @@ public:
 
   void addPointCloud(const seerep::PointCloud2& pointcloud2, boost::uuids::uuid uuid);
   void addPointCloudLabeled(const seerep::PointCloud2Labeled& pointcloud2labeled, boost::uuids::uuid uuid);
+
+  std::vector<std::vector<std::optional<seerep::Image>>> getImage(const seerep::Query& query);
+
   std::string newProject(std::string projectname);
 
 private:

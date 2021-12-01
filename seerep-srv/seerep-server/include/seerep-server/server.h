@@ -25,6 +25,9 @@ public:
 
   grpc::Status TransferImage(grpc::ServerContext* context, const seerep::Image* image, seerep::ServerResponse* response);
 
+  grpc::Status GetImage(grpc::ServerContext* context, const seerep::Query* request,
+                        grpc::ServerWriter<seerep::Image>* writer);
+
   grpc::Status TransferPointCloud2(grpc::ServerContext* context, const seerep::PointCloud2* point_cloud_2,
                                    seerep::ServerResponse* response);
   grpc::Status TransferPointCloud2Labeled(grpc::ServerContext* context,

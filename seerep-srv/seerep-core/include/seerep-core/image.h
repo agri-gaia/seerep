@@ -5,7 +5,7 @@
 #include <optional>
 
 // seerep-msgs
-#include <seerep-msgs/boundingbox.pb.h>
+#include <seerep-msgs/query.pb.h>
 #include <seerep-msgs/image.pb.h>
 // #include <seerep-msgs/point_cloud_2_labeled.pb.h>
 // seerep-hdf5
@@ -37,11 +37,13 @@ public:
   //            const seerep::ImageLabeled& image, const uint64_t& id);
   ~Image();
 
-  std::optional<seerep::Image> getData(const seerep::Boundingbox bb);
+  std::optional<seerep::Image> getData(const seerep::Query& query);
 
   AabbHierarchy::AABB getAABB();
   uint64_t getID();
   boost::uuids::uuid getUUID();
+  int64_t getTime();
+  AabbHierarchy::AabbTime getAABBTime();
 
 private:
   AabbHierarchy::AABB calcAABB(const seerep::Image& image);
@@ -53,6 +55,7 @@ private:
   const boost::uuids::uuid m_uuid;
   // axis aligned bounding box
   AabbHierarchy::AABB m_aabb;
+  int64_t m_time;
 };
 
 } /* namespace seerep_core */

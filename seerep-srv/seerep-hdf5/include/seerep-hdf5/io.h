@@ -55,6 +55,10 @@ public:
 
   bool hasAABB(const std::string& id);
 
+  void readTime(const std::string& id, int64_t time);
+
+  bool hasTime(const std::string& id);
+
   std::optional<seerep::PointCloud2> readPointCloud2(const std::string& id);
 
   void writePoint(const std::string& id, const seerep::Point& point);

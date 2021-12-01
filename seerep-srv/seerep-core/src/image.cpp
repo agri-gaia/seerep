@@ -10,6 +10,8 @@ Image::Image(std::string coordinatesystemParent, std::shared_ptr<seerep_hdf5::Se
 
   m_aabb = calcAABB(image);
   m_hdf5_io->writeAABB("images/" + boost::lexical_cast<std::string>(m_uuid), m_aabb);
+
+  m_time = image.header().stamp().seconds();
 }
 
 Image::Image(std::string coordinatesystemParent, std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io, const uint64_t& id,
@@ -19,6 +21,14 @@ Image::Image(std::string coordinatesystemParent, std::shared_ptr<seerep_hdf5::Se
   if (m_hdf5_io->hasAABB("images/" + boost::lexical_cast<std::string>(m_uuid)))
   {
     m_hdf5_io->readAABB("images/" + boost::lexical_cast<std::string>(m_uuid), m_aabb);
+  }
+  else
+  {
+  }
+
+  if (m_hdf5_io->hasTime("images/" + boost::lexical_cast<std::string>(m_uuid)))
+  {
+    m_hdf5_io->readTime("images/" + boost::lexical_cast<std::string>(m_uuid), m_time);
   }
   else
   {
@@ -36,7 +46,7 @@ Image::~Image()
 {
 }
 
-std::optional<seerep::Image> Image::getData(const seerep::Boundingbox bb)
+std::optional<seerep::Image> Image::getData(const seerep::Query& query)
 {
   std::cout << "loading image from images/" << m_id << std::endl;
 
@@ -63,5 +73,15 @@ boost::uuids::uuid Image::getUUID()
 AabbHierarchy::AABB Image::calcAABB(const seerep::Image& image)
 {
   return AabbHierarchy::AABB(AabbHierarchy::Point(0, 0, 0), AabbHierarchy::Point(0, 0, 0));
+}
+
+int64_t Image::getTime()
+{
+  return m_time;
+}
+
+AabbHierarchy::AabbTime Image::getAABBTime()
+{
+  return AabbHierarchy::AabbTime(AabbHierarchy::TimePoint(m_time), AabbHierarchy::TimePoint(m_time));
 }
 } /* namespace seerep_core */

@@ -32,7 +32,7 @@ public:
   ImageOverview();
   ImageOverview(std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io);
   ~ImageOverview();
-  std::vector<std::optional<seerep::Image>> getData(const seerep::Boundingbox& bb);
+  std::vector<std::optional<seerep::Image>> getData(const seerep::Query& bb);
 
   void addDataset(const seerep::Image& image);
   // void addDatasetLabeled(const seerep::ImageLabeled& imagelabeled);
@@ -48,6 +48,7 @@ private:
   std::unordered_map<uint64_t, std::shared_ptr<seerep_core::Image>> m_datasets;
 
   AabbHierarchy::rtree m_rt;
+  AabbHierarchy::timetree m_timetree;
 };
 
 } /* namespace seerep_core */

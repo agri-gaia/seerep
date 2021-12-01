@@ -19,7 +19,7 @@ Project::Project(boost::uuids::uuid& uuid, std::string path, std::string project
 {
   createHdf5Io(uuid, m_path);
   m_hdf5_io->writeProjectname(m_projectname);
-  m_pointcloudOverview = seerep_core::PointcloudOverview(m_hdf5_io);
+
   recreateDatatypes();
 }
 
@@ -30,6 +30,11 @@ Project::~Project()
 std::vector<std::optional<seerep::PointCloud2>> Project::getPointCloud(const seerep::Boundingbox& bb)
 {
   return m_pointcloudOverview.getData(bb);
+}
+
+std::vector<std::optional<seerep::Image>> Project::getImage(const seerep::Query& query)
+{
+  return m_imageOverview.getData(query);
 }
 
 void Project::createHdf5Io(boost::uuids::uuid& uuid, std::string path)

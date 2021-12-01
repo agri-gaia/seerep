@@ -316,6 +316,33 @@ bool SeerepHDF5IO::hasAABB(const std::string& id)
   return group.hasAttribute(AABB_FIELD);
 }
 
+void SeerepHDF5IO::readTime(const std::string& id, int64_t time)
+{
+  if (!m_file.exist(id))
+  {
+    std::cout << "id " << id << " does not exist in file " << m_file.getName() << std::endl;
+    return;
+  }
+  std::cout << "get group " << id << std::endl;
+  HighFive::Group group = m_file.getGroup(id);
+  if (group.hasAttribute(HEADER_STAMP_SECONDS))
+  {
+    group.getAttribute(HEADER_STAMP_SECONDS).read(time);
+  }
+}
+
+bool SeerepHDF5IO::hasTime(const std::string& id)
+{
+  if (!m_file.exist(id))
+  {
+    std::cout << "id " << id << " does not exist in file " << m_file.getName() << std::endl;
+    return false;
+  }
+  std::cout << "get group " << id << std::endl;
+  HighFive::Group group = m_file.getGroup(id);
+  return group.hasAttribute(HEADER_STAMP_SECONDS);
+}
+
 void SeerepHDF5IO::writeBoundingBoxLabeled(
     const std::string& id, const google::protobuf::RepeatedPtrField<::seerep::BoundingBoxLabeled>& boundingboxLabeled)
 {
