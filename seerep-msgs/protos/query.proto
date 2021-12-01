@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package seerep;
+
+import "time_interval.proto";
+import "boundingbox.proto";
+
+message Query
+{
+  Boundingbox boundingbox = 1;
+  TimeInterval timeinterval = 2;
+}

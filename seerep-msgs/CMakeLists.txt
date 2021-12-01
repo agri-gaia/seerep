@@ -26,7 +26,9 @@ set(MY_PROTO_FILES
 	protos/projectCreation.proto
 	protos/quaternion_stamped.proto
 	protos/quaternion.proto
+	protos/query.proto
 	protos/server_response.proto
+	protos/time_interval.proto
 	protos/transform_stamped.proto
 	protos/transform.proto
 	protos/twist_stamped.proto

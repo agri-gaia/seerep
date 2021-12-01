@@ -8,6 +8,7 @@ import "point_cloud_2_labeled.proto";
 import "header.proto";
 import "point.proto";
 import "quaternion.proto";
+import "query.proto";
 import "pose.proto";
 import "pose_stamped.proto";
 import "projectCreated.proto";
@@ -20,6 +21,7 @@ import "server_response.proto";
 service TransferSensorMsgs
 {
   rpc TransferImage(Image) returns (ServerResponse);
+  rpc GetImage(Query) returns (stream Image);
   rpc TransferPointCloud2(PointCloud2) returns (ServerResponse);
   rpc TransferPointCloud2Labeled(PointCloud2Labeled) returns (ServerResponse);
   rpc GetPointCloud2(Boundingbox) returns (stream PointCloud2);
