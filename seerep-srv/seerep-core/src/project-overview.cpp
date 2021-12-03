@@ -12,13 +12,12 @@ ProjectOverview::~ProjectOverview()
 {
 }
 
-std::vector<std::vector<std::optional<seerep::PointCloud2>>>
-ProjectOverview::getPointCloud(const seerep::Boundingbox& bb)
+std::vector<std::vector<std::optional<seerep::PointCloud2>>> ProjectOverview::getPointCloud(const seerep::Query& query)
 {
   std::vector<std::vector<std::optional<seerep::PointCloud2>>> result;
   for (auto& it : m_projects)
   {
-    result.push_back(it.second->getPointCloud(bb));
+    result.push_back(it.second->getPointCloud(query));
   }
 
   return result;

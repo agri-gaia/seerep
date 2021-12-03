@@ -45,20 +45,16 @@ std::vector<std::optional<seerep::Image>> ImageOverview::getData(const seerep::Q
 {
   std::vector<std::optional<seerep::Image>> result;
 
-  AabbHierarchy::AABB aabb(
-      AabbHierarchy::Point(query.boundingbox().point_min().x(), query.boundingbox().point_min().y(),
-                           query.boundingbox().point_min().z()),
-      AabbHierarchy::Point(query.boundingbox().point_max().x(), query.boundingbox().point_max().y(),
-                           query.boundingbox().point_max().z()));
+  // space
+  std::vector<AabbHierarchy::AabbIdPair> resultRt = querySpatial(query);
+  // time
+  std::vector<AabbHierarchy::AabbTimeIdPair> resultTime = queryTemporal(query);
 
-  std::vector<AabbHierarchy::AabbIdPair> rt_result;
+  std::vector<uint64_t> resultIntersection = intersectQueryResults(resultRt, resultTime);
 
-  // do the semantic query first and extend this query parameter by check if id is in semantic result
-  m_rt.query(boost::geometry::index::intersects(aabb), std::back_inserter(rt_result));
-
-  for (auto& r : rt_result)
+  for (auto& r : resultIntersection)
   {
-    std::optional<seerep::Image> img = m_datasets.at(r.second)->getData(query);
+    std::optional<seerep::Image> img = m_datasets.at(r)->getData(query);
 
     if (img)
     {
@@ -68,6 +64,49 @@ std::vector<std::optional<seerep::Image>> ImageOverview::getData(const seerep::Q
   }
 
   return result;
+}
+
+std::vector<AabbHierarchy::AabbIdPair> ImageOverview::querySpatial(const seerep::Query& query)
+{
+  AabbHierarchy::AABB aabb(
+      AabbHierarchy::Point(query.boundingbox().point_min().x(), query.boundingbox().point_min().y(),
+                           query.boundingbox().point_min().z()),
+      AabbHierarchy::Point(query.boundingbox().point_max().x(), query.boundingbox().point_max().y(),
+                           query.boundingbox().point_max().z()));
+  std::vector<AabbHierarchy::AabbIdPair> rt_result;
+  m_rt.query(boost::geometry::index::intersects(aabb), std::back_inserter(rt_result));
+  return rt_result;
+}
+
+std::vector<uint64_t> ImageOverview::intersectQueryResults(std::vector<AabbHierarchy::AabbIdPair> rt_result,
+                                                           std::vector<AabbHierarchy::AabbTimeIdPair> timetree_result)
+{
+  std::set<uint64_t> idsSpatial;
+  for (auto it = std::make_move_iterator(rt_result.begin()), end = std::make_move_iterator(rt_result.end()); it != end;
+       ++it)
+  {
+    idsSpatial.insert(std::move(it->second));
+  }
+  std::set<uint64_t> idsTemporal;
+  for (auto it = std::make_move_iterator(timetree_result.begin()), end = std::make_move_iterator(timetree_result.end());
+       it != end; ++it)
+  {
+    idsTemporal.insert(std::move(it->second));
+  }
+  std::vector<uint64_t> result;
+  std::set_intersection(idsSpatial.begin(), idsSpatial.end(), idsTemporal.begin(), idsTemporal.end(),
+                        std::back_inserter(result));
+  return result;
+}
+
+std::vector<AabbHierarchy::AabbTimeIdPair> ImageOverview::queryTemporal(const seerep::Query& query)
+{
+  AabbHierarchy::AabbTime aabbtime(AabbHierarchy::TimePoint(query.timeinterval().time_min()),
+                                   AabbHierarchy::TimePoint(query.timeinterval().time_max()));
+
+  std::vector<AabbHierarchy::AabbTimeIdPair> timetree_result;
+  m_timetree.query(boost::geometry::index::intersects(aabbtime), std::back_inserter(timetree_result));
+  return timetree_result;
 }
 
 void ImageOverview::addDataset(const seerep::Image& image)

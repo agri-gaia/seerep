@@ -12,7 +12,6 @@
 #include <boost/functional/hash.hpp>
 
 // seerep-msgs
-#include <seerep-msgs/boundingbox.pb.h>
 #include <seerep-msgs/query.pb.h>
 #include <seerep-msgs/point_cloud_2.pb.h>
 #include <seerep-msgs/point_cloud_2_labeled.pb.h>
@@ -32,7 +31,7 @@ class ProjectOverview
 public:
   ProjectOverview(std::string datafolder);
   ~ProjectOverview();
-  std::vector<std::vector<std::optional<seerep::PointCloud2>>> getPointCloud(const seerep::Boundingbox& bb);
+  std::vector<std::vector<std::optional<seerep::PointCloud2>>> getPointCloud(const seerep::Query& query);
 
   void addPointCloud(const seerep::PointCloud2& pointcloud2, boost::uuids::uuid uuid);
   void addPointCloudLabeled(const seerep::PointCloud2Labeled& pointcloud2labeled, boost::uuids::uuid uuid);

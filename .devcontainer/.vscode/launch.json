@@ -9,6 +9,13 @@
             "console": "integratedTerminal"
         },
         {
+            "name": "ROS: Launch querier",
+            "type": "ros",
+            "request": "launch",
+            "target": "${workspaceFolder}/src/seerep-ros/seerep_ros_communication/launch/querier.launch",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",

@@ -9,7 +9,6 @@
 #include <boost/uuid/uuid_io.hpp>          // streaming operators etc.
 
 // seerep-msgs
-#include <seerep-msgs/boundingbox.pb.h>
 #include <seerep-msgs/query.pb.h>
 #include <seerep-msgs/point_cloud_2.pb.h>
 #include <seerep-msgs/point_cloud_2_labeled.pb.h>
@@ -32,7 +31,7 @@ public:
   Project(boost::uuids::uuid& uuid, std::string path);
   Project(boost::uuids::uuid& uuid, std::string path, std::string projectname);
   ~Project();
-  std::vector<std::optional<seerep::PointCloud2>> getPointCloud(const seerep::Boundingbox& bb);
+  std::vector<std::optional<seerep::PointCloud2>> getPointCloud(const seerep::Query& query);
   std::vector<std::optional<seerep::Image>> getImage(const seerep::Query& query);
 
   void addPointCloud(const seerep::PointCloud2& pointcloud2);

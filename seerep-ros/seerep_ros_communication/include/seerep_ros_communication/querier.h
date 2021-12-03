@@ -6,6 +6,7 @@
 
 // grpc
 #include <grpc/grpc.h>
+#include <grpc/status.h>
 #include <grpcpp/create_channel.h>
 #include <grpcpp/client_context.h>
 #include <grpcpp/security/credentials.h>
@@ -28,7 +29,8 @@ class QueryData
 public:
   QueryData(std::shared_ptr<grpc::Channel> channel_ptr);
 
-  void queryPointcloud(const seerep::Boundingbox& bb, ros::Publisher& pc2_pub) const;
+  void queryPointcloud(const seerep::Query& query, ros::Publisher& pc2_pub) const;
+  void queryImage(const seerep::Query& query, ros::Publisher& img_pub) const;
 
 private:
   StubPtr stub_;

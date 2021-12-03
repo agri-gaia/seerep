@@ -29,11 +29,11 @@ Pointcloud::Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seere
 Pointcloud::~Pointcloud()
 {
 }
-std::optional<seerep::PointCloud2> Pointcloud::getData(const seerep::Boundingbox bb)
+std::optional<seerep::PointCloud2> Pointcloud::getData(const seerep::Query& query)
 {
   std::cout << "loading PC from pointclouds/" << m_id << std::endl;
   Eigen::Vector4f minPt, maxPt;
-  getMinMaxFromBundingBox(minPt, maxPt, bb);
+  getMinMaxFromBundingBox(minPt, maxPt, query.boundingbox());
   std::optional<seerep::PointCloud2> pc =
       m_hdf5_io->readPointCloud2("pointclouds/" + std::to_string(m_id) + "/rawdata");
 

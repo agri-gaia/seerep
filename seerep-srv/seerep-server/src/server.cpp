@@ -42,8 +42,7 @@ grpc::Status ReceiveSensorMsgs::GetImage(grpc::ServerContext* context, const see
 
     for (const std::vector<std::optional<seerep::Image>>& resultPerProject : images)
     {
-      std::cout << "Found " << resultPerProject.size() << " pointclouds in this projects that match the query"
-                << std::endl;
+      std::cout << "Found " << resultPerProject.size() << " images in this projects that match the query" << std::endl;
       for (const std::optional<seerep::Image>& img : resultPerProject)
       {
         writer->Write(img.value());
@@ -88,12 +87,13 @@ grpc::Status ReceiveSensorMsgs::TransferPointCloud2Labeled(grpc::ServerContext* 
   return grpc::Status::OK;
 }
 
-grpc::Status ReceiveSensorMsgs::GetPointCloud2(grpc::ServerContext* context, const seerep::Boundingbox* request,
+grpc::Status ReceiveSensorMsgs::GetPointCloud2(grpc::ServerContext* context, const seerep::Query* request,
                                                grpc::ServerWriter<seerep::PointCloud2>* writer)
 {
-  std::cout << "sending point cloud in bounding box min(" << request->point_min().x() << "/" << request->point_min().y()
-            << "/" << request->point_min().z() << "), max(" << request->point_max().x() << "/"
-            << request->point_max().y() << "/" << request->point_max().z() << ")" << std::endl;
+  std::cout << "sending point cloud in bounding box min(" << request->boundingbox().point_min().x() << "/"
+            << request->boundingbox().point_min().y() << "/" << request->boundingbox().point_min().z() << "), max("
+            << request->boundingbox().point_max().x() << "/" << request->boundingbox().point_max().y() << "/"
+            << request->boundingbox().point_max().z() << ")" << std::endl;
 
   std::vector<std::vector<std::optional<seerep::PointCloud2>>> pointclouds = projectOverview.getPointCloud(*request);
   if (!pointclouds.empty())

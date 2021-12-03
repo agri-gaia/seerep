@@ -8,6 +8,40 @@ SeerepHDF5IO::SeerepHDF5IO(HighFive::File& file) : m_file(file)
 {
 }
 
+template <typename T>
+void SeerepHDF5IO::writeAttribute(const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField,
+                                  T value)
+{
+  if (!dataSetPtr->hasAttribute(attributeField))
+    dataSetPtr->createAttribute(attributeField, value);
+  else
+    dataSetPtr->getAttribute(attributeField).write(value);
+}
+
+template <typename T>
+T SeerepHDF5IO::getAttribute(const std::string& id, const std::shared_ptr<HighFive::DataSet> dataSetPtr,
+                             std::string attributeField)
+{
+  T attributeValue;
+  if (dataSetPtr->hasAttribute(attributeField))
+  {
+    dataSetPtr->getAttribute(attributeField).read(attributeValue);
+  }
+  else
+  {
+    throw std::invalid_argument("id " + id + " has no attribute " + attributeField);
+  }
+  return attributeValue;
+}
+
+void SeerepHDF5IO::deleteAttribute(const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField)
+{
+  if (dataSetPtr->hasAttribute(attributeField))
+  {
+    dataSetPtr->deleteAttribute(attributeField);
+  }
+}
+
 void SeerepHDF5IO::writeHeaderAttributes(HighFive::DataSet& data_set, const seerep::Header& header)
 {
   if (!data_set.hasAttribute(HEADER_STAMP_SECONDS))
@@ -72,71 +106,26 @@ void SeerepHDF5IO::writeImage(const std::string& id, const seerep::Image& image)
     data_set_ptr = std::make_shared<HighFive::DataSet>(m_file.getDataSet(hdf5DatasetRawDataPath));
   }
 
-  if (!data_set_ptr->hasAttribute(HEIGHT))
-    data_set_ptr->createAttribute(HEIGHT, image.height());
-  else
-    data_set_ptr->getAttribute(HEIGHT).write(image.height());
-
-  if (!data_set_ptr->hasAttribute(WIDTH))
-    data_set_ptr->createAttribute(WIDTH, image.width());
-  else
-    data_set_ptr->getAttribute(WIDTH).write(image.width());
-
-  if (!data_set_ptr->hasAttribute(ENCODING))
-    data_set_ptr->createAttribute(ENCODING, image.encoding());
-  else
-    data_set_ptr->getAttribute(ENCODING).write(image.encoding());
-
-  if (!data_set_ptr->hasAttribute(IS_BIGENDIAN))
-    data_set_ptr->createAttribute(IS_BIGENDIAN, image.is_bigendian());
-  else
-    data_set_ptr->getAttribute(IS_BIGENDIAN).write(image.is_bigendian());
-
-  if (!data_set_ptr->hasAttribute(ROW_STEP))
-    data_set_ptr->createAttribute(ROW_STEP, image.step());
-  else
-    data_set_ptr->getAttribute(ROW_STEP).write(image.step());
+  writeAttribute<uint32_t>(data_set_ptr, HEIGHT, image.height());
+  writeAttribute<uint32_t>(data_set_ptr, WIDTH, image.width());
+  writeAttribute<std::string>(data_set_ptr, ENCODING, image.encoding());
+  writeAttribute<bool>(data_set_ptr, IS_BIGENDIAN, image.is_bigendian());
+  writeAttribute<uint32_t>(data_set_ptr, POINT_STEP, image.step());
+  writeAttribute<uint32_t>(data_set_ptr, ROW_STEP, image.row_step());
 
   if (image.encoding() == "rgb8" || image.encoding() == "8UC3")
   {
-    if (!data_set_ptr->hasAttribute(CLASS))
-      data_set_ptr->createAttribute(CLASS, std::string("IMAGE"));
-    else
-      data_set_ptr->getAttribute(CLASS).write(std::string("IMAGE"));
-
-    if (!data_set_ptr->hasAttribute("IMAGE_VERSION"))
-      data_set_ptr->createAttribute("IMAGE_VERSION", std::string("1.2"));
-    else
-      data_set_ptr->getAttribute("IMAGE_VERSION").write(std::string("1.2"));
-
-    if (!data_set_ptr->hasAttribute("IMAGE_SUBCLASS"))
-      data_set_ptr->createAttribute("IMAGE_SUBCLASS", std::string("IMAGE_TRUECOLOR"));
-    else
-      data_set_ptr->getAttribute("IMAGE_SUBCLASS").write(std::string("IMAGE_TRUECOLOR"));
-
-    if (!data_set_ptr->hasAttribute("INTERLACE_MODE"))
-      data_set_ptr->createAttribute("INTERLACE_MODE", std::string("INTERLACE_PIXEL"));
-    else
-      data_set_ptr->getAttribute("INTERLACE_MODE").write(std::string("INTERLACE_PIXEL"));
+    writeAttribute<std::string>(data_set_ptr, CLASS, "IMAGE");
+    writeAttribute<std::string>(data_set_ptr, "IMAGE_VERSION", "1.2");
+    writeAttribute<std::string>(data_set_ptr, "IMAGE_SUBCLASS", "IMAGE_TRUECOLOR");
+    writeAttribute<std::string>(data_set_ptr, "INTERLACE_MODE", "INTERLACE_PIXEL");
   }
   else
   {
-    if (data_set_ptr->hasAttribute(CLASS))
-    {
-      data_set_ptr->deleteAttribute(CLASS);
-    }
-    if (data_set_ptr->hasAttribute("IMAGE_VERSION"))
-    {
-      data_set_ptr->deleteAttribute("IMAGE_VERSION");
-    }
-    if (data_set_ptr->hasAttribute("IMAGE_SUBCLASS"))
-    {
-      data_set_ptr->deleteAttribute("IMAGE_SUBCLASS");
-    }
-    if (data_set_ptr->hasAttribute("INTERLACE_MODE"))
-    {
-      data_set_ptr->deleteAttribute("INTERLACE_MODE");
-    }
+    deleteAttribute(data_set_ptr, CLASS);
+    deleteAttribute(data_set_ptr, "IMAGE_VERSION");
+    deleteAttribute(data_set_ptr, "IMAGE_SUBCLASS");
+    deleteAttribute(data_set_ptr, "INTERLACE_MODE");
   }
 
   const uint8_t* begin = reinterpret_cast<const uint8_t*>(image.data().c_str());
@@ -176,11 +165,41 @@ std::optional<seerep::Image> SeerepHDF5IO::readImage(const std::string& id)
   if (!m_file.exist(hdf5DatasetRawDataPath))
     return std::nullopt;
 
-  HighFive::DataSet data_set = m_file.getDataSet(hdf5DatasetRawDataPath);
+  std::cout << "loading " << hdf5DatasetRawDataPath << std::endl;
+
+  std::shared_ptr<HighFive::DataSet> data_set_ptr =
+      std::make_shared<HighFive::DataSet>(m_file.getDataSet(hdf5DatasetRawDataPath));
 
   seerep::Image image;
-  data_set.read(image.mutable_data());
-  *image.mutable_header() = readHeaderAttributes(data_set);
+
+  try
+  {
+    image.set_height(getAttribute<uint32_t>(id, data_set_ptr, HEIGHT));
+    image.set_width(getAttribute<uint32_t>(id, data_set_ptr, WIDTH));
+    image.set_encoding(getAttribute<std::string>(id, data_set_ptr, ENCODING));
+    image.set_is_bigendian(getAttribute<bool>(id, data_set_ptr, IS_BIGENDIAN));
+    image.set_step(getAttribute<uint32_t>(id, data_set_ptr, POINT_STEP));
+    image.set_row_step(getAttribute<uint32_t>(id, data_set_ptr, ROW_STEP));
+  }
+  catch (const std::invalid_argument e)
+  {
+    std::cout << "error: " << e.what() << std::endl;
+    return std::nullopt;
+  }
+  std::vector<std::vector<std::vector<uint8_t>>> read_data;
+  data_set_ptr->read(read_data);
+  // std::cout << "read_data:" << std::endl;
+  // int j = 0;
+  // for (const auto& i : read_data)
+  // {
+  //   std::cout << unsigned(i) << ' ';
+  //   j++;
+  //   // if (j > 50)
+  //   // break;
+  // }
+  image.set_data(&read_data.front(), read_data.size() * read_data.at(0).size() * read_data.at(0).at(0).size());
+
+  *image.mutable_header() = readHeaderAttributes(*data_set_ptr);
   return image;
 }
 
@@ -262,7 +281,7 @@ void SeerepHDF5IO::writeAABB(
   if (!m_file.exist(id))
   {
     std::cout << "id " << id << " does not exist in file " << m_file.getName() << std::endl;
-    return;
+    throw std::invalid_argument("id " + id + " does not exist in file " + m_file.getName());
   }
   std::cout << "get group " << id << std::endl;
   HighFive::Group group = m_file.getGroup(id);
@@ -286,7 +305,7 @@ void SeerepHDF5IO::readAABB(
   if (!m_file.exist(id))
   {
     std::cout << "id " << id << " does not exist in file " << m_file.getName() << std::endl;
-    return;
+    throw std::invalid_argument("id " + id + " does not exist in file " + m_file.getName());
   }
   std::cout << "get group " << id << std::endl;
   HighFive::Group group = m_file.getGroup(id);
@@ -309,25 +328,101 @@ bool SeerepHDF5IO::hasAABB(const std::string& id)
   if (!m_file.exist(id))
   {
     std::cout << "id " << id << " does not exist in file " << m_file.getName() << std::endl;
-    return false;
+    throw std::invalid_argument("id " + id + " does not exist in file " + m_file.getName());
   }
   std::cout << "get group " << id << std::endl;
   HighFive::Group group = m_file.getGroup(id);
   return group.hasAttribute(AABB_FIELD);
 }
 
-void SeerepHDF5IO::readTime(const std::string& id, int64_t time)
+int64_t SeerepHDF5IO::readTime(const std::string& id)
 {
   if (!m_file.exist(id))
   {
     std::cout << "id " << id << " does not exist in file " << m_file.getName() << std::endl;
-    return;
+    throw std::invalid_argument("id " + id + " does not exist in file " + m_file.getName());
   }
-  std::cout << "get group " << id << std::endl;
-  HighFive::Group group = m_file.getGroup(id);
-  if (group.hasAttribute(HEADER_STAMP_SECONDS))
+
+  int64_t time;
+  switch (m_file.getObjectType(id))
   {
-    group.getAttribute(HEADER_STAMP_SECONDS).read(time);
+    case HighFive::ObjectType::Group:
+    {
+      std::cout << "get group " << id << std::endl;
+      HighFive::Group group = m_file.getGroup(id);
+      if (group.hasAttribute(HEADER_STAMP_SECONDS))
+      {
+        group.getAttribute(HEADER_STAMP_SECONDS).read(time);
+        return time;
+      }
+      else
+      {
+        throw std::invalid_argument("id " + id + " has no attribute " + HEADER_STAMP_SECONDS);
+      }
+    };
+
+    case HighFive::ObjectType::Dataset:
+    {
+      std::cout << "get group " << id << std::endl;
+      HighFive::DataSet dataset = m_file.getDataSet(id);
+      if (dataset.hasAttribute(HEADER_STAMP_SECONDS))
+      {
+        dataset.getAttribute(HEADER_STAMP_SECONDS).read(time);
+        return time;
+      }
+      else
+      {
+        throw std::invalid_argument("id " + id + " has no attribute " + HEADER_STAMP_SECONDS);
+      }
+    };
+    default:
+      return std::numeric_limits<uint64_t>::min();
+  }
+}
+
+void SeerepHDF5IO::writeTime(const std::string& id, const int64_t& time)
+{
+  if (!m_file.exist(id))
+  {
+    std::cout << "id " << id << " does not exist in file " << m_file.getName() << std::endl;
+    throw std::invalid_argument("id " + id + " does not exist in file " + m_file.getName());
+  }
+
+  switch (m_file.getObjectType(id))
+  {
+    case HighFive::ObjectType::Group:
+    {
+      std::cout << "get group " << id << std::endl;
+      HighFive::Group group = m_file.getGroup(id);
+      if (group.hasAttribute(HEADER_STAMP_SECONDS))
+      {
+        group.getAttribute(HEADER_STAMP_SECONDS).write(time);
+      }
+      else
+      {
+        group.createAttribute(HEADER_STAMP_SECONDS, time);
+      }
+      m_file.flush();
+      return;
+    };
+
+    case HighFive::ObjectType::Dataset:
+    {
+      std::cout << "get group " << id << std::endl;
+      HighFive::DataSet dataset = m_file.getDataSet(id);
+      if (dataset.hasAttribute(HEADER_STAMP_SECONDS))
+      {
+        dataset.getAttribute(HEADER_STAMP_SECONDS).write(time);
+      }
+      else
+      {
+        dataset.createAttribute(HEADER_STAMP_SECONDS, time);
+      }
+      m_file.flush();
+      return;
+    };
+    default:
+      return;
   }
 }
 
@@ -336,11 +431,22 @@ bool SeerepHDF5IO::hasTime(const std::string& id)
   if (!m_file.exist(id))
   {
     std::cout << "id " << id << " does not exist in file " << m_file.getName() << std::endl;
-    return false;
+    throw std::invalid_argument("id " + id + " does not exist in file " + m_file.getName());
   }
-  std::cout << "get group " << id << std::endl;
-  HighFive::Group group = m_file.getGroup(id);
-  return group.hasAttribute(HEADER_STAMP_SECONDS);
+
+  switch (m_file.getObjectType(id))
+  {
+    case HighFive::ObjectType::Group:
+      std::cout << "get group " << id << std::endl;
+      return m_file.getGroup(id).hasAttribute(HEADER_STAMP_SECONDS);
+
+    case HighFive::ObjectType::Dataset:
+      std::cout << "get dataset " << id << std::endl;
+      return m_file.getDataSet(id).hasAttribute(HEADER_STAMP_SECONDS);
+
+    default:
+      return false;
+  }
 }
 
 void SeerepHDF5IO::writeBoundingBoxLabeled(

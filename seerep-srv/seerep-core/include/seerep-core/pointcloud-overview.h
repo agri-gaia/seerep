@@ -5,7 +5,7 @@
 #include <optional>
 
 // seerep-msgs
-#include <seerep-msgs/boundingbox.pb.h>
+#include <seerep-msgs/query.pb.h>
 #include <seerep-msgs/point_cloud_2.pb.h>
 #include <seerep-msgs/point_cloud_2_labeled.pb.h>
 // seerep-hdf5
@@ -25,7 +25,7 @@ public:
   PointcloudOverview();
   PointcloudOverview(std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io);
   ~PointcloudOverview();
-  std::vector<std::optional<seerep::PointCloud2>> getData(const seerep::Boundingbox& bb);
+  std::vector<std::optional<seerep::PointCloud2>> getData(const seerep::Query& query);
 
   void addDataset(const seerep::PointCloud2& pointcloud2);
   void addDatasetLabeled(const seerep::PointCloud2Labeled& pointcloud2labeled);

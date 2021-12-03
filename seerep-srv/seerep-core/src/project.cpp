@@ -27,9 +27,9 @@ Project::~Project()
 {
 }
 
-std::vector<std::optional<seerep::PointCloud2>> Project::getPointCloud(const seerep::Boundingbox& bb)
+std::vector<std::optional<seerep::PointCloud2>> Project::getPointCloud(const seerep::Query& query)
 {
-  return m_pointcloudOverview.getData(bb);
+  return m_pointcloudOverview.getData(query);
 }
 
 std::vector<std::optional<seerep::Image>> Project::getImage(const seerep::Query& query)
@@ -53,6 +53,10 @@ void Project::recreateDatatypes()
     if (datatypeName == "pointclouds")
     {
       m_pointcloudOverview = seerep_core::PointcloudOverview(m_hdf5_io);
+    }
+    else if (datatypeName == "images")
+    {
+      m_imageOverview = seerep_core::ImageOverview(m_hdf5_io);
     }
     else
     {

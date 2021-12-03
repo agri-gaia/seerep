@@ -5,7 +5,7 @@
 #include <optional>
 
 // seerep-msgs
-#include <seerep-msgs/boundingbox.pb.h>
+#include <seerep-msgs/query.pb.h>
 #include <seerep-msgs/point_cloud_2.pb.h>
 #include <seerep-msgs/point_cloud_2_labeled.pb.h>
 // seerep-hdf5
@@ -39,7 +39,7 @@ public:
              const seerep::PointCloud2Labeled& pointcloud2, const uint64_t& id);
   ~Pointcloud();
 
-  std::optional<seerep::PointCloud2> getData(const seerep::Boundingbox bb);
+  std::optional<seerep::PointCloud2> getData(const seerep::Query& query);
 
   void getMinMaxFromBundingBox(Eigen::Vector4f& minPt, Eigen::Vector4f& maxPt, const seerep::Boundingbox& bb);
 

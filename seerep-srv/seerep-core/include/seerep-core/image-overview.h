@@ -40,6 +40,12 @@ public:
 private:
   void recreateDatasets();
 
+  std::vector<AabbHierarchy::AabbIdPair> querySpatial(const seerep::Query& query);
+  std::vector<AabbHierarchy::AabbTimeIdPair> queryTemporal(const seerep::Query& query);
+
+  std::vector<uint64_t> intersectQueryResults(std::vector<AabbHierarchy::AabbIdPair> rt_result,
+                                              std::vector<AabbHierarchy::AabbTimeIdPair> timetree_result);
+
   uint64_t data_count;
 
   std::string coordinatesystem;

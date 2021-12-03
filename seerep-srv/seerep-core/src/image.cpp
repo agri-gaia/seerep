@@ -8,7 +8,7 @@ Image::Image(std::string coordinatesystemParent, std::shared_ptr<seerep_hdf5::Se
 {
   m_hdf5_io->writeImage(boost::lexical_cast<std::string>(m_uuid), image);
 
-  m_aabb = calcAABB(image);
+  m_aabb = calcAABB();
   m_hdf5_io->writeAABB("images/" + boost::lexical_cast<std::string>(m_uuid), m_aabb);
 
   m_time = image.header().stamp().seconds();
@@ -24,14 +24,21 @@ Image::Image(std::string coordinatesystemParent, std::shared_ptr<seerep_hdf5::Se
   }
   else
   {
+    m_aabb = calcAABB();
+    m_hdf5_io->writeAABB("images/" + boost::lexical_cast<std::string>(m_uuid), m_aabb);
   }
 
   if (m_hdf5_io->hasTime("images/" + boost::lexical_cast<std::string>(m_uuid)))
   {
-    m_hdf5_io->readTime("images/" + boost::lexical_cast<std::string>(m_uuid), m_time);
+    m_time = m_hdf5_io->readTime("images/" + boost::lexical_cast<std::string>(m_uuid));
   }
   else
   {
+    if (m_hdf5_io->hasTime("images/" + boost::lexical_cast<std::string>(m_uuid) + "/rawdata"))
+    {
+      m_time = m_hdf5_io->readTime("images/" + boost::lexical_cast<std::string>(m_uuid) + "/rawdata");
+      m_hdf5_io->writeTime("images/" + boost::lexical_cast<std::string>(m_uuid), m_time);
+    }
   }
 }
 
@@ -70,7 +77,7 @@ boost::uuids::uuid Image::getUUID()
   return m_uuid;
 }
 
-AabbHierarchy::AABB Image::calcAABB(const seerep::Image& image)
+AabbHierarchy::AABB Image::calcAABB()
 {
   return AabbHierarchy::AABB(AabbHierarchy::Point(0, 0, 0), AabbHierarchy::Point(0, 0, 0));
 }

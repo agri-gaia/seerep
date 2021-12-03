@@ -46,7 +46,7 @@ public:
   AabbHierarchy::AabbTime getAABBTime();
 
 private:
-  AabbHierarchy::AABB calcAABB(const seerep::Image& image);
+  AabbHierarchy::AABB calcAABB();
 
   std::string m_coordinatesystem;
   std::string m_coordinatesystemParent;

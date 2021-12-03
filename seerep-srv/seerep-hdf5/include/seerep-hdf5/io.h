@@ -25,6 +25,14 @@ namespace seerep_hdf5
 class SeerepHDF5IO
 {
 public:
+  template <typename T>
+  void writeAttribute(const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField, T value);
+
+  template <typename T>
+  T getAttribute(const std::string& id, const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField);
+
+  void deleteAttribute(const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField);
+
   SeerepHDF5IO(HighFive::File& file);
 
   void writeImage(const std::string& id, const seerep::Image& image);
@@ -55,7 +63,9 @@ public:
 
   bool hasAABB(const std::string& id);
 
-  void readTime(const std::string& id, int64_t time);
+  int64_t readTime(const std::string& id);
+
+  void writeTime(const std::string& id, const int64_t& time);
 
   bool hasTime(const std::string& id);
 
