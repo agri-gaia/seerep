@@ -81,4 +81,9 @@ void ProjectOverview::addPointCloudLabeled(const seerep::PointCloud2Labeled& poi
   m_projects.at(uuid)->addPointCloudLabeled(pointcloud2labeled);
 }
 
+void ProjectOverview::addImage(const seerep::Image& image, boost::uuids::uuid uuid)
+{
+  m_projects.at(uuid)->addImage(image);
+}
+
 } /* namespace seerep_core */

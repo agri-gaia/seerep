@@ -19,10 +19,31 @@ grpc::Status ReceiveSensorMsgs::TransferImage(grpc::ServerContext* context, cons
                                               seerep::ServerResponse* response)
 {
   std::cout << "received image... " << std::endl;
-  // hdf5_io.writeImage("test_id", *image);
-  response->set_message("okidoki");
-  response->set_transmission_state(seerep::ServerResponse::SUCCESS);
-  return grpc::Status::OK;
+
+  if (!image->header().uuid_project().empty())
+  {
+    boost::uuids::uuid uuid;
+    try
+    {
+      boost::uuids::string_generator gen;
+      uuid = gen(image->header().uuid_project());
+    }
+    catch (std::runtime_error e)
+    {
+      // mainly catching "invalid uuid string"
+      std::cout << e.what() << std::endl;
+      return grpc::Status::CANCELLED;
+    }
+    projectOverview.addImage(*image, uuid);
+    response->set_message("okidoki");
+    response->set_transmission_state(seerep::ServerResponse::SUCCESS);
+    return grpc::Status::OK;
+  }
+  else
+  {
+    std::cout << "project_uuid is empty!" << std::endl;
+    return grpc::Status::CANCELLED;
+  }
 }
 
 grpc::Status ReceiveSensorMsgs::GetImage(grpc::ServerContext* context, const seerep::Query* request,
@@ -57,34 +78,68 @@ grpc::Status ReceiveSensorMsgs::GetImage(grpc::ServerContext* context, const see
 }
 
 grpc::Status ReceiveSensorMsgs::TransferPointCloud2(grpc::ServerContext* context,
-                                                    const seerep::PointCloud2* point_cloud_2,
+                                                    const seerep::PointCloud2* pointCloud2,
                                                     seerep::ServerResponse* response)
 {
   std::cout << "received point clouds... " << std::endl;
-  // TODO implement hdf5_io function
-  // hdf5_io.writePointCloud2("test_id", *point_cloud_2);
 
-  boost::uuids::string_generator gen;
-  boost::uuids::uuid uuid = gen(projectOverview.newProject("testproject"));
+  if (!pointCloud2->header().uuid_project().empty())
+  {
+    boost::uuids::uuid uuid;
+    try
+    {
+      boost::uuids::string_generator gen;
+      uuid = gen(pointCloud2->header().uuid_project());
+    }
+    catch (std::runtime_error e)
+    {
+      // mainly catching "invalid uuid string"
+      std::cout << e.what() << std::endl;
+      return grpc::Status::CANCELLED;
+    }
 
-  projectOverview.addPointCloud(*point_cloud_2, uuid);
-  response->set_message("okidoki");
-  response->set_transmission_state(seerep::ServerResponse::SUCCESS);
-  return grpc::Status::OK;
+    projectOverview.addPointCloud(*pointCloud2, uuid);
+    response->set_message("okidoki");
+    response->set_transmission_state(seerep::ServerResponse::SUCCESS);
+    return grpc::Status::OK;
+  }
+  else
+  {
+    std::cout << "project_uuid is empty!" << std::endl;
+    return grpc::Status::CANCELLED;
+  }
 }
 
 grpc::Status ReceiveSensorMsgs::TransferPointCloud2Labeled(grpc::ServerContext* context,
-                                                           const seerep::PointCloud2Labeled* point_cloud_2_labeled,
+                                                           const seerep::PointCloud2Labeled* pointCloud2Labeled,
                                                            seerep::ServerResponse* response)
 {
-  std::cout << "received point clouds... " << std::endl;
-  // TODO implement hdf5_io function
-  // hdf5_io.writePointCloud2("test_id", *point_cloud_2);
-  boost::uuids::uuid uuid;
-  projectOverview.addPointCloudLabeled(*point_cloud_2_labeled, uuid);
-  response->set_message("okidoki");
-  response->set_transmission_state(seerep::ServerResponse::SUCCESS);
-  return grpc::Status::OK;
+  std::cout << "received labeled point clouds... " << std::endl;
+
+  if (!pointCloud2Labeled->pointcloud().header().uuid_project().empty())
+  {
+    boost::uuids::uuid uuid;
+    try
+    {
+      boost::uuids::string_generator gen;
+      uuid = gen(pointCloud2Labeled->pointcloud().header().uuid_project());
+    }
+    catch (std::runtime_error e)
+    {
+      // mainly catching "invalid uuid string"
+      std::cout << e.what() << std::endl;
+      return grpc::Status::CANCELLED;
+    }
+    projectOverview.addPointCloudLabeled(*pointCloud2Labeled, uuid);
+    response->set_message("okidoki");
+    response->set_transmission_state(seerep::ServerResponse::SUCCESS);
+    return grpc::Status::OK;
+  }
+  else
+  {
+    std::cout << "project_uuid is empty!" << std::endl;
+    return grpc::Status::CANCELLED;
+  }
 }
 
 grpc::Status ReceiveSensorMsgs::GetPointCloud2(grpc::ServerContext* context, const seerep::Query* request,

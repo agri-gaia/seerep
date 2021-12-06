@@ -86,8 +86,30 @@ int main(int argc, char** argv)
     return EXIT_FAILURE;
   }
 
-  std::string hdf5FilePath =
-      hdf5FolderPath + "/" + boost::lexical_cast<std::string>(boost::uuids::random_generator()()) + ".h5";
+  std::string projectUuid;
+  if (private_nh.getParam("projectUuid", projectUuid))
+  {
+    try
+    {
+      boost::uuids::string_generator gen;
+      // if this throws no exception, the UUID is valid
+      gen(projectUuid);
+    }
+    catch (std::runtime_error e)
+    {
+      // mainly catching "invalid uuid string"
+      std::cout << e.what() << std::endl;
+      ROS_WARN_STREAM("The provided UUID is invalid! Generating a a new one.");
+      projectUuid = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+    }
+  }
+  else
+  {
+    ROS_WARN_STREAM("Use the \"hdf5FolderPath\" parameter to specify the HDF5 file! Generating a a new one.");
+    projectUuid = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+  }
+
+  std::string hdf5FilePath = hdf5FolderPath + "/" + projectUuid + ".h5";
 
   seerep_grpc_ros::DumpSensorMsgs dumpSensorMsgs = seerep_grpc_ros::DumpSensorMsgs(hdf5FilePath);
 

@@ -19,4 +19,10 @@ message Header
 
   // name of the coordinate frame this data is associated with
   string frame_id = 3;
+
+  // uuid of the project the msgs should be stored in
+  string uuid_project = 4;
+
+  //(optional) uuid of this msgs
+  string uuid_msgs = 5;
 }

@@ -28,10 +28,10 @@ public:
   grpc::Status GetImage(grpc::ServerContext* context, const seerep::Query* request,
                         grpc::ServerWriter<seerep::Image>* writer);
 
-  grpc::Status TransferPointCloud2(grpc::ServerContext* context, const seerep::PointCloud2* point_cloud_2,
+  grpc::Status TransferPointCloud2(grpc::ServerContext* context, const seerep::PointCloud2* pointCloud2,
                                    seerep::ServerResponse* response);
   grpc::Status TransferPointCloud2Labeled(grpc::ServerContext* context,
-                                          const seerep::PointCloud2Labeled* point_cloud_2_labeled,
+                                          const seerep::PointCloud2Labeled* pointCloud2Labeled,
                                           seerep::ServerResponse* response);
   grpc::Status GetPointCloud2(grpc::ServerContext* context, const seerep::Query* request,
                               grpc::ServerWriter<seerep::PointCloud2>* writer);

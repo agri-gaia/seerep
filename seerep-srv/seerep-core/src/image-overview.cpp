@@ -111,7 +111,17 @@ std::vector<AabbHierarchy::AabbTimeIdPair> ImageOverview::queryTemporal(const se
 
 void ImageOverview::addDataset(const seerep::Image& image)
 {
-  boost::uuids::uuid uuid = boost::uuids::random_generator()();
+  boost::uuids::uuid uuid;
+  if (!image.header().uuid_msgs().empty())
+  {
+    uuid = boost::uuids::random_generator()();
+  }
+  else
+  {
+    boost::uuids::string_generator gen;
+    uuid = gen(image.header().uuid_project());
+  }
+
   uint64_t id = data_count++;
   auto img = std::make_shared<Image>(coordinatesystem, m_hdf5_io, image, id, uuid);
   m_datasets.insert(std::make_pair(id, img));

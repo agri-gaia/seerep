@@ -75,4 +75,9 @@ void Project::addPointCloudLabeled(const seerep::PointCloud2Labeled& pointcloud2
   m_pointcloudOverview.addDatasetLabeled(pointcloud2Labeled);
 }
 
+void Project::addImage(const seerep::Image& image)
+{
+  m_imageOverview.addDataset(image);
+}
+
 } /* namespace seerep_core */
