@@ -188,6 +188,18 @@ std::optional<seerep::Image> SeerepHDF5IO::readImage(const std::string& id)
   }
   std::vector<std::vector<std::vector<uint8_t>>> read_data;
   data_set_ptr->read(read_data);
+
+  int pixel_step = image.step() / image.width();
+  uint8_t data[image.height()][image.width()][pixel_step];
+
+  for (int row = 0; row < image.height(); row++)
+  {
+    for (int col = 0; col < image.width(); col++)
+    {
+      std::copy(read_data.at(row).at(col).begin(), read_data.at(row).at(col).end(), data[row][col]);
+    }
+  }
+
   // std::cout << "read_data:" << std::endl;
   // int j = 0;
   // for (const auto& i : read_data)
@@ -197,7 +209,7 @@ std::optional<seerep::Image> SeerepHDF5IO::readImage(const std::string& id)
   //   // if (j > 50)
   //   // break;
   // }
-  image.set_data(&read_data.front(), read_data.size() * read_data.at(0).size() * read_data.at(0).at(0).size());
+  image.set_data(data, sizeof(data));
 
   *image.mutable_header() = readHeaderAttributes(*data_set_ptr);
   return image;
