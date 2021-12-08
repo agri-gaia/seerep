@@ -70,10 +70,10 @@ void Project::addPointCloud(const seerep::PointCloud2& pointcloud2)
   m_pointcloudOverview.addDataset(pointcloud2);
 }
 
-void Project::addPointCloudLabeled(const seerep::PointCloud2Labeled& pointcloud2Labeled)
-{
-  m_pointcloudOverview.addDatasetLabeled(pointcloud2Labeled);
-}
+// void Project::addPointCloudLabeled(const seerep::PointCloud2Labeled& pointcloud2Labeled)
+// {
+//   m_pointcloudOverview.addDatasetLabeled(pointcloud2Labeled);
+// }
 
 void Project::addImage(const seerep::Image& image)
 {

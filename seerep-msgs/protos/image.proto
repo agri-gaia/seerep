@@ -3,6 +3,7 @@ syntax = "proto3";
 package seerep;
 
 import "header.proto";
+import "boundingbox2d_labeled.proto";
 
 /**
  * This message contains an uncompressed image
@@ -45,4 +46,7 @@ message Image
 
   // actual matrix data, size is (step * rows)
   bytes data = 8;
+
+  // (optional) bounding box based labels
+  repeated BoundingBox2DLabeled labels_bb = 9;
 }

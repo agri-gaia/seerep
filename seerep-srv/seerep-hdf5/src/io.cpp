@@ -89,7 +89,7 @@ seerep::Header SeerepHDF5IO::readHeaderAttributes(HighFive::DataSet& data_set)
 void SeerepHDF5IO::writeImage(const std::string& id, const seerep::Image& image)
 {
   std::string hdf5DatasetPath = HDF5_GROUP_IMAGE + "/" + id;
-  std::string hdf5DatasetRawDataPath = hdf5DatasetPath + "/rawdata";
+  std::string hdf5DatasetRawDataPath = hdf5DatasetPath + "/" + RAWDATA;
 
   std::shared_ptr<HighFive::DataSet> data_set_ptr;
   HighFive::DataSpace data_space({ image.height(), image.width(), image.step() / image.width() });
@@ -148,19 +148,22 @@ void SeerepHDF5IO::writeImage(const std::string& id, const seerep::Image& image)
 
   data_set_ptr->write(tmp);
   writeHeaderAttributes(*data_set_ptr, image.header());
+
+  writeBoundingBox2DLabeled(HDF5_GROUP_IMAGE, id, image.labels_bb());
+
   m_file.flush();
 }
 
-void SeerepHDF5IO::writeImageLabeled(const std::string& id, const seerep::ImageLabeled& imageLabeled)
-{
-  writeImage(id, imageLabeled.image());
-  writeBoundingBox2DLabeled(id, imageLabeled.labels());
-}
+// void SeerepHDF5IO::writeImageLabeled(const std::string& id, const seerep::ImageLabeled& imageLabeled)
+// {
+//   writeImage(id, imageLabeled.image());
+//   writeBoundingBox2DLabeled(id, imageLabeled.labels());
+// }
 
 std::optional<seerep::Image> SeerepHDF5IO::readImage(const std::string& id)
 {
   std::string hdf5DatasetPath = HDF5_GROUP_IMAGE + "/" + id;
-  std::string hdf5DatasetRawDataPath = hdf5DatasetPath + "/rawdata";
+  std::string hdf5DatasetRawDataPath = hdf5DatasetPath + "/" + RAWDATA;
 
   if (!m_file.exist(hdf5DatasetRawDataPath))
     return std::nullopt;
@@ -279,17 +282,18 @@ SeerepHDF5IO::readPointFieldAttributes(HighFive::DataSet& data_set)
   return repeatedPointField;
 }
 
-void SeerepHDF5IO::writePointCloud2Labeled(const std::string& id, const seerep::PointCloud2Labeled& pointcloud2Labeled)
-{
-  writePointCloud2(id + "/rawdata", pointcloud2Labeled.pointcloud());
+// void SeerepHDF5IO::writePointCloud2Labeled(const std::string& id, const seerep::PointCloud2Labeled& pointcloud2Labeled)
+// {
+//   writePointCloud2(id + "/" + RAWDATA, pointcloud2Labeled.pointcloud());
 
-  writeBoundingBoxLabeled(id, pointcloud2Labeled.labels());
-}
+//   writeBoundingBoxLabeled(HDF5_GROUP_POINTCLOUD, id, pointcloud2Labeled.labels());
+// }
 
 void SeerepHDF5IO::writeAABB(
-    const std::string& id,
+    const std::string& datatypeGroup, const std::string& uuid,
     const boost::geometry::model::box<boost::geometry::model::point<float, 3, boost::geometry::cs::cartesian>>& aabb)
 {
+  std::string id = datatypeGroup + "/" + uuid;
   if (!m_file.exist(id))
   {
     std::cout << "id " << id << " does not exist in file " << m_file.getName() << std::endl;
@@ -311,9 +315,11 @@ void SeerepHDF5IO::writeAABB(
 }
 
 void SeerepHDF5IO::readAABB(
-    const std::string& id,
+    const std::string& datatypeGroup, const std::string& uuid,
     boost::geometry::model::box<boost::geometry::model::point<float, 3, boost::geometry::cs::cartesian>>& aabb)
 {
+  std::string id = datatypeGroup + "/" + uuid;
+
   if (!m_file.exist(id))
   {
     std::cout << "id " << id << " does not exist in file " << m_file.getName() << std::endl;
@@ -335,8 +341,10 @@ void SeerepHDF5IO::readAABB(
   }
 }
 
-bool SeerepHDF5IO::hasAABB(const std::string& id)
+bool SeerepHDF5IO::hasAABB(const std::string& datatypeGroup, const std::string& uuid)
 {
+  std::string id = datatypeGroup + "/" + uuid;
+
   if (!m_file.exist(id))
   {
     std::cout << "id " << id << " does not exist in file " << m_file.getName() << std::endl;
@@ -347,8 +355,15 @@ bool SeerepHDF5IO::hasAABB(const std::string& id)
   return group.hasAttribute(AABB_FIELD);
 }
 
-int64_t SeerepHDF5IO::readTime(const std::string& id)
+int64_t SeerepHDF5IO::readTimeFromRaw(const std::string& datatypeGroup, const std::string& uuid)
 {
+  return readTime(datatypeGroup, uuid + "/" + RAWDATA);
+}
+
+int64_t SeerepHDF5IO::readTime(const std::string& datatypeGroup, const std::string& uuid)
+{
+  std::string id = datatypeGroup + "/" + uuid;
+
   if (!m_file.exist(id))
   {
     std::cout << "id " << id << " does not exist in file " << m_file.getName() << std::endl;
@@ -392,8 +407,15 @@ int64_t SeerepHDF5IO::readTime(const std::string& id)
   }
 }
 
-void SeerepHDF5IO::writeTime(const std::string& id, const int64_t& time)
+void SeerepHDF5IO::writeTimeToRaw(const std::string& datatypeGroup, const std::string& uuid, const int64_t& time)
 {
+  writeTime(datatypeGroup, uuid + "/" + RAWDATA, time);
+}
+
+void SeerepHDF5IO::writeTime(const std::string& datatypeGroup, const std::string& uuid, const int64_t& time)
+{
+  std::string id = datatypeGroup + "/" + uuid;
+
   if (!m_file.exist(id))
   {
     std::cout << "id " << id << " does not exist in file " << m_file.getName() << std::endl;
@@ -438,8 +460,14 @@ void SeerepHDF5IO::writeTime(const std::string& id, const int64_t& time)
   }
 }
 
-bool SeerepHDF5IO::hasTime(const std::string& id)
+bool SeerepHDF5IO::hasTimeRaw(const std::string& datatypeGroup, const std::string& uuid)
 {
+  return hasTime(datatypeGroup, uuid + "/" + RAWDATA);
+}
+
+bool SeerepHDF5IO::hasTime(const std::string& datatypeGroup, const std::string& uuid)
+{
+  std::string id = datatypeGroup + "/" + uuid;
   if (!m_file.exist(id))
   {
     std::cout << "id " << id << " does not exist in file " << m_file.getName() << std::endl;
@@ -462,57 +490,70 @@ bool SeerepHDF5IO::hasTime(const std::string& id)
 }
 
 void SeerepHDF5IO::writeBoundingBoxLabeled(
-    const std::string& id, const google::protobuf::RepeatedPtrField<::seerep::BoundingBoxLabeled>& boundingboxLabeled)
+    const std::string& datatypeGroup, const std::string& uuid,
+    const google::protobuf::RepeatedPtrField<::seerep::BoundingBoxLabeled>& boundingboxLabeled)
 {
-  std::vector<std::string> labels;
-  std::vector<std::vector<double>> boundingBoxes;
-  for (auto label : boundingboxLabeled)
+  if (!boundingboxLabeled.empty())
   {
-    labels.push_back(label.label());
-    std::vector<double> box{ label.boundingbox().point_min().x(), label.boundingbox().point_min().y(),
-                             label.boundingbox().point_min().z(), label.boundingbox().point_max().x(),
-                             label.boundingbox().point_max().y(), label.boundingbox().point_max().z() };
-    boundingBoxes.push_back(box);
+    std::string id = datatypeGroup + "/" + uuid;
+
+    std::vector<std::string> labels;
+    std::vector<std::vector<double>> boundingBoxes;
+    for (auto label : boundingboxLabeled)
+    {
+      labels.push_back(label.label());
+      std::vector<double> box{ label.boundingbox().point_min().x(), label.boundingbox().point_min().y(),
+                               label.boundingbox().point_min().z(), label.boundingbox().point_max().x(),
+                               label.boundingbox().point_max().y(), label.boundingbox().point_max().z() };
+      boundingBoxes.push_back(box);
+    }
+
+    HighFive::DataSet datasetLabels =
+        m_file.createDataSet<std::string>(id + "/" + LABELS, HighFive::DataSpace::From(labels));
+    datasetLabels.write(labels);
+
+    HighFive::DataSet datasetBoxes =
+        m_file.createDataSet<double>(id + "/" + LABELBOXES, HighFive::DataSpace::From(boundingBoxes));
+    datasetBoxes.write(boundingBoxes);
+
+    m_file.flush();
   }
-
-  HighFive::DataSet datasetLabels =
-      m_file.createDataSet<std::string>(id + "/labels", HighFive::DataSpace::From(labels));
-  datasetLabels.write(labels);
-
-  HighFive::DataSet datasetBoxes =
-      m_file.createDataSet<double>(id + "/labelBoxes", HighFive::DataSpace::From(boundingBoxes));
-  datasetBoxes.write(boundingBoxes);
-
-  m_file.flush();
 }
 
 void SeerepHDF5IO::writeBoundingBox2DLabeled(
-    const std::string& id,
+    const std::string& datatypeGroup, const std::string& uuid,
     const google::protobuf::RepeatedPtrField<::seerep::BoundingBox2DLabeled>& boundingbox2DLabeled)
 {
-  std::vector<std::string> labels;
-  std::vector<std::vector<double>> boundingBoxes;
-  for (auto label : boundingbox2DLabeled)
+  std::string id = datatypeGroup + "/" + uuid;
+
+  if (!boundingbox2DLabeled.empty())
   {
-    labels.push_back(label.label());
-    std::vector<double> box{ label.boundingbox().point_min().x(), label.boundingbox().point_min().y(),
-                             label.boundingbox().point_max().x(), label.boundingbox().point_max().y() };
-    boundingBoxes.push_back(box);
+    std::vector<std::string> labels;
+    std::vector<std::vector<double>> boundingBoxes;
+    for (auto label : boundingbox2DLabeled)
+    {
+      labels.push_back(label.label());
+      std::vector<double> box{ label.boundingbox().point_min().x(), label.boundingbox().point_min().y(),
+                               label.boundingbox().point_max().x(), label.boundingbox().point_max().y() };
+      boundingBoxes.push_back(box);
+    }
+
+    HighFive::DataSet datasetLabels =
+        m_file.createDataSet<std::string>(id + "/" + LABELS, HighFive::DataSpace::From(labels));
+    datasetLabels.write(labels);
+
+    HighFive::DataSet datasetBoxes =
+        m_file.createDataSet<double>(id + "/" + LABELBOXES, HighFive::DataSpace::From(boundingBoxes));
+    datasetBoxes.write(boundingBoxes);
+
+    m_file.flush();
   }
-
-  HighFive::DataSet datasetLabels =
-      m_file.createDataSet<std::string>(id + "/labels", HighFive::DataSpace::From(labels));
-  datasetLabels.write(labels);
-
-  HighFive::DataSet datasetBoxes =
-      m_file.createDataSet<double>(id + "/labelBoxes", HighFive::DataSpace::From(boundingBoxes));
-  datasetBoxes.write(boundingBoxes);
-
-  m_file.flush();
 }
 
-void SeerepHDF5IO::writePointCloud2(const std::string& id, const seerep::PointCloud2& pointcloud2)
+void SeerepHDF5IO::writePointCloud2(const std::string& uuid, const seerep::PointCloud2& pointcloud2)
 {
+  std::string id = HDF5_GROUP_POINTCLOUD + "/" + uuid;
+
   std::shared_ptr<HighFive::DataSet> data_set_ptr;
   HighFive::DataSpace data_space({ pointcloud2.height(), pointcloud2.row_step() });
 
@@ -553,6 +594,9 @@ void SeerepHDF5IO::writePointCloud2(const std::string& id, const seerep::PointCl
   }
   data_set_ptr->write(tmp);
   writeHeaderAttributes(*data_set_ptr, pointcloud2.header());
+
+  writeBoundingBoxLabeled(HDF5_GROUP_POINTCLOUD, uuid, pointcloud2.labels_bb());
+
   m_file.flush();
 }
 

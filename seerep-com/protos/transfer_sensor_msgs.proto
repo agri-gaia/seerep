@@ -23,7 +23,7 @@ service TransferSensorMsgs
   rpc TransferImage(Image) returns (ServerResponse);
   rpc GetImage(Query) returns (stream Image);
   rpc TransferPointCloud2(PointCloud2) returns (ServerResponse);
-  rpc TransferPointCloud2Labeled(PointCloud2Labeled) returns (ServerResponse);
+  // rpc TransferPointCloud2Labeled(PointCloud2Labeled) returns (ServerResponse);
   rpc GetPointCloud2(Query) returns (stream PointCloud2);
   rpc TransferHeader(Header) returns (ServerResponse);
   rpc TransferPoint(Point) returns (ServerResponse);

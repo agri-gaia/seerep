@@ -6,26 +6,27 @@ Pointcloud::Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seere
                        const seerep::PointCloud2& pointcloud2, const uint64_t& id)
   : m_coordinatesystemParent(coordinatesystemParent), m_hdf5_io(hdf5_io), m_id(id)
 {
-  m_hdf5_io->writePointCloud2("pointclouds/" + std::to_string(m_id) + "/rawdata", pointcloud2);
+  m_hdf5_io->writePointCloud2(std::to_string(m_id), pointcloud2);
 
   m_aabb = calcAABB(pointcloud2);
-  m_hdf5_io->writeAABB("pointclouds/" + std::to_string(m_id), m_aabb);
+  m_hdf5_io->writeAABB(seerep_hdf5::SeerepHDF5IO::HDF5_GROUP_POINTCLOUD, std::to_string(m_id), m_aabb);
 }
 Pointcloud::Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io,
                        const uint64_t& id)
   : m_coordinatesystemParent(coordinatesystemParent), m_hdf5_io(hdf5_io), m_id(id)
 {
-  m_hdf5_io->readAABB("pointclouds/" + std::to_string(m_id), m_aabb);
+  m_hdf5_io->readAABB(seerep_hdf5::SeerepHDF5IO::HDF5_GROUP_POINTCLOUD, std::to_string(m_id), m_aabb);
 }
-Pointcloud::Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io,
-                       const seerep::PointCloud2Labeled& pointcloud2labeled, const uint64_t& id)
-  : m_coordinatesystemParent(coordinatesystemParent), m_hdf5_io(hdf5_io), m_id(id)
-{
-  m_hdf5_io->writePointCloud2Labeled("pointclouds/" + std::to_string(m_id), pointcloud2labeled);
+// Pointcloud::Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io,
+//                        const seerep::PointCloud2Labeled& pointcloud2labeled, const uint64_t& id)
+//   : m_coordinatesystemParent(coordinatesystemParent), m_hdf5_io(hdf5_io), m_id(id)
+// {
+//   m_hdf5_io->writePointCloud2Labeled(seerep_hdf5::SeerepHDF5IO::HDF5_GROUP_POINTCLOUD, std::to_string(m_id),
+//                                      pointcloud2labeled);
 
-  m_aabb = calcAABB(pointcloud2labeled.pointcloud());
-  m_hdf5_io->writeAABB("pointclouds/" + std::to_string(m_id), m_aabb);
-}
+//   m_aabb = calcAABB(pointcloud2labeled.pointcloud());
+//   m_hdf5_io->writeAABB(seerep_hdf5::SeerepHDF5IO::HDF5_GROUP_POINTCLOUD, std::to_string(m_id), m_aabb);
+// }
 Pointcloud::~Pointcloud()
 {
 }
@@ -34,8 +35,7 @@ std::optional<seerep::PointCloud2> Pointcloud::getData(const seerep::Query& quer
   std::cout << "loading PC from pointclouds/" << m_id << std::endl;
   Eigen::Vector4f minPt, maxPt;
   getMinMaxFromBundingBox(minPt, maxPt, query.boundingbox());
-  std::optional<seerep::PointCloud2> pc =
-      m_hdf5_io->readPointCloud2("pointclouds/" + std::to_string(m_id) + "/rawdata");
+  std::optional<seerep::PointCloud2> pc = m_hdf5_io->readPointCloud2(std::to_string(m_id) + "/rawdata");
 
   if (pc)
   {

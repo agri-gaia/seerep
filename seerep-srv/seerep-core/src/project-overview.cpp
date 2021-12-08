@@ -76,10 +76,10 @@ void ProjectOverview::addPointCloud(const seerep::PointCloud2& pointcloud2, boos
   m_projects.at(uuid)->addPointCloud(pointcloud2);
 }
 
-void ProjectOverview::addPointCloudLabeled(const seerep::PointCloud2Labeled& pointcloud2labeled, boost::uuids::uuid uuid)
-{
-  m_projects.at(uuid)->addPointCloudLabeled(pointcloud2labeled);
-}
+// void ProjectOverview::addPointCloudLabeled(const seerep::PointCloud2Labeled& pointcloud2labeled, boost::uuids::uuid uuid)
+// {
+//   m_projects.at(uuid)->addPointCloudLabeled(pointcloud2labeled);
+// }
 
 void ProjectOverview::addImage(const seerep::Image& image, boost::uuids::uuid uuid)
 {

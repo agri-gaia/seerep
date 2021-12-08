@@ -37,37 +37,40 @@ public:
 
   void writeImage(const std::string& id, const seerep::Image& image);
 
-  void writeImageLabeled(const std::string& id, const seerep::ImageLabeled& imageLabeled);
+  // void writeImageLabeled(const std::string& id, const seerep::ImageLabeled& imageLabeled);
 
   std::optional<seerep::Image> readImage(const std::string& id);
 
-  void writePointCloud2(const std::string& id, const seerep::PointCloud2& pointcloud2);
+  void writePointCloud2(const std::string& uuid, const seerep::PointCloud2& pointcloud2);
 
-  void writePointCloud2Labeled(const std::string& id, const seerep::PointCloud2Labeled& pointcloud2Labeled);
+  // void writePointCloud2Labeled(const std::string& id, const seerep::PointCloud2Labeled& pointcloud2Labeled);
 
   void
-  writeBoundingBoxLabeled(const std::string& id,
+  writeBoundingBoxLabeled(const std::string& datatypeGroup, const std::string& uuid,
                           const google::protobuf::RepeatedPtrField<::seerep::BoundingBoxLabeled>& boundingboxLabeled);
 
   void writeBoundingBox2DLabeled(
-      const std::string& id,
+      const std::string& datatypeGroup, const std::string& uuid,
       const google::protobuf::RepeatedPtrField<::seerep::BoundingBox2DLabeled>& boundingbox2DLabeled);
 
   void writeAABB(
-      const std::string& id,
+      const std::string& datatypeGroup, const std::string& uuid,
       const boost::geometry::model::box<boost::geometry::model::point<float, 3, boost::geometry::cs::cartesian>>& aabb);
 
   void
-  readAABB(const std::string& id,
+  readAABB(const std::string& datatypeGroup, const std::string& uuid,
            boost::geometry::model::box<boost::geometry::model::point<float, 3, boost::geometry::cs::cartesian>>& aabb);
 
-  bool hasAABB(const std::string& id);
+  bool hasAABB(const std::string& datatypeGroup, const std::string& uuid);
 
-  int64_t readTime(const std::string& id);
+  int64_t readTimeFromRaw(const std::string& datatypeGroup, const std::string& uuid);
+  int64_t readTime(const std::string& datatypeGroup, const std::string& uuid);
 
-  void writeTime(const std::string& id, const int64_t& time);
+  void writeTimeToRaw(const std::string& datatypeGroup, const std::string& uuid, const int64_t& time);
+  void writeTime(const std::string& datatypeGroup, const std::string& uuid, const int64_t& time);
 
-  bool hasTime(const std::string& id);
+  bool hasTimeRaw(const std::string& datatypeGroup, const std::string& uuid);
+  bool hasTime(const std::string& datatypeGroup, const std::string& uuid);
 
   std::optional<seerep::PointCloud2> readPointCloud2(const std::string& id);
 
@@ -137,12 +140,18 @@ private:
 
   const std::string PROJECTNAME = "projectname";
 
-  // datatype group names in hdf5
-  const std::string HDF5_GROUP_IMAGE = "images";
-  const std::string HDF5_GROUP_POINTCLOUD = "pointclouds";
+  // dataset names
+  const std::string RAWDATA = "rawdata";
+  const std::string LABELS = "labels";
+  const std::string LABELBOXES = "labelBoxes";
 
   HighFive::File m_file;
   std::mutex m_write_mtx;
+
+public:
+  // datatype group names in hdf5
+  inline static const std::string HDF5_GROUP_IMAGE = "images";
+  inline static const std::string HDF5_GROUP_POINTCLOUD = "pointclouds";
 };
 
 } /* namespace seerep_hdf5 */

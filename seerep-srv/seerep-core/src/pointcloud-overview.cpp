@@ -68,13 +68,13 @@ void PointcloudOverview::addDataset(const seerep::PointCloud2& pointcloud2)
   m_rt.insert(std::make_pair(pc->getAABB(), pc->getID()));
 }
 
-void PointcloudOverview::addDatasetLabeled(const seerep::PointCloud2Labeled& pointcloud2labeled)
-{
-  uint64_t id = data_count++;
-  auto pc = std::make_shared<Pointcloud>(coordinatesystem, m_hdf5_io, pointcloud2labeled, id);
-  m_datasets.insert(std::make_pair(id, pc));
+// void PointcloudOverview::addDatasetLabeled(const seerep::PointCloud2Labeled& pointcloud2labeled)
+// {
+//   uint64_t id = data_count++;
+//   auto pc = std::make_shared<Pointcloud>(coordinatesystem, m_hdf5_io, pointcloud2labeled, id);
+//   m_datasets.insert(std::make_pair(id, pc));
 
-  m_rt.insert(std::make_pair(pc->getAABB(), pc->getID()));
-}
+//   m_rt.insert(std::make_pair(pc->getAABB(), pc->getID()));
+// }
 
 } /* namespace seerep_core */
