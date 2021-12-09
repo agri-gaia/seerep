@@ -8,7 +8,7 @@
 #include <seerep-msgs/image.pb.h>
 #include <seerep-msgs/image_labeled.pb.h>
 #include <seerep-msgs/point_cloud_2.pb.h>
-#include <seerep-msgs/point_cloud_2_labeled.pb.h>
+// #include <seerep-msgs/point_cloud_2_labeled.pb.h>
 #include <seerep-msgs/boundingbox_labeled.pb.h>
 #include <seerep-msgs/point.pb.h>
 #include <seerep-msgs/quaternion.pb.h>

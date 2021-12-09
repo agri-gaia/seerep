@@ -109,23 +109,25 @@ std::vector<AabbHierarchy::AabbTimeIdPair> ImageOverview::queryTemporal(const se
   return timetree_result;
 }
 
-void ImageOverview::addDataset(const seerep::Image& image)
+boost::uuids::uuid ImageOverview::addDataset(const seerep::Image& image)
 {
   boost::uuids::uuid uuid;
-  if (!image.header().uuid_msgs().empty())
+  if (image.header().uuid_msgs().empty())
   {
     uuid = boost::uuids::random_generator()();
   }
   else
   {
     boost::uuids::string_generator gen;
-    uuid = gen(image.header().uuid_project());
+    uuid = gen(image.header().uuid_msgs());
   }
 
   uint64_t id = data_count++;
   auto img = std::make_shared<Image>(coordinatesystem, m_hdf5_io, image, id, uuid);
   m_datasets.insert(std::make_pair(id, img));
   m_rt.insert(std::make_pair(img->getAABB(), img->getID()));
+
+  return uuid;
 }
 
 // void ImageOverview::addDatasetLabeled(const seerep::ImageLabeled& imagelabeled)

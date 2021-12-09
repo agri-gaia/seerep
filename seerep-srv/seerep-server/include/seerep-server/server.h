@@ -47,6 +47,8 @@ public:
                                    seerep::ServerResponse* response);
   grpc::Status CreateProject(grpc::ServerContext* context, const seerep::ProjectCreation* request,
                              seerep::ProjectCreated* response);
+  grpc::Status GetProjects(grpc::ServerContext* context, const google::protobuf::Empty* request,
+                           seerep::ProjectUUIDs* response);
 
 private:
   // TODO: move into corresponding classes!

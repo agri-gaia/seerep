@@ -75,9 +75,9 @@ void Project::addPointCloud(const seerep::PointCloud2& pointcloud2)
 //   m_pointcloudOverview.addDatasetLabeled(pointcloud2Labeled);
 // }
 
-void Project::addImage(const seerep::Image& image)
+boost::uuids::uuid Project::addImage(const seerep::Image& image)
 {
-  m_imageOverview.addDataset(image);
+  return m_imageOverview.addDataset(image);
 }
 
 } /* namespace seerep_core */

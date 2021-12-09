@@ -36,7 +36,7 @@ public:
 
   void addPointCloud(const seerep::PointCloud2& pointcloud2);
   // void addPointCloudLabeled(const seerep::PointCloud2Labeled& pointcloud2Labeled);
-  void addImage(const seerep::Image& image);
+  boost::uuids::uuid addImage(const seerep::Image& image);
 
 private:
   void createHdf5Io(boost::uuids::uuid& uuid, std::string path);

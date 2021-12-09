@@ -34,7 +34,7 @@ public:
   ~ImageOverview();
   std::vector<std::optional<seerep::Image>> getData(const seerep::Query& bb);
 
-  void addDataset(const seerep::Image& image);
+  boost::uuids::uuid addDataset(const seerep::Image& image);
   // void addDatasetLabeled(const seerep::ImageLabeled& imagelabeled);
 
 private:

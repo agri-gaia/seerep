@@ -71,6 +71,14 @@ std::string ProjectOverview::newProject(std::string projectname)
   return filename;
 }
 
+void ProjectOverview::getProjects(seerep::ProjectUUIDs* projectUUIDs)
+{
+  for (auto it = m_projects.begin(); it != m_projects.end(); ++it)
+  {
+    projectUUIDs->add_uuids(boost::lexical_cast<std::string>(it->first));
+  }
+}
+
 void ProjectOverview::addPointCloud(const seerep::PointCloud2& pointcloud2, boost::uuids::uuid uuid)
 {
   m_projects.at(uuid)->addPointCloud(pointcloud2);
@@ -81,9 +89,9 @@ void ProjectOverview::addPointCloud(const seerep::PointCloud2& pointcloud2, boos
 //   m_projects.at(uuid)->addPointCloudLabeled(pointcloud2labeled);
 // }
 
-void ProjectOverview::addImage(const seerep::Image& image, boost::uuids::uuid uuid)
+boost::uuids::uuid ProjectOverview::addImage(const seerep::Image& image, boost::uuids::uuid uuid)
 {
-  m_projects.at(uuid)->addImage(image);
+  return m_projects.at(uuid)->addImage(image);
 }
 
 } /* namespace seerep_core */

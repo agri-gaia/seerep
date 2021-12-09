@@ -34,8 +34,8 @@ grpc::Status ReceiveSensorMsgs::TransferImage(grpc::ServerContext* context, cons
       std::cout << e.what() << std::endl;
       return grpc::Status::CANCELLED;
     }
-    projectOverview.addImage(*image, uuid);
-    response->set_message("okidoki");
+    boost::uuids::uuid uuidImg = projectOverview.addImage(*image, uuid);
+    response->set_message(boost::lexical_cast<std::string>(uuidImg));
     response->set_transmission_state(seerep::ServerResponse::SUCCESS);
     return grpc::Status::OK;
   }
@@ -217,6 +217,15 @@ grpc::Status ReceiveSensorMsgs::CreateProject(grpc::ServerContext* context, cons
 {
   std::cout << "create new project... " << std::endl;
   response->set_uuid(projectOverview.newProject(request->name()));
+
+  return grpc::Status::OK;
+}
+
+grpc::Status ReceiveSensorMsgs::GetProjects(grpc::ServerContext* context, const google::protobuf::Empty* request,
+                                            seerep::ProjectUUIDs* response)
+{
+  std::cout << "query the project infos... " << std::endl;
+  projectOverview.getProjects(response);
 
   return grpc::Status::OK;
 }

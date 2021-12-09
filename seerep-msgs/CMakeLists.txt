@@ -12,7 +12,7 @@ set(MY_PROTO_FILES
 	protos/header.proto
 	protos/image_labeled.proto
 	protos/image.proto
-	protos/point_cloud_2_labeled.proto
+	# protos/point_cloud_2_labeled.proto
 	protos/point_cloud_2.proto
 	protos/point_field.proto
 	protos/point_stamped.proto
@@ -22,6 +22,7 @@ set(MY_PROTO_FILES
 	protos/polygon.proto
 	protos/pose_stamped.proto
 	protos/pose.proto
+	protos/project_uuids.proto
 	protos/projectCreated.proto
 	protos/projectCreation.proto
 	protos/quaternion_stamped.proto
