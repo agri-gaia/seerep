@@ -31,6 +31,7 @@ apt-get update -qq && apt-get install -y -qq --no-install-recommends \
     ruby shellcheck \
     clang-format-10 \
     python3-catkin-lint
+pip3 install --upgrade pip
 pip3 install pre-commit
 
 echo '####################################################'
@@ -112,6 +113,9 @@ rm -rf grpc
 
 echo '#Install python3 grpcio_tools'
 pip3 install grpcio-tools
+
+echo '#Updating python proto stuff'
+pip3 install --upgrade protobuf
 
 # remove apt lists so that they are not saved in the image layers
 rm -rf /var/lib/apt/lists/*
