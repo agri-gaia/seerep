@@ -5,9 +5,9 @@ namespace seerep_core
 ImageOverview::ImageOverview()
 {
 }
-ImageOverview::ImageOverview(std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io) : m_hdf5_io(hdf5_io), data_count(0)
+ImageOverview::ImageOverview(std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io) : m_hdf5_io(hdf5_io), m_data_count(0)
 {
-  coordinatesystem = "test";
+  m_coordinatesystem = "test";
 
   recreateDatasets();
 }
@@ -27,12 +27,11 @@ void ImageOverview::recreateDatasets()
       boost::uuids::string_generator gen;
       boost::uuids::uuid uuid = gen(name);
 
-      uint64_t id = data_count++;
+      uint64_t id = m_data_count++;
 
-      auto img = std::make_shared<Image>(coordinatesystem, m_hdf5_io, id, uuid);
-      m_datasets.insert(std::make_pair(id, img));
-      m_rt.insert(std::make_pair(img->getAABB(), img->getID()));
-      m_timetree.insert(std::make_pair(img->getAABBTime(), img->getID()));
+      auto img = std::make_shared<Image>(m_coordinatesystem, m_hdf5_io, id, uuid);
+
+      addImageToIndices(img);
     }
     catch (const std::runtime_error& e)
     {
@@ -49,8 +48,10 @@ std::vector<std::optional<seerep::Image>> ImageOverview::getData(const seerep::Q
   std::vector<AabbHierarchy::AabbIdPair> resultRt = querySpatial(query);
   // time
   std::vector<AabbHierarchy::AabbTimeIdPair> resultTime = queryTemporal(query);
+  // semantic
+  std::set<uint64_t> resultSemantic = querySemantic(query);
 
-  std::vector<uint64_t> resultIntersection = intersectQueryResults(resultRt, resultTime);
+  std::vector<uint64_t> resultIntersection = intersectQueryResults(resultRt, resultTime, resultSemantic);
 
   for (auto& r : resultIntersection)
   {
@@ -78,8 +79,24 @@ std::vector<AabbHierarchy::AabbIdPair> ImageOverview::querySpatial(const seerep:
   return rt_result;
 }
 
+std::set<uint64_t> ImageOverview::querySemantic(const seerep::Query& query)
+{
+  std::set<uint64_t> result;
+  // find the queried label in the label-imageID-map
+  for (std::string labelquery : query.label())
+  {
+    // add all imageIDs to result set
+    for (uint64_t ids : m_label.find(labelquery)->second)
+    {
+      result.insert(ids);
+    }
+  }
+  return result;
+}
+
 std::vector<uint64_t> ImageOverview::intersectQueryResults(std::vector<AabbHierarchy::AabbIdPair> rt_result,
-                                                           std::vector<AabbHierarchy::AabbTimeIdPair> timetree_result)
+                                                           std::vector<AabbHierarchy::AabbTimeIdPair> timetree_result,
+                                                           std::set<uint64_t> semanticResult)
 {
   std::set<uint64_t> idsSpatial;
   for (auto it = std::make_move_iterator(rt_result.begin()), end = std::make_move_iterator(rt_result.end()); it != end;
@@ -93,9 +110,14 @@ std::vector<uint64_t> ImageOverview::intersectQueryResults(std::vector<AabbHiera
   {
     idsTemporal.insert(std::move(it->second));
   }
-  std::vector<uint64_t> result;
+  std::set<uint64_t> resultSpatioTemporal;
   std::set_intersection(idsSpatial.begin(), idsSpatial.end(), idsTemporal.begin(), idsTemporal.end(),
-                        std::back_inserter(result));
+                        std::inserter(resultSpatioTemporal, resultSpatioTemporal.begin()));
+
+  std::vector<uint64_t> result;
+  std::set_intersection(resultSpatioTemporal.begin(), resultSpatioTemporal.end(), semanticResult.begin(),
+                        semanticResult.end(), std::back_inserter(result));
+
   return result;
 }
 
@@ -121,19 +143,42 @@ boost::uuids::uuid ImageOverview::addDataset(const seerep::Image& image)
     boost::uuids::string_generator gen;
     uuid = gen(image.header().uuid_msgs());
   }
-
-  uint64_t id = data_count++;
-  auto img = std::make_shared<Image>(coordinatesystem, m_hdf5_io, image, id, uuid);
-  m_datasets.insert(std::make_pair(id, img));
-  m_rt.insert(std::make_pair(img->getAABB(), img->getID()));
+  uint64_t id = m_data_count++;
+  auto img = std::make_shared<Image>(m_coordinatesystem, m_hdf5_io, image, id, uuid);
+  addImageToIndices(img);
 
   return uuid;
 }
 
+void ImageOverview::addImageToIndices(std::shared_ptr<seerep_core::Image> img)
+{
+  m_datasets.insert(std::make_pair(img->getID(), img));
+  m_rt.insert(std::make_pair(img->getAABB(), img->getID()));
+  m_timetree.insert(std::make_pair(img->getAABBTime(), img->getID()));
+
+  std::unordered_set<std::string> labels = img->getLabels();
+
+  for (std::string label : labels)
+  {
+    // check if label already exists
+    std::unordered_map<std::string, std::vector<uint64_t>>::iterator labelmapentry = m_label.find(label);
+    if (labelmapentry != m_label.end())
+    {
+      // label already exists, add id of image to the vector
+      labelmapentry->second.push_back(img->getID());
+    }
+    else
+    {
+      // label doesn't already exist. Create new pair of label and vector of image ids
+      m_label.insert(std::make_pair(label, std::vector<uint64_t>{ img->getID() }));
+    }
+  }
+}
+
 // void ImageOverview::addDatasetLabeled(const seerep::ImageLabeled& imagelabeled)
 // {
-//   uint64_t id = data_count++;
-//   auto pc = std::make_shared<Image>(coordinatesystem, m_hdf5_io, imagelabeled, id);
+//   uint64_t id = m_data_count++;
+//   auto pc = std::make_shared<Image>(m_coordinatesystem, m_hdf5_io, imagelabeled, id);
 //   m_datasets.insert(std::make_pair(id, pc));
 
 //   m_rt.insert(std::make_pair(pc->getAABB(), pc->getID()));

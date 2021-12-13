@@ -37,6 +37,13 @@ void QueryData::queryImage(const seerep::Query& query, ros::Publisher& img_pub) 
     sensor_msgs::Image img = seerep_ros_conversions::toROS(response);
     img.header.frame_id = "map";
 
+    for (auto labels : response.labels_bb())
+    {
+      std::cout << "label: " << labels.label() << " box: " << labels.boundingbox().point_min().x() << " / "
+                << labels.boundingbox().point_min().y() << " / " << labels.boundingbox().point_max().x() << " / "
+                << labels.boundingbox().point_max().y() << std::endl;
+    }
+
     ROS_INFO_STREAM("publish image\n" << img);
     img_pub.publish(img);
 
@@ -52,29 +59,55 @@ int main(int argc, char** argv)
   ros::init(argc, argv, "seerep_ros_communication_client");
   ros::NodeHandle nh;
   ros::NodeHandle private_nh("~");
-  ros::Publisher pc2_pub = nh.advertise<sensor_msgs::PointCloud2>("queried_pc", 1000);
-  ros::Publisher img_pub = nh.advertise<sensor_msgs::Image>("queried_img", 1000);
 
+  // grpc server
   std::string server_address;
   private_nh.param<std::string>("server_address", server_address, "localhost:9090");
-
   seerep_grpc_ros::QueryData query_data(grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()));
 
-  seerep::Query query;
-  query.mutable_boundingbox()->mutable_point_min()->set_x(0);
-  query.mutable_boundingbox()->mutable_point_min()->set_y(0);
-  query.mutable_boundingbox()->mutable_point_min()->set_z(0);
-  query.mutable_boundingbox()->mutable_point_max()->set_x(10);
-  query.mutable_boundingbox()->mutable_point_max()->set_y(10);
-  query.mutable_boundingbox()->mutable_point_max()->set_z(10);
+  // publish topic PC
+  std::string topicqueriedpc;
+  private_nh.param<std::string>("topicqueriedpc", topicqueriedpc, "queried_pc");
+  ros::Publisher pc2_pub = nh.advertise<sensor_msgs::PointCloud2>(topicqueriedpc, 1000);
 
-  query.mutable_timeinterval()->set_time_min(1638549273);
-  query.mutable_timeinterval()->set_time_max(1638549276);
+  // publish topic img
+  std::string topicqueriedimg;
+  private_nh.param<std::string>("topicqueriedimg", topicqueriedimg, "queried_img");
+  ros::Publisher img_pub = nh.advertise<sensor_msgs::Image>(topicqueriedimg, 1000);
+
+  seerep::Query query;
+
+  // spatial
+  double minx, miny, minz, maxx, maxy, maxz;
+  private_nh.param<double>("point_min_x", minx, 0.0);
+  private_nh.param<double>("point_min_y", miny, 0.0);
+  private_nh.param<double>("point_min_z", minz, 0.0);
+  private_nh.param<double>("point_max_x", maxx, 0.0);
+  private_nh.param<double>("point_max_y", maxy, 0.0);
+  private_nh.param<double>("point_max_z", maxz, 0.0);
+  query.mutable_boundingbox()->mutable_point_min()->set_x(minx);
+  query.mutable_boundingbox()->mutable_point_min()->set_y(miny);
+  query.mutable_boundingbox()->mutable_point_min()->set_z(minz);
+  query.mutable_boundingbox()->mutable_point_max()->set_x(maxx);
+  query.mutable_boundingbox()->mutable_point_max()->set_y(maxy);
+  query.mutable_boundingbox()->mutable_point_max()->set_z(maxz);
+
+  // temporal
+  int mintime, maxtime;
+  private_nh.param<int>("time_min", mintime, 0);
+  private_nh.param<int>("time_max", maxtime, 0);
+  query.mutable_timeinterval()->set_time_min(mintime);
+  query.mutable_timeinterval()->set_time_max(maxtime);
+
+  // semantic
+  std::string label;
+  private_nh.param<std::string>("label", label, "");
+  query.mutable_label()->Add(std::move(label));
 
   ROS_INFO("Topic is published. Connect to it now. Press enter to resume.");
   std::cin.get();
-  // ros::Duration(10.0).sleep();
-  // query_data.queryPointcloud(query, pc2_pub);
+
+  // query and publish data
   query_data.queryImage(query, img_pub);
 
   return EXIT_SUCCESS;

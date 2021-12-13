@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <launch>
-    <arg name="topics" default=""/>
+    <arg name="server_address" default="localhost:9090"/>
+    <arg name="topicqueriedpc" default="queried_pc"/>
+    <arg name="topicqueriedimg" default="queried_img"/>
+    <arg name="point_min_x" default="0.0"/>
+    <arg name="point_min_y" default="0.0"/>
+    <arg name="point_min_z" default="0.0"/>
+    <arg name="point_max_x" default="10.0"/>
+    <arg name="point_max_y" default="10.0"/>
+    <arg name="point_max_z" default="10.0"/>
+    <arg name="time_min" default="1638549273"/>
+    <arg name="time_max" default="1738549276"/>
+    <arg name="label" default="testlabel40"/>
     <node name="seerep_ros_communication_querier" pkg="seerep_ros_communication" type="seerep_ros_communication_querier" output="screen">
+        <rosparam param="server_address" subst_value="True">$(arg server_address)</rosparam>
+        <rosparam param="topicqueriedpc" subst_value="True">$(arg topicqueriedpc)</rosparam>
+        <rosparam param="topicqueriedimg" subst_value="True">$(arg topicqueriedimg)</rosparam>
+        <rosparam param="point_min_x" subst_value="True">$(arg point_min_x)</rosparam>
+        <rosparam param="point_min_y" subst_value="True">$(arg point_min_y)</rosparam>
+        <rosparam param="point_min_z" subst_value="True">$(arg point_min_z)</rosparam>
+        <rosparam param="point_max_x" subst_value="True">$(arg point_max_x)</rosparam>
+        <rosparam param="point_max_y" subst_value="True">$(arg point_max_y)</rosparam>
+        <rosparam param="point_max_z" subst_value="True">$(arg point_max_z)</rosparam>
+        <rosparam param="time_min" subst_value="True">$(arg time_min)</rosparam>
+        <rosparam param="time_max" subst_value="True">$(arg time_max)</rosparam>
+        <rosparam param="label" subst_value="True">$(arg label)</rosparam>
     </node>
 </launch>

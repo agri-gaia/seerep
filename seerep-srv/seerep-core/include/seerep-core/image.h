@@ -7,7 +7,6 @@
 // seerep-msgs
 #include <seerep-msgs/query.pb.h>
 #include <seerep-msgs/image.pb.h>
-// #include <seerep-msgs/point_cloud_2_labeled.pb.h>
 // seerep-hdf5
 #include <seerep-hdf5/io.h>
 // seerep-conversion
@@ -32,9 +31,6 @@ public:
         const seerep::Image& image, const uint64_t& id, const boost::uuids::uuid& uuid);
   Image(std::string coordinatesystemParent, std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io, const uint64_t& id,
         const boost::uuids::uuid& uuid);
-  // labeled
-  // Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io,
-  //            const seerep::ImageLabeled& image, const uint64_t& id);
   ~Image();
 
   std::optional<seerep::Image> getData(const seerep::Query& query);
@@ -44,9 +40,13 @@ public:
   boost::uuids::uuid getUUID();
   int64_t getTime();
   AabbHierarchy::AabbTime getAABBTime();
+  std::unordered_set<std::string> getLabels();
 
 private:
   AabbHierarchy::AABB calcAABB();
+  void recreateAABB();
+  void recreateTime();
+  void recreateLabel();
 
   std::string m_coordinatesystem;
   std::string m_coordinatesystemParent;
@@ -56,6 +56,7 @@ private:
   // axis aligned bounding box
   AabbHierarchy::AABB m_aabb;
   int64_t m_time;
+  std::multimap<std::string, AabbHierarchy::AABB2D> m_labelsBB;
 };
 
 } /* namespace seerep_core */

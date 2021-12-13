@@ -39,22 +39,26 @@ public:
 
 private:
   void recreateDatasets();
+  void addImageToIndices(std::shared_ptr<seerep_core::Image> img);
 
   std::vector<AabbHierarchy::AabbIdPair> querySpatial(const seerep::Query& query);
   std::vector<AabbHierarchy::AabbTimeIdPair> queryTemporal(const seerep::Query& query);
+  std::set<uint64_t> querySemantic(const seerep::Query& query);
 
   std::vector<uint64_t> intersectQueryResults(std::vector<AabbHierarchy::AabbIdPair> rt_result,
-                                              std::vector<AabbHierarchy::AabbTimeIdPair> timetree_result);
+                                              std::vector<AabbHierarchy::AabbTimeIdPair> timetree_result,
+                                              std::set<uint64_t> semanticResult);
 
-  uint64_t data_count;
+  uint64_t m_data_count;
 
-  std::string coordinatesystem;
+  std::string m_coordinatesystem;
   std::shared_ptr<seerep_hdf5::SeerepHDF5IO> m_hdf5_io;
 
   std::unordered_map<uint64_t, std::shared_ptr<seerep_core::Image>> m_datasets;
 
   AabbHierarchy::rtree m_rt;
   AabbHierarchy::timetree m_timetree;
+  std::unordered_map<std::string, std::vector<uint64_t>> m_label;
 };
 
 } /* namespace seerep_core */

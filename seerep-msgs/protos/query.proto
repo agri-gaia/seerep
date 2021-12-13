@@ -9,4 +9,5 @@ message Query
 {
   Boundingbox boundingbox = 1;
   TimeInterval timeinterval = 2;
+  repeated string label = 3;
 }

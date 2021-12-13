@@ -53,6 +53,9 @@ public:
       const std::string& datatypeGroup, const std::string& uuid,
       const google::protobuf::RepeatedPtrField<::seerep::BoundingBox2DLabeled>& boundingbox2DLabeled);
 
+  std::optional<google::protobuf::RepeatedPtrField<::seerep::BoundingBox2DLabeled>>
+  readBoundingBox2DLabeled(const std::string& datatypeGroup, const std::string& uuid);
+
   void writeAABB(
       const std::string& datatypeGroup, const std::string& uuid,
       const boost::geometry::model::box<boost::geometry::model::point<float, 3, boost::geometry::cs::cartesian>>& aabb);

@@ -13,12 +13,19 @@ namespace seerep_core
 class AabbHierarchy
 {
 public:
-  // spatial
+  // spatial 3D
   typedef float PointDatatype;
   typedef bgm::point<PointDatatype, 3, bg::cs::cartesian> Point;
   typedef bgm::box<Point> AABB;
   typedef std::pair<AABB, uint64_t> AabbIdPair;
   typedef bgi::rtree<AabbIdPair, bgi::rstar<32>> rtree;
+
+  // spatial 2D
+  typedef float Point2DDatatype;
+  typedef bgm::point<Point2DDatatype, 2, bg::cs::cartesian> Point2D;
+  typedef bgm::box<Point2D> AABB2D;
+  typedef std::pair<AABB2D, uint64_t> Aabb2DIdPair;
+  typedef bgi::rtree<Aabb2DIdPair, bgi::rstar<32>> rtree2D;
 
   // temporal
   typedef int64_t TimeDatatype;

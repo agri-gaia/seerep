@@ -46,12 +46,12 @@ theImage.step = 3 * lim
 theImage.data = bytes(rgb)
 
 bb1 = bb.BoundingBox2DLabeled()
-for i in range(0, 100, 10):
+for i in range(0, 1, 0.1):
     bb1.label = "testlabel" + str(i)
-    bb1.boundingBox.point_min.x = 1 + i
-    bb1.boundingBox.point_min.y = 2 + i
-    bb1.boundingBox.point_max.x = 3 + i
-    bb1.boundingBox.point_max.y = 4 + i
+    bb1.boundingBox.point_min.x = 0.01 + i
+    bb1.boundingBox.point_min.y = 0.02 + i
+    bb1.boundingBox.point_max.x = 0.03 + i
+    bb1.boundingBox.point_max.y = 0.04 + i
     theImage.labels_bb.append(bb1)
 
 

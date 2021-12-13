@@ -215,6 +215,11 @@ std::optional<seerep::Image> SeerepHDF5IO::readImage(const std::string& id)
   image.set_data(data, sizeof(data));
 
   *image.mutable_header() = readHeaderAttributes(*data_set_ptr);
+  auto labels = readBoundingBox2DLabeled(HDF5_GROUP_IMAGE, id);
+  if (labels)
+  {
+    *image.mutable_labels_bb() = labels.value();
+  }
   return image;
 }
 
@@ -548,6 +553,55 @@ void SeerepHDF5IO::writeBoundingBox2DLabeled(
 
     m_file.flush();
   }
+}
+
+std::optional<google::protobuf::RepeatedPtrField<seerep::BoundingBox2DLabeled>>
+SeerepHDF5IO::readBoundingBox2DLabeled(const std::string& datatypeGroup, const std::string& uuid)
+{
+  std::string id = datatypeGroup + "/" + uuid;
+  if (!m_file.exist(id + "/" + LABELS))
+  {
+    std::cout << "id " << id + "/" + LABELS << " does not exist in file " << m_file.getName() << std::endl;
+    return std::nullopt;
+  }
+  if (!m_file.exist(id + "/" + LABELBOXES))
+  {
+    std::cout << "id " << id + "/" + LABELBOXES << " does not exist in file " << m_file.getName() << std::endl;
+    return std::nullopt;
+  }
+
+  std::vector<std::string> labels;
+  std::vector<std::vector<double>> boundingBoxes;
+
+  HighFive::DataSet datasetLabels = m_file.getDataSet(id + "/" + LABELS);
+  datasetLabels.read(labels);
+
+  HighFive::DataSet datasetBoxes = m_file.getDataSet(id + "/" + LABELBOXES);
+  datasetBoxes.read(boundingBoxes);
+
+  if (labels.size() != boundingBoxes.size())
+  {
+    std::cout << "size of labels (" << labels.size() << ") and size of bounding boxes (" << boundingBoxes.size()
+              << ") do not fit." << std::endl;
+    return std::nullopt;
+  }
+
+  google::protobuf::RepeatedPtrField<seerep::BoundingBox2DLabeled> result;
+
+  for (int i = 0; i < labels.size(); i++)
+  {
+    seerep::BoundingBox2DLabeled bblabeled;
+    bblabeled.set_label(labels.at(i));
+
+    bblabeled.mutable_boundingbox()->mutable_point_min()->set_x(boundingBoxes.at(i).at(0));
+    bblabeled.mutable_boundingbox()->mutable_point_min()->set_y(boundingBoxes.at(i).at(1));
+    bblabeled.mutable_boundingbox()->mutable_point_max()->set_x(boundingBoxes.at(i).at(2));
+    bblabeled.mutable_boundingbox()->mutable_point_max()->set_y(boundingBoxes.at(i).at(3));
+
+    result.Add(std::move(bblabeled));
+  }
+
+  return result;
 }
 
 void SeerepHDF5IO::writePointCloud2(const std::string& uuid, const seerep::PointCloud2& pointcloud2)

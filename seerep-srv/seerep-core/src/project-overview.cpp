@@ -28,7 +28,11 @@ std::vector<std::vector<std::optional<seerep::Image>>> ProjectOverview::getImage
   std::vector<std::vector<std::optional<seerep::Image>>> result;
   for (auto& it : m_projects)
   {
-    result.push_back(it.second->getImage(query));
+    auto img = it.second->getImage(query);
+    if (!img.empty())
+    {
+      result.push_back(img);
+    }
   }
 
   return result;
