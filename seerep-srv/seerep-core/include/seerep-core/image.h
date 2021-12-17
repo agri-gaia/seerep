@@ -47,6 +47,8 @@ private:
   void recreateAABB();
   void recreateTime();
   void recreateLabel();
+  void storeLabelGeneral(google::protobuf::RepeatedPtrField<std::string> labelGeneral);
+  void storeLabelBB(google::protobuf::RepeatedPtrField<seerep::BoundingBox2DLabeled> labelsBB);
 
   std::string m_coordinatesystem;
   std::string m_coordinatesystemParent;
@@ -57,6 +59,7 @@ private:
   AabbHierarchy::AABB m_aabb;
   int64_t m_time;
   std::multimap<std::string, AabbHierarchy::AABB2D> m_labelsBB;
+  std::unordered_set<std::string> m_labelGeneral;
 };
 
 } /* namespace seerep_core */

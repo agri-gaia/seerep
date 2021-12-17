@@ -150,6 +150,7 @@ void SeerepHDF5IO::writeImage(const std::string& id, const seerep::Image& image)
   writeHeaderAttributes(*data_set_ptr, image.header());
 
   writeBoundingBox2DLabeled(HDF5_GROUP_IMAGE, id, image.labels_bb());
+  writeLabelsGeneral(HDF5_GROUP_IMAGE, id, image.labels_general());
 
   m_file.flush();
 }
@@ -215,10 +216,15 @@ std::optional<seerep::Image> SeerepHDF5IO::readImage(const std::string& id)
   image.set_data(data, sizeof(data));
 
   *image.mutable_header() = readHeaderAttributes(*data_set_ptr);
-  auto labels = readBoundingBox2DLabeled(HDF5_GROUP_IMAGE, id);
-  if (labels)
+  auto labelsBB = readBoundingBox2DLabeled(HDF5_GROUP_IMAGE, id);
+  if (labelsBB)
   {
-    *image.mutable_labels_bb() = labels.value();
+    *image.mutable_labels_bb() = labelsBB.value();
+  }
+  auto labelsGeneral = readLabelsGeneral(HDF5_GROUP_IMAGE, id);
+  if (labelsGeneral)
+  {
+    *image.mutable_labels_general() = labelsGeneral.value();
   }
   return image;
 }
@@ -514,11 +520,11 @@ void SeerepHDF5IO::writeBoundingBoxLabeled(
     }
 
     HighFive::DataSet datasetLabels =
-        m_file.createDataSet<std::string>(id + "/" + LABELS, HighFive::DataSpace::From(labels));
+        m_file.createDataSet<std::string>(id + "/" + LABELBB, HighFive::DataSpace::From(labels));
     datasetLabels.write(labels);
 
     HighFive::DataSet datasetBoxes =
-        m_file.createDataSet<double>(id + "/" + LABELBOXES, HighFive::DataSpace::From(boundingBoxes));
+        m_file.createDataSet<double>(id + "/" + LABELBBBOXES, HighFive::DataSpace::From(boundingBoxes));
     datasetBoxes.write(boundingBoxes);
 
     m_file.flush();
@@ -544,11 +550,11 @@ void SeerepHDF5IO::writeBoundingBox2DLabeled(
     }
 
     HighFive::DataSet datasetLabels =
-        m_file.createDataSet<std::string>(id + "/" + LABELS, HighFive::DataSpace::From(labels));
+        m_file.createDataSet<std::string>(id + "/" + LABELBB, HighFive::DataSpace::From(labels));
     datasetLabels.write(labels);
 
     HighFive::DataSet datasetBoxes =
-        m_file.createDataSet<double>(id + "/" + LABELBOXES, HighFive::DataSpace::From(boundingBoxes));
+        m_file.createDataSet<double>(id + "/" + LABELBBBOXES, HighFive::DataSpace::From(boundingBoxes));
     datasetBoxes.write(boundingBoxes);
 
     m_file.flush();
@@ -559,24 +565,24 @@ std::optional<google::protobuf::RepeatedPtrField<seerep::BoundingBox2DLabeled>>
 SeerepHDF5IO::readBoundingBox2DLabeled(const std::string& datatypeGroup, const std::string& uuid)
 {
   std::string id = datatypeGroup + "/" + uuid;
-  if (!m_file.exist(id + "/" + LABELS))
+  if (!m_file.exist(id + "/" + LABELBB))
   {
-    std::cout << "id " << id + "/" + LABELS << " does not exist in file " << m_file.getName() << std::endl;
+    std::cout << "id " << id + "/" + LABELBB << " does not exist in file " << m_file.getName() << std::endl;
     return std::nullopt;
   }
-  if (!m_file.exist(id + "/" + LABELBOXES))
+  if (!m_file.exist(id + "/" + LABELBBBOXES))
   {
-    std::cout << "id " << id + "/" + LABELBOXES << " does not exist in file " << m_file.getName() << std::endl;
+    std::cout << "id " << id + "/" + LABELBBBOXES << " does not exist in file " << m_file.getName() << std::endl;
     return std::nullopt;
   }
 
   std::vector<std::string> labels;
   std::vector<std::vector<double>> boundingBoxes;
 
-  HighFive::DataSet datasetLabels = m_file.getDataSet(id + "/" + LABELS);
+  HighFive::DataSet datasetLabels = m_file.getDataSet(id + "/" + LABELBB);
   datasetLabels.read(labels);
 
-  HighFive::DataSet datasetBoxes = m_file.getDataSet(id + "/" + LABELBOXES);
+  HighFive::DataSet datasetBoxes = m_file.getDataSet(id + "/" + LABELBBBOXES);
   datasetBoxes.read(boundingBoxes);
 
   if (labels.size() != boundingBoxes.size())
@@ -599,6 +605,51 @@ SeerepHDF5IO::readBoundingBox2DLabeled(const std::string& datatypeGroup, const s
     bblabeled.mutable_boundingbox()->mutable_point_max()->set_y(boundingBoxes.at(i).at(3));
 
     result.Add(std::move(bblabeled));
+  }
+
+  return result;
+}
+
+void SeerepHDF5IO::writeLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid,
+                                      const google::protobuf::RepeatedPtrField<std::string>& labelsGeneral)
+{
+  std::string id = datatypeGroup + "/" + uuid;
+
+  if (!labelsGeneral.empty())
+  {
+    std::vector<std::string> labels;
+    for (auto label : labelsGeneral)
+    {
+      labels.push_back(label);
+    }
+
+    HighFive::DataSet datasetLabels =
+        m_file.createDataSet<std::string>(id + "/" + LABELGENERAL, HighFive::DataSpace::From(labels));
+    datasetLabels.write(labels);
+
+    m_file.flush();
+  }
+}
+
+std::optional<google::protobuf::RepeatedPtrField<std::string>>
+SeerepHDF5IO::readLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid)
+{
+  std::string id = datatypeGroup + "/" + uuid;
+  if (!m_file.exist(id + "/" + LABELGENERAL))
+  {
+    std::cout << "id " << id + "/" + LABELGENERAL << " does not exist in file " << m_file.getName() << std::endl;
+    return std::nullopt;
+  }
+
+  std::vector<std::string> labels;
+  HighFive::DataSet datasetLabels = m_file.getDataSet(id + "/" + LABELGENERAL);
+  datasetLabels.read(labels);
+
+  google::protobuf::RepeatedPtrField<std::string> result;
+
+  for (int i = 0; i < labels.size(); i++)
+  {
+    result.Add(std::move(labels.at(i)));
   }
 
   return result;

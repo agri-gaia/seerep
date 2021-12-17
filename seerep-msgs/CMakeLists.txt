@@ -10,9 +10,7 @@ set(MY_PROTO_FILES
 	protos/boundingbox2d_labeled.proto
 	protos/boundingbox2d.proto
 	protos/header.proto
-	protos/image_labeled.proto
 	protos/image.proto
-	# protos/point_cloud_2_labeled.proto
 	protos/point_cloud_2.proto
 	protos/point_field.proto
 	protos/point_stamped.proto

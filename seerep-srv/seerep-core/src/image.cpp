@@ -17,20 +17,14 @@ Image::Image(std::string coordinatesystemParent, std::shared_ptr<seerep_hdf5::Se
   m_time = image.header().stamp().seconds();
 
   // semantic
+  if (!image.labels_general().empty())
+  {
+    storeLabelGeneral(image.labels_general());
+  }
+
   if (!image.labels_bb().empty())
   {
-    std::vector<std::string> labels;
-    std::vector<std::vector<double>> boundingBoxes;
-    for (auto label : image.labels_bb())
-    {
-      m_labelsBB.insert(std::make_pair(
-          // key = label as string
-          label.label(),
-          // value = 2D bounding box
-          AabbHierarchy::AABB2D(
-              AabbHierarchy::Point2D(label.boundingbox().point_min().x(), label.boundingbox().point_min().y()),
-              AabbHierarchy::Point2D(label.boundingbox().point_max().x(), label.boundingbox().point_max().y()))));
-    }
+    storeLabelBB(image.labels_bb());
   }
 }
 
@@ -86,10 +80,14 @@ std::unordered_set<std::string> Image::getLabels()
 {
   std::unordered_set<std::string> labelset;
 
+  // add all bounding box based labels to the result set
   for (auto label : m_labelsBB)
   {
-    labelset.emplace(label.first);
+    labelset.insert(label.first);
   }
+
+  // add all general labels to the result set
+  labelset.insert(m_labelGeneral.begin(), m_labelGeneral.end());
 
   return labelset;
 }
@@ -132,19 +130,42 @@ void Image::recreateTime()
 
 void Image::recreateLabel()
 {
+  std::optional<google::protobuf::RepeatedPtrField<std::string>> labelGeneral = m_hdf5_io->readLabelsGeneral(
+      seerep_hdf5::SeerepHDF5IO::HDF5_GROUP_IMAGE, boost::lexical_cast<std::string>(m_uuid));
+  if (labelGeneral)
+  {
+    storeLabelGeneral(labelGeneral.value());
+  }
   std::optional<google::protobuf::RepeatedPtrField<seerep::BoundingBox2DLabeled>> labelsBB =
       m_hdf5_io->readBoundingBox2DLabeled(seerep_hdf5::SeerepHDF5IO::HDF5_GROUP_IMAGE,
                                           boost::lexical_cast<std::string>(m_uuid));
 
   if (labelsBB)
   {
-    for (auto labelBB : labelsBB.value())
-    {
-      AabbHierarchy::AABB2D aabb2d(
-          AabbHierarchy::Point2D(labelBB.boundingbox().point_min().x(), labelBB.boundingbox().point_min().y()),
-          AabbHierarchy::Point2D(labelBB.boundingbox().point_max().x(), labelBB.boundingbox().point_max().y()));
-      m_labelsBB.insert(std::make_pair(labelBB.label(), aabb2d));
-    }
+    storeLabelBB(labelsBB.value());
   }
 }
+
+void Image::storeLabelGeneral(google::protobuf::RepeatedPtrField<std::string> labelGeneral)
+{
+  for (auto label : labelGeneral)
+  {
+    m_labelGeneral.insert(label);
+  }
+}
+
+void Image::storeLabelBB(google::protobuf::RepeatedPtrField<seerep::BoundingBox2DLabeled> labelsBB)
+{
+  for (auto label : labelsBB)
+  {
+    m_labelsBB.insert(std::make_pair(
+        // key = label as string
+        label.label(),
+        // value = 2D bounding box
+        AabbHierarchy::AABB2D(
+            AabbHierarchy::Point2D(label.boundingbox().point_min().x(), label.boundingbox().point_min().y()),
+            AabbHierarchy::Point2D(label.boundingbox().point_max().x(), label.boundingbox().point_max().y()))));
+  }
+}
+
 } /* namespace seerep_core */

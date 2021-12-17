@@ -45,23 +45,13 @@ void Project::createHdf5Io(boost::uuids::uuid& uuid, std::string path)
 
 void Project::recreateDatatypes()
 {
+  m_pointcloudOverview = seerep_core::PointcloudOverview(m_hdf5_io);
+  m_imageOverview = seerep_core::ImageOverview(m_hdf5_io);
+
   std::vector<std::string> datatypeNames = m_hdf5_io->getGroupDatasets("");
   for (auto datatypeName : datatypeNames)
   {
     std::cout << "found datatype" << datatypeName << " in HDF5 file." << std::endl;
-
-    if (datatypeName == "pointclouds")
-    {
-      m_pointcloudOverview = seerep_core::PointcloudOverview(m_hdf5_io);
-    }
-    else if (datatypeName == "images")
-    {
-      m_imageOverview = seerep_core::ImageOverview(m_hdf5_io);
-    }
-    else
-    {
-      std::cout << "unknown datatype" << std::endl;
-    }
   }
 }
 

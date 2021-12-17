@@ -6,9 +6,7 @@
 
 // seerep-msgs
 #include <seerep-msgs/image.pb.h>
-#include <seerep-msgs/image_labeled.pb.h>
 #include <seerep-msgs/point_cloud_2.pb.h>
-// #include <seerep-msgs/point_cloud_2_labeled.pb.h>
 #include <seerep-msgs/boundingbox_labeled.pb.h>
 #include <seerep-msgs/point.pb.h>
 #include <seerep-msgs/quaternion.pb.h>
@@ -51,10 +49,16 @@ public:
 
   void writeBoundingBox2DLabeled(
       const std::string& datatypeGroup, const std::string& uuid,
-      const google::protobuf::RepeatedPtrField<::seerep::BoundingBox2DLabeled>& boundingbox2DLabeled);
+      const google::protobuf::RepeatedPtrField<seerep::BoundingBox2DLabeled>& boundingbox2DLabeled);
 
   std::optional<google::protobuf::RepeatedPtrField<::seerep::BoundingBox2DLabeled>>
   readBoundingBox2DLabeled(const std::string& datatypeGroup, const std::string& uuid);
+
+  void writeLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid,
+                          const google::protobuf::RepeatedPtrField<std::string>& labelsGeneral);
+
+  std::optional<google::protobuf::RepeatedPtrField<std::string>> readLabelsGeneral(const std::string& datatypeGroup,
+                                                                                   const std::string& uuid);
 
   void writeAABB(
       const std::string& datatypeGroup, const std::string& uuid,
@@ -145,8 +149,9 @@ private:
 
   // dataset names
   const std::string RAWDATA = "rawdata";
-  const std::string LABELS = "labels";
-  const std::string LABELBOXES = "labelBoxes";
+  const std::string LABELGENERAL = "labelGeneral";
+  const std::string LABELBB = "labelBB";
+  const std::string LABELBBBOXES = "labelBBBoxes";
 
   HighFive::File m_file;
   std::mutex m_write_mtx;

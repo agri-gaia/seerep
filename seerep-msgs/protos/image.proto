@@ -47,6 +47,9 @@ message Image
   // actual matrix data, size is (step * rows)
   bytes data = 8;
 
+  // (optional) labels for the complete image
+  repeated string labels_general = 9;
+
   // (optional) bounding box based labels
-  repeated BoundingBox2DLabeled labels_bb = 9;
+  repeated BoundingBox2DLabeled labels_bb = 10;
 }
