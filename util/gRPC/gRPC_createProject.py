@@ -10,7 +10,7 @@ import grpc
 import projectCreation_pb2
 import projectCreated_pb2
 
-channel = grpc.insecure_channel("localhost:9090")
+channel = grpc.insecure_channel("agrigaia-ur.ni.dfki:9090")
 
 stub = transferMsgs.TransferSensorMsgsStub(channel)
 
