@@ -259,7 +259,7 @@ int main(int argc, char** argv)
     datafolder = std::filesystem::current_path();
   }
   std::cout << "The used data folder is: " << datafolder << std::endl;
-  std::string server_address = "localhost:9090";
+  std::string server_address = "0.0.0.0:9090";
   // HighFive::File hdf5_file("test.h5", HighFive::File::ReadWrite | HighFive::File::Create);
   // HighFive::File::ReadWrite | HighFive::File::Create | HighFive::File::Truncate);
   seerep_server::ReceiveSensorMsgs receive_sensor_msgs_service(datafolder);
