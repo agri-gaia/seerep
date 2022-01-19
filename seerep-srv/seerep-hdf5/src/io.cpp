@@ -906,4 +906,95 @@ std::string SeerepHDF5IO::readProjectname()
   return projectname;
 }
 
+void SeerepHDF5IO::writeTransformStamped(const seerep::TransformStamped& tf)
+{
+  std::string hdf5DatasetPath = HDF5_GROUP_TF + "/" + tf.header().frame_id() + "_" + tf.child_frame_id();
+  std::string hdf5DatasetTimePath = hdf5DatasetPath + "/" + "time";
+  std::string hdf5DatasetTransPath = hdf5DatasetPath + "/" + "translation";
+  std::string hdf5DatasetRotPath = hdf5DatasetPath + "/" + "rotation";
+
+  std::shared_ptr<HighFive::DataSet> data_set_time_ptr, data_set_trans_ptr, data_set_rot_ptr;
+  uint64_t size = 0;
+
+  if (!m_file.exist(hdf5DatasetPath))
+  {
+    std::cout << "data id " << hdf5DatasetPath << " does not exist! Creat new dataset in hdf5" << std::endl;
+    HighFive::Group group = m_file.createGroup(hdf5DatasetPath);
+    group.createAttribute("CHILD_FRAME", tf.child_frame_id());
+    group.createAttribute("PARENT_FRAME", tf.header().frame_id());
+
+    // TIME
+    // Create a dataspace with initial shape and max shape
+    HighFive::DataSpace data_space_time({ 1, 2 }, { HighFive::DataSpace::UNLIMITED, 2 });
+    // Use chunking
+    HighFive::DataSetCreateProps props_time;
+    props_time.add(HighFive::Chunking(std::vector<hsize_t>{ 1, 2 }));
+    data_set_time_ptr = std::make_shared<HighFive::DataSet>(
+        m_file.createDataSet<int64_t>(hdf5DatasetTimePath, data_space_time, props_time));
+
+    // TRANSLATION
+    // Create a dataspace with initial shape and max shape
+    HighFive::DataSpace data_space_trans({ 1, 3 }, { HighFive::DataSpace::UNLIMITED, 3 });
+    // Use chunking
+    HighFive::DataSetCreateProps props_trans;
+    props_trans.add(HighFive::Chunking(std::vector<hsize_t>{ 1, 3 }));
+    data_set_trans_ptr = std::make_shared<HighFive::DataSet>(
+        m_file.createDataSet<double>(hdf5DatasetTransPath, data_space_trans, props_trans));
+
+    // ROTATION
+    // Create a dataspace with initial shape and max shape
+    HighFive::DataSpace data_space_rot({ 1, 4 }, { HighFive::DataSpace::UNLIMITED, 4 });
+    // Use chunking
+    HighFive::DataSetCreateProps props_rot;
+    props_rot.add(HighFive::Chunking(std::vector<hsize_t>{ 1, 4 }));
+    data_set_rot_ptr = std::make_shared<HighFive::DataSet>(
+        m_file.createDataSet<double>(hdf5DatasetRotPath, data_space_rot, props_rot));
+  }
+  else
+  {
+    std::cout << "data id " << hdf5DatasetPath << " already exists!" << std::endl;
+    data_set_time_ptr = std::make_shared<HighFive::DataSet>(m_file.getDataSet(hdf5DatasetTimePath));
+    data_set_trans_ptr = std::make_shared<HighFive::DataSet>(m_file.getDataSet(hdf5DatasetTransPath));
+    data_set_rot_ptr = std::make_shared<HighFive::DataSet>(m_file.getDataSet(hdf5DatasetRotPath));
+
+    HighFive::Group group = m_file.getGroup(hdf5DatasetPath);
+    group.getAttribute(SIZE).read(size);
+
+    // Resize the dataset to a larger size
+    data_set_time_ptr->resize({ size, 2 });
+    data_set_trans_ptr->resize({ size, 3 });
+    data_set_rot_ptr->resize({ size, 4 });
+  }
+
+  // write time
+  std::vector<int64_t> time;
+  time.push_back(tf.header().stamp().seconds());
+  time.push_back(tf.header().stamp().nanos());
+  data_set_time_ptr->select({ size, 0 }, { 1, 2 }).write(time);
+
+  // write translation
+  std::vector<double> trans;
+  time.push_back(tf.transform().translation().x());
+  time.push_back(tf.transform().translation().y());
+  time.push_back(tf.transform().translation().z());
+  data_set_trans_ptr->select({ size, 0 }, { 1, 3 }).write(trans);
+
+  // write rotation
+  std::vector<double> rot;
+  time.push_back(tf.transform().rotation().x());
+  time.push_back(tf.transform().rotation().y());
+  time.push_back(tf.transform().rotation().z());
+  time.push_back(tf.transform().rotation().w());
+  data_set_rot_ptr->select({ size, 0 }, { 1, 4 }).write(rot);
+
+  // write the size as group attribute
+  HighFive::Group group = m_file.getGroup(hdf5DatasetPath);
+  if (!group.hasAttribute(SIZE))
+    group.createAttribute(SIZE, ++size);
+  else
+    group.getAttribute(SIZE).write(++size);
+}
+
+// std::optional<seerep::TransformStamped> SeerepHDF5IO::readTransformStamped(const std::string& id);
+
 } /* namespace seerep_hdf5 */
