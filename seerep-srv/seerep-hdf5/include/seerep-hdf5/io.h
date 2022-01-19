@@ -5,13 +5,14 @@
 #include <highfive/H5File.hpp>
 
 // seerep-msgs
-#include <seerep-msgs/image.pb.h>
-#include <seerep-msgs/point_cloud_2.pb.h>
 #include <seerep-msgs/boundingbox_labeled.pb.h>
+#include <seerep-msgs/image.pb.h>
 #include <seerep-msgs/point.pb.h>
-#include <seerep-msgs/quaternion.pb.h>
+#include <seerep-msgs/point_cloud_2.pb.h>
 #include <seerep-msgs/pose.pb.h>
 #include <seerep-msgs/pose_stamped.pb.h>
+#include <seerep-msgs/quaternion.pb.h>
+#include <seerep-msgs/transform_stamped.pb.h>
 
 // std
 #include <optional>
@@ -95,6 +96,10 @@ public:
 
   std::string readProjectname();
 
+  void writeTransformStamped(const seerep::TransformStamped& tf);
+
+  // std::optional<seerep::TransformStamped> readTransformStamped(const std::string& id);
+
 private:
   void writeHeaderAttributes(HighFive::DataSet& data_set, const seerep::Header& header);
 
@@ -110,6 +115,7 @@ private:
 
   void writePointAttributes(HighFive::DataSet& data_set, const seerep::Point& point, const std::string& prefix = "");
 
+  const std::string SIZE = "size";
   const std::string CLASS = "CLASS";
   // image / pointcloud attribute keys
   const std::string HEIGHT = "height";
@@ -160,6 +166,7 @@ public:
   // datatype group names in hdf5
   inline static const std::string HDF5_GROUP_IMAGE = "images";
   inline static const std::string HDF5_GROUP_POINTCLOUD = "pointclouds";
+  inline static const std::string HDF5_GROUP_TF = "tf";
 };
 
 } /* namespace seerep_hdf5 */
