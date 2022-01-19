@@ -45,6 +45,11 @@ void DumpSensorMsgs::dump(const geometry_msgs::PoseStamped::ConstPtr& msg) const
   ROS_INFO_STREAM("Datatype not implemented.");
 }
 
+void DumpSensorMsgs::dump(const geometry_msgs::TransformStamped::ConstPtr& msg) const
+{
+  m_hdf5_io->writeTransformStamped(seerep_ros_conversions::toProto(*msg));
+}
+
 std::optional<ros::Subscriber> DumpSensorMsgs::getSubscriber(const std::string& message_type, const std::string& topic)
 {
   switch (type(message_type))
@@ -63,6 +68,8 @@ std::optional<ros::Subscriber> DumpSensorMsgs::getSubscriber(const std::string& 
       return nh.subscribe<geometry_msgs::Pose>(topic, 0, &DumpSensorMsgs::dump, this);
     case geometry_msgs_PoseStamped:
       return nh.subscribe<geometry_msgs::PoseStamped>(topic, 0, &DumpSensorMsgs::dump, this);
+    case tf_tfMessage:
+      return nh.subscribe<geometry_msgs::TransformStamped>(topic, 0, &DumpSensorMsgs::dump, this);
     default:
       ROS_ERROR_STREAM("Type \"" << message_type << "\" not supported");
       return std::nullopt;

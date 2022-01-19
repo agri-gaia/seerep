@@ -45,6 +45,8 @@ public:
 
   void dump(const geometry_msgs::PoseStamped::ConstPtr& msg) const;
 
+  void dump(const geometry_msgs::TransformStamped::ConstPtr& msg) const;
+
 private:
   std::shared_ptr<seerep_hdf5::SeerepHDF5IO> m_hdf5_io;
   ros::NodeHandle nh;
