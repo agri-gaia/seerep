@@ -961,9 +961,9 @@ void SeerepHDF5IO::writeTransformStamped(const seerep::TransformStamped& tf)
     group.getAttribute(SIZE).read(size);
 
     // Resize the dataset to a larger size
-    data_set_time_ptr->resize({ size, 2 });
-    data_set_trans_ptr->resize({ size, 3 });
-    data_set_rot_ptr->resize({ size, 4 });
+    data_set_time_ptr->resize({ size + 1, 2 });
+    data_set_trans_ptr->resize({ size + 1, 3 });
+    data_set_rot_ptr->resize({ size + 1, 4 });
   }
 
   // write time
@@ -974,17 +974,17 @@ void SeerepHDF5IO::writeTransformStamped(const seerep::TransformStamped& tf)
 
   // write translation
   std::vector<double> trans;
-  time.push_back(tf.transform().translation().x());
-  time.push_back(tf.transform().translation().y());
-  time.push_back(tf.transform().translation().z());
+  trans.push_back(tf.transform().translation().x());
+  trans.push_back(tf.transform().translation().y());
+  trans.push_back(tf.transform().translation().z());
   data_set_trans_ptr->select({ size, 0 }, { 1, 3 }).write(trans);
 
   // write rotation
   std::vector<double> rot;
-  time.push_back(tf.transform().rotation().x());
-  time.push_back(tf.transform().rotation().y());
-  time.push_back(tf.transform().rotation().z());
-  time.push_back(tf.transform().rotation().w());
+  rot.push_back(tf.transform().rotation().x());
+  rot.push_back(tf.transform().rotation().y());
+  rot.push_back(tf.transform().rotation().z());
+  rot.push_back(tf.transform().rotation().w());
   data_set_rot_ptr->select({ size, 0 }, { 1, 4 }).write(rot);
 
   // write the size as group attribute
@@ -993,6 +993,8 @@ void SeerepHDF5IO::writeTransformStamped(const seerep::TransformStamped& tf)
     group.createAttribute(SIZE, ++size);
   else
     group.getAttribute(SIZE).write(++size);
+
+  m_file.flush();
 }
 
 // std::optional<seerep::TransformStamped> SeerepHDF5IO::readTransformStamped(const std::string& id);

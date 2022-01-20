@@ -18,6 +18,7 @@
 // ros
 #include <ros/ros.h>
 #include <ros/master.h>
+#include <tf2_msgs/TFMessage.h>
 
 // pkg
 #include "types.h"
@@ -45,7 +46,7 @@ public:
 
   void dump(const geometry_msgs::PoseStamped::ConstPtr& msg) const;
 
-  void dump(const geometry_msgs::TransformStamped::ConstPtr& msg) const;
+  void dump(const tf2_msgs::TFMessage::ConstPtr& msg) const;
 
 private:
   std::shared_ptr<seerep_hdf5::SeerepHDF5IO> m_hdf5_io;

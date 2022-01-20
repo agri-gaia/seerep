@@ -45,9 +45,12 @@ void DumpSensorMsgs::dump(const geometry_msgs::PoseStamped::ConstPtr& msg) const
   ROS_INFO_STREAM("Datatype not implemented.");
 }
 
-void DumpSensorMsgs::dump(const geometry_msgs::TransformStamped::ConstPtr& msg) const
+void DumpSensorMsgs::dump(const tf2_msgs::TFMessage::ConstPtr& msg) const
 {
-  m_hdf5_io->writeTransformStamped(seerep_ros_conversions::toProto(*msg));
+  for (geometry_msgs::TransformStamped transform : msg->transforms)
+  {
+    m_hdf5_io->writeTransformStamped(seerep_ros_conversions::toProto(transform));
+  }
 }
 
 std::optional<ros::Subscriber> DumpSensorMsgs::getSubscriber(const std::string& message_type, const std::string& topic)
@@ -68,8 +71,8 @@ std::optional<ros::Subscriber> DumpSensorMsgs::getSubscriber(const std::string& 
       return nh.subscribe<geometry_msgs::Pose>(topic, 0, &DumpSensorMsgs::dump, this);
     case geometry_msgs_PoseStamped:
       return nh.subscribe<geometry_msgs::PoseStamped>(topic, 0, &DumpSensorMsgs::dump, this);
-    case tf_tfMessage:
-      return nh.subscribe<geometry_msgs::TransformStamped>(topic, 0, &DumpSensorMsgs::dump, this);
+    case tf2_msgs_TFMessage:
+      return nh.subscribe<tf2_msgs::TFMessage>(topic, 0, &DumpSensorMsgs::dump, this);
     default:
       ROS_ERROR_STREAM("Type \"" << message_type << "\" not supported");
       return std::nullopt;
@@ -112,8 +115,9 @@ int main(int argc, char** argv)
   }
   else
   {
-    ROS_WARN_STREAM("Use the \"hdf5FolderPath\" parameter to specify the HDF5 file! Generating a a new one.");
     projectUuid = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+    ROS_WARN_STREAM("Use the \"hdf5FolderPath\" parameter to specify the HDF5 file! Generating a a new one. (" +
+                    projectUuid + ".h5)");
   }
 
   std::string hdf5FilePath = hdf5FolderPath + "/" + projectUuid + ".h5";
