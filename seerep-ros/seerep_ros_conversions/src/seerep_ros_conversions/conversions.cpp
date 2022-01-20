@@ -260,6 +260,7 @@ seerep::TransformStamped toProto(const geometry_msgs::TransformStamped& transfor
 {
   seerep::TransformStamped ret;
   *ret.mutable_header() = toProto(transform.header);
+  *ret.mutable_child_frame_id() = transform.child_frame_id;
   *ret.mutable_transform() = toProto(transform.transform);
   return ret;
 }
@@ -268,6 +269,7 @@ geometry_msgs::TransformStamped toROS(const seerep::TransformStamped& transform)
 {
   geometry_msgs::TransformStamped ret;
   ret.header = toROS(transform.header());
+  ret.child_frame_id = transform.child_frame_id();
   ret.transform = toROS(transform.transform());
   return ret;
 }
