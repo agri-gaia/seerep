@@ -256,11 +256,13 @@ geometry_msgs::Transform toROS(const seerep::Transform& transform)
 /*
  * TransformStamped
  */
-seerep::TransformStamped toProto(const geometry_msgs::TransformStamped& transform)
+seerep::TransformStamped toProto(const geometry_msgs::TransformStamped& transform, std::string projectuuid)
 {
   seerep::TransformStamped ret;
   *ret.mutable_header() = toProto(transform.header);
+  *ret.mutable_header()->mutable_uuid_project() = projectuuid;
   *ret.mutable_child_frame_id() = transform.child_frame_id;
+  *ret.mutable_header()->mutable_uuid_project() = projectuuid;
   *ret.mutable_transform() = toProto(transform.transform);
   return ret;
 }

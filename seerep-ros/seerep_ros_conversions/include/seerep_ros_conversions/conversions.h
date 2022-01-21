@@ -203,9 +203,10 @@ geometry_msgs::Transform toROS(const seerep::Transform& vector);
  * @brief Converts a ROS geometry_msgs::TransformStamped message to the corresponding
  * Protobuf TransformStamped message
  * @param pose geometry_msgs::TransformStamped
+ * @param projectuuid std::string
  * @return Protobuf TransformStamped message
  */
-seerep::TransformStamped toProto(const geometry_msgs::TransformStamped& transform);
+seerep::TransformStamped toProto(const geometry_msgs::TransformStamped& transform, std::string projectuuid = "");
 
 /**
  * @brief Converts a Protobuf TransformStamped message to the corresponding

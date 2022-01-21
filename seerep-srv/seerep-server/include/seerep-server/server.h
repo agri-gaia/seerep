@@ -45,6 +45,10 @@ public:
 
   grpc::Status TransferPoseStamped(grpc::ServerContext* context, const seerep::PoseStamped* pose,
                                    seerep::ServerResponse* response);
+
+  grpc::Status TransferTransformStamped(grpc::ServerContext* context, const seerep::TransformStamped* transform,
+                                        seerep::ServerResponse* response);
+
   grpc::Status CreateProject(grpc::ServerContext* context, const seerep::ProjectCreation* request,
                              seerep::ProjectCreated* response);
   grpc::Status GetProjects(grpc::ServerContext* context, const google::protobuf::Empty* request,

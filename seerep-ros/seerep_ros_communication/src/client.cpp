@@ -114,6 +114,25 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const geometry_msgs::PoseStamped:
   }
 }
 
+void seerep_grpc_ros::TransferSensorMsgs::send(const tf2_msgs::TFMessage::ConstPtr& msg) const
+{
+  grpc::ClientContext context;
+  seerep::ServerResponse response;
+  for (auto tf : msg->transforms)
+  {
+    grpc::Status status =
+        stub_->TransferTransformStamped(&context, seerep_ros_conversions::toProto(tf, projectuuid), &response);
+    if (!status.ok())
+    {
+      ROS_ERROR_STREAM("gRPC status error code: " << status.error_code() << " " << status.error_message());
+    }
+    else
+    {
+      ROS_INFO_STREAM("Response:" << response.message());
+    }
+  }
+}
+
 std::optional<ros::Subscriber> TransferSensorMsgs::getSubscriber(const std::string& message_type,
                                                                  const std::string& topic)
 {
@@ -133,11 +152,35 @@ std::optional<ros::Subscriber> TransferSensorMsgs::getSubscriber(const std::stri
       return nh.subscribe<geometry_msgs::Pose>(topic, 0, &TransferSensorMsgs::send, this);
     case seerep_grpc_ros::geometry_msgs_PoseStamped:
       return nh.subscribe<geometry_msgs::PoseStamped>(topic, 0, &TransferSensorMsgs::send, this);
+    case tf2_msgs_TFMessage:
+      return nh.subscribe<tf2_msgs::TFMessage>(topic, 0, &TransferSensorMsgs::send, this);
     default:
       ROS_ERROR_STREAM("Type \"" << message_type << "\" not supported");
       return std::nullopt;
   }
 }
+
+std::string TransferSensorMsgs::createProject(std::string projectname) const
+{
+  grpc::ClientContext context;
+  seerep::ProjectCreated response;
+
+  seerep::ProjectCreation projectcreation;
+  *projectcreation.mutable_name() = projectname;
+
+  grpc::Status status = stub_->CreateProject(&context, projectcreation, &response);
+  if (!status.ok())
+  {
+    ROS_ERROR_STREAM("gRPC status error code: " << status.error_code() << " " << status.error_message());
+    return "";
+  }
+  else
+  {
+    ROS_INFO_STREAM("Response:" << response.uuid());
+    return response.uuid();
+  }
+}
+
 } /* namespace seerep_grpc_ros */
 
 int main(int argc, char** argv)
@@ -154,6 +197,31 @@ int main(int argc, char** argv)
 
   seerep_grpc_ros::TransferSensorMsgs transfer_sensor_msgs(
       grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()));
+
+  if (private_nh.getParam("projectUuid", transfer_sensor_msgs.projectuuid))
+  {
+    try
+    {
+      boost::uuids::string_generator gen;
+      // if this throws no exception, the UUID is valid
+      gen(transfer_sensor_msgs.projectuuid);
+    }
+    catch (std::runtime_error e)
+    {
+      // mainly catching "invalid uuid string"
+      std::cout << e.what() << std::endl;
+
+      transfer_sensor_msgs.projectuuid = transfer_sensor_msgs.createProject("");
+      ROS_WARN_STREAM("The provided UUID is invalid! Generating a a new one. (" + transfer_sensor_msgs.projectuuid +
+                      ".h5)");
+    }
+  }
+  else
+  {
+    transfer_sensor_msgs.projectuuid = transfer_sensor_msgs.createProject("");
+    ROS_WARN_STREAM("Use the \"hdf5FolderPath\" parameter to specify the HDF5 file! Generating a a new one. (" +
+                    transfer_sensor_msgs.projectuuid + ".h5)");
+  }
 
   ros::master::V_TopicInfo topic_info;
   ros::master::getTopics(topic_info);

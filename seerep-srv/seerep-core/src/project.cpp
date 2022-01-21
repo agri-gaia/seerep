@@ -8,6 +8,7 @@ Project::Project(boost::uuids::uuid& uuid, std::string path) : m_id(uuid), m_pat
 
   createHdf5Io(m_id, m_path);
   m_pointcloudOverview = seerep_core::PointcloudOverview(m_hdf5_io);
+  m_tfOverview = seerep_core::TFOverview(m_hdf5_io);
 
   m_projectname = m_hdf5_io->readProjectname();
 
@@ -47,6 +48,7 @@ void Project::recreateDatatypes()
 {
   m_pointcloudOverview = seerep_core::PointcloudOverview(m_hdf5_io);
   m_imageOverview = seerep_core::ImageOverview(m_hdf5_io);
+  m_tfOverview = seerep_core::TFOverview(m_hdf5_io);
 
   std::vector<std::string> datatypeNames = m_hdf5_io->getGroupDatasets("");
   for (auto datatypeName : datatypeNames)
@@ -68,6 +70,11 @@ void Project::addPointCloud(const seerep::PointCloud2& pointcloud2)
 boost::uuids::uuid Project::addImage(const seerep::Image& image)
 {
   return m_imageOverview.addDataset(image);
+}
+
+void Project::addTF(const seerep::TransformStamped& tf)
+{
+  m_tfOverview.addDataset(tf);
 }
 
 } /* namespace seerep_core */
