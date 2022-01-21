@@ -109,8 +109,8 @@ int main(int argc, char** argv)
     {
       // mainly catching "invalid uuid string"
       std::cout << e.what() << std::endl;
-      ROS_WARN_STREAM("The provided UUID is invalid! Generating a a new one.");
       projectUuid = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+      ROS_WARN_STREAM("The provided UUID is invalid! Generating a a new one. (" + projectUuid + ".h5)");
     }
   }
   else

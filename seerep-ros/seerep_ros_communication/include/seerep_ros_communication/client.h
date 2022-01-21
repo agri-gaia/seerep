@@ -17,9 +17,17 @@
 // ros
 #include <ros/ros.h>
 #include <ros/master.h>
+#include <tf2_msgs/TFMessage.h>
 
 // pkg
 #include "types.h"
+
+// uuid
+#include <boost/uuid/uuid.hpp>             // uuid class
+#include <boost/uuid/uuid_generators.hpp>  // generators
+#include <boost/uuid/uuid_io.hpp>          // streaming operators etc.
+#include <boost/lexical_cast.hpp>
+#include <boost/functional/hash.hpp>
 
 namespace seerep_grpc_ros
 {
@@ -43,6 +51,12 @@ public:
   void send(const geometry_msgs::Pose::ConstPtr& msg) const;
 
   void send(const geometry_msgs::PoseStamped::ConstPtr& msg) const;
+
+  void send(const tf2_msgs::TFMessage::ConstPtr& msg) const;
+
+  std::string createProject(std::string projectname) const;
+
+  std::string projectuuid;
 
 private:
   StubPtr stub_;

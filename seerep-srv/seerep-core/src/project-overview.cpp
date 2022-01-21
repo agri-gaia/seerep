@@ -83,9 +83,9 @@ void ProjectOverview::getProjects(seerep::ProjectUUIDs* projectUUIDs)
   }
 }
 
-void ProjectOverview::addPointCloud(const seerep::PointCloud2& pointcloud2, boost::uuids::uuid uuid)
+void ProjectOverview::addPointCloud(const seerep::PointCloud2& pointcloud2, boost::uuids::uuid projectuuid)
 {
-  m_projects.at(uuid)->addPointCloud(pointcloud2);
+  m_projects.at(projectuuid)->addPointCloud(pointcloud2);
 }
 
 // void ProjectOverview::addPointCloudLabeled(const seerep::PointCloud2Labeled& pointcloud2labeled, boost::uuids::uuid uuid)
@@ -93,9 +93,14 @@ void ProjectOverview::addPointCloud(const seerep::PointCloud2& pointcloud2, boos
 //   m_projects.at(uuid)->addPointCloudLabeled(pointcloud2labeled);
 // }
 
-boost::uuids::uuid ProjectOverview::addImage(const seerep::Image& image, boost::uuids::uuid uuid)
+boost::uuids::uuid ProjectOverview::addImage(const seerep::Image& image, boost::uuids::uuid projectuuid)
 {
-  return m_projects.at(uuid)->addImage(image);
+  return m_projects.at(projectuuid)->addImage(image);
+}
+
+void ProjectOverview::addTF(const seerep::TransformStamped& tf, boost::uuids::uuid projectuuid)
+{
+  m_projects.at(projectuuid)->addTF(tf);
 }
 
 } /* namespace seerep_core */

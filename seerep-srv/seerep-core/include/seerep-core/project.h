@@ -22,6 +22,8 @@
 #include "pointcloud-overview.h"
 #include "image.h"
 #include "image-overview.h"
+#include "tf.h"
+#include "tf-overview.h"
 
 namespace seerep_core
 {
@@ -37,6 +39,7 @@ public:
   void addPointCloud(const seerep::PointCloud2& pointcloud2);
   // void addPointCloudLabeled(const seerep::PointCloud2Labeled& pointcloud2Labeled);
   boost::uuids::uuid addImage(const seerep::Image& image);
+  void addTF(const seerep::TransformStamped& tf);
 
 private:
   void createHdf5Io(boost::uuids::uuid& uuid, std::string path);
@@ -49,6 +52,7 @@ private:
   std::string m_coordinatesystem;
   std::shared_ptr<seerep_hdf5::SeerepHDF5IO> m_hdf5_io;
 
+  seerep_core::TFOverview m_tfOverview;
   seerep_core::PointcloudOverview m_pointcloudOverview;
   seerep_core::ImageOverview m_imageOverview;
 };

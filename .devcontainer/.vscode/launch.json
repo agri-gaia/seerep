@@ -16,6 +16,13 @@
             "console": "integratedTerminal"
         },
         {
+            "name": "ROS: Launch client",
+            "type": "ros",
+            "request": "launch",
+            "target": "${workspaceFolder}/src/seerep-ros/seerep_ros_communication/launch/client.launch",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",
@@ -23,7 +30,7 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "cpp - Build and debug seerep server",
+            "name": "seerep server",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/devel/bin/seerep-server_server",

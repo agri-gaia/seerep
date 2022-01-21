@@ -17,6 +17,7 @@
 #include <seerep-msgs/point_cloud_2.pb.h>
 #include <seerep-msgs/project_uuids.pb.h>
 #include <seerep-msgs/query.pb.h>
+#include <seerep-msgs/transform_stamped.pb.h>
 // seerep-hdf5
 #include <seerep-hdf5/io.h>
 // seerep-conversion
@@ -34,11 +35,13 @@ public:
   ~ProjectOverview();
   std::vector<std::vector<std::optional<seerep::PointCloud2>>> getPointCloud(const seerep::Query& query);
 
-  void addPointCloud(const seerep::PointCloud2& pointcloud2, boost::uuids::uuid uuid);
+  void addPointCloud(const seerep::PointCloud2& pointcloud2, boost::uuids::uuid projectuuid);
   // void addPointCloudLabeled(const seerep::PointCloud2Labeled& pointcloud2labeled, boost::uuids::uuid uuid);
-  boost::uuids::uuid addImage(const seerep::Image& image, boost::uuids::uuid uuid);
+  boost::uuids::uuid addImage(const seerep::Image& image, boost::uuids::uuid projectuuid);
 
   std::vector<std::vector<std::optional<seerep::Image>>> getImage(const seerep::Query& query);
+
+  void addTF(const seerep::TransformStamped& tf, boost::uuids::uuid projectuuid);
 
   std::string newProject(std::string projectname);
 

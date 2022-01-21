@@ -7,6 +7,7 @@
 // seerep-msgs
 #include <seerep-msgs/boundingbox.pb.h>
 #include <seerep-msgs/image.pb.h>
+#include <seerep-msgs/query.pb.h>
 // #include <seerep-msgs/image_labeled.pb.h>
 // seerep-hdf5
 #include <seerep-hdf5/io.h>
