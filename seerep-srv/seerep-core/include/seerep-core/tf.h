@@ -21,11 +21,15 @@ public:
   ~TF();
 
   std::optional<std::vector<seerep::TransformStamped>> getData();
+  std::string getParentFrame();
+  std::string getChildFrame();
   std::string getID();
 
 private:
   std::shared_ptr<seerep_hdf5::SeerepHDF5IO> m_hdf5_io;
   const std::string m_id;
+  std::string m_parentframe;
+  std::string m_childframe;
 };
 
 } /* namespace seerep_core */
