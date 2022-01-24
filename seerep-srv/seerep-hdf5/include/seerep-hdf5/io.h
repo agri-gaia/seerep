@@ -98,7 +98,8 @@ public:
 
   void writeTransformStamped(const seerep::TransformStamped& tf);
 
-  // std::optional<seerep::TransformStamped> readTransformStamped(const std::string& id);
+  std::optional<std::vector<seerep::TransformStamped>> readTransformStamped(const std::string& id);
+  std::optional<std::vector<std::string>> readTransformStampedFrames(const std::string& id);
 
 private:
   void writeHeaderAttributes(HighFive::DataSet& data_set, const seerep::Header& header);
