@@ -3,6 +3,7 @@
 
 #include <functional>
 #include <optional>
+#include <limits>
 
 // seerep-msgs
 #include <seerep-msgs/transform_stamped.pb.h>
@@ -15,26 +16,32 @@
 // seerep-core
 #include "tf.h"
 
+// ros tf2
+#include <tf2/buffer_core.h>
+#include <ros/time.h>
+
 namespace seerep_core
 {
 class TFOverview
 {
 public:
-  TFOverview();
   TFOverview(std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io);
   ~TFOverview();
   std::vector<std::optional<seerep::TransformStamped>> getData(int64_t timesecs, int64_t timenanos,
-                                                               std::string parentFrame, std::string childFrame);
+                                                               std::string targetFrame, std::string sourceFrame);
 
   void addDataset(const seerep::TransformStamped& tf);
 
 private:
   void recreateDatasets();
   void addToIndices(std::shared_ptr<seerep_core::TF> tf);
+  void addToTfBuffer(seerep::TransformStamped transform);
 
   std::shared_ptr<seerep_hdf5::SeerepHDF5IO> m_hdf5_io;
 
   std::unordered_map<std::string, std::shared_ptr<seerep_core::TF>> m_datasets;
+
+  tf2::BufferCore tfbuffer;
 };
 
 } /* namespace seerep_core */

@@ -5,7 +5,7 @@ namespace seerep_core
 // constructor when data received and stored to hdf5
 TF::TF(std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io, const seerep::TransformStamped& tf)
   : m_hdf5_io(hdf5_io)
-  , m_id(tf.header().frame_id() + "_" + tf.child_frame_id())
+  , m_id(TF::idFromFrameNames(tf.header().frame_id(), tf.child_frame_id()))
   , m_parentframe(tf.header().frame_id())
   , m_childframe(tf.child_frame_id())
 {
@@ -28,6 +28,11 @@ TF::~TF()
 {
 }
 
+void TF::addData(const seerep::TransformStamped& tf)
+{
+  m_hdf5_io->writeTransformStamped(tf);
+}
+
 std::optional<std::vector<seerep::TransformStamped>> TF::getData()
 {
   std::cout << "loading tf from tfs/" << m_id << std::endl;
@@ -48,6 +53,11 @@ std::string TF::getChildFrame()
 std::string TF::getID()
 {
   return m_id;
+}
+
+std::string TF::idFromFrameNames(const std::string& parentframe, const std::string& childframe)
+{
+  return parentframe + "_" + childframe;
 }
 
 } /* namespace seerep_core */

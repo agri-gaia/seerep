@@ -20,10 +20,13 @@ public:
   TF(std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io, const std::string& id);
   ~TF();
 
+  void addData(const seerep::TransformStamped& tf);
   std::optional<std::vector<seerep::TransformStamped>> getData();
   std::string getParentFrame();
   std::string getChildFrame();
   std::string getID();
+
+  static std::string idFromFrameNames(const std::string& parentframe, const std::string& childframe);
 
 private:
   std::shared_ptr<seerep_hdf5::SeerepHDF5IO> m_hdf5_io;
