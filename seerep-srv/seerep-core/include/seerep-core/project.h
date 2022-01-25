@@ -52,9 +52,9 @@ private:
   std::string m_coordinatesystem;
   std::shared_ptr<seerep_hdf5::SeerepHDF5IO> m_hdf5_io;
 
-  seerep_core::TFOverview m_tfOverview;
-  seerep_core::PointcloudOverview m_pointcloudOverview;
-  seerep_core::ImageOverview m_imageOverview;
+  std::unique_ptr<seerep_core::TFOverview> m_tfOverview;
+  std::unique_ptr<seerep_core::PointcloudOverview> m_pointcloudOverview;
+  std::unique_ptr<seerep_core::ImageOverview> m_imageOverview;
 };
 
 } /* namespace seerep_core */

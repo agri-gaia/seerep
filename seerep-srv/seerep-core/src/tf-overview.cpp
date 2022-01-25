@@ -2,10 +2,9 @@
 
 namespace seerep_core
 {
-TFOverview::TFOverview()
-{
-}
-TFOverview::TFOverview(std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io) : m_hdf5_io(hdf5_io)
+// construct tfbuffer with INT_MAX so that it holds ALL tfs added
+TFOverview::TFOverview(std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io)
+  : m_hdf5_io(hdf5_io), tfbuffer(ros::DURATION_MAX)
 {
   recreateDatasets();
 }
@@ -33,23 +32,64 @@ void TFOverview::recreateDatasets()
   }
 }
 
-std::vector<std::optional<seerep::TransformStamped>>
-TFOverview::getData(int64_t timesecs, int64_t timenanos, std::string parentFrame, std::string childFrame)
+std::optional<seerep::TransformStamped> TFOverview::getData(int64_t timesecs, int64_t timenanos,
+                                                            std::string targetFrame, std::string sourceFrame)
 {
-  std::vector<std::optional<seerep::TransformStamped>> result;
+  // if (!ros::Time::isValid())
+  // {
+  //   ros::Time::init();
+  // }
 
-  return result;
+  try
+  {
+    return seerep_ros_conversions::toProto(
+        tfbuffer.lookupTransform(targetFrame, sourceFrame, ros::Time(timesecs, timenanos)));
+  }
+  catch (const std::exception& e)
+  {
+    std::cout << e.what() << std::endl;
+    return std::nullopt;
+  }
 }
 
 void TFOverview::addDataset(const seerep::TransformStamped& transform)
 {
-  auto tf = std::make_shared<seerep_core::TF>(m_hdf5_io, transform);
-  addToIndices(tf);
+  addToTfBuffer(transform);
+
+  auto tfInMap = m_datasets.find(TF::idFromFrameNames(transform.header().frame_id(), transform.child_frame_id()));
+  if (tfInMap == m_datasets.end())
+  {
+    // create new tf object and add to map if not existing yet
+    auto tf = std::make_shared<seerep_core::TF>(m_hdf5_io, transform);
+    addToIndices(tf);
+  }
+  else
+  {
+    // add transform to tf object
+    tfInMap->second->addData(transform);
+  }
 }
 
 void TFOverview::addToIndices(std::shared_ptr<seerep_core::TF> tf)
 {
   m_datasets.insert(std::make_pair(tf->getID(), tf));
 }
+
+void TFOverview::addToTfBuffer(seerep::TransformStamped transform)
+{
+  tfbuffer.setTransform(seerep_ros_conversions::toROS(transform), "fromHDF5");
+}
+
+// for (auto tf : m_datasets)
+// {
+//   std::optional<std::vector<seerep::TransformStamped>> transforms = tf.second->getData();
+
+//   for (auto transform : transforms.value())
+//   {
+//     tfbuffer.setTransform(seerep_ros_conversions::toROS(transform), "fromHDF5");
+//   }
+
+//   std::cout << "loaded from hdf5: " << std::endl tfbuffer.allFramesAsString() << std::endl;
+// }
 
 } /* namespace seerep_core */
