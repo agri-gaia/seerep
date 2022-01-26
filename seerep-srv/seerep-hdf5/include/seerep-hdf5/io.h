@@ -44,6 +44,8 @@ public:
 
   // void writePointCloud2Labeled(const std::string& id, const seerep::PointCloud2Labeled& pointcloud2Labeled);
 
+  std::optional<std::string> readFrameId(const std::string& datatypeGroup, const std::string& uuid);
+
   void
   writeBoundingBoxLabeled(const std::string& datatypeGroup, const std::string& uuid,
                           const google::protobuf::RepeatedPtrField<::seerep::BoundingBoxLabeled>& boundingboxLabeled);

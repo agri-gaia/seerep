@@ -49,10 +49,10 @@ private:
 
   std::string m_path;
   std::string m_projectname;
-  std::string m_coordinatesystem;
+  std::string m_frameId;
   std::shared_ptr<seerep_hdf5::SeerepHDF5IO> m_hdf5_io;
 
-  std::unique_ptr<seerep_core::TFOverview> m_tfOverview;
+  std::shared_ptr<seerep_core::TFOverview> m_tfOverview;
   std::unique_ptr<seerep_core::PointcloudOverview> m_pointcloudOverview;
   std::unique_ptr<seerep_core::ImageOverview> m_imageOverview;
 };

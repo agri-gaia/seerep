@@ -15,6 +15,7 @@
 
 // seerep-core
 #include "tf.h"
+#include "aabb-hierarchy.h"
 
 // ros tf2
 #include <tf2/buffer_core.h>
@@ -31,6 +32,8 @@ public:
                                                   std::string sourceFrame);
 
   void addDataset(const seerep::TransformStamped& tf);
+
+  AabbHierarchy::AABB transformAABB(AabbHierarchy::AABB aabb, std::string sourceFrame, std::string targetFrame);
 
 private:
   void recreateDatasets();
