@@ -15,7 +15,7 @@ TFOverview::~TFOverview()
 void TFOverview::recreateDatasets()
 {
   std::vector<std::string> tfs = m_hdf5_io->getGroupDatasets("tf");
-  for (auto name : tfs)
+  for (auto const& name : tfs)
   {
     std::cout << "found " << name << " in HDF5 file." << std::endl;
 
@@ -24,6 +24,14 @@ void TFOverview::recreateDatasets()
       auto tf = std::make_shared<TF>(m_hdf5_io, name);
 
       addToIndices(tf);
+
+      std::optional<std::vector<seerep::TransformStamped>> transforms = tf->getData();
+      if (transforms)
+      {
+        for (auto& transform : transforms.value())
+
+          addToTfBuffer(transform);
+      }
     }
     catch (const std::runtime_error& e)
     {
