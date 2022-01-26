@@ -2,13 +2,10 @@
 
 namespace seerep_core
 {
-ImageOverview::ImageOverview()
+ImageOverview::ImageOverview(std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io,
+                             std::shared_ptr<seerep_core::TFOverview> tfOverview, std::string frameId)
+  : m_hdf5_io(hdf5_io), m_tfOverview(tfOverview), m_frameId(frameId), m_data_count(0)
 {
-}
-ImageOverview::ImageOverview(std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io) : m_hdf5_io(hdf5_io), m_data_count(0)
-{
-  m_coordinatesystem = "test";
-
   recreateDatasets();
 }
 ImageOverview::~ImageOverview()
@@ -29,7 +26,7 @@ void ImageOverview::recreateDatasets()
 
       uint64_t id = m_data_count++;
 
-      auto img = std::make_shared<Image>(m_coordinatesystem, m_hdf5_io, id, uuid);
+      auto img = std::make_shared<Image>(m_hdf5_io, id, uuid);
 
       addImageToIndices(img);
     }
@@ -144,7 +141,7 @@ boost::uuids::uuid ImageOverview::addDataset(const seerep::Image& image)
     uuid = gen(image.header().uuid_msgs());
   }
   uint64_t id = m_data_count++;
-  auto img = std::make_shared<Image>(m_coordinatesystem, m_hdf5_io, image, id, uuid);
+  auto img = std::make_shared<Image>(m_hdf5_io, image, id, uuid);
   addImageToIndices(img);
 
   return uuid;
@@ -153,7 +150,7 @@ boost::uuids::uuid ImageOverview::addDataset(const seerep::Image& image)
 void ImageOverview::addImageToIndices(std::shared_ptr<seerep_core::Image> img)
 {
   m_datasets.insert(std::make_pair(img->getID(), img));
-  m_rt.insert(std::make_pair(img->getAABB(), img->getID()));
+  m_rt.insert(std::make_pair(m_tfOverview->transformAABB(img->getAABB(), img->getFrameId(), m_frameId), img->getID()));
   m_timetree.insert(std::make_pair(img->getAABBTime(), img->getID()));
 
   std::unordered_set<std::string> labels = img->getLabels();

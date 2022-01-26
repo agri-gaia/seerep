@@ -78,6 +78,10 @@ void TFOverview::addDataset(const seerep::TransformStamped& transform)
   }
 }
 
+AabbHierarchy::AABB TFOverview::transformAABB(AabbHierarchy::AABB aabb, std::string sourceFrame, std::string targetFrame)
+{
+}
+
 void TFOverview::addToIndices(std::shared_ptr<seerep_core::TF> tf)
 {
   m_datasets.insert(std::make_pair(tf->getID(), tf));

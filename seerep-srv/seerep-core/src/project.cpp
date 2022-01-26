@@ -4,7 +4,7 @@ namespace seerep_core
 {
 Project::Project(boost::uuids::uuid& uuid, std::string path) : m_id(uuid), m_path(path)
 {
-  m_coordinatesystem = "test";
+  m_frameId = "test";
 
   createHdf5Io(m_id, m_path);
 
@@ -44,9 +44,9 @@ void Project::createHdf5Io(boost::uuids::uuid& uuid, std::string path)
 
 void Project::recreateDatatypes()
 {
+  m_tfOverview = std::make_shared<seerep_core::TFOverview>(m_hdf5_io);
+  m_imageOverview = std::make_unique<seerep_core::ImageOverview>(m_hdf5_io, m_tfOverview, m_frameId);
   m_pointcloudOverview = std::make_unique<seerep_core::PointcloudOverview>(m_hdf5_io);
-  m_imageOverview = std::make_unique<seerep_core::ImageOverview>(m_hdf5_io);
-  m_tfOverview = std::make_unique<seerep_core::TFOverview>(m_hdf5_io);
 
   std::vector<std::string> datatypeNames = m_hdf5_io->getGroupDatasets("");
   for (auto datatypeName : datatypeNames)

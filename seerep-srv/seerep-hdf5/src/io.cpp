@@ -300,6 +300,31 @@ SeerepHDF5IO::readPointFieldAttributes(HighFive::DataSet& data_set)
 //   writeBoundingBoxLabeled(HDF5_GROUP_POINTCLOUD, id, pointcloud2Labeled.labels());
 // }
 
+std::optional<std::string> SeerepHDF5IO::readFrameId(const std::string& datatypeGroup, const std::string& uuid)
+{
+  std::string id = datatypeGroup + "/" + uuid;
+  std::string hdf5DatasetRawDataPath = id + "/" + RAWDATA;
+  if (!m_file.exist(hdf5DatasetRawDataPath))
+  {
+    std::cout << "id " << hdf5DatasetRawDataPath << " does not exist in file " << m_file.getName() << std::endl;
+    throw std::invalid_argument("id " + hdf5DatasetRawDataPath + " does not exist in file " + m_file.getName());
+  }
+  std::cout << "get dataset " << hdf5DatasetRawDataPath << std::endl;
+  std::shared_ptr<HighFive::DataSet> data_set_ptr =
+      std::make_shared<HighFive::DataSet>(m_file.getDataSet(hdf5DatasetRawDataPath));
+
+  if (data_set_ptr->hasAttribute(HEADER_FRAME_ID))
+  {
+    std::string frameId;
+    data_set_ptr->getAttribute(HEADER_FRAME_ID).read(frameId);
+    return frameId;
+  }
+  else
+  {
+    return std::nullopt;
+  }
+}
+
 void SeerepHDF5IO::writeAABB(
     const std::string& datatypeGroup, const std::string& uuid,
     const boost::geometry::model::box<boost::geometry::model::point<float, 3, boost::geometry::cs::cartesian>>& aabb)
