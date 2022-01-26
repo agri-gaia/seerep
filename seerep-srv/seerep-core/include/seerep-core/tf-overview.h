@@ -27,8 +27,8 @@ class TFOverview
 public:
   TFOverview(std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io);
   ~TFOverview();
-  std::vector<std::optional<seerep::TransformStamped>> getData(int64_t timesecs, int64_t timenanos,
-                                                               std::string targetFrame, std::string sourceFrame);
+  std::optional<seerep::TransformStamped> getData(int64_t timesecs, int64_t timenanos, std::string targetFrame,
+                                                  std::string sourceFrame);
 
   void addDataset(const seerep::TransformStamped& tf);
 
