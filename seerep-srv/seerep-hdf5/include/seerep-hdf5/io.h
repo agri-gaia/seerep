@@ -73,11 +73,12 @@ public:
 
   bool hasAABB(const std::string& datatypeGroup, const std::string& uuid);
 
-  int64_t readTimeFromRaw(const std::string& datatypeGroup, const std::string& uuid);
-  int64_t readTime(const std::string& datatypeGroup, const std::string& uuid);
+  void readTimeFromRaw(const std::string& datatypeGroup, const std::string& uuid, int64_t secs, int64_t nanos);
+  void readTime(const std::string& datatypeGroup, const std::string& uuid, int64_t secs, int64_t nanos);
 
-  void writeTimeToRaw(const std::string& datatypeGroup, const std::string& uuid, const int64_t& time);
-  void writeTime(const std::string& datatypeGroup, const std::string& uuid, const int64_t& time);
+  void writeTimeToRaw(const std::string& datatypeGroup, const std::string& uuid, const int64_t& secs,
+                      const int64_t& nanos);
+  void writeTime(const std::string& datatypeGroup, const std::string& uuid, const int64_t& secs, const int64_t& nanos);
 
   bool hasTimeRaw(const std::string& datatypeGroup, const std::string& uuid);
   bool hasTime(const std::string& datatypeGroup, const std::string& uuid);
@@ -97,6 +98,10 @@ public:
   void writeProjectname(const std::string& projectname);
 
   std::string readProjectname();
+
+  void writeProjectFrameId(const std::string& frameId);
+
+  std::string readProjectFrameId();
 
   void writeTransformStamped(const seerep::TransformStamped& tf);
 
@@ -155,6 +160,7 @@ private:
   const std::string AABB_FIELD = "AABB";
 
   const std::string PROJECTNAME = "projectname";
+  const std::string PROJECTFRAMEID = "projectframeid";
 
   // dataset names
   const std::string RAWDATA = "rawdata";

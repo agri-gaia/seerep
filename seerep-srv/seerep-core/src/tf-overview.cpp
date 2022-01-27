@@ -40,8 +40,9 @@ void TFOverview::recreateDatasets()
   }
 }
 
-std::optional<seerep::TransformStamped> TFOverview::getData(int64_t timesecs, int64_t timenanos,
-                                                            std::string targetFrame, std::string sourceFrame)
+std::optional<seerep::TransformStamped> TFOverview::getData(const int64_t& timesecs, const int64_t& timenanos,
+                                                            const std::string& targetFrame,
+                                                            const std::string& sourceFrame)
 {
   // if (!ros::Time::isValid())
   // {
@@ -78,8 +79,32 @@ void TFOverview::addDataset(const seerep::TransformStamped& transform)
   }
 }
 
-AabbHierarchy::AABB TFOverview::transformAABB(AabbHierarchy::AABB aabb, std::string sourceFrame, std::string targetFrame)
+// TODO optimise!
+AabbHierarchy::AABB TFOverview::transformAABB(AabbHierarchy::AABB aabb, const std::string& sourceFrame,
+                                              const std::string& targetFrame, const int64_t& timeSecs,
+                                              const int64_t& timeNanos)
 {
+  auto tf = tfbuffer.lookupTransform(targetFrame, targetFrame, ros::Time(timeSecs, timeNanos));
+  tf2::Transform transform;
+  transform.setOrigin(tf2::Vector3(tf.transform.translation.x, tf.transform.translation.y, tf.transform.translation.z));
+  transform.setRotation(tf2::Quaternion(tf.transform.rotation.x, tf.transform.rotation.y, tf.transform.rotation.z,
+                                        tf.transform.rotation.w));
+
+  tf2::Vector3 vmin(bg::get<bg::min_corner, 0>(aabb), bg::get<bg::min_corner, 1>(aabb),
+                    bg::get<bg::min_corner, 2>(aabb));
+  tf2::Vector3 vmintransformed = transform * vmin;
+  bg::set<bg::min_corner, 0>(aabb, vmintransformed.getX());
+  bg::set<bg::min_corner, 1>(aabb, vmintransformed.getY());
+  bg::set<bg::min_corner, 2>(aabb, vmintransformed.getZ());
+
+  tf2::Vector3 vmax(bg::get<bg::max_corner, 0>(aabb), bg::get<bg::max_corner, 1>(aabb),
+                    bg::get<bg::max_corner, 2>(aabb));
+  tf2::Vector3 vmaxtransformed = transform * vmax;
+  bg::set<bg::max_corner, 0>(aabb, vmaxtransformed.getX());
+  bg::set<bg::max_corner, 1>(aabb, vmaxtransformed.getY());
+  bg::set<bg::max_corner, 2>(aabb, vmaxtransformed.getZ());
+
+  return aabb;
 }
 
 void TFOverview::addToIndices(std::shared_ptr<seerep_core::TF> tf)

@@ -19,6 +19,8 @@
 
 // ros tf2
 #include <tf2/buffer_core.h>
+#include <tf2/LinearMath/Transform.h>
+#include <tf2/transform_datatypes.h>
 #include <ros/time.h>
 
 namespace seerep_core
@@ -28,12 +30,13 @@ class TFOverview
 public:
   TFOverview(std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io);
   ~TFOverview();
-  std::optional<seerep::TransformStamped> getData(int64_t timesecs, int64_t timenanos, std::string targetFrame,
-                                                  std::string sourceFrame);
+  std::optional<seerep::TransformStamped> getData(const int64_t& timesecs, const int64_t& timenanos,
+                                                  const std::string& targetFrame, const std::string& sourceFrame);
 
   void addDataset(const seerep::TransformStamped& tf);
 
-  AabbHierarchy::AABB transformAABB(AabbHierarchy::AABB aabb, std::string sourceFrame, std::string targetFrame);
+  AabbHierarchy::AABB transformAABB(AabbHierarchy::AABB aabb, const std::string& sourceFrame,
+                                    const std::string& targetFrame, const int64_t& timeSecs, const int64_t& timeNanos);
 
 private:
   void recreateDatasets();

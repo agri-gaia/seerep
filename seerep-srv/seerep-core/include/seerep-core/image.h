@@ -37,7 +37,7 @@ public:
   AabbHierarchy::AABB getAABB();
   uint64_t getID();
   boost::uuids::uuid getUUID();
-  int64_t getTime();
+  void getTime(int64_t& timeSecs, int64_t& timeNanos);
   AabbHierarchy::AabbTime getAABBTime();
   std::unordered_set<std::string> getLabels();
   std::string getFrameId();

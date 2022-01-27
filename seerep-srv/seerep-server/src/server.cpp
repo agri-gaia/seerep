@@ -248,7 +248,7 @@ grpc::Status ReceiveSensorMsgs::CreateProject(grpc::ServerContext* context, cons
                                               seerep::ProjectCreated* response)
 {
   std::cout << "create new project... " << std::endl;
-  response->set_uuid(projectOverview.newProject(request->name()));
+  response->set_uuid(projectOverview.newProject(request->name(), request->mapframeid()));
 
   return grpc::Status::OK;
 }

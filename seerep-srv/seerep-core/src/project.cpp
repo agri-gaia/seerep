@@ -4,20 +4,19 @@ namespace seerep_core
 {
 Project::Project(boost::uuids::uuid& uuid, std::string path) : m_id(uuid), m_path(path)
 {
-  m_frameId = "test";
-
   createHdf5Io(m_id, m_path);
 
   m_projectname = m_hdf5_io->readProjectname();
-
+  m_frameId = m_hdf5_io->readProjectFrameId();
   recreateDatatypes();
 }
 
-Project::Project(boost::uuids::uuid& uuid, std::string path, std::string projectname)
-  : m_id(uuid), m_path(path), m_projectname(projectname)
+Project::Project(boost::uuids::uuid& uuid, std::string path, std::string projectname, std::string mapFrameId)
+  : m_id(uuid), m_path(path), m_projectname(projectname), m_frameId(mapFrameId)
 {
   createHdf5Io(uuid, m_path);
   m_hdf5_io->writeProjectname(m_projectname);
+  m_hdf5_io->writeProjectFrameId(m_frameId);
 
   recreateDatatypes();
 }
@@ -28,12 +27,12 @@ Project::~Project()
 
 std::vector<std::optional<seerep::PointCloud2>> Project::getPointCloud(const seerep::Query& query)
 {
-  return m_pointcloudOverview->getData(query);
+  return m_pointcloudOverview->getData(transformQuery(query));
 }
 
 std::vector<std::optional<seerep::Image>> Project::getImage(const seerep::Query& query)
 {
-  return m_imageOverview->getData(query);
+  return m_imageOverview->getData(transformQuery(query));
 }
 
 void Project::createHdf5Io(boost::uuids::uuid& uuid, std::string path)
@@ -73,6 +72,13 @@ boost::uuids::uuid Project::addImage(const seerep::Image& image)
 void Project::addTF(const seerep::TransformStamped& tf)
 {
   m_tfOverview->addDataset(tf);
+}
+
+seerep::Query Project::transformQuery(const seerep::Query& query)
+{
+  seerep::Query queryTransformed(query);
+
+  return queryTransformed;
 }
 
 } /* namespace seerep_core */
