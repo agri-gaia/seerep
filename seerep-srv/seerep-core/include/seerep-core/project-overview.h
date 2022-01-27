@@ -43,7 +43,7 @@ public:
 
   void addTF(const seerep::TransformStamped& tf, boost::uuids::uuid projectuuid);
 
-  std::string newProject(std::string projectname);
+  std::string newProject(std::string projectname, std::string mapFrameId);
 
   void getProjects(seerep::ProjectUUIDs* projectUUIDs);
 

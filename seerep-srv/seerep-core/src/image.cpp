@@ -16,6 +16,7 @@ Image::Image(std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io, const seerep::I
 
   // time
   m_timeSecs = image.header().stamp().seconds();
+  m_timeNanos = image.header().stamp().nanos();
 
   // semantic
   if (!image.labels_general().empty())
@@ -70,9 +71,10 @@ boost::uuids::uuid Image::getUUID()
   return m_uuid;
 }
 
-int64_t Image::getTime()
+void Image::getTime(int64_t& timeSecs, int64_t& timeNanos)
 {
-  return m_timeSecs;
+  timeSecs = m_timeSecs;
+  timeNanos = m_timeNanos;
 }
 
 AabbHierarchy::AabbTime Image::getAABBTime()
@@ -123,17 +125,17 @@ void Image::recreateTime()
 {
   if (m_hdf5_io->hasTime(seerep_hdf5::SeerepHDF5IO::HDF5_GROUP_IMAGE, boost::lexical_cast<std::string>(m_uuid)))
   {
-    m_timeSecs =
-        m_hdf5_io->readTime(seerep_hdf5::SeerepHDF5IO::HDF5_GROUP_IMAGE, boost::lexical_cast<std::string>(m_uuid));
+    m_hdf5_io->readTime(seerep_hdf5::SeerepHDF5IO::HDF5_GROUP_IMAGE, boost::lexical_cast<std::string>(m_uuid),
+                        m_timeSecs, m_timeNanos);
   }
   else
   {
     if (m_hdf5_io->hasTimeRaw(seerep_hdf5::SeerepHDF5IO::HDF5_GROUP_IMAGE, boost::lexical_cast<std::string>(m_uuid)))
     {
-      m_timeSecs = m_hdf5_io->readTimeFromRaw(seerep_hdf5::SeerepHDF5IO::HDF5_GROUP_IMAGE,
-                                              boost::lexical_cast<std::string>(m_uuid));
+      m_hdf5_io->readTimeFromRaw(seerep_hdf5::SeerepHDF5IO::HDF5_GROUP_IMAGE, boost::lexical_cast<std::string>(m_uuid),
+                                 m_timeSecs, m_timeNanos);
       m_hdf5_io->writeTime(seerep_hdf5::SeerepHDF5IO::HDF5_GROUP_IMAGE, boost::lexical_cast<std::string>(m_uuid),
-                           m_timeSecs);
+                           m_timeSecs, m_timeNanos);
     }
   }
 }

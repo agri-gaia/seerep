@@ -31,7 +31,7 @@ class Project
 {
 public:
   Project(boost::uuids::uuid& uuid, std::string path);
-  Project(boost::uuids::uuid& uuid, std::string path, std::string projectname);
+  Project(boost::uuids::uuid& uuid, std::string path, std::string projectname, std::string mapFrameId);
   ~Project();
   std::vector<std::optional<seerep::PointCloud2>> getPointCloud(const seerep::Query& query);
   std::vector<std::optional<seerep::Image>> getImage(const seerep::Query& query);
@@ -44,6 +44,7 @@ public:
 private:
   void createHdf5Io(boost::uuids::uuid& uuid, std::string path);
   void recreateDatatypes();
+  seerep::Query transformQuery(const seerep::Query& query);
 
   boost::uuids::uuid m_id;
 

@@ -150,7 +150,10 @@ boost::uuids::uuid ImageOverview::addDataset(const seerep::Image& image)
 void ImageOverview::addImageToIndices(std::shared_ptr<seerep_core::Image> img)
 {
   m_datasets.insert(std::make_pair(img->getID(), img));
-  m_rt.insert(std::make_pair(m_tfOverview->transformAABB(img->getAABB(), img->getFrameId(), m_frameId), img->getID()));
+  int64_t timeSecs, timeNanos;
+  img->getTime(timeSecs, timeNanos);
+  m_rt.insert(std::make_pair(
+      m_tfOverview->transformAABB(img->getAABB(), img->getFrameId(), m_frameId, timeSecs, timeNanos), img->getID()));
   m_timetree.insert(std::make_pair(img->getAABBTime(), img->getID()));
 
   std::unordered_set<std::string> labels = img->getLabels();

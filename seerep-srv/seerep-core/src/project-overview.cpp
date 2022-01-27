@@ -62,14 +62,14 @@ void ProjectOverview::recreateProjects()
   }
 }
 
-std::string ProjectOverview::newProject(std::string projectname)
+std::string ProjectOverview::newProject(std::string projectname, std::string mapFrameId)
 {
   boost::uuids::uuid uuid = boost::uuids::random_generator()();
 
   std::string filename = boost::lexical_cast<std::string>(uuid);
   std::string path = m_datafolder + "/" + filename + ".h5";
 
-  auto project = std::make_shared<Project>(uuid, path, projectname);
+  auto project = std::make_shared<Project>(uuid, path, projectname, mapFrameId);
   m_projects.insert(std::make_pair(uuid, project));
 
   return filename;

@@ -391,12 +391,13 @@ bool SeerepHDF5IO::hasAABB(const std::string& datatypeGroup, const std::string& 
   return group.hasAttribute(AABB_FIELD);
 }
 
-int64_t SeerepHDF5IO::readTimeFromRaw(const std::string& datatypeGroup, const std::string& uuid)
+void SeerepHDF5IO::readTimeFromRaw(const std::string& datatypeGroup, const std::string& uuid, int64_t secs,
+                                   int64_t nanos)
 {
-  return readTime(datatypeGroup, uuid + "/" + RAWDATA);
+  readTime(datatypeGroup, uuid + "/" + RAWDATA, secs, nanos);
 }
 
-int64_t SeerepHDF5IO::readTime(const std::string& datatypeGroup, const std::string& uuid)
+void SeerepHDF5IO::readTime(const std::string& datatypeGroup, const std::string& uuid, int64_t secs, int64_t nanos)
 {
   std::string id = datatypeGroup + "/" + uuid;
 
@@ -406,7 +407,6 @@ int64_t SeerepHDF5IO::readTime(const std::string& datatypeGroup, const std::stri
     throw std::invalid_argument("id " + id + " does not exist in file " + m_file.getName());
   }
 
-  int64_t time;
   switch (m_file.getObjectType(id))
   {
     case HighFive::ObjectType::Group:
@@ -415,14 +415,22 @@ int64_t SeerepHDF5IO::readTime(const std::string& datatypeGroup, const std::stri
       HighFive::Group group = m_file.getGroup(id);
       if (group.hasAttribute(HEADER_STAMP_SECONDS))
       {
-        group.getAttribute(HEADER_STAMP_SECONDS).read(time);
-        return time;
+        group.getAttribute(HEADER_STAMP_SECONDS).read(secs);
       }
       else
       {
         throw std::invalid_argument("id " + id + " has no attribute " + HEADER_STAMP_SECONDS);
       }
+      if (group.hasAttribute(HEADER_STAMP_NANOS))
+      {
+        group.getAttribute(HEADER_STAMP_NANOS).read(nanos);
+      }
+      else
+      {
+        throw std::invalid_argument("id " + id + " has no attribute " + HEADER_STAMP_NANOS);
+      }
     };
+    break;
 
     case HighFive::ObjectType::Dataset:
     {
@@ -430,25 +438,37 @@ int64_t SeerepHDF5IO::readTime(const std::string& datatypeGroup, const std::stri
       HighFive::DataSet dataset = m_file.getDataSet(id);
       if (dataset.hasAttribute(HEADER_STAMP_SECONDS))
       {
-        dataset.getAttribute(HEADER_STAMP_SECONDS).read(time);
-        return time;
+        dataset.getAttribute(HEADER_STAMP_SECONDS).read(secs);
       }
       else
       {
         throw std::invalid_argument("id " + id + " has no attribute " + HEADER_STAMP_SECONDS);
       }
+      if (dataset.hasAttribute(HEADER_STAMP_NANOS))
+      {
+        dataset.getAttribute(HEADER_STAMP_NANOS).read(nanos);
+      }
+      else
+      {
+        throw std::invalid_argument("id " + id + " has no attribute " + HEADER_STAMP_NANOS);
+      }
     };
+    break;
+
     default:
-      return std::numeric_limits<uint64_t>::min();
+      secs = std::numeric_limits<uint64_t>::min();
+      nanos = std::numeric_limits<uint64_t>::min();
   }
 }
 
-void SeerepHDF5IO::writeTimeToRaw(const std::string& datatypeGroup, const std::string& uuid, const int64_t& time)
+void SeerepHDF5IO::writeTimeToRaw(const std::string& datatypeGroup, const std::string& uuid, const int64_t& secs,
+                                  const int64_t& nanos)
 {
-  writeTime(datatypeGroup, uuid + "/" + RAWDATA, time);
+  writeTime(datatypeGroup, uuid + "/" + RAWDATA, secs, nanos);
 }
 
-void SeerepHDF5IO::writeTime(const std::string& datatypeGroup, const std::string& uuid, const int64_t& time)
+void SeerepHDF5IO::writeTime(const std::string& datatypeGroup, const std::string& uuid, const int64_t& secs,
+                             const int64_t& nanos)
 {
   std::string id = datatypeGroup + "/" + uuid;
 
@@ -466,11 +486,19 @@ void SeerepHDF5IO::writeTime(const std::string& datatypeGroup, const std::string
       HighFive::Group group = m_file.getGroup(id);
       if (group.hasAttribute(HEADER_STAMP_SECONDS))
       {
-        group.getAttribute(HEADER_STAMP_SECONDS).write(time);
+        group.getAttribute(HEADER_STAMP_SECONDS).write(secs);
       }
       else
       {
-        group.createAttribute(HEADER_STAMP_SECONDS, time);
+        group.createAttribute(HEADER_STAMP_SECONDS, secs);
+      }
+      if (group.hasAttribute(HEADER_STAMP_NANOS))
+      {
+        group.getAttribute(HEADER_STAMP_NANOS).write(nanos);
+      }
+      else
+      {
+        group.createAttribute(HEADER_STAMP_NANOS, nanos);
       }
       m_file.flush();
       return;
@@ -482,11 +510,19 @@ void SeerepHDF5IO::writeTime(const std::string& datatypeGroup, const std::string
       HighFive::DataSet dataset = m_file.getDataSet(id);
       if (dataset.hasAttribute(HEADER_STAMP_SECONDS))
       {
-        dataset.getAttribute(HEADER_STAMP_SECONDS).write(time);
+        dataset.getAttribute(HEADER_STAMP_SECONDS).write(secs);
       }
       else
       {
-        dataset.createAttribute(HEADER_STAMP_SECONDS, time);
+        dataset.createAttribute(HEADER_STAMP_SECONDS, secs);
+      }
+      if (dataset.hasAttribute(HEADER_STAMP_NANOS))
+      {
+        dataset.getAttribute(HEADER_STAMP_NANOS).write(nanos);
+      }
+      else
+      {
+        dataset.createAttribute(HEADER_STAMP_NANOS, nanos);
       }
       m_file.flush();
       return;
@@ -514,11 +550,13 @@ bool SeerepHDF5IO::hasTime(const std::string& datatypeGroup, const std::string& 
   {
     case HighFive::ObjectType::Group:
       std::cout << "get group " << id << std::endl;
-      return m_file.getGroup(id).hasAttribute(HEADER_STAMP_SECONDS);
+      return m_file.getGroup(id).hasAttribute(HEADER_STAMP_SECONDS) &&
+             m_file.getGroup(id).hasAttribute(HEADER_STAMP_NANOS);
 
     case HighFive::ObjectType::Dataset:
       std::cout << "get dataset " << id << std::endl;
-      return m_file.getDataSet(id).hasAttribute(HEADER_STAMP_SECONDS);
+      return m_file.getDataSet(id).hasAttribute(HEADER_STAMP_SECONDS) &&
+             m_file.getDataSet(id).hasAttribute(HEADER_STAMP_NANOS);
 
     default:
       return false;
@@ -929,6 +967,28 @@ std::string SeerepHDF5IO::readProjectname()
     m_file.getAttribute(PROJECTNAME).read(projectname);
   }
   return projectname;
+}
+
+void SeerepHDF5IO::writeProjectFrameId(const std::string& frameId)
+{
+  if (!m_file.hasAttribute(PROJECTFRAMEID))
+  {
+    m_file.createAttribute<std::string>(PROJECTFRAMEID, frameId);
+  }
+  else
+  {
+    m_file.getAttribute(PROJECTFRAMEID).write(frameId);
+  }
+}
+
+std::string SeerepHDF5IO::readProjectFrameId()
+{
+  std::string frameId;
+  if (m_file.hasAttribute(PROJECTFRAMEID))
+  {
+    m_file.getAttribute(PROJECTFRAMEID).read(frameId);
+  }
+  return frameId;
 }
 
 void SeerepHDF5IO::writeTransformStamped(const seerep::TransformStamped& tf)
