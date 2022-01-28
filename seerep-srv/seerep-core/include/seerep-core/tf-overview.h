@@ -38,6 +38,8 @@ public:
   AabbHierarchy::AABB transformAABB(AabbHierarchy::AABB aabb, const std::string& sourceFrame,
                                     const std::string& targetFrame, const int64_t& timeSecs, const int64_t& timeNanos);
 
+  seerep::Query transformQuery(const seerep::Query& query, std::string targetFrame);
+
 private:
   void recreateDatasets();
   void addToIndices(std::shared_ptr<seerep_core::TF> tf);
@@ -47,7 +49,7 @@ private:
 
   std::unordered_map<std::string, std::shared_ptr<seerep_core::TF>> m_datasets;
 
-  tf2::BufferCore tfbuffer;
+  tf2::BufferCore m_tfbuffer;
 };
 
 } /* namespace seerep_core */

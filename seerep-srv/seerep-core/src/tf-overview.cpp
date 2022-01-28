@@ -4,7 +4,7 @@ namespace seerep_core
 {
 // construct tfbuffer with INT_MAX so that it holds ALL tfs added
 TFOverview::TFOverview(std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io)
-  : m_hdf5_io(hdf5_io), tfbuffer(ros::DURATION_MAX)
+  : m_hdf5_io(hdf5_io), m_tfbuffer(ros::DURATION_MAX)
 {
   recreateDatasets();
 }
@@ -52,7 +52,7 @@ std::optional<seerep::TransformStamped> TFOverview::getData(const int64_t& times
   try
   {
     return seerep_ros_conversions::toProto(
-        tfbuffer.lookupTransform(targetFrame, sourceFrame, ros::Time(timesecs, timenanos)));
+        m_tfbuffer.lookupTransform(targetFrame, sourceFrame, ros::Time(timesecs, timenanos)));
   }
   catch (const std::exception& e)
   {
@@ -84,27 +84,67 @@ AabbHierarchy::AABB TFOverview::transformAABB(AabbHierarchy::AABB aabb, const st
                                               const std::string& targetFrame, const int64_t& timeSecs,
                                               const int64_t& timeNanos)
 {
-  auto tf = tfbuffer.lookupTransform(targetFrame, targetFrame, ros::Time(timeSecs, timeNanos));
-  tf2::Transform transform;
-  transform.setOrigin(tf2::Vector3(tf.transform.translation.x, tf.transform.translation.y, tf.transform.translation.z));
-  transform.setRotation(tf2::Quaternion(tf.transform.rotation.x, tf.transform.rotation.y, tf.transform.rotation.z,
-                                        tf.transform.rotation.w));
+  if (targetFrame != sourceFrame)
+  {
+    auto tf = m_tfbuffer.lookupTransform(targetFrame, sourceFrame, ros::Time(timeSecs, timeNanos));
+    tf2::Transform transform;
+    transform.setOrigin(
+        tf2::Vector3(tf.transform.translation.x, tf.transform.translation.y, tf.transform.translation.z));
+    transform.setRotation(tf2::Quaternion(tf.transform.rotation.x, tf.transform.rotation.y, tf.transform.rotation.z,
+                                          tf.transform.rotation.w));
 
-  tf2::Vector3 vmin(bg::get<bg::min_corner, 0>(aabb), bg::get<bg::min_corner, 1>(aabb),
-                    bg::get<bg::min_corner, 2>(aabb));
-  tf2::Vector3 vmintransformed = transform * vmin;
-  bg::set<bg::min_corner, 0>(aabb, vmintransformed.getX());
-  bg::set<bg::min_corner, 1>(aabb, vmintransformed.getY());
-  bg::set<bg::min_corner, 2>(aabb, vmintransformed.getZ());
+    tf2::Vector3 vmin(bg::get<bg::min_corner, 0>(aabb), bg::get<bg::min_corner, 1>(aabb),
+                      bg::get<bg::min_corner, 2>(aabb));
+    tf2::Vector3 vmintransformed = transform * vmin;
+    bg::set<bg::min_corner, 0>(aabb, vmintransformed.getX());
+    bg::set<bg::min_corner, 1>(aabb, vmintransformed.getY());
+    bg::set<bg::min_corner, 2>(aabb, vmintransformed.getZ());
 
-  tf2::Vector3 vmax(bg::get<bg::max_corner, 0>(aabb), bg::get<bg::max_corner, 1>(aabb),
-                    bg::get<bg::max_corner, 2>(aabb));
-  tf2::Vector3 vmaxtransformed = transform * vmax;
-  bg::set<bg::max_corner, 0>(aabb, vmaxtransformed.getX());
-  bg::set<bg::max_corner, 1>(aabb, vmaxtransformed.getY());
-  bg::set<bg::max_corner, 2>(aabb, vmaxtransformed.getZ());
-
+    tf2::Vector3 vmax(bg::get<bg::max_corner, 0>(aabb), bg::get<bg::max_corner, 1>(aabb),
+                      bg::get<bg::max_corner, 2>(aabb));
+    tf2::Vector3 vmaxtransformed = transform * vmax;
+    bg::set<bg::max_corner, 0>(aabb, vmaxtransformed.getX());
+    bg::set<bg::max_corner, 1>(aabb, vmaxtransformed.getY());
+    bg::set<bg::max_corner, 2>(aabb, vmaxtransformed.getZ());
+  }
   return aabb;
+}
+
+seerep::Query TFOverview::transformQuery(const seerep::Query& query, std::string targetFrame)
+{
+  if (targetFrame != query.boundingbox().header().frame_id())
+  {
+    seerep::Query queryTransformed(query);
+
+    auto tf = m_tfbuffer.lookupTransform(targetFrame, query.boundingbox().header().frame_id(),
+                                         ros::Time(query.boundingbox().header().stamp().seconds(),
+                                                   query.boundingbox().header().stamp().nanos()));
+    tf2::Transform transform;
+    transform.setOrigin(
+        tf2::Vector3(tf.transform.translation.x, tf.transform.translation.y, tf.transform.translation.z));
+    transform.setRotation(tf2::Quaternion(tf.transform.rotation.x, tf.transform.rotation.y, tf.transform.rotation.z,
+                                          tf.transform.rotation.w));
+
+    tf2::Vector3 vmin(query.boundingbox().point_min().x(), query.boundingbox().point_min().y(),
+                      query.boundingbox().point_min().z());
+    tf2::Vector3 vmintransformed = transform * vmin;
+    queryTransformed.mutable_boundingbox()->mutable_point_min()->set_x(vmintransformed.getX());
+    queryTransformed.mutable_boundingbox()->mutable_point_min()->set_y(vmintransformed.getY());
+    queryTransformed.mutable_boundingbox()->mutable_point_min()->set_z(vmintransformed.getZ());
+
+    tf2::Vector3 vmax(query.boundingbox().point_max().x(), query.boundingbox().point_max().y(),
+                      query.boundingbox().point_max().z());
+    tf2::Vector3 vmaxtransformed = transform * vmax;
+    queryTransformed.mutable_boundingbox()->mutable_point_max()->set_x(vmaxtransformed.getX());
+    queryTransformed.mutable_boundingbox()->mutable_point_max()->set_y(vmaxtransformed.getY());
+    queryTransformed.mutable_boundingbox()->mutable_point_max()->set_z(vmaxtransformed.getZ());
+
+    return queryTransformed;
+  }
+  else
+  {
+    return query;
+  }
 }
 
 void TFOverview::addToIndices(std::shared_ptr<seerep_core::TF> tf)
@@ -114,7 +154,7 @@ void TFOverview::addToIndices(std::shared_ptr<seerep_core::TF> tf)
 
 void TFOverview::addToTfBuffer(seerep::TransformStamped transform)
 {
-  tfbuffer.setTransform(seerep_ros_conversions::toROS(transform), "fromHDF5");
+  m_tfbuffer.setTransform(seerep_ros_conversions::toROS(transform), "fromHDF5");
 }
 
 // for (auto tf : m_datasets)

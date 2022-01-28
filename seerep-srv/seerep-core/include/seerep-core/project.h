@@ -44,7 +44,6 @@ public:
 private:
   void createHdf5Io(boost::uuids::uuid& uuid, std::string path);
   void recreateDatatypes();
-  seerep::Query transformQuery(const seerep::Query& query);
 
   boost::uuids::uuid m_id;
 

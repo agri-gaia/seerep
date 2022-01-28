@@ -73,8 +73,8 @@ public:
 
   bool hasAABB(const std::string& datatypeGroup, const std::string& uuid);
 
-  void readTimeFromRaw(const std::string& datatypeGroup, const std::string& uuid, int64_t secs, int64_t nanos);
-  void readTime(const std::string& datatypeGroup, const std::string& uuid, int64_t secs, int64_t nanos);
+  void readTimeFromRaw(const std::string& datatypeGroup, const std::string& uuid, int64_t& secs, int64_t& nanos);
+  void readTime(const std::string& datatypeGroup, const std::string& uuid, int64_t& secs, int64_t& nanos);
 
   void writeTimeToRaw(const std::string& datatypeGroup, const std::string& uuid, const int64_t& secs,
                       const int64_t& nanos);

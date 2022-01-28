@@ -391,13 +391,13 @@ bool SeerepHDF5IO::hasAABB(const std::string& datatypeGroup, const std::string& 
   return group.hasAttribute(AABB_FIELD);
 }
 
-void SeerepHDF5IO::readTimeFromRaw(const std::string& datatypeGroup, const std::string& uuid, int64_t secs,
-                                   int64_t nanos)
+void SeerepHDF5IO::readTimeFromRaw(const std::string& datatypeGroup, const std::string& uuid, int64_t& secs,
+                                   int64_t& nanos)
 {
   readTime(datatypeGroup, uuid + "/" + RAWDATA, secs, nanos);
 }
 
-void SeerepHDF5IO::readTime(const std::string& datatypeGroup, const std::string& uuid, int64_t secs, int64_t nanos)
+void SeerepHDF5IO::readTime(const std::string& datatypeGroup, const std::string& uuid, int64_t& secs, int64_t& nanos)
 {
   std::string id = datatypeGroup + "/" + uuid;
 
