@@ -11,7 +11,7 @@ import query_pb2 as query
 
 from google.protobuf import empty_pb2
 
-channel = grpc.insecure_channel("agrigaia-ur.ni.dfki:9090")
+channel = grpc.insecure_channel("localhost:9090")
 
 stub = transferMsgs.TransferSensorMsgsStub(channel)
 
@@ -24,6 +24,8 @@ else:
 
 
 theQuery = query.Query()
+theQuery.boundingbox.header.frame_id = "map"
+
 theQuery.boundingbox.point_min.x = 0.0
 theQuery.boundingbox.point_min.y = 0.0
 theQuery.boundingbox.point_min.z = 0.0
