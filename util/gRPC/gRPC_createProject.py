@@ -14,7 +14,7 @@ channel = grpc.insecure_channel("agrigaia-ur.ni.dfki:9090")
 
 stub = transferMsgs.TransferSensorMsgsStub(channel)
 
-response = stub.CreateProject(projectCreation_pb2.ProjectCreation(name="testprojectpython"))
+response = stub.CreateProject(projectCreation_pb2.ProjectCreation(name="testprojectpython", mapFrameId="map"))
 
 
 print(response.uuid)
