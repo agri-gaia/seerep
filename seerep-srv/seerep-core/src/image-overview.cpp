@@ -41,26 +41,28 @@ std::vector<std::optional<seerep::Image>> ImageOverview::getData(const seerep::Q
 {
   std::vector<std::optional<seerep::Image>> result;
 
-  // space
-  std::vector<AabbHierarchy::AabbIdPair> resultRt = querySpatial(query);
-  // time
-  std::vector<AabbHierarchy::AabbTimeIdPair> resultTime = queryTemporal(query);
-  // semantic
-  std::set<uint64_t> resultSemantic = querySemantic(query);
-
-  std::vector<uint64_t> resultIntersection = intersectQueryResults(resultRt, resultTime, resultSemantic);
-
-  for (auto& r : resultIntersection)
+  if (m_data_count > 0)
   {
-    std::optional<seerep::Image> img = m_datasets.at(r)->getData(query);
+    // space
+    std::vector<AabbHierarchy::AabbIdPair> resultRt = querySpatial(query);
+    // time
+    std::vector<AabbHierarchy::AabbTimeIdPair> resultTime = queryTemporal(query);
+    // semantic
+    std::set<uint64_t> resultSemantic = querySemantic(query);
 
-    if (img)
+    std::vector<uint64_t> resultIntersection = intersectQueryResults(resultRt, resultTime, resultSemantic);
+
+    for (auto& r : resultIntersection)
     {
-      std::cout << "checked " << img.value().data() << std::endl;
-      result.push_back(img);
+      std::optional<seerep::Image> img = m_datasets.at(r)->getData(query);
+
+      if (img)
+      {
+        std::cout << "checked " << img.value().data() << std::endl;
+        result.push_back(img);
+      }
     }
   }
-
   return result;
 }
 
