@@ -13,9 +13,14 @@ void SeerepHDF5IO::writeAttribute(const std::shared_ptr<HighFive::DataSet> dataS
                                   T value)
 {
   if (!dataSetPtr->hasAttribute(attributeField))
+  {
     dataSetPtr->createAttribute(attributeField, value);
+  }
   else
+  {
     dataSetPtr->getAttribute(attributeField).write(value);
+  }
+  m_file.flush();
 }
 
 template <typename T>
@@ -39,6 +44,7 @@ void SeerepHDF5IO::deleteAttribute(const std::shared_ptr<HighFive::DataSet> data
   if (dataSetPtr->hasAttribute(attributeField))
   {
     dataSetPtr->deleteAttribute(attributeField);
+    m_file.flush();
   }
 }
 
@@ -154,12 +160,6 @@ void SeerepHDF5IO::writeImage(const std::string& id, const seerep::Image& image)
 
   m_file.flush();
 }
-
-// void SeerepHDF5IO::writeImageLabeled(const std::string& id, const seerep::ImageLabeled& imageLabeled)
-// {
-//   writeImage(id, imageLabeled.image());
-//   writeBoundingBox2DLabeled(id, imageLabeled.labels());
-// }
 
 std::optional<seerep::Image> SeerepHDF5IO::readImage(const std::string& id)
 {
@@ -292,13 +292,6 @@ SeerepHDF5IO::readPointFieldAttributes(HighFive::DataSet& data_set)
 
   return repeatedPointField;
 }
-
-// void SeerepHDF5IO::writePointCloud2Labeled(const std::string& id, const seerep::PointCloud2Labeled& pointcloud2Labeled)
-// {
-//   writePointCloud2(id + "/" + RAWDATA, pointcloud2Labeled.pointcloud());
-
-//   writeBoundingBoxLabeled(HDF5_GROUP_POINTCLOUD, id, pointcloud2Labeled.labels());
-// }
 
 std::optional<std::string> SeerepHDF5IO::readFrameId(const std::string& datatypeGroup, const std::string& uuid)
 {
@@ -957,6 +950,7 @@ void SeerepHDF5IO::writeProjectname(const std::string& projectname)
   {
     m_file.getAttribute(PROJECTNAME).write(projectname);
   }
+  m_file.flush();
 }
 
 std::string SeerepHDF5IO::readProjectname()
@@ -979,6 +973,7 @@ void SeerepHDF5IO::writeProjectFrameId(const std::string& frameId)
   {
     m_file.getAttribute(PROJECTFRAMEID).write(frameId);
   }
+  m_file.flush();
 }
 
 std::string SeerepHDF5IO::readProjectFrameId()
