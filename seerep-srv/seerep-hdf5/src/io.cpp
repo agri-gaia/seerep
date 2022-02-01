@@ -1,4 +1,5 @@
 #include "seerep-hdf5/io.h"
+#include "seerep-hdf5/point_cloud2_iterator.hpp"
 
 #include <highfive/H5DataSet.hpp>
 
@@ -194,6 +195,8 @@ std::optional<seerep::Image> SeerepHDF5IO::readImage(const std::string& id)
   data_set_ptr->read(read_data);
 
   int pixel_step = image.step() / image.width();
+
+  // TODO: write into protobuf data buffer
   uint8_t data[image.height()][image.width()][pixel_step];
 
   for (int row = 0; row < image.height(); row++)
@@ -660,12 +663,12 @@ void SeerepHDF5IO::writePointCloud2(const std::string& uuid, const seerep::Point
   std::string id = HDF5_GROUP_POINTCLOUD + "/" + uuid;
 
   std::shared_ptr<HighFive::DataSet> data_set_ptr;
-  HighFive::DataSpace data_space({ pointcloud2.height(), pointcloud2.row_step() });
+  HighFive::DataSpace data_space({ pointcloud2.height(), pointcloud2.width(), 3 });
 
   if (!m_file.exist(id))
   {
     std::cout << "data id " << id << " does not exist! Creat new dataset in hdf5" << std::endl;
-    data_set_ptr = std::make_shared<HighFive::DataSet>(m_file.createDataSet<uint8_t>(id, data_space));
+    data_set_ptr = std::make_shared<HighFive::DataSet>(m_file.createDataSet<float>(id, data_space));
     data_set_ptr->createAttribute(HEIGHT, pointcloud2.height());
     data_set_ptr->createAttribute(WIDTH, pointcloud2.width());
     data_set_ptr->createAttribute(IS_BIGENDIAN, pointcloud2.is_bigendian());
@@ -688,18 +691,27 @@ void SeerepHDF5IO::writePointCloud2(const std::string& uuid, const seerep::Point
   writePointFieldAttributes(*data_set_ptr, pointcloud2.fields());
 
   const uint8_t* begin = reinterpret_cast<const uint8_t*>(pointcloud2.data().c_str());
-  std::vector<std::vector<uint8_t>> tmp;
-  tmp.resize(pointcloud2.height());
+  std::vector<std::vector<std::vector<float>>> point_data;
+  point_data.resize(pointcloud2.height());
+
+  seerep_hdf5::PointCloud2ConstIterator<float> x_iter(pointcloud2, "x");
+  seerep_hdf5::PointCloud2ConstIterator<float> y_iter(pointcloud2, "y");
+  seerep_hdf5::PointCloud2ConstIterator<float> z_iter(pointcloud2, "z");
 
   for (int i = 0; i < pointcloud2.height(); i++)
   {
     const uint8_t* row = begin + i * pointcloud2.row_step();
-    tmp[i].reserve(pointcloud2.row_step());
-    std::copy_n(row, pointcloud2.row_step(), std::back_inserter(tmp[i]));
+    point_data[i].reserve(pointcloud2.width());
+    for (int y = 0; y < pointcloud2.width(); y++)
+    {
+      point_data[i].push_back(std::vector{ *x_iter, *y_iter, *z_iter });
+      ++x_iter, ++y_iter, ++z_iter;
+    }
   }
-  data_set_ptr->write(tmp);
-  writeHeaderAttributes(*data_set_ptr, pointcloud2.header());
 
+  data_set_ptr->write(point_data);
+
+  writeHeaderAttributes(*data_set_ptr, pointcloud2.header());
   writeBoundingBoxLabeled(HDF5_GROUP_POINTCLOUD, uuid, pointcloud2.labels_bb());
 
   m_file.flush();

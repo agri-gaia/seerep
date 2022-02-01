@@ -34,6 +34,7 @@ include_directories(
 	${HighFive_INCLUDE_DIRS}
 	${PCL_INCLUDE_DIRS}
 	${Boost_INCLUDE_DIRS}
+	${catkin_INCLUDE_DIRS}
 )
 
 add_library(seerepcore
@@ -53,6 +54,7 @@ target_link_libraries(seerepcore
 	${HighFive_LIBRARIES}
 	${PCL_LIBRARIES}
 	${Boost_LIBRARIES}
+	${catkin_LIBRARIES}
 )
 
 set(INSTALL_HEADERS
