@@ -1,0 +1,10 @@
+// Generated from twist.proto
+
+include "vector3.fbs"
+
+namespace seerep;
+
+table Twist {
+  linear:seerep.Vector3;
+  angular:seerep.Vector3;
+}

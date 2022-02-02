@@ -1,0 +1,11 @@
+// Generated from point_stamped.proto
+
+include "header.fbs"
+include "point.fbs"
+
+namespace seerep;
+
+table PointStamped {
+  header:seerep.Header;
+  point:seerep.Point;
+}

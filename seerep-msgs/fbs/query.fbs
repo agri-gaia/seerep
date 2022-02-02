@@ -1,0 +1,12 @@
+// Generated from query.proto
+
+include "time_interval.fbs"
+include "boundingbox.fbs"
+
+namespace seerep;
+
+table Query {
+  boundingbox:seerep.Boundingbox;
+  timeinterval:seerep.TimeInterval;
+  label:[string];
+}

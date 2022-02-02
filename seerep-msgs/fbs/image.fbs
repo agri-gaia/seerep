@@ -1,0 +1,19 @@
+// Generated from image.proto
+
+include "header.fbs"
+include "boundingbox2d_labeled.fbs"
+
+namespace seerep;
+
+table Image {
+  header:seerep.Header;
+  height:uint;
+  width:uint;
+  encoding:string;
+  is_bigendian:bool;
+  step:uint;
+  row_step:uint;
+  data:[ubyte];
+  labels_general:[string];
+  labels_bb:[seerep.BoundingBox2DLabeled];
+}

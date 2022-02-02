@@ -1,0 +1,10 @@
+// Generated from quaternion.proto
+
+namespace seerep;
+
+table Quaternion {
+  x:double;
+  y:double;
+  z:double;
+  w:double;
+}

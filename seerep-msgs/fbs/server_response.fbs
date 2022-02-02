@@ -1,0 +1,19 @@
+// Generated from server_response.proto
+
+include "timestamp.fbs"
+
+namespace seerep.ServerResponse_;
+
+enum TRANSMISSION_STATE : int {
+  SUCCESS = 0,
+  FAILURE = 1,
+}
+
+namespace seerep;
+
+table ServerResponse {
+  seq:uint;
+  stamp:seerep.Timestamp;
+  message:string;
+  transmission_state:seerep.ServerResponse_.TRANSMISSION_STATE;
+}

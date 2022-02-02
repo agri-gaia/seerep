@@ -1,0 +1,9 @@
+// Generated from polygon.proto
+
+include "point.fbs"
+
+namespace seerep;
+
+table Polygon {
+  points:[seerep.Point];
+}

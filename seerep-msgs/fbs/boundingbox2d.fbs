@@ -1,0 +1,12 @@
+// Generated from boundingbox2d.proto
+
+include "header.fbs"
+include "point2d.fbs"
+
+namespace seerep;
+
+table Boundingbox2D {
+  header:seerep.Header;
+  point_min:seerep.Point2D;
+  point_max:seerep.Point2D;
+}

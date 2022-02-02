@@ -1,0 +1,10 @@
+// Generated from boundingbox2d_labeled.proto
+
+include "boundingbox2d.fbs"
+
+namespace seerep;
+
+table BoundingBox2DLabeled {
+  label:string;
+  boundingBox:seerep.Boundingbox2D;
+}

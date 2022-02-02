@@ -1,0 +1,9 @@
+// Generated from vector3.proto
+
+namespace seerep;
+
+table Vector3 {
+  x:double;
+  y:double;
+  z:double;
+}

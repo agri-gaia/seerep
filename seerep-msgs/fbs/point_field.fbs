@@ -1,0 +1,24 @@
+// Generated from point_field.proto
+
+namespace seerep.PointField_;
+
+enum Datatype : int {
+  UNSET = 0,
+  INT8 = 1,
+  UINT8 = 2,
+  INT16 = 3,
+  UINT16 = 4,
+  INT32 = 5,
+  UINT32 = 6,
+  FLOAT32 = 7,
+  FLOAT64 = 8,
+}
+
+namespace seerep;
+
+table PointField {
+  name:string;
+  offset:uint;
+  datatype:seerep.PointField_.Datatype;
+  count:uint;
+}

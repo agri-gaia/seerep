@@ -1,0 +1,8 @@
+// Generated from projectCreation.proto
+
+namespace seerep;
+
+table ProjectCreation {
+  name:string;
+  mapFrameId:string;
+}

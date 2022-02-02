@@ -1,0 +1,10 @@
+// Generated from twist_with_covariance.proto
+
+include "twist.fbs"
+
+namespace seerep;
+
+table TwistWithCovariance {
+  twist:seerep.Twist;
+  covariance:[double];
+}

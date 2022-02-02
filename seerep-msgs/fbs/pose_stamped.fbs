@@ -1,0 +1,11 @@
+// Generated from pose_stamped.proto
+
+include "header.fbs"
+include "pose.fbs"
+
+namespace seerep;
+
+table PoseStamped {
+  header:seerep.Header;
+  pose:seerep.Pose;
+}
