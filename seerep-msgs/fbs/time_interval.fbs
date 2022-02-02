@@ -1,0 +1,11 @@
+// Generated from time_interval.proto
+
+include "header.fbs"
+
+namespace seerep;
+
+table TimeInterval {
+  header:seerep.Header;
+  time_min:long;
+  time_max:long;
+}

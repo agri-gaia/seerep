@@ -1,0 +1,8 @@
+// Generated from point2d.proto
+
+namespace seerep;
+
+table Point2D {
+  x:double;
+  y:double;
+}

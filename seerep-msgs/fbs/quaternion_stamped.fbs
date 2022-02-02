@@ -1,0 +1,11 @@
+// Generated from quaternion_stamped.proto
+
+include "header.fbs"
+include "quaternion.fbs"
+
+namespace seerep;
+
+table QuaternionStamped {
+  header:seerep.Header;
+  quaternion:seerep.Quaternion;
+}

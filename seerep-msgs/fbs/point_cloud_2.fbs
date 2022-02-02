@@ -1,0 +1,20 @@
+// Generated from point_cloud_2.proto
+
+include "header.fbs"
+include "boundingbox_labeled.fbs"
+include "point_field.fbs"
+
+namespace seerep;
+
+table PointCloud2 {
+  header:seerep.Header;
+  height:uint;
+  width:uint;
+  fields:[seerep.PointField];
+  is_bigendian:bool;
+  point_step:uint;
+  row_step:uint;
+  data:[ubyte];
+  is_dense:bool;
+  labels_bb:[seerep.BoundingBoxLabeled];
+}

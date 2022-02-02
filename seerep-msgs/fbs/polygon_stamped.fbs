@@ -1,0 +1,11 @@
+// Generated from polygon_stamped.proto
+
+include "header.fbs"
+include "polygon.fbs"
+
+namespace seerep;
+
+table PolygonStamped {
+  header:seerep.Header;
+  polygon:seerep.Polygon;
+}

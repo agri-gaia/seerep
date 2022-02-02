@@ -1,0 +1,9 @@
+// Generated from point.proto
+
+namespace seerep;
+
+table Point {
+  x:double;
+  y:double;
+  z:double;
+}

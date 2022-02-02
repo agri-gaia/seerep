@@ -1,0 +1,11 @@
+// Generated from transform.proto
+
+include "vector3.fbs"
+include "quaternion.fbs"
+
+namespace seerep;
+
+table Transform {
+  translation:seerep.Vector3;
+  rotation:seerep.Quaternion;
+}

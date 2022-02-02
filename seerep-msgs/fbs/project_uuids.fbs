@@ -1,0 +1,7 @@
+// Generated from project_uuids.proto
+
+namespace seerep;
+
+table ProjectUUIDs {
+  uuids:[string];
+}

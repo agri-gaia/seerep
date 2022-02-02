@@ -1,0 +1,11 @@
+// Generated from twist_stamped.proto
+
+include "header.fbs"
+include "twist.fbs"
+
+namespace seerep;
+
+table TwistStamped {
+  header:seerep.Header;
+  twist:seerep.Twist;
+}

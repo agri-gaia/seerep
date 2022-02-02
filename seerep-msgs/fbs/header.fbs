@@ -1,0 +1,13 @@
+// Generated from header.proto
+
+include "timestamp.fbs"
+
+namespace seerep;
+
+table Header {
+  seq:uint;
+  stamp:seerep.Timestamp;
+  frame_id:string;
+  uuid_project:string;
+  uuid_msgs:string;
+}
