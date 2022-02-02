@@ -717,6 +717,7 @@ void SeerepHDF5IO::writePointCloud2(const std::string& uuid, const seerep::Point
   m_file.flush();
 }
 
+// TODO read partial point cloud, e.g. only xyz without color, etc.
 std::optional<seerep::PointCloud2> SeerepHDF5IO::readPointCloud2(const std::string& id)
 {
   if (!m_file.exist(id))
@@ -760,22 +761,23 @@ std::optional<seerep::PointCloud2> SeerepHDF5IO::readPointCloud2(const std::stri
 
   std::cout << "read Dataset" << std::endl;
 
-  const uint8_t* begin = reinterpret_cast<const uint8_t*>(pointcloud2.data().c_str());
-  std::cout << "pointcloud c_str" << std::endl
-            << reinterpret_cast<const uint8_t*>(pointcloud2.data().c_str()) << std::endl;
+  seerep_hdf5::PointCloud2Iterator<float> x_iter(pointcloud2, "x");
+  seerep_hdf5::PointCloud2Iterator<float> y_iter(pointcloud2, "y");
+  seerep_hdf5::PointCloud2Iterator<float> z_iter(pointcloud2, "z");
 
-  std::vector<u_int8_t> read_data;
+  std::vector<std::vector<std::vector<float>>> read_data;
   data_set.read(read_data);
-  std::cout << "read_data:" << std::endl;
-  int j = 0;
-  for (const auto& i : read_data)
+
+  for (auto column : read_data)
   {
-    std::cout << unsigned(i) << ' ';
-    j++;
-    // if (j > 50)
-    // break;
+    for (auto row : column)
+    {
+      *x_iter = row[0];
+      *y_iter = row[1];
+      *z_iter = row[2];
+      ++x_iter, ++y_iter, ++z_iter;
+    }
   }
-  pointcloud2.set_data(&read_data.front(), read_data.size());
 
   return pointcloud2;
 }

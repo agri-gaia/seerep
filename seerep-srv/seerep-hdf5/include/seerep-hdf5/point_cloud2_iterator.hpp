@@ -233,7 +233,6 @@ public:
    */
   V<T> end() const;
 
-private:
   /** Common code to set the field of the PointCloud2
    * @param cloud_msg the PointCloud2 to modify
    * @param field_name the name of the field to iterate upon
@@ -292,6 +291,10 @@ public:
     : impl::PointCloud2IteratorBase<T, T, unsigned char, seerep::PointCloud2,
                                     seerep_hdf5::PointCloud2Iterator>::PointCloud2IteratorBase(cloud_msg, field_name)
   {
+    int offset = this->set_field(cloud_msg, field_name);
+    this->data_char_ = reinterpret_cast<unsigned char*>(cloud_msg.mutable_data()->data() + offset);
+    this->data_ = reinterpret_cast<T*>(this->data_char_);
+    this->data_end_ = reinterpret_cast<T*>(cloud_msg.mutable_data()->data() + cloud_msg.data().size() + offset);
   }
 };
 
@@ -315,6 +318,10 @@ public:
                                     seerep_hdf5::PointCloud2ConstIterator>::PointCloud2IteratorBase(cloud_msg,
                                                                                                     field_name)
   {
+    int offset = this->set_field(cloud_msg, field_name);
+    this->data_char_ = reinterpret_cast<const unsigned char*>(cloud_msg.data().data() + offset);
+    this->data_ = reinterpret_cast<const T*>(this->data_char_);
+    this->data_end_ = reinterpret_cast<const T*>(cloud_msg.data().data() + cloud_msg.data().size() + offset);
   }
 };
 }  // namespace seerep_hdf5

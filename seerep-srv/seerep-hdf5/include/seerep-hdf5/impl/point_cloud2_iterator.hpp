@@ -240,11 +240,6 @@ PointCloud2IteratorBase<T, TT, U, C, V>::PointCloud2IteratorBase() : data_char_(
 template <typename T, typename TT, typename U, typename C, template <typename> class V>
 PointCloud2IteratorBase<T, TT, U, C, V>::PointCloud2IteratorBase(C& cloud_msg, const std::string& field_name)
 {
-  int offset = set_field(cloud_msg, field_name);
-
-  data_char_ = reinterpret_cast<U*>(cloud_msg.data().c_str()) + offset;
-  data_ = reinterpret_cast<TT*>(data_char_);
-  data_end_ = reinterpret_cast<TT*>(&(cloud_msg.data().back()) + 1 + offset);
 }
 
 /** Assignment operator
