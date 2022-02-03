@@ -18,16 +18,18 @@ PointcloudOverview::~PointcloudOverview()
 
 void PointcloudOverview::recreateDatasets()
 {
-  std::vector<std::string> pcs = m_hdf5_io->getGroupDatasets("pointclouds");
-  for (auto name : pcs)
-  {
-    std::cout << "found " << name << " in HDF5 file." << std::endl;
+  // std::vector<std::string> pcs = m_hdf5_io->getGroupDatasets("pointclouds");
+  std::map<std::string, HighFive::Group> clouds = m_hdf5_io->getPointClouds();
 
-    uint64_t id;
-    std::istringstream(name) >> id;
-    auto pc = std::make_shared<Pointcloud>(coordinatesystem, m_hdf5_io, id);
-    m_datasets.insert(std::make_pair(id, pc));
-    m_rt.insert(std::make_pair(pc->getAABB(), pc->getID()));
+  // TODO clear trees
+  data_count = 0;
+
+  for (auto cloud : clouds)
+  {
+    std::cout << "found " << cloud.first << " in HDF5 file." << std::endl;
+
+    // m_datasets.insert(std::make_pair(id, pc));
+    // m_rt.insert(std::make_pair(pc->getAABB(), pc->getID()));
   }
 }
 

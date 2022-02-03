@@ -817,6 +817,20 @@ void SeerepHDF5IO::writePointCloud2(const std::string& uuid, const seerep::Point
   m_file.flush();
 }
 
+std::map<std::string, HighFive::Group> SeerepHDF5IO::getPointClouds()
+{
+  std::map<std::string, HighFive::Group> map;
+  if (m_file.exist(HDF5_GROUP_POINTCLOUD))
+  {
+    const HighFive::Group& clouds_group = m_file.getGroup(HDF5_GROUP_POINTCLOUD);
+    for (std::string& cloud_name : clouds_group.listObjectNames())
+    {
+      map.insert(std::pair(cloud_name, clouds_group.getGroup(cloud_name)));
+    }
+  }
+  return map;
+}
+
 // TODO read partial point cloud, e.g. only xyz without color, etc.
 std::optional<seerep::PointCloud2> SeerepHDF5IO::readPointCloud2(const std::string& id)
 {

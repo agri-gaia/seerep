@@ -83,6 +83,8 @@ public:
   bool hasTimeRaw(const std::string& datatypeGroup, const std::string& uuid);
   bool hasTime(const std::string& datatypeGroup, const std::string& uuid);
 
+  std::map<std::string, HighFive::Group> getPointClouds();
+
   std::optional<seerep::PointCloud2> readPointCloud2(const std::string& id);
 
   void writePoint(const std::string& id, const seerep::Point& point);
