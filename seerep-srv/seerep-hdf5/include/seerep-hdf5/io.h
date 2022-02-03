@@ -96,14 +96,16 @@ public:
   std::string readProjectname();
 
 private:
-  void writeHeaderAttributes(HighFive::DataSet& data_set, const seerep::Header& header);
+  template <class T>
+  void writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, const seerep::Header& header);
 
-  seerep::Header readHeaderAttributes(HighFive::DataSet& data_set);
+  template <class T>
+  seerep::Header readHeaderAttributes(HighFive::AnnotateTraits<T>& object);
 
-  void writePointFieldAttributes(HighFive::DataSet& data_set,
+  void writePointFieldAttributes(HighFive::Group& cloud_group,
                                  const google::protobuf::RepeatedPtrField<seerep::PointField> repeatedPointField);
 
-  google::protobuf::RepeatedPtrField<seerep::PointField> readPointFieldAttributes(HighFive::DataSet& data_set);
+  google::protobuf::RepeatedPtrField<seerep::PointField> readPointFieldAttributes(HighFive::Group& cloud_group);
 
   void writeQuaternionAttributes(HighFive::DataSet& data_set, const seerep::Quaternion& quaternion,
                                  const std::string& prefix = "");

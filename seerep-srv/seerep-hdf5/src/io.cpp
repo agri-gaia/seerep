@@ -43,30 +43,32 @@ void SeerepHDF5IO::deleteAttribute(const std::shared_ptr<HighFive::DataSet> data
   }
 }
 
-void SeerepHDF5IO::writeHeaderAttributes(HighFive::DataSet& data_set, const seerep::Header& header)
+template <class T>
+void SeerepHDF5IO::writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, const seerep::Header& header)
 {
-  if (!data_set.hasAttribute(HEADER_STAMP_SECONDS))
-    data_set.createAttribute(HEADER_STAMP_SECONDS, header.stamp().seconds());
+  if (!object.hasAttribute(HEADER_STAMP_SECONDS))
+    object.createAttribute(HEADER_STAMP_SECONDS, header.stamp().seconds());
   else
-    data_set.getAttribute(HEADER_STAMP_SECONDS).write(header.stamp().seconds());
+    object.getAttribute(HEADER_STAMP_SECONDS).write(header.stamp().seconds());
 
-  if (!data_set.hasAttribute(HEADER_STAMP_NANOS))
-    data_set.createAttribute(HEADER_STAMP_NANOS, header.stamp().nanos());
+  if (!object.hasAttribute(HEADER_STAMP_NANOS))
+    object.createAttribute(HEADER_STAMP_NANOS, header.stamp().nanos());
   else
-    data_set.getAttribute(HEADER_STAMP_NANOS).write(header.stamp().nanos());
+    object.getAttribute(HEADER_STAMP_NANOS).write(header.stamp().nanos());
 
-  if (!data_set.hasAttribute(HEADER_FRAME_ID))
-    data_set.createAttribute(HEADER_FRAME_ID, header.frame_id());
+  if (!object.hasAttribute(HEADER_FRAME_ID))
+    object.createAttribute(HEADER_FRAME_ID, header.frame_id());
   else
-    data_set.getAttribute(HEADER_FRAME_ID).write(header.frame_id());
+    object.getAttribute(HEADER_FRAME_ID).write(header.frame_id());
 
-  if (!data_set.hasAttribute(HEADER_SEQ))
-    data_set.createAttribute(HEADER_SEQ, header.seq());
+  if (!object.hasAttribute(HEADER_SEQ))
+    object.createAttribute(HEADER_SEQ, header.seq());
   else
-    data_set.getAttribute(HEADER_SEQ).write(header.seq());
+    object.getAttribute(HEADER_SEQ).write(header.seq());
 }
 
-seerep::Header SeerepHDF5IO::readHeaderAttributes(HighFive::DataSet& data_set)
+template <class T>
+seerep::Header SeerepHDF5IO::readHeaderAttributes(HighFive::AnnotateTraits<T>& object)
 {
   seerep::Header header;
 
@@ -74,11 +76,11 @@ seerep::Header SeerepHDF5IO::readHeaderAttributes(HighFive::DataSet& data_set)
   int32_t nanos;
   uint32_t seq;
 
-  data_set.getAttribute(HEADER_FRAME_ID).read(header.mutable_frame_id());
+  object.getAttribute(HEADER_FRAME_ID).read(header.mutable_frame_id());
 
-  data_set.getAttribute(HEADER_STAMP_SECONDS).read(seconds);
-  data_set.getAttribute(HEADER_STAMP_NANOS).read(nanos);
-  data_set.getAttribute(HEADER_SEQ).read(seq);
+  object.getAttribute(HEADER_STAMP_SECONDS).read(seconds);
+  object.getAttribute(HEADER_STAMP_NANOS).read(nanos);
+  object.getAttribute(HEADER_SEQ).read(seq);
 
   header.set_seq(seq);
   header.mutable_stamp()->set_seconds(seconds);
@@ -233,7 +235,7 @@ std::optional<seerep::Image> SeerepHDF5IO::readImage(const std::string& id)
 }
 
 void SeerepHDF5IO::writePointFieldAttributes(
-    HighFive::DataSet& data_set, const google::protobuf::RepeatedPtrField<seerep::PointField> repeatedPointField)
+    HighFive::Group& cloud_group, const google::protobuf::RepeatedPtrField<seerep::PointField> repeatedPointField)
 {
   std::vector<std::string> names;
   std::vector<uint32_t> offsets, counts;
@@ -246,29 +248,29 @@ void SeerepHDF5IO::writePointFieldAttributes(
     counts.push_back(repeatedPointField.at(i).count());
   }
 
-  if (!data_set.hasAttribute(FIELD_NAME))
-    data_set.createAttribute(FIELD_NAME, names);
+  if (!cloud_group.hasAttribute(FIELD_NAME))
+    cloud_group.createAttribute(FIELD_NAME, names);
   else
-    data_set.getAttribute(FIELD_NAME).write(names);
+    cloud_group.getAttribute(FIELD_NAME).write(names);
 
-  if (!data_set.hasAttribute(FIELD_OFFSET))
-    data_set.createAttribute(FIELD_OFFSET, offsets);
+  if (!cloud_group.hasAttribute(FIELD_OFFSET))
+    cloud_group.createAttribute(FIELD_OFFSET, offsets);
   else
-    data_set.getAttribute(FIELD_OFFSET).write(offsets);
+    cloud_group.getAttribute(FIELD_OFFSET).write(offsets);
 
-  if (!data_set.hasAttribute(FIELD_DATATYPE))
-    data_set.createAttribute(FIELD_DATATYPE, datatypes);
+  if (!cloud_group.hasAttribute(FIELD_DATATYPE))
+    cloud_group.createAttribute(FIELD_DATATYPE, datatypes);
   else
-    data_set.getAttribute(FIELD_DATATYPE).write(datatypes);
+    cloud_group.getAttribute(FIELD_DATATYPE).write(datatypes);
 
-  if (!data_set.hasAttribute(FIELD_COUNT))
-    data_set.createAttribute(FIELD_COUNT, counts);
+  if (!cloud_group.hasAttribute(FIELD_COUNT))
+    cloud_group.createAttribute(FIELD_COUNT, counts);
   else
-    data_set.getAttribute(FIELD_COUNT).write(counts);
+    cloud_group.getAttribute(FIELD_COUNT).write(counts);
 }
 
 google::protobuf::RepeatedPtrField<seerep::PointField>
-SeerepHDF5IO::readPointFieldAttributes(HighFive::DataSet& data_set)
+SeerepHDF5IO::readPointFieldAttributes(HighFive::Group& cloud_group)
 {
   google::protobuf::RepeatedPtrField<seerep::PointField> repeatedPointField;
 
@@ -276,10 +278,10 @@ SeerepHDF5IO::readPointFieldAttributes(HighFive::DataSet& data_set)
   std::vector<uint32_t> offsets, counts;
   std::vector<uint8_t> datatypes;
 
-  data_set.getAttribute(FIELD_NAME).read(names);
-  data_set.getAttribute(FIELD_OFFSET).read(offsets);
-  data_set.getAttribute(FIELD_DATATYPE).read(datatypes);
-  data_set.getAttribute(FIELD_COUNT).read(counts);
+  cloud_group.getAttribute(FIELD_NAME).read(names);
+  cloud_group.getAttribute(FIELD_OFFSET).read(offsets);
+  cloud_group.getAttribute(FIELD_DATATYPE).read(datatypes);
+  cloud_group.getAttribute(FIELD_COUNT).read(counts);
 
   for (int i = 0; i < names.size(); i++)
   {
@@ -660,37 +662,46 @@ SeerepHDF5IO::readLabelsGeneral(const std::string& datatypeGroup, const std::str
 
 void SeerepHDF5IO::writePointCloud2(const std::string& uuid, const seerep::PointCloud2& pointcloud2)
 {
-  std::string id = HDF5_GROUP_POINTCLOUD + "/" + uuid;
+  std::string cloud_group_id = HDF5_GROUP_POINTCLOUD + "/" + uuid;
 
-  std::shared_ptr<HighFive::DataSet> data_set_ptr;
-  HighFive::DataSpace data_space({ pointcloud2.height(), pointcloud2.width(), 3 });
+  std::shared_ptr<HighFive::Group> data_group_ptr;
 
-  if (!m_file.exist(id))
+  if (!m_file.exist(cloud_group_id))
   {
-    std::cout << "data id " << id << " does not exist! Creat new dataset in hdf5" << std::endl;
-    data_set_ptr = std::make_shared<HighFive::DataSet>(m_file.createDataSet<float>(id, data_space));
-    data_set_ptr->createAttribute(HEIGHT, pointcloud2.height());
-    data_set_ptr->createAttribute(WIDTH, pointcloud2.width());
-    data_set_ptr->createAttribute(IS_BIGENDIAN, pointcloud2.is_bigendian());
-    data_set_ptr->createAttribute(POINT_STEP, pointcloud2.point_step());
-    data_set_ptr->createAttribute(ROW_STEP, pointcloud2.row_step());
-    data_set_ptr->createAttribute(IS_DENSE, pointcloud2.is_dense());
+    std::cout << "data id " << cloud_group_id << " does not exist! Creat new dataset in hdf5" << std::endl;
+    data_group_ptr = std::make_shared<HighFive::Group>(m_file.createGroup(cloud_group_id));
+    data_group_ptr->createAttribute(HEIGHT, pointcloud2.height());
+    data_group_ptr->createAttribute(WIDTH, pointcloud2.width());
+    data_group_ptr->createAttribute(IS_BIGENDIAN, pointcloud2.is_bigendian());
+    data_group_ptr->createAttribute(POINT_STEP, pointcloud2.point_step());
+    data_group_ptr->createAttribute(ROW_STEP, pointcloud2.row_step());
+    data_group_ptr->createAttribute(IS_DENSE, pointcloud2.is_dense());
   }
   else
   {
-    std::cout << "data id " << id << " already exists!" << std::endl;
-    data_set_ptr = std::make_shared<HighFive::DataSet>(m_file.getDataSet(id));
-    data_set_ptr->getAttribute(HEIGHT).write(pointcloud2.height());
-    data_set_ptr->getAttribute(WIDTH).write(pointcloud2.width());
-    data_set_ptr->getAttribute(IS_BIGENDIAN).write(pointcloud2.is_bigendian());
-    data_set_ptr->getAttribute(POINT_STEP).write(pointcloud2.point_step());
-    data_set_ptr->getAttribute(ROW_STEP).write(pointcloud2.row_step());
-    data_set_ptr->getAttribute(IS_DENSE).write(pointcloud2.is_dense());
+    std::cout << "data id " << cloud_group_id << " already exists!" << std::endl;
+    data_group_ptr = std::make_shared<HighFive::Group>(m_file.getGroup(cloud_group_id));
+    data_group_ptr->getAttribute(HEIGHT).write(pointcloud2.height());
+    data_group_ptr->getAttribute(WIDTH).write(pointcloud2.width());
+    data_group_ptr->getAttribute(IS_BIGENDIAN).write(pointcloud2.is_bigendian());
+    data_group_ptr->getAttribute(POINT_STEP).write(pointcloud2.point_step());
+    data_group_ptr->getAttribute(ROW_STEP).write(pointcloud2.row_step());
+    data_group_ptr->getAttribute(IS_DENSE).write(pointcloud2.is_dense());
   }
 
-  writePointFieldAttributes(*data_set_ptr, pointcloud2.fields());
+  writePointFieldAttributes(*data_group_ptr, pointcloud2.fields());
+  // TODO
+  writeHeaderAttributes(*data_group_ptr, pointcloud2.header());
 
-  const uint8_t* begin = reinterpret_cast<const uint8_t*>(pointcloud2.data().c_str());
+  std::string points_id = HDF5_GROUP_POINTCLOUD + "/" + uuid + "/points";
+  HighFive::DataSpace data_space({ pointcloud2.height(), pointcloud2.width(), 3 });
+
+  std::shared_ptr<HighFive::DataSet> points_dataset_ptr;
+  if (!m_file.exist(points_id))
+    points_dataset_ptr = std::make_shared<HighFive::DataSet>(m_file.createDataSet<float>(points_id, data_space));
+  else
+    points_dataset_ptr = std::make_shared<HighFive::DataSet>(m_file.getDataSet(points_id));
+
   std::vector<std::vector<std::vector<float>>> point_data;
   point_data.resize(pointcloud2.height());
 
@@ -700,7 +711,6 @@ void SeerepHDF5IO::writePointCloud2(const std::string& uuid, const seerep::Point
 
   for (int i = 0; i < pointcloud2.height(); i++)
   {
-    const uint8_t* row = begin + i * pointcloud2.row_step();
     point_data[i].reserve(pointcloud2.width());
     for (int y = 0; y < pointcloud2.width(); y++)
     {
@@ -709,9 +719,8 @@ void SeerepHDF5IO::writePointCloud2(const std::string& uuid, const seerep::Point
     }
   }
 
-  data_set_ptr->write(point_data);
+  points_dataset_ptr->write(point_data);
 
-  writeHeaderAttributes(*data_set_ptr, pointcloud2.header());
   writeBoundingBoxLabeled(HDF5_GROUP_POINTCLOUD, uuid, pointcloud2.labels_bb());
 
   m_file.flush();
@@ -757,7 +766,9 @@ std::optional<seerep::PointCloud2> SeerepHDF5IO::readPointCloud2(const std::stri
   pointcloud2.set_is_dense(is_dense);
 
   std::cout << "read point field attributes" << std::endl;
-  *pointcloud2.mutable_fields() = readPointFieldAttributes(data_set);
+
+  // TODO
+  //*pointcloud2.mutable_fields() = readPointFieldAttributes(data_set);
 
   std::cout << "read Dataset" << std::endl;
 
