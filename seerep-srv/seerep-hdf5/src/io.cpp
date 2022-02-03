@@ -14,9 +14,14 @@ void SeerepHDF5IO::writeAttribute(const std::shared_ptr<HighFive::DataSet> dataS
                                   T value)
 {
   if (!dataSetPtr->hasAttribute(attributeField))
+  {
     dataSetPtr->createAttribute(attributeField, value);
+  }
   else
+  {
     dataSetPtr->getAttribute(attributeField).write(value);
+  }
+  m_file.flush();
 }
 
 template <typename T>
@@ -40,6 +45,7 @@ void SeerepHDF5IO::deleteAttribute(const std::shared_ptr<HighFive::DataSet> data
   if (dataSetPtr->hasAttribute(attributeField))
   {
     dataSetPtr->deleteAttribute(attributeField);
+    m_file.flush();
   }
 }
 
@@ -157,12 +163,6 @@ void SeerepHDF5IO::writeImage(const std::string& id, const seerep::Image& image)
 
   m_file.flush();
 }
-
-// void SeerepHDF5IO::writeImageLabeled(const std::string& id, const seerep::ImageLabeled& imageLabeled)
-// {
-//   writeImage(id, imageLabeled.image());
-//   writeBoundingBox2DLabeled(id, imageLabeled.labels());
-// }
 
 std::optional<seerep::Image> SeerepHDF5IO::readImage(const std::string& id)
 {
@@ -298,12 +298,30 @@ SeerepHDF5IO::readPointFieldAttributes(HighFive::Group& cloud_group)
   return repeatedPointField;
 }
 
-// void SeerepHDF5IO::writePointCloud2Labeled(const std::string& id, const seerep::PointCloud2Labeled& pointcloud2Labeled)
-// {
-//   writePointCloud2(id + "/" + RAWDATA, pointcloud2Labeled.pointcloud());
+std::optional<std::string> SeerepHDF5IO::readFrameId(const std::string& datatypeGroup, const std::string& uuid)
+{
+  std::string id = datatypeGroup + "/" + uuid;
+  std::string hdf5DatasetRawDataPath = id + "/" + RAWDATA;
+  if (!m_file.exist(hdf5DatasetRawDataPath))
+  {
+    std::cout << "id " << hdf5DatasetRawDataPath << " does not exist in file " << m_file.getName() << std::endl;
+    throw std::invalid_argument("id " + hdf5DatasetRawDataPath + " does not exist in file " + m_file.getName());
+  }
+  std::cout << "get dataset " << hdf5DatasetRawDataPath << std::endl;
+  std::shared_ptr<HighFive::DataSet> data_set_ptr =
+      std::make_shared<HighFive::DataSet>(m_file.getDataSet(hdf5DatasetRawDataPath));
 
-//   writeBoundingBoxLabeled(HDF5_GROUP_POINTCLOUD, id, pointcloud2Labeled.labels());
-// }
+  if (data_set_ptr->hasAttribute(HEADER_FRAME_ID))
+  {
+    std::string frameId;
+    data_set_ptr->getAttribute(HEADER_FRAME_ID).read(frameId);
+    return frameId;
+  }
+  else
+  {
+    return std::nullopt;
+  }
+}
 
 void SeerepHDF5IO::writeAABB(
     const std::string& datatypeGroup, const std::string& uuid,
@@ -371,12 +389,13 @@ bool SeerepHDF5IO::hasAABB(const std::string& datatypeGroup, const std::string& 
   return group.hasAttribute(AABB_FIELD);
 }
 
-int64_t SeerepHDF5IO::readTimeFromRaw(const std::string& datatypeGroup, const std::string& uuid)
+void SeerepHDF5IO::readTimeFromRaw(const std::string& datatypeGroup, const std::string& uuid, int64_t& secs,
+                                   int64_t& nanos)
 {
-  return readTime(datatypeGroup, uuid + "/" + RAWDATA);
+  readTime(datatypeGroup, uuid + "/" + RAWDATA, secs, nanos);
 }
 
-int64_t SeerepHDF5IO::readTime(const std::string& datatypeGroup, const std::string& uuid)
+void SeerepHDF5IO::readTime(const std::string& datatypeGroup, const std::string& uuid, int64_t& secs, int64_t& nanos)
 {
   std::string id = datatypeGroup + "/" + uuid;
 
@@ -386,7 +405,6 @@ int64_t SeerepHDF5IO::readTime(const std::string& datatypeGroup, const std::stri
     throw std::invalid_argument("id " + id + " does not exist in file " + m_file.getName());
   }
 
-  int64_t time;
   switch (m_file.getObjectType(id))
   {
     case HighFive::ObjectType::Group:
@@ -395,14 +413,22 @@ int64_t SeerepHDF5IO::readTime(const std::string& datatypeGroup, const std::stri
       HighFive::Group group = m_file.getGroup(id);
       if (group.hasAttribute(HEADER_STAMP_SECONDS))
       {
-        group.getAttribute(HEADER_STAMP_SECONDS).read(time);
-        return time;
+        group.getAttribute(HEADER_STAMP_SECONDS).read(secs);
       }
       else
       {
         throw std::invalid_argument("id " + id + " has no attribute " + HEADER_STAMP_SECONDS);
       }
+      if (group.hasAttribute(HEADER_STAMP_NANOS))
+      {
+        group.getAttribute(HEADER_STAMP_NANOS).read(nanos);
+      }
+      else
+      {
+        throw std::invalid_argument("id " + id + " has no attribute " + HEADER_STAMP_NANOS);
+      }
     };
+    break;
 
     case HighFive::ObjectType::Dataset:
     {
@@ -410,25 +436,37 @@ int64_t SeerepHDF5IO::readTime(const std::string& datatypeGroup, const std::stri
       HighFive::DataSet dataset = m_file.getDataSet(id);
       if (dataset.hasAttribute(HEADER_STAMP_SECONDS))
       {
-        dataset.getAttribute(HEADER_STAMP_SECONDS).read(time);
-        return time;
+        dataset.getAttribute(HEADER_STAMP_SECONDS).read(secs);
       }
       else
       {
         throw std::invalid_argument("id " + id + " has no attribute " + HEADER_STAMP_SECONDS);
       }
+      if (dataset.hasAttribute(HEADER_STAMP_NANOS))
+      {
+        dataset.getAttribute(HEADER_STAMP_NANOS).read(nanos);
+      }
+      else
+      {
+        throw std::invalid_argument("id " + id + " has no attribute " + HEADER_STAMP_NANOS);
+      }
     };
+    break;
+
     default:
-      return std::numeric_limits<uint64_t>::min();
+      secs = std::numeric_limits<uint64_t>::min();
+      nanos = std::numeric_limits<uint64_t>::min();
   }
 }
 
-void SeerepHDF5IO::writeTimeToRaw(const std::string& datatypeGroup, const std::string& uuid, const int64_t& time)
+void SeerepHDF5IO::writeTimeToRaw(const std::string& datatypeGroup, const std::string& uuid, const int64_t& secs,
+                                  const int64_t& nanos)
 {
-  writeTime(datatypeGroup, uuid + "/" + RAWDATA, time);
+  writeTime(datatypeGroup, uuid + "/" + RAWDATA, secs, nanos);
 }
 
-void SeerepHDF5IO::writeTime(const std::string& datatypeGroup, const std::string& uuid, const int64_t& time)
+void SeerepHDF5IO::writeTime(const std::string& datatypeGroup, const std::string& uuid, const int64_t& secs,
+                             const int64_t& nanos)
 {
   std::string id = datatypeGroup + "/" + uuid;
 
@@ -446,11 +484,19 @@ void SeerepHDF5IO::writeTime(const std::string& datatypeGroup, const std::string
       HighFive::Group group = m_file.getGroup(id);
       if (group.hasAttribute(HEADER_STAMP_SECONDS))
       {
-        group.getAttribute(HEADER_STAMP_SECONDS).write(time);
+        group.getAttribute(HEADER_STAMP_SECONDS).write(secs);
       }
       else
       {
-        group.createAttribute(HEADER_STAMP_SECONDS, time);
+        group.createAttribute(HEADER_STAMP_SECONDS, secs);
+      }
+      if (group.hasAttribute(HEADER_STAMP_NANOS))
+      {
+        group.getAttribute(HEADER_STAMP_NANOS).write(nanos);
+      }
+      else
+      {
+        group.createAttribute(HEADER_STAMP_NANOS, nanos);
       }
       m_file.flush();
       return;
@@ -462,11 +508,19 @@ void SeerepHDF5IO::writeTime(const std::string& datatypeGroup, const std::string
       HighFive::DataSet dataset = m_file.getDataSet(id);
       if (dataset.hasAttribute(HEADER_STAMP_SECONDS))
       {
-        dataset.getAttribute(HEADER_STAMP_SECONDS).write(time);
+        dataset.getAttribute(HEADER_STAMP_SECONDS).write(secs);
       }
       else
       {
-        dataset.createAttribute(HEADER_STAMP_SECONDS, time);
+        dataset.createAttribute(HEADER_STAMP_SECONDS, secs);
+      }
+      if (dataset.hasAttribute(HEADER_STAMP_NANOS))
+      {
+        dataset.getAttribute(HEADER_STAMP_NANOS).write(nanos);
+      }
+      else
+      {
+        dataset.createAttribute(HEADER_STAMP_NANOS, nanos);
       }
       m_file.flush();
       return;
@@ -494,11 +548,13 @@ bool SeerepHDF5IO::hasTime(const std::string& datatypeGroup, const std::string& 
   {
     case HighFive::ObjectType::Group:
       std::cout << "get group " << id << std::endl;
-      return m_file.getGroup(id).hasAttribute(HEADER_STAMP_SECONDS);
+      return m_file.getGroup(id).hasAttribute(HEADER_STAMP_SECONDS) &&
+             m_file.getGroup(id).hasAttribute(HEADER_STAMP_NANOS);
 
     case HighFive::ObjectType::Dataset:
       std::cout << "get dataset " << id << std::endl;
-      return m_file.getDataSet(id).hasAttribute(HEADER_STAMP_SECONDS);
+      return m_file.getDataSet(id).hasAttribute(HEADER_STAMP_SECONDS) &&
+             m_file.getDataSet(id).hasAttribute(HEADER_STAMP_NANOS);
 
     default:
       return false;
@@ -954,6 +1010,7 @@ void SeerepHDF5IO::writeProjectname(const std::string& projectname)
   {
     m_file.getAttribute(PROJECTNAME).write(projectname);
   }
+  m_file.flush();
 }
 
 std::string SeerepHDF5IO::readProjectname()
@@ -964,6 +1021,227 @@ std::string SeerepHDF5IO::readProjectname()
     m_file.getAttribute(PROJECTNAME).read(projectname);
   }
   return projectname;
+}
+
+void SeerepHDF5IO::writeProjectFrameId(const std::string& frameId)
+{
+  if (!m_file.hasAttribute(PROJECTFRAMEID))
+  {
+    m_file.createAttribute<std::string>(PROJECTFRAMEID, frameId);
+  }
+  else
+  {
+    m_file.getAttribute(PROJECTFRAMEID).write(frameId);
+  }
+  m_file.flush();
+}
+
+std::string SeerepHDF5IO::readProjectFrameId()
+{
+  std::string frameId;
+  if (m_file.hasAttribute(PROJECTFRAMEID))
+  {
+    m_file.getAttribute(PROJECTFRAMEID).read(frameId);
+  }
+  return frameId;
+}
+
+void SeerepHDF5IO::writeTransformStamped(const seerep::TransformStamped& tf)
+{
+  std::string hdf5DatasetPath = HDF5_GROUP_TF + "/" + tf.header().frame_id() + "_" + tf.child_frame_id();
+  std::string hdf5DatasetTimePath = hdf5DatasetPath + "/" + "time";
+  std::string hdf5DatasetTransPath = hdf5DatasetPath + "/" + "translation";
+  std::string hdf5DatasetRotPath = hdf5DatasetPath + "/" + "rotation";
+
+  std::shared_ptr<HighFive::DataSet> data_set_time_ptr, data_set_trans_ptr, data_set_rot_ptr;
+  uint64_t size = 0;
+
+  if (!m_file.exist(hdf5DatasetPath))
+  {
+    std::cout << "data id " << hdf5DatasetPath << " does not exist! Creat new dataset in hdf5" << std::endl;
+    HighFive::Group group = m_file.createGroup(hdf5DatasetPath);
+    group.createAttribute("CHILD_FRAME", tf.child_frame_id());
+    group.createAttribute("PARENT_FRAME", tf.header().frame_id());
+
+    // TIME
+    // Create a dataspace with initial shape and max shape
+    HighFive::DataSpace data_space_time({ 1, 2 }, { HighFive::DataSpace::UNLIMITED, 2 });
+    // Use chunking
+    HighFive::DataSetCreateProps props_time;
+    props_time.add(HighFive::Chunking(std::vector<hsize_t>{ 1, 2 }));
+    data_set_time_ptr = std::make_shared<HighFive::DataSet>(
+        m_file.createDataSet<int64_t>(hdf5DatasetTimePath, data_space_time, props_time));
+
+    // TRANSLATION
+    // Create a dataspace with initial shape and max shape
+    HighFive::DataSpace data_space_trans({ 1, 3 }, { HighFive::DataSpace::UNLIMITED, 3 });
+    // Use chunking
+    HighFive::DataSetCreateProps props_trans;
+    props_trans.add(HighFive::Chunking(std::vector<hsize_t>{ 1, 3 }));
+    data_set_trans_ptr = std::make_shared<HighFive::DataSet>(
+        m_file.createDataSet<double>(hdf5DatasetTransPath, data_space_trans, props_trans));
+
+    // ROTATION
+    // Create a dataspace with initial shape and max shape
+    HighFive::DataSpace data_space_rot({ 1, 4 }, { HighFive::DataSpace::UNLIMITED, 4 });
+    // Use chunking
+    HighFive::DataSetCreateProps props_rot;
+    props_rot.add(HighFive::Chunking(std::vector<hsize_t>{ 1, 4 }));
+    data_set_rot_ptr = std::make_shared<HighFive::DataSet>(
+        m_file.createDataSet<double>(hdf5DatasetRotPath, data_space_rot, props_rot));
+  }
+  else
+  {
+    std::cout << "data id " << hdf5DatasetPath << " already exists!" << std::endl;
+    data_set_time_ptr = std::make_shared<HighFive::DataSet>(m_file.getDataSet(hdf5DatasetTimePath));
+    data_set_trans_ptr = std::make_shared<HighFive::DataSet>(m_file.getDataSet(hdf5DatasetTransPath));
+    data_set_rot_ptr = std::make_shared<HighFive::DataSet>(m_file.getDataSet(hdf5DatasetRotPath));
+
+    HighFive::Group group = m_file.getGroup(hdf5DatasetPath);
+    group.getAttribute(SIZE).read(size);
+
+    // Resize the dataset to a larger size
+    data_set_time_ptr->resize({ size + 1, 2 });
+    data_set_trans_ptr->resize({ size + 1, 3 });
+    data_set_rot_ptr->resize({ size + 1, 4 });
+  }
+
+  // write time
+  std::vector<int64_t> time;
+  time.push_back(tf.header().stamp().seconds());
+  time.push_back(tf.header().stamp().nanos());
+  data_set_time_ptr->select({ size, 0 }, { 1, 2 }).write(time);
+
+  // write translation
+  std::vector<double> trans;
+  trans.push_back(tf.transform().translation().x());
+  trans.push_back(tf.transform().translation().y());
+  trans.push_back(tf.transform().translation().z());
+  data_set_trans_ptr->select({ size, 0 }, { 1, 3 }).write(trans);
+
+  // write rotation
+  std::vector<double> rot;
+  rot.push_back(tf.transform().rotation().x());
+  rot.push_back(tf.transform().rotation().y());
+  rot.push_back(tf.transform().rotation().z());
+  rot.push_back(tf.transform().rotation().w());
+  data_set_rot_ptr->select({ size, 0 }, { 1, 4 }).write(rot);
+
+  // write the size as group attribute
+  HighFive::Group group = m_file.getGroup(hdf5DatasetPath);
+  if (!group.hasAttribute(SIZE))
+    group.createAttribute(SIZE, ++size);
+  else
+    group.getAttribute(SIZE).write(++size);
+
+  m_file.flush();
+}
+
+std::optional<std::vector<seerep::TransformStamped>> SeerepHDF5IO::readTransformStamped(const std::string& id)
+{
+  std::string hdf5GroupPath = HDF5_GROUP_TF + "/" + id;
+  std::string hdf5DatasetTimePath = hdf5GroupPath + "/" + "time";
+  std::string hdf5DatasetTransPath = hdf5GroupPath + "/" + "translation";
+  std::string hdf5DatasetRotPath = hdf5GroupPath + "/" + "rotation";
+
+  if (!m_file.exist(hdf5GroupPath) || !m_file.exist(hdf5DatasetTimePath) || !m_file.exist(hdf5DatasetTransPath) ||
+      !m_file.exist(hdf5DatasetRotPath))
+  {
+    return std::nullopt;
+  }
+
+  std::cout << "loading " << hdf5GroupPath << std::endl;
+
+  // read size
+  std::shared_ptr<HighFive::Group> group_ptr = std::make_shared<HighFive::Group>(m_file.getGroup(hdf5GroupPath));
+  int size;
+  group_ptr->getAttribute(SIZE).read(size);
+  if (size == 0)
+  {
+    std::cout << "tf data has size 0." << std::endl;
+    return std::nullopt;
+  }
+
+  // read frames
+  std::string parentframe;
+  group_ptr->getAttribute("PARENT_FRAME").read(parentframe);
+  std::string childframe;
+  group_ptr->getAttribute("CHILD_FRAME").read(childframe);
+
+  // read time
+  std::shared_ptr<HighFive::DataSet> data_set_time_ptr =
+      std::make_shared<HighFive::DataSet>(m_file.getDataSet(hdf5DatasetTimePath));
+  std::vector<std::vector<int64_t>> time;
+  data_set_time_ptr->read(time);
+
+  // read translation
+  std::shared_ptr<HighFive::DataSet> data_set_trans_ptr =
+      std::make_shared<HighFive::DataSet>(m_file.getDataSet(hdf5DatasetTransPath));
+  std::vector<std::vector<double>> trans;
+  data_set_trans_ptr->read(trans);
+
+  // read rotation
+  std::shared_ptr<HighFive::DataSet> data_set_rot_ptr =
+      std::make_shared<HighFive::DataSet>(m_file.getDataSet(hdf5DatasetRotPath));
+  std::vector<std::vector<double>> rot;
+  data_set_rot_ptr->read(rot);
+
+  // check if all have the right size
+  if (time.size() != size || trans.size() != size || rot.size() != size)
+  {
+    std::cout << "sizes of time (" << time.size() << "), translation (" << trans.size() << ") and rotation ("
+              << rot.size() << ") not matching. Size expected by value in metadata (" << size << ")" << std::endl;
+    return std::nullopt;
+  }
+
+  std::vector<seerep::TransformStamped> tfs;
+  for (int i = 0; i < size; i++)
+  {
+    seerep::TransformStamped tf;
+    tf.mutable_header()->set_frame_id(parentframe);
+    tf.set_child_frame_id(childframe);
+
+    tf.mutable_header()->mutable_stamp()->set_seconds(time.at(i).at(0));
+    tf.mutable_header()->mutable_stamp()->set_nanos(time.at(i).at(1));
+
+    seerep::Vector3 translation;
+    translation.set_x(trans.at(i).at(0));
+    translation.set_y(trans.at(i).at(1));
+    translation.set_z(trans.at(i).at(2));
+    *tf.mutable_transform()->mutable_translation() = translation;
+
+    seerep::Quaternion rotation;
+    rotation.set_x(rot.at(i).at(0));
+    rotation.set_y(rot.at(i).at(1));
+    rotation.set_z(rot.at(i).at(2));
+    rotation.set_w(rot.at(i).at(3));
+    *tf.mutable_transform()->mutable_rotation() = rotation;
+
+    tfs.push_back(tf);
+  }
+  return tfs;
+}
+
+std::optional<std::vector<std::string>> SeerepHDF5IO::readTransformStampedFrames(const std::string& id)
+{
+  std::string hdf5GroupPath = HDF5_GROUP_TF + "/" + id;
+
+  if (!m_file.exist(hdf5GroupPath))
+  {
+    return std::nullopt;
+  }
+
+  std::shared_ptr<HighFive::Group> group_ptr = std::make_shared<HighFive::Group>(m_file.getGroup(hdf5GroupPath));
+
+  std::cout << "loading parent frame of " << hdf5GroupPath << std::endl;
+
+  // read frames
+  std::string parentframe;
+  group_ptr->getAttribute("PARENT_FRAME").read(parentframe);
+  std::string childframe;
+  group_ptr->getAttribute("CHILD_FRAME").read(childframe);
+
+  return std::vector<std::string>{ parentframe, childframe };
 }
 
 } /* namespace seerep_hdf5 */

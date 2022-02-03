@@ -5,4 +5,5 @@ package seerep;
 message ProjectCreation
 {
   string name = 1;
+  string mapFrameId = 2;
 }

@@ -46,6 +46,14 @@ void DumpSensorMsgs::dump(const geometry_msgs::PoseStamped::ConstPtr& msg) const
   ROS_INFO_STREAM("Datatype not implemented.");
 }
 
+void DumpSensorMsgs::dump(const tf2_msgs::TFMessage::ConstPtr& msg) const
+{
+  for (geometry_msgs::TransformStamped transform : msg->transforms)
+  {
+    m_hdf5_io->writeTransformStamped(seerep_ros_conversions::toProto(transform));
+  }
+}
+
 std::optional<ros::Subscriber> DumpSensorMsgs::getSubscriber(const std::string& message_type, const std::string& topic)
 {
   switch (type(message_type))
@@ -64,6 +72,8 @@ std::optional<ros::Subscriber> DumpSensorMsgs::getSubscriber(const std::string& 
       return nh.subscribe<geometry_msgs::Pose>(topic, 0, &DumpSensorMsgs::dump, this);
     case geometry_msgs_PoseStamped:
       return nh.subscribe<geometry_msgs::PoseStamped>(topic, 0, &DumpSensorMsgs::dump, this);
+    case tf2_msgs_TFMessage:
+      return nh.subscribe<tf2_msgs::TFMessage>(topic, 0, &DumpSensorMsgs::dump, this);
     default:
       ROS_ERROR_STREAM("Type \"" << message_type << "\" not supported");
       return std::nullopt;
@@ -100,14 +110,15 @@ int main(int argc, char** argv)
     {
       // mainly catching "invalid uuid string"
       std::cout << e.what() << std::endl;
-      ROS_WARN_STREAM("The provided UUID is invalid! Generating a a new one.");
       projectUuid = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+      ROS_WARN_STREAM("The provided UUID is invalid! Generating a a new one. (" + projectUuid + ".h5)");
     }
   }
   else
   {
-    ROS_WARN_STREAM("Use the \"hdf5FolderPath\" parameter to specify the HDF5 file! Generating a a new one.");
     projectUuid = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+    ROS_WARN_STREAM("Use the \"hdf5FolderPath\" parameter to specify the HDF5 file! Generating a a new one. (" +
+                    projectUuid + ".h5)");
   }
 
   std::string hdf5FilePath = hdf5FolderPath + "/" + projectUuid + ".h5";

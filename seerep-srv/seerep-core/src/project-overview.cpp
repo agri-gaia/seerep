@@ -62,14 +62,14 @@ void ProjectOverview::recreateProjects()
   }
 }
 
-std::string ProjectOverview::newProject(std::string projectname)
+std::string ProjectOverview::newProject(std::string projectname, std::string mapFrameId)
 {
   boost::uuids::uuid uuid = boost::uuids::random_generator()();
 
   std::string filename = boost::lexical_cast<std::string>(uuid);
   std::string path = m_datafolder + "/" + filename + ".h5";
 
-  auto project = std::make_shared<Project>(uuid, path, projectname);
+  auto project = std::make_shared<Project>(uuid, path, projectname, mapFrameId);
   m_projects.insert(std::make_pair(uuid, project));
 
   return filename;
@@ -83,9 +83,9 @@ void ProjectOverview::getProjects(seerep::ProjectUUIDs* projectUUIDs)
   }
 }
 
-void ProjectOverview::addPointCloud(const seerep::PointCloud2& pointcloud2, boost::uuids::uuid uuid)
+void ProjectOverview::addPointCloud(const seerep::PointCloud2& pointcloud2, boost::uuids::uuid projectuuid)
 {
-  m_projects.at(uuid)->addPointCloud(pointcloud2);
+  m_projects.at(projectuuid)->addPointCloud(pointcloud2);
 }
 
 // void ProjectOverview::addPointCloudLabeled(const seerep::PointCloud2Labeled& pointcloud2labeled, boost::uuids::uuid uuid)
@@ -93,9 +93,14 @@ void ProjectOverview::addPointCloud(const seerep::PointCloud2& pointcloud2, boos
 //   m_projects.at(uuid)->addPointCloudLabeled(pointcloud2labeled);
 // }
 
-boost::uuids::uuid ProjectOverview::addImage(const seerep::Image& image, boost::uuids::uuid uuid)
+boost::uuids::uuid ProjectOverview::addImage(const seerep::Image& image, boost::uuids::uuid projectuuid)
 {
-  return m_projects.at(uuid)->addImage(image);
+  return m_projects.at(projectuuid)->addImage(image);
+}
+
+void ProjectOverview::addTF(const seerep::TransformStamped& tf, boost::uuids::uuid projectuuid)
+{
+  m_projects.at(projectuuid)->addTF(tf);
 }
 
 } /* namespace seerep_core */

@@ -7,7 +7,7 @@
 // seerep-msgs
 #include <seerep-msgs/boundingbox.pb.h>
 #include <seerep-msgs/image.pb.h>
-// #include <seerep-msgs/image_labeled.pb.h>
+#include <seerep-msgs/query.pb.h>
 // seerep-hdf5
 #include <seerep-hdf5/io.h>
 // seerep-conversion
@@ -16,6 +16,7 @@
 // seerep-core
 #include "image.h"
 #include "aabb-hierarchy.h"
+#include "tf-overview.h"
 
 // uuid
 #include <boost/uuid/uuid.hpp>             // uuid class
@@ -29,13 +30,12 @@ namespace seerep_core
 class ImageOverview
 {
 public:
-  ImageOverview();
-  ImageOverview(std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io);
+  ImageOverview(std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io, std::shared_ptr<seerep_core::TFOverview> tfOverview,
+                std::string frameId);
   ~ImageOverview();
   std::vector<std::optional<seerep::Image>> getData(const seerep::Query& bb);
 
   boost::uuids::uuid addDataset(const seerep::Image& image);
-  // void addDatasetLabeled(const seerep::ImageLabeled& imagelabeled);
 
 private:
   void recreateDatasets();
@@ -51,7 +51,8 @@ private:
 
   uint64_t m_data_count;
 
-  std::string m_coordinatesystem;
+  std::string m_frameId;
+  std::shared_ptr<seerep_core::TFOverview> m_tfOverview;
   std::shared_ptr<seerep_hdf5::SeerepHDF5IO> m_hdf5_io;
 
   std::unordered_map<uint64_t, std::shared_ptr<seerep_core::Image>> m_datasets;

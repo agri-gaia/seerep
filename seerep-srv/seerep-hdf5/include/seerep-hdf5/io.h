@@ -5,13 +5,14 @@
 #include <highfive/H5File.hpp>
 
 // seerep-msgs
-#include <seerep-msgs/image.pb.h>
-#include <seerep-msgs/point_cloud_2.pb.h>
 #include <seerep-msgs/boundingbox_labeled.pb.h>
+#include <seerep-msgs/image.pb.h>
 #include <seerep-msgs/point.pb.h>
-#include <seerep-msgs/quaternion.pb.h>
+#include <seerep-msgs/point_cloud_2.pb.h>
 #include <seerep-msgs/pose.pb.h>
 #include <seerep-msgs/pose_stamped.pb.h>
+#include <seerep-msgs/quaternion.pb.h>
+#include <seerep-msgs/transform_stamped.pb.h>
 
 // std
 #include <optional>
@@ -43,6 +44,8 @@ public:
 
   // void writePointCloud2Labeled(const std::string& id, const seerep::PointCloud2Labeled& pointcloud2Labeled);
 
+  std::optional<std::string> readFrameId(const std::string& datatypeGroup, const std::string& uuid);
+
   void
   writeBoundingBoxLabeled(const std::string& datatypeGroup, const std::string& uuid,
                           const google::protobuf::RepeatedPtrField<::seerep::BoundingBoxLabeled>& boundingboxLabeled);
@@ -70,11 +73,12 @@ public:
 
   bool hasAABB(const std::string& datatypeGroup, const std::string& uuid);
 
-  int64_t readTimeFromRaw(const std::string& datatypeGroup, const std::string& uuid);
-  int64_t readTime(const std::string& datatypeGroup, const std::string& uuid);
+  void readTimeFromRaw(const std::string& datatypeGroup, const std::string& uuid, int64_t& secs, int64_t& nanos);
+  void readTime(const std::string& datatypeGroup, const std::string& uuid, int64_t& secs, int64_t& nanos);
 
-  void writeTimeToRaw(const std::string& datatypeGroup, const std::string& uuid, const int64_t& time);
-  void writeTime(const std::string& datatypeGroup, const std::string& uuid, const int64_t& time);
+  void writeTimeToRaw(const std::string& datatypeGroup, const std::string& uuid, const int64_t& secs,
+                      const int64_t& nanos);
+  void writeTime(const std::string& datatypeGroup, const std::string& uuid, const int64_t& secs, const int64_t& nanos);
 
   bool hasTimeRaw(const std::string& datatypeGroup, const std::string& uuid);
   bool hasTime(const std::string& datatypeGroup, const std::string& uuid);
@@ -95,6 +99,15 @@ public:
 
   std::string readProjectname();
 
+  void writeProjectFrameId(const std::string& frameId);
+
+  std::string readProjectFrameId();
+
+  void writeTransformStamped(const seerep::TransformStamped& tf);
+
+  std::optional<std::vector<seerep::TransformStamped>> readTransformStamped(const std::string& id);
+  std::optional<std::vector<std::string>> readTransformStampedFrames(const std::string& id);
+
 private:
   template <class T>
   void writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, const seerep::Header& header);
@@ -112,6 +125,7 @@ private:
 
   void writePointAttributes(HighFive::DataSet& data_set, const seerep::Point& point, const std::string& prefix = "");
 
+  const std::string SIZE = "size";
   const std::string CLASS = "CLASS";
   // image / pointcloud attribute keys
   const std::string HEIGHT = "height";
@@ -151,6 +165,7 @@ private:
   const std::string AABB_FIELD = "AABB";
 
   const std::string PROJECTNAME = "projectname";
+  const std::string PROJECTFRAMEID = "projectframeid";
 
   // dataset names
   const std::string RAWDATA = "rawdata";
@@ -165,6 +180,7 @@ public:
   // datatype group names in hdf5
   inline static const std::string HDF5_GROUP_IMAGE = "images";
   inline static const std::string HDF5_GROUP_POINTCLOUD = "pointclouds";
+  inline static const std::string HDF5_GROUP_TF = "tf";
 };
 
 } /* namespace seerep_hdf5 */

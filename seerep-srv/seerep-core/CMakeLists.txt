@@ -21,6 +21,7 @@ find_package(Boost REQUIRED)
 find_package(catkin REQUIRED
 	COMPONENTS
 	pcl_conversions
+	tf2
 )
 
 configure_file(include/SeerepCoreConfig.h.in SeerepCoreConfig.h)
@@ -40,6 +41,8 @@ include_directories(
 add_library(seerepcore
 	src/project.cpp
 	src/project-overview.cpp
+	src/tf.cpp
+	src/tf-overview.cpp
 	src/pointcloud.cpp
 	src/pointcloud-overview.cpp
 	src/image.cpp
@@ -60,6 +63,8 @@ target_link_libraries(seerepcore
 set(INSTALL_HEADERS
 	include/seerep-core/project.h
 	include/seerep-core/project-overview.h
+	include/seerep-core/tf.h
+	include/seerep-core/tf-overview.h
 	include/seerep-core/pointcloud.h
 	include/seerep-core/pointcloud-overview.h
 	include/seerep-core/image.h
