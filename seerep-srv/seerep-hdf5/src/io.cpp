@@ -709,14 +709,49 @@ void SeerepHDF5IO::writePointCloud2(const std::string& uuid, const seerep::Point
   seerep_hdf5::PointCloud2ConstIterator<float> y_iter(pointcloud2, "y");
   seerep_hdf5::PointCloud2ConstIterator<float> z_iter(pointcloud2, "z");
 
+  std::array<float, 3> min, max;
+  min[0] = min[1] = min[2] = std::numeric_limits<float>::max();
+  max[0] = max[1] = max[2] = std::numeric_limits<float>::min();
+
   for (int i = 0; i < pointcloud2.height(); i++)
   {
     point_data[i].reserve(pointcloud2.width());
-    for (int y = 0; y < pointcloud2.width(); y++)
+    for (int j = 0; j < pointcloud2.width(); j++)
     {
-      point_data[i].push_back(std::vector{ *x_iter, *y_iter, *z_iter });
+      const float& x = *x_iter;
+      const float& y = *y_iter;
+      const float& z = *z_iter;
+
+      // compute bounding box
+      if (x < min[0])
+        min[0] = x;
+      if (x > max[0])
+        max[0] = x;
+
+      if (y < min[1])
+        min[1] = y;
+      if (y > max[1])
+        max[1] = y;
+
+      if (z < min[2])
+        min[2] = z;
+      if (z > max[2])
+        max[2] = z;
+
+      point_data[i].push_back(std::vector{ x, y, z });
+
       ++x_iter, ++y_iter, ++z_iter;
     }
+  }
+
+  const std::vector boundingbox{ min[0], min[1], min[2], max[0], max[1], max[2] };
+  if (!m_file.exist(cloud_group_id))
+  {
+    data_group_ptr->createAttribute(BOUNDINGBOX, boundingbox);
+  }
+  else
+  {
+    data_group_ptr->getAttribute(BOUNDINGBOX).write(boundingbox);
   }
 
   points_dataset_ptr->write(point_data);

@@ -122,6 +122,9 @@ private:
   const std::string POINT_STEP = "point_step";
   const std::string IS_DENSE = "is_dense";
 
+  // bounding box attribute keys for point cloud
+  const std::string BOUNDINGBOX = "boundingbox";
+
   // pointcloud fields attribute keys
   const std::string FIELD_NAME = "field_name_";
   const std::string FIELD_OFFSET = "field_offset_";
