@@ -28,26 +28,6 @@ else:
 
 theTime = int(time.time())
 
-theTf = tf.TransformStamped()
-theTf.header.frame_id = "map"
-theTf.header.stamp.seconds = theTime
-theTf.header.uuid_project = projectname
-theTf.child_frame_id = "camera"
-theTf.transform.translation.x = 1
-theTf.transform.translation.y = 2
-theTf.transform.translation.z = 3
-theTf.transform.rotation.x = 0
-theTf.transform.rotation.y = 0
-theTf.transform.rotation.z = 0
-theTf.transform.rotation.w = 1
-stub.TransferTransformStamped(theTf)
-
-theTf.header.stamp.seconds = theTime + 10
-theTf.transform.translation.x = 100
-theTf.transform.translation.y = 200
-theTf.transform.translation.z = 300
-stub.TransferTransformStamped(theTf)
-
 for n in range(10):
     theImage = image.Image()
 
@@ -91,3 +71,23 @@ for n in range(10):
     uuidImg = stub.TransferImage(theImage)
 
     print("uuid of transfered img: " + uuidImg.message)
+
+theTf = tf.TransformStamped()
+theTf.header.frame_id = "map"
+theTf.header.stamp.seconds = theTime
+theTf.header.uuid_project = projectname
+theTf.child_frame_id = "camera"
+theTf.transform.translation.x = 1
+theTf.transform.translation.y = 2
+theTf.transform.translation.z = 3
+theTf.transform.rotation.x = 0
+theTf.transform.rotation.y = 0
+theTf.transform.rotation.z = 0
+theTf.transform.rotation.w = 1
+stub.TransferTransformStamped(theTf)
+
+theTf.header.stamp.seconds = theTime + 10
+theTf.transform.translation.x = 100
+theTf.transform.translation.y = 200
+theTf.transform.translation.z = 300
+stub.TransferTransformStamped(theTf)
