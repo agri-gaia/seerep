@@ -716,7 +716,8 @@ SeerepHDF5IO::readLabelsGeneral(const std::string& datatypeGroup, const std::str
   return result;
 }
 
-void SeerepHDF5IO::writePointCloud2(const std::string& uuid, const seerep::PointCloud2& pointcloud2)
+std::shared_ptr<HighFive::Group> SeerepHDF5IO::writePointCloud2(const std::string& uuid,
+                                                                const seerep::PointCloud2& pointcloud2)
 {
   std::string cloud_group_id = HDF5_GROUP_POINTCLOUD + "/" + uuid;
 
@@ -815,6 +816,7 @@ void SeerepHDF5IO::writePointCloud2(const std::string& uuid, const seerep::Point
   writeBoundingBoxLabeled(HDF5_GROUP_POINTCLOUD, uuid, pointcloud2.labels_bb());
 
   m_file.flush();
+  return data_group_ptr;
 }
 
 std::map<std::string, HighFive::Group> SeerepHDF5IO::getPointClouds()

@@ -1,5 +1,11 @@
 #include "seerep-core/pointcloud-overview.h"
 
+// uuids
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/random_generator.hpp>
+#include <boost/uuid/string_generator.hpp>
+#include <boost/uuid/uuid_io.hpp>
+
 namespace seerep_core
 {
 PointcloudOverview::PointcloudOverview()
@@ -28,8 +34,11 @@ void PointcloudOverview::recreateDatasets()
   {
     std::cout << "found " << cloud.first << " in HDF5 file." << std::endl;
 
-    // m_datasets.insert(std::make_pair(id, pc));
-    // m_rt.insert(std::make_pair(pc->getAABB(), pc->getID()));
+    std::shared_ptr<Pointcloud> cloud_io_ptr = std::make_shared<Pointcloud>(cloud.first, cloud.second);
+
+    m_datasets.insert(std::make_pair(data_count, cloud_io_ptr));
+    m_rt.insert(std::make_pair(cloud_io_ptr->getAABB(), data_count));
+    data_count++;
   }
 }
 
@@ -37,11 +46,11 @@ std::vector<std::optional<seerep::PointCloud2>> PointcloudOverview::getData(cons
 {
   std::vector<std::optional<seerep::PointCloud2>> result;
 
-  AabbHierarchy::AABB aabb(
-      AabbHierarchy::Point(query.boundingbox().point_min().x(), query.boundingbox().point_min().y(),
-                           query.boundingbox().point_min().z()),
-      AabbHierarchy::Point(query.boundingbox().point_max().x(), query.boundingbox().point_max().y(),
-                           query.boundingbox().point_max().z()));
+  const seerep::Point min = query.boundingbox().point_min();
+  const seerep::Point max = query.boundingbox().point_max();
+
+  AabbHierarchy::AABB aabb(AabbHierarchy::Point(min.x(), min.y(), min.z()),
+                           AabbHierarchy::Point(max.x(), max.y(), max.z()));
 
   std::vector<AabbHierarchy::AabbIdPair> rt_result;
 
@@ -62,21 +71,29 @@ std::vector<std::optional<seerep::PointCloud2>> PointcloudOverview::getData(cons
   return result;
 }
 
-void PointcloudOverview::addDataset(const seerep::PointCloud2& pointcloud2)
+void PointcloudOverview::addDataset(const seerep::PointCloud2& cloud)
 {
-  uint64_t id = data_count++;
-  auto pc = std::make_shared<Pointcloud>(coordinatesystem, m_hdf5_io, pointcloud2, id);
-  m_datasets.insert(std::make_pair(id, pc));
-  m_rt.insert(std::make_pair(pc->getAABB(), pc->getID()));
+  boost::uuids::uuid uuid;
+  if (cloud.header().uuid_msgs().empty())
+  {
+    uuid = boost::uuids::random_generator()();
+  }
+  else
+  {
+    boost::uuids::string_generator gen;
+    uuid = gen(cloud.header().uuid_msgs());
+  }
+
+  std::shared_ptr<HighFive::Group> cloud_group_ptr =
+      m_hdf5_io->writePointCloud2(boost::lexical_cast<std::string>(uuid), cloud);
+
+  std::shared_ptr<Pointcloud> cloud_io_ptr =
+      std::make_shared<Pointcloud>(boost::lexical_cast<std::string>(uuid), *cloud_group_ptr);
+
+  m_datasets.insert(std::make_pair(data_count, cloud_io_ptr));
+  m_rt.insert(std::make_pair(cloud_io_ptr->getAABB(), data_count));
+
+  data_count++;
 }
-
-// void PointcloudOverview::addDatasetLabeled(const seerep::PointCloud2Labeled& pointcloud2labeled)
-// {
-//   uint64_t id = data_count++;
-//   auto pc = std::make_shared<Pointcloud>(coordinatesystem, m_hdf5_io, pointcloud2labeled, id);
-//   m_datasets.insert(std::make_pair(id, pc));
-
-//   m_rt.insert(std::make_pair(pc->getAABB(), pc->getID()));
-// }
 
 } /* namespace seerep_core */

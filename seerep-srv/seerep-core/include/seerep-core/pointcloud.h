@@ -16,48 +16,31 @@
 // seerep-core
 #include "aabb-hierarchy.h"
 
-// pcl
-#include <pcl/point_cloud.h>
-#include <pcl/point_types.h>
-#include <pcl/PCLPointCloud2.h>
-#include <pcl/conversions.h>
-#include <pcl/filters/crop_box.h>
+#include <Eigen/Dense>
 
-#include <pcl_conversions/pcl_conversions.h>
-#include <pcl/features/moment_of_inertia_estimation.h>
+#include <highfive/H5Group.hpp>
 
 namespace seerep_core
 {
 class Pointcloud
 {
 public:
-  Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io,
-             const seerep::PointCloud2& pointcloud2, const uint64_t& id);
-  Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io, const uint64_t& id);
-  // labeled
-  // Pointcloud(std::string coordinatesystemParent, std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io,
-  //            const seerep::PointCloud2Labeled& pointcloud2, const uint64_t& id);
+  Pointcloud(const std::string& uuid, HighFive::Group& cloud_group);
+
   ~Pointcloud();
 
   std::optional<seerep::PointCloud2> getData(const seerep::Query& query);
 
   void getMinMaxFromBundingBox(Eigen::Vector4f& minPt, Eigen::Vector4f& maxPt, const seerep::Boundingbox& bb);
 
-  void protoToPcl(const seerep::PointCloud2& pc_proto, pcl::PointCloud<pcl::PointXYZ>::Ptr& pc_pcl);
-  void pclToProto(const pcl::PointCloud<pcl::PointXYZ>::Ptr& pc_pcl, seerep::PointCloud2& pc_proto);
-
   AabbHierarchy::AABB getAABB();
-  uint64_t getID();
+  std::string getUUID();
 
 private:
-  AabbHierarchy::AABB calcAABB(const seerep::PointCloud2& pointcloud2);
+  const std::string m_uuid;
+  std::unordered_map<uint64_t, std::shared_ptr<seerep_core::Pointcloud>> m_datasets;
 
-  std::string m_coordinatesystem;
-  std::string m_coordinatesystemParent;
-  std::shared_ptr<seerep_hdf5::SeerepHDF5IO> m_hdf5_io;
-  const uint64_t m_id;
-  // axis aligned bounding box
-  AabbHierarchy::AABB m_aabb;
+  const HighFive::Group& m_cloud_group;
 };
 
 } /* namespace seerep_core */
