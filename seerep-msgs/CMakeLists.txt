@@ -1,8 +1,14 @@
 cmake_minimum_required(VERSION 3.10)
 project(seerep-msgs VERSION 0.1)
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
+include(BuildFlatBuffers)
+include(FindFlatBuffers)
+
 include(FindProtobuf)
+
 find_package(Protobuf REQUIRED)
+find_package(Flatbuffers REQUIRED)
 
 set(MY_PROTO_FILES
 	protos/boundingbox_labeled.proto
@@ -37,6 +43,47 @@ set(MY_PROTO_FILES
 	protos/vector3_stamped.proto
 	protos/vector3.proto
 )
+
+set(MY_FBS_FILES
+	fbs/boundingbox_labeled.fbs
+	fbs/boundingbox.fbs
+	fbs/boundingbox2d_labeled.fbs
+	fbs/boundingbox2d.fbs
+	fbs/header.fbs
+	fbs/image.fbs
+	fbs/point_cloud_2.fbs
+	fbs/point_field.fbs
+	fbs/point_stamped.fbs
+	fbs/point.fbs
+	fbs/point2d.fbs
+	fbs/polygon_stamped.fbs
+	fbs/polygon.fbs
+	fbs/pose_stamped.fbs
+	fbs/pose.fbs
+	fbs/project_uuids.fbs
+	fbs/projectCreated.fbs
+	fbs/projectCreation.fbs
+	fbs/quaternion_stamped.fbs
+	fbs/quaternion.fbs
+	fbs/query.fbs
+	fbs/server_response.fbs
+	fbs/time_interval.fbs
+	fbs/timestamp.fbs
+	fbs/transform_stamped.fbs
+	fbs/transform.fbs
+	fbs/twist_stamped.fbs
+	fbs/twist_with_covariance_stamped.fbs
+	fbs/twist_with_covariance.fbs
+	fbs/twist.fbs
+	fbs/vector3_stamped.fbs
+	fbs/vector3.fbs
+)
+message("${CMAKE_CURRENT_SOURCE_DIR}")
+build_flatbuffers("${CMAKE_CURRENT_SOURCE_DIR}/fbs/vector3.fbs" "" fbschemas "" "${CMAKE_CURRENT_SOURCE_DIR}/generated" "${CMAKE_CURRENT_SOURCE_DIR}/generated" "" )
+
+# add_library(FlatbuffersTarget INTERFACE)
+# target_include_directories(FlatbuffersTarget INTERFACE ${FLATBUFFERS_INCLUDE_DIR})
+# add_dependencies(FlatbuffersTarget fbschemas)
 
 
 PROTOBUF_GENERATE_CPP(
