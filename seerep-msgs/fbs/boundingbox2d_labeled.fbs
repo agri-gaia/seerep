@@ -5,5 +5,5 @@ namespace seerep;
 
 table BoundingBox2DLabeled {
   label:string;
-  boundingBox:seerep.Boundingbox2D;
+  bounding_box:seerep.Boundingbox2D;
 }
