@@ -1,7 +1,6 @@
-// Generated from vector3_stamped.proto
 
-include "header.fbs"
-include "vector3.fbs"
+include "header.fbs";
+include "vector3.fbs";
 
 namespace seerep;
 

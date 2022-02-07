@@ -1,6 +1,5 @@
-// Generated from time_interval.proto
 
-include "header.fbs"
+include "header.fbs";
 
 namespace seerep;
 

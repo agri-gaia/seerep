@@ -1,7 +1,6 @@
-// Generated from transform.proto
 
-include "vector3.fbs"
-include "quaternion.fbs"
+include "vector3.fbs";
+include "quaternion.fbs";
 
 namespace seerep;
 

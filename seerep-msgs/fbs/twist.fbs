@@ -1,6 +1,5 @@
-// Generated from twist.proto
 
-include "vector3.fbs"
+include "vector3.fbs";
 
 namespace seerep;
 

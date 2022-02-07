@@ -1,7 +1,6 @@
-// Generated from polygon_stamped.proto
 
-include "header.fbs"
-include "polygon.fbs"
+include "header.fbs";
+include "polygon.fbs";
 
 namespace seerep;
 

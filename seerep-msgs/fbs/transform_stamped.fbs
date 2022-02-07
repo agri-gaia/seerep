@@ -1,7 +1,6 @@
-// Generated from transform_stamped.proto
 
-include "header.fbs"
-include "transform.fbs"
+include "header.fbs";
+include "transform.fbs";
 
 namespace seerep;
 

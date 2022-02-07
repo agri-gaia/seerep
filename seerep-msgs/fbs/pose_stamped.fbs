@@ -1,7 +1,6 @@
-// Generated from pose_stamped.proto
 
-include "header.fbs"
-include "pose.fbs"
+include "header.fbs";
+include "pose.fbs";
 
 namespace seerep;
 

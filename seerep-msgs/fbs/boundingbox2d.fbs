@@ -1,7 +1,6 @@
-// Generated from boundingbox2d.proto
 
-include "header.fbs"
-include "point2d.fbs"
+include "header.fbs";
+include "point2d.fbs";
 
 namespace seerep;
 

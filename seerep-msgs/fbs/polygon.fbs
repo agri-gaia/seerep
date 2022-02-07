@@ -1,6 +1,5 @@
-// Generated from polygon.proto
 
-include "point.fbs"
+include "point.fbs";
 
 namespace seerep;
 

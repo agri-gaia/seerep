@@ -1,7 +1,6 @@
-// Generated from point_stamped.proto
 
-include "header.fbs"
-include "point.fbs"
+include "header.fbs";
+include "point.fbs";
 
 namespace seerep;
 

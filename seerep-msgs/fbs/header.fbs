@@ -1,6 +1,4 @@
-// Generated from header.proto
-
-include "timestamp.fbs"
+include "timestamp.fbs";
 
 namespace seerep;
 

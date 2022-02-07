@@ -1,7 +1,6 @@
-// Generated from image.proto
 
-include "header.fbs"
-include "boundingbox2d_labeled.fbs"
+include "header.fbs";
+include "boundingbox2d_labeled.fbs";
 
 namespace seerep;
 
