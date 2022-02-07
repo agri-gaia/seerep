@@ -1,7 +1,6 @@
-// Generated from twist_stamped.proto
 
-include "header.fbs"
-include "twist.fbs"
+include "header.fbs";
+include "twist.fbs";
 
 namespace seerep;
 

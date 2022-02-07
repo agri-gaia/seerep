@@ -1,7 +1,6 @@
-// Generated from query.proto
 
-include "time_interval.fbs"
-include "boundingbox.fbs"
+include "time_interval.fbs";
+include "boundingbox.fbs";
 
 namespace seerep;
 

@@ -1,6 +1,5 @@
-// Generated from boundingbox2d_labeled.proto
 
-include "boundingbox2d.fbs"
+include "boundingbox2d.fbs";
 
 namespace seerep;
 

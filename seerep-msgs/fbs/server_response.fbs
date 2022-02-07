@@ -1,6 +1,5 @@
-// Generated from server_response.proto
 
-include "timestamp.fbs"
+include "timestamp.fbs";
 
 namespace seerep.ServerResponse_;
 

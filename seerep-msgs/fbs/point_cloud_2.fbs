@@ -1,8 +1,7 @@
-// Generated from point_cloud_2.proto
 
-include "header.fbs"
-include "boundingbox_labeled.fbs"
-include "point_field.fbs"
+include "header.fbs";
+include "boundingbox_labeled.fbs";
+include "point_field.fbs";
 
 namespace seerep;
 

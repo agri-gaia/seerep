@@ -1,7 +1,6 @@
-// Generated from twist_with_covariance_stamped.proto
 
-include "header.fbs"
-include "twist_with_covariance.fbs"
+include "header.fbs";
+include "twist_with_covariance.fbs";
 
 namespace seerep;
 

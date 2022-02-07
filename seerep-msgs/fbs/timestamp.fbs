@@ -2,6 +2,6 @@
 namespace seerep;
 
 table Timestamp {
-  seconds:int64
-  nanos:int64
+  seconds:int64;
+  nanos:int64;
 }
