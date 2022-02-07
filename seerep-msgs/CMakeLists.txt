@@ -79,7 +79,7 @@ set(MY_FBS_FILES
 	fbs/vector3.fbs
 )
 
-build_flatbuffers("${MY_FBS_FILES}" "fbs" fbschemas "" "${CMAKE_CURRENT_BINARY_DIR}/fbs" "" "" )
+build_flatbuffers("${MY_FBS_FILES}" "" fbschemas "" "${CMAKE_CURRENT_BINARY_DIR}/fbs" "${CMAKE_CURRENT_BINARY_DIR}/fbs" "" )
 
 add_library(FlatbuffersTarget INTERFACE)
 target_include_directories(FlatbuffersTarget INTERFACE ${FLATBUFFERS_INCLUDE_DIR})
