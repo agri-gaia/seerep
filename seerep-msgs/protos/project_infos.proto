@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package seerep;
+
+import "project_info.proto";
+
+message ProjectInfos
+{
+  repeated ProjectInfo projects = 1;
+}

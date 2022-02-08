@@ -20,8 +20,8 @@ set(MY_PROTO_FILES
 	protos/polygon.proto
 	protos/pose_stamped.proto
 	protos/pose.proto
-	protos/project_uuids.proto
-	protos/projectCreated.proto
+	protos/project_info.proto
+	protos/project_infos.proto
 	protos/projectCreation.proto
 	protos/quaternion_stamped.proto
 	protos/quaternion.proto

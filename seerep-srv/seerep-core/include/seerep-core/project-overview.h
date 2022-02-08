@@ -15,7 +15,8 @@
 #include <seerep-msgs/image.pb.h>
 // #include <seerep-msgs/point_cloud_2_labeled.pb.h>
 #include <seerep-msgs/point_cloud_2.pb.h>
-#include <seerep-msgs/project_uuids.pb.h>
+#include <seerep-msgs/project_info.pb.h>
+#include <seerep-msgs/project_infos.pb.h>
 #include <seerep-msgs/query.pb.h>
 #include <seerep-msgs/transform_stamped.pb.h>
 // seerep-hdf5
@@ -43,16 +44,14 @@ public:
 
   void addTF(const seerep::TransformStamped& tf, boost::uuids::uuid projectuuid);
 
-  std::string newProject(std::string projectname, std::string mapFrameId);
+  void newProject(std::string projectname, std::string mapFrameId, seerep::ProjectInfo* projectInfo);
 
-  void getProjects(seerep::ProjectUUIDs* projectUUIDs);
+  void getProjects(seerep::ProjectInfos* projectInfos);
 
 private:
   void recreateProjects();
 
   std::string m_datafolder;
-
-  std::string m_coordinatesystem;
 
   std::unordered_map<boost::uuids::uuid, std::shared_ptr<seerep_core::Project>, boost::hash<boost::uuids::uuid>>
       m_projects;

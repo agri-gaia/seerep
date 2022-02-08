@@ -33,6 +33,7 @@ public:
   Project(boost::uuids::uuid& uuid, std::string path);
   Project(boost::uuids::uuid& uuid, std::string path, std::string projectname, std::string mapFrameId);
   ~Project();
+  std::string getName();
   std::vector<std::optional<seerep::PointCloud2>> getPointCloud(const seerep::Query& query);
   std::vector<std::optional<seerep::Image>> getImage(const seerep::Query& query);
 

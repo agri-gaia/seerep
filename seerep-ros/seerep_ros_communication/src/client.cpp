@@ -163,7 +163,7 @@ std::optional<ros::Subscriber> TransferSensorMsgs::getSubscriber(const std::stri
 std::string TransferSensorMsgs::createProject(std::string projectname) const
 {
   grpc::ClientContext context;
-  seerep::ProjectCreated response;
+  seerep::ProjectInfo response;
 
   seerep::ProjectCreation projectcreation;
   *projectcreation.mutable_name() = projectname;
@@ -176,7 +176,7 @@ std::string TransferSensorMsgs::createProject(std::string projectname) const
   }
   else
   {
-    ROS_INFO_STREAM("Response:" << response.uuid());
+    ROS_INFO_STREAM("Response:" << response.name() << " " << response.uuid());
     return response.uuid();
   }
 }

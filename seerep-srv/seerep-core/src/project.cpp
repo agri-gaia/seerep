@@ -25,6 +25,11 @@ Project::~Project()
 {
 }
 
+std::string Project::getName()
+{
+  return m_projectname;
+}
+
 std::vector<std::optional<seerep::PointCloud2>> Project::getPointCloud(const seerep::Query& query)
 {
   return m_pointcloudOverview->getData(m_tfOverview->transformQuery(query, m_frameId));

@@ -10,8 +10,8 @@ import "point_cloud_2.proto";
 import "point.proto";
 import "pose_stamped.proto";
 import "pose.proto";
-import "project_uuids.proto";
-import "projectCreated.proto";
+import "project_info.proto";
+import "project_infos.proto";
 import "projectCreation.proto";
 import "quaternion.proto";
 import "query.proto";
@@ -32,6 +32,6 @@ service TransferSensorMsgs
   rpc TransferPoseStamped(PoseStamped) returns (ServerResponse);
   rpc TransferTransformStamped(TransformStamped) returns (ServerResponse);
 
-  rpc CreateProject(ProjectCreation) returns (ProjectCreated);
-  rpc GetProjects(google.protobuf.Empty) returns (ProjectUUIDs);
+  rpc CreateProject(ProjectCreation) returns (ProjectInfo);
+  rpc GetProjects(google.protobuf.Empty) returns (ProjectInfos);
 }

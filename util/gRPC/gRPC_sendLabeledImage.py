@@ -13,18 +13,24 @@ import transform_stamped_pb2 as tf
 
 from google.protobuf import empty_pb2
 
-channel = grpc.insecure_channel("localhost:9090")
+channel = grpc.insecure_channel("agrigaia-ur.ni.dfki:9090")
 
 stub = transferMsgs.TransferSensorMsgsStub(channel)
 
 response = stub.GetProjects(empty_pb2.Empty())
-if not response.uuids:
+
+found = False
+for project in response.projects:
+    print(project.name + " " + project.uuid)
+    if project.name == "testproject":
+        projectuuid = project.uuid
+        found = True
+
+if not found:
     creation = projectCreation.ProjectCreation(name="testproject", mapFrameId="map")
     projectCreated = stub.CreateProject(creation)
-    projectname = projectCreated.uuid
-else:
-    print(response.uuids)
-    projectname = response.uuids[0]
+    projectuuid = projectCreated.uuid
+
 
 theTime = int(time.time())
 
@@ -49,7 +55,7 @@ for n in range(10):
     theImage.header.frame_id = "camera"
     theImage.header.stamp.seconds = theTime + n
     theImage.header.stamp.nanos = 0
-    theImage.header.uuid_project = projectname
+    theImage.header.uuid_project = projectuuid
     theImage.height = lim
     theImage.width = lim
     theImage.encoding = "rgb8"
@@ -75,7 +81,7 @@ for n in range(10):
 theTf = tf.TransformStamped()
 theTf.header.frame_id = "map"
 theTf.header.stamp.seconds = theTime
-theTf.header.uuid_project = projectname
+theTf.header.uuid_project = projectuuid
 theTf.child_frame_id = "camera"
 theTf.transform.translation.x = 1
 theTf.transform.translation.y = 2

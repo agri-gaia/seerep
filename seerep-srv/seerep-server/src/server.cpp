@@ -245,16 +245,16 @@ grpc::Status ReceiveSensorMsgs::TransferTransformStamped(grpc::ServerContext* co
 }
 
 grpc::Status ReceiveSensorMsgs::CreateProject(grpc::ServerContext* context, const seerep::ProjectCreation* request,
-                                              seerep::ProjectCreated* response)
+                                              seerep::ProjectInfo* response)
 {
   std::cout << "create new project... " << std::endl;
-  response->set_uuid(projectOverview.newProject(request->name(), request->mapframeid()));
+  projectOverview.newProject(request->name(), request->mapframeid(), response);
 
   return grpc::Status::OK;
 }
 
 grpc::Status ReceiveSensorMsgs::GetProjects(grpc::ServerContext* context, const google::protobuf::Empty* request,
-                                            seerep::ProjectUUIDs* response)
+                                            seerep::ProjectInfos* response)
 {
   std::cout << "query the project infos... " << std::endl;
   projectOverview.getProjects(response);
