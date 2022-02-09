@@ -81,10 +81,12 @@ set(MY_FBS_FILES
 
 build_flatbuffers("${MY_FBS_FILES}" "" fbschemas "" "${CMAKE_CURRENT_BINARY_DIR}/fbs" "${CMAKE_CURRENT_BINARY_DIR}/fbs" "" )
 
-add_library(FlatbuffersTarget INTERFACE)
-target_include_directories(FlatbuffersTarget INTERFACE ${FLATBUFFERS_INCLUDE_DIR})
-add_dependencies(FlatbuffersTarget fbschemas)
+add_library(FlatBuffersTarget INTERFACE)
+target_include_directories(FlatBuffersTarget INTERFACE ${FLATBUFFERS_INCLUDE_DIR})
+add_dependencies(FlatBuffersTarget fbschemas)
 
+get_target_property(FlatBuffers_HEADERS fbschemas GENERATED_HEADERS)
+message("Generated FlatBuffers Header Files: " ${FlatBuffers_HEADERS})
 
 PROTOBUF_GENERATE_CPP(
 	PROTO_SOURCES PROTO_HEADERS
@@ -111,9 +113,11 @@ add_library(seerepmsgs
 	${PROTO_SOURCES}
 )
 
-add_dependencies(seerepmsgs FlatbuffersTarget)
+add_dependencies(seerepmsgs FlatBuffersTarget)
 
-set(INSTALL_HEADERS ${PROTO_HEADERS})
+set(INSTALL_HEADERS
+	${PROTO_HEADERS}
+	${FlatBuffers_HEADERS})
 
 set_target_properties(seerepmsgs PROPERTIES PUBLIC_HEADER "${INSTALL_HEADERS}")
 
