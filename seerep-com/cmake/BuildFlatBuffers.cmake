@@ -93,13 +93,13 @@ function(build_flatbuffers flatbuffers_schemas
     get_filename_component(filename ${schema} NAME_WE)
     # For each schema, do the things we requested.
     if (NOT ${generated_includes_dir} STREQUAL "")
-      set(generated_include ${generated_includes_dir}/${filename}.fbs.h)
+      set(generated_include ${generated_includes_dir}/${filename}.fb.h)
       add_custom_command(
         OUTPUT ${generated_include}
         COMMAND ${FLATC} ${FLATC_SCHEMA_ARGS}
         -o ${generated_includes_dir}
         ${include_params}
-        --filename-suffix ".fbs"
+        --filename-suffix ".fb"
         -c --grpc ${schema}
         DEPENDS ${FLATC_TARGET} ${schema} ${additional_dependencies}
         WORKING_DIRECTORY "${working_dir}")
