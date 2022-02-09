@@ -2,9 +2,9 @@
 include "header.fbs";
 include "quaternion.fbs";
 
-namespace seerep;
+namespace seerep.fb;
 
 table QuaternionStamped {
-  header:seerep.Header;
-  quaternion:seerep.Quaternion;
+  header:seerep.fb.Header;
+  quaternion:seerep.fb.Quaternion;
 }

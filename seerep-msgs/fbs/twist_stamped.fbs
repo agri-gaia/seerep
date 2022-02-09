@@ -2,9 +2,9 @@
 include "header.fbs";
 include "twist.fbs";
 
-namespace seerep;
+namespace seerep.fb;
 
 table TwistStamped {
-  header:seerep.Header;
-  twist:seerep.Twist;
+  header:seerep.fb.Header;
+  twist:seerep.fb.Twist;
 }

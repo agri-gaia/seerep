@@ -2,9 +2,9 @@
 include "header.fbs";
 include "point.fbs";
 
-namespace seerep;
+namespace seerep.fb;
 
 table PointStamped {
-  header:seerep.Header;
-  point:seerep.Point;
+  header:seerep.fb.Header;
+  point:seerep.fb.Point;
 }

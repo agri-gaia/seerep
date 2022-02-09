@@ -2,10 +2,10 @@
 include "header.fbs";
 include "boundingbox2d_labeled.fbs";
 
-namespace seerep;
+namespace seerep.fb;
 
 table Image {
-  header:seerep.Header;
+  header:seerep.fb.Header;
   height:uint;
   width:uint;
   encoding:string;
@@ -14,5 +14,5 @@ table Image {
   row_step:uint;
   data:[ubyte];
   labels_general:[string];
-  labels_bb:[seerep.BoundingBox2DLabeled];
+  labels_bb:[seerep.fb.BoundingBox2DLabeled];
 }

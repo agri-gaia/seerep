@@ -2,9 +2,9 @@
 include "header.fbs";
 include "polygon.fbs";
 
-namespace seerep;
+namespace seerep.fb;
 
 table PolygonStamped {
-  header:seerep.Header;
-  polygon:seerep.Polygon;
+  header:seerep.fb.Header;
+  polygon:seerep.fb.Polygon;
 }

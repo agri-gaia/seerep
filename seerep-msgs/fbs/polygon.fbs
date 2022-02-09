@@ -1,8 +1,8 @@
 
 include "point.fbs";
 
-namespace seerep;
+namespace seerep.fb;
 
 table Polygon {
-  points:[seerep.Point];
+  points:[seerep.fb.Point];
 }

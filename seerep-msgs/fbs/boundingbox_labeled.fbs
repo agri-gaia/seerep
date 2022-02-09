@@ -1,9 +1,9 @@
 
 include "boundingbox.fbs";
 
-namespace seerep;
+namespace seerep.fb;
 
 table BoundingBoxLabeled {
   label:string;
-  bounding_box:seerep.Boundingbox;
+  bounding_box:seerep.fb.Boundingbox;
 }
