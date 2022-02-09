@@ -59,7 +59,8 @@ public:
   std::string projectuuid;
 
 private:
-  StubPtr stub_;
+  StubTransferPtr stub_;
+  StubMetaPtr stubMeta_;
   ros::NodeHandle nh;
 };
 

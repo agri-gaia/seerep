@@ -6,6 +6,7 @@ import numpy as np
 
 import grpc
 import transfer_sensor_msgs_pb2_grpc as transferMsgs
+import meta_operations_pb2_grpc as metaOperations
 import image_pb2 as image
 import boundingbox2d_labeled_pb2 as bb
 import projectCreation_pb2 as projectCreation
@@ -16,8 +17,9 @@ from google.protobuf import empty_pb2
 channel = grpc.insecure_channel("agrigaia-ur.ni.dfki:9090")
 
 stub = transferMsgs.TransferSensorMsgsStub(channel)
+stubMeta = metaOperations.MetaOperationsStub(channel)
 
-response = stub.GetProjects(empty_pb2.Empty())
+response = stubMeta.GetProjects(empty_pb2.Empty())
 
 found = False
 for project in response.projects:
@@ -28,7 +30,7 @@ for project in response.projects:
 
 if not found:
     creation = projectCreation.ProjectCreation(name="testproject", mapFrameId="map")
-    projectCreated = stub.CreateProject(creation)
+    projectCreated = stubMeta.CreateProject(creation)
     projectuuid = projectCreated.uuid
 
 

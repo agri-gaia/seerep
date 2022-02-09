@@ -2,19 +2,13 @@ syntax = "proto3";
 
 package seerep;
 
-import "google/protobuf/empty.proto";
-
 import "header.proto";
 import "image.proto";
 import "point_cloud_2.proto";
 import "point.proto";
 import "pose_stamped.proto";
 import "pose.proto";
-import "project_info.proto";
-import "project_infos.proto";
-import "projectCreation.proto";
 import "quaternion.proto";
-import "query.proto";
 import "transform_stamped.proto";
 
 import "server_response.proto";
@@ -22,16 +16,11 @@ import "server_response.proto";
 service TransferSensorMsgs
 {
   rpc TransferImage(Image) returns (ServerResponse);
-  rpc GetImage(Query) returns (stream Image);
   rpc TransferPointCloud2(PointCloud2) returns (ServerResponse);
-  rpc GetPointCloud2(Query) returns (stream PointCloud2);
   rpc TransferHeader(Header) returns (ServerResponse);
   rpc TransferPoint(Point) returns (ServerResponse);
   rpc TransferQuaternion(Quaternion) returns (ServerResponse);
   rpc TransferPose(Pose) returns (ServerResponse);
   rpc TransferPoseStamped(PoseStamped) returns (ServerResponse);
   rpc TransferTransformStamped(TransformStamped) returns (ServerResponse);
-
-  rpc CreateProject(ProjectCreation) returns (ProjectInfo);
-  rpc GetProjects(google.protobuf.Empty) returns (ProjectInfos);
 }

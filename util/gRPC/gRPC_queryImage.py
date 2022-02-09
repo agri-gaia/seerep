@@ -5,17 +5,19 @@ import sys
 # import numpy as np
 
 import grpc
-import transfer_sensor_msgs_pb2_grpc as transferMsgs
+import query_data_pb2_grpc as queryData
+import meta_operations_pb2_grpc as metaOperations
 import image_pb2 as image
 import query_pb2 as query
 
 from google.protobuf import empty_pb2
 
-channel = grpc.insecure_channel("agrigaia-ur.ni.dfki:9090")
+channel = grpc.insecure_channel("localhost:9090")
 
-stub = transferMsgs.TransferSensorMsgsStub(channel)
+stub = queryData.QueryDataStub(channel)
+stubMeta = metaOperations.MetaOperationsStub(channel)
 
-response = stub.GetProjects(empty_pb2.Empty())
+response = stubMeta.GetProjects(empty_pb2.Empty())
 
 projectuuid = ""
 for project in response.projects:

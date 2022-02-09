@@ -13,6 +13,8 @@ include(ProtobufGenerateGrpcPython)
 list(APPEND PROTOBUF_IMPORT_DIRS ${SeerepMsgs_PROTOBUF_IMPORT_DIRS})
 
 set(MY_PROTO_FILES
+  protos/meta_operations.proto
+  protos/query_data.proto
   protos/transfer_sensor_msgs.proto
 )
 

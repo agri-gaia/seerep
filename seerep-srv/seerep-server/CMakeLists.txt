@@ -27,6 +27,15 @@ include_directories(
 	${catkin_INCLUDE_DIRS}
 )
 
+add_library(${PROJECT_NAME}_server_grpc
+	include/${PROJECT_NAME}/meta-operations.h
+	src/meta-operations.cpp
+	include/${PROJECT_NAME}/query-data.h
+	src/query-data.cpp
+	include/${PROJECT_NAME}/receive-sensor-msgs.h
+	src/receive-sensor-msgs.cpp
+)
+
 add_executable(${PROJECT_NAME}_server
 	src/server.cpp
 )
@@ -40,6 +49,7 @@ target_link_libraries(${PROJECT_NAME}_server
 	${SeerepCom_LIBRARIES}
 	${SeerepCore_LIBRARIES}
 	gRPC::grpc++_reflection
+	${PROJECT_NAME}_server_grpc
 )
 
 target_link_libraries(${PROJECT_NAME}_client
@@ -48,7 +58,7 @@ target_link_libraries(${PROJECT_NAME}_client
 	gRPC::grpc++_reflection
 )
 
-install(TARGETS ${PROJECT_NAME}_server ${PROJECT_NAME}_client
+install(TARGETS ${PROJECT_NAME}_server ${PROJECT_NAME}_client ${PROJECT_NAME}_server_grpc
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}

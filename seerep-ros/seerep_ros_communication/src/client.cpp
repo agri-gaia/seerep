@@ -5,7 +5,7 @@
 namespace seerep_grpc_ros
 {
 TransferSensorMsgs::TransferSensorMsgs(std::shared_ptr<grpc::Channel> channel_ptr)
-  : stub_(seerep::TransferSensorMsgs::NewStub(channel_ptr))
+  : stub_(seerep::TransferSensorMsgs::NewStub(channel_ptr)), stubMeta_(seerep::MetaOperations::NewStub(channel_ptr))
 {
 }
 
@@ -168,7 +168,7 @@ std::string TransferSensorMsgs::createProject(std::string projectname) const
   seerep::ProjectCreation projectcreation;
   *projectcreation.mutable_name() = projectname;
 
-  grpc::Status status = stub_->CreateProject(&context, projectcreation, &response);
+  grpc::Status status = stubMeta_->CreateProject(&context, projectcreation, &response);
   if (!status.ok())
   {
     ROS_ERROR_STREAM("gRPC status error code: " << status.error_code() << " " << status.error_message());

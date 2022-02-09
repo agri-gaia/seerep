@@ -12,7 +12,7 @@
 #include <grpcpp/security/credentials.h>
 
 // ag
-#include <seerep-com/transfer_sensor_msgs.grpc.pb.h>
+#include <seerep-com/query_data.grpc.pb.h>
 #include <seerep_ros_conversions/conversions.h>
 
 // ros
@@ -33,7 +33,7 @@ public:
   void queryImage(const seerep::Query& query, ros::Publisher& img_pub) const;
 
 private:
-  StubPtr stub_;
+  StubQueryPtr stub_;
   ros::NodeHandle nh;
 };
 

@@ -2,8 +2,7 @@
 
 namespace seerep_grpc_ros
 {
-QueryData::QueryData(std::shared_ptr<grpc::Channel> channel_ptr)
-  : stub_(seerep::TransferSensorMsgs::NewStub(channel_ptr))
+QueryData::QueryData(std::shared_ptr<grpc::Channel> channel_ptr) : stub_(seerep::QueryData::NewStub(channel_ptr))
 {
 }
 
