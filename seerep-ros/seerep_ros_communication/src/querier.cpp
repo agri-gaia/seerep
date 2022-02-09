@@ -2,7 +2,9 @@
 
 namespace seerep_grpc_ros
 {
-QueryData::QueryData(std::shared_ptr<grpc::Channel> channel_ptr) : stub_(seerep::QueryData::NewStub(channel_ptr))
+QueryData::QueryData(std::shared_ptr<grpc::Channel> channel_ptr)
+  : stubImage_(seerep::ImageService::NewStub(channel_ptr))
+  , stubPointCloud_(seerep::PointCloudService::NewStub(channel_ptr))
 {
 }
 
@@ -10,7 +12,7 @@ void QueryData::queryPointcloud(const seerep::Query& query, ros::Publisher& pc2_
 {
   grpc::ClientContext context;
   seerep::PointCloud2 response;
-  std::unique_ptr<grpc::ClientReader<seerep::PointCloud2>> reader = stub_->GetPointCloud2(&context, query);
+  std::unique_ptr<grpc::ClientReader<seerep::PointCloud2>> reader = stubPointCloud_->GetPointCloud2(&context, query);
 
   while (reader->Read(&response))
   {
@@ -29,7 +31,7 @@ void QueryData::queryImage(const seerep::Query& query, ros::Publisher& img_pub) 
 {
   grpc::ClientContext context;
   seerep::Image response;
-  std::unique_ptr<grpc::ClientReader<seerep::Image>> reader = stub_->GetImage(&context, query);
+  std::unique_ptr<grpc::ClientReader<seerep::Image>> reader = stubImage_->GetImage(&context, query);
 
   while (reader->Read(&response))
   {

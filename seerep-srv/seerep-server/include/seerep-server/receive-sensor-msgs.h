@@ -14,6 +14,8 @@
 
 #include <seerep-core/project-overview.h>
 
+// this class is for all the gRPC calls that are not yet implemented in the server
+
 namespace seerep_server
 {
 class ReceiveSensorMsgs final : public seerep::TransferSensorMsgs::Service
@@ -22,11 +24,6 @@ public:
   ReceiveSensorMsgs(std::shared_ptr<seerep_core::ProjectOverview> projectOverview);
   grpc::Status TransferHeader(grpc::ServerContext* context, const seerep::Header* header,
                               seerep::ServerResponse* response);
-
-  grpc::Status TransferImage(grpc::ServerContext* context, const seerep::Image* image, seerep::ServerResponse* response);
-
-  grpc::Status TransferPointCloud2(grpc::ServerContext* context, const seerep::PointCloud2* pointCloud2,
-                                   seerep::ServerResponse* response);
 
   grpc::Status TransferPoint(grpc::ServerContext* context, const seerep::Point* point, seerep::ServerResponse* response);
 
@@ -37,9 +34,6 @@ public:
 
   grpc::Status TransferPoseStamped(grpc::ServerContext* context, const seerep::PoseStamped* pose,
                                    seerep::ServerResponse* response);
-
-  grpc::Status TransferTransformStamped(grpc::ServerContext* context, const seerep::TransformStamped* transform,
-                                        seerep::ServerResponse* response);
 
 private:
   std::shared_ptr<seerep_core::ProjectOverview> projectOverview;

@@ -5,7 +5,8 @@ import time
 import numpy as np
 
 import grpc
-import transfer_sensor_msgs_pb2_grpc as transferMsgs
+import imageService_pb2_grpc as imageService
+import tfService_pb2_grpc as tfService
 import meta_operations_pb2_grpc as metaOperations
 import image_pb2 as image
 import boundingbox2d_labeled_pb2 as bb
@@ -16,7 +17,8 @@ from google.protobuf import empty_pb2
 
 channel = grpc.insecure_channel("agrigaia-ur.ni.dfki:9090")
 
-stub = transferMsgs.TransferSensorMsgsStub(channel)
+stub = imageService.ImageServiceStub(channel)
+stubTf = tfService.TfServiceStub(channel)
 stubMeta = metaOperations.MetaOperationsStub(channel)
 
 # create new project
@@ -106,4 +108,4 @@ for x in range(3):
         theTf.transform.translation.x = x
         theTf.transform.translation.y = y
         # transfer tf
-        stub.TransferTransformStamped(theTf)
+        stubTf.TransferTransformStamped(theTf)

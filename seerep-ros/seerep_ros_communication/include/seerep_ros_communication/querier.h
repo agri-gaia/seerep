@@ -11,8 +11,10 @@
 #include <grpcpp/client_context.h>
 #include <grpcpp/security/credentials.h>
 
-// ag
-#include <seerep-com/query_data.grpc.pb.h>
+// seerep
+#include <seerep-com/imageService.grpc.pb.h>
+#include <seerep-com/pointCloudService.grpc.pb.h>
+
 #include <seerep_ros_conversions/conversions.h>
 
 // ros
@@ -33,7 +35,8 @@ public:
   void queryImage(const seerep::Query& query, ros::Publisher& img_pub) const;
 
 private:
-  StubQueryPtr stub_;
+  StubImagePtr stubImage_;
+  StubPointCloudPtr stubPointCloud_;
   ros::NodeHandle nh;
 };
 

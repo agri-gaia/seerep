@@ -2,12 +2,13 @@ syntax = "proto3";
 
 package seerep;
 
-import "image.proto";
 import "point_cloud_2.proto";
 import "query.proto";
 
-service QueryData
+import "server_response.proto";
+
+service PointCloudService
 {
-  rpc GetImage(Query) returns (stream Image);
   rpc GetPointCloud2(Query) returns (stream PointCloud2);
+  rpc TransferPointCloud2(PointCloud2) returns (ServerResponse);
 }

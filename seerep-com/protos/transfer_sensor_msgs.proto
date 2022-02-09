@@ -3,24 +3,18 @@ syntax = "proto3";
 package seerep;
 
 import "header.proto";
-import "image.proto";
-import "point_cloud_2.proto";
 import "point.proto";
 import "pose_stamped.proto";
 import "pose.proto";
 import "quaternion.proto";
-import "transform_stamped.proto";
 
 import "server_response.proto";
 
 service TransferSensorMsgs
 {
-  rpc TransferImage(Image) returns (ServerResponse);
-  rpc TransferPointCloud2(PointCloud2) returns (ServerResponse);
   rpc TransferHeader(Header) returns (ServerResponse);
   rpc TransferPoint(Point) returns (ServerResponse);
   rpc TransferQuaternion(Quaternion) returns (ServerResponse);
   rpc TransferPose(Pose) returns (ServerResponse);
   rpc TransferPoseStamped(PoseStamped) returns (ServerResponse);
-  rpc TransferTransformStamped(TransformStamped) returns (ServerResponse);
 }

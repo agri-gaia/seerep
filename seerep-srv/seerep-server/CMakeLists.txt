@@ -30,10 +30,14 @@ include_directories(
 add_library(${PROJECT_NAME}_server_grpc
 	include/${PROJECT_NAME}/meta-operations.h
 	src/meta-operations.cpp
-	include/${PROJECT_NAME}/query-data.h
-	src/query-data.cpp
 	include/${PROJECT_NAME}/receive-sensor-msgs.h
 	src/receive-sensor-msgs.cpp
+	include/${PROJECT_NAME}/imageService.h
+	src/imageService.cpp
+	include/${PROJECT_NAME}/pointCloudService.h
+	src/pointCloudService.cpp
+	include/${PROJECT_NAME}/tfService.h
+	src/tfService.cpp
 )
 
 add_executable(${PROJECT_NAME}_server

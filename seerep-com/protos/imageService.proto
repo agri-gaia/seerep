@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package seerep;
+
+import "image.proto";
+import "query.proto";
+
+import "server_response.proto";
+
+service ImageService
+{
+  rpc GetImage(Query) returns (stream Image);
+  rpc TransferImage(Image) returns (ServerResponse);
+}

@@ -5,16 +5,15 @@ import sys
 # import numpy as np
 
 import grpc
-import query_data_pb2_grpc as queryData
+import imageService_pb2_grpc as imageService
 import meta_operations_pb2_grpc as metaOperations
-import image_pb2 as image
 import query_pb2 as query
 
 from google.protobuf import empty_pb2
 
 channel = grpc.insecure_channel("agrigaia-ur.ni.dfki:9090")
 
-stub = queryData.QueryDataStub(channel)
+stub = imageService.ImageServiceStub(channel)
 stubMeta = metaOperations.MetaOperationsStub(channel)
 
 response = stubMeta.GetProjects(empty_pb2.Empty())
