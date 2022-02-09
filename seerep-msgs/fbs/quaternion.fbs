@@ -1,5 +1,5 @@
 
-namespace seerep;
+namespace seerep.fb;
 
 table Quaternion {
   x:double;

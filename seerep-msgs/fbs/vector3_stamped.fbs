@@ -2,9 +2,9 @@
 include "header.fbs";
 include "vector3.fbs";
 
-namespace seerep;
+namespace seerep.fb;
 
 table Vector3Stamped {
-  header:seerep.Header;
-  vector:seerep.Vector3;
+  header:seerep.fb.Header;
+  vector:seerep.fb.Vector3;
 }

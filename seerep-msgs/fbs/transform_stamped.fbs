@@ -2,10 +2,10 @@
 include "header.fbs";
 include "transform.fbs";
 
-namespace seerep;
+namespace seerep.fb;
 
 table TransformStamped {
-  header:seerep.Header;
+  header:seerep.fb.Header;
   child_frame_id:string;
-  transform:seerep.Transform;
+  transform:seerep.fb.Transform;
 }

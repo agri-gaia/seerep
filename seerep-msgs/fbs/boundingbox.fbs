@@ -2,10 +2,10 @@
 include "header.fbs";
 include "point.fbs";
 
-namespace seerep;
+namespace seerep.fb;
 
 table Boundingbox {
-  header:seerep.Header;
-  point_min:seerep.Point;
-  point_max:seerep.Point;
+  header:seerep.fb.Header;
+  point_min:seerep.fb.Point;
+  point_max:seerep.fb.Point;
 }

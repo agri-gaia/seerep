@@ -2,9 +2,9 @@
 include "header.fbs";
 include "twist_with_covariance.fbs";
 
-namespace seerep;
+namespace seerep.fb;
 
 table TwistWithCovarianceStamped {
-  header:seerep.Header;
-  twist:seerep.TwistWithCovariance;
+  header:seerep.fb.Header;
+  twist:seerep.fb.TwistWithCovariance;
 }

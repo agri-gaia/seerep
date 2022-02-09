@@ -1,9 +1,9 @@
 
 include "twist.fbs";
 
-namespace seerep;
+namespace seerep.fb;
 
 table TwistWithCovariance {
-  twist:seerep.Twist;
+  twist:seerep.fb.Twist;
   covariance:[double];
 }

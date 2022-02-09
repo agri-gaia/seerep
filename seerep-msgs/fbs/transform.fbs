@@ -2,9 +2,9 @@
 include "vector3.fbs";
 include "quaternion.fbs";
 
-namespace seerep;
+namespace seerep.fb;
 
 table Transform {
-  translation:seerep.Vector3;
-  rotation:seerep.Quaternion;
+  translation:seerep.fb.Vector3;
+  rotation:seerep.fb.Quaternion;
 }

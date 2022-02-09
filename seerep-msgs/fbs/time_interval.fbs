@@ -1,10 +1,10 @@
 
 include "header.fbs";
 
-namespace seerep;
+namespace seerep.fb;
 
 table TimeInterval {
-  header:seerep.Header;
+  header:seerep.fb.Header;
   time_min:long;
   time_max:long;
 }

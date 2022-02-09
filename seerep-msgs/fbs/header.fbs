@@ -1,10 +1,10 @@
 include "timestamp.fbs";
 
-namespace seerep;
+namespace seerep.fb;
 
 table Header {
   seq:uint;
-  stamp:seerep.Timestamp;
+  stamp:seerep.fb.Timestamp;
   frame_id:string;
   uuid_project:string;
   uuid_msgs:string;
