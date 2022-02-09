@@ -76,6 +76,7 @@ function(build_flatbuffers flatbuffers_schemas
   set(schema_glob "*.fbs")
   # Generate the include files parameters.
   set(include_params "")
+  set(all_generated_headers "")
   set(all_generated_files "")
   foreach (include_dir ${schema_include_dirs})
     set(include_params -I ${include_dir} ${include_params})
@@ -103,6 +104,8 @@ function(build_flatbuffers flatbuffers_schemas
         DEPENDS ${FLATC_TARGET} ${schema} ${additional_dependencies}
         WORKING_DIRECTORY "${working_dir}")
       list(APPEND all_generated_files ${generated_include})
+      list(APPEND all_generated_headers ${generated_include})
+
     endif()
 
     if (NOT ${binary_schemas_dir} STREQUAL "")
@@ -135,6 +138,9 @@ function(build_flatbuffers flatbuffers_schemas
     set_property(TARGET ${custom_target_name}
       PROPERTY GENERATED_INCLUDES_DIR
       ${generated_includes_dir})
+    set_property(TARGET ${custom_target_name}
+      PROPERTY GENERATED_HEADERS
+      ${all_generated_headers})
   endif()
 
   # Register the binary schemas dir we are using.
