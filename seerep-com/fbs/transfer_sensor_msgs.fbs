@@ -1,0 +1,8 @@
+include "point.fbs";
+include "server_response.fbs";
+
+namespace seerep.fb;
+
+rpc_service TransferSensorMsgs {
+  TransferPoint(seerep.fb.Point):seerep.fb.ServerResponse;
+}
