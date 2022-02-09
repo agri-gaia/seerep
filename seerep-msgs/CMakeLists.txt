@@ -4,7 +4,6 @@ project(seerep-msgs VERSION 0.1)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
 include(BuildFlatBuffers)
 include(FindFlatBuffers)
-
 include(FindProtobuf)
 
 find_package(Protobuf REQUIRED)
@@ -123,6 +122,8 @@ set_target_properties(seerepmsgs PROPERTIES PUBLIC_HEADER "${INSTALL_HEADERS}")
 
 set(CMAKE_INSTALL_INCLUDEDIR include)
 set(PROTOBUF_IMPORT_DIR ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
+set(FLATBUFFERS_IMPORT_DIR ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
+
 set(CMAKE_INSTALL_LIBDIR lib)
 set(CMAKE_INSTALL_BINDIR bin)
 
@@ -137,21 +138,21 @@ include(CMakePackageConfigHelpers)
 
 configure_package_config_file(
 	${CMAKE_CURRENT_SOURCE_DIR}/SeerepMsgsConfig.cmake.in
-  ${CMAKE_CURRENT_BINARY_DIR}/SeerepMsgsConfig.cmake
+	${CMAKE_CURRENT_BINARY_DIR}/SeerepMsgsConfig.cmake
 	INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
-	PATH_VARS CMAKE_INSTALL_INCLUDEDIR CMAKE_INSTALL_LIBDIR PROTOBUF_IMPORT_DIR
+	PATH_VARS CMAKE_INSTALL_INCLUDEDIR CMAKE_INSTALL_LIBDIR PROTOBUF_IMPORT_DIR FLATBUFFERS_IMPORT_DIR
 )
 
 # generate the version file for the config file
 write_basic_package_version_file(
-  "${CMAKE_CURRENT_BINARY_DIR}/SeerepMsgsConfigVersion.cmake"
-  VERSION "${seerep-msgs_VERSION_MAJOR}.${seerep-msgs_VERSION_MINOR}"
-  COMPATIBILITY AnyNewerVersion
+	"${CMAKE_CURRENT_BINARY_DIR}/SeerepMsgsConfigVersion.cmake"
+	VERSION "${seerep-msgs_VERSION_MAJOR}.${seerep-msgs_VERSION_MINOR}"
+	COMPATIBILITY AnyNewerVersion
 )
 
 # install the configuration file
 install(FILES
-  ${CMAKE_CURRENT_BINARY_DIR}/SeerepMsgsConfig.cmake
+	${CMAKE_CURRENT_BINARY_DIR}/SeerepMsgsConfig.cmake
 	${CMAKE_CURRENT_BINARY_DIR}/SeerepMsgsConfigVersion.cmake
 	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/SeerepMsgs
 )
@@ -161,8 +162,14 @@ install(FILES
 	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
 )
 
+# install ProtoBuf proto files
 install(DIRECTORY protos/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
         FILES_MATCHING PATTERN "*.proto")
+
+# install FlatBuffers fbs files
+install(DIRECTORY fbs/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+        FILES_MATCHING PATTERN "*.fbs")
+
 
 #add PIC gcc flag
 SET(GCC_COVERAGE_COMPILE_FLAGS "-fPIC")
