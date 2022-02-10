@@ -85,7 +85,6 @@ target_include_directories(FlatBuffersTarget INTERFACE ${FLATBUFFERS_INCLUDE_DIR
 add_dependencies(FlatBuffersTarget fbschemas)
 
 get_target_property(FlatBuffers_HEADERS fbschemas GENERATED_HEADERS)
-message("Generated FlatBuffers Header Files: " ${FlatBuffers_HEADERS})
 
 PROTOBUF_GENERATE_CPP(
 	PROTO_SOURCES PROTO_HEADERS
