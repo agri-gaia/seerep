@@ -7,6 +7,7 @@
 
 // seerep-msgs
 #include <seerep-msgs/transform_stamped.pb.h>
+#include <seerep-msgs/transform_stamped_query.pb.h>
 #include <seerep-msgs/query.pb.h>
 // seerep-hdf5
 #include <seerep-hdf5/io.h>
@@ -42,6 +43,8 @@ public:
                     const int64_t& timeNanos);
 
   seerep::Query transformQuery(const seerep::Query& query, std::string targetFrame);
+
+  std::vector<std::string> getFrames();
 
 private:
   void recreateDatasets();

@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package seerep;
+
+import "header.proto";
+
+message TransformStampedQuery
+{
+  Header header = 1;
+  string child_frame_id = 2;
+}

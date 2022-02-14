@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package seerep;
+
+message FrameInfos
+{
+  repeated string frames = 1;
+}

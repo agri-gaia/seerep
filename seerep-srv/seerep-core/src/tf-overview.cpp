@@ -153,6 +153,13 @@ seerep::Query TFOverview::transformQuery(const seerep::Query& query, std::string
   }
 }
 
+std::vector<std::string> TFOverview::getFrames()
+{
+  std::cout << m_tfbuffer.allFramesAsString() << std::endl;
+
+  return std::vector<std::string>{ m_tfbuffer.allFramesAsYAML() };
+}
+
 void TFOverview::addToIndices(std::shared_ptr<seerep_core::TF> tf)
 {
   m_datasets.insert(std::make_pair(tf->getID(), tf));

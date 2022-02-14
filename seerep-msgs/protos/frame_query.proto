@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package seerep;
+
+message FrameQuery
+{
+  string projectuuid = 1;
+}

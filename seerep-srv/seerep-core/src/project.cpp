@@ -79,4 +79,15 @@ void Project::addTF(const seerep::TransformStamped& tf)
   m_tfOverview->addDataset(tf);
 }
 
+std::optional<seerep::TransformStamped> Project::getTF(const seerep::TransformStampedQuery& transformQuery)
+{
+  return m_tfOverview->getData(transformQuery.header().stamp().seconds(), transformQuery.header().stamp().nanos(),
+                               transformQuery.header().frame_id(), transformQuery.child_frame_id());
+}
+
+std::vector<std::string> Project::getFrames()
+{
+  return m_tfOverview->getFrames();
+}
+
 } /* namespace seerep_core */
