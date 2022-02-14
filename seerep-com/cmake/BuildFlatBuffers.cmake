@@ -77,6 +77,7 @@ function(build_flatbuffers flatbuffers_schemas
   # Generate the include files parameters.
   set(include_params "")
   set(all_generated_headers "")
+  set(all_generated_grpc_cc "")
   set(all_generated_files "")
   foreach (include_dir ${schema_include_dirs})
     set(include_params -I ${include_dir} ${include_params})
@@ -93,18 +94,27 @@ function(build_flatbuffers flatbuffers_schemas
     get_filename_component(filename ${schema} NAME_WE)
     # For each schema, do the things we requested.
     if (NOT ${generated_includes_dir} STREQUAL "")
-      set(generated_include ${generated_includes_dir}/${filename}.fb.h)
+      #using the _generated suffix due to the issue https://github.com/google/flatbuffers/issues/6864
+      #set(generated_include ${generated_includes_dir}/${filename}_generated.h)
+      set(generated_grpc_cc ${generated_includes_dir}/${filename}.grpc.fb.cc)
+      set(generated_headers "")
+      list(APPEND generated_headers ${generated_includes_dir}/${filename}_generated.h)
+      list(APPEND generated_headers ${generated_includes_dir}/${filename}.grpc.fb.h)
+
+      list(APPEND all_generated_files ${generated_headers})
+      list(APPEND all_generated_files ${generated_grpc_cc})
+      list(APPEND all_generated_headers ${generated_headers})
+      list(APPEND all_generated_grpc_cc ${generated_grpc_cc})
+
       add_custom_command(
-        OUTPUT ${generated_include}
+        OUTPUT ${all_generated_files}
         COMMAND ${FLATC} ${FLATC_SCHEMA_ARGS}
         -o ${generated_includes_dir}
         ${include_params}
-        --filename-suffix ".fb"
         -c --grpc ${schema}
         DEPENDS ${FLATC_TARGET} ${schema} ${additional_dependencies}
         WORKING_DIRECTORY "${working_dir}")
-      list(APPEND all_generated_files ${generated_include})
-      list(APPEND all_generated_headers ${generated_include})
+
 
     endif()
 
@@ -141,6 +151,9 @@ function(build_flatbuffers flatbuffers_schemas
     set_property(TARGET ${custom_target_name}
       PROPERTY GENERATED_HEADERS
       ${all_generated_headers})
+    set_property(TARGET ${custom_target_name}
+      PROPERTY GENERATED_GRPC_CC
+      ${all_generated_grpc_cc})
   endif()
 
   # Register the binary schemas dir we are using.
