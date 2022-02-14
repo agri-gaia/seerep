@@ -1,0 +1,19 @@
+
+include "header.fbs";
+include "boundingbox_labeled.fbs";
+include "point_field.fbs";
+
+namespace seerep.fb;
+
+table PointCloud2 {
+  header:seerep.fb.Header;
+  height:uint;
+  width:uint;
+  fields:[seerep.fb.PointField];
+  is_bigendian:bool;
+  point_step:uint;
+  row_step:uint;
+  data:[ubyte];
+  is_dense:bool;
+  labels_bb:[seerep.fb.BoundingBoxLabeled];
+}

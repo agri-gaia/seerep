@@ -10,8 +10,11 @@
 #include <grpcpp/client_context.h>
 #include <grpcpp/security/credentials.h>
 
-// ag
+// seerep
 #include <seerep-com/transfer_sensor_msgs.grpc.pb.h>
+#include <seerep-com/imageService.grpc.pb.h>
+#include <seerep-com/pointCloudService.grpc.pb.h>
+#include <seerep-com/tfService.grpc.pb.h>
 #include <seerep_ros_conversions/conversions.h>
 
 // ros
@@ -59,7 +62,11 @@ public:
   std::string projectuuid;
 
 private:
-  StubPtr stub_;
+  StubTransferPtr stub_;
+  StubImagePtr stubImage_;
+  StubPointCloudPtr stubPointCloud_;
+  StubTfPtr stubTf_;
+  StubMetaPtr stubMeta_;
   ros::NodeHandle nh;
 };
 

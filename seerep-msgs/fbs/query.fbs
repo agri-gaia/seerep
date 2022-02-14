@@ -1,0 +1,11 @@
+
+include "time_interval.fbs";
+include "boundingbox.fbs";
+
+namespace seerep.fb;
+
+table Query {
+  boundingbox:seerep.fb.Boundingbox;
+  timeinterval:seerep.fb.TimeInterval;
+  label:[string];
+}

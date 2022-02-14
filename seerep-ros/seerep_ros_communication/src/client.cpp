@@ -6,6 +6,9 @@ namespace seerep_grpc_ros
 {
 TransferSensorMsgs::TransferSensorMsgs(std::shared_ptr<grpc::Channel> channel_ptr)
   : stub_(seerep::TransferSensorMsgs::NewStub(channel_ptr))
+  , stubImage_(seerep::ImageService::NewStub(channel_ptr))
+  , stubPointCloud_(seerep::PointCloudService::NewStub(channel_ptr))
+  , stubMeta_(seerep::MetaOperations::NewStub(channel_ptr))
 {
 }
 
@@ -28,7 +31,8 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const sensor_msgs::PointCloud2::C
 {
   grpc::ClientContext context;
   seerep::ServerResponse response;
-  grpc::Status status = stub_->TransferPointCloud2(&context, seerep_ros_conversions::toProto(*msg), &response);
+  grpc::Status status =
+      stubPointCloud_->TransferPointCloud2(&context, seerep_ros_conversions::toProto(*msg), &response);
   if (!status.ok())
   {
     ROS_ERROR_STREAM("gRPC status error code: " << status.error_code() << " " << status.error_message());
@@ -43,7 +47,7 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const sensor_msgs::Image::ConstPt
 {
   grpc::ClientContext context;
   seerep::ServerResponse response;
-  grpc::Status status = stub_->TransferImage(&context, seerep_ros_conversions::toProto(*msg), &response);
+  grpc::Status status = stubImage_->TransferImage(&context, seerep_ros_conversions::toProto(*msg), &response);
   if (!status.ok())
   {
     ROS_ERROR_STREAM("gRPC status error code: " << status.error_code() << " " << status.error_message());
@@ -121,7 +125,7 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const tf2_msgs::TFMessage::ConstP
   for (auto tf : msg->transforms)
   {
     grpc::Status status =
-        stub_->TransferTransformStamped(&context, seerep_ros_conversions::toProto(tf, projectuuid), &response);
+        stubTf_->TransferTransformStamped(&context, seerep_ros_conversions::toProto(tf, projectuuid), &response);
     if (!status.ok())
     {
       ROS_ERROR_STREAM("gRPC status error code: " << status.error_code() << " " << status.error_message());
@@ -163,12 +167,12 @@ std::optional<ros::Subscriber> TransferSensorMsgs::getSubscriber(const std::stri
 std::string TransferSensorMsgs::createProject(std::string projectname) const
 {
   grpc::ClientContext context;
-  seerep::ProjectCreated response;
+  seerep::ProjectInfo response;
 
   seerep::ProjectCreation projectcreation;
   *projectcreation.mutable_name() = projectname;
 
-  grpc::Status status = stub_->CreateProject(&context, projectcreation, &response);
+  grpc::Status status = stubMeta_->CreateProject(&context, projectcreation, &response);
   if (!status.ok())
   {
     ROS_ERROR_STREAM("gRPC status error code: " << status.error_code() << " " << status.error_message());
@@ -176,7 +180,7 @@ std::string TransferSensorMsgs::createProject(std::string projectname) const
   }
   else
   {
-    ROS_INFO_STREAM("Response:" << response.uuid());
+    ROS_INFO_STREAM("Response:" << response.name() << " " << response.uuid());
     return response.uuid();
   }
 }

@@ -1,0 +1,9 @@
+
+include "boundingbox2d.fbs";
+
+namespace seerep.fb;
+
+table BoundingBox2DLabeled {
+  label:string;
+  bounding_box:seerep.fb.Boundingbox2D;
+}

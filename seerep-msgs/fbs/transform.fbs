@@ -1,0 +1,10 @@
+
+include "vector3.fbs";
+include "quaternion.fbs";
+
+namespace seerep.fb;
+
+table Transform {
+  translation:seerep.fb.Vector3;
+  rotation:seerep.fb.Quaternion;
+}

@@ -110,6 +110,12 @@ AabbHierarchy::AABB TFOverview::transformAABB(AabbHierarchy::AABB aabb, const st
   return aabb;
 }
 
+bool TFOverview::canTransform(const std::string& sourceFrame, const std::string& targetFrame, const int64_t& timeSecs,
+                              const int64_t& timeNanos)
+{
+  return m_tfbuffer.canTransform(targetFrame, sourceFrame, ros::Time(timeSecs, timeNanos));
+}
+
 seerep::Query TFOverview::transformQuery(const seerep::Query& query, std::string targetFrame)
 {
   if (targetFrame != query.boundingbox().header().frame_id())

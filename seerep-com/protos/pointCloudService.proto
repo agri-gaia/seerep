@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package seerep;
+
+import "point_cloud_2.proto";
+import "query.proto";
+
+import "server_response.proto";
+
+service PointCloudService
+{
+  rpc GetPointCloud2(Query) returns (stream PointCloud2);
+  rpc TransferPointCloud2(PointCloud2) returns (ServerResponse);
+}

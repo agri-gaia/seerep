@@ -1,0 +1,10 @@
+
+include "header.fbs";
+include "polygon.fbs";
+
+namespace seerep.fb;
+
+table PolygonStamped {
+  header:seerep.fb.Header;
+  polygon:seerep.fb.Polygon;
+}

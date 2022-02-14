@@ -1,0 +1,8 @@
+
+namespace seerep.fb;
+
+table Point {
+  x:double;
+  y:double;
+  z:double;
+}

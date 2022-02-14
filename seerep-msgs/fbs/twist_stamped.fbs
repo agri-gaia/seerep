@@ -1,0 +1,10 @@
+
+include "header.fbs";
+include "twist.fbs";
+
+namespace seerep.fb;
+
+table TwistStamped {
+  header:seerep.fb.Header;
+  twist:seerep.fb.Twist;
+}

@@ -43,6 +43,9 @@ std::vector<std::optional<seerep::Image>> ImageOverview::getData(const seerep::Q
 
   if (m_data_count > 0)
   {
+    // check if the data has now some tf for adding it to spatial rtree
+    tryAddingDataWithMissingTF();
+
     // space
     std::vector<AabbHierarchy::AabbIdPair> resultRt = querySpatial(query);
     // time
@@ -149,13 +152,46 @@ boost::uuids::uuid ImageOverview::addDataset(const seerep::Image& image)
   return uuid;
 }
 
+/*
+ * Data without tf cannot be added to rtree
+ * check if tf is now available and add data to spatial rtree
+ */
+void ImageOverview::tryAddingDataWithMissingTF()
+{
+  for (std::vector<std::shared_ptr<seerep_core::Image>>::iterator it = m_dataWithMissingTF.begin();
+       it != m_dataWithMissingTF.end();
+       /*it++*/ /*<-- increment in loop itself!*/)
+  {
+    int64_t timeSecs, timeNanos;
+    (*it)->getTime(timeSecs, timeNanos);
+    if (m_tfOverview->canTransform((*it)->getFrameId(), m_frameId, timeSecs, timeNanos))
+    {
+      m_rt.insert(std::make_pair(m_tfOverview->transformAABB((*it)->getAABB(), (*it)->getFrameId(), m_frameId, timeSecs,
+                                                             timeNanos),
+                                 (*it)->getID()));
+      it = m_dataWithMissingTF.erase(it);
+    }
+    else
+    {
+      it++;
+    }
+  }
+}
+
 void ImageOverview::addImageToIndices(std::shared_ptr<seerep_core::Image> img)
 {
   m_datasets.insert(std::make_pair(img->getID(), img));
   int64_t timeSecs, timeNanos;
   img->getTime(timeSecs, timeNanos);
-  m_rt.insert(std::make_pair(
-      m_tfOverview->transformAABB(img->getAABB(), img->getFrameId(), m_frameId, timeSecs, timeNanos), img->getID()));
+  if (m_tfOverview->canTransform(img->getFrameId(), m_frameId, timeSecs, timeNanos))
+  {
+    m_rt.insert(std::make_pair(
+        m_tfOverview->transformAABB(img->getAABB(), img->getFrameId(), m_frameId, timeSecs, timeNanos), img->getID()));
+  }
+  else
+  {
+    m_dataWithMissingTF.push_back(img);
+  }
   m_timetree.insert(std::make_pair(img->getAABBTime(), img->getID()));
 
   std::unordered_set<std::string> labels = img->getLabels();
@@ -176,14 +212,5 @@ void ImageOverview::addImageToIndices(std::shared_ptr<seerep_core::Image> img)
     }
   }
 }
-
-// void ImageOverview::addDatasetLabeled(const seerep::ImageLabeled& imagelabeled)
-// {
-//   uint64_t id = m_data_count++;
-//   auto pc = std::make_shared<Image>(m_coordinatesystem, m_hdf5_io, imagelabeled, id);
-//   m_datasets.insert(std::make_pair(id, pc));
-
-//   m_rt.insert(std::make_pair(pc->getAABB(), pc->getID()));
-// }
 
 } /* namespace seerep_core */

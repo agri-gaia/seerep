@@ -5,8 +5,13 @@
 #include <string>
 #include <algorithm>
 
-// ag
+// seerep
 #include <seerep-com/transfer_sensor_msgs.grpc.pb.h>
+#include <seerep-com/meta_operations.grpc.pb.h>
+#include <seerep-com/imageService.grpc.pb.h>
+#include <seerep-com/pointCloudService.grpc.pb.h>
+#include <seerep-com/tfService.grpc.pb.h>
+
 #include <seerep_ros_conversions/conversions.h>
 
 // Supported ROS message types
@@ -37,10 +42,26 @@ enum SEEREP_MESSAGE_TYPE
 std::string MessageTypeNames[] = { SEEREP_MESSAGE_TYPES(M) };
 #undef SEEREP_M
 
-using StubPtr = std::unique_ptr<seerep::TransferSensorMsgs::Stub>;
+using StubTransferPtr = std::unique_ptr<seerep::TransferSensorMsgs::Stub>;
+using StubMetaPtr = std::unique_ptr<seerep::MetaOperations::Stub>;
+using StubImagePtr = std::unique_ptr<seerep::ImageService::Stub>;
+using StubPointCloudPtr = std::unique_ptr<seerep::PointCloudService::Stub>;
+using StubTfPtr = std::unique_ptr<seerep::TfService::Stub>;
 
 template <typename Type>
-void send(StubPtr& stub, grpc::ClientContext* c, seerep::ServerResponse* r, Type msg)
+void send(StubTransferPtr& stub, grpc::ClientContext* c, seerep::ServerResponse* r, Type msg)
+{
+}
+template <typename Type>
+void send(StubImagePtr& stub, grpc::ClientContext* c, seerep::ServerResponse* r, Type msg)
+{
+}
+template <typename Type>
+void send(StubPointCloudPtr& stub, grpc::ClientContext* c, seerep::ServerResponse* r, Type msg)
+{
+}
+template <typename Type>
+void send(StubTfPtr& stub, grpc::ClientContext* c, seerep::ServerResponse* r, Type msg)
 {
 }
 

@@ -38,6 +38,9 @@ public:
   AabbHierarchy::AABB transformAABB(AabbHierarchy::AABB aabb, const std::string& sourceFrame,
                                     const std::string& targetFrame, const int64_t& timeSecs, const int64_t& timeNanos);
 
+  bool canTransform(const std::string& sourceFrame, const std::string& targetFrame, const int64_t& timeSecs,
+                    const int64_t& timeNanos);
+
   seerep::Query transformQuery(const seerep::Query& query, std::string targetFrame);
 
 private:

@@ -11,6 +11,7 @@
         "mhutchie.git-graph",
         "ms-iot.vscode-ros",
         "zxh404.vscode-proto3",
+        "gaborv.flatbuffers",
         "vscode-icons-team.vscode-icons"
     ],
     "containerUser": "docker",

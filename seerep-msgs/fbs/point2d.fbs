@@ -1,0 +1,7 @@
+
+namespace seerep.fb;
+
+table Point2D {
+  x:double;
+  y:double;
+}

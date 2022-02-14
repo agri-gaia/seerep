@@ -1,0 +1,11 @@
+
+include "header.fbs";
+include "point2d.fbs";
+
+namespace seerep.fb;
+
+table Boundingbox2D {
+  header:seerep.fb.Header;
+  point_min:seerep.fb.Point2D;
+  point_max:seerep.fb.Point2D;
+}

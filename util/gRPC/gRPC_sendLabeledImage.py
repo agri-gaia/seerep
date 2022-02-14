@@ -5,7 +5,9 @@ import time
 import numpy as np
 
 import grpc
-import transfer_sensor_msgs_pb2_grpc as transferMsgs
+import imageService_pb2_grpc as imageService
+import tfService_pb2_grpc as tfService
+import meta_operations_pb2_grpc as metaOperations
 import image_pb2 as image
 import boundingbox2d_labeled_pb2 as bb
 import projectCreation_pb2 as projectCreation
@@ -13,40 +15,28 @@ import transform_stamped_pb2 as tf
 
 from google.protobuf import empty_pb2
 
-channel = grpc.insecure_channel("localhost:9090")
+channel = grpc.insecure_channel("agrigaia-ur.ni.dfki:9090")
 
-stub = transferMsgs.TransferSensorMsgsStub(channel)
+stub = imageService.ImageServiceStub(channel)
+stubTf = tfService.TfServiceStub(channel)
+stubMeta = metaOperations.MetaOperationsStub(channel)
 
-response = stub.GetProjects(empty_pb2.Empty())
-if not response.uuids:
+response = stubMeta.GetProjects(empty_pb2.Empty())
+
+found = False
+for project in response.projects:
+    print(project.name + " " + project.uuid)
+    if project.name == "testproject":
+        projectuuid = project.uuid
+        found = True
+
+if not found:
     creation = projectCreation.ProjectCreation(name="testproject", mapFrameId="map")
-    projectCreated = stub.CreateProject(creation)
-    projectname = projectCreated.uuid
-else:
-    print(response.uuids)
-    projectname = response.uuids[0]
+    projectCreated = stubMeta.CreateProject(creation)
+    projectuuid = projectCreated.uuid
+
 
 theTime = int(time.time())
-
-theTf = tf.TransformStamped()
-theTf.header.frame_id = "map"
-theTf.header.stamp.seconds = theTime
-theTf.header.uuid_project = projectname
-theTf.child_frame_id = "camera"
-theTf.transform.translation.x = 1
-theTf.transform.translation.y = 2
-theTf.transform.translation.z = 3
-theTf.transform.rotation.x = 0
-theTf.transform.rotation.y = 0
-theTf.transform.rotation.z = 0
-theTf.transform.rotation.w = 1
-stub.TransferTransformStamped(theTf)
-
-theTf.header.stamp.seconds = theTime + 10
-theTf.transform.translation.x = 100
-theTf.transform.translation.y = 200
-theTf.transform.translation.z = 300
-stub.TransferTransformStamped(theTf)
 
 for n in range(10):
     theImage = image.Image()
@@ -69,7 +59,7 @@ for n in range(10):
     theImage.header.frame_id = "camera"
     theImage.header.stamp.seconds = theTime + n
     theImage.header.stamp.nanos = 0
-    theImage.header.uuid_project = projectname
+    theImage.header.uuid_project = projectuuid
     theImage.height = lim
     theImage.width = lim
     theImage.encoding = "rgb8"
@@ -91,3 +81,23 @@ for n in range(10):
     uuidImg = stub.TransferImage(theImage)
 
     print("uuid of transfered img: " + uuidImg.message)
+
+theTf = tf.TransformStamped()
+theTf.header.frame_id = "map"
+theTf.header.stamp.seconds = theTime
+theTf.header.uuid_project = projectuuid
+theTf.child_frame_id = "camera"
+theTf.transform.translation.x = 1
+theTf.transform.translation.y = 2
+theTf.transform.translation.z = 3
+theTf.transform.rotation.x = 0
+theTf.transform.rotation.y = 0
+theTf.transform.rotation.z = 0
+theTf.transform.rotation.w = 1
+stubTf.TransferTransformStamped(theTf)
+
+theTf.header.stamp.seconds = theTime + 10
+theTf.transform.translation.x = 100
+theTf.transform.translation.y = 200
+theTf.transform.translation.z = 300
+stubTf.TransferTransformStamped(theTf)

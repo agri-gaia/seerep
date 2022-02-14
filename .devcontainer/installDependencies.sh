@@ -83,6 +83,19 @@ cd .. || exit 1
 rm protobuf-cpp-$PB_VER.zip
 rm -rf protobuf-$PB_VER
 
+echo '####################################################'
+echo '#install flatbuffer'
+echo '####################################################'
+wget https://github.com/google/flatbuffers/archive/refs/tags/v2.0.0.tar.gz
+tar -xf v2.0.0.tar.gz
+mkdir flatbuffers-2.0.0/build
+cd flatbuffers-2.0.0/build  || exit 1
+cmake ..
+make -j"$(nproc)"
+make install
+
+cd ../..  || exit 1
+rm -rf flatbuffers-2.0.0 v2.0.0.tar.gz
 
 echo '####################################################'
 echo '#install gRPC'

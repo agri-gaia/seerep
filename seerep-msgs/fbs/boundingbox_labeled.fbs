@@ -1,0 +1,9 @@
+
+include "boundingbox.fbs";
+
+namespace seerep.fb;
+
+table BoundingBoxLabeled {
+  label:string;
+  bounding_box:seerep.fb.Boundingbox;
+}

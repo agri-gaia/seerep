@@ -1,8 +1,0 @@
-syntax = "proto3";
-
-package seerep;
-
-message ProjectCreated
-{
-  string uuid = 1;
-}

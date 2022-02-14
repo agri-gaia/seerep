@@ -1,0 +1,10 @@
+
+include "header.fbs";
+include "pose.fbs";
+
+namespace seerep.fb;
+
+table PoseStamped {
+  header:seerep.fb.Header;
+  pose:seerep.fb.Pose;
+}

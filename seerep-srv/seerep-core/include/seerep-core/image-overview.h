@@ -41,6 +41,7 @@ private:
   void recreateDatasets();
   void addImageToIndices(std::shared_ptr<seerep_core::Image> img);
 
+  void tryAddingDataWithMissingTF();
   std::vector<AabbHierarchy::AabbIdPair> querySpatial(const seerep::Query& query);
   std::vector<AabbHierarchy::AabbTimeIdPair> queryTemporal(const seerep::Query& query);
   std::set<uint64_t> querySemantic(const seerep::Query& query);
@@ -57,6 +58,7 @@ private:
 
   std::unordered_map<uint64_t, std::shared_ptr<seerep_core::Image>> m_datasets;
 
+  std::vector<std::shared_ptr<seerep_core::Image>> m_dataWithMissingTF;
   AabbHierarchy::rtree m_rt;
   AabbHierarchy::timetree m_timetree;
   std::unordered_map<std::string, std::vector<uint64_t>> m_label;

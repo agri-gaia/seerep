@@ -1,0 +1,9 @@
+
+namespace seerep.fb;
+
+table Quaternion {
+  x:double;
+  y:double;
+  z:double;
+  w:double;
+}

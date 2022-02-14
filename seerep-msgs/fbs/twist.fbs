@@ -1,0 +1,9 @@
+
+include "vector3.fbs";
+
+namespace seerep.fb;
+
+table Twist {
+  linear:seerep.fb.Vector3;
+  angular:seerep.fb.Vector3;
+}

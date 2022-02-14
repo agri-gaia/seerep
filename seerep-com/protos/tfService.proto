@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package seerep;
+
+import "transform_stamped.proto";
+// import "query.proto";
+
+import "server_response.proto";
+
+service TfService
+{
+  rpc TransferTransformStamped(TransformStamped) returns (ServerResponse);
+}

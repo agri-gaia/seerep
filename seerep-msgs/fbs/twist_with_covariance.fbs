@@ -1,0 +1,9 @@
+
+include "twist.fbs";
+
+namespace seerep.fb;
+
+table TwistWithCovariance {
+  twist:seerep.fb.Twist;
+  covariance:[double];
+}

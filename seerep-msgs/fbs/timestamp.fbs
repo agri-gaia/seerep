@@ -1,0 +1,7 @@
+
+namespace seerep.fb;
+
+table Timestamp {
+  seconds:int64;
+  nanos:int64;
+}
