@@ -23,3 +23,7 @@ list(APPEND SeerepHDF5_LIBRARIES ${HighFive_LIBRARIES})
 find_package(SeerepMsgs REQUIRED)
 list(APPEND SeerepHDF5_INCLUDE_DIRS ${SeerepMsgs_INCLUDE_DIRS})
 list(APPEND SeerepHDF5_LIBRARIES ${SeerepMsgs_LIBRARIES})
+
+# find_package(catkin REQUIRED COMPONENTS sensor_msgs)
+# list(APPEND SeerepHDF5_INCLUDE_DIRS ${catkin_INCLUDE_DIRS})
+# list(APPEND SeerepHDF5_LIBRARIES ${catkin_LIBRARIES})

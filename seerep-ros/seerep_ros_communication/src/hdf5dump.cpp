@@ -15,8 +15,9 @@ void DumpSensorMsgs::dump(const std_msgs::Header::ConstPtr& msg) const
 
 void DumpSensorMsgs::dump(const sensor_msgs::PointCloud2::ConstPtr& msg) const
 {
-  boost::uuids::uuid uuid = boost::uuids::random_generator()();
-  m_hdf5_io->writePointCloud2(boost::lexical_cast<std::string>(uuid), seerep_ros_conversions::toProto(*msg));
+  std::string uuid = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+  ROS_INFO_STREAM("Dump point cloud 2 with uuid: " << uuid);
+  m_hdf5_io->writePointCloud2(uuid, seerep_ros_conversions::toProto(*msg));
 }
 
 void DumpSensorMsgs::dump(const sensor_msgs::Image::ConstPtr& msg) const
@@ -137,7 +138,7 @@ int main(int argc, char** argv)
 
   for (auto topic : topics)
   {
-    ROS_INFO_STREAM("Try to subscribe to topic \"" << topic << "\".");
+    ROS_INFO_STREAM("Trying to subscribe to topic \"" << topic << "\".");
   }
 
   for (auto info : topic_info)

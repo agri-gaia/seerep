@@ -40,7 +40,7 @@ public:
 
   std::optional<seerep::Image> readImage(const std::string& id);
 
-  void writePointCloud2(const std::string& uuid, const seerep::PointCloud2& pointcloud2);
+  std::shared_ptr<HighFive::Group> writePointCloud2(const std::string& uuid, const seerep::PointCloud2& pointcloud2);
 
   // void writePointCloud2Labeled(const std::string& id, const seerep::PointCloud2Labeled& pointcloud2Labeled);
 
@@ -83,6 +83,8 @@ public:
   bool hasTimeRaw(const std::string& datatypeGroup, const std::string& uuid);
   bool hasTime(const std::string& datatypeGroup, const std::string& uuid);
 
+  std::map<std::string, HighFive::Group> getPointClouds();
+
   std::optional<seerep::PointCloud2> readPointCloud2(const std::string& id);
 
   void writePoint(const std::string& id, const seerep::Point& point);
@@ -108,15 +110,16 @@ public:
   std::optional<std::vector<seerep::TransformStamped>> readTransformStamped(const std::string& id);
   std::optional<std::vector<std::string>> readTransformStampedFrames(const std::string& id);
 
-private:
-  void writeHeaderAttributes(HighFive::DataSet& data_set, const seerep::Header& header);
+  template <class T>
+  void writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, const seerep::Header& header);
 
-  seerep::Header readHeaderAttributes(HighFive::DataSet& data_set);
+  template <class T>
+  seerep::Header readHeaderAttributes(HighFive::AnnotateTraits<T>& object);
 
-  void writePointFieldAttributes(HighFive::DataSet& data_set,
+  void writePointFieldAttributes(HighFive::Group& cloud_group,
                                  const google::protobuf::RepeatedPtrField<seerep::PointField> repeatedPointField);
 
-  google::protobuf::RepeatedPtrField<seerep::PointField> readPointFieldAttributes(HighFive::DataSet& data_set);
+  google::protobuf::RepeatedPtrField<seerep::PointField> readPointFieldAttributes(HighFive::Group& cloud_group);
 
   void writeQuaternionAttributes(HighFive::DataSet& data_set, const seerep::Quaternion& quaternion,
                                  const std::string& prefix = "");
@@ -125,26 +128,30 @@ private:
 
   const std::string SIZE = "size";
   const std::string CLASS = "CLASS";
+
   // image / pointcloud attribute keys
-  const std::string HEIGHT = "height";
-  const std::string WIDTH = "width";
-  const std::string ENCODING = "encoding";
-  const std::string IS_BIGENDIAN = "is_bigendian";
-  const std::string ROW_STEP = "row_step";
-  const std::string POINT_STEP = "point_step";
-  const std::string IS_DENSE = "is_dense";
+  inline static const std::string HEIGHT = "height";
+  inline static const std::string WIDTH = "width";
+  inline static const std::string ENCODING = "encoding";
+  inline static const std::string IS_BIGENDIAN = "is_bigendian";
+  inline static const std::string ROW_STEP = "row_step";
+  inline static const std::string POINT_STEP = "point_step";
+  inline static const std::string IS_DENSE = "is_dense";
+
+  // bounding box attribute keys for point cloud
+  inline static const std::string BOUNDINGBOX = "boundingbox";
 
   // pointcloud fields attribute keys
-  const std::string FIELD_NAME = "field_name_";
-  const std::string FIELD_OFFSET = "field_offset_";
-  const std::string FIELD_DATATYPE = "field_datatype_";
-  const std::string FIELD_COUNT = "field_count_";
+  inline static const std::string FIELD_NAME = "field_name_";
+  inline static const std::string FIELD_OFFSET = "field_offset_";
+  inline static const std::string FIELD_DATATYPE = "field_datatype_";
+  inline static const std::string FIELD_COUNT = "field_count_";
 
   // header attribute keys
-  const std::string HEADER_STAMP_SECONDS = "header_stamp_seconds";
-  const std::string HEADER_STAMP_NANOS = "header_stamp_nanos";
-  const std::string HEADER_FRAME_ID = "header_frame_id";
-  const std::string HEADER_SEQ = "header_seq";
+  inline static const std::string HEADER_STAMP_SECONDS = "header_stamp_seconds";
+  inline static const std::string HEADER_STAMP_NANOS = "header_stamp_nanos";
+  inline static const std::string HEADER_FRAME_ID = "header_frame_id";
+  inline static const std::string HEADER_SEQ = "header_seq";
 
   // point and quaternion attribute keys
   const std::string X = "x";

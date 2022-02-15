@@ -33,7 +33,11 @@ target_link_libraries(seerephdf5
 	${HighFive_LIBRARIES}
 )
 
-set(INSTALL_HEADERS include/seerep-hdf5/io.h)
+set(INSTALL_HEADERS
+	include/seerep-hdf5/io.h
+	include/seerep-hdf5/point_cloud2_iterator.hpp
+	include/seerep-hdf5/impl/point_cloud2_iterator.hpp
+)
 
 set_target_properties(seerephdf5 PROPERTIES PUBLIC_HEADER "${INSTALL_HEADERS}")
 
