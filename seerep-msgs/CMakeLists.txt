@@ -9,8 +9,41 @@ include(FindProtobuf)
 find_package(Protobuf REQUIRED)
 find_package(Flatbuffers REQUIRED)
 
-file(GLOB_RECURSE MY_PROTO_FILES
-  "${PROJECT_SOURCE_DIR}/protos/*.proto"
+set(MY_PROTO_FILES
+	protos/boundingbox_labeled.proto
+	protos/boundingbox.proto
+	protos/boundingbox2d_labeled.proto
+	protos/boundingbox2d.proto
+	protos/frame_infos.proto
+	protos/frame_query.proto
+	protos/header.proto
+	protos/image.proto
+	protos/point_cloud_2.proto
+	protos/point_field.proto
+	protos/point_stamped.proto
+	protos/point.proto
+	protos/point2d.proto
+	protos/polygon_stamped.proto
+	protos/polygon.proto
+	protos/pose_stamped.proto
+	protos/pose.proto
+	protos/project_info.proto
+	protos/project_infos.proto
+	protos/projectCreation.proto
+	protos/quaternion_stamped.proto
+	protos/quaternion.proto
+	protos/query.proto
+	protos/server_response.proto
+	protos/time_interval.proto
+	protos/transform_stamped.proto
+	protos/transform_stamped_query.proto
+	protos/transform.proto
+	protos/twist_stamped.proto
+	protos/twist_with_covariance_stamped.proto
+	protos/twist_with_covariance.proto
+	protos/twist.proto
+	protos/vector3_stamped.proto
+	protos/vector3.proto
 )
 
 set(MY_FBS_FILES
