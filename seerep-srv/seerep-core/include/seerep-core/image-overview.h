@@ -9,7 +9,7 @@
 #include <seerep-msgs/image.pb.h>
 #include <seerep-msgs/query.pb.h>
 // seerep-hdf5
-#include <seerep-hdf5/io.h>
+#include <seerep-hdf5/ioImage.h>
 // seerep-conversion
 #include <seerep_ros_conversions/conversions.h>
 
@@ -30,8 +30,8 @@ namespace seerep_core
 class ImageOverview
 {
 public:
-  ImageOverview(std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io, std::shared_ptr<seerep_core::TFOverview> tfOverview,
-                std::string frameId);
+  ImageOverview(std::shared_ptr<seerep_hdf5::SeerepHDF5IOImage> hdf5_io,
+                std::shared_ptr<seerep_core::TFOverview> tfOverview, std::string frameId);
   ~ImageOverview();
   std::vector<std::optional<seerep::Image>> getData(const seerep::Query& bb);
 
@@ -54,7 +54,7 @@ private:
 
   std::string m_frameId;
   std::shared_ptr<seerep_core::TFOverview> m_tfOverview;
-  std::shared_ptr<seerep_hdf5::SeerepHDF5IO> m_hdf5_io;
+  std::shared_ptr<seerep_hdf5::SeerepHDF5IOImage> m_hdf5_io;
 
   std::unordered_map<uint64_t, std::shared_ptr<seerep_core::Image>> m_datasets;
 

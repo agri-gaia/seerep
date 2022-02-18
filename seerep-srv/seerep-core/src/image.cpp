@@ -3,7 +3,7 @@
 namespace seerep_core
 {
 // constructor when data received and stored to hdf5
-Image::Image(std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io, const seerep::Image& image, const uint64_t& id,
+Image::Image(std::shared_ptr<seerep_hdf5::SeerepHDF5IOImage> hdf5_io, const seerep::Image& image, const uint64_t& id,
              const boost::uuids::uuid& uuid)
   : m_hdf5_io(hdf5_io), m_id(id), m_uuid(uuid)
 {
@@ -12,7 +12,8 @@ Image::Image(std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io, const seerep::I
 
   // space
   m_aabb = calcAABB();
-  m_hdf5_io->writeAABB(seerep_hdf5::SeerepHDF5IO::HDF5_GROUP_IMAGE, boost::lexical_cast<std::string>(m_uuid), m_aabb);
+  m_hdf5_io->writeAABB(seerep_hdf5::SeerepHDF5IOImage::HDF5_GROUP_IMAGE, boost::lexical_cast<std::string>(m_uuid),
+                       m_aabb);
 
   // time
   m_timeSecs = image.header().stamp().seconds();
@@ -31,11 +32,11 @@ Image::Image(std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io, const seerep::I
 }
 
 // constructor if recreating the server from hdf5
-Image::Image(std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io, const uint64_t& id, const boost::uuids::uuid& uuid)
+Image::Image(std::shared_ptr<seerep_hdf5::SeerepHDF5IOImage> hdf5_io, const uint64_t& id, const boost::uuids::uuid& uuid)
   : m_hdf5_io(hdf5_io), m_id(id), m_uuid(uuid)
 {
-  auto frameId =
-      m_hdf5_io->readFrameId(seerep_hdf5::SeerepHDF5IO::HDF5_GROUP_IMAGE, boost::lexical_cast<std::string>(m_uuid));
+  auto frameId = m_hdf5_io->readFrameId(seerep_hdf5::SeerepHDF5IOImage::HDF5_GROUP_IMAGE,
+                                        boost::lexical_cast<std::string>(m_uuid));
   m_frameId = frameId.value_or("noframeid");
 
   recreateAABB();
@@ -110,31 +111,34 @@ AabbHierarchy::AABB Image::calcAABB()
 
 void Image::recreateAABB()
 {
-  if (m_hdf5_io->hasAABB(seerep_hdf5::SeerepHDF5IO::HDF5_GROUP_IMAGE, boost::lexical_cast<std::string>(m_uuid)))
+  if (m_hdf5_io->hasAABB(seerep_hdf5::SeerepHDF5IOImage::HDF5_GROUP_IMAGE, boost::lexical_cast<std::string>(m_uuid)))
   {
-    m_hdf5_io->readAABB(seerep_hdf5::SeerepHDF5IO::HDF5_GROUP_IMAGE, boost::lexical_cast<std::string>(m_uuid), m_aabb);
+    m_hdf5_io->readAABB(seerep_hdf5::SeerepHDF5IOImage::HDF5_GROUP_IMAGE, boost::lexical_cast<std::string>(m_uuid),
+                        m_aabb);
   }
   else
   {
     m_aabb = calcAABB();
-    m_hdf5_io->writeAABB(seerep_hdf5::SeerepHDF5IO::HDF5_GROUP_IMAGE, boost::lexical_cast<std::string>(m_uuid), m_aabb);
+    m_hdf5_io->writeAABB(seerep_hdf5::SeerepHDF5IOImage::HDF5_GROUP_IMAGE, boost::lexical_cast<std::string>(m_uuid),
+                         m_aabb);
   }
 }
 
 void Image::recreateTime()
 {
-  if (m_hdf5_io->hasTime(seerep_hdf5::SeerepHDF5IO::HDF5_GROUP_IMAGE, boost::lexical_cast<std::string>(m_uuid)))
+  if (m_hdf5_io->hasTime(seerep_hdf5::SeerepHDF5IOImage::HDF5_GROUP_IMAGE, boost::lexical_cast<std::string>(m_uuid)))
   {
-    m_hdf5_io->readTime(seerep_hdf5::SeerepHDF5IO::HDF5_GROUP_IMAGE, boost::lexical_cast<std::string>(m_uuid),
+    m_hdf5_io->readTime(seerep_hdf5::SeerepHDF5IOImage::HDF5_GROUP_IMAGE, boost::lexical_cast<std::string>(m_uuid),
                         m_timeSecs, m_timeNanos);
   }
   else
   {
-    if (m_hdf5_io->hasTimeRaw(seerep_hdf5::SeerepHDF5IO::HDF5_GROUP_IMAGE, boost::lexical_cast<std::string>(m_uuid)))
+    if (m_hdf5_io->hasTimeRaw(seerep_hdf5::SeerepHDF5IOImage::HDF5_GROUP_IMAGE,
+                              boost::lexical_cast<std::string>(m_uuid)))
     {
-      m_hdf5_io->readTimeFromRaw(seerep_hdf5::SeerepHDF5IO::HDF5_GROUP_IMAGE, boost::lexical_cast<std::string>(m_uuid),
-                                 m_timeSecs, m_timeNanos);
-      m_hdf5_io->writeTime(seerep_hdf5::SeerepHDF5IO::HDF5_GROUP_IMAGE, boost::lexical_cast<std::string>(m_uuid),
+      m_hdf5_io->readTimeFromRaw(seerep_hdf5::SeerepHDF5IOImage::HDF5_GROUP_IMAGE,
+                                 boost::lexical_cast<std::string>(m_uuid), m_timeSecs, m_timeNanos);
+      m_hdf5_io->writeTime(seerep_hdf5::SeerepHDF5IOImage::HDF5_GROUP_IMAGE, boost::lexical_cast<std::string>(m_uuid),
                            m_timeSecs, m_timeNanos);
     }
   }
@@ -143,13 +147,13 @@ void Image::recreateTime()
 void Image::recreateLabel()
 {
   std::optional<google::protobuf::RepeatedPtrField<std::string>> labelGeneral = m_hdf5_io->readLabelsGeneral(
-      seerep_hdf5::SeerepHDF5IO::HDF5_GROUP_IMAGE, boost::lexical_cast<std::string>(m_uuid));
+      seerep_hdf5::SeerepHDF5IOImage::HDF5_GROUP_IMAGE, boost::lexical_cast<std::string>(m_uuid));
   if (labelGeneral)
   {
     storeLabelGeneral(labelGeneral.value());
   }
   std::optional<google::protobuf::RepeatedPtrField<seerep::BoundingBox2DLabeled>> labelsBB =
-      m_hdf5_io->readBoundingBox2DLabeled(seerep_hdf5::SeerepHDF5IO::HDF5_GROUP_IMAGE,
+      m_hdf5_io->readBoundingBox2DLabeled(seerep_hdf5::SeerepHDF5IOImage::HDF5_GROUP_IMAGE,
                                           boost::lexical_cast<std::string>(m_uuid));
 
   if (labelsBB)

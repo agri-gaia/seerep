@@ -24,7 +24,10 @@ include_directories(
 )
 
 add_library(seerephdf5
-	src/io.cpp
+	src/ioGeneral.cpp
+	src/ioTf.cpp
+	src/ioPointCloud.cpp
+	src/ioImage.cpp
 )
 
 target_link_libraries(seerephdf5
@@ -34,7 +37,10 @@ target_link_libraries(seerephdf5
 )
 
 set(INSTALL_HEADERS
-	include/seerep-hdf5/io.h
+	include/seerep-hdf5/ioGeneral.h
+	include/seerep-hdf5/ioTf.h
+	include/seerep-hdf5/ioPointCloud.h
+	include/seerep-hdf5/ioImage.h
 	include/seerep-hdf5/point_cloud2_iterator.hpp
 	include/seerep-hdf5/impl/point_cloud2_iterator.hpp
 )

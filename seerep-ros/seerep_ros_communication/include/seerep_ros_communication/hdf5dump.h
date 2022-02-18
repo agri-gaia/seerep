@@ -6,7 +6,9 @@
 
 // seerep
 #include <seerep_ros_conversions/conversions.h>
-#include <seerep-hdf5/io.h>
+#include <seerep-hdf5/ioTf.h>
+#include <seerep-hdf5/ioImage.h>
+#include <seerep-hdf5/ioPointCloud.h>
 
 // uuid
 #include <boost/uuid/uuid.hpp>             // uuid class
@@ -49,7 +51,9 @@ public:
   void dump(const tf2_msgs::TFMessage::ConstPtr& msg) const;
 
 private:
-  std::shared_ptr<seerep_hdf5::SeerepHDF5IO> m_hdf5_io;
+  std::shared_ptr<seerep_hdf5::SeerepHDF5IOTf> m_ioTf;
+  std::shared_ptr<seerep_hdf5::SeerepHDF5IOPointCloud> m_ioPointCloud;
+  std::shared_ptr<seerep_hdf5::SeerepHDF5IOImage> m_ioImage;
   ros::NodeHandle nh;
 };
 

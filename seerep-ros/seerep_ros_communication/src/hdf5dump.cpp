@@ -4,8 +4,12 @@ namespace seerep_grpc_ros
 {
 DumpSensorMsgs::DumpSensorMsgs(std::string hdf5FilePath)
 {
-  HighFive::File hdf5_file(hdf5FilePath, HighFive::File::OpenOrCreate);
-  m_hdf5_io = std::make_shared<seerep_hdf5::SeerepHDF5IO>(hdf5_file);
+  auto write_mtx = std::make_shared<std::mutex>();
+  std::shared_ptr<HighFive::File> hdf5_file =
+      std::make_shared<HighFive::File>(hdf5FilePath, HighFive::File::OpenOrCreate);
+  m_ioTf = std::make_shared<seerep_hdf5::SeerepHDF5IOTf>(hdf5_file, write_mtx);
+  m_ioPointCloud = std::make_shared<seerep_hdf5::SeerepHDF5IOPointCloud>(hdf5_file, write_mtx);
+  m_ioImage = std::make_shared<seerep_hdf5::SeerepHDF5IOImage>(hdf5_file, write_mtx);
 }
 
 void DumpSensorMsgs::dump(const std_msgs::Header::ConstPtr& msg) const
@@ -17,13 +21,13 @@ void DumpSensorMsgs::dump(const sensor_msgs::PointCloud2::ConstPtr& msg) const
 {
   std::string uuid = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
   ROS_INFO_STREAM("Dump point cloud 2 with uuid: " << uuid);
-  m_hdf5_io->writePointCloud2(uuid, seerep_ros_conversions::toProto(*msg));
+  m_ioPointCloud->writePointCloud2(uuid, seerep_ros_conversions::toProto(*msg));
 }
 
 void DumpSensorMsgs::dump(const sensor_msgs::Image::ConstPtr& msg) const
 {
   boost::uuids::uuid uuid = boost::uuids::random_generator()();
-  m_hdf5_io->writeImage(boost::lexical_cast<std::string>(uuid), seerep_ros_conversions::toProto(*msg));
+  m_ioImage->writeImage(boost::lexical_cast<std::string>(uuid), seerep_ros_conversions::toProto(*msg));
 }
 
 void DumpSensorMsgs::dump(const geometry_msgs::Point::ConstPtr& msg) const
@@ -50,7 +54,7 @@ void DumpSensorMsgs::dump(const tf2_msgs::TFMessage::ConstPtr& msg) const
 {
   for (geometry_msgs::TransformStamped transform : msg->transforms)
   {
-    m_hdf5_io->writeTransformStamped(seerep_ros_conversions::toProto(transform));
+    m_ioTf->writeTransformStamped(seerep_ros_conversions::toProto(transform));
   }
 }
 

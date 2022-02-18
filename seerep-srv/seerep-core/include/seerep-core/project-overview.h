@@ -20,8 +20,7 @@
 #include <seerep-msgs/query.pb.h>
 #include <seerep-msgs/transform_stamped.pb.h>
 #include <seerep-msgs/transform_stamped_query.pb.h>
-// seerep-hdf5
-#include <seerep-hdf5/io.h>
+
 // seerep-conversion
 #include <seerep_ros_conversions/conversions.h>
 

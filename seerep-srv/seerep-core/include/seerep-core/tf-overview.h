@@ -10,7 +10,7 @@
 #include <seerep-msgs/transform_stamped_query.pb.h>
 #include <seerep-msgs/query.pb.h>
 // seerep-hdf5
-#include <seerep-hdf5/io.h>
+#include <seerep-hdf5/ioTf.h>
 // seerep-conversion
 #include <seerep_ros_conversions/conversions.h>
 
@@ -29,7 +29,7 @@ namespace seerep_core
 class TFOverview
 {
 public:
-  TFOverview(std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io);
+  TFOverview(std::shared_ptr<seerep_hdf5::SeerepHDF5IOTf> hdf5_io);
   ~TFOverview();
   std::optional<seerep::TransformStamped> getData(const int64_t& timesecs, const int64_t& timenanos,
                                                   const std::string& targetFrame, const std::string& sourceFrame);
@@ -51,7 +51,7 @@ private:
   void addToIndices(std::shared_ptr<seerep_core::TF> tf);
   void addToTfBuffer(seerep::TransformStamped transform);
 
-  std::shared_ptr<seerep_hdf5::SeerepHDF5IO> m_hdf5_io;
+  std::shared_ptr<seerep_hdf5::SeerepHDF5IOTf> m_hdf5_io;
 
   std::unordered_map<std::string, std::shared_ptr<seerep_core::TF>> m_datasets;
 

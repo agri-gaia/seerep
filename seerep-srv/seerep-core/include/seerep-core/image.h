@@ -8,7 +8,7 @@
 #include <seerep-msgs/query.pb.h>
 #include <seerep-msgs/image.pb.h>
 // seerep-hdf5
-#include <seerep-hdf5/io.h>
+#include <seerep-hdf5/ioImage.h>
 // seerep-conversion
 #include <seerep_ros_conversions/conversions.h>
 
@@ -27,9 +27,9 @@ namespace seerep_core
 class Image
 {
 public:
-  Image(std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io, const seerep::Image& image, const uint64_t& id,
+  Image(std::shared_ptr<seerep_hdf5::SeerepHDF5IOImage> hdf5_io, const seerep::Image& image, const uint64_t& id,
         const boost::uuids::uuid& uuid);
-  Image(std::shared_ptr<seerep_hdf5::SeerepHDF5IO> hdf5_io, const uint64_t& id, const boost::uuids::uuid& uuid);
+  Image(std::shared_ptr<seerep_hdf5::SeerepHDF5IOImage> hdf5_io, const uint64_t& id, const boost::uuids::uuid& uuid);
   ~Image();
 
   std::optional<seerep::Image> getData(const seerep::Query& query);
@@ -51,7 +51,7 @@ private:
   void storeLabelBB(google::protobuf::RepeatedPtrField<seerep::BoundingBox2DLabeled> labelsBB);
 
   std::string m_frameId;
-  std::shared_ptr<seerep_hdf5::SeerepHDF5IO> m_hdf5_io;
+  std::shared_ptr<seerep_hdf5::SeerepHDF5IOImage> m_hdf5_io;
   const uint64_t m_id;
   const boost::uuids::uuid m_uuid;
   // axis aligned bounding box
