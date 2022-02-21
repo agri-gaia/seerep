@@ -5,7 +5,7 @@
 #include <highfive/H5File.hpp>
 
 // seerep-io
-#include "seerep-hdf5/general_io.h"
+#include "seerep-hdf5/general-io.h"
 
 // seerep-msgs
 #include <seerep-msgs/transform_stamped.pb.h>

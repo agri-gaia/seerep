@@ -12,7 +12,7 @@
 #include <seerep-msgs/query.pb.h>
 #include <seerep-msgs/point_cloud_2.pb.h>
 // seerep-hdf5
-#include <seerep-hdf5/general_io.h>
+#include <seerep-hdf5/general-io.h>
 #include <seerep-hdf5/ioTf.h>
 #include <seerep-hdf5/ioPointCloud.h>
 #include <seerep-hdf5/ioImage.h>

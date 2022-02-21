@@ -126,6 +126,6 @@ protected:
 
 } /* namespace seerep_hdf5 */
 
-#include "impl/general_io.hpp"  // NOLINT
+#include "impl/general-io.hpp"  // NOLINT
 
 #endif /* SEEREP_HDF5_IO_GENERAL_H_ */
