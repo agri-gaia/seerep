@@ -6,11 +6,11 @@
 #include <algorithm>
 
 // seerep
-#include <seerep-com/transfer_sensor_msgs.grpc.pb.h>
-#include <seerep-com/meta_operations.grpc.pb.h>
-#include <seerep-com/imageService.grpc.pb.h>
-#include <seerep-com/pointCloudService.grpc.pb.h>
-#include <seerep-com/tfService.grpc.pb.h>
+#include <seerep-com/transfer-sensor-msgs.grpc.pb.h>
+#include <seerep-com/meta-operations.grpc.pb.h>
+#include <seerep-com/image-service.grpc.pb.h>
+#include <seerep-com/point-cloud-service.grpc.pb.h>
+#include <seerep-com/tf-service.grpc.pb.h>
 
 #include <seerep_ros_conversions/conversions.h>
 

@@ -2,7 +2,7 @@
 #define SEEREP_SERVER_IMAGE_SERVICE_H_
 
 // seerep
-#include <seerep-com/imageService.grpc.pb.h>
+#include <seerep-com/image-service.grpc.pb.h>
 #include <seerep-core/project-overview.h>
 
 namespace seerep_server
