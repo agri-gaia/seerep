@@ -2,7 +2,7 @@
 #define SEEREP_SERVER_TF_SERVICE_H_
 
 // seerep
-#include <seerep-com/tfService.grpc.pb.h>
+#include <seerep-com/tf-service.grpc.pb.h>
 #include <seerep-core/project-overview.h>
 
 namespace seerep_server
