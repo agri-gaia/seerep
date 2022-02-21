@@ -29,8 +29,8 @@ protobuf_generate_cpp(
 )
 
 set(MY_FBS_FILES
-  # fbs/transfer-sensor-msgs.fbs
-  # fbs/image-service.fbs
+  fbs/transfer-sensor-msgs.fbs
+  fbs/image-service.fbs
   fbs/meta-operations.fbs
 )
 
