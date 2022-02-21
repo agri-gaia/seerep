@@ -1,0 +1,8 @@
+include "project_info.fbs";
+
+namespace seerep.fb;
+
+table ProjectInfos
+{
+  projects:seerep.fb.ProjectInfo;
+}
