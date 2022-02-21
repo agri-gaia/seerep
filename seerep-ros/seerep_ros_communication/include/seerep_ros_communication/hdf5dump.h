@@ -6,7 +6,7 @@
 
 // seerep
 #include <seerep_ros_conversions/conversions.h>
-#include <seerep-hdf5/ioTf.h>
+#include <seerep-hdf5/tf-io.h>
 #include <seerep-hdf5/image-io.h>
 #include <seerep-hdf5/pointcloud-io.h>
 
@@ -51,7 +51,7 @@ public:
   void dump(const tf2_msgs::TFMessage::ConstPtr& msg) const;
 
 private:
-  std::shared_ptr<seerep_hdf5::SeerepHDF5IOTf> m_ioTf;
+  std::shared_ptr<seerep_hdf5::TfIO> m_ioTf;
   std::shared_ptr<seerep_hdf5::PointCloudIO> m_ioPointCloud;
   std::shared_ptr<seerep_hdf5::ImageIO> m_ioImage;
   ros::NodeHandle nh;

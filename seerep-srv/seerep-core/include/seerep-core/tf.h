@@ -7,7 +7,7 @@
 // seerep-msgs
 #include <seerep-msgs/transform_stamped.pb.h>
 // seerep-hdf5
-#include <seerep-hdf5/ioTf.h>
+#include <seerep-hdf5/tf-io.h>
 // seerep-conversion
 #include <seerep_ros_conversions/conversions.h>
 
@@ -16,8 +16,8 @@ namespace seerep_core
 class TF
 {
 public:
-  TF(std::shared_ptr<seerep_hdf5::SeerepHDF5IOTf> hdf5_io, const seerep::TransformStamped& tf);
-  TF(std::shared_ptr<seerep_hdf5::SeerepHDF5IOTf> hdf5_io, const std::string& id);
+  TF(std::shared_ptr<seerep_hdf5::TfIO> hdf5_io, const seerep::TransformStamped& tf);
+  TF(std::shared_ptr<seerep_hdf5::TfIO> hdf5_io, const std::string& id);
   ~TF();
 
   void addData(const seerep::TransformStamped& tf);
@@ -29,7 +29,7 @@ public:
   static std::string idFromFrameNames(const std::string& parentframe, const std::string& childframe);
 
 private:
-  std::shared_ptr<seerep_hdf5::SeerepHDF5IOTf> m_hdf5_io;
+  std::shared_ptr<seerep_hdf5::TfIO> m_hdf5_io;
   const std::string m_id;
   std::string m_parentframe;
   std::string m_childframe;

@@ -1,15 +1,14 @@
-#include "seerep-hdf5/ioTf.h"
+#include "seerep-hdf5/tf-io.h"
 
 #include <highfive/H5DataSet.hpp>
 
 namespace seerep_hdf5
 {
-SeerepHDF5IOTf::SeerepHDF5IOTf(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx)
-  : GeneralIO(file, write_mtx)
+TfIO::TfIO(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx) : GeneralIO(file, write_mtx)
 {
 }
 
-void SeerepHDF5IOTf::writeTransformStamped(const seerep::TransformStamped& tf)
+void TfIO::writeTransformStamped(const seerep::TransformStamped& tf)
 {
   std::string hdf5DatasetPath = HDF5_GROUP_TF + "/" + tf.header().frame_id() + "_" + tf.child_frame_id();
   std::string hdf5DatasetTimePath = hdf5DatasetPath + "/" + "time";
@@ -100,7 +99,7 @@ void SeerepHDF5IOTf::writeTransformStamped(const seerep::TransformStamped& tf)
   m_file->flush();
 }
 
-std::optional<std::vector<seerep::TransformStamped>> SeerepHDF5IOTf::readTransformStamped(const std::string& id)
+std::optional<std::vector<seerep::TransformStamped>> TfIO::readTransformStamped(const std::string& id)
 {
   std::string hdf5GroupPath = HDF5_GROUP_TF + "/" + id;
   std::string hdf5DatasetTimePath = hdf5GroupPath + "/" + "time";
@@ -185,7 +184,7 @@ std::optional<std::vector<seerep::TransformStamped>> SeerepHDF5IOTf::readTransfo
   return tfs;
 }
 
-std::optional<std::vector<std::string>> SeerepHDF5IOTf::readTransformStampedFrames(const std::string& id)
+std::optional<std::vector<std::string>> TfIO::readTransformStampedFrames(const std::string& id)
 {
   std::string hdf5GroupPath = HDF5_GROUP_TF + "/" + id;
 

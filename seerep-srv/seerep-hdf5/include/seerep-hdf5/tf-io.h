@@ -17,10 +17,10 @@
 
 namespace seerep_hdf5
 {
-class SeerepHDF5IOTf : public GeneralIO
+class TfIO : public GeneralIO
 {
 public:
-  SeerepHDF5IOTf(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
+  TfIO(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
 
   void writeTransformStamped(const seerep::TransformStamped& tf);
 

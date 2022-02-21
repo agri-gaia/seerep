@@ -13,7 +13,7 @@
 #include <seerep-msgs/point_cloud_2.pb.h>
 // seerep-hdf5
 #include <seerep-hdf5/general-io.h>
-#include <seerep-hdf5/ioTf.h>
+#include <seerep-hdf5/tf-io.h>
 #include <seerep-hdf5/pointcloud-io.h>
 #include <seerep-hdf5/image-io.h>
 // seerep-conversion
@@ -58,7 +58,7 @@ private:
 
   std::shared_ptr<std::mutex> m_write_mtx;
   std::shared_ptr<seerep_hdf5::GeneralIO> m_ioGeneral;
-  std::shared_ptr<seerep_hdf5::SeerepHDF5IOTf> m_ioTf;
+  std::shared_ptr<seerep_hdf5::TfIO> m_ioTf;
   std::shared_ptr<seerep_hdf5::PointCloudIO> m_ioPointCloud;
   std::shared_ptr<seerep_hdf5::ImageIO> m_ioImage;
 
