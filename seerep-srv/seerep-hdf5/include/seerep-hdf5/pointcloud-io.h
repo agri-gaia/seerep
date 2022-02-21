@@ -17,10 +17,10 @@
 
 namespace seerep_hdf5
 {
-class SeerepHDF5IOPointCloud : public GeneralIO
+class PointCloudIO : public GeneralIO
 {
 public:
-  SeerepHDF5IOPointCloud(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
+  PointCloudIO(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
 
   std::map<std::string, HighFive::Group> getPointClouds();
 

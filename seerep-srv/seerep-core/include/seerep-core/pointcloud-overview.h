@@ -9,7 +9,7 @@
 #include <seerep-msgs/point_cloud_2.pb.h>
 // #include <seerep-msgs/point_cloud_2_labeled.pb.h>
 // seerep-hdf5
-#include <seerep-hdf5/ioPointCloud.h>
+#include <seerep-hdf5/pointcloud-io.h>
 // seerep-conversion
 #include <seerep_ros_conversions/conversions.h>
 
@@ -23,7 +23,7 @@ class PointcloudOverview
 {
 public:
   PointcloudOverview();
-  PointcloudOverview(std::shared_ptr<seerep_hdf5::SeerepHDF5IOPointCloud> hdf5_io);
+  PointcloudOverview(std::shared_ptr<seerep_hdf5::PointCloudIO> hdf5_io);
   ~PointcloudOverview();
   std::vector<std::optional<seerep::PointCloud2>> getData(const seerep::Query& query);
 
@@ -36,7 +36,7 @@ private:
   uint64_t data_count;
 
   std::string coordinatesystem;
-  std::shared_ptr<seerep_hdf5::SeerepHDF5IOPointCloud> m_hdf5_io;
+  std::shared_ptr<seerep_hdf5::PointCloudIO> m_hdf5_io;
 
   std::unordered_map<uint64_t, std::shared_ptr<seerep_core::Pointcloud>> m_datasets;
 

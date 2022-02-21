@@ -1,17 +1,16 @@
-#include "seerep-hdf5/ioPointCloud.h"
+#include "seerep-hdf5/pointcloud-io.h"
 #include "seerep-hdf5/point_cloud2_iterator.h"
 
 #include <highfive/H5DataSet.hpp>
 
 namespace seerep_hdf5
 {
-SeerepHDF5IOPointCloud::SeerepHDF5IOPointCloud(std::shared_ptr<HighFive::File>& file,
-                                               std::shared_ptr<std::mutex>& write_mtx)
+PointCloudIO::PointCloudIO(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx)
   : GeneralIO(file, write_mtx)
 {
 }
 
-std::map<std::string, HighFive::Group> SeerepHDF5IOPointCloud::getPointClouds()
+std::map<std::string, HighFive::Group> PointCloudIO::getPointClouds()
 {
   std::map<std::string, HighFive::Group> map;
   if (m_file->exist(HDF5_GROUP_POINTCLOUD))
@@ -25,8 +24,8 @@ std::map<std::string, HighFive::Group> SeerepHDF5IOPointCloud::getPointClouds()
   return map;
 }
 
-std::shared_ptr<HighFive::Group> SeerepHDF5IOPointCloud::writePointCloud2(const std::string& uuid,
-                                                                          const seerep::PointCloud2& pointcloud2)
+std::shared_ptr<HighFive::Group> PointCloudIO::writePointCloud2(const std::string& uuid,
+                                                                const seerep::PointCloud2& pointcloud2)
 {
   std::string cloud_group_id = HDF5_GROUP_POINTCLOUD + "/" + uuid;
 
@@ -129,7 +128,7 @@ std::shared_ptr<HighFive::Group> SeerepHDF5IOPointCloud::writePointCloud2(const 
 }
 
 // TODO read partial point cloud, e.g. only xyz without color, etc.
-std::optional<seerep::PointCloud2> SeerepHDF5IOPointCloud::readPointCloud2(const std::string& id)
+std::optional<seerep::PointCloud2> PointCloudIO::readPointCloud2(const std::string& id)
 {
   if (!m_file->exist(id))
   {
@@ -195,7 +194,7 @@ std::optional<seerep::PointCloud2> SeerepHDF5IOPointCloud::readPointCloud2(const
   return pointcloud2;
 }
 
-void SeerepHDF5IOPointCloud::writePointFieldAttributes(
+void PointCloudIO::writePointFieldAttributes(
     HighFive::Group& cloud_group, const google::protobuf::RepeatedPtrField<seerep::PointField> repeatedPointField)
 {
   std::vector<std::string> names;
@@ -231,7 +230,7 @@ void SeerepHDF5IOPointCloud::writePointFieldAttributes(
 }
 
 google::protobuf::RepeatedPtrField<seerep::PointField>
-SeerepHDF5IOPointCloud::readPointFieldAttributes(HighFive::Group& cloud_group)
+PointCloudIO::readPointFieldAttributes(HighFive::Group& cloud_group)
 {
   google::protobuf::RepeatedPtrField<seerep::PointField> repeatedPointField;
 

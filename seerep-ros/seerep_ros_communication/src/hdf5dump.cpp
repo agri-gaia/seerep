@@ -8,7 +8,7 @@ DumpSensorMsgs::DumpSensorMsgs(std::string hdf5FilePath)
   std::shared_ptr<HighFive::File> hdf5_file =
       std::make_shared<HighFive::File>(hdf5FilePath, HighFive::File::OpenOrCreate);
   m_ioTf = std::make_shared<seerep_hdf5::SeerepHDF5IOTf>(hdf5_file, write_mtx);
-  m_ioPointCloud = std::make_shared<seerep_hdf5::SeerepHDF5IOPointCloud>(hdf5_file, write_mtx);
+  m_ioPointCloud = std::make_shared<seerep_hdf5::PointCloudIO>(hdf5_file, write_mtx);
   m_ioImage = std::make_shared<seerep_hdf5::SeerepHDF5IOImage>(hdf5_file, write_mtx);
 }
 

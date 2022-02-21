@@ -11,7 +11,7 @@ namespace seerep_core
 PointcloudOverview::PointcloudOverview()
 {
 }
-PointcloudOverview::PointcloudOverview(std::shared_ptr<seerep_hdf5::SeerepHDF5IOPointCloud> hdf5_io)
+PointcloudOverview::PointcloudOverview(std::shared_ptr<seerep_hdf5::PointCloudIO> hdf5_io)
   : m_hdf5_io(hdf5_io), data_count(0)
 {
   coordinatesystem = "test";

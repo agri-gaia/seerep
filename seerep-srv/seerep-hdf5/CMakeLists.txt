@@ -25,9 +25,9 @@ include_directories(
 
 add_library(seerephdf5
 	src/io.cpp
-	src/general_io.cpp
+	src/general-io.cpp
 	src/ioTf.cpp
-	src/ioPointCloud.cpp
+	src/pointcloud-io.cpp
 	src/ioImage.cpp
 )
 
