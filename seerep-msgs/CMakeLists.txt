@@ -51,6 +51,8 @@ set(MY_FBS_FILES
 	fbs/boundingbox.fbs
 	fbs/boundingbox2d_labeled.fbs
 	fbs/boundingbox2d.fbs
+	fbs/frame_infos.fbs
+	fbs/frame_query.fbs
 	fbs/header.fbs
 	fbs/image.fbs
 	fbs/point_cloud_2.fbs
@@ -62,8 +64,8 @@ set(MY_FBS_FILES
 	fbs/polygon.fbs
 	fbs/pose_stamped.fbs
 	fbs/pose.fbs
-	fbs/project_uuids.fbs
-	fbs/projectCreated.fbs
+	fbs/project_info.fbs
+	fbs/project_infos.fbs
 	fbs/projectCreation.fbs
 	fbs/quaternion_stamped.fbs
 	fbs/quaternion.fbs
@@ -72,6 +74,7 @@ set(MY_FBS_FILES
 	fbs/time_interval.fbs
 	fbs/timestamp.fbs
 	fbs/transform_stamped.fbs
+	fbs/transform_stamped_query.fbs
 	fbs/transform.fbs
 	fbs/twist_stamped.fbs
 	fbs/twist_with_covariance_stamped.fbs

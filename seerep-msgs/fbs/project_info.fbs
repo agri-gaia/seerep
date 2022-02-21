@@ -1,6 +1,7 @@
-
 namespace seerep.fb;
 
-table ProjectCreated {
+table ProjectInfo
+{
+  name:string;
   uuid:string;
 }

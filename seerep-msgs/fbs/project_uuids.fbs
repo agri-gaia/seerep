@@ -1,6 +1,0 @@
-
-namespace seerep.fb;
-
-table ProjectUUIDs {
-  uuids:[string];
-}
