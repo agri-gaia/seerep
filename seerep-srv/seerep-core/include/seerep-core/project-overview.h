@@ -19,6 +19,7 @@
 #include <seerep-msgs/project_infos.pb.h>
 #include <seerep-msgs/query.pb.h>
 #include <seerep-msgs/transform_stamped.pb.h>
+#include <seerep-msgs/transform_stamped_query.pb.h>
 // seerep-hdf5
 #include <seerep-hdf5/io.h>
 // seerep-conversion
@@ -43,6 +44,11 @@ public:
   std::vector<std::vector<std::optional<seerep::Image>>> getImage(const seerep::Query& query);
 
   void addTF(const seerep::TransformStamped& tf, boost::uuids::uuid projectuuid);
+
+  std::optional<seerep::TransformStamped> getTF(const seerep::TransformStampedQuery& transformQuery,
+                                                boost::uuids::uuid projectuuid);
+
+  std::vector<std::string> getFrames(boost::uuids::uuid projectuuid);
 
   void newProject(std::string projectname, std::string mapFrameId, seerep::ProjectInfo* projectInfo);
 

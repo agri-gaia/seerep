@@ -11,7 +11,6 @@
 // seerep-msgs
 #include <seerep-msgs/query.pb.h>
 #include <seerep-msgs/point_cloud_2.pb.h>
-// #include <seerep-msgs/point_cloud_2_labeled.pb.h>
 // seerep-hdf5
 #include <seerep-hdf5/io.h>
 // seerep-conversion
@@ -41,6 +40,8 @@ public:
   // void addPointCloudLabeled(const seerep::PointCloud2Labeled& pointcloud2Labeled);
   boost::uuids::uuid addImage(const seerep::Image& image);
   void addTF(const seerep::TransformStamped& tf);
+  std::optional<seerep::TransformStamped> getTF(const seerep::TransformStampedQuery& transformQuery);
+  std::vector<std::string> getFrames();
 
 private:
   void createHdf5Io(boost::uuids::uuid& uuid, std::string path);

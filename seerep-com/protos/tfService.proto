@@ -3,11 +3,16 @@ syntax = "proto3";
 package seerep;
 
 import "transform_stamped.proto";
+import "transform_stamped_query.proto";
 // import "query.proto";
 
 import "server_response.proto";
+import "frame_infos.proto";
+import "frame_query.proto";
 
 service TfService
 {
   rpc TransferTransformStamped(TransformStamped) returns (ServerResponse);
+  rpc GetFrames(FrameQuery) returns (FrameInfos);
+  rpc GetTransformStamped(TransformStampedQuery) returns (TransformStamped);
 }

@@ -14,6 +14,8 @@ set(MY_PROTO_FILES
 	protos/boundingbox.proto
 	protos/boundingbox2d_labeled.proto
 	protos/boundingbox2d.proto
+	protos/frame_infos.proto
+	protos/frame_query.proto
 	protos/header.proto
 	protos/image.proto
 	protos/point_cloud_2.proto
@@ -34,6 +36,7 @@ set(MY_PROTO_FILES
 	protos/server_response.proto
 	protos/time_interval.proto
 	protos/transform_stamped.proto
+	protos/transform_stamped_query.proto
 	protos/transform.proto
 	protos/twist_stamped.proto
 	protos/twist_with_covariance_stamped.proto

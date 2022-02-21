@@ -159,4 +159,15 @@ void ProjectOverview::addTF(const seerep::TransformStamped& tf, boost::uuids::uu
   m_projects.at(projectuuid)->addTF(tf);
 }
 
+std::optional<seerep::TransformStamped> ProjectOverview::getTF(const seerep::TransformStampedQuery& transformQuery,
+                                                               boost::uuids::uuid projectuuid)
+{
+  return m_projects.at(projectuuid)->getTF(transformQuery);
+}
+
+std::vector<std::string> ProjectOverview::getFrames(boost::uuids::uuid projectuuid)
+{
+  return m_projects.at(projectuuid)->getFrames();
+}
+
 } /* namespace seerep_core */
