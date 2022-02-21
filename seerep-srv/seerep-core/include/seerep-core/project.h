@@ -15,7 +15,7 @@
 #include <seerep-hdf5/general-io.h>
 #include <seerep-hdf5/ioTf.h>
 #include <seerep-hdf5/pointcloud-io.h>
-#include <seerep-hdf5/ioImage.h>
+#include <seerep-hdf5/image-io.h>
 // seerep-conversion
 #include <seerep_ros_conversions/conversions.h>
 
@@ -60,7 +60,7 @@ private:
   std::shared_ptr<seerep_hdf5::GeneralIO> m_ioGeneral;
   std::shared_ptr<seerep_hdf5::SeerepHDF5IOTf> m_ioTf;
   std::shared_ptr<seerep_hdf5::PointCloudIO> m_ioPointCloud;
-  std::shared_ptr<seerep_hdf5::SeerepHDF5IOImage> m_ioImage;
+  std::shared_ptr<seerep_hdf5::ImageIO> m_ioImage;
 
   std::shared_ptr<seerep_core::TFOverview> m_tfOverview;
   std::unique_ptr<seerep_core::PointcloudOverview> m_pointcloudOverview;

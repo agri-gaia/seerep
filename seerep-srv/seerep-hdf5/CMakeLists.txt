@@ -28,7 +28,7 @@ add_library(seerephdf5
 	src/general-io.cpp
 	src/ioTf.cpp
 	src/pointcloud-io.cpp
-	src/ioImage.cpp
+	src/image-io.cpp
 )
 
 target_link_libraries(seerephdf5

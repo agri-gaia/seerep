@@ -7,7 +7,7 @@
 // seerep
 #include <seerep_ros_conversions/conversions.h>
 #include <seerep-hdf5/ioTf.h>
-#include <seerep-hdf5/ioImage.h>
+#include <seerep-hdf5/image-io.h>
 #include <seerep-hdf5/pointcloud-io.h>
 
 // uuid
@@ -53,7 +53,7 @@ public:
 private:
   std::shared_ptr<seerep_hdf5::SeerepHDF5IOTf> m_ioTf;
   std::shared_ptr<seerep_hdf5::PointCloudIO> m_ioPointCloud;
-  std::shared_ptr<seerep_hdf5::SeerepHDF5IOImage> m_ioImage;
+  std::shared_ptr<seerep_hdf5::ImageIO> m_ioImage;
   ros::NodeHandle nh;
 };
 

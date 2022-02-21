@@ -1,15 +1,15 @@
-#include "seerep-hdf5/ioImage.h"
+#include "seerep-hdf5/image-io.h"
 
 #include <highfive/H5DataSet.hpp>
 
 namespace seerep_hdf5
 {
-SeerepHDF5IOImage::SeerepHDF5IOImage(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx)
+ImageIO::ImageIO(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx)
   : GeneralIO(file, write_mtx)
 {
 }
 
-void SeerepHDF5IOImage::writeImage(const std::string& id, const seerep::Image& image)
+void ImageIO::writeImage(const std::string& id, const seerep::Image& image)
 {
   std::string hdf5DatasetPath = HDF5_GROUP_IMAGE + "/" + id;
   std::string hdf5DatasetRawDataPath = hdf5DatasetPath + "/" + RAWDATA;
@@ -78,7 +78,7 @@ void SeerepHDF5IOImage::writeImage(const std::string& id, const seerep::Image& i
   m_file->flush();
 }
 
-std::optional<seerep::Image> SeerepHDF5IOImage::readImage(const std::string& id)
+std::optional<seerep::Image> ImageIO::readImage(const std::string& id)
 {
   std::string hdf5DatasetPath = HDF5_GROUP_IMAGE + "/" + id;
   std::string hdf5DatasetRawDataPath = hdf5DatasetPath + "/" + RAWDATA;

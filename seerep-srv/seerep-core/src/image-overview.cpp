@@ -2,7 +2,7 @@
 
 namespace seerep_core
 {
-ImageOverview::ImageOverview(std::shared_ptr<seerep_hdf5::SeerepHDF5IOImage> hdf5_io,
+ImageOverview::ImageOverview(std::shared_ptr<seerep_hdf5::ImageIO> hdf5_io,
                              std::shared_ptr<seerep_core::TFOverview> tfOverview, std::string frameId)
   : m_hdf5_io(hdf5_io), m_tfOverview(tfOverview), m_frameId(frameId), m_data_count(0)
 {

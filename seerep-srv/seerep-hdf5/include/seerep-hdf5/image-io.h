@@ -17,10 +17,10 @@
 
 namespace seerep_hdf5
 {
-class SeerepHDF5IOImage : public GeneralIO
+class ImageIO : public GeneralIO
 {
 public:
-  SeerepHDF5IOImage(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
+  ImageIO(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
 
   void writeImage(const std::string& id, const seerep::Image& image);
 

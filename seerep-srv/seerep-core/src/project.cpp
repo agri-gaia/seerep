@@ -49,7 +49,7 @@ void Project::createHdf5Io(boost::uuids::uuid& uuid, std::string path)
   m_ioGeneral = std::make_shared<seerep_hdf5::GeneralIO>(hdf5_file, m_write_mtx);
   m_ioTf = std::make_shared<seerep_hdf5::SeerepHDF5IOTf>(hdf5_file, m_write_mtx);
   m_ioPointCloud = std::make_shared<seerep_hdf5::PointCloudIO>(hdf5_file, m_write_mtx);
-  m_ioImage = std::make_shared<seerep_hdf5::SeerepHDF5IOImage>(hdf5_file, m_write_mtx);
+  m_ioImage = std::make_shared<seerep_hdf5::ImageIO>(hdf5_file, m_write_mtx);
 }
 
 void Project::recreateDatatypes()
