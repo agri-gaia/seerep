@@ -1,0 +1,12 @@
+
+include "image.fbs";
+include "query.fbs";
+
+include "server_response.fbs";
+
+namespace seerep.fb;
+
+rpc_service ImageService {
+  GetImage(seerep.fb.Query):seerep.fb.Image (streaming: "server");
+  TransferImage(seerep.fb.Image):seerep.fb.ServerResponse;
+}

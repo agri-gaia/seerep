@@ -1,0 +1,18 @@
+
+include "header.fbs";
+include "point.fbs";
+include "pose_stamped.fbs";
+include "pose.fbs";
+include "quaternion.fbs";
+
+include "server_response.fbs";
+
+namespace seerep.fb;
+
+rpc_service TransferSensorMsgs {
+  TransferHeader(seerep.fb.Header):seerep.fb.ServerResponse;
+  TransferPoint(seerep.fb.Point):seerep.fb.ServerResponse;
+  TransferQuaternion(seerep.fb.Quaternion):seerep.fb.ServerResponse;
+  TransferPose(seerep.fb.Pose):seerep.fb.ServerResponse;
+  TransferPoseStamped(seerep.fb.PoseStamped):seerep.fb.ServerResponse;
+}

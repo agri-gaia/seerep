@@ -1,0 +1,9 @@
+include "header.fbs";
+
+namespace seerep.fb;
+
+table TransformStampedQuery
+{
+  header:seerep.fb.Header;
+  child_frame_id:string;
+}
