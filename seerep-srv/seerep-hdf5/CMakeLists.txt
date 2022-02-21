@@ -24,6 +24,7 @@ include_directories(
 )
 
 add_library(seerephdf5
+	src/io.cpp
 	src/ioGeneral.cpp
 	src/ioTf.cpp
 	src/ioPointCloud.cpp
@@ -37,6 +38,7 @@ target_link_libraries(seerephdf5
 )
 
 set(INSTALL_HEADERS
+	include/seerep-hdf5/io.h
 	include/seerep-hdf5/ioGeneral.h
 	include/seerep-hdf5/ioTf.h
 	include/seerep-hdf5/ioPointCloud.h
@@ -61,7 +63,7 @@ include(CMakePackageConfigHelpers)
 
 configure_package_config_file(
 	cmake/SeerepHDF5Config.cmake.in
-  ${CMAKE_CURRENT_BINARY_DIR}/SeerepHDF5Config.cmake
+  	${CMAKE_CURRENT_BINARY_DIR}/SeerepHDF5Config.cmake
 	INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 	PATH_VARS CMAKE_INSTALL_INCLUDEDIR CMAKE_INSTALL_LIBDIR
 )

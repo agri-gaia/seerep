@@ -55,9 +55,6 @@ private:
   const std::string Z = "z";
   const std::string W = "w";
 
-  std::shared_ptr<HighFive::File> m_file;
-  std::shared_ptr<std::mutex> m_write_mtx;
-
 public:
   // make private again after fixing io calls of pointcloud.cpp and pointcloud-overview.cpp
   inline static const std::string BOUNDINGBOX = "TODO";  // "boundingbox";

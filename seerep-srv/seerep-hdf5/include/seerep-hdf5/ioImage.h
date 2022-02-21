@@ -41,9 +41,6 @@ private:
 
   inline static const std::string RAWDATA = "rawdata";
 
-  std::shared_ptr<HighFive::File> m_file;
-  std::shared_ptr<std::mutex> m_write_mtx;
-
 public:
   // datatype group names in hdf5
   inline static const std::string HDF5_GROUP_IMAGE = "images";

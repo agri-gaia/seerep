@@ -5,7 +5,7 @@
 namespace seerep_hdf5
 {
 SeerepHDF5IOImage::SeerepHDF5IOImage(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx)
-  : m_file(file), m_write_mtx(write_mtx), SeerepHDF5IOGeneral(file, write_mtx)
+  : SeerepHDF5IOGeneral(file, write_mtx)
 {
 }
 

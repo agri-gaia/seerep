@@ -1,5 +1,5 @@
-#ifndef SEEREP_HDF5__IO_H_
-#define SEEREP_HDF5__IO_H_
+#ifndef SEEREP_HDF5_IO_TF_H_
+#define SEEREP_HDF5_IO_TF_H_
 
 // highfive
 #include <highfive/H5File.hpp>
@@ -27,9 +27,6 @@ public:
   std::optional<std::vector<seerep::TransformStamped>> readTransformStamped(const std::string& id);
   std::optional<std::vector<std::string>> readTransformStampedFrames(const std::string& id);
 
-  std::shared_ptr<HighFive::File> m_file;
-  std::shared_ptr<std::mutex> m_write_mtx;
-
 private:
   // datatype group names in hdf5
   inline static const std::string HDF5_GROUP_TF = "tf";
@@ -39,4 +36,4 @@ private:
 
 } /* namespace seerep_hdf5 */
 
-#endif /* SEEREP_HDF5__IO_H_ */
+#endif /* SEEREP_HDF5_IO_TF_H_ */

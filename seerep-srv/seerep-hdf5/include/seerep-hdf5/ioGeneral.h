@@ -119,6 +119,7 @@ private:
   inline static const std::string LABELBB = "labelBB";
   inline static const std::string LABELBBBOXES = "labelBBBoxes";
 
+protected:
   std::shared_ptr<HighFive::File> m_file;
   std::shared_ptr<std::mutex> m_write_mtx;
 };
