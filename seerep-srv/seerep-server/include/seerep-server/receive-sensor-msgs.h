@@ -10,7 +10,6 @@
 
 // seerep
 #include <seerep-com/transfer_sensor_msgs.grpc.pb.h>
-#include <seerep-hdf5/io.h>
 
 #include <seerep-core/project-overview.h>
 
