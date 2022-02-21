@@ -15,10 +15,10 @@
 
 namespace seerep_hdf5
 {
-class SeerepHDF5IOGeneral
+class GeneralIO
 {
 public:
-  SeerepHDF5IOGeneral(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
+  GeneralIO(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
 
   std::optional<std::string> readFrameId(const std::string& datatypeGroup, const std::string& uuid);
 
@@ -125,5 +125,7 @@ protected:
 };
 
 } /* namespace seerep_hdf5 */
+
+#include "impl/general_io.hpp"  // NOLINT
 
 #endif /* SEEREP_HDF5_IO_GENERAL_H_ */

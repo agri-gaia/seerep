@@ -1,15 +1,15 @@
-#include "seerep-hdf5/ioGeneral.h"
+#include "seerep-hdf5/general_io.h"
 
 #include <highfive/H5DataSet.hpp>
 
 namespace seerep_hdf5
 {
-SeerepHDF5IOGeneral::SeerepHDF5IOGeneral(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx)
+GeneralIO::GeneralIO(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx)
   : m_file(file), m_write_mtx(write_mtx)
 {
 }
 
-std::optional<std::string> SeerepHDF5IOGeneral::readFrameId(const std::string& datatypeGroup, const std::string& uuid)
+std::optional<std::string> GeneralIO::readFrameId(const std::string& datatypeGroup, const std::string& uuid)
 {
   std::string id = datatypeGroup + "/" + uuid;
   std::string hdf5DatasetRawDataPath = id + "/" + RAWDATA;
@@ -34,7 +34,7 @@ std::optional<std::string> SeerepHDF5IOGeneral::readFrameId(const std::string& d
   }
 }
 
-std::vector<std::string> SeerepHDF5IOGeneral::getGroupDatasets(const std::string& id)
+std::vector<std::string> GeneralIO::getGroupDatasets(const std::string& id)
 {
   std::vector<std::string> rootObjects = m_file->listObjectNames();
 
@@ -56,39 +56,7 @@ std::vector<std::string> SeerepHDF5IOGeneral::getGroupDatasets(const std::string
   }
 }
 
-template <typename T>
-void SeerepHDF5IOGeneral::writeAttribute(const std::shared_ptr<HighFive::DataSet> dataSetPtr,
-                                         std::string attributeField, T value)
-{
-  if (!dataSetPtr->hasAttribute(attributeField))
-  {
-    dataSetPtr->createAttribute(attributeField, value);
-  }
-  else
-  {
-    dataSetPtr->getAttribute(attributeField).write(value);
-  }
-  m_file->flush();
-}
-
-template <typename T>
-T SeerepHDF5IOGeneral::getAttribute(const std::string& id, const std::shared_ptr<HighFive::DataSet> dataSetPtr,
-                                    std::string attributeField)
-{
-  T attributeValue;
-  if (dataSetPtr->hasAttribute(attributeField))
-  {
-    dataSetPtr->getAttribute(attributeField).read(attributeValue);
-  }
-  else
-  {
-    throw std::invalid_argument("id " + id + " has no attribute " + attributeField);
-  }
-  return attributeValue;
-}
-
-void SeerepHDF5IOGeneral::deleteAttribute(const std::shared_ptr<HighFive::DataSet> dataSetPtr,
-                                          std::string attributeField)
+void GeneralIO::deleteAttribute(const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField)
 {
   if (dataSetPtr->hasAttribute(attributeField))
   {
@@ -97,53 +65,7 @@ void SeerepHDF5IOGeneral::deleteAttribute(const std::shared_ptr<HighFive::DataSe
   }
 }
 
-template <class T>
-void SeerepHDF5IOGeneral::writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, const seerep::Header& header)
-{
-  if (!object.hasAttribute(HEADER_STAMP_SECONDS))
-    object.createAttribute(HEADER_STAMP_SECONDS, header.stamp().seconds());
-  else
-    object.getAttribute(HEADER_STAMP_SECONDS).write(header.stamp().seconds());
-
-  if (!object.hasAttribute(HEADER_STAMP_NANOS))
-    object.createAttribute(HEADER_STAMP_NANOS, header.stamp().nanos());
-  else
-    object.getAttribute(HEADER_STAMP_NANOS).write(header.stamp().nanos());
-
-  if (!object.hasAttribute(HEADER_FRAME_ID))
-    object.createAttribute(HEADER_FRAME_ID, header.frame_id());
-  else
-    object.getAttribute(HEADER_FRAME_ID).write(header.frame_id());
-
-  if (!object.hasAttribute(HEADER_SEQ))
-    object.createAttribute(HEADER_SEQ, header.seq());
-  else
-    object.getAttribute(HEADER_SEQ).write(header.seq());
-}
-
-template <class T>
-seerep::Header SeerepHDF5IOGeneral::readHeaderAttributes(HighFive::AnnotateTraits<T>& object)
-{
-  seerep::Header header;
-
-  int64_t seconds;
-  int32_t nanos;
-  uint32_t seq;
-
-  object.getAttribute(HEADER_FRAME_ID).read(header.mutable_frame_id());
-
-  object.getAttribute(HEADER_STAMP_SECONDS).read(seconds);
-  object.getAttribute(HEADER_STAMP_NANOS).read(nanos);
-  object.getAttribute(HEADER_SEQ).read(seq);
-
-  header.set_seq(seq);
-  header.mutable_stamp()->set_seconds(seconds);
-  header.mutable_stamp()->set_nanos(nanos);
-
-  return header;
-}
-
-void SeerepHDF5IOGeneral::writeAABB(
+void GeneralIO::writeAABB(
     const std::string& datatypeGroup, const std::string& uuid,
     const boost::geometry::model::box<boost::geometry::model::point<float, 3, boost::geometry::cs::cartesian>>& aabb)
 {
@@ -168,7 +90,7 @@ void SeerepHDF5IOGeneral::writeAABB(
   m_file->flush();
 }
 
-void SeerepHDF5IOGeneral::readAABB(
+void GeneralIO::readAABB(
     const std::string& datatypeGroup, const std::string& uuid,
     boost::geometry::model::box<boost::geometry::model::point<float, 3, boost::geometry::cs::cartesian>>& aabb)
 {
@@ -195,7 +117,7 @@ void SeerepHDF5IOGeneral::readAABB(
   }
 }
 
-bool SeerepHDF5IOGeneral::hasAABB(const std::string& datatypeGroup, const std::string& uuid)
+bool GeneralIO::hasAABB(const std::string& datatypeGroup, const std::string& uuid)
 {
   std::string id = datatypeGroup + "/" + uuid;
 
@@ -209,14 +131,12 @@ bool SeerepHDF5IOGeneral::hasAABB(const std::string& datatypeGroup, const std::s
   return group.hasAttribute(AABB_FIELD);
 }
 
-void SeerepHDF5IOGeneral::readTimeFromRaw(const std::string& datatypeGroup, const std::string& uuid, int64_t& secs,
-                                          int64_t& nanos)
+void GeneralIO::readTimeFromRaw(const std::string& datatypeGroup, const std::string& uuid, int64_t& secs, int64_t& nanos)
 {
   readTime(datatypeGroup, uuid + "/" + RAWDATA, secs, nanos);
 }
 
-void SeerepHDF5IOGeneral::readTime(const std::string& datatypeGroup, const std::string& uuid, int64_t& secs,
-                                   int64_t& nanos)
+void GeneralIO::readTime(const std::string& datatypeGroup, const std::string& uuid, int64_t& secs, int64_t& nanos)
 {
   std::string id = datatypeGroup + "/" + uuid;
 
@@ -280,14 +200,14 @@ void SeerepHDF5IOGeneral::readTime(const std::string& datatypeGroup, const std::
   }
 }
 
-void SeerepHDF5IOGeneral::writeTimeToRaw(const std::string& datatypeGroup, const std::string& uuid, const int64_t& secs,
-                                         const int64_t& nanos)
+void GeneralIO::writeTimeToRaw(const std::string& datatypeGroup, const std::string& uuid, const int64_t& secs,
+                               const int64_t& nanos)
 {
   writeTime(datatypeGroup, uuid + "/" + RAWDATA, secs, nanos);
 }
 
-void SeerepHDF5IOGeneral::writeTime(const std::string& datatypeGroup, const std::string& uuid, const int64_t& secs,
-                                    const int64_t& nanos)
+void GeneralIO::writeTime(const std::string& datatypeGroup, const std::string& uuid, const int64_t& secs,
+                          const int64_t& nanos)
 {
   std::string id = datatypeGroup + "/" + uuid;
 
@@ -351,12 +271,12 @@ void SeerepHDF5IOGeneral::writeTime(const std::string& datatypeGroup, const std:
   }
 }
 
-bool SeerepHDF5IOGeneral::hasTimeRaw(const std::string& datatypeGroup, const std::string& uuid)
+bool GeneralIO::hasTimeRaw(const std::string& datatypeGroup, const std::string& uuid)
 {
   return hasTime(datatypeGroup, uuid + "/" + RAWDATA);
 }
 
-bool SeerepHDF5IOGeneral::hasTime(const std::string& datatypeGroup, const std::string& uuid)
+bool GeneralIO::hasTime(const std::string& datatypeGroup, const std::string& uuid)
 {
   std::string id = datatypeGroup + "/" + uuid;
   if (!m_file->exist(id))
@@ -382,7 +302,7 @@ bool SeerepHDF5IOGeneral::hasTime(const std::string& datatypeGroup, const std::s
   }
 }
 
-void SeerepHDF5IOGeneral::writeBoundingBoxLabeled(
+void GeneralIO::writeBoundingBoxLabeled(
     const std::string& datatypeGroup, const std::string& uuid,
     const google::protobuf::RepeatedPtrField<::seerep::BoundingBoxLabeled>& boundingboxLabeled)
 {
@@ -413,7 +333,7 @@ void SeerepHDF5IOGeneral::writeBoundingBoxLabeled(
   }
 }
 
-void SeerepHDF5IOGeneral::writeBoundingBox2DLabeled(
+void GeneralIO::writeBoundingBox2DLabeled(
     const std::string& datatypeGroup, const std::string& uuid,
     const google::protobuf::RepeatedPtrField<::seerep::BoundingBox2DLabeled>& boundingbox2DLabeled)
 {
@@ -444,7 +364,7 @@ void SeerepHDF5IOGeneral::writeBoundingBox2DLabeled(
 }
 
 std::optional<google::protobuf::RepeatedPtrField<seerep::BoundingBox2DLabeled>>
-SeerepHDF5IOGeneral::readBoundingBox2DLabeled(const std::string& datatypeGroup, const std::string& uuid)
+GeneralIO::readBoundingBox2DLabeled(const std::string& datatypeGroup, const std::string& uuid)
 {
   std::string id = datatypeGroup + "/" + uuid;
   if (!m_file->exist(id + "/" + LABELBB))
@@ -492,8 +412,8 @@ SeerepHDF5IOGeneral::readBoundingBox2DLabeled(const std::string& datatypeGroup, 
   return result;
 }
 
-void SeerepHDF5IOGeneral::writeLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid,
-                                             const google::protobuf::RepeatedPtrField<std::string>& labelsGeneral)
+void GeneralIO::writeLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid,
+                                   const google::protobuf::RepeatedPtrField<std::string>& labelsGeneral)
 {
   std::string id = datatypeGroup + "/" + uuid;
 
@@ -514,7 +434,7 @@ void SeerepHDF5IOGeneral::writeLabelsGeneral(const std::string& datatypeGroup, c
 }
 
 std::optional<google::protobuf::RepeatedPtrField<std::string>>
-SeerepHDF5IOGeneral::readLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid)
+GeneralIO::readLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid)
 {
   std::string id = datatypeGroup + "/" + uuid;
   if (!m_file->exist(id + "/" + LABELGENERAL))
@@ -537,7 +457,7 @@ SeerepHDF5IOGeneral::readLabelsGeneral(const std::string& datatypeGroup, const s
   return result;
 }
 
-void SeerepHDF5IOGeneral::writeProjectname(const std::string& projectname)
+void GeneralIO::writeProjectname(const std::string& projectname)
 {
   if (!m_file->hasAttribute(PROJECTNAME))
   {
@@ -550,7 +470,7 @@ void SeerepHDF5IOGeneral::writeProjectname(const std::string& projectname)
   m_file->flush();
 }
 
-std::string SeerepHDF5IOGeneral::readProjectname()
+std::string GeneralIO::readProjectname()
 {
   std::string projectname;
   if (m_file->hasAttribute(PROJECTNAME))
@@ -560,7 +480,7 @@ std::string SeerepHDF5IOGeneral::readProjectname()
   return projectname;
 }
 
-void SeerepHDF5IOGeneral::writeProjectFrameId(const std::string& frameId)
+void GeneralIO::writeProjectFrameId(const std::string& frameId)
 {
   if (!m_file->hasAttribute(PROJECTFRAMEID))
   {
@@ -573,7 +493,7 @@ void SeerepHDF5IOGeneral::writeProjectFrameId(const std::string& frameId)
   m_file->flush();
 }
 
-std::string SeerepHDF5IOGeneral::readProjectFrameId()
+std::string GeneralIO::readProjectFrameId()
 {
   std::string frameId;
   if (m_file->hasAttribute(PROJECTFRAMEID))

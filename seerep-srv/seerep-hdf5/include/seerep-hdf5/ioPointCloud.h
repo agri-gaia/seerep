@@ -5,7 +5,7 @@
 #include <highfive/H5File.hpp>
 
 // seerep-io
-#include "ioGeneral.h"
+#include "seerep-hdf5/general_io.h"
 
 // seerep-msgs
 #include <seerep-msgs/point_cloud_2.pb.h>
@@ -17,7 +17,7 @@
 
 namespace seerep_hdf5
 {
-class SeerepHDF5IOPointCloud : public SeerepHDF5IOGeneral
+class SeerepHDF5IOPointCloud : public GeneralIO
 {
 public:
   SeerepHDF5IOPointCloud(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);

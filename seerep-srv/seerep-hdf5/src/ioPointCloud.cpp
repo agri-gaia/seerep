@@ -1,6 +1,5 @@
 #include "seerep-hdf5/ioPointCloud.h"
-#include "seerep-hdf5/ioGeneral.h"
-#include "seerep-hdf5/point_cloud2_iterator.hpp"
+#include "seerep-hdf5/point_cloud2_iterator.h"
 
 #include <highfive/H5DataSet.hpp>
 
@@ -8,7 +7,7 @@ namespace seerep_hdf5
 {
 SeerepHDF5IOPointCloud::SeerepHDF5IOPointCloud(std::shared_ptr<HighFive::File>& file,
                                                std::shared_ptr<std::mutex>& write_mtx)
-  : SeerepHDF5IOGeneral(file, write_mtx)
+  : GeneralIO(file, write_mtx)
 {
 }
 

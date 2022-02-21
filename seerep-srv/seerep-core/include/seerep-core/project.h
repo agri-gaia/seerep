@@ -12,7 +12,7 @@
 #include <seerep-msgs/query.pb.h>
 #include <seerep-msgs/point_cloud_2.pb.h>
 // seerep-hdf5
-#include <seerep-hdf5/ioGeneral.h>
+#include <seerep-hdf5/general_io.h>
 #include <seerep-hdf5/ioTf.h>
 #include <seerep-hdf5/ioPointCloud.h>
 #include <seerep-hdf5/ioImage.h>
@@ -57,7 +57,7 @@ private:
   std::string m_frameId;
 
   std::shared_ptr<std::mutex> m_write_mtx;
-  std::shared_ptr<seerep_hdf5::SeerepHDF5IOGeneral> m_ioGeneral;
+  std::shared_ptr<seerep_hdf5::GeneralIO> m_ioGeneral;
   std::shared_ptr<seerep_hdf5::SeerepHDF5IOTf> m_ioTf;
   std::shared_ptr<seerep_hdf5::SeerepHDF5IOPointCloud> m_ioPointCloud;
   std::shared_ptr<seerep_hdf5::SeerepHDF5IOImage> m_ioImage;

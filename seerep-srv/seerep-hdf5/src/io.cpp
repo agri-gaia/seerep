@@ -1,5 +1,5 @@
 #include "seerep-hdf5/io.h"
-#include "seerep-hdf5/point_cloud2_iterator.hpp"
+#include "seerep-hdf5/point_cloud2_iterator.h"
 
 #include <highfive/H5DataSet.hpp>
 

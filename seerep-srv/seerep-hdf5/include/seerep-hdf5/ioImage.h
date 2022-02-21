@@ -5,7 +5,7 @@
 #include <highfive/H5File.hpp>
 
 // seerep-io
-#include "ioGeneral.h"
+#include "seerep-hdf5/general_io.h"
 
 // seerep-msgs
 #include <seerep-msgs/image.pb.h>
@@ -17,7 +17,7 @@
 
 namespace seerep_hdf5
 {
-class SeerepHDF5IOImage : public SeerepHDF5IOGeneral
+class SeerepHDF5IOImage : public GeneralIO
 {
 public:
   SeerepHDF5IOImage(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
