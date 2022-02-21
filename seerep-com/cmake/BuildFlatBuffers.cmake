@@ -98,16 +98,18 @@ function(build_flatbuffers flatbuffers_schemas
       #set(generated_include ${generated_includes_dir}/${filename}_generated.h)
       set(generated_grpc_cc ${generated_includes_dir}/${filename}.grpc.fb.cc)
       set(generated_headers "")
+      set(generated_files "")
       list(APPEND generated_headers ${generated_includes_dir}/${filename}_generated.h)
       list(APPEND generated_headers ${generated_includes_dir}/${filename}.grpc.fb.h)
 
-      list(APPEND all_generated_files ${generated_headers})
-      list(APPEND all_generated_files ${generated_grpc_cc})
+      list(APPEND generated_files ${generated_headers})
+      list(APPEND generated_files ${generated_grpc_cc})
+      list(APPEND all_generated_files ${generated_files})
       list(APPEND all_generated_headers ${generated_headers})
       list(APPEND all_generated_grpc_cc ${generated_grpc_cc})
 
       add_custom_command(
-        OUTPUT ${all_generated_files}
+        OUTPUT ${generated_files}
         COMMAND ${FLATC} ${FLATC_SCHEMA_ARGS}
         -o ${generated_includes_dir}
         ${include_params}
