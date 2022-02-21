@@ -34,12 +34,12 @@ add_library(${PROJECT_NAME}_server_grpc
 	src/meta-operations.cpp
 	include/${PROJECT_NAME}/receive-sensor-msgs.h
 	src/receive-sensor-msgs.cpp
-	include/${PROJECT_NAME}/imageService.h
-	src/imageService.cpp
-	include/${PROJECT_NAME}/pointCloudService.h
-	src/pointCloudService.cpp
-	include/${PROJECT_NAME}/tfService.h
-	src/tfService.cpp
+	include/${PROJECT_NAME}/image-service.h
+	src/image-service.cpp
+	include/${PROJECT_NAME}/point-cloud-service.h
+	src/point-cloud-service.cpp
+	include/${PROJECT_NAME}/tf-service.h
+	src/tf-service.cpp
 )
 
 add_executable(${PROJECT_NAME}_server

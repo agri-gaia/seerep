@@ -1,4 +1,4 @@
-#include "seerep-server/imageService.h"
+#include "seerep-server/image-service.h"
 
 namespace seerep_server
 {
