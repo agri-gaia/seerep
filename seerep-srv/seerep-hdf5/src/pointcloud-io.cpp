@@ -33,7 +33,6 @@ std::shared_ptr<HighFive::Group> PointCloudIO::writePointCloud2(const std::strin
 
   if (!m_file->exist(cloud_group_id))
   {
-    std::cout << "data id " << cloud_group_id << " does not exist! Creat new dataset in hdf5" << std::endl;
     data_group_ptr = std::make_shared<HighFive::Group>(m_file->createGroup(cloud_group_id));
     data_group_ptr->createAttribute(HEIGHT, pointcloud2.height());
     data_group_ptr->createAttribute(WIDTH, pointcloud2.width());
@@ -44,7 +43,6 @@ std::shared_ptr<HighFive::Group> PointCloudIO::writePointCloud2(const std::strin
   }
   else
   {
-    std::cout << "data id " << cloud_group_id << " already exists!" << std::endl;
     data_group_ptr = std::make_shared<HighFive::Group>(m_file->getGroup(cloud_group_id));
     data_group_ptr->getAttribute(HEIGHT).write(pointcloud2.height());
     data_group_ptr->getAttribute(WIDTH).write(pointcloud2.width());
@@ -55,11 +53,18 @@ std::shared_ptr<HighFive::Group> PointCloudIO::writePointCloud2(const std::strin
   }
 
   writePointFieldAttributes(*data_group_ptr, pointcloud2.fields());
-  // TODO
   writeHeaderAttributes(*data_group_ptr, pointcloud2.header());
 
+  writePoints(uuid, pointcloud2);
+
+  m_file->flush();
+  return data_group_ptr;
+}
+
+void PointCloudIO::writePoints(const std::string& uuid, const seerep::PointCloud2& cloud)
+{
   std::string points_id = HDF5_GROUP_POINTCLOUD + "/" + uuid + "/points";
-  HighFive::DataSpace data_space({ pointcloud2.height(), pointcloud2.width(), 3 });
+  HighFive::DataSpace data_space({ cloud.height(), cloud.width(), 3 });
 
   std::shared_ptr<HighFive::DataSet> points_dataset_ptr;
   if (!m_file->exist(points_id))
@@ -68,20 +73,20 @@ std::shared_ptr<HighFive::Group> PointCloudIO::writePointCloud2(const std::strin
     points_dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(points_id));
 
   std::vector<std::vector<std::vector<float>>> point_data;
-  point_data.resize(pointcloud2.height());
+  point_data.resize(cloud.height());
 
-  seerep_hdf5::PointCloud2ConstIterator<float> x_iter(pointcloud2, "x");
-  seerep_hdf5::PointCloud2ConstIterator<float> y_iter(pointcloud2, "y");
-  seerep_hdf5::PointCloud2ConstIterator<float> z_iter(pointcloud2, "z");
+  seerep_hdf5::PointCloud2ConstIterator<float> x_iter(cloud, "x");
+  seerep_hdf5::PointCloud2ConstIterator<float> y_iter(cloud, "y");
+  seerep_hdf5::PointCloud2ConstIterator<float> z_iter(cloud, "z");
 
   std::array<float, 3> min, max;
   min[0] = min[1] = min[2] = std::numeric_limits<float>::max();
   max[0] = max[1] = max[2] = std::numeric_limits<float>::min();
 
-  for (int i = 0; i < pointcloud2.height(); i++)
+  for (int i = 0; i < cloud.height(); i++)
   {
-    point_data[i].reserve(pointcloud2.width());
-    for (int j = 0; j < pointcloud2.width(); j++)
+    point_data[i].reserve(cloud.width());
+    for (int j = 0; j < cloud.width(); j++)
     {
       const float& x = *x_iter;
       const float& y = *y_iter;
@@ -109,55 +114,41 @@ std::shared_ptr<HighFive::Group> PointCloudIO::writePointCloud2(const std::strin
     }
   }
 
+  // write bounding box as attribute to dataset
   const std::vector boundingbox{ min[0], min[1], min[2], max[0], max[1], max[2] };
-  if (!m_file->exist(cloud_group_id))
-  {
-    data_group_ptr->createAttribute(BOUNDINGBOX, boundingbox);
-  }
+  if (!points_dataset_ptr->hasAttribute(BOUNDINGBOX))
+    points_dataset_ptr->createAttribute(BOUNDINGBOX, boundingbox);
   else
-  {
-    data_group_ptr->getAttribute(BOUNDINGBOX).write(boundingbox);
-  }
+    points_dataset_ptr->getAttribute(BOUNDINGBOX).write(boundingbox);
 
+  // write data to dataset
   points_dataset_ptr->write(point_data);
 
-  writeBoundingBoxLabeled(HDF5_GROUP_POINTCLOUD, uuid, pointcloud2.labels_bb());
-
-  m_file->flush();
-  return data_group_ptr;
+  // TODO what is this?
+  // writeBoundingBoxLabeled(HDF5_GROUP_POINTCLOUD, uuid, pointcloud2.labels_bb());
 }
 
 // TODO read partial point cloud, e.g. only xyz without color, etc.
-std::optional<seerep::PointCloud2> PointCloudIO::readPointCloud2(const std::string& id)
+std::optional<seerep::PointCloud2> PointCloudIO::readPointCloud2(const std::string& uuid)
 {
-  if (!m_file->exist(id))
+  if (!m_file->exist(uuid))
   {
-    std::cout << "id " << id << " does not exist in file " << m_file->getName() << std::endl;
     return std::nullopt;
   }
-  std::cout << "get Dataset" << std::endl;
-  HighFive::DataSet data_set = m_file->getDataSet(id);
+  HighFive::Group cloud_group = m_file->getGroup(uuid);
 
   seerep::PointCloud2 pointcloud2;
 
-  std::cout << "read header attributes" << std::endl;
-  *pointcloud2.mutable_header() = readHeaderAttributes(data_set);
+  *pointcloud2.mutable_header() = readHeaderAttributes(cloud_group);
 
-  std::cout << "get attributes" << std::endl;
   uint32_t height, width, point_step, row_step;
   bool is_bigendian, is_dense;
-  std::cout << "read height" << std::endl;
-  data_set.getAttribute(HEIGHT).read(height);
-  std::cout << "read width" << std::endl;
-  data_set.getAttribute(WIDTH).read(width);
-  std::cout << "read is_bigendian" << std::endl;
-  data_set.getAttribute(IS_BIGENDIAN).read(is_bigendian);
-  std::cout << "read point_step" << std::endl;
-  data_set.getAttribute(POINT_STEP).read(point_step);
-  std::cout << "read row_step" << std::endl;
-  data_set.getAttribute(ROW_STEP).read(row_step);
-  std::cout << "read is_dense" << std::endl;
-  data_set.getAttribute(IS_DENSE).read(is_dense);
+  cloud_group.getAttribute(HEIGHT).read(height);
+  cloud_group.getAttribute(WIDTH).read(width);
+  cloud_group.getAttribute(IS_BIGENDIAN).read(is_bigendian);
+  cloud_group.getAttribute(POINT_STEP).read(point_step);
+  cloud_group.getAttribute(ROW_STEP).read(row_step);
+  cloud_group.getAttribute(IS_DENSE).read(is_dense);
 
   pointcloud2.set_height(height);
   pointcloud2.set_width(width);
@@ -166,21 +157,56 @@ std::optional<seerep::PointCloud2> PointCloudIO::readPointCloud2(const std::stri
   pointcloud2.set_row_step(row_step);
   pointcloud2.set_is_dense(is_dense);
 
-  std::cout << "read point field attributes" << std::endl;
+  *pointcloud2.mutable_fields() = readPointFieldAttributes(cloud_group);
 
-  // TODO
-  //*pointcloud2.mutable_fields() = readPointFieldAttributes(data_set);
+  bool has_points = false;
+  bool has_rgb = false;
+  bool has_rgba = false;
+  bool has_normals = false;
+  std::map<std::string, seerep::PointField> other_fields;
 
-  std::cout << "read Dataset" << std::endl;
+  for (auto& field : pointcloud2.fields())
+  {
+    if (field.name() == "xyz")
+      has_points = true;
+    else if (field.name() == "rgb")
+      has_rgb = true;
+    else if (field.name() == "rgba")
+      has_rgba = true;
+    else if (field.name().find("normal") == 0)
+      has_normals = true;
+    else
+      other_fields[field.name()] = field;
+  }
 
-  seerep_hdf5::PointCloud2Iterator<float> x_iter(pointcloud2, "x");
-  seerep_hdf5::PointCloud2Iterator<float> y_iter(pointcloud2, "y");
-  seerep_hdf5::PointCloud2Iterator<float> z_iter(pointcloud2, "z");
+  // TODO build header and Point Fields
 
-  std::vector<std::vector<std::vector<float>>> read_data;
-  data_set.read(read_data);
+  if (has_points)
+    readPoints(uuid, pointcloud2);
 
-  for (auto column : read_data)
+  if (has_rgb)
+    readColorsRGB(uuid, pointcloud2);
+
+  if (has_rgba)
+    readColorsRGBA(uuid, pointcloud2);
+
+  return pointcloud2;
+}
+
+void PointCloudIO::readPoints(const std::string& uuid, seerep::PointCloud2& cloud)
+{
+  seerep_hdf5::PointCloud2Iterator<float> x_iter(cloud, "x");
+  seerep_hdf5::PointCloud2Iterator<float> y_iter(cloud, "y");
+  seerep_hdf5::PointCloud2Iterator<float> z_iter(cloud, "z");
+
+  std::vector<std::vector<std::vector<float>>> point_data;
+  std::string points_id = HDF5_GROUP_POINTCLOUD + "/" + uuid + "/points";
+
+  HighFive::DataSet points_dataset = m_file->getDataSet(points_id);
+
+  points_dataset.read(point_data);
+
+  for (auto column : point_data)
   {
     for (auto row : column)
     {
@@ -190,8 +216,62 @@ std::optional<seerep::PointCloud2> PointCloudIO::readPointCloud2(const std::stri
       ++x_iter, ++y_iter, ++z_iter;
     }
   }
+}
 
-  return pointcloud2;
+void PointCloudIO::readColorsRGB(const std::string& uuid, seerep::PointCloud2& cloud)
+{
+  seerep_hdf5::PointCloud2Iterator<uint8_t> r_iter(cloud, "r");
+  seerep_hdf5::PointCloud2Iterator<uint8_t> g_iter(cloud, "g");
+  seerep_hdf5::PointCloud2Iterator<uint8_t> b_iter(cloud, "b");
+
+  std::vector<std::vector<std::vector<uint8_t>>> color_data;
+  std::string colors_id = HDF5_GROUP_POINTCLOUD + "/" + uuid + "/colors";
+
+  HighFive::DataSet colors_dataset = m_file->getDataSet(colors_id);
+
+  colors_dataset.read(color_data);
+
+  for (auto column : color_data)
+  {
+    for (auto row : column)
+    {
+      *r_iter = row[0];
+      *g_iter = row[1];
+      *b_iter = row[2];
+      ++r_iter, ++g_iter, ++b_iter;
+    }
+  }
+}
+
+void PointCloudIO::readColorsRGBA(const std::string& uuid, seerep::PointCloud2& cloud)
+{
+  seerep_hdf5::PointCloud2Iterator<uint8_t> r_iter(cloud, "r");
+  seerep_hdf5::PointCloud2Iterator<uint8_t> g_iter(cloud, "g");
+  seerep_hdf5::PointCloud2Iterator<uint8_t> b_iter(cloud, "b");
+  seerep_hdf5::PointCloud2Iterator<uint8_t> a_iter(cloud, "a");
+
+  std::vector<std::vector<std::vector<uint8_t>>> color_data;
+  std::string colors_id = HDF5_GROUP_POINTCLOUD + "/" + uuid + "/colors";
+
+  HighFive::DataSet colors_dataset = m_file->getDataSet(colors_id);
+
+  colors_dataset.read(color_data);
+
+  for (auto column : color_data)
+  {
+    for (auto row : column)
+    {
+      *r_iter = row[0];
+      *g_iter = row[1];
+      *b_iter = row[2];
+      *a_iter = row[3];
+
+      ++r_iter;
+      ++g_iter;
+      ++b_iter;
+      ++a_iter;
+    }
+  }
 }
 
 void PointCloudIO::writePointFieldAttributes(

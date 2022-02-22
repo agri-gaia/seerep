@@ -12,9 +12,8 @@ find_package(Protobuf REQUIRED)
 find_package(SeerepMsgs REQUIRED)
 find_package(HighFive REQUIRED)
 
-configure_file(include/SeerepHDF5Config.h.in SeerepHDF5Config.h)
 
-message("HighFive Include Dirs: ${HighFive_INCLUDE_DIRS} Libraries: ${HighFive_LIBRARIES}")
+configure_file(include/SeerepHDF5Config.h.in SeerepHDF5Config.h)
 
 include_directories(
 	include

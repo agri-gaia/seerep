@@ -101,7 +101,6 @@ inline PointCloud2Modifier::PointCloud2Modifier(seerep::PointCloud2& cloud_msg) 
 
 inline size_t PointCloud2Modifier::size() const
 {
-  // TODO get size
   return cloud_msg_.data().size() / cloud_msg_.point_step();
 }
 

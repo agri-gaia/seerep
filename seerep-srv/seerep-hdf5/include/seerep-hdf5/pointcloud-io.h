@@ -26,7 +26,7 @@ public:
 
   std::shared_ptr<HighFive::Group> writePointCloud2(const std::string& uuid, const seerep::PointCloud2& pointcloud2);
 
-  std::optional<seerep::PointCloud2> readPointCloud2(const std::string& id);
+  std::optional<seerep::PointCloud2> readPointCloud2(const std::string& uuid);
 
   void writePointFieldAttributes(HighFive::Group& cloud_group,
                                  const google::protobuf::RepeatedPtrField<seerep::PointField> repeatedPointField);
@@ -34,6 +34,14 @@ public:
   google::protobuf::RepeatedPtrField<seerep::PointField> readPointFieldAttributes(HighFive::Group& cloud_group);
 
 private:
+  void writePoints(const std::string& uuid, const seerep::PointCloud2& cloud);
+
+  void readPoints(const std::string& uuid, seerep::PointCloud2& cloud);
+
+  void readColorsRGB(const std::string& uuid, seerep::PointCloud2& cloud);
+
+  void readColorsRGBA(const std::string& uuid, seerep::PointCloud2& cloud);
+
   // image / pointcloud attribute keys
   inline static const std::string HEIGHT = "height";
   inline static const std::string WIDTH = "width";
