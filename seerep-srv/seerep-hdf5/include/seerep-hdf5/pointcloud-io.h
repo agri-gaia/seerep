@@ -34,7 +34,22 @@ public:
   google::protobuf::RepeatedPtrField<seerep::PointField> readPointFieldAttributes(HighFive::Group& cloud_group);
 
 private:
+  struct CloudInfo
+  {
+    bool has_points = false;
+    bool has_rgb = false;
+    bool has_rgba = false;
+    bool has_normals = false;
+    std::map<std::string, seerep::PointField> other_fields;
+  };
+
+  CloudInfo getCloudInfo(const seerep::PointCloud2& cloud);
+
   void writePoints(const std::string& uuid, const seerep::PointCloud2& cloud);
+
+  void writeColorsRGB(const std::string& uuid, const seerep::PointCloud2& cloud);
+
+  void writeColorsRGBA(const std::string& uuid, const seerep::PointCloud2& cloud);
 
   void readPoints(const std::string& uuid, seerep::PointCloud2& cloud);
 

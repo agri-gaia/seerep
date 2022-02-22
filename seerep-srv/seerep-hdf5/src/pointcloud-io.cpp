@@ -55,7 +55,10 @@ std::shared_ptr<HighFive::Group> PointCloudIO::writePointCloud2(const std::strin
   writePointFieldAttributes(*data_group_ptr, pointcloud2.fields());
   writeHeaderAttributes(*data_group_ptr, pointcloud2.header());
 
-  writePoints(uuid, pointcloud2);
+  CloudInfo info = getCloudInfo(pointcloud2);
+
+  if (info.has_points)
+    writePoints(uuid, pointcloud2);
 
   m_file->flush();
   return data_group_ptr;
@@ -128,6 +131,35 @@ void PointCloudIO::writePoints(const std::string& uuid, const seerep::PointCloud
   // writeBoundingBoxLabeled(HDF5_GROUP_POINTCLOUD, uuid, pointcloud2.labels_bb());
 }
 
+void PointCloudIO::writeColorsRGB(const std::string& uuid, const seerep::PointCloud2& cloud)
+{
+  // TODO
+}
+
+void PointCloudIO::writeColorsRGBA(const std::string& uuid, const seerep::PointCloud2& cloud)
+{
+  // TODO
+}
+
+PointCloudIO::CloudInfo PointCloudIO::getCloudInfo(const seerep::PointCloud2& cloud)
+{
+  CloudInfo info;
+  for (auto& field : cloud.fields())
+  {
+    if (field.name() == "xyz")
+      info.has_points = true;
+    else if (field.name() == "rgb")
+      info.has_rgb = true;
+    else if (field.name() == "rgba")
+      info.has_rgba = true;
+    else if (field.name().find("normal") == 0)
+      info.has_normals = true;
+    else
+      info.other_fields[field.name()] = field;
+  }
+  return info;
+}
+
 // TODO read partial point cloud, e.g. only xyz without color, etc.
 std::optional<seerep::PointCloud2> PointCloudIO::readPointCloud2(const std::string& uuid)
 {
@@ -159,35 +191,17 @@ std::optional<seerep::PointCloud2> PointCloudIO::readPointCloud2(const std::stri
 
   *pointcloud2.mutable_fields() = readPointFieldAttributes(cloud_group);
 
-  bool has_points = false;
-  bool has_rgb = false;
-  bool has_rgba = false;
-  bool has_normals = false;
-  std::map<std::string, seerep::PointField> other_fields;
-
-  for (auto& field : pointcloud2.fields())
-  {
-    if (field.name() == "xyz")
-      has_points = true;
-    else if (field.name() == "rgb")
-      has_rgb = true;
-    else if (field.name() == "rgba")
-      has_rgba = true;
-    else if (field.name().find("normal") == 0)
-      has_normals = true;
-    else
-      other_fields[field.name()] = field;
-  }
-
   // TODO build header and Point Fields
 
-  if (has_points)
+  CloudInfo info = getCloudInfo(pointcloud2);
+
+  if (info.has_points)
     readPoints(uuid, pointcloud2);
 
-  if (has_rgb)
+  if (info.has_rgb)
     readColorsRGB(uuid, pointcloud2);
 
-  if (has_rgba)
+  if (info.has_rgba)
     readColorsRGBA(uuid, pointcloud2);
 
   return pointcloud2;
