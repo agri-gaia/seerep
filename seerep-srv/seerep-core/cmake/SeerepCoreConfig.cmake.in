@@ -31,7 +31,3 @@ list(APPEND SeerepCore_LIBRARIES ${SeerepHDF5_LIBRARIES})
 find_package(seerep_ros_conversions REQUIRED)
 list(APPEND SeerepCore_INCLUDE_DIRS ${seerep_ros_conversions_INCLUDE_DIRS})
 list(APPEND SeerepCore_LIBRARIES ${seerep_ros_conversions_LIBRARIES})
-
-find_package(PCL 1.10 REQUIRED)
-list(APPEND SeerepCore_INCLUDE_DIRS ${PCL_INCLUDE_DIRS})
-list(APPEND SeerepCore_LIBRARIES ${PCL_LIBRARIES})

@@ -16,7 +16,7 @@
 // seerep-core
 #include "aabb-hierarchy.h"
 
-#include <Eigen/Dense>
+#include <eigen3/Eigen/Dense>
 
 #include <highfive/H5Group.hpp>
 

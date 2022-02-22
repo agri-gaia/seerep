@@ -11,7 +11,7 @@ find_package(seerep_ros_conversions REQUIRED)
 find_package(Protobuf REQUIRED)
 find_package(SeerepMsgs REQUIRED)
 find_package(HighFive REQUIRED)
-find_package(PCL 1.10 REQUIRED)
+find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
@@ -20,7 +20,6 @@ find_package(Boost REQUIRED)
 
 find_package(catkin REQUIRED
 	COMPONENTS
-	pcl_conversions
 	tf2
 )
 
@@ -33,7 +32,6 @@ include_directories(
 	${seerep_ros_conversions_INCLUDE_DIRS}
 	${PROTOBUF_INCLUDE_DIR}
 	${HighFive_INCLUDE_DIRS}
-	${PCL_INCLUDE_DIRS}
 	${Boost_INCLUDE_DIRS}
 	${catkin_INCLUDE_DIRS}
 )
@@ -55,9 +53,9 @@ target_link_libraries(seerepcore
 	${seerep_ros_conversions_LIBRARIES}
 	${PROTOBUF_LIBRARIES}
 	${HighFive_LIBRARIES}
-	${PCL_LIBRARIES}
 	${Boost_LIBRARIES}
 	${catkin_LIBRARIES}
+	Eigen3::Eigen
 )
 
 set(INSTALL_HEADERS

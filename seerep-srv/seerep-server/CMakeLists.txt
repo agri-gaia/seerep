@@ -10,10 +10,12 @@ find_package(SeerepHDF5 REQUIRED)
 find_package(SeerepCom REQUIRED)
 find_package(SeerepCore REQUIRED)
 find_package(HighFive REQUIRED)
+find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(catkin REQUIRED
 	COMPONENTS
 	seerep_ros_conversions
 )
+
 message("LIBS" ${SeerepHDF5_LIBRARIES})
 message("INCS" ${SeerepHDF5_INCLUDE_DIRS})
 message("INCS2" ${HighFive_INCLUDE_DIRS})
@@ -54,6 +56,7 @@ target_link_libraries(${PROJECT_NAME}_server
 	${SeerepCore_LIBRARIES}
 	gRPC::grpc++_reflection
 	${PROJECT_NAME}_server_grpc
+	Eigen3::Eigen
 )
 
 target_link_libraries(${PROJECT_NAME}_client
