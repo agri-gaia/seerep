@@ -1,0 +1,8 @@
+#ifndef SeerepHDF5FlatbuffersCONFIG_H_
+#define SeerepHDF5FlatbuffersCONFIG_H_
+
+// the configured options and settings for seerep_hdf5_flatbuffers
+#define SEEREP_HDF5_FLATBUFFER_VERSION_MAJOR @seerep_hdf5_flatbuffers_VERSION_MAJOR @
+#define SEEREP_HDF5_FLATBUFFERS_VERSION_MINOR @seerep_hdf5_flatbuffers_VERSION_MINOR @
+
+#endif /* SeerepHDF5FlatbuffersCONFIG_H_ */

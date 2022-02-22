@@ -1,0 +1,29 @@
+@PACKAGE_INIT@
+
+list(APPEND CMAKE_MODULE_PATH "${CURRENT_LIST_DIR}/Modules")
+
+set(SeerepHDF5Flatbuffers_INCLUDE_DIRS @PACKAGE_CMAKE_INSTALL_INCLUDEDIR@)
+
+find_package(PkgConfig REQUIRED)
+find_library(SeerepHDF5Flatbuffers_LIBRARY NAMES seerephdf5flatbuffers)
+set(SeerepHDF5Flatbuffers_LIBRARIES ${SeerepHDF5Flatbuffers_LIBRARY})
+
+find_package(Flatbuffers REQUIRED)
+list(APPEND SeerepHDF5Flatbuffers_INCLUDE_DIRS ${Protobuf_INCLUDE_DIR})
+list(APPEND SeerepHDF5Flatbuffers_LIBRARIES ${Protobuf_LIBRARY})
+
+find_package(HDF5 REQUIRED)
+list(APPEND SeerepHDF5Flatbuffers_INCLUDE_DIRS ${HDF5Flatbuffers_INCLUDE_DIRS})
+list(APPEND SeerepHDF5Flatbuffers_LIBRARIES ${HDF5Flatbuffers_LIBRARIES})
+
+find_package(HighFive REQUIRED)
+list(APPEND SeerepHDF5Flatbuffers_INCLUDE_DIRS ${HighFive_INCLUDE_DIRS})
+list(APPEND SeerepHDF5Flatbuffers_LIBRARIES ${HighFive_LIBRARIES})
+
+find_package(SeerepMsgs REQUIRED)
+list(APPEND SeerepHDF5Flatbuffers_INCLUDE_DIRS ${SeerepMsgs_INCLUDE_DIRS})
+list(APPEND SeerepHDF5Flatbuffers_LIBRARIES ${SeerepMsgs_LIBRARIES})
+
+# find_package(catkin REQUIRED COMPONENTS sensor_msgs)
+# list(APPEND SeerepHDF5Flatbuffers_INCLUDE_DIRS ${catkin_INCLUDE_DIRS})
+# list(APPEND SeerepHDF5Flatbuffers_LIBRARIES ${catkin_LIBRARIES})
