@@ -1,5 +1,6 @@
 #include "seerep-hdf5/pointcloud-io.h"
 #include "seerep-hdf5/point_cloud2_iterator.h"
+#include "seerep-hdf5/point-field-conversion.h"
 
 #include <highfive/H5DataSet.hpp>
 
@@ -63,6 +64,8 @@ std::shared_ptr<HighFive::Group> PointCloudIO::writePointCloud2(const std::strin
     writeColorsRGB(uuid, pointcloud2);
   if (info.has_rgba)
     writeColorsRGBA(uuid, pointcloud2);
+  if (!info.other_fields.empty())
+    writeOtherFields(uuid, pointcloud2, info.other_fields);
 
   m_file->flush();
   return data_group_ptr;
@@ -199,6 +202,12 @@ void PointCloudIO::writeColorsRGBA(const std::string& uuid, const seerep::PointC
   }
 
   colors_dataset_ptr->write(colors_data);
+}
+
+void PointCloudIO::writeOtherFields(const std::string& uuid, const seerep::PointCloud2& cloud,
+                                    const std::map<std::string, seerep::PointField>& fields)
+{
+  // TODO
 }
 
 PointCloudIO::CloudInfo PointCloudIO::getCloudInfo(const seerep::PointCloud2& cloud)

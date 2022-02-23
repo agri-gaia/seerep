@@ -51,6 +51,9 @@ private:
 
   void writeColorsRGBA(const std::string& uuid, const seerep::PointCloud2& cloud);
 
+  void writeOtherFields(const std::string& uuid, const seerep::PointCloud2& cloud,
+                        const std::map<std::string, seerep::PointField>& fields);
+
   void readPoints(const std::string& uuid, seerep::PointCloud2& cloud);
 
   void readColorsRGB(const std::string& uuid, seerep::PointCloud2& cloud);
