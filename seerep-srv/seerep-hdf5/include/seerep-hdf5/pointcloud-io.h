@@ -15,6 +15,8 @@
 
 #include <boost/geometry.hpp>
 
+#include "seerep-hdf5/point_cloud2_iterator.h"
+
 namespace seerep_hdf5
 {
 class PointCloudIO : public GeneralIO
@@ -42,6 +44,31 @@ private:
     bool has_normals = false;
     std::map<std::string, seerep::PointField> other_fields;
   };
+
+  template <typename T>
+  void write(const std::string uuid, const std::string& name, const seerep::PointCloud2& cloud, size_t size)
+  {
+    const std::string id = HDF5_GROUP_POINTCLOUD + "/" + uuid + "/" + name;
+    HighFive::DataSpace data_space(size);
+
+    std::shared_ptr<HighFive::DataSet> dataset_ptr;
+    if (!m_file->exist(id))
+      dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->createDataSet<T>(id, data_space));
+    else
+      dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(id));
+
+    PointCloud2ConstIterator<T> iter(cloud, name);
+    std::vector<T> data;
+    data.reserve(size);
+
+    for (size_t i = 0; i < size; i++)
+    {
+      data.push_back(*iter);
+      ++iter;
+    }
+
+    dataset_ptr->write(data);
+  }
 
   CloudInfo getCloudInfo(const seerep::PointCloud2& cloud);
 

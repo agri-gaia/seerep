@@ -1,5 +1,4 @@
 #include "seerep-hdf5/pointcloud-io.h"
-#include "seerep-hdf5/point_cloud2_iterator.h"
 #include "seerep-hdf5/point-field-conversion.h"
 
 #include <highfive/H5DataSet.hpp>
@@ -207,7 +206,37 @@ void PointCloudIO::writeColorsRGBA(const std::string& uuid, const seerep::PointC
 void PointCloudIO::writeOtherFields(const std::string& uuid, const seerep::PointCloud2& cloud,
                                     const std::map<std::string, seerep::PointField>& fields)
 {
-  // TODO
+  for (auto field_map_entry : fields)
+  {
+    const auto& field = field_map_entry.second;
+    switch (field.datatype())
+    {
+      case seerep::PointField::INT8:
+        write<int8_t>(uuid, field.name(), cloud, field.count());
+        break;
+      case seerep::PointField::UINT8:
+        write<uint8_t>(uuid, field.name(), cloud, field.count());
+        break;
+      case seerep::PointField::INT16:
+        write<int16_t>(uuid, field.name(), cloud, field.count());
+        break;
+      case seerep::PointField::UINT16:
+        write<uint16_t>(uuid, field.name(), cloud, field.count());
+        break;
+      case seerep::PointField::INT32:
+        write<int32_t>(uuid, field.name(), cloud, field.count());
+        break;
+      case seerep::PointField::UINT32:
+        write<uint32_t>(uuid, field.name(), cloud, field.count());
+        break;
+      case seerep::PointField::FLOAT32:
+        write<float>(uuid, field.name(), cloud, field.count());
+        break;
+      case seerep::PointField::FLOAT64:
+        write<double>(uuid, field.name(), cloud, field.count());
+        break;
+    }
+  }
 }
 
 PointCloudIO::CloudInfo PointCloudIO::getCloudInfo(const seerep::PointCloud2& cloud)
