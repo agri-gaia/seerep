@@ -41,8 +41,8 @@
 
 namespace
 {
-/** Return the size of a datatype (which is an enum of sensor_msgs::msg::PointField::) in bytes
- * @param datatype one of the enums of sensor_msgs::msg::PointField::
+/** Return the size of a datatype (which is an enum of seerep::PointField::) in bytes
+ * @param datatype one of the enums of seerep::PointField::
  */
 inline int sizeOfPointField(int datatype)
 {
