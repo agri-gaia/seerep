@@ -63,6 +63,8 @@ std::shared_ptr<HighFive::Group> PointCloudIO::writePointCloud2(const std::strin
     writeColorsRGB(uuid, pointcloud2);
   if (info.has_rgba)
     writeColorsRGBA(uuid, pointcloud2);
+
+  // TODO normals
   if (!info.other_fields.empty())
     writeOtherFields(uuid, pointcloud2, info.other_fields);
 
@@ -301,6 +303,11 @@ std::optional<seerep::PointCloud2> PointCloudIO::readPointCloud2(const std::stri
 
   if (info.has_rgba)
     readColorsRGBA(uuid, pointcloud2);
+
+  // TODO normals
+
+  if (!info.other_fields.empty())
+    readOtherFields(uuid, pointcloud2, info.other_fields);
 
   return pointcloud2;
 }
