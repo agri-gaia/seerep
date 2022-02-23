@@ -158,11 +158,43 @@ void PointCloudIO::writeColorsRGB(const std::string& uuid, const seerep::PointCl
       ++r_iter, ++g_iter, ++b_iter;
     }
   }
+
+  colors_dataset_ptr->write(colors_data);
 }
 
 void PointCloudIO::writeColorsRGBA(const std::string& uuid, const seerep::PointCloud2& cloud)
 {
-  // TODO
+  const std::string colors_id = HDF5_GROUP_POINTCLOUD + "/" + uuid + "/colors";
+  HighFive::DataSpace data_space({ cloud.height(), cloud.width(), 4 });
+
+  std::shared_ptr<HighFive::DataSet> colors_dataset_ptr;
+  if (!m_file->exist(colors_id))
+    colors_dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->createDataSet<uint8_t>(colors_id, data_space));
+  else
+    colors_dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(colors_id));
+
+  std::vector<std::vector<std::vector<uint8_t>>> colors_data;
+  colors_data.resize(cloud.height());
+
+  seerep_hdf5::PointCloud2ConstIterator<uint8_t> r_iter(cloud, "r");
+  seerep_hdf5::PointCloud2ConstIterator<uint8_t> g_iter(cloud, "g");
+  seerep_hdf5::PointCloud2ConstIterator<uint8_t> b_iter(cloud, "b");
+  seerep_hdf5::PointCloud2ConstIterator<uint8_t> a_iter(cloud, "a");
+
+  for (int i = 0; i < cloud.height(); i++)
+  {
+    colors_data[i].reserve(cloud.width());
+    for (int j = 0; j < cloud.width(); j++)
+    {
+      colors_data[i].push_back(std::vector{ *r_iter, *g_iter, *b_iter, *a_iter });
+      ++r_iter;
+      ++g_iter;
+      ++b_iter;
+      ++a_iter;
+    }
+  }
+
+  colors_dataset_ptr->write(colors_data);
 }
 
 PointCloudIO::CloudInfo PointCloudIO::getCloudInfo(const seerep::PointCloud2& cloud)
