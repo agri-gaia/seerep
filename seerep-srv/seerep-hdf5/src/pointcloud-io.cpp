@@ -59,6 +59,10 @@ std::shared_ptr<HighFive::Group> PointCloudIO::writePointCloud2(const std::strin
 
   if (info.has_points)
     writePoints(uuid, pointcloud2);
+  if (info.has_rgb)
+    writeColorsRGB(uuid, pointcloud2);
+  if (info.has_rgba)
+    writeColorsRGBA(uuid, pointcloud2);
 
   m_file->flush();
   return data_group_ptr;
