@@ -386,6 +386,42 @@ void PointCloudIO::readColorsRGBA(const std::string& uuid, seerep::PointCloud2& 
   }
 }
 
+void PointCloudIO::readOtherFields(const std::string& uuid, seerep::PointCloud2& cloud,
+                                   const std::map<std::string, seerep::PointField>& fields)
+{
+  for (auto field_map_entry : fields)
+  {
+    const auto& field = field_map_entry.second;
+    switch (field.datatype())
+    {
+      case seerep::PointField::INT8:
+        read<int8_t>(uuid, field.name(), cloud, field.count());
+        break;
+      case seerep::PointField::UINT8:
+        read<uint8_t>(uuid, field.name(), cloud, field.count());
+        break;
+      case seerep::PointField::INT16:
+        read<int16_t>(uuid, field.name(), cloud, field.count());
+        break;
+      case seerep::PointField::UINT16:
+        read<uint16_t>(uuid, field.name(), cloud, field.count());
+        break;
+      case seerep::PointField::INT32:
+        read<int32_t>(uuid, field.name(), cloud, field.count());
+        break;
+      case seerep::PointField::UINT32:
+        read<uint32_t>(uuid, field.name(), cloud, field.count());
+        break;
+      case seerep::PointField::FLOAT32:
+        read<float>(uuid, field.name(), cloud, field.count());
+        break;
+      case seerep::PointField::FLOAT64:
+        read<double>(uuid, field.name(), cloud, field.count());
+        break;
+    }
+  }
+}
+
 void PointCloudIO::writePointFieldAttributes(
     HighFive::Group& cloud_group, const google::protobuf::RepeatedPtrField<seerep::PointField> repeatedPointField)
 {

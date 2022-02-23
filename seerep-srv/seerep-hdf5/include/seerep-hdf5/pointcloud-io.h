@@ -46,9 +46,26 @@ private:
   };
 
   template <typename T>
-  void write(const std::string uuid, const std::string& name, const seerep::PointCloud2& cloud, size_t size)
+  void read(const std::string cloud_uuid, const std::string& field_name, seerep::PointCloud2& cloud, size_t size)
   {
-    const std::string id = HDF5_GROUP_POINTCLOUD + "/" + uuid + "/" + name;
+    const std::string id = HDF5_GROUP_POINTCLOUD + "/" + cloud_uuid + "/" + field_name;
+    PointCloud2Iterator<T> iter(cloud, field_name);
+    HighFive::DataSet dataset = m_file->getDataSet(id);
+    std::vector<T> data;
+    data.reserve(size);
+    dataset.read(data);
+
+    for (auto& value : data)
+    {
+      *iter = value;
+      ++iter;
+    }
+  }
+
+  template <typename T>
+  void write(const std::string cloud_uuid, const std::string& field_name, const seerep::PointCloud2& cloud, size_t size)
+  {
+    const std::string id = HDF5_GROUP_POINTCLOUD + "/" + cloud_uuid + "/" + field_name;
     HighFive::DataSpace data_space(size);
 
     std::shared_ptr<HighFive::DataSet> dataset_ptr;
@@ -57,7 +74,7 @@ private:
     else
       dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(id));
 
-    PointCloud2ConstIterator<T> iter(cloud, name);
+    PointCloud2ConstIterator<T> iter(cloud, field_name);
     std::vector<T> data;
     data.reserve(size);
 
@@ -86,6 +103,9 @@ private:
   void readColorsRGB(const std::string& uuid, seerep::PointCloud2& cloud);
 
   void readColorsRGBA(const std::string& uuid, seerep::PointCloud2& cloud);
+
+  void readOtherFields(const std::string& uuid, seerep::PointCloud2& cloud,
+                       const std::map<std::string, seerep::PointField>& fields);
 
   // image / pointcloud attribute keys
   inline static const std::string HEIGHT = "height";
