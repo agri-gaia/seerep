@@ -15,6 +15,8 @@
 
 #include <boost/geometry.hpp>
 
+#include "seerep-hdf5/point_cloud2_iterator.h"
+
 namespace seerep_hdf5
 {
 class PointCloudIO : public GeneralIO
@@ -26,7 +28,7 @@ public:
 
   std::shared_ptr<HighFive::Group> writePointCloud2(const std::string& uuid, const seerep::PointCloud2& pointcloud2);
 
-  std::optional<seerep::PointCloud2> readPointCloud2(const std::string& id);
+  std::optional<seerep::PointCloud2> readPointCloud2(const std::string& uuid);
 
   void writePointFieldAttributes(HighFive::Group& cloud_group,
                                  const google::protobuf::RepeatedPtrField<seerep::PointField> repeatedPointField);
@@ -34,6 +36,77 @@ public:
   google::protobuf::RepeatedPtrField<seerep::PointField> readPointFieldAttributes(HighFive::Group& cloud_group);
 
 private:
+  struct CloudInfo
+  {
+    bool has_points = false;
+    bool has_rgb = false;
+    bool has_rgba = false;
+    bool has_normals = false;
+    std::map<std::string, seerep::PointField> other_fields;
+  };
+
+  template <typename T>
+  void read(const std::string cloud_uuid, const std::string& field_name, seerep::PointCloud2& cloud, size_t size)
+  {
+    const std::string id = HDF5_GROUP_POINTCLOUD + "/" + cloud_uuid + "/" + field_name;
+    PointCloud2Iterator<T> iter(cloud, field_name);
+    HighFive::DataSet dataset = m_file->getDataSet(id);
+    std::vector<T> data;
+    data.reserve(size);
+    dataset.read(data);
+
+    for (auto& value : data)
+    {
+      *iter = value;
+      ++iter;
+    }
+  }
+
+  template <typename T>
+  void write(const std::string cloud_uuid, const std::string& field_name, const seerep::PointCloud2& cloud, size_t size)
+  {
+    const std::string id = HDF5_GROUP_POINTCLOUD + "/" + cloud_uuid + "/" + field_name;
+    HighFive::DataSpace data_space(size);
+
+    std::shared_ptr<HighFive::DataSet> dataset_ptr;
+    if (!m_file->exist(id))
+      dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->createDataSet<T>(id, data_space));
+    else
+      dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(id));
+
+    PointCloud2ConstIterator<T> iter(cloud, field_name);
+    std::vector<T> data;
+    data.reserve(size);
+
+    for (size_t i = 0; i < size; i++)
+    {
+      data.push_back(*iter);
+      ++iter;
+    }
+
+    dataset_ptr->write(data);
+  }
+
+  CloudInfo getCloudInfo(const seerep::PointCloud2& cloud);
+
+  void writePoints(const std::string& uuid, const seerep::PointCloud2& cloud);
+
+  void writeColorsRGB(const std::string& uuid, const seerep::PointCloud2& cloud);
+
+  void writeColorsRGBA(const std::string& uuid, const seerep::PointCloud2& cloud);
+
+  void writeOtherFields(const std::string& uuid, const seerep::PointCloud2& cloud,
+                        const std::map<std::string, seerep::PointField>& fields);
+
+  void readPoints(const std::string& uuid, seerep::PointCloud2& cloud);
+
+  void readColorsRGB(const std::string& uuid, seerep::PointCloud2& cloud);
+
+  void readColorsRGBA(const std::string& uuid, seerep::PointCloud2& cloud);
+
+  void readOtherFields(const std::string& uuid, seerep::PointCloud2& cloud,
+                       const std::map<std::string, seerep::PointField>& fields);
+
   // image / pointcloud attribute keys
   inline static const std::string HEIGHT = "height";
   inline static const std::string WIDTH = "width";

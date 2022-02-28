@@ -41,8 +41,8 @@
 
 namespace
 {
-/** Return the size of a datatype (which is an enum of sensor_msgs::msg::PointField::) in bytes
- * @param datatype one of the enums of sensor_msgs::msg::PointField::
+/** Return the size of a datatype (which is an enum of seerep::PointField::) in bytes
+ * @param datatype one of the enums of seerep::PointField::
  */
 inline int sizeOfPointField(int datatype)
 {
@@ -101,7 +101,6 @@ inline PointCloud2Modifier::PointCloud2Modifier(seerep::PointCloud2& cloud_msg) 
 
 inline size_t PointCloud2Modifier::size() const
 {
-  // TODO get size
   return cloud_msg_.data().size() / cloud_msg_.point_step();
 }
 

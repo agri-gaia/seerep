@@ -46,17 +46,17 @@
  * @verbatim
  *   #include <sensor_msgs/point_cloud_iterator.hpp>
  *   // Create a PointCloud2
- *   sensor_msgs::msg::PointCloud2 cloud_msg;
+ *   seerep::PointCloud2 cloud_msg;
  *   // Fill some internals of the PoinCloud2 like the header/width/height ...
  *   cloud_msgs.height = 1;  cloud_msgs.width = 4;
  *   // Set the point fields to xyzrgb and resize the vector with the following command
  *   // 4 is for the number of added fields. Each come in triplet: the name of the PointField,
  *   // the number of occurrences of the type in the PointField, the type of the PointField
- *   sensor_msgs::msg::PointCloud2Modifier modifier(cloud_msg);
- *   modifier.setPointCloud2Fields(4, "x", 1, sensor_msgs::msg::PointField::FLOAT32,
- *                                            "y", 1, sensor_msgs::msg::PointField::FLOAT32,
- *                                            "z", 1, sensor_msgs::msg::PointField::FLOAT32,
- *                                            "rgb", 1, sensor_msgs::msg::PointField::FLOAT32);
+ *   seerep::PointCloud2Modifier modifier(cloud_msg);
+ *   modifier.setPointCloud2Fields(4, "x", 1, seerep::PointField::FLOAT32,
+ *                                            "y", 1, seerep::PointField::FLOAT32,
+ *                                            "z", 1, seerep::PointField::FLOAT32,
+ *                                            "rgb", 1, seerep::PointField::FLOAT32);
  *   // For convenience and the xyz, rgb, rgba fields, you can also use the following overloaded function.
  *   // You have to be aware that the following function does add extra padding for backward compatibility though
  *   // so it is definitely the solution of choice for PointXYZ and PointXYZRGB
@@ -111,22 +111,22 @@ public:
   explicit PointCloud2Modifier(seerep::PointCloud2& cloud_msg);
 
   /**
-   * @return the number of T's in the original sensor_msgs::msg::PointCloud2
+   * @return the number of T's in the original seerep::PointCloud2
    */
   size_t size() const;
 
   /**
-   * @param size The number of T's to reserve in the original sensor_msgs::msg::PointCloud2 for
+   * @param size The number of T's to reserve in the original seerep::PointCloud2 for
    */
   void reserve(size_t size);
 
   /**
-   * @param size The number of T's to change the size of the original sensor_msgs::msg::PointCloud2 by
+   * @param size The number of T's to change the size of the original seerep::PointCloud2 by
    */
   void resize(size_t size);
 
   /**
-   * @brief remove all T's from the original sensor_msgs::msg::PointCloud2
+   * @brief remove all T's from the original seerep::PointCloud2
    */
   void clear();
 
@@ -139,10 +139,10 @@ public:
    *
    * E.g, you create your PointCloud2 message with XYZ/RGB as follows:
    * @verbatim
-   *   setPointCloud2Fields(cloud_msg, 4, "x", 1, sensor_msgs::msg::PointField::FLOAT32,
-   *                                              "y", 1, sensor_msgs::msg::PointField::FLOAT32,
-   *                                              "z", 1, sensor_msgs::msg::PointField::FLOAT32,
-   *                                              "rgb", 1, sensor_msgs::msg::PointField::FLOAT32);
+   *   setPointCloud2Fields(cloud_msg, 4, "x", 1, seerep::PointField::FLOAT32,
+   *                                              "y", 1, seerep::PointField::FLOAT32,
+   *                                              "z", 1, seerep::PointField::FLOAT32,
+   *                                              "rgb", 1, seerep::PointField::FLOAT32);
    * @endverbatim
    * WARNING: THIS DOES NOT TAKE INTO ACCOUNT ANY PADDING
    * For simple usual cases, the overloaded setPointCloud2FieldsByString is what you want.
@@ -162,7 +162,7 @@ public:
   void setPointCloud2FieldsByString(int n_fields, ...);
 
 protected:
-  /** A reference to the original sensor_msgs::msg::PointCloud2 that we read */
+  /** A reference to the original seerep::PointCloud2 that we read */
   seerep::PointCloud2& cloud_msg_;
 };
 
@@ -264,7 +264,7 @@ public:
  *
  * For iterating over XYZ, you do :
  * @verbatim
- *   sensor_msgs::msg::PointCloud2Iterator<float> iter_x(cloud_msg, "x");
+ *   seerep::PointCloud2Iterator<float> iter_x(cloud_msg, "x");
  * @endverbatim
  * and then access X through iter_x[0] or *iter_x
  * You could create an iterator for Y and Z too but as they are consecutive,
@@ -272,7 +272,7 @@ public:
  *
  * For iterating over RGB, you do:
  * @verbatim
- * sensor_msgs::msg::PointCloud2Iterator<uint8_t> iter_rgb(cloud_msg, "rgb");
+ * seerep::PointCloud2Iterator<uint8_t> iter_rgb(cloud_msg, "rgb");
  * @endverbatim
  * and then access R,G,B through  iter_rgb[0], iter_rgb[1], iter_rgb[2]
  */
