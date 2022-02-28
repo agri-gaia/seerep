@@ -1,5 +1,4 @@
 #include "seerep-hdf5/pointcloud-io.h"
-#include "seerep-hdf5/point-field-conversion.h"
 
 #include <highfive/H5DataSet.hpp>
 
