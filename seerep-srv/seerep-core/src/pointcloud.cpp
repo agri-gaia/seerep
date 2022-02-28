@@ -81,7 +81,7 @@ void Pointcloud::getMinMaxFromBundingBox(Eigen::Vector4f& minPt, Eigen::Vector4f
 AabbHierarchy::AABB Pointcloud::getAABB()
 {
   std::vector<float> bb;
-  m_cloud_group.getAttribute(seerep_hdf5::PointCloudIO::BOUNDINGBOX).read(bb);
+  m_cloud_group.getAttribute(seerep_pb_io::PointCloudIO::BOUNDINGBOX).read(bb);
 
   return AabbHierarchy::AABB(AabbHierarchy::Point(bb[0], bb[1], bb[2]), AabbHierarchy::Point(bb[3], bb[4], bb[5]));
 }

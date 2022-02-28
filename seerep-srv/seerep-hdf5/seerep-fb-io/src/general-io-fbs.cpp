@@ -1,8 +1,8 @@
-#include "seerep-hdf5-flatbuffers/general-io-fbs.h"
+#include "seerep-fb-io/general-io-fbs.h"
 
 #include <highfive/H5DataSet.hpp>
 
-namespace seerep_hdf5
+namespace seerep_fb_io
 {
 GeneralIOFbs::GeneralIOFbs(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx)
   : m_file(file), m_write_mtx(write_mtx)
@@ -503,4 +503,4 @@ std::string GeneralIOFbs::readProjectFrameId()
   return frameId;
 }
 
-} /* namespace seerep_hdf5 */
+} /* namespace seerep_fb_io */

@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-find_package(SeerepHDF5 REQUIRED)
+find_package(SeerepProtobufIO REQUIRED)
 find_package(seerep_ros_conversions REQUIRED)
 find_package(Protobuf REQUIRED)
 find_package(SeerepMsgs REQUIRED)
@@ -28,7 +28,7 @@ configure_file(include/SeerepCoreConfig.h.in SeerepCoreConfig.h)
 include_directories(
 	include
 	${SeerepMsgs_INCLUDE_DIRS}
-	${SeerepHDF5_INCLUDE_DIRS}
+	${SeerepProtobufIO_INCLUDE_DIRS}
 	${seerep_ros_conversions_INCLUDE_DIRS}
 	${PROTOBUF_INCLUDE_DIR}
 	${HighFive_INCLUDE_DIRS}
@@ -49,7 +49,7 @@ add_library(seerepcore
 
 target_link_libraries(seerepcore
 	${SeerepMsgs_LIBRARIES}
-	${SeerepHDF5_LIBRARIES}
+	${SeerepProtobufIO_LIBRARIES}
 	${seerep_ros_conversions_LIBRARIES}
 	${PROTOBUF_LIBRARIES}
 	${HighFive_LIBRARIES}

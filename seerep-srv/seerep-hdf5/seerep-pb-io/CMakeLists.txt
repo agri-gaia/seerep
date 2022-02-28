@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(seerep-hdf5 VERSION 0.1)
+project(seerep-pb-io VERSION 0.1)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -13,7 +13,7 @@ find_package(SeerepMsgs REQUIRED)
 find_package(HighFive REQUIRED)
 
 
-configure_file(include/SeerepHDF5Config.h.in SeerepHDF5Config.h)
+configure_file(include/SeerepProtobufIOConfig.h.in SeerepProtobufIOConfig.h)
 
 include_directories(
 	include
@@ -48,36 +48,36 @@ install(TARGETS seerephdf5
 include(CMakePackageConfigHelpers)
 
 configure_package_config_file(
-	cmake/SeerepHDF5Config.cmake.in
-  	${CMAKE_CURRENT_BINARY_DIR}/SeerepHDF5Config.cmake
+	cmake/SeerepProtobufIOConfig.cmake.in
+  	${CMAKE_CURRENT_BINARY_DIR}/SeerepProtobufIOConfig.cmake
 	INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 	PATH_VARS CMAKE_INSTALL_INCLUDEDIR CMAKE_INSTALL_LIBDIR
 )
 
 # generate the version file for the config file
 write_basic_package_version_file(
-  "${CMAKE_CURRENT_BINARY_DIR}/SeerepHDF5ConfigVersion.cmake"
-  VERSION "${seerep_hdf5_VERSION_MAJOR}.${seerep_hdf5_VERSION_MINOR}"
+  "${CMAKE_CURRENT_BINARY_DIR}/SeerepProtobufIOConfigVersion.cmake"
+  VERSION "${seerep_pb_io_VERSION_MAJOR}.${seerep_pb_io_VERSION_MINOR}"
   COMPATIBILITY AnyNewerVersion
 )
 
 # install the configuration file
 install(FILES
-	${CMAKE_CURRENT_BINARY_DIR}/SeerepHDF5Config.cmake
-	${CMAKE_CURRENT_BINARY_DIR}/SeerepHDF5ConfigVersion.cmake
-	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/SeerepHDF5
+	${CMAKE_CURRENT_BINARY_DIR}/SeerepProtobufIOConfig.cmake
+	${CMAKE_CURRENT_BINARY_DIR}/SeerepProtobufIOConfigVersion.cmake
+	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/SeerepProtobufIO
 )
 
 install(FILES
-	"${PROJECT_BINARY_DIR}/SeerepHDF5Config.h"
+	"${PROJECT_BINARY_DIR}/SeerepProtobufIOConfig.h"
 	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
 )
 
-INSTALL(DIRECTORY include/seerep-hdf5 DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+INSTALL(DIRECTORY include/seerep-pb-io DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 install(FILES
 	cmake/FindHighFive.cmake
-	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/SeerepHDF5/Modules
+	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/SeerepProtobufIO/Modules
 )
 
 #add PIC gcc flag

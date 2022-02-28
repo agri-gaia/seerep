@@ -1,8 +1,9 @@
 #include "seerep-pb-io/pointcloud-io.h"
+#include "seerep-pb-io/point-field-conversion.h"
 
 #include <highfive/H5DataSet.hpp>
 
-namespace seerep_pb_io
+namespace seerep_hdf5
 {
 PointCloudIO::PointCloudIO(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx)
   : GeneralIO(file, write_mtx)
@@ -85,9 +86,9 @@ void PointCloudIO::writePoints(const std::string& uuid, const seerep::PointCloud
   std::vector<std::vector<std::vector<float>>> point_data;
   point_data.resize(cloud.height());
 
-  seerep_pb_io::PointCloud2ConstIterator<float> x_iter(cloud, "x");
-  seerep_pb_io::PointCloud2ConstIterator<float> y_iter(cloud, "y");
-  seerep_pb_io::PointCloud2ConstIterator<float> z_iter(cloud, "z");
+  seerep_hdf5::PointCloud2ConstIterator<float> x_iter(cloud, "x");
+  seerep_hdf5::PointCloud2ConstIterator<float> y_iter(cloud, "y");
+  seerep_hdf5::PointCloud2ConstIterator<float> z_iter(cloud, "z");
 
   std::array<float, 3> min, max;
   min[0] = min[1] = min[2] = std::numeric_limits<float>::max();
@@ -152,9 +153,9 @@ void PointCloudIO::writeColorsRGB(const std::string& uuid, const seerep::PointCl
   std::vector<std::vector<std::vector<uint8_t>>> colors_data;
   colors_data.resize(cloud.height());
 
-  seerep_pb_io::PointCloud2ConstIterator<uint8_t> r_iter(cloud, "r");
-  seerep_pb_io::PointCloud2ConstIterator<uint8_t> g_iter(cloud, "g");
-  seerep_pb_io::PointCloud2ConstIterator<uint8_t> b_iter(cloud, "b");
+  seerep_hdf5::PointCloud2ConstIterator<uint8_t> r_iter(cloud, "r");
+  seerep_hdf5::PointCloud2ConstIterator<uint8_t> g_iter(cloud, "g");
+  seerep_hdf5::PointCloud2ConstIterator<uint8_t> b_iter(cloud, "b");
 
   for (int i = 0; i < cloud.height(); i++)
   {
@@ -183,10 +184,10 @@ void PointCloudIO::writeColorsRGBA(const std::string& uuid, const seerep::PointC
   std::vector<std::vector<std::vector<uint8_t>>> colors_data;
   colors_data.resize(cloud.height());
 
-  seerep_pb_io::PointCloud2ConstIterator<uint8_t> r_iter(cloud, "r");
-  seerep_pb_io::PointCloud2ConstIterator<uint8_t> g_iter(cloud, "g");
-  seerep_pb_io::PointCloud2ConstIterator<uint8_t> b_iter(cloud, "b");
-  seerep_pb_io::PointCloud2ConstIterator<uint8_t> a_iter(cloud, "a");
+  seerep_hdf5::PointCloud2ConstIterator<uint8_t> r_iter(cloud, "r");
+  seerep_hdf5::PointCloud2ConstIterator<uint8_t> g_iter(cloud, "g");
+  seerep_hdf5::PointCloud2ConstIterator<uint8_t> b_iter(cloud, "b");
+  seerep_hdf5::PointCloud2ConstIterator<uint8_t> a_iter(cloud, "a");
 
   for (int i = 0; i < cloud.height(); i++)
   {
@@ -313,9 +314,9 @@ std::optional<seerep::PointCloud2> PointCloudIO::readPointCloud2(const std::stri
 
 void PointCloudIO::readPoints(const std::string& uuid, seerep::PointCloud2& cloud)
 {
-  seerep_pb_io::PointCloud2Iterator<float> x_iter(cloud, "x");
-  seerep_pb_io::PointCloud2Iterator<float> y_iter(cloud, "y");
-  seerep_pb_io::PointCloud2Iterator<float> z_iter(cloud, "z");
+  seerep_hdf5::PointCloud2Iterator<float> x_iter(cloud, "x");
+  seerep_hdf5::PointCloud2Iterator<float> y_iter(cloud, "y");
+  seerep_hdf5::PointCloud2Iterator<float> z_iter(cloud, "z");
 
   std::vector<std::vector<std::vector<float>>> point_data;
   std::string points_id = HDF5_GROUP_POINTCLOUD + "/" + uuid + "/points";
@@ -338,9 +339,9 @@ void PointCloudIO::readPoints(const std::string& uuid, seerep::PointCloud2& clou
 
 void PointCloudIO::readColorsRGB(const std::string& uuid, seerep::PointCloud2& cloud)
 {
-  seerep_pb_io::PointCloud2Iterator<uint8_t> r_iter(cloud, "r");
-  seerep_pb_io::PointCloud2Iterator<uint8_t> g_iter(cloud, "g");
-  seerep_pb_io::PointCloud2Iterator<uint8_t> b_iter(cloud, "b");
+  seerep_hdf5::PointCloud2Iterator<uint8_t> r_iter(cloud, "r");
+  seerep_hdf5::PointCloud2Iterator<uint8_t> g_iter(cloud, "g");
+  seerep_hdf5::PointCloud2Iterator<uint8_t> b_iter(cloud, "b");
 
   std::vector<std::vector<std::vector<uint8_t>>> color_data;
   std::string colors_id = HDF5_GROUP_POINTCLOUD + "/" + uuid + "/colors";
@@ -363,10 +364,10 @@ void PointCloudIO::readColorsRGB(const std::string& uuid, seerep::PointCloud2& c
 
 void PointCloudIO::readColorsRGBA(const std::string& uuid, seerep::PointCloud2& cloud)
 {
-  seerep_pb_io::PointCloud2Iterator<uint8_t> r_iter(cloud, "r");
-  seerep_pb_io::PointCloud2Iterator<uint8_t> g_iter(cloud, "g");
-  seerep_pb_io::PointCloud2Iterator<uint8_t> b_iter(cloud, "b");
-  seerep_pb_io::PointCloud2Iterator<uint8_t> a_iter(cloud, "a");
+  seerep_hdf5::PointCloud2Iterator<uint8_t> r_iter(cloud, "r");
+  seerep_hdf5::PointCloud2Iterator<uint8_t> g_iter(cloud, "g");
+  seerep_hdf5::PointCloud2Iterator<uint8_t> b_iter(cloud, "b");
+  seerep_hdf5::PointCloud2Iterator<uint8_t> a_iter(cloud, "a");
 
   std::vector<std::vector<std::vector<uint8_t>>> color_data;
   std::string colors_id = HDF5_GROUP_POINTCLOUD + "/" + uuid + "/colors";
@@ -492,4 +493,4 @@ PointCloudIO::readPointFieldAttributes(HighFive::Group& cloud_group)
   return repeatedPointField;
 }
 
-} /* namespace seerep_pb_io */
+} /* namespace seerep_hdf5 */

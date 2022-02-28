@@ -13,7 +13,7 @@
   <author email="mark.hoellmann@dfki.de">Mark Höllmann</author>
 
   <depend>seerep-msgs</depend>
-  <depend>seerep-hdf5</depend>
+  <depend>seerep-pb-io</depend>
   <depend>seerep_ros_conversions</depend>
   <depend>tf2</depend>
 

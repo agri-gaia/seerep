@@ -1,5 +1,5 @@
 
-namespace seerep_hdf5
+namespace seerep_pb_io
 {
 template <typename T>
 void GeneralIO::writeAttribute(const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField, T value)
@@ -77,4 +77,4 @@ seerep::Header GeneralIO::readHeaderAttributes(HighFive::AnnotateTraits<T>& obje
   return header;
 }
 
-} /* namespace seerep_hdf5 */
+} /* namespace seerep_pb_io */

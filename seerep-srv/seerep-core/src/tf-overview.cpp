@@ -3,7 +3,7 @@
 namespace seerep_core
 {
 // construct tfbuffer with INT_MAX so that it holds ALL tfs added
-TFOverview::TFOverview(std::shared_ptr<seerep_hdf5::TfIO> hdf5_io) : m_hdf5_io(hdf5_io), m_tfbuffer(ros::DURATION_MAX)
+TFOverview::TFOverview(std::shared_ptr<seerep_pb_io::TfIO> hdf5_io) : m_hdf5_io(hdf5_io), m_tfbuffer(ros::DURATION_MAX)
 {
   recreateDatasets();
 }

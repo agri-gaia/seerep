@@ -1,8 +1,8 @@
-#include "seerep-hdf5/general-io.h"
+#include "seerep-pb-io/general-io.h"
 
 #include <highfive/H5DataSet.hpp>
 
-namespace seerep_hdf5
+namespace seerep_pb_io
 {
 GeneralIO::GeneralIO(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx)
   : m_file(file), m_write_mtx(write_mtx)
@@ -503,4 +503,4 @@ std::string GeneralIO::readProjectFrameId()
   return frameId;
 }
 
-} /* namespace seerep_hdf5 */
+} /* namespace seerep_pb_io */

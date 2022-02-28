@@ -1,5 +1,5 @@
 
-namespace seerep_hdf5
+namespace seerep_fb_io
 {
 template <typename T>
 void GeneralIOFbs::writeAttribute(const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField,
@@ -76,4 +76,4 @@ flatbuffers::Offset<seerep::fb::Header> GeneralIOFbs::readHeaderAttributes(HighF
   return seerep::fb::CreateHeader(builder, seq, timestamp, builder.CreateString(frameId));
 }
 
-} /* namespace seerep_hdf5 */
+} /* namespace seerep_fb_io */

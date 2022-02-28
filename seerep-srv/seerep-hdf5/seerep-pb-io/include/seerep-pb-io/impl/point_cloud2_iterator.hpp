@@ -29,8 +29,8 @@
 // This file is originally from:
 // https://github.com/ros/common_msgs/blob/50ee957/sensor_msgs/include/sensor_msgs/impl/point_cloud2_iterator.h
 
-#ifndef SEEREP_HDF5__IMPL__POINT_CLOUD2_ITERATOR_HPP_
-#define SEEREP_HDF5__IMPL__POINT_CLOUD2_ITERATOR_HPP_
+#ifndef SEEREP_PB_IO__IMPL__POINT_CLOUD2_ITERATOR_HPP_
+#define SEEREP_PB_IO__IMPL__POINT_CLOUD2_ITERATOR_HPP_
 
 #include <seerep-msgs/point_cloud_2.pb.h>
 #include <seerep-msgs/point_field.pb.h>
@@ -93,7 +93,7 @@ inline int addPointField(seerep::PointCloud2& cloud_msg, const std::string& name
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-namespace seerep_hdf5
+namespace seerep_pb_io
 {
 inline PointCloud2Modifier::PointCloud2Modifier(seerep::PointCloud2& cloud_msg) : cloud_msg_(cloud_msg)
 {
@@ -423,6 +423,6 @@ int PointCloud2IteratorBase<T, TT, U, C, V>::set_field(const seerep::PointCloud2
 }
 
 }  // namespace impl
-}  // namespace seerep_hdf5
+}  // namespace seerep_pb_io
 
 #endif  // SENSOR_MSGS__IMPL__POINT_CLOUD2_ITERATOR_HPP_

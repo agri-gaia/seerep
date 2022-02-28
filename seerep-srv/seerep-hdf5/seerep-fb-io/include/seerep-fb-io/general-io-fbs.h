@@ -1,24 +1,25 @@
-#ifndef SEEREP_HDF5_IO_GENERAL_H_
-#define SEEREP_HDF5_IO_GENERAL_H_
+#ifndef SEEREP_HDF5_IO_GENERAL_FBS_H_
+#define SEEREP_HDF5_IO_GENERAL_FBS_H_
 
 // highfive
 #include <highfive/H5File.hpp>
 
 // seerep-msgs
-#include <seerep-msgs/boundingbox_labeled.pb.h>
-#include <seerep-msgs/boundingbox2d_labeled.pb.h>
+#include <seerep-msgs/boundingbox_labeled_generated.h>
+#include <seerep-msgs/boundingbox2d_labeled_generated.h>
 
 // std
 #include <optional>
+#include <mutex>
 
 #include <boost/geometry.hpp>
 
-namespace seerep_hdf5
+namespace seerep_fb_io
 {
-class GeneralIO
+class GeneralIOFbs
 {
 public:
-  GeneralIO(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
+  GeneralIOFbs(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
 
   std::optional<std::string> readFrameId(const std::string& datatypeGroup, const std::string& uuid);
 
@@ -36,10 +37,10 @@ public:
   void deleteAttribute(const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField);
 
   template <class T>
-  void writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, const seerep::Header& header);
+  void writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, const seerep::fb::Header& header);
 
   template <class T>
-  seerep::Header readHeaderAttributes(HighFive::AnnotateTraits<T>& object);
+  flatbuffers::Offset<seerep::fb::Header> readHeaderAttributes(HighFive::AnnotateTraits<T>& object);
 
   //################
   // AABB
@@ -70,25 +71,24 @@ public:
   //################
   // BoundingBoxes
   //################
-  void
-  writeBoundingBoxLabeled(const std::string& datatypeGroup, const std::string& uuid,
-                          const google::protobuf::RepeatedPtrField<::seerep::BoundingBoxLabeled>& boundingboxLabeled);
+  void writeBoundingBoxLabeled(
+      const std::string& datatypeGroup, const std::string& uuid,
+      const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>>& boundingboxLabeled);
 
   void writeBoundingBox2DLabeled(
       const std::string& datatypeGroup, const std::string& uuid,
-      const google::protobuf::RepeatedPtrField<seerep::BoundingBox2DLabeled>& boundingbox2DLabeled);
+      const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>>& boundingbox2DLabeled);
 
-  std::optional<google::protobuf::RepeatedPtrField<::seerep::BoundingBox2DLabeled>>
-  readBoundingBox2DLabeled(const std::string& datatypeGroup, const std::string& uuid);
+  void readBoundingBox2DLabeled(const std::string& datatypeGroup, const std::string& uuid,
+                                std::vector<std::string> labels, std::vector<std::vector<double>> boundingBoxes);
 
   //################
   // Labels General
   //################
   void writeLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid,
-                          const google::protobuf::RepeatedPtrField<std::string>& labelsGeneral);
+                          const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>& labelsGeneral);
 
-  std::optional<google::protobuf::RepeatedPtrField<std::string>> readLabelsGeneral(const std::string& datatypeGroup,
-                                                                                   const std::string& uuid);
+  void readLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid, std::vector<std::string> labels);
 
   //################
   // Project
@@ -124,8 +124,8 @@ protected:
   std::shared_ptr<std::mutex> m_write_mtx;
 };
 
-} /* namespace seerep_hdf5 */
+} /* namespace seerep_fb_io */
 
-#include "impl/general-io.hpp"  // NOLINT
+#include "impl/general-io-fbs.hpp"  // NOLINT
 
-#endif /* SEEREP_HDF5_IO_GENERAL_H_ */
+#endif /* SEEREP_HDF5_IO_GENERAL_FBS_H_ */

@@ -1,8 +1,8 @@
-#include "seerep-hdf5/tf-io.h"
+#include "seerep-pb-io/tf-io.h"
 
 #include <highfive/H5DataSet.hpp>
 
-namespace seerep_hdf5
+namespace seerep_pb_io
 {
 TfIO::TfIO(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx) : GeneralIO(file, write_mtx)
 {
@@ -206,4 +206,4 @@ std::optional<std::vector<std::string>> TfIO::readTransformStampedFrames(const s
   return std::vector<std::string>{ parentframe, childframe };
 }
 
-} /* namespace seerep_hdf5 */
+} /* namespace seerep_pb_io */

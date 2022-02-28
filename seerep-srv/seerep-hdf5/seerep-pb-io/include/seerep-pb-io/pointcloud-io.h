@@ -1,11 +1,11 @@
-#ifndef SEEREP_HDF5_IO_POINT_CLOUD_H_
-#define SEEREP_HDF5_IO_POINT_CLOUD_H_
+#ifndef SEEREP_PB_IO_IO_POINT_CLOUD_H_
+#define SEEREP_PB_IO_IO_POINT_CLOUD_H_
 
 // highfive
 #include <highfive/H5File.hpp>
 
 // seerep-io
-#include "seerep-hdf5/general-io.h"
+#include "seerep-pb-io/general-io.h"
 
 // seerep-msgs
 #include <seerep-msgs/point_cloud_2.pb.h>
@@ -15,9 +15,9 @@
 
 #include <boost/geometry.hpp>
 
-#include "seerep-hdf5/point_cloud2_iterator.h"
+#include "seerep-pb-io/point_cloud2_iterator.h"
 
-namespace seerep_hdf5
+namespace seerep_pb_io
 {
 class PointCloudIO : public GeneralIO
 {
@@ -134,6 +134,6 @@ public:
   // datatype group names in hdf5
   inline static const std::string HDF5_GROUP_POINTCLOUD = "pointclouds";
 };
-} /* namespace seerep_hdf5 */
+} /* namespace seerep_pb_io */
 
-#endif /* SEEREP_HDF5_IO_POINT_CLOUD_H_ */
+#endif /* SEEREP_PB_IO_IO_POINT_CLOUD_H_ */

@@ -1,30 +1,30 @@
-#ifndef SEEREP_HDF5_IO_IMAGE_FBS_H_
-#define SEEREP_HDF5_IO_IMAGE_FBS_H_
+#ifndef SEEREP_PB_IO_IO_IMAGE_H_
+#define SEEREP_PB_IO_IO_IMAGE_H_
 
 // highfive
 #include <highfive/H5File.hpp>
 
 // seerep-io
-#include "seerep-hdf5-flatbuffers/general-io-fbs.h"
+#include "seerep-pb-io/general-io.h"
 
 // seerep-msgs
-#include <seerep-msgs/image_generated.h>
+#include <seerep-msgs/image.pb.h>
 
 // std
 #include <optional>
 
 #include <boost/geometry.hpp>
 
-namespace seerep_hdf5
+namespace seerep_pb_io
 {
-class ImageIOFbs : public GeneralIOFbs
+class ImageIO : public GeneralIO
 {
 public:
-  ImageIOFbs(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
+  ImageIO(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
 
-  void writeImage(const std::string& id, const seerep::fb::Image& image);
+  void writeImage(const std::string& id, const seerep::Image& image);
 
-  std::optional<flatbuffers::Offset<seerep::fb::Image>> readImage(const std::string& id);
+  std::optional<seerep::Image> readImage(const std::string& id);
 
 private:
   const std::string SIZE = "size";
@@ -46,6 +46,6 @@ public:
   inline static const std::string HDF5_GROUP_IMAGE = "images";
 };
 
-} /* namespace seerep_hdf5 */
+} /* namespace seerep_pb_io */
 
-#endif /* SEEREP_HDF5_IO_IMAGE_FBS_H_ */
+#endif /* SEEREP_PB_IO_IO_IMAGE_H_ */

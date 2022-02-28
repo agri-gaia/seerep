@@ -1,8 +1,8 @@
-#include "seerep-hdf5/image-io.h"
+#include "seerep-pb-io/image-io.h"
 
 #include <highfive/H5DataSet.hpp>
 
-namespace seerep_hdf5
+namespace seerep_pb_io
 {
 ImageIO::ImageIO(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx)
   : GeneralIO(file, write_mtx)
@@ -148,4 +148,4 @@ std::optional<seerep::Image> ImageIO::readImage(const std::string& id)
   return image;
 }
 
-} /* namespace seerep_hdf5 */
+} /* namespace seerep_pb_io */

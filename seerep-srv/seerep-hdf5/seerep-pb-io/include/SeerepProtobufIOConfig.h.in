@@ -1,0 +1,8 @@
+#ifndef SeerepProtobufIOCONFIG_H_
+#define SeerepProtobufIOCONFIG_H_
+
+// the configured options and settings for seerep_hdf5
+#define SEEREP_PROTOBUF_IO_VERSION_MAJOR @seerep_hdf5_VERSION_MAJOR @
+#define SEEREP_PROTOBUF_IO_VERSION_MINOR @seerep_hdf5_VERSION_MINOR @
+
+#endif /* SeerepProtobufIOCONFIG_H_ */

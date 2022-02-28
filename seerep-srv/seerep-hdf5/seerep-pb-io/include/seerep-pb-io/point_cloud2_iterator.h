@@ -96,7 +96,7 @@
  * @endverbatim
  */
 
-namespace seerep_hdf5
+namespace seerep_pb_io
 {
 /**
  * @brief Enables modifying a seerep::PointCloud2 like a container
@@ -289,7 +289,7 @@ public:
    */
   PointCloud2Iterator(seerep::PointCloud2& cloud_msg, const std::string& field_name)
     : impl::PointCloud2IteratorBase<T, T, unsigned char, seerep::PointCloud2,
-                                    seerep_hdf5::PointCloud2Iterator>::PointCloud2IteratorBase(cloud_msg, field_name)
+                                    seerep_pb_io::PointCloud2Iterator>::PointCloud2IteratorBase(cloud_msg, field_name)
   {
     int offset = this->set_field(cloud_msg, field_name);
     this->data_char_ = reinterpret_cast<unsigned char*>(cloud_msg.mutable_data()->data() + offset);
@@ -315,8 +315,8 @@ public:
    */
   PointCloud2ConstIterator(const seerep::PointCloud2& cloud_msg, const std::string& field_name)
     : impl::PointCloud2IteratorBase<T, const T, const unsigned char, const seerep::PointCloud2,
-                                    seerep_hdf5::PointCloud2ConstIterator>::PointCloud2IteratorBase(cloud_msg,
-                                                                                                    field_name)
+                                    seerep_pb_io::PointCloud2ConstIterator>::PointCloud2IteratorBase(cloud_msg,
+                                                                                                     field_name)
   {
     int offset = this->set_field(cloud_msg, field_name);
     this->data_char_ = reinterpret_cast<const unsigned char*>(cloud_msg.data().data() + offset);
@@ -324,7 +324,7 @@ public:
     this->data_end_ = reinterpret_cast<const T*>(cloud_msg.data().data() + cloud_msg.data().size() + offset);
   }
 };
-}  // namespace seerep_hdf5
+}  // namespace seerep_pb_io
 
 #include "impl/point_cloud2_iterator.hpp"  // NOLINT
 

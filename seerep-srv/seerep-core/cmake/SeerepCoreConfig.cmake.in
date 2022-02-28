@@ -24,9 +24,9 @@ find_package(SeerepMsgs REQUIRED)
 list(APPEND SeerepCore_INCLUDE_DIRS ${SeerepMsgs_INCLUDE_DIRS})
 list(APPEND SeerepCore_LIBRARIES ${SeerepMsgs_LIBRARIES})
 
-find_package(SeerepHDF5 REQUIRED)
-list(APPEND SeerepCore_INCLUDE_DIRS ${SeerepHDF5_INCLUDE_DIRS})
-list(APPEND SeerepCore_LIBRARIES ${SeerepHDF5_LIBRARIES})
+find_package(SeerepProtobufIO REQUIRED)
+list(APPEND SeerepCore_INCLUDE_DIRS ${SeerepProtobufIO_INCLUDE_DIRS})
+list(APPEND SeerepCore_LIBRARIES ${SeerepProtobufIO_LIBRARIES})
 
 find_package(seerep_ros_conversions REQUIRED)
 list(APPEND SeerepCore_INCLUDE_DIRS ${seerep_ros_conversions_INCLUDE_DIRS})

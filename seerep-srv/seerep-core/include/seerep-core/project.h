@@ -11,11 +11,11 @@
 // seerep-msgs
 #include <seerep-msgs/query.pb.h>
 #include <seerep-msgs/point_cloud_2.pb.h>
-// seerep-hdf5
-#include <seerep-hdf5/general-io.h>
-#include <seerep-hdf5/tf-io.h>
-#include <seerep-hdf5/pointcloud-io.h>
-#include <seerep-hdf5/image-io.h>
+// seerep-pb-io
+#include <seerep-pb-io/general-io.h>
+#include <seerep-pb-io/tf-io.h>
+#include <seerep-pb-io/pointcloud-io.h>
+#include <seerep-pb-io/image-io.h>
 // seerep-conversion
 #include <seerep_ros_conversions/conversions.h>
 
@@ -57,10 +57,10 @@ private:
   std::string m_frameId;
 
   std::shared_ptr<std::mutex> m_write_mtx;
-  std::shared_ptr<seerep_hdf5::GeneralIO> m_ioGeneral;
-  std::shared_ptr<seerep_hdf5::TfIO> m_ioTf;
-  std::shared_ptr<seerep_hdf5::PointCloudIO> m_ioPointCloud;
-  std::shared_ptr<seerep_hdf5::ImageIO> m_ioImage;
+  std::shared_ptr<seerep_pb_io::GeneralIO> m_ioGeneral;
+  std::shared_ptr<seerep_pb_io::TfIO> m_ioTf;
+  std::shared_ptr<seerep_pb_io::PointCloudIO> m_ioPointCloud;
+  std::shared_ptr<seerep_pb_io::ImageIO> m_ioImage;
 
   std::shared_ptr<seerep_core::TFOverview> m_tfOverview;
   std::unique_ptr<seerep_core::PointcloudOverview> m_pointcloudOverview;

@@ -1,11 +1,11 @@
-#ifndef SEEREP_HDF5_IO_TF_H_
-#define SEEREP_HDF5_IO_TF_H_
+#ifndef SEEREP_PB_IO_IO_TF_H_
+#define SEEREP_PB_IO_IO_TF_H_
 
 // highfive
 #include <highfive/H5File.hpp>
 
 // seerep-io
-#include "seerep-hdf5/general-io.h"
+#include "seerep-pb-io/general-io.h"
 
 // seerep-msgs
 #include <seerep-msgs/transform_stamped.pb.h>
@@ -15,7 +15,7 @@
 
 #include <boost/geometry.hpp>
 
-namespace seerep_hdf5
+namespace seerep_pb_io
 {
 class TfIO : public GeneralIO
 {
@@ -34,6 +34,6 @@ private:
   inline static const std::string SIZE = "size";
 };
 
-} /* namespace seerep_hdf5 */
+} /* namespace seerep_pb_io */
 
-#endif /* SEEREP_HDF5_IO_TF_H_ */
+#endif /* SEEREP_PB_IO_IO_TF_H_ */
