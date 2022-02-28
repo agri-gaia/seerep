@@ -12,7 +12,6 @@
 
 // seerep
 #include <seerep-com/transfer-sensor-msgs.grpc.pb.h>
-#include <seerep-hdf5/io.h>
 
 namespace seerep_server
 {
