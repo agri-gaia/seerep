@@ -8,8 +8,8 @@
 #include <seerep-msgs/boundingbox.pb.h>
 #include <seerep-msgs/image.pb.h>
 #include <seerep-msgs/query.pb.h>
-// seerep-hdf5
-#include <seerep-hdf5/image-io.h>
+// seerep-pb-io
+#include <seerep-pb-io/image-io.h>
 // seerep-conversion
 #include <seerep_ros_conversions/conversions.h>
 
@@ -30,7 +30,7 @@ namespace seerep_core
 class ImageOverview
 {
 public:
-  ImageOverview(std::shared_ptr<seerep_hdf5::ImageIO> hdf5_io, std::shared_ptr<seerep_core::TFOverview> tfOverview,
+  ImageOverview(std::shared_ptr<seerep_pb_io::ImageIO> hdf5_io, std::shared_ptr<seerep_core::TFOverview> tfOverview,
                 std::string frameId);
   ~ImageOverview();
   std::vector<std::optional<seerep::Image>> getData(const seerep::Query& bb);
@@ -54,7 +54,7 @@ private:
 
   std::string m_frameId;
   std::shared_ptr<seerep_core::TFOverview> m_tfOverview;
-  std::shared_ptr<seerep_hdf5::ImageIO> m_hdf5_io;
+  std::shared_ptr<seerep_pb_io::ImageIO> m_hdf5_io;
 
   std::unordered_map<uint64_t, std::shared_ptr<seerep_core::Image>> m_datasets;
 

@@ -11,9 +11,9 @@
 // seerep
 #include "seerep-server/meta-operations.h"
 #include "seerep-server/receive-sensor-msgs.h"
-#include "seerep-server/imageService.h"
-#include "seerep-server/pointCloudService.h"
-#include "seerep-server/tfService.h"
+#include "seerep-server/image-service.h"
+#include "seerep-server/point-cloud-service.h"
+#include "seerep-server/tf-service.h"
 
 #include <seerep-core/project-overview.h>
 

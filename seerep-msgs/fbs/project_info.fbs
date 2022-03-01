@@ -1,0 +1,7 @@
+namespace seerep.fb;
+
+table ProjectInfo
+{
+  name:string;
+  uuid:string;
+}

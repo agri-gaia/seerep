@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>seerep-fb-io</name>
+  <version>0.0.1</version>
+  <description> The seerep flatbuffers IO package </description>
+
+  <maintainer email="spuetz@uos.de">Sebastian Pütz</maintainer>
+
+  <license>BSD-3</license>
+
+  <url type="website">TODO</url>
+
+  <author email="spuetz@uos.de">Sebastian Pütz</author>
+
+  <depend>seerep-msgs</depend>
+  <buildtool_depend>cmake</buildtool_depend>
+
+  <export>
+    <build_type>cmake</build_type>
+  </export>
+</package>

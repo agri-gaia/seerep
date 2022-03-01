@@ -1,7 +1,7 @@
 #ifndef SeerepCoreCONFIG_H_
 #define SeerepCoreCONFIG_H_
 
-// the configured options and settings for seerep_hdf5
+// the configured options and settings for seerep_pb_io
 #define SEEREP_CORE_VERSION_MAJOR @seerep_core_VERSION_MAJOR @
 #define SEEREP_CORE_VERSION_MINOR @seerep_core_VERSION_MINOR @
 

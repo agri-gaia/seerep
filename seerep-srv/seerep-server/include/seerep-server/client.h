@@ -11,7 +11,7 @@
 #include <grpcpp/security/credentials.h>
 
 // seerep
-#include <seerep-com/transfer_sensor_msgs.grpc.pb.h>
+#include <seerep-com/transfer-sensor-msgs.grpc.pb.h>
 
 namespace seerep_server
 {

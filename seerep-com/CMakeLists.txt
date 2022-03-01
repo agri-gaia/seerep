@@ -16,11 +16,11 @@ find_package(Flatbuffers REQUIRED)
 list(APPEND PROTOBUF_IMPORT_DIRS ${SeerepMsgs_PROTOBUF_IMPORT_DIRS})
 
 set(MY_PROTO_FILES
-  protos/meta_operations.proto
-  protos/imageService.proto
-  protos/pointCloudService.proto
-  protos/tfService.proto
-  protos/transfer_sensor_msgs.proto
+  protos/meta-operations.proto
+  protos/image-service.proto
+  protos/point-cloud-service.proto
+  protos/tf-service.proto
+  protos/transfer-sensor-msgs.proto
 )
 
 protobuf_generate_cpp(
@@ -29,7 +29,9 @@ protobuf_generate_cpp(
 )
 
 set(MY_FBS_FILES
-	fbs/transfer_sensor_msgs.fbs
+  fbs/transfer-sensor-msgs.fbs
+  fbs/image-service.fbs
+  fbs/meta-operations.fbs
 )
 
 message("SeerepMsgs FlatBuffers" ${SeerepMsgs_FLATBUFFERS_IMPORT_DIRS})

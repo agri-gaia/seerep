@@ -1,0 +1,6 @@
+namespace seerep.fb;
+
+table FrameInfos
+{
+  frames:[string];
+}
