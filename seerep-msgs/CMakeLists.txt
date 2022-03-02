@@ -9,6 +9,11 @@ include(FindProtobuf)
 find_package(Protobuf REQUIRED)
 find_package(Flatbuffers REQUIRED)
 
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+find_package(Boost REQUIRED)
+
 set(MY_PROTO_FILES
 	protos/boundingbox_labeled.proto
 	protos/boundingbox.proto
@@ -84,6 +89,30 @@ set(MY_FBS_FILES
 	fbs/vector3.fbs
 )
 
+set(MY_CORE_MSGS
+${CMAKE_CURRENT_SOURCE_DIR}/core/aabb.h
+# ${CMAKE_CURRENT_SOURCE_DIR}/core/boundingbox.h
+${CMAKE_CURRENT_SOURCE_DIR}/core/dataset-indexable.h
+# ${CMAKE_CURRENT_SOURCE_DIR}/core/point.h
+${CMAKE_CURRENT_SOURCE_DIR}/core/project-info.h
+${CMAKE_CURRENT_SOURCE_DIR}/core/query-result-project.h
+${CMAKE_CURRENT_SOURCE_DIR}/core/query-result.h
+${CMAKE_CURRENT_SOURCE_DIR}/core/query-tf.h
+${CMAKE_CURRENT_SOURCE_DIR}/core/query.h
+${CMAKE_CURRENT_SOURCE_DIR}/core/timeinterval.h
+${CMAKE_CURRENT_SOURCE_DIR}/core/timestamp.h
+)
+
+add_library(SeerepCoreMsgsTarget INTERFACE)
+target_sources(SeerepCoreMsgsTarget INTERFACE ${MY_CORE_MSGS})
+target_include_directories(SeerepCoreMsgsTarget INTERFACE
+	core/
+	${Boost_INCLUDE_DIRS}
+)
+target_link_libraries(SeerepCoreMsgsTarget
+	${Boost_LIBRARIES}
+)
+
 build_flatbuffers("${MY_FBS_FILES}" "" fbschemas "" "${CMAKE_CURRENT_BINARY_DIR}/fbs" "${CMAKE_CURRENT_BINARY_DIR}/fbs" "" )
 
 add_library(FlatBuffersTarget INTERFACE)
@@ -118,6 +147,7 @@ add_library(seerepmsgs
 )
 
 add_dependencies(seerepmsgs FlatBuffersTarget)
+add_dependencies(seerepmsgs SeerepCoreMsgsTarget)
 
 set(INSTALL_HEADERS
 	${PROTO_HEADERS}
@@ -173,7 +203,11 @@ install(DIRECTORY protos/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME
 
 # install FlatBuffers fbs files
 install(DIRECTORY fbs/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
-        FILES_MATCHING PATTERN "*.fbs")
+		FILES_MATCHING PATTERN "*.fbs")
+
+# install seerepCoreMsgs files
+install(DIRECTORY core/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+		FILES_MATCHING PATTERN "*.h")
 
 
 #add PIC gcc flag
