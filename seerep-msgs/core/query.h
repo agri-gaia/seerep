@@ -4,12 +4,14 @@
 #include <functional>
 #include <boost/uuid/uuid.hpp>  // uuid class
 #include "aabb.h"
-#include "Timeinterval.h"
+#include "timeinterval.h"
+#include "header.h"
 
 namespace seerep_core_msgs
 {
 struct Query
 {
+  Header header;
   std::vector<boost::uuids::uuid> projects;
   AABB boundingbox;
   Timeinterval timeinterval;

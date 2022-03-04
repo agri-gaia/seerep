@@ -4,7 +4,7 @@
 #include <functional>
 #include <boost/uuid/uuid.hpp>  // uuid class
 
-#include "Timestamp.h"
+#include "timestamp.h"
 
 namespace seerep_core_msgs
 {

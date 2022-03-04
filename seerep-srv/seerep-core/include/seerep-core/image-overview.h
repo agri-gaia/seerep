@@ -5,17 +5,15 @@
 #include <optional>
 
 // seerep-msgs
-#include <seerep-msgs/boundingbox.pb.h>
-#include <seerep-msgs/image.pb.h>
-#include <seerep-msgs/query.pb.h>
+#include <seerep-msgs/aabb.h>
+#include <seerep-msgs/query.h>
+#include <seerep-msgs/query-result.h>
 // seerep-pb-io
-#include <seerep-pb-io/image-io.h>
+#include <seerep-core-io/image-io-core.h>
 // seerep-conversion
 #include <seerep_ros_conversions/conversions.h>
 
 // seerep-core
-#include "image.h"
-#include "aabb-hierarchy.h"
 #include "tf-overview.h"
 
 // uuid
@@ -30,38 +28,34 @@ namespace seerep_core
 class ImageOverview
 {
 public:
-  ImageOverview(std::shared_ptr<seerep_pb_io::ImageIO> hdf5_io, std::shared_ptr<seerep_core::TFOverview> tfOverview,
-                std::string frameId);
+  ImageOverview(std::shared_ptr<seerep_core_io::ImageIOCore> hdf5_io,
+                std::shared_ptr<seerep_core::TFOverview> tfOverview, std::string frameId);
   ~ImageOverview();
-  std::vector<std::optional<seerep::Image>> getData(const seerep::Query& bb);
+  std::vector<boost::uuids::uuid> getData(const seerep_core_msgs::Query& bb);
 
-  boost::uuids::uuid addDataset(const seerep::Image& image);
+  boost::uuids::uuid addDataset(seerep_core_msgs::DatasetIndexable& image);
 
 private:
   void recreateDatasets();
-  void addImageToIndices(std::shared_ptr<seerep_core::Image> img);
+  void addImageToIndices(seerep_core_msgs::DatasetIndexable& img);
 
   void tryAddingDataWithMissingTF();
-  std::vector<AabbHierarchy::AabbIdPair> querySpatial(const seerep::Query& query);
-  std::vector<AabbHierarchy::AabbTimeIdPair> queryTemporal(const seerep::Query& query);
-  std::set<uint64_t> querySemantic(const seerep::Query& query);
+  std::vector<seerep_core_msgs::AabbIdPair> querySpatial(const seerep_core_msgs::Query& query);
+  std::vector<seerep_core_msgs::AabbTimeIdPair> queryTemporal(const seerep_core_msgs::Query& query);
+  std::set<boost::uuids::uuid> querySemantic(const seerep_core_msgs::Query& query);
 
-  std::vector<uint64_t> intersectQueryResults(std::vector<AabbHierarchy::AabbIdPair> rt_result,
-                                              std::vector<AabbHierarchy::AabbTimeIdPair> timetree_result,
-                                              std::set<uint64_t> semanticResult);
-
-  uint64_t m_data_count;
+  std::vector<boost::uuids::uuid> intersectQueryResults(std::vector<seerep_core_msgs::AabbIdPair> rt_result,
+                                                        std::vector<seerep_core_msgs::AabbTimeIdPair> timetree_result,
+                                                        std::set<boost::uuids::uuid> semanticResult);
 
   std::string m_frameId;
   std::shared_ptr<seerep_core::TFOverview> m_tfOverview;
-  std::shared_ptr<seerep_pb_io::ImageIO> m_hdf5_io;
+  std::shared_ptr<seerep_core_io::ImageIOCore> m_hdf5_io;
 
-  std::unordered_map<uint64_t, std::shared_ptr<seerep_core::Image>> m_datasets;
-
-  std::vector<std::shared_ptr<seerep_core::Image>> m_dataWithMissingTF;
-  AabbHierarchy::rtree m_rt;
-  AabbHierarchy::timetree m_timetree;
-  std::unordered_map<std::string, std::vector<uint64_t>> m_label;
+  std::vector<std::shared_ptr<seerep_core_msgs::DatasetIndexable>> m_dataWithMissingTF;
+  seerep_core_msgs::rtree m_rt;
+  seerep_core_msgs::timetree m_timetree;
+  std::unordered_map<std::string, std::vector<boost::uuids::uuid>> m_label;
 };
 
 } /* namespace seerep_core */

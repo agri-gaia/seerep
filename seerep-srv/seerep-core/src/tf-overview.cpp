@@ -3,7 +3,8 @@
 namespace seerep_core
 {
 // construct tfbuffer with INT_MAX so that it holds ALL tfs added
-TFOverview::TFOverview(std::shared_ptr<seerep_pb_io::TfIO> hdf5_io) : m_hdf5_io(hdf5_io), m_tfbuffer(ros::DURATION_MAX)
+TFOverview::TFOverview(std::shared_ptr<seerep_core_io::TfIOCore> hdf5_io)
+  : m_hdf5_io(hdf5_io), m_tfbuffer(ros::DURATION_MAX)
 {
   recreateDatasets();
 }
@@ -20,11 +21,7 @@ void TFOverview::recreateDatasets()
 
     try
     {
-      auto tf = std::make_shared<TF>(m_hdf5_io, name);
-
-      addToIndices(tf);
-
-      std::optional<std::vector<seerep::TransformStamped>> transforms = tf->getData();
+      std::optional<std::vector<geometry_msgs::TransformStamped>> transforms = m_hdf5_io->readTransformStamped(name);
       if (transforms)
       {
         for (auto& transform : transforms.value())
@@ -39,19 +36,13 @@ void TFOverview::recreateDatasets()
   }
 }
 
-std::optional<seerep::TransformStamped> TFOverview::getData(const int64_t& timesecs, const int64_t& timenanos,
-                                                            const std::string& targetFrame,
-                                                            const std::string& sourceFrame)
+std::optional<geometry_msgs::TransformStamped> TFOverview::getData(const int64_t& timesecs, const int64_t& timenanos,
+                                                                   const std::string& targetFrame,
+                                                                   const std::string& sourceFrame)
 {
-  // if (!ros::Time::isValid())
-  // {
-  //   ros::Time::init();
-  // }
-
   try
   {
-    return seerep_ros_conversions::toProto(
-        m_tfbuffer.lookupTransform(targetFrame, sourceFrame, ros::Time(timesecs, timenanos)));
+    return m_tfbuffer.lookupTransform(targetFrame, sourceFrame, ros::Time(timesecs, timenanos));
   }
   catch (const std::exception& e)
   {
@@ -60,28 +51,16 @@ std::optional<seerep::TransformStamped> TFOverview::getData(const int64_t& times
   }
 }
 
-void TFOverview::addDataset(const seerep::TransformStamped& transform)
+void TFOverview::addDataset(const geometry_msgs::TransformStamped& transform)
 {
   addToTfBuffer(transform);
-
-  auto tfInMap = m_datasets.find(TF::idFromFrameNames(transform.header().frame_id(), transform.child_frame_id()));
-  if (tfInMap == m_datasets.end())
-  {
-    // create new tf object and add to map if not existing yet
-    auto tf = std::make_shared<seerep_core::TF>(m_hdf5_io, transform);
-    addToIndices(tf);
-  }
-  else
-  {
-    // add transform to tf object
-    tfInMap->second->addData(transform);
-  }
 }
 
 // TODO optimise!
-AabbHierarchy::AABB TFOverview::transformAABB(AabbHierarchy::AABB aabb, const std::string& sourceFrame,
-                                              const std::string& targetFrame, const int64_t& timeSecs,
-                                              const int64_t& timeNanos)
+// TODO same as transformQuery -> merge!
+seerep_core_msgs::AABB TFOverview::transformAABB(seerep_core_msgs::AABB aabb, const std::string& sourceFrame,
+                                                 const std::string& targetFrame, const int64_t& timeSecs,
+                                                 const int64_t& timeNanos)
 {
   if (targetFrame != sourceFrame)
   {
@@ -115,34 +94,34 @@ bool TFOverview::canTransform(const std::string& sourceFrame, const std::string&
   return m_tfbuffer.canTransform(targetFrame, sourceFrame, ros::Time(timeSecs, timeNanos));
 }
 
-seerep::Query TFOverview::transformQuery(const seerep::Query& query, std::string targetFrame)
+// TODO same as transformAABB -> merge!
+seerep_core_msgs::Query TFOverview::transformQuery(const seerep_core_msgs::Query& query, std::string targetFrame)
 {
-  if (targetFrame != query.boundingbox().header().frame_id())
+  if (targetFrame != query.header.frameId)
   {
-    seerep::Query queryTransformed(query);
+    seerep_core_msgs::Query queryTransformed(query);
 
-    auto tf = m_tfbuffer.lookupTransform(targetFrame, query.boundingbox().header().frame_id(),
-                                         ros::Time(query.boundingbox().header().stamp().seconds(),
-                                                   query.boundingbox().header().stamp().nanos()));
+    auto tf = m_tfbuffer.lookupTransform(targetFrame, query.header.frameId,
+                                         ros::Time(query.header.timestamp.seconds, query.header.timestamp.nanos));
     tf2::Transform transform;
     transform.setOrigin(
         tf2::Vector3(tf.transform.translation.x, tf.transform.translation.y, tf.transform.translation.z));
     transform.setRotation(tf2::Quaternion(tf.transform.rotation.x, tf.transform.rotation.y, tf.transform.rotation.z,
                                           tf.transform.rotation.w));
 
-    tf2::Vector3 vmin(query.boundingbox().point_min().x(), query.boundingbox().point_min().y(),
-                      query.boundingbox().point_min().z());
+    tf2::Vector3 vmin(bg::get<bg::min_corner, 0>(query.boundingbox), bg::get<bg::min_corner, 1>(query.boundingbox),
+                      bg::get<bg::min_corner, 2>(query.boundingbox));
     tf2::Vector3 vmintransformed = transform * vmin;
-    queryTransformed.mutable_boundingbox()->mutable_point_min()->set_x(vmintransformed.getX());
-    queryTransformed.mutable_boundingbox()->mutable_point_min()->set_y(vmintransformed.getY());
-    queryTransformed.mutable_boundingbox()->mutable_point_min()->set_z(vmintransformed.getZ());
+    bg::set<bg::min_corner, 0>(queryTransformed.boundingbox, vmintransformed.getX());
+    bg::set<bg::min_corner, 1>(queryTransformed.boundingbox, vmintransformed.getY());
+    bg::set<bg::min_corner, 2>(queryTransformed.boundingbox, vmintransformed.getZ());
 
-    tf2::Vector3 vmax(query.boundingbox().point_max().x(), query.boundingbox().point_max().y(),
-                      query.boundingbox().point_max().z());
+    tf2::Vector3 vmax(bg::get<bg::max_corner, 0>(query.boundingbox), bg::get<bg::max_corner, 1>(query.boundingbox),
+                      bg::get<bg::max_corner, 2>(query.boundingbox));
     tf2::Vector3 vmaxtransformed = transform * vmax;
-    queryTransformed.mutable_boundingbox()->mutable_point_max()->set_x(vmaxtransformed.getX());
-    queryTransformed.mutable_boundingbox()->mutable_point_max()->set_y(vmaxtransformed.getY());
-    queryTransformed.mutable_boundingbox()->mutable_point_max()->set_z(vmaxtransformed.getZ());
+    bg::set<bg::max_corner, 0>(queryTransformed.boundingbox, vmaxtransformed.getX());
+    bg::set<bg::max_corner, 1>(queryTransformed.boundingbox, vmaxtransformed.getY());
+    bg::set<bg::max_corner, 2>(queryTransformed.boundingbox, vmaxtransformed.getZ());
 
     return queryTransformed;
   }
@@ -159,26 +138,9 @@ std::vector<std::string> TFOverview::getFrames()
   return std::vector<std::string>{ m_tfbuffer.allFramesAsYAML() };
 }
 
-void TFOverview::addToIndices(std::shared_ptr<seerep_core::TF> tf)
+void TFOverview::addToTfBuffer(geometry_msgs::TransformStamped transform)
 {
-  m_datasets.insert(std::make_pair(tf->getID(), tf));
+  m_tfbuffer.setTransform(transform, "fromHDF5");
 }
-
-void TFOverview::addToTfBuffer(seerep::TransformStamped transform)
-{
-  m_tfbuffer.setTransform(seerep_ros_conversions::toROS(transform), "fromHDF5");
-}
-
-// for (auto tf : m_datasets)
-// {
-//   std::optional<std::vector<seerep::TransformStamped>> transforms = tf.second->getData();
-
-//   for (auto transform : transforms.value())
-//   {
-//     tfbuffer.setTransform(seerep_ros_conversions::toROS(transform), "fromHDF5");
-//   }
-
-//   std::cout << "loaded from hdf5: " << std::endl tfbuffer.allFramesAsString() << std::endl;
-// }
 
 } /* namespace seerep_core */

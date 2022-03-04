@@ -3,7 +3,7 @@
 
 // seerep
 #include <seerep-com/tf-service.grpc.pb.h>
-#include <seerep-core/project-overview.h>
+#include <seerep-pb-core/project-overview.h>
 
 namespace seerep_server
 {

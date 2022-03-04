@@ -32,10 +32,10 @@ public:
   SeerepCore(std::string datafolder);
   ~SeerepCore();
 
-  void addPointCloud(const seerep_core_msgs::DatasetIndexable& pointcloud);
+  boost::uuids::uuid addPointCloud(const seerep_core_msgs::DatasetIndexable& pointcloud);
   seerep_core_msgs::QueryResult getPointCloud(const seerep_core_msgs::Query& query);
 
-  boost::uuids::uuid addImage(const seerep_core_msgs::DatasetIndexable& image);
+  boost::uuids::uuid addImage(seerep_core_msgs::DatasetIndexable& image);
   seerep_core_msgs::QueryResult getImage(const seerep_core_msgs::Query& query);
 
   void addTF(const geometry_msgs::TransformStamped& tf, boost::uuids::uuid projectuuid);
