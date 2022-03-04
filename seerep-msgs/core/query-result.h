@@ -2,7 +2,7 @@
 #define SEEREP_CORE_MSGS_QUERY_RESULT_H_
 
 #include <functional>
-#include "QueryResultProject.h"
+#include "query-result-project.h"
 
 namespace seerep_core_msgs
 {

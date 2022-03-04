@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>seerep-core-io</name>
+  <version>0.0.1</version>
+  <description> The seerep core IO package </description>
+
+  <maintainer email="mark.hoellmann@dfki.de">Mark Höllmann</maintainer>
+
+  <license>BSD-3</license>
+
+  <url type="website">TODO</url>
+
+  <author email="mark.hoellmann@dfki.de">Mark Höllmann</author>
+
+  <depend>seerep-msgs</depend>
+  <buildtool_depend>cmake</buildtool_depend>
+
+  <export>
+    <build_type>cmake</build_type>
+  </export>
+</package>

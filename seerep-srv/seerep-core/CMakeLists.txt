@@ -38,7 +38,7 @@ include_directories(
 
 add_library(seerepcore
 	src/project.cpp
-	src/project-overview.cpp
+	src/seerep-core.cpp
 	src/tf.cpp
 	src/tf-overview.cpp
 	src/pointcloud.cpp
@@ -60,7 +60,7 @@ target_link_libraries(seerepcore
 
 set(INSTALL_HEADERS
 	include/seerep-core/project.h
-	include/seerep-core/project-overview.h
+	include/seerep-core/seerep-core.h
 	include/seerep-core/tf.h
 	include/seerep-core/tf-overview.h
 	include/seerep-core/pointcloud.h
