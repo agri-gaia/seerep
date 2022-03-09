@@ -37,8 +37,6 @@ include_directories(
 )
 
 add_library(seereppbcore
-	src/project.cpp
-	src/project-overview.cpp
 	src/tf.cpp
 	src/pointcloud.cpp
 	src/image.cpp
@@ -56,15 +54,9 @@ target_link_libraries(seereppbcore
 )
 
 set(INSTALL_HEADERS
-	include/seerep-core/project.h
-	include/seerep-core/project-overview.h
-	include/seerep-core/tf.h
-	include/seerep-core/tf-overview.h
-	include/seerep-core/pointcloud.h
-	include/seerep-core/pointcloud-overview.h
-	include/seerep-core/image.h
-	include/seerep-core/image-overview.h
-	include/seerep-core/aabb-hierarchy.h
+	include/seerep-pb-core/tf.h
+	include/seerep-pb-core/pointcloud.h
+	include/seerep-pb-core/image.h
 )
 
 set_target_properties(seereppbcore PROPERTIES PUBLIC_HEADER "${INSTALL_HEADERS}")

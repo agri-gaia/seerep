@@ -119,8 +119,9 @@ void SeerepCore::newProject(const seerep_core_msgs::ProjectInfo& projectInfo)
   m_projects.insert(std::make_pair(projectInfo.uuid, project));
 }
 
-void SeerepCore::getProjects(std::vector<seerep_core_msgs::ProjectInfo>& projectInfos)
+std::vector<seerep_core_msgs::ProjectInfo> SeerepCore::getProjects()
 {
+  std::vector<seerep_core_msgs::ProjectInfo> projectInfos;
   for (auto it = m_projects.begin(); it != m_projects.end(); ++it)
   {
     seerep_core_msgs::ProjectInfo projectinfo;
@@ -130,6 +131,8 @@ void SeerepCore::getProjects(std::vector<seerep_core_msgs::ProjectInfo>& project
 
     projectInfos.push_back(projectinfo);
   }
+
+  return projectInfos;
 }
 
 boost::uuids::uuid SeerepCore::addPointCloud(const seerep_core_msgs::DatasetIndexable& pointcloud2)
@@ -137,12 +140,12 @@ boost::uuids::uuid SeerepCore::addPointCloud(const seerep_core_msgs::DatasetInde
   // m_projects.at(projectuuid)->addPointCloud(pointcloud2);
 }
 
-boost::uuids::uuid SeerepCore::addImage(seerep_core_msgs::DatasetIndexable& image)
+void SeerepCore::addImage(const seerep_core_msgs::DatasetIndexable& image)
 {
-  return m_projects.at(image.header.uuidProject)->addImage(image);
+  m_projects.at(image.header.uuidProject)->addImage(image);
 }
 
-void SeerepCore::addTF(const geometry_msgs::TransformStamped& tf, boost::uuids::uuid projectuuid)
+void SeerepCore::addTF(const geometry_msgs::TransformStamped& tf, const boost::uuids::uuid& projectuuid)
 {
   m_projects.at(projectuuid)->addTF(tf);
 }
@@ -152,9 +155,18 @@ std::optional<geometry_msgs::TransformStamped> SeerepCore::getTF(const seerep_co
   return m_projects.at(transformQuery.project)->getTF(transformQuery);
 }
 
-std::vector<std::string> SeerepCore::getFrames(boost::uuids::uuid projectuuid)
+std::vector<std::string> SeerepCore::getFrames(const boost::uuids::uuid& projectuuid)
 {
   return m_projects.at(projectuuid)->getFrames();
+}
+
+std::shared_ptr<std::mutex> SeerepCore::getHdf5FileMutex(const boost::uuids::uuid& projectuuid)
+{
+  return m_projects.at(projectuuid)->getHdf5FileMutex();
+}
+std::shared_ptr<HighFive::File> SeerepCore::getHdf5File(const boost::uuids::uuid& projectuuid)
+{
+  return m_projects.at(projectuuid)->getHdf5File();
 }
 
 } /* namespace seerep_core */

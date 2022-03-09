@@ -5,12 +5,12 @@ list(APPEND CMAKE_MODULE_PATH "${CURRENT_LIST_DIR}/Modules")
 set(SeerepCoreIO_INCLUDE_DIRS @PACKAGE_CMAKE_INSTALL_INCLUDEDIR@)
 
 find_package(PkgConfig REQUIRED)
-find_library(SeerepCoreIO_LIBRARY NAMES seerephdf5flatbuffers)
+find_library(SeerepCoreIO_LIBRARY NAMES seerepcoreio)
 set(SeerepCoreIO_LIBRARIES ${SeerepCoreIO_LIBRARY})
 
 find_package(HDF5 REQUIRED)
-list(APPEND SeerepCoreIO_INCLUDE_DIRS ${HDF5Flatbuffers_INCLUDE_DIRS})
-list(APPEND SeerepCoreIO_LIBRARIES ${HDF5Flatbuffers_LIBRARIES})
+list(APPEND SeerepCoreIO_INCLUDE_DIRS ${HDF5_INCLUDE_DIRS})
+list(APPEND SeerepCoreIO_LIBRARIES ${HDF5_LIBRARIES})
 
 find_package(HighFive REQUIRED)
 list(APPEND SeerepCoreIO_INCLUDE_DIRS ${HighFive_INCLUDE_DIRS})

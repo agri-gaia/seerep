@@ -2,8 +2,7 @@
 
 namespace seerep_server
 {
-ReceiveSensorMsgs::ReceiveSensorMsgs(std::shared_ptr<seerep_core::ProjectOverview> projectOverview)
-  : projectOverview(projectOverview)
+ReceiveSensorMsgs::ReceiveSensorMsgs(std::shared_ptr<seerep_core::SeerepCore> seerepCore) : seerepCore(seerepCore)
 {
 }
 

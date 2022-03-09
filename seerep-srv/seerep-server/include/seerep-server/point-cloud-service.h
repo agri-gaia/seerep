@@ -3,7 +3,7 @@
 
 // seerep
 #include <seerep-com/point-cloud-service.grpc.pb.h>
-#include <seerep-core/project-overview.h>
+#include <seerep-core/seerep-core.h>
 
 namespace seerep_server
 {
@@ -19,7 +19,7 @@ public:
                                    seerep::ServerResponse* response);
 
 private:
-  std::shared_ptr<seerep_core::ProjectOverview> projectOverview;
+  std::shared_ptr<seerep_core::SeerepCore> seerepCore;
 };
 
 } /* namespace seerep_server */

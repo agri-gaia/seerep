@@ -3,14 +3,14 @@
 
 // seerep
 #include <seerep-com/meta-operations.grpc.pb.h>
-#include <seerep-core/project-overview.h>
+#include <seerep-core/seerep-core.h>
 
 namespace seerep_server
 {
 class MetaOperations final : public seerep::MetaOperations::Service
 {
 public:
-  MetaOperations(std::shared_ptr<seerep_core::ProjectOverview> projectOverview);
+  MetaOperations(std::shared_ptr<seerep_core::SeerepCore> seerepCore);
 
   grpc::Status CreateProject(grpc::ServerContext* context, const seerep::ProjectCreation* request,
                              seerep::ProjectInfo* response);
@@ -18,7 +18,7 @@ public:
                            seerep::ProjectInfos* response);
 
 private:
-  std::shared_ptr<seerep_core::ProjectOverview> projectOverview;
+  std::shared_ptr<seerep_core::SeerepCore> seerepCore;
 };
 
 } /* namespace seerep_server */

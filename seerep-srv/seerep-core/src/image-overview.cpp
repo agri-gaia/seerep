@@ -120,16 +120,15 @@ std::vector<seerep_core_msgs::AabbTimeIdPair> ImageOverview::queryTemporal(const
   return timetree_result;
 }
 
-boost::uuids::uuid ImageOverview::addDataset(seerep_core_msgs::DatasetIndexable& image)
+void ImageOverview::addDataset(const seerep_core_msgs::DatasetIndexable& image)
 {
   // does the default constructor of uuid generate nil uuids?
   if (image.header.uuidData.is_nil())
   {
-    image.header.uuidData = boost::uuids::random_generator()();
+    throw std::invalid_argument("invalid uuid");
   }
 
   addImageToIndices(image);
-  return image.header.uuidData;
 }
 
 /*
@@ -158,7 +157,7 @@ void ImageOverview::tryAddingDataWithMissingTF()
   }
 }
 
-void ImageOverview::addImageToIndices(seerep_core_msgs::DatasetIndexable& img)
+void ImageOverview::addImageToIndices(const seerep_core_msgs::DatasetIndexable& img)
 {
   if (m_tfOverview->canTransform(img.header.frameId, m_frameId, img.header.timestamp.seconds,
                                  img.header.timestamp.nanos))

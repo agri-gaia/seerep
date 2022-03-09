@@ -1,63 +1,61 @@
-#include "seerep-core/tf.h"
+#include "seerep-pb-core/tf.h"
 
-namespace seerep_core
+namespace seerep_core_pb
 {
 // constructor when data received and stored to hdf5
-TF::TF(std::shared_ptr<seerep_pb_io::TfIO> hdf5_io, const seerep::TransformStamped& tf)
-  : m_hdf5_io(hdf5_io)
-  , m_id(TF::idFromFrameNames(tf.header().frame_id(), tf.child_frame_id()))
-  , m_parentframe(tf.header().frame_id())
-  , m_childframe(tf.child_frame_id())
+TfPb::TfPb(std::shared_ptr<seerep_core::SeerepCore> seerepCore) : m_seerepCore(seerepCore)
 {
-  m_hdf5_io->writeTransformStamped(tf);
-}
-
-// constructor if recreating the server from hdf5
-TF::TF(std::shared_ptr<seerep_pb_io::TfIO> hdf5_io, const std::string& id) : m_hdf5_io(hdf5_io), m_id(id)
-{
-  std::optional<std::vector<std::string>> frames = m_hdf5_io->readTransformStampedFrames(id);
-
-  if (frames)
+  for (seerep_core_msgs::ProjectInfo projectInfo : m_seerepCore->getProjects())
   {
-    m_parentframe = frames.value().at(0);
-    m_childframe = frames.value().at(1);
+    auto hdf5file = m_seerepCore->getHdf5File(projectInfo.uuid);
+    auto hdf5fileMutex = m_seerepCore->getHdf5FileMutex(projectInfo.uuid);
+    auto tfIo = std::make_shared<seerep_pb_io::TfIO>(hdf5file, hdf5fileMutex);
+
+    m_hdf5IoMap.insert(std::make_pair(projectInfo.uuid, tfIo));
   }
 }
 
-TF::~TF()
+TfPb::~TfPb()
 {
 }
 
-void TF::addData(const seerep::TransformStamped& tf)
+std::optional<seerep::TransformStamped> TfPb::getData(const seerep::TransformStampedQuery& query)
 {
-  m_hdf5_io->writeTransformStamped(tf);
+  std::cout << "loading tf from tfs/" << std::endl;
+  boost::uuids::string_generator gen;
+  seerep_core_msgs::QueryTf queryTf;
+  queryTf.childFrameId = query.child_frame_id();
+  queryTf.parentFrameId = query.header().frame_id();
+  queryTf.project = gen(query.header().uuid_project());
+  queryTf.timestamp.seconds = query.header().stamp().seconds();
+  queryTf.timestamp.nanos = query.header().stamp().nanos();
+  std::optional<geometry_msgs::TransformStamped> result = m_seerepCore->getTF(queryTf);
+
+  if (result)
+  {
+    return seerep_ros_conversions::toProto(result.value());
+  }
+  else
+  {
+    return std::nullopt;
+  }
 }
 
-std::optional<std::vector<seerep::TransformStamped>> TF::getData()
+void TfPb::addData(const seerep::TransformStamped& tf)
 {
-  std::cout << "loading tf from tfs/" << m_id << std::endl;
+  boost::uuids::string_generator gen;
+  boost::uuids::uuid projectuuid = gen(tf.header().uuid_project());
 
-  return m_hdf5_io->readTransformStamped(m_id);
+  // write to hdf5
+  m_hdf5IoMap.at(projectuuid)->writeTransformStamped(tf);
+
+  // add to seerep-core
+  m_seerepCore->addTF(seerep_ros_conversions::toROS(tf), projectuuid);
 }
 
-std::string TF::getParentFrame()
+std::vector<std::string> TfPb::getFrames(const boost::uuids::uuid& projectuuid)
 {
-  return m_parentframe;
+  return m_seerepCore->getFrames(projectuuid);
 }
 
-std::string TF::getChildFrame()
-{
-  return m_childframe;
-}
-
-std::string TF::getID()
-{
-  return m_id;
-}
-
-std::string TF::idFromFrameNames(const std::string& parentframe, const std::string& childframe)
-{
-  return parentframe + "_" + childframe;
-}
-
-} /* namespace seerep_core */
+}  // namespace seerep_core_pb

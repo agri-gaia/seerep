@@ -1,40 +1,43 @@
-#ifndef SEEREP_CORE_TF_H_
-#define SEEREP_CORE_TF_H_
+#ifndef SEEREP_PB_CORE_TF_H_
+#define SEEREP_PB_CORE_TF_H_
 
 #include <functional>
 #include <optional>
 
 // seerep-msgs
+#include <seerep-msgs/transform_stamped_query.pb.h>
 #include <seerep-msgs/transform_stamped.pb.h>
+// seerep-core-msgs
+#include <seerep-msgs/query-tf.h>
+// ros
+#include <geometry_msgs/TransformStamped.h>
 // seerep-pb-io
 #include <seerep-pb-io/tf-io.h>
+
 // seerep-conversion
 #include <seerep_ros_conversions/conversions.h>
 
-namespace seerep_core
+// seerep-core
+#include <seerep-core/seerep-core.h>
+
+namespace seerep_core_pb
 {
-class TF
+class TfPb
 {
 public:
-  TF(std::shared_ptr<seerep_pb_io::TfIO> hdf5_io, const seerep::TransformStamped& tf);
-  TF(std::shared_ptr<seerep_pb_io::TfIO> hdf5_io, const std::string& id);
-  ~TF();
+  TfPb(std::shared_ptr<seerep_core::SeerepCore> seerepCore);
+  ~TfPb();
 
+  std::optional<seerep::TransformStamped> getData(const seerep::TransformStampedQuery& query);
   void addData(const seerep::TransformStamped& tf);
-  std::optional<std::vector<seerep::TransformStamped>> getData();
-  std::string getParentFrame();
-  std::string getChildFrame();
-  std::string getID();
-
-  static std::string idFromFrameNames(const std::string& parentframe, const std::string& childframe);
+  std::vector<std::string> getFrames(const boost::uuids::uuid& projectuuid);
 
 private:
-  std::shared_ptr<seerep_pb_io::TfIO> m_hdf5_io;
-  const std::string m_id;
-  std::string m_parentframe;
-  std::string m_childframe;
+  std::shared_ptr<seerep_core::SeerepCore> m_seerepCore;
+  std::unordered_map<boost::uuids::uuid, std::shared_ptr<seerep_pb_io::TfIO>, boost::hash<boost::uuids::uuid>>
+      m_hdf5IoMap;
 };
 
-} /* namespace seerep_core */
+}  // namespace seerep_core_pb
 
-#endif  // SEEREP_CORE_TF_H_
+#endif  // SEEREP_PB_CORE_TF_H_

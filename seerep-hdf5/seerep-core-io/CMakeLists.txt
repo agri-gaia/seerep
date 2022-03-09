@@ -21,12 +21,12 @@ include_directories(
 	${HighFive_INCLUDE_DIRS}
 )
 
-add_library(seerep-core-io
+add_library(seerepcoreio
 src/general-io-core.cpp
 src/image-io-core.cpp
 )
 
-target_link_libraries(seerep-core-io
+target_link_libraries(seerepcoreio
 	${SeerepMsgs_LIBRARIES}
 	${PROTOBUF_LIBRARIES}
 	${HighFive_LIBRARIES}
@@ -36,7 +36,7 @@ set(CMAKE_INSTALL_INCLUDEDIR include)
 set(CMAKE_INSTALL_LIBDIR lib)
 set(CMAKE_INSTALL_BINDIR bin)
 
-install(TARGETS seerep-core-io
+install(TARGETS seerepcoreio
 	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 	PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}

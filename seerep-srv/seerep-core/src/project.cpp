@@ -52,13 +52,12 @@ seerep_core_msgs::QueryResultProject Project::getImage(const seerep_core_msgs::Q
 void Project::createHdf5Io(boost::uuids::uuid& uuid, std::string path)
 {
   m_write_mtx = std::make_shared<std::mutex>();
-  std::shared_ptr<HighFive::File> hdf5_file =
-      std::make_shared<HighFive::File>(path, HighFive::File::ReadWrite | HighFive::File::Create);
+  m_hdf5_file = std::make_shared<HighFive::File>(path, HighFive::File::ReadWrite | HighFive::File::Create);
 
-  m_ioGeneral = std::make_shared<seerep_core_io::GeneralIOCore>(hdf5_file, m_write_mtx);
-  m_ioTf = std::make_shared<seerep_core_io::TfIOCore>(hdf5_file, m_write_mtx);
+  m_ioGeneral = std::make_shared<seerep_core_io::GeneralIOCore>(m_hdf5_file, m_write_mtx);
+  m_ioTf = std::make_shared<seerep_core_io::TfIOCore>(m_hdf5_file, m_write_mtx);
   // m_ioPointCloud = std::make_shared<seerep_core_io::PointCloudIOCore>(hdf5_file, m_write_mtx);
-  m_ioImage = std::make_shared<seerep_core_io::ImageIOCore>(hdf5_file, m_write_mtx);
+  m_ioImage = std::make_shared<seerep_core_io::ImageIOCore>(m_hdf5_file, m_write_mtx);
 }
 
 void Project::recreateDatatypes()
@@ -79,9 +78,9 @@ void Project::recreateDatatypes()
 //   m_pointcloudOverview->addDataset(pointcloud2);
 // }
 
-boost::uuids::uuid Project::addImage(seerep_core_msgs::DatasetIndexable& image)
+void Project::addImage(const seerep_core_msgs::DatasetIndexable& image)
 {
-  return m_imageOverview->addDataset(image);
+  m_imageOverview->addDataset(image);
 }
 
 void Project::addTF(const geometry_msgs::TransformStamped& tf)
@@ -98,6 +97,15 @@ std::optional<geometry_msgs::TransformStamped> Project::getTF(const seerep_core_
 std::vector<std::string> Project::getFrames()
 {
   return m_tfOverview->getFrames();
+}
+
+std::shared_ptr<std::mutex> Project::getHdf5FileMutex()
+{
+  return m_write_mtx;
+}
+std::shared_ptr<HighFive::File> Project::getHdf5File()
+{
+  return m_hdf5_file;
 }
 
 } /* namespace seerep_core */
