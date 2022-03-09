@@ -1,5 +1,5 @@
-#ifndef SEEREP_CORE_IMAGE_H_
-#define SEEREP_CORE_IMAGE_H_
+#ifndef SEEREP_PB_CORE_IMAGE_H_
+#define SEEREP_PB_CORE_IMAGE_H_
 
 #include <functional>
 #include <optional>
@@ -7,13 +7,15 @@
 // seerep-msgs
 #include <seerep-msgs/query.pb.h>
 #include <seerep-msgs/image.pb.h>
+#include <seerep-msgs/server_response.pb.h>
+// seerep-core-msgs
+#include <seerep-msgs/query.h>
+#include <seerep-msgs/query-result.h>
 // seerep-pb-io
 #include <seerep-pb-io/image-io.h>
-// seerep-conversion
-#include <seerep_ros_conversions/conversions.h>
 
 // seerep-core
-#include "aabb-hierarchy.h"
+#include <seerep-core/seerep-core.h>
 
 // uuid
 #include <boost/uuid/uuid.hpp>             // uuid class
@@ -22,46 +24,23 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/functional/hash.hpp>
 
-namespace seerep_core
+namespace seerep_core_pb
 {
-class Image
+class ImagePb
 {
 public:
-  Image(std::shared_ptr<seerep_pb_io::ImageIO> hdf5_io, const seerep::Image& image, const uint64_t& id,
-        const boost::uuids::uuid& uuid);
-  Image(std::shared_ptr<seerep_pb_io::ImageIO> hdf5_io, const uint64_t& id, const boost::uuids::uuid& uuid);
-  ~Image();
+  ImagePb(std::shared_ptr<seerep_core::SeerepCore> seerepCore);
+  ~ImagePb();
 
-  std::optional<seerep::Image> getData(const seerep::Query& query);
-
-  AabbHierarchy::AABB getAABB();
-  uint64_t getID();
-  boost::uuids::uuid getUUID();
-  void getTime(int64_t& timeSecs, int64_t& timeNanos);
-  AabbHierarchy::AabbTime getAABBTime();
-  std::unordered_set<std::string> getLabels();
-  std::string getFrameId();
+  std::vector<seerep::Image> getData(const seerep::Query& query);
+  boost::uuids::uuid addData(const seerep::Image& img);
 
 private:
-  AabbHierarchy::AABB calcAABB();
-  void recreateAABB();
-  void recreateTime();
-  void recreateLabel();
-  void storeLabelGeneral(google::protobuf::RepeatedPtrField<std::string> labelGeneral);
-  void storeLabelBB(google::protobuf::RepeatedPtrField<seerep::BoundingBox2DLabeled> labelsBB);
-
-  std::string m_frameId;
-  std::shared_ptr<seerep_pb_io::ImageIO> m_hdf5_io;
-  const uint64_t m_id;
-  const boost::uuids::uuid m_uuid;
-  // axis aligned bounding box
-  AabbHierarchy::AABB m_aabb;
-  int64_t m_timeSecs;
-  int64_t m_timeNanos;
-  std::multimap<std::string, AabbHierarchy::AABB2D> m_labelsBB;
-  std::unordered_set<std::string> m_labelGeneral;
+  std::shared_ptr<seerep_core::SeerepCore> m_seerepCore;
+  std::unordered_map<boost::uuids::uuid, std::shared_ptr<seerep_pb_io::ImageIO>, boost::hash<boost::uuids::uuid>>
+      m_hdf5IoMap;
 };
 
-} /* namespace seerep_core */
+}  // namespace seerep_core_pb
 
-#endif  // SEEREP_CORE_IMAGE_H_
+#endif  // SEEREP_PB_CORE_IMAGE_H_

@@ -2,18 +2,19 @@
 
 namespace seerep_server
 {
-std::shared_ptr<grpc::Server>
-createServer(const std::string& server_address, seerep_server::MetaOperations* metaOperations,
-             seerep_server::ReceiveSensorMsgs* receiveSensorMsgs, seerep_server::ImageService* imageService,
-             seerep_server::PointCloudService* pointCloudService, seerep_server::TfService* tfService)
+std::shared_ptr<grpc::Server> createServer(const std::string& server_address,
+                                           seerep_server::MetaOperations* metaOperations,
+                                           seerep_server::ImageService* imageService,
+                                           seerep_server::TfService* tfService)
+// seerep_server::ReceiveSensorMsgs* receiveSensorMsgs, seerep_server::PointCloudService* pointCloudService,
 {
   std::cout << "Create the server..." << std::endl;
   grpc::ServerBuilder server_builder;
   server_builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
   server_builder.RegisterService(metaOperations);
-  server_builder.RegisterService(receiveSensorMsgs);
+  // server_builder.RegisterService(receiveSensorMsgs);
   server_builder.RegisterService(imageService);
-  server_builder.RegisterService(pointCloudService);
+  // server_builder.RegisterService(pointCloudService);
   server_builder.RegisterService(tfService);
   return std::shared_ptr<grpc::Server>(server_builder.BuildAndStart());
 }
@@ -38,15 +39,16 @@ int main(int argc, char** argv)
   std::cout << "The used data folder is: " << datafolder << std::endl;
   std::string server_address = "0.0.0.0:9090";
 
-  auto projectOverview = std::make_shared<seerep_core::ProjectOverview>(datafolder);
+  auto seerepCore = std::make_shared<seerep_core::SeerepCore>(datafolder);
 
-  seerep_server::MetaOperations metaOperationsService(projectOverview);
-  seerep_server::ReceiveSensorMsgs receiveSensorMsgsService(projectOverview);
-  seerep_server::ImageService imageService(projectOverview);
-  seerep_server::PointCloudService pointCloudService(projectOverview);
-  seerep_server::TfService tfService(projectOverview);
-  std::shared_ptr<grpc::Server> server = seerep_server::createServer(
-      server_address, &metaOperationsService, &receiveSensorMsgsService, &imageService, &pointCloudService, &tfService);
+  seerep_server::MetaOperations metaOperationsService(seerepCore);
+  // seerep_server::ReceiveSensorMsgs receiveSensorMsgsService(seerepCore);
+  seerep_server::ImageService imageService(seerepCore);
+  // seerep_server::PointCloudService pointCloudService(seerepCore);
+  seerep_server::TfService tfService(seerepCore);
+  std::shared_ptr<grpc::Server> server =
+      seerep_server::createServer(server_address, &metaOperationsService, &imageService,
+                                  &tfService);  //&receiveSensorMsgsService, &pointCloudService,
   std::cout << "serving on \"" << server_address << "\"..." << std::endl;
   server->Wait();
   return EXIT_SUCCESS;

@@ -35,15 +35,18 @@ public:
   boost::uuids::uuid addPointCloud(const seerep_core_msgs::DatasetIndexable& pointcloud);
   seerep_core_msgs::QueryResult getPointCloud(const seerep_core_msgs::Query& query);
 
-  boost::uuids::uuid addImage(seerep_core_msgs::DatasetIndexable& image);
+  void addImage(const seerep_core_msgs::DatasetIndexable& image);
   seerep_core_msgs::QueryResult getImage(const seerep_core_msgs::Query& query);
 
-  void addTF(const geometry_msgs::TransformStamped& tf, boost::uuids::uuid projectuuid);
+  void addTF(const geometry_msgs::TransformStamped& tf, const boost::uuids::uuid& projectuuid);
   std::optional<geometry_msgs::TransformStamped> getTF(const seerep_core_msgs::QueryTf& transformQuery);
-  std::vector<std::string> getFrames(boost::uuids::uuid projectuuid);
+  std::vector<std::string> getFrames(const boost::uuids::uuid& projectuuid);
 
   void newProject(const seerep_core_msgs::ProjectInfo& projectInfo);
-  void getProjects(std::vector<seerep_core_msgs::ProjectInfo>& projectInfos);
+  std::vector<seerep_core_msgs::ProjectInfo> getProjects();
+
+  std::shared_ptr<std::mutex> getHdf5FileMutex(const boost::uuids::uuid& projectuuid);
+  std::shared_ptr<HighFive::File> getHdf5File(const boost::uuids::uuid& projectuuid);
 
 private:
   void recreateProjects();

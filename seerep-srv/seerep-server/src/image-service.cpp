@@ -2,8 +2,8 @@
 
 namespace seerep_server
 {
-ImageService::ImageService(std::shared_ptr<seerep_core::ProjectOverview> projectOverview)
-  : projectOverview(projectOverview)
+ImageService::ImageService(std::shared_ptr<seerep_core::SeerepCore> seerepCore)
+  : imagePb(std::make_shared<seerep_core_pb::ImagePb>(seerepCore))
 {
 }
 
@@ -17,18 +17,13 @@ grpc::Status ImageService::GetImage(grpc::ServerContext* context, const seerep::
             << " and time interval (" << request->timeinterval().time_min() << "/" << request->timeinterval().time_max()
             << ")" << std::endl;
 
-  std::vector<std::vector<std::optional<seerep::Image>>> images = projectOverview->getImage(*request);
+  std::vector<seerep::Image> images = imagePb->getData(*request);
   if (!images.empty())
   {
-    std::cout << "Found images in " << images.size() << " projects that match the query" << std::endl;
-
-    for (const std::vector<std::optional<seerep::Image>>& resultPerProject : images)
+    std::cout << "Found " << images.size() << " images that match the query" << std::endl;
+    for (const seerep::Image& img : images)
     {
-      std::cout << "Found " << resultPerProject.size() << " images in this projects that match the query" << std::endl;
-      for (const std::optional<seerep::Image>& img : resultPerProject)
-      {
-        writer->Write(img.value());
-      }
+      writer->Write(img);
     }
   }
   else
@@ -57,7 +52,7 @@ grpc::Status ImageService::TransferImage(grpc::ServerContext* context, const see
       std::cout << e.what() << std::endl;
       return grpc::Status::CANCELLED;
     }
-    boost::uuids::uuid uuidImg = projectOverview->addImage(*image, uuid);
+    boost::uuids::uuid uuidImg = imagePb->addData(*image);
     response->set_message(boost::lexical_cast<std::string>(uuidImg));
     response->set_transmission_state(seerep::ServerResponse::SUCCESS);
     return grpc::Status::OK;

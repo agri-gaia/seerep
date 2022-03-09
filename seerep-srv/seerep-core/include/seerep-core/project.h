@@ -41,12 +41,15 @@ public:
   seerep_core_msgs::QueryResultProject getImage(const seerep_core_msgs::Query& query);
 
   // boost::uuids::uuid addPointCloud(const seerep_core_msgs::DatasetIndexable& pointcloud);
-  boost::uuids::uuid addImage(seerep_core_msgs::DatasetIndexable& pointcloud);
+  void addImage(const seerep_core_msgs::DatasetIndexable& pointcloud);
 
   // tf
   void addTF(const geometry_msgs::TransformStamped& tf);
   std::optional<geometry_msgs::TransformStamped> getTF(const seerep_core_msgs::QueryTf& transformQuery);
   std::vector<std::string> getFrames();
+
+  std::shared_ptr<std::mutex> getHdf5FileMutex();
+  std::shared_ptr<HighFive::File> getHdf5File();
 
 private:
   void createHdf5Io(boost::uuids::uuid& uuid, std::string path);
@@ -59,6 +62,7 @@ private:
   std::string m_frameId;
 
   std::shared_ptr<std::mutex> m_write_mtx;
+  std::shared_ptr<HighFive::File> m_hdf5_file;
   std::shared_ptr<seerep_core_io::GeneralIOCore> m_ioGeneral;
   std::shared_ptr<seerep_core_io::TfIOCore> m_ioTf;
   // std::shared_ptr<seerep_core_io::PointCloudIOCore> m_ioPointCloud;

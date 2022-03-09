@@ -2,7 +2,8 @@
 
 namespace seerep_server
 {
-TfService::TfService(std::shared_ptr<seerep_core::ProjectOverview> projectOverview) : projectOverview(projectOverview)
+TfService::TfService(std::shared_ptr<seerep_core::SeerepCore> seerepCore)
+  : tfPb(std::make_shared<seerep_core_pb::TfPb>(seerepCore))
 {
 }
 
@@ -26,7 +27,7 @@ grpc::Status TfService::TransferTransformStamped(grpc::ServerContext* context,
       std::cout << e.what() << std::endl;
       return grpc::Status::CANCELLED;
     }
-    projectOverview->addTF(*transform, uuid);
+    tfPb->addData(*transform);
     response->set_message("added transform");
     response->set_transmission_state(seerep::ServerResponse::SUCCESS);
     return grpc::Status::OK;
@@ -53,7 +54,7 @@ grpc::Status TfService::GetFrames(grpc::ServerContext* context, const seerep::Fr
     std::cout << e.what() << std::endl;
     return grpc::Status::CANCELLED;
   }
-  for (auto framename : projectOverview->getFrames(uuid))
+  for (auto framename : tfPb->getFrames(uuid))
   {
     response->add_frames(framename);
   }
@@ -76,7 +77,12 @@ grpc::Status TfService::GetTransformStamped(grpc::ServerContext* context,
     std::cout << e.what() << std::endl;
     return grpc::Status::CANCELLED;
   }
-  projectOverview->getTF(*transformQuery, uuid);
+  auto result = tfPb->getData(*transformQuery);
+
+  if (result)
+  {
+    *response = result.value();
+  }
 
   return grpc::Status::OK;
 }

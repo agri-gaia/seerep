@@ -1,5 +1,5 @@
-#ifndef SEEREP_CORE_POINTCLOUD_H_
-#define SEEREP_CORE_POINTCLOUD_H_
+#ifndef SEEREP_PB_CORE_POINTCLOUD_H_
+#define SEEREP_PB_CORE_POINTCLOUD_H_
 
 #include <functional>
 #include <optional>
@@ -20,7 +20,7 @@
 
 #include <highfive/H5Group.hpp>
 
-namespace seerep_core
+namespace seerep_pb_core
 {
 class Pointcloud
 {
@@ -43,6 +43,6 @@ private:
   const HighFive::Group& m_cloud_group;
 };
 
-} /* namespace seerep_core */
+}  // namespace seerep_pb_core
 
-#endif  // SEEREP_CORE_POINTCLOUD_H_
+#endif  // SEEREP_PB_CORE_POINTCLOUD_H_
