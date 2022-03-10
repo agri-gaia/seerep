@@ -1,5 +1,5 @@
-#ifndef SEEREP_HDF5_IO_GENERAL_FBS_H_
-#define SEEREP_HDF5_IO_GENERAL_FBS_H_
+#ifndef SEEREP_IO_FB_GENERAL_H_
+#define SEEREP_IO_FB_GENERAL_H_
 
 // highfive
 #include <highfive/H5File.hpp>
@@ -14,12 +14,12 @@
 
 #include <boost/geometry.hpp>
 
-namespace seerep_fb_io
+namespace seerep_io_fb
 {
-class GeneralIOFbs
+class IoFbGeneral
 {
 public:
-  GeneralIOFbs(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
+  IoFbGeneral(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
 
   std::optional<std::string> readFrameId(const std::string& datatypeGroup, const std::string& uuid);
 
@@ -124,8 +124,8 @@ protected:
   std::shared_ptr<std::mutex> m_write_mtx;
 };
 
-} /* namespace seerep_fb_io */
+} /* namespace seerep_io_fb */
 
 #include "impl/general-io-fbs.hpp"  // NOLINT
 
-#endif /* SEEREP_HDF5_IO_GENERAL_FBS_H_ */
+#endif /* SEEREP_IO_FB_GENERAL_H_ */

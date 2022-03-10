@@ -1,11 +1,11 @@
-#ifndef SEEREP_HDF5_IO_IMAGE_FBS_H_
-#define SEEREP_HDF5_IO_IMAGE_FBS_H_
+#ifndef SEEREP_IO_FB_IMAGE_H_
+#define SEEREP_IO_FB_IMAGE_H_
 
 // highfive
 #include <highfive/H5File.hpp>
 
 // seerep-io
-#include "seerep-fb-io/general-io-fbs.h"
+#include "seerep-io-fb/io-fb-general.h"
 
 // seerep-msgs
 #include <seerep-msgs/image_generated.h>
@@ -15,9 +15,9 @@
 
 #include <boost/geometry.hpp>
 
-namespace seerep_fb_io
+namespace seerep_io_fb
 {
-class ImageIOFbs : public GeneralIOFbs
+class ImageIOFbs : public IoFbGeneral
 {
 public:
   ImageIOFbs(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
@@ -46,6 +46,6 @@ public:
   inline static const std::string HDF5_GROUP_IMAGE = "images";
 };
 
-} /* namespace seerep_fb_io */
+} /* namespace seerep_io_fb */
 
-#endif /* SEEREP_HDF5_IO_IMAGE_FBS_H_ */
+#endif /* SEEREP_IO_FB_IMAGE_H_ */

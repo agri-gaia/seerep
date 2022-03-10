@@ -1,9 +1,9 @@
 
-namespace seerep_fb_io
+namespace seerep_io_fb
 {
 template <typename T>
-void GeneralIOFbs::writeAttribute(const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField,
-                                  T value)
+void IoFbGeneral::writeAttribute(const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField,
+                                 T value)
 {
   if (!dataSetPtr->hasAttribute(attributeField))
   {
@@ -17,8 +17,8 @@ void GeneralIOFbs::writeAttribute(const std::shared_ptr<HighFive::DataSet> dataS
 }
 
 template <typename T>
-T GeneralIOFbs::getAttribute(const std::string& id, const std::shared_ptr<HighFive::DataSet> dataSetPtr,
-                             std::string attributeField)
+T IoFbGeneral::getAttribute(const std::string& id, const std::shared_ptr<HighFive::DataSet> dataSetPtr,
+                            std::string attributeField)
 {
   T attributeValue;
   if (dataSetPtr->hasAttribute(attributeField))
@@ -33,7 +33,7 @@ T GeneralIOFbs::getAttribute(const std::string& id, const std::shared_ptr<HighFi
 }
 
 template <class T>
-void GeneralIOFbs::writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, const seerep::fb::Header& header)
+void IoFbGeneral::writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, const seerep::fb::Header& header)
 {
   if (!object.hasAttribute(HEADER_STAMP_SECONDS))
     object.createAttribute(HEADER_STAMP_SECONDS, header.stamp()->seconds());
@@ -57,7 +57,7 @@ void GeneralIOFbs::writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, co
 }
 
 template <class T>
-flatbuffers::Offset<seerep::fb::Header> GeneralIOFbs::readHeaderAttributes(HighFive::AnnotateTraits<T>& object)
+flatbuffers::Offset<seerep::fb::Header> IoFbGeneral::readHeaderAttributes(HighFive::AnnotateTraits<T>& object)
 {
   flatbuffers::FlatBufferBuilder builder;
   int64_t seconds;
@@ -76,4 +76,4 @@ flatbuffers::Offset<seerep::fb::Header> GeneralIOFbs::readHeaderAttributes(HighF
   return seerep::fb::CreateHeader(builder, seq, timestamp, builder.CreateString(frameId));
 }
 
-} /* namespace seerep_fb_io */
+} /* namespace seerep_io_fb */

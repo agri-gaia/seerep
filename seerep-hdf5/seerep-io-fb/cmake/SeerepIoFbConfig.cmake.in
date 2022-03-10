@@ -1,0 +1,29 @@
+@PACKAGE_INIT@
+
+list(APPEND CMAKE_MODULE_PATH "${CURRENT_LIST_DIR}/Modules")
+
+set(SeerepIoFb_INCLUDE_DIRS @PACKAGE_CMAKE_INSTALL_INCLUDEDIR@)
+
+find_package(PkgConfig REQUIRED)
+find_library(SeerepIoFb_LIBRARY NAMES seerepiofb)
+set(SeerepIoFb_LIBRARIES ${SeerepIoFb_LIBRARY})
+
+find_package(Flatbuffers REQUIRED)
+list(APPEND SeerepIoFb_INCLUDE_DIRS ${Protobuf_INCLUDE_DIR})
+list(APPEND SeerepIoFb_LIBRARIES ${Protobuf_LIBRARY})
+
+find_package(HDF5 REQUIRED)
+list(APPEND SeerepIoFb_INCLUDE_DIRS ${HDF5Flatbuffers_INCLUDE_DIRS})
+list(APPEND SeerepIoFb_LIBRARIES ${HDF5Flatbuffers_LIBRARIES})
+
+find_package(HighFive REQUIRED)
+list(APPEND SeerepIoFb_INCLUDE_DIRS ${HighFive_INCLUDE_DIRS})
+list(APPEND SeerepIoFb_LIBRARIES ${HighFive_LIBRARIES})
+
+find_package(SeerepMsgs REQUIRED)
+list(APPEND SeerepIoFb_INCLUDE_DIRS ${SeerepMsgs_INCLUDE_DIRS})
+list(APPEND SeerepIoFb_LIBRARIES ${SeerepMsgs_LIBRARIES})
+
+# find_package(catkin REQUIRED COMPONENTS sensor_msgs)
+# list(APPEND SeerepIoFb_INCLUDE_DIRS ${catkin_INCLUDE_DIRS})
+# list(APPEND SeerepIoFb_LIBRARIES ${catkin_LIBRARIES})

@@ -1,15 +1,15 @@
-#include "seerep-fb-io/general-io-fbs.h"
+#include "seerep-io-fb/io-fb-general.h"
 
 #include <highfive/H5DataSet.hpp>
 
-namespace seerep_fb_io
+namespace seerep_io_fb
 {
-GeneralIOFbs::GeneralIOFbs(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx)
+IoFbGeneral::IoFbGeneral(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx)
   : m_file(file), m_write_mtx(write_mtx)
 {
 }
 
-std::optional<std::string> GeneralIOFbs::readFrameId(const std::string& datatypeGroup, const std::string& uuid)
+std::optional<std::string> IoFbGeneral::readFrameId(const std::string& datatypeGroup, const std::string& uuid)
 {
   std::string id = datatypeGroup + "/" + uuid;
   std::string hdf5DatasetRawDataPath = id + "/" + RAWDATA;
@@ -34,7 +34,7 @@ std::optional<std::string> GeneralIOFbs::readFrameId(const std::string& datatype
   }
 }
 
-std::vector<std::string> GeneralIOFbs::getGroupDatasets(const std::string& id)
+std::vector<std::string> IoFbGeneral::getGroupDatasets(const std::string& id)
 {
   std::vector<std::string> rootObjects = m_file->listObjectNames();
 
@@ -56,7 +56,7 @@ std::vector<std::string> GeneralIOFbs::getGroupDatasets(const std::string& id)
   }
 }
 
-void GeneralIOFbs::deleteAttribute(const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField)
+void IoFbGeneral::deleteAttribute(const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField)
 {
   if (dataSetPtr->hasAttribute(attributeField))
   {
@@ -65,7 +65,7 @@ void GeneralIOFbs::deleteAttribute(const std::shared_ptr<HighFive::DataSet> data
   }
 }
 
-void GeneralIOFbs::writeAABB(
+void IoFbGeneral::writeAABB(
     const std::string& datatypeGroup, const std::string& uuid,
     const boost::geometry::model::box<boost::geometry::model::point<float, 3, boost::geometry::cs::cartesian>>& aabb)
 {
@@ -90,7 +90,7 @@ void GeneralIOFbs::writeAABB(
   m_file->flush();
 }
 
-void GeneralIOFbs::readAABB(
+void IoFbGeneral::readAABB(
     const std::string& datatypeGroup, const std::string& uuid,
     boost::geometry::model::box<boost::geometry::model::point<float, 3, boost::geometry::cs::cartesian>>& aabb)
 {
@@ -117,7 +117,7 @@ void GeneralIOFbs::readAABB(
   }
 }
 
-bool GeneralIOFbs::hasAABB(const std::string& datatypeGroup, const std::string& uuid)
+bool IoFbGeneral::hasAABB(const std::string& datatypeGroup, const std::string& uuid)
 {
   std::string id = datatypeGroup + "/" + uuid;
 
@@ -131,13 +131,13 @@ bool GeneralIOFbs::hasAABB(const std::string& datatypeGroup, const std::string& 
   return group.hasAttribute(AABB_FIELD);
 }
 
-void GeneralIOFbs::readTimeFromRaw(const std::string& datatypeGroup, const std::string& uuid, int64_t& secs,
-                                   int64_t& nanos)
+void IoFbGeneral::readTimeFromRaw(const std::string& datatypeGroup, const std::string& uuid, int64_t& secs,
+                                  int64_t& nanos)
 {
   readTime(datatypeGroup, uuid + "/" + RAWDATA, secs, nanos);
 }
 
-void GeneralIOFbs::readTime(const std::string& datatypeGroup, const std::string& uuid, int64_t& secs, int64_t& nanos)
+void IoFbGeneral::readTime(const std::string& datatypeGroup, const std::string& uuid, int64_t& secs, int64_t& nanos)
 {
   std::string id = datatypeGroup + "/" + uuid;
 
@@ -201,14 +201,14 @@ void GeneralIOFbs::readTime(const std::string& datatypeGroup, const std::string&
   }
 }
 
-void GeneralIOFbs::writeTimeToRaw(const std::string& datatypeGroup, const std::string& uuid, const int64_t& secs,
-                                  const int64_t& nanos)
+void IoFbGeneral::writeTimeToRaw(const std::string& datatypeGroup, const std::string& uuid, const int64_t& secs,
+                                 const int64_t& nanos)
 {
   writeTime(datatypeGroup, uuid + "/" + RAWDATA, secs, nanos);
 }
 
-void GeneralIOFbs::writeTime(const std::string& datatypeGroup, const std::string& uuid, const int64_t& secs,
-                             const int64_t& nanos)
+void IoFbGeneral::writeTime(const std::string& datatypeGroup, const std::string& uuid, const int64_t& secs,
+                            const int64_t& nanos)
 {
   std::string id = datatypeGroup + "/" + uuid;
 
@@ -272,12 +272,12 @@ void GeneralIOFbs::writeTime(const std::string& datatypeGroup, const std::string
   }
 }
 
-bool GeneralIOFbs::hasTimeRaw(const std::string& datatypeGroup, const std::string& uuid)
+bool IoFbGeneral::hasTimeRaw(const std::string& datatypeGroup, const std::string& uuid)
 {
   return hasTime(datatypeGroup, uuid + "/" + RAWDATA);
 }
 
-bool GeneralIOFbs::hasTime(const std::string& datatypeGroup, const std::string& uuid)
+bool IoFbGeneral::hasTime(const std::string& datatypeGroup, const std::string& uuid)
 {
   std::string id = datatypeGroup + "/" + uuid;
   if (!m_file->exist(id))
@@ -303,7 +303,7 @@ bool GeneralIOFbs::hasTime(const std::string& datatypeGroup, const std::string& 
   }
 }
 
-void GeneralIOFbs::writeBoundingBoxLabeled(
+void IoFbGeneral::writeBoundingBoxLabeled(
     const std::string& datatypeGroup, const std::string& uuid,
     const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>>& boundingboxLabeled)
 {
@@ -334,7 +334,7 @@ void GeneralIOFbs::writeBoundingBoxLabeled(
   }
 }
 
-void GeneralIOFbs::writeBoundingBox2DLabeled(
+void IoFbGeneral::writeBoundingBox2DLabeled(
     const std::string& datatypeGroup, const std::string& uuid,
     const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>>& boundingbox2DLabeled)
 {
@@ -364,9 +364,9 @@ void GeneralIOFbs::writeBoundingBox2DLabeled(
   }
 }
 
-void GeneralIOFbs::readBoundingBox2DLabeled(const std::string& datatypeGroup, const std::string& uuid,
-                                            std::vector<std::string> labels,
-                                            std::vector<std::vector<double>> boundingBoxes)
+void IoFbGeneral::readBoundingBox2DLabeled(const std::string& datatypeGroup, const std::string& uuid,
+                                           std::vector<std::string> labels,
+                                           std::vector<std::vector<double>> boundingBoxes)
 {
   std::string id = datatypeGroup + "/" + uuid;
   if (!m_file->exist(id + "/" + LABELBB))
@@ -413,8 +413,8 @@ void GeneralIOFbs::readBoundingBox2DLabeled(const std::string& datatypeGroup, co
   // return result;
 }
 
-void GeneralIOFbs::writeLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid,
-                                      const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>& labelsGeneral)
+void IoFbGeneral::writeLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid,
+                                     const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>& labelsGeneral)
 {
   std::string id = datatypeGroup + "/" + uuid;
 
@@ -434,8 +434,8 @@ void GeneralIOFbs::writeLabelsGeneral(const std::string& datatypeGroup, const st
   }
 }
 
-void GeneralIOFbs::readLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid,
-                                     std::vector<std::string> labels)
+void IoFbGeneral::readLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid,
+                                    std::vector<std::string> labels)
 {
   std::string id = datatypeGroup + "/" + uuid;
   if (!m_file->exist(id + "/" + LABELGENERAL))
@@ -457,7 +457,7 @@ void GeneralIOFbs::readLabelsGeneral(const std::string& datatypeGroup, const std
   // return result;
 }
 
-void GeneralIOFbs::writeProjectname(const std::string& projectname)
+void IoFbGeneral::writeProjectname(const std::string& projectname)
 {
   if (!m_file->hasAttribute(PROJECTNAME))
   {
@@ -470,7 +470,7 @@ void GeneralIOFbs::writeProjectname(const std::string& projectname)
   m_file->flush();
 }
 
-std::string GeneralIOFbs::readProjectname()
+std::string IoFbGeneral::readProjectname()
 {
   std::string projectname;
   if (m_file->hasAttribute(PROJECTNAME))
@@ -480,7 +480,7 @@ std::string GeneralIOFbs::readProjectname()
   return projectname;
 }
 
-void GeneralIOFbs::writeProjectFrameId(const std::string& frameId)
+void IoFbGeneral::writeProjectFrameId(const std::string& frameId)
 {
   if (!m_file->hasAttribute(PROJECTFRAMEID))
   {
@@ -493,7 +493,7 @@ void GeneralIOFbs::writeProjectFrameId(const std::string& frameId)
   m_file->flush();
 }
 
-std::string GeneralIOFbs::readProjectFrameId()
+std::string IoFbGeneral::readProjectFrameId()
 {
   std::string frameId;
   if (m_file->hasAttribute(PROJECTFRAMEID))
@@ -503,4 +503,4 @@ std::string GeneralIOFbs::readProjectFrameId()
   return frameId;
 }
 
-} /* namespace seerep_fb_io */
+} /* namespace seerep_io_fb */
