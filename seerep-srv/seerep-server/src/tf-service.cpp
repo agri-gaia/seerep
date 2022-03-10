@@ -2,8 +2,8 @@
 
 namespace seerep_server
 {
-TfService::TfService(std::shared_ptr<seerep_core::SeerepCore> seerepCore)
-  : tfPb(std::make_shared<seerep_core_pb::TfPb>(seerepCore))
+TfService::TfService(std::shared_ptr<seerep_core::Core> seerepCore)
+  : tfPb(std::make_shared<seerep_core_pb::CorePbTf>(seerepCore))
 {
 }
 

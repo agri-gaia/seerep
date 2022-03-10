@@ -6,11 +6,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Protobuf REQUIRED)
 find_package(gRPC CONFIG REQUIRED)
-find_package(SeerepProtobufIO REQUIRED)
-find_package(SeerepCoreIO REQUIRED)
+find_package(SeerepIoPb REQUIRED)
+find_package(SeerepIoCore REQUIRED)
 find_package(SeerepCom REQUIRED)
 find_package(SeerepCore REQUIRED)
-find_package(SeerepPbCore REQUIRED)
+find_package(SeerepCorePb REQUIRED)
 find_package(HighFive REQUIRED)
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(catkin REQUIRED
@@ -18,17 +18,17 @@ find_package(catkin REQUIRED
 	seerep_ros_conversions
 )
 
-message("LIBS" ${SeerepCoreIO_LIBRARIES})
-message("INCS" ${SeerepCoreIO_INCLUDE_DIRS})
+message("LIBS" ${SeerepIoCore_LIBRARIES})
+message("INCS" ${SeerepIoCore_INCLUDE_DIRS})
 message("INCS2" ${HighFive_INCLUDE_DIRS})
 
 include_directories(
 	include
 	${SeerepCom_INCLUDE_DIRS}
 	${SeerepCore_INCLUDE_DIRS}
-	${SeerepPbCore_INCLUDE_DIRS}
-	${SeerepProtobufIO_INCLUDE_DIRS}
-	${SeerepCoreIO_INCLUDE_DIRS}
+	${SeerepCorePb_INCLUDE_DIRS}
+	${SeerepIoPb_INCLUDE_DIRS}
+	${SeerepIoCore_INCLUDE_DIRS}
 	${HighFive_INCLUDE_DIRS}
 	${catkin_INCLUDE_DIRS}
 )
@@ -55,19 +55,19 @@ add_executable(${PROJECT_NAME}_client
 )
 
 target_link_libraries(${PROJECT_NAME}_server
-	${SeerepProtobufIO_LIBRARIES}
-	${SeerepCoreIO_LIBRARIES}
+	${SeerepIoPb_LIBRARIES}
+	${SeerepIoCore_LIBRARIES}
 	${SeerepCom_LIBRARIES}
 	${SeerepCore_LIBRARIES}
-	${SeerepPbCore_LIBRARIES}
+	${SeerepCorePb_LIBRARIES}
 	gRPC::grpc++_reflection
 	${PROJECT_NAME}_server_grpc
 	Eigen3::Eigen
 )
 
 target_link_libraries(${PROJECT_NAME}_client
-	${SeerepProtobufIO_LIBRARIES}
-	${SeerepCoreIO_LIBRARIES}
+	${SeerepIoPb_LIBRARIES}
+	${SeerepIoCore_LIBRARIES}
 	${SeerepCom_LIBRARIES}
 	gRPC::grpc++_reflection
 )

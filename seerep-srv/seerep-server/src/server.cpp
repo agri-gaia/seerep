@@ -39,7 +39,7 @@ int main(int argc, char** argv)
   std::cout << "The used data folder is: " << datafolder << std::endl;
   std::string server_address = "0.0.0.0:9090";
 
-  auto seerepCore = std::make_shared<seerep_core::SeerepCore>(datafolder);
+  auto seerepCore = std::make_shared<seerep_core::Core>(datafolder);
 
   seerep_server::MetaOperations metaOperationsService(seerepCore);
   // seerep_server::ReceiveSensorMsgs receiveSensorMsgsService(seerepCore);

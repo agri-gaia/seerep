@@ -2,8 +2,8 @@
 
 namespace seerep_server
 {
-ImageService::ImageService(std::shared_ptr<seerep_core::SeerepCore> seerepCore)
-  : imagePb(std::make_shared<seerep_core_pb::ImagePb>(seerepCore))
+ImageService::ImageService(std::shared_ptr<seerep_core::Core> seerepCore)
+  : imagePb(std::make_shared<seerep_core_pb::CorePbImage>(seerepCore))
 {
 }
 
