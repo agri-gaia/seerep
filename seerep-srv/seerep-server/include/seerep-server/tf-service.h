@@ -3,15 +3,15 @@
 
 // seerep
 #include <seerep-com/tf-service.grpc.pb.h>
-#include <seerep-core/seerep-core.h>
-#include <seerep-pb-core/tf.h>
+#include <seerep-core/core.h>
+#include <seerep-core-pb/core-pb-tf.h>
 
 namespace seerep_server
 {
 class TfService final : public seerep::TfService::Service
 {
 public:
-  TfService(std::shared_ptr<seerep_core::SeerepCore> seerepCore);
+  TfService(std::shared_ptr<seerep_core::Core> seerepCore);
 
   grpc::Status TransferTransformStamped(grpc::ServerContext* context, const seerep::TransformStamped* transform,
                                         seerep::ServerResponse* response);
@@ -21,7 +21,7 @@ public:
                                    seerep::TransformStamped* response);
 
 private:
-  std::shared_ptr<seerep_core_pb::TfPb> tfPb;
+  std::shared_ptr<seerep_core_pb::CorePbTf> tfPb;
 };
 
 } /* namespace seerep_server */

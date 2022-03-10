@@ -1,0 +1,8 @@
+#ifndef SeerepCorePbCONFIG_H_
+#define SeerepCorePbCONFIG_H_
+
+// the configured options and settings for seerep_pb_io
+#define SEEREP_CORE_PB_VERSION_MAJOR @seerep_core_pb_VERSION_MAJOR @
+#define SEEREP_CORE_PB_VERSION_MINOR @seerep_core_pb_VERSION_MINOR @
+
+#endif /* SeerepCorePbCONFIG_H_ */

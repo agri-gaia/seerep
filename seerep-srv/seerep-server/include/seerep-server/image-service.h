@@ -3,15 +3,15 @@
 
 // seerep
 #include <seerep-com/image-service.grpc.pb.h>
-#include <seerep-core/seerep-core.h>
-#include <seerep-pb-core/image.h>
+#include <seerep-core/core.h>
+#include <seerep-core-pb/core-pb-image.h>
 
 namespace seerep_server
 {
 class ImageService final : public seerep::ImageService::Service
 {
 public:
-  ImageService(std::shared_ptr<seerep_core::SeerepCore> seerepCore);
+  ImageService(std::shared_ptr<seerep_core::Core> seerepCore);
 
   grpc::Status GetImage(grpc::ServerContext* context, const seerep::Query* request,
                         grpc::ServerWriter<seerep::Image>* writer);
@@ -19,7 +19,7 @@ public:
   grpc::Status TransferImage(grpc::ServerContext* context, const seerep::Image* image, seerep::ServerResponse* response);
 
 private:
-  std::shared_ptr<seerep_core_pb::ImagePb> imagePb;
+  std::shared_ptr<seerep_core_pb::CorePbImage> imagePb;
 };
 
 } /* namespace seerep_server */

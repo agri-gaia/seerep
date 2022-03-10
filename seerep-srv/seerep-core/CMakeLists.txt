@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-find_package(SeerepProtobufIO REQUIRED)
+find_package(SeerepIoCore REQUIRED)
 find_package(seerep_ros_conversions REQUIRED)
 find_package(Protobuf REQUIRED)
 find_package(SeerepMsgs REQUIRED)
@@ -28,7 +28,7 @@ configure_file(include/SeerepCoreConfig.h.in SeerepCoreConfig.h)
 include_directories(
 	include
 	${SeerepMsgs_INCLUDE_DIRS}
-	${SeerepProtobufIO_INCLUDE_DIRS}
+	${SeerepIoCore_INCLUDE_DIRS}
 	${seerep_ros_conversions_INCLUDE_DIRS}
 	${PROTOBUF_INCLUDE_DIR}
 	${HighFive_INCLUDE_DIRS}
@@ -37,19 +37,16 @@ include_directories(
 )
 
 add_library(seerepcore
-	src/project.cpp
-	src/seerep-core.cpp
-	src/tf.cpp
-	src/tf-overview.cpp
-	src/pointcloud.cpp
-	src/pointcloud-overview.cpp
-	src/image.cpp
-	src/image-overview.cpp
+	src/core-project.cpp
+	src/core.cpp
+	src/core-tf.cpp
+	src/core-pointcloud.cpp
+	src/core-image.cpp
 )
 
 target_link_libraries(seerepcore
 	${SeerepMsgs_LIBRARIES}
-	${SeerepProtobufIO_LIBRARIES}
+	${SeerepIoCore_LIBRARIES}
 	${seerep_ros_conversions_LIBRARIES}
 	${PROTOBUF_LIBRARIES}
 	${HighFive_LIBRARIES}
@@ -59,15 +56,11 @@ target_link_libraries(seerepcore
 )
 
 set(INSTALL_HEADERS
-	include/seerep-core/project.h
-	include/seerep-core/seerep-core.h
-	include/seerep-core/tf.h
-	include/seerep-core/tf-overview.h
-	include/seerep-core/pointcloud.h
-	include/seerep-core/pointcloud-overview.h
-	include/seerep-core/image.h
-	include/seerep-core/image-overview.h
-	include/seerep-core/aabb-hierarchy.h
+	include/seerep-core/core-project.h
+	include/seerep-core/core.h
+	include/seerep-core/core-tf.h
+	include/seerep-core/core-pointcloud.h
+	include/seerep-core/core-image.h
 )
 
 set_target_properties(seerepcore PROPERTIES PUBLIC_HEADER "${INSTALL_HEADERS}")

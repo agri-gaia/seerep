@@ -11,7 +11,7 @@
 // seerep
 #include <seerep-com/transfer-sensor-msgs.grpc.pb.h>
 
-#include <seerep-core/seerep-core.h>
+#include <seerep-core/core.h>
 
 // this class is for all the gRPC calls that are not yet implemented in the server
 
@@ -20,7 +20,7 @@ namespace seerep_server
 class ReceiveSensorMsgs final : public seerep::TransferSensorMsgs::Service
 {
 public:
-  ReceiveSensorMsgs(std::shared_ptr<seerep_core::SeerepCore> seerepCore);
+  ReceiveSensorMsgs(std::shared_ptr<seerep_core::Core> seerepCore);
   grpc::Status TransferHeader(grpc::ServerContext* context, const seerep::Header* header,
                               seerep::ServerResponse* response);
 
@@ -35,7 +35,7 @@ public:
                                    seerep::ServerResponse* response);
 
 private:
-  std::shared_ptr<seerep_core::SeerepCore> seerepCore;
+  std::shared_ptr<seerep_core::Core> seerepCore;
 };
 } /* namespace seerep_server */
 #endif  // SEEREP_SERVER_RECEIVE_SENSOR_MSGS_H_

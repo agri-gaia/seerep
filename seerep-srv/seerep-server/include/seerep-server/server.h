@@ -15,7 +15,7 @@
 // #include "seerep-server/point-cloud-service.h"
 #include "seerep-server/tf-service.h"
 
-#include <seerep-core/seerep-core.h>
+#include <seerep-core/core.h>
 
 namespace seerep_server
 {

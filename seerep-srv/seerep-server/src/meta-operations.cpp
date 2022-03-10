@@ -2,7 +2,7 @@
 
 namespace seerep_server
 {
-MetaOperations::MetaOperations(std::shared_ptr<seerep_core::SeerepCore> seerepCore) : seerepCore(seerepCore)
+MetaOperations::MetaOperations(std::shared_ptr<seerep_core::Core> seerepCore) : seerepCore(seerepCore)
 {
 }
 
