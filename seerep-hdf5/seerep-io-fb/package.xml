@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>seerep-fb-io</name>
+  <name>seerep-io-fb</name>
   <version>0.0.1</version>
   <description> The seerep flatbuffers IO package </description>
 

@@ -1,8 +1,0 @@
-#ifndef SeerepFlatbuffersIOCONFIG_H_
-#define SeerepFlatbuffersIOCONFIG_H_
-
-// the configured options and settings for seerep_fb_io_flatbuffers
-#define SEEREP_HDF5_FLATBUFFER_VERSION_MAJOR @seerep_fb_io_flatbuffers_VERSION_MAJOR @
-#define SEEREP_HDF5_FLATBUFFERS_VERSION_MINOR @seerep_fb_io_flatbuffers_VERSION_MINOR @
-
-#endif /* SeerepFlatbuffersIOCONFIG_H_ */

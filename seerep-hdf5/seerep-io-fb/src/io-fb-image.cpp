@@ -1,11 +1,11 @@
-#include "seerep-fb-io/image-io-fbs.h"
+#include "seerep-io-fb/io-fb-image.h"
 
 #include <highfive/H5DataSet.hpp>
 
-namespace seerep_fb_io
+namespace seerep_io_fb
 {
 ImageIOFbs::ImageIOFbs(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx)
-  : GeneralIOFbs(file, write_mtx)
+  : IoFbGeneral(file, write_mtx)
 {
 }
 
@@ -171,4 +171,4 @@ std::optional<flatbuffers::Offset<seerep::fb::Image>> ImageIOFbs::readImage(cons
   // return image;
 }
 
-} /* namespace seerep_fb_io */
+} /* namespace seerep_io_fb */
