@@ -24,6 +24,5 @@
     "runArgs": [
         "--network=host"
     ],
-    "initializeCommand": "docker pull seerep/dev-image:latest",
     "postStartCommand": "git -C ./src pull || git clone git@github.com:agri-gaia/seerep.git ./src; ./src/.devcontainer/postCreateCommand.sh"
 }
