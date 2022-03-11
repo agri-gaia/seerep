@@ -36,10 +36,13 @@ std::string CoreProject::getFrameId()
   return m_frameId;
 }
 
-// seerep_core_msgs::QueryResultProject CoreProject::getPointCloud(const seerep_core_msgs::Query& query)
-// {
-//   return m_pointcloudOverview->getData(m_tfOverview->transformQuery(query, m_frameId));
-// }
+seerep_core_msgs::QueryResultProject CoreProject::getPointCloud(const seerep_core_msgs::Query& query)
+{
+  seerep_core_msgs::QueryResultProject result;
+  result.projectUuid = m_id;
+  result.dataUuids = m_pointcloudOverview->getData(m_tfOverview->transformQuery(query, m_frameId));
+  return result;
+}
 
 seerep_core_msgs::QueryResultProject CoreProject::getImage(const seerep_core_msgs::Query& query)
 {
@@ -73,10 +76,10 @@ void CoreProject::recreateDatatypes()
   }
 }
 
-// void CoreProject::addPointCloud(const seerep::PointCloud2& pointcloud2)
-// {
-//   m_pointcloudOverview->addDataset(pointcloud2);
-// }
+void CoreProject::addPointCloud(const seerep_core_msgs::DatasetIndexable& pointcloud)
+{
+  m_pointcloudOverview->addDataset(pointcloud);
+}
 
 void CoreProject::addImage(const seerep_core_msgs::DatasetIndexable& image)
 {

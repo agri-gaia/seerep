@@ -7,13 +7,11 @@
 // seerep-msgs
 #include <seerep-msgs/query.pb.h>
 #include <seerep-msgs/image.pb.h>
-#include <seerep-msgs/server_response.pb.h>
 // seerep-core-msgs
 #include <seerep-msgs/query.h>
 #include <seerep-msgs/query-result.h>
 // seerep-pb-io
 #include <seerep-io-pb/io-pb-image.h>
-
 // seerep-core
 #include <seerep-core/core.h>
 

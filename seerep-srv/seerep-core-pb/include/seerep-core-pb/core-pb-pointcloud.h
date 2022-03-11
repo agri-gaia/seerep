@@ -7,39 +7,36 @@
 // seerep-msgs
 #include <seerep-msgs/query.pb.h>
 #include <seerep-msgs/point_cloud_2.pb.h>
-
-#include <seerep-msgs/aabb.h>
-
+// seerep-core-msgs
+#include <seerep-msgs/query.h>
+#include <seerep-msgs/query-result.h>
 // seerep-pb-io
 #include <seerep-io-pb/io-pb-pointcloud.h>
-// seerep-conversion
-#include <seerep_ros_conversions/conversions.h>
+// seerep-core
+#include <seerep-core/core.h>
 
-#include <eigen3/Eigen/Dense>
-
-#include <highfive/H5Group.hpp>
+// uuid
+#include <boost/uuid/uuid.hpp>             // uuid class
+#include <boost/uuid/uuid_generators.hpp>  // generators
+#include <boost/uuid/uuid_io.hpp>          // streaming operators etc.
+#include <boost/lexical_cast.hpp>
+#include <boost/functional/hash.hpp>
 
 namespace seerep_core_pb
 {
 class CorePbPointCloud
 {
 public:
-  CorePbPointCloud(const std::string& uuid, HighFive::Group& cloud_group);
-
+  CorePbPointCloud(std::shared_ptr<seerep_core::Core> seerepCore);
   ~CorePbPointCloud();
 
-  std::optional<seerep::PointCloud2> getData(const seerep::Query& query);
-
-  void getMinMaxFromBundingBox(Eigen::Vector4f& minPt, Eigen::Vector4f& maxPt, const seerep::Boundingbox& bb);
-
-  seerep_core_msgs::AABB getAABB();
-  std::string getUUID();
+  std::vector<seerep::PointCloud2> getData(const seerep::Query& query);
+  boost::uuids::uuid addData(const seerep::PointCloud2& pc);
 
 private:
-  const std::string m_uuid;
-  std::unordered_map<uint64_t, std::shared_ptr<seerep_core_pb::CorePbPointCloud>> m_datasets;
-
-  const HighFive::Group& m_cloud_group;
+  std::shared_ptr<seerep_core::Core> m_seerepCore;
+  std::unordered_map<boost::uuids::uuid, std::shared_ptr<seerep_io_pb::IoPbPointCloud>, boost::hash<boost::uuids::uuid>>
+      m_hdf5IoMap;
 };
 
 }  // namespace seerep_core_pb

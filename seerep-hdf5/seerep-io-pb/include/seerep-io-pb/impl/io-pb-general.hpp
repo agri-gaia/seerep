@@ -35,25 +35,25 @@ T IoPbGeneral::getAttribute(const std::string& id, const std::shared_ptr<HighFiv
 template <class T>
 void IoPbGeneral::writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, const seerep::Header& header)
 {
-  if (!object.hasAttribute(HEADER_STAMP_SECONDS))
-    object.createAttribute(HEADER_STAMP_SECONDS, header.stamp().seconds());
+  if (!object.hasAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_SECONDS))
+    object.createAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_SECONDS, header.stamp().seconds());
   else
-    object.getAttribute(HEADER_STAMP_SECONDS).write(header.stamp().seconds());
+    object.getAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_SECONDS).write(header.stamp().seconds());
 
-  if (!object.hasAttribute(HEADER_STAMP_NANOS))
-    object.createAttribute(HEADER_STAMP_NANOS, header.stamp().nanos());
+  if (!object.hasAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_NANOS))
+    object.createAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_NANOS, header.stamp().nanos());
   else
-    object.getAttribute(HEADER_STAMP_NANOS).write(header.stamp().nanos());
+    object.getAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_NANOS).write(header.stamp().nanos());
 
-  if (!object.hasAttribute(HEADER_FRAME_ID))
-    object.createAttribute(HEADER_FRAME_ID, header.frame_id());
+  if (!object.hasAttribute(seerep_io_core::IoCoreGeneral::HEADER_FRAME_ID))
+    object.createAttribute(seerep_io_core::IoCoreGeneral::HEADER_FRAME_ID, header.frame_id());
   else
-    object.getAttribute(HEADER_FRAME_ID).write(header.frame_id());
+    object.getAttribute(seerep_io_core::IoCoreGeneral::HEADER_FRAME_ID).write(header.frame_id());
 
-  if (!object.hasAttribute(HEADER_SEQ))
-    object.createAttribute(HEADER_SEQ, header.seq());
+  if (!object.hasAttribute(seerep_io_core::IoCoreGeneral::HEADER_SEQ))
+    object.createAttribute(seerep_io_core::IoCoreGeneral::HEADER_SEQ, header.seq());
   else
-    object.getAttribute(HEADER_SEQ).write(header.seq());
+    object.getAttribute(seerep_io_core::IoCoreGeneral::HEADER_SEQ).write(header.seq());
 }
 
 template <class T>
@@ -65,11 +65,11 @@ seerep::Header IoPbGeneral::readHeaderAttributes(HighFive::AnnotateTraits<T>& ob
   int32_t nanos;
   uint32_t seq;
 
-  object.getAttribute(HEADER_FRAME_ID).read(header.mutable_frame_id());
+  object.getAttribute(seerep_io_core::IoCoreGeneral::HEADER_FRAME_ID).read(header.mutable_frame_id());
 
-  object.getAttribute(HEADER_STAMP_SECONDS).read(seconds);
-  object.getAttribute(HEADER_STAMP_NANOS).read(nanos);
-  object.getAttribute(HEADER_SEQ).read(seq);
+  object.getAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_SECONDS).read(seconds);
+  object.getAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_NANOS).read(nanos);
+  object.getAttribute(seerep_io_core::IoCoreGeneral::HEADER_SEQ).read(seq);
 
   header.set_seq(seq);
   header.mutable_stamp()->set_seconds(seconds);

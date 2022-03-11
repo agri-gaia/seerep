@@ -5,6 +5,7 @@
 #include <highfive/H5File.hpp>
 
 // seerep-io
+#include <seerep-io-core/io-core-point-cloud.h>
 #include "seerep-io-pb/io-pb-general.h"
 
 // seerep-msgs
@@ -48,7 +49,7 @@ private:
   template <typename T>
   void read(const std::string cloud_uuid, const std::string& field_name, seerep::PointCloud2& cloud, size_t size)
   {
-    const std::string id = HDF5_GROUP_POINTCLOUD + "/" + cloud_uuid + "/" + field_name;
+    const std::string id = seerep_io_core::IoCorePointCloud::BOUNDINGBOX + "/" + cloud_uuid + "/" + field_name;
     PointCloud2Iterator<T> iter(cloud, field_name);
     HighFive::DataSet dataset = m_file->getDataSet(id);
     std::vector<T> data;
@@ -65,7 +66,7 @@ private:
   template <typename T>
   void write(const std::string cloud_uuid, const std::string& field_name, const seerep::PointCloud2& cloud, size_t size)
   {
-    const std::string id = HDF5_GROUP_POINTCLOUD + "/" + cloud_uuid + "/" + field_name;
+    const std::string id = seerep_io_core::IoCorePointCloud::BOUNDINGBOX + "/" + cloud_uuid + "/" + field_name;
     HighFive::DataSpace data_space(size);
 
     std::shared_ptr<HighFive::DataSet> dataset_ptr;
@@ -107,32 +108,32 @@ private:
   void readOtherFields(const std::string& uuid, seerep::PointCloud2& cloud,
                        const std::map<std::string, seerep::PointField>& fields);
 
-  // image / pointcloud attribute keys
-  inline static const std::string HEIGHT = "height";
-  inline static const std::string WIDTH = "width";
-  inline static const std::string ENCODING = "encoding";
-  inline static const std::string IS_BIGENDIAN = "is_bigendian";
-  inline static const std::string ROW_STEP = "row_step";
-  inline static const std::string POINT_STEP = "point_step";
-  inline static const std::string IS_DENSE = "is_dense";
+  //   // image / pointcloud attribute keys
+  //   inline static const std::string HEIGHT = "height";
+  //   inline static const std::string WIDTH = "width";
+  //   inline static const std::string ENCODING = "encoding";
+  //   inline static const std::string IS_BIGENDIAN = "is_bigendian";
+  //   inline static const std::string ROW_STEP = "row_step";
+  //   inline static const std::string POINT_STEP = "point_step";
+  //   inline static const std::string IS_DENSE = "is_dense";
 
-  // pointcloud fields attribute keys
-  inline static const std::string FIELD_NAME = "field_name_";
-  inline static const std::string FIELD_OFFSET = "field_offset_";
-  inline static const std::string FIELD_DATATYPE = "field_datatype_";
-  inline static const std::string FIELD_COUNT = "field_count_";
+  //   // pointcloud fields attribute keys
+  //   inline static const std::string FIELD_NAME = "field_name_";
+  //   inline static const std::string FIELD_OFFSET = "field_offset_";
+  //   inline static const std::string FIELD_DATATYPE = "field_datatype_";
+  //   inline static const std::string FIELD_COUNT = "field_count_";
 
-  // point and quaternion attribute keys
-  const std::string X = "x";
-  const std::string Y = "y";
-  const std::string Z = "z";
-  const std::string W = "w";
+  //   // point and quaternion attribute keys
+  //   const std::string X = "x";
+  //   const std::string Y = "y";
+  //   const std::string Z = "z";
+  //   const std::string W = "w";
 
-public:
-  // make private again after fixing io calls of pointcloud.cpp and pointcloud-overview.cpp
-  inline static const std::string BOUNDINGBOX = "TODO";  // "boundingbox";
-  // datatype group names in hdf5
-  inline static const std::string HDF5_GROUP_POINTCLOUD = "pointclouds";
+  // public:
+  //   // make private again after fixing io calls of pointcloud.cpp and pointcloud-overview.cpp
+  //   inline static const std::string BOUNDINGBOX = "TODO";  // "boundingbox";
+  //   // datatype group names in hdf5
+  //   inline static const std::string seerep_io_core::IoCorePointCloud::BOUNDINGBOX = "pointclouds";
 };
 } /* namespace seerep_io_pb */
 

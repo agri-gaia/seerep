@@ -83,7 +83,7 @@ public:
 
   std::string readProjectFrameId();
 
-private:
+public:
   // header attribute keys
   inline static const std::string HEADER_STAMP_SECONDS = "header_stamp_seconds";
   inline static const std::string HEADER_STAMP_NANOS = "header_stamp_nanos";

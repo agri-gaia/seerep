@@ -12,9 +12,9 @@ IoPbPointCloud::IoPbPointCloud(std::shared_ptr<HighFive::File>& file, std::share
 std::map<std::string, HighFive::Group> IoPbPointCloud::getPointClouds()
 {
   std::map<std::string, HighFive::Group> map;
-  if (m_file->exist(HDF5_GROUP_POINTCLOUD))
+  if (m_file->exist(seerep_io_core::IoCorePointCloud::HDF5_GROUP_POINTCLOUD))
   {
-    const HighFive::Group& clouds_group = m_file->getGroup(HDF5_GROUP_POINTCLOUD);
+    const HighFive::Group& clouds_group = m_file->getGroup(seerep_io_core::IoCorePointCloud::HDF5_GROUP_POINTCLOUD);
     for (std::string& cloud_name : clouds_group.listObjectNames())
     {
       map.insert(std::pair(cloud_name, clouds_group.getGroup(cloud_name)));
@@ -26,29 +26,29 @@ std::map<std::string, HighFive::Group> IoPbPointCloud::getPointClouds()
 std::shared_ptr<HighFive::Group> IoPbPointCloud::writePointCloud2(const std::string& uuid,
                                                                   const seerep::PointCloud2& pointcloud2)
 {
-  std::string cloud_group_id = HDF5_GROUP_POINTCLOUD + "/" + uuid;
+  std::string cloud_group_id = seerep_io_core::IoCorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + uuid;
 
   std::shared_ptr<HighFive::Group> data_group_ptr;
 
   if (!m_file->exist(cloud_group_id))
   {
     data_group_ptr = std::make_shared<HighFive::Group>(m_file->createGroup(cloud_group_id));
-    data_group_ptr->createAttribute(HEIGHT, pointcloud2.height());
-    data_group_ptr->createAttribute(WIDTH, pointcloud2.width());
-    data_group_ptr->createAttribute(IS_BIGENDIAN, pointcloud2.is_bigendian());
-    data_group_ptr->createAttribute(POINT_STEP, pointcloud2.point_step());
-    data_group_ptr->createAttribute(ROW_STEP, pointcloud2.row_step());
-    data_group_ptr->createAttribute(IS_DENSE, pointcloud2.is_dense());
+    data_group_ptr->createAttribute(seerep_io_core::IoCorePointCloud::HEIGHT, pointcloud2.height());
+    data_group_ptr->createAttribute(seerep_io_core::IoCorePointCloud::WIDTH, pointcloud2.width());
+    data_group_ptr->createAttribute(seerep_io_core::IoCorePointCloud::IS_BIGENDIAN, pointcloud2.is_bigendian());
+    data_group_ptr->createAttribute(seerep_io_core::IoCorePointCloud::POINT_STEP, pointcloud2.point_step());
+    data_group_ptr->createAttribute(seerep_io_core::IoCorePointCloud::ROW_STEP, pointcloud2.row_step());
+    data_group_ptr->createAttribute(seerep_io_core::IoCorePointCloud::IS_DENSE, pointcloud2.is_dense());
   }
   else
   {
     data_group_ptr = std::make_shared<HighFive::Group>(m_file->getGroup(cloud_group_id));
-    data_group_ptr->getAttribute(HEIGHT).write(pointcloud2.height());
-    data_group_ptr->getAttribute(WIDTH).write(pointcloud2.width());
-    data_group_ptr->getAttribute(IS_BIGENDIAN).write(pointcloud2.is_bigendian());
-    data_group_ptr->getAttribute(POINT_STEP).write(pointcloud2.point_step());
-    data_group_ptr->getAttribute(ROW_STEP).write(pointcloud2.row_step());
-    data_group_ptr->getAttribute(IS_DENSE).write(pointcloud2.is_dense());
+    data_group_ptr->getAttribute(seerep_io_core::IoCorePointCloud::HEIGHT).write(pointcloud2.height());
+    data_group_ptr->getAttribute(seerep_io_core::IoCorePointCloud::WIDTH).write(pointcloud2.width());
+    data_group_ptr->getAttribute(seerep_io_core::IoCorePointCloud::IS_BIGENDIAN).write(pointcloud2.is_bigendian());
+    data_group_ptr->getAttribute(seerep_io_core::IoCorePointCloud::POINT_STEP).write(pointcloud2.point_step());
+    data_group_ptr->getAttribute(seerep_io_core::IoCorePointCloud::ROW_STEP).write(pointcloud2.row_step());
+    data_group_ptr->getAttribute(seerep_io_core::IoCorePointCloud::IS_DENSE).write(pointcloud2.is_dense());
   }
 
   writePointFieldAttributes(*data_group_ptr, pointcloud2.fields());
@@ -73,7 +73,7 @@ std::shared_ptr<HighFive::Group> IoPbPointCloud::writePointCloud2(const std::str
 
 void IoPbPointCloud::writePoints(const std::string& uuid, const seerep::PointCloud2& cloud)
 {
-  std::string points_id = HDF5_GROUP_POINTCLOUD + "/" + uuid + "/points";
+  std::string points_id = seerep_io_core::IoCorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + uuid + "/points";
   HighFive::DataSpace data_space({ cloud.height(), cloud.width(), 3 });
 
   std::shared_ptr<HighFive::DataSet> points_dataset_ptr;
@@ -126,21 +126,21 @@ void IoPbPointCloud::writePoints(const std::string& uuid, const seerep::PointClo
 
   // write bounding box as attribute to dataset
   const std::vector boundingbox{ min[0], min[1], min[2], max[0], max[1], max[2] };
-  if (!points_dataset_ptr->hasAttribute(BOUNDINGBOX))
-    points_dataset_ptr->createAttribute(BOUNDINGBOX, boundingbox);
+  if (!points_dataset_ptr->hasAttribute(seerep_io_core::IoCorePointCloud::BOUNDINGBOX))
+    points_dataset_ptr->createAttribute(seerep_io_core::IoCorePointCloud::BOUNDINGBOX, boundingbox);
   else
-    points_dataset_ptr->getAttribute(BOUNDINGBOX).write(boundingbox);
+    points_dataset_ptr->getAttribute(seerep_io_core::IoCorePointCloud::BOUNDINGBOX).write(boundingbox);
 
   // write data to dataset
   points_dataset_ptr->write(point_data);
 
   // TODO what is this?
-  // writeBoundingBoxLabeled(HDF5_GROUP_POINTCLOUD, uuid, pointcloud2.labels_bb());
+  // writeBoundingBoxLabeled(seerep_io_core::IoCorePointCloud::HDF5_GROUP_POINTCLOUD, uuid, pointcloud2.labels_bb());
 }
 
 void IoPbPointCloud::writeColorsRGB(const std::string& uuid, const seerep::PointCloud2& cloud)
 {
-  const std::string colors_id = HDF5_GROUP_POINTCLOUD + "/" + uuid + "/colors";
+  const std::string colors_id = seerep_io_core::IoCorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + uuid + "/colors";
   HighFive::DataSpace data_space({ cloud.height(), cloud.width(), 3 });
 
   std::shared_ptr<HighFive::DataSet> colors_dataset_ptr;
@@ -171,7 +171,7 @@ void IoPbPointCloud::writeColorsRGB(const std::string& uuid, const seerep::Point
 
 void IoPbPointCloud::writeColorsRGBA(const std::string& uuid, const seerep::PointCloud2& cloud)
 {
-  const std::string colors_id = HDF5_GROUP_POINTCLOUD + "/" + uuid + "/colors";
+  const std::string colors_id = seerep_io_core::IoCorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + uuid + "/colors";
   HighFive::DataSpace data_space({ cloud.height(), cloud.width(), 4 });
 
   std::shared_ptr<HighFive::DataSet> colors_dataset_ptr;
@@ -274,12 +274,12 @@ std::optional<seerep::PointCloud2> IoPbPointCloud::readPointCloud2(const std::st
 
   uint32_t height, width, point_step, row_step;
   bool is_bigendian, is_dense;
-  cloud_group.getAttribute(HEIGHT).read(height);
-  cloud_group.getAttribute(WIDTH).read(width);
-  cloud_group.getAttribute(IS_BIGENDIAN).read(is_bigendian);
-  cloud_group.getAttribute(POINT_STEP).read(point_step);
-  cloud_group.getAttribute(ROW_STEP).read(row_step);
-  cloud_group.getAttribute(IS_DENSE).read(is_dense);
+  cloud_group.getAttribute(seerep_io_core::IoCorePointCloud::HEIGHT).read(height);
+  cloud_group.getAttribute(seerep_io_core::IoCorePointCloud::WIDTH).read(width);
+  cloud_group.getAttribute(seerep_io_core::IoCorePointCloud::IS_BIGENDIAN).read(is_bigendian);
+  cloud_group.getAttribute(seerep_io_core::IoCorePointCloud::POINT_STEP).read(point_step);
+  cloud_group.getAttribute(seerep_io_core::IoCorePointCloud::ROW_STEP).read(row_step);
+  cloud_group.getAttribute(seerep_io_core::IoCorePointCloud::IS_DENSE).read(is_dense);
 
   pointcloud2.set_height(height);
   pointcloud2.set_width(width);
@@ -318,7 +318,7 @@ void IoPbPointCloud::readPoints(const std::string& uuid, seerep::PointCloud2& cl
   seerep_io_pb::PointCloud2Iterator<float> z_iter(cloud, "z");
 
   std::vector<std::vector<std::vector<float>>> point_data;
-  std::string points_id = HDF5_GROUP_POINTCLOUD + "/" + uuid + "/points";
+  std::string points_id = seerep_io_core::IoCorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + uuid + "/points";
 
   HighFive::DataSet points_dataset = m_file->getDataSet(points_id);
 
@@ -343,7 +343,7 @@ void IoPbPointCloud::readColorsRGB(const std::string& uuid, seerep::PointCloud2&
   seerep_io_pb::PointCloud2Iterator<uint8_t> b_iter(cloud, "b");
 
   std::vector<std::vector<std::vector<uint8_t>>> color_data;
-  std::string colors_id = HDF5_GROUP_POINTCLOUD + "/" + uuid + "/colors";
+  std::string colors_id = seerep_io_core::IoCorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + uuid + "/colors";
 
   HighFive::DataSet colors_dataset = m_file->getDataSet(colors_id);
 
@@ -369,7 +369,7 @@ void IoPbPointCloud::readColorsRGBA(const std::string& uuid, seerep::PointCloud2
   seerep_io_pb::PointCloud2Iterator<uint8_t> a_iter(cloud, "a");
 
   std::vector<std::vector<std::vector<uint8_t>>> color_data;
-  std::string colors_id = HDF5_GROUP_POINTCLOUD + "/" + uuid + "/colors";
+  std::string colors_id = seerep_io_core::IoCorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + uuid + "/colors";
 
   HighFive::DataSet colors_dataset = m_file->getDataSet(colors_id);
 
@@ -442,25 +442,25 @@ void IoPbPointCloud::writePointFieldAttributes(
     counts.push_back(repeatedPointField.at(i).count());
   }
 
-  if (!cloud_group.hasAttribute(FIELD_NAME))
-    cloud_group.createAttribute(FIELD_NAME, names);
+  if (!cloud_group.hasAttribute(seerep_io_core::IoCorePointCloud::FIELD_NAME))
+    cloud_group.createAttribute(seerep_io_core::IoCorePointCloud::FIELD_NAME, names);
   else
-    cloud_group.getAttribute(FIELD_NAME).write(names);
+    cloud_group.getAttribute(seerep_io_core::IoCorePointCloud::FIELD_NAME).write(names);
 
-  if (!cloud_group.hasAttribute(FIELD_OFFSET))
-    cloud_group.createAttribute(FIELD_OFFSET, offsets);
+  if (!cloud_group.hasAttribute(seerep_io_core::IoCorePointCloud::FIELD_OFFSET))
+    cloud_group.createAttribute(seerep_io_core::IoCorePointCloud::FIELD_OFFSET, offsets);
   else
-    cloud_group.getAttribute(FIELD_OFFSET).write(offsets);
+    cloud_group.getAttribute(seerep_io_core::IoCorePointCloud::FIELD_OFFSET).write(offsets);
 
-  if (!cloud_group.hasAttribute(FIELD_DATATYPE))
-    cloud_group.createAttribute(FIELD_DATATYPE, datatypes);
+  if (!cloud_group.hasAttribute(seerep_io_core::IoCorePointCloud::BOUNDINGBOX))
+    cloud_group.createAttribute(seerep_io_core::IoCorePointCloud::BOUNDINGBOX, datatypes);
   else
-    cloud_group.getAttribute(FIELD_DATATYPE).write(datatypes);
+    cloud_group.getAttribute(seerep_io_core::IoCorePointCloud::BOUNDINGBOX).write(datatypes);
 
-  if (!cloud_group.hasAttribute(FIELD_COUNT))
-    cloud_group.createAttribute(FIELD_COUNT, counts);
+  if (!cloud_group.hasAttribute(seerep_io_core::IoCorePointCloud::BOUNDINGBOX))
+    cloud_group.createAttribute(seerep_io_core::IoCorePointCloud::BOUNDINGBOX, counts);
   else
-    cloud_group.getAttribute(FIELD_COUNT).write(counts);
+    cloud_group.getAttribute(seerep_io_core::IoCorePointCloud::BOUNDINGBOX).write(counts);
 }
 
 google::protobuf::RepeatedPtrField<seerep::PointField>
@@ -472,10 +472,10 @@ IoPbPointCloud::readPointFieldAttributes(HighFive::Group& cloud_group)
   std::vector<uint32_t> offsets, counts;
   std::vector<uint8_t> datatypes;
 
-  cloud_group.getAttribute(FIELD_NAME).read(names);
-  cloud_group.getAttribute(FIELD_OFFSET).read(offsets);
-  cloud_group.getAttribute(FIELD_DATATYPE).read(datatypes);
-  cloud_group.getAttribute(FIELD_COUNT).read(counts);
+  cloud_group.getAttribute(seerep_io_core::IoCorePointCloud::FIELD_NAME).read(names);
+  cloud_group.getAttribute(seerep_io_core::IoCorePointCloud::FIELD_OFFSET).read(offsets);
+  cloud_group.getAttribute(seerep_io_core::IoCorePointCloud::BOUNDINGBOX).read(datatypes);
+  cloud_group.getAttribute(seerep_io_core::IoCorePointCloud::BOUNDINGBOX).read(counts);
 
   for (int i = 0; i < names.size(); i++)
   {

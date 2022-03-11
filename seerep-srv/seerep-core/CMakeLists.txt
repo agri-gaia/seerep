@@ -40,7 +40,7 @@ add_library(seerepcore
 	src/core-project.cpp
 	src/core.cpp
 	src/core-tf.cpp
-	src/core-pointcloud.cpp
+	src/core-point-cloud.cpp
 	src/core-image.cpp
 )
 
@@ -59,7 +59,7 @@ set(INSTALL_HEADERS
 	include/seerep-core/core-project.h
 	include/seerep-core/core.h
 	include/seerep-core/core-tf.h
-	include/seerep-core/core-pointcloud.h
+	include/seerep-core/core-point-cloud.h
 	include/seerep-core/core-image.h
 )
 

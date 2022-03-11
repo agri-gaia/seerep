@@ -2,96 +2,62 @@
 
 namespace seerep_core_pb
 {
-CorePbPointCloud::CorePbPointCloud(const std::string& uuid, HighFive::Group& cloud_group)
-  : m_uuid(uuid), m_cloud_group(cloud_group)
+CorePbPointCloud::CorePbPointCloud(std::shared_ptr<seerep_core::Core> seerepCore) : m_seerepCore(seerepCore)
 {
+  for (seerep_core_msgs::ProjectInfo projectInfo : m_seerepCore->getProjects())
+  {
+    auto hdf5file = m_seerepCore->getHdf5File(projectInfo.uuid);
+    auto hdf5fileMutex = m_seerepCore->getHdf5FileMutex(projectInfo.uuid);
+    auto pointCloudIo = std::make_shared<seerep_io_pb::IoPbPointCloud>(hdf5file, hdf5fileMutex);
+
+    m_hdf5IoMap.insert(std::make_pair(projectInfo.uuid, pointCloudIo));
+  }
 }
 
 CorePbPointCloud::~CorePbPointCloud()
 {
 }
 
-std::optional<seerep::PointCloud2> CorePbPointCloud::getData(const seerep::Query& query)
+std::vector<seerep::PointCloud2> CorePbPointCloud::getData(const seerep::Query& query)
 {
-  /*
-  std::cout << "loading PC from pointclouds/" << m_id << std::endl;
-  Eigen::Vector4f minPt, maxPt;
-  getMinMaxFromBundingBox(minPt, maxPt, query.boundingbox());
-  std::optional<seerep::PointCloud2> pc = m_hdf5_io->readPointCloud2(std::to_string(m_id) + "/rawdata");
-
-  if (pc)
+  std::cout << "loading image from images/" << std::endl;
+  seerep_core_msgs::Query queryCore;
+  // TODO do the transform
+  boost::uuids::string_generator gen;
+  queryCore.projects.push_back(gen(query.projectuuid()));
+  for (auto label : query.label())
   {
-    pcl::PointCloud<pcl::PointXYZ>::Ptr temp_cloud(new pcl::PointCloud<pcl::PointXYZ>);
-    protoToPcl(pc.value(), temp_cloud);
-
-    std::cout << "filtering PC" << std::endl;
-    pcl::CropBox<pcl::PointXYZ> boxFilter;
-    boxFilter.setMin(minPt);
-    boxFilter.setMax(maxPt);
-    boxFilter.setInputCloud(temp_cloud);
-    pcl::PointCloud<pcl::PointXYZ>::Ptr filtered_cloud(new pcl::PointCloud<pcl::PointXYZ>);
-    boxFilter.filter(*filtered_cloud);
-    std::cout << "PCL filtered size: " << filtered_cloud->size() << std::endl;
-
-    seerep::PointCloud2 result_pc;
-    pclToProto(filtered_cloud, result_pc);
-    return result_pc;
+    queryCore.label.push_back(label);
   }
-  */
+  queryCore.timeinterval.timeMin.seconds = query.timeinterval().time_min();
+  queryCore.timeinterval.timeMax.seconds = query.timeinterval().time_max();
+  queryCore.timeinterval.timeMin.nanos = 0;
+  queryCore.timeinterval.timeMax.nanos = 0;
 
-  return std::nullopt;
-}
+  queryCore.header.frameId = query.boundingbox().header().frame_id();
+  queryCore.boundingbox.min_corner().set<0>(query.boundingbox().point_min().x());
+  queryCore.boundingbox.min_corner().set<1>(query.boundingbox().point_min().y());
+  queryCore.boundingbox.min_corner().set<2>(query.boundingbox().point_min().z());
+  queryCore.boundingbox.max_corner().set<0>(query.boundingbox().point_max().x());
+  queryCore.boundingbox.max_corner().set<1>(query.boundingbox().point_max().y());
+  queryCore.boundingbox.max_corner().set<2>(query.boundingbox().point_max().z());
 
-void CorePbPointCloud::getMinMaxFromBundingBox(Eigen::Vector4f& minPt, Eigen::Vector4f& maxPt,
-                                               const seerep::Boundingbox& bb)
-{
-  if (bb.point_max().x() < bb.point_min().x())
+  seerep_core_msgs::QueryResult resultCore = m_seerepCore->getPointCloud(queryCore);
+
+  std::vector<seerep::PointCloud2> resultPointClouds;
+  for (auto project : resultCore.queryResultProjects)
   {
-    maxPt(0) = bb.point_min().x();
-    minPt(0) = bb.point_max().x();
+    for (auto uuidPc : project.dataUuids)
+    {
+      std::optional<seerep::PointCloud2> pc =
+          m_hdf5IoMap.at(project.projectUuid)->readPointCloud2(boost::lexical_cast<std::string>(uuidPc));
+      if (pc)
+      {
+        resultPointClouds.push_back(pc.value());
+      }
+    }
   }
-  else
-  {
-    maxPt(0) = bb.point_max().x();
-    minPt(0) = bb.point_min().x();
-  }
-  if (bb.point_max().y() < bb.point_min().y())
-  {
-    maxPt(1) = bb.point_min().y();
-    minPt(1) = bb.point_max().y();
-  }
-  else
-  {
-    maxPt(1) = bb.point_max().y();
-    minPt(1) = bb.point_min().y();
-  }
-  if (bb.point_max().z() < bb.point_min().z())
-  {
-    maxPt(2) = bb.point_min().z();
-    minPt(2) = bb.point_max().z();
-  }
-  else
-  {
-    maxPt(2) = bb.point_max().z();
-    minPt(2) = bb.point_min().z();
-  }
-
-  maxPt(3) = 1.0f;
-  minPt(3) = 1.0f;
-}
-
-seerep_core_msgs::AABB CorePbPointCloud::getAABB()
-{
-  std::vector<float> bb;
-  m_cloud_group.getAttribute(seerep_io_pb::IoPbPointCloud::BOUNDINGBOX).read(bb);
-
-  return seerep_core_msgs::AABB(seerep_core_msgs::Point(bb[0], bb[1], bb[2]),
-                                seerep_core_msgs::Point(bb[3], bb[4], bb[5]));
-}
-
-std::string CorePbPointCloud::getUUID()
-{
-  return m_uuid;
+  return resultPointClouds;
 }
 
 }  // namespace seerep_core_pb
