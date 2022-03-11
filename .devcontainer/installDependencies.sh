@@ -3,7 +3,7 @@
 echo '#enable noninteractive installs'
 export DEBIAN_FRONTEND="noninteractive"
 
-echo '#Install other required tools'
+echo '#install other required tools'
 apt-get -qq update && apt-get -qq install -y -o=Dpkg::Use-Pty=0 \
         bash-completion \
         autoconf \
@@ -11,6 +11,8 @@ apt-get -qq update && apt-get -qq install -y -o=Dpkg::Use-Pty=0 \
         libtool \
         curl \
         make \
+        flex \
+        bison \
         g++ \
         gdb \
         unzip \
@@ -25,7 +27,7 @@ apt-get -qq update && apt-get -qq install -y -o=Dpkg::Use-Pty=0 \
         ros-noetic-pcl-conversions \
         ros-noetic-tf
 
-echo '# Install pre-commit hooks to /root/.cache/pre-commit/'
+echo '# install pre-commit hooks to /root/.cache/pre-commit/'
 apt-get update -qq && apt-get install -y -qq --no-install-recommends \
     git \
     python3-pip \
@@ -36,15 +38,13 @@ pip3 install --upgrade pip
 pip3 install pre-commit
 
 echo '####################################################'
-echo '#Install cmake'
+echo '#install cmake'
 echo '####################################################'
 bash <(curl -s https://apt.kitware.com/kitware-archive.sh)
 apt-get update -q && apt-get install -qy cmake
 
-
-
 echo '####################################################'
-echo '#Install HighFive'
+echo '#install HighFive'
 echo '####################################################'
 apt-get -qq update && apt-get -qq install -y -o=Dpkg::Use-Pty=0 \
         libhdf5-dev \
@@ -107,10 +107,10 @@ echo '####################################################'
 #mkdir ${GRPC_INSTALL_DIR}
 #export PATH="$PATH:$GRPC_INSTALL_DIR/bin"
 
-echo '#Clone the grpc repo'
+echo '#clone the grpc repo'
 git clone --recurse-submodules --depth 1 -b v1.35.0 https://github.com/grpc/grpc
 
-echo '#Build and install gRPC and Protocol Buffers'
+echo '#build and install gRPC and Protocol Buffers'
 cd grpc || exit 1
 mkdir -p cmake/build
 pushd cmake/build || exit 1
@@ -125,11 +125,34 @@ echo '#remove gRPC code'
 cd .. || exit 1
 rm -rf grpc
 
-echo '#Install python3 grpcio_tools'
+echo '#install python3 grpcio_tools'
 pip3 install grpcio-tools
 
-echo '#Updating python proto stuff'
+echo '#updating python proto stuff'
 pip3 install --upgrade protobuf
+
+echo '####################################################'
+echo '#install doxygen'
+echo '####################################################'
+DOX_REL="https://github.com/doxygen/doxygen/archive/refs/tags"
+DOX_VER="Release_1_9_3"
+
+wget $DOX_REL/$DOX_VER.tar.gz
+tar -xf $DOX_VER.tar.gz
+mkdir doxygen-$DOX_VER/build
+cd doxygen-$DOX_VER/build || exit 1
+
+cmake -G "Unix Makefiles" ..
+make
+make install
+
+cd ../..  || exit 1
+rm -rf doxygen-$DOX_VER.tar.gz
+
+echo '####################################################'
+echo '#install mkdocs'
+echo '####################################################'
+pip3 install mkdocs==1.2.3 # pinning the version is recommended
 
 # remove apt lists so that they are not saved in the image layers
 rm -rf /var/lib/apt/lists/*
