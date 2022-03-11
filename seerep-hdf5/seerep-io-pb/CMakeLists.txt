@@ -18,6 +18,7 @@ configure_file(include/SeerepIoPbConfig.h.in SeerepIoPbConfig.h)
 include_directories(
 	include
 	${SeerepMsgs_INCLUDE_DIRS}
+	${SeerepIoCore_INCLUDE_DIRS}
 	${PROTOBUF_INCLUDE_DIR}
 	${HighFive_INCLUDE_DIRS}
 )
@@ -31,6 +32,7 @@ add_library(seerepiopb
 
 target_link_libraries(seerepiopb
 	${SeerepMsgs_LIBRARIES}
+	${SeerepIoCore_LIBRARIES}
 	${PROTOBUF_LIBRARIES}
 	${HighFive_LIBRARIES}
 )

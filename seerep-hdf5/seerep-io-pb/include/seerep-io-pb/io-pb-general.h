@@ -4,6 +4,9 @@
 // highfive
 #include <highfive/H5File.hpp>
 
+// seerep-io
+#include <seerep-io-core/io-core-general.h>
+
 // seerep-msgs
 #include <seerep-msgs/boundingbox_labeled.pb.h>
 #include <seerep-msgs/boundingbox2d_labeled.pb.h>
@@ -101,23 +104,23 @@ public:
 
   std::string readProjectFrameId();
 
-private:
-  // header attribute keys
-  inline static const std::string HEADER_STAMP_SECONDS = "header_stamp_seconds";
-  inline static const std::string HEADER_STAMP_NANOS = "header_stamp_nanos";
-  inline static const std::string HEADER_FRAME_ID = "header_frame_id";
-  inline static const std::string HEADER_SEQ = "header_seq";
+  // private:
+  //   // header attribute keys
+  //   inline static const std::string HEADER_STAMP_SECONDS = "header_stamp_seconds";
+  //   inline static const std::string HEADER_STAMP_NANOS = "header_stamp_nanos";
+  //   inline static const std::string HEADER_FRAME_ID = "header_frame_id";
+  //   inline static const std::string HEADER_SEQ = "header_seq";
 
-  inline static const std::string AABB_FIELD = "AABB";
+  //   inline static const std::string AABB_FIELD = "AABB";
 
-  inline static const std::string PROJECTNAME = "projectname";
-  inline static const std::string PROJECTFRAMEID = "projectframeid";
+  //   inline static const std::string PROJECTNAME = "projectname";
+  //   inline static const std::string PROJECTFRAMEID = "projectframeid";
 
-  // dataset names
-  inline static const std::string RAWDATA = "rawdata";
-  inline static const std::string LABELGENERAL = "labelGeneral";
-  inline static const std::string LABELBB = "labelBB";
-  inline static const std::string LABELBBBOXES = "labelBBBoxes";
+  //   // dataset names
+  //   inline static const std::string RAWDATA = "rawdata";
+  //   inline static const std::string LABELGENERAL = "labelGeneral";
+  //   inline static const std::string LABELBB = "labelBB";
+  //   inline static const std::string LABELBBBOXES = "labelBBBoxes";
 
 protected:
   std::shared_ptr<HighFive::File> m_file;

@@ -30,6 +30,7 @@ include_directories(
 add_library(seerepiocore
 	src/io-core-general.cpp
 	src/io-core-image.cpp
+	src/io-core-point-cloud.cpp
 	src/io-core-tf.cpp
 )
 

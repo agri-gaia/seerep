@@ -11,8 +11,8 @@ IoPbImage::IoPbImage(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std:
 
 void IoPbImage::writeImage(const std::string& id, const seerep::Image& image)
 {
-  std::string hdf5DatasetPath = HDF5_GROUP_IMAGE + "/" + id;
-  std::string hdf5DatasetRawDataPath = hdf5DatasetPath + "/" + RAWDATA;
+  std::string hdf5DatasetPath = seerep_io_core::IoCoreImage::HDF5_GROUP_IMAGE + "/" + id;
+  std::string hdf5DatasetRawDataPath = hdf5DatasetPath + "/" + seerep_io_core::IoCoreImage::RAWDATA;
 
   std::shared_ptr<HighFive::DataSet> data_set_ptr;
   HighFive::DataSpace data_space({ image.height(), image.width(), image.step() / image.width() });
@@ -29,23 +29,23 @@ void IoPbImage::writeImage(const std::string& id, const seerep::Image& image)
     data_set_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DatasetRawDataPath));
   }
 
-  writeAttribute<uint32_t>(data_set_ptr, HEIGHT, image.height());
-  writeAttribute<uint32_t>(data_set_ptr, WIDTH, image.width());
-  writeAttribute<std::string>(data_set_ptr, ENCODING, image.encoding());
-  writeAttribute<bool>(data_set_ptr, IS_BIGENDIAN, image.is_bigendian());
-  writeAttribute<uint32_t>(data_set_ptr, POINT_STEP, image.step());
-  writeAttribute<uint32_t>(data_set_ptr, ROW_STEP, image.row_step());
+  writeAttribute<uint32_t>(data_set_ptr, seerep_io_core::IoCoreImage::HEIGHT, image.height());
+  writeAttribute<uint32_t>(data_set_ptr, seerep_io_core::IoCoreImage::WIDTH, image.width());
+  writeAttribute<std::string>(data_set_ptr, seerep_io_core::IoCoreImage::ENCODING, image.encoding());
+  writeAttribute<bool>(data_set_ptr, seerep_io_core::IoCoreImage::IS_BIGENDIAN, image.is_bigendian());
+  writeAttribute<uint32_t>(data_set_ptr, seerep_io_core::IoCoreImage::POINT_STEP, image.step());
+  writeAttribute<uint32_t>(data_set_ptr, seerep_io_core::IoCoreImage::ROW_STEP, image.row_step());
 
   if (image.encoding() == "rgb8" || image.encoding() == "8UC3")
   {
-    writeAttribute<std::string>(data_set_ptr, CLASS, "IMAGE");
+    writeAttribute<std::string>(data_set_ptr, seerep_io_core::IoCoreImage::CLASS, "IMAGE");
     writeAttribute<std::string>(data_set_ptr, "IMAGE_VERSION", "1.2");
     writeAttribute<std::string>(data_set_ptr, "IMAGE_SUBCLASS", "IMAGE_TRUECOLOR");
     writeAttribute<std::string>(data_set_ptr, "INTERLACE_MODE", "INTERLACE_PIXEL");
   }
   else
   {
-    deleteAttribute(data_set_ptr, CLASS);
+    deleteAttribute(data_set_ptr, seerep_io_core::IoCoreImage::CLASS);
     deleteAttribute(data_set_ptr, "IMAGE_VERSION");
     deleteAttribute(data_set_ptr, "IMAGE_SUBCLASS");
     deleteAttribute(data_set_ptr, "INTERLACE_MODE");
@@ -72,16 +72,16 @@ void IoPbImage::writeImage(const std::string& id, const seerep::Image& image)
   data_set_ptr->write(tmp);
   writeHeaderAttributes(*data_set_ptr, image.header());
 
-  writeBoundingBox2DLabeled(HDF5_GROUP_IMAGE, id, image.labels_bb());
-  writeLabelsGeneral(HDF5_GROUP_IMAGE, id, image.labels_general());
+  writeBoundingBox2DLabeled(seerep_io_core::IoCoreImage::HDF5_GROUP_IMAGE, id, image.labels_bb());
+  writeLabelsGeneral(seerep_io_core::IoCoreImage::HDF5_GROUP_IMAGE, id, image.labels_general());
 
   m_file->flush();
 }
 
 std::optional<seerep::Image> IoPbImage::readImage(const std::string& id)
 {
-  std::string hdf5DatasetPath = HDF5_GROUP_IMAGE + "/" + id;
-  std::string hdf5DatasetRawDataPath = hdf5DatasetPath + "/" + RAWDATA;
+  std::string hdf5DatasetPath = seerep_io_core::IoCoreImage::HDF5_GROUP_IMAGE + "/" + id;
+  std::string hdf5DatasetRawDataPath = hdf5DatasetPath + "/" + seerep_io_core::IoCoreImage::RAWDATA;
 
   if (!m_file->exist(hdf5DatasetRawDataPath))
     return std::nullopt;
@@ -95,12 +95,12 @@ std::optional<seerep::Image> IoPbImage::readImage(const std::string& id)
 
   try
   {
-    image.set_height(getAttribute<uint32_t>(id, data_set_ptr, HEIGHT));
-    image.set_width(getAttribute<uint32_t>(id, data_set_ptr, WIDTH));
-    image.set_encoding(getAttribute<std::string>(id, data_set_ptr, ENCODING));
-    image.set_is_bigendian(getAttribute<bool>(id, data_set_ptr, IS_BIGENDIAN));
-    image.set_step(getAttribute<uint32_t>(id, data_set_ptr, POINT_STEP));
-    image.set_row_step(getAttribute<uint32_t>(id, data_set_ptr, ROW_STEP));
+    image.set_height(getAttribute<uint32_t>(id, data_set_ptr, seerep_io_core::IoCoreImage::HEIGHT));
+    image.set_width(getAttribute<uint32_t>(id, data_set_ptr, seerep_io_core::IoCoreImage::WIDTH));
+    image.set_encoding(getAttribute<std::string>(id, data_set_ptr, seerep_io_core::IoCoreImage::ENCODING));
+    image.set_is_bigendian(getAttribute<bool>(id, data_set_ptr, seerep_io_core::IoCoreImage::IS_BIGENDIAN));
+    image.set_step(getAttribute<uint32_t>(id, data_set_ptr, seerep_io_core::IoCoreImage::POINT_STEP));
+    image.set_row_step(getAttribute<uint32_t>(id, data_set_ptr, seerep_io_core::IoCoreImage::ROW_STEP));
   }
   catch (const std::invalid_argument e)
   {
@@ -135,12 +135,12 @@ std::optional<seerep::Image> IoPbImage::readImage(const std::string& id)
   image.set_data(data, sizeof(data));
 
   *image.mutable_header() = readHeaderAttributes(*data_set_ptr);
-  auto labelsBB = readBoundingBox2DLabeled(HDF5_GROUP_IMAGE, id);
+  auto labelsBB = readBoundingBox2DLabeled(seerep_io_core::IoCoreImage::HDF5_GROUP_IMAGE, id);
   if (labelsBB)
   {
     *image.mutable_labels_bb() = labelsBB.value();
   }
-  auto labelsGeneral = readLabelsGeneral(HDF5_GROUP_IMAGE, id);
+  auto labelsGeneral = readLabelsGeneral(seerep_io_core::IoCoreImage::HDF5_GROUP_IMAGE, id);
   if (labelsGeneral)
   {
     *image.mutable_labels_general() = labelsGeneral.value();

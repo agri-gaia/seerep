@@ -31,9 +31,9 @@ public:
 
   std::optional<seerep_core_msgs::DatasetIndexable> readImage(const boost::uuids::uuid& uuid);
 
-private:
-  const std::string SIZE = "size";
-  const std::string CLASS = "CLASS";
+public:
+  inline static const std::string SIZE = "size";
+  inline static const std::string CLASS = "CLASS";
 
   // image / pointcloud attribute keys
   inline static const std::string HEIGHT = "height";
@@ -46,7 +46,6 @@ private:
 
   inline static const std::string RAWDATA = "rawdata";
 
-public:
   // datatype group names in hdf5
   inline static const std::string HDF5_GROUP_IMAGE = "images";
 };

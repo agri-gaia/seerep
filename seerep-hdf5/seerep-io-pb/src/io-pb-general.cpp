@@ -12,7 +12,7 @@ IoPbGeneral::IoPbGeneral(std::shared_ptr<HighFive::File>& file, std::shared_ptr<
 std::optional<std::string> IoPbGeneral::readFrameId(const std::string& datatypeGroup, const std::string& uuid)
 {
   std::string id = datatypeGroup + "/" + uuid;
-  std::string hdf5DatasetRawDataPath = id + "/" + RAWDATA;
+  std::string hdf5DatasetRawDataPath = id + "/" + seerep_io_core::IoCoreGeneral::RAWDATA;
   if (!m_file->exist(hdf5DatasetRawDataPath))
   {
     std::cout << "id " << hdf5DatasetRawDataPath << " does not exist in file " << m_file->getName() << std::endl;
@@ -22,10 +22,10 @@ std::optional<std::string> IoPbGeneral::readFrameId(const std::string& datatypeG
   std::shared_ptr<HighFive::DataSet> data_set_ptr =
       std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DatasetRawDataPath));
 
-  if (data_set_ptr->hasAttribute(HEADER_FRAME_ID))
+  if (data_set_ptr->hasAttribute(seerep_io_core::IoCoreGeneral::HEADER_FRAME_ID))
   {
     std::string frameId;
-    data_set_ptr->getAttribute(HEADER_FRAME_ID).read(frameId);
+    data_set_ptr->getAttribute(seerep_io_core::IoCoreGeneral::HEADER_FRAME_ID).read(frameId);
     return frameId;
   }
   else
@@ -82,10 +82,10 @@ void IoPbGeneral::writeAABB(
                                  aabb.max_corner().get<0>(), aabb.max_corner().get<1>(), aabb.max_corner().get<2>() };
 
   std::cout << "write AABB as attribute" << std::endl;
-  if (!group.hasAttribute(AABB_FIELD))
-    group.createAttribute(AABB_FIELD, aabbPoints);
+  if (!group.hasAttribute(seerep_io_core::IoCoreGeneral::AABB_FIELD))
+    group.createAttribute(seerep_io_core::IoCoreGeneral::AABB_FIELD, aabbPoints);
   else
-    group.getAttribute(AABB_FIELD).write(aabbPoints);
+    group.getAttribute(seerep_io_core::IoCoreGeneral::AABB_FIELD).write(aabbPoints);
 
   m_file->flush();
 }
@@ -103,10 +103,10 @@ void IoPbGeneral::readAABB(
   }
   std::cout << "get group " << id << std::endl;
   HighFive::Group group = m_file->getGroup(id);
-  if (group.hasAttribute(AABB_FIELD))
+  if (group.hasAttribute(seerep_io_core::IoCoreGeneral::AABB_FIELD))
   {
     std::vector<float> aabbPoints;
-    group.getAttribute(AABB_FIELD).read(aabbPoints);
+    group.getAttribute(seerep_io_core::IoCoreGeneral::AABB_FIELD).read(aabbPoints);
 
     aabb.min_corner().set<0>(aabbPoints.at(0));
     aabb.min_corner().set<1>(aabbPoints.at(1));
@@ -128,13 +128,13 @@ bool IoPbGeneral::hasAABB(const std::string& datatypeGroup, const std::string& u
   }
   std::cout << "get group " << id << std::endl;
   HighFive::Group group = m_file->getGroup(id);
-  return group.hasAttribute(AABB_FIELD);
+  return group.hasAttribute(seerep_io_core::IoCoreGeneral::AABB_FIELD);
 }
 
 void IoPbGeneral::readTimeFromRaw(const std::string& datatypeGroup, const std::string& uuid, int64_t& secs,
                                   int64_t& nanos)
 {
-  readTime(datatypeGroup, uuid + "/" + RAWDATA, secs, nanos);
+  readTime(datatypeGroup, uuid + "/" + seerep_io_core::IoCoreGeneral::RAWDATA, secs, nanos);
 }
 
 void IoPbGeneral::readTime(const std::string& datatypeGroup, const std::string& uuid, int64_t& secs, int64_t& nanos)
@@ -153,21 +153,23 @@ void IoPbGeneral::readTime(const std::string& datatypeGroup, const std::string& 
     {
       std::cout << "get group " << id << std::endl;
       HighFive::Group group = m_file->getGroup(id);
-      if (group.hasAttribute(HEADER_STAMP_SECONDS))
+      if (group.hasAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_SECONDS))
       {
-        group.getAttribute(HEADER_STAMP_SECONDS).read(secs);
+        group.getAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_SECONDS).read(secs);
       }
       else
       {
-        throw std::invalid_argument("id " + id + " has no attribute " + HEADER_STAMP_SECONDS);
+        throw std::invalid_argument("id " + id + " has no attribute " +
+                                    seerep_io_core::IoCoreGeneral::HEADER_STAMP_SECONDS);
       }
-      if (group.hasAttribute(HEADER_STAMP_NANOS))
+      if (group.hasAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_NANOS))
       {
-        group.getAttribute(HEADER_STAMP_NANOS).read(nanos);
+        group.getAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_NANOS).read(nanos);
       }
       else
       {
-        throw std::invalid_argument("id " + id + " has no attribute " + HEADER_STAMP_NANOS);
+        throw std::invalid_argument("id " + id + " has no attribute " +
+                                    seerep_io_core::IoCoreGeneral::HEADER_STAMP_NANOS);
       }
     };
     break;
@@ -176,21 +178,23 @@ void IoPbGeneral::readTime(const std::string& datatypeGroup, const std::string& 
     {
       std::cout << "get group " << id << std::endl;
       HighFive::DataSet dataset = m_file->getDataSet(id);
-      if (dataset.hasAttribute(HEADER_STAMP_SECONDS))
+      if (dataset.hasAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_SECONDS))
       {
-        dataset.getAttribute(HEADER_STAMP_SECONDS).read(secs);
+        dataset.getAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_SECONDS).read(secs);
       }
       else
       {
-        throw std::invalid_argument("id " + id + " has no attribute " + HEADER_STAMP_SECONDS);
+        throw std::invalid_argument("id " + id + " has no attribute " +
+                                    seerep_io_core::IoCoreGeneral::HEADER_STAMP_SECONDS);
       }
-      if (dataset.hasAttribute(HEADER_STAMP_NANOS))
+      if (dataset.hasAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_NANOS))
       {
-        dataset.getAttribute(HEADER_STAMP_NANOS).read(nanos);
+        dataset.getAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_NANOS).read(nanos);
       }
       else
       {
-        throw std::invalid_argument("id " + id + " has no attribute " + HEADER_STAMP_NANOS);
+        throw std::invalid_argument("id " + id + " has no attribute " +
+                                    seerep_io_core::IoCoreGeneral::HEADER_STAMP_NANOS);
       }
     };
     break;
@@ -204,7 +208,7 @@ void IoPbGeneral::readTime(const std::string& datatypeGroup, const std::string& 
 void IoPbGeneral::writeTimeToRaw(const std::string& datatypeGroup, const std::string& uuid, const int64_t& secs,
                                  const int64_t& nanos)
 {
-  writeTime(datatypeGroup, uuid + "/" + RAWDATA, secs, nanos);
+  writeTime(datatypeGroup, uuid + "/" + seerep_io_core::IoCoreGeneral::RAWDATA, secs, nanos);
 }
 
 void IoPbGeneral::writeTime(const std::string& datatypeGroup, const std::string& uuid, const int64_t& secs,
@@ -224,21 +228,21 @@ void IoPbGeneral::writeTime(const std::string& datatypeGroup, const std::string&
     {
       std::cout << "get group " << id << std::endl;
       HighFive::Group group = m_file->getGroup(id);
-      if (group.hasAttribute(HEADER_STAMP_SECONDS))
+      if (group.hasAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_SECONDS))
       {
-        group.getAttribute(HEADER_STAMP_SECONDS).write(secs);
+        group.getAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_SECONDS).write(secs);
       }
       else
       {
-        group.createAttribute(HEADER_STAMP_SECONDS, secs);
+        group.createAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_SECONDS, secs);
       }
-      if (group.hasAttribute(HEADER_STAMP_NANOS))
+      if (group.hasAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_NANOS))
       {
-        group.getAttribute(HEADER_STAMP_NANOS).write(nanos);
+        group.getAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_NANOS).write(nanos);
       }
       else
       {
-        group.createAttribute(HEADER_STAMP_NANOS, nanos);
+        group.createAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_NANOS, nanos);
       }
       m_file->flush();
       return;
@@ -248,21 +252,21 @@ void IoPbGeneral::writeTime(const std::string& datatypeGroup, const std::string&
     {
       std::cout << "get group " << id << std::endl;
       HighFive::DataSet dataset = m_file->getDataSet(id);
-      if (dataset.hasAttribute(HEADER_STAMP_SECONDS))
+      if (dataset.hasAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_SECONDS))
       {
-        dataset.getAttribute(HEADER_STAMP_SECONDS).write(secs);
+        dataset.getAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_SECONDS).write(secs);
       }
       else
       {
-        dataset.createAttribute(HEADER_STAMP_SECONDS, secs);
+        dataset.createAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_SECONDS, secs);
       }
-      if (dataset.hasAttribute(HEADER_STAMP_NANOS))
+      if (dataset.hasAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_NANOS))
       {
-        dataset.getAttribute(HEADER_STAMP_NANOS).write(nanos);
+        dataset.getAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_NANOS).write(nanos);
       }
       else
       {
-        dataset.createAttribute(HEADER_STAMP_NANOS, nanos);
+        dataset.createAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_NANOS, nanos);
       }
       m_file->flush();
       return;
@@ -274,7 +278,7 @@ void IoPbGeneral::writeTime(const std::string& datatypeGroup, const std::string&
 
 bool IoPbGeneral::hasTimeRaw(const std::string& datatypeGroup, const std::string& uuid)
 {
-  return hasTime(datatypeGroup, uuid + "/" + RAWDATA);
+  return hasTime(datatypeGroup, uuid + "/" + seerep_io_core::IoCoreGeneral::RAWDATA);
 }
 
 bool IoPbGeneral::hasTime(const std::string& datatypeGroup, const std::string& uuid)
@@ -290,13 +294,13 @@ bool IoPbGeneral::hasTime(const std::string& datatypeGroup, const std::string& u
   {
     case HighFive::ObjectType::Group:
       std::cout << "get group " << id << std::endl;
-      return m_file->getGroup(id).hasAttribute(HEADER_STAMP_SECONDS) &&
-             m_file->getGroup(id).hasAttribute(HEADER_STAMP_NANOS);
+      return m_file->getGroup(id).hasAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_SECONDS) &&
+             m_file->getGroup(id).hasAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_NANOS);
 
     case HighFive::ObjectType::Dataset:
       std::cout << "get dataset " << id << std::endl;
-      return m_file->getDataSet(id).hasAttribute(HEADER_STAMP_SECONDS) &&
-             m_file->getDataSet(id).hasAttribute(HEADER_STAMP_NANOS);
+      return m_file->getDataSet(id).hasAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_SECONDS) &&
+             m_file->getDataSet(id).hasAttribute(seerep_io_core::IoCoreGeneral::HEADER_STAMP_NANOS);
 
     default:
       return false;
@@ -322,12 +326,12 @@ void IoPbGeneral::writeBoundingBoxLabeled(
       boundingBoxes.push_back(box);
     }
 
-    HighFive::DataSet datasetLabels =
-        m_file->createDataSet<std::string>(id + "/" + LABELBB, HighFive::DataSpace::From(labels));
+    HighFive::DataSet datasetLabels = m_file->createDataSet<std::string>(
+        id + "/" + seerep_io_core::IoCoreGeneral::LABELBB, HighFive::DataSpace::From(labels));
     datasetLabels.write(labels);
 
-    HighFive::DataSet datasetBoxes =
-        m_file->createDataSet<double>(id + "/" + LABELBBBOXES, HighFive::DataSpace::From(boundingBoxes));
+    HighFive::DataSet datasetBoxes = m_file->createDataSet<double>(
+        id + "/" + seerep_io_core::IoCoreGeneral::LABELBBBOXES, HighFive::DataSpace::From(boundingBoxes));
     datasetBoxes.write(boundingBoxes);
 
     m_file->flush();
@@ -352,12 +356,12 @@ void IoPbGeneral::writeBoundingBox2DLabeled(
       boundingBoxes.push_back(box);
     }
 
-    HighFive::DataSet datasetLabels =
-        m_file->createDataSet<std::string>(id + "/" + LABELBB, HighFive::DataSpace::From(labels));
+    HighFive::DataSet datasetLabels = m_file->createDataSet<std::string>(
+        id + "/" + seerep_io_core::IoCoreGeneral::LABELBB, HighFive::DataSpace::From(labels));
     datasetLabels.write(labels);
 
-    HighFive::DataSet datasetBoxes =
-        m_file->createDataSet<double>(id + "/" + LABELBBBOXES, HighFive::DataSpace::From(boundingBoxes));
+    HighFive::DataSet datasetBoxes = m_file->createDataSet<double>(
+        id + "/" + seerep_io_core::IoCoreGeneral::LABELBBBOXES, HighFive::DataSpace::From(boundingBoxes));
     datasetBoxes.write(boundingBoxes);
 
     m_file->flush();
@@ -368,24 +372,26 @@ std::optional<google::protobuf::RepeatedPtrField<seerep::BoundingBox2DLabeled>>
 IoPbGeneral::readBoundingBox2DLabeled(const std::string& datatypeGroup, const std::string& uuid)
 {
   std::string id = datatypeGroup + "/" + uuid;
-  if (!m_file->exist(id + "/" + LABELBB))
+  if (!m_file->exist(id + "/" + seerep_io_core::IoCoreGeneral::LABELBB))
   {
-    std::cout << "id " << id + "/" + LABELBB << " does not exist in file " << m_file->getName() << std::endl;
+    std::cout << "id " << id + "/" + seerep_io_core::IoCoreGeneral::LABELBB << " does not exist in file "
+              << m_file->getName() << std::endl;
     return std::nullopt;
   }
-  if (!m_file->exist(id + "/" + LABELBBBOXES))
+  if (!m_file->exist(id + "/" + seerep_io_core::IoCoreGeneral::LABELBBBOXES))
   {
-    std::cout << "id " << id + "/" + LABELBBBOXES << " does not exist in file " << m_file->getName() << std::endl;
+    std::cout << "id " << id + "/" + seerep_io_core::IoCoreGeneral::LABELBBBOXES << " does not exist in file "
+              << m_file->getName() << std::endl;
     return std::nullopt;
   }
 
   std::vector<std::string> labels;
   std::vector<std::vector<double>> boundingBoxes;
 
-  HighFive::DataSet datasetLabels = m_file->getDataSet(id + "/" + LABELBB);
+  HighFive::DataSet datasetLabels = m_file->getDataSet(id + "/" + seerep_io_core::IoCoreGeneral::LABELBB);
   datasetLabels.read(labels);
 
-  HighFive::DataSet datasetBoxes = m_file->getDataSet(id + "/" + LABELBBBOXES);
+  HighFive::DataSet datasetBoxes = m_file->getDataSet(id + "/" + seerep_io_core::IoCoreGeneral::LABELBBBOXES);
   datasetBoxes.read(boundingBoxes);
 
   if (labels.size() != boundingBoxes.size())
@@ -426,8 +432,8 @@ void IoPbGeneral::writeLabelsGeneral(const std::string& datatypeGroup, const std
       labels.push_back(label);
     }
 
-    HighFive::DataSet datasetLabels =
-        m_file->createDataSet<std::string>(id + "/" + LABELGENERAL, HighFive::DataSpace::From(labels));
+    HighFive::DataSet datasetLabels = m_file->createDataSet<std::string>(
+        id + "/" + seerep_io_core::IoCoreGeneral::LABELGENERAL, HighFive::DataSpace::From(labels));
     datasetLabels.write(labels);
 
     m_file->flush();
@@ -438,14 +444,15 @@ std::optional<google::protobuf::RepeatedPtrField<std::string>>
 IoPbGeneral::readLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid)
 {
   std::string id = datatypeGroup + "/" + uuid;
-  if (!m_file->exist(id + "/" + LABELGENERAL))
+  if (!m_file->exist(id + "/" + seerep_io_core::IoCoreGeneral::LABELGENERAL))
   {
-    std::cout << "id " << id + "/" + LABELGENERAL << " does not exist in file " << m_file->getName() << std::endl;
+    std::cout << "id " << id + "/" + seerep_io_core::IoCoreGeneral::LABELGENERAL << " does not exist in file "
+              << m_file->getName() << std::endl;
     return std::nullopt;
   }
 
   std::vector<std::string> labels;
-  HighFive::DataSet datasetLabels = m_file->getDataSet(id + "/" + LABELGENERAL);
+  HighFive::DataSet datasetLabels = m_file->getDataSet(id + "/" + seerep_io_core::IoCoreGeneral::LABELGENERAL);
   datasetLabels.read(labels);
 
   google::protobuf::RepeatedPtrField<std::string> result;
@@ -460,13 +467,13 @@ IoPbGeneral::readLabelsGeneral(const std::string& datatypeGroup, const std::stri
 
 void IoPbGeneral::writeProjectname(const std::string& projectname)
 {
-  if (!m_file->hasAttribute(PROJECTNAME))
+  if (!m_file->hasAttribute(seerep_io_core::IoCoreGeneral::PROJECTNAME))
   {
-    m_file->createAttribute<std::string>(PROJECTNAME, projectname);
+    m_file->createAttribute<std::string>(seerep_io_core::IoCoreGeneral::PROJECTNAME, projectname);
   }
   else
   {
-    m_file->getAttribute(PROJECTNAME).write(projectname);
+    m_file->getAttribute(seerep_io_core::IoCoreGeneral::PROJECTNAME).write(projectname);
   }
   m_file->flush();
 }
@@ -474,22 +481,22 @@ void IoPbGeneral::writeProjectname(const std::string& projectname)
 std::string IoPbGeneral::readProjectname()
 {
   std::string projectname;
-  if (m_file->hasAttribute(PROJECTNAME))
+  if (m_file->hasAttribute(seerep_io_core::IoCoreGeneral::PROJECTNAME))
   {
-    m_file->getAttribute(PROJECTNAME).read(projectname);
+    m_file->getAttribute(seerep_io_core::IoCoreGeneral::PROJECTNAME).read(projectname);
   }
   return projectname;
 }
 
 void IoPbGeneral::writeProjectFrameId(const std::string& frameId)
 {
-  if (!m_file->hasAttribute(PROJECTFRAMEID))
+  if (!m_file->hasAttribute(seerep_io_core::IoCoreGeneral::PROJECTFRAMEID))
   {
-    m_file->createAttribute<std::string>(PROJECTFRAMEID, frameId);
+    m_file->createAttribute<std::string>(seerep_io_core::IoCoreGeneral::PROJECTFRAMEID, frameId);
   }
   else
   {
-    m_file->getAttribute(PROJECTFRAMEID).write(frameId);
+    m_file->getAttribute(seerep_io_core::IoCoreGeneral::PROJECTFRAMEID).write(frameId);
   }
   m_file->flush();
 }
@@ -497,9 +504,9 @@ void IoPbGeneral::writeProjectFrameId(const std::string& frameId)
 std::string IoPbGeneral::readProjectFrameId()
 {
   std::string frameId;
-  if (m_file->hasAttribute(PROJECTFRAMEID))
+  if (m_file->hasAttribute(seerep_io_core::IoCoreGeneral::PROJECTFRAMEID))
   {
-    m_file->getAttribute(PROJECTFRAMEID).read(frameId);
+    m_file->getAttribute(seerep_io_core::IoCoreGeneral::PROJECTFRAMEID).read(frameId);
   }
   return frameId;
 }

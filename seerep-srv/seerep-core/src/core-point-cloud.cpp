@@ -1,20 +1,20 @@
-#include "seerep-core/core-image.h"
+#include "seerep-core/core-point-cloud.h"
 
 namespace seerep_core
 {
-CoreImage::CoreImage(std::shared_ptr<seerep_io_core::IoCoreImage> hdf5_io,
-                     std::shared_ptr<seerep_core::CoreTf> tfOverview, std::string frameId)
+CorePointCloud::CorePointCloud(std::shared_ptr<seerep_io_core::IoCorePointCloud> hdf5_io,
+                               std::shared_ptr<seerep_core::CoreTf> tfOverview, std::string frameId)
   : m_hdf5_io(hdf5_io), m_tfOverview(tfOverview), m_frameId(frameId)
 {
   recreateDatasets();
 }
-CoreImage::~CoreImage()
+CorePointCloud::~CorePointCloud()
 {
 }
 
-void CoreImage::recreateDatasets()
+void CorePointCloud::recreateDatasets()
 {
-  std::vector<std::string> imgs = m_hdf5_io->getGroupDatasets(seerep_io_core::IoCoreImage::HDF5_GROUP_IMAGE);
+  std::vector<std::string> imgs = m_hdf5_io->getGroupDatasets(seerep_io_core::IoCorePointCloud::HDF5_GROUP_POINTCLOUD);
   for (auto name : imgs)
   {
     std::cout << "found " << name << " in HDF5 file." << std::endl;
@@ -25,7 +25,7 @@ void CoreImage::recreateDatasets()
       boost::uuids::uuid uuid = gen(name);
 
       std::optional<seerep_core_msgs::DatasetIndexable> img =
-          m_hdf5_io->readDataForIndices(seerep_io_core::IoCoreImage::HDF5_GROUP_IMAGE, name);
+          m_hdf5_io->readDataForIndices(seerep_io_core::IoCorePointCloud::HDF5_GROUP_POINTCLOUD, name);
 
       if (img)
         addDatasetToIndices(img.value());
@@ -37,7 +37,7 @@ void CoreImage::recreateDatasets()
   }
 }
 
-std::vector<boost::uuids::uuid> CoreImage::getData(const seerep_core_msgs::Query& query)
+std::vector<boost::uuids::uuid> CorePointCloud::getData(const seerep_core_msgs::Query& query)
 {
   std::vector<boost::uuids::uuid> result;
 
@@ -54,7 +54,7 @@ std::vector<boost::uuids::uuid> CoreImage::getData(const seerep_core_msgs::Query
   return intersectQueryResults(resultRt, resultTime, resultSemantic);
 }
 
-std::vector<seerep_core_msgs::AabbIdPair> CoreImage::querySpatial(const seerep_core_msgs::Query& query)
+std::vector<seerep_core_msgs::AabbIdPair> CorePointCloud::querySpatial(const seerep_core_msgs::Query& query)
 {
   seerep_core_msgs::AABB aabb(seerep_core_msgs::Point(bg::get<bg::min_corner, 0>(query.boundingbox),
                                                       bg::get<bg::min_corner, 1>(query.boundingbox),
@@ -67,7 +67,7 @@ std::vector<seerep_core_msgs::AabbIdPair> CoreImage::querySpatial(const seerep_c
   return rt_result;
 }
 
-std::set<boost::uuids::uuid> CoreImage::querySemantic(const seerep_core_msgs::Query& query)
+std::set<boost::uuids::uuid> CorePointCloud::querySemantic(const seerep_core_msgs::Query& query)
 {
   std::set<boost::uuids::uuid> result;
   // find the queried label in the label-imageID-map
@@ -83,9 +83,9 @@ std::set<boost::uuids::uuid> CoreImage::querySemantic(const seerep_core_msgs::Qu
 }
 
 std::vector<boost::uuids::uuid>
-CoreImage::intersectQueryResults(std::vector<seerep_core_msgs::AabbIdPair> rt_result,
-                                 std::vector<seerep_core_msgs::AabbTimeIdPair> timetree_result,
-                                 std::set<boost::uuids::uuid> semanticResult)
+CorePointCloud::intersectQueryResults(std::vector<seerep_core_msgs::AabbIdPair> rt_result,
+                                      std::vector<seerep_core_msgs::AabbTimeIdPair> timetree_result,
+                                      std::set<boost::uuids::uuid> semanticResult)
 {
   std::set<boost::uuids::uuid> idsSpatial;
   for (auto it = std::make_move_iterator(rt_result.begin()), end = std::make_move_iterator(rt_result.end()); it != end;
@@ -110,7 +110,7 @@ CoreImage::intersectQueryResults(std::vector<seerep_core_msgs::AabbIdPair> rt_re
   return result;
 }
 
-std::vector<seerep_core_msgs::AabbTimeIdPair> CoreImage::queryTemporal(const seerep_core_msgs::Query& query)
+std::vector<seerep_core_msgs::AabbTimeIdPair> CorePointCloud::queryTemporal(const seerep_core_msgs::Query& query)
 {
   seerep_core_msgs::AabbTime aabbtime(seerep_core_msgs::TimePoint(query.timeinterval.timeMin.seconds),
                                       seerep_core_msgs::TimePoint(query.timeinterval.timeMax.seconds));
@@ -120,7 +120,7 @@ std::vector<seerep_core_msgs::AabbTimeIdPair> CoreImage::queryTemporal(const see
   return timetree_result;
 }
 
-void CoreImage::addDataset(const seerep_core_msgs::DatasetIndexable& image)
+void CorePointCloud::addDataset(const seerep_core_msgs::DatasetIndexable& image)
 {
   // does the default constructor of uuid generate nil uuids?
   if (image.header.uuidData.is_nil())
@@ -135,7 +135,7 @@ void CoreImage::addDataset(const seerep_core_msgs::DatasetIndexable& image)
  * Data without tf cannot be added to rtree
  * check if tf is now available and add data to spatial rtree
  */
-void CoreImage::tryAddingDataWithMissingTF()
+void CorePointCloud::tryAddingDataWithMissingTF()
 {
   for (std::vector<std::shared_ptr<seerep_core_msgs::DatasetIndexable>>::iterator it = m_dataWithMissingTF.begin();
        it != m_dataWithMissingTF.end();
@@ -157,7 +157,7 @@ void CoreImage::tryAddingDataWithMissingTF()
   }
 }
 
-void CoreImage::addDatasetToIndices(const seerep_core_msgs::DatasetIndexable& img)
+void CorePointCloud::addDatasetToIndices(const seerep_core_msgs::DatasetIndexable& img)
 {
   if (m_tfOverview->canTransform(img.header.frameId, m_frameId, img.header.timestamp.seconds,
                                  img.header.timestamp.nanos))
