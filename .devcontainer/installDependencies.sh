@@ -147,7 +147,8 @@ make
 make install
 
 cd ../..  || exit 1
-rm -rf doxygen-$DOX_VER.tar.gz
+rm -rf doxygen-$DOX_VER
+rm -rf $DOX_VER.tar.gz
 
 echo '####################################################'
 echo '#install mkdocs'
