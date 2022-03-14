@@ -8,7 +8,7 @@ CorePbImage::CorePbImage(std::shared_ptr<seerep_core::Core> seerepCore) : m_seer
   {
     auto hdf5file = m_seerepCore->getHdf5File(projectInfo.uuid);
     auto hdf5fileMutex = m_seerepCore->getHdf5FileMutex(projectInfo.uuid);
-    auto imageIo = std::make_shared<seerep_io_pb::IoPbImage>(hdf5file, hdf5fileMutex);
+    auto imageIo = std::make_shared<seerep_hdf5_pb::Hdf5PbImage>(hdf5file, hdf5fileMutex);
 
     m_hdf5IoMap.insert(std::make_pair(projectInfo.uuid, imageIo));
   }
@@ -22,7 +22,6 @@ std::vector<seerep::Image> CorePbImage::getData(const seerep::Query& query)
 {
   std::cout << "loading image from images/" << std::endl;
   seerep_core_msgs::Query queryCore;
-  // TODO do the transform
   boost::uuids::string_generator gen;
   queryCore.projects.push_back(gen(query.projectuuid()));
   for (auto label : query.label())

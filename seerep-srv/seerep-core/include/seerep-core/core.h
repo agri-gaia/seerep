@@ -32,7 +32,7 @@ public:
   Core(std::string datafolder);
   ~Core();
 
-  boost::uuids::uuid addPointCloud(const seerep_core_msgs::DatasetIndexable& pointcloud);
+  void addPointCloud(const seerep_core_msgs::DatasetIndexable& pointcloud);
   seerep_core_msgs::QueryResult getPointCloud(const seerep_core_msgs::Query& query);
 
   void addImage(const seerep_core_msgs::DatasetIndexable& image);

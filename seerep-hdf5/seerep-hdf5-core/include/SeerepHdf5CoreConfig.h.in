@@ -1,0 +1,8 @@
+#ifndef SeerepCoreHdf5_CONFIG_H_
+#define SeerepCoreHdf5_CONFIG_H_
+
+// the configured options and settings for seerep_fb_io_core
+#define SEEREP_HDF5_CORE_VERSION_MAJOR @seerep_hdf5_core_VERSION_MAJOR @
+#define SEEREP_HDF5_CORE_VERSION_MINOR @seerep_hdf5_core_VERSION_MINOR @
+
+#endif /* SeerepCoreHdf5_CONFIG_H_ */

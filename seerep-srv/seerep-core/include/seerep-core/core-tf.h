@@ -12,8 +12,8 @@
 // ros-msgs (tf)
 #include <geometry_msgs/TransformStamped.h>
 
-// seerep-io-core
-#include <seerep-io-core/io-core-tf.h>
+// seerep-hdf5-core
+#include <seerep-hdf5-core/hdf5-core-tf.h>
 
 // ros tf2
 #include <tf2/buffer_core.h>
@@ -26,7 +26,7 @@ namespace seerep_core
 class CoreTf
 {
 public:
-  CoreTf(std::shared_ptr<seerep_io_core::IoCoreTf> hdf5_io);
+  CoreTf(std::shared_ptr<seerep_hdf5_core::Hdf5CoreTf> hdf5_io);
   ~CoreTf();
   std::optional<geometry_msgs::TransformStamped> getData(const int64_t& timesecs, const int64_t& timenanos,
                                                          const std::string& targetFrame,
@@ -49,7 +49,7 @@ private:
   void recreateDatasets();
   void addToTfBuffer(geometry_msgs::TransformStamped transform);
 
-  std::shared_ptr<seerep_io_core::IoCoreTf> m_hdf5_io;
+  std::shared_ptr<seerep_hdf5_core::Hdf5CoreTf> m_hdf5_io;
   tf2::BufferCore m_tfbuffer;
 };
 

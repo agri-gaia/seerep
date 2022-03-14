@@ -14,7 +14,7 @@
 
   <depend>seerep-msgs</depend>
   <depend>seerep-com</depend>
-  <depend>seerep-io-pb</depend>
+  <depend>seerep-hdf5-pb</depend>
   <depend>roscpp</depend>
   <depend>std_msgs</depend>
   <depend>geometry_msgs</depend>

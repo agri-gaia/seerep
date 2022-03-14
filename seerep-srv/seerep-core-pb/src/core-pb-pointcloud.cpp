@@ -8,7 +8,7 @@ CorePbPointCloud::CorePbPointCloud(std::shared_ptr<seerep_core::Core> seerepCore
   {
     auto hdf5file = m_seerepCore->getHdf5File(projectInfo.uuid);
     auto hdf5fileMutex = m_seerepCore->getHdf5FileMutex(projectInfo.uuid);
-    auto pointCloudIo = std::make_shared<seerep_io_pb::IoPbPointCloud>(hdf5file, hdf5fileMutex);
+    auto pointCloudIo = std::make_shared<seerep_hdf5_pb::Hdf5PbPointCloud>(hdf5file, hdf5fileMutex);
 
     m_hdf5IoMap.insert(std::make_pair(projectInfo.uuid, pointCloudIo));
   }

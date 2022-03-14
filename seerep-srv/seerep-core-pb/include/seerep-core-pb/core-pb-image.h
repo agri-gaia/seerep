@@ -10,8 +10,8 @@
 // seerep-core-msgs
 #include <seerep-msgs/query.h>
 #include <seerep-msgs/query-result.h>
-// seerep-pb-io
-#include <seerep-io-pb/io-pb-image.h>
+// seerep-hdf5-pb
+#include <seerep-hdf5-pb/hdf5-pb-image.h>
 // seerep-core
 #include <seerep-core/core.h>
 
@@ -35,7 +35,7 @@ public:
 
 private:
   std::shared_ptr<seerep_core::Core> m_seerepCore;
-  std::unordered_map<boost::uuids::uuid, std::shared_ptr<seerep_io_pb::IoPbImage>, boost::hash<boost::uuids::uuid>>
+  std::unordered_map<boost::uuids::uuid, std::shared_ptr<seerep_hdf5_pb::Hdf5PbImage>, boost::hash<boost::uuids::uuid>>
       m_hdf5IoMap;
 };
 

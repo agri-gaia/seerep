@@ -1,8 +1,0 @@
-#ifndef SeerepIoFbCONFIG_H_
-#define SeerepIoFbCONFIG_H_
-
-// the configured options and settings for seerep_fb_io_flatbuffers
-#define SEEREP_IO_FB_VERSION_MAJOR @seerep_io_fb_VERSION_MAJOR @
-#define SEEREP_IO_FB_VERSION_MINOR @seerep_io_fb_VERSION_MINOR @
-
-#endif /* SeerepIoFbCONFIG_H_ */

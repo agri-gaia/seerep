@@ -1,0 +1,8 @@
+#ifndef SeerepHdf5Pb_CONFIG_H_
+#define SeerepHdf5Pb_CONFIG_H_
+
+// the configured options and settings for seerep_hdf5_pb
+#define SEEREP_HDF5_PB_VERSION_MAJOR @seerep_hdf5_pb_VERSION_MAJOR @
+#define SEEREP_HDF5_PB_VERSION_MINOR @seerep_hdf5_pb_VERSION_MINOR @
+
+#endif /* SeerepHdf5Pb_CONFIG_H_ */

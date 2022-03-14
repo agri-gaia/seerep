@@ -6,8 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Protobuf REQUIRED)
 find_package(gRPC CONFIG REQUIRED)
-find_package(SeerepIoPb REQUIRED)
-find_package(SeerepIoCore REQUIRED)
+find_package(SeerepHdf5Pb REQUIRED)
+find_package(SeerepHdf5Core REQUIRED)
 find_package(SeerepCom REQUIRED)
 find_package(SeerepCore REQUIRED)
 find_package(SeerepCorePb REQUIRED)
@@ -18,8 +18,8 @@ find_package(catkin REQUIRED
 	seerep_ros_conversions
 )
 
-message("LIBS" ${SeerepIoCore_LIBRARIES})
-message("INCS" ${SeerepIoCore_INCLUDE_DIRS})
+message("LIBS" ${SeerepHdf5Core_LIBRARIES})
+message("INCS" ${SeerepHdf5Core_INCLUDE_DIRS})
 message("INCS2" ${HighFive_INCLUDE_DIRS})
 
 include_directories(
@@ -27,8 +27,8 @@ include_directories(
 	${SeerepCom_INCLUDE_DIRS}
 	${SeerepCore_INCLUDE_DIRS}
 	${SeerepCorePb_INCLUDE_DIRS}
-	${SeerepIoPb_INCLUDE_DIRS}
-	${SeerepIoCore_INCLUDE_DIRS}
+	${SeerepHdf5Pb_INCLUDE_DIRS}
+	${SeerepHdf5Core_INCLUDE_DIRS}
 	${HighFive_INCLUDE_DIRS}
 	${catkin_INCLUDE_DIRS}
 )
@@ -55,8 +55,8 @@ add_executable(${PROJECT_NAME}_client
 )
 
 target_link_libraries(${PROJECT_NAME}_server
-	${SeerepIoPb_LIBRARIES}
-	${SeerepIoCore_LIBRARIES}
+	${SeerepHdf5Pb_LIBRARIES}
+	${SeerepHdf5Core_LIBRARIES}
 	${SeerepCom_LIBRARIES}
 	${SeerepCore_LIBRARIES}
 	${SeerepCorePb_LIBRARIES}
@@ -66,8 +66,8 @@ target_link_libraries(${PROJECT_NAME}_server
 )
 
 target_link_libraries(${PROJECT_NAME}_client
-	${SeerepIoPb_LIBRARIES}
-	${SeerepIoCore_LIBRARIES}
+	${SeerepHdf5Pb_LIBRARIES}
+	${SeerepHdf5Core_LIBRARIES}
 	${SeerepCom_LIBRARIES}
 	gRPC::grpc++_reflection
 )

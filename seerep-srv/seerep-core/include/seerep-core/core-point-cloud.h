@@ -8,8 +8,8 @@
 #include <seerep-msgs/aabb.h>
 #include <seerep-msgs/query.h>
 #include <seerep-msgs/query-result.h>
-// seerep-pb-io
-#include <seerep-io-core/io-core-point-cloud.h>
+// seerep-hdf5-pb
+#include <seerep-hdf5-core/hdf5-core-point-cloud.h>
 // seerep-core
 #include "core-tf.h"
 
@@ -25,7 +25,7 @@ namespace seerep_core
 class CorePointCloud
 {
 public:
-  CorePointCloud(std::shared_ptr<seerep_io_core::IoCorePointCloud> hdf5_io,
+  CorePointCloud(std::shared_ptr<seerep_hdf5_core::Hdf5CorePointCloud> hdf5_io,
                  std::shared_ptr<seerep_core::CoreTf> tfOverview, std::string frameId);
   ~CorePointCloud();
   std::vector<boost::uuids::uuid> getData(const seerep_core_msgs::Query& bb);
@@ -47,7 +47,7 @@ private:
 
   std::string m_frameId;
   std::shared_ptr<seerep_core::CoreTf> m_tfOverview;
-  std::shared_ptr<seerep_io_core::IoCorePointCloud> m_hdf5_io;
+  std::shared_ptr<seerep_hdf5_core::Hdf5CorePointCloud> m_hdf5_io;
 
   std::vector<std::shared_ptr<seerep_core_msgs::DatasetIndexable>> m_dataWithMissingTF;
   seerep_core_msgs::rtree m_rt;

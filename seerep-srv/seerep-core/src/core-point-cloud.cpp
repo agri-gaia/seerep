@@ -2,7 +2,7 @@
 
 namespace seerep_core
 {
-CorePointCloud::CorePointCloud(std::shared_ptr<seerep_io_core::IoCorePointCloud> hdf5_io,
+CorePointCloud::CorePointCloud(std::shared_ptr<seerep_hdf5_core::Hdf5CorePointCloud> hdf5_io,
                                std::shared_ptr<seerep_core::CoreTf> tfOverview, std::string frameId)
   : m_hdf5_io(hdf5_io), m_tfOverview(tfOverview), m_frameId(frameId)
 {
@@ -14,7 +14,8 @@ CorePointCloud::~CorePointCloud()
 
 void CorePointCloud::recreateDatasets()
 {
-  std::vector<std::string> imgs = m_hdf5_io->getGroupDatasets(seerep_io_core::IoCorePointCloud::HDF5_GROUP_POINTCLOUD);
+  std::vector<std::string> imgs =
+      m_hdf5_io->getGroupDatasets(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD);
   for (auto name : imgs)
   {
     std::cout << "found " << name << " in HDF5 file." << std::endl;
@@ -25,7 +26,7 @@ void CorePointCloud::recreateDatasets()
       boost::uuids::uuid uuid = gen(name);
 
       std::optional<seerep_core_msgs::DatasetIndexable> img =
-          m_hdf5_io->readDataForIndices(seerep_io_core::IoCorePointCloud::HDF5_GROUP_POINTCLOUD, name);
+          m_hdf5_io->readDataForIndices(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, name);
 
       if (img)
         addDatasetToIndices(img.value());
