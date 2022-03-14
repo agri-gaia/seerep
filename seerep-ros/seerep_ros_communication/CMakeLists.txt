@@ -14,7 +14,7 @@ find_package(catkin REQUIRED
 	sensor_msgs
 	roscpp
 )
-find_package(SeerepIoPb REQUIRED)
+find_package(SeerepHdf5Pb REQUIRED)
 find_package(seerep_ros_conversions REQUIRED)
 find_package(Protobuf REQUIRED)
 find_package(gRPC CONFIG REQUIRED)
@@ -32,7 +32,7 @@ include_directories(
 	include
 	${SeerepCom_INCLUDE_DIRS}
 	${SeerepMsgs_INCLUDE_DIRS}
-	${SeerepIoPb_INCLUDE_DIRS}
+	${SeerepHdf5Pb_INCLUDE_DIRS}
 	${seerep_ros_conversions_INCLUDE_DIRS}
 	${catkin_INCLUDE_DIRS}
 )
@@ -72,7 +72,7 @@ target_link_libraries(${PROJECT_NAME}_client
 target_link_libraries(${PROJECT_NAME}_hdf5dump
 	${SeerepCom_LIBRARIES}
 	${seerep_ros_conversions_LIBRARIES}
-	${SeerepIoPb_LIBRARIES}
+	${SeerepHdf5Pb_LIBRARIES}
 	${catkin_LIBRARIES}
 )
 target_link_libraries(${PROJECT_NAME}_querier

@@ -12,45 +12,35 @@ Core::~Core()
 
 seerep_core_msgs::QueryResult Core::getPointCloud(const seerep_core_msgs::Query& query)
 {
-  // std::vector<std::vector<std::optional<seerep::PointCloud2>>> result;
+  seerep_core_msgs::QueryResult result;
 
-  // // search all projects
-  // if (query.projectuuid().empty())
-  // {
-  //   for (auto& it : m_projects)
-  //   {
-  //     auto pc = it.second->getPointCloud(query);
-  //     if (!pc.empty())
-  //     {
-  //       result.push_back(pc);
-  //     }
-  //   }
-  // }
-  // // Search only in project specified in query
-  // else
-  // {
-  //   boost::uuids::uuid uuid;
-  //   try
-  //   {
-  //     boost::uuids::string_generator gen;
-  //     uuid = gen(query.projectuuid());
-  //   }
-  //   catch (const std::runtime_error& e)
-  //   {
-  //     std::cout << e.what() << std::endl;
-  //   }
-  //   auto project = m_projects.find(uuid);
-  //   if (project != m_projects.end())
-  //   {
-  //     auto pc = project->second->getPointCloud(query);
-  //     if (!pc.empty())
-  //     {
-  //       result.push_back(pc);
-  //     }
-  //   }
-  // }
+  // search all projects
+  if (query.header.uuidProject.is_nil())
+  {
+    for (auto& it : m_projects)
+    {
+      auto pc = it.second->getPointCloud(query);
+      if (!pc.dataUuids.empty())
+      {
+        result.queryResultProjects.push_back(pc);
+      }
+    }
+  }
+  // Search only in project specified in query
+  else
+  {
+    auto project = m_projects.find(query.header.uuidProject);
+    if (project != m_projects.end())
+    {
+      auto pc = project->second->getPointCloud(query);
+      if (!pc.dataUuids.empty())
+      {
+        result.queryResultProjects.push_back(pc);
+      }
+    }
+  }
 
-  // return result;
+  return result;
 }
 
 seerep_core_msgs::QueryResult Core::getImage(const seerep_core_msgs::Query& query)
@@ -135,9 +125,9 @@ std::vector<seerep_core_msgs::ProjectInfo> Core::getProjects()
   return projectInfos;
 }
 
-boost::uuids::uuid Core::addPointCloud(const seerep_core_msgs::DatasetIndexable& pointcloud2)
+void Core::addPointCloud(const seerep_core_msgs::DatasetIndexable& pointcloud2)
 {
-  // m_projects.at(projectuuid)->addPointCloud(pointcloud2);
+  m_projects.at(pointcloud2.header.uuidProject)->addPointCloud(pointcloud2);
 }
 
 void Core::addImage(const seerep_core_msgs::DatasetIndexable& image)

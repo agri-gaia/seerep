@@ -2,7 +2,7 @@
 
 namespace seerep_core
 {
-CoreImage::CoreImage(std::shared_ptr<seerep_io_core::IoCoreImage> hdf5_io,
+CoreImage::CoreImage(std::shared_ptr<seerep_hdf5_core::Hdf5CoreImage> hdf5_io,
                      std::shared_ptr<seerep_core::CoreTf> tfOverview, std::string frameId)
   : m_hdf5_io(hdf5_io), m_tfOverview(tfOverview), m_frameId(frameId)
 {
@@ -14,7 +14,7 @@ CoreImage::~CoreImage()
 
 void CoreImage::recreateDatasets()
 {
-  std::vector<std::string> imgs = m_hdf5_io->getGroupDatasets(seerep_io_core::IoCoreImage::HDF5_GROUP_IMAGE);
+  std::vector<std::string> imgs = m_hdf5_io->getGroupDatasets(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE);
   for (auto name : imgs)
   {
     std::cout << "found " << name << " in HDF5 file." << std::endl;
@@ -25,7 +25,7 @@ void CoreImage::recreateDatasets()
       boost::uuids::uuid uuid = gen(name);
 
       std::optional<seerep_core_msgs::DatasetIndexable> img =
-          m_hdf5_io->readDataForIndices(seerep_io_core::IoCoreImage::HDF5_GROUP_IMAGE, name);
+          m_hdf5_io->readDataForIndices(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, name);
 
       if (img)
         addDatasetToIndices(img.value());

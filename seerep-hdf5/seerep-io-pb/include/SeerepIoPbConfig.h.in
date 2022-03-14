@@ -1,8 +1,0 @@
-#ifndef SeerepIoPbCONFIG_H_
-#define SeerepIoPbCONFIG_H_
-
-// the configured options and settings for seerep_hdf5
-#define SEEREP_IO_PB_VERSION_MAJOR @seerep_hdf5_VERSION_MAJOR @
-#define SEEREP_IO_PB_VERSION_MINOR @seerep_hdf5_VERSION_MINOR @
-
-#endif /* SeerepIoPbCONFIG_H_ */

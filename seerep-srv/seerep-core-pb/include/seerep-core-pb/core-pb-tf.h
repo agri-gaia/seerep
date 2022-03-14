@@ -11,8 +11,8 @@
 #include <seerep-msgs/query-tf.h>
 // ros
 #include <geometry_msgs/TransformStamped.h>
-// seerep-pb-io
-#include <seerep-io-pb/io-pb-tf.h>
+// seerep-hdf5-pb
+#include <seerep-hdf5-pb/hdf5-pb-tf.h>
 
 // seerep-conversion
 #include <seerep_ros_conversions/conversions.h>
@@ -34,7 +34,7 @@ public:
 
 private:
   std::shared_ptr<seerep_core::Core> m_seerepCore;
-  std::unordered_map<boost::uuids::uuid, std::shared_ptr<seerep_io_pb::IoPbTf>, boost::hash<boost::uuids::uuid>>
+  std::unordered_map<boost::uuids::uuid, std::shared_ptr<seerep_hdf5_pb::Hdf5PbTf>, boost::hash<boost::uuids::uuid>>
       m_hdf5IoMap;
 };
 

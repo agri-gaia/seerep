@@ -14,10 +14,10 @@
 #include <seerep-msgs/query-result-project.h>
 #include <seerep-msgs/dataset-indexable.h>
 
-// seerep-core-io
-#include <seerep-io-core/io-core-image.h>
-#include <seerep-io-core/io-core-point-cloud.h>
-#include <seerep-io-core/io-core-tf.h>
+// seerep-hdf5-core
+#include <seerep-hdf5-core/hdf5-core-image.h>
+#include <seerep-hdf5-core/hdf5-core-point-cloud.h>
+#include <seerep-hdf5-core/hdf5-core-tf.h>
 
 // seerep-core
 #include "core-point-cloud.h"
@@ -33,8 +33,10 @@ public:
   CoreProject(const boost::uuids::uuid& uuid, const std::string path, const std::string projectname,
               const std::string mapFrameId);
   ~CoreProject();
+
   std::string getName();
   std::string getFrameId();
+
   seerep_core_msgs::QueryResultProject getPointCloud(const seerep_core_msgs::Query& query);
   seerep_core_msgs::QueryResultProject getImage(const seerep_core_msgs::Query& query);
 
@@ -61,10 +63,10 @@ private:
 
   std::shared_ptr<std::mutex> m_write_mtx;
   std::shared_ptr<HighFive::File> m_hdf5_file;
-  std::shared_ptr<seerep_io_core::IoCoreGeneral> m_ioGeneral;
-  std::shared_ptr<seerep_io_core::IoCoreTf> m_ioTf;
-  std::shared_ptr<seerep_io_core::IoCorePointCloud> m_ioPointCloud;
-  std::shared_ptr<seerep_io_core::IoCoreImage> m_ioImage;
+  std::shared_ptr<seerep_hdf5_core::Hdf5CoreGeneral> m_ioGeneral;
+  std::shared_ptr<seerep_hdf5_core::Hdf5CoreTf> m_ioTf;
+  std::shared_ptr<seerep_hdf5_core::Hdf5CorePointCloud> m_ioPointCloud;
+  std::shared_ptr<seerep_hdf5_core::Hdf5CoreImage> m_ioImage;
 
   std::shared_ptr<seerep_core::CoreTf> m_tfOverview;
   std::unique_ptr<seerep_core::CorePointCloud> m_pointcloudOverview;
