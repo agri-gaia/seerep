@@ -38,6 +38,12 @@ seerep_core_msgs::QueryResult Core::getPointCloud(const seerep_core_msgs::Query&
         result.queryResultProjects.push_back(pc);
       }
     }
+    // if not found throw error
+    else
+    {
+      throw std::runtime_error("project " + boost::lexical_cast<std::string>(query.header.uuidProject) +
+                               "does not exist!");
+    };
   }
 
   return result;
@@ -48,7 +54,7 @@ seerep_core_msgs::QueryResult Core::getImage(const seerep_core_msgs::Query& quer
   seerep_core_msgs::QueryResult result;
 
   // search all projects
-  if (query.header.uuidProject.is_nil())
+  if (query.projects.empty())
   {
     for (auto& it : m_projects)
     {
@@ -62,14 +68,23 @@ seerep_core_msgs::QueryResult Core::getImage(const seerep_core_msgs::Query& quer
   // Search only in project specified in query
   else
   {
-    auto project = m_projects.find(query.header.uuidProject);
-    if (project != m_projects.end())
+    for (auto projectuuid : query.projects)
     {
-      auto img = project->second->getImage(query);
-      if (!img.dataUuids.empty())
+      auto project = m_projects.find(projectuuid);
+      if (project != m_projects.end())
       {
-        result.queryResultProjects.push_back(img);
+        auto img = project->second->getImage(query);
+        if (!img.dataUuids.empty())
+        {
+          result.queryResultProjects.push_back(img);
+        }
       }
+      // if not found throw error
+      else
+      {
+        throw std::runtime_error("project " + boost::lexical_cast<std::string>(query.header.uuidProject) +
+                                 "does not exist!");
+      };
     }
   }
 
@@ -127,36 +142,115 @@ std::vector<seerep_core_msgs::ProjectInfo> Core::getProjects()
 
 void Core::addPointCloud(const seerep_core_msgs::DatasetIndexable& pointcloud2)
 {
-  m_projects.at(pointcloud2.header.uuidProject)->addPointCloud(pointcloud2);
+  // find the project based on its uuid
+  auto project = m_projects.find(pointcloud2.header.uuidProject);
+  // if project was found add pointcloud2
+  if (project != m_projects.end())
+  {
+    return project->second->addPointCloud(pointcloud2);
+  }
+  // if not found throw error
+  else
+  {
+    throw std::runtime_error("project " + boost::lexical_cast<std::string>(pointcloud2.header.uuidProject) +
+                             "does not exist!");
+  };
 }
 
 void Core::addImage(const seerep_core_msgs::DatasetIndexable& image)
 {
-  m_projects.at(image.header.uuidProject)->addImage(image);
+  // find the project based on its uuid
+  auto project = m_projects.find(image.header.uuidProject);
+  // if project was found add image
+  if (project != m_projects.end())
+  {
+    return project->second->addImage(image);
+  }
+  // if not found throw error
+  else
+  {
+    throw std::runtime_error("project " + boost::lexical_cast<std::string>(image.header.uuidProject) +
+                             "does not exist!");
+  };
 }
 
 void Core::addTF(const geometry_msgs::TransformStamped& tf, const boost::uuids::uuid& projectuuid)
 {
-  m_projects.at(projectuuid)->addTF(tf);
+  // find the project based on its uuid
+  auto project = m_projects.find(projectuuid);
+  // if project was found add tf
+  if (project != m_projects.end())
+  {
+    return project->second->addTF(tf);
+  }
+  // if not found throw error
+  else
+  {
+    throw std::runtime_error("project " + boost::lexical_cast<std::string>(projectuuid) + "does not exist!");
+  };
 }
 
 std::optional<geometry_msgs::TransformStamped> Core::getTF(const seerep_core_msgs::QueryTf& transformQuery)
 {
-  return m_projects.at(transformQuery.project)->getTF(transformQuery);
+  // find the project based on its uuid
+  auto project = m_projects.find(transformQuery.project);
+  // if project was found call function and return result
+  if (project != m_projects.end())
+  {
+    return project->second->getTF(transformQuery);
+  }
+  // if not found return empty optional
+  else
+  {
+    return std::nullopt;
+  };
 }
 
 std::vector<std::string> Core::getFrames(const boost::uuids::uuid& projectuuid)
 {
-  return m_projects.at(projectuuid)->getFrames();
+  // find the project based on its uuid
+  auto project = m_projects.find(projectuuid);
+  // if project was found call function and return result
+  if (project != m_projects.end())
+  {
+    return project->second->getFrames();
+  }
+  // if not found return empty vector
+  else
+  {
+    return {};
+  };
 }
 
 std::shared_ptr<std::mutex> Core::getHdf5FileMutex(const boost::uuids::uuid& projectuuid)
 {
-  return m_projects.at(projectuuid)->getHdf5FileMutex();
+  // find the project based on its uuid
+  auto project = m_projects.find(projectuuid);
+  // if project was found return pointer to mutex
+  if (project != m_projects.end())
+  {
+    return project->second->getHdf5FileMutex();
+  }
+  // if not found return null pointer
+  else
+  {
+    return nullptr;
+  }
 }
 std::shared_ptr<HighFive::File> Core::getHdf5File(const boost::uuids::uuid& projectuuid)
 {
-  return m_projects.at(projectuuid)->getHdf5File();
+  // find the project based on its uuid
+  auto project = m_projects.find(projectuuid);
+  // if project was found return pointer to HighFive::File
+  if (project != m_projects.end())
+  {
+    return project->second->getHdf5File();
+  }
+  // if not found return null pointer
+  else
+  {
+    return nullptr;
+  }
 }
 
 } /* namespace seerep_core */

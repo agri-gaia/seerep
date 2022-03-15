@@ -5,8 +5,8 @@ import time
 import numpy as np
 
 import grpc
-import imageService_pb2_grpc as imageService
-import tfService_pb2_grpc as tfService
+import image_service_pb2_grpc as imageService
+import tf_service_pb2_grpc as tfService
 import meta_operations_pb2_grpc as metaOperations
 import image_pb2 as image
 import boundingbox2d_labeled_pb2 as bb
@@ -15,7 +15,7 @@ import transform_stamped_pb2 as tf
 
 from google.protobuf import empty_pb2
 
-channel = grpc.insecure_channel("agrigaia-ur.ni.dfki:9090")
+channel = grpc.insecure_channel("localhost:9090")
 
 stub = imageService.ImageServiceStub(channel)
 stubTf = tfService.TfServiceStub(channel)
