@@ -33,6 +33,8 @@ public:
   std::vector<std::string> getFrames(const boost::uuids::uuid& projectuuid);
 
 private:
+  void getFileAccessorFromCore(boost::uuids::uuid project);
+  std::shared_ptr<seerep_hdf5_pb::Hdf5PbTf> getHdf5(boost::uuids::uuid project);
   std::shared_ptr<seerep_core::Core> m_seerepCore;
   std::unordered_map<boost::uuids::uuid, std::shared_ptr<seerep_hdf5_pb::Hdf5PbTf>, boost::hash<boost::uuids::uuid>>
       m_hdf5IoMap;

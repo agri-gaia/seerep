@@ -7,11 +7,7 @@ CorePbTf::CorePbTf(std::shared_ptr<seerep_core::Core> seerepCore) : m_seerepCore
 {
   for (seerep_core_msgs::ProjectInfo projectInfo : m_seerepCore->getProjects())
   {
-    auto hdf5file = m_seerepCore->getHdf5File(projectInfo.uuid);
-    auto hdf5fileMutex = m_seerepCore->getHdf5FileMutex(projectInfo.uuid);
-    auto tfIo = std::make_shared<seerep_hdf5_pb::Hdf5PbTf>(hdf5file, hdf5fileMutex);
-
-    m_hdf5IoMap.insert(std::make_pair(projectInfo.uuid, tfIo));
+    getFileAccessorFromCore(projectInfo.uuid);
   }
 }
 
@@ -47,7 +43,8 @@ void CorePbTf::addData(const seerep::TransformStamped& tf)
   boost::uuids::uuid projectuuid = gen(tf.header().uuid_project());
 
   // write to hdf5
-  m_hdf5IoMap.at(projectuuid)->writeTransformStamped(tf);
+  auto hdf5io = getHdf5(projectuuid);
+  hdf5io->writeTransformStamped(tf);
 
   // add to seerep-core
   m_seerepCore->addTF(seerep_ros_conversions::toROS(tf), projectuuid);
@@ -56,6 +53,33 @@ void CorePbTf::addData(const seerep::TransformStamped& tf)
 std::vector<std::string> CorePbTf::getFrames(const boost::uuids::uuid& projectuuid)
 {
   return m_seerepCore->getFrames(projectuuid);
+}
+
+void CorePbTf::getFileAccessorFromCore(boost::uuids::uuid project)
+{
+  auto hdf5file = m_seerepCore->getHdf5File(project);
+  auto hdf5fileMutex = m_seerepCore->getHdf5FileMutex(project);
+  auto tfIo = std::make_shared<seerep_hdf5_pb::Hdf5PbTf>(hdf5file, hdf5fileMutex);
+  m_hdf5IoMap.insert(std::make_pair(project, tfIo));
+}
+
+std::shared_ptr<seerep_hdf5_pb::Hdf5PbTf> CorePbTf::getHdf5(boost::uuids::uuid project)
+{
+  // find the project based on its uuid
+  auto hdf5io = m_hdf5IoMap.find(project);
+  // if project was found add tf
+  if (hdf5io != m_hdf5IoMap.end())
+  {
+    return hdf5io->second;
+  }
+  // if not found ask core
+  else
+  {
+    // this throws an exeption if core has no project with the uuid
+    getFileAccessorFromCore(project);
+    // if getFileAccessorFromCore didn't throw an error, find project and return pointer
+    return m_hdf5IoMap.find(project)->second;
+  };
 }
 
 }  // namespace seerep_core_pb

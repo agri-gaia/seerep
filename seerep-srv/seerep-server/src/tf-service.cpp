@@ -20,22 +20,29 @@ grpc::Status TfService::TransferTransformStamped(grpc::ServerContext* context,
     {
       boost::uuids::string_generator gen;
       uuid = gen(transform->header().uuid_project());
+
+      tfPb->addData(*transform);
+
+      response->set_message("added transform");
+      response->set_transmission_state(seerep::ServerResponse::SUCCESS);
+      return grpc::Status::OK;
     }
     catch (std::runtime_error e)
     {
-      // mainly catching "invalid uuid string"
+      // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
+      // also catching core doesn't have project with uuid error
       std::cout << e.what() << std::endl;
-      return grpc::Status::CANCELLED;
+      response->set_message(std::string(e.what()));
+      response->set_transmission_state(seerep::ServerResponse::FAILURE);
+      return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
     }
-    tfPb->addData(*transform);
-    response->set_message("added transform");
-    response->set_transmission_state(seerep::ServerResponse::SUCCESS);
-    return grpc::Status::OK;
   }
   else
   {
     std::cout << "project_uuid is empty!" << std::endl;
-    return grpc::Status::CANCELLED;
+    response->set_message("project_uuid is empty!");
+    response->set_transmission_state(seerep::ServerResponse::FAILURE);
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, "project_uuid is empty!");
   }
 }
 
@@ -47,16 +54,18 @@ grpc::Status TfService::GetFrames(grpc::ServerContext* context, const seerep::Fr
   {
     boost::uuids::string_generator gen;
     uuid = gen(frameQuery->projectuuid());
+
+    for (auto framename : tfPb->getFrames(uuid))
+    {
+      response->add_frames(framename);
+    }
   }
   catch (std::runtime_error e)
   {
-    // mainly catching "invalid uuid string"
+    // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
+    // also catching core doesn't have project with uuid error
     std::cout << e.what() << std::endl;
-    return grpc::Status::CANCELLED;
-  }
-  for (auto framename : tfPb->getFrames(uuid))
-  {
-    response->add_frames(framename);
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
   }
   return grpc::Status::OK;
 }
@@ -65,23 +74,20 @@ grpc::Status TfService::GetTransformStamped(grpc::ServerContext* context,
                                             const seerep::TransformStampedQuery* transformQuery,
                                             seerep::TransformStamped* response)
 {
-  boost::uuids::uuid uuid;
   try
   {
-    boost::uuids::string_generator gen;
-    uuid = gen(transformQuery->header().uuid_project());
+    auto result = tfPb->getData(*transformQuery);
+    if (result)
+    {
+      *response = result.value();
+    }
   }
   catch (std::runtime_error e)
   {
-    // mainly catching "invalid uuid string"
+    // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
+    // also catching core doesn't have project with uuid error
     std::cout << e.what() << std::endl;
-    return grpc::Status::CANCELLED;
-  }
-  auto result = tfPb->getData(*transformQuery);
-
-  if (result)
-  {
-    *response = result.value();
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
   }
 
   return grpc::Status::OK;

@@ -17,7 +17,19 @@ grpc::Status ImageService::GetImage(grpc::ServerContext* context, const seerep::
             << " and time interval (" << request->timeinterval().time_min() << "/" << request->timeinterval().time_max()
             << ")" << std::endl;
 
-  std::vector<seerep::Image> images = imagePb->getData(*request);
+  std::vector<seerep::Image> images;
+  try
+  {
+    images = imagePb->getData(*request);
+  }
+  catch (std::runtime_error e)
+  {
+    // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
+    // also catching core doesn't have project with uuid error
+    std::cout << e.what() << std::endl;
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+
   if (!images.empty())
   {
     std::cout << "Found " << images.size() << " images that match the query" << std::endl;
@@ -45,22 +57,29 @@ grpc::Status ImageService::TransferImage(grpc::ServerContext* context, const see
     {
       boost::uuids::string_generator gen;
       uuid = gen(image->header().uuid_project());
+
+      boost::uuids::uuid uuidImg = imagePb->addData(*image);
+
+      response->set_message(boost::lexical_cast<std::string>(uuidImg));
+      response->set_transmission_state(seerep::ServerResponse::SUCCESS);
+      return grpc::Status::OK;
     }
     catch (std::runtime_error e)
     {
-      // mainly catching "invalid uuid string"
+      // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
+      // also catching core doesn't have project with uuid error
       std::cout << e.what() << std::endl;
-      return grpc::Status::CANCELLED;
+      response->set_message(std::string(e.what()));
+      response->set_transmission_state(seerep::ServerResponse::FAILURE);
+      return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
     }
-    boost::uuids::uuid uuidImg = imagePb->addData(*image);
-    response->set_message(boost::lexical_cast<std::string>(uuidImg));
-    response->set_transmission_state(seerep::ServerResponse::SUCCESS);
-    return grpc::Status::OK;
   }
   else
   {
     std::cout << "project_uuid is empty!" << std::endl;
-    return grpc::Status::CANCELLED;
+    response->set_message("project_uuid is empty!");
+    response->set_transmission_state(seerep::ServerResponse::FAILURE);
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, "project_uuid is empty!");
   }
 }
 

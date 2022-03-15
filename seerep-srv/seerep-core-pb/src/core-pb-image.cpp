@@ -6,11 +6,7 @@ CorePbImage::CorePbImage(std::shared_ptr<seerep_core::Core> seerepCore) : m_seer
 {
   for (seerep_core_msgs::ProjectInfo projectInfo : m_seerepCore->getProjects())
   {
-    auto hdf5file = m_seerepCore->getHdf5File(projectInfo.uuid);
-    auto hdf5fileMutex = m_seerepCore->getHdf5FileMutex(projectInfo.uuid);
-    auto imageIo = std::make_shared<seerep_hdf5_pb::Hdf5PbImage>(hdf5file, hdf5fileMutex);
-
-    m_hdf5IoMap.insert(std::make_pair(projectInfo.uuid, imageIo));
+    getFileAccessorFromCore(projectInfo.uuid);
   }
 }
 
@@ -48,8 +44,8 @@ std::vector<seerep::Image> CorePbImage::getData(const seerep::Query& query)
   {
     for (auto uuidImg : project.dataUuids)
     {
-      std::optional<seerep::Image> image =
-          m_hdf5IoMap.at(project.projectUuid)->readImage(boost::lexical_cast<std::string>(uuidImg));
+      auto hdf5io = getHdf5(project.projectUuid);
+      std::optional<seerep::Image> image = hdf5io->readImage(boost::lexical_cast<std::string>(uuidImg));
       if (image)
       {
         resultImages.push_back(image.value());
@@ -61,7 +57,6 @@ std::vector<seerep::Image> CorePbImage::getData(const seerep::Query& query)
 
 boost::uuids::uuid CorePbImage::addData(const seerep::Image& img)
 {
-  // TODO check if project uuid is valid
   boost::uuids::string_generator gen;
   boost::uuids::uuid uuid;
   if (img.header().uuid_msgs().empty())
@@ -72,8 +67,8 @@ boost::uuids::uuid CorePbImage::addData(const seerep::Image& img)
   {
     uuid = gen(img.header().uuid_msgs());
   }
-
-  m_hdf5IoMap.at(gen(img.header().uuid_project()))->writeImage(boost::lexical_cast<std::string>(uuid), img);
+  auto hdf5io = getHdf5(gen(img.header().uuid_project()));
+  hdf5io->writeImage(boost::lexical_cast<std::string>(uuid), img);
 
   seerep_core_msgs::DatasetIndexable dataForIndices;
   dataForIndices.header.frameId = img.header().frame_id();
@@ -104,6 +99,33 @@ boost::uuids::uuid CorePbImage::addData(const seerep::Image& img)
   m_seerepCore->addImage(dataForIndices);
 
   return uuid;
+}
+
+void CorePbImage::getFileAccessorFromCore(boost::uuids::uuid project)
+{
+  auto hdf5file = m_seerepCore->getHdf5File(project);
+  auto hdf5fileMutex = m_seerepCore->getHdf5FileMutex(project);
+  auto imageIo = std::make_shared<seerep_hdf5_pb::Hdf5PbImage>(hdf5file, hdf5fileMutex);
+  m_hdf5IoMap.insert(std::make_pair(project, imageIo));
+}
+
+std::shared_ptr<seerep_hdf5_pb::Hdf5PbImage> CorePbImage::getHdf5(boost::uuids::uuid project)
+{
+  // find the project based on its uuid
+  auto hdf5io = m_hdf5IoMap.find(project);
+  // if project was found add tf
+  if (hdf5io != m_hdf5IoMap.end())
+  {
+    return hdf5io->second;
+  }
+  // if not found ask core
+  else
+  {
+    // this throws an exeption if core has no project with the uuid
+    getFileAccessorFromCore(project);
+    // if getFileAccessorFromCore didn't throw an error, find project and return pointer
+    return m_hdf5IoMap.find(project)->second;
+  };
 }
 
 }  // namespace seerep_core_pb
