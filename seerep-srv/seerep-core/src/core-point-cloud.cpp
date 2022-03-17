@@ -23,10 +23,9 @@ void CorePointCloud::recreateDatasets()
     try
     {
       boost::uuids::string_generator gen;
-      boost::uuids::uuid uuid = gen(name);
+      boost::uuids::uuid uuid = gen(name);  // remove this rather use optional
 
-      std::optional<seerep_core_msgs::DatasetIndexable> img =
-          m_hdf5_io->readDataForIndices(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, name);
+      std::optional<seerep_core_msgs::DatasetIndexable> img = m_hdf5_io->readPointCloud(name);
 
       if (img)
         addDatasetToIndices(img.value());

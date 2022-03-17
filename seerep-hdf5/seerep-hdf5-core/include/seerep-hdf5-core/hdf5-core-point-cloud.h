@@ -30,6 +30,7 @@ public:
   Hdf5CorePointCloud(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
 
   std::optional<seerep_core_msgs::DatasetIndexable> readPointCloud(const boost::uuids::uuid& uuid);
+  std::optional<seerep_core_msgs::DatasetIndexable> readPointCloud(const std::string& uuid);
 
 public:
   // image / pointcloud attribute keys

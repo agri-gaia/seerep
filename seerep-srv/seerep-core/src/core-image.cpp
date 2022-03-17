@@ -24,8 +24,7 @@ void CoreImage::recreateDatasets()
       boost::uuids::string_generator gen;
       boost::uuids::uuid uuid = gen(name);
 
-      std::optional<seerep_core_msgs::DatasetIndexable> img =
-          m_hdf5_io->readDataForIndices(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, name);
+      std::optional<seerep_core_msgs::DatasetIndexable> img = m_hdf5_io->readImage(name);
 
       if (img)
         addDatasetToIndices(img.value());

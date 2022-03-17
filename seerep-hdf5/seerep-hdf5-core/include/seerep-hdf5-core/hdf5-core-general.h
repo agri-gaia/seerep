@@ -21,65 +21,65 @@ class Hdf5CoreGeneral
 public:
   Hdf5CoreGeneral(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
 
-  std::optional<std::string> readFrameId(const std::string& datatypeGroup, const std::string& uuid);
+  // std::optional<std::string> readFrameId(const std::string& datatypeGroup, const std::string& uuid);
 
   std::vector<std::string> getGroupDatasets(const std::string& id);
 
   //################
   // Attributes
   //################
-  template <typename T>
-  void writeAttribute(const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField, T value);
+  // template <typename T>
+  // void writeAttribute(const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField, T value);
 
   template <typename T>
   T getAttribute(const std::string& id, const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField);
 
-  void deleteAttribute(const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField);
+  // void deleteAttribute(const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField);
 
-  std::optional<seerep_core_msgs::DatasetIndexable> readDataForIndices(const std::string& datatypeGroup,
-                                                                       const std::string& uuid);
+  // std::optional<seerep_core_msgs::DatasetIndexable> readDataForIndices(const std::string& datatypeGroup,
+  //                                                                      const std::string& uuid);
 
-  //################
-  // AABB
-  //################
-  void writeAABB(const std::string& datatypeGroup, const std::string& uuid, const seerep_core_msgs::AABB& aabb);
+  // //################
+  // // AABB
+  // //################
+  // void writeAABB(const std::string& datatypeGroup, const std::string& uuid, const seerep_core_msgs::AABB& aabb);
 
-  void readAABB(const std::string& datatypeGroup, const std::string& uuid, seerep_core_msgs::AABB& aabb);
+  // void readAABB(const std::string& datatypeGroup, const std::string& uuid, seerep_core_msgs::AABB& aabb);
 
-  bool hasAABB(const std::string& datatypeGroup, const std::string& uuid);
+  // bool hasAABB(const std::string& datatypeGroup, const std::string& uuid);
 
-  //################
-  // Time
-  //################
-  void readTimeFromRaw(const std::string& datatypeGroup, const std::string& uuid, int64_t& secs, int64_t& nanos);
-  void readTime(const std::string& datatypeGroup, const std::string& uuid, int64_t& secs, int64_t& nanos);
+  // //################
+  // // Time
+  // //################
+  // void readTimeFromRaw(const std::string& datatypeGroup, const std::string& uuid, int64_t& secs, int64_t& nanos);
+  // void readTime(const std::string& datatypeGroup, const std::string& uuid, int64_t& secs, int64_t& nanos);
 
-  void writeTimeToRaw(const std::string& datatypeGroup, const std::string& uuid, const int64_t& secs,
-                      const int64_t& nanos);
-  void writeTime(const std::string& datatypeGroup, const std::string& uuid, const int64_t& secs, const int64_t& nanos);
+  // void writeTimeToRaw(const std::string& datatypeGroup, const std::string& uuid, const int64_t& secs,
+  //                     const int64_t& nanos);
+  // void writeTime(const std::string& datatypeGroup, const std::string& uuid, const int64_t& secs, const int64_t& nanos);
 
-  bool hasTimeRaw(const std::string& datatypeGroup, const std::string& uuid);
-  bool hasTime(const std::string& datatypeGroup, const std::string& uuid);
+  // bool hasTimeRaw(const std::string& datatypeGroup, const std::string& uuid);
+  // bool hasTime(const std::string& datatypeGroup, const std::string& uuid);
 
-  //################
-  // BoundingBoxes
-  //################
-  void readBoundingBox2DLabeled(const std::string& datatypeGroup, const std::string& uuid,
-                                std::vector<std::string> labels, std::vector<std::vector<double>> boundingBoxes);
+  // //################
+  // // BoundingBoxes
+  // //################
+  // void readBoundingBox2DLabeled(const std::string& datatypeGroup, const std::string& uuid,
+  //                               std::vector<std::string> labels, std::vector<std::vector<double>> boundingBoxes);
 
-  //################
-  // Labels General
-  //################
-  void readLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid, std::vector<std::string> labels);
+  // //################
+  // // Labels General
+  // //################
+  // void readLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid, std::vector<std::string> labels);
 
-  //################
-  // Project
-  //################
-  void writeProjectname(const std::string& projectname);
+  // //################
+  // // Project
+  // //################
+  // void writeProjectname(const std::string& projectname);
 
   std::string readProjectname();
 
-  void writeProjectFrameId(const std::string& frameId);
+  // void writeProjectFrameId(const std::string& frameId);
 
   std::string readProjectFrameId();
 
