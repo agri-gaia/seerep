@@ -5,7 +5,7 @@ import sys
 # import numpy as np
 
 import grpc
-import tfService_pb2_grpc as tfService
+import tf_service_pb2_grpc as tfService
 import meta_operations_pb2_grpc as metaOperations
 import frame_query_pb2 as frameQuery
 

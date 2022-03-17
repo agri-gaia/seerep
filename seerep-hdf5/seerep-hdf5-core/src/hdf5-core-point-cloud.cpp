@@ -11,13 +11,18 @@ Hdf5CorePointCloud::Hdf5CorePointCloud(std::shared_ptr<HighFive::File>& file, st
 
 std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CorePointCloud::readPointCloud(const boost::uuids::uuid& uuid)
 {
-  std::string id = boost::lexical_cast<std::string>(uuid);
-  std::string hdf5DatasetPath = HDF5_GROUP_POINTCLOUD + "/" + id;
+  return readPointCloud(boost::lexical_cast<std::string>(uuid));
+}
+
+std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CorePointCloud::readPointCloud(const std::string& uuid)
+{
+  std::string hdf5DatasetPath = HDF5_GROUP_POINTCLOUD + "/" + uuid;
 
   if (!m_file->exist(hdf5DatasetPath))
     return std::nullopt;
 
-  return readDataForIndices(hdf5DatasetPath, id);
+  // return readDataForIndices(hdf5DatasetPath, id);
+  return std::nullopt;
 }
 
 }  // namespace seerep_hdf5_core

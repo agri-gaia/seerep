@@ -31,6 +31,12 @@ public:
 
   std::optional<seerep_core_msgs::DatasetIndexable> readImage(const boost::uuids::uuid& uuid);
 
+  std::optional<seerep_core_msgs::DatasetIndexable> readImage(const std::string& uuid);
+
+private:
+  std::vector<std::string> readLabelsGeneral(const std::string& dataGroup);
+  std::vector<std::string> readBoundingBox2DLabels(const std::string& dataGroup);
+
 public:
   inline static const std::string SIZE = "size";
   inline static const std::string CLASS = "CLASS";
