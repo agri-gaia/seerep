@@ -78,7 +78,8 @@ void Hdf5FbImage::writeImage(const std::string& id, const seerep::fb::Image& ima
   m_file->flush();
 }
 
-std::optional<flatbuffers::Offset<seerep::fb::Image>> Hdf5FbImage::readImage(const std::string& id)
+std::optional<flatbuffers::Offset<seerep::fb::Image>> Hdf5FbImage::readImage(const std::string& id,
+                                                                             const std::string& projectuuid)
 {
   std::string hdf5DatasetPath = HDF5_GROUP_IMAGE + "/" + id;
   std::string hdf5DatasetRawDataPath = hdf5DatasetPath + "/" + RAWDATA;
@@ -132,7 +133,7 @@ std::optional<flatbuffers::Offset<seerep::fb::Image>> Hdf5FbImage::readImage(con
   // auto dataFbs = builder.CreateVector(read_data);
   imageBuilder.add_data(builder.CreateVector(read_data));
 
-  imageBuilder.add_header(readHeaderAttributes(*data_set_ptr));
+  imageBuilder.add_header(readHeaderAttributes(*data_set_ptr, projectuuid, id));
 
   std::vector<std::string> labels;
   readLabelsGeneral(HDF5_GROUP_IMAGE, id, labels);

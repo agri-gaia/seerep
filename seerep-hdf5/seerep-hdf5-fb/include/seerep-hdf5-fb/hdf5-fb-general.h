@@ -40,7 +40,8 @@ public:
   void writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, const seerep::fb::Header& header);
 
   template <class T>
-  flatbuffers::Offset<seerep::fb::Header> readHeaderAttributes(HighFive::AnnotateTraits<T>& object);
+  flatbuffers::Offset<seerep::fb::Header> readHeaderAttributes(HighFive::AnnotateTraits<T>& object,
+                                                               std::string uuidProject, std::string uuidMsg);
 
   //################
   // AABB
