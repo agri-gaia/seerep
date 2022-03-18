@@ -83,12 +83,13 @@ boost::uuids::uuid CorePbPointCloud::addData(const seerep::PointCloud2& pc)
   dataForIndices.header.uuidProject = gen(pc.header().uuid_project());
 
   // TODO load from file
-  dataForIndices.boundingbox.min_corner().set<0>(0);
-  dataForIndices.boundingbox.min_corner().set<1>(0);
-  dataForIndices.boundingbox.min_corner().set<2>(0);
-  dataForIndices.boundingbox.max_corner().set<0>(0);
-  dataForIndices.boundingbox.max_corner().set<1>(0);
-  dataForIndices.boundingbox.max_corner().set<2>(0);
+  std::vector<float> bb = hdf5io->loadBoundingBox(boost::lexical_cast<std::string>(uuid));
+  dataForIndices.boundingbox.min_corner().set<0>(bb.at(0));
+  dataForIndices.boundingbox.min_corner().set<1>(bb.at(1));
+  dataForIndices.boundingbox.min_corner().set<2>(bb.at(2));
+  dataForIndices.boundingbox.max_corner().set<0>(bb.at(3));
+  dataForIndices.boundingbox.max_corner().set<1>(bb.at(4));
+  dataForIndices.boundingbox.max_corner().set<2>(bb.at(5));
 
   // semantic
   dataForIndices.labels.reserve(pc.labels_general().size() + pc.labels_bb().size());

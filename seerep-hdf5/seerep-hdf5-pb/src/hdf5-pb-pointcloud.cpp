@@ -492,4 +492,12 @@ Hdf5PbPointCloud::readPointFieldAttributes(HighFive::Group& cloud_group)
   return repeatedPointField;
 }
 
+std::vector<float> Hdf5PbPointCloud::loadBoundingBox(const std::string& uuid)
+{
+  std::string hdf5DatasetPath = seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + uuid;
+  std::shared_ptr<HighFive::Group> group_ptr = std::make_shared<HighFive::Group>(m_file->getGroup(hdf5DatasetPath));
+  std::vector<float> bb;
+  group_ptr->getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX).write(bb);
+  return bb;
+}
 } /* namespace seerep_hdf5_pb */

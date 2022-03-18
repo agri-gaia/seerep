@@ -36,6 +36,8 @@ public:
 
   google::protobuf::RepeatedPtrField<seerep::PointField> readPointFieldAttributes(HighFive::Group& cloud_group);
 
+  std::vector<float> loadBoundingBox(const std::string& uuid);
+
 private:
   struct CloudInfo
   {
