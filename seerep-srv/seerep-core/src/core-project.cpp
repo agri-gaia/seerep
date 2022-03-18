@@ -15,6 +15,8 @@ CoreProject::CoreProject(const boost::uuids::uuid& uuid, const std::string path,
   : m_id(uuid), m_path(path), m_projectname(projectname), m_frameId(mapFrameId)
 {
   createHdf5Io(m_id, m_path);
+  m_ioGeneral->writeProjectname(m_projectname);
+  m_ioGeneral->writeProjectFrameId(m_frameId);
   recreateDatatypes();
 }
 CoreProject::~CoreProject()
