@@ -75,11 +75,11 @@ public:
   // //################
   // // Project
   // //################
-  // void writeProjectname(const std::string& projectname);
+  void writeProjectname(const std::string& projectname);
 
   std::string readProjectname();
 
-  // void writeProjectFrameId(const std::string& frameId);
+  void writeProjectFrameId(const std::string& frameId);
 
   std::string readProjectFrameId();
 

@@ -373,18 +373,18 @@ std::vector<std::string> Hdf5CoreGeneral::getGroupDatasets(const std::string& id
 //   datasetLabels.read(labels);
 // }
 
-// void Hdf5CoreGeneral::writeProjectname(const std::string& projectname)
-// {
-//   if (!m_file->hasAttribute(PROJECTNAME))
-//   {
-//     m_file->createAttribute<std::string>(PROJECTNAME, projectname);
-//   }
-//   else
-//   {
-//     m_file->getAttribute(PROJECTNAME).write(projectname);
-//   }
-//   m_file->flush();
-// }
+void Hdf5CoreGeneral::writeProjectname(const std::string& projectname)
+{
+  if (!m_file->hasAttribute(PROJECTNAME))
+  {
+    m_file->createAttribute<std::string>(PROJECTNAME, projectname);
+  }
+  else
+  {
+    m_file->getAttribute(PROJECTNAME).write(projectname);
+  }
+  m_file->flush();
+}
 
 std::string Hdf5CoreGeneral::readProjectname()
 {
@@ -396,18 +396,18 @@ std::string Hdf5CoreGeneral::readProjectname()
   return projectname;
 }
 
-// void Hdf5CoreGeneral::writeProjectFrameId(const std::string& frameId)
-// {
-//   if (!m_file->hasAttribute(PROJECTFRAMEID))
-//   {
-//     m_file->createAttribute<std::string>(PROJECTFRAMEID, frameId);
-//   }
-//   else
-//   {
-//     m_file->getAttribute(PROJECTFRAMEID).write(frameId);
-//   }
-//   m_file->flush();
-// }
+void Hdf5CoreGeneral::writeProjectFrameId(const std::string& frameId)
+{
+  if (!m_file->hasAttribute(PROJECTFRAMEID))
+  {
+    m_file->createAttribute<std::string>(PROJECTFRAMEID, frameId);
+  }
+  else
+  {
+    m_file->getAttribute(PROJECTFRAMEID).write(frameId);
+  }
+  m_file->flush();
+}
 
 std::string Hdf5CoreGeneral::readProjectFrameId()
 {
