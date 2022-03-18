@@ -49,8 +49,8 @@ std::vector<seerep::PointCloud2> CorePbPointCloud::getData(const seerep::Query& 
   {
     for (auto uuidPc : project.dataUuids)
     {
-      std::optional<seerep::PointCloud2> pc =
-          m_hdf5IoMap.at(project.projectUuid)->readPointCloud2(boost::lexical_cast<std::string>(uuidPc));
+      auto hdf5io = getHdf5(project.projectUuid);
+      std::optional<seerep::PointCloud2> pc = hdf5io->readPointCloud2(boost::lexical_cast<std::string>(uuidPc));
       if (pc)
       {
         resultPointClouds.push_back(pc.value());
@@ -58,6 +58,80 @@ std::vector<seerep::PointCloud2> CorePbPointCloud::getData(const seerep::Query& 
     }
   }
   return resultPointClouds;
+}
+
+boost::uuids::uuid CorePbPointCloud::addData(const seerep::PointCloud2& pc)
+{
+  boost::uuids::string_generator gen;
+  boost::uuids::uuid uuid;
+  if (pc.header().uuid_msgs().empty())
+  {
+    uuid = boost::uuids::random_generator()();
+  }
+  else
+  {
+    uuid = gen(pc.header().uuid_msgs());
+  }
+  auto hdf5io = getHdf5(gen(pc.header().uuid_project()));
+  hdf5io->writePointCloud2(boost::lexical_cast<std::string>(uuid), pc);
+
+  seerep_core_msgs::DatasetIndexable dataForIndices;
+  dataForIndices.header.frameId = pc.header().frame_id();
+  dataForIndices.header.timestamp.seconds = pc.header().stamp().seconds();
+  dataForIndices.header.timestamp.nanos = pc.header().stamp().nanos();
+  dataForIndices.header.uuidData = uuid;
+  dataForIndices.header.uuidProject = gen(pc.header().uuid_project());
+
+  // TODO load from file
+  dataForIndices.boundingbox.min_corner().set<0>(0);
+  dataForIndices.boundingbox.min_corner().set<1>(0);
+  dataForIndices.boundingbox.min_corner().set<2>(0);
+  dataForIndices.boundingbox.max_corner().set<0>(0);
+  dataForIndices.boundingbox.max_corner().set<1>(0);
+  dataForIndices.boundingbox.max_corner().set<2>(0);
+
+  // semantic
+  dataForIndices.labels.reserve(pc.labels_general().size() + pc.labels_bb().size());
+  for (auto label : pc.labels_general())
+  {
+    dataForIndices.labels.push_back(label);
+  }
+
+  for (auto label : pc.labels_bb())
+  {
+    dataForIndices.labels.push_back(label.label());
+  }
+
+  m_seerepCore->addImage(dataForIndices);
+
+  return uuid;
+}
+
+void CorePbPointCloud::getFileAccessorFromCore(boost::uuids::uuid project)
+{
+  auto hdf5file = m_seerepCore->getHdf5File(project);
+  auto hdf5fileMutex = m_seerepCore->getHdf5FileMutex(project);
+  auto pointCloudIo = std::make_shared<seerep_hdf5_pb::Hdf5PbPointCloud>(hdf5file, hdf5fileMutex);
+  m_hdf5IoMap.insert(std::make_pair(project, pointCloudIo));
+}
+
+std::shared_ptr<seerep_hdf5_pb::Hdf5PbPointCloud> CorePbPointCloud::getHdf5(boost::uuids::uuid project)
+{
+  // find the project based on its uuid
+  auto hdf5io = m_hdf5IoMap.find(project);
+  // if project was found add tf
+  if (hdf5io != m_hdf5IoMap.end())
+  {
+    return hdf5io->second;
+  }
+  // if not found ask core
+  else
+  {
+    // this throws an exeption if core has no project with the uuid
+    getFileAccessorFromCore(project);
+    // if getFileAccessorFromCore didn't throw an error, find project and return pointer
+    return m_hdf5IoMap.find(project)->second;
+  };
 }
 
 }  // namespace seerep_core_pb

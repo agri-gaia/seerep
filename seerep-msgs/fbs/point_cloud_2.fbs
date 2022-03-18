@@ -15,5 +15,6 @@ table PointCloud2 {
   row_step:uint;
   data:[ubyte];
   is_dense:bool;
+  labels_general:[string];
   labels_bb:[seerep.fb.BoundingBoxLabeled];
 }

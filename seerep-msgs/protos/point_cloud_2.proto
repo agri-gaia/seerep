@@ -37,6 +37,9 @@ message PointCloud2
   bytes data = 8;
   bool is_dense = 9;
 
+  // (optional) labels for the complete image
+  repeated string labels_general = 10;
+
   // (optional) bounding box based labels
-  repeated BoundingBoxLabeled labels_bb = 10;
+  repeated BoundingBoxLabeled labels_bb = 11;
 }
