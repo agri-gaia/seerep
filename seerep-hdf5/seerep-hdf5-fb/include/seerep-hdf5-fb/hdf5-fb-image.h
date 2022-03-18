@@ -24,7 +24,7 @@ public:
 
   void writeImage(const std::string& id, const seerep::fb::Image& image);
 
-  std::optional<flatbuffers::Offset<seerep::fb::Image>> readImage(const std::string& id);
+  std::optional<flatbuffers::Offset<seerep::fb::Image>> readImage(const std::string& id, const std::string& projectuuid);
 
 private:
   const std::string SIZE = "size";

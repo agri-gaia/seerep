@@ -57,7 +57,8 @@ void Hdf5FbGeneral::writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, c
 }
 
 template <class T>
-flatbuffers::Offset<seerep::fb::Header> Hdf5FbGeneral::readHeaderAttributes(HighFive::AnnotateTraits<T>& object)
+flatbuffers::Offset<seerep::fb::Header>
+Hdf5FbGeneral::readHeaderAttributes(HighFive::AnnotateTraits<T>& object, std::string uuidProject, std::string uuidMsg)
 {
   flatbuffers::FlatBufferBuilder builder;
   int64_t seconds;
@@ -73,7 +74,8 @@ flatbuffers::Offset<seerep::fb::Header> Hdf5FbGeneral::readHeaderAttributes(High
 
   auto timestamp = seerep::fb::CreateTimestamp(builder, seconds, nanos);
 
-  return seerep::fb::CreateHeader(builder, seq, timestamp, builder.CreateString(frameId));
+  return seerep::fb::CreateHeader(builder, seq, timestamp, builder.CreateString(frameId),
+                                  builder.CreateString(uuidProject), builder.CreateString(uuidMsg));
 }
 
 } /* namespace seerep_hdf5_fb */
