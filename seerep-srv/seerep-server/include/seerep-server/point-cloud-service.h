@@ -3,14 +3,15 @@
 
 // seerep
 #include <seerep-com/point-cloud-service.grpc.pb.h>
-#include <seerep-core/seerep-core.h>
+#include <seerep-core/core.h>
+#include <seerep-core-pb/core-pb-pointcloud.h>
 
 namespace seerep_server
 {
 class PointCloudService final : public seerep::PointCloudService::Service
 {
 public:
-  PointCloudService(std::shared_ptr<seerep_core::ProjectOverview> projectOverview);
+  PointCloudService(std::shared_ptr<seerep_core::Core> seerepCore);
 
   grpc::Status GetPointCloud2(grpc::ServerContext* context, const seerep::Query* request,
                               grpc::ServerWriter<seerep::PointCloud2>* writer);
@@ -19,7 +20,7 @@ public:
                                    seerep::ServerResponse* response);
 
 private:
-  std::shared_ptr<seerep_core::SeerepCore> seerepCore;
+  std::shared_ptr<seerep_core_pb::CorePbPointCloud> pointCloudPb;
 };
 
 } /* namespace seerep_server */

@@ -5,13 +5,13 @@ import sys
 # import numpy as np
 
 import grpc
-import imageService_pb2_grpc as imageService
+import image_service_pb2_grpc as imageService
 import meta_operations_pb2_grpc as metaOperations
 import query_pb2 as query
 
 from google.protobuf import empty_pb2
 
-channel = grpc.insecure_channel("agrigaia-ur.ni.dfki:9090")
+channel = grpc.insecure_channel("localhost:9090")
 
 stub = imageService.ImageServiceStub(channel)
 stubMeta = metaOperations.MetaOperationsStub(channel)

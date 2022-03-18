@@ -32,6 +32,10 @@ public:
   std::optional<seerep_core_msgs::DatasetIndexable> readPointCloud(const boost::uuids::uuid& uuid);
   std::optional<seerep_core_msgs::DatasetIndexable> readPointCloud(const std::string& uuid);
 
+private:
+  std::vector<std::string> readLabelsGeneral(const std::string& dataGroup);
+  std::vector<std::string> readBoundingBoxLabels(const std::string& dataGroup);
+
 public:
   // image / pointcloud attribute keys
   inline static const std::string HEIGHT = "height";
