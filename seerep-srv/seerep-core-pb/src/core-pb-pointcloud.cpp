@@ -82,7 +82,6 @@ boost::uuids::uuid CorePbPointCloud::addData(const seerep::PointCloud2& pc)
   dataForIndices.header.uuidData = uuid;
   dataForIndices.header.uuidProject = gen(pc.header().uuid_project());
 
-  // TODO load from file
   std::vector<float> bb = hdf5io->loadBoundingBox(boost::lexical_cast<std::string>(uuid));
   dataForIndices.boundingbox.min_corner().set<0>(bb.at(0));
   dataForIndices.boundingbox.min_corner().set<1>(bb.at(1));
