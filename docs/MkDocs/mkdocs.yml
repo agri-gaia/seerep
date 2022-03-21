@@ -2,6 +2,6 @@ site_name: SEEREP Documentation
 nav:
   - Home: index.md
   - Getting Started: getting-started.md
-  - Packages: packages.md
+  - Package Overview: packages.md
 theme:
   name: material
