@@ -24,6 +24,10 @@ find_package(SeerepMsgs REQUIRED)
 list(APPEND SeerepHdf5Pb_INCLUDE_DIRS ${SeerepMsgs_INCLUDE_DIRS})
 list(APPEND SeerepHdf5Pb_LIBRARIES ${SeerepMsgs_LIBRARIES})
 
+#find_package(SeerepHdf5Core REQUIRED)
+#list(APPEND SeerepHdf5Pb_INCLUDE_DIRS ${SeerepHdf5Core_INCLUDE_DIRS})
+#list(APPEND SeerepHdf5Pb_LIBRARIES ${SeerepHdf5Core_LIBRARIES})
+
 # find_package(catkin REQUIRED COMPONENTS sensor_msgs)
 # list(APPEND SeerepHdf5Pb_INCLUDE_DIRS ${catkin_INCLUDE_DIRS})
 # list(APPEND SeerepHdf5Pb_LIBRARIES ${catkin_LIBRARIES})
