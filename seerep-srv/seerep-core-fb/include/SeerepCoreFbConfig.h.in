@@ -1,0 +1,8 @@
+#ifndef SeerepCoreFbCONFIG_H_
+#define SeerepCoreFbCONFIG_H_
+
+// the configured options and settings for seerep_fb_io
+#define SEEREP_CORE_FB_VERSION_MAJOR @seerep_core_fb_VERSION_MAJOR @
+#define SEEREP_CORE_FB_VERSION_MINOR @seerep_core_fb_VERSION_MINOR @
+
+#endif /* SeerepCoreFbCONFIG_H_ */

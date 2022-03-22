@@ -8,4 +8,5 @@ table Query {
   boundingbox:seerep.fb.Boundingbox;
   timeinterval:seerep.fb.TimeInterval;
   label:[string];
+  projectuuid:[string];
 }

@@ -11,6 +11,7 @@ include(FindFlatBuffers)
 
 find_package(Flatbuffers REQUIRED)
 find_package(SeerepMsgs REQUIRED)
+find_package(SeerepHdf5Core REQUIRED)
 find_package(HighFive REQUIRED)
 
 configure_file(include/SeerepHdf5FbConfig.h.in SeerepHdf5FbConfig.h)
@@ -20,16 +21,18 @@ message("HighFive Include Dirs: ${HighFive_INCLUDE_DIRS} Libraries: ${HighFive_L
 include_directories(
 	include
 	${SeerepMsgs_INCLUDE_DIRS}
+	${SeerepHdf5Core_INCLUDE_DIRS}
 	${FLATBUFFER_INCLUDE_DIR}
 	${HighFive_INCLUDE_DIRS}
 )
 
-add_library(seerep-hdf5-fb
+add_library(seerephdf5fb
 	src/hdf5-fb-general.cpp
+	src/hdf5-fb-tf.cpp
 	src/hdf5-fb-image.cpp
 )
 
-target_link_libraries(seerep-hdf5-fb
+target_link_libraries(seerephdf5fb
 	${SeerepMsgs_LIBRARIES}
 	${PROTOBUF_LIBRARIES}
 	${HighFive_LIBRARIES}
@@ -39,7 +42,7 @@ set(CMAKE_INSTALL_INCLUDEDIR include)
 set(CMAKE_INSTALL_LIBDIR lib)
 set(CMAKE_INSTALL_BINDIR bin)
 
-install(TARGETS seerep-hdf5-fb
+install(TARGETS seerephdf5fb
 	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 	PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
@@ -57,7 +60,7 @@ configure_package_config_file(
 # generate the version file for the config file
 write_basic_package_version_file(
   "${CMAKE_CURRENT_BINARY_DIR}/SeerepHdf5FbConfigVersion.cmake"
-  VERSION "${seerep-hdf5-fb_VERSION_MAJOR}.${seerep-hdf5-fb_VERSION_MINOR}"
+  VERSION "${seerep_hdf5_fb_VERSION_MAJOR}.${seerep_hdf5_fb_VERSION_MINOR}"
   COMPATIBILITY AnyNewerVersion
 )
 
@@ -65,7 +68,7 @@ write_basic_package_version_file(
 install(FILES
 	${CMAKE_CURRENT_BINARY_DIR}/SeerepHdf5FbConfig.cmake
 	${CMAKE_CURRENT_BINARY_DIR}/SeerepHdf5FbConfigVersion.cmake
-	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/SeerepIoFb
+	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/SeerepHdf5Fb
 )
 
 install(FILES
@@ -77,7 +80,7 @@ INSTALL(DIRECTORY include/seerep-hdf5-fb DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 
 install(FILES
 	cmake/FindHighFive.cmake
-	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/SeerepIoFb/Modules
+	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/SeerepHdf5Fb/Modules
 )
 
 #add PIC gcc flag

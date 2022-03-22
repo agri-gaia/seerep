@@ -1,0 +1,33 @@
+@PACKAGE_INIT@
+
+list(APPEND CMAKE_MODULE_PATH "${CURRENT_LIST_DIR}/Modules")
+
+set(SeerepCoreFb_INCLUDE_DIRS @PACKAGE_CMAKE_INSTALL_INCLUDEDIR@)
+
+find_package(PkgConfig REQUIRED)
+find_library(SeerepCoreFb_LIBRARY NAMES seerepcorefb)
+set(SeerepCoreFb_LIBRARIES ${SeerepCoreFb_LIBRARY})
+
+find_package(Protobuf REQUIRED)
+list(APPEND SeerepCoreFb_INCLUDE_DIRS ${Protobuf_INCLUDE_DIR})
+list(APPEND SeerepCoreFb_LIBRARIES ${Protobuf_LIBRARY})
+
+find_package(HDF5 REQUIRED)
+list(APPEND SeerepCoreFb_INCLUDE_DIRS ${HDF5_INCLUDE_DIRS})
+list(APPEND SeerepCoreFb_LIBRARIES ${HDF5_LIBRARIES})
+
+find_package(HighFive REQUIRED)
+list(APPEND SeerepCoreFb_INCLUDE_DIRS ${HighFive_INCLUDE_DIRS})
+list(APPEND SeerepCoreFb_LIBRARIES ${HighFive_LIBRARIES})
+
+find_package(SeerepMsgs REQUIRED)
+list(APPEND SeerepCoreFb_INCLUDE_DIRS ${SeerepMsgs_INCLUDE_DIRS})
+list(APPEND SeerepCoreFb_LIBRARIES ${SeerepMsgs_LIBRARIES})
+
+find_package(SeerepHdf5Pb REQUIRED)
+list(APPEND SeerepCoreFb_INCLUDE_DIRS ${SeerepHdf5Pb_INCLUDE_DIRS})
+list(APPEND SeerepCoreFb_LIBRARIES ${SeerepHdf5Pb_LIBRARIES})
+
+find_package(seerep_ros_conversions REQUIRED)
+list(APPEND SeerepCoreFb_INCLUDE_DIRS ${seerep_ros_conversions_INCLUDE_DIRS})
+list(APPEND SeerepCoreFb_LIBRARIES ${seerep_ros_conversions_LIBRARIES})
