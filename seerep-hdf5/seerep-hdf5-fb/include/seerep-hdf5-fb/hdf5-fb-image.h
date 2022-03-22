@@ -5,6 +5,7 @@
 #include <highfive/H5File.hpp>
 
 // seerep-hdf5
+#include <seerep-hdf5-core/hdf5-core-image.h>
 #include "seerep-hdf5-fb/hdf5-fb-general.h"
 
 // seerep-msgs
