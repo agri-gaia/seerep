@@ -72,10 +72,14 @@ std::set<boost::uuids::uuid> CoreImage::querySemantic(const seerep_core_msgs::Qu
   // find the queried label in the label-imageID-map
   for (std::string labelquery : query.label)
   {
-    // add all imageIDs to result set
-    for (boost::uuids::uuid ids : m_label.find(labelquery)->second)
+    auto labelPtr = m_label.find(labelquery);
+    if (labelPtr != m_label.end())
     {
-      result.insert(ids);
+      // add all imageIDs to result set
+      for (boost::uuids::uuid id : labelPtr->second)
+      {
+        result.insert(id);
+      }
     }
   }
   return result;
