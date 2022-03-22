@@ -10,6 +10,7 @@ include(cmake/FindHighFive.cmake)
 
 find_package(Protobuf REQUIRED)
 find_package(SeerepMsgs REQUIRED)
+find_package(SeerepHdf5Core REQUIRED)
 find_package(HighFive REQUIRED)
 
 
@@ -18,7 +19,7 @@ configure_file(include/SeerepHdf5PbConfig.h.in SeerepHdf5PbConfig.h)
 include_directories(
 	include
 	${SeerepMsgs_INCLUDE_DIRS}
-	${SeerepIoCore_INCLUDE_DIRS}
+	${SeerepHdf5Core_INCLUDE_DIRS}
 	${PROTOBUF_INCLUDE_DIR}
 	${HighFive_INCLUDE_DIRS}
 )

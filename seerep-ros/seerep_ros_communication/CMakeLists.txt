@@ -14,11 +14,14 @@ find_package(catkin REQUIRED
 	sensor_msgs
 	roscpp
 )
+#find_package(SeerepMsgs REQUIRED)
 find_package(SeerepHdf5Pb REQUIRED)
 find_package(seerep_ros_conversions REQUIRED)
 find_package(Protobuf REQUIRED)
 find_package(gRPC CONFIG REQUIRED)
 
+
+message("HighFive Include Dirs: ${catkin_INCLUDE_DIRS} \n Libraries: ${catkin_LIBRARIES}")
 
 
 catkin_package(
