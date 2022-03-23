@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<launch>
+    <node name="seerep_ros_communication_querierFb" pkg="seerep_ros_communication" type="seerep_ros_communication_querierFb" output="screen">
+    </node>
+</launch>
