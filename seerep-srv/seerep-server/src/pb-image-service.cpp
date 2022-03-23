@@ -1,14 +1,14 @@
-#include "seerep-server/image-service.h"
+#include "seerep-server/pb-image-service.h"
 
 namespace seerep_server
 {
-ImageService::ImageService(std::shared_ptr<seerep_core::Core> seerepCore)
+PbImageService::PbImageService(std::shared_ptr<seerep_core::Core> seerepCore)
   : imagePb(std::make_shared<seerep_core_pb::CorePbImage>(seerepCore))
 {
 }
 
-grpc::Status ImageService::GetImage(grpc::ServerContext* context, const seerep::Query* request,
-                                    grpc::ServerWriter<seerep::Image>* writer)
+grpc::Status PbImageService::GetImage(grpc::ServerContext* context, const seerep::Query* request,
+                                      grpc::ServerWriter<seerep::Image>* writer)
 {
   std::cout << "sending images in bounding box min(" << request->boundingbox().point_min().x() << "/"
             << request->boundingbox().point_min().y() << "/" << request->boundingbox().point_min().z() << "), max("
@@ -45,8 +45,8 @@ grpc::Status ImageService::GetImage(grpc::ServerContext* context, const seerep::
   return grpc::Status::OK;
 }
 
-grpc::Status ImageService::TransferImage(grpc::ServerContext* context, const seerep::Image* image,
-                                         seerep::ServerResponse* response)
+grpc::Status PbImageService::TransferImage(grpc::ServerContext* context, const seerep::Image* image,
+                                           seerep::ServerResponse* response)
 {
   std::cout << "received image... " << std::endl;
 

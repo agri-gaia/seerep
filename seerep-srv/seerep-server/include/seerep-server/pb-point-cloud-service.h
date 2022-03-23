@@ -8,10 +8,10 @@
 
 namespace seerep_server
 {
-class PointCloudService final : public seerep::PointCloudService::Service
+class PbPointCloudService final : public seerep::PointCloudService::Service
 {
 public:
-  PointCloudService(std::shared_ptr<seerep_core::Core> seerepCore);
+  PbPointCloudService(std::shared_ptr<seerep_core::Core> seerepCore);
 
   grpc::Status GetPointCloud2(grpc::ServerContext* context, const seerep::Query* request,
                               grpc::ServerWriter<seerep::PointCloud2>* writer);

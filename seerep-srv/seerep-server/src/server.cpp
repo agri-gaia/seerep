@@ -2,11 +2,11 @@
 
 namespace seerep_server
 {
-std::shared_ptr<grpc::Server> createServer(const std::string& server_address,
-                                           seerep_server::MetaOperations* metaOperations,
-                                           seerep_server::TfService* tfService,
-                                           seerep_server::ImageService* imageService,
-                                           seerep_server::PointCloudService* pointCloudService)
+std::shared_ptr<grpc::Server> createServerPb(const std::string& server_address,
+                                             seerep_server::PbMetaOperations* metaOperations,
+                                             seerep_server::PbTfService* tfService,
+                                             seerep_server::PbImageService* imageService,
+                                             seerep_server::PbPointCloudService* pointCloudService)
 // seerep_server::ReceiveSensorMsgs* receiveSensorMsgs,
 {
   std::cout << "Create the server..." << std::endl;
@@ -17,6 +17,16 @@ std::shared_ptr<grpc::Server> createServer(const std::string& server_address,
   server_builder.RegisterService(imageService);
   server_builder.RegisterService(pointCloudService);
   // server_builder.RegisterService(receiveSensorMsgs);
+  return std::shared_ptr<grpc::Server>(server_builder.BuildAndStart());
+}
+std::shared_ptr<grpc::Server> createServerFb(const std::string& server_address,
+                                             seerep_server::FbMetaOperations* metaOperations)
+// seerep_server::ReceiveSensorMsgs* receiveSensorMsgs,
+{
+  std::cout << "Create the server..." << std::endl;
+  grpc::ServerBuilder server_builder;
+  server_builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
+  server_builder.RegisterService(metaOperations);
   return std::shared_ptr<grpc::Server>(server_builder.BuildAndStart());
 }
 } /* namespace seerep_server */
@@ -42,14 +52,22 @@ int main(int argc, char** argv)
 
   auto seerepCore = std::make_shared<seerep_core::Core>(datafolder);
 
-  seerep_server::MetaOperations metaOperationsService(seerepCore);
-  seerep_server::TfService tfService(seerepCore);
-  seerep_server::ImageService imageService(seerepCore);
-  seerep_server::PointCloudService pointCloudService(seerepCore);
-  // seerep_server::ReceiveSensorMsgs receiveSensorMsgsService(seerepCore);
-  std::shared_ptr<grpc::Server> server =
-      seerep_server::createServer(server_address, &metaOperationsService, &tfService, &imageService,
-                                  &pointCloudService);  //&receiveSensorMsgsService, ,
+  std::shared_ptr<grpc::Server> server;
+  if (false)
+  {
+    seerep_server::PbMetaOperations metaOperationsService(seerepCore);
+    seerep_server::PbTfService tfService(seerepCore);
+    seerep_server::PbImageService imageService(seerepCore);
+    seerep_server::PbPointCloudService pointCloudService(seerepCore);
+    // seerep_server::ReceiveSensorMsgs receiveSensorMsgsService(seerepCore);
+    server = seerep_server::createServerPb(server_address, &metaOperationsService, &tfService, &imageService,
+                                           &pointCloudService);  //&receiveSensorMsgsService, ,
+  }
+  else
+  {
+    seerep_server::FbMetaOperations metaOperationsService(seerepCore);
+    server = seerep_server::createServerFb(server_address, &metaOperationsService);
+  }
   std::cout << "serving on \"" << server_address << "\"..." << std::endl;
   server->Wait();
   return EXIT_SUCCESS;

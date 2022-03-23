@@ -16,8 +16,10 @@
   <depend>seerep-com</depend>
   <depend>seerep-core</depend>
   <depend>seerep-core-pb</depend>
+  <depend>seerep-core-fb</depend>
   <depend>seerep-hdf5-core</depend>
   <depend>seerep-hdf5-pb</depend>
+  <depend>seerep-hdf5-fb</depend>
   <buildtool_depend>cmake</buildtool_depend>
 
   <export>

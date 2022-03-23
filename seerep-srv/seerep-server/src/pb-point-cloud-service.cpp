@@ -1,14 +1,14 @@
-#include "seerep-server/point-cloud-service.h"
+#include "seerep-server/pb-point-cloud-service.h"
 
 namespace seerep_server
 {
-PointCloudService::PointCloudService(std::shared_ptr<seerep_core::Core> seerepCore)
+PbPointCloudService::PbPointCloudService(std::shared_ptr<seerep_core::Core> seerepCore)
   : pointCloudPb(std::make_shared<seerep_core_pb::CorePbPointCloud>(seerepCore))
 {
 }
 
-grpc::Status PointCloudService::GetPointCloud2(grpc::ServerContext* context, const seerep::Query* request,
-                                               grpc::ServerWriter<seerep::PointCloud2>* writer)
+grpc::Status PbPointCloudService::GetPointCloud2(grpc::ServerContext* context, const seerep::Query* request,
+                                                 grpc::ServerWriter<seerep::PointCloud2>* writer)
 {
   std::cout << "sending point cloud in bounding box min(" << request->boundingbox().point_min().x() << "/"
             << request->boundingbox().point_min().y() << "/" << request->boundingbox().point_min().z() << "), max("
@@ -45,9 +45,9 @@ grpc::Status PointCloudService::GetPointCloud2(grpc::ServerContext* context, con
   return grpc::Status::OK;
 }
 
-grpc::Status PointCloudService::TransferPointCloud2(grpc::ServerContext* context,
-                                                    const seerep::PointCloud2* pointCloud2,
-                                                    seerep::ServerResponse* response)
+grpc::Status PbPointCloudService::TransferPointCloud2(grpc::ServerContext* context,
+                                                      const seerep::PointCloud2* pointCloud2,
+                                                      seerep::ServerResponse* response)
 {
   std::cout << "received point clouds... " << std::endl;
 

@@ -1,13 +1,13 @@
-#include "seerep-server/receive-sensor-msgs.h"
+#include "seerep-server/pb-receive-sensor-msgs.h"
 
 namespace seerep_server
 {
-ReceiveSensorMsgs::ReceiveSensorMsgs(std::shared_ptr<seerep_core::Core> seerepCore) : seerepCore(seerepCore)
+PbReceiveSensorMsgs::PbReceiveSensorMsgs(std::shared_ptr<seerep_core::Core> seerepCore) : seerepCore(seerepCore)
 {
 }
 
-grpc::Status ReceiveSensorMsgs::TransferHeader(grpc::ServerContext* context, const seerep::Header* header,
-                                               seerep::ServerResponse* response)
+grpc::Status PbReceiveSensorMsgs::TransferHeader(grpc::ServerContext* context, const seerep::Header* header,
+                                                 seerep::ServerResponse* response)
 {
   std::cout << "received header... " << std::endl;
   response->set_message("okidoki");
@@ -15,8 +15,8 @@ grpc::Status ReceiveSensorMsgs::TransferHeader(grpc::ServerContext* context, con
   return grpc::Status::OK;
 }
 
-grpc::Status ReceiveSensorMsgs::TransferPoint(grpc::ServerContext* context, const seerep::Point* point,
-                                              seerep::ServerResponse* response)
+grpc::Status PbReceiveSensorMsgs::TransferPoint(grpc::ServerContext* context, const seerep::Point* point,
+                                                seerep::ServerResponse* response)
 {
   std::cout << "received point... " << std::endl;
   // hdf5_io.writePoint("test_id", *point);
@@ -25,8 +25,8 @@ grpc::Status ReceiveSensorMsgs::TransferPoint(grpc::ServerContext* context, cons
   return grpc::Status::OK;
 }
 
-grpc::Status ReceiveSensorMsgs::TransferQuaternion(grpc::ServerContext* context, const seerep::Quaternion* quaternion,
-                                                   seerep::ServerResponse* response)
+grpc::Status PbReceiveSensorMsgs::TransferQuaternion(grpc::ServerContext* context, const seerep::Quaternion* quaternion,
+                                                     seerep::ServerResponse* response)
 {
   std::cout << "received quaternion... " << std::endl;
   // hdf5_io.writeQuaternion("test_id", *quaternion);
@@ -35,8 +35,8 @@ grpc::Status ReceiveSensorMsgs::TransferQuaternion(grpc::ServerContext* context,
   return grpc::Status::OK;
 }
 
-grpc::Status ReceiveSensorMsgs::TransferPose(grpc::ServerContext* context, const seerep::Pose* pose,
-                                             seerep::ServerResponse* response)
+grpc::Status PbReceiveSensorMsgs::TransferPose(grpc::ServerContext* context, const seerep::Pose* pose,
+                                               seerep::ServerResponse* response)
 {
   std::cout << "received pose... " << std::endl;
   // hdf5_io.writePose("test_id", *pose);
@@ -45,8 +45,8 @@ grpc::Status ReceiveSensorMsgs::TransferPose(grpc::ServerContext* context, const
   return grpc::Status::OK;
 }
 
-grpc::Status ReceiveSensorMsgs::TransferPoseStamped(grpc::ServerContext* context, const seerep::PoseStamped* pose,
-                                                    seerep::ServerResponse* response)
+grpc::Status PbReceiveSensorMsgs::TransferPoseStamped(grpc::ServerContext* context, const seerep::PoseStamped* pose,
+                                                      seerep::ServerResponse* response)
 {
   std::cout << "received pose_stamped... " << std::endl;
   // hdf5_io.writePoseStamped("test_id", *pose);

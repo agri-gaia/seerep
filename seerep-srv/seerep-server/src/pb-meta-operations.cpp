@@ -1,13 +1,13 @@
-#include "seerep-server/meta-operations.h"
+#include "seerep-server/pb-meta-operations.h"
 
 namespace seerep_server
 {
-MetaOperations::MetaOperations(std::shared_ptr<seerep_core::Core> seerepCore) : seerepCore(seerepCore)
+PbMetaOperations::PbMetaOperations(std::shared_ptr<seerep_core::Core> seerepCore) : seerepCore(seerepCore)
 {
 }
 
-grpc::Status MetaOperations::CreateProject(grpc::ServerContext* context, const seerep::ProjectCreation* request,
-                                           seerep::ProjectInfo* response)
+grpc::Status PbMetaOperations::CreateProject(grpc::ServerContext* context, const seerep::ProjectCreation* request,
+                                             seerep::ProjectInfo* response)
 {
   std::cout << "create new project... " << std::endl;
   seerep_core_msgs::ProjectInfo projectInfo;
@@ -22,8 +22,8 @@ grpc::Status MetaOperations::CreateProject(grpc::ServerContext* context, const s
   return grpc::Status::OK;
 }
 
-grpc::Status MetaOperations::GetProjects(grpc::ServerContext* context, const google::protobuf::Empty* request,
-                                         seerep::ProjectInfos* response)
+grpc::Status PbMetaOperations::GetProjects(grpc::ServerContext* context, const google::protobuf::Empty* request,
+                                           seerep::ProjectInfos* response)
 {
   std::cout << "query the project infos... " << std::endl;
   auto projectInfos = seerepCore->getProjects();
