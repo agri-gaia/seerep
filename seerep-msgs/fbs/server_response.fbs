@@ -1,18 +1,16 @@
 
 include "timestamp.fbs";
 
-namespace seerep.fb.ServerResponse_;
+namespace seerep.fb;
 
 enum TRANSMISSION_STATE : int {
   SUCCESS = 0,
   FAILURE = 1,
 }
 
-namespace seerep.fb;
-
 table ServerResponse {
   seq:uint;
   stamp:seerep.fb.Timestamp;
   message:string;
-  transmission_state:seerep.fb.ServerResponse_.TRANSMISSION_STATE;
+  transmission_state:seerep.fb.TRANSMISSION_STATE;
 }

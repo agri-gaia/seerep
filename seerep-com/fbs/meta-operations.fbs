@@ -2,10 +2,11 @@
 include "project_info.fbs";
 include "project_infos.fbs";
 include "projectCreation.fbs";
+include "empty.fbs";
 
 namespace seerep.fb;
 
 rpc_service MetaOperations {
-  GetImage(seerep.fb.ProjectCreation):seerep.fb.ProjectInfo;
-  TransferImage(seerep.fb.ProjectCreation):seerep.fb.ProjectInfos;
+  CreateProject(seerep.fb.ProjectCreation):seerep.fb.ProjectInfo;
+  GetProjects(seerep.fb.Empty):seerep.fb.ProjectInfos;
 }
