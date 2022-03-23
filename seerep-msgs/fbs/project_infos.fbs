@@ -4,5 +4,5 @@ namespace seerep.fb;
 
 table ProjectInfos
 {
-  projects:seerep.fb.ProjectInfo;
+  projects:[seerep.fb.ProjectInfo];
 }

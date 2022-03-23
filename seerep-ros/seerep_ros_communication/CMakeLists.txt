@@ -53,11 +53,15 @@ add_executable(${PROJECT_NAME}_hdf5dump
 add_executable(${PROJECT_NAME}_querier
 	src/querier.cpp
 )
+add_executable(${PROJECT_NAME}_querierFb
+	src/querierFb.cpp
+)
 
 add_dependencies(${PROJECT_NAME}_server ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(${PROJECT_NAME}_client ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(${PROJECT_NAME}_hdf5dump ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(${PROJECT_NAME}_querier ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(${PROJECT_NAME}_querierFb ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 target_link_libraries(${PROJECT_NAME}_server
 	${SeerepCom_LIBRARIES}
@@ -84,8 +88,14 @@ target_link_libraries(${PROJECT_NAME}_querier
 	${catkin_LIBRARIES}
 	gRPC::grpc++_reflection
 )
+target_link_libraries(${PROJECT_NAME}_querierFb
+	${SeerepCom_LIBRARIES}
+	${seerep_ros_conversions_LIBRARIES}
+	${catkin_LIBRARIES}
+	gRPC::grpc++_reflection
+)
 
-install(TARGETS ${PROJECT_NAME}_server ${PROJECT_NAME}_client ${PROJECT_NAME}_hdf5dump ${PROJECT_NAME}_querier
+install(TARGETS ${PROJECT_NAME}_server ${PROJECT_NAME}_client ${PROJECT_NAME}_hdf5dump ${PROJECT_NAME}_querier ${PROJECT_NAME}_querierFb
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}

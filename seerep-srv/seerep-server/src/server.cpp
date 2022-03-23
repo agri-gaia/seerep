@@ -52,7 +52,6 @@ int main(int argc, char** argv)
 
   auto seerepCore = std::make_shared<seerep_core::Core>(datafolder);
 
-  std::shared_ptr<grpc::Server> server;
   if (false)
   {
     seerep_server::PbMetaOperations metaOperationsService(seerepCore);
@@ -60,15 +59,18 @@ int main(int argc, char** argv)
     seerep_server::PbImageService imageService(seerepCore);
     seerep_server::PbPointCloudService pointCloudService(seerepCore);
     // seerep_server::ReceiveSensorMsgs receiveSensorMsgsService(seerepCore);
-    server = seerep_server::createServerPb(server_address, &metaOperationsService, &tfService, &imageService,
-                                           &pointCloudService);  //&receiveSensorMsgsService, ,
+    std::shared_ptr<grpc::Server> server =
+        seerep_server::createServerPb(server_address, &metaOperationsService, &tfService, &imageService,
+                                      &pointCloudService);  //&receiveSensorMsgsService, ,
+    std::cout << "serving on \"" << server_address << "\"..." << std::endl;
+    server->Wait();
   }
   else
   {
     seerep_server::FbMetaOperations metaOperationsService(seerepCore);
-    server = seerep_server::createServerFb(server_address, &metaOperationsService);
+    std::shared_ptr<grpc::Server> server = seerep_server::createServerFb(server_address, &metaOperationsService);
+    std::cout << "serving on \"" << server_address << "\"..." << std::endl;
+    server->Wait();
   }
-  std::cout << "serving on \"" << server_address << "\"..." << std::endl;
-  server->Wait();
   return EXIT_SUCCESS;
 }
