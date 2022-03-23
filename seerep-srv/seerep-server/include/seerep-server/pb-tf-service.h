@@ -8,10 +8,10 @@
 
 namespace seerep_server
 {
-class TfService final : public seerep::TfService::Service
+class PbTfService final : public seerep::TfService::Service
 {
 public:
-  TfService(std::shared_ptr<seerep_core::Core> seerepCore);
+  PbTfService(std::shared_ptr<seerep_core::Core> seerepCore);
 
   grpc::Status TransferTransformStamped(grpc::ServerContext* context, const seerep::TransformStamped* transform,
                                         seerep::ServerResponse* response);

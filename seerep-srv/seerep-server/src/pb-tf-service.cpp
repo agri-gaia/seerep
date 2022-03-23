@@ -1,15 +1,15 @@
-#include "seerep-server/tf-service.h"
+#include "seerep-server/pb-tf-service.h"
 
 namespace seerep_server
 {
-TfService::TfService(std::shared_ptr<seerep_core::Core> seerepCore)
+PbTfService::PbTfService(std::shared_ptr<seerep_core::Core> seerepCore)
   : tfPb(std::make_shared<seerep_core_pb::CorePbTf>(seerepCore))
 {
 }
 
-grpc::Status TfService::TransferTransformStamped(grpc::ServerContext* context,
-                                                 const seerep::TransformStamped* transform,
-                                                 seerep::ServerResponse* response)
+grpc::Status PbTfService::TransferTransformStamped(grpc::ServerContext* context,
+                                                   const seerep::TransformStamped* transform,
+                                                   seerep::ServerResponse* response)
 {
   std::cout << "received transform... " << std::endl;
 
@@ -46,8 +46,8 @@ grpc::Status TfService::TransferTransformStamped(grpc::ServerContext* context,
   }
 }
 
-grpc::Status TfService::GetFrames(grpc::ServerContext* context, const seerep::FrameQuery* frameQuery,
-                                  seerep::FrameInfos* response)
+grpc::Status PbTfService::GetFrames(grpc::ServerContext* context, const seerep::FrameQuery* frameQuery,
+                                    seerep::FrameInfos* response)
 {
   boost::uuids::uuid uuid;
   try
@@ -70,9 +70,9 @@ grpc::Status TfService::GetFrames(grpc::ServerContext* context, const seerep::Fr
   return grpc::Status::OK;
 }
 
-grpc::Status TfService::GetTransformStamped(grpc::ServerContext* context,
-                                            const seerep::TransformStampedQuery* transformQuery,
-                                            seerep::TransformStamped* response)
+grpc::Status PbTfService::GetTransformStamped(grpc::ServerContext* context,
+                                              const seerep::TransformStampedQuery* transformQuery,
+                                              seerep::TransformStamped* response)
 {
   try
   {

@@ -17,10 +17,10 @@
 
 namespace seerep_server
 {
-class ReceiveSensorMsgs final : public seerep::TransferSensorMsgs::Service
+class PbReceiveSensorMsgs final : public seerep::TransferSensorMsgs::Service
 {
 public:
-  ReceiveSensorMsgs(std::shared_ptr<seerep_core::Core> seerepCore);
+  PbReceiveSensorMsgs(std::shared_ptr<seerep_core::Core> seerepCore);
   grpc::Status TransferHeader(grpc::ServerContext* context, const seerep::Header* header,
                               seerep::ServerResponse* response);
 

@@ -8,10 +8,10 @@
 
 namespace seerep_server
 {
-class ImageService final : public seerep::ImageService::Service
+class PbImageService final : public seerep::ImageService::Service
 {
 public:
-  ImageService(std::shared_ptr<seerep_core::Core> seerepCore);
+  PbImageService(std::shared_ptr<seerep_core::Core> seerepCore);
 
   grpc::Status GetImage(grpc::ServerContext* context, const seerep::Query* request,
                         grpc::ServerWriter<seerep::Image>* writer);

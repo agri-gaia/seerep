@@ -7,10 +7,10 @@
 
 namespace seerep_server
 {
-class MetaOperations final : public seerep::MetaOperations::Service
+class PbMetaOperations final : public seerep::MetaOperations::Service
 {
 public:
-  MetaOperations(std::shared_ptr<seerep_core::Core> seerepCore);
+  PbMetaOperations(std::shared_ptr<seerep_core::Core> seerepCore);
 
   grpc::Status CreateProject(grpc::ServerContext* context, const seerep::ProjectCreation* request,
                              seerep::ProjectInfo* response);

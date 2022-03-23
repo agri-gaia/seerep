@@ -7,10 +7,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Protobuf REQUIRED)
 find_package(gRPC CONFIG REQUIRED)
 find_package(SeerepHdf5Pb REQUIRED)
+find_package(SeerepHdf5Fb REQUIRED)
 find_package(SeerepHdf5Core REQUIRED)
 find_package(SeerepCom REQUIRED)
 find_package(SeerepCore REQUIRED)
 find_package(SeerepCorePb REQUIRED)
+find_package(SeerepCoreFb REQUIRED)
 find_package(HighFive REQUIRED)
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(catkin REQUIRED
@@ -27,7 +29,9 @@ include_directories(
 	${SeerepCom_INCLUDE_DIRS}
 	${SeerepCore_INCLUDE_DIRS}
 	${SeerepCorePb_INCLUDE_DIRS}
+	${SeerepCoreFb_INCLUDE_DIRS}
 	${SeerepHdf5Pb_INCLUDE_DIRS}
+	${SeerepHdf5Fb_INCLUDE_DIRS}
 	${SeerepHdf5Core_INCLUDE_DIRS}
 	${HighFive_INCLUDE_DIRS}
 	${catkin_INCLUDE_DIRS}
@@ -51,10 +55,11 @@ include_directories(
 
 add_executable(${PROJECT_NAME}_server
 	src/server.cpp
-	src/meta-operations.cpp
-	src/tf-service.cpp
-	src/image-service.cpp
-	src/point-cloud-service.cpp
+	src/pb-meta-operations.cpp
+	src/pb-tf-service.cpp
+	src/pb-image-service.cpp
+	src/pb-point-cloud-service.cpp
+	src/fb-meta-operations.cpp
 )
 
 add_executable(${PROJECT_NAME}_client
@@ -63,10 +68,12 @@ add_executable(${PROJECT_NAME}_client
 
 target_link_libraries(${PROJECT_NAME}_server
 	${SeerepHdf5Pb_LIBRARIES}
+	${SeerepHdf5Fb_LIBRARIES}
 	${SeerepHdf5Core_LIBRARIES}
 	${SeerepCom_LIBRARIES}
 	${SeerepCore_LIBRARIES}
 	${SeerepCorePb_LIBRARIES}
+	${SeerepCoreFb_LIBRARIES}
 	gRPC::grpc++_reflection
 	# ${PROJECT_NAME}_server_grpc
 	Eigen3::Eigen
