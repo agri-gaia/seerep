@@ -30,7 +30,9 @@ public:
   CoreFbImage(std::shared_ptr<seerep_core::Core> seerepCore);
   ~CoreFbImage();
 
-  std::vector<flatbuffers::Offset<seerep::fb::Image>> getData(const seerep::fb::Query& query);
+  // std::vector<flatbuffers::Offset<seerep::fb::Image>>
+  void getData(const seerep::fb::Query& query,
+               grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::Image>>* const writer);
   boost::uuids::uuid addData(const seerep::fb::Image& img);
 
 private:

@@ -8,5 +8,5 @@ namespace seerep.fb;
 
 rpc_service ImageService {
   GetImage(seerep.fb.Query):seerep.fb.Image (streaming: "server");
-  TransferImage(seerep.fb.Image):seerep.fb.ServerResponse;
+  TransferImage(seerep.fb.Image):seerep.fb.ServerResponse  (streaming: "client");
 }

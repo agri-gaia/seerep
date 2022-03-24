@@ -19,9 +19,9 @@ grpc::Status FbMetaOperations::CreateProject(grpc::ServerContext* context,
   seerepCore->newProject(projectInfo);
 
   flatbuffers::grpc::MessageBuilder builder;
-  auto responseOffset =
-      seerep::fb::CreateProjectInfo(builder, builder.CreateString(projectInfo.name),
-                                    builder.CreateString(boost::lexical_cast<std::string>(projectInfo.uuid)));
+  auto nameOffset = builder.CreateString(projectInfo.name);
+  auto uuidOffset = builder.CreateString(boost::lexical_cast<std::string>(projectInfo.uuid));
+  auto responseOffset = seerep::fb::CreateProjectInfo(builder, nameOffset, uuidOffset);
 
   builder.Finish(responseOffset);
   *response = builder.ReleaseMessage<seerep::fb::ProjectInfo>();

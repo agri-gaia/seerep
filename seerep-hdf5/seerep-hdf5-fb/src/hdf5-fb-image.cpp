@@ -78,62 +78,60 @@ void Hdf5FbImage::writeImage(const std::string& id, const seerep::fb::Image& ima
   m_file->flush();
 }
 
-std::optional<flatbuffers::Offset<seerep::fb::Image>> Hdf5FbImage::readImage(const std::string& id,
-                                                                             const std::string& projectuuid)
+// std::optional<flatbuffers::Offset<seerep::fb::Image>>
+void Hdf5FbImage::readImage(const std::string& id, const std::string& projectuuid,
+                            grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::Image>>* const writer)
 {
   std::string hdf5DatasetPath = HDF5_GROUP_IMAGE + "/" + id;
   std::string hdf5DatasetRawDataPath = hdf5DatasetPath + "/" + RAWDATA;
 
   if (!m_file->exist(hdf5DatasetRawDataPath))
-    return std::nullopt;
+    return;
 
   std::cout << "loading " << hdf5DatasetRawDataPath << std::endl;
 
   std::shared_ptr<HighFive::DataSet> data_set_ptr =
       std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DatasetRawDataPath));
 
-  flatbuffers::FlatBufferBuilder builder;
-  seerep::fb::ImageBuilder imageBuilder(builder);
+  flatbuffers::grpc::MessageBuilder builder;
 
-  int step, height, width;
+  uint32_t step, height, width, rowStep;
+  flatbuffers::Offset<flatbuffers::String> encoding;
+  bool isBigendian;
   try
   {
     height = getAttribute<uint32_t>(id, data_set_ptr, HEIGHT);
-    imageBuilder.add_height(height);
     width = getAttribute<uint32_t>(id, data_set_ptr, WIDTH);
-    imageBuilder.add_width(width);
-    imageBuilder.add_encoding(builder.CreateString(getAttribute<std::string>(id, data_set_ptr, ENCODING)));
-    imageBuilder.add_is_bigendian(getAttribute<bool>(id, data_set_ptr, IS_BIGENDIAN));
+    encoding = builder.CreateString(getAttribute<std::string>(id, data_set_ptr, ENCODING));
+    isBigendian = getAttribute<bool>(id, data_set_ptr, IS_BIGENDIAN);
     step = getAttribute<uint32_t>(id, data_set_ptr, POINT_STEP);
-    imageBuilder.add_step(step);
-    imageBuilder.add_row_step(getAttribute<uint32_t>(id, data_set_ptr, ROW_STEP));
+    rowStep = getAttribute<uint32_t>(id, data_set_ptr, ROW_STEP);
   }
   catch (const std::invalid_argument e)
   {
     std::cout << "error: " << e.what() << std::endl;
-    return std::nullopt;
+    return;
   }
 
-  std::vector<uint8_t> read_data;
+  std::vector<std::vector<std::vector<uint8_t>>> read_data;
   data_set_ptr->read(read_data);
 
   int pixel_step = step / width;
-
-  // // TODO: write into protobuf data buffer
   // uint8_t data[height][width][pixel_step];
+  std::vector<uint8_t> data;
+  data.reserve(height * width * pixel_step);
+  for (int row = 0; row < height; row++)
+  {
+    for (int col = 0; col < width; col++)
+    {
+      // std::copy(read_data.at(row).at(col).begin(), read_data.at(row).at(col).end(), data[row]);
+      data.insert(data.end(), std::make_move_iterator(read_data.at(row).at(col).begin()),
+                  std::make_move_iterator(read_data.at(row).at(col).end()));
+    }
+  }
 
-  // for (int row = 0; row < height; row++)
-  // {
-  //   for (int col = 0; col < width; col++)
-  //   {
-  //     std::copy(read_data.at(row).at(col).begin(), read_data.at(row).at(col).end(), data[row][col]);
-  //   }
-  // }
-
-  // auto dataFbs = builder.CreateVector(read_data);
-  imageBuilder.add_data(builder.CreateVector(read_data));
-
-  imageBuilder.add_header(readHeaderAttributes(*data_set_ptr, projectuuid, id));
+  auto readDataOffset = builder.CreateVector(data);
+  auto headerOffset = readHeaderAttributes(*data_set_ptr, projectuuid, id, builder);
 
   std::vector<std::string> labels;
   readLabelsGeneral(HDF5_GROUP_IMAGE, id, labels);
@@ -145,9 +143,23 @@ std::optional<flatbuffers::Offset<seerep::fb::Image>> Hdf5FbImage::readImage(con
       },
       &builder);
 
+  seerep::fb::ImageBuilder imageBuilder(builder);
+  imageBuilder.add_height(height);
+  imageBuilder.add_width(width);
+  imageBuilder.add_encoding(encoding);
+  imageBuilder.add_is_bigendian(isBigendian);
+  imageBuilder.add_step(step);
+  imageBuilder.add_row_step(rowStep);
+
+  imageBuilder.add_data(readDataOffset);
+  imageBuilder.add_header(headerOffset);
+
   imageBuilder.add_labels_general(vecofstrings);
 
-  return imageBuilder.Finish();
+  imageBuilder.Finish();
+
+  writer->Write(builder.ReleaseMessage<seerep::fb::Image>());
+
   // // std::cout << "read_data:" << std::endl;
   // // int j = 0;
   // // for (const auto& i : read_data)

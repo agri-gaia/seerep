@@ -20,13 +20,15 @@ std::shared_ptr<grpc::Server> createServerPb(const std::string& server_address,
   return std::shared_ptr<grpc::Server>(server_builder.BuildAndStart());
 }
 std::shared_ptr<grpc::Server> createServerFb(const std::string& server_address,
-                                             seerep_server::FbMetaOperations* metaOperations)
+                                             seerep_server::FbMetaOperations* metaOperations,
+                                             seerep_server::FbImageService* imageService)
 // seerep_server::ReceiveSensorMsgs* receiveSensorMsgs,
 {
   std::cout << "Create the server..." << std::endl;
   grpc::ServerBuilder server_builder;
   server_builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
   server_builder.RegisterService(metaOperations);
+  server_builder.RegisterService(imageService);
   return std::shared_ptr<grpc::Server>(server_builder.BuildAndStart());
 }
 } /* namespace seerep_server */
@@ -68,7 +70,9 @@ int main(int argc, char** argv)
   else
   {
     seerep_server::FbMetaOperations metaOperationsService(seerepCore);
-    std::shared_ptr<grpc::Server> server = seerep_server::createServerFb(server_address, &metaOperationsService);
+    seerep_server::FbImageService imageService(seerepCore);
+    std::shared_ptr<grpc::Server> server =
+        seerep_server::createServerFb(server_address, &metaOperationsService, &imageService);
     std::cout << "serving on \"" << server_address << "\"..." << std::endl;
     server->Wait();
   }
