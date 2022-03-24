@@ -58,9 +58,9 @@ void Hdf5FbGeneral::writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, c
 
 template <class T>
 flatbuffers::Offset<seerep::fb::Header>
-Hdf5FbGeneral::readHeaderAttributes(HighFive::AnnotateTraits<T>& object, std::string uuidProject, std::string uuidMsg)
+Hdf5FbGeneral::readHeaderAttributes(HighFive::AnnotateTraits<T>& object, std::string uuidProject, std::string uuidMsg,
+                                    flatbuffers::grpc::MessageBuilder& builder)
 {
-  flatbuffers::FlatBufferBuilder builder;
   int64_t seconds;
   int32_t nanos;
   uint32_t seq;

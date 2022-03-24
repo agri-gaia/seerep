@@ -8,6 +8,9 @@
 #include <seerep-msgs/boundingbox_labeled_generated.h>
 #include <seerep-msgs/boundingbox2d_labeled_generated.h>
 
+#include "flatbuffers/grpc.h"
+#include <grpcpp/grpcpp.h>
+
 // std
 #include <optional>
 #include <mutex>
@@ -41,7 +44,8 @@ public:
 
   template <class T>
   flatbuffers::Offset<seerep::fb::Header> readHeaderAttributes(HighFive::AnnotateTraits<T>& object,
-                                                               std::string uuidProject, std::string uuidMsg);
+                                                               std::string uuidProject, std::string uuidMsg,
+                                                               flatbuffers::grpc::MessageBuilder& builder);
 
   //################
   // AABB

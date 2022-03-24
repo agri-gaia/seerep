@@ -11,10 +11,15 @@
 // seerep-msgs
 #include <seerep-msgs/image_generated.h>
 
+#include <seerep-com/image-service.grpc.fb.h>
+
 // std
 #include <optional>
 
 #include <boost/geometry.hpp>
+
+#include "flatbuffers/grpc.h"
+#include <grpcpp/grpcpp.h>
 
 namespace seerep_hdf5_fb
 {
@@ -25,7 +30,9 @@ public:
 
   void writeImage(const std::string& id, const seerep::fb::Image& image);
 
-  std::optional<flatbuffers::Offset<seerep::fb::Image>> readImage(const std::string& id, const std::string& projectuuid);
+  // std::optional<flatbuffers::Offset<seerep::fb::Image>>
+  void readImage(const std::string& id, const std::string& projectuuid,
+                 grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::Image>>* const writer);
 
 private:
   const std::string SIZE = "size";

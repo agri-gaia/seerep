@@ -60,6 +60,7 @@ add_executable(${PROJECT_NAME}_server
 	src/pb-image-service.cpp
 	src/pb-point-cloud-service.cpp
 	src/fb-meta-operations.cpp
+	src/fb-image-service.cpp
 )
 
 add_executable(${PROJECT_NAME}_client
