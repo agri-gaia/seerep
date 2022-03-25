@@ -9,7 +9,7 @@ ReceiveSensorMsgs::ReceiveSensorMsgs()
 grpc::Status ReceiveSensorMsgs::TransferPointCloud2(grpc::ServerContext* context, const seerep::PointCloud2* msg,
                                                     seerep::ServerResponse* response)
 {
-  sensor_msgs::PointCloud2 cloud = seerep_ros_conversions::toROS(*msg);
+  sensor_msgs::PointCloud2 cloud = seerep_ros_conversions_pb::toROS(*msg);
   ROS_INFO_STREAM("Incoming PointCloud2 message" << std::endl << cloud);
   response->set_message("okidoki");
   response->set_transmission_state(seerep::ServerResponse::SUCCESS);
@@ -19,7 +19,7 @@ grpc::Status ReceiveSensorMsgs::TransferPointCloud2(grpc::ServerContext* context
 grpc::Status ReceiveSensorMsgs::TransferHeader(grpc::ServerContext* context, const seerep::Header* msg,
                                                seerep::ServerResponse* response)
 {
-  std_msgs::Header header = seerep_ros_conversions::toROS(*msg);
+  std_msgs::Header header = seerep_ros_conversions_pb::toROS(*msg);
   ROS_INFO_STREAM("Incoming Header message" << std::endl << header);
   response->set_message("okidoki");
   response->set_transmission_state(seerep::ServerResponse::SUCCESS);
@@ -29,7 +29,7 @@ grpc::Status ReceiveSensorMsgs::TransferHeader(grpc::ServerContext* context, con
 grpc::Status ReceiveSensorMsgs::TransferImage(grpc::ServerContext* context, const seerep::Image* msg,
                                               seerep::ServerResponse* response)
 {
-  sensor_msgs::Image image = seerep_ros_conversions::toROS(*msg);
+  sensor_msgs::Image image = seerep_ros_conversions_pb::toROS(*msg);
   ROS_INFO_STREAM("Incoming Image message" << std::endl << image);
   response->set_message("okidoki");
   response->set_transmission_state(seerep::ServerResponse::SUCCESS);
@@ -39,7 +39,7 @@ grpc::Status ReceiveSensorMsgs::TransferImage(grpc::ServerContext* context, cons
 grpc::Status ReceiveSensorMsgs::TransferPoint(grpc::ServerContext* context, const seerep::Point* msg,
                                               seerep::ServerResponse* response)
 {
-  geometry_msgs::Point point = seerep_ros_conversions::toROS(*msg);
+  geometry_msgs::Point point = seerep_ros_conversions_pb::toROS(*msg);
   ROS_INFO_STREAM("Incoming Point message" << std::endl << point);
   response->set_message("okidoki");
   response->set_transmission_state(seerep::ServerResponse::SUCCESS);
@@ -49,7 +49,7 @@ grpc::Status ReceiveSensorMsgs::TransferPoint(grpc::ServerContext* context, cons
 grpc::Status ReceiveSensorMsgs::TransferQuaternion(grpc::ServerContext* context, const seerep::Quaternion* msg,
                                                    seerep::ServerResponse* response)
 {
-  geometry_msgs::Quaternion quaternion = seerep_ros_conversions::toROS(*msg);
+  geometry_msgs::Quaternion quaternion = seerep_ros_conversions_pb::toROS(*msg);
   ROS_INFO_STREAM("Incoming Quaternion message" << std::endl << quaternion);
   response->set_message("okidoki");
   response->set_transmission_state(seerep::ServerResponse::SUCCESS);
@@ -59,7 +59,7 @@ grpc::Status ReceiveSensorMsgs::TransferQuaternion(grpc::ServerContext* context,
 grpc::Status ReceiveSensorMsgs::TransferPose(grpc::ServerContext* context, const seerep::Pose* msg,
                                              seerep::ServerResponse* response)
 {
-  geometry_msgs::Pose pose = seerep_ros_conversions::toROS(*msg);
+  geometry_msgs::Pose pose = seerep_ros_conversions_pb::toROS(*msg);
   ROS_INFO_STREAM("Incoming Pose message" << std::endl << pose);
   response->set_message("okidoki");
   response->set_transmission_state(seerep::ServerResponse::SUCCESS);
@@ -69,7 +69,7 @@ grpc::Status ReceiveSensorMsgs::TransferPose(grpc::ServerContext* context, const
 grpc::Status ReceiveSensorMsgs::TransferPoseStamped(grpc::ServerContext* context, const seerep::PoseStamped* msg,
                                                     seerep::ServerResponse* response)
 {
-  geometry_msgs::PoseStamped pose = seerep_ros_conversions::toROS(*msg);
+  geometry_msgs::PoseStamped pose = seerep_ros_conversions_pb::toROS(*msg);
   ROS_INFO_STREAM("Incoming PoseStamped message" << std::endl << pose);
   response->set_message("okidoki");
   response->set_transmission_state(seerep::ServerResponse::SUCCESS);

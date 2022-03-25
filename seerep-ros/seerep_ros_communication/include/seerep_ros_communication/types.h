@@ -12,7 +12,7 @@
 #include <seerep-com/point-cloud-service.grpc.pb.h>
 #include <seerep-com/tf-service.grpc.pb.h>
 
-#include <seerep_ros_conversions/conversions.h>
+#include <seerep_ros_conversions_pb/conversions.h>
 
 // Supported ROS message types
 #define SEEREP_MESSAGE_TYPES(M)                                                                                        \

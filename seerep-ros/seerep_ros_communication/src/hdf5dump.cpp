@@ -21,13 +21,13 @@ void DumpSensorMsgs::dump(const sensor_msgs::PointCloud2::ConstPtr& msg) const
 {
   std::string uuid = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
   ROS_INFO_STREAM("Dump point cloud 2 with uuid: " << uuid);
-  m_ioPointCloud->writePointCloud2(uuid, seerep_ros_conversions::toProto(*msg));
+  m_ioPointCloud->writePointCloud2(uuid, seerep_ros_conversions_pb::toProto(*msg));
 }
 
 void DumpSensorMsgs::dump(const sensor_msgs::Image::ConstPtr& msg) const
 {
   boost::uuids::uuid uuid = boost::uuids::random_generator()();
-  m_ioImage->writeImage(boost::lexical_cast<std::string>(uuid), seerep_ros_conversions::toProto(*msg));
+  m_ioImage->writeImage(boost::lexical_cast<std::string>(uuid), seerep_ros_conversions_pb::toProto(*msg));
 }
 
 void DumpSensorMsgs::dump(const geometry_msgs::Point::ConstPtr& msg) const
@@ -54,7 +54,7 @@ void DumpSensorMsgs::dump(const tf2_msgs::TFMessage::ConstPtr& msg) const
 {
   for (geometry_msgs::TransformStamped transform : msg->transforms)
   {
-    m_ioTf->writeTransformStamped(seerep_ros_conversions::toProto(transform));
+    m_ioTf->writeTransformStamped(seerep_ros_conversions_pb::toProto(transform));
   }
 }
 

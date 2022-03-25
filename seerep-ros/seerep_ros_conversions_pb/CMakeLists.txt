@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(seerep_ros_conversions VERSION 0.1)
+project(seerep_ros_conversions_pb VERSION 0.1)
 
 find_package(catkin REQUIRED
 	COMPONENTS
@@ -10,11 +10,11 @@ find_package(catkin REQUIRED
 
 find_package(SeerepMsgs REQUIRED)
 
-configure_file(include/SeerepRosConversionsConfig.h.in SeerepRosConversionsConfig.h)
+configure_file(include/SeerepRosConversionsPbConfig.h.in SeerepRosConversionsPbConfig.h)
 
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES seerep_ros_conversions
+  LIBRARIES seerep_ros_conversions_pb
 	CATKIN_DEPENDS std_msgs geometry_msgs sensor_msgs
   DEPENDS SeerepMsgs
 )
@@ -43,6 +43,6 @@ install(DIRECTORY include/${PROJECT_NAME}/
 )
 
 install(FILES
-	"${PROJECT_BINARY_DIR}/SeerepRosConversionsConfig.h"
+	"${PROJECT_BINARY_DIR}/SeerepRosConversionsPbConfig.h"
 	DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 )

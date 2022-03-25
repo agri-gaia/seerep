@@ -14,7 +14,6 @@
 
   <depend>seerep-msgs</depend>
   <depend>seerep-hdf5-core</depend>
-  <depend>seerep_ros_conversions</depend>
   <depend>tf2</depend>
 
   <buildtool_depend>cmake</buildtool_depend>

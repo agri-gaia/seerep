@@ -10,7 +10,7 @@
 
 // ag
 #include <seerep-com/transfer-sensor-msgs.grpc.pb.h>
-#include <seerep_ros_conversions/conversions.h>
+#include <seerep_ros_conversions_pb/conversions.h>
 
 // ros
 #include <ros/ros.h>

@@ -1,5 +1,5 @@
-#ifndef SEEREP_ROS_CONVERSIONS
-#define SEEREP_ROS_CONVERSIONS
+#ifndef SEEREP_ROS_CONVERSIONS_PB
+#define SEEREP_ROS_CONVERSIONS_PB
 
 // ROS messages
 #include <std_msgs/Header.h>
@@ -21,7 +21,7 @@
 #include <seerep-msgs/transform.pb.h>
 #include <seerep-msgs/transform_stamped.pb.h>
 
-namespace seerep_ros_conversions
+namespace seerep_ros_conversions_pb
 {
 /**
  * @brief Converts a ROS std_msgs/Header message to the corresponding
@@ -215,6 +215,6 @@ seerep::TransformStamped toProto(const geometry_msgs::TransformStamped& transfor
  * @return ROS geometry_msgs::TransformStamped
  */
 geometry_msgs::TransformStamped toROS(const seerep::TransformStamped& vector);
-} /* namespace seerep_ros_conversions */
+} /* namespace seerep_ros_conversions_pb */
 
-#endif /* SEEREP_ROS_CONVERSIONS */
+#endif /* SEEREP_ROS_CONVERSIONS_PB */

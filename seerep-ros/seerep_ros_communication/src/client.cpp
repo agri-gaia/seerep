@@ -16,7 +16,7 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const std_msgs::Header::ConstPtr&
 {
   grpc::ClientContext context;
   seerep::ServerResponse response;
-  grpc::Status status = stub_->TransferHeader(&context, seerep_ros_conversions::toProto(*msg), &response);
+  grpc::Status status = stub_->TransferHeader(&context, seerep_ros_conversions_pb::toProto(*msg), &response);
   if (!status.ok())
   {
     ROS_ERROR_STREAM("gRPC status error code: " << status.error_code() << " " << status.error_message());
@@ -32,7 +32,7 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const sensor_msgs::PointCloud2::C
   grpc::ClientContext context;
   seerep::ServerResponse response;
   grpc::Status status =
-      stubPointCloud_->TransferPointCloud2(&context, seerep_ros_conversions::toProto(*msg), &response);
+      stubPointCloud_->TransferPointCloud2(&context, seerep_ros_conversions_pb::toProto(*msg), &response);
   if (!status.ok())
   {
     ROS_ERROR_STREAM("gRPC status error code: " << status.error_code() << " " << status.error_message());
@@ -47,7 +47,7 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const sensor_msgs::Image::ConstPt
 {
   grpc::ClientContext context;
   seerep::ServerResponse response;
-  grpc::Status status = stubImage_->TransferImage(&context, seerep_ros_conversions::toProto(*msg), &response);
+  grpc::Status status = stubImage_->TransferImage(&context, seerep_ros_conversions_pb::toProto(*msg), &response);
   if (!status.ok())
   {
     ROS_ERROR_STREAM("gRPC status error code: " << status.error_code() << " " << status.error_message());
@@ -62,7 +62,7 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const geometry_msgs::Point::Const
 {
   grpc::ClientContext context;
   seerep::ServerResponse response;
-  grpc::Status status = stub_->TransferPoint(&context, seerep_ros_conversions::toProto(*msg), &response);
+  grpc::Status status = stub_->TransferPoint(&context, seerep_ros_conversions_pb::toProto(*msg), &response);
   if (!status.ok())
   {
     ROS_ERROR_STREAM("gRPC status error code: " << status.error_code() << " " << status.error_message());
@@ -77,7 +77,7 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const geometry_msgs::Quaternion::
 {
   grpc::ClientContext context;
   seerep::ServerResponse response;
-  grpc::Status status = stub_->TransferQuaternion(&context, seerep_ros_conversions::toProto(*msg), &response);
+  grpc::Status status = stub_->TransferQuaternion(&context, seerep_ros_conversions_pb::toProto(*msg), &response);
   if (!status.ok())
   {
     ROS_ERROR_STREAM("gRPC status error code: " << status.error_code() << " " << status.error_message());
@@ -92,7 +92,7 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const geometry_msgs::Pose::ConstP
 {
   grpc::ClientContext context;
   seerep::ServerResponse response;
-  grpc::Status status = stub_->TransferPose(&context, seerep_ros_conversions::toProto(*msg), &response);
+  grpc::Status status = stub_->TransferPose(&context, seerep_ros_conversions_pb::toProto(*msg), &response);
   if (!status.ok())
   {
     ROS_ERROR_STREAM("gRPC status error code: " << status.error_code() << " " << status.error_message());
@@ -107,7 +107,7 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const geometry_msgs::PoseStamped:
 {
   grpc::ClientContext context;
   seerep::ServerResponse response;
-  grpc::Status status = stub_->TransferPoseStamped(&context, seerep_ros_conversions::toProto(*msg), &response);
+  grpc::Status status = stub_->TransferPoseStamped(&context, seerep_ros_conversions_pb::toProto(*msg), &response);
   if (!status.ok())
   {
     ROS_ERROR_STREAM("gRPC status error code: " << status.error_code() << " " << status.error_message());
@@ -125,7 +125,7 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const tf2_msgs::TFMessage::ConstP
   for (auto tf : msg->transforms)
   {
     grpc::Status status =
-        stubTf_->TransferTransformStamped(&context, seerep_ros_conversions::toProto(tf, projectuuid), &response);
+        stubTf_->TransferTransformStamped(&context, seerep_ros_conversions_pb::toProto(tf, projectuuid), &response);
     if (!status.ok())
     {
       ROS_ERROR_STREAM("gRPC status error code: " << status.error_code() << " " << status.error_message());

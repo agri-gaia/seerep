@@ -17,7 +17,7 @@ find_package(HighFive REQUIRED)
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(catkin REQUIRED
 	COMPONENTS
-	seerep_ros_conversions
+	seerep_ros_conversions_pb
 	seerep_ros_conversions_fb
 )
 

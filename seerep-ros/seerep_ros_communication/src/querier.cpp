@@ -16,7 +16,7 @@ void QueryData::queryPointcloud(const seerep::Query& query, ros::Publisher& pc2_
 
   while (reader->Read(&response))
   {
-    sensor_msgs::PointCloud2 pc2 = seerep_ros_conversions::toROS(response);
+    sensor_msgs::PointCloud2 pc2 = seerep_ros_conversions_pb::toROS(response);
     pc2.header.frame_id = "map";
 
     ROS_INFO_STREAM("publish pointcloud\n" << pc2);
@@ -35,7 +35,7 @@ void QueryData::queryImage(const seerep::Query& query, ros::Publisher& img_pub) 
 
   while (reader->Read(&response))
   {
-    sensor_msgs::Image img = seerep_ros_conversions::toROS(response);
+    sensor_msgs::Image img = seerep_ros_conversions_pb::toROS(response);
     img.header.frame_id = "map";
 
     for (auto labels : response.labels_bb())
