@@ -29,7 +29,7 @@ std::optional<seerep::TransformStamped> CorePbTf::getData(const seerep::Transfor
 
   if (result)
   {
-    return seerep_ros_conversions::toProto(result.value());
+    return seerep_ros_conversions_pb::toProto(result.value());
   }
   else
   {
@@ -47,7 +47,7 @@ void CorePbTf::addData(const seerep::TransformStamped& tf)
   hdf5io->writeTransformStamped(tf);
 
   // add to seerep-core
-  m_seerepCore->addTF(seerep_ros_conversions::toROS(tf), projectuuid);
+  m_seerepCore->addTF(seerep_ros_conversions_pb::toROS(tf), projectuuid);
 }
 
 std::vector<std::string> CorePbTf::getFrames(const boost::uuids::uuid& projectuuid)

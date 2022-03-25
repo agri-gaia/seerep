@@ -1,6 +1,6 @@
-#include "seerep_ros_conversions/conversions.h"
+#include "seerep_ros_conversions_pb/conversions.h"
 
-namespace seerep_ros_conversions
+namespace seerep_ros_conversions_pb
 {
 /*
  * Header
@@ -275,4 +275,4 @@ geometry_msgs::TransformStamped toROS(const seerep::TransformStamped& transform)
   ret.transform = toROS(transform.transform());
   return ret;
 }
-} /* namespace seerep_ros_conversions */
+}  // namespace seerep_ros_conversions_pb

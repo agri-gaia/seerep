@@ -16,7 +16,7 @@ find_package(catkin REQUIRED
 )
 #find_package(SeerepMsgs REQUIRED)
 find_package(SeerepHdf5Pb REQUIRED)
-find_package(seerep_ros_conversions REQUIRED)
+find_package(seerep_ros_conversions_pb REQUIRED)
 find_package(Protobuf REQUIRED)
 find_package(gRPC CONFIG REQUIRED)
 
@@ -27,7 +27,7 @@ message("HighFive Include Dirs: ${catkin_INCLUDE_DIRS} \n Libraries: ${catkin_LI
 catkin_package(
   INCLUDE_DIRS include
   # LIBRARIES
-	CATKIN_DEPENDS std_msgs geometry_msgs sensor_msgs roscpp seerep_ros_conversions roscpp topic_tools
+	CATKIN_DEPENDS std_msgs geometry_msgs sensor_msgs roscpp seerep_ros_conversions_pb roscpp topic_tools
   # DEPENDS
 )
 
@@ -36,7 +36,7 @@ include_directories(
 	${SeerepCom_INCLUDE_DIRS}
 	${SeerepMsgs_INCLUDE_DIRS}
 	${SeerepHdf5Pb_INCLUDE_DIRS}
-	${seerep_ros_conversions_INCLUDE_DIRS}
+	${seerep_ros_conversions_pb_INCLUDE_DIRS}
 	${catkin_INCLUDE_DIRS}
 )
 
@@ -65,32 +65,32 @@ add_dependencies(${PROJECT_NAME}_querierFb ${${PROJECT_NAME}_EXPORTED_TARGETS} $
 
 target_link_libraries(${PROJECT_NAME}_server
 	${SeerepCom_LIBRARIES}
-	${seerep_ros_conversions_LIBRARIES}
+	${seerep_ros_conversions_pb_LIBRARIES}
 	${catkin_LIBRARIES}
 	gRPC::grpc++_reflection
 )
 
 target_link_libraries(${PROJECT_NAME}_client
 	${SeerepCom_LIBRARIES}
-	${seerep_ros_conversions_LIBRARIES}
+	${seerep_ros_conversions_pb_LIBRARIES}
 	${catkin_LIBRARIES}
 	gRPC::grpc++_reflection
 )
 target_link_libraries(${PROJECT_NAME}_hdf5dump
 	${SeerepCom_LIBRARIES}
-	${seerep_ros_conversions_LIBRARIES}
+	${seerep_ros_conversions_pb_LIBRARIES}
 	${SeerepHdf5Pb_LIBRARIES}
 	${catkin_LIBRARIES}
 )
 target_link_libraries(${PROJECT_NAME}_querier
 	${SeerepCom_LIBRARIES}
-	${seerep_ros_conversions_LIBRARIES}
+	${seerep_ros_conversions_pb_LIBRARIES}
 	${catkin_LIBRARIES}
 	gRPC::grpc++_reflection
 )
 target_link_libraries(${PROJECT_NAME}_querierFb
 	${SeerepCom_LIBRARIES}
-	${seerep_ros_conversions_LIBRARIES}
+	${seerep_ros_conversions_pb_LIBRARIES}
 	${catkin_LIBRARIES}
 	gRPC::grpc++_reflection
 )

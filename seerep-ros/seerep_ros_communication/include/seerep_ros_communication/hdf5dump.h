@@ -5,7 +5,7 @@
 #include <optional>
 
 // seerep
-#include <seerep_ros_conversions/conversions.h>
+#include <seerep_ros_conversions_pb/conversions.h>
 #include <seerep-hdf5-pb/hdf5-pb-tf.h>
 #include <seerep-hdf5-pb/hdf5-pb-image.h>
 #include <seerep-hdf5-pb/hdf5-pb-pointcloud.h>
