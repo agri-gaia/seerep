@@ -1,0 +1,8 @@
+#ifndef SEEREP_ROS_CONVERSIONS_FB_CONFIG_H_
+#define SEEREP_ROS_CONVERSIONS_FB_CONFIG_H_
+
+// the configured options and settings for Seerep ROS conversions flatbuffer
+#define SeerepRosConversionsFb_VERSION_MAJOR @SEEREP_ROS_CONVERSIONS_FB_VERSION_MAJOR@
+#define SeerepRosConversionsFb_VERSION_MINOR @SEEREP_ROS_CONVERSIONS_FB_VERSION_MINOR@
+
+#endif // SEEREP_ROS_CONVERSIONS_FB_CONFIG_H_
