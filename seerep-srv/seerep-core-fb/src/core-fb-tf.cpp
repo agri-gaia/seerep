@@ -15,7 +15,8 @@ CoreFbTf::~CoreFbTf()
 {
 }
 
-std::optional<seerep::fb::TransformStamped> CoreFbTf::getData(const seerep::fb::TransformStampedQuery& query)
+void CoreFbTf::getData(const seerep::fb::TransformStampedQuery& query,
+                       flatbuffers::grpc::Message<seerep::fb::TransformStamped>* response)
 {
   std::cout << "loading tf from tfs/" << std::endl;
   boost::uuids::string_generator gen;
@@ -29,11 +30,7 @@ std::optional<seerep::fb::TransformStamped> CoreFbTf::getData(const seerep::fb::
 
   if (result)
   {
-    // return seerep_ros_conversions::toProto(result.value());
-  }
-  else
-  {
-    return std::nullopt;
+    *response = seerep_ros_conversions_fb::toFlat(result.value(), query.header()->uuid_project()->str());
   }
 }
 
@@ -47,7 +44,7 @@ void CoreFbTf::addData(const seerep::fb::TransformStamped& tf)
   hdf5io->writeTransformStamped(tf);
 
   // add to seerep-core
-  // m_seerepCore->addTF(seerep_ros_conversions::toROS(tf), projectuuid);
+  m_seerepCore->addTF(seerep_ros_conversions_fb::toROS(tf), projectuuid);
 }
 
 std::vector<std::string> CoreFbTf::getFrames(const boost::uuids::uuid& projectuuid)

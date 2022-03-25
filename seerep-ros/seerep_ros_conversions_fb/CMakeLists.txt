@@ -14,7 +14,7 @@ configure_file(include/SeerepRosConversionsFbConfig.h.in SeerepRosConversionsFbC
 
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES seerep_ros_conversions
+  LIBRARIES seerep_ros_conversions_fb
 	CATKIN_DEPENDS std_msgs geometry_msgs sensor_msgs
   DEPENDS SeerepMsgs
 )

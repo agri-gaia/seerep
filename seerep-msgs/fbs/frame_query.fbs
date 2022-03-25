@@ -2,5 +2,5 @@ namespace seerep.fb;
 
 table FrameQuery
 {
-  projectuuid:[string];
+  projectuuid:string;
 }

@@ -18,6 +18,7 @@ find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(catkin REQUIRED
 	COMPONENTS
 	seerep_ros_conversions
+	seerep_ros_conversions_fb
 )
 
 message("LIBS" ${SeerepCorePb_LIBRARIES})
@@ -60,6 +61,7 @@ add_executable(${PROJECT_NAME}_server
 	src/pb-image-service.cpp
 	src/pb-point-cloud-service.cpp
 	src/fb-meta-operations.cpp
+	src/fb-tf-service.cpp
 	src/fb-image-service.cpp
 )
 
