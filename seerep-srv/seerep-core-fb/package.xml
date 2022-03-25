@@ -15,7 +15,7 @@
   <depend>seerep-msgs</depend>
   <depend>seerep-core</depend>
   <depend>seerep-hdf5-fb</depend>
-  <depend>seerep_ros_conversions</depend>
+  <depend>seerep_ros_conversions_fb</depend>
   <depend>tf2</depend>
 
   <buildtool_depend>cmake</buildtool_depend>

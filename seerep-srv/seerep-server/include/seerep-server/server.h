@@ -16,6 +16,7 @@
 #include "seerep-server/pb-tf-service.h"
 
 #include "seerep-server/fb-meta-operations.h"
+#include "seerep-server/fb-tf-service.h"
 #include "seerep-server/fb-image-service.h"
 
 #include <seerep-core/core.h>
@@ -29,6 +30,7 @@ std::shared_ptr<grpc::Server> createServerPb(
                                                              // ,
 std::shared_ptr<grpc::Server> createServerFb(const std::string& server_address,
                                              seerep_server::FbMetaOperations* metaOperations,
+                                             seerep_server::FbTfService* tfService,
                                              seerep_server::FbImageService* imageService);
 } /* namespace seerep_server */
 #endif  // SEEREP_SERVER_SERVER_H_

@@ -14,7 +14,6 @@ CoreFbImage::~CoreFbImage()
 {
 }
 
-// std::vector<flatbuffers::Offset<seerep::fb::Image>>
 void CoreFbImage::getData(const seerep::fb::Query& query,
                           grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::Image>>* const writer)
 {
@@ -45,22 +44,15 @@ void CoreFbImage::getData(const seerep::fb::Query& query,
 
   seerep_core_msgs::QueryResult resultCore = m_seerepCore->getImage(queryCore);
 
-  // std::vector<flatbuffers::Offset<seerep::fb::Image>> resultImages;
   for (auto project : resultCore.queryResultProjects)
   {
     for (auto uuidImg : project.dataUuids)
     {
-      auto hdf5io = getHdf5(project.projectUuid);
-      // std::optional<flatbuffers::Offset<seerep::fb::Image>> image =
-      hdf5io->readImage(boost::lexical_cast<std::string>(uuidImg),
-                        boost::lexical_cast<std::string>(project.projectUuid), writer);
-      // if (image)
-      // {
-      //   resultImages.push_back(image.value());
-      // }
+      getHdf5(project.projectUuid)
+          ->readImage(boost::lexical_cast<std::string>(uuidImg), boost::lexical_cast<std::string>(project.projectUuid),
+                      writer);
     }
   }
-  // return resultImages;
 }
 
 boost::uuids::uuid CoreFbImage::addData(const seerep::fb::Image& img)

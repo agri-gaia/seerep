@@ -15,7 +15,7 @@
 #include <seerep-hdf5-fb/hdf5-fb-tf.h>
 
 // seerep-conversion
-#include <seerep_ros_conversions/conversions.h>
+#include <seerep_ros_conversions_fb/conversions.h>
 
 // seerep-core
 #include <seerep-core/core.h>
@@ -28,7 +28,8 @@ public:
   CoreFbTf(std::shared_ptr<seerep_core::Core> seerepCore);
   ~CoreFbTf();
 
-  std::optional<seerep::fb::TransformStamped> getData(const seerep::fb::TransformStampedQuery& query);
+  void getData(const seerep::fb::TransformStampedQuery& query,
+               flatbuffers::grpc::Message<seerep::fb::TransformStamped>* response);
   void addData(const seerep::fb::TransformStamped& tf);
   std::vector<std::string> getFrames(const boost::uuids::uuid& projectuuid);
 

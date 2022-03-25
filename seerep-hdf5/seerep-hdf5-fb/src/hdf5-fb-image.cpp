@@ -78,7 +78,6 @@ void Hdf5FbImage::writeImage(const std::string& id, const seerep::fb::Image& ima
   m_file->flush();
 }
 
-// std::optional<flatbuffers::Offset<seerep::fb::Image>>
 void Hdf5FbImage::readImage(const std::string& id, const std::string& projectuuid,
                             grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::Image>>* const writer)
 {
@@ -156,32 +155,10 @@ void Hdf5FbImage::readImage(const std::string& id, const std::string& projectuui
 
   imageBuilder.add_labels_general(vecofstrings);
 
-  imageBuilder.Finish();
+  auto imageOffset = imageBuilder.Finish();
+  builder.Finish(imageOffset);
 
   writer->Write(builder.ReleaseMessage<seerep::fb::Image>());
-
-  // // std::cout << "read_data:" << std::endl;
-  // // int j = 0;
-  // // for (const auto& i : read_data)
-  // // {
-  // //   std::cout << unsigned(i) << ' ';
-  // //   j++;
-  // //   // if (j > 50)
-  // //   // break;
-  // // }
-  // image.set_data(data, sizeof(data));
-
-  // *image.mutable_header() = readHeaderAttributes(*data_set_ptr);
-  // auto labelsBB = readBoundingBox2DLabeled(HDF5_GROUP_IMAGE, id);
-  // if (labelsBB)
-  // {
-  //   *image.mutable_labels_bb() = labelsBB.value();
-  // }
-  // if (labelsGeneral)
-  // {
-  //   *image.mutable_labels_general() = labelsGeneral.value();
-  // }
-  // return image;
 }
 
 }  // namespace seerep_hdf5_fb
