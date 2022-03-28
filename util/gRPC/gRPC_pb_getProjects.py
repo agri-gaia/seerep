@@ -2,9 +2,9 @@
 
 import sys
 
-from google.protobuf import empty_pb2
-import meta_operations_pb2_grpc as metaOperations
 import grpc
+import meta_operations_pb2_grpc as metaOperations
+from google.protobuf import empty_pb2
 
 server = "localhost:9090"
 channel = grpc.insecure_channel(server)

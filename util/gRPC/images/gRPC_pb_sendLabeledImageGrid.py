@@ -2,17 +2,16 @@
 
 import sys
 import time
-import numpy as np
 
-import grpc
-import image_service_pb2_grpc as imageService
-import tf_service_pb2_grpc as tfService
-import meta_operations_pb2_grpc as metaOperations
-import image_pb2 as image
 import boundingbox2d_labeled_pb2 as bb
+import grpc
+import image_pb2 as image
+import image_service_pb2_grpc as imageService
+import meta_operations_pb2_grpc as metaOperations
+import numpy as np
 import projectCreation_pb2 as projectCreation
+import tf_service_pb2_grpc as tfService
 import transform_stamped_pb2 as tf
-
 from google.protobuf import empty_pb2
 
 channel = grpc.insecure_channel("localhost:9090")

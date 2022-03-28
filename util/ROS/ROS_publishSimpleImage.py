@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 # PointCloud2 color cube
 # https://answers.ros.org/question/289576/understanding-the-bytes-in-a-pcl2-message/
-import rospy
 import numpy as np
-
+import rospy
 from sensor_msgs.msg import Image
 from std_msgs.msg import Header
-
 
 rospy.init_node("create_image_rgb")
 pub = rospy.Publisher("image", Image, queue_size=2)

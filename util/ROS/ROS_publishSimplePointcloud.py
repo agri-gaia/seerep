@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 # PointCloud2 color cube
 # https://answers.ros.org/question/289576/understanding-the-bytes-in-a-pcl2-message/
-import rospy
 import struct
 
+import rospy
 from sensor_msgs import point_cloud2
 from sensor_msgs.msg import PointCloud2, PointField
 from std_msgs.msg import Header
-
 
 rospy.init_node("create_cloud_xyzrgb")
 pub = rospy.Publisher("point_cloud2", PointCloud2, queue_size=2)
