@@ -2,14 +2,14 @@
 
 import sys
 
-# import numpy as np
-
 import grpc
 import image_service_pb2_grpc as imageService
 import meta_operations_pb2_grpc as metaOperations
 import query_pb2 as query
-
 from google.protobuf import empty_pb2
+
+# import numpy as np
+
 
 channel = grpc.insecure_channel("localhost:9090")
 

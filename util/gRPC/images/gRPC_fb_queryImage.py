@@ -2,24 +2,25 @@
 
 import sys
 
+import flatbuffers
+import grpc
+from query_pb2 import Query
+from seerep.fb import (
+    Boundingbox,
+    Empty,
+    Header,
+    Image,
+    Point,
+    ProjectInfos,
+    Query,
+    TimeInterval,
+    Timestamp,
+)
+from seerep.fb import imageService_grpc_fb as imageService
+from seerep.fb import metaOperations_grpc_fb as metaOperations
+
 # import numpy as np
 
-import grpc
-import flatbuffers
-from query_pb2 import Query
-
-from seerep.fb import metaOperations_grpc_fb as metaOperations
-from seerep.fb import imageService_grpc_fb as imageService
-from seerep.fb import ProjectInfos
-from seerep.fb import Point
-from seerep.fb import Header
-from seerep.fb import Boundingbox
-from seerep.fb import Timestamp
-from seerep.fb import TimeInterval
-from seerep.fb import Query
-from seerep.fb import Image
-
-from seerep.fb import Empty
 
 server = "localhost:9090"
 channel = grpc.insecure_channel(server)

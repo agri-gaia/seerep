@@ -2,8 +2,8 @@
 
 import sys
 
-import meta_operations_pb2_grpc as metaOperations
 import grpc
+import meta_operations_pb2_grpc as metaOperations
 import projectCreation_pb2
 
 server = "localhost:9090"

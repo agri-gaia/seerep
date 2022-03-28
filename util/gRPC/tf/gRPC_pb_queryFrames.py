@@ -2,14 +2,14 @@
 
 import sys
 
+import frame_query_pb2 as frameQuery
+import grpc
+import meta_operations_pb2_grpc as metaOperations
+import tf_service_pb2_grpc as tfService
+from google.protobuf import empty_pb2
+
 # import numpy as np
 
-import grpc
-import tf_service_pb2_grpc as tfService
-import meta_operations_pb2_grpc as metaOperations
-import frame_query_pb2 as frameQuery
-
-from google.protobuf import empty_pb2
 
 channel = grpc.insecure_channel("localhost:9090")
 

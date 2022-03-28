@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 
-from seerep.fb import metaOperations_grpc_fb as metaOperations
-from seerep.fb import Empty
-from seerep.fb import ProjectInfos
-import grpc
 import flatbuffers
+import grpc
+from seerep.fb import Empty, ProjectInfos
+from seerep.fb import metaOperations_grpc_fb as metaOperations
 
 server = "localhost:9090"
 channel = grpc.insecure_channel(server)
