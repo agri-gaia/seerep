@@ -5,17 +5,18 @@
 #include <highfive/H5File.hpp>
 
 // seerep-msgs
-#include <seerep-msgs/boundingbox_labeled_generated.h>
 #include <seerep-msgs/boundingbox2d_labeled_generated.h>
+#include <seerep-msgs/boundingbox_labeled_generated.h>
 
-#include "flatbuffers/grpc.h"
+// grpc / flatbuffer
 #include <grpcpp/grpcpp.h>
 
-// std
-#include <optional>
-#include <mutex>
+#include "flatbuffers/grpc.h"
 
+// std
 #include <boost/geometry.hpp>
+#include <mutex>
+#include <optional>
 
 namespace seerep_hdf5_fb
 {

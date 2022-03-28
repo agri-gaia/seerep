@@ -7,19 +7,18 @@
 // grpc
 #include <grpc/grpc.h>
 #include <grpc/status.h>
-#include <grpcpp/create_channel.h>
 #include <grpcpp/client_context.h>
+#include <grpcpp/create_channel.h>
 #include <grpcpp/security/credentials.h>
 
 // seerep
 #include <seerep-com/image-service.grpc.pb.h>
 #include <seerep-com/point-cloud-service.grpc.pb.h>
-
 #include <seerep_ros_conversions_pb/conversions.h>
 
 // ros
-#include <ros/ros.h>
 #include <ros/master.h>
+#include <ros/ros.h>
 
 // pkg
 #include "types.h"

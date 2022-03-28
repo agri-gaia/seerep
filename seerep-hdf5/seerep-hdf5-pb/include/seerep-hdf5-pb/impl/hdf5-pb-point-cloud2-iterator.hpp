@@ -34,6 +34,7 @@
 
 #include <seerep-msgs/point_cloud_2.pb.h>
 #include <seerep-msgs/point_field.pb.h>
+
 #include <cstdarg>
 #include <sstream>
 #include <string>

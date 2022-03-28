@@ -11,9 +11,8 @@
 #include <geometry_msgs/TransformStamped.h>
 
 // std
-#include <optional>
-
 #include <boost/geometry.hpp>
+#include <optional>
 
 namespace seerep_hdf5_core
 {

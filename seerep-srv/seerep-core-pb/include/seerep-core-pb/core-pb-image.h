@@ -5,22 +5,22 @@
 #include <optional>
 
 // seerep-msgs
-#include <seerep-msgs/query.pb.h>
 #include <seerep-msgs/image.pb.h>
+#include <seerep-msgs/query.pb.h>
 // seerep-core-msgs
-#include <seerep-msgs/query.h>
 #include <seerep-msgs/query-result.h>
+#include <seerep-msgs/query.h>
 // seerep-hdf5-pb
 #include <seerep-hdf5-pb/hdf5-pb-image.h>
 // seerep-core
 #include <seerep-core/core.h>
 
 // uuid
+#include <boost/functional/hash.hpp>
+#include <boost/lexical_cast.hpp>
 #include <boost/uuid/uuid.hpp>             // uuid class
 #include <boost/uuid/uuid_generators.hpp>  // generators
 #include <boost/uuid/uuid_io.hpp>          // streaming operators etc.
-#include <boost/lexical_cast.hpp>
-#include <boost/functional/hash.hpp>
 
 namespace seerep_core_pb
 {

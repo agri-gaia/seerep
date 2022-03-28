@@ -1,11 +1,12 @@
 #ifndef SEEREP_CORE_MSGS_QUERY_H_
 #define SEEREP_CORE_MSGS_QUERY_H_
 
-#include <functional>
 #include <boost/uuid/uuid.hpp>  // uuid class
+#include <functional>
+
 #include "aabb.h"
-#include "timeinterval.h"
 #include "header.h"
+#include "timeinterval.h"
 
 namespace seerep_core_msgs
 {

@@ -1,18 +1,17 @@
 #ifndef SEEREP_CORE_CORE_PROJECT_H_
 #define SEEREP_CORE_CORE_PROJECT_H_
 
-#include <functional>
-#include <optional>
-
 #include <boost/uuid/uuid.hpp>             // uuid class
 #include <boost/uuid/uuid_generators.hpp>  // generators
 #include <boost/uuid/uuid_io.hpp>          // streaming operators etc.
+#include <functional>
+#include <optional>
 
 // seerep-msgs
-#include <seerep-msgs/query.h>
-#include <seerep-msgs/query-tf.h>
-#include <seerep-msgs/query-result-project.h>
 #include <seerep-msgs/dataset-indexable.h>
+#include <seerep-msgs/query-result-project.h>
+#include <seerep-msgs/query-tf.h>
+#include <seerep-msgs/query.h>
 
 // seerep-hdf5-core
 #include <seerep-hdf5-core/hdf5-core-image.h>
@@ -20,8 +19,8 @@
 #include <seerep-hdf5-core/hdf5-core-tf.h>
 
 // seerep-core
-#include "core-point-cloud.h"
 #include "core-image.h"
+#include "core-point-cloud.h"
 #include "core-tf.h"
 
 namespace seerep_core

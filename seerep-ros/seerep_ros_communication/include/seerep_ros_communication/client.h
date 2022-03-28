@@ -6,31 +6,31 @@
 
 // grpc
 #include <grpc/grpc.h>
-#include <grpcpp/create_channel.h>
 #include <grpcpp/client_context.h>
+#include <grpcpp/create_channel.h>
 #include <grpcpp/security/credentials.h>
 
 // seerep
-#include <seerep-com/transfer-sensor-msgs.grpc.pb.h>
 #include <seerep-com/image-service.grpc.pb.h>
 #include <seerep-com/point-cloud-service.grpc.pb.h>
 #include <seerep-com/tf-service.grpc.pb.h>
+#include <seerep-com/transfer-sensor-msgs.grpc.pb.h>
 #include <seerep_ros_conversions_pb/conversions.h>
 
 // ros
-#include <ros/ros.h>
 #include <ros/master.h>
+#include <ros/ros.h>
 #include <tf2_msgs/TFMessage.h>
 
 // pkg
 #include "types.h"
 
 // uuid
+#include <boost/functional/hash.hpp>
+#include <boost/lexical_cast.hpp>
 #include <boost/uuid/uuid.hpp>             // uuid class
 #include <boost/uuid/uuid_generators.hpp>  // generators
 #include <boost/uuid/uuid_io.hpp>          // streaming operators etc.
-#include <boost/lexical_cast.hpp>
-#include <boost/functional/hash.hpp>
 
 namespace seerep_grpc_ros
 {

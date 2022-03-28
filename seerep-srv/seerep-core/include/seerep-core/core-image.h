@@ -6,19 +6,19 @@
 
 // seerep-msgs
 #include <seerep-msgs/aabb.h>
-#include <seerep-msgs/query.h>
 #include <seerep-msgs/query-result.h>
+#include <seerep-msgs/query.h>
 // seerep-hdf5-pb
 #include <seerep-hdf5-core/hdf5-core-image.h>
 // seerep-core
 #include "core-tf.h"
 
 // uuid
+#include <boost/functional/hash.hpp>
+#include <boost/lexical_cast.hpp>
 #include <boost/uuid/uuid.hpp>             // uuid class
 #include <boost/uuid/uuid_generators.hpp>  // generators
 #include <boost/uuid/uuid_io.hpp>          // streaming operators etc.
-#include <boost/lexical_cast.hpp>
-#include <boost/functional/hash.hpp>
 
 namespace seerep_core
 {

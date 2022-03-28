@@ -6,15 +6,15 @@
 
 // seerep-hdf5
 #include <seerep-hdf5-core/hdf5-core-image.h>
+
 #include "seerep-hdf5-pb/hdf5-pb-general.h"
 
 // seerep-msgs
 #include <seerep-msgs/image.pb.h>
 
 // std
-#include <optional>
-
 #include <boost/geometry.hpp>
+#include <optional>
 
 namespace seerep_hdf5_pb
 {

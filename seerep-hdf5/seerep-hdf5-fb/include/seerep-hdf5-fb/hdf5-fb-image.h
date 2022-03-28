@@ -6,20 +6,22 @@
 
 // seerep-hdf5
 #include <seerep-hdf5-core/hdf5-core-image.h>
+
 #include "seerep-hdf5-fb/hdf5-fb-general.h"
 
 // seerep-msgs
 #include <seerep-msgs/image_generated.h>
 
+// seerep-com
 #include <seerep-com/image-service.grpc.fb.h>
 
 // std
-#include <optional>
+#include <grpcpp/grpcpp.h>
 
 #include <boost/geometry.hpp>
+#include <optional>
 
 #include "flatbuffers/grpc.h"
-#include <grpcpp/grpcpp.h>
 
 namespace seerep_hdf5_fb
 {

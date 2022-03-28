@@ -2,13 +2,13 @@
 #define SEEREP_CORE_CORE_TF_H_
 
 #include <functional>
-#include <optional>
 #include <limits>
+#include <optional>
 
 // seerep-msgs
 #include <seerep-msgs/aabb.h>
-#include <seerep-msgs/query.h>
 #include <seerep-msgs/query-tf.h>
+#include <seerep-msgs/query.h>
 // ros-msgs (tf)
 #include <geometry_msgs/TransformStamped.h>
 
@@ -16,10 +16,10 @@
 #include <seerep-hdf5-core/hdf5-core-tf.h>
 
 // ros tf2
-#include <tf2/buffer_core.h>
-#include <tf2/LinearMath/Transform.h>
-#include <tf2/transform_datatypes.h>
 #include <ros/time.h>
+#include <tf2/LinearMath/Transform.h>
+#include <tf2/buffer_core.h>
+#include <tf2/transform_datatypes.h>
 
 namespace seerep_core
 {

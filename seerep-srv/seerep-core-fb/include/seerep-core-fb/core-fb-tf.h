@@ -5,8 +5,8 @@
 #include <optional>
 
 // seerep-msgs
-#include <seerep-msgs/transform_stamped_query_generated.h>
 #include <seerep-msgs/transform_stamped_generated.h>
+#include <seerep-msgs/transform_stamped_query_generated.h>
 // seerep-core-msgs
 #include <seerep-msgs/query-tf.h>
 // ros

@@ -11,16 +11,15 @@
 #include <seerep-msgs/dataset-indexable.h>
 
 // std
+#include <boost/geometry.hpp>
 #include <optional>
 
-#include <boost/geometry.hpp>
-
 // uuid
+#include <boost/functional/hash.hpp>
+#include <boost/lexical_cast.hpp>
 #include <boost/uuid/uuid.hpp>             // uuid class
 #include <boost/uuid/uuid_generators.hpp>  // generators
 #include <boost/uuid/uuid_io.hpp>          // streaming operators etc.
-#include <boost/lexical_cast.hpp>
-#include <boost/functional/hash.hpp>
 
 namespace seerep_hdf5_core
 {

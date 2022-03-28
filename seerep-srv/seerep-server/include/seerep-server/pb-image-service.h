@@ -3,8 +3,8 @@
 
 // seerep
 #include <seerep-com/image-service.grpc.pb.h>
-#include <seerep-core/core.h>
 #include <seerep-core-pb/core-pb-image.h>
+#include <seerep-core/core.h>
 
 namespace seerep_server
 {

@@ -5,21 +5,21 @@
 #include <optional>
 
 // seerep
-#include <seerep_ros_conversions_pb/conversions.h>
-#include <seerep-hdf5-pb/hdf5-pb-tf.h>
 #include <seerep-hdf5-pb/hdf5-pb-image.h>
 #include <seerep-hdf5-pb/hdf5-pb-pointcloud.h>
+#include <seerep-hdf5-pb/hdf5-pb-tf.h>
+#include <seerep_ros_conversions_pb/conversions.h>
 
 // uuid
+#include <boost/functional/hash.hpp>
+#include <boost/lexical_cast.hpp>
 #include <boost/uuid/uuid.hpp>             // uuid class
 #include <boost/uuid/uuid_generators.hpp>  // generators
 #include <boost/uuid/uuid_io.hpp>          // streaming operators etc.
-#include <boost/lexical_cast.hpp>
-#include <boost/functional/hash.hpp>
 
 // ros
-#include <ros/ros.h>
 #include <ros/master.h>
+#include <ros/ros.h>
 #include <tf2_msgs/TFMessage.h>
 
 // pkg

@@ -1,8 +1,8 @@
 #ifndef SEEREP_CORE_MSGS_QUERY_TF_H_
 #define SEEREP_CORE_MSGS_QUERY_TF_H_
 
-#include <functional>
 #include <boost/uuid/uuid.hpp>  // uuid class
+#include <functional>
 
 #include "timestamp.h"
 

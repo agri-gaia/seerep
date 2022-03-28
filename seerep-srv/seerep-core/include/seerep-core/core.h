@@ -1,22 +1,21 @@
 #ifndef SEEREP_CORE_CORE_H_
 #define SEEREP_CORE_CORE_H_
 
-#include <functional>
-#include <optional>
-#include <filesystem>
-
+#include <boost/functional/hash.hpp>
+#include <boost/lexical_cast.hpp>
 #include <boost/uuid/uuid.hpp>             // uuid class
 #include <boost/uuid/uuid_generators.hpp>  // generators
 #include <boost/uuid/uuid_io.hpp>          // streaming operators etc.
-#include <boost/lexical_cast.hpp>
-#include <boost/functional/hash.hpp>
+#include <filesystem>
+#include <functional>
+#include <optional>
 
 // seerep-msgs
-#include <seerep-msgs/project-info.h>
-#include <seerep-msgs/query.h>
-#include <seerep-msgs/query-tf.h>
-#include <seerep-msgs/query-result.h>
 #include <seerep-msgs/dataset-indexable.h>
+#include <seerep-msgs/project-info.h>
+#include <seerep-msgs/query-result.h>
+#include <seerep-msgs/query-tf.h>
+#include <seerep-msgs/query.h>
 
 // ros-msgs (tf)
 #include <geometry_msgs/TransformStamped.h>

@@ -3,23 +3,22 @@
 
 // grpc
 #include <grpc/grpc.h>
+#include <grpcpp/security/server_credentials.h>
 #include <grpcpp/server.h>
 #include <grpcpp/server_builder.h>
 #include <grpcpp/server_context.h>
-#include <grpcpp/security/server_credentials.h>
 
 // seerep
 #include "seerep-server/pb-meta-operations.h"
 // #include "seerep-server/pb-receive-sensor-msgs.h"
+#include <seerep-core/core.h>
+
+#include "seerep-server/fb-image-service.h"
+#include "seerep-server/fb-meta-operations.h"
+#include "seerep-server/fb-tf-service.h"
 #include "seerep-server/pb-image-service.h"
 #include "seerep-server/pb-point-cloud-service.h"
 #include "seerep-server/pb-tf-service.h"
-
-#include "seerep-server/fb-meta-operations.h"
-#include "seerep-server/fb-tf-service.h"
-#include "seerep-server/fb-image-service.h"
-
-#include <seerep-core/core.h>
 
 namespace seerep_server
 {

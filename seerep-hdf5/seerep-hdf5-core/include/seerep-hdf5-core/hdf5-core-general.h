@@ -5,14 +5,13 @@
 #include <highfive/H5File.hpp>
 
 // seerep-msgs
-#include <seerep-msgs/dataset-indexable.h>
 #include <seerep-msgs/aabb.h>
+#include <seerep-msgs/dataset-indexable.h>
 
 // std
-#include <optional>
-#include <mutex>
-
 #include <boost/geometry.hpp>
+#include <mutex>
+#include <optional>
 
 namespace seerep_hdf5_core
 {

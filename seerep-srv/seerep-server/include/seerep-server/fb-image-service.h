@@ -3,8 +3,8 @@
 
 // seerep
 #include <seerep-com/image-service.grpc.fb.h>
-#include <seerep-core/core.h>
 #include <seerep-core-fb/core-fb-image.h>
+#include <seerep-core/core.h>
 
 namespace seerep_server
 {

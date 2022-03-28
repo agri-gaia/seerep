@@ -3,14 +3,13 @@
 
 // grpc
 #include <grpc/grpc.h>
+#include <grpcpp/security/server_credentials.h>
 #include <grpcpp/server.h>
 #include <grpcpp/server_builder.h>
 #include <grpcpp/server_context.h>
-#include <grpcpp/security/server_credentials.h>
 
 // seerep
 #include <seerep-com/transfer-sensor-msgs.grpc.pb.h>
-
 #include <seerep-core/core.h>
 
 // this class is for all the gRPC calls that are not yet implemented in the server

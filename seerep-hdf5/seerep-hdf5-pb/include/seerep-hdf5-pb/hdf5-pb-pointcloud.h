@@ -6,17 +6,16 @@
 
 // seerep-hdf5
 #include <seerep-hdf5-core/hdf5-core-point-cloud.h>
+
 #include "seerep-hdf5-pb/hdf5-pb-general.h"
+#include "seerep-hdf5-pb/hdf5-pb-point-cloud2-iterator.h"
 
 // seerep-msgs
 #include <seerep-msgs/point_cloud_2.pb.h>
 
 // std
-#include <optional>
-
 #include <boost/geometry.hpp>
-
-#include "seerep-hdf5-pb/hdf5-pb-point-cloud2-iterator.h"
+#include <optional>
 
 namespace seerep_hdf5_pb
 {

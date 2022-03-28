@@ -8,13 +8,12 @@
 #include <seerep-hdf5-core/hdf5-core-general.h>
 
 // seerep-msgs
-#include <seerep-msgs/boundingbox_labeled.pb.h>
 #include <seerep-msgs/boundingbox2d_labeled.pb.h>
+#include <seerep-msgs/boundingbox_labeled.pb.h>
 
 // std
-#include <optional>
-
 #include <boost/geometry.hpp>
+#include <optional>
 
 namespace seerep_hdf5_pb
 {

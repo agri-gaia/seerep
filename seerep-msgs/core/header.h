@@ -1,8 +1,9 @@
 #ifndef SEEREP_CORE_MSGS_HEADER_H_
 #define SEEREP_CORE_MSGS_HEADER_H_
 
-#include "timestamp.h"
 #include <boost/uuid/uuid.hpp>
+
+#include "timestamp.h"
 
 namespace seerep_core_msgs
 {

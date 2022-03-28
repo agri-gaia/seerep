@@ -11,9 +11,8 @@
 #include <seerep-msgs/transform_stamped.pb.h>
 
 // std
-#include <optional>
-
 #include <boost/geometry.hpp>
+#include <optional>
 
 namespace seerep_hdf5_pb
 {

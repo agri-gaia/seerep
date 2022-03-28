@@ -2,7 +2,7 @@
 BasedOnStyle:  Google
 ColumnLimit:    120
 MaxEmptyLinesToKeep: 1
-SortIncludes: false
+SortIncludes: true
 
 Standard:        Auto
 IndentWidth:     2

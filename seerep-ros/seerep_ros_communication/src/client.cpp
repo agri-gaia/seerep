@@ -1,6 +1,8 @@
 #include "seerep_ros_communication/client.h"
-#include "seerep_ros_communication/types.h"
+
 #include <grpc/status.h>
+
+#include "seerep_ros_communication/types.h"
 
 namespace seerep_grpc_ros
 {

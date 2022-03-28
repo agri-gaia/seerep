@@ -2,16 +2,15 @@
 #define SEEREP_GRPC_ROS_TYPES_H_
 
 // std
-#include <string>
 #include <algorithm>
+#include <string>
 
 // seerep
-#include <seerep-com/transfer-sensor-msgs.grpc.pb.h>
-#include <seerep-com/meta-operations.grpc.pb.h>
 #include <seerep-com/image-service.grpc.pb.h>
+#include <seerep-com/meta-operations.grpc.pb.h>
 #include <seerep-com/point-cloud-service.grpc.pb.h>
 #include <seerep-com/tf-service.grpc.pb.h>
-
+#include <seerep-com/transfer-sensor-msgs.grpc.pb.h>
 #include <seerep_ros_conversions_pb/conversions.h>
 
 // Supported ROS message types
