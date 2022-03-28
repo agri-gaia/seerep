@@ -23,14 +23,33 @@
 
 namespace seerep_server
 {
-std::shared_ptr<grpc::Server> createServerPb(
-    const std::string& server_address, seerep_server::PbMetaOperations* metaOperations,
-    seerep_server::PbTfService* tfService, seerep_server::PbImageService* imageService,
-    seerep_server::PbPointCloudService* pointCloudService);  // seerep_server::PbReceiveSensorMsgs* receiveSensorMsgs,
-                                                             // ,
-std::shared_ptr<grpc::Server> createServerFb(const std::string& server_address,
-                                             seerep_server::FbMetaOperations* metaOperations,
-                                             seerep_server::FbTfService* tfService,
-                                             seerep_server::FbImageService* imageService);
+class server
+{
+public:
+  server(std::shared_ptr<seerep_core::Core> seerepCore);
+
+  void addServicesPb(grpc::ServerBuilder& server_builder);
+
+  void addServicesFb(grpc::ServerBuilder& server_builder);
+
+private:
+  void createServicesPb();
+  void createServicesFb();
+
+  std::shared_ptr<seerep_core::Core> m_seerepCore;
+
+  // protobuf services
+  std::shared_ptr<seerep_server::PbMetaOperations> m_metaOperationsPb;
+  std::shared_ptr<seerep_server::PbTfService> m_tfServicePb;
+  std::shared_ptr<seerep_server::PbImageService> m_imageServicePb;
+  std::shared_ptr<seerep_server::PbPointCloudService> m_pointCloudServicePb;
+
+  // flatbuffer services
+  std::shared_ptr<seerep_server::FbMetaOperations> m_metaOperationsFb;
+  std::shared_ptr<seerep_server::FbTfService> m_tfServiceFb;
+  std::shared_ptr<seerep_server::FbImageService> m_imageServiceFb;
+
+  // flatbuffer services
+};
 } /* namespace seerep_server */
 #endif  // SEEREP_SERVER_SERVER_H_
