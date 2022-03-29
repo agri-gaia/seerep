@@ -31,6 +31,7 @@ public:
   std::vector<boost::uuids::uuid> getData(const seerep_core_msgs::Query& bb);
 
   void addDataset(const seerep_core_msgs::DatasetIndexable& image);
+  void addImageLabels(std::vector<std::string>& labels, const boost::uuids::uuid& msgUuid);
 
 private:
   void recreateDatasets();

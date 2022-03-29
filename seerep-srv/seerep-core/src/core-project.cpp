@@ -56,6 +56,11 @@ void CoreProject::addImage(const seerep_core_msgs::DatasetIndexable& image)
   m_imageOverview->addDataset(image);
 }
 
+void CoreProject::addImageLabels(std::vector<std::string>& labels, const boost::uuids::uuid& msgUuid)
+{
+  m_imageOverview->addImageLabels(labels, msgUuid);
+}
+
 void CoreProject::addTF(const geometry_msgs::TransformStamped& tf)
 {
   m_tfOverview->addDataset(tf);

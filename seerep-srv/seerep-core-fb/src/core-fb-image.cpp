@@ -101,6 +101,28 @@ boost::uuids::uuid CoreFbImage::addData(const seerep::fb::Image& img)
   return uuid;
 }
 
+void CoreFbImage::addBoundingBoxesLabeled(const seerep::fb::BoundingBoxes2DLabeledStamped& bbs2dlabeled)
+{
+  boost::uuids::string_generator gen;
+  boost::uuids::uuid uuidMsg = gen(bbs2dlabeled.header()->uuid_msgs()->str());
+  boost::uuids::uuid uuidProject = gen(bbs2dlabeled.header()->uuid_project()->str());
+
+  auto hdf5io = getHdf5(uuidProject);
+  hdf5io->writeImageBoundingBox2DLabeled(boost::lexical_cast<std::string>(uuidMsg), bbs2dlabeled);
+
+  std::vector<std::string> labels;
+  for (auto bb : *bbs2dlabeled.labels_bb())
+  {
+    labels.push_back(bb->label()->str());
+  }
+  // this only adds labels to the image in the core
+  // if there are already bounding box labels for this image
+  // those labels must be removed separatly. The hdfio currently overrides
+  // existing labels. The data is only correct if labels are added and there
+  // weren't any bounding box labels before
+  m_seerepCore->addImageLabels(labels, uuidMsg, uuidProject);
+}
+
 void CoreFbImage::getFileAccessorFromCore(boost::uuids::uuid project)
 {
   auto hdf5file = m_seerepCore->getHdf5File(project);

@@ -196,4 +196,23 @@ void CoreImage::addDatasetToIndices(const seerep_core_msgs::DatasetIndexable& im
   }
 }
 
+void CoreImage::addImageLabels(std::vector<std::string>& labels, const boost::uuids::uuid& msgUuid)
+{
+  for (std::string label : labels)
+  {
+    // check if label already exists
+    std::unordered_map<std::string, std::vector<boost::uuids::uuid>>::iterator labelmapentry = m_label.find(label);
+    if (labelmapentry != m_label.end())
+    {
+      // label already exists, add id of image to the vector
+      labelmapentry->second.push_back(msgUuid);
+    }
+    else
+    {
+      // label doesn't already exist. Create new pair of label and vector of image ids
+      m_label.insert(std::make_pair(label, std::vector<boost::uuids::uuid>{ msgUuid }));
+    }
+  }
+}
+
 } /* namespace seerep_core */
