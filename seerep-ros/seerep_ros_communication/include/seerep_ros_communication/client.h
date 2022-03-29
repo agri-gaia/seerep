@@ -62,11 +62,11 @@ public:
   std::string projectuuid;
 
 private:
-  StubTransferPtr stub_;
-  StubImagePtr stubImage_;
-  StubPointCloudPtr stubPointCloud_;
-  StubTfPtr stubTf_;
-  StubMetaPtr stubMeta_;
+  StubTransferPbPtr stub_;
+  StubImagePbPtr stubImage_;
+  StubPointCloudPbPtr stubPointCloud_;
+  StubTfPbPtr stubTf_;
+  StubMetaPbPtr stubMeta_;
   ros::NodeHandle nh;
 };
 

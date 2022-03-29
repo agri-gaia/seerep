@@ -34,8 +34,8 @@ public:
   void queryImage(const seerep::Query& query, ros::Publisher& img_pub) const;
 
 private:
-  StubImagePtr stubImage_;
-  StubPointCloudPtr stubPointCloud_;
+  StubImagePbPtr stubImage_;
+  StubPointCloudPbPtr stubPointCloud_;
   ros::NodeHandle nh;
 };
 
