@@ -34,6 +34,7 @@ public:
   void getData(const seerep::fb::Query& query,
                grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::Image>>* const writer);
   boost::uuids::uuid addData(const seerep::fb::Image& img);
+  void addBoundingBoxesLabeled(const seerep::fb::BoundingBoxes2DLabeledStamped& bbs2dlabeled);
 
 private:
   void getFileAccessorFromCore(boost::uuids::uuid project);

@@ -41,6 +41,7 @@ public:
 
   void addPointCloud(const seerep_core_msgs::DatasetIndexable& pointcloud);
   void addImage(const seerep_core_msgs::DatasetIndexable& image);
+  void addImageLabels(std::vector<std::string>& labels, const boost::uuids::uuid& msgUuid);
 
   // tf
   void addTF(const geometry_msgs::TransformStamped& tf);

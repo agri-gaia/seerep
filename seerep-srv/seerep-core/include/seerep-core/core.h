@@ -36,6 +36,8 @@ public:
 
   void addImage(const seerep_core_msgs::DatasetIndexable& image);
   seerep_core_msgs::QueryResult getImage(const seerep_core_msgs::Query& query);
+  void addImageLabels(std::vector<std::string>& labels, const boost::uuids::uuid& msgUuid,
+                      const boost::uuids::uuid& projectuuid);
 
   void addTF(const geometry_msgs::TransformStamped& tf, const boost::uuids::uuid& projectuuid);
   std::optional<geometry_msgs::TransformStamped> getTF(const seerep_core_msgs::QueryTf& transformQuery);
