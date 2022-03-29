@@ -13,10 +13,12 @@ find_package(catkin REQUIRED
 	geometry_msgs
 	sensor_msgs
 	roscpp
+	tf
 )
 #find_package(SeerepMsgs REQUIRED)
 find_package(SeerepHdf5Pb REQUIRED)
 find_package(seerep_ros_conversions_pb REQUIRED)
+find_package(seerep_ros_conversions_fb REQUIRED)
 find_package(Protobuf REQUIRED)
 find_package(gRPC CONFIG REQUIRED)
 
@@ -27,7 +29,7 @@ message("HighFive Include Dirs: ${catkin_INCLUDE_DIRS} \n Libraries: ${catkin_LI
 catkin_package(
   INCLUDE_DIRS include
   # LIBRARIES
-	CATKIN_DEPENDS std_msgs geometry_msgs sensor_msgs roscpp seerep_ros_conversions_pb roscpp topic_tools
+	CATKIN_DEPENDS std_msgs geometry_msgs sensor_msgs roscpp seerep_ros_conversions_pb seerep_ros_conversions_fb roscpp topic_tools tf
   # DEPENDS
 )
 
@@ -36,7 +38,9 @@ include_directories(
 	${SeerepCom_INCLUDE_DIRS}
 	${SeerepMsgs_INCLUDE_DIRS}
 	${SeerepHdf5Pb_INCLUDE_DIRS}
+	${SeerepHdf5Fb_INCLUDE_DIRS}
 	${seerep_ros_conversions_pb_INCLUDE_DIRS}
+	${seerep_ros_conversions_fb_INCLUDE_DIRS}
 	${catkin_INCLUDE_DIRS}
 )
 
@@ -57,11 +61,16 @@ add_executable(${PROJECT_NAME}_querierFb
 	src/querierFb.cpp
 )
 
+add_executable(${PROJECT_NAME}_clientImagesWithDetection
+	src/clientImagesWithDetection.cpp
+)
+
 add_dependencies(${PROJECT_NAME}_server ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(${PROJECT_NAME}_client ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(${PROJECT_NAME}_hdf5dump ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(${PROJECT_NAME}_querier ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(${PROJECT_NAME}_querierFb ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(${PROJECT_NAME}_clientImagesWithDetection ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 target_link_libraries(${PROJECT_NAME}_server
 	${SeerepCom_LIBRARIES}
@@ -90,12 +99,19 @@ target_link_libraries(${PROJECT_NAME}_querier
 )
 target_link_libraries(${PROJECT_NAME}_querierFb
 	${SeerepCom_LIBRARIES}
-	${seerep_ros_conversions_pb_LIBRARIES}
+	${seerep_ros_conversions_fb_LIBRARIES}
+	${catkin_LIBRARIES}
+	gRPC::grpc++_reflection
+)
+target_link_libraries(${PROJECT_NAME}_clientImagesWithDetection
+	${SeerepCom_LIBRARIES}
+	${seerep_ros_conversions_fb_LIBRARIES}
 	${catkin_LIBRARIES}
 	gRPC::grpc++_reflection
 )
 
-install(TARGETS ${PROJECT_NAME}_server ${PROJECT_NAME}_client ${PROJECT_NAME}_hdf5dump ${PROJECT_NAME}_querier ${PROJECT_NAME}_querierFb
+install(TARGETS ${PROJECT_NAME}_server ${PROJECT_NAME}_client ${PROJECT_NAME}_hdf5dump
+	${PROJECT_NAME}_querier ${PROJECT_NAME}_querierFb ${PROJECT_NAME}_clientImagesWithDetection
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}

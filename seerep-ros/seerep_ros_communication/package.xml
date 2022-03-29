@@ -15,11 +15,14 @@
   <depend>seerep-msgs</depend>
   <depend>seerep-com</depend>
   <depend>seerep-hdf5-pb</depend>
+  <depend>seerep-hdf5-fb</depend>
   <depend>roscpp</depend>
   <depend>std_msgs</depend>
   <depend>geometry_msgs</depend>
   <depend>sensor_msgs</depend>
   <depend>topic_tools</depend>
   <depend>seerep_ros_conversions_pb</depend>
+  <depend>seerep_ros_conversions_fb</depend>
+  <depend>tf</depend>
   <buildtool_depend>catkin</buildtool_depend>
 </package>
