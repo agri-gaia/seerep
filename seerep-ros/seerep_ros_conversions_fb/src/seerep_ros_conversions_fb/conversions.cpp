@@ -5,14 +5,15 @@ namespace seerep_ros_conversions_fb
 /*
  * Header
  */
-flatbuffers::grpc::Message<seerep::fb::Header> toFlat(const std_msgs::Header& header, std::string projectuuid)
+flatbuffers::grpc::Message<seerep::fb::Header> toFlat(const std_msgs::Header& header, std::string projectuuid,
+                                                      std::string msguuid = "")
 {
   flatbuffers::grpc::MessageBuilder builder;
-  builder.Finish(toFlat(header, projectuuid, builder));
+  builder.Finish(toFlat(header, projectuuid, builder, msguuid));
   return builder.ReleaseMessage<seerep::fb::Header>();
 }
 flatbuffers::Offset<seerep::fb::Header> toFlat(const std_msgs::Header& header, std::string projectuuid,
-                                               flatbuffers::grpc::MessageBuilder& builder)
+                                               flatbuffers::grpc::MessageBuilder& builder, std::string msguuid = "")
 {
   seerep::fb::TimestampBuilder timestampbuilder(builder);
   timestampbuilder.add_seconds(header.stamp.sec);
@@ -24,6 +25,10 @@ flatbuffers::Offset<seerep::fb::Header> toFlat(const std_msgs::Header& header, s
   headerbuilder.add_frame_id(builder.CreateString(header.frame_id));
   headerbuilder.add_stamp(stamp);
   headerbuilder.add_uuid_project(builder.CreateString(projectuuid));
+  if (!msguuid.empty())
+  {
+    headerbuilder.add_uuid_msgs(builder.CreateString(msguuid));
+  }
   return headerbuilder.Finish();
 }
 
@@ -73,16 +78,17 @@ sensor_msgs::PointField toROS(const seerep::fb::PointField& point_field)
  * PointCloud2
  */
 flatbuffers::grpc::Message<seerep::fb::PointCloud2> toFlat(const sensor_msgs::PointCloud2& cloud,
-                                                           std::string projectuuid)
+                                                           std::string projectuuid, std::string msguuid = "")
 {
   flatbuffers::grpc::MessageBuilder builder;
-  builder.Finish(toFlat(cloud, projectuuid, builder));
+  builder.Finish(toFlat(cloud, projectuuid, builder, msguuid));
   return builder.ReleaseMessage<seerep::fb::PointCloud2>();
 }
 flatbuffers::Offset<seerep::fb::PointCloud2> toFlat(const sensor_msgs::PointCloud2& cloud, std::string projectuuid,
-                                                    flatbuffers::grpc::MessageBuilder& builder)
+                                                    flatbuffers::grpc::MessageBuilder& builder,
+                                                    std::string msguuid = "")
 {
-  auto header = toFlat(cloud.header, projectuuid, builder);
+  auto header = toFlat(cloud.header, projectuuid, builder, msguuid);
 
   std::vector<flatbuffers::Offset<seerep::fb::PointField>> fieldsvector;
   fieldsvector.reserve(cloud.fields.size());
@@ -118,6 +124,7 @@ sensor_msgs::PointCloud2 toROS(const seerep::fb::PointCloud2& cloud)
   ret.point_step = cloud.point_step();
   ret.row_step = cloud.row_step();
   // std::copy(cloud.data().begin(), cloud.data().end(), std::back_inserter(ret.data));
+  std::copy_n(cloud.data()->Data(), cloud.data()->size(), std::back_inserter(ret.data));
   ret.is_dense = cloud.is_dense();
   return ret;
 }
@@ -125,16 +132,17 @@ sensor_msgs::PointCloud2 toROS(const seerep::fb::PointCloud2& cloud)
 /*
  * Image
  */
-flatbuffers::grpc::Message<seerep::fb::Image> toFlat(const sensor_msgs::Image& image, std::string projectuuid)
+flatbuffers::grpc::Message<seerep::fb::Image> toFlat(const sensor_msgs::Image& image, std::string projectuuid,
+                                                     std::string msguuid = "")
 {
   flatbuffers::grpc::MessageBuilder builder;
-  builder.Finish(toFlat(image, projectuuid, builder));
+  builder.Finish(toFlat(image, projectuuid, builder, msguuid));
   return builder.ReleaseMessage<seerep::fb::Image>();
 }
 flatbuffers::Offset<seerep::fb::Image> toFlat(const sensor_msgs::Image& image, std::string projectuuid,
-                                              flatbuffers::grpc::MessageBuilder& builder)
+                                              flatbuffers::grpc::MessageBuilder& builder, std::string msguuid = "")
 {
-  auto header = toFlat(image.header, projectuuid, builder);
+  auto header = toFlat(image.header, projectuuid, builder, msguuid);
 
   seerep::fb::ImageBuilder imagebuilder(builder);
 
@@ -402,4 +410,67 @@ geometry_msgs::TransformStamped toROS(const seerep::fb::TransformStamped& transf
   ret.transform = toROS(*transform.transform());
   return ret;
 }
+
+flatbuffers::grpc::Message<seerep::fb::BoundingBoxes2DLabeledStamped>
+toFlat(const vision_msgs::Detection2DArray& detection2d, std::string projectuuid, std::string msguuid = "")
+{
+  flatbuffers::grpc::MessageBuilder builder;
+  builder.Finish(toFlat(detection2d, projectuuid, builder, msguuid));
+  return builder.ReleaseMessage<seerep::fb::BoundingBoxes2DLabeledStamped>();
+}
+flatbuffers::Offset<seerep::fb::BoundingBoxes2DLabeledStamped> toFlat(const vision_msgs::Detection2DArray& detection2d,
+                                                                      std::string projectuuid,
+                                                                      flatbuffers::grpc::MessageBuilder& builder,
+                                                                      std::string msguuid = "")
+{
+  auto header = toFlat(detection2d.header, projectuuid, builder, msguuid);
+  std::vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>> bblabeled;
+  for (vision_msgs::Detection2D detection : detection2d.detections)
+  {
+    bblabeled.push_back(toFlat(detection, projectuuid, builder, msguuid));
+  }
+
+  seerep::fb::BoundingBoxes2DLabeledStampedBuilder bbbuilder(builder);
+  bbbuilder.add_header(header);
+  bbbuilder.add_labels_bb(builder.CreateVector(bblabeled));
+  return bbbuilder.Finish();
+}
+
+// vision_msgs::Detection2D toROS(const seerep::fb::BoundingBoxes2DLabeledStamped& bb_labeled_stamped)
+// {
+//   return vision_msgs::Detection2D();
+// }
+
+flatbuffers::grpc::Message<seerep::fb::BoundingBox2DLabeled> toFlat(const vision_msgs::Detection2D& detection2d,
+                                                                    std::string projectuuid, std::string msguuid)
+{
+  flatbuffers::grpc::MessageBuilder builder;
+  builder.Finish(toFlat(detection2d, projectuuid, builder, msguuid));
+  return builder.ReleaseMessage<seerep::fb::BoundingBox2DLabeled>();
+}
+flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled> toFlat(const vision_msgs::Detection2D& detection2d,
+                                                             std::string projectuuid,
+                                                             flatbuffers::grpc::MessageBuilder& builder,
+                                                             std::string msguuid)
+{
+  seerep::fb::Point2DBuilder pointBuilder(builder);
+  pointBuilder.add_x(detection2d.bbox.center.x - detection2d.bbox.size_x / 2.0);
+  pointBuilder.add_y(detection2d.bbox.center.y - detection2d.bbox.size_y / 2.0);
+  auto pointMin = pointBuilder.Finish();
+
+  pointBuilder.add_x(detection2d.bbox.center.x + detection2d.bbox.size_x / 2.0);
+  pointBuilder.add_y(detection2d.bbox.center.y + detection2d.bbox.size_y / 2.0);
+  auto pointMax = pointBuilder.Finish();
+
+  seerep::fb::Boundingbox2DBuilder bbbuilder(builder);
+  bbbuilder.add_point_min(pointMin);
+  bbbuilder.add_point_max(pointMax);
+  auto bb = bbbuilder.Finish();
+
+  seerep::fb::BoundingBox2DLabeledBuilder bblabeledbuilder(builder);
+  bblabeledbuilder.add_bounding_box(bb);
+  bblabeledbuilder.add_label(builder.CreateString(std::to_string(detection2d.results.at(0).id)));
+  return bblabeledbuilder.Finish();
+}
+
 }  // namespace seerep_ros_conversions_fb

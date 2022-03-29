@@ -1,6 +1,7 @@
 
 include "image.fbs";
 include "query.fbs";
+include "boundingboxes2d_labeled_stamped.fbs";
 
 include "server_response.fbs";
 
@@ -9,4 +10,5 @@ namespace seerep.fb;
 rpc_service ImageService {
   GetImage(seerep.fb.Query):seerep.fb.Image (streaming: "server");
   TransferImage(seerep.fb.Image):seerep.fb.ServerResponse  (streaming: "client");
+  AddBoundingBoxes2dLabeled(seerep.fb.BoundingBoxes2DLabeledStamped):seerep.fb.ServerResponse   (streaming: "client");
 }

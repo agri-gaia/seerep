@@ -56,6 +56,7 @@ set(MY_FBS_FILES
 	fbs/boundingbox.fbs
 	fbs/boundingbox2d_labeled.fbs
 	fbs/boundingbox2d.fbs
+	fbs/boundingboxes2d_labeled_stamped.fbs
 	fbs/empty.fbs
 	fbs/frame_infos.fbs
 	fbs/frame_query.fbs
