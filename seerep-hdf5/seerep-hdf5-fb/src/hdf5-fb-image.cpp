@@ -78,6 +78,12 @@ void Hdf5FbImage::writeImage(const std::string& id, const seerep::fb::Image& ima
   m_file->flush();
 }
 
+void Hdf5FbImage::writeImageBoundingBox2DLabeled(const std::string& id,
+                                                 const seerep::fb::BoundingBoxes2DLabeledStamped& bb2dLabeledStamped)
+{
+  writeBoundingBox2DLabeled(HDF5_GROUP_IMAGE, id, *bb2dLabeledStamped.labels_bb());
+}
+
 void Hdf5FbImage::readImage(const std::string& id, const std::string& projectuuid,
                             grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::Image>>* const writer)
 {

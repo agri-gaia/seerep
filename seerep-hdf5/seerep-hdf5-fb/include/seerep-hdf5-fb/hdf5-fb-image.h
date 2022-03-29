@@ -31,6 +31,8 @@ public:
   Hdf5FbImage(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
 
   void writeImage(const std::string& id, const seerep::fb::Image& image);
+  void writeImageBoundingBox2DLabeled(const std::string& id,
+                                      const seerep::fb::BoundingBoxes2DLabeledStamped& bb2dLabeledStamped);
 
   // std::optional<flatbuffers::Offset<seerep::fb::Image>>
   void readImage(const std::string& id, const std::string& projectuuid,
