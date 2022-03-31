@@ -85,15 +85,30 @@ boost::uuids::uuid CoreFbImage::addData(const seerep::fb::Image& img)
   dataForIndices.boundingbox.max_corner().set<2>(0);
 
   // semantic
-  dataForIndices.labels.reserve(img.labels_general()->size() + img.labels_bb()->size());
-  for (auto label : *img.labels_general())
+  int labelSizeAll = 0;
+  if (img.labels_general())
   {
-    dataForIndices.labels.push_back(label->str());
+    labelSizeAll += img.labels_general()->size();
+  }
+  if (img.labels_bb())
+  {
+    labelSizeAll += img.labels_bb()->size();
+  }
+  dataForIndices.labels.reserve(labelSizeAll);
+  if (img.labels_general())
+  {
+    for (auto label : *img.labels_general())
+    {
+      dataForIndices.labels.push_back(label->str());
+    }
   }
 
-  for (auto label : *img.labels_bb())
+  if (img.labels_bb())
   {
-    dataForIndices.labels.push_back(label->label()->str());
+    for (auto label : *img.labels_bb())
+    {
+      dataForIndices.labels.push_back(label->label()->str());
+    }
   }
 
   m_seerepCore->addImage(dataForIndices);
