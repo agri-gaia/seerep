@@ -79,11 +79,11 @@ public:
   //################
   void writeBoundingBoxLabeled(
       const std::string& datatypeGroup, const std::string& uuid,
-      const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>>& boundingboxLabeled);
+      const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>>* boundingboxLabeled);
 
   void writeBoundingBox2DLabeled(
       const std::string& datatypeGroup, const std::string& uuid,
-      const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>>& boundingbox2DLabeled);
+      const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>>* boundingbox2DLabeled);
 
   void readBoundingBox2DLabeled(const std::string& datatypeGroup, const std::string& uuid,
                                 std::vector<std::string> labels, std::vector<std::vector<double>> boundingBoxes);
@@ -92,7 +92,7 @@ public:
   // Labels General
   //################
   void writeLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid,
-                          const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>& labelsGeneral);
+                          const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>* labelsGeneral);
 
   void readLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid, std::vector<std::string> labels);
 

@@ -51,7 +51,7 @@ void Hdf5FbImage::writeImage(const std::string& id, const seerep::fb::Image& ima
     deleteAttribute(data_set_ptr, "INTERLACE_MODE");
   }
 
-  const uint8_t* begin = reinterpret_cast<const uint8_t*>(image.data());
+  flatbuffers::VectorIterator begin = image.data()->cbegin();
 
   std::vector<std::vector<std::vector<uint8_t>>> tmp;
   tmp.resize(image.height());
@@ -63,17 +63,22 @@ void Hdf5FbImage::writeImage(const std::string& id, const seerep::fb::Image& ima
     tmp.at(row).resize(image.width());
     for (int col = 0; col < image.width(); col++)
     {
-      const uint8_t* pxl = begin + row * image.step() + col * pixel_step;
-      tmp.at(row).at(col).reserve(pixel_step);
-      std::copy_n(pxl, pixel_step, std::back_inserter(tmp.at(row).at(col)));
+      // for (int channel = 0; channel < pixel_step; channel++)
+      // {
+      //   tmp.at(row).at(col).push_back(*(begin + row * image.step() + col * pixel_step + channel));
+      // }
+
+      //   const uint8_t* pxl = begin + row * image.step() + col * pixel_step;
+      // // tmp.at(row).at(col).reserve(pixel_step);
+      std::copy_n(begin + row * image.step() + col * pixel_step, pixel_step, std::back_inserter(tmp.at(row).at(col)));
     }
   }
 
   data_set_ptr->write(tmp);
   writeHeaderAttributes(*data_set_ptr, *image.header());
 
-  writeBoundingBox2DLabeled(HDF5_GROUP_IMAGE, id, *image.labels_bb());
-  writeLabelsGeneral(HDF5_GROUP_IMAGE, id, *image.labels_general());
+  writeBoundingBox2DLabeled(HDF5_GROUP_IMAGE, id, image.labels_bb());
+  writeLabelsGeneral(HDF5_GROUP_IMAGE, id, image.labels_general());
 
   m_file->flush();
 }
@@ -81,7 +86,7 @@ void Hdf5FbImage::writeImage(const std::string& id, const seerep::fb::Image& ima
 void Hdf5FbImage::writeImageBoundingBox2DLabeled(const std::string& id,
                                                  const seerep::fb::BoundingBoxes2DLabeledStamped& bb2dLabeledStamped)
 {
-  writeBoundingBox2DLabeled(HDF5_GROUP_IMAGE, id, *bb2dLabeledStamped.labels_bb());
+  writeBoundingBox2DLabeled(HDF5_GROUP_IMAGE, id, bb2dLabeledStamped.labels_bb());
 }
 
 void Hdf5FbImage::readImage(const std::string& id, const std::string& projectuuid,
