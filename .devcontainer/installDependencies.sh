@@ -26,6 +26,7 @@ apt-get -qq update && apt-get -qq install -y -o=Dpkg::Use-Pty=0 \
         libpcl-dev \
         ros-noetic-pcl-conversions \
         ros-noetic-tf \
+        ros-noetic-vision-msgs \
         libgeographic-dev
 
 echo '# install pre-commit hooks to /root/.cache/pre-commit/'
