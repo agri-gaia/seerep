@@ -11,6 +11,8 @@ Hdf5FbTf::Hdf5FbTf(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::m
 
 void Hdf5FbTf::writeTransformStamped(const seerep::fb::TransformStamped& tf)
 {
+  const std::scoped_lock lock(*m_write_mtx);
+
   std::string hdf5DatasetPath = HDF5_GROUP_TF + "/" + tf.header()->frame_id()->str() + "_" + tf.child_frame_id()->str();
   std::string hdf5DatasetTimePath = hdf5DatasetPath + "/" + "time";
   std::string hdf5DatasetTransPath = hdf5DatasetPath + "/" + "translation";
@@ -103,6 +105,8 @@ void Hdf5FbTf::writeTransformStamped(const seerep::fb::TransformStamped& tf)
 std::optional<std::vector<flatbuffers::Offset<seerep::fb::TransformStamped>>>
 Hdf5FbTf::readTransformStamped(const std::string& id)
 {
+  const std::scoped_lock lock(*m_write_mtx);
+
   std::string hdf5GroupPath = HDF5_GROUP_TF + "/" + id;
   std::string hdf5DatasetTimePath = hdf5GroupPath + "/" + "time";
   std::string hdf5DatasetTransPath = hdf5GroupPath + "/" + "translation";
@@ -179,6 +183,8 @@ Hdf5FbTf::readTransformStamped(const std::string& id)
 
 std::optional<std::vector<std::string>> Hdf5FbTf::readTransformStampedFrames(const std::string& id)
 {
+  const std::scoped_lock lock(*m_write_mtx);
+
   std::string hdf5GroupPath = HDF5_GROUP_TF + "/" + id;
 
   if (!m_file->exist(hdf5GroupPath))

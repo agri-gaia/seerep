@@ -11,6 +11,8 @@ Hdf5PbImage::Hdf5PbImage(std::shared_ptr<HighFive::File>& file, std::shared_ptr<
 
 void Hdf5PbImage::writeImage(const std::string& id, const seerep::Image& image)
 {
+  const std::scoped_lock lock(*m_write_mtx);
+
   std::string hdf5DatasetPath = seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE + "/" + id;
   std::string hdf5DatasetRawDataPath = hdf5DatasetPath + "/" + seerep_hdf5_core::Hdf5CoreImage::RAWDATA;
 
@@ -80,6 +82,8 @@ void Hdf5PbImage::writeImage(const std::string& id, const seerep::Image& image)
 
 std::optional<seerep::Image> Hdf5PbImage::readImage(const std::string& id)
 {
+  const std::scoped_lock lock(*m_write_mtx);
+
   std::string hdf5DatasetPath = seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE + "/" + id;
   std::string hdf5DatasetRawDataPath = hdf5DatasetPath + "/" + seerep_hdf5_core::Hdf5CoreImage::RAWDATA;
 

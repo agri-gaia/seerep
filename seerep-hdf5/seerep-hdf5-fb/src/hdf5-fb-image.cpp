@@ -11,6 +11,8 @@ Hdf5FbImage::Hdf5FbImage(std::shared_ptr<HighFive::File>& file, std::shared_ptr<
 
 void Hdf5FbImage::writeImage(const std::string& id, const seerep::fb::Image& image)
 {
+  const std::scoped_lock lock(*m_write_mtx);
+
   std::string hdf5DatasetPath = HDF5_GROUP_IMAGE + "/" + id;
   std::string hdf5DatasetRawDataPath = hdf5DatasetPath + "/" + RAWDATA;
 
@@ -86,12 +88,16 @@ void Hdf5FbImage::writeImage(const std::string& id, const seerep::fb::Image& ima
 void Hdf5FbImage::writeImageBoundingBox2DLabeled(const std::string& id,
                                                  const seerep::fb::BoundingBoxes2DLabeledStamped& bb2dLabeledStamped)
 {
+  const std::scoped_lock lock(*m_write_mtx);
+
   writeBoundingBox2DLabeled(HDF5_GROUP_IMAGE, id, bb2dLabeledStamped.labels_bb());
 }
 
 void Hdf5FbImage::readImage(const std::string& id, const std::string& projectuuid,
                             grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::Image>>* const writer)
 {
+  const std::scoped_lock lock(*m_write_mtx);
+
   std::string hdf5DatasetPath = HDF5_GROUP_IMAGE + "/" + id;
   std::string hdf5DatasetRawDataPath = hdf5DatasetPath + "/" + RAWDATA;
 

@@ -30,11 +30,6 @@ public:
 
   std::optional<seerep::PointCloud2> readPointCloud2(const std::string& uuid);
 
-  void writePointFieldAttributes(HighFive::Group& cloud_group,
-                                 const google::protobuf::RepeatedPtrField<seerep::PointField> repeatedPointField);
-
-  google::protobuf::RepeatedPtrField<seerep::PointField> readPointFieldAttributes(HighFive::Group& cloud_group);
-
   std::vector<float> loadBoundingBox(const std::string& uuid);
 
 private:
@@ -100,6 +95,9 @@ private:
   void writeOtherFields(const std::string& uuid, const seerep::PointCloud2& cloud,
                         const std::map<std::string, seerep::PointField>& fields);
 
+  void writePointFieldAttributes(HighFive::Group& cloud_group,
+                                 const google::protobuf::RepeatedPtrField<seerep::PointField> repeatedPointField);
+
   void readPoints(const std::string& uuid, seerep::PointCloud2& cloud);
 
   void readColorsRGB(const std::string& uuid, seerep::PointCloud2& cloud);
@@ -108,6 +106,8 @@ private:
 
   void readOtherFields(const std::string& uuid, seerep::PointCloud2& cloud,
                        const std::map<std::string, seerep::PointField>& fields);
+
+  google::protobuf::RepeatedPtrField<seerep::PointField> readPointFieldAttributes(HighFive::Group& cloud_group);
 
   //   // image / pointcloud attribute keys
   //   inline static const std::string HEIGHT = "height";

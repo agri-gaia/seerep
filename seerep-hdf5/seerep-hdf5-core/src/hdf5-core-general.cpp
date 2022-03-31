@@ -62,6 +62,8 @@ Hdf5CoreGeneral::Hdf5CoreGeneral(std::shared_ptr<HighFive::File>& file, std::sha
 
 std::vector<std::string> Hdf5CoreGeneral::getGroupDatasets(const std::string& id)
 {
+  const std::scoped_lock lock(*m_write_mtx);
+
   std::vector<std::string> rootObjects = m_file->listObjectNames();
 
   if (id.empty())
@@ -375,6 +377,8 @@ std::vector<std::string> Hdf5CoreGeneral::getGroupDatasets(const std::string& id
 
 void Hdf5CoreGeneral::writeProjectname(const std::string& projectname)
 {
+  const std::scoped_lock lock(*m_write_mtx);
+
   if (!m_file->hasAttribute(PROJECTNAME))
   {
     m_file->createAttribute<std::string>(PROJECTNAME, projectname);
@@ -388,6 +392,8 @@ void Hdf5CoreGeneral::writeProjectname(const std::string& projectname)
 
 std::string Hdf5CoreGeneral::readProjectname()
 {
+  const std::scoped_lock lock(*m_write_mtx);
+
   std::string projectname;
   if (m_file->hasAttribute(PROJECTNAME))
   {
@@ -398,6 +404,8 @@ std::string Hdf5CoreGeneral::readProjectname()
 
 void Hdf5CoreGeneral::writeProjectFrameId(const std::string& frameId)
 {
+  const std::scoped_lock lock(*m_write_mtx);
+
   if (!m_file->hasAttribute(PROJECTFRAMEID))
   {
     m_file->createAttribute<std::string>(PROJECTFRAMEID, frameId);
@@ -411,6 +419,8 @@ void Hdf5CoreGeneral::writeProjectFrameId(const std::string& frameId)
 
 std::string Hdf5CoreGeneral::readProjectFrameId()
 {
+  const std::scoped_lock lock(*m_write_mtx);
+
   std::string frameId;
   if (m_file->hasAttribute(PROJECTFRAMEID))
   {
