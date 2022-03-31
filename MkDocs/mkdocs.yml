@@ -1,7 +1,11 @@
 site_name: SEEREP Documentation
 nav:
   - Home: index.md
-  - Getting Started: getting-started.md
+  - Getting Started:
+    - 'Installation': 'installation.md'
+    - 'Tutorials': 'tutorials.md'
   - Package Overview: packages.md
 theme:
   name: material
+markdown_extensions:
+  - admonition
