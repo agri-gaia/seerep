@@ -20,15 +20,17 @@ flatbuffers::Offset<seerep::fb::Header> toFlat(const std_msgs::Header& header, s
   timestampbuilder.add_nanos(header.stamp.nsec);
   auto stamp = timestampbuilder.Finish();
 
+  auto frameIdOffset = builder.CreateString(header.frame_id);
+  auto projectUuidOffset = builder.CreateString(projectuuid);
+  auto msgUuidOffset = builder.CreateString(msguuid);
+
   seerep::fb::HeaderBuilder headerbuilder(builder);
   headerbuilder.add_seq(header.seq);
-  headerbuilder.add_frame_id(builder.CreateString(header.frame_id));
+  headerbuilder.add_frame_id(frameIdOffset);
   headerbuilder.add_stamp(stamp);
-  headerbuilder.add_uuid_project(builder.CreateString(projectuuid));
-  if (!msguuid.empty())
-  {
-    headerbuilder.add_uuid_msgs(builder.CreateString(msguuid));
-  }
+  headerbuilder.add_uuid_project(projectUuidOffset);
+  headerbuilder.add_uuid_msgs(msgUuidOffset);
+
   return headerbuilder.Finish();
 }
 
@@ -55,9 +57,10 @@ flatbuffers::Offset<seerep::fb::PointField> toFlat(const sensor_msgs::PointField
                                                    flatbuffers::grpc::MessageBuilder& builder)
 
 {
-  seerep::fb::PointFieldBuilder pointFieldBuilder(builder);
+  auto nameOffset = builder.CreateString(point_field.name);
 
-  pointFieldBuilder.add_name(builder.CreateString(point_field.name));
+  seerep::fb::PointFieldBuilder pointFieldBuilder(builder);
+  pointFieldBuilder.add_name(nameOffset);
   pointFieldBuilder.add_offset(point_field.offset);
   pointFieldBuilder.add_datatype(seerep::fb::PointField_::Datatype(point_field.datatype));
   pointFieldBuilder.add_count(point_field.count);
@@ -97,6 +100,7 @@ flatbuffers::Offset<seerep::fb::PointCloud2> toFlat(const sensor_msgs::PointClou
     fieldsvector.push_back(toFlat(field, builder));
   }
   auto fieldsOffset = builder.CreateVector(fieldsvector);
+  auto dataOffset = builder.CreateVector(cloud.data);
 
   seerep::fb::PointCloud2Builder cloudbuilder(builder);
   cloudbuilder.add_header(header);
@@ -107,7 +111,7 @@ flatbuffers::Offset<seerep::fb::PointCloud2> toFlat(const sensor_msgs::PointClou
   cloudbuilder.add_row_step(cloud.row_step);
   cloudbuilder.add_is_dense(cloud.is_dense);
   cloudbuilder.add_fields(fieldsOffset);
-  cloudbuilder.add_data(builder.CreateVector(cloud.data));
+  cloudbuilder.add_data(dataOffset);
 
   return cloudbuilder.Finish();
 }
@@ -144,15 +148,18 @@ flatbuffers::Offset<seerep::fb::Image> toFlat(const sensor_msgs::Image& image, s
 {
   auto header = toFlat(image.header, projectuuid, builder, msguuid);
 
-  seerep::fb::ImageBuilder imagebuilder(builder);
+  auto encodingOffset = builder.CreateString(image.encoding);
+  auto dataVector = builder.CreateVector(image.data);
 
+  seerep::fb::ImageBuilder imagebuilder(builder);
   imagebuilder.add_header(header);
   imagebuilder.add_height(image.height);
   imagebuilder.add_width(image.width);
-  imagebuilder.add_encoding(builder.CreateString(image.encoding));
+  imagebuilder.add_encoding(encodingOffset);
   imagebuilder.add_is_bigendian(image.is_bigendian);
   imagebuilder.add_step(image.step);
-  imagebuilder.add_data(builder.CreateVector(image.data));
+  imagebuilder.add_row_step(image.step * image.width);
+  imagebuilder.add_data(dataVector);
 
   return imagebuilder.Finish();
 }
@@ -394,10 +401,11 @@ flatbuffers::Offset<seerep::fb::TransformStamped> toFlat(const geometry_msgs::Tr
 {
   auto headerOffset = toFlat(transform.header, projectuuid, builder);
   auto transformOffset = toFlat(transform.transform, builder);
+  auto frameIdOffset = builder.CreateString(transform.child_frame_id);
 
   seerep::fb::TransformStampedBuilder transformbuilder(builder);
   transformbuilder.add_header(headerOffset);
-  transformbuilder.add_child_frame_id(builder.CreateString(transform.child_frame_id));
+  transformbuilder.add_child_frame_id(frameIdOffset);
   transformbuilder.add_transform(transformOffset);
   return transformbuilder.Finish();
 }
@@ -430,9 +438,10 @@ flatbuffers::Offset<seerep::fb::BoundingBoxes2DLabeledStamped> toFlat(const visi
     bblabeled.push_back(toFlat(detection, projectuuid, builder, msguuid));
   }
 
+  auto labelsOffset = builder.CreateVector(bblabeled);
   seerep::fb::BoundingBoxes2DLabeledStampedBuilder bbbuilder(builder);
   bbbuilder.add_header(header);
-  bbbuilder.add_labels_bb(builder.CreateVector(bblabeled));
+  bbbuilder.add_labels_bb(labelsOffset);
   return bbbuilder.Finish();
 }
 
@@ -453,23 +462,25 @@ flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled> toFlat(const vision_msgs::
                                                              flatbuffers::grpc::MessageBuilder& builder,
                                                              std::string msguuid)
 {
-  seerep::fb::Point2DBuilder pointBuilder(builder);
-  pointBuilder.add_x(detection2d.bbox.center.x - detection2d.bbox.size_x / 2.0);
-  pointBuilder.add_y(detection2d.bbox.center.y - detection2d.bbox.size_y / 2.0);
-  auto pointMin = pointBuilder.Finish();
+  seerep::fb::Point2DBuilder pointBuilderMin(builder);
+  pointBuilderMin.add_x(detection2d.bbox.center.x - detection2d.bbox.size_x / 2.0);
+  pointBuilderMin.add_y(detection2d.bbox.center.y - detection2d.bbox.size_y / 2.0);
+  auto pointMin = pointBuilderMin.Finish();
 
-  pointBuilder.add_x(detection2d.bbox.center.x + detection2d.bbox.size_x / 2.0);
-  pointBuilder.add_y(detection2d.bbox.center.y + detection2d.bbox.size_y / 2.0);
-  auto pointMax = pointBuilder.Finish();
+  seerep::fb::Point2DBuilder pointBuilderMax(builder);
+  pointBuilderMax.add_x(detection2d.bbox.center.x + detection2d.bbox.size_x / 2.0);
+  pointBuilderMax.add_y(detection2d.bbox.center.y + detection2d.bbox.size_y / 2.0);
+  auto pointMax = pointBuilderMax.Finish();
 
   seerep::fb::Boundingbox2DBuilder bbbuilder(builder);
   bbbuilder.add_point_min(pointMin);
   bbbuilder.add_point_max(pointMax);
   auto bb = bbbuilder.Finish();
 
+  auto labelOffset = builder.CreateString(std::to_string(detection2d.results.at(0).id));
   seerep::fb::BoundingBox2DLabeledBuilder bblabeledbuilder(builder);
   bblabeledbuilder.add_bounding_box(bb);
-  bblabeledbuilder.add_label(builder.CreateString(std::to_string(detection2d.results.at(0).id)));
+  bblabeledbuilder.add_label(labelOffset);
   return bblabeledbuilder.Finish();
 }
 
