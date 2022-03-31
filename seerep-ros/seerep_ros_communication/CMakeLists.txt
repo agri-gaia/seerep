@@ -22,6 +22,9 @@ find_package(seerep_ros_conversions_fb REQUIRED)
 find_package(Protobuf REQUIRED)
 find_package(gRPC CONFIG REQUIRED)
 
+# Geographiclib installs FindGeographicLib.cmake to this non-standard location
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "/usr/share/cmake/geographiclib/")
+find_package(GeographicLib REQUIRED)
 
 message("HighFive Include Dirs: ${catkin_INCLUDE_DIRS} \n Libraries: ${catkin_LIBRARIES}")
 
@@ -30,7 +33,8 @@ catkin_package(
   INCLUDE_DIRS include
   # LIBRARIES
 	CATKIN_DEPENDS std_msgs geometry_msgs sensor_msgs roscpp seerep_ros_conversions_pb seerep_ros_conversions_fb roscpp topic_tools tf
-  # DEPENDS
+  DEPENDS
+    GeographicLib
 )
 
 include_directories(
@@ -108,6 +112,7 @@ target_link_libraries(${PROJECT_NAME}_clientImagesWithDetection
 	${seerep_ros_conversions_fb_LIBRARIES}
 	${catkin_LIBRARIES}
 	gRPC::grpc++_reflection
+	${GeographicLib_LIBRARIES}
 )
 
 install(TARGETS ${PROJECT_NAME}_server ${PROJECT_NAME}_client ${PROJECT_NAME}_hdf5dump

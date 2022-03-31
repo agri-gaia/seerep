@@ -25,7 +25,8 @@ apt-get -qq update && apt-get -qq install -y -o=Dpkg::Use-Pty=0 \
         python3-osrf-pycommon \
         libpcl-dev \
         ros-noetic-pcl-conversions \
-        ros-noetic-tf
+        ros-noetic-tf \
+        libgeographic-dev
 
 echo '# install pre-commit hooks to /root/.cache/pre-commit/'
 apt-get update -qq && apt-get install -y -qq --no-install-recommends \
