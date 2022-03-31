@@ -23,6 +23,13 @@
             "console": "integratedTerminal"
         },
         {
+            "name": "ROS: Launch client imageWithDetection",
+            "type": "ros",
+            "request": "launch",
+            "target": "${workspaceFolder}/src/seerep-ros/seerep_ros_communication/launch/clientImagesWithDetection.launch",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",
