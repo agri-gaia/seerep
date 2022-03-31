@@ -11,6 +11,8 @@ Hdf5PbPointCloud::Hdf5PbPointCloud(std::shared_ptr<HighFive::File>& file, std::s
 
 std::map<std::string, HighFive::Group> Hdf5PbPointCloud::getPointClouds()
 {
+  const std::scoped_lock lock(*m_write_mtx);
+
   std::map<std::string, HighFive::Group> map;
   if (m_file->exist(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD))
   {
@@ -26,6 +28,8 @@ std::map<std::string, HighFive::Group> Hdf5PbPointCloud::getPointClouds()
 std::shared_ptr<HighFive::Group> Hdf5PbPointCloud::writePointCloud2(const std::string& uuid,
                                                                     const seerep::PointCloud2& pointcloud2)
 {
+  const std::scoped_lock lock(*m_write_mtx);
+
   std::string cloud_group_id = seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + uuid;
 
   std::shared_ptr<HighFive::Group> data_group_ptr;
@@ -262,6 +266,8 @@ Hdf5PbPointCloud::CloudInfo Hdf5PbPointCloud::getCloudInfo(const seerep::PointCl
 // TODO read partial point cloud, e.g. only xyz without color, etc.
 std::optional<seerep::PointCloud2> Hdf5PbPointCloud::readPointCloud2(const std::string& uuid)
 {
+  const std::scoped_lock lock(*m_write_mtx);
+
   if (!m_file->exist(uuid))
   {
     return std::nullopt;
@@ -494,6 +500,8 @@ Hdf5PbPointCloud::readPointFieldAttributes(HighFive::Group& cloud_group)
 
 std::vector<float> Hdf5PbPointCloud::loadBoundingBox(const std::string& uuid)
 {
+  const std::scoped_lock lock(*m_write_mtx);
+
   std::string hdf5DatasetPath = seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + uuid;
   std::shared_ptr<HighFive::Group> group_ptr = std::make_shared<HighFive::Group>(m_file->getGroup(hdf5DatasetPath));
   std::vector<float> bb;

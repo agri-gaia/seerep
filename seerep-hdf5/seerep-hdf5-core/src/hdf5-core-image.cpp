@@ -16,6 +16,8 @@ std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CoreImage::readImage(const
 
 std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CoreImage::readImage(const std::string& uuid)
 {
+  const std::scoped_lock lock(*m_write_mtx);
+
   std::string hdf5DatasetPath = HDF5_GROUP_IMAGE + "/" + uuid;
   std::string hdf5DatasetRawDataPath = hdf5DatasetPath + "/" + seerep_hdf5_core::Hdf5CoreImage::RAWDATA;
 

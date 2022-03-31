@@ -19,7 +19,7 @@ namespace seerep_hdf5_pb
 {
 class Hdf5PbGeneral
 {
-public:
+protected:
   Hdf5PbGeneral(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
 
   std::optional<std::string> readFrameId(const std::string& datatypeGroup, const std::string& uuid);
