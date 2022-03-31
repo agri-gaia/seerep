@@ -15,7 +15,7 @@
 repos:
   # Standard hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.0.1
+    rev: v4.1.0
     hooks:
       - id: check-added-large-files
       - id: check-case-conflict
@@ -46,7 +46,7 @@ repos:
         exclude: *excludes
 
   - repo: https://github.com/psf/black
-    rev: 21.7b0
+    rev: 22.3.0
     hooks:
       - id: black
 
@@ -71,7 +71,7 @@ repos:
     hooks:
     - id: seed-isort-config
   - repo: https://github.com/pre-commit/mirrors-isort
-    rev: v5.4.2
+    rev: v5.10.1
     hooks:
     - id: isort
 
