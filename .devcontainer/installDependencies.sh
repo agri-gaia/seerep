@@ -54,7 +54,7 @@ apt-get -qq update && apt-get -qq install -y -o=Dpkg::Use-Pty=0 \
         libboost-all-dev \
         libeigen3-dev
 HDF5_REL="https://github.com/BlueBrain/HighFive"
-git clone --depth 1 $HDF5_REL.git
+git clone --recurse-submodules --depth 1 $HDF5_REL.git
 mkdir HighFive/build
 cd HighFive/build || exit 1
 cmake .. -DHIGHFIVE_EXAMPLES=OFF -DHIGHFIVE_PARALLEL_HDF5=ON -DHIGHFIVE_USE_EIGEN=ON
