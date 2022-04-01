@@ -21,14 +21,14 @@ TransferImagesWithDetection::~TransferImagesWithDetection()
   writerTf_->WritesDone();
   grpc::Status statusTf = writerTf_->Finish();
 
-  std::cout << "tf transfer finish status: " << statusTf.ok() << std::endl;
-  std::cout << "tf transfer server response: " << tfResponse_.GetRoot()->message() << std::endl;
+  ROS_INFO_STREAM("tf transfer finish status: " << statusTf.ok());
+  ROS_INFO_STREAM("tf transfer server response: " << tfResponse_.GetRoot()->message());
 
   writerImage_->WritesDone();
   grpc::Status statusImage = writerImage_->Finish();
 
-  std::cout << "image transfer finish status: " << statusImage.ok() << std::endl;
-  std::cout << "image transfer server response: " << imageResponse_.GetRoot()->message() << std::endl;
+  ROS_INFO_STREAM("image transfer finish status: " << statusImage.ok());
+  ROS_INFO_STREAM("image transfer server response: " << imageResponse_.GetRoot()->message());
 }
 
 void seerep_grpc_ros::TransferImagesWithDetection::send(const sensor_msgs::Image::ConstPtr& msg)
@@ -36,21 +36,20 @@ void seerep_grpc_ros::TransferImagesWithDetection::send(const sensor_msgs::Image
   boost::uuids::uuid msguuid = boost::uuids::random_generator()();
   std::string uuidstring = boost::lexical_cast<std::string>(msguuid);
 
-  std::cout << "transfering image to server " << uuidstring << std::endl;
+  ROS_INFO_STREAM(uuidstring << " transfering image to server"
+                             << " time: " << msg->header.stamp.sec << " / " << msg->header.stamp.nsec);
+  uint64_t time = (uint64_t)msg->header.stamp.sec << 32 | msg->header.stamp.nsec;
 
-  if (writerImage_->Write(seerep_ros_conversions_fb::toFlat(*msg, projectuuid_, uuidstring)))
-  {
-    uint64_t time = (uint64_t)msg->header.stamp.sec << 32 | msg->header.stamp.nsec;
-
-    {  // scope of lock
-      const std::scoped_lock lock(timeUuidMapMutex_);
-      timeUuidMap_.emplace(time, uuidstring);
-    }
+  {  // scope of lock
+    const std::scoped_lock lock(timeUuidMapMutex_);
+    timeUuidMap_.emplace(time, uuidstring);
   }
-  else
+
+  if (!writerImage_->Write(seerep_ros_conversions_fb::toFlat(*msg, projectuuid_, uuidstring)))
   {
     ROS_ERROR_STREAM("error while transfering image");
   }
+  ROS_WARN_STREAM(uuidstring << " transfered image");
 }
 
 void seerep_grpc_ros::TransferImagesWithDetection::send(const vision_msgs::Detection2DArray::ConstPtr& msg)
@@ -72,13 +71,12 @@ void seerep_grpc_ros::TransferImagesWithDetection::send(const vision_msgs::Detec
   }
   //   ros::Duration(1).sleep();
   // }
-
-  std::cout << "transfering detections to server: " << uuidstring << std::endl;
+  ROS_INFO_STREAM("transfering detections to server: " << uuidstring << " time: " << msg->header.stamp.sec << " / "
+                                                       << msg->header.stamp.nsec);
 
   if (uuidstring.empty())
   {
     ROS_ERROR_STREAM("uuid of detection is empty");
-    std::cout << "time: " << msg->header.stamp.sec << " / " << msg->header.stamp.nsec << std::endl;
   }
   else
   {
@@ -92,7 +90,7 @@ void seerep_grpc_ros::TransferImagesWithDetection::send(const vision_msgs::Detec
 
 void seerep_grpc_ros::TransferImagesWithDetection::send(const sensor_msgs::NavSatFix::ConstPtr& msg)
 {
-  std::cout << "transfering tf to server" << msg->header.stamp.sec << std::endl;
+  ROS_INFO_STREAM("transfering tf to server" << msg->header.stamp.sec);
   if (!localCartesian_)
   {
     localCartesian_ =
@@ -164,12 +162,13 @@ int main(int argc, char** argv)
 
   std::string server_address;
   private_nh.param<std::string>("server_address", server_address, "localhost:9090");
+  ROS_INFO_STREAM("seerep server address: " << server_address);
 
   seerep_grpc_ros::TransferImagesWithDetection transferImagesWithDetection(
       grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()));
 
   // ros::spin();
-  auto spinner = ros::MultiThreadedSpinner(4);
+  auto spinner = ros::MultiThreadedSpinner();
   spinner.spin();
 
   return EXIT_SUCCESS;
