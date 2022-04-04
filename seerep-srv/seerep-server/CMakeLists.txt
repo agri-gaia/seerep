@@ -65,9 +65,6 @@ add_executable(${PROJECT_NAME}_server
 	src/fb-image-service.cpp
 )
 
-add_executable(${PROJECT_NAME}_client
-	src/client.cpp
-)
 
 target_link_libraries(${PROJECT_NAME}_server
 	${SeerepHdf5Pb_LIBRARIES}
@@ -82,14 +79,8 @@ target_link_libraries(${PROJECT_NAME}_server
 	Eigen3::Eigen
 )
 
-target_link_libraries(${PROJECT_NAME}_client
-	${SeerepHdf5Pb_LIBRARIES}
-	${SeerepHdf5Core_LIBRARIES}
-	${SeerepCom_LIBRARIES}
-	gRPC::grpc++_reflection
-)
 
-install(TARGETS ${PROJECT_NAME}_server ${PROJECT_NAME}_client #${PROJECT_NAME}_server_grpc
+install(TARGETS ${PROJECT_NAME}_server #${PROJECT_NAME}_server_grpc
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
