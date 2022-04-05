@@ -7,7 +7,7 @@ ENV PB_VER="3.15.6"
 
 RUN echo '#Install other required tools'
 
-RUN apt-get -qq update && apt-get -qq install -y -o=Dpkg::Use-Pty=0 \
+RUN apt-get -qq update && apt-get -qq install --no-install-recommends -y -o=Dpkg::Use-Pty=0 \
         bash-completion \
         autoconf \
         automake \
@@ -29,15 +29,17 @@ RUN apt-get -qq update && apt-get -qq install -y -o=Dpkg::Use-Pty=0 \
         ros-noetic-tf \
         libfile-pushd-perl \
         ros-noetic-vision-msgs \
-        libgeographic-dev
+        libgeographic-dev \
+        && rm -rf /var/lib/apt/lists/*
 
 RUN echo '# Install pre-commit hooks to /root/.cache/pre-commit/'
 RUN apt-get update -qq && apt-get install -y -qq --no-install-recommends \
-    git \
-    python3-pip \
-    ruby shellcheck \
-    clang-format-10 \
-    python3-catkin-lint
+        git \
+        python3-pip \
+        ruby shellcheck \
+        clang-format-10 \
+        python3-catkin-lint \
+        && rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install --upgrade pip
 RUN pip3 install pre-commit
@@ -48,18 +50,19 @@ RUN echo '####################################################'
 RUN curl -s https://apt.kitware.com/kitware-archive.sh -o kitware-archive.sh
 RUN chmod +x kitware-archive.sh
 RUN /kitware-archive.sh
-RUN apt-get update -q && apt-get install -qy cmake
+RUN apt-get update -q && apt-get install --no-install-recommends -qy cmake \
+        && rm -rf /var/lib/apt/lists/*
 
 
 RUN echo '####################################################'
 RUN echo '#Install HighFive'
 RUN echo '####################################################'
-RUN apt-get -qq update && apt-get -qq install -y -o=Dpkg::Use-Pty=0 \
+RUN apt-get -qq update && apt-get -qq install --no-install-recommends -y -o=Dpkg::Use-Pty=0 \
         libhdf5-dev \
         libhdf5-mpi-dev \
         libboost-all-dev \
-        libeigen3-dev
-
+        libeigen3-dev \
+        && rm -rf /var/lib/apt/lists/*
 
 RUN git clone --depth 1 $HDF5_REL.git
 RUN mkdir HighFive/build
@@ -122,9 +125,6 @@ RUN pip3 install grpcio-tools
 RUN echo '#Updating python proto stuff'
 RUN pip3 install --upgrade protobuf
 
-# remove apt lists so that they are not saved in the image layers
-RUN rm -rf /var/lib/apt/lists/*
-
 # add non root user
 RUN useradd -u 1001 --create-home --shell /bin/bash docker && echo "docker:docker" | chpasswd && adduser docker sudo
 
@@ -137,7 +137,7 @@ COPY seerep-msgs src/seerep/seerep-msgs
 COPY seerep-ros src/seerep/seerep-ros
 COPY seerep-srv src/seerep/seerep-srv
 COPY util src/seerep/util
-COPY start_server.sh start_server.sh
+COPY docker/start_server.sh start_server.sh
 
 RUN chown -R docker:docker /home/docker/seerep_ws
 
@@ -149,10 +149,3 @@ RUN /bin/bash -c ". /home/docker/seerep_ws/devel/setup.bash"
 EXPOSE 9090
 
 ENTRYPOINT ["/bin/bash", "start_server.sh"]
-
-
-
-
-
-
-
