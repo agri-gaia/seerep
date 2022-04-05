@@ -86,7 +86,7 @@ protected:
       const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>>* boundingbox2DLabeled);
 
   void readBoundingBox2DLabeled(const std::string& datatypeGroup, const std::string& uuid,
-                                std::vector<std::string> labels, std::vector<std::vector<double>> boundingBoxes);
+                                std::vector<std::string>& labels, std::vector<std::vector<double>>& boundingBoxes);
 
   //################
   // Labels General

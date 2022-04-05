@@ -149,13 +149,38 @@ void Hdf5FbImage::readImage(const std::string& id, const std::string& projectuui
   auto readDataOffset = builder.CreateVector(data);
   auto headerOffset = readHeaderAttributes(*data_set_ptr, projectuuid, id, builder);
 
-  std::vector<std::string> labels;
-  readLabelsGeneral(HDF5_GROUP_IMAGE, id, labels);
+  std::vector<std::string> boundingBoxesLabels;
+  std::vector<std::vector<double>> boundingBoxes;
+  readBoundingBox2DLabeled(HDF5_GROUP_IMAGE, id, boundingBoxesLabels, boundingBoxes);
 
-  auto vecofstrings = builder.CreateVector<flatbuffers::Offset<flatbuffers::String>>(
-      labels.size(),
-      [labels](size_t i, flatbuffers::FlatBufferBuilder* b) -> flatbuffers::Offset<flatbuffers::String> {
-        return b->CreateSharedString(labels.at(i));
+  std::vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>> bblabeledVector;
+  for (int i = 0; i < boundingBoxes.size(); i++)
+  {
+    auto labelOffset = builder.CreateString(boundingBoxesLabels.at(i));
+
+    auto pointMin = seerep::fb::CreatePoint2D(builder, boundingBoxes.at(i).at(0), boundingBoxes.at(i).at(1));
+    auto pointMax = seerep::fb::CreatePoint2D(builder, boundingBoxes.at(i).at(2), boundingBoxes.at(i).at(3));
+
+    seerep::fb::Boundingbox2DBuilder bbBuilder(builder);
+    bbBuilder.add_point_min(pointMin);
+    bbBuilder.add_point_max(pointMax);
+    auto bb = bbBuilder.Finish();
+
+    seerep::fb::BoundingBox2DLabeledBuilder bblabeledBuilder(builder);
+    bblabeledBuilder.add_bounding_box(bb);
+    bblabeledBuilder.add_label(labelOffset);
+
+    bblabeledVector.push_back(bblabeledBuilder.Finish());
+  }
+  auto bblabeledVectorOffset = builder.CreateVector(bblabeledVector);
+
+  std::vector<std::string> labelsGeneral;
+  readLabelsGeneral(HDF5_GROUP_IMAGE, id, labelsGeneral);
+
+  auto labelsGeneralOffset = builder.CreateVector<flatbuffers::Offset<flatbuffers::String>>(
+      labelsGeneral.size(),
+      [labelsGeneral](size_t i, flatbuffers::FlatBufferBuilder* b) -> flatbuffers::Offset<flatbuffers::String> {
+        return b->CreateSharedString(labelsGeneral.at(i));
       },
       &builder);
 
@@ -170,7 +195,8 @@ void Hdf5FbImage::readImage(const std::string& id, const std::string& projectuui
   imageBuilder.add_data(readDataOffset);
   imageBuilder.add_header(headerOffset);
 
-  imageBuilder.add_labels_general(vecofstrings);
+  imageBuilder.add_labels_bb(bblabeledVectorOffset);
+  imageBuilder.add_labels_general(labelsGeneralOffset);
 
   auto imageOffset = imageBuilder.Finish();
   builder.Finish(imageOffset);

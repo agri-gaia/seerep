@@ -101,7 +101,7 @@ void seerep_grpc_ros::TransferImagesWithDetection::send(const sensor_msgs::NavSa
   geometry_msgs::TransformStamped transform;
   transform.header = msg->header;
   transform.header.frame_id = "map";
-  transform.child_frame_id = "camera_color_optical_frame ";
+  transform.child_frame_id = "camera_color_optical_frame";
   transform.transform.translation.x = x;
   transform.transform.translation.y = y;
   transform.transform.translation.z = z;
