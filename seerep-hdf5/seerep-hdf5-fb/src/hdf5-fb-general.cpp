@@ -365,8 +365,8 @@ void Hdf5FbGeneral::writeBoundingBox2DLabeled(
 }
 
 void Hdf5FbGeneral::readBoundingBox2DLabeled(const std::string& datatypeGroup, const std::string& uuid,
-                                             std::vector<std::string> labels,
-                                             std::vector<std::vector<double>> boundingBoxes)
+                                             std::vector<std::string>& labels,
+                                             std::vector<std::vector<double>>& boundingBoxes)
 {
   std::string id = datatypeGroup + "/" + uuid;
   if (!m_file->exist(id + "/" + LABELBB))

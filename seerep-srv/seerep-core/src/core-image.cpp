@@ -21,13 +21,12 @@ void CoreImage::recreateDatasets()
 
     try
     {
-      boost::uuids::string_generator gen;
-      boost::uuids::uuid uuid = gen(name);
-
       std::optional<seerep_core_msgs::DatasetIndexable> img = m_hdf5_io->readImage(name);
 
       if (img)
+      {
         addDatasetToIndices(img.value());
+      }
     }
     catch (const std::runtime_error& e)
     {

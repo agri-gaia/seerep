@@ -40,16 +40,16 @@ response = ProjectInfos.ProjectInfos.GetRootAs(responseBuf)
 projectuuid = ""
 for i in range(response.ProjectsLength()):
     print(response.Projects(i).Name().decode("utf-8") + " " + response.Projects(i).Uuid().decode("utf-8"))
-    if response.Projects(i).Name().decode("utf-8") == "testproject":
+    if response.Projects(i).Name().decode("utf-8") == "agricultural_demonstator":
         projectuuid = response.Projects(i).Uuid().decode("utf-8")
 
 if projectuuid == "":
     sys.exit()
 
 Point.Start(builder)
-Point.AddX(builder, 0.0)
-Point.AddY(builder, 0.0)
-Point.AddZ(builder, 0.0)
+Point.AddX(builder, -100.0)
+Point.AddY(builder, -100.0)
+Point.AddZ(builder, -100.0)
 pointMin = Point.End(builder)
 
 Point.Start(builder)
@@ -70,7 +70,7 @@ Boundingbox.AddHeader(builder, header)
 boundingbox = Boundingbox.End(builder)
 
 Timestamp.Start(builder)
-Timestamp.AddSeconds(builder, 1638549273)
+Timestamp.AddSeconds(builder, 1610549273)
 Timestamp.AddNanos(builder, 0)
 timeMin = Timestamp.End(builder)
 
@@ -90,7 +90,7 @@ builder.PrependUOffsetTRelative(projectuuidString)
 projectuuidMsg = builder.EndVector()
 
 
-label = builder.CreateString("testlabel0")
+label = builder.CreateString("1")
 Query.StartLabelVector(builder, 1)
 builder.PrependUOffsetTRelative(label)
 labelMsg = builder.EndVector()
@@ -108,3 +108,14 @@ buf = builder.Output()
 for responseBuf in stub.GetImage(bytes(buf)):
     response = Image.Image.GetRootAs(responseBuf)
     print("uuidmsg: " + response.Header().UuidMsgs().decode("utf-8"))
+    print("first label: " + response.LabelsBb(0).Label().decode("utf-8"))
+    print(
+        "first BoundingBox (Xmin,Ymin,Xmax,Ymax): "
+        + str(response.LabelsBb(0).BoundingBox().PointMin().X())
+        + " "
+        + str(response.LabelsBb(0).BoundingBox().PointMin().Y())
+        + " "
+        + str(response.LabelsBb(0).BoundingBox().PointMax().X())
+        + " "
+        + str(response.LabelsBb(0).BoundingBox().PointMax().Y())
+    )

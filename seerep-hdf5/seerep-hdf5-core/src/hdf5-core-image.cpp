@@ -36,6 +36,10 @@ std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CoreImage::readImage(const
   data.header.timestamp.nanos =
       getAttribute<int64_t>(hdf5DatasetRawDataPath, data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::HEADER_STAMP_NANOS);
 
+  boost::uuids::string_generator gen;
+  boost::uuids::uuid uuid_generated = gen(uuid);
+  data.header.uuidData = uuid_generated;
+
   // set bounding box for images to 0. assume no spatial extent
   data.boundingbox.min_corner().set<0>(0);
   data.boundingbox.min_corner().set<1>(0);
