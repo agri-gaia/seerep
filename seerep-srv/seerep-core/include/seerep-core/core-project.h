@@ -39,8 +39,8 @@ public:
   seerep_core_msgs::QueryResultProject getPointCloud(const seerep_core_msgs::Query& query);
   seerep_core_msgs::QueryResultProject getImage(const seerep_core_msgs::Query& query);
 
-  void addPointCloud(const seerep_core_msgs::DatasetIndexable& pointcloud);
-  void addImage(const seerep_core_msgs::DatasetIndexable& image);
+  void addPointCloud(const seerep_core_msgs::DatasetIndexable& dataset);
+  void addImage(const seerep_core_msgs::DatasetIndexable& dataset);
   void addImageLabels(std::vector<std::string>& labels, const boost::uuids::uuid& msgUuid);
 
   // tf

@@ -102,7 +102,7 @@ boost::uuids::uuid CorePbPointCloud::addData(const seerep::PointCloud2& pc)
     dataForIndices.labels.push_back(label.label());
   }
 
-  m_seerepCore->addImage(dataForIndices);
+  m_seerepCore->addPointCloud(dataForIndices);
 
   return uuid;
 }

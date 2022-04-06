@@ -30,12 +30,12 @@ public:
   ~CoreImage();
   std::vector<boost::uuids::uuid> getData(const seerep_core_msgs::Query& bb);
 
-  void addDataset(const seerep_core_msgs::DatasetIndexable& image);
+  void addDataset(const seerep_core_msgs::DatasetIndexable& dataset);
   void addImageLabels(std::vector<std::string>& labels, const boost::uuids::uuid& msgUuid);
 
 private:
   void recreateDatasets();
-  void addDatasetToIndices(const seerep_core_msgs::DatasetIndexable& img);
+  void addDatasetToIndices(const seerep_core_msgs::DatasetIndexable& dataset);
 
   void tryAddingDataWithMissingTF();
   std::vector<seerep_core_msgs::AabbIdPair> querySpatial(const seerep_core_msgs::Query& query);

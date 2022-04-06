@@ -140,36 +140,36 @@ std::vector<seerep_core_msgs::ProjectInfo> Core::getProjects()
   return projectInfos;
 }
 
-void Core::addPointCloud(const seerep_core_msgs::DatasetIndexable& pointcloud2)
+void Core::addPointCloud(const seerep_core_msgs::DatasetIndexable& dataset)
 {
   // find the project based on its uuid
-  auto project = m_projects.find(pointcloud2.header.uuidProject);
+  auto project = m_projects.find(dataset.header.uuidProject);
   // if project was found add pointcloud2
   if (project != m_projects.end())
   {
-    return project->second->addPointCloud(pointcloud2);
+    return project->second->addPointCloud(dataset);
   }
   // if not found throw error
   else
   {
-    throw std::runtime_error("project " + boost::lexical_cast<std::string>(pointcloud2.header.uuidProject) +
+    throw std::runtime_error("project " + boost::lexical_cast<std::string>(dataset.header.uuidProject) +
                              "does not exist!");
   };
 }
 
-void Core::addImage(const seerep_core_msgs::DatasetIndexable& image)
+void Core::addImage(const seerep_core_msgs::DatasetIndexable& dataset)
 {
   // find the project based on its uuid
-  auto project = m_projects.find(image.header.uuidProject);
+  auto project = m_projects.find(dataset.header.uuidProject);
   // if project was found add image
   if (project != m_projects.end())
   {
-    return project->second->addImage(image);
+    return project->second->addImage(dataset);
   }
   // if not found throw error
   else
   {
-    throw std::runtime_error("project " + boost::lexical_cast<std::string>(image.header.uuidProject) +
+    throw std::runtime_error("project " + boost::lexical_cast<std::string>(dataset.header.uuidProject) +
                              "does not exist!");
   };
 }

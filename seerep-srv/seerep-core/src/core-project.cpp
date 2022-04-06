@@ -47,13 +47,13 @@ seerep_core_msgs::QueryResultProject CoreProject::getImage(const seerep_core_msg
   return result;
 }
 
-void CoreProject::addPointCloud(const seerep_core_msgs::DatasetIndexable& pointcloud)
+void CoreProject::addPointCloud(const seerep_core_msgs::DatasetIndexable& dataset)
 {
-  m_pointcloudOverview->addDataset(pointcloud);
+  m_pointcloudOverview->addDataset(dataset);
 }
-void CoreProject::addImage(const seerep_core_msgs::DatasetIndexable& image)
+void CoreProject::addImage(const seerep_core_msgs::DatasetIndexable& dataset)
 {
-  m_imageOverview->addDataset(image);
+  m_imageOverview->addDataset(dataset);
 }
 
 void CoreProject::addImageLabels(std::vector<std::string>& labels, const boost::uuids::uuid& msgUuid)

@@ -30,11 +30,11 @@ public:
   ~CorePointCloud();
   std::vector<boost::uuids::uuid> getData(const seerep_core_msgs::Query& bb);
 
-  void addDataset(const seerep_core_msgs::DatasetIndexable& pc);
+  void addDataset(const seerep_core_msgs::DatasetIndexable& dataset);
 
 private:
   void recreateDatasets();
-  void addDatasetToIndices(const seerep_core_msgs::DatasetIndexable& img);
+  void addDatasetToIndices(const seerep_core_msgs::DatasetIndexable& dataset);
 
   void tryAddingDataWithMissingTF();
   std::vector<seerep_core_msgs::AabbIdPair> querySpatial(const seerep_core_msgs::Query& query);

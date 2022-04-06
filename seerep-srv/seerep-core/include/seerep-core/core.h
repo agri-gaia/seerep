@@ -31,10 +31,10 @@ public:
   Core(std::string datafolder);
   ~Core();
 
-  void addPointCloud(const seerep_core_msgs::DatasetIndexable& pointcloud);
+  void addPointCloud(const seerep_core_msgs::DatasetIndexable& dataset);
   seerep_core_msgs::QueryResult getPointCloud(const seerep_core_msgs::Query& query);
 
-  void addImage(const seerep_core_msgs::DatasetIndexable& image);
+  void addImage(const seerep_core_msgs::DatasetIndexable& dataset);
   seerep_core_msgs::QueryResult getImage(const seerep_core_msgs::Query& query);
   void addImageLabels(std::vector<std::string>& labels, const boost::uuids::uuid& msgUuid,
                       const boost::uuids::uuid& projectuuid);

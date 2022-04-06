@@ -14,21 +14,18 @@ CorePointCloud::~CorePointCloud()
 
 void CorePointCloud::recreateDatasets()
 {
-  std::vector<std::string> imgs =
+  std::vector<std::string> datasets =
       m_hdf5_io->getGroupDatasets(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD);
-  for (auto name : imgs)
+  for (auto uuid : datasets)
   {
-    std::cout << "found " << name << " in HDF5 file." << std::endl;
+    std::cout << "found " << uuid << " in HDF5 file." << std::endl;
 
     try
     {
-      boost::uuids::string_generator gen;
-      boost::uuids::uuid uuid = gen(name);  // remove this rather use optional
+      std::optional<seerep_core_msgs::DatasetIndexable> dataset = m_hdf5_io->readPointCloud(uuid);
 
-      std::optional<seerep_core_msgs::DatasetIndexable> img = m_hdf5_io->readPointCloud(name);
-
-      if (img)
-        addDatasetToIndices(img.value());
+      if (dataset)
+        addDatasetToIndices(dataset.value());
     }
     catch (const std::runtime_error& e)
     {
@@ -120,15 +117,15 @@ std::vector<seerep_core_msgs::AabbTimeIdPair> CorePointCloud::queryTemporal(cons
   return timetree_result;
 }
 
-void CorePointCloud::addDataset(const seerep_core_msgs::DatasetIndexable& image)
+void CorePointCloud::addDataset(const seerep_core_msgs::DatasetIndexable& dataset)
 {
   // does the default constructor of uuid generate nil uuids?
-  if (image.header.uuidData.is_nil())
+  if (dataset.header.uuidData.is_nil())
   {
     throw std::invalid_argument("invalid uuid");
   }
 
-  addDatasetToIndices(image);
+  addDatasetToIndices(dataset);
 }
 
 /*
@@ -157,24 +154,25 @@ void CorePointCloud::tryAddingDataWithMissingTF()
   }
 }
 
-void CorePointCloud::addDatasetToIndices(const seerep_core_msgs::DatasetIndexable& img)
+void CorePointCloud::addDatasetToIndices(const seerep_core_msgs::DatasetIndexable& dataset)
 {
-  if (m_tfOverview->canTransform(img.header.frameId, m_frameId, img.header.timestamp.seconds,
-                                 img.header.timestamp.nanos))
+  if (m_tfOverview->canTransform(dataset.header.frameId, m_frameId, dataset.header.timestamp.seconds,
+                                 dataset.header.timestamp.nanos))
   {
-    m_rt.insert(std::make_pair(m_tfOverview->transformAABB(img.boundingbox, img.header.frameId, m_frameId,
-                                                           img.header.timestamp.seconds, img.header.timestamp.nanos),
-                               img.header.uuidData));
+    m_rt.insert(
+        std::make_pair(m_tfOverview->transformAABB(dataset.boundingbox, dataset.header.frameId, m_frameId,
+                                                   dataset.header.timestamp.seconds, dataset.header.timestamp.nanos),
+                       dataset.header.uuidData));
   }
   else
   {
-    m_dataWithMissingTF.push_back(std::make_shared<seerep_core_msgs::DatasetIndexable>(img));
+    m_dataWithMissingTF.push_back(std::make_shared<seerep_core_msgs::DatasetIndexable>(dataset));
   }
-  seerep_core_msgs::AabbTime aabbTime(seerep_core_msgs::TimePoint(img.header.timestamp.seconds),
-                                      seerep_core_msgs::TimePoint(img.header.timestamp.seconds));
-  m_timetree.insert(std::make_pair(aabbTime, img.header.uuidData));
+  seerep_core_msgs::AabbTime aabbTime(seerep_core_msgs::TimePoint(dataset.header.timestamp.seconds),
+                                      seerep_core_msgs::TimePoint(dataset.header.timestamp.seconds));
+  m_timetree.insert(std::make_pair(aabbTime, dataset.header.uuidData));
 
-  auto& labels = img.labels;
+  auto& labels = dataset.labels;
 
   for (std::string label : labels)
   {
@@ -183,12 +181,12 @@ void CorePointCloud::addDatasetToIndices(const seerep_core_msgs::DatasetIndexabl
     if (labelmapentry != m_label.end())
     {
       // label already exists, add id of image to the vector
-      labelmapentry->second.push_back(img.header.uuidData);
+      labelmapentry->second.push_back(dataset.header.uuidData);
     }
     else
     {
       // label doesn't already exist. Create new pair of label and vector of image ids
-      m_label.insert(std::make_pair(label, std::vector<boost::uuids::uuid>{ img.header.uuidData }));
+      m_label.insert(std::make_pair(label, std::vector<boost::uuids::uuid>{ dataset.header.uuidData }));
     }
   }
 }
