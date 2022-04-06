@@ -5,7 +5,8 @@ services:
     container_name: seerep_server
     #restart: unless-stopped
     #user: docker:docker
-    entrypoint: /home/docker/workspace/src/.devcontainer/startSeerepServer.sh
+    # entrypoint: /home/docker/workspace/src/.devcontainer/startSeerepServer.sh
+    entrypoint: /bin/sh -c "while sleep 1000; do :; done"
     ports:
       - 9090:9090
     volumes:

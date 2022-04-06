@@ -1,0 +1,132 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: seerep-data-pv
+  namespace: robot
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 20Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /opt/seerep-data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: seerep-pv-claim
+  namespace: robot
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: seerep-server
+  namespace: robot
+  labels:
+    app: seerep-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: seerep-server
+  template:
+    metadata:
+      labels:
+        app: seerep-server
+    spec:
+      containers:
+        - name: seerep-server
+          image: 'git.ni.dfki.de:5050/agrigaia/seerep/seerep-server'
+          ports:
+            - containerPort: 9090
+              protocol: TCP
+          args:
+            - /mnt/seerep-data
+          resources:
+            limits:
+              cpu: 100m
+              memory: 100Mi
+            requests:
+              cpu: 50m
+              memory: 50Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+          volumeMounts:
+            - mountPath: /mnt/seerep-data
+              name: seerep-data
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext:
+        runAsGroup: 1001
+        runAsUser: 1001
+        fsGroup: 1001
+      imagePullSecrets:
+        - name: gitlab-token # secret containing dockerconfig
+      schedulerName: default-scheduler
+      volumes:
+        - name: seerep-data
+          persistentVolumeClaim:
+            claimName: seerep-pv-claim
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: seerep-service
+  namespace: robot
+  labels:
+    app: seerep-server
+spec:
+  ports:
+    - name: grpc
+      protocol: TCP
+      port: 9090
+      targetPort: 9090
+  selector:
+    app: seerep-server
+  type: ClusterIP
+---
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: seerep-route
+  namespace: robot
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: GRPC
+    nginx.ingress.kubernetes.io/service-upstream: 'true'
+    nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - seerep.robot.10.249.3.13.nip.io
+      secretName: seerep-ca # certificate for ssl access
+  rules:
+    - host: seerep.robot.10.249.3.13.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: seerep-service
+                port:
+                  number: 9090
