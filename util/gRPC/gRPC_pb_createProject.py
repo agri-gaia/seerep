@@ -6,8 +6,7 @@ import grpc
 import meta_operations_pb2_grpc as metaOperations
 import projectCreation_pb2
 
-
-with open('tls.pem', 'rb' ) as f:
+with open('tls.pem', 'rb') as f:
     root_cert = f.read()
 
 # server = "localhost:9090"
