@@ -46,7 +46,7 @@ spec:
     spec:
       containers:
         - name: seerep-server
-          image: 'git.ni.dfki.de:5050/agrigaia/seerep/seerep-server'
+          image: 'git.ni.dfki.de:5050/agrigaia/seerep/server'
           ports:
             - containerPort: 9090
               protocol: TCP
