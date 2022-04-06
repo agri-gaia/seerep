@@ -27,7 +27,9 @@ RUN apt-get -qq update && apt-get -qq install -y -o=Dpkg::Use-Pty=0 \
         libpcl-dev \
         ros-noetic-pcl-conversions \
         ros-noetic-tf \
-        libfile-pushd-perl
+        libfile-pushd-perl \
+        ros-noetic-vision-msgs \
+        libgeographic-dev
 
 RUN echo '# Install pre-commit hooks to /root/.cache/pre-commit/'
 RUN apt-get update -qq && apt-get install -y -qq --no-install-recommends \

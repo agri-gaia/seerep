@@ -6,8 +6,18 @@ import grpc
 import meta_operations_pb2_grpc as metaOperations
 import projectCreation_pb2
 
-server = "localhost:9090"
-channel = grpc.insecure_channel(server)
+
+with open('tls.pem', 'rb' ) as f:
+    root_cert = f.read()
+
+# server = "localhost:9090"
+server = "seerep.robot.10.249.3.13.nip.io:32141"
+
+# channel = grpc.insecure_channel(server)
+
+creds = grpc.ssl_channel_credentials(root_cert)
+
+channel = grpc.secure_channel(server, creds)
 
 stub = metaOperations.MetaOperationsStub(channel)
 
