@@ -1,5 +1,5 @@
 {
-    "image": "seerep/dev-image:latest",
+    "image": "git.ni.dfki.de:5050/agrigaia/seerep/dev:latest",
     "name": "seerep_dev",
     "extensions": [
         "ms-vscode.cpptools",
