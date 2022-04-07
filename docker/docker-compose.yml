@@ -3,14 +3,13 @@ services:
   seerep:
     image: git.ni.dfki.de:5050/agrigaia/seerep/server:latest
     container_name: seerep_server
-    #restart: unless-stopped
-    #user: docker:docker
+    # restart: unless-stopped
+    # user: docker:docker
     command:
-      - /home/docker/workspace/seerep-data # define data-dir for seerep-server
-    # entrypoint: /home/docker/workspace/start_server.sh
+      - /mnt/seerep-data # define data-dir for seerep-server
     # entrypoint: /bin/sh -c "while sleep 1000; do :; done" # use this entrypoint for local testing
     ports:
       - 9090:9090
     volumes:
-      - ..:/home/docker/workspace/src
-      - ../../seerep-data:/home/docker/workspace/seerep-data
+      #- ..:/seerep/src # mount the git for local testing
+      - ../../seerep-data:/mnt/seerep-data
