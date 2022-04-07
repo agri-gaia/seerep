@@ -29,6 +29,7 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v2
         with:
+          push: true
           file: docker/base/Dockerfile
           tags: git.ni.dfki.de:5050/agrigaia/seerep/base:latest
           cache-from: type=registry,ref=git.ni.dfki.de:5050/agrigaia/seerep/base:latest
@@ -37,6 +38,7 @@ jobs:
         name: Build and push dev image
         uses: docker/build-push-action@v2
         with:
+          push: true
           file: docker/dev/Dockerfile
           tags: git.ni.dfki.de:5050/agrigaia/seerep/dev:latest
           cache-from: type=registry,ref=git.ni.dfki.de:5050/agrigaia/seerep/dev:latest
@@ -45,6 +47,7 @@ jobs:
         name: Build and push server image
         uses: docker/build-push-action@v2
         with:
+          push: true
           file: docker/server/Dockerfile
           tags: git.ni.dfki.de:5050/agrigaia/seerep/server:latest
           cache-from: type=registry,ref=git.ni.dfki.de:5050/agrigaia/seerep/server:latest
