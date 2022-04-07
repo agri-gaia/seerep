@@ -1,5 +1,5 @@
 {
-    "image": "git.ni.dfki.de:5050/agrigaia/seerep/dev:latest",
+    "image": "git.ni.dfki.de:5050/agrigaia/seerep/base:latest",
     "name": "seerep_dev",
     "extensions": [
         "ms-vscode.cpptools",
@@ -18,11 +18,11 @@
     ],
     "containerUser": "docker",
     "mounts": [
-        "source=vscode-extensions,target=/home/docker/.vscode-server,type=volume",
-        "source=${localWorkspaceFolder}/../seerep-data,target=/home/docker/workspace/seerep-data,type=bind,consistency=cached"
+        "source=seerep-vscode-extensions,target=/home/docker/.vscode-server/extensions,type=volume",
+        "source=${localWorkspaceFolder}/../seerep-data,target=/seerep/seerep-data,type=bind,consistency=cached"
     ],
-    "workspaceMount": "source=${localWorkspaceFolder},target=/home/docker/workspace/src,type=bind,consistency=cached",
-    "workspaceFolder": "/home/docker/workspace",
+    "workspaceMount": "source=${localWorkspaceFolder},target=/seerep/src,type=bind,consistency=cached",
+    "workspaceFolder": "/seerep",
     "runArgs": [
         "--network=host"
     ],
