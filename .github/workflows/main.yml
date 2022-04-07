@@ -72,7 +72,7 @@ jobs:
           cache-to: type=inline
 
   # builds the code
-  build:
+  build-code:
     needs: build-docker
     # run in docker container on ubuntu
     runs-on: ubuntu-20.04
@@ -114,6 +114,7 @@ jobs:
         shell: bash
 
   build-docker-deployment:
+    needs: build-code
     # run on ubuntu
     runs-on: ubuntu-20.04
     if: ${{ GitHub.event_name != 'pull_request'}}
