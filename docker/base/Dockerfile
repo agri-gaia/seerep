@@ -4,6 +4,8 @@ ENV DEBIAN_FRONTEND="noninteractive"
 ENV HDF5_REL="https://github.com/BlueBrain/HighFive"
 ENV PB_REL="https://github.com/protocolbuffers/protobuf/releases"
 ENV PB_VER="3.15.6"
+ENV DOX_REL="https://github.com/doxygen/doxygen/archive/refs/tags"
+ENV DOX_VER="Release_1_9_3"
 
 #Install general required tools
 RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
@@ -28,16 +30,19 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         libgeographic-dev \
         libfile-pushd-perl \
         python3-pip \
+        flex \
+        bison \
         && rm -rf /var/lib/apt/lists/*
+
 RUN pip3 install --upgrade pip
-#install seerep dependencies from apt
+#Install seerep dependencies from apt
 RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         ros-noetic-tf \
         ros-noetic-vision-msgs \
         libgeographic-dev \
         && rm -rf /var/lib/apt/lists/*
 
-# Install pre-commit hooks to /root/.cache/pre-commit/
+#Install pre-commit hooks to /root/.cache/pre-commit/
 RUN pip3 install pre-commit \
         && apt-get update -qq && apt-get -qq install -y --no-install-recommends \
                 ruby shellcheck \
@@ -74,7 +79,7 @@ RUN git clone --depth 1 $HDF5_REL.git \
         && rm -rf HighFive
 
 ####################################################
-#install protobuf via precompiled binaries from github
+#Install protobuf via precompiled binaries from github
 ####################################################
 RUN curl -LO $PB_REL/download/v$PB_VER/protobuf-cpp-$PB_VER.zip \
         && unzip protobuf-cpp-$PB_VER.zip \
@@ -91,7 +96,7 @@ RUN curl -LO $PB_REL/download/v$PB_VER/protobuf-cpp-$PB_VER.zip \
 RUN pip3 install --upgrade protobuf
 
 ####################################################
-#install flatbuffer
+#Install flatbuffer
 ####################################################
 RUN wget https://github.com/google/flatbuffers/archive/refs/tags/v2.0.0.tar.gz \
         && tar -xf v2.0.0.tar.gz \
@@ -104,7 +109,7 @@ RUN wget https://github.com/google/flatbuffers/archive/refs/tags/v2.0.0.tar.gz \
         && rm -rf flatbuffers-2.0.0 v2.0.0.tar.gz
 
 ####################################################
-#install gRPC
+#Install gRPC
 ####################################################
 
 #Clone the grpc repo
@@ -119,6 +124,25 @@ RUN git clone --recurse-submodules --depth 1 -b v1.35.0 https://github.com/grpc/
 
 #Install python3 grpcio_tools'
 RUN pip3 install grpcio-tools
+
+####################################################
+#Install docs dependencies
+####################################################
+
+# Install mkdocs and material theme
+RUN pip3 install mkdocs==1.3.0 && pip3 install mkdocs-material
+
+# Install doxygen
+
+RUN wget ${DOX_REL}/${DOX_VER}.tar.gz \
+        && tar -xf ${DOX_VER}.tar.gz \
+        && mkdir -p doxygen-${DOX_VER}/build \
+        && cd doxygen-${DOX_VER}/build \
+        && cmake -G "Unix Makefiles" .. \
+        && make -j"$(nproc)" \
+        && make install \
+        && cd ../.. \
+        && rm -rf doxygen-${DOX_VER}.tar.gz
 
 RUN echo "source /opt/ros/noetic/setup.bash" >> /root/.bashrc \
         && echo "source /opt/ros/noetic/setup.zsh" >> /root/.zshrc \
