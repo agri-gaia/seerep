@@ -1,0 +1,10 @@
+deploy:
+    image:
+        name: bitnami/kubectl:latest
+        entrypoint: [""]
+    script:
+    - kubectl config get-contexts
+    - kubectl config use-context agrigaia/seerep:seerep-agent
+    - kubectl apply -f docker/seerep-deployment.yaml
+    rules:
+      - if: '$CI_PIPELINE_SOURCE == "trigger"'

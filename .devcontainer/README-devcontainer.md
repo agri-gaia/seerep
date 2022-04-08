@@ -2,10 +2,9 @@
 
 This folder contains all files needed for the development container:
 
-1. Dockerfile and installDependencies.sh: Creation of the docker image
-2. devcontainer.json and postCreateCommand.sh: Instructions for VS Code on how to create the dev container based on
+1. devcontainer.json and postCreateCommand.sh: Instructions for VS Code on how to create the dev container based on
   the previously created image
-3. .vscode: The VS Code settings folder. To be used in the devcontainer to create a out of the box working Intellisense
+2. .vscode: The VS Code settings folder. To be used in the devcontainer to create a out of the box working Intellisense
 
 ## Remote Host
 
