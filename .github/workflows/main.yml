@@ -61,7 +61,7 @@ jobs:
     runs-on: ubuntu-20.04
     container:
       image: git.ni.dfki.de:5050/agrigaia/seerep/base:latest
-      options: --user docker --workdir /home/docker
+      options: --user root
       credentials:
         username: ${{ secrets.GITLAB_REGISTRY_USER }}
         password: ${{ secrets.GITLAB_REGISTRY_ACCESS_TOKEN }}
@@ -70,16 +70,8 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-
-      # Move the code in a "src" folder for catkin build
-      - name: Move code to src folder
-        run: |
-          shopt -s dotglob
-          mkdir $GITHUB_WORKSPACE/../tmp
-          mv $GITHUB_WORKSPACE/* $GITHUB_WORKSPACE/../tmp/
-          mkdir -p $GITHUB_WORKSPACE/src/seerep
-          mv $GITHUB_WORKSPACE/../tmp/* $GITHUB_WORKSPACE/src/seerep/
-        shell: bash
+        with:
+          path: src
 
       #build workspace
       - name: Build the ros workspace
@@ -93,7 +85,7 @@ jobs:
         run: |
           source /opt/ros/noetic/setup.bash
           source $GITHUB_WORKSPACE/devel/setup.bash
-          cd $GITHUB_WORKSPACE/src/seerep; pre-commit run -a
+          cd $GITHUB_WORKSPACE/src; pre-commit run -a
         shell: bash
 
   build-docker-deployment:
