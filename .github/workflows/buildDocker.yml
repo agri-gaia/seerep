@@ -47,5 +47,5 @@ jobs:
         name: Trigger deployment
         uses: wei/cur@master
         with:
-          args: --request POST --form "token=e68b192c8907ce44caf1dbc0e2438d" --form ref=deployment-pipeline  "https://git.ni.dfki.de/api/v4/projects/379/trigger/pipeline"
+          args: --request POST --form "token=e68b192c8907ce44caf1dbc0e2438d" --form ref=main  "https://git.ni.dfki.de/api/v4/projects/379/trigger/pipeline"
        
