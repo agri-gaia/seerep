@@ -42,10 +42,5 @@ jobs:
           file: docker/server/Dockerfile
           tags: git.ni.dfki.de:5050/agrigaia/seerep/server:latest
           cache-from: type=registry,ref=git.ni.dfki.de:5050/agrigaia/seerep/server:latest
-          cache-to: type=inline
-      -
-        name: Trigger deployment
-        uses: wei/cur@master
-        with:
-          args: --request POST --form "token=e68b192c8907ce44caf1dbc0e2438d" --form ref=main  "https://git.ni.dfki.de/api/v4/projects/379/trigger/pipeline"
+          cache-to: type=inline    
        
