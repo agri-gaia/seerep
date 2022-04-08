@@ -42,5 +42,5 @@ jobs:
           file: docker/server/Dockerfile
           tags: git.ni.dfki.de:5050/agrigaia/seerep/server:latest
           cache-from: type=registry,ref=git.ni.dfki.de:5050/agrigaia/seerep/server:latest
-          cache-to: type=inline    
-       
+          cache-to: type=inline
+
