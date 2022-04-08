@@ -126,14 +126,13 @@ RUN git clone --recurse-submodules --depth 1 -b v1.35.0 https://github.com/grpc/
 RUN pip3 install grpcio-tools
 
 ####################################################
-#Install docs dependencies
+#Install documentation dependencies
 ####################################################
 
-# Install mkdocs and material theme
+#Install mkdocs and material theme
 RUN pip3 install mkdocs==1.3.0 && pip3 install mkdocs-material
 
-# Install doxygen
-
+#Install doxygen
 RUN wget ${DOX_REL}/${DOX_VER}.tar.gz \
         && tar -xf ${DOX_VER}.tar.gz \
         && mkdir -p doxygen-${DOX_VER}/build \
@@ -142,7 +141,7 @@ RUN wget ${DOX_REL}/${DOX_VER}.tar.gz \
         && make -j"$(nproc)" \
         && make install \
         && cd ../.. \
-        && rm -rf doxygen-${DOX_VER}.tar.gz
+        && rm -rf doxygen-${DOX_VER} ${DOX_VER}.tar.gz
 
 RUN echo "source /opt/ros/noetic/setup.bash" >> /root/.bashrc \
         && echo "source /opt/ros/noetic/setup.zsh" >> /root/.zshrc \
