@@ -6,9 +6,7 @@ This page provides an overview on ways to install SEEREP.
 
 !!! tip "Recommended way of installing SEEREP"
 
-**Requirement**:
-
-Docker Version >= 17.12.0
+**Requirement**: Docker Version >= 17.12.0
 
 1. Clone the SEEREP repository from
    [Github](https://github.com/agri-gaia/seerep) and open it in VS-Code.
