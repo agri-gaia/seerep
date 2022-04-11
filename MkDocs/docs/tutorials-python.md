@@ -1,4 +1,4 @@
-# Tutorials
+# Tutorials in python
 
 This tutorial will give an introduction on how to use SEEREP. The following
 topics are covered:
