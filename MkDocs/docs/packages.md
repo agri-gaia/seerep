@@ -13,7 +13,7 @@ handled via [gRPC](https://grpc.io/) and [protobuffers
 (PB)](https://developers.google.com/protocol-buffers/docs/overview)/
 [flatbuffers (FB)](https://google.github.io/flatbuffers/).
 
-![](imgs/SEEREP-Structure.svg)
+![](imgs/SEEREP-Structure.svg){ width=800 }
 
 ## Packages
 
