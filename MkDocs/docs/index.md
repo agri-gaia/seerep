@@ -44,7 +44,7 @@ scanning campaign). The data can be saved locally on the robot or sent into the
 cloud with gRPC. Due to that, the computation load on the robot can be reduced
 and algorithms can fetch the data subset which they actually need.
 
-![](imgs/SEEREP-Overview.svg)
+![](imgs/SEEREP-Overview.svg){ width=800 }
 
 A more detailed version, with all ROS packages and message types is available in
 the [package overview](packages.md#package-overview).

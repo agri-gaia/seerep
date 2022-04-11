@@ -1,14 +1,28 @@
 site_name: SEEREP Documentation
+repo_url: https://github.com/agri-gaia/seerep
 nav:
   - Home: index.md
-  - Getting Started:
-    - 'Installation': 'installation.md'
-    - 'Tutorials': 'tutorials.md'
-  - Package Overview: packages.md
+  - Getting started:
+    - Installation: 'installation.md'
+    - Tutorials:
+      - Python: 'tutorials-python.md'
+      - C++: 'tutorials-c++.md'
+  - Packages:
+    - Overview: packages.md
 theme:
   name: material
+  language: en
+  theme:
+  features:
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.expand
+    - navigation.sections
 markdown_extensions:
   - admonition
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.superfences
+  - meta
+  - attr_list
