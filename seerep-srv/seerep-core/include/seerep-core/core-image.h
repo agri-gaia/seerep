@@ -8,7 +8,7 @@
 #include <seerep-msgs/aabb.h>
 #include <seerep-msgs/query-result.h>
 #include <seerep-msgs/query.h>
-// seerep-hdf5-pb
+// seerep-hdf5-core
 #include <seerep-hdf5-core/hdf5-core-image.h>
 // seerep-core
 #include "core-tf.h"

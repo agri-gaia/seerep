@@ -17,6 +17,7 @@ struct Query
   AABB boundingbox;
   Timeinterval timeinterval;
   std::vector<std::string> label;
+  std::vector<boost::uuids::uuid> instances;
 };
 
 } /* namespace seerep_core_msgs */

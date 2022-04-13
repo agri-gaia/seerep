@@ -5,6 +5,7 @@
 
 #include "aabb.h"
 #include "header.h"
+#include "label-with-instance.h"
 
 namespace seerep_core_msgs
 {
@@ -12,7 +13,7 @@ struct DatasetIndexable
 {
   Header header;
   AABB boundingbox;
-  std::vector<std::string> labels;
+  std::vector<LabelWithInstance> labelsWithInstances;
 };
 
 } /* namespace seerep_core_msgs */

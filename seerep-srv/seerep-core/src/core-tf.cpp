@@ -14,7 +14,7 @@ CoreTf::~CoreTf()
 
 void CoreTf::recreateDatasets()
 {
-  std::vector<std::string> tfs = m_hdf5_io->getGroupDatasets("tf");
+  std::vector<std::string> tfs = m_hdf5_io->getGroupDatasets(seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF);
   for (auto const& name : tfs)
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "found " << name << " in HDF5 file.";
