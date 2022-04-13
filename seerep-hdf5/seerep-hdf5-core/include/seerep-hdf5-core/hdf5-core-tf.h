@@ -24,7 +24,7 @@ public:
   std::optional<std::vector<geometry_msgs::TransformStamped>> readTransformStamped(const std::string& id);
   std::optional<std::vector<std::string>> readTransformStampedFrames(const std::string& id);
 
-private:
+public:
   // datatype group names in hdf5
   inline static const std::string HDF5_GROUP_TF = "tf";
 

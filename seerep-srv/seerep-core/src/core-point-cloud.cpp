@@ -172,12 +172,13 @@ void CorePointCloud::addDatasetToIndices(const seerep_core_msgs::DatasetIndexabl
                                       seerep_core_msgs::TimePoint(dataset.header.timestamp.seconds));
   m_timetree.insert(std::make_pair(aabbTime, dataset.header.uuidData));
 
-  auto& labels = dataset.labels;
+  auto& labels = dataset.labelsWithInstances;
 
-  for (std::string label : labels)
+  for (seerep_core_msgs::LabelWithInstance labelWithInstances : labels)
   {
     // check if label already exists
-    std::unordered_map<std::string, std::vector<boost::uuids::uuid>>::iterator labelmapentry = m_label.find(label);
+    std::unordered_map<std::string, std::vector<boost::uuids::uuid>>::iterator labelmapentry =
+        m_label.find(labelWithInstances.label);
     if (labelmapentry != m_label.end())
     {
       // label already exists, add id of image to the vector
@@ -186,7 +187,8 @@ void CorePointCloud::addDatasetToIndices(const seerep_core_msgs::DatasetIndexabl
     else
     {
       // label doesn't already exist. Create new pair of label and vector of image ids
-      m_label.insert(std::make_pair(label, std::vector<boost::uuids::uuid>{ dataset.header.uuidData }));
+      m_label.insert(
+          std::make_pair(labelWithInstances.label, std::vector<boost::uuids::uuid>{ dataset.header.uuidData }));
     }
   }
 }

@@ -166,6 +166,11 @@ void Core::addImage(const seerep_core_msgs::DatasetIndexable& dataset)
   if (project != m_projects.end())
   {
     return project->second->addImage(dataset);
+
+    if (!dataset.labelsWithInstances.empty())
+    {
+      // add to core-instances
+    }
   }
   // if not found throw error
   else

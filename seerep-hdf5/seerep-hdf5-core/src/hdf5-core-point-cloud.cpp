@@ -49,8 +49,16 @@ std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CorePointCloud::readPointC
   std::vector<std::string> labelsGeneral = readLabelsGeneral(hdf5DatasetPath);
   std::vector<std::string> labelsBB = readBoundingBoxLabels(hdf5DatasetPath);
 
-  data.labels.insert(std::end(data.labels), std::begin(labelsGeneral), std::end(labelsGeneral));
-  data.labels.insert(std::end(data.labels), std::begin(labelsBB), std::end(labelsBB));
+  for (auto label : labelsGeneral)
+  {
+    data.labelsWithInstances.push_back(
+        seerep_core_msgs::LabelWithInstance{ .label = label, .uuidInstance = boost::uuids::nil_uuid() });
+  }
+  for (auto label : labelsBB)
+  {
+    data.labelsWithInstances.push_back(
+        seerep_core_msgs::LabelWithInstance{ .label = label, .uuidInstance = boost::uuids::nil_uuid() });
+  }
 
   return data;
 }
