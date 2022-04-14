@@ -24,18 +24,19 @@ public:
   CoreInstance(std::shared_ptr<seerep_hdf5_core::Hdf5CoreInstance> hdf5_io, boost::uuids::uuid& uuid);
   ~CoreInstance();
 
-  std::vector<boost::uuids::uuid> getImages() const;
-  void addImage(const boost::uuids::uuid& uuidDataset);
+  boost::uuids::uuid getUUID();
 
   std::optional<std::string> getAttribute(const std::string& key) const;
   void writeAttribute(const std::string& key, const std::string& value);
+
+  std::vector<boost::uuids::uuid> getImages() const;
+  void addImage(const boost::uuids::uuid& uuidDataset);
 
 private:
   void recreateInstances();
   std::shared_ptr<seerep_hdf5_core::Hdf5CoreInstance> m_hdf5_io;
 
   boost::uuids::uuid m_uuid;
-
   std::unordered_map<std::string, std::string> m_attributes;
 
   // images

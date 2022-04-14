@@ -85,15 +85,17 @@ boost::uuids::uuid CorePbImage::addData(const seerep::Image& img)
   dataForIndices.boundingbox.max_corner().set<2>(0);
 
   // semantic
-  dataForIndices.labels.reserve(img.labels_general().size() + img.labels_bb().size());
+  dataForIndices.labelsWithInstances.reserve(img.labels_general().size() + img.labels_bb().size());
   for (auto label : img.labels_general())
   {
-    dataForIndices.labels.push_back(label);
+    dataForIndices.labelsWithInstances.push_back(
+        seerep_core_msgs::LabelWithInstance{ .label = label, .uuidInstance = boost::uuids::nil_uuid() });
   }
 
   for (auto label : img.labels_bb())
   {
-    dataForIndices.labels.push_back(label.label());
+    dataForIndices.labelsWithInstances.push_back(
+        seerep_core_msgs::LabelWithInstance{ .label = label.label(), .uuidInstance = boost::uuids::nil_uuid() });
   }
 
   m_seerepCore->addImage(dataForIndices);

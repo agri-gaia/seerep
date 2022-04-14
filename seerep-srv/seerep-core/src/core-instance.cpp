@@ -11,24 +11,9 @@ CoreInstance::~CoreInstance()
 {
 }
 
-void CoreInstance::recreateInstances()
+boost::uuids::uuid CoreInstance::getUUID()
 {
-  auto attributes = m_hdf5_io->readAttributes(m_uuid);
-
-  if (attributes)
-  {
-    m_attributes = std::move(*attributes);
-  }
-}
-
-std::vector<boost::uuids::uuid> CoreInstance::getImages() const
-{
-  return m_images;
-}
-
-void CoreInstance::addImage(const boost::uuids::uuid& uuidDataset)
-{
-  m_images.push_back(uuidDataset);
+  return m_uuid;
 }
 
 std::optional<std::string> CoreInstance::getAttribute(const std::string& key) const
@@ -44,6 +29,7 @@ std::optional<std::string> CoreInstance::getAttribute(const std::string& key) co
     return std::nullopt;
   }
 }
+
 void CoreInstance::writeAttribute(const std::string& key, const std::string& value)
 {
   auto emplaceResult = m_attributes.emplace(key, value);
@@ -57,4 +43,23 @@ void CoreInstance::writeAttribute(const std::string& key, const std::string& val
   m_hdf5_io->writeAttribute(m_uuid, key, value);
 }
 
+std::vector<boost::uuids::uuid> CoreInstance::getImages() const
+{
+  return m_images;
+}
+
+void CoreInstance::addImage(const boost::uuids::uuid& uuidDataset)
+{
+  m_images.push_back(uuidDataset);
+}
+
+void CoreInstance::recreateInstances()
+{
+  auto attributes = m_hdf5_io->readAttributes(m_uuid);
+
+  if (attributes)
+  {
+    m_attributes = std::move(*attributes);
+  }
+}
 } /* namespace seerep_core */

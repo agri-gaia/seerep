@@ -102,12 +102,13 @@ boost::uuids::uuid CoreFbImage::addData(const seerep::fb::Image& img)
   {
     labelSizeAll += img.labels_bb()->size();
   }
-  dataForIndices.labels.reserve(labelSizeAll);
+  dataForIndices.labelsWithInstances.reserve(labelSizeAll);
   if (img.labels_general())
   {
     for (auto label : *img.labels_general())
     {
-      dataForIndices.labels.push_back(label->str());
+      dataForIndices.labelsWithInstances.push_back(
+          seerep_core_msgs::LabelWithInstance{ .label = label->str(), .uuidInstance = boost::uuids::nil_uuid() });
     }
   }
 
@@ -115,7 +116,8 @@ boost::uuids::uuid CoreFbImage::addData(const seerep::fb::Image& img)
   {
     for (auto label : *img.labels_bb())
     {
-      dataForIndices.labels.push_back(label->label()->str());
+      dataForIndices.labelsWithInstances.push_back(seerep_core_msgs::LabelWithInstance{
+          .label = label->label()->str(), .uuidInstance = boost::uuids::nil_uuid() });
     }
   }
 

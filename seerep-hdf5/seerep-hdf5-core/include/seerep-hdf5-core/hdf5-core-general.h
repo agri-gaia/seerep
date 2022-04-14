@@ -34,8 +34,8 @@ public:
   // template <typename T>
   // void writeAttribute(const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField, T value);
 
-  template <typename T>
-  T getAttribute(const std::string& id, const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField);
+  template <typename T, class C>
+  T getAttribute(const std::string& id, const HighFive::AnnotateTraits<C>& object, std::string attributeField);
 
   // void deleteAttribute(const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField);
 
