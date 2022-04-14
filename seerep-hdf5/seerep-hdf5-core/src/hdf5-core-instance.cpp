@@ -17,18 +17,26 @@ Hdf5CoreInstance::readAttributes(const boost::uuids::uuid& uuid)
 
 std::optional<std::unordered_map<std::string, std::string>> Hdf5CoreInstance::readAttributes(const std::string& uuid)
 {
+  throw std::runtime_error("read Attribute of Instance not implemented");
+
   const std::scoped_lock lock(*m_write_mtx);
 
   std::string hdf5GroupPath = HDF5_GROUP_INSTANCE + "/" + uuid;
-  std::string hdf5DatasetTimePath = hdf5GroupPath + "/" + "time";
-  std::string hdf5DatasetTransPath = hdf5GroupPath + "/" + "translation";
-  std::string hdf5DatasetRotPath = hdf5GroupPath + "/" + "rotation";
 
-  if (!m_file->exist(hdf5GroupPath) || !m_file->exist(hdf5DatasetTimePath) || !m_file->exist(hdf5DatasetTransPath) ||
-      !m_file->exist(hdf5DatasetRotPath))
+  if (!m_file->exist(hdf5GroupPath))
   {
     return std::nullopt;
   }
+
+  std::shared_ptr<HighFive::Group> groupPtr = std::make_shared<HighFive::Group>(m_file->getGroup(hdf5GroupPath));
+  std::vector<std::string> allAttributesKeys = groupPtr->listAttributeNames();
+  std::unordered_map<std::string, std::string> attributesMap;
+  for (auto attributeKey : allAttributesKeys)
+  {
+    std::string attributeValue = getAttribute<std::string>(uuid, *groupPtr, attributeKey);
+    attributesMap.emplace(attributeKey, attributeValue);
+  }
+  return attributesMap;
 }
 
 void Hdf5CoreInstance::writeAttribute(const boost::uuids::uuid& uuid, std::string key, std::string value)
@@ -41,6 +49,8 @@ void Hdf5CoreInstance::writeAttribute(const std::string& uuid, std::string key, 
   const std::scoped_lock lock(*m_write_mtx);
 
   std::string hdf5GroupPath = HDF5_GROUP_INSTANCE + "/" + uuid;
+
+  throw std::runtime_error("write Attribute of Instance not implemented");
 }
 
 }  // namespace seerep_hdf5_core

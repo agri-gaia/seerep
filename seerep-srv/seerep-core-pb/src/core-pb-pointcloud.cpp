@@ -91,15 +91,17 @@ boost::uuids::uuid CorePbPointCloud::addData(const seerep::PointCloud2& pc)
   dataForIndices.boundingbox.max_corner().set<2>(bb.at(5));
 
   // semantic
-  dataForIndices.labels.reserve(pc.labels_general().size() + pc.labels_bb().size());
+  dataForIndices.labelsWithInstances.reserve(pc.labels_general().size() + pc.labels_bb().size());
   for (auto label : pc.labels_general())
   {
-    dataForIndices.labels.push_back(label);
+    dataForIndices.labelsWithInstances.push_back(
+        seerep_core_msgs::LabelWithInstance{ .label = label, .uuidInstance = boost::uuids::nil_uuid() });
   }
 
   for (auto label : pc.labels_bb())
   {
-    dataForIndices.labels.push_back(label.label());
+    dataForIndices.labelsWithInstances.push_back(
+        seerep_core_msgs::LabelWithInstance{ .label = label.label(), .uuidInstance = boost::uuids::nil_uuid() });
   }
 
   m_seerepCore->addPointCloud(dataForIndices);

@@ -1,14 +1,14 @@
 
 namespace seerep_hdf5_core
 {
-template <typename T>
-T Hdf5CoreGeneral::getAttribute(const std::string& id, const std::shared_ptr<HighFive::DataSet> dataSetPtr,
+template <typename T, class C>
+T Hdf5CoreGeneral::getAttribute(const std::string& id, const HighFive::AnnotateTraits<C>& object,
                                 std::string attributeField)
 {
   T attributeValue;
-  if (dataSetPtr->hasAttribute(attributeField))
+  if (object.hasAttribute(attributeField))
   {
-    dataSetPtr->getAttribute(attributeField).read(attributeValue);
+    object.getAttribute(attributeField).read(attributeValue);
   }
   else
   {
