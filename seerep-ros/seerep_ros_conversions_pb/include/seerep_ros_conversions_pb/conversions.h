@@ -58,7 +58,7 @@ sensor_msgs::PointField toROS(const seerep::PointField& point_field);
 /**
  * @brief Converts a ROS sensor_msgs/PointCloud2 message to the corresponding
  * Protobuf PointCloud2 message
- * @param point_field sensor_msgs/PointCloud2
+ * @param cloud sensor_msgs/PointCloud2
  * @return Protobuf PointCloud2 message
  */
 seerep::PointCloud2 toProto(const sensor_msgs::PointCloud2& cloud);
@@ -82,21 +82,21 @@ seerep::Image toProto(const sensor_msgs::Image& image);
 /**
  * @brief Converts a Protobuf Image message to the corresponding
  * ROS sensor_msgs/Image message
- * @param cloud Protobuf Image
+ * @param image Protobuf Image
  * @return ROS std_sensor_msgs/Image
  */
 sensor_msgs::Image toROS(const seerep::Image& image);
 
 /**
  * @brief Converts a ROS geometry_msgs::Point message to the corresponding
- * Protobuf Image message
+ * Protobuf point message
  * @param point geometry_msgs::Point
  * @return Protobuf Point message
  */
 seerep::Point toProto(const geometry_msgs::Point& point);
 
 /**
- * @brief Converts a Protobuf Image message to the corresponding
+ * @brief Converts a Protobuf point message to the corresponding
  * ROS geometry_msgs::Point message
  * @param point Protobuf Point
  * @return ROS geometry_msgs::Point
@@ -154,7 +154,7 @@ geometry_msgs::PoseStamped toROS(const seerep::PoseStamped& pose);
 /**
  * @brief Converts a ROS geometry_msgs::Vector3 message to the corresponding
  * Protobuf Vector3 message
- * @param pose geometry_msgs::Vector3
+ * @param vector geometry_msgs::Vector3
  * @return Protobuf Vector3 message
  */
 seerep::Vector3 toProto(const geometry_msgs::Vector3& vector);
@@ -162,7 +162,7 @@ seerep::Vector3 toProto(const geometry_msgs::Vector3& vector);
 /**
  * @brief Converts a Protobuf Vector3 message to the corresponding
  * ROS geometry_msgs::Vector3 message
- * @param pose Protobuf Vector3
+ * @param vector Protobuf Vector3
  * @return ROS geometry_msgs::Vector3
  */
 geometry_msgs::Vector3 toROS(const seerep::Vector3& vector);
@@ -170,7 +170,7 @@ geometry_msgs::Vector3 toROS(const seerep::Vector3& vector);
 /**
  * @brief Converts a ROS geometry_msgs::Vector3Stamped message to the corresponding
  * Protobuf Vector3Stamped message
- * @param pose geometry_msgs::Vector3Stamped
+ * @param vector geometry_msgs::Vector3Stamped
  * @return Protobuf Vector3Stamped message
  */
 seerep::Vector3Stamped toProto(const geometry_msgs::Vector3Stamped& vector);
@@ -178,7 +178,7 @@ seerep::Vector3Stamped toProto(const geometry_msgs::Vector3Stamped& vector);
 /**
  * @brief Converts a Protobuf Vector3Stamped message to the corresponding
  * ROS geometry_msgs::Vector3Stamped message
- * @param pose Protobuf Vector3Stamped
+ * @param vector Protobuf Vector3Stamped
  * @return ROS geometry_msgs::Vector3Stamped
  */
 geometry_msgs::Vector3Stamped toROS(const seerep::Vector3Stamped& vector);
@@ -186,23 +186,23 @@ geometry_msgs::Vector3Stamped toROS(const seerep::Vector3Stamped& vector);
 /**
  * @brief Converts a ROS geometry_msgs::Transform message to the corresponding
  * Protobuf Transform message
- * @param pose geometry_msgs::Transform
+ * @param transform geometry_msgs::Transform
  * @return Protobuf Transform message
  */
-seerep::Transform toProto(const geometry_msgs::Transform& vector);
+seerep::Transform toProto(const geometry_msgs::Transform& transform);
 
 /**
  * @brief Converts a Protobuf Transform message to the corresponding
  * ROS geometry_msgs::Transform message
- * @param pose Protobuf Transform
+ * @param transform Protobuf Transform
  * @return ROS geometry_msgs::Transform
  */
-geometry_msgs::Transform toROS(const seerep::Transform& vector);
+geometry_msgs::Transform toROS(const seerep::Transform& transform);
 
 /**
  * @brief Converts a ROS geometry_msgs::TransformStamped message to the corresponding
  * Protobuf TransformStamped message
- * @param pose geometry_msgs::TransformStamped
+ * @param transform geometry_msgs::TransformStamped
  * @param projectuuid std::string
  * @return Protobuf TransformStamped message
  */
@@ -211,10 +211,10 @@ seerep::TransformStamped toProto(const geometry_msgs::TransformStamped& transfor
 /**
  * @brief Converts a Protobuf TransformStamped message to the corresponding
  * ROS geometry_msgs::TransformStamped message
- * @param pose Protobuf TransformStamped
+ * @param transform Protobuf TransformStamped
  * @return ROS geometry_msgs::TransformStamped
  */
-geometry_msgs::TransformStamped toROS(const seerep::TransformStamped& vector);
+geometry_msgs::TransformStamped toROS(const seerep::TransformStamped& transform);
 } /* namespace seerep_ros_conversions_pb */
 
 #endif /* SEEREP_ROS_CONVERSIONS_PB */
