@@ -31,12 +31,23 @@ namespace seerep_ros_conversions_fb
 {
 /**
  * @brief Converts a ROS std_msgs/Header message to the corresponding
- * Flatbuffer Header message
+ * gRPC Flatbuffer Header message
  * @param header std_msgs/Header
- * @return Flatbuffer Header message
+ * @param projectuuid UUID of the target project. Used to set the corresponding field in the Flatbuffer message
+ * @param msguuid UUID of the message. Used to set the corresponding field in the Flatbuffer message
+ * @return gRPC Flatbuffer Header message
  */
 flatbuffers::grpc::Message<seerep::fb::Header> toFlat(const std_msgs::Header& header, std::string projectuuid,
                                                       std::string msguuid);
+/**
+ * @brief Converts a ROS std_msgs/Header message to the corresponding
+ * Flatbuffer Header message
+ * @param header std_msgs/Header
+ * @param projectuuid UUID of the target project. Used to set the corresponding field in the Flatbuffer message
+ * @param builder the flatbuffer message builder to build the flatbuffer message
+ * @param msguuid UUID of the message. Used to set the corresponding field in the Flatbuffer message
+ * @return Flatbuffer Header message
+ */
 flatbuffers::Offset<seerep::fb::Header> toFlat(const std_msgs::Header& header, std::string projectuuid,
                                                flatbuffers::grpc::MessageBuilder& builder, std::string msguuid);
 
@@ -50,11 +61,18 @@ std_msgs::Header toROS(const seerep::fb::Header& header);
 
 /**
  * @brief Converts a ROS sensor_msgs/PointField message to the corresponding
- * Flatbuffer PointField message
+ * gRPC Flatbuffer PointField message
  * @param point_field sensor_msgs/PointField
- * @return Flatbuffer PointField message
+ * @return gRPC Flatbuffer PointField message
  */
 flatbuffers::grpc::Message<seerep::fb::PointField> toFlat(const sensor_msgs::PointField& point_field);
+/**
+ * @brief Converts a ROS sensor_msgs/PointField message to the corresponding
+ * Flatbuffer PointField message
+ * @param point_field sensor_msgs/PointField
+ * @param builder the flatbuffer message builder to build the flatbuffer message
+ * @return Flatbuffer PointField message
+ */
 flatbuffers::Offset<seerep::fb::PointField> toFlat(const sensor_msgs::PointField& point_field,
                                                    flatbuffers::grpc::MessageBuilder& builder);
 
@@ -68,12 +86,23 @@ sensor_msgs::PointField toROS(const seerep::fb::PointField& point_field);
 
 /**
  * @brief Converts a ROS sensor_msgs/PointCloud2 message to the corresponding
- * Flatbuffer PointCloud2 message
- * @param point_field sensor_msgs/PointCloud2
- * @return Flatbuffer PointCloud2 message
+ * gRPC Flatbuffer PointCloud2 message
+ * @param cloud sensor_msgs/PointCloud2
+ * @param projectuuid UUID of the target project. Used to set the corresponding field in the Flatbuffer message
+ * @param msguuid UUID of the message. Used to set the corresponding field in the Flatbuffer message
+ * @return gRPC Flatbuffer PointCloud2 message
  */
 flatbuffers::grpc::Message<seerep::fb::PointCloud2> toFlat(const sensor_msgs::PointCloud2& cloud,
                                                            std::string projectuuid, std::string msguuid);
+/**
+ * @brief Converts a ROS sensor_msgs/PointCloud2 message to the corresponding
+ * Flatbuffer PointCloud2 message
+ * @param cloud sensor_msgs/PointCloud2
+ * @param projectuuid UUID of the target project. Used to set the corresponding field in the Flatbuffer message
+ * @param builder the flatbuffer message builder to build the flatbuffer message
+ * @param msguuid UUID of the message. Used to set the corresponding field in the Flatbuffer message
+ * @return Flatbuffer PointCloud2 message
+ */
 flatbuffers::Offset<seerep::fb::PointCloud2> toFlat(const sensor_msgs::PointCloud2& cloud, std::string projectuuid,
                                                     flatbuffers::grpc::MessageBuilder& builder, std::string msguuid);
 
@@ -87,30 +116,48 @@ sensor_msgs::PointCloud2 toROS(const seerep::fb::PointCloud2& cloud);
 
 /**
  * @brief Converts a ROS sensor_msgs/Image message to the corresponding
- * Flatbuffer Image message
+ * gRPC Flatbuffer Image message
  * @param image sensor_msgs/Image
- * @return Flatbuffer Image message
+ * @param projectuuid UUID of the target project. Used to set the corresponding field in the Flatbuffer message
+ * @param msguuid UUID of the message. Used to set the corresponding field in the Flatbuffer message
+ * @return gRPC Flatbuffer Image message
  */
 flatbuffers::grpc::Message<seerep::fb::Image> toFlat(const sensor_msgs::Image& image, std::string projectuuid,
                                                      std::string msguuid);
+/**
+ * @brief Converts a ROS sensor_msgs/Image message to the corresponding
+ * Flatbuffer Image message
+ * @param image sensor_msgs/Image
+ * @param projectuuid UUID of the target project. Used to set the corresponding field in the Flatbuffer message
+ * @param builder the flatbuffer message builder to build the flatbuffer message
+ * @param msguuid UUID of the message. Used to set the corresponding field in the Flatbuffer message
+ * @return Flatbuffer Image message
+ */
 flatbuffers::Offset<seerep::fb::Image> toFlat(const sensor_msgs::Image& image, std::string projectuuid,
                                               flatbuffers::grpc::MessageBuilder& builder, std::string msguuid);
 
 /**
  * @brief Converts a Flatbuffer Image message to the corresponding
  * ROS sensor_msgs/Image message
- * @param cloud Flatbuffer Image
+ * @param image Flatbuffer Image
  * @return ROS std_sensor_msgs/Image
  */
 sensor_msgs::Image toROS(const seerep::fb::Image& image);
 
 /**
  * @brief Converts a ROS geometry_msgs::Point message to the corresponding
- * Flatbuffer Image message
+ * gRPC Flatbuffer Image message
  * @param point geometry_msgs::Point
- * @return Flatbuffer Point message
+ * @return gRPC Flatbuffer Point message
  */
 flatbuffers::grpc::Message<seerep::fb::Point> toFlat(const geometry_msgs::Point& point);
+/**
+ * @brief Converts a ROS geometry_msgs::Point message to the corresponding
+ * Flatbuffer Image message
+ * @param point geometry_msgs::Point
+ * @param builder the flatbuffer message builder to build the flatbuffer message
+ * @return Flatbuffer Point message
+ */
 flatbuffers::Offset<seerep::fb::Point> toFlat(const geometry_msgs::Point& point,
                                               flatbuffers::grpc::MessageBuilder& builder);
 
@@ -124,11 +171,18 @@ geometry_msgs::Point toROS(const seerep::fb::Point& point);
 
 /**
  * @brief Converts a ROS geometry_msgs::Quaternion message to the corresponding
- * Flatbuffer Quaternion message
+ * gRPC Flatbuffer Quaternion message
  * @param quaternion geometry_msgs::Quaternion
- * @return Flatbuffer Quaternion message
+ * @return gRPC Flatbuffer Quaternion message
  */
 flatbuffers::grpc::Message<seerep::fb::Quaternion> toFlat(const geometry_msgs::Quaternion& quaternion);
+/**
+ * @brief Converts a ROS geometry_msgs::Quaternion message to the corresponding
+ * Flatbuffer Quaternion message
+ * @param quaternion geometry_msgs::Quaternion
+ * @param builder the flatbuffer message builder to build the flatbuffer message
+ * @return Flatbuffer Quaternion message
+ */
 flatbuffers::Offset<seerep::fb::Quaternion> toFlat(const geometry_msgs::Quaternion& quaternion,
                                                    flatbuffers::grpc::MessageBuilder& builder);
 
@@ -142,11 +196,18 @@ geometry_msgs::Quaternion toROS(const seerep::fb::Quaternion& quaternion);
 
 /**
  * @brief Converts a ROS geometry_msgs::Pose message to the corresponding
- * Flatbuffer Pose message
+ * gRPC Flatbuffer Pose message
  * @param pose geometry_msgs::Pose
- * @return Flatbuffer Pose message
+ * @return gRPC Flatbuffer Pose message
  */
 flatbuffers::grpc::Message<seerep::fb::Pose> toFlat(const geometry_msgs::Pose& pose);
+/**
+ * @brief Converts a ROS geometry_msgs::Pose message to the corresponding
+ * Flatbuffer Pose message
+ * @param pose geometry_msgs::Pose
+ * @param builder the flatbuffer message builder to build the flatbuffer message
+ * @return Flatbuffer Pose message
+ */
 flatbuffers::Offset<seerep::fb::Pose> toFlat(const geometry_msgs::Pose& pose,
                                              flatbuffers::grpc::MessageBuilder& builder);
 
@@ -160,12 +221,21 @@ geometry_msgs::Pose toROS(const seerep::fb::Pose& pose);
 
 /**
  * @brief Converts a ROS geometry_msgs::PoseStamped message to the corresponding
- * Flatbuffer PoseStamped message
+ * gRPC Flatbuffer PoseStamped message
  * @param pose geometry_msgs::PoseStamped
- * @return Flatbuffer PoseStamped message
+ * @param projectuuid UUID of the target project. Used to set the corresponding field in the Flatbuffer message
+ * @return gRPC Flatbuffer PoseStamped message
  */
 flatbuffers::grpc::Message<seerep::fb::PoseStamped> toFlat(const geometry_msgs::PoseStamped& pose,
                                                            std::string projectuuid);
+/**
+ * @brief Converts a ROS geometry_msgs::PoseStamped message to the corresponding
+ * Flatbuffer PoseStamped message
+ * @param pose geometry_msgs::PoseStamped
+ * @param projectuuid UUID of the target project. Used to set the corresponding field in the Flatbuffer message
+ * @param builder the flatbuffer message builder to build the flatbuffer message
+ * @return Flatbuffer PoseStamped message
+ */
 flatbuffers::Offset<seerep::fb::PoseStamped> toFlat(const geometry_msgs::PoseStamped& pose, std::string projectuuid,
                                                     flatbuffers::grpc::MessageBuilder& builder);
 
@@ -179,30 +249,46 @@ geometry_msgs::PoseStamped toROS(const seerep::fb::PoseStamped& pose);
 
 /**
  * @brief Converts a ROS geometry_msgs::Vector3 message to the corresponding
- * Flatbuffer Vector3 message
- * @param pose geometry_msgs::Vector3
- * @return Flatbuffer Vector3 message
+ * gRPC Flatbuffer Vector3 message
+ * @param vector geometry_msgs::Vector3
+ * @return gRPC Flatbuffer Vector3 message
  */
 flatbuffers::grpc::Message<seerep::fb::Vector3> toFlat(const geometry_msgs::Vector3& vector);
+/**
+ * @brief Converts a ROS geometry_msgs::Vector3 message to the corresponding
+ * Flatbuffer Vector3 message
+ * @param vector geometry_msgs::Vector3
+ * @param builder the flatbuffer message builder to build the flatbuffer message
+ * @return Flatbuffer Vector3 message
+ */
 flatbuffers::Offset<seerep::fb::Vector3> toFlat(const geometry_msgs::Vector3& vector,
                                                 flatbuffers::grpc::MessageBuilder& builder);
 
 /**
  * @brief Converts a Flatbuffer Vector3 message to the corresponding
  * ROS geometry_msgs::Vector3 message
- * @param pose Flatbuffer Vector3
+ * @param vector Flatbuffer Vector3
  * @return ROS geometry_msgs::Vector3
  */
 geometry_msgs::Vector3 toROS(const seerep::fb::Vector3& vector);
 
 /**
  * @brief Converts a ROS geometry_msgs::Vector3Stamped message to the corresponding
- * Flatbuffer Vector3Stamped message
- * @param pose geometry_msgs::Vector3Stamped
- * @return Flatbuffer Vector3Stamped message
+ * gRPC Flatbuffer Vector3Stamped message
+ * @param vector geometry_msgs::Vector3Stamped
+ * @param projectuuid UUID of the target project. Used to set the corresponding field in the Flatbuffer message
+ * @return gRPC Flatbuffer Vector3Stamped message
  */
 flatbuffers::grpc::Message<seerep::fb::Vector3Stamped> toFlat(const geometry_msgs::Vector3Stamped& vector,
                                                               std::string projectuuid);
+/**
+ * @brief Converts a ROS geometry_msgs::Vector3Stamped message to the corresponding
+ * Flatbuffer Vector3Stamped message
+ * @param vector geometry_msgs::Vector3Stamped
+ * @param projectuuid UUID of the target project. Used to set the corresponding field in the Flatbuffer message
+ * @param builder the flatbuffer message builder to build the flatbuffer message
+ * @return Flatbuffer Vector3Stamped message
+ */
 flatbuffers::Offset<seerep::fb::Vector3Stamped> toFlat(const geometry_msgs::Vector3Stamped& vector,
                                                        std::string projectuuid,
                                                        flatbuffers::grpc::MessageBuilder& builder);
@@ -217,31 +303,46 @@ geometry_msgs::Vector3Stamped toROS(const seerep::fb::Vector3Stamped& vector);
 
 /**
  * @brief Converts a ROS geometry_msgs::Transform message to the corresponding
- * Flatbuffer Transform message
- * @param pose geometry_msgs::Transform
- * @return Flatbuffer Transform message
+ * gRPC Flatbuffer Transform message
+ * @param transform geometry_msgs::Transform
+ * @return gRPC Flatbuffer Transform message
  */
 flatbuffers::grpc::Message<seerep::fb::Transform> toFlat(const geometry_msgs::Transform& transform);
+/**
+ * @brief Converts a ROS geometry_msgs::Transform message to the corresponding
+ * Flatbuffer Transform message
+ * @param transform geometry_msgs::Transform
+ * @param builder the flatbuffer message builder to build the flatbuffer message
+ * @return Flatbuffer Transform message
+ */
 flatbuffers::Offset<seerep::fb::Transform> toFlat(const geometry_msgs::Transform& transform,
                                                   flatbuffers::grpc::MessageBuilder& builder);
 
 /**
  * @brief Converts a Flatbuffer Transform message to the corresponding
  * ROS geometry_msgs::Transform message
- * @param pose Flatbuffer Transform
+ * @param transform Flatbuffer Transform
  * @return ROS geometry_msgs::Transform
  */
 geometry_msgs::Transform toROS(const seerep::fb::Transform& transform);
 
 /**
  * @brief Converts a ROS geometry_msgs::TransformStamped message to the corresponding
- * Flatbuffer TransformStamped message
- * @param pose geometry_msgs::TransformStamped
+ * gRPC Flatbuffer TransformStamped message
+ * @param transform geometry_msgs::TransformStamped
  * @param projectuuid std::string
- * @return Flatbuffer TransformStamped message
+ * @return gRPC Flatbuffer TransformStamped message
  */
 flatbuffers::grpc::Message<seerep::fb::TransformStamped> toFlat(const geometry_msgs::TransformStamped& transform,
                                                                 std::string projectuuid);
+/**
+ * @brief Converts a ROS geometry_msgs::TransformStamped message to the corresponding
+ * Flatbuffer TransformStamped message
+ * @param transform geometry_msgs::TransformStamped
+ * @param projectuuid std::string
+ * @param builder the flatbuffer message builder to build the flatbuffer message
+ * @return Flatbuffer TransformStamped message
+ */
 flatbuffers::Offset<seerep::fb::TransformStamped> toFlat(const geometry_msgs::TransformStamped& transform,
                                                          std::string projectuuid,
                                                          flatbuffers::grpc::MessageBuilder& builder);
@@ -249,20 +350,30 @@ flatbuffers::Offset<seerep::fb::TransformStamped> toFlat(const geometry_msgs::Tr
 /**
  * @brief Converts a Flatbuffer TransformStamped message to the corresponding
  * ROS geometry_msgs::TransformStamped message
- * @param pose Flatbuffer TransformStamped
+ * @param transform Flatbuffer TransformStamped
  * @return ROS geometry_msgs::TransformStamped
  */
 geometry_msgs::TransformStamped toROS(const seerep::fb::TransformStamped& transform);
 
 /**
  * @brief Converts a ROS vision_msgs::Detection2DArray message to the corresponding
- * Flatbuffer BoundingBoxes2D_labeled_stamped message
- * @param pose geometry_vision_msgs::Detection2DArray
- * @param projectuuid std::string
- * @return Flatbuffer BoundingBoxes2D_labeled_stamped message
+ * gRPC Flatbuffer BoundingBoxes2D_labeled_stamped message
+ * @param detection2d geometry_vision_msgs::Detection2DArray
+ * @param projectuuid UUID of the target project. Used to set the corresponding field in the Flatbuffer message
+ * @param msguuid UUID of the message. Used to set the corresponding field in the Flatbuffer message
+ * @return gRPC Flatbuffer BoundingBoxes2D_labeled_stamped message
  */
 flatbuffers::grpc::Message<seerep::fb::BoundingBoxes2DLabeledStamped>
 toFlat(const vision_msgs::Detection2DArray& detection2d, std::string projectuuid, std::string msguuid);
+/**
+ * @brief Converts a ROS vision_msgs::Detection2DArray message to the corresponding
+ * Flatbuffer BoundingBoxes2D_labeled_stamped message
+ * @param detection2d geometry_vision_msgs::Detection2DArray
+ * @param projectuuid UUID of the target project. Used to set the corresponding field in the Flatbuffer message
+ * @param builder the flatbuffer message builder to build the flatbuffer message
+ * @param msguuid UUID of the message. Used to set the corresponding field in the Flatbuffer message
+ * @return Flatbuffer BoundingBoxes2D_labeled_stamped message
+ */
 flatbuffers::Offset<seerep::fb::BoundingBoxes2DLabeledStamped> toFlat(const vision_msgs::Detection2DArray& detection2d,
                                                                       std::string projectuuid,
                                                                       flatbuffers::grpc::MessageBuilder& builder,
@@ -271,26 +382,32 @@ flatbuffers::Offset<seerep::fb::BoundingBoxes2DLabeledStamped> toFlat(const visi
 /**
  * @brief Converts a Flatbuffer BoundingBoxes2D_labeled_stamped message to the corresponding
  * ROS vision_msgs::Detection2DArray message
- * @param pose Flatbuffer BoundingBoxes2D_labeled_stamped
+ * @param bb_labeled_stamped Flatbuffer BoundingBoxes2D_labeled_stamped
  * @return ROS vision_msgs::Detection2DArray
  */
 vision_msgs::Detection2DArray toROS(const seerep::fb::BoundingBoxes2DLabeledStamped& bb_labeled_stamped);
 
 /**
  * @brief Converts a ROS vision_msgs::Detection2D message to the corresponding
- * Flatbuffer BoundingBoxes2DLabeled message
- * @param pose geometry_vision_msgs::Detection2D
- * @param projectuuid std::string
- * @return Flatbuffer BoundingBoxes2DLabeled message
+ * gRPC Flatbuffer BoundingBoxes2DLabeled message
+ * @param detection2d geometry_vision_msgs::Detection2D
+ * @return gRPC Flatbuffer BoundingBoxes2DLabeled message
  */
 flatbuffers::grpc::Message<seerep::fb::BoundingBox2DLabeled> toFlat(const vision_msgs::Detection2D& detection2d);
+/**
+ * @brief Converts a ROS vision_msgs::Detection2D message to the corresponding
+ * Flatbuffer BoundingBoxes2DLabeled message
+ * @param detection2d geometry_vision_msgs::Detection2D
+ * @param builder the flatbuffer message builder to build the flatbuffer message
+ * @return Flatbuffer BoundingBoxes2DLabeled message
+ */
 flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled> toFlat(const vision_msgs::Detection2D& detection2d,
                                                              flatbuffers::grpc::MessageBuilder& builder);
 
 /**
  * @brief Converts a Flatbuffer BoundingBoxes2DLabeled message to the corresponding
  * ROS vision_msgs::Detection2D message
- * @param pose Flatbuffer BoundingBoxes2DLabeled
+ * @param bb_labeled_stamped Flatbuffer BoundingBoxes2DLabeled
  * @return ROS vision_msgs::Detection2D
  */
 vision_msgs::Detection2D toROS(const seerep::fb::BoundingBox2DLabeled& bb_labeled_stamped);
