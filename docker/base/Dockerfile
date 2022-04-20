@@ -107,6 +107,7 @@ RUN wget https://github.com/google/flatbuffers/archive/refs/tags/v2.0.0.tar.gz \
         && make install -C /flatbuffers-2.0.0/build \
         && cd ../.. \
         && rm -rf flatbuffers-2.0.0 v2.0.0.tar.gz
+RUN pip3 install flatbuffers
 
 ####################################################
 #Install gRPC
