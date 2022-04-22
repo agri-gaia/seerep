@@ -8,9 +8,9 @@ workflow](https://github.com/agri-gaia/seerep/actions/workflows/main.yml/badge.s
 ## Table of Contents
 
 - [General](#general)
-- [Why?](#why)
+- [Why](#why)
 - [Overview of SEEREP](#overview-of-seerep)
-- [Further Documentation](#further-documentation)
+- [Documentation](#further-documentation)
 
 ## General
 
@@ -45,11 +45,11 @@ above-mentioned features.
 
 ![](docs/imgs//SEEREP-Overview.svg)
 
-## Further Documentation
+## Documentation
 
-(needs to be updated with the links when open sourced)
+### MkDocs
 
-- The full documentation for SEEREP is available under the [MkDocs Page](). This
-  includes a more detailed overview of the architecture and getting started
-  tutorials.
-- For detailed code documentation, visit the SEEREP [Doxygen Page]()
+Since the documentation is currently not published to GitHub Pages, it needs to
+be run locally. For that, switch into the folder where the `mkdocs.yml` is
+located and use `mkdocs serve` to start the server. The page should then be
+available under [http://127.0.0.1:8000/](http://127.0.0.1:8000/).
