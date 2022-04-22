@@ -33,7 +33,10 @@
 
 **/build/**
 .vscode
-#whitelist the .vscode folder in .devcontainer
+# whitelist the .vscode folder in .devcontainer
 !.devcontainer/.vscode
 
 .idea/
+
+# never commit the doxygen output folder
+**/html/**
