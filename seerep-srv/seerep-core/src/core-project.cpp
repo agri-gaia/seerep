@@ -2,7 +2,7 @@
 
 namespace seerep_core
 {
-CoreProject::CoreProject(const boost::uuids::uuid& uuid, const std::string path) : m_id(uuid), m_path(path)
+CoreProject::CoreProject(const boost::uuids::uuid& uuid, const std::string path) : m_uuid(uuid), m_path(path)
 {
   createHdf5Io(m_path);
 
@@ -12,7 +12,7 @@ CoreProject::CoreProject(const boost::uuids::uuid& uuid, const std::string path)
 }
 CoreProject::CoreProject(const boost::uuids::uuid& uuid, const std::string path, const std::string projectname,
                          const std::string mapFrameId)
-  : m_id(uuid), m_path(path), m_projectname(projectname), m_frameId(mapFrameId)
+  : m_uuid(uuid), m_path(path), m_projectname(projectname), m_frameId(mapFrameId)
 {
   createHdf5Io(m_path);
   m_ioGeneral->writeProjectname(m_projectname);
@@ -35,14 +35,14 @@ std::string CoreProject::getFrameId()
 seerep_core_msgs::QueryResultProject CoreProject::getPointCloud(const seerep_core_msgs::Query& query)
 {
   seerep_core_msgs::QueryResultProject result;
-  result.projectUuid = m_id;
+  result.projectUuid = m_uuid;
   result.dataUuids = m_pointcloudOverview->getData(m_tfOverview->transformQuery(query, m_frameId));
   return result;
 }
 seerep_core_msgs::QueryResultProject CoreProject::getImage(const seerep_core_msgs::Query& query)
 {
   seerep_core_msgs::QueryResultProject result;
-  result.projectUuid = m_id;
+  result.projectUuid = m_uuid;
   result.dataUuids = m_imageOverview->getData(m_tfOverview->transformQuery(query, m_frameId));
   return result;
 }

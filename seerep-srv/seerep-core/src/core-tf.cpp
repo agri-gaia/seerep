@@ -4,7 +4,7 @@ namespace seerep_core
 {
 // construct tfbuffer with INT_MAX so that it holds ALL tfs added
 CoreTf::CoreTf(std::shared_ptr<seerep_hdf5_core::Hdf5CoreTf> hdf5_io)
-  : m_hdf5_io(hdf5_io), m_tfbuffer(ros::DURATION_MAX)
+  : m_hdf5_io(hdf5_io), m_tfBuffer(ros::DURATION_MAX)
 {
   recreateDatasets();
 }
@@ -42,7 +42,7 @@ std::optional<geometry_msgs::TransformStamped> CoreTf::getData(const int64_t& ti
 {
   try
   {
-    return m_tfbuffer.lookupTransform(targetFrame, sourceFrame, ros::Time(timesecs, timenanos));
+    return m_tfBuffer.lookupTransform(targetFrame, sourceFrame, ros::Time(timesecs, timenanos));
   }
   catch (const std::exception& e)
   {
@@ -64,7 +64,7 @@ seerep_core_msgs::AABB CoreTf::transformAABB(seerep_core_msgs::AABB aabb, const 
 {
   if (targetFrame != sourceFrame)
   {
-    auto tf = m_tfbuffer.lookupTransform(targetFrame, sourceFrame, ros::Time(timeSecs, timeNanos));
+    auto tf = m_tfBuffer.lookupTransform(targetFrame, sourceFrame, ros::Time(timeSecs, timeNanos));
     tf2::Transform transform;
     transform.setOrigin(
         tf2::Vector3(tf.transform.translation.x, tf.transform.translation.y, tf.transform.translation.z));
@@ -91,7 +91,7 @@ seerep_core_msgs::AABB CoreTf::transformAABB(seerep_core_msgs::AABB aabb, const 
 bool CoreTf::canTransform(const std::string& sourceFrame, const std::string& targetFrame, const int64_t& timeSecs,
                           const int64_t& timeNanos)
 {
-  return m_tfbuffer.canTransform(targetFrame, sourceFrame, ros::Time(timeSecs, timeNanos));
+  return m_tfBuffer.canTransform(targetFrame, sourceFrame, ros::Time(timeSecs, timeNanos));
 }
 
 // TODO same as transformAABB -> merge!
@@ -101,7 +101,7 @@ seerep_core_msgs::Query CoreTf::transformQuery(const seerep_core_msgs::Query& qu
   {
     seerep_core_msgs::Query queryTransformed(query);
 
-    auto tf = m_tfbuffer.lookupTransform(targetFrame, query.header.frameId,
+    auto tf = m_tfBuffer.lookupTransform(targetFrame, query.header.frameId,
                                          ros::Time(query.header.timestamp.seconds, query.header.timestamp.nanos));
     tf2::Transform transform;
     transform.setOrigin(
@@ -133,14 +133,14 @@ seerep_core_msgs::Query CoreTf::transformQuery(const seerep_core_msgs::Query& qu
 
 std::vector<std::string> CoreTf::getFrames()
 {
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << m_tfbuffer.allFramesAsString();
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << m_tfBuffer.allFramesAsString();
 
-  return std::vector<std::string>{ m_tfbuffer.allFramesAsYAML() };
+  return std::vector<std::string>{ m_tfBuffer.allFramesAsYAML() };
 }
 
 void CoreTf::addToTfBuffer(geometry_msgs::TransformStamped transform)
 {
-  m_tfbuffer.setTransform(transform, "fromHDF5");
+  m_tfBuffer.setTransform(transform, "fromHDF5");
 }
 
 } /* namespace seerep_core */
