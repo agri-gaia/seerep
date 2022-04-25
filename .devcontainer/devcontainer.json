@@ -14,7 +14,8 @@
         "gaborv.flatbuffers",
         "vscode-icons-team.vscode-icons",
         "GitHub.vscode-pull-request-github",
-        "eamodio.gitlens"
+        "eamodio.gitlens",
+        "streetsidesoftware.code-spell-checker"
     ],
     "containerUser": "docker",
     "mounts": [
