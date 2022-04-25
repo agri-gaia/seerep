@@ -53,7 +53,7 @@ public:
   std::vector<boost::uuids::uuid> getData(const seerep_core_msgs::Query& query);
 
   /**
-   * @brief Adds a image to the spatial, temporal and semantic indices
+   * @brief Adds an image to the spatial, temporal and semantic indices
    * @param dataset contains the relevant information for indexing
    */
   void addDataset(const seerep_core_msgs::DatasetIndexable& dataset);
