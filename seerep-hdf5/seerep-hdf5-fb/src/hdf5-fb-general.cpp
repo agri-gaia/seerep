@@ -322,7 +322,8 @@ void Hdf5FbGeneral::writeBoundingBoxLabeled(
     std::vector<std::vector<double>> boundingBoxes;
     for (auto label : *boundingboxLabeled)
     {
-      labels.push_back(label->label()->str());
+      ///@todo write instance
+      labels.push_back(label->labelWithInstance()->label()->str());
       std::vector<double> box{ label->bounding_box()->point_min()->x(), label->bounding_box()->point_min()->y(),
                                label->bounding_box()->point_min()->z(), label->bounding_box()->point_max()->x(),
                                label->bounding_box()->point_max()->y(), label->bounding_box()->point_max()->z() };
@@ -353,7 +354,8 @@ void Hdf5FbGeneral::writeBoundingBox2DLabeled(
     std::vector<std::vector<double>> boundingBoxes;
     for (auto label : *boundingbox2DLabeled)
     {
-      labels.push_back(label->label()->str());
+      ///@todo write instace
+      labels.push_back(label->labelWithInstance()->label()->str());
       std::vector<double> box{ label->bounding_box()->point_min()->x(), label->bounding_box()->point_min()->y(),
                                label->bounding_box()->point_max()->x(), label->bounding_box()->point_max()->y() };
       boundingBoxes.push_back(box);
@@ -423,8 +425,9 @@ void Hdf5FbGeneral::readBoundingBox2DLabeled(const std::string& datatypeGroup, c
   // return result;
 }
 
-void Hdf5FbGeneral::writeLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid,
-                                       const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>* labelsGeneral)
+void Hdf5FbGeneral::writeLabelsGeneral(
+    const std::string& datatypeGroup, const std::string& uuid,
+    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>* labelsGeneral)
 {
   std::string id = datatypeGroup + "/" + uuid;
 
@@ -433,7 +436,8 @@ void Hdf5FbGeneral::writeLabelsGeneral(const std::string& datatypeGroup, const s
     std::vector<std::string> labels;
     for (auto label : *labelsGeneral)
     {
-      labels.push_back(label->str());
+      ///@todo write instance
+      labels.push_back(label->label()->str());
     }
 
     HighFive::DataSet datasetLabels =

@@ -38,7 +38,7 @@ public:
    * @param hdf5_io a shared pointer to the object handling the HDF5 io for instances
    * @param uuid the UUID of this instance
    */
-  CoreInstance(std::shared_ptr<seerep_hdf5_core::Hdf5CoreInstance> hdf5_io, boost::uuids::uuid& uuid);
+  CoreInstance(std::shared_ptr<seerep_hdf5_core::Hdf5CoreInstance> hdf5_io, const boost::uuids::uuid& uuidInstance);
   ~CoreInstance();
 
   /**

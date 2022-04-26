@@ -87,11 +87,12 @@ protected:
   //################
   // Labels General
   //################
-  void writeLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid,
-                          const google::protobuf::RepeatedPtrField<std::string>& labelsGeneral);
+  void
+  writeLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid,
+                     const google::protobuf::RepeatedPtrField<seerep::LabelWithInstance>& labelsGeneralWithInstances);
 
-  std::optional<google::protobuf::RepeatedPtrField<std::string>> readLabelsGeneral(const std::string& datatypeGroup,
-                                                                                   const std::string& uuid);
+  std::optional<google::protobuf::RepeatedPtrField<seerep::LabelWithInstance>>
+  readLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid);
 
   //################
   // Project

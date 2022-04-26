@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package seerep;
+
+message LabelWithInstance
+{
+  string label = 1;
+  string instanceUuid = 2;
+}

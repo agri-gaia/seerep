@@ -3,9 +3,10 @@ syntax = "proto3";
 package seerep;
 
 import "boundingbox2d.proto";
+import "label_with_instance.proto";
 
 message BoundingBox2DLabeled
 {
-  string label = 1;
+  LabelWithInstance labelWithInstance = 1;
   Boundingbox2D boundingBox = 2;
 }

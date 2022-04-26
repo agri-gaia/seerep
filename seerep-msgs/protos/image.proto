@@ -4,6 +4,7 @@ package seerep;
 
 import "header.proto";
 import "boundingbox2d_labeled.proto";
+import "label_with_instance.proto";
 
 /**
  * This message contains an uncompressed image
@@ -48,7 +49,7 @@ message Image
   bytes data = 8;
 
   // (optional) labels for the complete image
-  repeated string labels_general = 9;
+  repeated LabelWithInstance labels_general = 9;
 
   // (optional) bounding box based labels
   repeated BoundingBox2DLabeled labels_bb = 10;

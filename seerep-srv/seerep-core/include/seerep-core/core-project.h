@@ -15,11 +15,13 @@
 
 // seerep-hdf5-core
 #include <seerep-hdf5-core/hdf5-core-image.h>
+#include <seerep-hdf5-core/hdf5-core-instance.h>
 #include <seerep-hdf5-core/hdf5-core-point-cloud.h>
 #include <seerep-hdf5-core/hdf5-core-tf.h>
 
 // seerep-core
 #include "core-image.h"
+#include "core-instances.h"
 #include "core-point-cloud.h"
 #include "core-tf.h"
 
@@ -163,17 +165,21 @@ private:
   std::shared_ptr<seerep_hdf5_core::Hdf5CoreGeneral> m_ioGeneral;
   /** @brief object handling the HDF5 file IO regarding TFs */
   std::shared_ptr<seerep_hdf5_core::Hdf5CoreTf> m_ioTf;
+  /** @brief object handling the HDF5 file IO regarding instances */
+  std::shared_ptr<seerep_hdf5_core::Hdf5CoreInstance> m_ioInstance;
   /** @brief object handling the HDF5 file IO regarding point clouds */
   std::shared_ptr<seerep_hdf5_core::Hdf5CorePointCloud> m_ioPointCloud;
   /** @brief object handling the HDF5 file IO regarding images */
   std::shared_ptr<seerep_hdf5_core::Hdf5CoreImage> m_ioImage;
 
   /** @brief object handling the TF buffer and TF queries */
-  std::shared_ptr<seerep_core::CoreTf> m_tfOverview;
+  std::shared_ptr<seerep_core::CoreTf> m_coreTfs;
+  /** @brief object handling the instances */
+  std::shared_ptr<seerep_core::CoreInstances> m_coreInstances;
   /** @brief object handling the point cloud indices and point cloud related queries */
-  std::unique_ptr<seerep_core::CorePointCloud> m_pointcloudOverview;
+  std::unique_ptr<seerep_core::CorePointCloud> m_corePointClouds;
   /** @brief object handling the image indices and image related queries */
-  std::unique_ptr<seerep_core::CoreImage> m_imageOverview;
+  std::unique_ptr<seerep_core::CoreImage> m_coreImages;
 
   boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
 };

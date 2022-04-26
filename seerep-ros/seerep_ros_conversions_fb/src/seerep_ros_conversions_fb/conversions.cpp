@@ -474,10 +474,17 @@ flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled> toFlat(const vision_msgs::
   bbbuilder.add_point_max(pointMax);
   auto bb = bbbuilder.Finish();
 
+  auto InstanceOffset = builder.CreateString("");
   auto labelOffset = builder.CreateString(std::to_string(detection2d.results.at(0).id));
+
+  seerep::fb::LabelWithInstanceBuilder labelBuilder(builder);
+  labelBuilder.add_instanceUuid(InstanceOffset);
+  labelBuilder.add_label(labelOffset);
+  auto labelWithInstanceOffset = labelBuilder.Finish();
+
   seerep::fb::BoundingBox2DLabeledBuilder bblabeledbuilder(builder);
   bblabeledbuilder.add_bounding_box(bb);
-  bblabeledbuilder.add_label(labelOffset);
+  bblabeledbuilder.add_labelWithInstance(labelWithInstanceOffset);
   return bblabeledbuilder.Finish();
 }
 

@@ -107,8 +107,19 @@ boost::uuids::uuid CoreFbImage::addData(const seerep::fb::Image& img)
   {
     for (auto label : *img.labels_general())
     {
+      boost::uuids::string_generator gen;
+      boost::uuids::uuid uuidInstance;
+      try
+      {
+        uuidInstance = gen(label->instanceUuid()->str());
+      }
+      catch (std::runtime_error e)
+      {
+        uuidInstance = boost::uuids::nil_uuid();
+      }
+
       dataForIndices.labelsWithInstances.push_back(
-          seerep_core_msgs::LabelWithInstance{ .label = label->str(), .uuidInstance = boost::uuids::nil_uuid() });
+          seerep_core_msgs::LabelWithInstance{ .label = label->label()->str(), .uuidInstance = uuidInstance });
     }
   }
 
@@ -116,8 +127,19 @@ boost::uuids::uuid CoreFbImage::addData(const seerep::fb::Image& img)
   {
     for (auto label : *img.labels_bb())
     {
+      boost::uuids::string_generator gen;
+      boost::uuids::uuid uuidInstance;
+      try
+      {
+        uuidInstance = gen(label->labelWithInstance()->instanceUuid()->str());
+      }
+      catch (std::runtime_error e)
+      {
+        uuidInstance = boost::uuids::nil_uuid();
+      }
+
       dataForIndices.labelsWithInstances.push_back(seerep_core_msgs::LabelWithInstance{
-          .label = label->label()->str(), .uuidInstance = boost::uuids::nil_uuid() });
+          .label = label->labelWithInstance()->label()->str(), .uuidInstance = uuidInstance });
     }
   }
 
@@ -138,13 +160,15 @@ void CoreFbImage::addBoundingBoxesLabeled(const seerep::fb::BoundingBoxes2DLabel
   std::vector<std::string> labels;
   for (auto bb : *bbs2dlabeled.labels_bb())
   {
-    labels.push_back(bb->label()->str());
+    labels.push_back(bb->labelWithInstance()->label()->str());
   }
   // this only adds labels to the image in the core
   // if there are already bounding box labels for this image
   // those labels must be removed separatly. The hdfio currently overrides
   // existing labels. The data is only correct if labels are added and there
   // weren't any bounding box labels before
+
+  /// @todo also add instance
   m_seerepCore->addImageLabels(labels, uuidMsg, uuidProject);
 }
 

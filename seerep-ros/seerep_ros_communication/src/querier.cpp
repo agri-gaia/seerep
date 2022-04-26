@@ -40,9 +40,9 @@ void QueryData::queryImage(const seerep::Query& query, ros::Publisher& img_pub) 
 
     for (auto labels : response.labels_bb())
     {
-      std::cout << "label: " << labels.label() << " box: " << labels.boundingbox().point_min().x() << " / "
-                << labels.boundingbox().point_min().y() << " / " << labels.boundingbox().point_max().x() << " / "
-                << labels.boundingbox().point_max().y() << std::endl;
+      std::cout << "label: " << labels.labelwithinstance().label() << " box: " << labels.boundingbox().point_min().x()
+                << " / " << labels.boundingbox().point_min().y() << " / " << labels.boundingbox().point_max().x()
+                << " / " << labels.boundingbox().point_max().y() << std::endl;
     }
 
     ROS_INFO_STREAM("publish image\n" << img);

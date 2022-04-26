@@ -23,6 +23,7 @@ set(MY_PROTO_FILES
 	protos/frame_query.proto
 	protos/header.proto
 	protos/image.proto
+	protos/label_with_instance.proto
 	protos/point_cloud_2.proto
 	protos/point_field.proto
 	protos/point_stamped.proto
@@ -62,6 +63,7 @@ set(MY_FBS_FILES
 	fbs/frame_query.fbs
 	fbs/header.fbs
 	fbs/image.fbs
+	fbs/label_with_instance.fbs
 	fbs/point_cloud_2.fbs
 	fbs/point_field.fbs
 	fbs/point_stamped.fbs

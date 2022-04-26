@@ -3,8 +3,9 @@
 namespace seerep_core
 {
 CoreImage::CoreImage(std::shared_ptr<seerep_hdf5_core::Hdf5CoreImage> hdf5_io,
-                     std::shared_ptr<seerep_core::CoreTf> tfOverview, std::string frameId)
-  : m_frameId(frameId), m_tfOverview(tfOverview), m_hdf5_io(hdf5_io)
+                     std::shared_ptr<seerep_core::CoreTf> tfOverview,
+                     std::shared_ptr<seerep_core::CoreInstances> coreInstances, std::string frameId)
+  : m_frameId(frameId), m_tfOverview(tfOverview), m_coreInstances(coreInstances), m_hdf5_io(hdf5_io)
 {
   recreateDatasets();
 }
@@ -194,6 +195,12 @@ void CoreImage::addDatasetToIndices(const seerep_core_msgs::DatasetIndexable& da
       // label doesn't already exist. Create new pair of label and vector of image ids
       m_label.insert(
           std::make_pair(labelWithInstance.label, std::vector<boost::uuids::uuid>{ dataset.header.uuidData }));
+    }
+
+    // add to instance
+    if (!labelWithInstance.uuidInstance.is_nil())
+    {
+      m_coreInstances->addImage(labelWithInstance, dataset.header.uuidData);
     }
   }
 }

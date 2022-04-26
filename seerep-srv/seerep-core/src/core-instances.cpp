@@ -10,15 +10,19 @@ CoreInstances::~CoreInstances()
 {
 }
 
-std::shared_ptr<seerep_core::CoreInstance> CoreInstances::createNewInstance()
+std::shared_ptr<seerep_core::CoreInstance> CoreInstances::createNewInstance(const std::string& label)
 {
-  auto uuid = boost::uuids::random_generator()();
-  return createNewInstance(uuid);
+  return createNewInstance(
+      seerep_core_msgs::LabelWithInstance{ .label = label, .uuidInstance = boost::uuids::random_generator()() });
 }
-std::shared_ptr<seerep_core::CoreInstance> CoreInstances::createNewInstance(boost::uuids::uuid uuid)
+std::shared_ptr<seerep_core::CoreInstance>
+CoreInstances::createNewInstance(const seerep_core_msgs::LabelWithInstance& labelWithInstance)
 {
-  auto instance = std::make_shared<seerep_core::CoreInstance>(seerep_core::CoreInstance(m_hdf5_io, uuid));
-  m_instances.emplace(uuid, instance);
+  auto instance =
+      std::make_shared<seerep_core::CoreInstance>(seerep_core::CoreInstance(m_hdf5_io, labelWithInstance.uuidInstance));
+  /// @todo set label in instance
+  // instace->setLabel(labelWithInstance.label);
+  m_instances.emplace(labelWithInstance.uuidInstance, instance);
   return instance;
 }
 
@@ -68,20 +72,23 @@ std::vector<boost::uuids::uuid> CoreInstances::getImages(const std::vector<boost
 
   return imagesAll;
 }
-void CoreInstances::addImage(const boost::uuids::uuid& uuidInstance, const boost::uuids::uuid& uuidDataset)
+void CoreInstances::addImage(const seerep_core_msgs::LabelWithInstance& labelWithInstance,
+                             const boost::uuids::uuid& uuidDataset)
 {
-  auto instanceMapEntry = m_instances.find(uuidInstance);
+  auto instanceMapEntry = m_instances.find(labelWithInstance.uuidInstance);
   std::shared_ptr<seerep_core::CoreInstance> instance;
   if (instanceMapEntry == m_instances.end())
   {
-    instance = createNewInstance(uuidInstance);
+    instance = createNewInstance(labelWithInstance);
   }
   else
   {
-    instance = m_instances.at(uuidInstance);
+    instance = m_instances.at(labelWithInstance.uuidInstance);
   }
-  // TODO check if instances exists
+  /// @todo check if label of instance and of dataset match
+  // if(instance->getLabel() == labelWithInstance.label){
   instance->addImage(uuidDataset);
+  //}
 }
 
 void CoreInstances::recreateInstances()

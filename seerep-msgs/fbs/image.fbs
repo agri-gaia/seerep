@@ -1,6 +1,7 @@
 
 include "header.fbs";
 include "boundingbox2d_labeled.fbs";
+include "label_with_instance.fbs";
 
 namespace seerep.fb;
 
@@ -13,6 +14,6 @@ table Image {
   step:uint;
   row_step:uint;
   data:[ubyte];
-  labels_general:[string];
+  labels_general:[LabelWithInstance];
   labels_bb:[seerep.fb.BoundingBox2DLabeled];
 }
