@@ -1,0 +1,7 @@
+
+namespace seerep.fb;
+
+table LabelWithInstance {
+  label:string;
+  instanceUuid:string;
+}

@@ -2,8 +2,9 @@
 
 namespace seerep_core
 {
-CoreInstance::CoreInstance(std::shared_ptr<seerep_hdf5_core::Hdf5CoreInstance> hdf5_io, boost::uuids::uuid& uuid)
-  : m_hdf5_io(hdf5_io), m_uuid(uuid)
+CoreInstance::CoreInstance(std::shared_ptr<seerep_hdf5_core::Hdf5CoreInstance> hdf5_io,
+                           const boost::uuids::uuid& uuidInstance)
+  : m_hdf5_io(hdf5_io), m_uuid(uuidInstance)
 {
   recreateInstances();
 }

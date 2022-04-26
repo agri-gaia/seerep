@@ -88,14 +88,35 @@ boost::uuids::uuid CorePbImage::addData(const seerep::Image& img)
   dataForIndices.labelsWithInstances.reserve(img.labels_general().size() + img.labels_bb().size());
   for (auto label : img.labels_general())
   {
+    boost::uuids::string_generator gen;
+    boost::uuids::uuid uuidInstance;
+    try
+    {
+      uuidInstance = gen(label.instanceuuid());
+    }
+    catch (std::runtime_error e)
+    {
+      uuidInstance = boost::uuids::nil_uuid();
+    }
+
     dataForIndices.labelsWithInstances.push_back(
-        seerep_core_msgs::LabelWithInstance{ .label = label, .uuidInstance = boost::uuids::nil_uuid() });
+        seerep_core_msgs::LabelWithInstance{ .label = label.label(), .uuidInstance = uuidInstance });
   }
 
   for (auto label : img.labels_bb())
   {
-    dataForIndices.labelsWithInstances.push_back(
-        seerep_core_msgs::LabelWithInstance{ .label = label.label(), .uuidInstance = boost::uuids::nil_uuid() });
+    boost::uuids::string_generator gen;
+    boost::uuids::uuid uuidInstance;
+    try
+    {
+      uuidInstance = gen(label.labelwithinstance().instanceuuid());
+    }
+    catch (std::runtime_error e)
+    {
+      uuidInstance = boost::uuids::nil_uuid();
+    }
+    dataForIndices.labelsWithInstances.push_back(seerep_core_msgs::LabelWithInstance{
+        .label = label.labelwithinstance().label(), .uuidInstance = uuidInstance });
   }
 
   m_seerepCore->addImage(dataForIndices);

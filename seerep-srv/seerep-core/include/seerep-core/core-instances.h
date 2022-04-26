@@ -43,13 +43,14 @@ public:
    * @brief Create a new instance with a random UUID
    * @return shared pointer to the created instance object
    */
-  std::shared_ptr<seerep_core::CoreInstance> createNewInstance();
+  std::shared_ptr<seerep_core::CoreInstance> createNewInstance(const std::string& label);
   /**
    * @brief Create a new instance with the given UUID
    * @param uuid the UUID for the new instance
    * @return shared pointer to the created instance object
    */
-  std::shared_ptr<seerep_core::CoreInstance> createNewInstance(boost::uuids::uuid uuid);
+  std::shared_ptr<seerep_core::CoreInstance>
+  createNewInstance(const seerep_core_msgs::LabelWithInstance& labelWithInstance);
 
   /**
    * @brief Returns the value of the attribute of the instance with the defined UUID defined by the key
@@ -74,10 +75,10 @@ public:
   std::vector<boost::uuids::uuid> getImages(const std::vector<boost::uuids::uuid>& instanceIds) const;
   /**
    * @brief adds an image to this instance
-   * @param uuidInstance the UUID of the targeted instance
+   * @param labelWithInstance the UUID of the targeted instance and the assigned label
    * @param uuidDataset the UUID of the image
    */
-  void addImage(const boost::uuids::uuid& uuidInstance, const boost::uuids::uuid& uuidDataset);
+  void addImage(const seerep_core_msgs::LabelWithInstance& labelWithInstance, const boost::uuids::uuid& uuidDataset);
 
 private:
   /**

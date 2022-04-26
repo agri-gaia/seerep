@@ -1,9 +1,10 @@
 
 include "boundingbox.fbs";
+include "label_with_instance.fbs";
 
 namespace seerep.fb;
 
 table BoundingBoxLabeled {
-  label:string;
+  labelWithInstance:LabelWithInstance;
   bounding_box:seerep.fb.Boundingbox;
 }

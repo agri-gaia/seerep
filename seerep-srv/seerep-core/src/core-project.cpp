@@ -36,43 +36,43 @@ seerep_core_msgs::QueryResultProject CoreProject::getPointCloud(const seerep_cor
 {
   seerep_core_msgs::QueryResultProject result;
   result.projectUuid = m_uuid;
-  result.dataUuids = m_pointcloudOverview->getData(m_tfOverview->transformQuery(query, m_frameId));
+  result.dataUuids = m_corePointClouds->getData(m_coreTfs->transformQuery(query, m_frameId));
   return result;
 }
 seerep_core_msgs::QueryResultProject CoreProject::getImage(const seerep_core_msgs::Query& query)
 {
   seerep_core_msgs::QueryResultProject result;
   result.projectUuid = m_uuid;
-  result.dataUuids = m_imageOverview->getData(m_tfOverview->transformQuery(query, m_frameId));
+  result.dataUuids = m_coreImages->getData(m_coreTfs->transformQuery(query, m_frameId));
   return result;
 }
 
 void CoreProject::addPointCloud(const seerep_core_msgs::DatasetIndexable& dataset)
 {
-  m_pointcloudOverview->addDataset(dataset);
+  m_corePointClouds->addDataset(dataset);
 }
 void CoreProject::addImage(const seerep_core_msgs::DatasetIndexable& dataset)
 {
-  m_imageOverview->addDataset(dataset);
+  m_coreImages->addDataset(dataset);
 }
 
 void CoreProject::addImageLabels(std::vector<std::string>& labels, const boost::uuids::uuid& msgUuid)
 {
-  m_imageOverview->addImageLabels(labels, msgUuid);
+  m_coreImages->addImageLabels(labels, msgUuid);
 }
 
 void CoreProject::addTF(const geometry_msgs::TransformStamped& tf)
 {
-  m_tfOverview->addDataset(tf);
+  m_coreTfs->addDataset(tf);
 }
 std::optional<geometry_msgs::TransformStamped> CoreProject::getTF(const seerep_core_msgs::QueryTf& transformQuery)
 {
-  return m_tfOverview->getData(transformQuery.timestamp.seconds, transformQuery.timestamp.nanos,
-                               transformQuery.parentFrameId, transformQuery.childFrameId);
+  return m_coreTfs->getData(transformQuery.timestamp.seconds, transformQuery.timestamp.nanos,
+                            transformQuery.parentFrameId, transformQuery.childFrameId);
 }
 std::vector<std::string> CoreProject::getFrames()
 {
-  return m_tfOverview->getFrames();
+  return m_coreTfs->getFrames();
 }
 
 std::shared_ptr<std::mutex> CoreProject::getHdf5FileMutex()
@@ -91,14 +91,16 @@ void CoreProject::createHdf5Io(std::string path)
 
   m_ioGeneral = std::make_shared<seerep_hdf5_core::Hdf5CoreGeneral>(m_hdf5_file, m_write_mtx);
   m_ioTf = std::make_shared<seerep_hdf5_core::Hdf5CoreTf>(m_hdf5_file, m_write_mtx);
+  m_ioInstance = std::make_shared<seerep_hdf5_core::Hdf5CoreInstance>(m_hdf5_file, m_write_mtx);
   m_ioPointCloud = std::make_shared<seerep_hdf5_core::Hdf5CorePointCloud>(m_hdf5_file, m_write_mtx);
   m_ioImage = std::make_shared<seerep_hdf5_core::Hdf5CoreImage>(m_hdf5_file, m_write_mtx);
 }
 void CoreProject::recreateDatatypes()
 {
-  m_tfOverview = std::make_shared<seerep_core::CoreTf>(m_ioTf);
-  m_imageOverview = std::make_unique<seerep_core::CoreImage>(m_ioImage, m_tfOverview, m_frameId);
-  m_pointcloudOverview = std::make_unique<seerep_core::CorePointCloud>(m_ioPointCloud, m_tfOverview, m_frameId);
+  m_coreTfs = std::make_shared<seerep_core::CoreTf>(m_ioTf);
+  m_coreInstances = std::make_shared<seerep_core::CoreInstances>(m_ioInstance);
+  m_coreImages = std::make_unique<seerep_core::CoreImage>(m_ioImage, m_coreTfs, m_coreInstances, m_frameId);
+  m_corePointClouds = std::make_unique<seerep_core::CorePointCloud>(m_ioPointCloud, m_coreTfs, m_frameId);
 
   std::vector<std::string> datatypeNames = m_ioGeneral->getGroupDatasets("");
   for (auto datatypeName : datatypeNames)

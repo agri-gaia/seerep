@@ -11,6 +11,7 @@
 // seerep-hdf5-core
 #include <seerep-hdf5-core/hdf5-core-image.h>
 // seerep-core
+#include "core-instances.h"
 #include "core-tf.h"
 
 // uuid
@@ -42,7 +43,7 @@ public:
    * @param frameId the common frame id of the project used for the spatial index
    */
   CoreImage(std::shared_ptr<seerep_hdf5_core::Hdf5CoreImage> hdf5_io, std::shared_ptr<seerep_core::CoreTf> tfOverview,
-            std::string frameId);
+            std::shared_ptr<seerep_core::CoreInstances> coreInstances, std::string frameId);
   ~CoreImage();
 
   /**
@@ -116,6 +117,8 @@ private:
   std::string m_frameId;
   /** @brief shared pointer to the object handling transformations */
   std::shared_ptr<seerep_core::CoreTf> m_tfOverview;
+  /** @brief shared pointer to the object handling the instances */
+  std::shared_ptr<seerep_core::CoreInstances> m_coreInstances;
   /** @brief shared pointer to the object handling the HDF5 io for images */
   std::shared_ptr<seerep_hdf5_core::Hdf5CoreImage> m_hdf5_io;
 

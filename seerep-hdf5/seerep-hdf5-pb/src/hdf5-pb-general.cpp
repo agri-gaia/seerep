@@ -319,7 +319,8 @@ void Hdf5PbGeneral::writeBoundingBoxLabeled(
     std::vector<std::vector<double>> boundingBoxes;
     for (auto label : boundingboxLabeled)
     {
-      labels.push_back(label.label());
+      ///@todo write instance
+      labels.push_back(label.labelwithinstance().label());
       std::vector<double> box{ label.boundingbox().point_min().x(), label.boundingbox().point_min().y(),
                                label.boundingbox().point_min().z(), label.boundingbox().point_max().x(),
                                label.boundingbox().point_max().y(), label.boundingbox().point_max().z() };
@@ -350,7 +351,8 @@ void Hdf5PbGeneral::writeBoundingBox2DLabeled(
     std::vector<std::vector<double>> boundingBoxes;
     for (auto label : boundingbox2DLabeled)
     {
-      labels.push_back(label.label());
+      ///@todo write instance
+      labels.push_back(label.labelwithinstance().label());
       std::vector<double> box{ label.boundingbox().point_min().x(), label.boundingbox().point_min().y(),
                                label.boundingbox().point_max().x(), label.boundingbox().point_max().y() };
       boundingBoxes.push_back(box);
@@ -406,7 +408,9 @@ Hdf5PbGeneral::readBoundingBox2DLabeled(const std::string& datatypeGroup, const 
   for (long unsigned int i = 0; i < labels.size(); i++)
   {
     seerep::BoundingBox2DLabeled bblabeled;
-    bblabeled.set_label(labels.at(i));
+    bblabeled.mutable_labelwithinstance()->set_label(labels.at(i));
+    /// @todo load instance
+    bblabeled.mutable_labelwithinstance()->set_instanceuuid("");
 
     bblabeled.mutable_boundingbox()->mutable_point_min()->set_x(boundingBoxes.at(i).at(0));
     bblabeled.mutable_boundingbox()->mutable_point_min()->set_y(boundingBoxes.at(i).at(1));
@@ -419,17 +423,19 @@ Hdf5PbGeneral::readBoundingBox2DLabeled(const std::string& datatypeGroup, const 
   return result;
 }
 
-void Hdf5PbGeneral::writeLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid,
-                                       const google::protobuf::RepeatedPtrField<std::string>& labelsGeneral)
+void Hdf5PbGeneral::writeLabelsGeneral(
+    const std::string& datatypeGroup, const std::string& uuid,
+    const google::protobuf::RepeatedPtrField<seerep::LabelWithInstance>& labelsGeneralWithInstances)
 {
   std::string id = datatypeGroup + "/" + uuid;
 
-  if (!labelsGeneral.empty())
+  if (!labelsGeneralWithInstances.empty())
   {
     std::vector<std::string> labels;
-    for (auto label : labelsGeneral)
+    for (auto labelWithInstances : labelsGeneralWithInstances)
     {
-      labels.push_back(label);
+      labels.push_back(labelWithInstances.label());
+      /// @todo write instances
     }
 
     HighFive::DataSet datasetLabels = m_file->createDataSet<std::string>(
@@ -440,7 +446,7 @@ void Hdf5PbGeneral::writeLabelsGeneral(const std::string& datatypeGroup, const s
   }
 }
 
-std::optional<google::protobuf::RepeatedPtrField<std::string>>
+std::optional<google::protobuf::RepeatedPtrField<seerep::LabelWithInstance>>
 Hdf5PbGeneral::readLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid)
 {
   std::string id = datatypeGroup + "/" + uuid;
@@ -455,11 +461,15 @@ Hdf5PbGeneral::readLabelsGeneral(const std::string& datatypeGroup, const std::st
   HighFive::DataSet datasetLabels = m_file->getDataSet(id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERAL);
   datasetLabels.read(labels);
 
-  google::protobuf::RepeatedPtrField<std::string> result;
+  google::protobuf::RepeatedPtrField<seerep::LabelWithInstance> result;
 
   for (long unsigned int i = 0; i < labels.size(); i++)
   {
-    result.Add(std::move(labels.at(i)));
+    seerep::LabelWithInstance labelWithInstance;
+    labelWithInstance.set_label(labels.at(i));
+    ///@todo load instance uuid
+    labelWithInstance.set_instanceuuid("");
+    result.Add(std::move(labelWithInstance));
   }
 
   return result;
