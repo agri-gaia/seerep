@@ -21,6 +21,9 @@ set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 find_package(Boost COMPONENTS log log_setup REQUIRED)
 
+enable_testing()
+find_package(GTest REQUIRED)
+
 configure_file(include/SeerepHdf5FbConfig.h.in SeerepHdf5FbConfig.h)
 
 # message("HighFive Include Dirs: ${HighFive_INCLUDE_DIRS} Libraries: ${HighFive_LIBRARIES}")
@@ -47,6 +50,11 @@ target_link_libraries(seerephdf5fb
 	${Boost_LIBRARIES}
 	${Boost_LOG_LIBRARY} ${Boost_LOG_SETUP_LIBRARY}
 )
+
+# create executable with tests
+add_executable(flatbuffer-write-load test/fb-write-load-test.cpp)
+target_link_libraries(flatbuffer-write-load GTest::gtest GTest::gtest_main)
+add_test(flatbuffer-write-load flatbuffer-write-load)
 
 set(CMAKE_INSTALL_INCLUDEDIR include)
 set(CMAKE_INSTALL_LIBDIR lib)
