@@ -14,6 +14,9 @@ find_package(SeerepMsgs REQUIRED)
 find_package(SeerepHdf5Core REQUIRED)
 find_package(HighFive REQUIRED)
 
+enable_testing()
+find_package(GTest REQUIRED)
+
 configure_file(include/SeerepHdf5FbConfig.h.in SeerepHdf5FbConfig.h)
 
 message("HighFive Include Dirs: ${HighFive_INCLUDE_DIRS} Libraries: ${HighFive_LIBRARIES}")
@@ -37,6 +40,11 @@ target_link_libraries(seerephdf5fb
 	${PROTOBUF_LIBRARIES}
 	${HighFive_LIBRARIES}
 )
+
+# create executable with tests
+add_executable(flatbuffer-write-load test/fb-write-load-test.cpp)
+target_link_libraries(flatbuffer-write-load GTest::gtest GTest::gtest_main)
+add_test(flatbuffer-write-load flatbuffer-write-load)
 
 set(CMAKE_INSTALL_INCLUDEDIR include)
 set(CMAKE_INSTALL_LIBDIR lib)
