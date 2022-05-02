@@ -40,3 +40,4 @@
 
 # never commit the doxygen output folder
 **/html/**
+doxygen
