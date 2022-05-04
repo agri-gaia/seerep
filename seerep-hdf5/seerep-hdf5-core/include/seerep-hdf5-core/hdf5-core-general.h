@@ -101,8 +101,10 @@ public:
   // dataset names
   inline static const std::string RAWDATA = "rawdata";
   inline static const std::string LABELGENERAL = "labelGeneral";
+  inline static const std::string LABELGENERALINSTANCES = "labelGeneralInstances";
   inline static const std::string LABELBB = "labelBB";
   inline static const std::string LABELBBBOXES = "labelBBBoxes";
+  inline static const std::string LABELBBINSTANCES = "labelBBInstances";
 
 protected:
   std::shared_ptr<HighFive::File> m_file;

@@ -152,13 +152,13 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
 
   std::vector<std::string> boundingBoxesLabels;
   std::vector<std::vector<double>> boundingBoxes;
-  readBoundingBox2DLabeled(HDF5_GROUP_IMAGE, id, boundingBoxesLabels, boundingBoxes);
+  std::vector<std::string> boundingBoxesInstances;
+  readBoundingBox2DLabeled(HDF5_GROUP_IMAGE, id, boundingBoxesLabels, boundingBoxes, boundingBoxesInstances);
 
   std::vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>> bblabeledVector;
   for (long unsigned int i = 0; i < boundingBoxes.size(); i++)
   {
-    ///@todo load instances
-    auto InstanceOffset = builder.CreateString("");
+    auto InstanceOffset = builder.CreateString(boundingBoxesInstances.at(i));
     auto labelOffset = builder.CreateString(boundingBoxesLabels.at(i));
 
     seerep::fb::LabelWithInstanceBuilder labelBuilder(builder);
@@ -183,16 +183,15 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
   auto bblabeledVectorOffset = builder.CreateVector(bblabeledVector);
 
   std::vector<std::string> labelsGeneral;
-  readLabelsGeneral(HDF5_GROUP_IMAGE, id, labelsGeneral);
-  ///@todo load instances general
+  std::vector<std::string> labelsGeneralInstances;
+  readLabelsGeneral(HDF5_GROUP_IMAGE, id, labelsGeneral, labelsGeneralInstances);
 
   std::vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>> labelGeneralVector;
   labelGeneralVector.resize(labelsGeneral.size());
-  for (auto label : labelsGeneral)
+  for (int i = 0; i < labelsGeneral.size(); i++)
   {
-    auto labelOffset = builder.CreateString(label);
-    ///@todo load instance general
-    auto instanceOffset = builder.CreateString("");
+    auto labelOffset = builder.CreateString(labelsGeneral.at(i));
+    auto instanceOffset = builder.CreateString(labelsGeneralInstances.at(i));
 
     seerep::fb::LabelWithInstanceBuilder labelBuilder(builder);
     labelBuilder.add_label(labelOffset);
