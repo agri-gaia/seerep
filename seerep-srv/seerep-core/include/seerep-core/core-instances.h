@@ -90,6 +90,9 @@ private:
   /** @brief map from the uuid of an instance to the object of it */
   std::unordered_map<boost::uuids::uuid, std::shared_ptr<seerep_core::CoreInstance>, boost::hash<boost::uuids::uuid>>
       m_instances;
+
+public:
+  inline static const std::string ATTRIBUTELABEL = "label";
 };
 
 } /* namespace seerep_core */

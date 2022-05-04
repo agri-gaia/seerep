@@ -20,8 +20,8 @@ CoreInstances::createNewInstance(const seerep_core_msgs::LabelWithInstance& labe
 {
   auto instance =
       std::make_shared<seerep_core::CoreInstance>(seerep_core::CoreInstance(m_hdf5_io, labelWithInstance.uuidInstance));
-  /// @todo set label in instance
-  // instace->setLabel(labelWithInstance.label);
+
+  instance->writeAttribute(CoreInstances::ATTRIBUTELABEL, labelWithInstance.label);
   m_instances.emplace(labelWithInstance.uuidInstance, instance);
   return instance;
 }
@@ -85,10 +85,15 @@ void CoreInstances::addImage(const seerep_core_msgs::LabelWithInstance& labelWit
   {
     instance = m_instances.at(labelWithInstance.uuidInstance);
   }
-  /// @todo check if label of instance and of dataset match
-  // if(instance->getLabel() == labelWithInstance.label){
-  instance->addImage(uuidDataset);
-  //}
+  /// only add the dataset to an existing instance if the labels match otherwise throw an error
+  if (instance->getAttribute(CoreInstances::ATTRIBUTELABEL) == labelWithInstance.label)
+  {
+    instance->addImage(uuidDataset);
+  }
+  else
+  {
+    throw std::runtime_error("label of instance and of new dataset do not match!");
+  }
 }
 
 void CoreInstances::recreateInstances()

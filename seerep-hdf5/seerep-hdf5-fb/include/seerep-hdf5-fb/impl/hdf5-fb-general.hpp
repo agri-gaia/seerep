@@ -35,25 +35,25 @@ T Hdf5FbGeneral::getAttribute(const std::string& id, const std::shared_ptr<HighF
 template <class T>
 void Hdf5FbGeneral::writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, const seerep::fb::Header& header)
 {
-  if (!object.hasAttribute(HEADER_STAMP_SECONDS))
-    object.createAttribute(HEADER_STAMP_SECONDS, header.stamp()->seconds());
+  if (!object.hasAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS))
+    object.createAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS, header.stamp()->seconds());
   else
-    object.getAttribute(HEADER_STAMP_SECONDS).write(header.stamp()->seconds());
+    object.getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS).write(header.stamp()->seconds());
 
-  if (!object.hasAttribute(HEADER_STAMP_NANOS))
-    object.createAttribute(HEADER_STAMP_NANOS, header.stamp()->nanos());
+  if (!object.hasAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS))
+    object.createAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS, header.stamp()->nanos());
   else
-    object.getAttribute(HEADER_STAMP_NANOS).write(header.stamp()->nanos());
+    object.getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS).write(header.stamp()->nanos());
 
-  if (!object.hasAttribute(HEADER_FRAME_ID))
-    object.createAttribute(HEADER_FRAME_ID, header.frame_id()->str());
+  if (!object.hasAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID))
+    object.createAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID, header.frame_id()->str());
   else
-    object.getAttribute(HEADER_FRAME_ID).write(header.frame_id()->str());
+    object.getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID).write(header.frame_id()->str());
 
-  if (!object.hasAttribute(HEADER_SEQ))
-    object.createAttribute(HEADER_SEQ, header.seq());
+  if (!object.hasAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ))
+    object.createAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ, header.seq());
   else
-    object.getAttribute(HEADER_SEQ).write(header.seq());
+    object.getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ).write(header.seq());
 }
 
 template <class T>
@@ -68,11 +68,11 @@ flatbuffers::Offset<seerep::fb::Header> Hdf5FbGeneral::readHeaderAttributes(High
 
   std::string uuidProject = std::filesystem::path(m_file->getName()).filename().stem();
 
-  object.getAttribute(HEADER_FRAME_ID).read(frameId);
+  object.getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID).read(frameId);
 
-  object.getAttribute(HEADER_STAMP_SECONDS).read(seconds);
-  object.getAttribute(HEADER_STAMP_NANOS).read(nanos);
-  object.getAttribute(HEADER_SEQ).read(seq);
+  object.getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS).read(seconds);
+  object.getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS).read(nanos);
+  object.getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ).read(seq);
 
   auto timestamp = seerep::fb::CreateTimestamp(builder, seconds, nanos);
 
