@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package seerep;
+
+// https://github.com/ros2/rcl_interfaces/blob/master/builtin_interfaces/msg/Time.msg
+message Timestamp
+{
+  int32 seconds = 2;
+  uint32 nanos = 3;
+}

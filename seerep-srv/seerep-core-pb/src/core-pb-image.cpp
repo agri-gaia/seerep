@@ -25,10 +25,10 @@ std::vector<seerep::Image> CorePbImage::getData(const seerep::Query& query)
   {
     queryCore.label.push_back(label);
   }
-  queryCore.timeinterval.timeMin.seconds = query.timeinterval().time_min();
-  queryCore.timeinterval.timeMax.seconds = query.timeinterval().time_max();
-  queryCore.timeinterval.timeMin.nanos = 0;
-  queryCore.timeinterval.timeMax.nanos = 0;
+  queryCore.timeinterval.timeMin.seconds = query.timeinterval().time_min().seconds();
+  queryCore.timeinterval.timeMax.seconds = query.timeinterval().time_max().seconds();
+  queryCore.timeinterval.timeMin.nanos = query.timeinterval().time_min().nanos();
+  queryCore.timeinterval.timeMax.nanos = query.timeinterval().time_max().nanos();
 
   queryCore.header.frameId = query.boundingbox().header().frame_id();
   queryCore.boundingbox.min_corner().set<0>(query.boundingbox().point_min().x());
