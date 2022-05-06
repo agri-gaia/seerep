@@ -6,7 +6,11 @@ CoreInstance::CoreInstance(std::shared_ptr<seerep_hdf5_core::Hdf5CoreInstance> h
                            const boost::uuids::uuid& uuidInstance)
   : m_hdf5_io(hdf5_io), m_uuid(uuidInstance)
 {
-  recreateInstances();
+  recreateInstance();
+
+  // fill the map with empty vectors for each implemented datatype
+  m_typeUUIDMap.emplace(seerep_core_msgs::Datatype::Images, std::vector<boost::uuids::uuid>());
+  m_typeUUIDMap.emplace(seerep_core_msgs::Datatype::PointClouds, std::vector<boost::uuids::uuid>());
 }
 CoreInstance::~CoreInstance()
 {
@@ -44,17 +48,17 @@ void CoreInstance::writeAttribute(const std::string& key, const std::string& val
   m_hdf5_io->writeAttribute(m_uuid, key, value);
 }
 
-std::vector<boost::uuids::uuid> CoreInstance::getImages() const
+std::vector<boost::uuids::uuid> CoreInstance::getDatasets(const seerep_core_msgs::Datatype& datatype) const
 {
-  return m_images;
+  return m_typeUUIDMap.at(datatype);
 }
 
-void CoreInstance::addImage(const boost::uuids::uuid& uuidDataset)
+void CoreInstance::addDataset(const boost::uuids::uuid& uuidDataset, const seerep_core_msgs::Datatype& datatype)
 {
-  m_images.push_back(uuidDataset);
+  m_typeUUIDMap.at(datatype).push_back(uuidDataset);
 }
 
-void CoreInstance::recreateInstances()
+void CoreInstance::recreateInstance()
 {
   auto attributes = m_hdf5_io->readAttributes(m_uuid);
 

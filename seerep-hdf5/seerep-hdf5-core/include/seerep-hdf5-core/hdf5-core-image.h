@@ -5,6 +5,7 @@
 #include <highfive/H5File.hpp>
 
 // seerep-hdf5
+#include "seerep-hdf5-core/hdf5-core-datatype-interface.h"
 #include "seerep-hdf5-core/hdf5-core-general.h"
 
 // seerep-msgs
@@ -23,18 +24,19 @@
 
 namespace seerep_hdf5_core
 {
-class Hdf5CoreImage : public Hdf5CoreGeneral
+class Hdf5CoreImage : public Hdf5CoreGeneral, public Hdf5CoreDatatypeInterface
 {
 public:
   Hdf5CoreImage(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
 
-  std::optional<seerep_core_msgs::DatasetIndexable> readImage(const boost::uuids::uuid& uuid);
+  std::optional<seerep_core_msgs::DatasetIndexable> readDataset(const boost::uuids::uuid& uuid);
+  std::optional<seerep_core_msgs::DatasetIndexable> readDataset(const std::string& uuid);
 
-  std::optional<seerep_core_msgs::DatasetIndexable> readImage(const std::string& uuid);
+  std::vector<std::string> getDatasetUuids();
 
 private:
   std::vector<std::string> readLabelsGeneral(const std::string& dataGroup);
-  std::vector<std::string> readBoundingBox2DLabels(const std::string& dataGroup);
+  std::vector<std::string> readBoundingBoxLabels(const std::string& dataGroup);
 
 public:
   inline static const std::string SIZE = "size";

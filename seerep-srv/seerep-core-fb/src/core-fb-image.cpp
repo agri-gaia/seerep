@@ -19,7 +19,7 @@ void CoreFbImage::getData(const seerep::fb::Query& query,
 {
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "loading image from images";
   seerep_core_msgs::Query queryCore;
-
+  queryCore.header.datatype = seerep_core_msgs::Datatype::Images;
   boost::uuids::string_generator gen;
 
   for (auto projectuuid : *query.projectuuid())
@@ -43,7 +43,7 @@ void CoreFbImage::getData(const seerep::fb::Query& query,
   queryCore.boundingbox.max_corner().set<1>(query.boundingbox()->point_max()->y());
   queryCore.boundingbox.max_corner().set<2>(query.boundingbox()->point_max()->z());
 
-  seerep_core_msgs::QueryResult resultCore = m_seerepCore->getImage(queryCore);
+  seerep_core_msgs::QueryResult resultCore = m_seerepCore->getDataset(queryCore);
 
   for (auto project : resultCore.queryResultProjects)
   {
@@ -79,6 +79,7 @@ boost::uuids::uuid CoreFbImage::addData(const seerep::fb::Image& img)
   hdf5io->writeImage(boost::lexical_cast<std::string>(uuid), img);
 
   seerep_core_msgs::DatasetIndexable dataForIndices;
+  dataForIndices.header.datatype = seerep_core_msgs::Datatype::Images;
   dataForIndices.header.frameId = img.header()->frame_id()->str();
   dataForIndices.header.timestamp.seconds = img.header()->stamp()->seconds();
   dataForIndices.header.timestamp.nanos = img.header()->stamp()->nanos();
@@ -143,7 +144,7 @@ boost::uuids::uuid CoreFbImage::addData(const seerep::fb::Image& img)
     }
   }
 
-  m_seerepCore->addImage(dataForIndices);
+  m_seerepCore->addDataset(dataForIndices);
 
   return uuid;
 }
@@ -164,12 +165,12 @@ void CoreFbImage::addBoundingBoxesLabeled(const seerep::fb::BoundingBoxes2DLabel
   }
   // this only adds labels to the image in the core
   // if there are already bounding box labels for this image
-  // those labels must be removed separatly. The hdfio currently overrides
+  // those labels must be removed separately. The hdfio currently overrides
   // existing labels. The data is only correct if labels are added and there
   // weren't any bounding box labels before
 
   /// @todo also add instance
-  m_seerepCore->addImageLabels(labels, uuidMsg, uuidProject);
+  m_seerepCore->addLabels(seerep_core_msgs::Datatype::Images, labels, uuidMsg, uuidProject);
 }
 
 void CoreFbImage::getFileAccessorFromCore(boost::uuids::uuid project)

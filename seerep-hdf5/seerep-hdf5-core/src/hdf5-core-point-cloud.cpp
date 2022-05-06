@@ -9,12 +9,12 @@ Hdf5CorePointCloud::Hdf5CorePointCloud(std::shared_ptr<HighFive::File>& file, st
 {
 }
 
-std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CorePointCloud::readPointCloud(const boost::uuids::uuid& uuid)
+std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CorePointCloud::readDataset(const boost::uuids::uuid& uuid)
 {
-  return readPointCloud(boost::lexical_cast<std::string>(uuid));
+  return readDataset(boost::lexical_cast<std::string>(uuid));
 }
 
-std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CorePointCloud::readPointCloud(const std::string& uuid)
+std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CorePointCloud::readDataset(const std::string& uuid)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
@@ -61,6 +61,11 @@ std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CorePointCloud::readPointC
   }
 
   return data;
+}
+
+std::vector<std::string> Hdf5CorePointCloud::getDatasetUuids()
+{
+  return getGroupDatasets(HDF5_GROUP_POINTCLOUD);
 }
 
 std::vector<std::string> Hdf5CorePointCloud::readLabelsGeneral(const std::string& dataGroup)
