@@ -38,6 +38,7 @@
 
 .idea/
 
-# never commit the doxygen output folder
+# never commit the doxygen / mkdocs output folder
 **/html/**
 doxygen
+site
