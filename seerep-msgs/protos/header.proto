@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package seerep;
 
-import "google/protobuf/timestamp.proto";
+import "timestamp.proto";
 
 /**
  * Standard metadata for higher-level stamped data types.
@@ -15,7 +15,7 @@ message Header
   uint32 seq = 1;
 
   // time this data is associated with
-  google.protobuf.Timestamp stamp = 2;
+  Timestamp stamp = 2;
 
   // name of the coordinate frame this data is associated with
   string frame_id = 3;

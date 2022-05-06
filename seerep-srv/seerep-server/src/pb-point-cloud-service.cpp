@@ -15,8 +15,8 @@ grpc::Status PbPointCloudService::GetPointCloud2(grpc::ServerContext* context, c
             << request->boundingbox().point_min().y() << "/" << request->boundingbox().point_min().z() << "), max("
             << request->boundingbox().point_max().x() << "/" << request->boundingbox().point_max().y() << "/"
             << request->boundingbox().point_max().z() << ")"
-            << " and time interval (" << request->timeinterval().time_min() << "/" << request->timeinterval().time_max()
-            << ")" << std::endl;
+            << " and time interval (" << request->timeinterval().time_min().seconds() << "/"
+            << request->timeinterval().time_max().seconds() << ")" << std::endl;
 
   std::vector<seerep::PointCloud2> pointClouds;
   try

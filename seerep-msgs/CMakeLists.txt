@@ -41,6 +41,7 @@ set(MY_PROTO_FILES
 	protos/query.proto
 	protos/server_response.proto
 	protos/time_interval.proto
+	protos/timestamp.proto
 	protos/transform_stamped.proto
 	protos/transform_stamped_query.proto
 	protos/transform.proto

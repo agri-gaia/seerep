@@ -203,13 +203,13 @@ void CoreDataset::addDatasetToIndices(const seerep_core_msgs::Datatype& datatype
     datatypeSpecifics->dataWithMissingTF.push_back(std::make_shared<seerep_core_msgs::DatasetIndexable>(dataset));
   }
 
-  std::cout << "secs  " << std::bitset<64>((int64_t)dataset.header.timestamp.seconds) << std::endl;
-  std::cout << "shift " << std::bitset<64>((int64_t)dataset.header.timestamp.seconds << 32) << std::endl;
-  std::cout << "nanos " << std::bitset<64>((int64_t)dataset.header.timestamp.nanos) << std::endl;
-  std::cout
-      << "combi "
-      << std::bitset<64>(((int64_t)dataset.header.timestamp.seconds) << 32 | ((uint64_t)dataset.header.timestamp.nanos))
-      << std::endl;
+  // std::cout << "secs  " << std::bitset<64>((int64_t)dataset.header.timestamp.seconds) << std::endl;
+  // std::cout << "shift " << std::bitset<64>((int64_t)dataset.header.timestamp.seconds << 32) << std::endl;
+  // std::cout << "nanos " << std::bitset<64>((int64_t)dataset.header.timestamp.nanos) << std::endl;
+  // std::cout
+  //     << "combi "
+  //     << std::bitset<64>(((int64_t)dataset.header.timestamp.seconds) << 32 | ((uint64_t)dataset.header.timestamp.nanos))
+  //     << std::endl;
 
   seerep_core_msgs::AabbTime aabbTime(seerep_core_msgs::TimePoint(((int64_t)dataset.header.timestamp.seconds) << 32 |
                                                                   ((uint64_t)dataset.header.timestamp.nanos)),

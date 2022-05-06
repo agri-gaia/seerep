@@ -7,8 +7,8 @@ namespace seerep_core_msgs
 {
 struct Timestamp
 {
-  int64_t seconds;
-  int64_t nanos;
+  int32_t seconds;
+  uint32_t nanos;
 };
 } /* namespace seerep_core_msgs */
 

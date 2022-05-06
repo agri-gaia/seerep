@@ -97,8 +97,8 @@ int main(int argc, char** argv)
   int mintime, maxtime;
   private_nh.param<int>("time_min", mintime, 0);
   private_nh.param<int>("time_max", maxtime, 0);
-  query.mutable_timeinterval()->set_time_min(mintime);
-  query.mutable_timeinterval()->set_time_max(maxtime);
+  query.mutable_timeinterval()->mutable_time_min()->set_seconds(mintime);
+  query.mutable_timeinterval()->mutable_time_max()->set_seconds(maxtime);
 
   // semantic
   std::string label;
