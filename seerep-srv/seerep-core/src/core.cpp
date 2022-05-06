@@ -10,46 +10,7 @@ Core::~Core()
 {
 }
 
-seerep_core_msgs::QueryResult Core::getPointCloud(const seerep_core_msgs::Query& query)
-{
-  seerep_core_msgs::QueryResult result;
-
-  // search all projects
-  if (query.header.uuidProject.is_nil())
-  {
-    for (auto& it : m_projects)
-    {
-      auto pc = it.second->getPointCloud(query);
-      if (!pc.dataUuids.empty())
-      {
-        result.queryResultProjects.push_back(pc);
-      }
-    }
-  }
-  // Search only in project specified in query
-  else
-  {
-    auto project = m_projects.find(query.header.uuidProject);
-    if (project != m_projects.end())
-    {
-      auto pc = project->second->getPointCloud(query);
-      if (!pc.dataUuids.empty())
-      {
-        result.queryResultProjects.push_back(pc);
-      }
-    }
-    // if not found throw error
-    else
-    {
-      throw std::runtime_error("project " + boost::lexical_cast<std::string>(query.header.uuidProject) +
-                               "does not exist!");
-    };
-  }
-
-  return result;
-}
-
-seerep_core_msgs::QueryResult Core::getImage(const seerep_core_msgs::Query& query)
+seerep_core_msgs::QueryResult Core::getDataset(const seerep_core_msgs::Query& query)
 {
   seerep_core_msgs::QueryResult result;
 
@@ -58,7 +19,7 @@ seerep_core_msgs::QueryResult Core::getImage(const seerep_core_msgs::Query& quer
   {
     for (auto& it : m_projects)
     {
-      auto img = it.second->getImage(query);
+      auto img = it.second->getDataset(query);
       if (!img.dataUuids.empty())
       {
         result.queryResultProjects.push_back(img);
@@ -73,7 +34,7 @@ seerep_core_msgs::QueryResult Core::getImage(const seerep_core_msgs::Query& quer
       auto project = m_projects.find(projectuuid);
       if (project != m_projects.end())
       {
-        auto img = project->second->getImage(query);
+        auto img = project->second->getDataset(query);
         if (!img.dataUuids.empty())
         {
           result.queryResultProjects.push_back(img);
@@ -141,36 +102,14 @@ std::vector<seerep_core_msgs::ProjectInfo> Core::getProjects()
   return projectInfos;
 }
 
-void Core::addPointCloud(const seerep_core_msgs::DatasetIndexable& dataset)
-{
-  // find the project based on its uuid
-  auto project = m_projects.find(dataset.header.uuidProject);
-  // if project was found add pointcloud2
-  if (project != m_projects.end())
-  {
-    return project->second->addPointCloud(dataset);
-  }
-  // if not found throw error
-  else
-  {
-    throw std::runtime_error("project " + boost::lexical_cast<std::string>(dataset.header.uuidProject) +
-                             "does not exist!");
-  };
-}
-
-void Core::addImage(const seerep_core_msgs::DatasetIndexable& dataset)
+void Core::addDataset(const seerep_core_msgs::DatasetIndexable& dataset)
 {
   // find the project based on its uuid
   auto project = m_projects.find(dataset.header.uuidProject);
   // if project was found add image
   if (project != m_projects.end())
   {
-    return project->second->addImage(dataset);
-
-    if (!dataset.labelsWithInstances.empty())
-    {
-      // add to core-instances
-    }
+    return project->second->addDataset(dataset);
   }
   // if not found throw error
   else
@@ -180,15 +119,15 @@ void Core::addImage(const seerep_core_msgs::DatasetIndexable& dataset)
   };
 }
 
-void Core::addImageLabels(std::vector<std::string>& labels, const boost::uuids::uuid& msgUuid,
-                          const boost::uuids::uuid& projectuuid)
+void Core::addLabels(const seerep_core_msgs::Datatype& datatype, std::vector<std::string>& labels,
+                     const boost::uuids::uuid& msgUuid, const boost::uuids::uuid& projectuuid)
 {
   // find the project based on its uuid
   auto project = m_projects.find(projectuuid);
   // if project was found add image
   if (project != m_projects.end())
   {
-    return project->second->addImageLabels(labels, msgUuid);
+    return project->second->addLabels(datatype, labels, msgUuid);
   }
   // if not found throw error
   else

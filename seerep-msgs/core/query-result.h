@@ -3,12 +3,14 @@
 
 #include <functional>
 
+#include "datatype.h"
 #include "query-result-project.h"
 
 namespace seerep_core_msgs
 {
 struct QueryResult
 {
+  Datatype datatype;
   std::vector<QueryResultProject> queryResultProjects;
 };
 

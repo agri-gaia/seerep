@@ -9,12 +9,12 @@ Hdf5CoreImage::Hdf5CoreImage(std::shared_ptr<HighFive::File>& file, std::shared_
 {
 }
 
-std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CoreImage::readImage(const boost::uuids::uuid& uuid)
+std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CoreImage::readDataset(const boost::uuids::uuid& uuid)
 {
-  return readImage(boost::lexical_cast<std::string>(uuid));
+  return readDataset(boost::lexical_cast<std::string>(uuid));
 }
 
-std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CoreImage::readImage(const std::string& uuid)
+std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CoreImage::readDataset(const std::string& uuid)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
@@ -49,7 +49,7 @@ std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CoreImage::readImage(const
   data.boundingbox.max_corner().set<2>(0);
 
   std::vector<std::string> labelsGeneral = readLabelsGeneral(hdf5DatasetPath);
-  std::vector<std::string> labelsBB = readBoundingBox2DLabels(hdf5DatasetPath);
+  std::vector<std::string> labelsBB = readBoundingBoxLabels(hdf5DatasetPath);
 
   for (auto label : labelsGeneral)
   {
@@ -63,6 +63,11 @@ std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CoreImage::readImage(const
   }
 
   return data;
+}
+
+std::vector<std::string> Hdf5CoreImage::getDatasetUuids()
+{
+  return getGroupDatasets(HDF5_GROUP_IMAGE);
 }
 
 std::vector<std::string> Hdf5CoreImage::readLabelsGeneral(const std::string& dataGroup)
@@ -83,7 +88,7 @@ std::vector<std::string> Hdf5CoreImage::readLabelsGeneral(const std::string& dat
   return labels;
 }
 
-std::vector<std::string> Hdf5CoreImage::readBoundingBox2DLabels(const std::string& dataGroup)
+std::vector<std::string> Hdf5CoreImage::readBoundingBoxLabels(const std::string& dataGroup)
 {
   if (!m_file->exist(dataGroup + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBB))
   {

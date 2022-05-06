@@ -46,36 +46,26 @@ public:
   ~Core();
 
   /**
-   * @brief Adds a point cloud to the spatial, temporal and semantic indices
+   * @brief Adds a dataset to the spatial, temporal and semantic indices
    * @param dataset contains the relevant information for indexing
    */
-  void addPointCloud(const seerep_core_msgs::DatasetIndexable& dataset);
+  void addDataset(const seerep_core_msgs::DatasetIndexable& dataset);
   /**
-   * @brief Returns a vector of UUIDs of point clouds that match the query per project
+   * @brief Returns a vector of UUIDs of datasets that match the query per project
    * @param query the spatio-temporal-semantic query
-   * @return vector of UUIDs of point clouds matching the query per project
+   * @return vector of UUIDs of datasets matching the query per project
    */
-  seerep_core_msgs::QueryResult getPointCloud(const seerep_core_msgs::Query& query);
+  seerep_core_msgs::QueryResult getDataset(const seerep_core_msgs::Query& query);
 
   /**
-   * @brief Adds an image to the spatial, temporal and semantic indices
-   * @param dataset contains the relevant information for indexing
-   */
-  void addImage(const seerep_core_msgs::DatasetIndexable& dataset);
-  /**
-   * @brief Returns a vector of UUIDs of images that match the query per project
-   * @param query the spatio-temporal-semantic query
-   * @return vector of UUIDs of images matching the query pre project
-   */
-  seerep_core_msgs::QueryResult getImage(const seerep_core_msgs::Query& query);
-  /**
-   * @brief Adds labels to an existing image
-   * @param labels a vector of labels to be added to the image
-   * @param msgUuid the UUID of the targeted image
+   * @brief Adds labels to an existing dataset
+   * @param datatype the targeted datatype
+   * @param labels a vector of labels to be added to the dataset
+   * @param msgUuid the UUID of the targeted dataset
    * @param projectuuid the UUID of the targeted project
    */
-  void addImageLabels(std::vector<std::string>& labels, const boost::uuids::uuid& msgUuid,
-                      const boost::uuids::uuid& projectuuid);
+  void addLabels(const seerep_core_msgs::Datatype& datatype, std::vector<std::string>& labels,
+                 const boost::uuids::uuid& msgUuid, const boost::uuids::uuid& projectuuid);
 
   /**
    * @brief Adds a tf to the tf buffer

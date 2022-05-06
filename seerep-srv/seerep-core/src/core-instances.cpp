@@ -55,7 +55,8 @@ void CoreInstances::writeAttribute(const boost::uuids::uuid& uuidInstance, const
   }
 }
 
-std::vector<boost::uuids::uuid> CoreInstances::getImages(const std::vector<boost::uuids::uuid>& instanceIds) const
+std::vector<boost::uuids::uuid> CoreInstances::getDatasets(const std::vector<boost::uuids::uuid>& instanceIds,
+                                                           const seerep_core_msgs::Datatype& datatype) const
 {
   std::vector<boost::uuids::uuid> imagesAll;
 
@@ -65,15 +66,15 @@ std::vector<boost::uuids::uuid> CoreInstances::getImages(const std::vector<boost
 
     if (instance != m_instances.end())
     {
-      auto img = instance->second->getImages();
+      auto img = instance->second->getDatasets(datatype);
       imagesAll.insert(std::end(imagesAll), std::begin(img), std::end(img));
     }
   }
 
   return imagesAll;
 }
-void CoreInstances::addImage(const seerep_core_msgs::LabelWithInstance& labelWithInstance,
-                             const boost::uuids::uuid& uuidDataset)
+void CoreInstances::addDataset(const seerep_core_msgs::LabelWithInstance& labelWithInstance,
+                               const boost::uuids::uuid& uuidDataset, const seerep_core_msgs::Datatype& datatype)
 {
   auto instanceMapEntry = m_instances.find(labelWithInstance.uuidInstance);
   std::shared_ptr<seerep_core::CoreInstance> instance;
@@ -88,7 +89,7 @@ void CoreInstances::addImage(const seerep_core_msgs::LabelWithInstance& labelWit
   /// only add the dataset to an existing instance if the labels match otherwise throw an error
   if (instance->getAttribute(CoreInstances::ATTRIBUTELABEL) == labelWithInstance.label)
   {
-    instance->addImage(uuidDataset);
+    instance->addDataset(uuidDataset, datatype);
   }
   else
   {

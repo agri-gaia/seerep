@@ -18,6 +18,7 @@ std::vector<seerep::Image> CorePbImage::getData(const seerep::Query& query)
 {
   std::cout << "loading image from images/" << std::endl;
   seerep_core_msgs::Query queryCore;
+  queryCore.header.datatype = seerep_core_msgs::Datatype::Images;
   boost::uuids::string_generator gen;
   queryCore.projects.push_back(gen(query.projectuuid()));
   for (auto label : query.label())
@@ -37,7 +38,7 @@ std::vector<seerep::Image> CorePbImage::getData(const seerep::Query& query)
   queryCore.boundingbox.max_corner().set<1>(query.boundingbox().point_max().y());
   queryCore.boundingbox.max_corner().set<2>(query.boundingbox().point_max().z());
 
-  seerep_core_msgs::QueryResult resultCore = m_seerepCore->getImage(queryCore);
+  seerep_core_msgs::QueryResult resultCore = m_seerepCore->getDataset(queryCore);
 
   std::vector<seerep::Image> resultImages;
   for (auto project : resultCore.queryResultProjects)
@@ -71,6 +72,7 @@ boost::uuids::uuid CorePbImage::addData(const seerep::Image& img)
   hdf5io->writeImage(boost::lexical_cast<std::string>(uuid), img);
 
   seerep_core_msgs::DatasetIndexable dataForIndices;
+  dataForIndices.header.datatype = seerep_core_msgs::Datatype::Images;
   dataForIndices.header.frameId = img.header().frame_id();
   dataForIndices.header.timestamp.seconds = img.header().stamp().seconds();
   dataForIndices.header.timestamp.nanos = img.header().stamp().nanos();
@@ -119,7 +121,7 @@ boost::uuids::uuid CorePbImage::addData(const seerep::Image& img)
         .label = label.labelwithinstance().label(), .uuidInstance = uuidInstance });
   }
 
-  m_seerepCore->addImage(dataForIndices);
+  m_seerepCore->addDataset(dataForIndices);
 
   return uuid;
 }

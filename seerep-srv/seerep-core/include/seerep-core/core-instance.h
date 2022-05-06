@@ -5,6 +5,7 @@
 #include <optional>
 
 // seerep-msgs
+#include <seerep-msgs/datatype.h>
 #include <seerep-msgs/label-with-instance.h>
 // seerep-hdf5-core
 #include <seerep-hdf5-core/hdf5-core-instance.h>
@@ -61,21 +62,23 @@ public:
   void writeAttribute(const std::string& key, const std::string& value);
 
   /**
-   * @brief Returns the UUIDs of the images showing this instance
+   * @brief Returns the UUIDs of the datasets of the specified type showing this instance
+   * @param datatype the datatype to be considered
    * @return Vector of the UUIDs of the images showings this instance
    */
-  std::vector<boost::uuids::uuid> getImages() const;
+  std::vector<boost::uuids::uuid> getDatasets(const seerep_core_msgs::Datatype& datatype) const;
   /**
-   * @brief adds an image to this instance
-   * @param uuidDataset the UUID of the image
+   * @brief adds a dataset to this instance
+   * @param uuidDataset the UUID of the dataset
+   * @param datatype the type of the dataset
    */
-  void addImage(const boost::uuids::uuid& uuidDataset);
+  void addDataset(const boost::uuids::uuid& uuidDataset, const seerep_core_msgs::Datatype& datatype);
 
 private:
   /**
    * @brief fills the member variables based on the HDF5 file
    */
-  void recreateInstances();
+  void recreateInstance();
   /** @brief shared pointer to the object handling the HDF5 io for instances */
   std::shared_ptr<seerep_hdf5_core::Hdf5CoreInstance> m_hdf5_io;
 
@@ -84,10 +87,8 @@ private:
   /** @brief the attributes of this instance */
   std::unordered_map<std::string, std::string> m_attributes;
 
-  /** @brief vector of UUIDs of images showing this instance */
-  std::vector<boost::uuids::uuid> m_images;
-  /** @brief vector of UUIDs of point clouds showing this instance */
-  std::vector<boost::uuids::uuid> m_pointClouds;
+  /** @brief map from datatype to the vector of UUIDs of datasets showing this instance */
+  std::unordered_map<seerep_core_msgs::Datatype, std::vector<boost::uuids::uuid>> m_typeUUIDMap;
 };
 
 } /* namespace seerep_core */

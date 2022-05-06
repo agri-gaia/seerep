@@ -3,12 +3,14 @@
 
 #include <boost/uuid/uuid.hpp>
 
+#include "datatype.h"
 #include "timestamp.h"
 
 namespace seerep_core_msgs
 {
 struct Header
 {
+  Datatype datatype;
   std::string frameId;
   Timestamp timestamp;
   boost::uuids::uuid uuidProject;

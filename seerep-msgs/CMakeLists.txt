@@ -97,6 +97,7 @@ set(MY_CORE_MSGS
 ${CMAKE_CURRENT_SOURCE_DIR}/core/aabb.h
 ${CMAKE_CURRENT_SOURCE_DIR}/core/dataset-indexable.h
 ${CMAKE_CURRENT_SOURCE_DIR}/core/header.h
+${CMAKE_CURRENT_SOURCE_DIR}/core/datatype.h
 ${CMAKE_CURRENT_SOURCE_DIR}/core/label-with-instance.h
 ${CMAKE_CURRENT_SOURCE_DIR}/core/project-info.h
 ${CMAKE_CURRENT_SOURCE_DIR}/core/query-result-project.h

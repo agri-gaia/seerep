@@ -20,9 +20,8 @@
 #include <seerep-hdf5-core/hdf5-core-tf.h>
 
 // seerep-core
-#include "core-image.h"
+#include "core-dataset.h"
 #include "core-instances.h"
-#include "core-point-cloud.h"
 #include "core-tf.h"
 
 // logging
@@ -75,34 +74,26 @@ public:
   std::string getFrameId();
 
   /**
-   * @brief Returns a vector of UUIDs of point clouds that match the query and the project UUID
+   * @brief Returns a vector of UUIDs of datasets that match the query and the project UUID
    * @param query the spatio-temporal-semantic query
    * @return vector of UUIDs of images matching the query and the project UUID
    */
-  seerep_core_msgs::QueryResultProject getPointCloud(const seerep_core_msgs::Query& query);
-  /**
-   * @brief Returns a vector of UUIDs of images that match the query and the project UUID
-   * @param query the spatio-temporal-semantic query
-   * @return vector of UUIDs of images matching the query and the project UUID
-   */
-  seerep_core_msgs::QueryResultProject getImage(const seerep_core_msgs::Query& query);
+  seerep_core_msgs::QueryResultProject getDataset(const seerep_core_msgs::Query& query);
 
   /**
-   * @brief Adds a point cloud to the spatial, temporal and semantic indices
+   * @brief Adds a dataset to the spatial, temporal and semantic indices
    * @param dataset contains the relevant information for indexing
    */
-  void addPointCloud(const seerep_core_msgs::DatasetIndexable& dataset);
+  void addDataset(const seerep_core_msgs::DatasetIndexable& dataset);
+
   /**
-   * @brief Adds an image to the spatial, temporal and semantic indices
-   * @param dataset contains the relevant information for indexing
+   * @brief Adds labels to an existing dataset
+   * @param datatype the targeted datatype
+   * @param labels a vector of labels to be added to the dataset
+   * @param msgUuid the UUID of the targeted dataset
    */
-  void addImage(const seerep_core_msgs::DatasetIndexable& dataset);
-  /**
-   * @brief Adds labels to an existing image
-   * @param labels a vector of labels to be added to the image
-   * @param msgUuid the UUID of the targeted image
-   */
-  void addImageLabels(std::vector<std::string>& labels, const boost::uuids::uuid& msgUuid);
+  void addLabels(const seerep_core_msgs::Datatype& datatype, const std::vector<std::string>& labels,
+                 const boost::uuids::uuid& msgUuid);
 
   // tf
   /**
@@ -176,10 +167,8 @@ private:
   std::shared_ptr<seerep_core::CoreTf> m_coreTfs;
   /** @brief object handling the instances */
   std::shared_ptr<seerep_core::CoreInstances> m_coreInstances;
-  /** @brief object handling the point cloud indices and point cloud related queries */
-  std::unique_ptr<seerep_core::CorePointCloud> m_corePointClouds;
-  /** @brief object handling the image indices and image related queries */
-  std::unique_ptr<seerep_core::CoreImage> m_coreImages;
+  /** @brief object handling the dataset indices and dataset related queries */
+  std::unique_ptr<seerep_core::CoreDataset> m_coreDatasets;
 
   boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
 };

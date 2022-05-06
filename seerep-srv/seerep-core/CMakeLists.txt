@@ -37,10 +37,9 @@ include_directories(
 )
 
 add_library(seerepcore
-	src/core-image.cpp
+	src/core-dataset.cpp
 	src/core-instance.cpp
 	src/core-instances.cpp
-	src/core-point-cloud.cpp
 	src/core-project.cpp
 	src/core-tf.cpp
 	src/core.cpp
@@ -59,10 +58,9 @@ target_link_libraries(seerepcore
 )
 
 set(INSTALL_HEADERS
-	include/seerep-core/core-image.h
+	include/seerep-core/core-dataset.h
 	include/seerep-core/core-instance.h
 	include/seerep-core/core-instances.h
-	include/seerep-core/core-point-cloud.h
 	include/seerep-core/core-project.h
 	include/seerep-core/core-tf.h
 	include/seerep-core/core.h

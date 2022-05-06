@@ -32,33 +32,23 @@ std::string CoreProject::getFrameId()
   return m_frameId;
 }
 
-seerep_core_msgs::QueryResultProject CoreProject::getPointCloud(const seerep_core_msgs::Query& query)
+seerep_core_msgs::QueryResultProject CoreProject::getDataset(const seerep_core_msgs::Query& query)
 {
   seerep_core_msgs::QueryResultProject result;
   result.projectUuid = m_uuid;
-  result.dataUuids = m_corePointClouds->getData(m_coreTfs->transformQuery(query, m_frameId));
-  return result;
-}
-seerep_core_msgs::QueryResultProject CoreProject::getImage(const seerep_core_msgs::Query& query)
-{
-  seerep_core_msgs::QueryResultProject result;
-  result.projectUuid = m_uuid;
-  result.dataUuids = m_coreImages->getData(m_coreTfs->transformQuery(query, m_frameId));
+  result.dataUuids = m_coreDatasets->getData(m_coreTfs->transformQuery(query, m_frameId));
   return result;
 }
 
-void CoreProject::addPointCloud(const seerep_core_msgs::DatasetIndexable& dataset)
+void CoreProject::addDataset(const seerep_core_msgs::DatasetIndexable& dataset)
 {
-  m_corePointClouds->addDataset(dataset);
-}
-void CoreProject::addImage(const seerep_core_msgs::DatasetIndexable& dataset)
-{
-  m_coreImages->addDataset(dataset);
+  m_coreDatasets->addDataset(dataset);
 }
 
-void CoreProject::addImageLabels(std::vector<std::string>& labels, const boost::uuids::uuid& msgUuid)
+void CoreProject::addLabels(const seerep_core_msgs::Datatype& datatype, const std::vector<std::string>& labels,
+                            const boost::uuids::uuid& msgUuid)
 {
-  m_coreImages->addImageLabels(labels, msgUuid);
+  m_coreDatasets->addLabels(datatype, labels, msgUuid);
 }
 
 void CoreProject::addTF(const geometry_msgs::TransformStamped& tf)
@@ -99,8 +89,12 @@ void CoreProject::recreateDatatypes()
 {
   m_coreTfs = std::make_shared<seerep_core::CoreTf>(m_ioTf);
   m_coreInstances = std::make_shared<seerep_core::CoreInstances>(m_ioInstance);
-  m_coreImages = std::make_unique<seerep_core::CoreImage>(m_ioImage, m_coreTfs, m_coreInstances, m_frameId);
-  m_corePointClouds = std::make_unique<seerep_core::CorePointCloud>(m_ioPointCloud, m_coreTfs, m_frameId);
+  m_coreDatasets = std::make_unique<seerep_core::CoreDataset>(m_coreTfs, m_coreInstances, m_frameId);
+
+  m_coreDatasets->addDatatype(seerep_core_msgs::Datatype::Images, m_ioImage);
+  m_coreDatasets->addDatatype(seerep_core_msgs::Datatype::PointClouds, m_ioPointCloud);
+
+  /// @todo add datatypes to datasets
 
   std::vector<std::string> datatypeNames = m_ioGeneral->getGroupDatasets("");
   for (auto datatypeName : datatypeNames)

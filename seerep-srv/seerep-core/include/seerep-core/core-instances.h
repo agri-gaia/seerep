@@ -7,6 +7,7 @@
 #include "core-instance.h"
 
 // seerep-msgs
+#include <seerep-msgs/datatype.h>
 #include <seerep-msgs/label-with-instance.h>
 // seerep-hdf5-core
 #include <seerep-hdf5-core/hdf5-core-instance.h>
@@ -41,12 +42,13 @@ public:
 
   /**
    * @brief Create a new instance with a random UUID
+   * @param label the label for the instance
    * @return shared pointer to the created instance object
    */
   std::shared_ptr<seerep_core::CoreInstance> createNewInstance(const std::string& label);
   /**
-   * @brief Create a new instance with the given UUID
-   * @param uuid the UUID for the new instance
+   * @brief Create a new instance with a given UUID and label
+   * @param labelWithInstance the label and the UUID of the new instance
    * @return shared pointer to the created instance object
    */
   std::shared_ptr<seerep_core::CoreInstance>
@@ -70,15 +72,19 @@ public:
   /**
    * @brief Returns the UUIDs of the images showing these instances
    * @param instanceIds vector of UUIDs of the targeted instances
+   * @param dataset the datatype to be returned
    * @return Vector of the UUIDs of the images showings these instances
    */
-  std::vector<boost::uuids::uuid> getImages(const std::vector<boost::uuids::uuid>& instanceIds) const;
+  std::vector<boost::uuids::uuid> getDatasets(const std::vector<boost::uuids::uuid>& instanceIds,
+                                              const seerep_core_msgs::Datatype& datatype) const;
   /**
    * @brief adds an image to this instance
    * @param labelWithInstance the UUID of the targeted instance and the assigned label
    * @param uuidDataset the UUID of the image
+   * @param dataset the type of the dataset
    */
-  void addImage(const seerep_core_msgs::LabelWithInstance& labelWithInstance, const boost::uuids::uuid& uuidDataset);
+  void addDataset(const seerep_core_msgs::LabelWithInstance& labelWithInstance, const boost::uuids::uuid& uuidDataset,
+                  const seerep_core_msgs::Datatype& datatype);
 
 private:
   /**
