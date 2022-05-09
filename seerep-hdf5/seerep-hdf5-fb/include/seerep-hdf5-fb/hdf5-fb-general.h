@@ -15,6 +15,7 @@
 
 // std
 #include <boost/geometry.hpp>
+#include <filesystem>
 #include <mutex>
 #include <optional>
 
@@ -44,8 +45,7 @@ protected:
   void writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, const seerep::fb::Header& header);
 
   template <class T>
-  flatbuffers::Offset<seerep::fb::Header> readHeaderAttributes(HighFive::AnnotateTraits<T>& object,
-                                                               std::string uuidProject, std::string uuidMsg,
+  flatbuffers::Offset<seerep::fb::Header> readHeaderAttributes(HighFive::AnnotateTraits<T>& object, std::string uuidMsg,
                                                                flatbuffers::grpc::MessageBuilder& builder);
 
   //################

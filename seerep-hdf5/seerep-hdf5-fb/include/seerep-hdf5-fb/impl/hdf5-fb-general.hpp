@@ -57,14 +57,16 @@ void Hdf5FbGeneral::writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, c
 }
 
 template <class T>
-flatbuffers::Offset<seerep::fb::Header>
-Hdf5FbGeneral::readHeaderAttributes(HighFive::AnnotateTraits<T>& object, std::string uuidProject, std::string uuidMsg,
-                                    flatbuffers::grpc::MessageBuilder& builder)
+flatbuffers::Offset<seerep::fb::Header> Hdf5FbGeneral::readHeaderAttributes(HighFive::AnnotateTraits<T>& object,
+                                                                            std::string uuidMsg,
+                                                                            flatbuffers::grpc::MessageBuilder& builder)
 {
   int64_t seconds;
   int32_t nanos;
   uint32_t seq;
   std::string frameId;
+
+  std::string uuidProject = std::filesystem::path(m_file->getName()).filename().stem();
 
   object.getAttribute(HEADER_FRAME_ID).read(frameId);
 

@@ -13,6 +13,7 @@
 
 // std
 #include <boost/geometry.hpp>
+#include <filesystem>
 #include <optional>
 
 namespace seerep_hdf5_pb

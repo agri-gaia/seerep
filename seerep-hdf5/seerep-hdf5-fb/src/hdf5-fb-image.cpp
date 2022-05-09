@@ -93,7 +93,7 @@ void Hdf5FbImage::writeImageBoundingBox2DLabeled(const std::string& id,
   writeBoundingBox2DLabeled(HDF5_GROUP_IMAGE, id, bb2dLabeledStamped.labels_bb());
 }
 
-void Hdf5FbImage::readImage(const std::string& id, const std::string& projectuuid,
+void Hdf5FbImage::readImage(const std::string& id,
                             grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::Image>>* const writer)
 {
   const std::scoped_lock lock(*m_write_mtx);
@@ -147,7 +147,7 @@ void Hdf5FbImage::readImage(const std::string& id, const std::string& projectuui
   }
 
   auto readDataOffset = builder.CreateVector(data);
-  auto headerOffset = readHeaderAttributes(*data_set_ptr, projectuuid, id, builder);
+  auto headerOffset = readHeaderAttributes(*data_set_ptr, id, builder);
 
   std::vector<std::string> boundingBoxesLabels;
   std::vector<std::vector<double>> boundingBoxes;
