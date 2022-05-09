@@ -93,8 +93,7 @@ void Hdf5FbImage::writeImageBoundingBox2DLabeled(const std::string& id,
   writeBoundingBox2DLabeled(HDF5_GROUP_IMAGE, id, bb2dLabeledStamped.labels_bb());
 }
 
-void Hdf5FbImage::readImage(const std::string& id,
-                            grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::Image>>* const writer)
+std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readImage(const std::string& id)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
@@ -102,7 +101,7 @@ void Hdf5FbImage::readImage(const std::string& id,
   std::string hdf5DatasetRawDataPath = hdf5DatasetPath + "/" + RAWDATA;
 
   if (!m_file->exist(hdf5DatasetRawDataPath))
-    return;
+    return std::nullopt;
 
   std::cout << "loading " << hdf5DatasetRawDataPath << std::endl;
 
@@ -126,7 +125,7 @@ void Hdf5FbImage::readImage(const std::string& id,
   catch (const std::invalid_argument e)
   {
     std::cout << "error: " << e.what() << std::endl;
-    return;
+    return std::nullopt;
   }
 
   std::vector<std::vector<std::vector<uint8_t>>> read_data;
@@ -200,8 +199,8 @@ void Hdf5FbImage::readImage(const std::string& id,
 
   auto imageOffset = imageBuilder.Finish();
   builder.Finish(imageOffset);
-
-  writer->Write(builder.ReleaseMessage<seerep::fb::Image>());
+  auto grpcImage = builder.ReleaseMessage<seerep::fb::Image>();
+  return std::move(grpcImage);
 }
 
 }  // namespace seerep_hdf5_fb

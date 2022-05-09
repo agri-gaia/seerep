@@ -48,7 +48,12 @@ void CoreFbImage::getData(const seerep::fb::Query& query,
   {
     for (auto uuidImg : project.dataUuids)
     {
-      getHdf5(project.projectUuid)->readImage(boost::lexical_cast<std::string>(uuidImg), writer);
+      auto img = getHdf5(project.projectUuid)->readImage(boost::lexical_cast<std::string>(uuidImg));
+
+      if (img)
+      {
+        writer->Write(img.value());
+      }
     }
   }
 }
