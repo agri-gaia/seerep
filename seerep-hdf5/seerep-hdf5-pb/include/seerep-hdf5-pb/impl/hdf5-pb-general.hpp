@@ -65,6 +65,8 @@ seerep::Header Hdf5PbGeneral::readHeaderAttributes(HighFive::AnnotateTraits<T>& 
   int32_t nanos;
   uint32_t seq;
 
+  std::string uuidProject = std::filesystem::path(m_file->getName()).filename().stem();
+
   object.getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID).read(header.mutable_frame_id());
 
   object.getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS).read(seconds);
@@ -74,6 +76,8 @@ seerep::Header Hdf5PbGeneral::readHeaderAttributes(HighFive::AnnotateTraits<T>& 
   header.set_seq(seq);
   header.mutable_stamp()->set_seconds(seconds);
   header.mutable_stamp()->set_nanos(nanos);
+  header.set_uuid_project(uuidProject);
+  /// @todo set uuidMsg
 
   return header;
 }

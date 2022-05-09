@@ -35,8 +35,7 @@ public:
                                       const seerep::fb::BoundingBoxes2DLabeledStamped& bb2dLabeledStamped);
 
   // std::optional<flatbuffers::Offset<seerep::fb::Image>>
-  void readImage(const std::string& id, const std::string& projectuuid,
-                 grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::Image>>* const writer);
+  void readImage(const std::string& id, grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::Image>>* const writer);
 
 private:
   const std::string SIZE = "size";
