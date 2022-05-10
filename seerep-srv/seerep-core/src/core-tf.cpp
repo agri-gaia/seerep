@@ -94,10 +94,11 @@ bool CoreTf::canTransform(const std::string& sourceFrame, const std::string& tar
   return m_tfBuffer.canTransform(targetFrame, sourceFrame, ros::Time(timeSecs, timeNanos));
 }
 
-// TODO same as transformAABB -> merge!
+/// @todo same as transformAABB -> merge!
 seerep_core_msgs::Query CoreTf::transformQuery(const seerep_core_msgs::Query& query, std::string targetFrame)
 {
-  if (targetFrame != query.header.frameId)
+  // if spatial query is set and if targetframe and query frame differ, transform the spatial query
+  if (query.boundingbox && targetFrame != query.header.frameId)
   {
     seerep_core_msgs::Query queryTransformed(query);
 
@@ -109,19 +110,21 @@ seerep_core_msgs::Query CoreTf::transformQuery(const seerep_core_msgs::Query& qu
     transform.setRotation(tf2::Quaternion(tf.transform.rotation.x, tf.transform.rotation.y, tf.transform.rotation.z,
                                           tf.transform.rotation.w));
 
-    tf2::Vector3 vmin(bg::get<bg::min_corner, 0>(query.boundingbox), bg::get<bg::min_corner, 1>(query.boundingbox),
-                      bg::get<bg::min_corner, 2>(query.boundingbox));
+    tf2::Vector3 vmin(bg::get<bg::min_corner, 0>(query.boundingbox.value()),
+                      bg::get<bg::min_corner, 1>(query.boundingbox.value()),
+                      bg::get<bg::min_corner, 2>(query.boundingbox.value()));
     tf2::Vector3 vmintransformed = transform * vmin;
-    bg::set<bg::min_corner, 0>(queryTransformed.boundingbox, vmintransformed.getX());
-    bg::set<bg::min_corner, 1>(queryTransformed.boundingbox, vmintransformed.getY());
-    bg::set<bg::min_corner, 2>(queryTransformed.boundingbox, vmintransformed.getZ());
+    bg::set<bg::min_corner, 0>(queryTransformed.boundingbox.value(), vmintransformed.getX());
+    bg::set<bg::min_corner, 1>(queryTransformed.boundingbox.value(), vmintransformed.getY());
+    bg::set<bg::min_corner, 2>(queryTransformed.boundingbox.value(), vmintransformed.getZ());
 
-    tf2::Vector3 vmax(bg::get<bg::max_corner, 0>(query.boundingbox), bg::get<bg::max_corner, 1>(query.boundingbox),
-                      bg::get<bg::max_corner, 2>(query.boundingbox));
+    tf2::Vector3 vmax(bg::get<bg::max_corner, 0>(query.boundingbox.value()),
+                      bg::get<bg::max_corner, 1>(query.boundingbox.value()),
+                      bg::get<bg::max_corner, 2>(query.boundingbox.value()));
     tf2::Vector3 vmaxtransformed = transform * vmax;
-    bg::set<bg::max_corner, 0>(queryTransformed.boundingbox, vmaxtransformed.getX());
-    bg::set<bg::max_corner, 1>(queryTransformed.boundingbox, vmaxtransformed.getY());
-    bg::set<bg::max_corner, 2>(queryTransformed.boundingbox, vmaxtransformed.getZ());
+    bg::set<bg::max_corner, 0>(queryTransformed.boundingbox.value(), vmaxtransformed.getX());
+    bg::set<bg::max_corner, 1>(queryTransformed.boundingbox.value(), vmaxtransformed.getY());
+    bg::set<bg::max_corner, 2>(queryTransformed.boundingbox.value(), vmaxtransformed.getZ());
 
     return queryTransformed;
   }

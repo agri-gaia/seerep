@@ -13,11 +13,11 @@ namespace seerep_core_msgs
 struct Query
 {
   Header header;
-  std::vector<boost::uuids::uuid> projects;
-  AABB boundingbox;
-  Timeinterval timeinterval;
-  std::vector<std::string> label;
-  std::vector<boost::uuids::uuid> instances;
+  std::optional<std::vector<boost::uuids::uuid>> projects;   ///< search all projects if not set
+  std::optional<AABB> boundingbox;                           ///< only do spatial query if set
+  std::optional<Timeinterval> timeinterval;                  ///< only do temporal query if set
+  std::optional<std::vector<std::string>> label;             ///< only do semantic query if set
+  std::optional<std::vector<boost::uuids::uuid>> instances;  ///< only query instances if set
 };
 
 } /* namespace seerep_core_msgs */

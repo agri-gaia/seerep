@@ -57,86 +57,173 @@ std::vector<boost::uuids::uuid> CoreDataset::getData(const seerep_core_msgs::Que
 
   auto datatypeSpecifics = m_datatypeDatatypeSpecifcsMap.at(query.header.datatype);
   // space
-  std::vector<seerep_core_msgs::AabbIdPair> resultRt = querySpatial(datatypeSpecifics, query);
+  auto resultRt = querySpatial(datatypeSpecifics, query);
   // time
-  std::vector<seerep_core_msgs::AabbTimeIdPair> resultTime = queryTemporal(datatypeSpecifics, query);
+  auto resultTime = queryTemporal(datatypeSpecifics, query);
   // semantic
-  std::set<boost::uuids::uuid> resultSemantic = querySemantic(datatypeSpecifics, query);
+  auto resultSemantic = querySemantic(datatypeSpecifics, query);
 
-  return intersectQueryResults(resultRt, resultTime, resultSemantic);
+  // instances
+  std::optional<std::vector<boost::uuids::uuid>> instanceResult;
+  if (query.instances)
+  {
+    instanceResult.value() = m_coreInstances->getDatasets(query.instances.value(), query.header.datatype);
+  }
+
+  return intersectQueryResults(resultRt, resultTime, resultSemantic, instanceResult);
 }
 
-std::vector<seerep_core_msgs::AabbIdPair>
+std::optional<std::vector<seerep_core_msgs::AabbIdPair>>
 CoreDataset::querySpatial(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics, const seerep_core_msgs::Query& query)
 {
-  seerep_core_msgs::AABB aabb(seerep_core_msgs::Point(bg::get<bg::min_corner, 0>(query.boundingbox),
-                                                      bg::get<bg::min_corner, 1>(query.boundingbox),
-                                                      bg::get<bg::min_corner, 2>(query.boundingbox)),
-                              seerep_core_msgs::Point(bg::get<bg::max_corner, 0>(query.boundingbox),
-                                                      bg::get<bg::max_corner, 1>(query.boundingbox),
-                                                      bg::get<bg::max_corner, 2>(query.boundingbox)));
-  std::vector<seerep_core_msgs::AabbIdPair> rt_result;
-  datatypeSpecifics->rt.query(boost::geometry::index::intersects(aabb), std::back_inserter(rt_result));
-  return rt_result;
+  if (query.boundingbox)
+  {
+    std::optional<std::vector<seerep_core_msgs::AabbIdPair>> rt_result = std::vector<seerep_core_msgs::AabbIdPair>();
+    seerep_core_msgs::AABB aabb(seerep_core_msgs::Point(bg::get<bg::min_corner, 0>(query.boundingbox.value()),
+                                                        bg::get<bg::min_corner, 1>(query.boundingbox.value()),
+                                                        bg::get<bg::min_corner, 2>(query.boundingbox.value())),
+                                seerep_core_msgs::Point(bg::get<bg::max_corner, 0>(query.boundingbox.value()),
+                                                        bg::get<bg::max_corner, 1>(query.boundingbox.value()),
+                                                        bg::get<bg::max_corner, 2>(query.boundingbox.value())));
+
+    datatypeSpecifics->rt.query(boost::geometry::index::intersects(aabb), std::back_inserter(rt_result.value()));
+    return rt_result;
+  }
+  else
+  {
+    return std::nullopt;
+  }
 }
 
-std::set<boost::uuids::uuid> CoreDataset::querySemantic(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
-                                                        const seerep_core_msgs::Query& query)
+std::optional<std::vector<seerep_core_msgs::AabbTimeIdPair>>
+CoreDataset::queryTemporal(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics, const seerep_core_msgs::Query& query)
 {
-  std::set<boost::uuids::uuid> result;
-  // find the queried label in the label-imageID-map
-  for (std::string labelquery : query.label)
+  if (query.timeinterval)
   {
-    auto labelPtr = datatypeSpecifics->label.find(labelquery);
-    if (labelPtr != datatypeSpecifics->label.end())
+    std::optional<std::vector<seerep_core_msgs::AabbTimeIdPair>> timetree_result =
+        std::vector<seerep_core_msgs::AabbTimeIdPair>();
+    seerep_core_msgs::AabbTime aabbtime(
+        seerep_core_msgs::TimePoint(((int64_t)query.timeinterval.value().timeMin.seconds) << 32 |
+                                    ((uint64_t)query.timeinterval.value().timeMin.nanos)),
+        seerep_core_msgs::TimePoint(((int64_t)query.timeinterval.value().timeMax.seconds) << 32 |
+                                    ((uint64_t)query.timeinterval.value().timeMax.nanos)));
+
+    datatypeSpecifics->timetree.query(boost::geometry::index::intersects(aabbtime),
+                                      std::back_inserter(timetree_result.value()));
+    return timetree_result;
+  }
+  else
+  {
+    return std::nullopt;
+  }
+}
+
+std::optional<std::set<boost::uuids::uuid>>
+CoreDataset::querySemantic(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics, const seerep_core_msgs::Query& query)
+{
+  if (query.label)
+  {
+    std::optional<std::set<boost::uuids::uuid>> result = std::set<boost::uuids::uuid>();
+    // find the queried label in the label-imageID-map
+    for (std::string labelquery : query.label.value())
     {
-      // add all imageIDs to result set
-      for (boost::uuids::uuid id : labelPtr->second)
+      auto labelPtr = datatypeSpecifics->label.find(labelquery);
+      if (labelPtr != datatypeSpecifics->label.end())
       {
-        result.insert(id);
+        // add all imageIDs to result set
+        for (boost::uuids::uuid id : labelPtr->second)
+        {
+          result.value().insert(id);
+        }
       }
     }
+    return result;
   }
-  return result;
+  else
+  {
+    return std::nullopt;
+  }
 }
 
 std::vector<boost::uuids::uuid>
-CoreDataset::intersectQueryResults(std::vector<seerep_core_msgs::AabbIdPair> rt_result,
-                                   std::vector<seerep_core_msgs::AabbTimeIdPair> timetree_result,
-                                   std::set<boost::uuids::uuid> semanticResult)
+CoreDataset::intersectQueryResults(std::optional<std::vector<seerep_core_msgs::AabbIdPair>>& rt_result,
+                                   std::optional<std::vector<seerep_core_msgs::AabbTimeIdPair>>& timetree_result,
+                                   std::optional<std::set<boost::uuids::uuid>>& semanticResult,
+                                   std::optional<std::vector<boost::uuids::uuid>>& instanceResult)
 {
-  std::set<boost::uuids::uuid> idsSpatial;
-  for (auto it = std::make_move_iterator(rt_result.begin()), end = std::make_move_iterator(rt_result.end()); it != end;
-       ++it)
-  {
-    idsSpatial.insert(std::move(it->second));
-  }
-  std::set<boost::uuids::uuid> idsTemporal;
-  for (auto it = std::make_move_iterator(timetree_result.begin()), end = std::make_move_iterator(timetree_result.end());
-       it != end; ++it)
-  {
-    idsTemporal.insert(std::move(it->second));
-  }
-  std::set<boost::uuids::uuid> resultSpatioTemporal;
-  std::set_intersection(idsSpatial.begin(), idsSpatial.end(), idsTemporal.begin(), idsTemporal.end(),
-                        std::inserter(resultSpatioTemporal, resultSpatioTemporal.begin()));
+  std::vector<std::set<boost::uuids::uuid>> idsPerSingleModality;
 
-  std::vector<boost::uuids::uuid> result;
-  std::set_intersection(resultSpatioTemporal.begin(), resultSpatioTemporal.end(), semanticResult.begin(),
-                        semanticResult.end(), std::back_inserter(result));
+  if (rt_result)
+  {
+    std::set<boost::uuids::uuid> idsSpatial;
+    for (auto it = std::make_move_iterator(rt_result.value().begin()),
+              end = std::make_move_iterator(rt_result.value().end());
+         it != end; ++it)
+    {
+      idsSpatial.insert(std::move(it->second));
+    }
+    idsPerSingleModality.push_back(std::move(idsSpatial));
+  }
 
-  return result;
+  if (timetree_result)
+  {
+    std::set<boost::uuids::uuid> idsTemporal;
+    for (auto it = std::make_move_iterator(timetree_result.value().begin()),
+              end = std::make_move_iterator(timetree_result.value().end());
+         it != end; ++it)
+    {
+      idsTemporal.insert(std::move(it->second));
+    }
+    idsPerSingleModality.push_back(std::move(idsTemporal));
+  }
+
+  if (semanticResult)
+  {
+    idsPerSingleModality.push_back(std::move(semanticResult.value()));
+  }
+
+  if (instanceResult)
+  {
+    idsPerSingleModality.push_back(
+        std::move(std::set<boost::uuids::uuid>(instanceResult.value().begin(), instanceResult.value().end())));
+  }
+
+  return intersectVectorOfSets(idsPerSingleModality);
 }
 
-std::vector<seerep_core_msgs::AabbTimeIdPair>
-CoreDataset::queryTemporal(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics, const seerep_core_msgs::Query& query)
+std::vector<boost::uuids::uuid>
+CoreDataset::intersectVectorOfSets(std::vector<std::set<boost::uuids::uuid>>& vectorOfSets)
 {
-  seerep_core_msgs::AabbTime aabbtime(seerep_core_msgs::TimePoint(query.timeinterval.timeMin.seconds),
-                                      seerep_core_msgs::TimePoint(query.timeinterval.timeMax.seconds));
+  if (vectorOfSets.size() > 1)
+  {
+    // intersect two sets until the vector has only one set remaining
 
-  std::vector<seerep_core_msgs::AabbTimeIdPair> timetree_result;
-  datatypeSpecifics->timetree.query(boost::geometry::index::intersects(aabbtime), std::back_inserter(timetree_result));
-  return timetree_result;
+    std::set<boost::uuids::uuid> intersectionResult;
+    // intersect the last and the second-last set
+    std::set_intersection(vectorOfSets.at(vectorOfSets.size() - 1).begin(),
+                          vectorOfSets.at(vectorOfSets.size() - 1).end(),
+                          vectorOfSets.at(vectorOfSets.size() - 2).begin(),
+                          vectorOfSets.at(vectorOfSets.size() - 2).end(),
+                          std::inserter(intersectionResult, intersectionResult.begin()));
+    // pop the two intersected sets
+    vectorOfSets.pop_back();
+    vectorOfSets.pop_back();
+
+    // add the intersection result to the vector
+    vectorOfSets.push_back(std::move(intersectionResult));
+    // recursive call until all sets are intersected
+    return intersectVectorOfSets(vectorOfSets);
+  }
+  else if (vectorOfSets.size() == 1)
+  {
+    // return the result as soon as all sets are intersected
+    return std::vector(vectorOfSets.at(0).begin(), vectorOfSets.at(0).end());
+  }
+  else
+  {
+    // return empty vector if input vector is empty
+    return std::vector<boost::uuids::uuid>();
+  }
 }
 
 void CoreDataset::addDataset(const seerep_core_msgs::DatasetIndexable& dataset)

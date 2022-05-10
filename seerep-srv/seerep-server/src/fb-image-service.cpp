@@ -33,6 +33,19 @@ grpc::Status FbImageService::GetImage(grpc::ServerContext* context,
 
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << debuginfo.rdbuf();
 
+  if (requestRoot->boundingbox() != NULL)
+  {
+    std::cout << "in bounding box min(" << requestRoot->boundingbox()->point_min()->x() << "/"
+              << requestRoot->boundingbox()->point_min()->y() << "/" << requestRoot->boundingbox()->point_min()->z()
+              << "), max(" << requestRoot->boundingbox()->point_max()->x() << "/"
+              << requestRoot->boundingbox()->point_max()->y() << "/" << requestRoot->boundingbox()->point_max()->z()
+              << ")" << std::endl;
+  }
+  if (requestRoot->timeinterval() != NULL)
+  {
+    std::cout << "in time interval (" << requestRoot->timeinterval()->time_min()->seconds() << "/"
+              << requestRoot->timeinterval()->time_max()->seconds() << ")" << std::endl;
+  }
   try
   {
     imageFb->getData(*requestRoot, writer);
