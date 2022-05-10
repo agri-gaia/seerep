@@ -20,23 +20,23 @@ std::vector<seerep::Image> CorePbImage::getData(const seerep::Query& query)
   seerep_core_msgs::Query queryCore;
   queryCore.header.datatype = seerep_core_msgs::Datatype::Images;
   boost::uuids::string_generator gen;
-  queryCore.projects.push_back(gen(query.projectuuid()));
+  queryCore.projects.value().push_back(gen(query.projectuuid()));
   for (auto label : query.label())
   {
-    queryCore.label.push_back(label);
+    queryCore.label.value().push_back(label);
   }
-  queryCore.timeinterval.timeMin.seconds = query.timeinterval().time_min().seconds();
-  queryCore.timeinterval.timeMax.seconds = query.timeinterval().time_max().seconds();
-  queryCore.timeinterval.timeMin.nanos = query.timeinterval().time_min().nanos();
-  queryCore.timeinterval.timeMax.nanos = query.timeinterval().time_max().nanos();
+  queryCore.timeinterval.value().timeMin.seconds = query.timeinterval().time_min().seconds();
+  queryCore.timeinterval.value().timeMax.seconds = query.timeinterval().time_max().seconds();
+  queryCore.timeinterval.value().timeMin.nanos = query.timeinterval().time_min().nanos();
+  queryCore.timeinterval.value().timeMax.nanos = query.timeinterval().time_max().nanos();
 
   queryCore.header.frameId = query.boundingbox().header().frame_id();
-  queryCore.boundingbox.min_corner().set<0>(query.boundingbox().point_min().x());
-  queryCore.boundingbox.min_corner().set<1>(query.boundingbox().point_min().y());
-  queryCore.boundingbox.min_corner().set<2>(query.boundingbox().point_min().z());
-  queryCore.boundingbox.max_corner().set<0>(query.boundingbox().point_max().x());
-  queryCore.boundingbox.max_corner().set<1>(query.boundingbox().point_max().y());
-  queryCore.boundingbox.max_corner().set<2>(query.boundingbox().point_max().z());
+  queryCore.boundingbox.value().min_corner().set<0>(query.boundingbox().point_min().x());
+  queryCore.boundingbox.value().min_corner().set<1>(query.boundingbox().point_min().y());
+  queryCore.boundingbox.value().min_corner().set<2>(query.boundingbox().point_min().z());
+  queryCore.boundingbox.value().max_corner().set<0>(query.boundingbox().point_max().x());
+  queryCore.boundingbox.value().max_corner().set<1>(query.boundingbox().point_max().y());
+  queryCore.boundingbox.value().max_corner().set<2>(query.boundingbox().point_max().z());
 
   seerep_core_msgs::QueryResult resultCore = m_seerepCore->getDataset(queryCore);
 

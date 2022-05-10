@@ -15,7 +15,7 @@ seerep_core_msgs::QueryResult Core::getDataset(const seerep_core_msgs::Query& qu
   seerep_core_msgs::QueryResult result;
 
   // search all projects
-  if (query.projects.empty())
+  if (!query.projects)
   {
     for (auto& it : m_projects)
     {
@@ -29,7 +29,7 @@ seerep_core_msgs::QueryResult Core::getDataset(const seerep_core_msgs::Query& qu
   // Search only in project specified in query
   else
   {
-    for (auto projectuuid : query.projects)
+    for (auto projectuuid : query.projects.value())
     {
       auto project = m_projects.find(projectuuid);
       if (project != m_projects.end())

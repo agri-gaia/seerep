@@ -118,24 +118,24 @@ private:
    * @param query the query parameters
    * @return vector of bounding box / UUID pairs matching the query
    */
-  std::vector<seerep_core_msgs::AabbIdPair> querySpatial(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
-                                                         const seerep_core_msgs::Query& query);
+  std::optional<std::vector<seerep_core_msgs::AabbIdPair>>
+  querySpatial(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics, const seerep_core_msgs::Query& query);
   /**
    * @brief queries the temporal index and returns a vector of temporal bounding box / UUID pairs matching the query
    * @param datatypeSpecifics the datatype specific information to be used in the query
    * @param query the query parameters
    * @return vector of temporal bounding box / UUID pairs matching the query
    */
-  std::vector<seerep_core_msgs::AabbTimeIdPair> queryTemporal(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
-                                                              const seerep_core_msgs::Query& query);
+  std::optional<std::vector<seerep_core_msgs::AabbTimeIdPair>>
+  queryTemporal(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics, const seerep_core_msgs::Query& query);
   /**
    * @brief queries the semantic index and returns the UUIDs of the images matching the query
    * @param datatypeSpecifics the datatype specific information to be used in the query
    * @param query the query parameters
    * @return set of UUIDs of the images matching the query
    */
-  std::set<boost::uuids::uuid> querySemantic(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
-                                             const seerep_core_msgs::Query& query);
+  std::optional<std::set<boost::uuids::uuid>> querySemantic(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
+                                                            const seerep_core_msgs::Query& query);
 
   /**
    * @brief intersects the results of the spatial, temporal and semantic query and returns the UUIDs
@@ -143,11 +143,21 @@ private:
    * @param rt_result the result of the spatial query
    * @param timetree_result the result of the temporal query
    * @param semanticResult the result of the semantic query
+   * @param instanceResult the result of the instance based query
    * @return vector of UUIDs of the images matching the query in all three modalities
    */
-  std::vector<boost::uuids::uuid> intersectQueryResults(std::vector<seerep_core_msgs::AabbIdPair> rt_result,
-                                                        std::vector<seerep_core_msgs::AabbTimeIdPair> timetree_result,
-                                                        std::set<boost::uuids::uuid> semanticResult);
+  std::vector<boost::uuids::uuid>
+  intersectQueryResults(std::optional<std::vector<seerep_core_msgs::AabbIdPair>>& rt_result,
+                        std::optional<std::vector<seerep_core_msgs::AabbTimeIdPair>>& timetree_result,
+                        std::optional<std::set<boost::uuids::uuid>>& semanticResult,
+                        std::optional<std::vector<boost::uuids::uuid>>& instanceResult);
+
+  /**
+   * @brief intersects a vector of sets pairwise recursively until one intersection set remains
+   * @param vectorOfSets the vector of sets to be intersected
+   * @return vector of UUIDs of the intersection result
+   */
+  std::vector<boost::uuids::uuid> intersectVectorOfSets(std::vector<std::set<boost::uuids::uuid>>& vectorOfSets);
 
   /** @brief the frame id of the spatial index*/
   std::string m_frameId;

@@ -22,26 +22,44 @@ void CoreFbImage::getData(const seerep::fb::Query& query,
   queryCore.header.datatype = seerep_core_msgs::Datatype::Images;
   boost::uuids::string_generator gen;
 
-  for (auto projectuuid : *query.projectuuid())
+  if (query.projectuuid() != NULL)
   {
-    queryCore.projects.push_back(gen(projectuuid->str()));
+    queryCore.projects = std::vector<boost::uuids::uuid>();
+    for (auto projectuuid : *query.projectuuid())
+    {
+      queryCore.projects.value().push_back(gen(projectuuid->str()));
+    }
   }
-  for (auto label : *query.label())
-  {
-    queryCore.label.push_back(label->str());
-  }
-  queryCore.timeinterval.timeMin.seconds = query.timeinterval()->time_min()->seconds();
-  queryCore.timeinterval.timeMax.seconds = query.timeinterval()->time_max()->seconds();
-  queryCore.timeinterval.timeMin.nanos = query.timeinterval()->time_min()->nanos();
-  queryCore.timeinterval.timeMax.nanos = query.timeinterval()->time_max()->nanos();
 
-  queryCore.header.frameId = query.boundingbox()->header()->frame_id()->str();
-  queryCore.boundingbox.min_corner().set<0>(query.boundingbox()->point_min()->x());
-  queryCore.boundingbox.min_corner().set<1>(query.boundingbox()->point_min()->y());
-  queryCore.boundingbox.min_corner().set<2>(query.boundingbox()->point_min()->z());
-  queryCore.boundingbox.max_corner().set<0>(query.boundingbox()->point_max()->x());
-  queryCore.boundingbox.max_corner().set<1>(query.boundingbox()->point_max()->y());
-  queryCore.boundingbox.max_corner().set<2>(query.boundingbox()->point_max()->z());
+  if (query.label() != NULL)
+  {
+    queryCore.label = std::vector<std::string>();
+    for (auto label : *query.label())
+    {
+      queryCore.label.value().push_back(label->str());
+    }
+  }
+
+  if (query.timeinterval() != NULL)
+  {
+    queryCore.timeinterval = seerep_core_msgs::Timeinterval();
+    queryCore.timeinterval.value().timeMin.seconds = query.timeinterval()->time_min()->seconds();
+    queryCore.timeinterval.value().timeMax.seconds = query.timeinterval()->time_max()->seconds();
+    queryCore.timeinterval.value().timeMin.nanos = query.timeinterval()->time_min()->nanos();
+    queryCore.timeinterval.value().timeMax.nanos = query.timeinterval()->time_max()->nanos();
+  }
+
+  if (query.boundingbox() != NULL)
+  {
+    queryCore.header.frameId = query.boundingbox()->header()->frame_id()->str();
+    queryCore.boundingbox = seerep_core_msgs::AABB();
+    queryCore.boundingbox.value().min_corner().set<0>(query.boundingbox()->point_min()->x());
+    queryCore.boundingbox.value().min_corner().set<1>(query.boundingbox()->point_min()->y());
+    queryCore.boundingbox.value().min_corner().set<2>(query.boundingbox()->point_min()->z());
+    queryCore.boundingbox.value().max_corner().set<0>(query.boundingbox()->point_max()->x());
+    queryCore.boundingbox.value().max_corner().set<1>(query.boundingbox()->point_max()->y());
+    queryCore.boundingbox.value().max_corner().set<2>(query.boundingbox()->point_max()->z());
+  }
 
   seerep_core_msgs::QueryResult resultCore = m_seerepCore->getDataset(queryCore);
 
