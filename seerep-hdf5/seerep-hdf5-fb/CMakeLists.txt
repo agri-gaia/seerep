@@ -15,6 +15,8 @@ find_package(Flatbuffers REQUIRED)
 find_package(SeerepMsgs REQUIRED)
 find_package(SeerepHdf5Core REQUIRED)
 find_package(HighFive REQUIRED)
+find_package(gRPC CONFIG REQUIRED)
+find_package(SeerepCore REQUIRED)
 
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
@@ -30,11 +32,13 @@ configure_file(include/SeerepHdf5FbConfig.h.in SeerepHdf5FbConfig.h)
 
 include_directories(
 	include
+	${seerep_ros_conversions_fb_INCLUDE_DIRS}
 	${SeerepMsgs_INCLUDE_DIRS}
 	${SeerepHdf5Core_INCLUDE_DIRS}
 	${FLATBUFFER_INCLUDE_DIR}
 	${HighFive_INCLUDE_DIRS}
 	${Boost_INCLUDE_DIRS}
+	${SeerepCore_INCLUDE_DIRS}
 )
 
 add_library(seerephdf5fb
@@ -53,7 +57,20 @@ target_link_libraries(seerephdf5fb
 
 # create executable with tests
 add_executable(flatbuffer-write-load test/fb-write-load-test.cpp)
-target_link_libraries(flatbuffer-write-load GTest::gtest GTest::gtest_main)
+add_dependencies(
+	flatbuffer-write-load
+	${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS}
+)
+target_link_libraries(flatbuffer-write-load
+	GTest::gtest
+	GTest::gtest_main
+	${catkin_LIBRARIES}
+	${HighFive_LIBRARIES}
+	${SeerepCore_LIBRARIES}
+	gRPC::grpc++_reflection
+	-lboost_filesystem -lboost_system
+	seerephdf5fb
+)
 add_test(flatbuffer-write-load flatbuffer-write-load)
 
 set(CMAKE_INSTALL_INCLUDEDIR include)
