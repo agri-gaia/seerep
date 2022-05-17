@@ -43,7 +43,7 @@ std::vector<seerep::Image> CorePbImage::getData(const seerep::Query& query)
   std::vector<seerep::Image> resultImages;
   for (auto project : resultCore.queryResultProjects)
   {
-    for (auto uuidImg : project.dataUuids)
+    for (auto uuidImg : project.dataOrInstanceUuids)
     {
       auto hdf5io = getHdf5(project.projectUuid);
       std::optional<seerep::Image> image = hdf5io->readImage(boost::lexical_cast<std::string>(uuidImg));

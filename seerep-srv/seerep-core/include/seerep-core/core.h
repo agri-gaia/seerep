@@ -58,6 +58,13 @@ public:
   seerep_core_msgs::QueryResult getDataset(const seerep_core_msgs::Query& query);
 
   /**
+   * @brief Returns a vector of UUIDs of instances that match the query and the project UUID
+   * @param query the spatio-temporal-semantic query
+   * @return vector of UUIDs of instances matching the query and the project UUID
+   */
+  seerep_core_msgs::QueryResult getInstances(const seerep_core_msgs::Query& query);
+
+  /**
    * @brief Adds labels to an existing dataset
    * @param datatype the targeted datatype
    * @param labels a vector of labels to be added to the dataset

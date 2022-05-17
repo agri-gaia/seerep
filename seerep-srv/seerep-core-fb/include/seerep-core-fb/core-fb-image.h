@@ -4,6 +4,8 @@
 #include <functional>
 #include <optional>
 
+#include "core-fb-conversion.h"
+
 // seerep-msgs
 #include <seerep-msgs/image_generated.h>
 #include <seerep-msgs/query_generated.h>

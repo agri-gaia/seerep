@@ -17,49 +17,8 @@ CoreFbImage::~CoreFbImage()
 void CoreFbImage::getData(const seerep::fb::Query& query,
                           grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::Image>>* const writer)
 {
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "loading image from images";
-  seerep_core_msgs::Query queryCore;
-  queryCore.header.datatype = seerep_core_msgs::Datatype::Images;
-  boost::uuids::string_generator gen;
-
-  if (query.projectuuid() != NULL)
-  {
-    queryCore.projects = std::vector<boost::uuids::uuid>();
-    for (auto projectuuid : *query.projectuuid())
-    {
-      queryCore.projects.value().push_back(gen(projectuuid->str()));
-    }
-  }
-
-  if (query.label() != NULL)
-  {
-    queryCore.label = std::vector<std::string>();
-    for (auto label : *query.label())
-    {
-      queryCore.label.value().push_back(label->str());
-    }
-  }
-
-  if (query.timeinterval() != NULL)
-  {
-    queryCore.timeinterval = seerep_core_msgs::Timeinterval();
-    queryCore.timeinterval.value().timeMin.seconds = query.timeinterval()->time_min()->seconds();
-    queryCore.timeinterval.value().timeMax.seconds = query.timeinterval()->time_max()->seconds();
-    queryCore.timeinterval.value().timeMin.nanos = query.timeinterval()->time_min()->nanos();
-    queryCore.timeinterval.value().timeMax.nanos = query.timeinterval()->time_max()->nanos();
-  }
-
-  if (query.boundingbox() != NULL)
-  {
-    queryCore.header.frameId = query.boundingbox()->header()->frame_id()->str();
-    queryCore.boundingbox = seerep_core_msgs::AABB();
-    queryCore.boundingbox.value().min_corner().set<0>(query.boundingbox()->point_min()->x());
-    queryCore.boundingbox.value().min_corner().set<1>(query.boundingbox()->point_min()->y());
-    queryCore.boundingbox.value().min_corner().set<2>(query.boundingbox()->point_min()->z());
-    queryCore.boundingbox.value().max_corner().set<0>(query.boundingbox()->point_max()->x());
-    queryCore.boundingbox.value().max_corner().set<1>(query.boundingbox()->point_max()->y());
-    queryCore.boundingbox.value().max_corner().set<2>(query.boundingbox()->point_max()->z());
-  }
+  std::cout << "loading image from images/" << std::endl;
+  seerep_core_msgs::Query queryCore = seerep_core_fb::CoreFbConversion::fromFb(query);
 
   seerep_core_msgs::QueryResult resultCore = m_seerepCore->getDataset(queryCore);
 
@@ -67,7 +26,7 @@ void CoreFbImage::getData(const seerep::fb::Query& query,
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
         << "sending images from project" << boost::lexical_cast<std::string>(project.projectUuid);
-    for (auto uuidImg : project.dataUuids)
+    for (auto uuidImg : project.dataOrInstanceUuids)
     {
       auto img = getHdf5(project.projectUuid)->readImage(boost::lexical_cast<std::string>(uuidImg));
 
@@ -83,88 +42,14 @@ void CoreFbImage::getData(const seerep::fb::Query& query,
 
 boost::uuids::uuid CoreFbImage::addData(const seerep::fb::Image& img)
 {
-  boost::uuids::string_generator gen;
-  boost::uuids::uuid uuid;
-  if (img.header()->uuid_msgs()->str().empty())
-  {
-    uuid = boost::uuids::random_generator()();
-  }
-  else
-  {
-    uuid = gen(img.header()->uuid_msgs()->str());
-  }
-  auto hdf5io = getHdf5(gen(img.header()->uuid_project()->str()));
-  hdf5io->writeImage(boost::lexical_cast<std::string>(uuid), img);
+  seerep_core_msgs::DatasetIndexable dataForIndices = CoreFbConversion::fromFb(img);
 
-  seerep_core_msgs::DatasetIndexable dataForIndices;
-  dataForIndices.header.datatype = seerep_core_msgs::Datatype::Images;
-  dataForIndices.header.frameId = img.header()->frame_id()->str();
-  dataForIndices.header.timestamp.seconds = img.header()->stamp()->seconds();
-  dataForIndices.header.timestamp.nanos = img.header()->stamp()->nanos();
-  dataForIndices.header.uuidData = uuid;
-  dataForIndices.header.uuidProject = gen(img.header()->uuid_project()->str());
-  // set bounding box for images to 0. assume no spatial extent
-  dataForIndices.boundingbox.min_corner().set<0>(0);
-  dataForIndices.boundingbox.min_corner().set<1>(0);
-  dataForIndices.boundingbox.min_corner().set<2>(0);
-  dataForIndices.boundingbox.max_corner().set<0>(0);
-  dataForIndices.boundingbox.max_corner().set<1>(0);
-  dataForIndices.boundingbox.max_corner().set<2>(0);
-
-  // semantic
-  int labelSizeAll = 0;
-  if (img.labels_general())
-  {
-    labelSizeAll += img.labels_general()->size();
-  }
-  if (img.labels_bb())
-  {
-    labelSizeAll += img.labels_bb()->size();
-  }
-  dataForIndices.labelsWithInstances.reserve(labelSizeAll);
-  if (img.labels_general())
-  {
-    for (auto label : *img.labels_general())
-    {
-      boost::uuids::string_generator gen;
-      boost::uuids::uuid uuidInstance;
-      try
-      {
-        uuidInstance = gen(label->instanceUuid()->str());
-      }
-      catch (std::runtime_error e)
-      {
-        uuidInstance = boost::uuids::nil_uuid();
-      }
-
-      dataForIndices.labelsWithInstances.push_back(
-          seerep_core_msgs::LabelWithInstance{ .label = label->label()->str(), .uuidInstance = uuidInstance });
-    }
-  }
-
-  if (img.labels_bb())
-  {
-    for (auto label : *img.labels_bb())
-    {
-      boost::uuids::string_generator gen;
-      boost::uuids::uuid uuidInstance;
-      try
-      {
-        uuidInstance = gen(label->labelWithInstance()->instanceUuid()->str());
-      }
-      catch (std::runtime_error e)
-      {
-        uuidInstance = boost::uuids::nil_uuid();
-      }
-
-      dataForIndices.labelsWithInstances.push_back(seerep_core_msgs::LabelWithInstance{
-          .label = label->labelWithInstance()->label()->str(), .uuidInstance = uuidInstance });
-    }
-  }
+  auto hdf5io = getHdf5(dataForIndices.header.uuidProject);
+  hdf5io->writeImage(boost::lexical_cast<std::string>(dataForIndices.header.uuidData), img);
 
   m_seerepCore->addDataset(dataForIndices);
 
-  return uuid;
+  return dataForIndices.header.uuidData;
 }
 
 void CoreFbImage::addBoundingBoxesLabeled(const seerep::fb::BoundingBoxes2DLabeledStamped& bbs2dlabeled)

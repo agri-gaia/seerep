@@ -48,7 +48,7 @@ std::vector<seerep::PointCloud2> CorePbPointCloud::getData(const seerep::Query& 
   std::vector<seerep::PointCloud2> resultPointClouds;
   for (auto project : resultCore.queryResultProjects)
   {
-    for (auto uuidPc : project.dataUuids)
+    for (auto uuidPc : project.dataOrInstanceUuids)
     {
       auto hdf5io = getHdf5(project.projectUuid);
       std::optional<seerep::PointCloud2> pc = hdf5io->readPointCloud2(boost::lexical_cast<std::string>(uuidPc));

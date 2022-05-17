@@ -27,6 +27,7 @@ void server::addServicesFb(grpc::ServerBuilder& server_builder)
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "add the flatbuffer gRPC services...";
   server_builder.RegisterService(&*m_metaOperationsFb);
   server_builder.RegisterService(&*m_tfServiceFb);
+  server_builder.RegisterService(&*m_instanceServiceFb);
   server_builder.RegisterService(&*m_imageServiceFb);
 }
 
@@ -42,6 +43,7 @@ void server::createServicesFb()
 {
   m_metaOperationsFb = std::make_shared<seerep_server::FbMetaOperations>(m_seerepCore);
   m_tfServiceFb = std::make_shared<seerep_server::FbTfService>(m_seerepCore);
+  m_instanceServiceFb = std::make_shared<seerep_server::FbInstanceService>(m_seerepCore);
   m_imageServiceFb = std::make_shared<seerep_server::FbImageService>(m_seerepCore);
 }
 } /* namespace seerep_server */

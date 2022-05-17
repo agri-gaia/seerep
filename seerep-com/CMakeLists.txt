@@ -29,10 +29,11 @@ protobuf_generate_cpp(
 )
 
 set(MY_FBS_FILES
-  fbs/transfer-sensor-msgs.fbs
+  fbs/image-service.fbs
+  fbs/instance-service.fbs
   fbs/meta-operations.fbs
   fbs/tf-service.fbs
-  fbs/image-service.fbs
+  fbs/transfer-sensor-msgs.fbs
 )
 
 #message("SeerepMsgs FlatBuffers" ${SeerepMsgs_FLATBUFFERS_IMPORT_DIRS})

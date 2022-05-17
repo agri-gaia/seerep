@@ -38,8 +38,10 @@ include_directories(
 )
 
 add_library(seerepcorefb
-	src/core-fb-tf.cpp
+	src/core-fb-conversion.cpp
 	src/core-fb-image.cpp
+	src/core-fb-instance.cpp
+	src/core-fb-tf.cpp
 )
 
 target_link_libraries(seerepcorefb
@@ -55,8 +57,10 @@ target_link_libraries(seerepcorefb
 )
 
 set(INSTALL_HEADERS
-	include/seerep-core-fb/core-fb-tf.h
+	include/seerep-core-fb/core-fb-conversion.h
 	include/seerep-core-fb/core-fb-image.h
+	include/seerep-core-fb/core-fb-instance.h
+	include/seerep-core-fb/core-fb-tf.h
 )
 
 set_target_properties(seerepcorefb PROPERTIES PUBLIC_HEADER "${INSTALL_HEADERS}")

@@ -19,10 +19,10 @@ seerep_core_msgs::QueryResult Core::getDataset(const seerep_core_msgs::Query& qu
   {
     for (auto& it : m_projects)
     {
-      auto img = it.second->getDataset(query);
-      if (!img.dataUuids.empty())
+      auto dataset = it.second->getDataset(query);
+      if (!dataset.dataOrInstanceUuids.empty())
       {
-        result.queryResultProjects.push_back(img);
+        result.queryResultProjects.push_back(dataset);
       }
     }
   }
@@ -34,10 +34,52 @@ seerep_core_msgs::QueryResult Core::getDataset(const seerep_core_msgs::Query& qu
       auto project = m_projects.find(projectuuid);
       if (project != m_projects.end())
       {
-        auto img = project->second->getDataset(query);
-        if (!img.dataUuids.empty())
+        auto dataset = project->second->getDataset(query);
+        if (!dataset.dataOrInstanceUuids.empty())
         {
-          result.queryResultProjects.push_back(img);
+          result.queryResultProjects.push_back(dataset);
+        }
+      }
+      // if not found throw error
+      else
+      {
+        throw std::runtime_error("project " + boost::lexical_cast<std::string>(query.header.uuidProject) +
+                                 "does not exist!");
+      };
+    }
+  }
+
+  return result;
+}
+
+seerep_core_msgs::QueryResult Core::getInstances(const seerep_core_msgs::Query& query)
+{
+  seerep_core_msgs::QueryResult result;
+
+  // search all projects
+  if (!query.projects)
+  {
+    for (auto& it : m_projects)
+    {
+      auto instances = it.second->getInstances(query);
+      if (!instances.dataOrInstanceUuids.empty())
+      {
+        result.queryResultProjects.push_back(instances);
+      }
+    }
+  }
+  // Search only in project specified in query
+  else
+  {
+    for (auto projectuuid : query.projects.value())
+    {
+      auto project = m_projects.find(projectuuid);
+      if (project != m_projects.end())
+      {
+        auto instances = project->second->getDataset(query);
+        if (!instances.dataOrInstanceUuids.empty())
+        {
+          result.queryResultProjects.push_back(instances);
         }
       }
       // if not found throw error

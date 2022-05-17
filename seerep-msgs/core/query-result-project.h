@@ -9,7 +9,7 @@ namespace seerep_core_msgs
 struct QueryResultProject
 {
   boost::uuids::uuid projectUuid;
-  std::vector<boost::uuids::uuid> dataUuids;
+  std::vector<boost::uuids::uuid> dataOrInstanceUuids;
 };
 
 } /* namespace seerep_core_msgs */
