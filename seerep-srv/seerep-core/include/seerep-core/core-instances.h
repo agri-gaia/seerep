@@ -70,10 +70,10 @@ public:
   void writeAttribute(const boost::uuids::uuid& uuidInstance, const std::string& key, const std::string& value);
 
   /**
-   * @brief Returns the UUIDs of the images showing these instances
+   * @brief Returns the UUIDs of the datasets showing these instances
    * @param instanceIds vector of UUIDs of the targeted instances
    * @param dataset the datatype to be returned
-   * @return Vector of the UUIDs of the images showings these instances
+   * @return Vector of the UUIDs of the datasets showings these instances
    */
   std::vector<boost::uuids::uuid> getDatasets(const std::vector<boost::uuids::uuid>& instanceIds,
                                               const seerep_core_msgs::Datatype& datatype) const;

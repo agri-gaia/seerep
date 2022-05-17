@@ -1,0 +1,7 @@
+
+namespace seerep.fb;
+
+table UuidsProjectPair {
+  projectUuid:string;
+  uuids:[string];
+}

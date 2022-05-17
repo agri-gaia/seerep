@@ -40,13 +40,19 @@ private:
     /** @brief shared pointer to the object handling the HDF5 io for the datatype */
     std::shared_ptr<seerep_hdf5_core::Hdf5CoreDatatypeInterface> hdf5io;
     /** @brief vector of the datasets which couldn't be added to the spatial index yet due to missing tf*/
-    std::vector<std::shared_ptr<seerep_core_msgs::DatasetIndexable>> dataWithMissingTF;
+    std::vector<std::shared_ptr<seerep_core_msgs::DatasetIndexable>> dataWithMissingTF =
+        std::vector<std::shared_ptr<seerep_core_msgs::DatasetIndexable>>();
     /** @brief the spatial r-tree for the spatial index*/
-    seerep_core_msgs::rtree rt;
+    seerep_core_msgs::rtree rt = seerep_core_msgs::rtree();
     /** @brief the temporal r-tree for the temporal index*/
-    seerep_core_msgs::timetree timetree;
+    seerep_core_msgs::timetree timetree = seerep_core_msgs::timetree();
     /** @brief map from label to the UUIDs of the images annotated with this label*/
-    std::unordered_map<std::string, std::vector<boost::uuids::uuid>> label;
+    std::unordered_map<std::string, std::vector<boost::uuids::uuid>> labelDatasetsMap =
+        std::unordered_map<std::string, std::vector<boost::uuids::uuid>>();
+    /** @brief map from the UUID of the dataset a vector of UUID of instances the dataset is showing */
+    std::unordered_map<boost::uuids::uuid, std::vector<boost::uuids::uuid>, boost::hash<boost::uuids::uuid>>
+        datasetInstancesMap =
+            std::unordered_map<boost::uuids::uuid, std::vector<boost::uuids::uuid>, boost::hash<boost::uuids::uuid>>();
   };
 
 public:
@@ -69,11 +75,18 @@ public:
                    std::shared_ptr<seerep_hdf5_core::Hdf5CoreDatatypeInterface> hdf5Io);
 
   /**
-   * @brief Returns a vector of UUIDs of images that match the query
+   * @brief Returns a vector of UUIDs of datasets that match the query
    * @param query the spatio-temporal-semantic query
-   * @return vector of UUIDs of images matching the query
+   * @return vector of UUIDs of datasets matching the query
    */
   std::vector<boost::uuids::uuid> getData(const seerep_core_msgs::Query& query);
+
+  /**
+   * @brief Returns a vector of UUIDs of instances that match the query
+   * @param query the spatio-temporal-semantic query
+   * @return vector of UUIDs of instances matching the query
+   */
+  std::vector<boost::uuids::uuid> getInstances(const seerep_core_msgs::Query& query);
 
   /**
    * @brief Adds an image to the spatial, temporal and semantic indices

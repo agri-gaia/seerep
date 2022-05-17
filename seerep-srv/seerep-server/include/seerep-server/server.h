@@ -14,6 +14,7 @@
 #include <seerep-core/core.h>
 
 #include "seerep-server/fb-image-service.h"
+#include "seerep-server/fb-instance-service.h"
 #include "seerep-server/fb-meta-operations.h"
 #include "seerep-server/fb-tf-service.h"
 #include "seerep-server/pb-image-service.h"
@@ -54,6 +55,7 @@ private:
   std::shared_ptr<seerep_server::FbMetaOperations> m_metaOperationsFb;
   std::shared_ptr<seerep_server::FbTfService> m_tfServiceFb;
   std::shared_ptr<seerep_server::FbImageService> m_imageServiceFb;
+  std::shared_ptr<seerep_server::FbInstanceService> m_instanceServiceFb;
 
   boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
 };

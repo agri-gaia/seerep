@@ -19,13 +19,8 @@ void CoreFbTf::getData(const seerep::fb::TransformStampedQuery& query,
                        flatbuffers::grpc::Message<seerep::fb::TransformStamped>* response)
 {
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "loading tf from tfs/";
-  boost::uuids::string_generator gen;
-  seerep_core_msgs::QueryTf queryTf;
-  queryTf.childFrameId = query.child_frame_id()->str();
-  queryTf.parentFrameId = query.header()->frame_id()->str();
-  queryTf.project = gen(query.header()->uuid_project()->str());
-  queryTf.timestamp.seconds = query.header()->stamp()->seconds();
-  queryTf.timestamp.nanos = query.header()->stamp()->nanos();
+  seerep_core_msgs::QueryTf queryTf = CoreFbConversion::fromFb(query);
+
   std::optional<geometry_msgs::TransformStamped> result = m_seerepCore->getTF(queryTf);
 
   if (result)

@@ -71,6 +71,7 @@ add_executable(${PROJECT_NAME}_server
 	src/fb-meta-operations.cpp
 	src/fb-tf-service.cpp
 	src/fb-image-service.cpp
+	src/fb-instance-service.cpp
 )
 
 
