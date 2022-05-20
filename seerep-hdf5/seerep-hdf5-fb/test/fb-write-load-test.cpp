@@ -1,113 +1,278 @@
 #include <gtest/gtest.h>
+#include <seerep-core/core.h>
 #include <seerep-hdf5-fb/hdf5-fb-image.h>
 
-#include <ctime>
-#include <filesystem>
-#include <optional>
-#include <string>
-
-// seerep flatbuffer messages
-#include <seerep-core/core.h>
-#include <seerep-msgs/image_generated.h>
-
 #include <H5File.hpp>
-#include <boost/filesystem.hpp>
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>
+#include <ctime>
+#include <optional>
+#include <string>
+#include <vector>
 
-bool fBImageEquals(const seerep::fb::Image* lhs, const seerep::fb::Image* rhs)
+auto createTimeStamp(flatbuffers::FlatBufferBuilder& fbb)
 {
-  return lhs->width() == rhs->width();
+  auto timeStampMsgOffset = seerep::fb::CreateTimestamp(fbb, std::time(0), 0);
+  fbb.Finish(timeStampMsgOffset);
+  return timeStampMsgOffset;
 }
 
-// consider adding SetUp() and TearDown() for exception safety
-class FileSetUp : public testing::Test
+auto createHeader(flatbuffers::FlatBufferBuilder& fbb, const std::string& frameId, const std::string& projectUUID,
+                  const std::string& messageUUID)
+{
+  auto frameIdOffset = fbb.CreateString(frameId);
+  auto projectUUIDOffset = fbb.CreateString(projectUUID);
+  auto messageUUIDOffset = fbb.CreateString(messageUUID);
+  auto timeStampOffset = createTimeStamp(fbb);
+  auto headerMsgOffset =
+      seerep::fb::CreateHeader(fbb, 0, timeStampOffset, frameIdOffset, projectUUIDOffset, messageUUIDOffset);
+  // uint8_t* buf = fbb.GetBufferPointer();
+  return headerMsgOffset;
+}
+
+auto createPoint(flatbuffers::FlatBufferBuilder& fbb, const double x, const double y)
+{
+  auto pointOffset = seerep::fb::CreatePoint2D(fbb, x, y);
+  fbb.Finish(pointOffset);
+  return pointOffset;
+}
+
+auto createImageData(flatbuffers::FlatBufferBuilder& fbb, const unsigned int imageHeight, const unsigned int imageWidth)
+{
+  std::vector<u_int8_t> data;
+  for (size_t i = 0; i < imageWidth; i++)
+  {
+    for (size_t j = 0; j < imageHeight; j++)
+    {
+      float x = float(i) / imageHeight;
+      float y = float(j) / imageHeight;
+      float z = float(j) / imageHeight;
+
+      uint8_t r = int((x * 255.0)) % 255;
+      uint8_t g = int((y * 255.0)) % 255;
+      uint8_t b = int((z * 255.0)) % 255;
+
+      data.push_back(r);
+      data.push_back(g);
+      data.push_back(b);
+    }
+  }
+  auto fbImageDataOffset = fbb.CreateVector(data.data(), data.size());
+  fbb.Finish(fbImageDataOffset);
+  return fbImageDataOffset;
+}
+
+auto createLabelWithInstance(flatbuffers::FlatBufferBuilder& fbb)
+{
+  boost::uuids::uuid instanceUUID = boost::uuids::random_generator()();
+  auto instanceUUIDOffset = fbb.CreateString(boost::lexical_cast<std::string>(instanceUUID));
+  auto labelOffset = fbb.CreateString("testLabelGeneral");
+  auto labelWithInstanceOffset = seerep::fb::CreateLabelWithInstance(fbb, labelOffset, instanceUUIDOffset);
+  fbb.Finish(labelWithInstanceOffset);
+  return labelWithInstanceOffset;
+}
+
+auto createBB2DLabeled(flatbuffers::FlatBufferBuilder& fbb, const std::string& projectUUID,
+                       const std::string& messageUUID)
+{
+  std::vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>> bbLabeled;
+  for (size_t i = 0; i < 10; i++)
+  {
+    auto headerOffset = createHeader(fbb, "camera", projectUUID, messageUUID);
+
+    auto pointMinOffset = createPoint(fbb, 0.01 + i / 10, 0.02 + i / 10);
+    auto pointMaxOffset = createPoint(fbb, 0.03 + i / 10, 0.04 + i / 10);
+
+    auto bb2DOffset = seerep::fb::CreateBoundingbox2D(fbb, headerOffset, pointMinOffset, pointMaxOffset);
+    fbb.Finish(bb2DOffset);
+
+    auto labelWithInstanceOffset = createLabelWithInstance(fbb);
+
+    auto boudingBox2DLabeledOffset = seerep::fb::CreateBoundingBox2DLabeled(fbb, labelWithInstanceOffset, bb2DOffset);
+    fbb.Finish(boudingBox2DLabeledOffset);
+
+    bbLabeled.push_back(boudingBox2DLabeledOffset);
+  }
+  auto labelsBBOffset = fbb.CreateVector(bbLabeled.data(), bbLabeled.size());
+  fbb.Finish(labelsBBOffset);
+  return labelsBBOffset;
+}
+
+auto createImageMessage(flatbuffers::FlatBufferBuilder& fbb, const unsigned int imageHeight, const unsigned imageWidth,
+                        const std::string& projectUUID, const std::string& messageUUID)
+{
+  auto encodingOffset = fbb.CreateString("rgb8");
+  auto headerOffset = createHeader(fbb, "camera", projectUUID, messageUUID);
+  auto imageOffset = createImageData(fbb, 256, 256);
+  std::vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>> labelsGeneral;
+  for (size_t i = 0; i < 10; i++)
+  {
+    auto labelWithInstanceOffset = createLabelWithInstance(fbb);
+    fbb.Finish(labelWithInstanceOffset);
+    labelsGeneral.push_back(labelWithInstanceOffset);
+  }
+  auto generalLabelsOffset = fbb.CreateVector(labelsGeneral.data(), labelsGeneral.size());
+  auto bB2DLabeledOffset = createBB2DLabeled(fbb, projectUUID, messageUUID);
+
+  auto imgMsgOffset = seerep::fb::CreateImage(fbb, headerOffset, imageHeight, imageWidth, encodingOffset, true,
+                                              3 * imageHeight, 0, imageOffset, generalLabelsOffset, bB2DLabeledOffset);
+  fbb.Finish(imgMsgOffset);
+  uint8_t* buf = fbb.GetBufferPointer();
+  return flatbuffers::GetRoot<seerep::fb::Image>(buf);
+}
+
+class fbWriteLoadTest : public testing::Test
 {
 protected:
-  const unsigned int height = 256;
-  const unsigned int width = 256;
-  const std::string imgId = "test1";
-  boost::uuids::uuid projectUUID;
+  static std::shared_ptr<std::mutex> hdf5FileMutex;
+  static std::string hdf5FileName;
+  static std::shared_ptr<HighFive::File> hdf5File;
+  static std::shared_ptr<seerep_hdf5_fb::Hdf5FbImage> imageIO;
 
-  std::shared_ptr<std::mutex> hdf5FileMutex;
-  std::shared_ptr<HighFive::File> hdf5File;
-  std::string hdf5FileName;
+  static boost::uuids::uuid projectUUID;
+  static boost::uuids::uuid messageUUID;
+  static std::string projectName;
 
-  FileSetUp()
+  static const seerep::fb::Image* writeImage;
+  static const seerep::fb::Image* readImage;
+
+  static flatbuffers::FlatBufferBuilder fbb;
+
+  // because the tests only compare data and don't alter them, we create the
+  // resources only once and share them between the tests
+  static void SetUpTestSuite()
   {
-    hdf5FileMutex = std::make_shared<std::mutex>();
+    projectName = "testProject";
     projectUUID = boost::uuids::random_generator()();
+    messageUUID = boost::uuids::random_generator()();
+
+    hdf5FileMutex = std::make_shared<std::mutex>();
     hdf5FileName = boost::lexical_cast<std::string>(projectUUID) + ".h5";
     hdf5File = std::make_shared<HighFive::File>(hdf5FileName, HighFive::File::ReadWrite | HighFive::File::Create);
+
+    fbb = flatbuffers::FlatBufferBuilder(1024);
+
+    auto seerepCore = std::make_shared<seerep_core::Core>("./");
+    seerep_core_msgs::ProjectInfo projectInfo;
+    projectInfo.name = projectName;
+    projectInfo.uuid = projectUUID;
+    seerepCore->newProject(projectInfo);
+
+    imageIO = std::make_shared<seerep_hdf5_fb::Hdf5FbImage>(hdf5File, hdf5FileMutex);
+    if (imageIO == nullptr)
+    {
+      FAIL() << "Error: Can't create HDF5Image object for writing images";
+    }
+
+    writeImage = createImageMessage(fbb, 256, 256, boost::lexical_cast<std::string>(projectUUID),
+                                    boost::lexical_cast<std::string>(messageUUID));
+    if (writeImage == nullptr)
+    {
+      FAIL() << "Error: No image data to write into HDF5 file";
+    }
+
+    imageIO->writeImage(boost::lexical_cast<std::string>(messageUUID), *writeImage);
+
+    auto gRPCImage = imageIO->readImage(boost::lexical_cast<std::string>(messageUUID));
+    if (!gRPCImage.has_value())
+    {
+      FAIL() << "Error: No data could be read from HDF5 file";
+    };
+
+    readImage = gRPCImage.value().GetRoot();
   }
-  virtual ~FileSetUp()
+
+  static void TearDownTestSuite()
   {
     std::filesystem::remove(hdf5FileName);
-  };
+  }
 };
 
-TEST_F(FileSetUp, fBwriteLoadTest)
+std::shared_ptr<std::mutex> fbWriteLoadTest::hdf5FileMutex;
+std::shared_ptr<HighFive::File> fbWriteLoadTest::hdf5File;
+std::string fbWriteLoadTest::hdf5FileName;
+
+boost::uuids::uuid fbWriteLoadTest::projectUUID;
+boost::uuids::uuid fbWriteLoadTest::messageUUID;
+std::string fbWriteLoadTest::projectName;
+
+flatbuffers::FlatBufferBuilder fbWriteLoadTest::fbb;
+std::shared_ptr<seerep_hdf5_fb::Hdf5FbImage> fbWriteLoadTest::imageIO;
+
+const seerep::fb::Image* fbWriteLoadTest::writeImage;
+const seerep::fb::Image* fbWriteLoadTest::readImage;
+
+TEST_F(fbWriteLoadTest, testImageHeader)
 {
-  flatbuffers::FlatBufferBuilder fbb(1024);
+  EXPECT_EQ(readImage->header()->stamp()->seconds(), writeImage->header()->stamp()->seconds());
+  EXPECT_EQ(readImage->header()->stamp()->nanos(), writeImage->header()->stamp()->nanos());
+  EXPECT_STREQ(readImage->header()->frame_id()->c_str(), writeImage->header()->frame_id()->c_str());
+  EXPECT_STREQ(readImage->header()->uuid_project()->c_str(), writeImage->header()->uuid_project()->c_str());
+  EXPECT_STREQ(readImage->header()->uuid_msgs()->c_str(), writeImage->header()->uuid_msgs()->c_str());
+}
 
-  // create new Project
-  const std::string projectName = "testProject";
-  auto seerepCore = std::make_shared<seerep_core::Core>("./");
+TEST_F(fbWriteLoadTest, testImageBaseFields)
+{
+  EXPECT_EQ(readImage->height(), writeImage->height());
+  EXPECT_EQ(readImage->width(), writeImage->width());
+  EXPECT_STREQ(readImage->encoding()->c_str(), writeImage->encoding()->c_str());
+  EXPECT_EQ(readImage->is_bigendian(), writeImage->is_bigendian());
+  EXPECT_EQ(readImage->step(), writeImage->step());
+  EXPECT_EQ(readImage->row_step(), writeImage->row_step());
+}
 
-  seerep_core_msgs::ProjectInfo projectInfo;
-  projectInfo.name = projectName;
-  projectInfo.uuid = projectUUID;
-  seerepCore->newProject(projectInfo);
-
-  // create all nessacary flatbuffer strings
-  auto frameId = fbb.CreateString("camera");
-  auto encoding = fbb.CreateString("rgb8");
-  auto nameOffset = fbb.CreateString(projectName);
-  auto uuidOffset = fbb.CreateString(boost::lexical_cast<std::string>(projectUUID));
-  uint8_t dataArray[] = { 1, 2, 3, 4 };
-  auto data = fbb.CreateVector(dataArray, 4);
-
-  // create timestamp
-  seerep::fb::TimestampBuilder timeStampBuilder(fbb);
-  timeStampBuilder.add_seconds(std::time(0));
-  timeStampBuilder.add_nanos(0);
-  flatbuffers::Offset<seerep::fb::Timestamp> timeStampMsg = timeStampBuilder.Finish();
-  fbb.Finish(timeStampMsg);
-
-  // create header message
-  seerep::fb::HeaderBuilder fbHeaderBuilder(fbb);
-  fbHeaderBuilder.add_frame_id(frameId);
-  fbHeaderBuilder.add_uuid_project(uuidOffset);
-  fbHeaderBuilder.add_stamp(timeStampMsg);
-  flatbuffers::Offset<seerep::fb::Header> fbHeaderMsg = fbHeaderBuilder.Finish();
-  fbb.Finish(fbHeaderMsg);
-
-  // create image message
-  seerep::fb::ImageBuilder fbImgBuilder(fbb);
-  fbImgBuilder.add_header(fbHeaderMsg);
-  fbImgBuilder.add_height(height);
-  fbImgBuilder.add_width(width);
-  fbImgBuilder.add_encoding(encoding);
-  fbImgBuilder.add_is_bigendian(true);
-  fbImgBuilder.add_step(0);
-  fbImgBuilder.add_row_step(0);
-  fbImgBuilder.add_data(data);
-  flatbuffers::Offset<seerep::fb::Image> fbImgMsg = fbImgBuilder.Finish();
-  fbb.Finish(fbImgMsg);
-
-  uint8_t* buf = fbb.GetBufferPointer();
-  const seerep::fb::Image* writeImgPtr = flatbuffers::GetRoot<seerep::fb::Image>(buf);
-
-  auto imageIo = std::make_shared<seerep_hdf5_fb::Hdf5FbImage>(hdf5File, hdf5FileMutex);
-  imageIo->writeImage(imgId, *writeImgPtr);
-
-  const seerep::fb::Image* readImgPtr;
-  if (auto tmp = imageIo->readImage(imgId))
+TEST_F(fbWriteLoadTest, testImageData)
+{
+  ASSERT_EQ(readImage->data()->size(), writeImage->data()->size());
+  for (size_t i = 0; i < readImage->data()->size(); i++)
   {
-    readImgPtr = tmp.value().GetRoot();
-  };
-  fBImageEquals(writeImgPtr, readImgPtr);
-  ASSERT_TRUE(fBImageEquals(writeImgPtr, readImgPtr));
+    EXPECT_EQ(readImage->data()->Get(i), writeImage->data()->Get(i));
+  }
+}
+
+void testLabelWithInstance(const seerep::fb::LabelWithInstance* readInstance,
+                           const seerep::fb::LabelWithInstance* writeInstance)
+{
+  if (readInstance == nullptr || writeInstance == nullptr)
+  {
+    FAIL() << "Error: Can't compare a LabelWithInstance to nullptr";
+  }
+  EXPECT_STREQ(readInstance->label()->c_str(), writeInstance->label()->c_str());
+  EXPECT_STREQ(readInstance->instanceUuid()->c_str(), writeInstance->instanceUuid()->c_str());
+}
+
+TEST_F(fbWriteLoadTest, testGeneralLabels)
+{
+  ASSERT_EQ(readImage->labels_general()->size(), writeImage->labels_general()->size());
+  for (size_t i = 0; i < readImage->labels_general()->size(); i++)
+  {
+    testLabelWithInstance(readImage->labels_general()->Get(i), writeImage->labels_general()->Get(i));
+  }
+}
+
+void testEqualPoints(const seerep::fb::Point2D* readPoint, const seerep::fb::Point2D* writePoint)
+{
+  if (readPoint == nullptr || writePoint == nullptr)
+  {
+    FAIL() << "Error: Can't compare a point to nullptr";
+  }
+  EXPECT_EQ(readPoint->x(), writePoint->x());
+  EXPECT_EQ(readPoint->y(), writePoint->y());
+}
+
+// don't test the header since, it will be removed soon
+TEST_F(fbWriteLoadTest, testBoundingBox2DLabeled)
+{
+  ASSERT_EQ(readImage->labels_bb()->size(), writeImage->labels_bb()->size());
+  for (size_t i = 0; i < readImage->labels_bb()->size(); i++)
+  {
+    testLabelWithInstance(readImage->labels_bb()->Get(i)->labelWithInstance(),
+                          writeImage->labels_bb()->Get(i)->labelWithInstance());
+    testEqualPoints(readImage->labels_bb()->Get(i)->bounding_box()->point_min(),
+                    writeImage->labels_bb()->Get(i)->bounding_box()->point_min());
+    testEqualPoints(readImage->labels_bb()->Get(i)->bounding_box()->point_max(),
+                    writeImage->labels_bb()->Get(i)->bounding_box()->point_max());
+  }
 }
 
 int main(int argc, char** argv)

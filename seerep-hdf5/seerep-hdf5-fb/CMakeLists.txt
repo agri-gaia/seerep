@@ -64,11 +64,11 @@ add_dependencies(
 target_link_libraries(flatbuffer-write-load
 	GTest::gtest
 	GTest::gtest_main
+	gmock_main
 	${catkin_LIBRARIES}
 	${HighFive_LIBRARIES}
 	${SeerepCore_LIBRARIES}
 	gRPC::grpc++_reflection
-	-lboost_filesystem -lboost_system
 	seerephdf5fb
 )
 add_test(flatbuffer-write-load flatbuffer-write-load)
