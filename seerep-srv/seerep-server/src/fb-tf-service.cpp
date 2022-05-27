@@ -11,7 +11,7 @@ grpc::Status FbTfService::TransferTransformStamped(
     grpc::ServerContext* context, grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::TransformStamped>>* reader,
     flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response)
 {
-  std::cout << "received transform... " << std::endl;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "received transform... ";
   std::string answer = "everything stored!";
 
   flatbuffers::grpc::Message<seerep::fb::TransformStamped> tfMsg;
@@ -29,7 +29,7 @@ grpc::Status FbTfService::TransferTransformStamped(
       {
         // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
         // also catching core doesn't have project with uuid error
-        std::cout << e.what() << std::endl;
+        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
 
         flatbuffers::grpc::MessageBuilder builder;
         auto msg = builder.CreateString(std::string(e.what()));
@@ -92,7 +92,7 @@ grpc::Status FbTfService::GetFrames(grpc::ServerContext* context,
   {
     // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
     // also catching core doesn't have project with uuid error
-    std::cout << e.what() << std::endl;
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
   }
   return grpc::Status::OK;
@@ -111,7 +111,7 @@ FbTfService::GetTransformStamped(grpc::ServerContext* context,
   {
     // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
     // also catching core doesn't have project with uuid error
-    std::cout << e.what() << std::endl;
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
   }
 

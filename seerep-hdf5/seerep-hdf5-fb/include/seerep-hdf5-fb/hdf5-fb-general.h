@@ -19,6 +19,9 @@
 #include <mutex>
 #include <optional>
 
+// logging
+#include <boost/log/sources/severity_logger.hpp>
+#include <boost/log/trivial.hpp>
 namespace seerep_hdf5_fb
 {
 class Hdf5FbGeneral
@@ -128,6 +131,7 @@ private:
 protected:
   std::shared_ptr<HighFive::File> m_file;
   std::shared_ptr<std::mutex> m_write_mtx;
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
 };
 
 }  // namespace seerep_hdf5_fb

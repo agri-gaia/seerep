@@ -3,6 +3,7 @@ project(seerep-core-fb VERSION 0.1)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_FLAGS "-fPIC -DBOOST_LOG_DYN_LINK")#-Wall -Wextra
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
@@ -16,7 +17,7 @@ find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
-find_package(Boost REQUIRED)
+find_package(Boost COMPONENTS log log_setup REQUIRED)
 
 find_package(catkin REQUIRED
 	COMPONENTS
@@ -48,6 +49,7 @@ target_link_libraries(seerepcorefb
 	${PROTOBUF_LIBRARIES}
 	${HighFive_LIBRARIES}
 	${Boost_LIBRARIES}
+	${Boost_LOG_LIBRARY} ${Boost_LOG_SETUP_LIBRARY}
 	${catkin_LIBRARIES}
 	Eigen3::Eigen
 )

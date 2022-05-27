@@ -17,8 +17,9 @@ CoreFbImage::~CoreFbImage()
 void CoreFbImage::getData(const seerep::fb::Query& query,
                           grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::Image>>* const writer)
 {
-  std::cout << "loading image from images/" << std::endl;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "loading image from images";
   seerep_core_msgs::Query queryCore;
+
   boost::uuids::string_generator gen;
 
   for (auto projectuuid : *query.projectuuid())
@@ -46,12 +47,16 @@ void CoreFbImage::getData(const seerep::fb::Query& query,
 
   for (auto project : resultCore.queryResultProjects)
   {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
+        << "sending images from project" << boost::lexical_cast<std::string>(project.projectUuid);
     for (auto uuidImg : project.dataUuids)
     {
       auto img = getHdf5(project.projectUuid)->readImage(boost::lexical_cast<std::string>(uuidImg));
 
       if (img)
       {
+        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
+            << "sending img " << boost::lexical_cast<std::string>(uuidImg);
         writer->Write(img.value());
       }
     }

@@ -97,7 +97,8 @@ void Core::recreateProjects()
   {
     if (entry.path().filename().extension() == ".h5")
     {
-      std::cout << "found " << entry.path().string() << " in HDF5 file." << std::endl;
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
+          << "found " << entry.path().string() << " in HDF5 file.";
 
       try
       {
@@ -109,7 +110,7 @@ void Core::recreateProjects()
       }
       catch (const std::runtime_error& e)
       {
-        std::cout << e.what() << std::endl;
+        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
       }
     }
   }

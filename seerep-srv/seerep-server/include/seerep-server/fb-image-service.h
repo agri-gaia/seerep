@@ -6,6 +6,10 @@
 #include <seerep-core-fb/core-fb-image.h>
 #include <seerep-core/core.h>
 
+// logging
+#include <boost/log/sources/severity_logger.hpp>
+#include <boost/log/trivial.hpp>
+
 namespace seerep_server
 {
 class FbImageService final : public seerep::fb::ImageService::Service
@@ -25,6 +29,7 @@ public:
 
 private:
   std::shared_ptr<seerep_core_fb::CoreFbImage> imageFb;
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
 };
 
 } /* namespace seerep_server */

@@ -35,7 +35,7 @@ set(MY_FBS_FILES
   fbs/image-service.fbs
 )
 
-message("SeerepMsgs FlatBuffers" ${SeerepMsgs_FLATBUFFERS_IMPORT_DIRS})
+#message("SeerepMsgs FlatBuffers" ${SeerepMsgs_FLATBUFFERS_IMPORT_DIRS})
 
 build_flatbuffers("${MY_FBS_FILES}" "${SeerepMsgs_FLATBUFFERS_IMPORT_DIRS}" fbschemas "" "${CMAKE_CURRENT_BINARY_DIR}/fbs" "${CMAKE_CURRENT_BINARY_DIR}/fbs" "" )
 

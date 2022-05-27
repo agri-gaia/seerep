@@ -18,7 +18,7 @@ void CorePointCloud::recreateDatasets()
       m_hdf5_io->getGroupDatasets(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD);
   for (auto uuid : datasets)
   {
-    std::cout << "found " << uuid << " in HDF5 file." << std::endl;
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "found " << uuid << " in HDF5 file.";
 
     try
     {
@@ -29,7 +29,7 @@ void CorePointCloud::recreateDatasets()
     }
     catch (const std::runtime_error& e)
     {
-      std::cout << e.what() << std::endl;
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
     }
   }
 }

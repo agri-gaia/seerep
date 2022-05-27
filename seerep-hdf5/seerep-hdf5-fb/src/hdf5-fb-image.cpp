@@ -21,13 +21,15 @@ void Hdf5FbImage::writeImage(const std::string& id, const seerep::fb::Image& ima
 
   if (!m_file->exist(hdf5DatasetRawDataPath))
   {
-    std::cout << "data id " << hdf5DatasetRawDataPath << " does not exist! Creat new dataset in hdf5" << std::endl;
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
+        << "data id " << hdf5DatasetRawDataPath << " does not exist! Creat new dataset in hdf5";
     data_set_ptr =
         std::make_shared<HighFive::DataSet>(m_file->createDataSet<uint8_t>(hdf5DatasetRawDataPath, data_space));
   }
   else
   {
-    std::cout << "data id " << hdf5DatasetRawDataPath << " already exists!" << std::endl;
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
+        << "data id " << hdf5DatasetRawDataPath << " already exists!";
     data_set_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DatasetRawDataPath));
   }
 
@@ -60,10 +62,10 @@ void Hdf5FbImage::writeImage(const std::string& id, const seerep::fb::Image& ima
 
   int pixel_step = image.step() / image.width();
 
-  for (int row = 0; row < image.height(); row++)
+  for (uint32_t row = 0; row < image.height(); row++)
   {
     tmp.at(row).resize(image.width());
-    for (int col = 0; col < image.width(); col++)
+    for (uint32_t col = 0; col < image.width(); col++)
     {
       // for (int channel = 0; channel < pixel_step; channel++)
       // {
@@ -103,7 +105,7 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
   if (!m_file->exist(hdf5DatasetRawDataPath))
     return std::nullopt;
 
-  std::cout << "loading " << hdf5DatasetRawDataPath << std::endl;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "loading " << hdf5DatasetRawDataPath;
 
   std::shared_ptr<HighFive::DataSet> data_set_ptr =
       std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DatasetRawDataPath));
@@ -122,9 +124,9 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
     step = getAttribute<uint32_t>(id, data_set_ptr, POINT_STEP);
     rowStep = getAttribute<uint32_t>(id, data_set_ptr, ROW_STEP);
   }
-  catch (const std::invalid_argument e)
+  catch (const std::invalid_argument& e)
   {
-    std::cout << "error: " << e.what() << std::endl;
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << "error: " << e.what();
     return std::nullopt;
   }
 
@@ -135,9 +137,9 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
   // uint8_t data[height][width][pixel_step];
   std::vector<uint8_t> data;
   data.reserve(height * width * pixel_step);
-  for (int row = 0; row < height; row++)
+  for (uint32_t row = 0; row < height; row++)
   {
-    for (int col = 0; col < width; col++)
+    for (uint32_t col = 0; col < width; col++)
     {
       // std::copy(read_data.at(row).at(col).begin(), read_data.at(row).at(col).end(), data[row]);
       data.insert(data.end(), std::make_move_iterator(read_data.at(row).at(col).begin()),
@@ -153,7 +155,7 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
   readBoundingBox2DLabeled(HDF5_GROUP_IMAGE, id, boundingBoxesLabels, boundingBoxes);
 
   std::vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>> bblabeledVector;
-  for (int i = 0; i < boundingBoxes.size(); i++)
+  for (long unsigned int i = 0; i < boundingBoxes.size(); i++)
   {
     auto labelOffset = builder.CreateString(boundingBoxesLabels.at(i));
 
@@ -200,7 +202,7 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
   auto imageOffset = imageBuilder.Finish();
   builder.Finish(imageOffset);
   auto grpcImage = builder.ReleaseMessage<seerep::fb::Image>();
-  return std::move(grpcImage);
+  return grpcImage;
 }
 
 }  // namespace seerep_hdf5_fb

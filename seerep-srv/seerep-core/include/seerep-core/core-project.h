@@ -23,6 +23,9 @@
 #include "core-point-cloud.h"
 #include "core-tf.h"
 
+// logging
+#include <boost/log/sources/severity_logger.hpp>
+#include <boost/log/trivial.hpp>
 namespace seerep_core
 {
 class CoreProject
@@ -71,6 +74,8 @@ private:
   std::shared_ptr<seerep_core::CoreTf> m_tfOverview;
   std::unique_ptr<seerep_core::CorePointCloud> m_pointcloudOverview;
   std::unique_ptr<seerep_core::CoreImage> m_imageOverview;
+
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
 };
 
 } /* namespace seerep_core */

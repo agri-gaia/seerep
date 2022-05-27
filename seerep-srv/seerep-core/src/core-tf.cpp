@@ -17,7 +17,7 @@ void CoreTf::recreateDatasets()
   std::vector<std::string> tfs = m_hdf5_io->getGroupDatasets("tf");
   for (auto const& name : tfs)
   {
-    std::cout << "found " << name << " in HDF5 file." << std::endl;
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "found " << name << " in HDF5 file.";
 
     try
     {
@@ -31,7 +31,7 @@ void CoreTf::recreateDatasets()
     }
     catch (const std::runtime_error& e)
     {
-      std::cout << e.what() << std::endl;
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
     }
   }
 }
@@ -46,7 +46,7 @@ std::optional<geometry_msgs::TransformStamped> CoreTf::getData(const int64_t& ti
   }
   catch (const std::exception& e)
   {
-    std::cout << e.what() << std::endl;
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << e.what();
     return std::nullopt;
   }
 }
@@ -133,7 +133,7 @@ seerep_core_msgs::Query CoreTf::transformQuery(const seerep_core_msgs::Query& qu
 
 std::vector<std::string> CoreTf::getFrames()
 {
-  std::cout << m_tfbuffer.allFramesAsString() << std::endl;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << m_tfbuffer.allFramesAsString();
 
   return std::vector<std::string>{ m_tfbuffer.allFramesAsYAML() };
 }

@@ -21,6 +21,9 @@
 #include <tf2/buffer_core.h>
 #include <tf2/transform_datatypes.h>
 
+// logging
+#include <boost/log/sources/severity_logger.hpp>
+#include <boost/log/trivial.hpp>
 namespace seerep_core
 {
 class CoreTf
@@ -51,6 +54,8 @@ private:
 
   std::shared_ptr<seerep_hdf5_core::Hdf5CoreTf> m_hdf5_io;
   tf2::BufferCore m_tfbuffer;
+
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
 };
 
 } /* namespace seerep_core */
