@@ -102,7 +102,7 @@ boost::uuids::uuid CorePbPointCloud::addData(const seerep::PointCloud2& pc)
     {
       uuidInstance = gen(label.instanceuuid());
     }
-    catch (std::runtime_error e)
+    catch (std::runtime_error const& e)
     {
       uuidInstance = boost::uuids::nil_uuid();
     }
@@ -119,7 +119,7 @@ boost::uuids::uuid CorePbPointCloud::addData(const seerep::PointCloud2& pc)
     {
       uuidInstance = gen(label.labelwithinstance().instanceuuid());
     }
-    catch (std::runtime_error e)
+    catch (std::runtime_error const& e)
     {
       uuidInstance = boost::uuids::nil_uuid();
     }

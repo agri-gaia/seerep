@@ -96,7 +96,7 @@ boost::uuids::uuid CorePbImage::addData(const seerep::Image& img)
     {
       uuidInstance = gen(label.instanceuuid());
     }
-    catch (std::runtime_error e)
+    catch (std::runtime_error const& e)
     {
       uuidInstance = boost::uuids::nil_uuid();
     }
@@ -113,7 +113,7 @@ boost::uuids::uuid CorePbImage::addData(const seerep::Image& img)
     {
       uuidInstance = gen(label.labelwithinstance().instanceuuid());
     }
-    catch (std::runtime_error e)
+    catch (std::runtime_error const& e)
     {
       uuidInstance = boost::uuids::nil_uuid();
     }

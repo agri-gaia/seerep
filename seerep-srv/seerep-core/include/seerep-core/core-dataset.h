@@ -178,8 +178,10 @@ private:
   std::shared_ptr<seerep_core::CoreTf> m_tfOverview;
   /** @brief shared pointer to the object handling the instances */
   std::shared_ptr<seerep_core::CoreInstances> m_coreInstances;
-
+  /** @brief map from the datatype to the struct with the specific objects for that datatype*/
   std::unordered_map<seerep_core_msgs::Datatype, std::shared_ptr<DatatypeSpecifics>> m_datatypeDatatypeSpecifcsMap;
+  /** @brief object handling the logging */
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
 };
 
 } /* namespace seerep_core */

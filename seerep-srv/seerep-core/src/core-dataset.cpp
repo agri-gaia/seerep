@@ -4,7 +4,7 @@ namespace seerep_core
 {
 CoreDataset::CoreDataset(std::shared_ptr<seerep_core::CoreTf> tfOverview,
                          std::shared_ptr<seerep_core::CoreInstances> coreInstances, const std::string& frameId)
-  : m_tfOverview(tfOverview), m_coreInstances(coreInstances), m_frameId(frameId)
+  : m_frameId(frameId), m_tfOverview(tfOverview), m_coreInstances(coreInstances)
 {
 }
 CoreDataset::~CoreDataset()
@@ -33,7 +33,7 @@ void CoreDataset::recreateDatasets(const seerep_core_msgs::Datatype& datatype,
   std::vector<std::string> datasets = hdf5Io->getDatasetUuids();
   for (auto uuid : datasets)
   {
-    std::cout << "found " << uuid << " in HDF5 file." << std::endl;
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "found " << uuid << " in HDF5 file.";
 
     try
     {
@@ -46,7 +46,7 @@ void CoreDataset::recreateDatasets(const seerep_core_msgs::Datatype& datatype,
     }
     catch (const std::runtime_error& e)
     {
-      std::cout << e.what() << std::endl;
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
     }
   }
 }
@@ -315,13 +315,13 @@ void CoreDataset::addDatasetToIndices(const seerep_core_msgs::Datatype& datatype
     datatypeSpecifics->dataWithMissingTF.push_back(std::make_shared<seerep_core_msgs::DatasetIndexable>(dataset));
   }
 
-  // std::cout << "secs  " << std::bitset<64>((int64_t)dataset.header.timestamp.seconds) << std::endl;
-  // std::cout << "shift " << std::bitset<64>((int64_t)dataset.header.timestamp.seconds << 32) << std::endl;
-  // std::cout << "nanos " << std::bitset<64>((int64_t)dataset.header.timestamp.nanos) << std::endl;
+  // std::cout << "secs  " << std::bitset<64>((int64_t)dataset.header.timestamp.seconds);
+  // std::cout << "shift " << std::bitset<64>((int64_t)dataset.header.timestamp.seconds << 32);
+  // std::cout << "nanos " << std::bitset<64>((int64_t)dataset.header.timestamp.nanos);
   // std::cout
   //     << "combi "
   //     << std::bitset<64>(((int64_t)dataset.header.timestamp.seconds) << 32 | ((uint64_t)dataset.header.timestamp.nanos))
-  //     << std::endl;
+  //    ;
 
   seerep_core_msgs::AabbTime aabbTime(seerep_core_msgs::TimePoint(((int64_t)dataset.header.timestamp.seconds) << 32 |
                                                                   ((uint64_t)dataset.header.timestamp.nanos)),

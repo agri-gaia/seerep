@@ -176,7 +176,7 @@ private:
   std::shared_ptr<seerep_core::CoreInstances> m_coreInstances;
   /** @brief object handling the dataset indices and dataset related queries */
   std::unique_ptr<seerep_core::CoreDataset> m_coreDatasets;
-
+  /** @brief object handling the logging */
   boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
 };
 
