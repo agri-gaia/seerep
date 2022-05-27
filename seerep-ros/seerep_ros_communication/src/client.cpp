@@ -212,7 +212,7 @@ int main(int argc, char** argv)
       // if this throws no exception, the UUID is valid
       gen(transfer_sensor_msgs.projectuuid);
     }
-    catch (std::runtime_error e)
+    catch (std::runtime_error const& e)
     {
       // mainly catching "invalid uuid string"
       std::cout << e.what() << std::endl;

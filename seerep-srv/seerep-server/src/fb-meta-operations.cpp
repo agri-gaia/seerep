@@ -10,6 +10,7 @@ grpc::Status FbMetaOperations::CreateProject(grpc::ServerContext* context,
                                              const flatbuffers::grpc::Message<seerep::fb::ProjectCreation>* request,
                                              flatbuffers::grpc::Message<seerep::fb::ProjectInfo>* response)
 {
+  (void)context;  // ignore that variable without causing warnings
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "create new project... ";
   const seerep::fb::ProjectCreation* requestMsg = request->GetRoot();
   seerep_core_msgs::ProjectInfo projectInfo;
@@ -34,6 +35,8 @@ grpc::Status FbMetaOperations::GetProjects(grpc::ServerContext* context,
                                            const flatbuffers::grpc::Message<seerep::fb::Empty>* request,
                                            flatbuffers::grpc::Message<seerep::fb::ProjectInfos>* response)
 {
+  (void)context;  // ignore that variable without causing warnings
+  (void)request;  // ignore that variable without causing warnings
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "query the project infos... ";
   auto projectInfos = seerepCore->getProjects();
 

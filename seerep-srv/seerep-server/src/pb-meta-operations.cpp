@@ -9,6 +9,7 @@ PbMetaOperations::PbMetaOperations(std::shared_ptr<seerep_core::Core> seerepCore
 grpc::Status PbMetaOperations::CreateProject(grpc::ServerContext* context, const seerep::ProjectCreation* request,
                                              seerep::ProjectInfo* response)
 {
+  (void)context;  // ignore that variable without causing warnings
   std::cout << "create new project... " << std::endl;
   seerep_core_msgs::ProjectInfo projectInfo;
   projectInfo.frameId = request->mapframeid();
@@ -25,6 +26,8 @@ grpc::Status PbMetaOperations::CreateProject(grpc::ServerContext* context, const
 grpc::Status PbMetaOperations::GetProjects(grpc::ServerContext* context, const google::protobuf::Empty* request,
                                            seerep::ProjectInfos* response)
 {
+  (void)context;  // ignore that variable without causing warnings
+  (void)request;  // ignore that variable without causing warnings
   std::cout << "query the project infos... " << std::endl;
   auto projectInfos = seerepCore->getProjects();
 

@@ -11,6 +11,7 @@ grpc::Status PbTfService::TransferTransformStamped(grpc::ServerContext* context,
                                                    const seerep::TransformStamped* transform,
                                                    seerep::ServerResponse* response)
 {
+  (void)context;  // ignore that variable without causing warnings
   std::cout << "received transform... " << std::endl;
 
   if (!transform->header().uuid_project().empty())
@@ -27,7 +28,7 @@ grpc::Status PbTfService::TransferTransformStamped(grpc::ServerContext* context,
       response->set_transmission_state(seerep::ServerResponse::SUCCESS);
       return grpc::Status::OK;
     }
-    catch (std::runtime_error e)
+    catch (std::runtime_error const& e)
     {
       // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
       // also catching core doesn't have project with uuid error
@@ -49,6 +50,7 @@ grpc::Status PbTfService::TransferTransformStamped(grpc::ServerContext* context,
 grpc::Status PbTfService::GetFrames(grpc::ServerContext* context, const seerep::FrameQuery* frameQuery,
                                     seerep::FrameInfos* response)
 {
+  (void)context;  // ignore that variable without causing warnings
   boost::uuids::uuid uuid;
   try
   {
@@ -60,7 +62,7 @@ grpc::Status PbTfService::GetFrames(grpc::ServerContext* context, const seerep::
       response->add_frames(framename);
     }
   }
-  catch (std::runtime_error e)
+  catch (std::runtime_error const& e)
   {
     // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
     // also catching core doesn't have project with uuid error
@@ -74,6 +76,7 @@ grpc::Status PbTfService::GetTransformStamped(grpc::ServerContext* context,
                                               const seerep::TransformStampedQuery* transformQuery,
                                               seerep::TransformStamped* response)
 {
+  (void)context;  // ignore that variable without causing warnings
   try
   {
     auto result = tfPb->getData(*transformQuery);
@@ -82,7 +85,7 @@ grpc::Status PbTfService::GetTransformStamped(grpc::ServerContext* context,
       *response = result.value();
     }
   }
-  catch (std::runtime_error e)
+  catch (std::runtime_error const& e)
   {
     // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
     // also catching core doesn't have project with uuid error

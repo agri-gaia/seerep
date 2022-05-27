@@ -55,7 +55,7 @@ public:
   std::shared_ptr<HighFive::File> getHdf5File();
 
 private:
-  void createHdf5Io(boost::uuids::uuid& uuid, std::string path);
+  void createHdf5Io(std::string path);
   void recreateDatatypes();
 
   boost::uuids::uuid m_id;

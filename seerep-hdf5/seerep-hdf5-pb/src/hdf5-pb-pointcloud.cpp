@@ -100,10 +100,10 @@ void Hdf5PbPointCloud::writePoints(const std::string& uuid, const seerep::PointC
   min[0] = min[1] = min[2] = std::numeric_limits<float>::max();
   max[0] = max[1] = max[2] = std::numeric_limits<float>::min();
 
-  for (int i = 0; i < cloud.height(); i++)
+  for (unsigned int i = 0; i < cloud.height(); i++)
   {
     point_data[i].reserve(cloud.width());
-    for (int j = 0; j < cloud.width(); j++)
+    for (unsigned int j = 0; j < cloud.width(); j++)
     {
       const float& x = *x_iter;
       const float& y = *y_iter;
@@ -160,10 +160,10 @@ void Hdf5PbPointCloud::writeColorsRGB(const std::string& uuid, const seerep::Poi
   seerep_hdf5_pb::PointCloud2ConstIterator<uint8_t> g_iter(cloud, "g");
   seerep_hdf5_pb::PointCloud2ConstIterator<uint8_t> b_iter(cloud, "b");
 
-  for (int i = 0; i < cloud.height(); i++)
+  for (unsigned int i = 0; i < cloud.height(); i++)
   {
     colors_data[i].reserve(cloud.width());
-    for (int j = 0; j < cloud.width(); j++)
+    for (unsigned int j = 0; j < cloud.width(); j++)
     {
       colors_data[i].push_back(std::vector{ *r_iter, *g_iter, *b_iter });
       ++r_iter, ++g_iter, ++b_iter;
@@ -192,10 +192,10 @@ void Hdf5PbPointCloud::writeColorsRGBA(const std::string& uuid, const seerep::Po
   seerep_hdf5_pb::PointCloud2ConstIterator<uint8_t> b_iter(cloud, "b");
   seerep_hdf5_pb::PointCloud2ConstIterator<uint8_t> a_iter(cloud, "a");
 
-  for (int i = 0; i < cloud.height(); i++)
+  for (unsigned int i = 0; i < cloud.height(); i++)
   {
     colors_data[i].reserve(cloud.width());
-    for (int j = 0; j < cloud.width(); j++)
+    for (unsigned int j = 0; j < cloud.width(); j++)
     {
       colors_data[i].push_back(std::vector{ *r_iter, *g_iter, *b_iter, *a_iter });
       ++r_iter;
@@ -239,6 +239,9 @@ void Hdf5PbPointCloud::writeOtherFields(const std::string& uuid, const seerep::P
         break;
       case seerep::PointField::FLOAT64:
         write<double>(uuid, field.name(), cloud, field.count());
+        break;
+      default:
+        std::cout << "datatype of pointcloud unknown" << std::endl;
         break;
     }
   }
@@ -430,6 +433,9 @@ void Hdf5PbPointCloud::readOtherFields(const std::string& uuid, seerep::PointClo
       case seerep::PointField::FLOAT64:
         read<double>(uuid, field.name(), cloud, field.count());
         break;
+      default:
+        std::cout << "datatype of pointcloud unknown" << std::endl;
+        break;
     }
   }
 }
@@ -483,7 +489,7 @@ Hdf5PbPointCloud::readPointFieldAttributes(HighFive::Group& cloud_group)
   cloud_group.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX).read(datatypes);
   cloud_group.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX).read(counts);
 
-  for (int i = 0; i < names.size(); i++)
+  for (long unsigned int i = 0; i < names.size(); i++)
   {
     seerep::PointField point_field;
 

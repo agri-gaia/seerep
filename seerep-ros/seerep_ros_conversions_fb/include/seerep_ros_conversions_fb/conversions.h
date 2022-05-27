@@ -283,12 +283,9 @@ vision_msgs::Detection2DArray toROS(const seerep::fb::BoundingBoxes2DLabeledStam
  * @param projectuuid std::string
  * @return Flatbuffer BoundingBoxes2DLabeled message
  */
-flatbuffers::grpc::Message<seerep::fb::BoundingBox2DLabeled> toFlat(const vision_msgs::Detection2D& detection2d,
-                                                                    std::string projectuuid, std::string msguuid);
+flatbuffers::grpc::Message<seerep::fb::BoundingBox2DLabeled> toFlat(const vision_msgs::Detection2D& detection2d);
 flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled> toFlat(const vision_msgs::Detection2D& detection2d,
-                                                             std::string projectuuid,
-                                                             flatbuffers::grpc::MessageBuilder& builder,
-                                                             std::string msguuid);
+                                                             flatbuffers::grpc::MessageBuilder& builder);
 
 /**
  * @brief Converts a Flatbuffer BoundingBoxes2DLabeled message to the corresponding

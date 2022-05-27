@@ -4,7 +4,7 @@ namespace seerep_core
 {
 CorePointCloud::CorePointCloud(std::shared_ptr<seerep_hdf5_core::Hdf5CorePointCloud> hdf5_io,
                                std::shared_ptr<seerep_core::CoreTf> tfOverview, std::string frameId)
-  : m_hdf5_io(hdf5_io), m_tfOverview(tfOverview), m_frameId(frameId)
+  : m_frameId(frameId), m_tfOverview(tfOverview), m_hdf5_io(hdf5_io)
 {
   recreateDatasets();
 }

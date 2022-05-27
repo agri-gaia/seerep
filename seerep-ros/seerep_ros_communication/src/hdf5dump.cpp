@@ -14,6 +14,7 @@ DumpSensorMsgs::DumpSensorMsgs(std::string hdf5FilePath)
 
 void DumpSensorMsgs::dump(const std_msgs::Header::ConstPtr& msg) const
 {
+  (void)msg;  // ignore that variable without causing warnings
   ROS_INFO_STREAM("Datatype not implemented.");
 }
 
@@ -32,21 +33,25 @@ void DumpSensorMsgs::dump(const sensor_msgs::Image::ConstPtr& msg) const
 
 void DumpSensorMsgs::dump(const geometry_msgs::Point::ConstPtr& msg) const
 {
+  (void)msg;  // ignore that variable without causing warnings
   ROS_INFO_STREAM("Datatype not implemented.");
 }
 
 void DumpSensorMsgs::dump(const geometry_msgs::Quaternion::ConstPtr& msg) const
 {
+  (void)msg;  // ignore that variable without causing warnings
   ROS_INFO_STREAM("Datatype not implemented.");
 }
 
 void DumpSensorMsgs::dump(const geometry_msgs::Pose::ConstPtr& msg) const
 {
+  (void)msg;  // ignore that variable without causing warnings
   ROS_INFO_STREAM("Datatype not implemented.");
 }
 
 void DumpSensorMsgs::dump(const geometry_msgs::PoseStamped::ConstPtr& msg) const
 {
+  (void)msg;  // ignore that variable without causing warnings
   ROS_INFO_STREAM("Datatype not implemented.");
 }
 
@@ -110,7 +115,7 @@ int main(int argc, char** argv)
       // if this throws no exception, the UUID is valid
       gen(projectUuid);
     }
-    catch (std::runtime_error e)
+    catch (std::runtime_error const& e)
     {
       // mainly catching "invalid uuid string"
       std::cout << e.what() << std::endl;

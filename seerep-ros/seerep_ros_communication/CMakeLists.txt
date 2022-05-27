@@ -26,7 +26,7 @@ find_package(gRPC CONFIG REQUIRED)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "/usr/share/cmake/geographiclib/")
 find_package(GeographicLib REQUIRED)
 
-message("HighFive Include Dirs: ${catkin_INCLUDE_DIRS} \n Libraries: ${catkin_LIBRARIES}")
+# message("HighFive Include Dirs: ${catkin_INCLUDE_DIRS} \n Libraries: ${catkin_LIBRARIES}")
 
 
 catkin_package(

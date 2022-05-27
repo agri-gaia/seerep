@@ -8,7 +8,7 @@
 // seerep
 #include <seerep-com/meta-operations.grpc.fb.h>
 
-int main(int argc, char** argv)
+int main(void)
 {
   auto channel = grpc::CreateChannel("localhost:9090", grpc::InsecureChannelCredentials());
 

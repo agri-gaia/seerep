@@ -3,9 +3,9 @@
 namespace seerep_grpc_ros
 {
 TransferImagesWithDetection::TransferImagesWithDetection(std::shared_ptr<grpc::Channel> channel_ptr)
-  : stubImage_(seerep::fb::ImageService::NewStub(channel_ptr))
-  , stubMeta_(seerep::fb::MetaOperations::NewStub(channel_ptr))
+  : stubMeta_(seerep::fb::MetaOperations::NewStub(channel_ptr))
   , stubTf_(seerep::fb::TfService::NewStub(channel_ptr))
+  , stubImage_(seerep::fb::ImageService::NewStub(channel_ptr))
 {
   writerTf_ = stubTf_->TransferTransformStamped(&contextTf_, &tfResponse_);
 
