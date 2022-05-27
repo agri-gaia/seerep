@@ -240,6 +240,8 @@ PointCloud2IteratorBase<T, TT, U, C, V>::PointCloud2IteratorBase() : data_char_(
 template <typename T, typename TT, typename U, typename C, template <typename> class V>
 PointCloud2IteratorBase<T, TT, U, C, V>::PointCloud2IteratorBase(C& cloud_msg, const std::string& field_name)
 {
+  (void)cloud_msg;   // ignore that variable without causing warnings
+  (void)field_name;  // ignore that variable without causing warnings
 }
 
 /** Assignment operator

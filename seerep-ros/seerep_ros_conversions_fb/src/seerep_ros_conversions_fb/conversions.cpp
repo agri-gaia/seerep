@@ -435,7 +435,7 @@ flatbuffers::Offset<seerep::fb::BoundingBoxes2DLabeledStamped> toFlat(const visi
   std::vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>> bblabeled;
   for (vision_msgs::Detection2D detection : detection2d.detections)
   {
-    bblabeled.push_back(toFlat(detection, projectuuid, builder, msguuid));
+    bblabeled.push_back(toFlat(detection, builder));
   }
 
   auto labelsOffset = builder.CreateVector(bblabeled);
@@ -450,17 +450,14 @@ flatbuffers::Offset<seerep::fb::BoundingBoxes2DLabeledStamped> toFlat(const visi
 //   return vision_msgs::Detection2D();
 // }
 
-flatbuffers::grpc::Message<seerep::fb::BoundingBox2DLabeled> toFlat(const vision_msgs::Detection2D& detection2d,
-                                                                    std::string projectuuid, std::string msguuid)
+flatbuffers::grpc::Message<seerep::fb::BoundingBox2DLabeled> toFlat(const vision_msgs::Detection2D& detection2d)
 {
   flatbuffers::grpc::MessageBuilder builder;
-  builder.Finish(toFlat(detection2d, projectuuid, builder, msguuid));
+  builder.Finish(toFlat(detection2d, builder));
   return builder.ReleaseMessage<seerep::fb::BoundingBox2DLabeled>();
 }
 flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled> toFlat(const vision_msgs::Detection2D& detection2d,
-                                                             std::string projectuuid,
-                                                             flatbuffers::grpc::MessageBuilder& builder,
-                                                             std::string msguuid)
+                                                             flatbuffers::grpc::MessageBuilder& builder)
 {
   seerep::fb::Point2DBuilder pointBuilderMin(builder);
   pointBuilderMin.add_x(detection2d.bbox.center.x - detection2d.bbox.size_x / 2.0);

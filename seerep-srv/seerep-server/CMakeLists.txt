@@ -3,7 +3,7 @@ project(seerep-server VERSION 0.1)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_FLAGS "-fPIC -DBOOST_LOG_DYN_LINK")#-Wall -Wextra
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -fPIC -DBOOST_LOG_DYN_LINK")
 
 find_package(Protobuf REQUIRED)
 find_package(gRPC CONFIG REQUIRED)

@@ -117,7 +117,7 @@ std::optional<std::vector<seerep::TransformStamped>> Hdf5PbTf::readTransformStam
 
   // read size
   std::shared_ptr<HighFive::Group> group_ptr = std::make_shared<HighFive::Group>(m_file->getGroup(hdf5GroupPath));
-  int size;
+  long unsigned int size;
   group_ptr->getAttribute(SIZE).read(size);
   if (size == 0)
   {
@@ -158,7 +158,7 @@ std::optional<std::vector<seerep::TransformStamped>> Hdf5PbTf::readTransformStam
   }
 
   std::vector<seerep::TransformStamped> tfs;
-  for (int i = 0; i < size; i++)
+  for (long unsigned int i = 0; i < size; i++)
   {
     seerep::TransformStamped tf;
     tf.mutable_header()->set_frame_id(parentframe);

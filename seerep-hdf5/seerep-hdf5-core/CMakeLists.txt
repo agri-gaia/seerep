@@ -25,7 +25,7 @@ find_package(catkin REQUIRED
 
 configure_file(include/SeerepHdf5CoreConfig.h.in SeerepHdf5CoreConfig.h)
 
-message("HighFive Include Dirs: ${HighFive_INCLUDE_DIRS} Libraries: ${HighFive_LIBRARIES}")
+# message("HighFive Include Dirs: ${HighFive_INCLUDE_DIRS} Libraries: ${HighFive_LIBRARIES}")
 
 include_directories(
 	include

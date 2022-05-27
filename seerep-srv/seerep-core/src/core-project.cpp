@@ -4,7 +4,7 @@ namespace seerep_core
 {
 CoreProject::CoreProject(const boost::uuids::uuid& uuid, const std::string path) : m_id(uuid), m_path(path)
 {
-  createHdf5Io(m_id, m_path);
+  createHdf5Io(m_path);
 
   m_projectname = m_ioGeneral->readProjectname();
   m_frameId = m_ioGeneral->readProjectFrameId();
@@ -14,7 +14,7 @@ CoreProject::CoreProject(const boost::uuids::uuid& uuid, const std::string path,
                          const std::string mapFrameId)
   : m_id(uuid), m_path(path), m_projectname(projectname), m_frameId(mapFrameId)
 {
-  createHdf5Io(m_id, m_path);
+  createHdf5Io(m_path);
   m_ioGeneral->writeProjectname(m_projectname);
   m_ioGeneral->writeProjectFrameId(m_frameId);
   recreateDatatypes();
@@ -84,7 +84,7 @@ std::shared_ptr<HighFive::File> CoreProject::getHdf5File()
   return m_hdf5_file;
 }
 
-void CoreProject::createHdf5Io(boost::uuids::uuid& uuid, std::string path)
+void CoreProject::createHdf5Io(std::string path)
 {
   m_write_mtx = std::make_shared<std::mutex>();
   m_hdf5_file = std::make_shared<HighFive::File>(path, HighFive::File::ReadWrite | HighFive::File::Create);

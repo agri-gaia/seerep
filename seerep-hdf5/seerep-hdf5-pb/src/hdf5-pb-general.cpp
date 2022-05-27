@@ -403,7 +403,7 @@ Hdf5PbGeneral::readBoundingBox2DLabeled(const std::string& datatypeGroup, const 
 
   google::protobuf::RepeatedPtrField<seerep::BoundingBox2DLabeled> result;
 
-  for (int i = 0; i < labels.size(); i++)
+  for (long unsigned int i = 0; i < labels.size(); i++)
   {
     seerep::BoundingBox2DLabeled bblabeled;
     bblabeled.set_label(labels.at(i));
@@ -457,7 +457,7 @@ Hdf5PbGeneral::readLabelsGeneral(const std::string& datatypeGroup, const std::st
 
   google::protobuf::RepeatedPtrField<std::string> result;
 
-  for (int i = 0; i < labels.size(); i++)
+  for (long unsigned int i = 0; i < labels.size(); i++)
   {
     result.Add(std::move(labels.at(i)));
   }

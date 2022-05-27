@@ -11,6 +11,7 @@ grpc::Status FbImageService::GetImage(grpc::ServerContext* context,
                                       const flatbuffers::grpc::Message<seerep::fb::Query>* request,
                                       grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::Image>>* writer)
 {
+  (void)context;  // ignore that variable without causing warnings
   auto requestRoot = request->GetRoot();
 
   std::stringstream debuginfo;
@@ -36,7 +37,7 @@ grpc::Status FbImageService::GetImage(grpc::ServerContext* context,
   {
     imageFb->getData(*requestRoot, writer);
   }
-  catch (std::runtime_error e)
+  catch (std::runtime_error const& e)
   {
     // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
     // also catching core doesn't have project with uuid error
@@ -51,6 +52,7 @@ grpc::Status FbImageService::TransferImage(grpc::ServerContext* context,
                                            grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::Image>>* reader,
                                            flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response)
 {
+  (void)context;  // ignore that variable without causing warnings
   std::string answer = "everything stored!";
 
   flatbuffers::grpc::Message<seerep::fb::Image> imageMsg;
@@ -64,9 +66,9 @@ grpc::Status FbImageService::TransferImage(grpc::ServerContext* context,
     {
       try
       {
-        boost::uuids::uuid uuidImg = imageFb->addData(*image);
+        imageFb->addData(*image);
       }
-      catch (std::runtime_error e)
+      catch (std::runtime_error const& e)
       {
         // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
         // also catching core doesn't have project with uuid error
@@ -108,6 +110,7 @@ grpc::Status FbImageService::AddBoundingBoxes2dLabeled(
     grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::BoundingBoxes2DLabeledStamped>>* reader,
     flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response)
 {
+  (void)context;  // ignore that variable without causing warnings
   std::string answer = "everything stored!";
 
   flatbuffers::grpc::Message<seerep::fb::BoundingBoxes2DLabeledStamped> bbsMsg;
@@ -123,7 +126,7 @@ grpc::Status FbImageService::AddBoundingBoxes2dLabeled(
       {
         imageFb->addBoundingBoxesLabeled(*bbslabeled);
       }
-      catch (std::runtime_error e)
+      catch (std::runtime_error const& e)
       {
         // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
         // also catching core doesn't have project with uuid error

@@ -11,6 +11,7 @@ grpc::Status FbTfService::TransferTransformStamped(
     grpc::ServerContext* context, grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::TransformStamped>>* reader,
     flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response)
 {
+  (void)context;  // ignore that variable without causing warnings
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "received transform... ";
   std::string answer = "everything stored!";
 
@@ -25,7 +26,7 @@ grpc::Status FbTfService::TransferTransformStamped(
       {
         tfFb->addData(*transform);
       }
-      catch (std::runtime_error e)
+      catch (std::runtime_error const& e)
       {
         // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
         // also catching core doesn't have project with uuid error
@@ -66,6 +67,7 @@ grpc::Status FbTfService::GetFrames(grpc::ServerContext* context,
                                     const flatbuffers::grpc::Message<seerep::fb::FrameQuery>* request,
                                     flatbuffers::grpc::Message<seerep::fb::FrameInfos>* response)
 {
+  (void)context;  // ignore that variable without causing warnings
   boost::uuids::uuid uuid;
   try
   {
@@ -85,10 +87,11 @@ grpc::Status FbTfService::GetFrames(grpc::ServerContext* context,
     seerep::fb::FrameInfosBuilder frameinfosbuilder(builder);
     frameinfosbuilder.add_frames(builder.CreateVector(framesOffset));
     auto frameinfosOffset = frameinfosbuilder.Finish();
+    builder.Finish(frameinfosOffset);
     *response = builder.ReleaseMessage<seerep::fb::FrameInfos>();
     assert(response->Verify());
   }
-  catch (std::runtime_error e)
+  catch (std::runtime_error const& e)
   {
     // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
     // also catching core doesn't have project with uuid error
@@ -103,11 +106,12 @@ FbTfService::GetTransformStamped(grpc::ServerContext* context,
                                  const flatbuffers::grpc::Message<seerep::fb::TransformStampedQuery>* request,
                                  flatbuffers::grpc::Message<seerep::fb::TransformStamped>* response)
 {
+  (void)context;  // ignore that variable without causing warnings
   try
   {
     tfFb->getData(*request->GetRoot(), response);
   }
-  catch (std::runtime_error e)
+  catch (std::runtime_error const& e)
   {
     // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
     // also catching core doesn't have project with uuid error

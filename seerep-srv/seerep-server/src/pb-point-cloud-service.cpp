@@ -10,6 +10,7 @@ PbPointCloudService::PbPointCloudService(std::shared_ptr<seerep_core::Core> seer
 grpc::Status PbPointCloudService::GetPointCloud2(grpc::ServerContext* context, const seerep::Query* request,
                                                  grpc::ServerWriter<seerep::PointCloud2>* writer)
 {
+  (void)context;  // ignore that variable without causing warnings
   std::cout << "sending point cloud in bounding box min(" << request->boundingbox().point_min().x() << "/"
             << request->boundingbox().point_min().y() << "/" << request->boundingbox().point_min().z() << "), max("
             << request->boundingbox().point_max().x() << "/" << request->boundingbox().point_max().y() << "/"
@@ -22,7 +23,7 @@ grpc::Status PbPointCloudService::GetPointCloud2(grpc::ServerContext* context, c
   {
     pointClouds = pointCloudPb->getData(*request);
   }
-  catch (std::runtime_error e)
+  catch (std::runtime_error const& e)
   {
     // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
     // also catching core doesn't have project with uuid error
@@ -49,6 +50,7 @@ grpc::Status PbPointCloudService::TransferPointCloud2(grpc::ServerContext* conte
                                                       const seerep::PointCloud2* pointCloud2,
                                                       seerep::ServerResponse* response)
 {
+  (void)context;  // ignore that variable without causing warnings
   std::cout << "received point clouds... " << std::endl;
 
   if (!pointCloud2->header().uuid_project().empty())
@@ -65,7 +67,7 @@ grpc::Status PbPointCloudService::TransferPointCloud2(grpc::ServerContext* conte
       response->set_transmission_state(seerep::ServerResponse::SUCCESS);
       return grpc::Status::OK;
     }
-    catch (std::runtime_error e)
+    catch (std::runtime_error const& e)
     {
       // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
       // also catching core doesn't have project with uuid error

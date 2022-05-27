@@ -10,6 +10,7 @@ PbImageService::PbImageService(std::shared_ptr<seerep_core::Core> seerepCore)
 grpc::Status PbImageService::GetImage(grpc::ServerContext* context, const seerep::Query* request,
                                       grpc::ServerWriter<seerep::Image>* writer)
 {
+  (void)context;  // ignore that variable without causing warnings
   std::cout << "sending images in bounding box min(" << request->boundingbox().point_min().x() << "/"
             << request->boundingbox().point_min().y() << "/" << request->boundingbox().point_min().z() << "), max("
             << request->boundingbox().point_max().x() << "/" << request->boundingbox().point_max().y() << "/"
@@ -22,7 +23,7 @@ grpc::Status PbImageService::GetImage(grpc::ServerContext* context, const seerep
   {
     images = imagePb->getData(*request);
   }
-  catch (std::runtime_error e)
+  catch (std::runtime_error const& e)
   {
     // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
     // also catching core doesn't have project with uuid error
@@ -48,6 +49,7 @@ grpc::Status PbImageService::GetImage(grpc::ServerContext* context, const seerep
 grpc::Status PbImageService::TransferImage(grpc::ServerContext* context, const seerep::Image* image,
                                            seerep::ServerResponse* response)
 {
+  (void)context;  // ignore that variable without causing warnings
   std::cout << "received image... " << std::endl;
 
   if (!image->header().uuid_project().empty())
@@ -64,7 +66,7 @@ grpc::Status PbImageService::TransferImage(grpc::ServerContext* context, const s
       response->set_transmission_state(seerep::ServerResponse::SUCCESS);
       return grpc::Status::OK;
     }
-    catch (std::runtime_error e)
+    catch (std::runtime_error const& e)
     {
       // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
       // also catching core doesn't have project with uuid error

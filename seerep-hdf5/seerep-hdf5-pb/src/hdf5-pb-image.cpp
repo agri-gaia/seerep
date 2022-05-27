@@ -60,10 +60,10 @@ void Hdf5PbImage::writeImage(const std::string& id, const seerep::Image& image)
 
   int pixel_step = image.step() / image.width();
 
-  for (int row = 0; row < image.height(); row++)
+  for (unsigned int row = 0; row < image.height(); row++)
   {
     tmp.at(row).resize(image.width());
-    for (int col = 0; col < image.width(); col++)
+    for (unsigned int col = 0; col < image.width(); col++)
     {
       const uint8_t* pxl = begin + row * image.step() + col * pixel_step;
       tmp.at(row).at(col).reserve(pixel_step);
@@ -106,7 +106,7 @@ std::optional<seerep::Image> Hdf5PbImage::readImage(const std::string& id)
     image.set_step(getAttribute<uint32_t>(id, data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::POINT_STEP));
     image.set_row_step(getAttribute<uint32_t>(id, data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::ROW_STEP));
   }
-  catch (const std::invalid_argument e)
+  catch (const std::invalid_argument& e)
   {
     std::cout << "error: " << e.what() << std::endl;
     return std::nullopt;
@@ -119,9 +119,9 @@ std::optional<seerep::Image> Hdf5PbImage::readImage(const std::string& id)
   // TODO: write into protobuf data buffer
   uint8_t data[image.height()][image.width()][pixel_step];
 
-  for (int row = 0; row < image.height(); row++)
+  for (unsigned int row = 0; row < image.height(); row++)
   {
-    for (int col = 0; col < image.width(); col++)
+    for (unsigned int col = 0; col < image.width(); col++)
     {
       std::copy(read_data.at(row).at(col).begin(), read_data.at(row).at(col).end(), data[row][col]);
     }
