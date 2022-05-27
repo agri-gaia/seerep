@@ -24,15 +24,15 @@ std::optional<std::vector<geometry_msgs::TransformStamped>> Hdf5CoreTf::readTran
     return std::nullopt;
   }
 
-  std::cout << "loading " << hdf5GroupPath << std::endl;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "loading " << hdf5GroupPath;
 
   // read size
   std::shared_ptr<HighFive::Group> group_ptr = std::make_shared<HighFive::Group>(m_file->getGroup(hdf5GroupPath));
-  int size;
+  long unsigned int size;
   group_ptr->getAttribute(SIZE).read(size);
   if (size == 0)
   {
-    std::cout << "tf data has size 0." << std::endl;
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "tf data has size 0.";
     return std::nullopt;
   }
 
@@ -63,13 +63,14 @@ std::optional<std::vector<geometry_msgs::TransformStamped>> Hdf5CoreTf::readTran
   // check if all have the right size
   if (time.size() != size || trans.size() != size || rot.size() != size)
   {
-    std::cout << "sizes of time (" << time.size() << "), translation (" << trans.size() << ") and rotation ("
-              << rot.size() << ") not matching. Size expected by value in metadata (" << size << ")" << std::endl;
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning)
+        << "sizes of time (" << time.size() << "), translation (" << trans.size() << ") and rotation (" << rot.size()
+        << ") not matching. Size expected by value in metadata (" << size << ")";
     return std::nullopt;
   }
 
   std::vector<geometry_msgs::TransformStamped> tfs;
-  for (int i = 0; i < size; i++)
+  for (long unsigned int i = 0; i < size; i++)
   {
     geometry_msgs::TransformStamped tf;
     tf.header.frame_id = parentframe;
@@ -105,7 +106,7 @@ std::optional<std::vector<std::string>> Hdf5CoreTf::readTransformStampedFrames(c
 
   std::shared_ptr<HighFive::Group> group_ptr = std::make_shared<HighFive::Group>(m_file->getGroup(hdf5GroupPath));
 
-  std::cout << "loading parent frame of " << hdf5GroupPath << std::endl;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "loading parent frame of " << hdf5GroupPath;
 
   // read frames
   std::string parentframe;

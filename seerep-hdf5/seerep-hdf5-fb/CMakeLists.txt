@@ -3,6 +3,8 @@ project(seerep-hdf5-fb VERSION 0.1)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -fPIC -DBOOST_LOG_DYN_LINK")
+
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
@@ -14,6 +16,11 @@ find_package(SeerepMsgs REQUIRED)
 find_package(SeerepHdf5Core REQUIRED)
 find_package(HighFive REQUIRED)
 
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+find_package(Boost COMPONENTS log log_setup REQUIRED)
+
 configure_file(include/SeerepHdf5FbConfig.h.in SeerepHdf5FbConfig.h)
 
 message("HighFive Include Dirs: ${HighFive_INCLUDE_DIRS} Libraries: ${HighFive_LIBRARIES}")
@@ -24,6 +31,7 @@ include_directories(
 	${SeerepHdf5Core_INCLUDE_DIRS}
 	${FLATBUFFER_INCLUDE_DIR}
 	${HighFive_INCLUDE_DIRS}
+	${Boost_INCLUDE_DIRS}
 )
 
 add_library(seerephdf5fb
@@ -36,6 +44,8 @@ target_link_libraries(seerephdf5fb
 	${SeerepMsgs_LIBRARIES}
 	${PROTOBUF_LIBRARIES}
 	${HighFive_LIBRARIES}
+	${Boost_LIBRARIES}
+	${Boost_LOG_LIBRARY} ${Boost_LOG_SETUP_LIBRARY}
 )
 
 set(CMAKE_INSTALL_INCLUDEDIR include)

@@ -103,7 +103,8 @@ void CoreProject::recreateDatatypes()
   std::vector<std::string> datatypeNames = m_ioGeneral->getGroupDatasets("");
   for (auto datatypeName : datatypeNames)
   {
-    std::cout << "found datatype" << datatypeName << " in HDF5 file." << std::endl;
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
+        << "found datatype" << datatypeName << " in HDF5 file.";
   }
 }
 

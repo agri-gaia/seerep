@@ -11,7 +11,7 @@ void server::addServicesPb(grpc::ServerBuilder& server_builder)
   // create services
   createServicesPb();
   // add services
-  std::cout << "add the protobuf gRPC services..." << std::endl;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "add the protobuf gRPC services...";
   server_builder.RegisterService(&*m_metaOperationsPb);
   server_builder.RegisterService(&*m_tfServicePb);
   server_builder.RegisterService(&*m_imageServicePb);
@@ -24,7 +24,7 @@ void server::addServicesFb(grpc::ServerBuilder& server_builder)
   // create services
   createServicesFb();
   // add services
-  std::cout << "add the flatbuffer gRPC services..." << std::endl;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "add the flatbuffer gRPC services...";
   server_builder.RegisterService(&*m_metaOperationsFb);
   server_builder.RegisterService(&*m_tfServiceFb);
   server_builder.RegisterService(&*m_imageServiceFb);
@@ -46,8 +46,24 @@ void server::createServicesFb()
 }
 } /* namespace seerep_server */
 
+void initLogging()
+{
+  boost::log::add_common_attributes();
+  boost::log::add_file_log(
+      boost::log::keywords::file_name = "seerep_%N.log", boost::log::keywords::rotation_size = 10 * 1024 * 1024,
+      boost::log::keywords::time_based_rotation = boost::log::sinks::file::rotation_at_time_point(0, 0, 0),
+      boost::log::keywords::format = "[%TimeStamp%]: %Message%");
+
+  boost::log::add_console_log(std::cout, boost::log::keywords::format = "[%TimeStamp%]: %Message%");
+
+  boost::log::core::get()->set_filter(boost::log::trivial::severity >= boost::log::trivial::info);
+}
+
 int main(int argc, char** argv)
 {
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level> logger;
+  initLogging();
+
   std::string datafolder;
   if (argc == 2)
   {
@@ -64,7 +80,7 @@ int main(int argc, char** argv)
     // take the current path if no path is given
     datafolder = std::filesystem::current_path();
   }
-  std::cout << "The used data folder is: " << datafolder << std::endl;
+  BOOST_LOG_SEV(logger, boost::log::trivial::severity_level::info) << "The used data folder is: ";
   auto seerepCore = std::make_shared<seerep_core::Core>(datafolder);
 
   // create server builder and set server address / port
@@ -79,7 +95,8 @@ int main(int argc, char** argv)
 
   // create the server and serve
   std::shared_ptr<grpc::Server> grpcServer = std::shared_ptr<grpc::Server>(serverBuilder.BuildAndStart());
-  std::cout << "serving gRPC Server on \"" << serverAddress << "\"..." << std::endl;
+  BOOST_LOG_SEV(logger, boost::log::trivial::severity_level::info)
+      << "serving gRPC Server on \"" << serverAddress << "\"...";
   grpcServer->Wait();
 
   return EXIT_SUCCESS;

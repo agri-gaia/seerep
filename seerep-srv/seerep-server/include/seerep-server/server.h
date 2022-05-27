@@ -20,6 +20,13 @@
 #include "seerep-server/pb-point-cloud-service.h"
 #include "seerep-server/pb-tf-service.h"
 
+// logging
+#include <boost/log/core.hpp>
+#include <boost/log/sources/severity_logger.hpp>
+#include <boost/log/trivial.hpp>
+#include <boost/log/utility/setup/common_attributes.hpp>
+#include <boost/log/utility/setup/console.hpp>
+#include <boost/log/utility/setup/file.hpp>
 namespace seerep_server
 {
 class server
@@ -48,7 +55,7 @@ private:
   std::shared_ptr<seerep_server::FbTfService> m_tfServiceFb;
   std::shared_ptr<seerep_server::FbImageService> m_imageServiceFb;
 
-  // flatbuffer services
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
 };
 } /* namespace seerep_server */
 #endif  // SEEREP_SERVER_SERVER_H_

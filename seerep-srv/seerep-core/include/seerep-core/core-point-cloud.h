@@ -20,6 +20,9 @@
 #include <boost/uuid/uuid_generators.hpp>  // generators
 #include <boost/uuid/uuid_io.hpp>          // streaming operators etc.
 
+// logging
+#include <boost/log/sources/severity_logger.hpp>
+#include <boost/log/trivial.hpp>
 namespace seerep_core
 {
 class CorePointCloud
@@ -53,6 +56,8 @@ private:
   seerep_core_msgs::rtree m_rt;
   seerep_core_msgs::timetree m_timetree;
   std::unordered_map<std::string, std::vector<boost::uuids::uuid>> m_label;
+
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
 };
 
 } /* namespace seerep_core */

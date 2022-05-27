@@ -17,7 +17,7 @@ void CoreImage::recreateDatasets()
   std::vector<std::string> datasets = m_hdf5_io->getGroupDatasets(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE);
   for (auto uuid : datasets)
   {
-    std::cout << "found " << uuid << " in HDF5 file." << std::endl;
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "found " << uuid << " in HDF5 file.";
 
     try
     {
@@ -30,7 +30,7 @@ void CoreImage::recreateDatasets()
     }
     catch (const std::runtime_error& e)
     {
-      std::cout << e.what() << std::endl;
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
     }
   }
 }

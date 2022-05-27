@@ -3,6 +3,7 @@ project(seerep-server VERSION 0.1)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_FLAGS "-fPIC -DBOOST_LOG_DYN_LINK")#-Wall -Wextra
 
 find_package(Protobuf REQUIRED)
 find_package(gRPC CONFIG REQUIRED)
@@ -15,15 +16,21 @@ find_package(SeerepCorePb REQUIRED)
 find_package(SeerepCoreFb REQUIRED)
 find_package(HighFive REQUIRED)
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
+
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+find_package(Boost COMPONENTS log log_setup REQUIRED)
+
 find_package(catkin REQUIRED
 	COMPONENTS
 	seerep_ros_conversions_pb
 	seerep_ros_conversions_fb
 )
 
-message("LIBS" ${SeerepCorePb_LIBRARIES})
-message("INCS" ${SeerepCorePb_INCLUDE_DIRS})
-message("INCS2" ${HighFive_INCLUDE_DIRS})
+# message("LIBS" ${SeerepCorePb_LIBRARIES})
+# message("INCS" ${SeerepCorePb_INCLUDE_DIRS})
+# message("INCS2" ${HighFive_INCLUDE_DIRS})
 
 include_directories(
 	include
@@ -35,6 +42,7 @@ include_directories(
 	${SeerepHdf5Fb_INCLUDE_DIRS}
 	${SeerepHdf5Core_INCLUDE_DIRS}
 	${HighFive_INCLUDE_DIRS}
+	${Boost_INCLUDE_DIRS}
 	${catkin_INCLUDE_DIRS}
 )
 
@@ -74,6 +82,8 @@ target_link_libraries(${PROJECT_NAME}_server
 	${SeerepCore_LIBRARIES}
 	${SeerepCorePb_LIBRARIES}
 	${SeerepCoreFb_LIBRARIES}
+	${Boost_LIBRARIES}
+	${Boost_LOG_LIBRARY} ${Boost_LOG_SETUP_LIBRARY}
 	gRPC::grpc++_reflection
 	# ${PROJECT_NAME}_server_grpc
 	Eigen3::Eigen

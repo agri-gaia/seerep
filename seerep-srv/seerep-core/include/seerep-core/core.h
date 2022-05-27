@@ -23,6 +23,9 @@
 // seerep-core
 #include "core-project.h"
 
+// logging
+#include <boost/log/sources/severity_logger.hpp>
+#include <boost/log/trivial.hpp>
 namespace seerep_core
 {
 class Core
@@ -56,6 +59,8 @@ private:
 
   std::unordered_map<boost::uuids::uuid, std::shared_ptr<seerep_core::CoreProject>, boost::hash<boost::uuids::uuid>>
       m_projects;
+
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
 };
 
 } /* namespace seerep_core */

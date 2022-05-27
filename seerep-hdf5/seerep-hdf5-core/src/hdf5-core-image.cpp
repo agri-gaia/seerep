@@ -61,8 +61,9 @@ std::vector<std::string> Hdf5CoreImage::readLabelsGeneral(const std::string& dat
 {
   if (!m_file->exist(dataGroup + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERAL))
   {
-    std::cout << "id " << dataGroup + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERAL
-              << " does not exist in file " << m_file->getName() << std::endl;
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
+        << "id " << dataGroup + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERAL << " does not exist in file "
+        << m_file->getName();
     return std::vector<std::string>();
   }
 
@@ -78,8 +79,9 @@ std::vector<std::string> Hdf5CoreImage::readBoundingBox2DLabels(const std::strin
 {
   if (!m_file->exist(dataGroup + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBB))
   {
-    std::cout << "id " << dataGroup + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBB << " does not exist in file "
-              << m_file->getName() << std::endl;
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
+        << "id " << dataGroup + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBB << " does not exist in file "
+        << m_file->getName();
     return std::vector<std::string>();
   }
 

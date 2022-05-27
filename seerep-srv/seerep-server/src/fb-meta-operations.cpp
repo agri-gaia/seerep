@@ -10,7 +10,7 @@ grpc::Status FbMetaOperations::CreateProject(grpc::ServerContext* context,
                                              const flatbuffers::grpc::Message<seerep::fb::ProjectCreation>* request,
                                              flatbuffers::grpc::Message<seerep::fb::ProjectInfo>* response)
 {
-  std::cout << "create new project... " << std::endl;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "create new project... ";
   const seerep::fb::ProjectCreation* requestMsg = request->GetRoot();
   seerep_core_msgs::ProjectInfo projectInfo;
   projectInfo.frameId = requestMsg->map_frame_id()->str();
@@ -34,7 +34,7 @@ grpc::Status FbMetaOperations::GetProjects(grpc::ServerContext* context,
                                            const flatbuffers::grpc::Message<seerep::fb::Empty>* request,
                                            flatbuffers::grpc::Message<seerep::fb::ProjectInfos>* response)
 {
-  std::cout << "query the project infos... " << std::endl;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "query the project infos... ";
   auto projectInfos = seerepCore->getProjects();
 
   flatbuffers::grpc::MessageBuilder builder;

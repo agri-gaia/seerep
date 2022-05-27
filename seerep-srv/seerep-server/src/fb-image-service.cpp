@@ -12,13 +12,25 @@ grpc::Status FbImageService::GetImage(grpc::ServerContext* context,
                                       grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::Image>>* writer)
 {
   auto requestRoot = request->GetRoot();
-  std::cout << "sending images in bounding box min(" << requestRoot->boundingbox()->point_min()->x() << "/"
+
+  std::stringstream debuginfo;
+  debuginfo << "sending images in bounding box min(" << requestRoot->boundingbox()->point_min()->x() << "/"
             << requestRoot->boundingbox()->point_min()->y() << "/" << requestRoot->boundingbox()->point_min()->z()
             << "), max(" << requestRoot->boundingbox()->point_max()->x() << "/"
             << requestRoot->boundingbox()->point_max()->y() << "/" << requestRoot->boundingbox()->point_max()->z()
             << ")"
             << " and time interval (" << requestRoot->timeinterval()->time_min()->seconds() << "/"
-            << requestRoot->timeinterval()->time_max()->seconds() << ")" << std::endl;
+            << requestRoot->timeinterval()->time_max()->seconds() << ")";
+  if (requestRoot->label() != NULL)
+  {
+    debuginfo << " and labels general";
+    for (auto label : *requestRoot->label())
+    {
+      debuginfo << "'" << label->str() << "' ";
+    }
+  }
+
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << debuginfo.rdbuf();
 
   try
   {
@@ -28,7 +40,7 @@ grpc::Status FbImageService::GetImage(grpc::ServerContext* context,
   {
     // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
     // also catching core doesn't have project with uuid error
-    std::cout << e.what() << std::endl;
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
   }
 
@@ -44,7 +56,7 @@ grpc::Status FbImageService::TransferImage(grpc::ServerContext* context,
   flatbuffers::grpc::Message<seerep::fb::Image> imageMsg;
   while (reader->Read(&imageMsg))
   {
-    std::cout << "received image... " << std::endl;
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "received image... ";
     auto image = imageMsg.GetRoot();
 
     std::string uuidProject = image->header()->uuid_project()->str();
@@ -58,7 +70,7 @@ grpc::Status FbImageService::TransferImage(grpc::ServerContext* context,
       {
         // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
         // also catching core doesn't have project with uuid error
-        std::cout << e.what() << std::endl;
+        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
 
         flatbuffers::grpc::MessageBuilder builder;
         auto msg = builder.CreateString(std::string(e.what()));
@@ -101,7 +113,7 @@ grpc::Status FbImageService::AddBoundingBoxes2dLabeled(
   flatbuffers::grpc::Message<seerep::fb::BoundingBoxes2DLabeledStamped> bbsMsg;
   while (reader->Read(&bbsMsg))
   {
-    std::cout << "received BoundingBoxes2DLabeledStamped... " << std::endl;
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "received BoundingBoxes2DLabeledStamped... ";
     auto bbslabeled = bbsMsg.GetRoot();
 
     std::string uuidProject = bbslabeled->header()->uuid_project()->str();
@@ -115,7 +127,7 @@ grpc::Status FbImageService::AddBoundingBoxes2dLabeled(
       {
         // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
         // also catching core doesn't have project with uuid error
-        std::cout << e.what() << std::endl;
+        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
 
         flatbuffers::grpc::MessageBuilder builder;
         auto msg = builder.CreateString(std::string(e.what()));
