@@ -129,7 +129,7 @@ private:
   /** @brief a map from the UUID of a project the object of the project */
   std::unordered_map<boost::uuids::uuid, std::shared_ptr<seerep_core::CoreProject>, boost::hash<boost::uuids::uuid>>
       m_projects;
-
+  /** @brief object handling the logging */
   boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
 };
 

@@ -99,7 +99,7 @@ seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::Im
       {
         uuidInstance = gen(label->instanceUuid()->str());
       }
-      catch (std::runtime_error e)
+      catch (std::runtime_error const& e)
       {
         uuidInstance = boost::uuids::nil_uuid();
       }
@@ -119,7 +119,7 @@ seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::Im
       {
         uuidInstance = gen(label->labelWithInstance()->instanceUuid()->str());
       }
-      catch (std::runtime_error e)
+      catch (std::runtime_error const& e)
       {
         uuidInstance = boost::uuids::nil_uuid();
       }

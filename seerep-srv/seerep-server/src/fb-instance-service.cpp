@@ -11,11 +11,12 @@ grpc::Status FbInstanceService::GetInstances(grpc::ServerContext* context,
                                              const flatbuffers::grpc::Message<seerep::fb::Query>* request,
                                              flatbuffers::grpc::Message<seerep::fb::UuidsPerProject>* response)
 {
+  (void)context;  // ignore that variable without causing warnings
   try
   {
     m_instanceFb->getInstances(request, response);
   }
-  catch (std::runtime_error e)
+  catch (std::runtime_error const& e)
   {
     // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
     // also catching core doesn't have project with uuid error

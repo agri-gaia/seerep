@@ -103,7 +103,7 @@ void CoreInstances::recreateInstances()
       m_hdf5_io->getGroupDatasets(seerep_hdf5_core::Hdf5CoreInstance::HDF5_GROUP_INSTANCE);
   for (auto const& name : instances)
   {
-    std::cout << "found " << name << " in HDF5 file." << std::endl;
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "found " << name << " in HDF5 file.";
 
     try
     {
@@ -113,7 +113,7 @@ void CoreInstances::recreateInstances()
     }
     catch (const std::runtime_error& e)
     {
-      std::cout << e.what() << std::endl;
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
     }
   }
 }

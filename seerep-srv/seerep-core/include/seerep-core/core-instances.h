@@ -96,6 +96,8 @@ private:
   /** @brief map from the uuid of an instance to the object of it */
   std::unordered_map<boost::uuids::uuid, std::shared_ptr<seerep_core::CoreInstance>, boost::hash<boost::uuids::uuid>>
       m_instances;
+  /** @brief object handling the logging */
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
 
 public:
   inline static const std::string ATTRIBUTELABEL = "label";

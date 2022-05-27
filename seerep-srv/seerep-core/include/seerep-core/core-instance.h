@@ -89,6 +89,8 @@ private:
 
   /** @brief map from datatype to the vector of UUIDs of datasets showing this instance */
   std::unordered_map<seerep_core_msgs::Datatype, std::vector<boost::uuids::uuid>> m_typeUUIDMap;
+  /** @brief object handling the logging */
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
 };
 
 } /* namespace seerep_core */
