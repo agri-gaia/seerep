@@ -97,7 +97,7 @@ protected:
   void writeLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid,
                           const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>* labelsGeneral);
 
-  void readLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid, std::vector<std::string> labels);
+  void readLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid, std::vector<std::string>& labels);
 
   //################
   // Project
