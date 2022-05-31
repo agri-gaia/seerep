@@ -445,7 +445,7 @@ void Hdf5FbGeneral::writeLabelsGeneral(const std::string& datatypeGroup, const s
 }
 
 void Hdf5FbGeneral::readLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid,
-                                      std::vector<std::string> labels)
+                                      std::vector<std::string>& labels)
 {
   std::string id = datatypeGroup + "/" + uuid;
   if (!m_file->exist(id + "/" + LABELGENERAL))
