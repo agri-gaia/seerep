@@ -20,7 +20,7 @@ find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
-find_package(Boost COMPONENTS log log_setup REQUIRED)
+find_package(Boost COMPONENTS program_options log log_setup REQUIRED)
 
 find_package(catkin REQUIRED
 	COMPONENTS
