@@ -1,6 +1,8 @@
 #ifndef SEEREP_SERVER_SERVER_H_
 #define SEEREP_SERVER_SERVER_H_
 
+#include <fstream>
+
 // grpc
 #include <grpc/grpc.h>
 #include <grpcpp/security/server_credentials.h>
@@ -28,6 +30,10 @@
 #include <boost/log/utility/setup/common_attributes.hpp>
 #include <boost/log/utility/setup/console.hpp>
 #include <boost/log/utility/setup/file.hpp>
+
+// program options / cmd line args
+#include <boost/program_options.hpp>
+
 namespace seerep_server
 {
 class server
