@@ -23,8 +23,9 @@ from seerep.fb import metaOperations_grpc_fb as metaOperations
 # import numpy as np
 
 
-# # server with certs
-# __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+# server with certs
+# __location__ = os.path.realpath(
+#     os.path.join(os.getcwd(), os.path.dirname(__file__)))
 # with open(os.path.join(__location__, 'tls.pem'), 'rb') as f:
 #     root_cert = f.read()
 # server = "seerep.robot.10.249.3.13.nip.io:32141"
@@ -118,7 +119,7 @@ buf = builder.Output()
 for responseBuf in stub.GetImage(bytes(buf)):
     response = Image.Image.GetRootAs(responseBuf)
     print("uuidmsg: " + response.Header().UuidMsgs().decode("utf-8"))
-    print("first label: " + response.LabelsBb(0).Label().decode("utf-8"))
+    print("first label: " + response.LabelsBb(0).LabelWithInstance().Label().decode("utf-8"))
     print(
         "first BoundingBox (Xmin,Ymin,Xmax,Ymax): "
         + str(response.LabelsBb(0).BoundingBox().PointMin().X())

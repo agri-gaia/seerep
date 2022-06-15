@@ -187,7 +187,7 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
   readLabelsGeneral(HDF5_GROUP_IMAGE, id, labelsGeneral, labelsGeneralInstances);
 
   std::vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>> labelGeneralVector;
-  labelGeneralVector.resize(labelsGeneral.size());
+  labelGeneralVector.reserve(labelsGeneral.size());
   for (long unsigned int i = 0; i < labelsGeneral.size(); i++)
   {
     auto labelOffset = builder.CreateString(labelsGeneral.at(i));
