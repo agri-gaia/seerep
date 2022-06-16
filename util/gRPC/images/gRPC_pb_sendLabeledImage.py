@@ -8,6 +8,7 @@ import boundingbox2d_labeled_pb2 as bb
 import grpc
 import image_pb2 as image
 import image_service_pb2_grpc as imageService
+import label_with_instance_pb2 as labelWithInstance
 import meta_operations_pb2_grpc as metaOperations
 import numpy as np
 import projectCreation_pb2 as projectCreation
@@ -78,7 +79,7 @@ for n in range(10):
 
     bb1 = bb.BoundingBox2DLabeled()
     for i in range(0, 10):
-        bb1.label = "testlabel" + str(i)
+        bb1.labelWithInstance.label = "testlabel" + str(i)
         bb1.boundingBox.point_min.x = 0.01 + i / 10
         bb1.boundingBox.point_min.y = 0.02 + i / 10
         bb1.boundingBox.point_max.x = 0.03 + i / 10
@@ -86,7 +87,9 @@ for n in range(10):
         theImage.labels_bb.append(bb1)
 
     for i in range(0, 10):
-        theImage.labels_general.append("testlabelgeneral" + str(i))
+        label = labelWithInstance.LabelWithInstance()
+        label.label = "testlabelgeneral" + str(i)
+        theImage.labels_general.append(label)
 
     uuidImg = stub.TransferImage(theImage)
 

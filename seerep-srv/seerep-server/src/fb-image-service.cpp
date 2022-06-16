@@ -15,16 +15,23 @@ grpc::Status FbImageService::GetImage(grpc::ServerContext* context,
   auto requestRoot = request->GetRoot();
 
   std::stringstream debuginfo;
-  debuginfo << "sending images in bounding box min(" << requestRoot->boundingbox()->point_min()->x() << "/"
-            << requestRoot->boundingbox()->point_min()->y() << "/" << requestRoot->boundingbox()->point_min()->z()
-            << "), max(" << requestRoot->boundingbox()->point_max()->x() << "/"
-            << requestRoot->boundingbox()->point_max()->y() << "/" << requestRoot->boundingbox()->point_max()->z()
-            << ")"
-            << " and time interval (" << requestRoot->timeinterval()->time_min()->seconds() << "/"
-            << requestRoot->timeinterval()->time_max()->seconds() << ")";
+  debuginfo << "sending images with this query parameters:";
+  if (requestRoot->boundingbox() != NULL)
+  {
+    debuginfo << "bounding box min(" << requestRoot->boundingbox()->point_min()->x() << "/"
+              << requestRoot->boundingbox()->point_min()->y() << "/" << requestRoot->boundingbox()->point_min()->z()
+              << "), max(" << requestRoot->boundingbox()->point_max()->x() << "/"
+              << requestRoot->boundingbox()->point_max()->y() << "/" << requestRoot->boundingbox()->point_max()->z()
+              << ")";
+  }
+  if (requestRoot->timeinterval() != NULL)
+  {
+    debuginfo << "time interval (" << requestRoot->timeinterval()->time_min()->seconds() << "/"
+              << requestRoot->timeinterval()->time_max()->seconds() << ")";
+  }
   if (requestRoot->label() != NULL)
   {
-    debuginfo << " and labels general";
+    debuginfo << "labels general";
     for (auto label : *requestRoot->label())
     {
       debuginfo << "'" << label->str() << "' ";
