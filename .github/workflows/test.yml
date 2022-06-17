@@ -1,0 +1,35 @@
+name: xUnit Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  Build-and-run-tests:
+    runs-on: ubuntu-latest
+    container:
+      image: git.ni.dfki.de:5050/agrigaia/seerep/base:latest
+      options: --user root
+      credentials:
+        username: ${{ secrets.GITLAB_REGISTRY_USER }}
+        password: ${{ secrets.GITLAB_REGISTRY_ACCESS_TOKEN }}
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        path: src
+
+    - name: Build the ros workspace
+      run: |
+        source /opt/ros/noetic/setup.bash
+        catkin build --workspace $GITHUB_WORKSPACE/
+      shell: bash
+
+    - name: Run FlatBuffers write/load test of image message
+      run: |
+        source /opt/ros/noetic/setup.bash
+        source $GITHUB_WORKSPACE/devel/setup.bash
+        $GITHUB_WORKSPACE/devel/bin/flatbuffer-write-load
+      shell: bash
