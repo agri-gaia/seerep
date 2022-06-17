@@ -152,7 +152,7 @@ protected:
 
     fbb = flatbuffers::FlatBufferBuilder(1024);
 
-    auto seerepCore = std::make_shared<seerep_core::Core>("./");
+    auto seerepCore = std::make_shared<seerep_core::Core>("./", false);
     seerep_core_msgs::ProjectInfo projectInfo;
     projectInfo.name = projectName;
     projectInfo.uuid = projectUUID;
