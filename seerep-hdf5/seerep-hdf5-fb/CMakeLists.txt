@@ -61,6 +61,7 @@ add_dependencies(
 	flatbuffer-write-load
 	${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS}
 )
+
 target_link_libraries(flatbuffer-write-load
 	GTest::gtest
 	GTest::gtest_main
@@ -76,6 +77,12 @@ add_test(flatbuffer-write-load flatbuffer-write-load)
 set(CMAKE_INSTALL_INCLUDEDIR include)
 set(CMAKE_INSTALL_LIBDIR lib)
 set(CMAKE_INSTALL_BINDIR bin)
+
+install(TARGETS flatbuffer-write-load
+	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+	PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+)
 
 install(TARGETS seerephdf5fb
 	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
