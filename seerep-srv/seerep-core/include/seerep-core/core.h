@@ -40,9 +40,10 @@ class Core
 public:
   /**
    * @brief Constructs the core and loads all projects / HDF5 files from the data folder
-   * @param datafolder path to the folder containing the HDF5 files
+   * @param dataFolder path to the folder containing the HDF5 files
+   * @param loadHdf5Files bool flag if the HDF5 files in the data folder should be read on startup (default true)
    */
-  Core(std::string datafolder);
+  Core(std::string dataFolder, bool loadHdf5Files = true);
   ~Core();
 
   /**
@@ -124,7 +125,7 @@ private:
   void recreateProjects();
 
   /** @brief the path to the folder containing the HDF5 files */
-  std::string m_datafolder;
+  std::string m_dataFolder;
 
   /** @brief a map from the UUID of a project the object of the project */
   std::unordered_map<boost::uuids::uuid, std::shared_ptr<seerep_core::CoreProject>, boost::hash<boost::uuids::uuid>>
