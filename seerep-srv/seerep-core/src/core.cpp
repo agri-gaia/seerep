@@ -2,9 +2,12 @@
 
 namespace seerep_core
 {
-Core::Core(std::string datafolder) : m_datafolder(datafolder)
+Core::Core(std::string dataFolder, bool loadHdf5Files) : m_dataFolder(dataFolder)
 {
-  recreateProjects();
+  if (loadHdf5Files)
+  {
+    recreateProjects();
+  }
 }
 Core::~Core()
 {
@@ -96,7 +99,7 @@ seerep_core_msgs::QueryResult Core::getInstances(const seerep_core_msgs::Query& 
 
 void Core::recreateProjects()
 {
-  for (const auto& entry : std::filesystem::directory_iterator(m_datafolder))
+  for (const auto& entry : std::filesystem::directory_iterator(m_dataFolder))
   {
     if (entry.path().filename().extension() == ".h5")
     {
@@ -122,7 +125,7 @@ void Core::recreateProjects()
 void Core::newProject(const seerep_core_msgs::ProjectInfo& projectInfo)
 {
   std::string filename = boost::lexical_cast<std::string>(projectInfo.uuid);
-  std::string path = m_datafolder + "/" + filename + ".h5";
+  std::string path = m_dataFolder + "/" + filename + ".h5";
 
   auto project = std::make_shared<CoreProject>(projectInfo.uuid, path, projectInfo.name, projectInfo.frameId);
   m_projects.insert(std::make_pair(projectInfo.uuid, project));
