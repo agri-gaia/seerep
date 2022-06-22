@@ -10,6 +10,15 @@
 #include <string>
 #include <vector>
 
+/*
+This test serves more as an integration test rather than a unit test. We want
+to make sure that a Flabuffers image message is the same after saving and
+reading it from a hdf5 file. Because the underlying components like the
+seerep-hdf5-core and seerep-hdf5-fb are not (fully) tested, we don't use mocks and
+propagate the data through all components. This should be changed in the future
+to improve the quality of the tests.
+*/
+
 auto createTimeStamp(flatbuffers::FlatBufferBuilder& fbb)
 {
   auto timeStampMsgOffset = seerep::fb::CreateTimestamp(fbb, std::time(0), 0);
@@ -138,7 +147,7 @@ protected:
 
   static flatbuffers::FlatBufferBuilder fbb;
 
-  // because the tests only compare data and don't alter them, we create the
+  // Because the tests only compare the written and read data, we create the
   // resources only once and share them between the tests
   static void SetUpTestSuite()
   {
@@ -152,6 +161,7 @@ protected:
 
     fbb = flatbuffers::FlatBufferBuilder(1024);
 
+    // temporary files are stored in the build directory of seerep-hdf5-fb
     auto seerepCore = std::make_shared<seerep_core::Core>("./", false);
     seerep_core_msgs::ProjectInfo projectInfo;
     projectInfo.name = projectName;
@@ -159,6 +169,13 @@ protected:
     seerepCore->newProject(projectInfo);
 
     imageIO = std::make_shared<seerep_hdf5_fb::Hdf5FbImage>(hdf5File, hdf5FileMutex);
+    /*
+      If the testsuite set up throws, a failure, the tests are still executed,
+      which will likely result in a segmentation fault, due to a nullptr.
+      https://github.com/google/googletest/issues/247
+      https://github.com/google/googletest/issues/3799
+      An error message will still be in the test log for debugging.
+    */
     if (imageIO == nullptr)
     {
       FAIL() << "Error: Can't create HDF5Image object for writing images";
@@ -260,7 +277,7 @@ void testEqualPoints(const seerep::fb::Point2D* readPoint, const seerep::fb::Poi
   EXPECT_EQ(readPoint->y(), writePoint->y());
 }
 
-// don't test the header since, it will be removed soon
+// don't test the header since, it will be removed in #72
 TEST_F(fbWriteLoadTest, testBoundingBox2DLabeled)
 {
   ASSERT_EQ(readImage->labels_bb()->size(), writeImage->labels_bb()->size());
