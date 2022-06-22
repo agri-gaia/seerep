@@ -56,13 +56,13 @@ target_link_libraries(seerephdf5fb
 )
 
 # create executable with tests
-add_executable(flatbuffer-write-load test/fb-write-load-test.cpp)
+add_executable(flatbuffer-write-load-test test/fb-write-load-test.cpp)
 add_dependencies(
-	flatbuffer-write-load
+	flatbuffer-write-load-test
 	${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS}
 )
 
-target_link_libraries(flatbuffer-write-load
+target_link_libraries(flatbuffer-write-load-test
 	GTest::gtest
 	GTest::gtest_main
 	gmock_main
@@ -72,13 +72,13 @@ target_link_libraries(flatbuffer-write-load
 	gRPC::grpc++_reflection
 	seerephdf5fb
 )
-add_test(flatbuffer-write-load flatbuffer-write-load)
+add_test(flatbuffer-write-load-test flatbuffer-write-load-test)
 
 set(CMAKE_INSTALL_INCLUDEDIR include)
 set(CMAKE_INSTALL_LIBDIR lib)
 set(CMAKE_INSTALL_BINDIR bin)
 
-install(TARGETS flatbuffer-write-load
+install(TARGETS flatbuffer-write-load-test
 	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 	PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
