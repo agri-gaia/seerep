@@ -9,6 +9,7 @@ nav:
       - C++: 'tutorials-c++.md'
   - Packages:
     - Overview: packages.md
+  - Testing: testing.md
 theme:
   name: material
   language: en
