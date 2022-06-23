@@ -27,9 +27,9 @@ jobs:
         catkin build --workspace $GITHUB_WORKSPACE/
       shell: bash
 
-    - name: Run FlatBuffers write/load test of image message
+    - name: Test FlatBuffers write/load of image
       run: |
         source /opt/ros/noetic/setup.bash
         source $GITHUB_WORKSPACE/devel/setup.bash
-        $GITHUB_WORKSPACE/devel/bin/flatbuffer-write-load
+        $GITHUB_WORKSPACE/devel/bin/flatbuffer-write-load-test
       shell: bash
