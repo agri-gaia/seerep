@@ -147,6 +147,8 @@ protected:
 
   static flatbuffers::FlatBufferBuilder fbb;
 
+  static bool failureInSetup;
+
   // Because the tests only compare the written and read data, we create the
   // resources only once and share them between the tests
   static void SetUpTestSuite()
@@ -161,6 +163,8 @@ protected:
 
     fbb = flatbuffers::FlatBufferBuilder(1024);
 
+    failureInSetup = false;
+
     // temporary files are stored in the build directory of seerep-hdf5-fb
     auto seerepCore = std::make_shared<seerep_core::Core>("./", false);
     seerep_core_msgs::ProjectInfo projectInfo;
@@ -169,23 +173,18 @@ protected:
     seerepCore->newProject(projectInfo);
 
     imageIO = std::make_shared<seerep_hdf5_fb::Hdf5FbImage>(hdf5File, hdf5FileMutex);
-    /*
-      If the testsuite set up throws, a failure, the tests are still executed,
-      which will likely result in a segmentation fault, due to a nullptr.
-      https://github.com/google/googletest/issues/247
-      https://github.com/google/googletest/issues/3799
-      An error message will still be in the test log for debugging.
-    */
     if (imageIO == nullptr)
     {
-      FAIL() << "Error: Can't create HDF5Image object for writing images";
+      failureInSetup = true;
+      GTEST_FATAL_FAILURE_("Error: Can't create HDF5Image object for writing images");
     }
 
     writeImage = createImageMessage(fbb, 256, 256, boost::lexical_cast<std::string>(projectUUID),
                                     boost::lexical_cast<std::string>(messageUUID));
     if (writeImage == nullptr)
     {
-      FAIL() << "Error: No image data to write into HDF5 file";
+      failureInSetup = true;
+      GTEST_FATAL_FAILURE_("Error: No image data to write into HDF5 file");
     }
 
     imageIO->writeImage(boost::lexical_cast<std::string>(messageUUID), *writeImage);
@@ -193,10 +192,23 @@ protected:
     auto gRPCImage = imageIO->readImage(boost::lexical_cast<std::string>(messageUUID));
     if (!gRPCImage.has_value())
     {
-      FAIL() << "Error: No data could be read from HDF5 file";
+      failureInSetup = true;
+      GTEST_FATAL_FAILURE_("Error: No data could be read from HDF5 file");
     };
 
     readImage = gRPCImage.value().GetRoot();
+  }
+
+  /*
+    If the testsuite set up throws, a failure, the tests are still executed,
+    which will likely result in a segmentation fault, due to a nullptr.
+    https://github.com/google/googletest/issues/247
+    https://github.com/google/googletest/issues/3799
+    Using a bool to check the setup is a small workaround.
+  */
+  void SetUp()
+  {
+    ASSERT_FALSE(failureInSetup);
   }
 
   static void TearDownTestSuite()
@@ -218,6 +230,8 @@ std::shared_ptr<seerep_hdf5_fb::Hdf5FbImage> fbWriteLoadTest::imageIO;
 
 const seerep::fb::Image* fbWriteLoadTest::writeImage;
 const seerep::fb::Image* fbWriteLoadTest::readImage;
+
+bool fbWriteLoadTest::failureInSetup;
 
 TEST_F(fbWriteLoadTest, testImageHeader)
 {
