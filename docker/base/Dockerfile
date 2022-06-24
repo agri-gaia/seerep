@@ -71,7 +71,7 @@ RUN apt-get -qq update && apt-get -qq install --no-install-recommends -y -o=Dpkg
         libeigen3-dev \
         && rm -rf /var/lib/apt/lists/*
 
-RUN git clone --depth 1 $HDF5_REL.git \
+RUN git clone --depth 1 -b v2.4.0 $HDF5_REL.git \
         && mkdir HighFive/build \
         && cmake -DHIGHFIVE_EXAMPLES=OFF -DHIGHFIVE_PARALLEL_HDF5=ON -DHIGHFIVE_USE_EIGEN=ON -B /HighFive/build -S /HighFive \
         && make -j"$(nproc)" -C /HighFive/build \
