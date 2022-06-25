@@ -123,6 +123,23 @@ RUN git clone --recurse-submodules --depth 1 -b v1.35.0 https://github.com/grpc/
         && cd ../../.. \
         && rm -rf grpc
 
+####################################################
+#Install current googletest release
+####################################################
+
+# remove the old version of googletest and googlemock, introduced by catkin in the ros noetic base layer
+RUN rm -rf /usr/src/gtest /usr/src/googletest /usr/src/gmock
+
+RUN git clone https://github.com/google/googletest.git -b release-1.12.0 \
+        && cd googletest \
+        && mkdir -p build \
+        && cd build \
+        && cmake .. \
+        && make -j"$(nproc)" \
+        && make install \
+        && cd ../../ \
+        && rm -rf googletest
+
 #Install python3 grpcio_tools'
 RUN pip3 install grpcio-tools
 
