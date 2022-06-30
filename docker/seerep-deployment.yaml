@@ -61,6 +61,8 @@ spec:
           ports:
             - containerPort: 9090
               protocol: TCP
+          args:
+            - /seerep/src/seerep.cfg
           resources:
             limits:
               cpu: 100m
@@ -86,6 +88,7 @@ spec:
         fsGroup: 1001
       imagePullSecrets:
         - name: gitlab-token # secret containing dockerconfig
+
       schedulerName: default-scheduler
       volumes:
         - name: seerep-data
@@ -95,12 +98,7 @@ spec:
           configMap:
             name: seerep-cfg
   strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 25%
-      maxSurge: 25%
-  revisionHistoryLimit: 10
-  progressDeadlineSeconds: 600
+    type: Recreate
 ---
 apiVersion: v1
 kind: Service
