@@ -76,9 +76,6 @@ spec:
           volumeMounts:
             - mountPath: /mnt/seerep-data
               name: seerep-data
-            - mountPath: /seerep/src/seerep.cfg
-              name: seerep-config
-              subPath: seerep.cfg
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
@@ -88,15 +85,11 @@ spec:
         fsGroup: 1001
       imagePullSecrets:
         - name: gitlab-token # secret containing dockerconfig
-
       schedulerName: default-scheduler
       volumes:
         - name: seerep-data
           persistentVolumeClaim:
             claimName: seerep-pv-claim
-        - name: seerep-config
-          configMap:
-            name: seerep-cfg
   strategy:
     type: Recreate
 ---
