@@ -27,6 +27,17 @@ spec:
     requests:
       storage: 20Gi
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: seerep-cfg
+  namespace: robot
+data:
+  seerep.cfg: |
+    data-folder = /mnt/seerep-data #defaulting to work dir
+    log-path = /mnt/seerep-data/log/ #file logging disabled if not set
+    #port = 9090
+---
 kind: Deployment
 apiVersion: apps/v1
 metadata:
@@ -50,8 +61,6 @@ spec:
           ports:
             - containerPort: 9090
               protocol: TCP
-          args:
-            - /mnt/seerep-data
           resources:
             limits:
               cpu: 100m
@@ -65,6 +74,9 @@ spec:
           volumeMounts:
             - mountPath: /mnt/seerep-data
               name: seerep-data
+            - mountPath: /seerep/src/seerep.cfg
+              name: seerep-config
+              subPath: seerep.cfg
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
@@ -79,6 +91,9 @@ spec:
         - name: seerep-data
           persistentVolumeClaim:
             claimName: seerep-pv-claim
+        - name: seerep-config
+          configMap:
+            name: seerep-cfg
   strategy:
     type: RollingUpdate
     rollingUpdate:
