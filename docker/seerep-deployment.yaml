@@ -61,6 +61,8 @@ spec:
           ports:
             - containerPort: 9090
               protocol: TCP
+          args:
+            - /seerep/src/seerep.cfg
           resources:
             limits:
               cpu: 100m
@@ -74,9 +76,6 @@ spec:
           volumeMounts:
             - mountPath: /mnt/seerep-data
               name: seerep-data
-            - mountPath: /seerep/src/seerep.cfg
-              name: seerep-config
-              subPath: seerep.cfg
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
@@ -91,16 +90,8 @@ spec:
         - name: seerep-data
           persistentVolumeClaim:
             claimName: seerep-pv-claim
-        - name: seerep-config
-          configMap:
-            name: seerep-cfg
   strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 25%
-      maxSurge: 25%
-  revisionHistoryLimit: 10
-  progressDeadlineSeconds: 600
+    type: Recreate
 ---
 apiVersion: v1
 kind: Service
