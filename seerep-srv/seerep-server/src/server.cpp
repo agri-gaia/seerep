@@ -30,6 +30,8 @@ void server::parseProgramOptions(int argc, char** argv)
 {
   try
   {
+
+    std::cout << "parsing programming options" << std::endl;
     // Declare a group of options that will be
     // allowed only on command line
     boost::program_options::options_description generic("Generic options");
@@ -86,6 +88,7 @@ void server::parseProgramOptions(int argc, char** argv)
   }
   catch (std::exception& e)
   {
+    std::cout << "could not parse programming options" << std::endl;
     std::cout << e.what() << std::endl;
     exit(EXIT_FAILURE);
   }
