@@ -6,7 +6,7 @@ server::server(int argc, char** argv)
 {
   std::cout << "Starting seerep server" << std::endl;
   signal(SIGINT, signalHandler);
-
+  std::cout << "trigger signal" << std::endl;
   parseProgramOptions(argc, argv);
   initLogging();
 
