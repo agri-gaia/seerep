@@ -4,6 +4,7 @@ namespace seerep_server
 {
 server::server(int argc, char** argv)
 {
+  std::cout << "Starting seerep server" << std::endl;
   signal(SIGINT, signalHandler);
 
   parseProgramOptions(argc, argv);
