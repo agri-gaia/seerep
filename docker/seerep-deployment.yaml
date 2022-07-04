@@ -57,12 +57,10 @@ spec:
     spec:
       containers:
         - name: seerep-server
-          image: 'git.ni.dfki.de:5050/agrigaia/seerep/server'
+          image: 'git.ni.dfki.de:5050/agrigaia/seerep/server:latest'
           ports:
             - containerPort: 9090
               protocol: TCP
-          args:
-            - /seerep/src/seerep.cfg
           resources:
             limits:
               cpu: 100m
