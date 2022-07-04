@@ -30,7 +30,6 @@ void server::parseProgramOptions(int argc, char** argv)
 {
   try
   {
-
     std::cout << "parsing programming options" << std::endl;
     // Declare a group of options that will be
     // allowed only on command line
