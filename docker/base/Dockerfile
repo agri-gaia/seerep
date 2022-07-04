@@ -66,14 +66,13 @@ RUN curl -s https://apt.kitware.com/kitware-archive.sh -o kitware-archive.sh \
 ####################################################
 RUN apt-get -qq update && apt-get -qq install --no-install-recommends -y -o=Dpkg::Use-Pty=0 \
         libhdf5-dev \
-        libhdf5-mpi-dev \
         libboost-all-dev \
         libeigen3-dev \
         && rm -rf /var/lib/apt/lists/*
 
 RUN git clone --depth 1 -b v2.4.0 $HDF5_REL.git \
         && mkdir HighFive/build \
-        && cmake -DHIGHFIVE_EXAMPLES=OFF -DHIGHFIVE_PARALLEL_HDF5=ON -DHIGHFIVE_USE_EIGEN=ON -B /HighFive/build -S /HighFive \
+        && cmake -DHIGHFIVE_EXAMPLES=OFF -DHIGHFIVE_USE_EIGEN=ON -B /HighFive/build -S /HighFive \
         && make -j"$(nproc)" -C /HighFive/build \
         && make install -C /HighFive/build \
         && rm -rf HighFive
@@ -122,6 +121,23 @@ RUN git clone --recurse-submodules --depth 1 -b v1.35.0 https://github.com/grpc/
         && make install \
         && cd ../../.. \
         && rm -rf grpc
+
+####################################################
+#Install current googletest release
+####################################################
+
+# remove the old version of googletest and googlemock, introduced by catkin in the ros noetic base layer
+RUN dpkg -r --force-depends googletest libgtest-dev google-mock
+
+RUN git clone https://github.com/google/googletest.git -b release-1.12.0 \
+        && cd googletest \
+        && mkdir -p build \
+        && cd build \
+        && cmake .. \
+        && make -j"$(nproc)" \
+        && make install \
+        && cd ../../ \
+        && rm -rf googletest
 
 #Install python3 grpcio_tools'
 RUN pip3 install grpcio-tools
