@@ -62,11 +62,17 @@ void server::parseProgramOptions(int argc, char** argv)
       std::cout << it.first.c_str() << " ";
       auto& value = it.second.value();
       if (auto v = boost::any_cast<uint32_t>(&value))
-        std::cout << *v;
+      {
+          std::cout << *v;
+      }
       else if (auto v = boost::any_cast<std::string>(&value))
-        std::cout << *v;
+      {
+          std::cout << *v;
+      }
       else
-        std::cout << "error";
+      {
+          std::cout << "error";
+      }
     }
 
     if (m_vm.count("config"))
