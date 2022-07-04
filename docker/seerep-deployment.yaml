@@ -61,6 +61,8 @@ spec:
           ports:
             - containerPort: 9090
               protocol: TCP
+          args:
+            - help
           resources:
             limits:
               cpu: 100m
