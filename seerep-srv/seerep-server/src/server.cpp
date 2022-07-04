@@ -58,20 +58,21 @@ void server::parseProgramOptions(int argc, char** argv)
     store(boost::program_options::command_line_parser(argc, argv).options(cmdline_options).run(), m_vm);
     notify(m_vm);
 
-    for (const auto& it : m_vm) {
+    for (const auto& it : m_vm)
+    {
       std::cout << it.first.c_str() << " ";
       auto& value = it.second.value();
       if (auto v = boost::any_cast<uint32_t>(&value))
       {
-          std::cout << *v;
+        std::cout << *v;
       }
       else if (auto v = boost::any_cast<std::string>(&value))
       {
-          std::cout << *v;
+        std::cout << *v;
       }
       else
       {
-          std::cout << "error";
+        std::cout << "error";
       }
     }
 
