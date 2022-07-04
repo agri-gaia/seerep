@@ -6,10 +6,8 @@ server::server(int argc, char** argv)
 {
   std::cout << "Starting seerep server" << std::endl;
   signal(SIGINT, signalHandler);
-
   parseProgramOptions(argc, argv);
   initLogging();
-
   createGrpcServer();
 }
 
@@ -22,7 +20,6 @@ void server::signalHandler(int signum)
 {
   std::cout << "Interrupt signal (" << signum << ") received. Flushing log file." << std::endl;
   boost::log::core::get()->flush();
-
   exit(EXIT_SUCCESS);
 }
 
@@ -30,8 +27,6 @@ void server::parseProgramOptions(int argc, char** argv)
 {
   try
   {
-
-    std::cout << "parsing programming options" << std::endl;
     // Declare a group of options that will be
     // allowed only on command line
     boost::program_options::options_description generic("Generic options");
