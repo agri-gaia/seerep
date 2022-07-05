@@ -32,7 +32,7 @@ void server::parseProgramOptions(int argc, char** argv)
   {
     std::cout << "parsing programming options" << argv << std::endl;
 
-    for (i = 0; i < argc - 1; i++)
+    for (int i = 0; i < argc - 1; i++)
     {
       std::cout << "options" << argv[i] << std::endl;
     }
