@@ -6,10 +6,8 @@ server::server(int argc, char** argv)
 {
   std::cout << "Starting seerep server" << std::endl;
   signal(SIGINT, signalHandler);
-  std::cout << "trigger signal" << std::endl;
   parseProgramOptions(argc, argv);
   initLogging();
-
   createGrpcServer();
 }
 
@@ -22,7 +20,6 @@ void server::signalHandler(int signum)
 {
   std::cout << "Interrupt signal (" << signum << ") received. Flushing log file." << std::endl;
   boost::log::core::get()->flush();
-
   exit(EXIT_SUCCESS);
 }
 
@@ -30,13 +27,6 @@ void server::parseProgramOptions(int argc, char** argv)
 {
   try
   {
-    std::cout << "parsing programming options" << argv << std::endl;
-
-    for (int i = 0; i < argc - 1; i++)
-    {
-      std::cout << "options" << argv[i] << std::endl;
-    }
-
     // Declare a group of options that will be
     // allowed only on command line
     boost::program_options::options_description generic("Generic options");
@@ -63,24 +53,6 @@ void server::parseProgramOptions(int argc, char** argv)
 
     store(boost::program_options::command_line_parser(argc, argv).options(cmdline_options).run(), m_vm);
     notify(m_vm);
-
-    for (const auto& it : m_vm)
-    {
-      std::cout << it.first.c_str() << " ";
-      auto& value = it.second.value();
-      if (auto v = boost::any_cast<uint32_t>(&value))
-      {
-        std::cout << *v;
-      }
-      else if (auto v = boost::any_cast<std::string>(&value))
-      {
-        std::cout << *v;
-      }
-      else
-      {
-        std::cout << "error";
-      }
-    }
 
     if (m_vm.count("config"))
     {
