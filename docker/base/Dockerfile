@@ -127,9 +127,6 @@ RUN git clone --recurse-submodules --depth 1 -b v1.35.0 https://github.com/grpc/
 #Install current googletest release
 ####################################################
 
-# remove the old version of googletest and googlemock, introduced by catkin in the ros noetic base layer
-RUN dpkg -r --force-depends googletest libgtest-dev google-mock
-
 RUN git clone https://github.com/google/googletest.git -b release-1.12.0 \
         && cd googletest \
         && mkdir -p build \
