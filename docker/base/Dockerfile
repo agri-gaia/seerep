@@ -21,6 +21,7 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         git \
         sudo \
         ssh \
+        vim \
         build-essential \
         pkg-config \
         python3-catkin-tools \
