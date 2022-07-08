@@ -22,8 +22,8 @@ namespace seerep_core
 /**
  * @brief This is the class for a single instance
  *
- * It handles all data regarding instances. The attributes of the instances are queriable.
- * And the attributes can also be written. The changes are persistet in the HDF5 file via the
+ * It handles all data regarding instances. The attributes of the instances are queryable.
+ * And the attributes can also be written. The changes are persisted in the HDF5 file via the
  * corresponding IO class.
  *
  * The UUID of all data showing the instances are stored and can be easily queried.
@@ -35,7 +35,7 @@ class CoreInstance
 {
 public:
   /**
-   * @brief Contructs the object based on the given UUID and the HDF5 IO object
+   * @brief Constructs the object based on the given UUID and the HDF5 IO object
    * @param hdf5_io a shared pointer to the object handling the HDF5 io for instances
    * @param uuid the UUID of this instance
    */
