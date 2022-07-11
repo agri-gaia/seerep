@@ -1,9 +1,11 @@
 # SEEREP
 
-![catkin build
-workflow](https://github.com/agri-gaia/seerep/actions/workflows/main.yml/badge.svg)
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://pre-commit.com/)
-![Architecture](https://img.shields.io/badge/Architecture-x86-blue)
+![unstable](https://img.shields.io/badge/stability-unstable-orange)
+[![License](https://img.shields.io/badge/license-BSD_3-brightgreen)](./LICENSE)
+[![catkin build workflow](https://github.com/agri-gaia/seerep/actions/workflows/main.yml/badge.svg)](https://github.com/agri-gaia/seerep/actions)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](./.pre-commit-config.yaml)
+[![Docker](https://img.shields.io/badge/Docker-enabled-blue?logo=docker)](./docker)
+ <!-- ![Architecture](https://img.shields.io/badge/Architecture-x86-blue) -->
 
 ## Table of Contents
 
@@ -11,6 +13,13 @@ workflow](https://github.com/agri-gaia/seerep/actions/workflows/main.yml/badge.s
 - [Why](#why)
 - [Overview of SEEREP](#overview-of-seerep)
 - [Documentation](#further-documentation)
+
+## Maintainer
+
+Mark Höllmann\
+German Research Center for Artificial Intelligence,
+DFKI Niedersachsen\
+mark.hoellmann@dfki.de
 
 ## General
 
@@ -74,3 +83,5 @@ content. The page should be available under the default
 If you want to run [MkDocs](#mkdocs) and [Doxygen](#doxygen) at the same time
 you need to provide a different port to the  Doxygen web server, use `python3 -m
 http.server 8002` instead.
+
+<!-- ## Related Publications -->

@@ -24,7 +24,7 @@ set(Boost_USE_STATIC_RUNTIME OFF)
 find_package(Boost COMPONENTS log log_setup REQUIRED)
 
 enable_testing()
-find_package(GTest REQUIRED)
+find_package(GTest 1.12.0 REQUIRED)
 
 configure_file(include/SeerepHdf5FbConfig.h.in SeerepHdf5FbConfig.h)
 

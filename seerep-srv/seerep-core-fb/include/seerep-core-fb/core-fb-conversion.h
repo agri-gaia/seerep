@@ -29,14 +29,38 @@
 
 namespace seerep_core_fb
 {
+/**
+ * @brief This class converts between flatbuffer messages and seerep core specific messages
+ *
+ */
 class CoreFbConversion
 {
 public:
+  /**
+   * @brief converts the flatbuffer query message to seerep core specific message
+   * @param query the flatbuffer query message
+   * @return the query message in seerep core format
+   */
   static seerep_core_msgs::Query fromFb(const seerep::fb::Query& query);
+  /**
+   * @brief converts the flatbuffer image message to seerep core specific message
+   * @param img the flatbuffer image message
+   * @return the message in seerep core format for the data needed for the indices
+   */
   static seerep_core_msgs::DatasetIndexable fromFb(const seerep::fb::Image& img);
 
+  /**
+   * @brief converts the flatbuffer tf query message to seerep core specific message
+   * @param query the flatbuffer tf query message
+   * @return the tf query message in seerep core format
+   */
   static seerep_core_msgs::QueryTf fromFb(const seerep::fb::TransformStampedQuery& query);
 
+  /**
+   * @brief converts the query result from the seerep core format to gRPC flatbuffer message
+   * @param result the query result in seerep core specific format
+   * @return the result as gRPC flatbuffer message
+   */
   static flatbuffers::grpc::Message<seerep::fb::UuidsPerProject> toFb(seerep_core_msgs::QueryResult& result);
 };
 

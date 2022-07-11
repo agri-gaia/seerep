@@ -21,6 +21,7 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         git \
         sudo \
         ssh \
+        vim \
         build-essential \
         pkg-config \
         python3-catkin-tools \
@@ -66,6 +67,7 @@ RUN curl -s https://apt.kitware.com/kitware-archive.sh -o kitware-archive.sh \
 ####################################################
 RUN apt-get -qq update && apt-get -qq install --no-install-recommends -y -o=Dpkg::Use-Pty=0 \
         libhdf5-dev \
+        libhdf5-mpi-dev \
         libboost-all-dev \
         libeigen3-dev \
         && rm -rf /var/lib/apt/lists/*
@@ -125,9 +127,6 @@ RUN git clone --recurse-submodules --depth 1 -b v1.35.0 https://github.com/grpc/
 ####################################################
 #Install current googletest release
 ####################################################
-
-# remove the old version of googletest and googlemock, introduced by catkin in the ros noetic base layer
-RUN dpkg -r --force-depends googletest libgtest-dev google-mock
 
 RUN git clone https://github.com/google/googletest.git -b release-1.12.0 \
         && cd googletest \
