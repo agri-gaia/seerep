@@ -54,34 +54,4 @@ above-mentioned features.
 
 ![](docs/imgs//SEEREP-Overview.svg)
 
-## Documentation
-
-The documentation consists of two parts, [MkDocs](#mkdocs) which focuses on
-concepts, tutorials and general information, while [Doxygen](#doxygen) is used
-for code documentation.
-
-### MkDocs
-
-Since the documentation is currently not published to GitHub Pages, it needs to
-be run locally. For that, switch into the folder where the `mkdocs.yml` is
-located and use `mkdocs serve` to start the server. The page should then be
-available under [http://127.0.0.1:8000/](http://127.0.0.1:8000/).
-
-### Doxygen
-
-Same situation as with [MkDocs](#mkdocs), currently Doxygen is only available
-locally. To create the Doxygen output switch into the folder where the
-`Doxyfile` is located and run `doxygen Doxyfile`. Now an `html/` folder should
-be in the same directory.
-
-If you are **not working in the devcontainer** you can simply open the
-`index.html` with your browser of choice. **Otherwise,** switch into the `html`
-folder and use `python3 -m http.server` to start a local web server to serve the
-content. The page should be available under the default
-[http://0.0.0.0:8000/](http://0.0.0.0:8000/) address.
-
-If you want to run [MkDocs](#mkdocs) and [Doxygen](#doxygen) at the same time
-you need to provide a different port to the  Doxygen web server, use `python3 -m
-http.server 8002` instead.
-
 <!-- ## Related Publications -->

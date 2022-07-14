@@ -1,4 +1,4 @@
-# Testing
+# Tests
 
 We are currently working on integrating more tests into SEEREP.
 [GoogleTest](https://github.com/google/googletest) is used as  a testing
