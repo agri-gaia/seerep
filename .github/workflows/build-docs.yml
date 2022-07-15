@@ -1,0 +1,57 @@
+name: Build Docs
+
+on: push #for testing
+
+env:
+  DOX_REL: https://github.com/doxygen/doxygen/archive/refs/tags
+  DOX_VER: Release_1_9_3
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout SEEREP
+        uses: actions/checkout@v3
+      - name: Download MkDocs
+        shell: bash
+        run: |
+          sudo python3 -m pip install mkdocs-material
+      - name: Download Doxygen
+        shell: bash
+        run: |
+          sudo apt update && sudo apt install graphviz
+          wget $DOX_REL/$DOX_VER.tar.gz
+          tar -xf $DOX_VER.tar.gz
+          mkdir -p doxygen-$DOX_VER/build
+          cd doxygen-$DOX_VER/build
+          cmake -G "Unix Makefiles" ..
+          make -j"$(nproc)"
+          make install
+          cd ../..
+          rm -rf doxygen-$DOX_VER $DOX_VER.tar.gz
+      - name: Build MkDocs
+        shell: bash
+        run: |
+          mkdocs build
+          mkdir -p ${{ github.workspace }}/public/mkdocs
+          cp -r ./site/* ${{ github.workspace }}/public/mkdocs
+      - name: Build Doxygen
+        shell: bash
+        run: |
+          doxygen Doxyfile
+          mkdir -p ${{ github.workspace }}//public/doxygen
+          cp -r ./doxygen/html/* ${{ github.workspace }}//public/doxygen
+      - name: Additional files
+        shell: bash
+        run: |
+          ls $GITHUB_WORKSPACE/public
+          cp -r ./docs/gh-pages/index.html ${{ github.workspace }}//public/index.html
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ${{ github.workspace }}/public
+          user_name: 'github-actions'
+          user_email: 'github-actions@users.noreply.github.com'
