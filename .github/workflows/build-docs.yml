@@ -1,6 +1,14 @@
 name: Build Docs
 
-on: push #for testing
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - docs/**
+      - mkdocs.yml
+      - Doxyfile
+  workflow_dispatch:
 
 env:
   DOX_REL: https://github.com/doxygen/doxygen/archive/refs/tags
