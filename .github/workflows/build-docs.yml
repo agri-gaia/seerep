@@ -37,8 +37,6 @@ jobs:
           cmake -G "Unix Makefiles" ..
           make -j"$(nproc)"
           make install
-          cd ../..
-          rm -rf doxygen-$DOX_VER $DOX_VER.tar.gz
       - name: Build MkDocs
         shell: bash
         run: |
@@ -50,11 +48,10 @@ jobs:
         run: |
           doxygen Doxyfile
           mkdir -p ${{ github.workspace }}//public/doxygen
-          cp -r ./doxygen/html/* ${{ github.workspace }}//public/doxygen
+          cp -r ./doxygen-output/html/* ${{ github.workspace }}//public/doxygen
       - name: Additional files
         shell: bash
         run: |
-          ls $GITHUB_WORKSPACE/public
           cp -r ./docs/gh-pages/index.html ${{ github.workspace }}//public/index.html
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3

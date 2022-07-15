@@ -1,5 +1,6 @@
 site_name: SEEREP Documentation
 repo_url: https://github.com/agri-gaia/seerep
+docs_dir: docs/mkdocs
 nav:
   - Home: index.md
   - Getting started:
@@ -10,7 +11,6 @@ nav:
   - Tutorials:
     - Python: 'tutorials-python.md'
     - C++: 'tutorials-c++.md'
-
 theme:
   name: material
   language: en

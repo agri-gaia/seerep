@@ -40,5 +40,5 @@
 
 # never commit the doxygen / mkdocs output folder
 **/html/**
-doxygen
+doxygen-output
 site
