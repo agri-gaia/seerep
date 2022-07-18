@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import sys
 
 import flatbuffers
 from fb import Empty, ProjectInfos
@@ -24,6 +25,6 @@ buf = builder.Output()
 responseBuf = stub.GetProjects(bytes(buf))
 response = ProjectInfos.ProjectInfos.GetRootAs(responseBuf)
 
-print(server + " has the following projects (name/uuid):")
+print("The server has the following projects (name/uuid):")
 for i in range(response.ProjectsLength()):
     print("\t" + response.Projects(i).Name().decode("utf-8") + " " + response.Projects(i).Uuid().decode("utf-8"))

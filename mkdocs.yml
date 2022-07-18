@@ -2,15 +2,17 @@ site_name: SEEREP Documentation
 repo_url: https://github.com/agri-gaia/seerep
 docs_dir: docs/mkdocs
 nav:
-  - Home: index.md
+  - Home: 'home/index.md'
   - Getting started:
-    - Installation: installation.md
-    - Package Overview: packages.md
-    - Docs: docs.md
-    - Tests: testing.md
+    - Installation: 'getting-started/installation.md'
+    - Docs: 'getting-started/docs.md'
+    - Tests: 'getting-started/tests.md'
+  - Reference:
+    - Package Overview: 'reference/packages.md'
   - Tutorials:
-    - Python: 'tutorials-python.md'
-    - C++: 'tutorials-c++.md'
+    - Overview: 'tutorials/overview.md'
+    - Creating & retrieving projects: 'tutorials/projects.md'
+    - Sending & Querying Images: 'tutorials/images.md'
 theme:
   name: material
   language: en
@@ -25,7 +27,8 @@ markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.superfences
-  - meta
+  - pymdownx.tabbed:
+      alternate_style: true
   - attr_list
 copyright: >
         <a href="/seerep/mkdocs/legal-notice/index.html">Legal Notice</a> - <a href="/seerep/mkdocs/data-protection-notice/index.html">Data Protection Notice</a>

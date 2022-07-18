@@ -4,6 +4,7 @@ import os
 import sys
 
 import flatbuffers
+import grpc
 from fb import (
     Boundingbox,
     Empty,

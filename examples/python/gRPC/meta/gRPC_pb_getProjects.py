@@ -18,6 +18,6 @@ stub = metaOperations.MetaOperationsStub(channel)
 response = stub.GetProjects(empty_pb2.Empty())
 
 
-print(server + " has the following projects (name/uuid):")
+print("The server has the following projects (name/uuid):")
 for projectinfo in response.projects:
     print("\t" + projectinfo.name + " " + projectinfo.uuid)
