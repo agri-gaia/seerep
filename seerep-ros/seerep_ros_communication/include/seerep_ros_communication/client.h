@@ -62,6 +62,8 @@ public:
   std::string projectuuid;
 
 private:
+  void checkStatus(const grpc::Status& status, const seerep::ServerResponse& response) const;
+
   StubTransferPbPtr stub_;
   StubImagePbPtr stubImage_;
   StubPointCloudPbPtr stubPointCloud_;
