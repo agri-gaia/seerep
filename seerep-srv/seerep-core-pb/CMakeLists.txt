@@ -38,6 +38,7 @@ include_directories(
 )
 
 add_library(seerepcorepb
+	src/core-pb-conversion.cpp
 	src/core-pb-tf.cpp
 	src/core-pb-pointcloud.cpp
 	src/core-pb-image.cpp
@@ -55,6 +56,7 @@ target_link_libraries(seerepcorepb
 )
 
 set(INSTALL_HEADERS
+	include/seerep-core-pb/core-pb-conversion.h
 	include/seerep-core-pb/core-pb-tf.h
 	include/seerep-core-pb/core-pb-pointcloud.h
 	include/seerep-core-pb/core-pb-image.h
