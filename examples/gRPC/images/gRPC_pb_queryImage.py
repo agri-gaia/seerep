@@ -3,132 +3,60 @@
 import os
 import sys
 
-import flatbuffers
 import grpc
-from query_pb2 import Query
-from seerep.fb import (
-    Boundingbox,
-    Empty,
-    Header,
-    Image,
-    Point,
-    ProjectInfos,
-    Query,
-    TimeInterval,
-    Timestamp,
-)
-from seerep.fb import image_service_grpc_fb as imageService
-from seerep.fb import meta_operations_grpc_fb as metaOperations
+import image_service_pb2_grpc as imageService
+import meta_operations_pb2_grpc as metaOperations
+import query_pb2 as query
+from google.protobuf import empty_pb2
 
 # import numpy as np
 
-
 # server with certs
-# __location__ = os.path.realpath(
-#     os.path.join(os.getcwd(), os.path.dirname(__file__))) + "/../"
-# with open(os.path.join(__location__, 'tls.pem'), 'rb') as f:
-#     root_cert = f.read()
-# server = "seerep.robot.10.249.3.13.nip.io:32141"
-# creds = grpc.ssl_channel_credentials(root_cert)
-# channel = grpc.secure_channel(server, creds)
+__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+with open(os.path.join(__location__, '../tls.pem'), 'rb') as f:
+    root_cert = f.read()
+server = "seerep.robot.10.249.3.13.nip.io:32141"
+creds = grpc.ssl_channel_credentials(root_cert)
+channel = grpc.secure_channel(server, creds)
 
 # server without certs
-server = "localhost:9090"
-channel = grpc.insecure_channel(server)
+# channel = grpc.insecure_channel("localhost:9090")
 
 stub = imageService.ImageServiceStub(channel)
 stubMeta = metaOperations.MetaOperationsStub(channel)
 
-builder = flatbuffers.Builder(1024)
-Empty.Start(builder)
-emptyMsg = Empty.End(builder)
-builder.Finish(emptyMsg)
-buf = builder.Output()
-
-responseBuf = stubMeta.GetProjects(bytes(buf))
-response = ProjectInfos.ProjectInfos.GetRootAs(responseBuf)
+response = stubMeta.GetProjects(empty_pb2.Empty())
 
 projectuuid = ""
-for i in range(response.ProjectsLength()):
-    print(response.Projects(i).Name().decode("utf-8") + " " + response.Projects(i).Uuid().decode("utf-8"))
-    if response.Projects(i).Name().decode("utf-8") == "agricultural_demonstator":
-        projectuuid = response.Projects(i).Uuid().decode("utf-8")
+for project in response.projects:
+    print(project.name + " " + project.uuid)
+    if project.name == "testproject":
+        projectuuid = project.uuid
 
 if projectuuid == "":
     sys.exit()
 
-Point.Start(builder)
-Point.AddX(builder, -100.0)
-Point.AddY(builder, -100.0)
-Point.AddZ(builder, -100.0)
-pointMin = Point.End(builder)
 
-Point.Start(builder)
-Point.AddX(builder, 100.0)
-Point.AddY(builder, 100.0)
-Point.AddZ(builder, 100.0)
-pointMax = Point.End(builder)
+theQuery = query.Query()
+theQuery.projectuuid.append(projectuuid)
+theQuery.boundingbox.header.frame_id = "map"
 
-frameId = builder.CreateString("map")
-Header.Start(builder)
-Header.AddFrameId(builder, frameId)
-header = Header.End(builder)
+theQuery.boundingbox.point_min.x = 0.0
+theQuery.boundingbox.point_min.y = 0.0
+theQuery.boundingbox.point_min.z = 0.0
+theQuery.boundingbox.point_max.x = 100.0
+theQuery.boundingbox.point_max.y = 100.0
+theQuery.boundingbox.point_max.z = 100.0
 
-Boundingbox.Start(builder)
-Boundingbox.AddPointMin(builder, pointMin)
-Boundingbox.AddPointMax(builder, pointMax)
-Boundingbox.AddHeader(builder, header)
-boundingbox = Boundingbox.End(builder)
+# since epoche
+theQuery.timeinterval.time_min.seconds = 1638549273
+theQuery.timeinterval.time_min.nanos = 0
+theQuery.timeinterval.time_max.seconds = 1938549273
+theQuery.timeinterval.time_max.nanos = 0
 
-Timestamp.Start(builder)
-Timestamp.AddSeconds(builder, 1610549273)
-Timestamp.AddNanos(builder, 0)
-timeMin = Timestamp.End(builder)
-
-Timestamp.Start(builder)
-Timestamp.AddSeconds(builder, 1938549273)
-Timestamp.AddNanos(builder, 0)
-timeMax = Timestamp.End(builder)
-
-TimeInterval.Start(builder)
-TimeInterval.AddTimeMin(builder, timeMin)
-TimeInterval.AddTimeMax(builder, timeMax)
-timeInterval = TimeInterval.End(builder)
-
-projectuuidString = builder.CreateString(projectuuid)
-Query.StartProjectuuidVector(builder, 1)
-builder.PrependUOffsetTRelative(projectuuidString)
-projectuuidMsg = builder.EndVector()
+# labels
+theQuery.label.extend(["testlabel0"])
 
 
-label = builder.CreateString("1")
-Query.StartLabelVector(builder, 1)
-builder.PrependUOffsetTRelative(label)
-labelMsg = builder.EndVector()
-
-Query.Start(builder)
-Query.AddBoundingbox(builder, boundingbox)
-Query.AddTimeinterval(builder, timeInterval)
-Query.AddProjectuuid(builder, projectuuidMsg)
-Query.AddLabel(builder, labelMsg)
-queryMsg = Query.End(builder)
-
-builder.Finish(queryMsg)
-buf = builder.Output()
-
-for responseBuf in stub.GetImage(bytes(buf)):
-    response = Image.Image.GetRootAs(responseBuf)
-    print("uuidmsg: " + response.Header().UuidMsgs().decode("utf-8"))
-    if response.LabelsBbLength() > 0:
-        print("first label: " + response.LabelsBb(0).LabelWithInstance().Label().decode("utf-8"))
-
-        print(
-            "first BoundingBox (Xmin,Ymin,Xmax,Ymax): "
-            + str(response.LabelsBb(0).BoundingBox().PointMin().X())
-            + " "
-            + str(response.LabelsBb(0).BoundingBox().PointMin().Y())
-            + " "
-            + str(response.LabelsBb(0).BoundingBox().PointMax().X())
-            + " "
-            + str(response.LabelsBb(0).BoundingBox().PointMax().Y())
-        )
+for img in stub.GetImage(theQuery):
+    print("uuid of transfered img: " + img.labels_general[0])

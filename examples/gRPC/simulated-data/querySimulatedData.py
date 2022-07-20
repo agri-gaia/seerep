@@ -24,8 +24,8 @@ from seerep.fb import meta_operations_grpc_fb as metaOperations
 
 
 # # server with certs
-# __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__))) + "/../"
-# with open(os.path.join(__location__, 'tls.pem'), 'rb') as f:
+# __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+# with open(os.path.join(__location__, '../tls.pem'), 'rb') as f:
 #     root_cert = f.read()
 # server = "seerep.robot.10.249.3.13.nip.io:32141"
 # creds = grpc.ssl_channel_credentials(root_cert)

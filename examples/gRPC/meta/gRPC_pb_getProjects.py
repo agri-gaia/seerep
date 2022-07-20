@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import os
 import sys
 
 import grpc
@@ -7,8 +8,8 @@ import meta_operations_pb2_grpc as metaOperations
 from google.protobuf import empty_pb2
 
 # # server with certs
-# __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__))) + "/../"
-# with open(os.path.join(__location__, 'tls.pem'), 'rb') as f:
+# __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+# with open(os.path.join(__location__, '../tls.pem'), 'rb') as f:
 #     root_cert = f.read()
 # server = "seerep.robot.10.249.3.13.nip.io:32141"
 # creds = grpc.ssl_channel_credentials(root_cert)
