@@ -28,10 +28,6 @@ find_package(catkin REQUIRED
 	seerep_ros_conversions_fb
 )
 
-# message("LIBS" ${SeerepCorePb_LIBRARIES})
-# message("INCS" ${SeerepCorePb_INCLUDE_DIRS})
-# message("INCS2" ${HighFive_INCLUDE_DIRS})
-
 include_directories(
 	include
 	${SeerepCom_INCLUDE_DIRS}
@@ -45,22 +41,6 @@ include_directories(
 	${Boost_INCLUDE_DIRS}
 	${catkin_INCLUDE_DIRS}
 )
-
-# add_library(${PROJECT_NAME}_server_grpc
-# 	src/meta-operations.cpp
-# 	src/tf-service.cpp
-# 	src/image-service.cpp
-# 	src/point-cloud-service.cpp
-# 	# src/receive-sensor-msgs.cpp
-# )
-
-# set(INSTALL_HEADERS
-# 	include/${PROJECT_NAME}/meta-operations.h
-# 	include/${PROJECT_NAME}/tf-service.h
-# 	include/${PROJECT_NAME}/image-service.h
-# 	include/${PROJECT_NAME}/point-cloud-service.h
-# 	# include/${PROJECT_NAME}/receive-sensor-msgs.h
-# )
 
 add_executable(${PROJECT_NAME}_server
 	src/server.cpp
@@ -86,12 +66,11 @@ target_link_libraries(${PROJECT_NAME}_server
 	${Boost_LIBRARIES}
 	${Boost_LOG_LIBRARY} ${Boost_LOG_SETUP_LIBRARY}
 	gRPC::grpc++_reflection
-	# ${PROJECT_NAME}_server_grpc
 	Eigen3::Eigen
 )
 
 
-install(TARGETS ${PROJECT_NAME}_server #${PROJECT_NAME}_server_grpc
+install(TARGETS ${PROJECT_NAME}_server
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
