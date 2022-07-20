@@ -6,46 +6,11 @@ seerep_core_msgs::Query CoreFbConversion::fromFb(const seerep::fb::Query& query)
 {
   seerep_core_msgs::Query queryCore;
   queryCore.header.datatype = seerep_core_msgs::Datatype::Images;
-  boost::uuids::string_generator gen;
 
-  if (query.projectuuid() != NULL)
-  {
-    queryCore.projects = std::vector<boost::uuids::uuid>();
-    for (auto projectuuid : *query.projectuuid())
-    {
-      queryCore.projects.value().push_back(gen(projectuuid->str()));
-    }
-  }
-
-  if (query.label() != NULL)
-  {
-    queryCore.label = std::vector<std::string>();
-    for (auto label : *query.label())
-    {
-      queryCore.label.value().push_back(label->str());
-    }
-  }
-
-  if (query.timeinterval() != NULL)
-  {
-    queryCore.timeinterval = seerep_core_msgs::Timeinterval();
-    queryCore.timeinterval.value().timeMin.seconds = query.timeinterval()->time_min()->seconds();
-    queryCore.timeinterval.value().timeMax.seconds = query.timeinterval()->time_max()->seconds();
-    queryCore.timeinterval.value().timeMin.nanos = query.timeinterval()->time_min()->nanos();
-    queryCore.timeinterval.value().timeMax.nanos = query.timeinterval()->time_max()->nanos();
-  }
-
-  if (query.boundingbox() != NULL)
-  {
-    queryCore.header.frameId = query.boundingbox()->header()->frame_id()->str();
-    queryCore.boundingbox = seerep_core_msgs::AABB();
-    queryCore.boundingbox.value().min_corner().set<0>(query.boundingbox()->point_min()->x());
-    queryCore.boundingbox.value().min_corner().set<1>(query.boundingbox()->point_min()->y());
-    queryCore.boundingbox.value().min_corner().set<2>(query.boundingbox()->point_min()->z());
-    queryCore.boundingbox.value().max_corner().set<0>(query.boundingbox()->point_max()->x());
-    queryCore.boundingbox.value().max_corner().set<1>(query.boundingbox()->point_max()->y());
-    queryCore.boundingbox.value().max_corner().set<2>(query.boundingbox()->point_max()->z());
-  }
+  toFBProject(query, queryCore);
+  toFBLabel(query, queryCore);
+  toFBTime(query, queryCore);
+  toFBBoundingBox(query, queryCore);
 
   return queryCore;
 }
@@ -176,4 +141,55 @@ flatbuffers::grpc::Message<seerep::fb::UuidsPerProject> CoreFbConversion::toFb(s
   return builder.ReleaseMessage<seerep::fb::UuidsPerProject>();
 }
 
+void CoreFbConversion::toFBProject(const seerep::fb::Query& query, seerep_core_msgs::Query& queryCore)
+{
+  boost::uuids::string_generator gen;
+  if (query.projectuuid() != NULL)
+  {
+    queryCore.projects = std::vector<boost::uuids::uuid>();
+    for (auto projectuuid : *query.projectuuid())
+    {
+      queryCore.projects.value().push_back(gen(projectuuid->str()));
+    }
+  }
+}
+
+void CoreFbConversion::toFBLabel(const seerep::fb::Query& query, seerep_core_msgs::Query& queryCore)
+{
+  if (query.label() != NULL)
+  {
+    queryCore.label = std::vector<std::string>();
+    for (auto label : *query.label())
+    {
+      queryCore.label.value().push_back(label->str());
+    }
+  }
+}
+
+void CoreFbConversion::toFBTime(const seerep::fb::Query& query, seerep_core_msgs::Query& queryCore)
+{
+  if (query.timeinterval() != NULL)
+  {
+    queryCore.timeinterval = seerep_core_msgs::Timeinterval();
+    queryCore.timeinterval.value().timeMin.seconds = query.timeinterval()->time_min()->seconds();
+    queryCore.timeinterval.value().timeMax.seconds = query.timeinterval()->time_max()->seconds();
+    queryCore.timeinterval.value().timeMin.nanos = query.timeinterval()->time_min()->nanos();
+    queryCore.timeinterval.value().timeMax.nanos = query.timeinterval()->time_max()->nanos();
+  }
+}
+
+void CoreFbConversion::toFBBoundingBox(const seerep::fb::Query& query, seerep_core_msgs::Query& queryCore)
+{
+  if (query.boundingbox() != NULL)
+  {
+    queryCore.header.frameId = query.boundingbox()->header()->frame_id()->str();
+    queryCore.boundingbox = seerep_core_msgs::AABB();
+    queryCore.boundingbox.value().min_corner().set<0>(query.boundingbox()->point_min()->x());
+    queryCore.boundingbox.value().min_corner().set<1>(query.boundingbox()->point_min()->y());
+    queryCore.boundingbox.value().min_corner().set<2>(query.boundingbox()->point_min()->z());
+    queryCore.boundingbox.value().max_corner().set<0>(query.boundingbox()->point_max()->x());
+    queryCore.boundingbox.value().max_corner().set<1>(query.boundingbox()->point_max()->y());
+    queryCore.boundingbox.value().max_corner().set<2>(query.boundingbox()->point_max()->z());
+  }
+}
 }  // namespace seerep_core_fb
