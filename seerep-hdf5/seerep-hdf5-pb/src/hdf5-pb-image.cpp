@@ -127,15 +127,6 @@ std::optional<seerep::Image> Hdf5PbImage::readImage(const std::string& id)
     }
   }
 
-  // std::cout << "read_data:" << std::endl;
-  // int j = 0;
-  // for (const auto& i : read_data)
-  // {
-  //   std::cout << unsigned(i) << ' ';
-  //   j++;
-  //   // if (j > 50)
-  //   // break;
-  // }
   image.set_data(data, sizeof(data));
 
   *image.mutable_header() = readHeaderAttributes(*data_set_ptr);
