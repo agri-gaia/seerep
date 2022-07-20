@@ -6,6 +6,8 @@
 #include <seerep-core-pb/core-pb-image.h>
 #include <seerep-core/core.h>
 
+#include "util.hpp"
+
 namespace seerep_server
 {
 class PbImageService final : public seerep::ImageService::Service

@@ -6,6 +6,8 @@
 #include <seerep-core-fb/core-fb-tf.h>
 #include <seerep-core/core.h>
 
+#include "util.hpp"
+
 // logging
 #include <boost/log/sources/severity_logger.hpp>
 #include <boost/log/trivial.hpp>
