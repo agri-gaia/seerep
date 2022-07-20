@@ -13,9 +13,9 @@
 #include <seerep-com/transfer-sensor-msgs.grpc.pb.h>
 
 // seerep-fb
-#include <seerep-com/image-service.grpc.fb.h>
-#include <seerep-com/meta-operations.grpc.fb.h>
-#include <seerep-com/tf-service.grpc.fb.h>
+#include <seerep-com/image_service.grpc.fb.h>
+#include <seerep-com/meta_operations.grpc.fb.h>
+#include <seerep-com/tf_service.grpc.fb.h>
 
 // seerep-com
 #include <seerep_ros_conversions_pb/conversions.h>

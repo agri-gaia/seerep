@@ -29,11 +29,11 @@ protobuf_generate_cpp(
 )
 
 set(MY_FBS_FILES
-  fbs/image-service.fbs
-  fbs/instance-service.fbs
-  fbs/meta-operations.fbs
-  fbs/tf-service.fbs
-  fbs/transfer-sensor-msgs.fbs
+  fbs/image_service.fbs
+  fbs/instance_service.fbs
+  fbs/meta_operations.fbs
+  fbs/tf_service.fbs
+  fbs/transfer_sensor_msgs.fbs
 )
 
 build_flatbuffers("${MY_FBS_FILES}" "${SeerepMsgs_FLATBUFFERS_IMPORT_DIRS}" fbschemas "" "${CMAKE_CURRENT_BINARY_DIR}/fbs" "${CMAKE_CURRENT_BINARY_DIR}/fbs" "" )
