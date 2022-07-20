@@ -12,7 +12,7 @@ from google.protobuf import empty_pb2
 # import numpy as np
 
 # # server with certs
-# __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+# __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__))) + "/../"
 # with open(os.path.join(__location__, '../tls.pem'), 'rb') as f:
 #     root_cert = f.read()
 # server = "seerep.robot.10.249.3.13.nip.io:32141"
