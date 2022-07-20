@@ -67,7 +67,7 @@ std::shared_ptr<seerep_hdf5_pb::Hdf5PbTf> CorePbTf::getHdf5(boost::uuids::uuid p
 {
   // find the project based on its uuid
   auto hdf5io = m_hdf5IoMap.find(project);
-  // if project was found add tf
+  // if project was found return hdf5 accessor
   if (hdf5io != m_hdf5IoMap.end())
   {
     return hdf5io->second;

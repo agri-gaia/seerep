@@ -62,6 +62,32 @@ public:
    * @return the result as gRPC flatbuffer message
    */
   static flatbuffers::grpc::Message<seerep::fb::UuidsPerProject> toFb(seerep_core_msgs::QueryResult& result);
+
+private:
+  /**
+   * @brief converts the project part of the flatbuffer query message to seerep core specific message
+   * @param query the flatbuffer query message
+   * @param queryCore query message in seerep core format
+   */
+  static void toFBProject(const seerep::fb::Query& query, seerep_core_msgs::Query& queryCore);
+  /**
+   * @brief converts the label part of the flatbuffer query message to seerep core specific message
+   * @param query the flatbuffer query message
+   * @param queryCore query message in seerep core format
+   */
+  static void toFBLabel(const seerep::fb::Query& query, seerep_core_msgs::Query& queryCore);
+  /**
+   * @brief converts the temporal part of the flatbuffer query message to seerep core specific message
+   * @param query the flatbuffer query message
+   * @param queryCore query message in seerep core format
+   */
+  static void toFBTime(const seerep::fb::Query& query, seerep_core_msgs::Query& queryCore);
+  /**
+   * @brief converts the spatial part of the flatbuffer query message to seerep core specific message
+   * @param query the flatbuffer query message
+   * @param queryCore query message in seerep core format
+   */
+  static void toFBBoundingBox(const seerep::fb::Query& query, seerep_core_msgs::Query& queryCore);
 };
 
 }  // namespace seerep_core_fb
