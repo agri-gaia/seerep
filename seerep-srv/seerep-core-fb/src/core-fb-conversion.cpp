@@ -7,10 +7,10 @@ seerep_core_msgs::Query CoreFbConversion::fromFb(const seerep::fb::Query& query)
   seerep_core_msgs::Query queryCore;
   queryCore.header.datatype = seerep_core_msgs::Datatype::Images;
 
-  toFBProject(query, queryCore);
-  toFBLabel(query, queryCore);
-  toFBTime(query, queryCore);
-  toFBBoundingBox(query, queryCore);
+  fromFbProject(query, queryCore);
+  fromFbLabel(query, queryCore);
+  fromFbTime(query, queryCore);
+  fromFbBoundingBox(query, queryCore);
 
   return queryCore;
 }
@@ -141,7 +141,7 @@ flatbuffers::grpc::Message<seerep::fb::UuidsPerProject> CoreFbConversion::toFb(s
   return builder.ReleaseMessage<seerep::fb::UuidsPerProject>();
 }
 
-void CoreFbConversion::toFBProject(const seerep::fb::Query& query, seerep_core_msgs::Query& queryCore)
+void CoreFbConversion::fromFbProject(const seerep::fb::Query& query, seerep_core_msgs::Query& queryCore)
 {
   boost::uuids::string_generator gen;
   if (query.projectuuid() != NULL)
@@ -154,7 +154,7 @@ void CoreFbConversion::toFBProject(const seerep::fb::Query& query, seerep_core_m
   }
 }
 
-void CoreFbConversion::toFBLabel(const seerep::fb::Query& query, seerep_core_msgs::Query& queryCore)
+void CoreFbConversion::fromFbLabel(const seerep::fb::Query& query, seerep_core_msgs::Query& queryCore)
 {
   if (query.label() != NULL)
   {
@@ -166,7 +166,7 @@ void CoreFbConversion::toFBLabel(const seerep::fb::Query& query, seerep_core_msg
   }
 }
 
-void CoreFbConversion::toFBTime(const seerep::fb::Query& query, seerep_core_msgs::Query& queryCore)
+void CoreFbConversion::fromFbTime(const seerep::fb::Query& query, seerep_core_msgs::Query& queryCore)
 {
   if (query.timeinterval() != NULL)
   {
@@ -178,7 +178,7 @@ void CoreFbConversion::toFBTime(const seerep::fb::Query& query, seerep_core_msgs
   }
 }
 
-void CoreFbConversion::toFBBoundingBox(const seerep::fb::Query& query, seerep_core_msgs::Query& queryCore)
+void CoreFbConversion::fromFbBoundingBox(const seerep::fb::Query& query, seerep_core_msgs::Query& queryCore)
 {
   if (query.boundingbox() != NULL)
   {

@@ -18,13 +18,8 @@ CorePbTf::~CorePbTf()
 std::optional<seerep::TransformStamped> CorePbTf::getData(const seerep::TransformStampedQuery& query)
 {
   std::cout << "loading tf from tfs/" << std::endl;
-  boost::uuids::string_generator gen;
-  seerep_core_msgs::QueryTf queryTf;
-  queryTf.childFrameId = query.child_frame_id();
-  queryTf.parentFrameId = query.header().frame_id();
-  queryTf.project = gen(query.header().uuid_project());
-  queryTf.timestamp.seconds = query.header().stamp().seconds();
-  queryTf.timestamp.nanos = query.header().stamp().nanos();
+  seerep_core_msgs::QueryTf queryTf = CorePbConversion::fromPb(query);
+
   std::optional<geometry_msgs::TransformStamped> result = m_seerepCore->getTF(queryTf);
 
   if (result)
