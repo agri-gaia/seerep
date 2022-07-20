@@ -94,15 +94,7 @@ grpc::Status FbImageService::TransferImage(grpc::ServerContext* context,
         // also catching core doesn't have project with uuid error
         BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
 
-        flatbuffers::grpc::MessageBuilder builder;
-        auto msg = builder.CreateString(std::string(e.what()));
-        seerep::fb::ServerResponseBuilder responseBuilder(builder);
-        responseBuilder.add_message(msg);
-        responseBuilder.add_transmission_state(seerep::fb::TRANSMISSION_STATE_FAILURE);
-        auto responseOffset = responseBuilder.Finish();
-        builder.Finish(responseOffset);
-        *response = builder.ReleaseMessage<seerep::fb::ServerResponse>();
-        assert(response->Verify());
+        seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
 
         return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
       }
@@ -112,15 +104,8 @@ grpc::Status FbImageService::TransferImage(grpc::ServerContext* context,
       answer = "a msg had no project uuid!";
     }
   }
-  flatbuffers::grpc::MessageBuilder builder;
-  auto msg = builder.CreateString(answer);
-  seerep::fb::ServerResponseBuilder responseBuilder(builder);
-  responseBuilder.add_message(msg);
-  responseBuilder.add_transmission_state(seerep::fb::TRANSMISSION_STATE_SUCCESS);
-  auto responseOffset = responseBuilder.Finish();
-  builder.Finish(responseOffset);
-  *response = builder.ReleaseMessage<seerep::fb::ServerResponse>();
-  assert(response->Verify());
+
+  seerep_server_util::createResponseFb(answer, seerep::fb::TRANSMISSION_STATE_SUCCESS, response);
 
   return grpc::Status::OK;
 }
@@ -152,15 +137,7 @@ grpc::Status FbImageService::AddBoundingBoxes2dLabeled(
         // also catching core doesn't have project with uuid error
         BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
 
-        flatbuffers::grpc::MessageBuilder builder;
-        auto msg = builder.CreateString(std::string(e.what()));
-        seerep::fb::ServerResponseBuilder responseBuilder(builder);
-        responseBuilder.add_message(msg);
-        responseBuilder.add_transmission_state(seerep::fb::TRANSMISSION_STATE_FAILURE);
-        auto responseOffset = responseBuilder.Finish();
-        builder.Finish(responseOffset);
-        *response = builder.ReleaseMessage<seerep::fb::ServerResponse>();
-        assert(response->Verify());
+        seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
 
         return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
       }
@@ -171,15 +148,7 @@ grpc::Status FbImageService::AddBoundingBoxes2dLabeled(
     }
   }
 
-  flatbuffers::grpc::MessageBuilder builder;
-  auto msg = builder.CreateString(answer);
-  seerep::fb::ServerResponseBuilder responseBuilder(builder);
-  responseBuilder.add_message(msg);
-  responseBuilder.add_transmission_state(seerep::fb::TRANSMISSION_STATE_SUCCESS);
-  auto responseOffset = responseBuilder.Finish();
-  builder.Finish(responseOffset);
-  *response = builder.ReleaseMessage<seerep::fb::ServerResponse>();
-  assert(response->Verify());
+  seerep_server_util::createResponseFb(answer, seerep::fb::TRANSMISSION_STATE_SUCCESS, response);
 
   return grpc::Status::OK;
 }

@@ -77,6 +77,22 @@ private:
   void initLogging();
 
   /**
+   * @brief sets the severity level of the logging
+   */
+  void setSeverityLevel();
+
+  /**
+   * @brief initializes the file logging
+   * @return the folder in which the logs are stored
+   */
+  std::string initFileLogging();
+
+  /**
+   * @brief initializes the console logging
+   */
+  void initConsoleLogging();
+
+  /**
    * @brief creates the gRPC server
    *
    * The SEEREP core, the flatbuffer services and the protobuf services are created
@@ -110,7 +126,7 @@ private:
   void createServicesFb();
 
   /** @brief the value map of the program options from commandline or cfg file*/
-  boost::program_options::variables_map m_vm;
+  boost::program_options::variables_map m_programOptionsMap;
 
   /** @brief the seerep core which deals with the data indexing*/
   std::shared_ptr<seerep_core::Core> m_seerepCore;
