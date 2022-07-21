@@ -5,7 +5,6 @@ import sys
 
 import flatbuffers
 import grpc
-from query_pb2 import Query
 from seerep.fb import (
     Boundingbox,
     Empty,
