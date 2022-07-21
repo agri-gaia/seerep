@@ -37,29 +37,78 @@ std::optional<std::vector<geometry_msgs::TransformStamped>> Hdf5CoreTf::readTran
   }
 
   // read frames
-  std::string parentframe;
-  group_ptr->getAttribute("PARENT_FRAME").read(parentframe);
-  std::string childframe;
-  group_ptr->getAttribute("CHILD_FRAME").read(childframe);
+  std::string parentframe = readFrame("PARENT_FRAME", group_ptr);
+  std::string childframe = readFrame("CHILD_FRAME", group_ptr);
+  std::vector<std::vector<int64_t>> time = readTime(hdf5DatasetTimePath);
+  std::vector<std::vector<double>> trans = readTranslation(hdf5DatasetTransPath);
+  std::vector<std::vector<double>> rot = readRotation(hdf5DatasetRotPath);
 
-  // read time
+  return convertToTfs(size, parentframe, childframe, time, trans, rot);
+}
+
+std::optional<std::vector<std::string>> Hdf5CoreTf::readTransformStampedFrames(const std::string& id)
+{
+  const std::scoped_lock lock(*m_write_mtx);
+
+  std::string hdf5GroupPath = HDF5_GROUP_TF + "/" + id;
+
+  if (!m_file->exist(hdf5GroupPath))
+  {
+    return std::nullopt;
+  }
+
+  std::shared_ptr<HighFive::Group> group_ptr = std::make_shared<HighFive::Group>(m_file->getGroup(hdf5GroupPath));
+
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "loading parent frame of " << hdf5GroupPath;
+
+  // read frames
+  std::string parentframe = readFrame("PARENT_FRAME", group_ptr);
+  std::string childframe = readFrame("CHILD_FRAME", group_ptr);
+
+  return std::vector<std::string>{ parentframe, childframe };
+}
+
+std::string Hdf5CoreTf::readFrame(const std::string& frameName,
+                                  const std::shared_ptr<const HighFive::Group>& group_ptr) const
+{
+  std::string frame;
+  group_ptr->getAttribute(frameName).read(frame);
+  return frame;
+}
+
+std::vector<std::vector<int64_t>> Hdf5CoreTf::readTime(const std::string& hdf5DatasetTimePath) const
+{
   std::shared_ptr<HighFive::DataSet> data_set_time_ptr =
       std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DatasetTimePath));
   std::vector<std::vector<int64_t>> time;
   data_set_time_ptr->read(time);
 
-  // read translation
+  return time;
+}
+std::vector<std::vector<double>> Hdf5CoreTf::readTranslation(const std::string& hdf5DatasetTransPath) const
+{
   std::shared_ptr<HighFive::DataSet> data_set_trans_ptr =
       std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DatasetTransPath));
   std::vector<std::vector<double>> trans;
   data_set_trans_ptr->read(trans);
 
-  // read rotation
+  return trans;
+}
+std::vector<std::vector<double>> Hdf5CoreTf::readRotation(const std::string& hdf5DatasetRotPath) const
+{
   std::shared_ptr<HighFive::DataSet> data_set_rot_ptr =
       std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DatasetRotPath));
   std::vector<std::vector<double>> rot;
   data_set_rot_ptr->read(rot);
 
+  return rot;
+}
+
+std::optional<std::vector<geometry_msgs::TransformStamped>>
+Hdf5CoreTf::convertToTfs(const long unsigned int& size, const std::string& parentframe, const std::string& childframe,
+                         const std::vector<std::vector<int64_t>>& time, const std::vector<std::vector<double>>& trans,
+                         const std::vector<std::vector<double>>& rot)
+{
   // check if all have the right size
   if (time.size() != size || trans.size() != size || rot.size() != size)
   {
@@ -90,31 +139,8 @@ std::optional<std::vector<geometry_msgs::TransformStamped>> Hdf5CoreTf::readTran
 
     tfs.push_back(tf);
   }
+
   return tfs;
-}
-
-std::optional<std::vector<std::string>> Hdf5CoreTf::readTransformStampedFrames(const std::string& id)
-{
-  const std::scoped_lock lock(*m_write_mtx);
-
-  std::string hdf5GroupPath = HDF5_GROUP_TF + "/" + id;
-
-  if (!m_file->exist(hdf5GroupPath))
-  {
-    return std::nullopt;
-  }
-
-  std::shared_ptr<HighFive::Group> group_ptr = std::make_shared<HighFive::Group>(m_file->getGroup(hdf5GroupPath));
-
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "loading parent frame of " << hdf5GroupPath;
-
-  // read frames
-  std::string parentframe;
-  group_ptr->getAttribute("PARENT_FRAME").read(parentframe);
-  std::string childframe;
-  group_ptr->getAttribute("CHILD_FRAME").read(childframe);
-
-  return std::vector<std::string>{ parentframe, childframe };
 }
 
 }  // namespace seerep_hdf5_core

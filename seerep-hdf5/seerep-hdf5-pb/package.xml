@@ -4,12 +4,14 @@
   <version>0.0.1</version>
   <description> The seerep-hdf5-pb package </description>
 
+  <maintainer email="mark.hoellmann@dfki.de">Mark Höllmann</maintainer>
   <maintainer email="spuetz@uos.de">Sebastian Pütz</maintainer>
 
-  <license>TODO</license>
+  <license>BSD-3</license>
 
   <url type="website">TODO</url>
 
+  <author email="mark.hoellmann@dfki.de">Mark Höllmann</author>
   <author email="spuetz@uos.de">Sebastian Pütz</author>
 
   <depend>seerep-msgs</depend>

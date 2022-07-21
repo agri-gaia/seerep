@@ -72,17 +72,17 @@ std::vector<std::string> Hdf5CoreImage::getDatasetUuids()
 
 std::vector<std::string> Hdf5CoreImage::readLabelsGeneral(const std::string& dataGroup)
 {
-  if (!m_file->exist(dataGroup + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERAL))
+  std::string labelGeneralPath = dataGroup + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERAL;
+
+  if (!m_file->exist(labelGeneralPath))
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
-        << "id " << dataGroup + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERAL << " does not exist in file "
-        << m_file->getName();
+        << "id " << labelGeneralPath << " does not exist in file " << m_file->getName();
     return std::vector<std::string>();
   }
 
   std::vector<std::string> labels;
-  HighFive::DataSet datasetLabels =
-      m_file->getDataSet(dataGroup + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERAL);
+  HighFive::DataSet datasetLabels = m_file->getDataSet(labelGeneralPath);
   datasetLabels.read(labels);
 
   return labels;
@@ -90,17 +90,17 @@ std::vector<std::string> Hdf5CoreImage::readLabelsGeneral(const std::string& dat
 
 std::vector<std::string> Hdf5CoreImage::readBoundingBoxLabels(const std::string& dataGroup)
 {
-  if (!m_file->exist(dataGroup + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBB))
+  std::string labelBBPath = dataGroup + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBB;
+  if (!m_file->exist(labelBBPath))
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
-        << "id " << dataGroup + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBB << " does not exist in file "
-        << m_file->getName();
+        << "id " << labelBBPath << " does not exist in file " << m_file->getName();
     return std::vector<std::string>();
   }
 
   std::vector<std::string> labels;
 
-  HighFive::DataSet datasetLabels = m_file->getDataSet(dataGroup + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBB);
+  HighFive::DataSet datasetLabels = m_file->getDataSet(labelBBPath);
   datasetLabels.read(labels);
 
   return labels;

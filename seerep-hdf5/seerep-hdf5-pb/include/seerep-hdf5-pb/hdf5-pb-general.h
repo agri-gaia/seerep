@@ -16,6 +16,10 @@
 #include <filesystem>
 #include <optional>
 
+// logging
+#include <boost/log/sources/severity_logger.hpp>
+#include <boost/log/trivial.hpp>
+
 namespace seerep_hdf5_pb
 {
 class Hdf5PbGeneral
@@ -26,6 +30,8 @@ protected:
   std::optional<std::string> readFrameId(const std::string& datatypeGroup, const std::string& uuid);
 
   std::vector<std::string> getGroupDatasets(const std::string& id);
+
+  void checkExists(const std::string& id);
 
   //################
   // Attributes
@@ -104,24 +110,6 @@ protected:
   void writeProjectFrameId(const std::string& frameId);
 
   std::string readProjectFrameId();
-
-  // private:
-  //   // header attribute keys
-  //   inline static const std::string HEADER_STAMP_SECONDS = "header_stamp_seconds";
-  //   inline static const std::string HEADER_STAMP_NANOS = "header_stamp_nanos";
-  //   inline static const std::string HEADER_FRAME_ID = "header_frame_id";
-  //   inline static const std::string HEADER_SEQ = "header_seq";
-
-  //   inline static const std::string AABB_FIELD = "AABB";
-
-  //   inline static const std::string PROJECTNAME = "projectname";
-  //   inline static const std::string PROJECTFRAMEID = "projectframeid";
-
-  //   // dataset names
-  //   inline static const std::string RAWDATA = "rawdata";
-  //   inline static const std::string LABELGENERAL = "labelGeneral";
-  //   inline static const std::string LABELBB = "labelBB";
-  //   inline static const std::string LABELBBBOXES = "labelBBBoxes";
 
 protected:
   std::shared_ptr<HighFive::File> m_file;

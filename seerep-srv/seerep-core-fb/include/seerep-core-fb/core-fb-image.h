@@ -71,7 +71,7 @@ public:
    * @brief Adds bounding box based labels to an existing image
    * @param bbs2dlabeled the flatbuffer message containing bounding box based labels
    */
-  void addBoundingBoxesLabeled(const seerep::fb::BoundingBoxes2DLabeledStamped& bbs2dlabeled);
+  void addBoundingBoxesLabeled(const seerep::fb::BoundingBoxes2DLabeledStamped& boundingBoxes2dlabeled);
 
 private:
   /**

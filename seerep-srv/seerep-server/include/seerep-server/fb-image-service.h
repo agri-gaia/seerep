@@ -2,9 +2,11 @@
 #define SEEREP_SERVER_FB_IMAGE_SERVICE_H_
 
 // seerep
-#include <seerep-com/image-service.grpc.fb.h>
+#include <seerep-com/image_service.grpc.fb.h>
 #include <seerep-core-fb/core-fb-image.h>
 #include <seerep-core/core.h>
+
+#include "util.hpp"
 
 // logging
 #include <boost/log/sources/severity_logger.hpp>
@@ -28,6 +30,9 @@ public:
       flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response);
 
 private:
+  void createResponse(std::string msg, seerep::fb::TRANSMISSION_STATE state,
+                      flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response);
+
   std::shared_ptr<seerep_core_fb::CoreFbImage> imageFb;
   boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
 };

@@ -8,6 +8,7 @@ import boundingbox2d_labeled_pb2 as bb
 import grpc
 import image_pb2 as image
 import image_service_pb2_grpc as imageService
+import label_with_instance_pb2 as labelWithInstance
 import meta_operations_pb2_grpc as metaOperations
 import numpy as np
 import projectCreation_pb2 as projectCreation
@@ -78,7 +79,7 @@ for k in range(9):
         # write labeled bounding boxes
         bb1 = bb.BoundingBox2DLabeled()
         for i in range(1, n + 1):
-            bb1.label = "http://aims.fao.org/aos/agrovoc/c_24596"
+            bb1.labelWithInstance.label = "http://aims.fao.org/aos/agrovoc/c_24596"
             bb1.boundingBox.point_min.x = 0.01 + i / 10
             bb1.boundingBox.point_min.y = 0.02 + i / 10
             bb1.boundingBox.point_max.x = 0.03 + i / 10
@@ -86,8 +87,13 @@ for k in range(9):
             theImage.labels_bb.append(bb1)
 
         # write general labels
-        theImage.labels_general.append("http://aims.fao.org/aos/agrovoc/c_2894")
-        theImage.labels_general.append("http://aims.fao.org/aos/agrovoc/c_7156")
+        label1 = labelWithInstance.LabelWithInstance()
+        label1.label = "http://aims.fao.org/aos/agrovoc/c_2894"
+        theImage.labels_general.append(label1)
+
+        label2 = labelWithInstance.LabelWithInstance()
+        label2.label = "http://aims.fao.org/aos/agrovoc/c_7156"
+        theImage.labels_general.append(label2)
 
         # transfer image
         uuidImg = stub.TransferImage(theImage)

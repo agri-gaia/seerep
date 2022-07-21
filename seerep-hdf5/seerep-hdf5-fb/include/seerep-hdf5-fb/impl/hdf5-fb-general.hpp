@@ -80,4 +80,34 @@ flatbuffers::Offset<seerep::fb::Header> Hdf5FbGeneral::readHeaderAttributes(High
                                   builder.CreateString(uuidProject), builder.CreateString(uuidMsg));
 }
 
+template <class T>
+void Hdf5FbGeneral::readTimeFromAnnotateTraits(const std::string& id, int64_t& value,
+                                               const HighFive::AnnotateTraits<T>& highFiveObject,
+                                               const std::string& attribute)
+{
+  if (highFiveObject.hasAttribute(attribute))
+  {
+    highFiveObject.getAttribute(attribute).read(value);
+  }
+  else
+  {
+    throw std::invalid_argument("id " + id + " has no attribute " + attribute);
+  }
+}
+
+template <class T>
+void Hdf5FbGeneral::writeTimeToAnnotateTraits(const int64_t& value, HighFive::AnnotateTraits<T>& highFiveObject,
+                                              const std::string& attribute)
+{
+  if (highFiveObject.hasAttribute(attribute))
+  {
+    highFiveObject.getAttribute(attribute).write(value);
+  }
+  else
+  {
+    highFiveObject.createAttribute(attribute, value);
+  }
+  m_file->flush();
+}
+
 } /* namespace seerep_hdf5_fb */

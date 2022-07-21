@@ -20,6 +20,8 @@
 // seerep-core
 #include <seerep-core/core.h>
 
+#include "seerep-core-pb/core-pb-conversion.h"
+
 namespace seerep_core_pb
 {
 class CorePbTf

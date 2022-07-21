@@ -15,7 +15,7 @@ grpc::Status PbMetaOperations::CreateProject(grpc::ServerContext* context, const
   projectInfo.frameId = request->mapframeid();
   projectInfo.name = request->name();
   projectInfo.uuid = boost::uuids::random_generator()();
-  seerepCore->newProject(projectInfo);
+  seerepCore->createProject(projectInfo);
 
   response->set_name(projectInfo.name);
   response->set_uuid(boost::lexical_cast<std::string>(projectInfo.uuid));

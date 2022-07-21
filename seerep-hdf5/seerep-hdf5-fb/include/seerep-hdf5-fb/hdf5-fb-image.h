@@ -13,7 +13,7 @@
 #include <seerep-msgs/image_generated.h>
 
 // seerep-com
-#include <seerep-com/image-service.grpc.fb.h>
+#include <seerep-com/image_service.grpc.fb.h>
 
 // std
 #include <grpcpp/grpcpp.h>

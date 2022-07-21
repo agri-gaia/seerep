@@ -27,6 +27,10 @@ void CoreFbTf::getData(const seerep::fb::TransformStampedQuery& query,
   {
     *response = seerep_ros_conversions_fb::toFlat(result.value(), query.header()->uuid_project()->str());
   }
+  else
+  {
+    return;
+  }
 }
 
 void CoreFbTf::addData(const seerep::fb::TransformStamped& tf)

@@ -102,8 +102,6 @@ void CoreProject::recreateDatatypes()
   m_coreDatasets->addDatatype(seerep_core_msgs::Datatype::Images, m_ioImage);
   m_coreDatasets->addDatatype(seerep_core_msgs::Datatype::PointClouds, m_ioPointCloud);
 
-  /// @todo add datatypes to datasets
-
   std::vector<std::string> datatypeNames = m_ioGeneral->getGroupDatasets("");
   for (auto datatypeName : datatypeNames)
   {

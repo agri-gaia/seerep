@@ -19,18 +19,19 @@ void Hdf5FbImage::writeImage(const std::string& id, const seerep::fb::Image& ima
   std::shared_ptr<HighFive::DataSet> data_set_ptr;
   HighFive::DataSpace data_space({ image.height(), image.width(), image.step() / image.width() });
 
-  if (!m_file->exist(hdf5DatasetRawDataPath))
+  try
+  {
+    checkExists(hdf5DatasetRawDataPath);
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
+        << "data id " << hdf5DatasetRawDataPath << " already exists!";
+    data_set_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DatasetRawDataPath));
+  }
+  catch (std::invalid_argument const& e)
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
         << "data id " << hdf5DatasetRawDataPath << " does not exist! Creat new dataset in hdf5";
     data_set_ptr =
         std::make_shared<HighFive::DataSet>(m_file->createDataSet<uint8_t>(hdf5DatasetRawDataPath, data_space));
-  }
-  else
-  {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
-        << "data id " << hdf5DatasetRawDataPath << " already exists!";
-    data_set_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DatasetRawDataPath));
   }
 
   writeAttribute<uint32_t>(data_set_ptr, HEIGHT, image.height());
@@ -67,13 +68,6 @@ void Hdf5FbImage::writeImage(const std::string& id, const seerep::fb::Image& ima
     tmp.at(row).resize(image.width());
     for (uint32_t col = 0; col < image.width(); col++)
     {
-      // for (int channel = 0; channel < pixel_step; channel++)
-      // {
-      //   tmp.at(row).at(col).push_back(*(begin + row * image.step() + col * pixel_step + channel));
-      // }
-
-      //   const uint8_t* pxl = begin + row * image.step() + col * pixel_step;
-      // // tmp.at(row).at(col).reserve(pixel_step);
       std::copy_n(begin + row * image.step() + col * pixel_step, pixel_step, std::back_inserter(tmp.at(row).at(col)));
     }
   }
@@ -134,14 +128,12 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
   data_set_ptr->read(read_data);
 
   int pixel_step = step / width;
-  // uint8_t data[height][width][pixel_step];
   std::vector<uint8_t> data;
   data.reserve(height * width * pixel_step);
   for (uint32_t row = 0; row < height; row++)
   {
     for (uint32_t col = 0; col < width; col++)
     {
-      // std::copy(read_data.at(row).at(col).begin(), read_data.at(row).at(col).end(), data[row]);
       data.insert(data.end(), std::make_move_iterator(read_data.at(row).at(col).begin()),
                   std::make_move_iterator(read_data.at(row).at(col).end()));
     }

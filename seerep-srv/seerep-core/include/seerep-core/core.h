@@ -98,7 +98,7 @@ public:
    * @brief creates a new project / HDF5 file with the given project information
    * @param projectInfo the data needed for project creation (name, UUID, map frame etc.)
    */
-  void newProject(const seerep_core_msgs::ProjectInfo& projectInfo);
+  void createProject(const seerep_core_msgs::ProjectInfo& projectInfo);
   /**
    * @brief returns the information of all projects
    * @return vector of project information
@@ -123,6 +123,36 @@ private:
    * @brief create the project object for each HDF5 file in the data folder
    */
   void recreateProjects();
+
+  /**
+   * @brief Returns an iterator to the project with the given uuid. Throws an error if not found
+   * @param projectuuid the UUID of the project to find
+   * @return an iterator to the map entry of the project object with the given uuid
+   */
+  std::unordered_map<boost::uuids::uuid, std::shared_ptr<seerep_core::CoreProject>,
+                     boost::hash<boost::uuids::uuid>>::iterator
+  findProject(const boost::uuids::uuid& projectuuid);
+
+  /**
+   * @brief Applies the query on all projects
+   * @param query the query with the query parameters
+   * @return the query result
+   */
+  seerep_core_msgs::QueryResult getDatasetFromAllProjects(const seerep_core_msgs::Query& query);
+
+  /**
+   * @brief Applies the query on the specified projects
+   * @param query the query with the query parameters
+   * @return the query result
+   */
+  seerep_core_msgs::QueryResult getDatasetFromSpecificProjects(const seerep_core_msgs::Query& query);
+
+  /**
+   * @brief Adds a dataset to the result set
+   * @param dataset the dataset that should be added to the result
+   * @param result the result
+   */
+  void addDatasetToResult(seerep_core_msgs::QueryResultProject& dataset, seerep_core_msgs::QueryResult& result);
 
   /** @brief the path to the folder containing the HDF5 files */
   std::string m_dataFolder;

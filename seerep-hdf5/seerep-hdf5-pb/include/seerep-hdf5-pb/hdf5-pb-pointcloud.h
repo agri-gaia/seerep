@@ -108,33 +108,6 @@ private:
                        const std::map<std::string, seerep::PointField>& fields);
 
   google::protobuf::RepeatedPtrField<seerep::PointField> readPointFieldAttributes(HighFive::Group& cloud_group);
-
-  //   // image / pointcloud attribute keys
-  //   inline static const std::string HEIGHT = "height";
-  //   inline static const std::string WIDTH = "width";
-  //   inline static const std::string ENCODING = "encoding";
-  //   inline static const std::string IS_BIGENDIAN = "is_bigendian";
-  //   inline static const std::string ROW_STEP = "row_step";
-  //   inline static const std::string POINT_STEP = "point_step";
-  //   inline static const std::string IS_DENSE = "is_dense";
-
-  //   // pointcloud fields attribute keys
-  //   inline static const std::string FIELD_NAME = "field_name_";
-  //   inline static const std::string FIELD_OFFSET = "field_offset_";
-  //   inline static const std::string FIELD_DATATYPE = "field_datatype_";
-  //   inline static const std::string FIELD_COUNT = "field_count_";
-
-  //   // point and quaternion attribute keys
-  //   const std::string X = "x";
-  //   const std::string Y = "y";
-  //   const std::string Z = "z";
-  //   const std::string W = "w";
-
-  // public:
-  //   // make private again after fixing io calls of pointcloud.cpp and pointcloud-overview.cpp
-  //   inline static const std::string BOUNDINGBOX = "TODO";  // "boundingbox";
-  //   // datatype group names in hdf5
-  //   inline static const std::string seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX = "pointclouds";
 };
 } /* namespace seerep_hdf5_pb */
 
