@@ -4,6 +4,11 @@ name: Build Docker from scratch unconditionally
 on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      imageTag:
+        description: 'The tag to be used for the images'
+        required: true
+        default: 'main'
 
 env:
   IMAGE_NAME_BASE: seerep_base
@@ -24,15 +29,8 @@ jobs:
 
           # Change all uppercase to lowercase
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-          # Strip git ref prefix from version
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-          # Strip "v" prefix from tag name
-          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
-          # Use Docker `latest` tag convention
-          [ "$VERSION" == "main" ] && VERSION=latest
           # save to env for later steps
           echo "image_id_base=$IMAGE_ID" >> $GITHUB_ENV
-          echo "version_base=$VERSION" >> $GITHUB_ENV
       -
         name: Generate tags server
         run: |
@@ -40,15 +38,8 @@ jobs:
 
           # Change all uppercase to lowercase
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-          # Strip git ref prefix from version
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-          # Strip "v" prefix from tag name
-          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
-          # Use Docker `latest` tag convention
-          [ "$VERSION" == "main" ] && VERSION=latest
           # save to env for later steps
           echo "image_id_server=$IMAGE_ID" >> $GITHUB_ENV
-          echo "version_server=$VERSION" >> $GITHUB_ENV
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       -
         name: Checkout
@@ -69,8 +60,8 @@ jobs:
         with:
           push: true
           file: docker/base/Dockerfile
-          tags: ${{ env.image_id_base }}:${{ env.version_base }}
-          cache-from: type=registry,ref=${{ env.image_id_base }}:${{ env.version_base }}
+          tags: ${{ env.image_id_base }}:${{ github.event.inputs.imageTag }}
+          cache-from: type=registry,ref=${{ env.image_id_base }}:${{ github.event.inputs.imageTag }}
           cache-to: type=inline
       -
         name: Build and push server image
@@ -78,9 +69,9 @@ jobs:
         with:
           push: true
           file: docker/server/Dockerfile
-          tags: ${{ env.image_id_server }}:${{ env.version_server }}
-          cache-from: type=registry,ref=${{ env.image_id_server }}:${{ env.version_server }}
+          tags: ${{ env.image_id_server }}:${{ github.event.inputs.imageTag }}
+          cache-from: type=registry,ref=${{ env.image_id_server }}:${{ github.event.inputs.imageTag }}
           cache-to: type=inline
           build-args: |
             IMAGEBASE=${{ env.image_id_base }}
-            IMAGEBASETAG=${{ env.version_server }}
+            IMAGEBASETAG=${{ github.event.inputs.imageTag }}
