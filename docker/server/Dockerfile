@@ -1,5 +1,7 @@
 # base container with all necessary dependencies
-FROM git.ni.dfki.de:5050/agrigaia/seerep/base
+ARG IMAGEBASE
+ARG IMAGEBASETAG
+FROM $IMAGEBASE:$IMAGEBASETAG
 
 USER root
 WORKDIR /seerep

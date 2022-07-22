@@ -81,3 +81,6 @@ jobs:
           tags: ${{ env.image_id_server }}:${{ env.version_server }}
           cache-from: type=registry,ref=${{ env.image_id_server }}:${{ env.version_server }}
           cache-to: type=inline
+          build-args: |
+            IMAGEBASE=${{ env.image_id_base }}
+            IMAGEBASETAG=${{ env.version_server }}
