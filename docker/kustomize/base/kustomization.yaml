@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: robot
+
+resources:
+  - persistent_volume.yaml
+  - persistent_volume_claim.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+
+configMapGenerator:
+  - name:  seerep-cfg
+    files:
+      - seerep.cfg
