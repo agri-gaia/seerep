@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: seerep-service
+  namespace: robot
+  labels:
+    app: seerep-server
+spec:
+  ports:
+    - name: grpc
+      protocol: TCP
+      port: 9090
+      targetPort: 9090
+  selector:
+    app: seerep-server
+  type: ClusterIP
