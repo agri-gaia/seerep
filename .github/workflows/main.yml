@@ -43,7 +43,7 @@ jobs:
           # Strip "v" prefix from tag name
           [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
           # Use Docker `latest` tag convention
-          [ "$VERSION" == "main" ] && VERSION=latest
+          [[ "${{ github.ref }}" != "refs/tags/"* ]] && VERSION=latest
           # save to env for later steps
           echo "image_id_base=$IMAGE_ID" >> $GITHUB_ENV
           echo "version_base=$VERSION" >> $GITHUB_ENV
