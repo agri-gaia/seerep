@@ -52,6 +52,6 @@ on the context.
 The following graphic provides a high level overview of SEEREP and its
 above-mentioned features.
 
-![](docs/imgs//SEEREP-Overview.svg)
+![](docs/mkdocs/imgs//SEEREP-Overview.svg)
 
 <!-- ## Related Publications -->
