@@ -8,7 +8,7 @@ on:
       imageTag:
         description: 'The tag to be used for the images'
         required: true
-        default: 'main'
+        default: 'latest'
 
 env:
   IMAGE_NAME_BASE: seerep_base
