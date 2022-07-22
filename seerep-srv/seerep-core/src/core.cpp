@@ -9,50 +9,23 @@ Core::Core(std::string dataFolder, bool loadHdf5Files) : m_dataFolder(dataFolder
     recreateProjects();
   }
 }
+
 Core::~Core()
 {
 }
 
 seerep_core_msgs::QueryResult Core::getDataset(const seerep_core_msgs::Query& query)
 {
-  seerep_core_msgs::QueryResult result;
-
   // search all projects
   if (!query.projects)
   {
-    for (auto& it : m_projects)
-    {
-      auto dataset = it.second->getDataset(query);
-      if (!dataset.dataOrInstanceUuids.empty())
-      {
-        result.queryResultProjects.push_back(dataset);
-      }
-    }
+    return getDatasetFromAllProjects(query);
   }
   // Search only in project specified in query
   else
   {
-    for (auto projectuuid : query.projects.value())
-    {
-      auto project = m_projects.find(projectuuid);
-      if (project != m_projects.end())
-      {
-        auto dataset = project->second->getDataset(query);
-        if (!dataset.dataOrInstanceUuids.empty())
-        {
-          result.queryResultProjects.push_back(dataset);
-        }
-      }
-      // if not found throw error
-      else
-      {
-        throw std::runtime_error("project " + boost::lexical_cast<std::string>(query.header.uuidProject) +
-                                 "does not exist!");
-      };
-    }
+    return getDatasetFromSpecificProjects(query);
   }
-
-  return result;
 }
 
 seerep_core_msgs::QueryResult Core::getInstances(const seerep_core_msgs::Query& query)
@@ -76,21 +49,13 @@ seerep_core_msgs::QueryResult Core::getInstances(const seerep_core_msgs::Query& 
   {
     for (auto projectuuid : query.projects.value())
     {
-      auto project = m_projects.find(projectuuid);
-      if (project != m_projects.end())
+      auto project = findProject(projectuuid);
+
+      auto instances = project->second->getDataset(query);
+      if (!instances.dataOrInstanceUuids.empty())
       {
-        auto instances = project->second->getDataset(query);
-        if (!instances.dataOrInstanceUuids.empty())
-        {
-          result.queryResultProjects.push_back(instances);
-        }
+        result.queryResultProjects.push_back(instances);
       }
-      // if not found throw error
-      else
-      {
-        throw std::runtime_error("project " + boost::lexical_cast<std::string>(query.header.uuidProject) +
-                                 "does not exist!");
-      };
     }
   }
 
@@ -122,7 +87,7 @@ void Core::recreateProjects()
   }
 }
 
-void Core::newProject(const seerep_core_msgs::ProjectInfo& projectInfo)
+void Core::createProject(const seerep_core_msgs::ProjectInfo& projectInfo)
 {
   std::string filename = boost::lexical_cast<std::string>(projectInfo.uuid);
   std::string path = m_dataFolder + "/" + filename + ".h5";
@@ -149,81 +114,46 @@ std::vector<seerep_core_msgs::ProjectInfo> Core::getProjects()
 
 void Core::addDataset(const seerep_core_msgs::DatasetIndexable& dataset)
 {
-  // find the project based on its uuid
-  auto project = m_projects.find(dataset.header.uuidProject);
-  // if project was found add image
-  if (project != m_projects.end())
-  {
-    return project->second->addDataset(dataset);
-  }
-  // if not found throw error
-  else
-  {
-    throw std::runtime_error("project " + boost::lexical_cast<std::string>(dataset.header.uuidProject) +
-                             "does not exist!");
-  };
+  auto project = findProject(dataset.header.uuidProject);
+
+  project->second->addDataset(dataset);
 }
 
 void Core::addLabels(const seerep_core_msgs::Datatype& datatype, std::vector<std::string>& labels,
                      const boost::uuids::uuid& msgUuid, const boost::uuids::uuid& projectuuid)
 {
-  // find the project based on its uuid
-  auto project = m_projects.find(projectuuid);
-  // if project was found add image
-  if (project != m_projects.end())
-  {
-    return project->second->addLabels(datatype, labels, msgUuid);
-  }
-  // if not found throw error
-  else
-  {
-    throw std::runtime_error("project " + boost::lexical_cast<std::string>(projectuuid) + "does not exist!");
-  };
+  auto project = findProject(projectuuid);
+
+  project->second->addLabels(datatype, labels, msgUuid);
 }
 
 void Core::addTF(const geometry_msgs::TransformStamped& tf, const boost::uuids::uuid& projectuuid)
 {
-  // find the project based on its uuid
-  auto project = m_projects.find(projectuuid);
-  // if project was found add tf
-  if (project != m_projects.end())
-  {
-    return project->second->addTF(tf);
-  }
-  // if not found throw error
-  else
-  {
-    throw std::runtime_error("project " + boost::lexical_cast<std::string>(projectuuid) + "does not exist!");
-  };
+  auto project = findProject(projectuuid);
+  project->second->addTF(tf);
 }
 
 std::optional<geometry_msgs::TransformStamped> Core::getTF(const seerep_core_msgs::QueryTf& transformQuery)
 {
-  // find the project based on its uuid
-  auto project = m_projects.find(transformQuery.project);
-  // if project was found call function and return result
-  if (project != m_projects.end())
+  try
   {
+    auto project = findProject(transformQuery.project);
     return project->second->getTF(transformQuery);
   }
-  // if not found return empty optional
-  else
+  catch (const std::runtime_error& e)
   {
     return std::nullopt;
-  };
+  }
 }
 
 std::vector<std::string> Core::getFrames(const boost::uuids::uuid& projectuuid)
 {
-  // find the project based on its uuid
-  auto project = m_projects.find(projectuuid);
-  // if project was found call function and return result
-  if (project != m_projects.end())
+  try
   {
+    auto project = findProject(projectuuid);
     return project->second->getFrames();
   }
-  // if not found return empty vector
-  else
+  catch (const std::runtime_error& e)
   {
     return {};
   };
@@ -231,32 +161,71 @@ std::vector<std::string> Core::getFrames(const boost::uuids::uuid& projectuuid)
 
 std::shared_ptr<std::mutex> Core::getHdf5FileMutex(const boost::uuids::uuid& projectuuid)
 {
-  // find the project based on its uuid
-  auto project = m_projects.find(projectuuid);
-  // if project was found return pointer to mutex
-  if (project != m_projects.end())
+  try
   {
+    auto project = findProject(projectuuid);
     return project->second->getHdf5FileMutex();
   }
-  // if not found return null pointer
-  else
+  catch (const std::runtime_error& e)
   {
     return nullptr;
   }
 }
 std::shared_ptr<HighFive::File> Core::getHdf5File(const boost::uuids::uuid& projectuuid)
 {
-  // find the project based on its uuid
-  auto project = m_projects.find(projectuuid);
-  // if project was found return pointer to HighFive::File
-  if (project != m_projects.end())
+  try
   {
+    auto project = findProject(projectuuid);
     return project->second->getHdf5File();
   }
-  // if not found return null pointer
-  else
+  catch (const std::runtime_error& e)
   {
     return nullptr;
+  }
+}
+
+std::unordered_map<boost::uuids::uuid, std::shared_ptr<seerep_core::CoreProject>, boost::hash<boost::uuids::uuid>>::iterator
+Core::findProject(const boost::uuids::uuid& projectuuid)
+{
+  auto project = m_projects.find(projectuuid);
+  if (project != m_projects.end())
+  {
+    return project;
+  }
+  else
+  {
+    throw std::runtime_error("project " + boost::lexical_cast<std::string>(projectuuid) + "does not exist!");
+  }
+}
+
+seerep_core_msgs::QueryResult Core::getDatasetFromAllProjects(const seerep_core_msgs::Query& query)
+{
+  seerep_core_msgs::QueryResult result;
+  for (auto& it : m_projects)
+  {
+    auto dataset = it.second->getDataset(query);
+    addDatasetToResult(dataset, result);
+  }
+  return result;
+}
+seerep_core_msgs::QueryResult Core::getDatasetFromSpecificProjects(const seerep_core_msgs::Query& query)
+{
+  seerep_core_msgs::QueryResult result;
+  for (auto projectuuid : query.projects.value())
+  {
+    auto project = findProject(projectuuid);
+
+    auto dataset = project->second->getDataset(query);
+    addDatasetToResult(dataset, result);
+  }
+  return result;
+}
+
+void Core::addDatasetToResult(seerep_core_msgs::QueryResultProject& dataset, seerep_core_msgs::QueryResult& result)
+{
+  if (!dataset.dataOrInstanceUuids.empty())
+  {
+    result.queryResultProjects.push_back(dataset);
   }
 }
 

@@ -23,20 +23,19 @@ boost::uuids::uuid CoreInstance::getUUID()
 
 std::optional<std::string> CoreInstance::getAttribute(const std::string& key) const
 {
-  auto value = m_attributes.find(key);
+  auto mapValue = m_attributes.find(key);
 
-  if (value != m_attributes.end())
+  if (mapValue != m_attributes.end())
   {
-    return value->second;
+    return mapValue->second;
   }
-  else
-  {
-    return std::nullopt;
-  }
+
+  return std::nullopt;
 }
 
 void CoreInstance::writeAttribute(const std::string& key, const std::string& value)
 {
+  // add key-value pair to map; does not override
   auto emplaceResult = m_attributes.emplace(key, value);
 
   // key already in map -> override!

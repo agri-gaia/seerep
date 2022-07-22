@@ -13,11 +13,9 @@ std::optional<std::string> Hdf5PbGeneral::readFrameId(const std::string& datatyp
 {
   std::string id = datatypeGroup + "/" + uuid;
   std::string hdf5DatasetRawDataPath = id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::RAWDATA;
-  if (!m_file->exist(hdf5DatasetRawDataPath))
-  {
-    std::cout << "id " << hdf5DatasetRawDataPath << " does not exist in file " << m_file->getName() << std::endl;
-    throw std::invalid_argument("id " + hdf5DatasetRawDataPath + " does not exist in file " + m_file->getName());
-  }
+
+  checkExists(hdf5DatasetRawDataPath);
+
   std::cout << "get dataset " << hdf5DatasetRawDataPath << std::endl;
   std::shared_ptr<HighFive::DataSet> data_set_ptr =
       std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DatasetRawDataPath));
@@ -56,6 +54,15 @@ std::vector<std::string> Hdf5PbGeneral::getGroupDatasets(const std::string& id)
   }
 }
 
+void Hdf5PbGeneral::checkExists(const std::string& id)
+{
+  if (!m_file->exist(id))
+  {
+    std::cout << "id " << id << " does not exist in file " << m_file->getName() << std::endl;
+    throw std::invalid_argument("id " + id + " does not exist in file " + m_file->getName());
+  }
+}
+
 void Hdf5PbGeneral::deleteAttribute(const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField)
 {
   if (dataSetPtr->hasAttribute(attributeField))
@@ -70,11 +77,8 @@ void Hdf5PbGeneral::writeAABB(
     const boost::geometry::model::box<boost::geometry::model::point<float, 3, boost::geometry::cs::cartesian>>& aabb)
 {
   std::string id = datatypeGroup + "/" + uuid;
-  if (!m_file->exist(id))
-  {
-    std::cout << "id " << id << " does not exist in file " << m_file->getName() << std::endl;
-    throw std::invalid_argument("id " + id + " does not exist in file " + m_file->getName());
-  }
+  checkExists(id);
+
   std::cout << "get group " << id << std::endl;
   HighFive::Group group = m_file->getGroup(id);
 
@@ -95,12 +99,8 @@ void Hdf5PbGeneral::readAABB(
     boost::geometry::model::box<boost::geometry::model::point<float, 3, boost::geometry::cs::cartesian>>& aabb)
 {
   std::string id = datatypeGroup + "/" + uuid;
+  checkExists(id);
 
-  if (!m_file->exist(id))
-  {
-    std::cout << "id " << id << " does not exist in file " << m_file->getName() << std::endl;
-    throw std::invalid_argument("id " + id + " does not exist in file " + m_file->getName());
-  }
   std::cout << "get group " << id << std::endl;
   HighFive::Group group = m_file->getGroup(id);
   if (group.hasAttribute(seerep_hdf5_core::Hdf5CoreGeneral::AABB_FIELD))
@@ -120,12 +120,8 @@ void Hdf5PbGeneral::readAABB(
 bool Hdf5PbGeneral::hasAABB(const std::string& datatypeGroup, const std::string& uuid)
 {
   std::string id = datatypeGroup + "/" + uuid;
+  checkExists(id);
 
-  if (!m_file->exist(id))
-  {
-    std::cout << "id " << id << " does not exist in file " << m_file->getName() << std::endl;
-    throw std::invalid_argument("id " + id + " does not exist in file " + m_file->getName());
-  }
   std::cout << "get group " << id << std::endl;
   HighFive::Group group = m_file->getGroup(id);
   return group.hasAttribute(seerep_hdf5_core::Hdf5CoreGeneral::AABB_FIELD);
@@ -141,11 +137,7 @@ void Hdf5PbGeneral::readTime(const std::string& datatypeGroup, const std::string
 {
   std::string id = datatypeGroup + "/" + uuid;
 
-  if (!m_file->exist(id))
-  {
-    std::cout << "id " << id << " does not exist in file " << m_file->getName() << std::endl;
-    throw std::invalid_argument("id " + id + " does not exist in file " + m_file->getName());
-  }
+  checkExists(id);
 
   switch (m_file->getObjectType(id))
   {
@@ -215,12 +207,7 @@ void Hdf5PbGeneral::writeTime(const std::string& datatypeGroup, const std::strin
                               const int64_t& nanos)
 {
   std::string id = datatypeGroup + "/" + uuid;
-
-  if (!m_file->exist(id))
-  {
-    std::cout << "id " << id << " does not exist in file " << m_file->getName() << std::endl;
-    throw std::invalid_argument("id " + id + " does not exist in file " + m_file->getName());
-  }
+  checkExists(id);
 
   switch (m_file->getObjectType(id))
   {
@@ -284,11 +271,7 @@ bool Hdf5PbGeneral::hasTimeRaw(const std::string& datatypeGroup, const std::stri
 bool Hdf5PbGeneral::hasTime(const std::string& datatypeGroup, const std::string& uuid)
 {
   std::string id = datatypeGroup + "/" + uuid;
-  if (!m_file->exist(id))
-  {
-    std::cout << "id " << id << " does not exist in file " << m_file->getName() << std::endl;
-    throw std::invalid_argument("id " + id + " does not exist in file " + m_file->getName());
-  }
+  checkExists(id);
 
   switch (m_file->getObjectType(id))
   {
@@ -385,22 +368,14 @@ std::optional<google::protobuf::RepeatedPtrField<seerep::BoundingBox2DLabeled>>
 Hdf5PbGeneral::readBoundingBox2DLabeled(const std::string& datatypeGroup, const std::string& uuid)
 {
   std::string id = datatypeGroup + "/" + uuid;
-  if (!m_file->exist(id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBB))
+  try
   {
-    std::cout << "id " << id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBB << " does not exist in file "
-              << m_file->getName() << std::endl;
-    return std::nullopt;
+    checkExists(id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBB);
+    checkExists(id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBBBOXES);
+    checkExists(id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBBINSTANCES);
   }
-  if (!m_file->exist(id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBBBOXES))
+  catch (std::invalid_argument const& e)
   {
-    std::cout << "id " << id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBBBOXES << " does not exist in file "
-              << m_file->getName() << std::endl;
-    return std::nullopt;
-  }
-  if (!m_file->exist(id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBBINSTANCES))
-  {
-    std::cout << "id " << id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBBINSTANCES << " does not exist in file "
-              << m_file->getName() << std::endl;
     return std::nullopt;
   }
 
@@ -477,16 +452,13 @@ std::optional<google::protobuf::RepeatedPtrField<seerep::LabelWithInstance>>
 Hdf5PbGeneral::readLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid)
 {
   std::string id = datatypeGroup + "/" + uuid;
-  if (!m_file->exist(id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERAL))
+  try
   {
-    std::cout << "id " << id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERAL << " does not exist in file "
-              << m_file->getName() << std::endl;
-    return std::nullopt;
+    checkExists(id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERAL);
+    checkExists(id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERALINSTANCES);
   }
-  if (!m_file->exist(id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERALINSTANCES))
+  catch (std::invalid_argument const& e)
   {
-    std::cout << "id " << id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERALINSTANCES
-              << " does not exist in file " << m_file->getName() << std::endl;
     return std::nullopt;
   }
 

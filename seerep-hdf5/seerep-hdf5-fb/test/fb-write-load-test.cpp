@@ -166,7 +166,7 @@ protected:
     seerep_core_msgs::ProjectInfo projectInfo;
     projectInfo.name = projectName;
     projectInfo.uuid = projectUUID;
-    seerepCore->newProject(projectInfo);
+    seerepCore->createProject(projectInfo);
 
     imageIO = std::make_shared<seerep_hdf5_fb::Hdf5FbImage>(hdf5File, hdf5FileMutex);
     if (imageIO == nullptr)

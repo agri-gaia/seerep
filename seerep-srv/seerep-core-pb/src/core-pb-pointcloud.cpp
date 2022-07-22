@@ -21,28 +21,7 @@ CorePbPointCloud::~CorePbPointCloud()
 std::vector<seerep::PointCloud2> CorePbPointCloud::getData(const seerep::Query& query)
 {
   std::cout << "loading image from images/" << std::endl;
-  seerep_core_msgs::Query queryCore;
-  queryCore.header.datatype = seerep_core_msgs::Datatype::Images;
-  // TODO do the transform
-  boost::uuids::string_generator gen;
-  queryCore.projects.value().push_back(gen(query.projectuuid()));
-  for (auto label : query.label())
-  {
-    queryCore.label.value().push_back(label);
-  }
-  queryCore.timeinterval.value().timeMin.seconds = query.timeinterval().time_min().seconds();
-  queryCore.timeinterval.value().timeMax.seconds = query.timeinterval().time_max().seconds();
-  queryCore.timeinterval.value().timeMin.nanos = query.timeinterval().time_min().nanos();
-  queryCore.timeinterval.value().timeMax.nanos = query.timeinterval().time_max().nanos();
-
-  queryCore.header.frameId = query.boundingbox().header().frame_id();
-  queryCore.boundingbox.value().min_corner().set<0>(query.boundingbox().point_min().x());
-  queryCore.boundingbox.value().min_corner().set<1>(query.boundingbox().point_min().y());
-  queryCore.boundingbox.value().min_corner().set<2>(query.boundingbox().point_min().z());
-  queryCore.boundingbox.value().max_corner().set<0>(query.boundingbox().point_max().x());
-  queryCore.boundingbox.value().max_corner().set<1>(query.boundingbox().point_max().y());
-  queryCore.boundingbox.value().max_corner().set<2>(query.boundingbox().point_max().z());
-
+  seerep_core_msgs::Query queryCore = CorePbConversion::fromPb(query, seerep_core_msgs::Datatype::PointClouds);
   seerep_core_msgs::QueryResult resultCore = m_seerepCore->getDataset(queryCore);
 
   std::vector<seerep::PointCloud2> resultPointClouds;

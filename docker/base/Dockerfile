@@ -67,6 +67,7 @@ RUN curl -s https://apt.kitware.com/kitware-archive.sh -o kitware-archive.sh \
 ####################################################
 RUN apt-get -qq update && apt-get -qq install --no-install-recommends -y -o=Dpkg::Use-Pty=0 \
         libhdf5-dev \
+        libhdf5-mpi-dev \
         libboost-all-dev \
         libeigen3-dev \
         && rm -rf /var/lib/apt/lists/*

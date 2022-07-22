@@ -17,15 +17,15 @@ from seerep.fb import (
     TimeInterval,
     Timestamp,
 )
-from seerep.fb import imageService_grpc_fb as imageService
-from seerep.fb import metaOperations_grpc_fb as metaOperations
+from seerep.fb import image_service_grpc_fb as imageService
+from seerep.fb import meta_operations_grpc_fb as metaOperations
 
 # import numpy as np
 
 
 # # server with certs
 # __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
-# with open(os.path.join(__location__, 'tls.pem'), 'rb') as f:
+# with open(os.path.join(__location__, '../tls.pem'), 'rb') as f:
 #     root_cert = f.read()
 # server = "seerep.robot.10.249.3.13.nip.io:32141"
 # creds = grpc.ssl_channel_credentials(root_cert)
@@ -119,14 +119,16 @@ i = 0
 for responseBuf in stub.GetImage(bytes(buf)):
     response = Image.Image.GetRootAs(responseBuf)
     print(str(i) + "uuidmsg: " + response.Header().UuidMsgs().decode("utf-8"))
-    # print("first label: " + response.LabelsBb(0).LabelWithInstance().Label().decode("utf-8"))
-    # print(
-    #     "first BoundingBox (Xmin,Ymin,Xmax,Ymax): "
-    #     + str(response.LabelsBb(0).BoundingBox().PointMin().X())
-    #     + " "
-    #     + str(response.LabelsBb(0).BoundingBox().PointMin().Y())
-    #     + " "
-    #     + str(response.LabelsBb(0).BoundingBox().PointMax().X())
-    #     + " "
-    #     + str(response.LabelsBb(0).BoundingBox().PointMax().Y())
-    # )
+    i = i + 1
+    if response.LabelsBbLength() > 0:
+        print("first label: " + response.LabelsBb(0).LabelWithInstance().Label().decode("utf-8"))
+        print(
+            "first BoundingBox (Xmin,Ymin,Xmax,Ymax): "
+            + str(response.LabelsBb(0).BoundingBox().PointMin().X())
+            + " "
+            + str(response.LabelsBb(0).BoundingBox().PointMin().Y())
+            + " "
+            + str(response.LabelsBb(0).BoundingBox().PointMax().X())
+            + " "
+            + str(response.LabelsBb(0).BoundingBox().PointMax().Y())
+        )

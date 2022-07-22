@@ -6,6 +6,8 @@
 #include <seerep-core-pb/core-pb-pointcloud.h>
 #include <seerep-core/core.h>
 
+#include "util.hpp"
+
 namespace seerep_server
 {
 class PbPointCloudService final : public seerep::PointCloudService::Service

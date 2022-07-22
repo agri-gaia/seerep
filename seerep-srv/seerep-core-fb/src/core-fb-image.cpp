@@ -17,7 +17,7 @@ CoreFbImage::~CoreFbImage()
 void CoreFbImage::getData(const seerep::fb::Query& query,
                           grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::Image>>* const writer)
 {
-  std::cout << "loading image from images/" << std::endl;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "loading image from images/" << std::endl;
   seerep_core_msgs::Query queryCore = seerep_core_fb::CoreFbConversion::fromFb(query);
 
   seerep_core_msgs::QueryResult resultCore = m_seerepCore->getDataset(queryCore);
@@ -52,17 +52,17 @@ boost::uuids::uuid CoreFbImage::addData(const seerep::fb::Image& img)
   return dataForIndices.header.uuidData;
 }
 
-void CoreFbImage::addBoundingBoxesLabeled(const seerep::fb::BoundingBoxes2DLabeledStamped& bbs2dlabeled)
+void CoreFbImage::addBoundingBoxesLabeled(const seerep::fb::BoundingBoxes2DLabeledStamped& boundingBoxes2dlabeled)
 {
   boost::uuids::string_generator gen;
-  boost::uuids::uuid uuidMsg = gen(bbs2dlabeled.header()->uuid_msgs()->str());
-  boost::uuids::uuid uuidProject = gen(bbs2dlabeled.header()->uuid_project()->str());
+  boost::uuids::uuid uuidMsg = gen(boundingBoxes2dlabeled.header()->uuid_msgs()->str());
+  boost::uuids::uuid uuidProject = gen(boundingBoxes2dlabeled.header()->uuid_project()->str());
 
   auto hdf5io = getHdf5(uuidProject);
-  hdf5io->writeImageBoundingBox2DLabeled(boost::lexical_cast<std::string>(uuidMsg), bbs2dlabeled);
+  hdf5io->writeImageBoundingBox2DLabeled(boost::lexical_cast<std::string>(uuidMsg), boundingBoxes2dlabeled);
 
   std::vector<std::string> labels;
-  for (auto bb : *bbs2dlabeled.labels_bb())
+  for (auto bb : *boundingBoxes2dlabeled.labels_bb())
   {
     labels.push_back(bb->labelWithInstance()->label()->str());
   }

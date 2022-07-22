@@ -81,10 +81,6 @@ spec:
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
-      securityContext:
-        runAsGroup: 1001
-        runAsUser: 1001
-        fsGroup: 1001
       imagePullSecrets:
         - name: gitlab-token # secret containing dockerconfig
       schedulerName: default-scheduler

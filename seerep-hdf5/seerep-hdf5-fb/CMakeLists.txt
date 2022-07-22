@@ -28,8 +28,6 @@ find_package(GTest 1.12.0 REQUIRED)
 
 configure_file(include/SeerepHdf5FbConfig.h.in SeerepHdf5FbConfig.h)
 
-# message("HighFive Include Dirs: ${HighFive_INCLUDE_DIRS} Libraries: ${HighFive_LIBRARIES}")
-
 include_directories(
 	include
 	${seerep_ros_conversions_fb_INCLUDE_DIRS}

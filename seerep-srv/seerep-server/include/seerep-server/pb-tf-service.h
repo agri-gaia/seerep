@@ -6,6 +6,8 @@
 #include <seerep-core-pb/core-pb-tf.h>
 #include <seerep-core/core.h>
 
+#include "util.hpp"
+
 namespace seerep_server
 {
 class PbTfService final : public seerep::TfService::Service

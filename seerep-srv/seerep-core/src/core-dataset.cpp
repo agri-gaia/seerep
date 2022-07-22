@@ -104,6 +104,7 @@ CoreDataset::querySpatial(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics, 
   if (query.boundingbox)
   {
     std::optional<std::vector<seerep_core_msgs::AabbIdPair>> rt_result = std::vector<seerep_core_msgs::AabbIdPair>();
+    // axis-aligned bounding box
     seerep_core_msgs::AABB aabb(seerep_core_msgs::Point(bg::get<bg::min_corner, 0>(query.boundingbox.value()),
                                                         bg::get<bg::min_corner, 1>(query.boundingbox.value()),
                                                         bg::get<bg::min_corner, 2>(query.boundingbox.value())),
@@ -164,10 +165,8 @@ CoreDataset::querySemantic(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
     }
     return result;
   }
-  else
-  {
-    return std::nullopt;
-  }
+
+  return std::nullopt;
 }
 
 std::vector<boost::uuids::uuid>
@@ -244,11 +243,9 @@ CoreDataset::intersectVectorOfSets(std::vector<std::set<boost::uuids::uuid>>& ve
     // return the result as soon as all sets are intersected
     return std::vector(vectorOfSets.at(0).begin(), vectorOfSets.at(0).end());
   }
-  else
-  {
-    // return empty vector if input vector is empty
-    return std::vector<boost::uuids::uuid>();
-  }
+
+  // return empty vector if input vector is empty
+  return std::vector<boost::uuids::uuid>();
 }
 
 void CoreDataset::addDataset(const seerep_core_msgs::DatasetIndexable& dataset)
@@ -314,14 +311,6 @@ void CoreDataset::addDatasetToIndices(const seerep_core_msgs::Datatype& datatype
   {
     datatypeSpecifics->dataWithMissingTF.push_back(std::make_shared<seerep_core_msgs::DatasetIndexable>(dataset));
   }
-
-  // std::cout << "secs  " << std::bitset<64>((int64_t)dataset.header.timestamp.seconds);
-  // std::cout << "shift " << std::bitset<64>((int64_t)dataset.header.timestamp.seconds << 32);
-  // std::cout << "nanos " << std::bitset<64>((int64_t)dataset.header.timestamp.nanos);
-  // std::cout
-  //     << "combi "
-  //     << std::bitset<64>(((int64_t)dataset.header.timestamp.seconds) << 32 | ((uint64_t)dataset.header.timestamp.nanos))
-  //    ;
 
   seerep_core_msgs::AabbTime aabbTime(seerep_core_msgs::TimePoint(((int64_t)dataset.header.timestamp.seconds) << 32 |
                                                                   ((uint64_t)dataset.header.timestamp.nanos)),

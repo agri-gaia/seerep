@@ -2,9 +2,11 @@
 #define SEEREP_SERVER_FB_TF_SERVICE_H_
 
 // seerep
-#include <seerep-com/tf-service.grpc.fb.h>
+#include <seerep-com/tf_service.grpc.fb.h>
 #include <seerep-core-fb/core-fb-tf.h>
 #include <seerep-core/core.h>
+
+#include "util.hpp"
 
 // logging
 #include <boost/log/sources/severity_logger.hpp>

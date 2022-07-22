@@ -17,7 +17,7 @@ grpc::Status FbMetaOperations::CreateProject(grpc::ServerContext* context,
   projectInfo.frameId = requestMsg->map_frame_id()->str();
   projectInfo.name = requestMsg->name()->str();
   projectInfo.uuid = boost::uuids::random_generator()();
-  seerepCore->newProject(projectInfo);
+  seerepCore->createProject(projectInfo);
 
   flatbuffers::grpc::MessageBuilder builder;
   auto nameOffset = builder.CreateString(projectInfo.name);

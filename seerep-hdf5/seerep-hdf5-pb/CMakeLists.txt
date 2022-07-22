@@ -14,6 +14,11 @@ find_package(SeerepMsgs REQUIRED)
 find_package(SeerepHdf5Core REQUIRED)
 find_package(HighFive REQUIRED)
 
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+find_package(Boost COMPONENTS log log_setup REQUIRED)
+
 
 configure_file(include/SeerepHdf5PbConfig.h.in SeerepHdf5PbConfig.h)
 
@@ -23,6 +28,7 @@ include_directories(
 	${SeerepHdf5Core_INCLUDE_DIRS}
 	${PROTOBUF_INCLUDE_DIR}
 	${HighFive_INCLUDE_DIRS}
+	${Boost_INCLUDE_DIRS}
 )
 
 add_library(seerephdf5pb
@@ -37,6 +43,8 @@ target_link_libraries(seerephdf5pb
 	${SeerepIoCore_LIBRARIES}
 	${PROTOBUF_LIBRARIES}
 	${HighFive_LIBRARIES}
+	${Boost_LIBRARIES}
+	${Boost_LOG_LIBRARY} ${Boost_LOG_SETUP_LIBRARY}
 )
 
 set(CMAKE_INSTALL_INCLUDEDIR include)
