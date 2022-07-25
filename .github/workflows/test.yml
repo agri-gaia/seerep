@@ -10,11 +10,8 @@ jobs:
   Build-and-run-tests:
     runs-on: ubuntu-latest
     container:
-      image: git.ni.dfki.de:5050/agrigaia/seerep/base:latest
+      image: ghcr.io/agri-gaia/seerep_base:latest
       options: --user root
-      credentials:
-        username: ${{ secrets.GITLAB_REGISTRY_USER }}
-        password: ${{ secrets.GITLAB_REGISTRY_ACCESS_TOKEN }}
 
     steps:
     - uses: actions/checkout@v2

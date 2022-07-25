@@ -5,11 +5,18 @@ on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches: [ main ]
+    tags:
+      - v*
   pull_request:
     branches: [ main ]
 
+
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+
+env:
+  IMAGE_NAME_BASE: seerep_base
+  IMAGE_NAME_SERVER: seerep_server
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -17,9 +24,44 @@ jobs:
   build-docker:
     # run on ubuntu
     runs-on: ubuntu-20.04
+    outputs:
+      base_id: ${{ steps.tagsBase.outputs.base_id }}
+      server_id: ${{ steps.tagsServer.outputs.server_id }}
+      version: ${{ steps.tagsBase.outputs.version }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      -
+        id: tagsBase
+        name: Generate tags base
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME_BASE
+
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          # Use Docker `latest` tag convention
+          [[ "${{ github.ref }}" != "refs/tags/"* ]] && VERSION=latest
+          # save to env for later steps
+          echo "image_id_base=$IMAGE_ID" >> $GITHUB_ENV
+          echo "version_base=$VERSION" >> $GITHUB_ENV
+          echo "::set-output name=base_id::$IMAGE_ID"
+          echo "::set-output name=version::$VERSION"
+      -
+        id: tagsServer
+        name: Generate tags server
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME_SERVER
+
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          # save to output
+          echo "::set-output name=server_id::$IMAGE_ID"
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
         with:
@@ -33,25 +75,25 @@ jobs:
             docker/base/Dockerfile
       -
         name: Set up Docker Buildx
-        if: steps.changed-files-specific-docker-base.outputs.any_changed == 'true'
+        if: github.ref_type == 'tag' || steps.changed-files-specific-docker-base.outputs.any_changed == 'true'
         uses: docker/setup-buildx-action@v1
       -
         name: Login to Container Registry
-        if: steps.changed-files-specific-docker-base.outputs.any_changed == 'true'
+        if: github.ref_type == 'tag' || steps.changed-files-specific-docker-base.outputs.any_changed == 'true'
         uses: docker/login-action@v1
         with:
-          registry: git.ni.dfki.de:5050/agrigaia/seerep
-          username: ${{ secrets.GITLAB_REGISTRY_USER }}
-          password: ${{ secrets.GITLAB_REGISTRY_ACCESS_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       -
         name: Build and push base image
-        if: steps.changed-files-specific-docker-base.outputs.any_changed == 'true'
+        if: github.ref_type == 'tag' || steps.changed-files-specific-docker-base.outputs.any_changed == 'true'
         uses: docker/build-push-action@v2
         with:
           file: docker/base/Dockerfile
           push: ${{ GitHub.event_name != 'pull_request'}}
-          tags: git.ni.dfki.de:5050/agrigaia/seerep/base:latest
-          cache-from: type=registry,ref=git.ni.dfki.de:5050/agrigaia/seerep/base:latest
+          tags: ${{ env.image_id_base }}:${{ env.version_base }}
+          cache-from: type=registry,ref=${{ env.image_id_base }}:${{ env.version_base }}
           cache-to: type=inline
 
   # builds the code
@@ -60,11 +102,8 @@ jobs:
     # run in docker container on ubuntu
     runs-on: ubuntu-20.04
     container:
-      image: git.ni.dfki.de:5050/agrigaia/seerep/base:latest
+      image: ${{ needs.build-docker.outputs.base_id }}:${{ needs.build-docker.outputs.version }}
       options: --user root
-      credentials:
-        username: ${{ secrets.GITLAB_REGISTRY_USER }}
-        password: ${{ secrets.GITLAB_REGISTRY_ACCESS_TOKEN }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -106,18 +145,21 @@ jobs:
         name: Login to Container Registry
         uses: docker/login-action@v1
         with:
-          registry: git.ni.dfki.de:5050/agrigaia/seerep
-          username: ${{ secrets.GITLAB_REGISTRY_USER }}
-          password: ${{ secrets.GITLAB_REGISTRY_ACCESS_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       -
         name: Build and push server image
         uses: docker/build-push-action@v2
         with:
           file: docker/server/Dockerfile
           push: ${{ GitHub.event_name != 'pull_request'}}
-          tags: git.ni.dfki.de:5050/agrigaia/seerep/server:latest
-          cache-from: type=registry,ref=git.ni.dfki.de:5050/agrigaia/seerep/server:latest
+          tags: ${{ needs.build-docker.outputs.server_id }}:${{ needs.build-docker.outputs.version }}
+          cache-from: type=registry,ref=${{ needs.build-docker.outputs.server_id }}:${{ needs.build-docker.outputs.version }}
           cache-to: type=inline
+          build-args: |
+            IMAGEBASE=${{ needs.build-docker.outputs.base_id }}
+            IMAGEBASETAG=${{ needs.build-docker.outputs.version }}
       -
         name: Trigger deployment
         uses: wei/curl@master

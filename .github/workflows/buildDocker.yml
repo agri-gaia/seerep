@@ -4,13 +4,42 @@ name: Build Docker from scratch unconditionally
 on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      imageTag:
+        description: 'The tag to be used for the images'
+        required: true
+        default: 'latest'
+
+env:
+  IMAGE_NAME_BASE: seerep_base
+  IMAGE_NAME_SERVER: seerep_server
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   build-docker:
     runs-on: ubuntu-20.04
+    permissions:
+      packages: write
 
     steps:
+      -
+        name: Generate tags base
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME_BASE
+
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          # save to env for later steps
+          echo "image_id_base=$IMAGE_ID" >> $GITHUB_ENV
+      -
+        name: Generate tags server
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME_SERVER
+
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          # save to env for later steps
+          echo "image_id_server=$IMAGE_ID" >> $GITHUB_ENV
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       -
         name: Checkout
@@ -22,17 +51,17 @@ jobs:
         name: Login to Container Registry
         uses: docker/login-action@v1
         with:
-          registry: git.ni.dfki.de:5050/agrigaia/seerep
-          username: ${{ secrets.GITLAB_REGISTRY_USER }}
-          password: ${{ secrets.GITLAB_REGISTRY_ACCESS_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       -
-        name: Build and push
+        name: Build and push base image
         uses: docker/build-push-action@v2
         with:
           push: true
           file: docker/base/Dockerfile
-          tags: git.ni.dfki.de:5050/agrigaia/seerep/base:latest
-          cache-from: type=registry,ref=git.ni.dfki.de:5050/agrigaia/seerep/base:latest
+          tags: ${{ env.image_id_base }}:${{ github.event.inputs.imageTag }}
+          cache-from: type=registry,ref=${{ env.image_id_base }}:${{ github.event.inputs.imageTag }}
           cache-to: type=inline
       -
         name: Build and push server image
@@ -40,6 +69,9 @@ jobs:
         with:
           push: true
           file: docker/server/Dockerfile
-          tags: git.ni.dfki.de:5050/agrigaia/seerep/server:latest
-          cache-from: type=registry,ref=git.ni.dfki.de:5050/agrigaia/seerep/server:latest
+          tags: ${{ env.image_id_server }}:${{ github.event.inputs.imageTag }}
+          cache-from: type=registry,ref=${{ env.image_id_server }}:${{ github.event.inputs.imageTag }}
           cache-to: type=inline
+          build-args: |
+            IMAGEBASE=${{ env.image_id_base }}
+            IMAGEBASETAG=${{ github.event.inputs.imageTag }}
