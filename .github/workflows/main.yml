@@ -63,6 +63,8 @@ jobs:
     needs: create-ids
     # run on ubuntu
     runs-on: ubuntu-20.04
+    permissions:
+      packages: write
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -135,6 +137,8 @@ jobs:
     needs: [build-code, create-ids]
     # run on ubuntu
     runs-on: ubuntu-20.04
+    permissions:
+      packages: write
     if: ${{ GitHub.event_name != 'pull_request'}}
 
     steps:
