@@ -18,10 +18,12 @@
 
 ## Maintainer
 
-Mark Höllmann\
-German Research Center for Artificial Intelligence,
-DFKI Niedersachsen\
+[Mark Höllmann](https://github.com/mhoellmann)\
 [mark.hoellmann@dfki.de](mailto:mark.hoellmann@dfki.de)
+
+[German Research Center for Artificial Intelligence\
+DFKI Niedersachsen\
+Plan-Based Robot Control](https://www.dfki.de/en/web/research/research-departments/plan-based-robot-control)
 
 ## General
 
@@ -42,7 +44,13 @@ high-level planning and reasoning systems using the SEEREP query server.
 To deploy the server locally the following `docker run` command or the following `docker-compose.yml` can be used.
 
 ```
-docker run --volume=seerep-data:/mnt/seerep-data --publish=9090 --name=seerep_server --tty ghcr.io/agri-gaia/seerep_server:latest --data-folder=/mnt/seerep-data
+docker run \
+  --volume=seerep-data:/mnt/seerep-data \
+  --publish=9090 \
+  --name=seerep_server \
+  --tty \
+  ghcr.io/agri-gaia/seerep_server:latest \
+  --data-folder=/mnt/seerep-data
 ```
 
 Example docker-compose.yml:
@@ -55,17 +63,16 @@ services:
     tty: true
     container_name: seerep_server
     command:
-      - "--data-folder=/mnt/seerep-data" # define data-dir for seerep-server
+      # define data-dir for seerep-server
+      - "--data-folder=/mnt/seerep-data"
     ports:
       # the gRPC port
       - 9090
     volumes:
       # persist the data folder
       - seerep-data:/mnt/seerep-data
-
 volumes:
   seerep-data:
-
 ```
 
 ## Documentation
