@@ -1,5 +1,5 @@
 {
-    "image": "git.ni.dfki.de:5050/agrigaia/seerep/base:latest",
+    "image": "ghcr.io/agri-gaia/seerep_base:latest",
     "name": "seerep_dev",
     "extensions": [
         "ms-vscode.cpptools",
