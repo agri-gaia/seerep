@@ -52,6 +52,7 @@ version: "3.9"
 services:
   seerep:
     image: ghcr.io/agri-gaia/seerep_server:latest
+    tty: true
     container_name: seerep_server
     command:
       - "--data-folder=/mnt/seerep-data" # define data-dir for seerep-server
@@ -61,6 +62,10 @@ services:
     volumes:
       # persist the data folder
       - seerep-data:/mnt/seerep-data
+
+volumes:
+  seerep-data:
+
 ```
 
 ## Documentation
