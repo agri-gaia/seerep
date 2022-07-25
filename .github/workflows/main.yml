@@ -20,16 +20,13 @@ env:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # builds the docker image if the corresponding files changed
-  build-docker:
-    # run on ubuntu
+  create-ids:
     runs-on: ubuntu-20.04
     outputs:
       base_id: ${{ steps.tagsBase.outputs.base_id }}
       server_id: ${{ steps.tagsServer.outputs.server_id }}
       version: ${{ steps.tagsBase.outputs.version }}
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       -
         id: tagsBase
@@ -45,9 +42,7 @@ jobs:
           [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
           # Use Docker `latest` tag convention
           [[ "${{ github.ref }}" != "refs/tags/"* ]] && VERSION=latest
-          # save to env for later steps
-          echo "image_id_base=$IMAGE_ID" >> $GITHUB_ENV
-          echo "version_base=$VERSION" >> $GITHUB_ENV
+          # save to output for later steps
           echo "::set-output name=base_id::$IMAGE_ID"
           echo "::set-output name=version::$VERSION"
       -
@@ -62,6 +57,15 @@ jobs:
           [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
           # save to output
           echo "::set-output name=server_id::$IMAGE_ID"
+
+  # builds the docker image if the corresponding files changed
+  build-docker:
+    needs: create-ids
+    # run on ubuntu
+    runs-on: ubuntu-20.04
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
         with:
@@ -92,17 +96,17 @@ jobs:
         with:
           file: docker/base/Dockerfile
           push: ${{ GitHub.event_name != 'pull_request'}}
-          tags: ${{ env.image_id_base }}:${{ env.version_base }}
-          cache-from: type=registry,ref=${{ env.image_id_base }}:${{ env.version_base }}
+          tags: ${{ needs.create-ids.outputs.base_id }}:${{ needs.create-ids.outputs.version }}
+          cache-from: type=registry,ref=${{ needs.create-ids.outputs.base_id }}:${{ needs.create-ids.outputs.version }}
           cache-to: type=inline
 
   # builds the code
   build-code:
-    needs: build-docker
+    needs: [build-docker, create-ids]
     # run in docker container on ubuntu
     runs-on: ubuntu-20.04
     container:
-      image: ${{ needs.build-docker.outputs.base_id }}:${{ needs.build-docker.outputs.version }}
+      image: ${{ needs.create-ids.outputs.base_id }}:${{ needs.create-ids.outputs.version }}
       options: --user root
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -128,7 +132,7 @@ jobs:
         shell: bash
 
   build-docker-deployment:
-    needs: build-code
+    needs: [build-code, create-ids]
     # run on ubuntu
     runs-on: ubuntu-20.04
     if: ${{ GitHub.event_name != 'pull_request'}}
@@ -154,12 +158,12 @@ jobs:
         with:
           file: docker/server/Dockerfile
           push: ${{ GitHub.event_name != 'pull_request'}}
-          tags: ${{ needs.build-docker.outputs.server_id }}:${{ needs.build-docker.outputs.version }}
-          cache-from: type=registry,ref=${{ needs.build-docker.outputs.server_id }}:${{ needs.build-docker.outputs.version }}
+          tags: ${{ needs.create-ids.outputs.server_id }}:${{ needs.create-ids.outputs.version }}
+          cache-from: type=registry,ref=${{ needs.create-ids.outputs.server_id }}:${{ needs.create-ids.outputs.version }}
           cache-to: type=inline
           build-args: |
-            IMAGEBASE=${{ needs.build-docker.outputs.base_id }}
-            IMAGEBASETAG=${{ needs.build-docker.outputs.version }}
+            IMAGEBASE=${{ needs.create-ids.outputs.base_id }}
+            IMAGEBASETAG=${{ needs.create-ids.outputs.version }}
       -
         name: Trigger deployment
         uses: wei/curl@master
