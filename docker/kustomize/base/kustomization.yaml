@@ -18,6 +18,10 @@ patches:
       - op: replace
         path: /metadata/namespace
         value: seerep
+      - op: replace
+        path: /spec/template/metadata/namespace
+        value: seerep
+
 
 configurations:
   - configuration/sealed-secret-config.yaml
