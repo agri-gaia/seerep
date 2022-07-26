@@ -5,6 +5,7 @@ namespace: seerep-prod
 
 resources:
   - ./../../base
+  - ca-secret-sealed-prod.yaml
 patches:
   - target:
       kind: PersistentVolume
@@ -23,6 +24,10 @@ patches:
         value: seerep-prod.robot.10.249.3.13.nip.io
 
 namePrefix: prod-
+
+secretGenerator:
+  - name: ca-secret-prod.yaml
+    type: Opaque
 
 images:
   - name: seerep-server

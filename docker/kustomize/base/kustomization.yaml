@@ -10,18 +10,6 @@ resources:
   - deployment.yaml
   - service.yaml
   - ingress.yaml
-patches:
-  - target:
-      kind: SealedSecret
-      name: seerep-ca
-    patch: |-
-      - op: replace
-        path: /metadata/namespace
-        value: seerep
-      - op: replace
-        path: /spec/template/metadata/namespace
-        value: seerep
-
 
 configurations:
   - configuration/sealed-secret-config.yaml
