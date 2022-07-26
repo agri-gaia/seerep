@@ -2,7 +2,6 @@ kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: seerep-server
-  namespace: robot
   labels:
     app: seerep-server
 spec:

@@ -2,7 +2,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: seerep-service
-  namespace: robot
   labels:
     app: seerep-server
 spec:

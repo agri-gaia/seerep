@@ -2,7 +2,6 @@ kind: Ingress
 apiVersion: networking.k8s.io/v1
 metadata:
   name: seerep-route
-  namespace: robot
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: GRPC
     nginx.ingress.kubernetes.io/service-upstream: 'true'
