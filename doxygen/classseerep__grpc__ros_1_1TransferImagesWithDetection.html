@@ -1,0 +1,754 @@
+<!--
+Doxygen Awesome
+https://github.com/jothepro/doxygen-awesome-css
+MIT License
+Copyright (c) 2022 jothepro
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.3"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>SEEREP </title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="/doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<a href="https://github.com/agri-gaia/seerep" class="github-corner" title="View source on GitHub" target="_blank">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+<!-- https://github.com/tholman/github-corners -->
+<style>.github-corner svg {fill: var(--primary-light-color); color: var(--page-background-color); width: 72px; height: 72px;}</style>
+<style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">SEEREP
+   </div>
+   <div id="projectbrief">Spatio-temporal-SEmantic Environment REPresentation for robots in an agricultural context</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.3 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search",'Search','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('classseerep__grpc__ros_1_1TransferImagesWithDetection.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="classseerep__grpc__ros_1_1TransferImagesWithDetection-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">seerep_grpc_ros::TransferImagesWithDetection Class Reference</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="clientImagesWithDetection_8h_source.html">clientImagesWithDetection.h</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:ac250c57ba68469d383e17debadfa55ae"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__grpc__ros_1_1TransferImagesWithDetection.html#ac250c57ba68469d383e17debadfa55ae">TransferImagesWithDetection</a> (std::shared_ptr&lt; grpc::Channel &gt; channel_ptr)</td></tr>
+<tr class="separator:ac250c57ba68469d383e17debadfa55ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49be88855f26684730eefdd6965023cf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__grpc__ros_1_1TransferImagesWithDetection.html#a49be88855f26684730eefdd6965023cf">~TransferImagesWithDetection</a> ()</td></tr>
+<tr class="separator:a49be88855f26684730eefdd6965023cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b17530ecd865ce44d50b428d43966db"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__grpc__ros_1_1TransferImagesWithDetection.html#a8b17530ecd865ce44d50b428d43966db">send</a> (const sensor_msgs::Image::ConstPtr &amp;msg)</td></tr>
+<tr class="separator:a8b17530ecd865ce44d50b428d43966db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a231beb4b9f0c760eabcf8afb327cf813"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__grpc__ros_1_1TransferImagesWithDetection.html#a231beb4b9f0c760eabcf8afb327cf813">send</a> (const vision_msgs::Detection2DArray::ConstPtr &amp;msg)</td></tr>
+<tr class="separator:a231beb4b9f0c760eabcf8afb327cf813"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af404d5e6679bdd96318d44d45bdb06ca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__grpc__ros_1_1TransferImagesWithDetection.html#af404d5e6679bdd96318d44d45bdb06ca">send</a> (const sensor_msgs::NavSatFix::ConstPtr &amp;msg)</td></tr>
+<tr class="separator:af404d5e6679bdd96318d44d45bdb06ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a269e2e4604464f8d32d634b55ae994f9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__grpc__ros_1_1TransferImagesWithDetection.html#a269e2e4604464f8d32d634b55ae994f9">createSubscriber</a> ()</td></tr>
+<tr class="separator:a269e2e4604464f8d32d634b55ae994f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f6468ed142bb06da5e498a1cda89eda"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__grpc__ros_1_1TransferImagesWithDetection.html#a4f6468ed142bb06da5e498a1cda89eda">createProject</a> ()</td></tr>
+<tr class="separator:a4f6468ed142bb06da5e498a1cda89eda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a23ec20b7436dcdaa349e233a7beff177"><td class="memItemLeft" align="right" valign="top">std::map&lt; uint64_t, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__grpc__ros_1_1TransferImagesWithDetection.html#a23ec20b7436dcdaa349e233a7beff177">timeUuidMap_</a></td></tr>
+<tr class="separator:a23ec20b7436dcdaa349e233a7beff177"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a468b2d32670bfa045f5cb208563bbbe4"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__grpc__ros_1_1TransferImagesWithDetection.html#a468b2d32670bfa045f5cb208563bbbe4">timeUuidMapMutex_</a></td></tr>
+<tr class="separator:a468b2d32670bfa045f5cb208563bbbe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f74a75314bcf576759589318795e092"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__grpc__ros_1_1TransferImagesWithDetection.html#a0f74a75314bcf576759589318795e092">projectuuid_</a></td></tr>
+<tr class="separator:a0f74a75314bcf576759589318795e092"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1adeac39f28337b70a152b0f23a055ce"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceseerep__grpc__ros.html#ae5279551913aac60c5d13a68a189e922">StubMetaFbPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__grpc__ros_1_1TransferImagesWithDetection.html#a1adeac39f28337b70a152b0f23a055ce">stubMeta_</a></td></tr>
+<tr class="separator:a1adeac39f28337b70a152b0f23a055ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad754eb9eb91cf1698743f8ba67c87cf3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceseerep__grpc__ros.html#a5c54dc99fbafd6641e218acaedb6e381">StubTfFbPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__grpc__ros_1_1TransferImagesWithDetection.html#ad754eb9eb91cf1698743f8ba67c87cf3">stubTf_</a></td></tr>
+<tr class="separator:ad754eb9eb91cf1698743f8ba67c87cf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2facb2c96a9e8ad01ab3197d5db89dd7"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt;::grpc::ClientWriter&lt; flatbuffers::grpc::Message&lt; seerep::fb::TransformStamped &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__grpc__ros_1_1TransferImagesWithDetection.html#a2facb2c96a9e8ad01ab3197d5db89dd7">writerTf_</a></td></tr>
+<tr class="separator:a2facb2c96a9e8ad01ab3197d5db89dd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a997db1ebf57816db00162b4cbc09d93e"><td class="memItemLeft" align="right" valign="top">grpc::ClientContext&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__grpc__ros_1_1TransferImagesWithDetection.html#a997db1ebf57816db00162b4cbc09d93e">contextTf_</a></td></tr>
+<tr class="separator:a997db1ebf57816db00162b4cbc09d93e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9dc671eb3fe793815c85b4fddddb175e"><td class="memItemLeft" align="right" valign="top">flatbuffers::grpc::Message&lt; seerep::fb::ServerResponse &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__grpc__ros_1_1TransferImagesWithDetection.html#a9dc671eb3fe793815c85b4fddddb175e">tfResponse_</a></td></tr>
+<tr class="separator:a9dc671eb3fe793815c85b4fddddb175e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1013c4d3bbd579ba47725a90ba99bbf8"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; GeographicLib::LocalCartesian &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__grpc__ros_1_1TransferImagesWithDetection.html#a1013c4d3bbd579ba47725a90ba99bbf8">localCartesian_</a></td></tr>
+<tr class="separator:a1013c4d3bbd579ba47725a90ba99bbf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf68ffef33804785ebcb91e283e0b2f7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceseerep__grpc__ros.html#a5db9747764aba180342b7c207c466f60">StubImageFbPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__grpc__ros_1_1TransferImagesWithDetection.html#acf68ffef33804785ebcb91e283e0b2f7">stubImage_</a></td></tr>
+<tr class="separator:acf68ffef33804785ebcb91e283e0b2f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70ca8dc3631ba681a94ce91d06c9e962"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt;::grpc::ClientWriter&lt; flatbuffers::grpc::Message&lt; seerep::fb::Image &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__grpc__ros_1_1TransferImagesWithDetection.html#a70ca8dc3631ba681a94ce91d06c9e962">writerImage_</a></td></tr>
+<tr class="separator:a70ca8dc3631ba681a94ce91d06c9e962"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac80b4a0b4360f82b5eb4ada0235c67c5"><td class="memItemLeft" align="right" valign="top">grpc::ClientContext&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__grpc__ros_1_1TransferImagesWithDetection.html#ac80b4a0b4360f82b5eb4ada0235c67c5">contextImage_</a></td></tr>
+<tr class="separator:ac80b4a0b4360f82b5eb4ada0235c67c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6bf5741db937e7b80fface215c58b915"><td class="memItemLeft" align="right" valign="top">flatbuffers::grpc::Message&lt; seerep::fb::ServerResponse &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__grpc__ros_1_1TransferImagesWithDetection.html#a6bf5741db937e7b80fface215c58b915">imageResponse_</a></td></tr>
+<tr class="separator:a6bf5741db937e7b80fface215c58b915"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed748a9bff0639eda7f68d92e8031ead"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt;::grpc::ClientWriter&lt; flatbuffers::grpc::Message&lt; seerep::fb::BoundingBoxes2DLabeledStamped &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__grpc__ros_1_1TransferImagesWithDetection.html#aed748a9bff0639eda7f68d92e8031ead">writerImageDetection_</a></td></tr>
+<tr class="separator:aed748a9bff0639eda7f68d92e8031ead"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a395649bb2bafb3d12aa4e45aa37b7a66"><td class="memItemLeft" align="right" valign="top">grpc::ClientContext&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__grpc__ros_1_1TransferImagesWithDetection.html#a395649bb2bafb3d12aa4e45aa37b7a66">contextImageDetection_</a></td></tr>
+<tr class="separator:a395649bb2bafb3d12aa4e45aa37b7a66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a025fcdc3e4f6cadab2b1cd518a1921c3"><td class="memItemLeft" align="right" valign="top">flatbuffers::grpc::Message&lt; seerep::fb::ServerResponse &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__grpc__ros_1_1TransferImagesWithDetection.html#a025fcdc3e4f6cadab2b1cd518a1921c3">imageDetectionResponse_</a></td></tr>
+<tr class="separator:a025fcdc3e4f6cadab2b1cd518a1921c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93c8a77ccc78c69469c37abe4f437d16"><td class="memItemLeft" align="right" valign="top">ros::NodeHandle&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__grpc__ros_1_1TransferImagesWithDetection.html#a93c8a77ccc78c69469c37abe4f437d16">nh_</a></td></tr>
+<tr class="separator:a93c8a77ccc78c69469c37abe4f437d16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94adb87c9075b07d266a750ddb6b0fdc"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, ros::Subscriber &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__grpc__ros_1_1TransferImagesWithDetection.html#a94adb87c9075b07d266a750ddb6b0fdc">subscribers_</a></td></tr>
+<tr class="separator:a94adb87c9075b07d266a750ddb6b0fdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ac250c57ba68469d383e17debadfa55ae" name="ac250c57ba68469d383e17debadfa55ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac250c57ba68469d383e17debadfa55ae">&#9670;&nbsp;</a></span>TransferImagesWithDetection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">seerep_grpc_ros::TransferImagesWithDetection::TransferImagesWithDetection </td>
+          <td>(</td>
+          <td class="paramtype">std::shared_ptr&lt; grpc::Channel &gt;&#160;</td>
+          <td class="paramname"><em>channel_ptr</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a49be88855f26684730eefdd6965023cf" name="a49be88855f26684730eefdd6965023cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49be88855f26684730eefdd6965023cf">&#9670;&nbsp;</a></span>~TransferImagesWithDetection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">seerep_grpc_ros::TransferImagesWithDetection::~TransferImagesWithDetection </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a4f6468ed142bb06da5e498a1cda89eda" name="a4f6468ed142bb06da5e498a1cda89eda"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f6468ed142bb06da5e498a1cda89eda">&#9670;&nbsp;</a></span>createProject()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_grpc_ros::TransferImagesWithDetection::createProject </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a269e2e4604464f8d32d634b55ae994f9" name="a269e2e4604464f8d32d634b55ae994f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a269e2e4604464f8d32d634b55ae994f9">&#9670;&nbsp;</a></span>createSubscriber()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_grpc_ros::TransferImagesWithDetection::createSubscriber </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8b17530ecd865ce44d50b428d43966db" name="a8b17530ecd865ce44d50b428d43966db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b17530ecd865ce44d50b428d43966db">&#9670;&nbsp;</a></span>send() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_grpc_ros::TransferImagesWithDetection::send </td>
+          <td>(</td>
+          <td class="paramtype">const sensor_msgs::Image::ConstPtr &amp;&#160;</td>
+          <td class="paramname"><em>msg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af404d5e6679bdd96318d44d45bdb06ca" name="af404d5e6679bdd96318d44d45bdb06ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af404d5e6679bdd96318d44d45bdb06ca">&#9670;&nbsp;</a></span>send() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_grpc_ros::TransferImagesWithDetection::send </td>
+          <td>(</td>
+          <td class="paramtype">const sensor_msgs::NavSatFix::ConstPtr &amp;&#160;</td>
+          <td class="paramname"><em>msg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a231beb4b9f0c760eabcf8afb327cf813" name="a231beb4b9f0c760eabcf8afb327cf813"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a231beb4b9f0c760eabcf8afb327cf813">&#9670;&nbsp;</a></span>send() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_grpc_ros::TransferImagesWithDetection::send </td>
+          <td>(</td>
+          <td class="paramtype">const vision_msgs::Detection2DArray::ConstPtr &amp;&#160;</td>
+          <td class="paramname"><em>msg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="ac80b4a0b4360f82b5eb4ada0235c67c5" name="ac80b4a0b4360f82b5eb4ada0235c67c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac80b4a0b4360f82b5eb4ada0235c67c5">&#9670;&nbsp;</a></span>contextImage_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">grpc::ClientContext seerep_grpc_ros::TransferImagesWithDetection::contextImage_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a395649bb2bafb3d12aa4e45aa37b7a66" name="a395649bb2bafb3d12aa4e45aa37b7a66"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a395649bb2bafb3d12aa4e45aa37b7a66">&#9670;&nbsp;</a></span>contextImageDetection_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">grpc::ClientContext seerep_grpc_ros::TransferImagesWithDetection::contextImageDetection_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a997db1ebf57816db00162b4cbc09d93e" name="a997db1ebf57816db00162b4cbc09d93e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a997db1ebf57816db00162b4cbc09d93e">&#9670;&nbsp;</a></span>contextTf_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">grpc::ClientContext seerep_grpc_ros::TransferImagesWithDetection::contextTf_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a025fcdc3e4f6cadab2b1cd518a1921c3" name="a025fcdc3e4f6cadab2b1cd518a1921c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a025fcdc3e4f6cadab2b1cd518a1921c3">&#9670;&nbsp;</a></span>imageDetectionResponse_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::grpc::Message&lt;seerep::fb::ServerResponse&gt; seerep_grpc_ros::TransferImagesWithDetection::imageDetectionResponse_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6bf5741db937e7b80fface215c58b915" name="a6bf5741db937e7b80fface215c58b915"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6bf5741db937e7b80fface215c58b915">&#9670;&nbsp;</a></span>imageResponse_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::grpc::Message&lt;seerep::fb::ServerResponse&gt; seerep_grpc_ros::TransferImagesWithDetection::imageResponse_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1013c4d3bbd579ba47725a90ba99bbf8" name="a1013c4d3bbd579ba47725a90ba99bbf8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1013c4d3bbd579ba47725a90ba99bbf8">&#9670;&nbsp;</a></span>localCartesian_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt;GeographicLib::LocalCartesian&gt; seerep_grpc_ros::TransferImagesWithDetection::localCartesian_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a93c8a77ccc78c69469c37abe4f437d16" name="a93c8a77ccc78c69469c37abe4f437d16"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a93c8a77ccc78c69469c37abe4f437d16">&#9670;&nbsp;</a></span>nh_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ros::NodeHandle seerep_grpc_ros::TransferImagesWithDetection::nh_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0f74a75314bcf576759589318795e092" name="a0f74a75314bcf576759589318795e092"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f74a75314bcf576759589318795e092">&#9670;&nbsp;</a></span>projectuuid_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string seerep_grpc_ros::TransferImagesWithDetection::projectuuid_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acf68ffef33804785ebcb91e283e0b2f7" name="acf68ffef33804785ebcb91e283e0b2f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf68ffef33804785ebcb91e283e0b2f7">&#9670;&nbsp;</a></span>stubImage_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceseerep__grpc__ros.html#a5db9747764aba180342b7c207c466f60">StubImageFbPtr</a> seerep_grpc_ros::TransferImagesWithDetection::stubImage_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1adeac39f28337b70a152b0f23a055ce" name="a1adeac39f28337b70a152b0f23a055ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1adeac39f28337b70a152b0f23a055ce">&#9670;&nbsp;</a></span>stubMeta_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceseerep__grpc__ros.html#ae5279551913aac60c5d13a68a189e922">StubMetaFbPtr</a> seerep_grpc_ros::TransferImagesWithDetection::stubMeta_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad754eb9eb91cf1698743f8ba67c87cf3" name="ad754eb9eb91cf1698743f8ba67c87cf3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad754eb9eb91cf1698743f8ba67c87cf3">&#9670;&nbsp;</a></span>stubTf_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceseerep__grpc__ros.html#a5c54dc99fbafd6641e218acaedb6e381">StubTfFbPtr</a> seerep_grpc_ros::TransferImagesWithDetection::stubTf_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a94adb87c9075b07d266a750ddb6b0fdc" name="a94adb87c9075b07d266a750ddb6b0fdc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a94adb87c9075b07d266a750ddb6b0fdc">&#9670;&nbsp;</a></span>subscribers_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt;std::string, ros::Subscriber&gt; seerep_grpc_ros::TransferImagesWithDetection::subscribers_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9dc671eb3fe793815c85b4fddddb175e" name="a9dc671eb3fe793815c85b4fddddb175e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9dc671eb3fe793815c85b4fddddb175e">&#9670;&nbsp;</a></span>tfResponse_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::grpc::Message&lt;seerep::fb::ServerResponse&gt; seerep_grpc_ros::TransferImagesWithDetection::tfResponse_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a23ec20b7436dcdaa349e233a7beff177" name="a23ec20b7436dcdaa349e233a7beff177"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23ec20b7436dcdaa349e233a7beff177">&#9670;&nbsp;</a></span>timeUuidMap_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt;uint64_t, std::string&gt; seerep_grpc_ros::TransferImagesWithDetection::timeUuidMap_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a468b2d32670bfa045f5cb208563bbbe4" name="a468b2d32670bfa045f5cb208563bbbe4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a468b2d32670bfa045f5cb208563bbbe4">&#9670;&nbsp;</a></span>timeUuidMapMutex_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::mutex seerep_grpc_ros::TransferImagesWithDetection::timeUuidMapMutex_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a70ca8dc3631ba681a94ce91d06c9e962" name="a70ca8dc3631ba681a94ce91d06c9e962"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a70ca8dc3631ba681a94ce91d06c9e962">&#9670;&nbsp;</a></span>writerImage_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt;::grpc::ClientWriter&lt;flatbuffers::grpc::Message&lt;seerep::fb::Image&gt; &gt; &gt; seerep_grpc_ros::TransferImagesWithDetection::writerImage_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aed748a9bff0639eda7f68d92e8031ead" name="aed748a9bff0639eda7f68d92e8031ead"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed748a9bff0639eda7f68d92e8031ead">&#9670;&nbsp;</a></span>writerImageDetection_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt;::grpc::ClientWriter&lt;flatbuffers::grpc::Message&lt;seerep::fb::BoundingBoxes2DLabeledStamped&gt; &gt; &gt; seerep_grpc_ros::TransferImagesWithDetection::writerImageDetection_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2facb2c96a9e8ad01ab3197d5db89dd7" name="a2facb2c96a9e8ad01ab3197d5db89dd7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2facb2c96a9e8ad01ab3197d5db89dd7">&#9670;&nbsp;</a></span>writerTf_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt;::grpc::ClientWriter&lt;flatbuffers::grpc::Message&lt;seerep::fb::TransformStamped&gt; &gt; &gt; seerep_grpc_ros::TransferImagesWithDetection::writerTf_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>seerep-ros/seerep_ros_communication/include/seerep_ros_communication/<a class="el" href="clientImagesWithDetection_8h_source.html">clientImagesWithDetection.h</a></li>
+<li>seerep-ros/seerep_ros_communication/src/<a class="el" href="clientImagesWithDetection_8cpp.html">clientImagesWithDetection.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespaceseerep__grpc__ros.html">seerep_grpc_ros</a></li><li class="navelem"><a class="el" href="classseerep__grpc__ros_1_1TransferImagesWithDetection.html">TransferImagesWithDetection</a></li>
+    <li class="footer">
+        <a href="../mkdocs/legal-notice">Legal Notice</a> -
+        <a href="../mkdocs/data-protection-notice">Data Protection Notice</a> -
+        Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+    </li>
+  </ul>
+</div>
+</body>
+</html>

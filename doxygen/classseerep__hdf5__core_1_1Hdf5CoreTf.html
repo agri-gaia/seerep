@@ -1,0 +1,536 @@
+<!--
+Doxygen Awesome
+https://github.com/jothepro/doxygen-awesome-css
+MIT License
+Copyright (c) 2022 jothepro
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.3"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>SEEREP </title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="/doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<a href="https://github.com/agri-gaia/seerep" class="github-corner" title="View source on GitHub" target="_blank">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+<!-- https://github.com/tholman/github-corners -->
+<style>.github-corner svg {fill: var(--primary-light-color); color: var(--page-background-color); width: 72px; height: 72px;}</style>
+<style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">SEEREP
+   </div>
+   <div id="projectbrief">Spatio-temporal-SEmantic Environment REPresentation for robots in an agricultural context</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.3 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search",'Search','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('classseerep__hdf5__core_1_1Hdf5CoreTf.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="classseerep__hdf5__core_1_1Hdf5CoreTf-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">seerep_hdf5_core::Hdf5CoreTf Class Reference</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="hdf5-core-tf_8h_source.html">hdf5-core-tf.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for seerep_hdf5_core::Hdf5CoreTf:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" frameborder="0" src="classseerep__hdf5__core_1_1Hdf5CoreTf__inherit__graph.svg" width="230" height="127"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<div class="dynheader">
+Collaboration diagram for seerep_hdf5_core::Hdf5CoreTf:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" frameborder="0" src="classseerep__hdf5__core_1_1Hdf5CoreTf__coll__graph.svg" width="230" height="127"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a6df5740b5178ce9bc97560c78b097320"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreTf.html#a6df5740b5178ce9bc97560c78b097320">Hdf5CoreTf</a> (std::shared_ptr&lt; HighFive::File &gt; &amp;file, std::shared_ptr&lt; std::mutex &gt; &amp;write_mtx)</td></tr>
+<tr class="separator:a6df5740b5178ce9bc97560c78b097320"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c6a5b465b5b1f381fe36e0da83f572e"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::vector&lt; geometry_msgs::TransformStamped &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreTf.html#a4c6a5b465b5b1f381fe36e0da83f572e">readTransformStamped</a> (const std::string &amp;id)</td></tr>
+<tr class="separator:a4c6a5b465b5b1f381fe36e0da83f572e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a992032b14875108c8f413aae716c04d7"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::vector&lt; std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreTf.html#a992032b14875108c8f413aae716c04d7">readTransformStampedFrames</a> (const std::string &amp;id)</td></tr>
+<tr class="separator:a992032b14875108c8f413aae716c04d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html">seerep_hdf5_core::Hdf5CoreGeneral</a></td></tr>
+<tr class="memitem:a8742137ed1324de30bb6e106a9efafd5 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a8742137ed1324de30bb6e106a9efafd5">Hdf5CoreGeneral</a> (std::shared_ptr&lt; HighFive::File &gt; &amp;file, std::shared_ptr&lt; std::mutex &gt; &amp;write_mtx)</td></tr>
+<tr class="separator:a8742137ed1324de30bb6e106a9efafd5 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b5eacd573e2486080ed68c31b4e1ceb inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a9b5eacd573e2486080ed68c31b4e1ceb">getGroupDatasets</a> (const std::string &amp;id)</td></tr>
+<tr class="separator:a9b5eacd573e2486080ed68c31b4e1ceb inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ee8514c1b5113af017bc815894e52aa inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplParams" colspan="2">template&lt;typename T , class C &gt; </td></tr>
+<tr class="memitem:a6ee8514c1b5113af017bc815894e52aa inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a6ee8514c1b5113af017bc815894e52aa">getAttribute</a> (const std::string &amp;id, const HighFive::AnnotateTraits&lt; C &gt; &amp;object, std::string attributeField)</td></tr>
+<tr class="separator:a6ee8514c1b5113af017bc815894e52aa inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95033cb2048076b5d3b2dd98eb7cac26 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a95033cb2048076b5d3b2dd98eb7cac26">writeProjectname</a> (const std::string &amp;projectname)</td></tr>
+<tr class="separator:a95033cb2048076b5d3b2dd98eb7cac26 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a169525769c17cafc12e7f93be2702218 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a169525769c17cafc12e7f93be2702218">readProjectname</a> ()</td></tr>
+<tr class="separator:a169525769c17cafc12e7f93be2702218 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6247850d07c817afb7fb3e79026a1598 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a6247850d07c817afb7fb3e79026a1598">writeProjectFrameId</a> (const std::string &amp;frameId)</td></tr>
+<tr class="separator:a6247850d07c817afb7fb3e79026a1598 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae39d9997316e6a6a09f0d171f6d3b152 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ae39d9997316e6a6a09f0d171f6d3b152">readProjectFrameId</a> ()</td></tr>
+<tr class="separator:ae39d9997316e6a6a09f0d171f6d3b152 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a8ad8804b40e2b42caf6548cb08b0a9d0"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreTf.html#a8ad8804b40e2b42caf6548cb08b0a9d0">HDF5_GROUP_TF</a> = &quot;tf&quot;</td></tr>
+<tr class="separator:a8ad8804b40e2b42caf6548cb08b0a9d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af951e1a5dd555fefe5630ff57d3febe7"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreTf.html#af951e1a5dd555fefe5630ff57d3febe7">SIZE</a> = &quot;size&quot;</td></tr>
+<tr class="separator:af951e1a5dd555fefe5630ff57d3febe7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td colspan="2" onclick="javascript:toggleInherit('pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral')"><img src="closed.png" alt="-"/>&#160;Static Public Attributes inherited from <a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html">seerep_hdf5_core::Hdf5CoreGeneral</a></td></tr>
+<tr class="memitem:a4e0619372e5a59da3571f86b678f5d37 inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a4e0619372e5a59da3571f86b678f5d37">HEADER_STAMP_SECONDS</a> = &quot;header_stamp_seconds&quot;</td></tr>
+<tr class="separator:a4e0619372e5a59da3571f86b678f5d37 inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6f257897d2f3bb84f67f47099f1b88d inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#af6f257897d2f3bb84f67f47099f1b88d">HEADER_STAMP_NANOS</a> = &quot;header_stamp_nanos&quot;</td></tr>
+<tr class="separator:af6f257897d2f3bb84f67f47099f1b88d inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4aa22424097d3bf24d080b2caa2cdcf inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ac4aa22424097d3bf24d080b2caa2cdcf">HEADER_FRAME_ID</a> = &quot;header_frame_id&quot;</td></tr>
+<tr class="separator:ac4aa22424097d3bf24d080b2caa2cdcf inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14af1849d28306d44ff394c409cd0e6f inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a14af1849d28306d44ff394c409cd0e6f">HEADER_SEQ</a> = &quot;header_seq&quot;</td></tr>
+<tr class="separator:a14af1849d28306d44ff394c409cd0e6f inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac62fc2657e0de4a36be9874d2f78b701 inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ac62fc2657e0de4a36be9874d2f78b701">AABB_FIELD</a> = &quot;AABB&quot;</td></tr>
+<tr class="separator:ac62fc2657e0de4a36be9874d2f78b701 inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f84c759d9b83ec6d418b48a72f30b9e inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a2f84c759d9b83ec6d418b48a72f30b9e">PROJECTNAME</a> = &quot;projectname&quot;</td></tr>
+<tr class="separator:a2f84c759d9b83ec6d418b48a72f30b9e inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a414320881a6f84f3959e0684daa4f20d inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a414320881a6f84f3959e0684daa4f20d">PROJECTFRAMEID</a> = &quot;projectframeid&quot;</td></tr>
+<tr class="separator:a414320881a6f84f3959e0684daa4f20d inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53b8de0c69698ba803f4052ef66bda00 inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a53b8de0c69698ba803f4052ef66bda00">RAWDATA</a> = &quot;rawdata&quot;</td></tr>
+<tr class="separator:a53b8de0c69698ba803f4052ef66bda00 inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac621f66d2e9dab8025b42b0b39c8e924 inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ac621f66d2e9dab8025b42b0b39c8e924">LABELGENERAL</a> = &quot;labelGeneral&quot;</td></tr>
+<tr class="separator:ac621f66d2e9dab8025b42b0b39c8e924 inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19b4fe044e996991f97a0f9780a2b7fa inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a19b4fe044e996991f97a0f9780a2b7fa">LABELGENERALINSTANCES</a> = &quot;labelGeneralInstances&quot;</td></tr>
+<tr class="separator:a19b4fe044e996991f97a0f9780a2b7fa inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3bc18459b28fbf568ce5ddc6629abb9 inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ac3bc18459b28fbf568ce5ddc6629abb9">LABELBB</a> = &quot;labelBB&quot;</td></tr>
+<tr class="separator:ac3bc18459b28fbf568ce5ddc6629abb9 inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32ab719172753bd14d4c193c30ab975f inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a32ab719172753bd14d4c193c30ab975f">LABELBBBOXES</a> = &quot;labelBBBoxes&quot;</td></tr>
+<tr class="separator:a32ab719172753bd14d4c193c30ab975f inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a982821eb1b6284a7eb396d1d65af671c inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a982821eb1b6284a7eb396d1d65af671c">LABELBBINSTANCES</a> = &quot;labelBBInstances&quot;</td></tr>
+<tr class="separator:a982821eb1b6284a7eb396d1d65af671c inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a36715a8af72bf91f650f3ff059cd8edf"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreTf.html#a36715a8af72bf91f650f3ff059cd8edf">readFrame</a> (const std::string &amp;frameName, const std::shared_ptr&lt; const HighFive::Group &gt; &amp;group_ptr) const</td></tr>
+<tr class="separator:a36715a8af72bf91f650f3ff059cd8edf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40948575c3f8708bb787e8220a1ad013"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; int64_t &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreTf.html#a40948575c3f8708bb787e8220a1ad013">readTime</a> (const std::string &amp;hdf5DatasetTimePath) const</td></tr>
+<tr class="separator:a40948575c3f8708bb787e8220a1ad013"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a965c0275296bf8d00bc9018aa2b8b9f0"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreTf.html#a965c0275296bf8d00bc9018aa2b8b9f0">readTranslation</a> (const std::string &amp;hdf5DatasetTransPath) const</td></tr>
+<tr class="separator:a965c0275296bf8d00bc9018aa2b8b9f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23bd1c7bca359dd95c133f23d80cbfd3"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreTf.html#a23bd1c7bca359dd95c133f23d80cbfd3">readRotation</a> (const std::string &amp;hdf5DatasetRotPath) const</td></tr>
+<tr class="separator:a23bd1c7bca359dd95c133f23d80cbfd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af994cccecef6b0bfd28453b829fcab47"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::vector&lt; geometry_msgs::TransformStamped &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreTf.html#af994cccecef6b0bfd28453b829fcab47">convertToTfs</a> (const long unsigned int &amp;size, const std::string &amp;parentframe, const std::string &amp;childframe, const std::vector&lt; std::vector&lt; int64_t &gt; &gt; &amp;time, const std::vector&lt; std::vector&lt; double &gt; &gt; &amp;trans, const std::vector&lt; std::vector&lt; double &gt; &gt; &amp;rot)</td></tr>
+<tr class="separator:af994cccecef6b0bfd28453b829fcab47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pro_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html">seerep_hdf5_core::Hdf5CoreGeneral</a></td></tr>
+<tr class="memitem:a5cc0b9aa14cb5d7a4c33524aec2809d0 inherit pro_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; HighFive::File &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a5cc0b9aa14cb5d7a4c33524aec2809d0">m_file</a></td></tr>
+<tr class="separator:a5cc0b9aa14cb5d7a4c33524aec2809d0 inherit pro_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ae8a40bcccd1a8e0d44dd0b12f1cb52 inherit pro_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; std::mutex &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a8ae8a40bcccd1a8e0d44dd0b12f1cb52">m_write_mtx</a></td></tr>
+<tr class="separator:a8ae8a40bcccd1a8e0d44dd0b12f1cb52 inherit pro_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad0364ff3c788a71d171205b66d578df inherit pro_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">boost::log::sources::severity_logger&lt; boost::log::trivial::severity_level &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#aad0364ff3c788a71d171205b66d578df">m_logger</a></td></tr>
+<tr class="separator:aad0364ff3c788a71d171205b66d578df inherit pro_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a6df5740b5178ce9bc97560c78b097320" name="a6df5740b5178ce9bc97560c78b097320"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6df5740b5178ce9bc97560c78b097320">&#9670;&nbsp;</a></span>Hdf5CoreTf()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">seerep_hdf5_core::Hdf5CoreTf::Hdf5CoreTf </td>
+          <td>(</td>
+          <td class="paramtype">std::shared_ptr&lt; HighFive::File &gt; &amp;&#160;</td>
+          <td class="paramname"><em>file</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::shared_ptr&lt; std::mutex &gt; &amp;&#160;</td>
+          <td class="paramname"><em>write_mtx</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="af994cccecef6b0bfd28453b829fcab47" name="af994cccecef6b0bfd28453b829fcab47"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af994cccecef6b0bfd28453b829fcab47">&#9670;&nbsp;</a></span>convertToTfs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; std::vector&lt; geometry_msgs::TransformStamped &gt; &gt; seerep_hdf5_core::Hdf5CoreTf::convertToTfs </td>
+          <td>(</td>
+          <td class="paramtype">const long unsigned int &amp;&#160;</td>
+          <td class="paramname"><em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>parentframe</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>childframe</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; std::vector&lt; int64_t &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>time</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; std::vector&lt; double &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>trans</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; std::vector&lt; double &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rot</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a36715a8af72bf91f650f3ff059cd8edf" name="a36715a8af72bf91f650f3ff059cd8edf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36715a8af72bf91f650f3ff059cd8edf">&#9670;&nbsp;</a></span>readFrame()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string seerep_hdf5_core::Hdf5CoreTf::readFrame </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>frameName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::shared_ptr&lt; const HighFive::Group &gt; &amp;&#160;</td>
+          <td class="paramname"><em>group_ptr</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a23bd1c7bca359dd95c133f23d80cbfd3" name="a23bd1c7bca359dd95c133f23d80cbfd3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23bd1c7bca359dd95c133f23d80cbfd3">&#9670;&nbsp;</a></span>readRotation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::vector&lt; double &gt; &gt; seerep_hdf5_core::Hdf5CoreTf::readRotation </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>hdf5DatasetRotPath</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a40948575c3f8708bb787e8220a1ad013" name="a40948575c3f8708bb787e8220a1ad013"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40948575c3f8708bb787e8220a1ad013">&#9670;&nbsp;</a></span>readTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::vector&lt; int64_t &gt; &gt; seerep_hdf5_core::Hdf5CoreTf::readTime </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>hdf5DatasetTimePath</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4c6a5b465b5b1f381fe36e0da83f572e" name="a4c6a5b465b5b1f381fe36e0da83f572e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c6a5b465b5b1f381fe36e0da83f572e">&#9670;&nbsp;</a></span>readTransformStamped()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; std::vector&lt; geometry_msgs::TransformStamped &gt; &gt; seerep_hdf5_core::Hdf5CoreTf::readTransformStamped </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a992032b14875108c8f413aae716c04d7" name="a992032b14875108c8f413aae716c04d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a992032b14875108c8f413aae716c04d7">&#9670;&nbsp;</a></span>readTransformStampedFrames()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; std::vector&lt; std::string &gt; &gt; seerep_hdf5_core::Hdf5CoreTf::readTransformStampedFrames </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a965c0275296bf8d00bc9018aa2b8b9f0" name="a965c0275296bf8d00bc9018aa2b8b9f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a965c0275296bf8d00bc9018aa2b8b9f0">&#9670;&nbsp;</a></span>readTranslation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::vector&lt; double &gt; &gt; seerep_hdf5_core::Hdf5CoreTf::readTranslation </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>hdf5DatasetTransPath</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a8ad8804b40e2b42caf6548cb08b0a9d0" name="a8ad8804b40e2b42caf6548cb08b0a9d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ad8804b40e2b42caf6548cb08b0a9d0">&#9670;&nbsp;</a></span>HDF5_GROUP_TF</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::string seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF = &quot;tf&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af951e1a5dd555fefe5630ff57d3febe7" name="af951e1a5dd555fefe5630ff57d3febe7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af951e1a5dd555fefe5630ff57d3febe7">&#9670;&nbsp;</a></span>SIZE</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::string seerep_hdf5_core::Hdf5CoreTf::SIZE = &quot;size&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>seerep-hdf5/seerep-hdf5-core/include/seerep-hdf5-core/<a class="el" href="hdf5-core-tf_8h_source.html">hdf5-core-tf.h</a></li>
+<li>seerep-hdf5/seerep-hdf5-core/src/<a class="el" href="hdf5-core-tf_8cpp.html">hdf5-core-tf.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespaceseerep__hdf5__core.html">seerep_hdf5_core</a></li><li class="navelem"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreTf.html">Hdf5CoreTf</a></li>
+    <li class="footer">
+        <a href="../mkdocs/legal-notice">Legal Notice</a> -
+        <a href="../mkdocs/data-protection-notice">Data Protection Notice</a> -
+        Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+    </li>
+  </ul>
+</div>
+</body>
+</html>

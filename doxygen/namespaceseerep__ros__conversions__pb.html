@@ -1,0 +1,883 @@
+<!--
+Doxygen Awesome
+https://github.com/jothepro/doxygen-awesome-css
+MIT License
+Copyright (c) 2022 jothepro
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.3"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>SEEREP </title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="/doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<a href="https://github.com/agri-gaia/seerep" class="github-corner" title="View source on GitHub" target="_blank">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+<!-- https://github.com/tholman/github-corners -->
+<style>.github-corner svg {fill: var(--primary-light-color); color: var(--page-background-color); width: 72px; height: 72px;}</style>
+<style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">SEEREP
+   </div>
+   <div id="projectbrief">Spatio-temporal-SEmantic Environment REPresentation for robots in an agricultural context</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.3 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search",'Search','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('namespaceseerep__ros__conversions__pb.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#func-members">Functions</a>  </div>
+  <div class="headertitle"><div class="title">seerep_ros_conversions_pb Namespace Reference</div></div>
+</div><!--header-->
+<div class="contents">
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ad893491e63242cd830d9ea67fead59b3"><td class="memItemLeft" align="right" valign="top">seerep::Header&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__pb.html#ad893491e63242cd830d9ea67fead59b3">toProto</a> (const std_msgs::Header &amp;header)</td></tr>
+<tr class="memdesc:ad893491e63242cd830d9ea67fead59b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS std_msgs/Header message to the corresponding Protobuf Header message.  <a href="namespaceseerep__ros__conversions__pb.html#ad893491e63242cd830d9ea67fead59b3">More...</a><br /></td></tr>
+<tr class="separator:ad893491e63242cd830d9ea67fead59b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa83993720d237b52c7724fff8aa50b7b"><td class="memItemLeft" align="right" valign="top">std_msgs::Header&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__pb.html#aa83993720d237b52c7724fff8aa50b7b">toROS</a> (const seerep::Header &amp;header)</td></tr>
+<tr class="memdesc:aa83993720d237b52c7724fff8aa50b7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a Protobuf Header message to the corresponding ROS std_msgs/Header message.  <a href="namespaceseerep__ros__conversions__pb.html#aa83993720d237b52c7724fff8aa50b7b">More...</a><br /></td></tr>
+<tr class="separator:aa83993720d237b52c7724fff8aa50b7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15c06ade714b4a498862000fcdef7dda"><td class="memItemLeft" align="right" valign="top">seerep::PointField&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__pb.html#a15c06ade714b4a498862000fcdef7dda">toProto</a> (const sensor_msgs::PointField &amp;point_field)</td></tr>
+<tr class="memdesc:a15c06ade714b4a498862000fcdef7dda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS sensor_msgs/PointField message to the corresponding Protobuf PointField message.  <a href="namespaceseerep__ros__conversions__pb.html#a15c06ade714b4a498862000fcdef7dda">More...</a><br /></td></tr>
+<tr class="separator:a15c06ade714b4a498862000fcdef7dda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b2efcac6a6132d1dc9fa152ba29589f"><td class="memItemLeft" align="right" valign="top">sensor_msgs::PointField&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__pb.html#a5b2efcac6a6132d1dc9fa152ba29589f">toROS</a> (const seerep::PointField &amp;point_field)</td></tr>
+<tr class="memdesc:a5b2efcac6a6132d1dc9fa152ba29589f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a Protobuf PointField message to the corresponding ROS sensor_msgs/PointField message.  <a href="namespaceseerep__ros__conversions__pb.html#a5b2efcac6a6132d1dc9fa152ba29589f">More...</a><br /></td></tr>
+<tr class="separator:a5b2efcac6a6132d1dc9fa152ba29589f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeaf889473dd905d5e6efcf79a02f0dd2"><td class="memItemLeft" align="right" valign="top">seerep::PointCloud2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__pb.html#aeaf889473dd905d5e6efcf79a02f0dd2">toProto</a> (const sensor_msgs::PointCloud2 &amp;cloud)</td></tr>
+<tr class="memdesc:aeaf889473dd905d5e6efcf79a02f0dd2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS sensor_msgs/PointCloud2 message to the corresponding Protobuf PointCloud2 message.  <a href="namespaceseerep__ros__conversions__pb.html#aeaf889473dd905d5e6efcf79a02f0dd2">More...</a><br /></td></tr>
+<tr class="separator:aeaf889473dd905d5e6efcf79a02f0dd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5bec2c8d695616e6b2cc499c6b52efa"><td class="memItemLeft" align="right" valign="top">sensor_msgs::PointCloud2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__pb.html#ac5bec2c8d695616e6b2cc499c6b52efa">toROS</a> (const seerep::PointCloud2 &amp;cloud)</td></tr>
+<tr class="memdesc:ac5bec2c8d695616e6b2cc499c6b52efa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a Protobuf PointCloud2 message to the corresponding ROS sensor_msgs/PointCloud2 message.  <a href="namespaceseerep__ros__conversions__pb.html#ac5bec2c8d695616e6b2cc499c6b52efa">More...</a><br /></td></tr>
+<tr class="separator:ac5bec2c8d695616e6b2cc499c6b52efa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd6cbb912c1f4f243ea1c171fb113076"><td class="memItemLeft" align="right" valign="top">seerep::Image&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__pb.html#afd6cbb912c1f4f243ea1c171fb113076">toProto</a> (const sensor_msgs::Image &amp;image)</td></tr>
+<tr class="memdesc:afd6cbb912c1f4f243ea1c171fb113076"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS sensor_msgs/Image message to the corresponding Protobuf Image message.  <a href="namespaceseerep__ros__conversions__pb.html#afd6cbb912c1f4f243ea1c171fb113076">More...</a><br /></td></tr>
+<tr class="separator:afd6cbb912c1f4f243ea1c171fb113076"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68c7257b77d8159837bcfec418e6c15b"><td class="memItemLeft" align="right" valign="top">sensor_msgs::Image&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__pb.html#a68c7257b77d8159837bcfec418e6c15b">toROS</a> (const seerep::Image &amp;image)</td></tr>
+<tr class="memdesc:a68c7257b77d8159837bcfec418e6c15b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a Protobuf Image message to the corresponding ROS sensor_msgs/Image message.  <a href="namespaceseerep__ros__conversions__pb.html#a68c7257b77d8159837bcfec418e6c15b">More...</a><br /></td></tr>
+<tr class="separator:a68c7257b77d8159837bcfec418e6c15b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adfca5b726ae3afda45d23874c1236350"><td class="memItemLeft" align="right" valign="top">seerep::Point&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__pb.html#adfca5b726ae3afda45d23874c1236350">toProto</a> (const geometry_msgs::Point &amp;point)</td></tr>
+<tr class="memdesc:adfca5b726ae3afda45d23874c1236350"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS geometry_msgs::Point message to the corresponding Protobuf point message.  <a href="namespaceseerep__ros__conversions__pb.html#adfca5b726ae3afda45d23874c1236350">More...</a><br /></td></tr>
+<tr class="separator:adfca5b726ae3afda45d23874c1236350"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0248be287fad6906f9e991b5525e8e0a"><td class="memItemLeft" align="right" valign="top">geometry_msgs::Point&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__pb.html#a0248be287fad6906f9e991b5525e8e0a">toROS</a> (const seerep::Point &amp;point)</td></tr>
+<tr class="memdesc:a0248be287fad6906f9e991b5525e8e0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a Protobuf point message to the corresponding ROS geometry_msgs::Point message.  <a href="namespaceseerep__ros__conversions__pb.html#a0248be287fad6906f9e991b5525e8e0a">More...</a><br /></td></tr>
+<tr class="separator:a0248be287fad6906f9e991b5525e8e0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c449602a372cfc354a122f28c11cddd"><td class="memItemLeft" align="right" valign="top">seerep::Quaternion&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__pb.html#a9c449602a372cfc354a122f28c11cddd">toProto</a> (const geometry_msgs::Quaternion &amp;quaternion)</td></tr>
+<tr class="memdesc:a9c449602a372cfc354a122f28c11cddd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS geometry_msgs::Quaternion message to the corresponding Protobuf Quaternion message.  <a href="namespaceseerep__ros__conversions__pb.html#a9c449602a372cfc354a122f28c11cddd">More...</a><br /></td></tr>
+<tr class="separator:a9c449602a372cfc354a122f28c11cddd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc375d4d6af8ffd092f44749953b9d8c"><td class="memItemLeft" align="right" valign="top">geometry_msgs::Quaternion&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__pb.html#acc375d4d6af8ffd092f44749953b9d8c">toROS</a> (const seerep::Quaternion &amp;quaternion)</td></tr>
+<tr class="memdesc:acc375d4d6af8ffd092f44749953b9d8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a Protobuf Quaternion message to the corresponding ROS geometry_msgs::Quaternion message.  <a href="namespaceseerep__ros__conversions__pb.html#acc375d4d6af8ffd092f44749953b9d8c">More...</a><br /></td></tr>
+<tr class="separator:acc375d4d6af8ffd092f44749953b9d8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7e8026acca65bb1821f84d9cb2bab47"><td class="memItemLeft" align="right" valign="top">seerep::Pose&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__pb.html#ab7e8026acca65bb1821f84d9cb2bab47">toProto</a> (const geometry_msgs::Pose &amp;pose)</td></tr>
+<tr class="memdesc:ab7e8026acca65bb1821f84d9cb2bab47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS geometry_msgs::Pose message to the corresponding Protobuf Pose message.  <a href="namespaceseerep__ros__conversions__pb.html#ab7e8026acca65bb1821f84d9cb2bab47">More...</a><br /></td></tr>
+<tr class="separator:ab7e8026acca65bb1821f84d9cb2bab47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6cc69c78160ff5fce4c63b04d606e93"><td class="memItemLeft" align="right" valign="top">geometry_msgs::Pose&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__pb.html#ac6cc69c78160ff5fce4c63b04d606e93">toROS</a> (const seerep::Pose &amp;pose)</td></tr>
+<tr class="memdesc:ac6cc69c78160ff5fce4c63b04d606e93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a Protobuf Pose message to the corresponding ROS geometry_msgs::Pose message.  <a href="namespaceseerep__ros__conversions__pb.html#ac6cc69c78160ff5fce4c63b04d606e93">More...</a><br /></td></tr>
+<tr class="separator:ac6cc69c78160ff5fce4c63b04d606e93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49e76d6a4536530cd9216450a362958f"><td class="memItemLeft" align="right" valign="top">seerep::PoseStamped&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__pb.html#a49e76d6a4536530cd9216450a362958f">toProto</a> (const geometry_msgs::PoseStamped &amp;pose)</td></tr>
+<tr class="memdesc:a49e76d6a4536530cd9216450a362958f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS geometry_msgs::PoseStamped message to the corresponding Protobuf PoseStamped message.  <a href="namespaceseerep__ros__conversions__pb.html#a49e76d6a4536530cd9216450a362958f">More...</a><br /></td></tr>
+<tr class="separator:a49e76d6a4536530cd9216450a362958f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17444fa092b349cf8b3b0dbd238d4b70"><td class="memItemLeft" align="right" valign="top">geometry_msgs::PoseStamped&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__pb.html#a17444fa092b349cf8b3b0dbd238d4b70">toROS</a> (const seerep::PoseStamped &amp;pose)</td></tr>
+<tr class="memdesc:a17444fa092b349cf8b3b0dbd238d4b70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a Protobuf PoseStamped message to the corresponding ROS geometry_msgs::PoseStamped message.  <a href="namespaceseerep__ros__conversions__pb.html#a17444fa092b349cf8b3b0dbd238d4b70">More...</a><br /></td></tr>
+<tr class="separator:a17444fa092b349cf8b3b0dbd238d4b70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2c89545b68a9f2fb2d142026a41b7b7"><td class="memItemLeft" align="right" valign="top">seerep::Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__pb.html#ab2c89545b68a9f2fb2d142026a41b7b7">toProto</a> (const geometry_msgs::Vector3 &amp;vector)</td></tr>
+<tr class="memdesc:ab2c89545b68a9f2fb2d142026a41b7b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS geometry_msgs::Vector3 message to the corresponding Protobuf Vector3 message.  <a href="namespaceseerep__ros__conversions__pb.html#ab2c89545b68a9f2fb2d142026a41b7b7">More...</a><br /></td></tr>
+<tr class="separator:ab2c89545b68a9f2fb2d142026a41b7b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46c8b2b4e586ce806037b3aeb6f6c7b7"><td class="memItemLeft" align="right" valign="top">geometry_msgs::Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__pb.html#a46c8b2b4e586ce806037b3aeb6f6c7b7">toROS</a> (const seerep::Vector3 &amp;vector)</td></tr>
+<tr class="memdesc:a46c8b2b4e586ce806037b3aeb6f6c7b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a Protobuf Vector3 message to the corresponding ROS geometry_msgs::Vector3 message.  <a href="namespaceseerep__ros__conversions__pb.html#a46c8b2b4e586ce806037b3aeb6f6c7b7">More...</a><br /></td></tr>
+<tr class="separator:a46c8b2b4e586ce806037b3aeb6f6c7b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e316f466dd354235c44ed937eda14a8"><td class="memItemLeft" align="right" valign="top">seerep::Vector3Stamped&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__pb.html#a5e316f466dd354235c44ed937eda14a8">toProto</a> (const geometry_msgs::Vector3Stamped &amp;vector)</td></tr>
+<tr class="memdesc:a5e316f466dd354235c44ed937eda14a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS geometry_msgs::Vector3Stamped message to the corresponding Protobuf Vector3Stamped message.  <a href="namespaceseerep__ros__conversions__pb.html#a5e316f466dd354235c44ed937eda14a8">More...</a><br /></td></tr>
+<tr class="separator:a5e316f466dd354235c44ed937eda14a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc9af54ebc6996b2f3781419d6fcdc12"><td class="memItemLeft" align="right" valign="top">geometry_msgs::Vector3Stamped&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__pb.html#abc9af54ebc6996b2f3781419d6fcdc12">toROS</a> (const seerep::Vector3Stamped &amp;vector)</td></tr>
+<tr class="memdesc:abc9af54ebc6996b2f3781419d6fcdc12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a Protobuf Vector3Stamped message to the corresponding ROS geometry_msgs::Vector3Stamped message.  <a href="namespaceseerep__ros__conversions__pb.html#abc9af54ebc6996b2f3781419d6fcdc12">More...</a><br /></td></tr>
+<tr class="separator:abc9af54ebc6996b2f3781419d6fcdc12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0fda0189c61c8c737408ff6ea5c2b87"><td class="memItemLeft" align="right" valign="top">seerep::Transform&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__pb.html#ae0fda0189c61c8c737408ff6ea5c2b87">toProto</a> (const geometry_msgs::Transform &amp;transform)</td></tr>
+<tr class="memdesc:ae0fda0189c61c8c737408ff6ea5c2b87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS geometry_msgs::Transform message to the corresponding Protobuf Transform message.  <a href="namespaceseerep__ros__conversions__pb.html#ae0fda0189c61c8c737408ff6ea5c2b87">More...</a><br /></td></tr>
+<tr class="separator:ae0fda0189c61c8c737408ff6ea5c2b87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a515a866b3fc31a0d539295ad3163a0c3"><td class="memItemLeft" align="right" valign="top">geometry_msgs::Transform&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__pb.html#a515a866b3fc31a0d539295ad3163a0c3">toROS</a> (const seerep::Transform &amp;transform)</td></tr>
+<tr class="memdesc:a515a866b3fc31a0d539295ad3163a0c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a Protobuf Transform message to the corresponding ROS geometry_msgs::Transform message.  <a href="namespaceseerep__ros__conversions__pb.html#a515a866b3fc31a0d539295ad3163a0c3">More...</a><br /></td></tr>
+<tr class="separator:a515a866b3fc31a0d539295ad3163a0c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69a5a6d3cc2eb8ab581799eaef79b653"><td class="memItemLeft" align="right" valign="top">seerep::TransformStamped&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__pb.html#a69a5a6d3cc2eb8ab581799eaef79b653">toProto</a> (const geometry_msgs::TransformStamped &amp;transform, std::string projectuuid=&quot;&quot;)</td></tr>
+<tr class="memdesc:a69a5a6d3cc2eb8ab581799eaef79b653"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS geometry_msgs::TransformStamped message to the corresponding Protobuf TransformStamped message.  <a href="namespaceseerep__ros__conversions__pb.html#a69a5a6d3cc2eb8ab581799eaef79b653">More...</a><br /></td></tr>
+<tr class="separator:a69a5a6d3cc2eb8ab581799eaef79b653"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:affc703d4879f00e5f5c5ce89a1b0971a"><td class="memItemLeft" align="right" valign="top">geometry_msgs::TransformStamped&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__pb.html#affc703d4879f00e5f5c5ce89a1b0971a">toROS</a> (const seerep::TransformStamped &amp;transform)</td></tr>
+<tr class="memdesc:affc703d4879f00e5f5c5ce89a1b0971a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a Protobuf TransformStamped message to the corresponding ROS geometry_msgs::TransformStamped message.  <a href="namespaceseerep__ros__conversions__pb.html#affc703d4879f00e5f5c5ce89a1b0971a">More...</a><br /></td></tr>
+<tr class="separator:affc703d4879f00e5f5c5ce89a1b0971a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="adfca5b726ae3afda45d23874c1236350" name="adfca5b726ae3afda45d23874c1236350"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adfca5b726ae3afda45d23874c1236350">&#9670;&nbsp;</a></span>toProto() <span class="overload">[1/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">seerep::Point seerep_ros_conversions_pb::toProto </td>
+          <td>(</td>
+          <td class="paramtype">const geometry_msgs::Point &amp;&#160;</td>
+          <td class="paramname"><em>point</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS geometry_msgs::Point message to the corresponding Protobuf point message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">point</td><td>geometry_msgs::Point </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Protobuf Point message </dd></dl>
+
+</div>
+</div>
+<a id="ab7e8026acca65bb1821f84d9cb2bab47" name="ab7e8026acca65bb1821f84d9cb2bab47"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7e8026acca65bb1821f84d9cb2bab47">&#9670;&nbsp;</a></span>toProto() <span class="overload">[2/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">seerep::Pose seerep_ros_conversions_pb::toProto </td>
+          <td>(</td>
+          <td class="paramtype">const geometry_msgs::Pose &amp;&#160;</td>
+          <td class="paramname"><em>pose</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS geometry_msgs::Pose message to the corresponding Protobuf Pose message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pose</td><td>geometry_msgs::Pose </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Protobuf Pose message </dd></dl>
+
+</div>
+</div>
+<a id="a49e76d6a4536530cd9216450a362958f" name="a49e76d6a4536530cd9216450a362958f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49e76d6a4536530cd9216450a362958f">&#9670;&nbsp;</a></span>toProto() <span class="overload">[3/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">seerep::PoseStamped seerep_ros_conversions_pb::toProto </td>
+          <td>(</td>
+          <td class="paramtype">const geometry_msgs::PoseStamped &amp;&#160;</td>
+          <td class="paramname"><em>pose</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS geometry_msgs::PoseStamped message to the corresponding Protobuf PoseStamped message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pose</td><td>geometry_msgs::PoseStamped </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Protobuf PoseStamped message </dd></dl>
+
+</div>
+</div>
+<a id="a9c449602a372cfc354a122f28c11cddd" name="a9c449602a372cfc354a122f28c11cddd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c449602a372cfc354a122f28c11cddd">&#9670;&nbsp;</a></span>toProto() <span class="overload">[4/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">seerep::Quaternion seerep_ros_conversions_pb::toProto </td>
+          <td>(</td>
+          <td class="paramtype">const geometry_msgs::Quaternion &amp;&#160;</td>
+          <td class="paramname"><em>quaternion</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS geometry_msgs::Quaternion message to the corresponding Protobuf Quaternion message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">quaternion</td><td>geometry_msgs::Quaternion </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Protobuf Quaternion message </dd></dl>
+
+</div>
+</div>
+<a id="ae0fda0189c61c8c737408ff6ea5c2b87" name="ae0fda0189c61c8c737408ff6ea5c2b87"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0fda0189c61c8c737408ff6ea5c2b87">&#9670;&nbsp;</a></span>toProto() <span class="overload">[5/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">seerep::Transform seerep_ros_conversions_pb::toProto </td>
+          <td>(</td>
+          <td class="paramtype">const geometry_msgs::Transform &amp;&#160;</td>
+          <td class="paramname"><em>transform</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS geometry_msgs::Transform message to the corresponding Protobuf Transform message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">transform</td><td>geometry_msgs::Transform </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Protobuf Transform message </dd></dl>
+
+</div>
+</div>
+<a id="a69a5a6d3cc2eb8ab581799eaef79b653" name="a69a5a6d3cc2eb8ab581799eaef79b653"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a69a5a6d3cc2eb8ab581799eaef79b653">&#9670;&nbsp;</a></span>toProto() <span class="overload">[6/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">seerep::TransformStamped seerep_ros_conversions_pb::toProto </td>
+          <td>(</td>
+          <td class="paramtype">const geometry_msgs::TransformStamped &amp;&#160;</td>
+          <td class="paramname"><em>transform</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>projectuuid</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS geometry_msgs::TransformStamped message to the corresponding Protobuf TransformStamped message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">transform</td><td>geometry_msgs::TransformStamped </td></tr>
+    <tr><td class="paramname">projectuuid</td><td>std::string </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Protobuf TransformStamped message </dd></dl>
+
+</div>
+</div>
+<a id="ab2c89545b68a9f2fb2d142026a41b7b7" name="ab2c89545b68a9f2fb2d142026a41b7b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2c89545b68a9f2fb2d142026a41b7b7">&#9670;&nbsp;</a></span>toProto() <span class="overload">[7/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">seerep::Vector3 seerep_ros_conversions_pb::toProto </td>
+          <td>(</td>
+          <td class="paramtype">const geometry_msgs::Vector3 &amp;&#160;</td>
+          <td class="paramname"><em>vector</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS geometry_msgs::Vector3 message to the corresponding Protobuf Vector3 message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">vector</td><td>geometry_msgs::Vector3 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Protobuf Vector3 message </dd></dl>
+
+</div>
+</div>
+<a id="a5e316f466dd354235c44ed937eda14a8" name="a5e316f466dd354235c44ed937eda14a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e316f466dd354235c44ed937eda14a8">&#9670;&nbsp;</a></span>toProto() <span class="overload">[8/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">seerep::Vector3Stamped seerep_ros_conversions_pb::toProto </td>
+          <td>(</td>
+          <td class="paramtype">const geometry_msgs::Vector3Stamped &amp;&#160;</td>
+          <td class="paramname"><em>vector</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS geometry_msgs::Vector3Stamped message to the corresponding Protobuf Vector3Stamped message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">vector</td><td>geometry_msgs::Vector3Stamped </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Protobuf Vector3Stamped message </dd></dl>
+
+</div>
+</div>
+<a id="afd6cbb912c1f4f243ea1c171fb113076" name="afd6cbb912c1f4f243ea1c171fb113076"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd6cbb912c1f4f243ea1c171fb113076">&#9670;&nbsp;</a></span>toProto() <span class="overload">[9/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">seerep::Image seerep_ros_conversions_pb::toProto </td>
+          <td>(</td>
+          <td class="paramtype">const sensor_msgs::Image &amp;&#160;</td>
+          <td class="paramname"><em>image</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS sensor_msgs/Image message to the corresponding Protobuf Image message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">image</td><td>sensor_msgs/Image </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Protobuf Image message </dd></dl>
+
+</div>
+</div>
+<a id="aeaf889473dd905d5e6efcf79a02f0dd2" name="aeaf889473dd905d5e6efcf79a02f0dd2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeaf889473dd905d5e6efcf79a02f0dd2">&#9670;&nbsp;</a></span>toProto() <span class="overload">[10/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">seerep::PointCloud2 seerep_ros_conversions_pb::toProto </td>
+          <td>(</td>
+          <td class="paramtype">const sensor_msgs::PointCloud2 &amp;&#160;</td>
+          <td class="paramname"><em>cloud</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS sensor_msgs/PointCloud2 message to the corresponding Protobuf PointCloud2 message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cloud</td><td>sensor_msgs/PointCloud2 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Protobuf PointCloud2 message </dd></dl>
+
+</div>
+</div>
+<a id="a15c06ade714b4a498862000fcdef7dda" name="a15c06ade714b4a498862000fcdef7dda"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15c06ade714b4a498862000fcdef7dda">&#9670;&nbsp;</a></span>toProto() <span class="overload">[11/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">seerep::PointField seerep_ros_conversions_pb::toProto </td>
+          <td>(</td>
+          <td class="paramtype">const sensor_msgs::PointField &amp;&#160;</td>
+          <td class="paramname"><em>point_field</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS sensor_msgs/PointField message to the corresponding Protobuf PointField message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">point_field</td><td>sensor_msgs/PointField </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Protobuf PointField message </dd></dl>
+
+</div>
+</div>
+<a id="ad893491e63242cd830d9ea67fead59b3" name="ad893491e63242cd830d9ea67fead59b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad893491e63242cd830d9ea67fead59b3">&#9670;&nbsp;</a></span>toProto() <span class="overload">[12/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">seerep::Header seerep_ros_conversions_pb::toProto </td>
+          <td>(</td>
+          <td class="paramtype">const std_msgs::Header &amp;&#160;</td>
+          <td class="paramname"><em>header</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS std_msgs/Header message to the corresponding Protobuf Header message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">header</td><td>std_msgs/Header </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Protobuf Header message </dd></dl>
+
+</div>
+</div>
+<a id="aa83993720d237b52c7724fff8aa50b7b" name="aa83993720d237b52c7724fff8aa50b7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa83993720d237b52c7724fff8aa50b7b">&#9670;&nbsp;</a></span>toROS() <span class="overload">[1/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std_msgs::Header seerep_ros_conversions_pb::toROS </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::Header &amp;&#160;</td>
+          <td class="paramname"><em>header</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a Protobuf Header message to the corresponding ROS std_msgs/Header message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">header</td><td>Protobuf Header </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ROS std_msgs/Header </dd></dl>
+
+</div>
+</div>
+<a id="a68c7257b77d8159837bcfec418e6c15b" name="a68c7257b77d8159837bcfec418e6c15b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68c7257b77d8159837bcfec418e6c15b">&#9670;&nbsp;</a></span>toROS() <span class="overload">[2/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sensor_msgs::Image seerep_ros_conversions_pb::toROS </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::Image &amp;&#160;</td>
+          <td class="paramname"><em>image</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a Protobuf Image message to the corresponding ROS sensor_msgs/Image message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">image</td><td>Protobuf Image </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ROS std_sensor_msgs/Image </dd></dl>
+
+</div>
+</div>
+<a id="a0248be287fad6906f9e991b5525e8e0a" name="a0248be287fad6906f9e991b5525e8e0a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0248be287fad6906f9e991b5525e8e0a">&#9670;&nbsp;</a></span>toROS() <span class="overload">[3/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">geometry_msgs::Point seerep_ros_conversions_pb::toROS </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::Point &amp;&#160;</td>
+          <td class="paramname"><em>point</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a Protobuf point message to the corresponding ROS geometry_msgs::Point message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">point</td><td>Protobuf Point </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ROS geometry_msgs::Point </dd></dl>
+
+</div>
+</div>
+<a id="ac5bec2c8d695616e6b2cc499c6b52efa" name="ac5bec2c8d695616e6b2cc499c6b52efa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5bec2c8d695616e6b2cc499c6b52efa">&#9670;&nbsp;</a></span>toROS() <span class="overload">[4/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sensor_msgs::PointCloud2 seerep_ros_conversions_pb::toROS </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::PointCloud2 &amp;&#160;</td>
+          <td class="paramname"><em>cloud</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a Protobuf PointCloud2 message to the corresponding ROS sensor_msgs/PointCloud2 message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cloud</td><td>Protobuf PointCloud2 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ROS std_sensor_msgs/PointCloud2 </dd></dl>
+
+</div>
+</div>
+<a id="a5b2efcac6a6132d1dc9fa152ba29589f" name="a5b2efcac6a6132d1dc9fa152ba29589f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b2efcac6a6132d1dc9fa152ba29589f">&#9670;&nbsp;</a></span>toROS() <span class="overload">[5/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sensor_msgs::PointField seerep_ros_conversions_pb::toROS </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::PointField &amp;&#160;</td>
+          <td class="paramname"><em>point_field</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a Protobuf PointField message to the corresponding ROS sensor_msgs/PointField message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">point_field</td><td>Protobuf PointField </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ROS std_sensor_msgs/PointField </dd></dl>
+
+</div>
+</div>
+<a id="ac6cc69c78160ff5fce4c63b04d606e93" name="ac6cc69c78160ff5fce4c63b04d606e93"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6cc69c78160ff5fce4c63b04d606e93">&#9670;&nbsp;</a></span>toROS() <span class="overload">[6/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">geometry_msgs::Pose seerep_ros_conversions_pb::toROS </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::Pose &amp;&#160;</td>
+          <td class="paramname"><em>pose</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a Protobuf Pose message to the corresponding ROS geometry_msgs::Pose message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pose</td><td>Protobuf Pose </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ROS geometry_msgs::Pose </dd></dl>
+
+</div>
+</div>
+<a id="a17444fa092b349cf8b3b0dbd238d4b70" name="a17444fa092b349cf8b3b0dbd238d4b70"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a17444fa092b349cf8b3b0dbd238d4b70">&#9670;&nbsp;</a></span>toROS() <span class="overload">[7/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">geometry_msgs::PoseStamped seerep_ros_conversions_pb::toROS </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::PoseStamped &amp;&#160;</td>
+          <td class="paramname"><em>pose</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a Protobuf PoseStamped message to the corresponding ROS geometry_msgs::PoseStamped message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pose</td><td>Protobuf PoseStamped </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ROS geometry_msgs::PoseStamped </dd></dl>
+
+</div>
+</div>
+<a id="acc375d4d6af8ffd092f44749953b9d8c" name="acc375d4d6af8ffd092f44749953b9d8c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc375d4d6af8ffd092f44749953b9d8c">&#9670;&nbsp;</a></span>toROS() <span class="overload">[8/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">geometry_msgs::Quaternion seerep_ros_conversions_pb::toROS </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::Quaternion &amp;&#160;</td>
+          <td class="paramname"><em>quaternion</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a Protobuf Quaternion message to the corresponding ROS geometry_msgs::Quaternion message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">quaternion</td><td>Protobuf Quaternion </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ROS geometry_msgs::Quaternion </dd></dl>
+
+</div>
+</div>
+<a id="a515a866b3fc31a0d539295ad3163a0c3" name="a515a866b3fc31a0d539295ad3163a0c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a515a866b3fc31a0d539295ad3163a0c3">&#9670;&nbsp;</a></span>toROS() <span class="overload">[9/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">geometry_msgs::Transform seerep_ros_conversions_pb::toROS </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::Transform &amp;&#160;</td>
+          <td class="paramname"><em>transform</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a Protobuf Transform message to the corresponding ROS geometry_msgs::Transform message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">transform</td><td>Protobuf Transform </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ROS geometry_msgs::Transform </dd></dl>
+
+</div>
+</div>
+<a id="affc703d4879f00e5f5c5ce89a1b0971a" name="affc703d4879f00e5f5c5ce89a1b0971a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#affc703d4879f00e5f5c5ce89a1b0971a">&#9670;&nbsp;</a></span>toROS() <span class="overload">[10/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">geometry_msgs::TransformStamped seerep_ros_conversions_pb::toROS </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::TransformStamped &amp;&#160;</td>
+          <td class="paramname"><em>transform</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a Protobuf TransformStamped message to the corresponding ROS geometry_msgs::TransformStamped message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">transform</td><td>Protobuf TransformStamped </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ROS geometry_msgs::TransformStamped </dd></dl>
+
+</div>
+</div>
+<a id="a46c8b2b4e586ce806037b3aeb6f6c7b7" name="a46c8b2b4e586ce806037b3aeb6f6c7b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46c8b2b4e586ce806037b3aeb6f6c7b7">&#9670;&nbsp;</a></span>toROS() <span class="overload">[11/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">geometry_msgs::Vector3 seerep_ros_conversions_pb::toROS </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::Vector3 &amp;&#160;</td>
+          <td class="paramname"><em>vector</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a Protobuf Vector3 message to the corresponding ROS geometry_msgs::Vector3 message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">vector</td><td>Protobuf Vector3 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ROS geometry_msgs::Vector3 </dd></dl>
+
+</div>
+</div>
+<a id="abc9af54ebc6996b2f3781419d6fcdc12" name="abc9af54ebc6996b2f3781419d6fcdc12"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc9af54ebc6996b2f3781419d6fcdc12">&#9670;&nbsp;</a></span>toROS() <span class="overload">[12/12]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">geometry_msgs::Vector3Stamped seerep_ros_conversions_pb::toROS </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::Vector3Stamped &amp;&#160;</td>
+          <td class="paramname"><em>vector</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a Protobuf Vector3Stamped message to the corresponding ROS geometry_msgs::Vector3Stamped message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">vector</td><td>Protobuf Vector3Stamped </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ROS geometry_msgs::Vector3Stamped </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespaceseerep__ros__conversions__pb.html">seerep_ros_conversions_pb</a></li>
+    <li class="footer">
+        <a href="../mkdocs/legal-notice">Legal Notice</a> -
+        <a href="../mkdocs/data-protection-notice">Data Protection Notice</a> -
+        Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+    </li>
+  </ul>
+</div>
+</body>
+</html>

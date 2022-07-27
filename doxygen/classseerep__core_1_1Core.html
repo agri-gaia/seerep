@@ -1,0 +1,862 @@
+<!--
+Doxygen Awesome
+https://github.com/jothepro/doxygen-awesome-css
+MIT License
+Copyright (c) 2022 jothepro
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.3"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>SEEREP </title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="/doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<a href="https://github.com/agri-gaia/seerep" class="github-corner" title="View source on GitHub" target="_blank">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+<!-- https://github.com/tholman/github-corners -->
+<style>.github-corner svg {fill: var(--primary-light-color); color: var(--page-background-color); width: 72px; height: 72px;}</style>
+<style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">SEEREP
+   </div>
+   <div id="projectbrief">Spatio-temporal-SEmantic Environment REPresentation for robots in an agricultural context</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.3 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search",'Search','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('classseerep__core_1_1Core.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="classseerep__core_1_1Core-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">seerep_core::Core Class Reference</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>This is the central point of access to the seerep core. All interaction with the core goes through this class and is than distributed to the corresponding project.  
+ <a href="classseerep__core_1_1Core.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="core_8h_source.html">core.h</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a4ff581ae2809f42092e071f517cfdba9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1Core.html#a4ff581ae2809f42092e071f517cfdba9">Core</a> (std::string dataFolder, bool loadHdf5Files=true)</td></tr>
+<tr class="memdesc:a4ff581ae2809f42092e071f517cfdba9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs the core and loads all projects / HDF5 files from the data folder.  <a href="classseerep__core_1_1Core.html#a4ff581ae2809f42092e071f517cfdba9">More...</a><br /></td></tr>
+<tr class="separator:a4ff581ae2809f42092e071f517cfdba9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acce948f728afdef5db7e458b4f03eeae"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1Core.html#acce948f728afdef5db7e458b4f03eeae">~Core</a> ()</td></tr>
+<tr class="separator:acce948f728afdef5db7e458b4f03eeae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2fbffbb820f259a3a34c3e8c13a573c7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1Core.html#a2fbffbb820f259a3a34c3e8c13a573c7">addDataset</a> (const <a class="el" href="structseerep__core__msgs_1_1DatasetIndexable.html">seerep_core_msgs::DatasetIndexable</a> &amp;dataset)</td></tr>
+<tr class="memdesc:a2fbffbb820f259a3a34c3e8c13a573c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a dataset to the spatial, temporal and semantic indices.  <a href="classseerep__core_1_1Core.html#a2fbffbb820f259a3a34c3e8c13a573c7">More...</a><br /></td></tr>
+<tr class="separator:a2fbffbb820f259a3a34c3e8c13a573c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a204c5ca7fb62a7d1b8dd0546410d3913"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structseerep__core__msgs_1_1QueryResult.html">seerep_core_msgs::QueryResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1Core.html#a204c5ca7fb62a7d1b8dd0546410d3913">getDataset</a> (const <a class="el" href="structseerep__core__msgs_1_1Query.html">seerep_core_msgs::Query</a> &amp;query)</td></tr>
+<tr class="memdesc:a204c5ca7fb62a7d1b8dd0546410d3913"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a vector of UUIDs of datasets that match the query per project.  <a href="classseerep__core_1_1Core.html#a204c5ca7fb62a7d1b8dd0546410d3913">More...</a><br /></td></tr>
+<tr class="separator:a204c5ca7fb62a7d1b8dd0546410d3913"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9036cbd1c7fab2349a3a48086b88aa0b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structseerep__core__msgs_1_1QueryResult.html">seerep_core_msgs::QueryResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1Core.html#a9036cbd1c7fab2349a3a48086b88aa0b">getInstances</a> (const <a class="el" href="structseerep__core__msgs_1_1Query.html">seerep_core_msgs::Query</a> &amp;query)</td></tr>
+<tr class="memdesc:a9036cbd1c7fab2349a3a48086b88aa0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a vector of UUIDs of instances that match the query and the project UUID.  <a href="classseerep__core_1_1Core.html#a9036cbd1c7fab2349a3a48086b88aa0b">More...</a><br /></td></tr>
+<tr class="separator:a9036cbd1c7fab2349a3a48086b88aa0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3680e0db685653b2f189aeade690d33"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1Core.html#aa3680e0db685653b2f189aeade690d33">addLabels</a> (const <a class="el" href="namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0">seerep_core_msgs::Datatype</a> &amp;datatype, std::vector&lt; std::string &gt; &amp;labels, const boost::uuids::uuid &amp;msgUuid, const boost::uuids::uuid &amp;projectuuid)</td></tr>
+<tr class="memdesc:aa3680e0db685653b2f189aeade690d33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds labels to an existing dataset.  <a href="classseerep__core_1_1Core.html#aa3680e0db685653b2f189aeade690d33">More...</a><br /></td></tr>
+<tr class="separator:aa3680e0db685653b2f189aeade690d33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1769d6c72c2b4ff0732076a35124c88e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1Core.html#a1769d6c72c2b4ff0732076a35124c88e">addTF</a> (const geometry_msgs::TransformStamped &amp;tf, const boost::uuids::uuid &amp;projectuuid)</td></tr>
+<tr class="memdesc:a1769d6c72c2b4ff0732076a35124c88e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a tf to the tf buffer.  <a href="classseerep__core_1_1Core.html#a1769d6c72c2b4ff0732076a35124c88e">More...</a><br /></td></tr>
+<tr class="separator:a1769d6c72c2b4ff0732076a35124c88e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2eef12975acd4e7030611194689794fa"><td class="memItemLeft" align="right" valign="top">std::optional&lt; geometry_msgs::TransformStamped &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1Core.html#a2eef12975acd4e7030611194689794fa">getTF</a> (const <a class="el" href="structseerep__core__msgs_1_1QueryTf.html">seerep_core_msgs::QueryTf</a> &amp;transformQuery)</td></tr>
+<tr class="memdesc:a2eef12975acd4e7030611194689794fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the queried transformation between the two given frames at the given point in time.  <a href="classseerep__core_1_1Core.html#a2eef12975acd4e7030611194689794fa">More...</a><br /></td></tr>
+<tr class="separator:a2eef12975acd4e7030611194689794fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab79a52a1c480897478843c09f62f4431"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1Core.html#ab79a52a1c480897478843c09f62f4431">getFrames</a> (const boost::uuids::uuid &amp;projectuuid)</td></tr>
+<tr class="memdesc:ab79a52a1c480897478843c09f62f4431"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a vector of all frames stored in the TF tree by the TF buffer.  <a href="classseerep__core_1_1Core.html#ab79a52a1c480897478843c09f62f4431">More...</a><br /></td></tr>
+<tr class="separator:ab79a52a1c480897478843c09f62f4431"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b97e131ab8a91907a77f497b93e26da"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1Core.html#a7b97e131ab8a91907a77f497b93e26da">createProject</a> (const <a class="el" href="structseerep__core__msgs_1_1ProjectInfo.html">seerep_core_msgs::ProjectInfo</a> &amp;projectInfo)</td></tr>
+<tr class="memdesc:a7b97e131ab8a91907a77f497b93e26da"><td class="mdescLeft">&#160;</td><td class="mdescRight">creates a new project / HDF5 file with the given project information  <a href="classseerep__core_1_1Core.html#a7b97e131ab8a91907a77f497b93e26da">More...</a><br /></td></tr>
+<tr class="separator:a7b97e131ab8a91907a77f497b93e26da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a372d31eee4ca1fbe5f1efe2f241a8c31"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structseerep__core__msgs_1_1ProjectInfo.html">seerep_core_msgs::ProjectInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1Core.html#a372d31eee4ca1fbe5f1efe2f241a8c31">getProjects</a> ()</td></tr>
+<tr class="memdesc:a372d31eee4ca1fbe5f1efe2f241a8c31"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns the information of all projects  <a href="classseerep__core_1_1Core.html#a372d31eee4ca1fbe5f1efe2f241a8c31">More...</a><br /></td></tr>
+<tr class="separator:a372d31eee4ca1fbe5f1efe2f241a8c31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c90d7dd4d02827f6e824dd20ef802be"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; std::mutex &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1Core.html#a9c90d7dd4d02827f6e824dd20ef802be">getHdf5FileMutex</a> (const boost::uuids::uuid &amp;projectuuid)</td></tr>
+<tr class="memdesc:a9c90d7dd4d02827f6e824dd20ef802be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a shared pointer to the file mutex of the HDF5 file of the targeted project.  <a href="classseerep__core_1_1Core.html#a9c90d7dd4d02827f6e824dd20ef802be">More...</a><br /></td></tr>
+<tr class="separator:a9c90d7dd4d02827f6e824dd20ef802be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aade16116ff2adf933d7273a0dc2f05b4"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; HighFive::File &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1Core.html#aade16116ff2adf933d7273a0dc2f05b4">getHdf5File</a> (const boost::uuids::uuid &amp;projectuuid)</td></tr>
+<tr class="memdesc:aade16116ff2adf933d7273a0dc2f05b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a shared pointer to the HDF5 file accessor of the targeted project.  <a href="classseerep__core_1_1Core.html#aade16116ff2adf933d7273a0dc2f05b4">More...</a><br /></td></tr>
+<tr class="separator:aade16116ff2adf933d7273a0dc2f05b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a4b1082346204a123819c7c1d70e5c640"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1Core.html#a4b1082346204a123819c7c1d70e5c640">recreateProjects</a> ()</td></tr>
+<tr class="memdesc:a4b1082346204a123819c7c1d70e5c640"><td class="mdescLeft">&#160;</td><td class="mdescRight">create the project object for each HDF5 file in the data folder  <a href="classseerep__core_1_1Core.html#a4b1082346204a123819c7c1d70e5c640">More...</a><br /></td></tr>
+<tr class="separator:a4b1082346204a123819c7c1d70e5c640"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad11047d4bd01e839eba796c08cde965a"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; boost::uuids::uuid, std::shared_ptr&lt; <a class="el" href="classseerep__core_1_1CoreProject.html">seerep_core::CoreProject</a> &gt;, boost::hash&lt; boost::uuids::uuid &gt; &gt;::iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1Core.html#ad11047d4bd01e839eba796c08cde965a">findProject</a> (const boost::uuids::uuid &amp;projectuuid)</td></tr>
+<tr class="memdesc:ad11047d4bd01e839eba796c08cde965a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an iterator to the project with the given uuid. Throws an error if not found.  <a href="classseerep__core_1_1Core.html#ad11047d4bd01e839eba796c08cde965a">More...</a><br /></td></tr>
+<tr class="separator:ad11047d4bd01e839eba796c08cde965a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae885a342f5a086c6927f888f62763ad2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structseerep__core__msgs_1_1QueryResult.html">seerep_core_msgs::QueryResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1Core.html#ae885a342f5a086c6927f888f62763ad2">getDatasetFromAllProjects</a> (const <a class="el" href="structseerep__core__msgs_1_1Query.html">seerep_core_msgs::Query</a> &amp;query)</td></tr>
+<tr class="memdesc:ae885a342f5a086c6927f888f62763ad2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies the query on all projects.  <a href="classseerep__core_1_1Core.html#ae885a342f5a086c6927f888f62763ad2">More...</a><br /></td></tr>
+<tr class="separator:ae885a342f5a086c6927f888f62763ad2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1419adfc9a6d07750256183f5c9dc43"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structseerep__core__msgs_1_1QueryResult.html">seerep_core_msgs::QueryResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1Core.html#ac1419adfc9a6d07750256183f5c9dc43">getDatasetFromSpecificProjects</a> (const <a class="el" href="structseerep__core__msgs_1_1Query.html">seerep_core_msgs::Query</a> &amp;query)</td></tr>
+<tr class="memdesc:ac1419adfc9a6d07750256183f5c9dc43"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies the query on the specified projects.  <a href="classseerep__core_1_1Core.html#ac1419adfc9a6d07750256183f5c9dc43">More...</a><br /></td></tr>
+<tr class="separator:ac1419adfc9a6d07750256183f5c9dc43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a663771ed3a3063e790b2be478d9c679a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1Core.html#a663771ed3a3063e790b2be478d9c679a">addDatasetToResult</a> (<a class="el" href="structseerep__core__msgs_1_1QueryResultProject.html">seerep_core_msgs::QueryResultProject</a> &amp;dataset, <a class="el" href="structseerep__core__msgs_1_1QueryResult.html">seerep_core_msgs::QueryResult</a> &amp;result)</td></tr>
+<tr class="memdesc:a663771ed3a3063e790b2be478d9c679a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a dataset to the result set.  <a href="classseerep__core_1_1Core.html#a663771ed3a3063e790b2be478d9c679a">More...</a><br /></td></tr>
+<tr class="separator:a663771ed3a3063e790b2be478d9c679a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:ae8b1bb8866d912cb8f3f0c7307a55ad7"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1Core.html#ae8b1bb8866d912cb8f3f0c7307a55ad7">m_dataFolder</a></td></tr>
+<tr class="memdesc:ae8b1bb8866d912cb8f3f0c7307a55ad7"><td class="mdescLeft">&#160;</td><td class="mdescRight">the path to the folder containing the HDF5 files  <a href="classseerep__core_1_1Core.html#ae8b1bb8866d912cb8f3f0c7307a55ad7">More...</a><br /></td></tr>
+<tr class="separator:ae8b1bb8866d912cb8f3f0c7307a55ad7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00bee5613640dffe6bdf754605beaf14"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; boost::uuids::uuid, std::shared_ptr&lt; <a class="el" href="classseerep__core_1_1CoreProject.html">seerep_core::CoreProject</a> &gt;, boost::hash&lt; boost::uuids::uuid &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1Core.html#a00bee5613640dffe6bdf754605beaf14">m_projects</a></td></tr>
+<tr class="memdesc:a00bee5613640dffe6bdf754605beaf14"><td class="mdescLeft">&#160;</td><td class="mdescRight">a map from the UUID of a project the object of the project  <a href="classseerep__core_1_1Core.html#a00bee5613640dffe6bdf754605beaf14">More...</a><br /></td></tr>
+<tr class="separator:a00bee5613640dffe6bdf754605beaf14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a889939160e0030e69c26e43e9ee01f20"><td class="memItemLeft" align="right" valign="top">boost::log::sources::severity_logger&lt; boost::log::trivial::severity_level &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1Core.html#a889939160e0030e69c26e43e9ee01f20">m_logger</a></td></tr>
+<tr class="memdesc:a889939160e0030e69c26e43e9ee01f20"><td class="mdescLeft">&#160;</td><td class="mdescRight">object handling the logging  <a href="classseerep__core_1_1Core.html#a889939160e0030e69c26e43e9ee01f20">More...</a><br /></td></tr>
+<tr class="separator:a889939160e0030e69c26e43e9ee01f20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p >This is the central point of access to the seerep core. All interaction with the core goes through this class and is than distributed to the corresponding project. </p>
+<p >This class stores holds shared pointer to all projects. The pointers are uniquely discribed by the project UUID. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a4ff581ae2809f42092e071f517cfdba9" name="a4ff581ae2809f42092e071f517cfdba9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ff581ae2809f42092e071f517cfdba9">&#9670;&nbsp;</a></span>Core()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">seerep_core::Core::Core </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>dataFolder</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>loadHdf5Files</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs the core and loads all projects / HDF5 files from the data folder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dataFolder</td><td>path to the folder containing the HDF5 files </td></tr>
+    <tr><td class="paramname">loadHdf5Files</td><td>bool flag if the HDF5 files in the data folder should be read on startup (default true) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="acce948f728afdef5db7e458b4f03eeae" name="acce948f728afdef5db7e458b4f03eeae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acce948f728afdef5db7e458b4f03eeae">&#9670;&nbsp;</a></span>~Core()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">seerep_core::Core::~Core </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a2fbffbb820f259a3a34c3e8c13a573c7" name="a2fbffbb820f259a3a34c3e8c13a573c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2fbffbb820f259a3a34c3e8c13a573c7">&#9670;&nbsp;</a></span>addDataset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_core::Core::addDataset </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structseerep__core__msgs_1_1DatasetIndexable.html">seerep_core_msgs::DatasetIndexable</a> &amp;&#160;</td>
+          <td class="paramname"><em>dataset</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Adds a dataset to the spatial, temporal and semantic indices. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dataset</td><td>contains the relevant information for indexing </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a663771ed3a3063e790b2be478d9c679a" name="a663771ed3a3063e790b2be478d9c679a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a663771ed3a3063e790b2be478d9c679a">&#9670;&nbsp;</a></span>addDatasetToResult()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_core::Core::addDatasetToResult </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structseerep__core__msgs_1_1QueryResultProject.html">seerep_core_msgs::QueryResultProject</a> &amp;&#160;</td>
+          <td class="paramname"><em>dataset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structseerep__core__msgs_1_1QueryResult.html">seerep_core_msgs::QueryResult</a> &amp;&#160;</td>
+          <td class="paramname"><em>result</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds a dataset to the result set. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dataset</td><td>the dataset that should be added to the result </td></tr>
+    <tr><td class="paramname">result</td><td>the result </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa3680e0db685653b2f189aeade690d33" name="aa3680e0db685653b2f189aeade690d33"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3680e0db685653b2f189aeade690d33">&#9670;&nbsp;</a></span>addLabels()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_core::Core::addLabels </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0">seerep_core_msgs::Datatype</a> &amp;&#160;</td>
+          <td class="paramname"><em>datatype</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>labels</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const boost::uuids::uuid &amp;&#160;</td>
+          <td class="paramname"><em>msgUuid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const boost::uuids::uuid &amp;&#160;</td>
+          <td class="paramname"><em>projectuuid</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Adds labels to an existing dataset. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">datatype</td><td>the targeted datatype </td></tr>
+    <tr><td class="paramname">labels</td><td>a vector of labels to be added to the dataset </td></tr>
+    <tr><td class="paramname">msgUuid</td><td>the UUID of the targeted dataset </td></tr>
+    <tr><td class="paramname">projectuuid</td><td>the UUID of the targeted project </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a1769d6c72c2b4ff0732076a35124c88e" name="a1769d6c72c2b4ff0732076a35124c88e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1769d6c72c2b4ff0732076a35124c88e">&#9670;&nbsp;</a></span>addTF()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_core::Core::addTF </td>
+          <td>(</td>
+          <td class="paramtype">const geometry_msgs::TransformStamped &amp;&#160;</td>
+          <td class="paramname"><em>tf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const boost::uuids::uuid &amp;&#160;</td>
+          <td class="paramname"><em>projectuuid</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Adds a tf to the tf buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tf</td><td>the TransformStamped to be added to the buffer </td></tr>
+    <tr><td class="paramname">projectuuid</td><td>the UUID of the targeted project </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a7b97e131ab8a91907a77f497b93e26da" name="a7b97e131ab8a91907a77f497b93e26da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b97e131ab8a91907a77f497b93e26da">&#9670;&nbsp;</a></span>createProject()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_core::Core::createProject </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structseerep__core__msgs_1_1ProjectInfo.html">seerep_core_msgs::ProjectInfo</a> &amp;&#160;</td>
+          <td class="paramname"><em>projectInfo</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>creates a new project / HDF5 file with the given project information </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">projectInfo</td><td>the data needed for project creation (name, UUID, map frame etc.) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ad11047d4bd01e839eba796c08cde965a" name="ad11047d4bd01e839eba796c08cde965a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad11047d4bd01e839eba796c08cde965a">&#9670;&nbsp;</a></span>findProject()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_map&lt; boost::uuids::uuid, std::shared_ptr&lt; <a class="el" href="classseerep__core_1_1CoreProject.html">seerep_core::CoreProject</a> &gt;, boost::hash&lt; boost::uuids::uuid &gt; &gt;::iterator seerep_core::Core::findProject </td>
+          <td>(</td>
+          <td class="paramtype">const boost::uuids::uuid &amp;&#160;</td>
+          <td class="paramname"><em>projectuuid</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns an iterator to the project with the given uuid. Throws an error if not found. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">projectuuid</td><td>the UUID of the project to find </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>an iterator to the map entry of the project object with the given uuid </dd></dl>
+
+</div>
+</div>
+<a id="a204c5ca7fb62a7d1b8dd0546410d3913" name="a204c5ca7fb62a7d1b8dd0546410d3913"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a204c5ca7fb62a7d1b8dd0546410d3913">&#9670;&nbsp;</a></span>getDataset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structseerep__core__msgs_1_1QueryResult.html">seerep_core_msgs::QueryResult</a> seerep_core::Core::getDataset </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structseerep__core__msgs_1_1Query.html">seerep_core_msgs::Query</a> &amp;&#160;</td>
+          <td class="paramname"><em>query</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a vector of UUIDs of datasets that match the query per project. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">query</td><td>the spatio-temporal-semantic query </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>vector of UUIDs of datasets matching the query per project </dd></dl>
+
+</div>
+</div>
+<a id="ae885a342f5a086c6927f888f62763ad2" name="ae885a342f5a086c6927f888f62763ad2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae885a342f5a086c6927f888f62763ad2">&#9670;&nbsp;</a></span>getDatasetFromAllProjects()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structseerep__core__msgs_1_1QueryResult.html">seerep_core_msgs::QueryResult</a> seerep_core::Core::getDatasetFromAllProjects </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structseerep__core__msgs_1_1Query.html">seerep_core_msgs::Query</a> &amp;&#160;</td>
+          <td class="paramname"><em>query</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Applies the query on all projects. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">query</td><td>the query with the query parameters </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the query result </dd></dl>
+
+</div>
+</div>
+<a id="ac1419adfc9a6d07750256183f5c9dc43" name="ac1419adfc9a6d07750256183f5c9dc43"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac1419adfc9a6d07750256183f5c9dc43">&#9670;&nbsp;</a></span>getDatasetFromSpecificProjects()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structseerep__core__msgs_1_1QueryResult.html">seerep_core_msgs::QueryResult</a> seerep_core::Core::getDatasetFromSpecificProjects </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structseerep__core__msgs_1_1Query.html">seerep_core_msgs::Query</a> &amp;&#160;</td>
+          <td class="paramname"><em>query</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Applies the query on the specified projects. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">query</td><td>the query with the query parameters </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the query result </dd></dl>
+
+</div>
+</div>
+<a id="ab79a52a1c480897478843c09f62f4431" name="ab79a52a1c480897478843c09f62f4431"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab79a52a1c480897478843c09f62f4431">&#9670;&nbsp;</a></span>getFrames()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::string &gt; seerep_core::Core::getFrames </td>
+          <td>(</td>
+          <td class="paramtype">const boost::uuids::uuid &amp;&#160;</td>
+          <td class="paramname"><em>projectuuid</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a vector of all frames stored in the TF tree by the TF buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">projectuuid</td><td>the UUID of the targeted project </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>vector of frame names </dd></dl>
+
+</div>
+</div>
+<a id="aade16116ff2adf933d7273a0dc2f05b4" name="aade16116ff2adf933d7273a0dc2f05b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aade16116ff2adf933d7273a0dc2f05b4">&#9670;&nbsp;</a></span>getHdf5File()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt; HighFive::File &gt; seerep_core::Core::getHdf5File </td>
+          <td>(</td>
+          <td class="paramtype">const boost::uuids::uuid &amp;&#160;</td>
+          <td class="paramname"><em>projectuuid</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a shared pointer to the HDF5 file accessor of the targeted project. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">projectuuid</td><td>the UUID of the targeted project </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a shared pointer to the HDF5 file accessor </dd></dl>
+
+</div>
+</div>
+<a id="a9c90d7dd4d02827f6e824dd20ef802be" name="a9c90d7dd4d02827f6e824dd20ef802be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c90d7dd4d02827f6e824dd20ef802be">&#9670;&nbsp;</a></span>getHdf5FileMutex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt; std::mutex &gt; seerep_core::Core::getHdf5FileMutex </td>
+          <td>(</td>
+          <td class="paramtype">const boost::uuids::uuid &amp;&#160;</td>
+          <td class="paramname"><em>projectuuid</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a shared pointer to the file mutex of the HDF5 file of the targeted project. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">projectuuid</td><td>the UUID of the targeted project </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>shared pointer to the HDF5 file mutex </dd></dl>
+
+</div>
+</div>
+<a id="a9036cbd1c7fab2349a3a48086b88aa0b" name="a9036cbd1c7fab2349a3a48086b88aa0b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9036cbd1c7fab2349a3a48086b88aa0b">&#9670;&nbsp;</a></span>getInstances()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structseerep__core__msgs_1_1QueryResult.html">seerep_core_msgs::QueryResult</a> seerep_core::Core::getInstances </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structseerep__core__msgs_1_1Query.html">seerep_core_msgs::Query</a> &amp;&#160;</td>
+          <td class="paramname"><em>query</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a vector of UUIDs of instances that match the query and the project UUID. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">query</td><td>the spatio-temporal-semantic query </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>vector of UUIDs of instances matching the query and the project UUID </dd></dl>
+
+</div>
+</div>
+<a id="a372d31eee4ca1fbe5f1efe2f241a8c31" name="a372d31eee4ca1fbe5f1efe2f241a8c31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a372d31eee4ca1fbe5f1efe2f241a8c31">&#9670;&nbsp;</a></span>getProjects()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="structseerep__core__msgs_1_1ProjectInfo.html">seerep_core_msgs::ProjectInfo</a> &gt; seerep_core::Core::getProjects </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>returns the information of all projects </p>
+<dl class="section return"><dt>Returns</dt><dd>vector of project information </dd></dl>
+
+</div>
+</div>
+<a id="a2eef12975acd4e7030611194689794fa" name="a2eef12975acd4e7030611194689794fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2eef12975acd4e7030611194689794fa">&#9670;&nbsp;</a></span>getTF()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; geometry_msgs::TransformStamped &gt; seerep_core::Core::getTF </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structseerep__core__msgs_1_1QueryTf.html">seerep_core_msgs::QueryTf</a> &amp;&#160;</td>
+          <td class="paramname"><em>transformQuery</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the queried transformation between the two given frames at the given point in time. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">transformQuery</td><td>the query for a transformation </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the queried TF if it exists </dd></dl>
+
+</div>
+</div>
+<a id="a4b1082346204a123819c7c1d70e5c640" name="a4b1082346204a123819c7c1d70e5c640"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b1082346204a123819c7c1d70e5c640">&#9670;&nbsp;</a></span>recreateProjects()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_core::Core::recreateProjects </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>create the project object for each HDF5 file in the data folder </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="ae8b1bb8866d912cb8f3f0c7307a55ad7" name="ae8b1bb8866d912cb8f3f0c7307a55ad7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae8b1bb8866d912cb8f3f0c7307a55ad7">&#9670;&nbsp;</a></span>m_dataFolder</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string seerep_core::Core::m_dataFolder</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>the path to the folder containing the HDF5 files </p>
+
+</div>
+</div>
+<a id="a889939160e0030e69c26e43e9ee01f20" name="a889939160e0030e69c26e43e9ee01f20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a889939160e0030e69c26e43e9ee01f20">&#9670;&nbsp;</a></span>m_logger</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::log::sources::severity_logger&lt;boost::log::trivial::severity_level&gt; seerep_core::Core::m_logger</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>object handling the logging </p>
+
+</div>
+</div>
+<a id="a00bee5613640dffe6bdf754605beaf14" name="a00bee5613640dffe6bdf754605beaf14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00bee5613640dffe6bdf754605beaf14">&#9670;&nbsp;</a></span>m_projects</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_map&lt;boost::uuids::uuid, std::shared_ptr&lt;<a class="el" href="classseerep__core_1_1CoreProject.html">seerep_core::CoreProject</a>&gt;, boost::hash&lt;boost::uuids::uuid&gt; &gt; seerep_core::Core::m_projects</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>a map from the UUID of a project the object of the project </p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>seerep-srv/seerep-core/include/seerep-core/<a class="el" href="core_8h_source.html">core.h</a></li>
+<li>seerep-srv/seerep-core/src/<a class="el" href="core_8cpp.html">core.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespaceseerep__core.html">seerep_core</a></li><li class="navelem"><a class="el" href="classseerep__core_1_1Core.html">Core</a></li>
+    <li class="footer">
+        <a href="../mkdocs/legal-notice">Legal Notice</a> -
+        <a href="../mkdocs/data-protection-notice">Data Protection Notice</a> -
+        Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+    </li>
+  </ul>
+</div>
+</body>
+</html>

@@ -1,0 +1,636 @@
+<!--
+Doxygen Awesome
+https://github.com/jothepro/doxygen-awesome-css
+MIT License
+Copyright (c) 2022 jothepro
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.3"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>SEEREP </title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="/doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<a href="https://github.com/agri-gaia/seerep" class="github-corner" title="View source on GitHub" target="_blank">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+<!-- https://github.com/tholman/github-corners -->
+<style>.github-corner svg {fill: var(--primary-light-color); color: var(--page-background-color); width: 72px; height: 72px;}</style>
+<style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">SEEREP
+   </div>
+   <div id="projectbrief">Spatio-temporal-SEmantic Environment REPresentation for robots in an agricultural context</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.3 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search",'Search','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('classseerep__core_1_1CoreTf.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="classseerep__core_1_1CoreTf-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">seerep_core::CoreTf Class Reference</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>This is the class handling the TF buffer.  
+ <a href="classseerep__core_1_1CoreTf.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="core-tf_8h_source.html">core-tf.h</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a1e05f13cef60a2fb7f5b11a740e85fc8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreTf.html#a1e05f13cef60a2fb7f5b11a740e85fc8">CoreTf</a> (std::shared_ptr&lt; <a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreTf.html">seerep_hdf5_core::Hdf5CoreTf</a> &gt; hdf5_io)</td></tr>
+<tr class="memdesc:a1e05f13cef60a2fb7f5b11a740e85fc8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs the object handling the TF buffer.  <a href="classseerep__core_1_1CoreTf.html#a1e05f13cef60a2fb7f5b11a740e85fc8">More...</a><br /></td></tr>
+<tr class="separator:a1e05f13cef60a2fb7f5b11a740e85fc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a176739c9dbefb3218b6f5a44e2195054"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreTf.html#a176739c9dbefb3218b6f5a44e2195054">~CoreTf</a> ()</td></tr>
+<tr class="separator:a176739c9dbefb3218b6f5a44e2195054"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9463ca41939921a7730ddf1c25eb4f7e"><td class="memItemLeft" align="right" valign="top">std::optional&lt; geometry_msgs::TransformStamped &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreTf.html#a9463ca41939921a7730ddf1c25eb4f7e">getData</a> (const int64_t &amp;timesecs, const int64_t &amp;timenanos, const std::string &amp;targetFrame, const std::string &amp;sourceFrame)</td></tr>
+<tr class="memdesc:a9463ca41939921a7730ddf1c25eb4f7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the queried transformation between the two given frames at the given point in time.  <a href="classseerep__core_1_1CoreTf.html#a9463ca41939921a7730ddf1c25eb4f7e">More...</a><br /></td></tr>
+<tr class="separator:a9463ca41939921a7730ddf1c25eb4f7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03636de48e183fdea31b2c8ca67f165d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreTf.html#a03636de48e183fdea31b2c8ca67f165d">addDataset</a> (const geometry_msgs::TransformStamped &amp;tf)</td></tr>
+<tr class="memdesc:a03636de48e183fdea31b2c8ca67f165d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a tf to the tf buffer.  <a href="classseerep__core_1_1CoreTf.html#a03636de48e183fdea31b2c8ca67f165d">More...</a><br /></td></tr>
+<tr class="separator:a03636de48e183fdea31b2c8ca67f165d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60e0108d838d0f585b5520a3a6b87dbe"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceseerep__core__msgs.html#a51f23338981d650d0d2ffb8cb403adc0">seerep_core_msgs::AABB</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreTf.html#a60e0108d838d0f585b5520a3a6b87dbe">transformAABB</a> (<a class="el" href="namespaceseerep__core__msgs.html#a51f23338981d650d0d2ffb8cb403adc0">seerep_core_msgs::AABB</a> aabb, const std::string &amp;sourceFrame, const std::string &amp;targetFrame, const int64_t &amp;timeSecs, const int64_t &amp;timeNanos)</td></tr>
+<tr class="memdesc:a60e0108d838d0f585b5520a3a6b87dbe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforms an AABB into the target frame.  <a href="classseerep__core_1_1CoreTf.html#a60e0108d838d0f585b5520a3a6b87dbe">More...</a><br /></td></tr>
+<tr class="separator:a60e0108d838d0f585b5520a3a6b87dbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a439e9312e714389d15c9f82c9dd850d0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreTf.html#a439e9312e714389d15c9f82c9dd850d0">canTransform</a> (const std::string &amp;sourceFrame, const std::string &amp;targetFrame, const int64_t &amp;timeSecs, const int64_t &amp;timeNanos)</td></tr>
+<tr class="memdesc:a439e9312e714389d15c9f82c9dd850d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a transformation from the source to the target frame is available at the defined point in time.  <a href="classseerep__core_1_1CoreTf.html#a439e9312e714389d15c9f82c9dd850d0">More...</a><br /></td></tr>
+<tr class="separator:a439e9312e714389d15c9f82c9dd850d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2118b055ed3d37258803214b81620511"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structseerep__core__msgs_1_1Query.html">seerep_core_msgs::Query</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreTf.html#a2118b055ed3d37258803214b81620511">transformQuery</a> (const <a class="el" href="structseerep__core__msgs_1_1Query.html">seerep_core_msgs::Query</a> &amp;query, std::string targetFrame)</td></tr>
+<tr class="memdesc:a2118b055ed3d37258803214b81620511"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforms the spatial part of a query into the target frame.  <a href="classseerep__core_1_1CoreTf.html#a2118b055ed3d37258803214b81620511">More...</a><br /></td></tr>
+<tr class="separator:a2118b055ed3d37258803214b81620511"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa794e624a811495504d75667c75794cc"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreTf.html#aa794e624a811495504d75667c75794cc">getFrames</a> ()</td></tr>
+<tr class="memdesc:aa794e624a811495504d75667c75794cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a vector of all frames stored in the TF tree by the TF buffer.  <a href="classseerep__core_1_1CoreTf.html#aa794e624a811495504d75667c75794cc">More...</a><br /></td></tr>
+<tr class="separator:aa794e624a811495504d75667c75794cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:aa5aed7f27571d7e8ec78cf8511e12747"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreTf.html#aa5aed7f27571d7e8ec78cf8511e12747">recreateDatasets</a> ()</td></tr>
+<tr class="memdesc:aa5aed7f27571d7e8ec78cf8511e12747"><td class="mdescLeft">&#160;</td><td class="mdescRight">loads the TFs into the buffer from the HDF5 file  <a href="classseerep__core_1_1CoreTf.html#aa5aed7f27571d7e8ec78cf8511e12747">More...</a><br /></td></tr>
+<tr class="separator:aa5aed7f27571d7e8ec78cf8511e12747"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0b6228fdddcf0eff49a8faef977c781"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreTf.html#ab0b6228fdddcf0eff49a8faef977c781">addToTfBuffer</a> (geometry_msgs::TransformStamped transform)</td></tr>
+<tr class="memdesc:ab0b6228fdddcf0eff49a8faef977c781"><td class="mdescLeft">&#160;</td><td class="mdescRight">adds a transformation to the TF buffer  <a href="classseerep__core_1_1CoreTf.html#ab0b6228fdddcf0eff49a8faef977c781">More...</a><br /></td></tr>
+<tr class="separator:ab0b6228fdddcf0eff49a8faef977c781"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:ad41c685f0fa873b668493b96e176475b"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreTf.html">seerep_hdf5_core::Hdf5CoreTf</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreTf.html#ad41c685f0fa873b668493b96e176475b">m_hdf5_io</a></td></tr>
+<tr class="memdesc:ad41c685f0fa873b668493b96e176475b"><td class="mdescLeft">&#160;</td><td class="mdescRight">shared pointer to the object handling the HDF5 io for TFs  <a href="classseerep__core_1_1CoreTf.html#ad41c685f0fa873b668493b96e176475b">More...</a><br /></td></tr>
+<tr class="separator:ad41c685f0fa873b668493b96e176475b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9cc73a2e6d25877744b6166cbb4f8803"><td class="memItemLeft" align="right" valign="top">tf2::BufferCore&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreTf.html#a9cc73a2e6d25877744b6166cbb4f8803">m_tfBuffer</a></td></tr>
+<tr class="memdesc:a9cc73a2e6d25877744b6166cbb4f8803"><td class="mdescLeft">&#160;</td><td class="mdescRight">the TF buffer  <a href="classseerep__core_1_1CoreTf.html#a9cc73a2e6d25877744b6166cbb4f8803">More...</a><br /></td></tr>
+<tr class="separator:a9cc73a2e6d25877744b6166cbb4f8803"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a283eee26639d5728f937bc3dc2ef64e4"><td class="memItemLeft" align="right" valign="top">boost::log::sources::severity_logger&lt; boost::log::trivial::severity_level &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreTf.html#a283eee26639d5728f937bc3dc2ef64e4">m_logger</a></td></tr>
+<tr class="memdesc:a283eee26639d5728f937bc3dc2ef64e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">object handling the logging  <a href="classseerep__core_1_1CoreTf.html#a283eee26639d5728f937bc3dc2ef64e4">More...</a><br /></td></tr>
+<tr class="separator:a283eee26639d5728f937bc3dc2ef64e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p >This is the class handling the TF buffer. </p>
+<p >TFs are stored in a tf2::BufferCore. TFs can be added to this buffer and queries from one frame to another can be queried for a specific point in time. AABBs and spatial queries can also be transformed directly in the map frame of the project via public methods. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a1e05f13cef60a2fb7f5b11a740e85fc8" name="a1e05f13cef60a2fb7f5b11a740e85fc8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e05f13cef60a2fb7f5b11a740e85fc8">&#9670;&nbsp;</a></span>CoreTf()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">seerep_core::CoreTf::CoreTf </td>
+          <td>(</td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreTf.html">seerep_hdf5_core::Hdf5CoreTf</a> &gt;&#160;</td>
+          <td class="paramname"><em>hdf5_io</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs the object handling the TF buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">hdf5_io</td><td>pointer to the HDF5 io object for TFs </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a176739c9dbefb3218b6f5a44e2195054" name="a176739c9dbefb3218b6f5a44e2195054"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a176739c9dbefb3218b6f5a44e2195054">&#9670;&nbsp;</a></span>~CoreTf()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">seerep_core::CoreTf::~CoreTf </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a03636de48e183fdea31b2c8ca67f165d" name="a03636de48e183fdea31b2c8ca67f165d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03636de48e183fdea31b2c8ca67f165d">&#9670;&nbsp;</a></span>addDataset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_core::CoreTf::addDataset </td>
+          <td>(</td>
+          <td class="paramtype">const geometry_msgs::TransformStamped &amp;&#160;</td>
+          <td class="paramname"><em>tf</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Adds a tf to the tf buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tf</td><td>the TransformStamped to be added to the buffer </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab0b6228fdddcf0eff49a8faef977c781" name="ab0b6228fdddcf0eff49a8faef977c781"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0b6228fdddcf0eff49a8faef977c781">&#9670;&nbsp;</a></span>addToTfBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_core::CoreTf::addToTfBuffer </td>
+          <td>(</td>
+          <td class="paramtype">geometry_msgs::TransformStamped&#160;</td>
+          <td class="paramname"><em>transform</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>adds a transformation to the TF buffer </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">transform</td><td>the transformation to be added to the buffer </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a439e9312e714389d15c9f82c9dd850d0" name="a439e9312e714389d15c9f82c9dd850d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a439e9312e714389d15c9f82c9dd850d0">&#9670;&nbsp;</a></span>canTransform()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool seerep_core::CoreTf::canTransform </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>sourceFrame</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>targetFrame</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int64_t &amp;&#160;</td>
+          <td class="paramname"><em>timeSecs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int64_t &amp;&#160;</td>
+          <td class="paramname"><em>timeNanos</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Check if a transformation from the source to the target frame is available at the defined point in time. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sourceFrame</td><td>the source frame of the transformation </td></tr>
+    <tr><td class="paramname">targetFrame</td><td>the target frame of the transformation </td></tr>
+    <tr><td class="paramname">timeSecs</td><td>the point in time to be used for the transformation; seconds </td></tr>
+    <tr><td class="paramname">timeNanos</td><td>the point in time to be used for the transformation; nanoseconds </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if transformation is available; false otherwise </dd></dl>
+
+</div>
+</div>
+<a id="a9463ca41939921a7730ddf1c25eb4f7e" name="a9463ca41939921a7730ddf1c25eb4f7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9463ca41939921a7730ddf1c25eb4f7e">&#9670;&nbsp;</a></span>getData()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; geometry_msgs::TransformStamped &gt; seerep_core::CoreTf::getData </td>
+          <td>(</td>
+          <td class="paramtype">const int64_t &amp;&#160;</td>
+          <td class="paramname"><em>timesecs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int64_t &amp;&#160;</td>
+          <td class="paramname"><em>timenanos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>targetFrame</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>sourceFrame</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the queried transformation between the two given frames at the given point in time. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">timesecs</td><td>queried transformation time; seconds </td></tr>
+    <tr><td class="paramname">timenanos</td><td>queried transformation time; nanoseconds </td></tr>
+    <tr><td class="paramname">targetFrame</td><td>the target frame of the transformation </td></tr>
+    <tr><td class="paramname">sourceFrame</td><td>the source frame of the transformation </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the queried TF if it exists </dd></dl>
+
+</div>
+</div>
+<a id="aa794e624a811495504d75667c75794cc" name="aa794e624a811495504d75667c75794cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa794e624a811495504d75667c75794cc">&#9670;&nbsp;</a></span>getFrames()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::string &gt; seerep_core::CoreTf::getFrames </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a vector of all frames stored in the TF tree by the TF buffer. </p>
+<dl class="section return"><dt>Returns</dt><dd>vector of frame names </dd></dl>
+
+</div>
+</div>
+<a id="aa5aed7f27571d7e8ec78cf8511e12747" name="aa5aed7f27571d7e8ec78cf8511e12747"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5aed7f27571d7e8ec78cf8511e12747">&#9670;&nbsp;</a></span>recreateDatasets()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_core::CoreTf::recreateDatasets </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>loads the TFs into the buffer from the HDF5 file </p>
+
+</div>
+</div>
+<a id="a60e0108d838d0f585b5520a3a6b87dbe" name="a60e0108d838d0f585b5520a3a6b87dbe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60e0108d838d0f585b5520a3a6b87dbe">&#9670;&nbsp;</a></span>transformAABB()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceseerep__core__msgs.html#a51f23338981d650d0d2ffb8cb403adc0">seerep_core_msgs::AABB</a> seerep_core::CoreTf::transformAABB </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceseerep__core__msgs.html#a51f23338981d650d0d2ffb8cb403adc0">seerep_core_msgs::AABB</a>&#160;</td>
+          <td class="paramname"><em>aabb</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>sourceFrame</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>targetFrame</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int64_t &amp;&#160;</td>
+          <td class="paramname"><em>timeSecs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int64_t &amp;&#160;</td>
+          <td class="paramname"><em>timeNanos</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Transforms an AABB into the target frame. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">aabb</td><td>the AABB which should be transformed </td></tr>
+    <tr><td class="paramname">sourceFrame</td><td>the frame of the AABB before the transformation </td></tr>
+    <tr><td class="paramname">targetFrame</td><td>the frame of the AABB after the transformation </td></tr>
+    <tr><td class="paramname">timeSecs</td><td>the point in time to be used for the transformation; seconds </td></tr>
+    <tr><td class="paramname">timeNanos</td><td>the point in time to be used for the transformation; nanoseconds </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the AABB transformed into the target frame </dd></dl>
+
+</div>
+</div>
+<a id="a2118b055ed3d37258803214b81620511" name="a2118b055ed3d37258803214b81620511"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2118b055ed3d37258803214b81620511">&#9670;&nbsp;</a></span>transformQuery()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structseerep__core__msgs_1_1Query.html">seerep_core_msgs::Query</a> seerep_core::CoreTf::transformQuery </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structseerep__core__msgs_1_1Query.html">seerep_core_msgs::Query</a> &amp;&#160;</td>
+          <td class="paramname"><em>query</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>targetFrame</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Transforms the spatial part of a query into the target frame. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">query</td><td>the query which spatial part should be transformed </td></tr>
+    <tr><td class="paramname">targetFrame</td><td>the frame of the spatial part of the query after the transformation </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the query with the spatial part transformed in the target frame</dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="ad41c685f0fa873b668493b96e176475b" name="ad41c685f0fa873b668493b96e176475b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad41c685f0fa873b668493b96e176475b">&#9670;&nbsp;</a></span>m_hdf5_io</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreTf.html">seerep_hdf5_core::Hdf5CoreTf</a>&gt; seerep_core::CoreTf::m_hdf5_io</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>shared pointer to the object handling the HDF5 io for TFs </p>
+
+</div>
+</div>
+<a id="a283eee26639d5728f937bc3dc2ef64e4" name="a283eee26639d5728f937bc3dc2ef64e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a283eee26639d5728f937bc3dc2ef64e4">&#9670;&nbsp;</a></span>m_logger</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::log::sources::severity_logger&lt;boost::log::trivial::severity_level&gt; seerep_core::CoreTf::m_logger</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>object handling the logging </p>
+
+</div>
+</div>
+<a id="a9cc73a2e6d25877744b6166cbb4f8803" name="a9cc73a2e6d25877744b6166cbb4f8803"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9cc73a2e6d25877744b6166cbb4f8803">&#9670;&nbsp;</a></span>m_tfBuffer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">tf2::BufferCore seerep_core::CoreTf::m_tfBuffer</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>the TF buffer </p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>seerep-srv/seerep-core/include/seerep-core/<a class="el" href="core-tf_8h_source.html">core-tf.h</a></li>
+<li>seerep-srv/seerep-core/src/<a class="el" href="core-tf_8cpp.html">core-tf.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespaceseerep__core.html">seerep_core</a></li><li class="navelem"><a class="el" href="classseerep__core_1_1CoreTf.html">CoreTf</a></li>
+    <li class="footer">
+        <a href="../mkdocs/legal-notice">Legal Notice</a> -
+        <a href="../mkdocs/data-protection-notice">Data Protection Notice</a> -
+        Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+    </li>
+  </ul>
+</div>
+</body>
+</html>
