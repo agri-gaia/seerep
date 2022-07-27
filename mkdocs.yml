@@ -27,3 +27,5 @@ markdown_extensions:
   - pymdownx.superfences
   - meta
   - attr_list
+copyright: >
+        <a href="/legal-notice/">Legal Notice</a> - <a href="/data-protection-notice/">Data Protection Notice</a>
