@@ -8,14 +8,14 @@ when visiting and using our web site.
 ## Controller
 
 Deutsches Forschungszentrum für Künstliche Intelligenz GmbH (DFKI)<br>
-Phone: +49 631 20575 0<br>
-info@dfki.de<br>
+Phone: [+49 631 20575 0](tel:+49631205750)<br>
+[info@dfki.de](mailto:info@dfki.de)<br>
 [Legal Notice](/seerep/mkdocs/legal-notice/index.html)
 
 ## Data protection officer
 
-Phone: +49 631 20575 0<br>
-datenschutz@dfki.de
+Phone: [+49 631 20575 0](tel:+49631205750)<br>
+[datenschutz@dfki.de](mailto:datenschutz@dfki.de)
 
 ## Hosting Server
 

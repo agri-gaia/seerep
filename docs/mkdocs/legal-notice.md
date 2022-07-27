@@ -2,31 +2,35 @@
 
 ## Responsible service provider
 
-Responsible for the content of the domain agri-gaia.github.io/seerep from the point of view of § 5 TMG:
+Responsible for the content of the domain *[agri-gaia.github.io/seerep](agri-gaia.github.io/seerep/)* from the point of
+view of § 5 TMG:
 
-*Deutsches Forschungszentrum für Künstliche Intelligenz GmbH (DFKI)*<br>
+**Deutsches Forschungszentrum für Künstliche Intelligenz GmbH (DFKI)**</br>
 Management:<br>
 Prof. Dr. Antonio Krüger<br>
 Helmut Ditzer<br>
 Trippstadter Str. 122<br>
 67663 Kaiserslautern<br>
-Germany<br>
-Phone: +49 631 20575 0<br>
-Fax: +49 631 20575 5030<br>
-Email: info@dfki.de
+Germany
+
+Phone: [+49 631 20575 0](tel:+49631205750)<br>
+Email: [info@dfki.de](mailto:info@dfki.de)
 
 Register Court: Amtsgericht Kaiserslautern<br>
 Register Number: HRB 2313
 
 ID-Number: DE 148 646 973
 
-The person responsible for the editorial content of the domain agri-gaia.github.io/seerep of the German Research Center
-for Artificial Intelligence GmbH within the meaning of § 18 para. 2 MStV is:
+The person responsible for the editorial content of the domain *[agri-gaia.github.io/seerep](agri-gaia.github.io/seerep/)*
+of the German Research Center for Artificial Intelligence GmbH within the meaning of § 18 para. 2 MStV is:
 
 Mark Höllmann<br>
-Berghoffstraße 11, 49090 Osnabrück<br>
-Phone: +49 (0) 541 386050 2254<br>
-E-mail: mark.hoellmann@dfki.de<br>
+Berghoffstraße 11<br>
+49090 Osnabrück<br>
+Germany<br>
+
+Phone: [+49 541 386050 2254](tel:+495413860502254)<br>
+E-mail: [mark.hoellmann@dfki.de](mailto:mark.hoellmann@dfki.de)<br>
 Website URL: www.dfki.de
 
 ## Liability for content
