@@ -10,7 +10,7 @@ when visiting and using our web site.
 Deutsches Forschungszentrum für Künstliche Intelligenz GmbH (DFKI)<br>
 Phone: +49 631 20575 0<br>
 info@dfki.de<br>
-[Legal Notice](/legal-notice)
+[Legal Notice](/mkdocs/legal-notice/index.html)
 
 ## Data protection officer
 
