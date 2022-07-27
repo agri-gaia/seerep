@@ -28,4 +28,4 @@ markdown_extensions:
   - meta
   - attr_list
 copyright: >
-        <a href="/legal-notice/">Legal Notice</a> - <a href="/data-protection-notice/">Data Protection Notice</a>
+        <a href="/mkdocs/legal-notice/index.html">Legal Notice</a> - <a href="/mkdocs/data-protection-notice/index.html">Data Protection Notice</a>
