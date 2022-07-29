@@ -115,6 +115,10 @@ write_basic_package_version_file(
   COMPATIBILITY AnyNewerVersion
 )
 
+# install the generated python sources
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+        FILES_MATCHING PATTERN "*.py")
+
 # install the configuration file
 install(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/SeerepComConfig.cmake
