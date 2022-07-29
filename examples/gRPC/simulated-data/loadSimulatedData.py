@@ -3,6 +3,7 @@
 import os
 import sys
 import time
+import uuid
 
 import boundingbox2d_labeled_pb2 as bb
 import grpc
@@ -89,6 +90,7 @@ for folderIndex in range(2):
         bb1 = bb.BoundingBox2DLabeled()
         for a in annotations:
             bb1.labelWithInstance.label = labelSwitch.get(a[0])
+            bb1.labelWithInstance.instanceUuid = str(uuid.uuid4())
 
             bb1.boundingBox.point_min.x = a[1] - a[3] / 2.0
             bb1.boundingBox.point_min.y = a[2] - a[4] / 2.0
