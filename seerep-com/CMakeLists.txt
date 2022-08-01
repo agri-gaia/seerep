@@ -38,9 +38,27 @@ set(MY_FBS_FILES
 
 build_flatbuffers("${MY_FBS_FILES}" "${SeerepMsgs_FLATBUFFERS_IMPORT_DIRS}" fbschemas "" "${CMAKE_CURRENT_BINARY_DIR}/fbs" "${CMAKE_CURRENT_BINARY_DIR}/fbs" "" )
 
+set(FBS_INCLUDE_DIR
+  ${SeerepMsgs_FLATBUFFERS_IMPORT_DIRS}
+  ${SeerepMsgs_FLATBUFFERS_IMPORT_DIRS}/fbs/seerep/fb
+)
+
+foreach(FILENAME IN LISTS MY_FBS_FILES)
+  configure_file("${FILENAME}" "${CMAKE_CURRENT_BINARY_DIR}/${FILENAME}" COPYONLY)
+endforeach()
+
+add_custom_target(fbpyschemas)
+add_custom_command(
+        TARGET fbpyschemas
+        COMMAND flatc -p --grpc "*.fbs"
+        DEPENDS fbpyschemas
+        WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/fbs/")
+
+
 add_library(FlatBuffersTarget INTERFACE)
 target_include_directories(FlatBuffersTarget INTERFACE ${FLATBUFFERS_INCLUDE_DIR})
 add_dependencies(FlatBuffersTarget fbschemas)
+add_dependencies(FlatBuffersTarget fbpyschemas)
 
 get_target_property(FlatBuffers_HEADERS fbschemas GENERATED_HEADERS)
 get_target_property(FlatBuffers_GRPC_SOURCES fbschemas GENERATED_GRPC_CC)
