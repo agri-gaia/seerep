@@ -4,8 +4,8 @@ import os
 
 import flatbuffers
 import grpc
-from seerep.fb import Empty, ProjectInfos
-from seerep.fb import meta_operations_grpc_fb as metaOperations
+from fb import Empty, ProjectInfos
+from fb import meta_operations_grpc_fb as metaOperations
 
 # # server with certs
 # __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))

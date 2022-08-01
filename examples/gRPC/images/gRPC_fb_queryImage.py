@@ -5,7 +5,7 @@ import sys
 
 import flatbuffers
 import grpc
-from seerep.fb import (
+from fb import (
     Boundingbox,
     Empty,
     Header,
@@ -16,8 +16,8 @@ from seerep.fb import (
     TimeInterval,
     Timestamp,
 )
-from seerep.fb import imageService_grpc_fb as imageService
-from seerep.fb import metaOperations_grpc_fb as metaOperations
+from fb import image_service_grpc_fb as imageService
+from fb import meta_operations_grpc_fb as metaOperations
 
 # import numpy as np
 

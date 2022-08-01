@@ -1,24 +1,16 @@
-# Seerep Container
+# Seerep Images
 
-The seerep-container is divided into three parts: base, dev-server and server.
+The seerep-image is divided into two parts: base and server.
 
-All containers are stored in the gitlab-registry (<https://git.ni.dfki.de/agrigaia/seerep/container_registry>)
+All images are stored in the [github-registry](https://github.com/orgs/agri-gaia/packages?repo_name=seerep)
 
-## Base Container
+## Base Image
 
-The base container itself is derived from [ros:neotic](http://wiki.ros.org/noetic) and installs all neccessary dependencies
-for ros and seerep.
+The base image itself is derived from [ros:neotic](http://wiki.ros.org/noetic) and installs all neccessary dependencies
+for ros and seerep. This image is also used for the vs-code dev-container.
 
-- source: git.ni.dfki.de:5050/agrigaia/seerep/base
-- folder: /base
-
-## Dev Container
-
-To start the seerep-server on any server, one can use the Dev Container. This will start seerep with the default path
-(seerep-data) to store any created data.
-
-- source: git.ni.dfki.de:5050/agrigaia/seerep/dev-server
-- folder: /dev-server
+- source: <https://github.com/agri-gaia/seerep/pkgs/container/seerep_base>
+- folder: ./base
 
 ## Server Container
 

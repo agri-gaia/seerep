@@ -1,15 +1,17 @@
 version: "3.9"
 services:
   seerep:
-    image: git.ni.dfki.de:5050/agrigaia/seerep/server:latest
+    image: ghcr.io/agri-gaia/seerep_server:latest
+    tty: true
     container_name: seerep_server
-    # restart: unless-stopped
-    # user: docker:docker
     command:
-      - /mnt/seerep-data # define data-dir for seerep-server
-    # entrypoint: /bin/sh -c "while sleep 1000; do :; done" # use this entrypoint for local testing
+      # define data-dir for seerep-server
+      - "--data-folder=/mnt/seerep-data"
     ports:
-      - 9090:9090
+      # the gRPC port
+      - 9090
     volumes:
-      #- ..:/seerep/src # mount the git for local testing
-      - ../../seerep-data:/mnt/seerep-data
+      # persist the data folder
+      - seerep-data:/mnt/seerep-data
+volumes:
+  seerep-data:
