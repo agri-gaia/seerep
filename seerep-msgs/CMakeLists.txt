@@ -90,6 +90,7 @@ set(MY_FBS_FILES
 	fbs/twist_with_covariance_stamped.fbs
 	fbs/twist_with_covariance.fbs
 	fbs/twist.fbs
+	fbs/union_map_entry.fbs
 	fbs/uuids_per_project.fbs
 	fbs/uuids_project_pair.fbs
 	fbs/vector3_stamped.fbs

@@ -1,0 +1,29 @@
+namespace seerep.fb;
+
+table Boolean {
+  data:bool;
+}
+
+table Integer {
+  data:long;
+}
+
+table Double {
+  data:double;
+}
+
+table String {
+  data:string;
+}
+
+union Datatypes{
+    Boolean,
+    Integer,
+    Double,
+    String
+}
+
+table UnionMapEntry{
+    key:string;
+    value:Datatypes;
+}

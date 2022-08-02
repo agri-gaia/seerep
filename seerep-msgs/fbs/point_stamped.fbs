@@ -1,10 +1,14 @@
 
 include "header.fbs";
 include "point.fbs";
+include "label_with_instance.fbs";
+include "union_map_entry.fbs";
 
 namespace seerep.fb;
 
 table PointStamped {
   header:seerep.fb.Header;
   point:seerep.fb.Point;
+  labels_general:[LabelWithInstance];
+  attribute:[UnionMapEntry];
 }
