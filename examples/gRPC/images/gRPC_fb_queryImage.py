@@ -19,9 +19,6 @@ from fb import (
 from fb import image_service_grpc_fb as imageService
 from fb import meta_operations_grpc_fb as metaOperations
 
-# import numpy as np
-
-
 # server with certs
 # __location__ = os.path.realpath(
 #     os.path.join(os.getcwd(), os.path.dirname(__file__)))
@@ -49,17 +46,17 @@ response = ProjectInfos.ProjectInfos.GetRootAs(responseBuf)
 
 projectuuid = ""
 for i in range(response.ProjectsLength()):
-    print(response.Projects(i).Name().decode("utf-8") + " " + response.Projects(i).Uuid().decode("utf-8"))
-    if response.Projects(i).Name().decode("utf-8") == "agricultural_demonstator":
+    print(response.Projects(i).Name().decode("utf-8") + " " + response.Projects(i).Uuid().decode("utf-8") + "\n")
+    if response.Projects(i).Name().decode("utf-8") == "testproject":
         projectuuid = response.Projects(i).Uuid().decode("utf-8")
 
 if projectuuid == "":
     sys.exit()
 
 Point.Start(builder)
-Point.AddX(builder, -100.0)
-Point.AddY(builder, -100.0)
-Point.AddZ(builder, -100.0)
+Point.AddX(builder, 0.0)
+Point.AddY(builder, 0.0)
+Point.AddZ(builder, 0.0)
 pointMin = Point.End(builder)
 
 Point.Start(builder)
@@ -100,7 +97,7 @@ builder.PrependUOffsetTRelative(projectuuidString)
 projectuuidMsg = builder.EndVector()
 
 
-label = builder.CreateString("1")
+label = builder.CreateString("testlabel0")
 Query.StartLabelVector(builder, 1)
 builder.PrependUOffsetTRelative(label)
 labelMsg = builder.EndVector()
@@ -117,10 +114,11 @@ buf = builder.Output()
 
 for responseBuf in stub.GetImage(bytes(buf)):
     response = Image.Image.GetRootAs(responseBuf)
-    print("uuidmsg: " + response.Header().UuidMsgs().decode("utf-8"))
+
+    print(f"uuidmsg: {response.Header().UuidMsgs().decode('utf-8')}")
     print("first label: " + response.LabelsBb(0).LabelWithInstance().Label().decode("utf-8"))
     print(
-        "first BoundingBox (Xmin,Ymin,Xmax,Ymax): "
+        "first bounding box (Xmin,Ymin,Xmax,Ymax): "
         + str(response.LabelsBb(0).BoundingBox().PointMin().X())
         + " "
         + str(response.LabelsBb(0).BoundingBox().PointMin().Y())
@@ -128,4 +126,5 @@ for responseBuf in stub.GetImage(bytes(buf)):
         + str(response.LabelsBb(0).BoundingBox().PointMax().X())
         + " "
         + str(response.LabelsBb(0).BoundingBox().PointMax().Y())
+        + "\n"
     )
