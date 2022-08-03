@@ -43,6 +43,7 @@ add_library(seerephdf5fb
 	src/hdf5-fb-general.cpp
 	src/hdf5-fb-tf.cpp
 	src/hdf5-fb-image.cpp
+	src/hdf5-fb-point.cpp
 )
 
 target_link_libraries(seerephdf5fb

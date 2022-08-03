@@ -32,6 +32,7 @@ set(MY_FBS_FILES
   fbs/image_service.fbs
   fbs/instance_service.fbs
   fbs/meta_operations.fbs
+  fbs/point_service.fbs
   fbs/tf_service.fbs
   fbs/transfer_sensor_msgs.fbs
 )

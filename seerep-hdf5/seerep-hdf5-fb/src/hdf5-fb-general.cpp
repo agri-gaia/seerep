@@ -64,6 +64,43 @@ void Hdf5FbGeneral::checkExists(const std::string& id)
   }
 }
 
+void Hdf5FbGeneral::writeAttributeMap(
+    const std::shared_ptr<HighFive::DataSet> dataSetPtr,
+    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>>& attributes)
+{
+  for (auto attribute : attributes)
+  {
+    if (attribute->value_type() == seerep::fb::Datatypes_Boolean)
+    {
+      writeAttribute(dataSetPtr, attribute->key()->str(),
+                     static_cast<const seerep::fb::Boolean*>(attribute->value())->data());
+    }
+    else if (attribute->value_type() == seerep::fb::Datatypes_Integer)
+    {
+      writeAttribute(dataSetPtr, attribute->key()->str(),
+                     static_cast<const seerep::fb::Integer*>(attribute->value())->data());
+    }
+    else if (attribute->value_type() == seerep::fb::Datatypes_Double)
+    {
+      writeAttribute(dataSetPtr, attribute->key()->str(),
+                     static_cast<const seerep::fb::Double*>(attribute->value())->data());
+    }
+    else if (attribute->value_type() == seerep::fb::Datatypes_String)
+    {
+      writeAttribute(dataSetPtr, attribute->key()->str(),
+                     static_cast<const seerep::fb::String*>(attribute->value())->data()->str());
+    }
+    else
+    {
+      std::stringstream errorMsg;
+      errorMsg << "type " << attribute->value_type() << " of attribute " << attribute->key()->c_str()
+               << " not implemented in hdf5-io.";
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << errorMsg.str();
+      throw std::invalid_argument(errorMsg.str());
+    }
+  }
+}
+
 void Hdf5FbGeneral::deleteAttribute(const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField)
 {
   if (dataSetPtr->hasAttribute(attributeField))
