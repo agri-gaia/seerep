@@ -73,44 +73,62 @@ public:
 private:
   /**
    * @brief converts the project part of the flatbuffer query message to seerep core specific message
-   * @param query the flatbuffer query message
-   * @param queryCore query message in seerep core format
+   * @param projects the projects in the flatbuffer query message
+   * @param queryCoreProjects th eprojects in the query message in seerep core format
    */
   static void fromFbQueryProject(const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>* projects,
                                  std::optional<std::vector<boost::uuids::uuid>>& queryCoreProjects);
   /**
    * @brief converts the label part of the flatbuffer query message to seerep core specific message
-   * @param query the flatbuffer query message
-   * @param queryCore query message in seerep core format
+   * @param label the labels in the flatbuffer query message
+   * @param queryCoreLabel the labels in the query message in seerep core format
    */
   static void fromFbQueryLabel(const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>* label,
                                std::optional<std::vector<std::string>>& queryCoreLabel);
   /**
    * @brief converts the temporal part of the flatbuffer query message to seerep core specific message
-   * @param query the flatbuffer query message
-   * @param queryCore query message in seerep core format
+   * @param time the thime in the flatbuffer query message
+   * @param queryCoreTime the time in the query message in seerep core format
    */
   static void fromFbQueryTime(const seerep::fb::TimeInterval* time,
                               std::optional<seerep_core_msgs::Timeinterval>& queryCoreTime);
   /**
    * @brief converts the spatial part of the flatbuffer query message to seerep core specific message
-   * @param query the flatbuffer query message
-   * @param queryCore query message in seerep core format
+   * @param boundingBox the bounding box in the flatbuffer query message
+   * @param queryCoreBoundingBox the bounding box in the query message in seerep core format
+   * @param queryCoreHeaderFrameId the frame id in the header of the query message in the seerep core format
    */
   static void fromFbQueryBoundingBox(const seerep::fb::Boundingbox* boundingBox,
                                      std::optional<seerep_core_msgs::AABB>& queryCoreBoundingBox,
                                      std::string& queryCoreHeaderFrameId);
+  /**
+   * @brief converts the header of the flatbuffer data message to seerep core specific message
+   * @param header the header in the flatbuffer data message
+   * @param coreHeader the header in the data message in seerep core format
+   */
+  static void fromFbDataHeader(const seerep::fb::Header* header, seerep_core_msgs::Header& coreHeader);
 
-  static void fromFbDataHeader(seerep_core_msgs::Header& coreHeader, const seerep::fb::Header* header);
-
+  /**
+   * @brief converts (or generates if not set) the msg uuid of the flatbuffer data message to seerep core specific message
+   * @param uuidMsg the msg uuid in the flatbuffer data message
+   */
   static boost::uuids::uuid fromFbDataHeaderUuid(const std::string& uuidMsg);
-
+  /**
+   * @brief converts the labels_general with instances of the flatbuffer data message to seerep core specific message
+   * @param labelsGeneral the labels_general with instances in the flatbuffer data message
+   * @param labelWithInstance the labels_general with instances in the data message in seerep core format
+   */
   static void
-  fromFbDataLabelsGeneral(std::vector<seerep_core_msgs::LabelWithInstance>& labelWithInstance,
-                          const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>* labelsGeneral);
+  fromFbDataLabelsGeneral(const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>* labelsGeneral,
+                          std::vector<seerep_core_msgs::LabelWithInstance>& labelWithInstance);
+  /**
+   * @brief converts the BoundingBox2DLabeled with instances of the flatbuffer data message to seerep core specific message
+   * @param labelsGeneral the BoundingBox2DLabeled with instances in the flatbuffer data message
+   * @param labelWithInstance the BoundingBox2DLabeled with instances in the data message in seerep core format
+   */
   static void
-  fromFbDataLabelsGeneral(std::vector<seerep_core_msgs::LabelWithInstance>& labelWithInstance,
-                          const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>>* labelsBB2d);
+  fromFbDataLabelsGeneral(const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>>* labelsBB2d,
+                          std::vector<seerep_core_msgs::LabelWithInstance>& labelWithInstance);
 };
 
 }  // namespace seerep_core_fb

@@ -19,7 +19,7 @@ seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::Im
 {
   seerep_core_msgs::DatasetIndexable dataForIndices;
 
-  fromFbDataHeader(dataForIndices.header, img.header());
+  fromFbDataHeader(img.header(), dataForIndices.header);
 
   // set bounding box for images to 0. assume no spatial extent
   dataForIndices.boundingbox.min_corner().set<0>(0);
@@ -41,8 +41,8 @@ seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::Im
   }
   dataForIndices.labelsWithInstances.reserve(labelSizeAll);
 
-  fromFbDataLabelsGeneral(dataForIndices.labelsWithInstances, img.labels_general());
-  fromFbDataLabelsGeneral(dataForIndices.labelsWithInstances, img.labels_bb());
+  fromFbDataLabelsGeneral(img.labels_general(), dataForIndices.labelsWithInstances);
+  fromFbDataLabelsGeneral(img.labels_bb(), dataForIndices.labelsWithInstances);
 
   return dataForIndices;
 }
@@ -50,7 +50,7 @@ seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::Po
 {
   seerep_core_msgs::DatasetIndexable dataForIndices;
 
-  fromFbDataHeader(dataForIndices.header, point.header());
+  fromFbDataHeader(point.header(), dataForIndices.header);
 
   // set bounding box for point to point coordinates. assume no spatial extent
   dataForIndices.boundingbox.min_corner().set<0>(point.point()->x());
@@ -69,7 +69,7 @@ seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::Po
 
   dataForIndices.labelsWithInstances.reserve(labelSizeAll);
 
-  fromFbDataLabelsGeneral(dataForIndices.labelsWithInstances, point.labels_general());
+  fromFbDataLabelsGeneral(point.labels_general(), dataForIndices.labelsWithInstances);
 
   return dataForIndices;
 }
@@ -175,7 +175,7 @@ void CoreFbConversion::fromFbQueryBoundingBox(const seerep::fb::Boundingbox* bou
   }
 }
 
-void CoreFbConversion::fromFbDataHeader(seerep_core_msgs::Header& coreHeader, const seerep::fb::Header* header)
+void CoreFbConversion::fromFbDataHeader(const seerep::fb::Header* header, seerep_core_msgs::Header& coreHeader)
 {
   boost::uuids::uuid uuid = fromFbDataHeaderUuid(header->uuid_msgs()->str());
 
@@ -204,8 +204,8 @@ boost::uuids::uuid CoreFbConversion::fromFbDataHeaderUuid(const std::string& uui
 }
 
 void CoreFbConversion::fromFbDataLabelsGeneral(
-    std::vector<seerep_core_msgs::LabelWithInstance>& labelWithInstance,
-    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>* labelsGeneral)
+    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>* labelsGeneral,
+    std::vector<seerep_core_msgs::LabelWithInstance>& labelWithInstance)
 {
   if (labelsGeneral)
   {
@@ -229,8 +229,8 @@ void CoreFbConversion::fromFbDataLabelsGeneral(
 }
 
 void CoreFbConversion::fromFbDataLabelsGeneral(
-    std::vector<seerep_core_msgs::LabelWithInstance>& labelWithInstance,
-    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>>* labelsBB2d)
+    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>>* labelsBB2d,
+    std::vector<seerep_core_msgs::LabelWithInstance>& labelWithInstance)
 {
   if (labelsBB2d)
   {

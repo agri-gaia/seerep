@@ -5,6 +5,7 @@
 #include <optional>
 
 #include "core-fb-conversion.h"
+#include "core-fb-general.h"
 
 // seerep-msgs
 #include <seerep-msgs/transform_stamped_generated.h>
@@ -61,16 +62,6 @@ public:
   std::vector<std::string> getFrames(const boost::uuids::uuid& projectuuid);
 
 private:
-  /**
-   * @brief gets the file accessors (the hdf5 file object itself, the mutex, the io object) for the hdf5 file
-   * @param project the uuid of the project for which the accessors are needed
-   */
-  void getFileAccessorFromCore(boost::uuids::uuid project);
-  /**
-   * @brief extracts the hdf5-io object from the hdf5-io-map for the given project
-   * @param project the uuid of the project for which the io-object is needed
-   */
-  std::shared_ptr<seerep_hdf5_fb::Hdf5FbTf> getHdf5(boost::uuids::uuid project);
   /** @brief a shared pointer to the general core */
   std::shared_ptr<seerep_core::Core> m_seerepCore;
   /** a map from the uuids of the projects to the hdf5-io objects handling the io for the object */
