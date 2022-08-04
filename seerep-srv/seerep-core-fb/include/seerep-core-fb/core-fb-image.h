@@ -5,6 +5,7 @@
 #include <optional>
 
 #include "core-fb-conversion.h"
+#include "core-fb-general.h"
 
 // seerep-msgs
 #include <seerep-msgs/image_generated.h>

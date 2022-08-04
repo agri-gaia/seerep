@@ -8,7 +8,8 @@ enum class Datatype
 {
   Unknown,  // default value
   Images,
-  PointClouds
+  PointClouds,
+  Point
 };
 
 } /* namespace seerep_core_msgs */

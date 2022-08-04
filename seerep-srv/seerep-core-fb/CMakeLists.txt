@@ -41,6 +41,7 @@ add_library(seerepcorefb
 	src/core-fb-conversion.cpp
 	src/core-fb-image.cpp
 	src/core-fb-instance.cpp
+	src/core-fb-point.cpp
 	src/core-fb-tf.cpp
 )
 
@@ -55,15 +56,6 @@ target_link_libraries(seerepcorefb
 	${catkin_LIBRARIES}
 	Eigen3::Eigen
 )
-
-set(INSTALL_HEADERS
-	include/seerep-core-fb/core-fb-conversion.h
-	include/seerep-core-fb/core-fb-image.h
-	include/seerep-core-fb/core-fb-instance.h
-	include/seerep-core-fb/core-fb-tf.h
-)
-
-set_target_properties(seerepcorefb PROPERTIES PUBLIC_HEADER "${INSTALL_HEADERS}")
 
 set(CMAKE_INSTALL_INCLUDEDIR include)
 set(CMAKE_INSTALL_LIBDIR lib)
@@ -96,6 +88,8 @@ install(FILES
 	${CMAKE_CURRENT_BINARY_DIR}/SeerepCoreFbConfigVersion.cmake
 	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/seerepcorefb
 )
+
+INSTALL(DIRECTORY include/seerep-core-fb DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 install(FILES
 	"${PROJECT_BINARY_DIR}/SeerepCoreFbConfig.h"
