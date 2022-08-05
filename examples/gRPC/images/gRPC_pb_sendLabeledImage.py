@@ -62,7 +62,6 @@ for n in range(10):
             r = np.ubyte((x * 255.0 + n) % 255)
             g = np.ubyte((y * 255.0 + n) % 255)
             b = np.ubyte((z * 255.0 + n) % 255)
-            # print(r, g, b)
             rgb.append(r)
             rgb.append(g)
             rgb.append(b)
