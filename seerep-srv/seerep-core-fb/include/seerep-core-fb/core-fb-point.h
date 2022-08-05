@@ -1,5 +1,5 @@
-#ifndef SEEREP_CORE_FB_IMAGE_H_
-#define SEEREP_CORE_FB_IMAGE_H_
+#ifndef SEEREP_CORE_FB_POINT_H_
+#define SEEREP_CORE_FB_POINT_H_
 
 #include <functional>
 #include <optional>
@@ -81,4 +81,4 @@ private:
 
 }  // namespace seerep_core_fb
 
-#endif  // SEEREP_CORE_FB_IMAGE_H_
+#endif  // SEEREP_CORE_FB_POINT_H_

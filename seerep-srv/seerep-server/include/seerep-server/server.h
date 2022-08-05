@@ -18,6 +18,7 @@
 #include "seerep-server/fb-image-service.h"
 #include "seerep-server/fb-instance-service.h"
 #include "seerep-server/fb-meta-operations.h"
+#include "seerep-server/fb-point-service.h"
 #include "seerep-server/fb-tf-service.h"
 #include "seerep-server/pb-image-service.h"
 #include "seerep-server/pb-meta-operations.h"
@@ -148,6 +149,8 @@ private:
   std::shared_ptr<seerep_server::FbTfService> m_tfServiceFb;
   /** @brief the flatbuffer service for image related queries*/
   std::shared_ptr<seerep_server::FbImageService> m_imageServiceFb;
+  /** @brief the flatbuffer service for point related queries*/
+  std::shared_ptr<seerep_server::FbPointService> m_pointServiceFb;
   /** @brief the flatbuffer service for instances related queries*/
   std::shared_ptr<seerep_server::FbInstanceService> m_instanceServiceFb;
 
