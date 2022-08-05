@@ -141,6 +141,9 @@ RUN git clone https://github.com/google/googletest.git -b release-1.12.0 \
 #Install python3 grpcio_tools'
 RUN pip3 install grpcio-tools
 
+# Install python imgeio
+RUN pip3 install imageio==2.20.0
+
 ####################################################
 #Install documentation dependencies
 ####################################################
