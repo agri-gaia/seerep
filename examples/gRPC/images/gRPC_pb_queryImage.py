@@ -59,7 +59,7 @@ theQuery.label.extend(["testlabel0"])
 for img in stub.GetImage(theQuery):
     # currently not implemented #103
     # print(f"uuidmsg: {img.header.uuid_msgs}")
-    print(f"first abel: {img.labels_bb[0].labelWithInstance.label}")
+    print(f"first label: {img.labels_bb[0].labelWithInstance.label}")
     print(
         "First bounding box (Xmin, Ymin, Xmax, Ymax): "
         + str(img.labels_bb[0].boundingBox.point_min.x)

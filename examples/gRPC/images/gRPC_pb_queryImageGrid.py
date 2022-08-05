@@ -28,7 +28,7 @@ response = stubMeta.GetProjects(empty_pb2.Empty())
 projectuuid = ""
 for project in response.projects:
     print(project.name + " " + project.uuid)
-    if project.name == "testproject":
+    if project.name == "LabeledImagesInGrid":
         projectuuid = project.uuid
 
 if projectuuid == "":
@@ -39,12 +39,8 @@ theQuery = query.Query()
 theQuery.projectuuid.append(projectuuid)
 theQuery.boundingbox.header.frame_id = "map"
 
-theQuery.boundingbox.point_min.x = 0.0
-theQuery.boundingbox.point_min.y = 0.0
-theQuery.boundingbox.point_min.z = 0.0
-theQuery.boundingbox.point_max.x = 100.0
-theQuery.boundingbox.point_max.y = 100.0
-theQuery.boundingbox.point_max.z = 100.0
+theQuery.boundingbox.point_min.z = -1.0
+theQuery.boundingbox.point_max.z = 1.0
 
 # since epoche
 theQuery.timeinterval.time_min.seconds = 1638549273
@@ -53,7 +49,7 @@ theQuery.timeinterval.time_max.seconds = 1938549273
 theQuery.timeinterval.time_max.nanos = 0
 
 # labels
-theQuery.label.extend(["testlabel0"])
+theQuery.label.extend(["testlabel1"])
 
 for x in range(3):
     for y in range(3):
@@ -62,4 +58,4 @@ for x in range(3):
         theQuery.boundingbox.point_max.x = x + 0.5
         theQuery.boundingbox.point_max.y = y + 0.5
         for img in stub.GetImage(theQuery):
-            print("label general 0 of transfered img: " + img.labels_general[0].label)
+            print("General label of transferred img: " + img.labels_general[0].label)

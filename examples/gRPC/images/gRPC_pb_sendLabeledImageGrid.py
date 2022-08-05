@@ -79,7 +79,7 @@ for k in range(9):
         # write labeled bounding boxes
         bb1 = bb.BoundingBox2DLabeled()
         for i in range(1, n + 1):
-            bb1.labelWithInstance.label = "http://aims.fao.org/aos/agrovoc/c_24596"
+            bb1.labelWithInstance.label = "testlabel" + str(i)
             bb1.boundingBox.point_min.x = 0.01 + i / 10
             bb1.boundingBox.point_min.y = 0.02 + i / 10
             bb1.boundingBox.point_max.x = 0.03 + i / 10
@@ -87,13 +87,9 @@ for k in range(9):
             theImage.labels_bb.append(bb1)
 
         # write general labels
-        label1 = labelWithInstance.LabelWithInstance()
-        label1.label = "http://aims.fao.org/aos/agrovoc/c_2894"
-        theImage.labels_general.append(label1)
-
-        label2 = labelWithInstance.LabelWithInstance()
-        label2.label = "http://aims.fao.org/aos/agrovoc/c_7156"
-        theImage.labels_general.append(label2)
+        label = labelWithInstance.LabelWithInstance()
+        label.label = "testlabelgeneral"
+        theImage.labels_general.append(label)
 
         # transfer image
         uuidImg = stub.TransferImage(theImage)
@@ -103,11 +99,8 @@ for k in range(9):
 # create tf with data valid for all following tfs
 theTf = tf.TransformStamped()
 theTf.header.frame_id = "map"
-# theTf.header.stamp.seconds = theTime
 theTf.header.uuid_project = projectname
 theTf.child_frame_id = "camera"
-# theTf.transform.translation.x = 0
-# theTf.transform.translation.y = 0
 theTf.transform.translation.z = 0
 theTf.transform.rotation.x = 0
 theTf.transform.rotation.y = 0
