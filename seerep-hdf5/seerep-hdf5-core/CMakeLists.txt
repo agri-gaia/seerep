@@ -40,6 +40,7 @@ add_library(seerephdf5core
 	src/hdf5-core-image.cpp
 	src/hdf5-core-instance.cpp
 	src/hdf5-core-point-cloud.cpp
+	src/hdf5-core-point.cpp
 	src/hdf5-core-tf.cpp
 )
 
