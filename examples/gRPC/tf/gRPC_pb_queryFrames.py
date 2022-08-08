@@ -4,23 +4,16 @@ import os
 import sys
 
 import frame_query_pb2 as frameQuery
-import grpc
 import meta_operations_pb2_grpc as metaOperations
 import tf_service_pb2_grpc as tfService
 from google.protobuf import empty_pb2
 
-# import numpy as np
+script_dir = os.path.dirname(__file__)
+util_dir = os.path.join(script_dir, '..')
+sys.path.append(util_dir)
+import util
 
-# # server with certs
-# __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
-# with open(os.path.join(__location__, '../tls.pem'), 'rb') as f:
-#     root_cert = f.read()
-# server = "seerep.robot.10.249.3.13.nip.io:32141"
-# creds = grpc.ssl_channel_credentials(root_cert)
-# channel = grpc.secure_channel(server, creds)
-
-# server without certs
-channel = grpc.insecure_channel("localhost:9090")
+channel = util.get_gRPC_channel()
 
 stub = tfService.TfServiceStub(channel)
 stubMeta = metaOperations.MetaOperationsStub(channel)
