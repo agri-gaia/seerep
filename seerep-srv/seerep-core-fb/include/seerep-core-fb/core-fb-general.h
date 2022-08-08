@@ -36,8 +36,30 @@ public:
    */
   template <class C>
   static std::shared_ptr<C>
+  getHdf5(const std::string& project, std::shared_ptr<seerep_core::Core>& seerepCore,
+          std::unordered_map<boost::uuids::uuid, std::shared_ptr<C>, boost::hash<boost::uuids::uuid>>& hdf5IoMap);
+
+  /**
+   * @brief extracts the hdf5-io object from the hdf5-io-map for the given project
+   * @param project the uuid of the project for which the io-object is needed
+   * @param seerepCore pointer to the seerep core which is needed to get the io-objects
+   * @param hdf5IoMap the map to store the io-objects
+   */
+  template <class C>
+  static std::shared_ptr<C>
   getHdf5(const boost::uuids::uuid& project, std::shared_ptr<seerep_core::Core>& seerepCore,
           std::unordered_map<boost::uuids::uuid, std::shared_ptr<C>, boost::hash<boost::uuids::uuid>>& hdf5IoMap);
+
+  /**
+   * @brief gets the file accessors (the hdf5 file object itself, the mutex, the io object) for the hdf5 file
+   * @param project the uuid of the project for which the accessors are needed
+   * @param seerepCore pointer to the seerep core which is needed to get the accessors
+   * @param hdf5IoMap the map to store the accessors
+   */
+  template <class C>
+  static void getFileAccessorFromCore(
+      const std::string& project, std::shared_ptr<seerep_core::Core>& seerepCore,
+      std::unordered_map<boost::uuids::uuid, std::shared_ptr<C>, boost::hash<boost::uuids::uuid>>& hdf5IoMap);
 
   /**
    * @brief gets the file accessors (the hdf5 file object itself, the mutex, the io object) for the hdf5 file

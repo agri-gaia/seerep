@@ -13,8 +13,7 @@ void Hdf5FbPoint::writePoint(const std::string& id, const seerep::fb::PointStamp
 {
   const std::scoped_lock lock(*m_write_mtx);
 
-  std::string hdf5DatasetPath = HDF5_GROUP_POINT + "/" + id;
-  std::string hdf5DatasetRawDataPath = hdf5DatasetPath + "/" + RAWDATA;
+  std::string hdf5DatasetRawDataPath = getHdf5DatasetRawDataPath(id);
 
   std::shared_ptr<HighFive::DataSet> data_set_ptr;
 
@@ -47,21 +46,33 @@ void Hdf5FbPoint::writePoint(const std::string& id, const seerep::fb::PointStamp
   m_file->flush();
 }
 
-// void Hdf5FbPoint::writeImageBoundingBox2DLabeled(const std::string& id,
-//                                                  const seerep::fb::BoundingBoxes2DLabeledStamped& bb2dLabeledStamped)
-// {
-//   const std::scoped_lock lock(*m_write_mtx);
+void Hdf5FbPoint::writeAdditionalPointAttributes(const seerep::fb::AttributesStamped& attributeStamped)
+{
+  const std::scoped_lock lock(*m_write_mtx);
 
-//   writeBoundingBox2DLabeled(HDF5_GROUP_IMAGE, id, bb2dLabeledStamped.labels_bb());
-// }
+  std::string hdf5DatasetRawDataPath = getHdf5DatasetRawDataPath(attributeStamped.header()->uuid_msgs()->str());
+  try
+  {
+    checkExists(hdf5DatasetRawDataPath);
+
+    std::shared_ptr<HighFive::DataSet> data_set_ptr =
+        std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DatasetRawDataPath));
+
+    writeAttributeMap(data_set_ptr, *attributeStamped.attribute());
+  }
+  catch (const std::exception& e)
+  {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+        << "loading " << hdf5DatasetRawDataPath << std::endl
+        << e.what();
+  }
+}
 
 std::optional<flatbuffers::grpc::Message<seerep::fb::PointStamped>> Hdf5FbPoint::readPoint(const std::string& id)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
-  std::string hdf5DatasetPath = HDF5_GROUP_POINT + "/" + id;
-  std::string hdf5DatasetRawDataPath = hdf5DatasetPath + "/" + RAWDATA;
-
+  std::string hdf5DatasetRawDataPath = getHdf5DatasetRawDataPath(id);
   if (!m_file->exist(hdf5DatasetRawDataPath))
     return std::nullopt;
 
@@ -115,6 +126,11 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::PointStamped>> Hdf5FbPoint:
   builder.Finish(pointStampedOffset);
   auto grpcPoint = builder.ReleaseMessage<seerep::fb::PointStamped>();
   return grpcPoint;
+}
+
+std::string Hdf5FbPoint::getHdf5DatasetRawDataPath(const std::string& id)
+{
+  return HDF5_GROUP_POINT + "/" + id + "/" + RAWDATA;
 }
 
 }  // namespace seerep_hdf5_fb

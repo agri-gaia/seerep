@@ -1,0 +1,9 @@
+include "header.fbs";
+include "union_map_entry.fbs";
+
+namespace seerep.fb;
+
+table AttributesStamped {
+  header:Header;
+  attribute:[UnionMapEntry];
+}

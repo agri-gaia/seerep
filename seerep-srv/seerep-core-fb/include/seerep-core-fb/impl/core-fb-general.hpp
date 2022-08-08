@@ -13,6 +13,16 @@ void CoreFbGeneral::getAllFileAccessorFromCore(
 
 template <class C>
 void CoreFbGeneral::getFileAccessorFromCore(
+    const std::string& project, std::shared_ptr<seerep_core::Core>& seerepCore,
+    std::unordered_map<boost::uuids::uuid, std::shared_ptr<C>, boost::hash<boost::uuids::uuid>>& hdf5IoMap)
+{
+  boost::uuids::string_generator gen;
+  boost::uuids::uuid projectUuid = gen(project);
+  getFileAccessorFromCore(projectUuid, seerepCore, hdf5IoMap);
+}
+
+template <class C>
+void CoreFbGeneral::getFileAccessorFromCore(
     const boost::uuids::uuid& project, std::shared_ptr<seerep_core::Core>& seerepCore,
     std::unordered_map<boost::uuids::uuid, std::shared_ptr<C>, boost::hash<boost::uuids::uuid>>& hdf5IoMap)
 {
@@ -20,6 +30,16 @@ void CoreFbGeneral::getFileAccessorFromCore(
   auto hdf5fileMutex = seerepCore->getHdf5FileMutex(project);
   auto datatypeIo = std::make_shared<C>(hdf5file, hdf5fileMutex);
   hdf5IoMap.insert(std::make_pair(project, datatypeIo));
+}
+
+template <class C>
+std::shared_ptr<C> CoreFbGeneral::getHdf5(
+    const std::string& project, std::shared_ptr<seerep_core::Core>& seerepCore,
+    std::unordered_map<boost::uuids::uuid, std::shared_ptr<C>, boost::hash<boost::uuids::uuid>>& hdf5IoMap)
+{
+  boost::uuids::string_generator gen;
+  boost::uuids::uuid projectUuid = gen(project);
+  return getHdf5(projectUuid, seerepCore, hdf5IoMap);
 }
 
 template <class C>

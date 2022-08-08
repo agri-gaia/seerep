@@ -113,40 +113,40 @@ FbPointService::TransferPoint(grpc::ServerContext* context,
 
 grpc::Status
 FbPointService::AddAttribute(grpc::ServerContext* context,
-                             grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::UnionMapEntry>>* reader,
+                             grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::AttributesStamped>>* reader,
                              flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response)
 {
   (void)context;  // ignore that variable without causing warnings
   std::string answer = "everything stored!";
 
-  flatbuffers::grpc::Message<seerep::fb::UnionMapEntry> unionMapEntryMsg;
-  while (reader->Read(&unionMapEntryMsg))
+  flatbuffers::grpc::Message<seerep::fb::AttributesStamped> attributesStampedMsg;
+  while (reader->Read(&attributesStampedMsg))
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "received image... ";
-    auto unionMapEntry = unionMapEntryMsg.GetRoot();
+    auto attributesStamped = attributesStampedMsg.GetRoot();
 
-    // std::string uuidProject = unionMapEntry->header()->uuid_project()->str();
-    // if (!uuidProject.empty())
-    // {
-    try
+    std::string uuidProject = attributesStamped->header()->uuid_project()->str();
+    if (!uuidProject.empty())
     {
-      // pointFb->(*unionMapEntry);
+      try
+      {
+        pointFb->addAttributes(*attributesStamped);
+      }
+      catch (std::runtime_error const& e)
+      {
+        // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
+        // also catching core doesn't have project with uuid error
+        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+
+        seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+
+        return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+      }
     }
-    catch (std::runtime_error const& e)
+    else
     {
-      // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
-      // also catching core doesn't have project with uuid error
-      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
-
-      seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
-
-      return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+      answer = "a msg had no project uuid!";
     }
-    // }
-    // else
-    // {
-    answer = "a msg had no project uuid!";
-    // }
   }
 
   seerep_server_util::createResponseFb(answer, seerep::fb::TRANSMISSION_STATE_SUCCESS, response);

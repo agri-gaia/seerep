@@ -54,6 +54,7 @@ set(MY_PROTO_FILES
 )
 
 set(MY_FBS_FILES
+	fbs/attributes_stamped.fbs
 	fbs/boundingbox_labeled.fbs
 	fbs/boundingbox.fbs
 	fbs/boundingbox2d_labeled.fbs

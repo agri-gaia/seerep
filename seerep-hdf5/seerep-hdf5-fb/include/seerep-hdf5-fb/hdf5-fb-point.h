@@ -7,9 +7,6 @@
 // seerep-hdf5
 #include "seerep-hdf5-fb/hdf5-fb-general.h"
 
-// seerep-msgs
-#include <seerep-msgs/point_stamped_generated.h>
-
 // seerep-com
 #include <seerep-com/point_service.grpc.fb.h>
 
@@ -29,11 +26,12 @@ public:
   Hdf5FbPoint(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
 
   void writePoint(const std::string& id, const seerep::fb::PointStamped& point);
-  // void writePointAttribute(const std::string& id, const seerep::fb::BoundingBoxes2DLabeledStamped& bb2dLabeledStamped);
+  void writeAdditionalPointAttributes(const seerep::fb::AttributesStamped& attributeStamped);
 
   std::optional<flatbuffers::grpc::Message<seerep::fb::PointStamped>> readPoint(const std::string& id);
 
 private:
+  std::string getHdf5DatasetRawDataPath(const std::string& id);
   // Point
   inline static const std::string RAWDATA = "rawdata";
 

@@ -25,7 +25,7 @@ public:
                              grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::PointStamped>>* reader,
                              flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response);
   grpc::Status AddAttribute(grpc::ServerContext* context,
-                            grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::UnionMapEntry>>* reader,
+                            grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::AttributesStamped>>* reader,
                             flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response);
 
 private:

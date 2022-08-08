@@ -50,4 +50,9 @@ boost::uuids::uuid CoreFbPoint::addData(const seerep::fb::PointStamped& point)
   return dataForIndices.header.uuidData;
 }
 
+void CoreFbPoint::addAttributes(const seerep::fb::AttributesStamped& attributesStamped)
+{
+  auto hdf5io = CoreFbGeneral::getHdf5(attributesStamped.header()->uuid_project()->str(), m_seerepCore, m_hdf5IoMap);
+  hdf5io->writeAdditionalPointAttributes(attributesStamped);
+}
 }  // namespace seerep_core_fb

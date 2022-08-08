@@ -8,6 +8,7 @@
 #include "core-fb-general.h"
 
 // seerep-msgs
+#include <seerep-msgs/attributes_stamped_generated.h>
 #include <seerep-msgs/point_stamped_generated.h>
 #include <seerep-msgs/query_generated.h>
 // seerep-core-msgs
@@ -68,6 +69,11 @@ public:
    * core. If the uuid of point is not defined yet, a uuid is generated and returned.
    */
   boost::uuids::uuid addData(const seerep::fb::PointStamped& point);
+  /**
+   * @brief Adds attributes to an existing point
+   * @param uuidAttributePair a pair of the uuid of the targeted point and the attributes
+   */
+  void addAttributes(const seerep::fb::AttributesStamped& attributesStamped);
 
 private:
   /** @brief a shared pointer to the general core */
