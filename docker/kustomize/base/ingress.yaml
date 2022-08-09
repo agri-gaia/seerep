@@ -10,10 +10,10 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - seerep-service.seerep.10.249.3.13.nip.io
+        - seerep.robot.10.249.3.13.nip.io
       secretName: seerep-ca # certificate for ssl access
   rules:
-    - host: seerep-service.seerep.10.249.3.13.nip.io
+    - host: seerep.robot.10.249.3.13.nip.io
       http:
         paths:
           - path: /
