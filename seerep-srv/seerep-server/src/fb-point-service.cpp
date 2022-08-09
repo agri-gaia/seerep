@@ -55,7 +55,7 @@ grpc::Status FbPointService::GetPoint(grpc::ServerContext* context,
   }
   try
   {
-    pointFb->getData(*requestRoot, writer);
+    pointFb->getData(requestRoot, writer);
   }
   catch (std::runtime_error const& e)
   {

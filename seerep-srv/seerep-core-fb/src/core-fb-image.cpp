@@ -11,11 +11,12 @@ CoreFbImage::~CoreFbImage()
 {
 }
 
-void CoreFbImage::getData(const seerep::fb::Query& query,
+void CoreFbImage::getData(const seerep::fb::Query* query,
                           grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::Image>>* const writer)
 {
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "loading image from images/" << std::endl;
-  seerep_core_msgs::Query queryCore = seerep_core_fb::CoreFbConversion::fromFb(query);
+  seerep_core_msgs::Query queryCore =
+      seerep_core_fb::CoreFbConversion::fromFb(query, seerep_core_msgs::Datatype::Image);
 
   seerep_core_msgs::QueryResult resultCore = m_seerepCore->getDataset(queryCore);
 
@@ -71,7 +72,7 @@ void CoreFbImage::addBoundingBoxesLabeled(const seerep::fb::BoundingBoxes2DLabel
   // weren't any bounding box labels before
 
   /// @todo also add instance
-  m_seerepCore->addLabels(seerep_core_msgs::Datatype::Images, labels, uuidMsg, uuidProject);
+  m_seerepCore->addLabels(seerep_core_msgs::Datatype::Image, labels, uuidMsg, uuidProject);
 }
 
 }  // namespace seerep_core_fb

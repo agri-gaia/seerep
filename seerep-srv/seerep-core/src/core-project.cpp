@@ -45,6 +45,7 @@ seerep_core_msgs::QueryResultProject CoreProject::getInstances(const seerep_core
   seerep_core_msgs::QueryResultProject result;
   result.projectUuid = m_uuid;
   result.dataOrInstanceUuids = m_coreDatasets->getInstances(m_coreTfs->transformQuery(query, m_frameId));
+
   return result;
 }
 
@@ -101,8 +102,8 @@ void CoreProject::recreateDatatypes()
   m_coreInstances = std::make_shared<seerep_core::CoreInstances>(m_ioInstance);
   m_coreDatasets = std::make_unique<seerep_core::CoreDataset>(m_coreTfs, m_coreInstances, m_frameId);
 
-  m_coreDatasets->addDatatype(seerep_core_msgs::Datatype::Images, m_ioImage);
-  m_coreDatasets->addDatatype(seerep_core_msgs::Datatype::PointClouds, m_ioPointCloud);
+  m_coreDatasets->addDatatype(seerep_core_msgs::Datatype::Image, m_ioImage);
+  m_coreDatasets->addDatatype(seerep_core_msgs::Datatype::PointCloud, m_ioPointCloud);
   m_coreDatasets->addDatatype(seerep_core_msgs::Datatype::Point, m_ioPoint);
 
   std::vector<std::string> datatypeNames = m_ioGeneral->getGroupDatasets("");

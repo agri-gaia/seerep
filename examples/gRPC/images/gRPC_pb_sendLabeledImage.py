@@ -3,6 +3,7 @@
 import os
 import sys
 import time
+import uuid
 
 import boundingbox2d_labeled_pb2 as bb
 import image_pb2 as image
@@ -73,6 +74,7 @@ for n in range(10):
     bb1 = bb.BoundingBox2DLabeled()
     for i in range(0, 10):
         bb1.labelWithInstance.label = "testlabel" + str(i)
+        bb1.labelWithInstance.instanceUuid = str(uuid.uuid4())
         bb1.boundingBox.point_min.x = 0.01 + i / 10
         bb1.boundingBox.point_min.y = 0.02 + i / 10
         bb1.boundingBox.point_max.x = 0.03 + i / 10

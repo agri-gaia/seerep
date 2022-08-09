@@ -58,7 +58,7 @@ public:
    * Based on the query the indices are used to get the uuids of the points matching the query. Then the points are
    * loaded by the hdf5-fb-io and send via gRPC directly using the writer
    */
-  void getData(const seerep::fb::Query& query,
+  void getData(const seerep::fb::Query* query,
                grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::PointStamped>>* const writer);
   /**
    * @brief Add an point to the indices and write the data to hdf5

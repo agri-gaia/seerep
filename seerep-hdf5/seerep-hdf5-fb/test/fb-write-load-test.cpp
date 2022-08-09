@@ -12,7 +12,7 @@
 
 /*
 This test serves more as an integration test rather than a unit test. We want
-to make sure that a Flabuffers image message is the same after saving and
+to make sure that a Flatbuffers image message is the same after saving and
 reading it from a hdf5 file. Because the underlying components like the
 seerep-hdf5-core and seerep-hdf5-fb are not (fully) tested, we don't use mocks and
 propagate the data through all components. This should be changed in the future

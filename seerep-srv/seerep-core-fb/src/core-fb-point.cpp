@@ -11,11 +11,12 @@ CoreFbPoint::~CoreFbPoint()
 {
 }
 
-void CoreFbPoint::getData(const seerep::fb::Query& query,
+void CoreFbPoint::getData(const seerep::fb::Query* query,
                           grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::PointStamped>>* const writer)
 {
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "loading image from images/" << std::endl;
-  seerep_core_msgs::Query queryCore = seerep_core_fb::CoreFbConversion::fromFb(query);
+  seerep_core_msgs::Query queryCore =
+      seerep_core_fb::CoreFbConversion::fromFb(query, seerep_core_msgs::Datatype::Point);
 
   seerep_core_msgs::QueryResult resultCore = m_seerepCore->getDataset(queryCore);
 

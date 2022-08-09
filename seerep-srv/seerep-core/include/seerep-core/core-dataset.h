@@ -125,6 +125,10 @@ private:
    * @param datatype the datatype to consider
    */
   void tryAddingDataWithMissingTF(const seerep_core_msgs::Datatype& datatype);
+
+  void getUuidsFromMap(std::unordered_map<boost::uuids::uuid, std::vector<boost::uuids::uuid>,
+                                          boost::hash<boost::uuids::uuid>>& datasetInstancesMap,
+                       std::vector<boost::uuids::uuid>& datasets, std::vector<boost::uuids::uuid>& result);
   /**
    * @brief queries the spatial index and returns a vector of bounding box / UUID pairs matching the query
    * @param datatypeSpecifics the datatype specific information to be used in the query
@@ -179,7 +183,7 @@ private:
   /** @brief shared pointer to the object handling the instances */
   std::shared_ptr<seerep_core::CoreInstances> m_coreInstances;
   /** @brief map from the datatype to the struct with the specific objects for that datatype*/
-  std::unordered_map<seerep_core_msgs::Datatype, std::shared_ptr<DatatypeSpecifics>> m_datatypeDatatypeSpecifcsMap;
+  std::unordered_map<seerep_core_msgs::Datatype, std::shared_ptr<DatatypeSpecifics>> m_datatypeDatatypeSpecificsMap;
   /** @brief object handling the logging */
   boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
 };

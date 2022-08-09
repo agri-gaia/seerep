@@ -57,7 +57,7 @@ public:
    * Based on the query the indices are used to get the uuids of the images matching the query. Then the images are
    * loaded by the hdf5-fb-io and send via gRPC directly using the writer
    */
-  void getData(const seerep::fb::Query& query,
+  void getData(const seerep::fb::Query* query,
                grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::Image>>* const writer);
   /**
    * @brief Add an image to the indices and write the data to hdf5

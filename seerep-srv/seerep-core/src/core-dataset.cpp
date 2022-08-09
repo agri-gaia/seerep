@@ -23,7 +23,7 @@ void CoreDataset::addDatatype(const seerep_core_msgs::Datatype& datatype,
     .datasetInstancesMap =
         std::unordered_map<boost::uuids::uuid, std::vector<boost::uuids::uuid>, boost::hash<boost::uuids::uuid>>()
   };
-  m_datatypeDatatypeSpecifcsMap.emplace(datatype, std::make_shared<DatatypeSpecifics>(datatypeSpecifics));
+  m_datatypeDatatypeSpecificsMap.emplace(datatype, std::make_shared<DatatypeSpecifics>(datatypeSpecifics));
   recreateDatasets(datatype, hdf5Io);
 }
 
@@ -58,7 +58,7 @@ std::vector<boost::uuids::uuid> CoreDataset::getData(const seerep_core_msgs::Que
   // check if the data has now some tf for adding it to spatial rtree
   tryAddingDataWithMissingTF(query.header.datatype);
 
-  auto datatypeSpecifics = m_datatypeDatatypeSpecifcsMap.at(query.header.datatype);
+  auto datatypeSpecifics = m_datatypeDatatypeSpecificsMap.at(query.header.datatype);
   // space
   auto resultRt = querySpatial(datatypeSpecifics, query);
   // time
@@ -78,10 +78,29 @@ std::vector<boost::uuids::uuid> CoreDataset::getData(const seerep_core_msgs::Que
 
 std::vector<boost::uuids::uuid> CoreDataset::getInstances(const seerep_core_msgs::Query& query)
 {
-  auto datasets = getData(query);
+  std::vector<boost::uuids::uuid> result;
+  if (query.header.datatype == seerep_core_msgs::Datatype::Unknown)
+  {
+    auto queryLocal = query;
+    for (auto& datatypeSpecifics : m_datatypeDatatypeSpecificsMap)
+    {
+      queryLocal.header.datatype = datatypeSpecifics.first;
+      auto datasets = getData(queryLocal);
+      getUuidsFromMap(datatypeSpecifics.second->datasetInstancesMap, datasets, result);
+    }
+  }
+  else
+  {
+    auto datasets = getData(query);
+    getUuidsFromMap(m_datatypeDatatypeSpecificsMap.at(query.header.datatype)->datasetInstancesMap, datasets, result);
+  }
+  return result;
+}
 
-  auto& datasetInstancesMap = m_datatypeDatatypeSpecifcsMap.at(query.header.datatype)->datasetInstancesMap;
-
+void CoreDataset::getUuidsFromMap(std::unordered_map<boost::uuids::uuid, std::vector<boost::uuids::uuid>,
+                                                     boost::hash<boost::uuids::uuid>>& datasetInstancesMap,
+                                  std::vector<boost::uuids::uuid>& datasets, std::vector<boost::uuids::uuid>& result)
+{
   std::set<boost::uuids::uuid> instances;
   for (auto dataset : datasets)
   {
@@ -95,7 +114,7 @@ std::vector<boost::uuids::uuid> CoreDataset::getInstances(const seerep_core_msgs
     }
   }
 
-  return std::vector(instances.begin(), instances.end());
+  std::copy(instances.begin(), instances.end(), std::back_inserter(result));
 }
 
 std::optional<std::vector<seerep_core_msgs::AabbIdPair>>
@@ -257,7 +276,7 @@ void CoreDataset::addDataset(const seerep_core_msgs::DatasetIndexable& dataset)
   }
 
   // check if datatype is available
-  if (m_datatypeDatatypeSpecifcsMap.find(dataset.header.datatype) == m_datatypeDatatypeSpecifcsMap.end())
+  if (m_datatypeDatatypeSpecificsMap.find(dataset.header.datatype) == m_datatypeDatatypeSpecificsMap.end())
   {
     throw std::invalid_argument("datatype not available in seerep_core");
   }
@@ -271,7 +290,7 @@ void CoreDataset::addDataset(const seerep_core_msgs::DatasetIndexable& dataset)
  */
 void CoreDataset::tryAddingDataWithMissingTF(const seerep_core_msgs::Datatype& datatype)
 {
-  auto datatypeSpecifics = m_datatypeDatatypeSpecifcsMap.at(datatype);
+  auto datatypeSpecifics = m_datatypeDatatypeSpecificsMap.at(datatype);
 
   for (std::vector<std::shared_ptr<seerep_core_msgs::DatasetIndexable>>::iterator it =
            datatypeSpecifics->dataWithMissingTF.begin();
@@ -297,7 +316,7 @@ void CoreDataset::tryAddingDataWithMissingTF(const seerep_core_msgs::Datatype& d
 void CoreDataset::addDatasetToIndices(const seerep_core_msgs::Datatype& datatype,
                                       const seerep_core_msgs::DatasetIndexable& dataset)
 {
-  auto datatypeSpecifics = m_datatypeDatatypeSpecifcsMap.at(datatype);
+  auto datatypeSpecifics = m_datatypeDatatypeSpecificsMap.at(datatype);
 
   if (m_tfOverview->canTransform(dataset.header.frameId, m_frameId, dataset.header.timestamp.seconds,
                                  dataset.header.timestamp.nanos))
@@ -353,7 +372,7 @@ void CoreDataset::addDatasetToIndices(const seerep_core_msgs::Datatype& datatype
 void CoreDataset::addLabels(const seerep_core_msgs::Datatype& datatype, const std::vector<std::string>& labels,
                             const boost::uuids::uuid& msgUuid)
 {
-  auto datatypeSpecifics = m_datatypeDatatypeSpecifcsMap.at(datatype);
+  auto datatypeSpecifics = m_datatypeDatatypeSpecificsMap.at(datatype);
 
   for (std::string label : labels)
   {

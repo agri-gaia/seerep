@@ -5,11 +5,14 @@
 #include <optional>
 
 // grpc / flatbuffer
+#include <flatbuffers/flatbuffers.h>
 #include <flatbuffers/grpc.h>
 // seerep-msgs
+#include <seerep-msgs/datatype_generated.h>
 #include <seerep-msgs/image_generated.h>
 #include <seerep-msgs/point_stamped_generated.h>
 #include <seerep-msgs/query_generated.h>
+#include <seerep-msgs/query_instance_generated.h>
 #include <seerep-msgs/transform_stamped_generated.h>
 #include <seerep-msgs/transform_stamped_query_generated.h>
 #include <seerep-msgs/uuids_per_project_generated.h>
@@ -38,11 +41,24 @@ class CoreFbConversion
 {
 public:
   /**
-   * @brief converts the flatbuffer query message to seerep core specific message
-   * @param query the flatbuffer query message
+   * @brief converts the flatbuffer instance query message to seerep core specific message
+   * @param query the flatbuffer instance query message
    * @return the query message in seerep core format
    */
-  static seerep_core_msgs::Query fromFb(const seerep::fb::Query& query);
+  static seerep_core_msgs::Query fromFb(const seerep::fb::QueryInstance* queryInstance);
+  /**
+   * @brief converts the flatbuffer query message to seerep core specific message
+   * @param datatype the flatbuffer query message
+   * @return the query message in seerep core format
+   */
+  static seerep_core_msgs::Datatype fromFb(const seerep::fb::Datatype& datatype);
+  /**
+   * @brief converts the flatbuffer query message to seerep core specific message
+   * @param query the flatbuffer query message
+   * @param datatype the targeted datatype
+   * @return the query message in seerep core format
+   */
+  static seerep_core_msgs::Query fromFb(const seerep::fb::Query* query, const seerep_core_msgs::Datatype& datatype);
   /**
    * @brief converts the flatbuffer image message to seerep core specific message
    * @param img the flatbuffer image message
@@ -76,21 +92,20 @@ private:
    * @param projects the projects in the flatbuffer query message
    * @param queryCoreProjects th eprojects in the query message in seerep core format
    */
-  static void fromFbQueryProject(const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>* projects,
+  static void fromFbQueryProject(const seerep::fb::Query* query,
                                  std::optional<std::vector<boost::uuids::uuid>>& queryCoreProjects);
   /**
    * @brief converts the label part of the flatbuffer query message to seerep core specific message
    * @param label the labels in the flatbuffer query message
    * @param queryCoreLabel the labels in the query message in seerep core format
    */
-  static void fromFbQueryLabel(const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>* label,
-                               std::optional<std::vector<std::string>>& queryCoreLabel);
+  static void fromFbQueryLabel(const seerep::fb::Query* query, std::optional<std::vector<std::string>>& queryCoreLabel);
   /**
    * @brief converts the temporal part of the flatbuffer query message to seerep core specific message
    * @param time the thime in the flatbuffer query message
    * @param queryCoreTime the time in the query message in seerep core format
    */
-  static void fromFbQueryTime(const seerep::fb::TimeInterval* time,
+  static void fromFbQueryTime(const seerep::fb::Query* query,
                               std::optional<seerep_core_msgs::Timeinterval>& queryCoreTime);
   /**
    * @brief converts the spatial part of the flatbuffer query message to seerep core specific message
@@ -98,7 +113,7 @@ private:
    * @param queryCoreBoundingBox the bounding box in the query message in seerep core format
    * @param queryCoreHeaderFrameId the frame id in the header of the query message in the seerep core format
    */
-  static void fromFbQueryBoundingBox(const seerep::fb::Boundingbox* boundingBox,
+  static void fromFbQueryBoundingBox(const seerep::fb::Query* query,
                                      std::optional<seerep_core_msgs::AABB>& queryCoreBoundingBox,
                                      std::string& queryCoreHeaderFrameId);
   /**

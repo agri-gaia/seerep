@@ -36,7 +36,6 @@ include_directories(
 	${FLATBUFFER_INCLUDE_DIR}
 	${HighFive_INCLUDE_DIRS}
 	${Boost_INCLUDE_DIRS}
-	${SeerepCore_INCLUDE_DIRS}
 )
 
 add_library(seerephdf5fb
@@ -47,8 +46,10 @@ add_library(seerephdf5fb
 )
 
 target_link_libraries(seerephdf5fb
+	${seerep_ros_conversions_fb_LIBRARIES}
 	${SeerepMsgs_LIBRARIES}
-	${PROTOBUF_LIBRARIES}
+	${SeerepHdf5Core_LIBRARIES}
+	${FLATBUFFER_LIBRARIES}
 	${HighFive_LIBRARIES}
 	${Boost_LIBRARIES}
 	${Boost_LOG_LIBRARY} ${Boost_LOG_SETUP_LIBRARY}

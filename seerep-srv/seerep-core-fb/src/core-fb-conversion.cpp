@@ -2,15 +2,41 @@
 
 namespace seerep_core_fb
 {
-seerep_core_msgs::Query CoreFbConversion::fromFb(const seerep::fb::Query& query)
+seerep_core_msgs::Query CoreFbConversion::fromFb(const seerep::fb::QueryInstance* queryInstance)
+{
+  return seerep_core_fb::CoreFbConversion::fromFb(queryInstance->query(), fromFb(queryInstance->datatype()));
+}
+
+seerep_core_msgs::Datatype CoreFbConversion::fromFb(const seerep::fb::Datatype& datatype)
+{
+  if (datatype == seerep::fb::Datatype_Image)
+  {
+    return seerep_core_msgs::Datatype::Image;
+  }
+  else if (datatype == seerep::fb::Datatype_PointCloud)
+  {
+    return seerep_core_msgs::Datatype::PointCloud;
+  }
+  else if (datatype == seerep::fb::Datatype_Point)
+  {
+    return seerep_core_msgs::Datatype::Point;
+  }
+  else
+  {
+    return seerep_core_msgs::Datatype::Unknown;
+  }
+}
+
+seerep_core_msgs::Query CoreFbConversion::fromFb(const seerep::fb::Query* query,
+                                                 const seerep_core_msgs::Datatype& datatype)
 {
   seerep_core_msgs::Query queryCore;
-  queryCore.header.datatype = seerep_core_msgs::Datatype::Images;
+  queryCore.header.datatype = datatype;
 
-  fromFbQueryProject(query.projectuuid(), queryCore.projects);
-  fromFbQueryLabel(query.label(), queryCore.label);
-  fromFbQueryTime(query.timeinterval(), queryCore.timeinterval);
-  fromFbQueryBoundingBox(query.boundingbox(), queryCore.boundingbox, queryCore.header.frameId);
+  fromFbQueryProject(query, queryCore.projects);
+  fromFbQueryLabel(query, queryCore.label);
+  fromFbQueryTime(query, queryCore.timeinterval);
+  fromFbQueryBoundingBox(query, queryCore.boundingbox, queryCore.header.frameId);
 
   return queryCore;
 }
@@ -118,60 +144,60 @@ flatbuffers::grpc::Message<seerep::fb::UuidsPerProject> CoreFbConversion::toFb(s
   return builder.ReleaseMessage<seerep::fb::UuidsPerProject>();
 }
 
-void CoreFbConversion::fromFbQueryProject(const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>* projects,
+void CoreFbConversion::fromFbQueryProject(const seerep::fb::Query* query,
                                           std::optional<std::vector<boost::uuids::uuid>>& queryCoreProjects)
 {
-  boost::uuids::string_generator gen;
-  if (projects != NULL)
+  if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_PROJECTUUID))
   {
+    boost::uuids::string_generator gen;
     queryCoreProjects = std::vector<boost::uuids::uuid>();
-    for (auto projectuuid : *projects)
+    for (auto projectuuid : *query->projectuuid())
     {
       queryCoreProjects.value().push_back(gen(projectuuid->str()));
     }
   }
 }
 
-void CoreFbConversion::fromFbQueryLabel(const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>* label,
+void CoreFbConversion::fromFbQueryLabel(const seerep::fb::Query* query,
                                         std::optional<std::vector<std::string>>& queryCoreLabel)
 {
-  if (label != NULL)
+  if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_LABEL))
   {
     queryCoreLabel = std::vector<std::string>();
-    for (auto label : *label)
+    for (auto label : *query->label())
     {
       queryCoreLabel.value().push_back(label->str());
     }
   }
 }
 
-void CoreFbConversion::fromFbQueryTime(const seerep::fb::TimeInterval* time,
+void CoreFbConversion::fromFbQueryTime(const seerep::fb::Query* query,
                                        std::optional<seerep_core_msgs::Timeinterval>& queryCoreTime)
 {
-  if (time != NULL)
+  if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_TIMEINTERVAL))
   {
     queryCoreTime = seerep_core_msgs::Timeinterval();
-    queryCoreTime.value().timeMin.seconds = time->time_min()->seconds();
-    queryCoreTime.value().timeMax.seconds = time->time_max()->seconds();
-    queryCoreTime.value().timeMin.nanos = time->time_min()->nanos();
-    queryCoreTime.value().timeMax.nanos = time->time_max()->nanos();
+    queryCoreTime.value().timeMin.seconds = query->timeinterval()->time_min()->seconds();
+    queryCoreTime.value().timeMax.seconds = query->timeinterval()->time_max()->seconds();
+    queryCoreTime.value().timeMin.nanos = query->timeinterval()->time_min()->nanos();
+    queryCoreTime.value().timeMax.nanos = query->timeinterval()->time_max()->nanos();
   }
 }
 
-void CoreFbConversion::fromFbQueryBoundingBox(const seerep::fb::Boundingbox* boundingBox,
+void CoreFbConversion::fromFbQueryBoundingBox(const seerep::fb::Query* query,
                                               std::optional<seerep_core_msgs::AABB>& queryCoreBoundingBox,
                                               std::string& queryCoreHeaderFrameId)
 {
-  if (boundingBox != NULL)
+  if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_BOUNDINGBOX))
   {
-    queryCoreHeaderFrameId = boundingBox->header()->frame_id()->str();
+    queryCoreHeaderFrameId = query->boundingbox()->header()->frame_id()->str();
     queryCoreBoundingBox = seerep_core_msgs::AABB();
-    queryCoreBoundingBox.value().min_corner().set<0>(boundingBox->point_min()->x());
-    queryCoreBoundingBox.value().min_corner().set<1>(boundingBox->point_min()->y());
-    queryCoreBoundingBox.value().min_corner().set<2>(boundingBox->point_min()->z());
-    queryCoreBoundingBox.value().max_corner().set<0>(boundingBox->point_max()->x());
-    queryCoreBoundingBox.value().max_corner().set<1>(boundingBox->point_max()->y());
-    queryCoreBoundingBox.value().max_corner().set<2>(boundingBox->point_max()->z());
+    queryCoreBoundingBox.value().min_corner().set<0>(query->boundingbox()->point_min()->x());
+    queryCoreBoundingBox.value().min_corner().set<1>(query->boundingbox()->point_min()->y());
+    queryCoreBoundingBox.value().min_corner().set<2>(query->boundingbox()->point_min()->z());
+    queryCoreBoundingBox.value().max_corner().set<0>(query->boundingbox()->point_max()->x());
+    queryCoreBoundingBox.value().max_corner().set<1>(query->boundingbox()->point_max()->y());
+    queryCoreBoundingBox.value().max_corner().set<2>(query->boundingbox()->point_max()->z());
   }
 }
 
@@ -179,7 +205,7 @@ void CoreFbConversion::fromFbDataHeader(const seerep::fb::Header* header, seerep
 {
   boost::uuids::uuid uuid = fromFbDataHeaderUuid(header->uuid_msgs()->str());
 
-  coreHeader.datatype = seerep_core_msgs::Datatype::Images;
+  coreHeader.datatype = seerep_core_msgs::Datatype::Image;
   coreHeader.frameId = header->frame_id()->str();
   coreHeader.timestamp.seconds = header->stamp()->seconds();
   coreHeader.timestamp.nanos = header->stamp()->nanos();
