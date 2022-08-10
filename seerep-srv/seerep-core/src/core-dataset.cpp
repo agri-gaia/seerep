@@ -361,9 +361,10 @@ void CoreDataset::addDatasetToIndices(const seerep_core_msgs::Datatype& datatype
     if (!labelWithInstance.uuidInstance.is_nil())
     {
       m_coreInstances->addDataset(labelWithInstance, dataset.header.uuidData, datatype);
+
+      // collect the instance uuids of this dataset in this vector
+      instanceUuids.push_back(labelWithInstance.uuidInstance);
     }
-    // collect the instance uuids of this dataset in this vector
-    instanceUuids.push_back(labelWithInstance.uuidInstance);
   }
   // add the vector of instance uuids to the datatypespecifics
   datatypeSpecifics->datasetInstancesMap.emplace(dataset.header.uuidData, instanceUuids);

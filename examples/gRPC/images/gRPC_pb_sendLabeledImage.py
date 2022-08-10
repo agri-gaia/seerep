@@ -84,6 +84,8 @@ for n in range(10):
     for i in range(0, 10):
         label = labelWithInstance.LabelWithInstance()
         label.label = "testlabelgeneral" + str(i)
+        # assuming that that the general labels are not instance related -> no instance uuid
+        # label.instanceUuid = str(uuid.uuid4())
         theImage.labels_general.append(label)
 
     uuidImg = stub.TransferImage(theImage)
