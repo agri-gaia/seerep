@@ -2,11 +2,9 @@
 
 import os
 import sys
-import time
 import uuid
 
 import boundingbox2d_labeled_pb2 as bb
-import grpc
 import image_pb2 as image
 import image_service_pb2_grpc as imageService
 import imageio
@@ -20,19 +18,13 @@ import projectCreation_pb2 as projectCreation
 import tf_service_pb2_grpc as tfService
 import transform_stamped_pb2 as tf
 import yaml
-from google.protobuf import empty_pb2
 
-# # server with certs
-# __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
-# with open(os.path.join(__location__, '../tls.pem'), 'rb') as f:
-#     root_cert = f.read()
-# server = "seerep.robot.10.249.3.13.nip.io:32141"
-# creds = grpc.ssl_channel_credentials(root_cert)
-# channel = grpc.secure_channel(server, creds)
+script_dir = os.path.dirname(__file__)
+util_dir = os.path.join(script_dir, '..')
+sys.path.append(util_dir)
+import util
 
-# server without certs
-server = "localhost:9090"
-channel = grpc.insecure_channel(server)
+channel = util.get_gRPC_channel()
 
 stubImage = imageService.ImageServiceStub(channel)
 stubPointcloud = pointcloudService.PointCloudServiceStub(channel)

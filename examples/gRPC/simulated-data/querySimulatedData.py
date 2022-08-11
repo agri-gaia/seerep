@@ -4,7 +4,6 @@ import os
 import sys
 
 import flatbuffers
-import grpc
 from fb import (
     Boundingbox,
     Empty,
@@ -19,20 +18,12 @@ from fb import (
 from fb import image_service_grpc_fb as imageService
 from fb import meta_operations_grpc_fb as metaOperations
 
-# import numpy as np
+script_dir = os.path.dirname(__file__)
+util_dir = os.path.join(script_dir, '..')
+sys.path.append(util_dir)
+import util
 
-
-# # server with certs
-# __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
-# with open(os.path.join(__location__, '../tls.pem'), 'rb') as f:
-#     root_cert = f.read()
-# server = "seerep.robot.10.249.3.13.nip.io:32141"
-# creds = grpc.ssl_channel_credentials(root_cert)
-# channel = grpc.secure_channel(server, creds)
-
-# server without certs
-server = "localhost:9090"
-channel = grpc.insecure_channel(server)
+channel = util.get_gRPC_channel()
 
 stub = imageService.ImageServiceStub(channel)
 stubMeta = metaOperations.MetaOperationsStub(channel)
