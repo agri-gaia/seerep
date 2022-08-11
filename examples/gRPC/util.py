@@ -3,7 +3,7 @@ import os
 import grpc
 
 
-def get_gRPC_channel(target="prod"):
+def get_gRPC_channel(target="local"):
     if target == "prod" or target == "dev":
         if target == "prod":
             targetName = "robot"
