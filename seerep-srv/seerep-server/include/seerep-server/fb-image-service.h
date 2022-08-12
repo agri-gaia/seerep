@@ -20,14 +20,14 @@ public:
   FbImageService(std::shared_ptr<seerep_core::Core> seerepCore);
 
   grpc::Status GetImage(grpc::ServerContext* context, const flatbuffers::grpc::Message<seerep::fb::Query>* request,
-                        grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::Image>>* writer);
+                        grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::Image>>* writer) override;
   grpc::Status TransferImage(grpc::ServerContext* context,
                              grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::Image>>* reader,
-                             flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response);
+                             flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response) override;
   grpc::Status AddBoundingBoxes2dLabeled(
       grpc::ServerContext* context,
       grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::BoundingBoxes2DLabeledStamped>>* reader,
-      flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response);
+      flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response) override;
 
 private:
   void createResponse(std::string msg, seerep::fb::TRANSMISSION_STATE state,
