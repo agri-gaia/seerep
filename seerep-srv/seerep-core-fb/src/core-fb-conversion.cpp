@@ -72,30 +72,29 @@ seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::Im
 
   return dataForIndices;
 }
-seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::PointStamped& point)
+seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::PointStamped* point)
 {
   seerep_core_msgs::DatasetIndexable dataForIndices;
 
-  fromFbDataHeader(point.header(), dataForIndices.header);
+  fromFbDataHeader(point->header(), dataForIndices.header);
 
   // set bounding box for point to point coordinates. assume no spatial extent
-  dataForIndices.boundingbox.min_corner().set<0>(point.point()->x());
-  dataForIndices.boundingbox.min_corner().set<1>(point.point()->y());
-  dataForIndices.boundingbox.min_corner().set<2>(point.point()->z());
-  dataForIndices.boundingbox.max_corner().set<0>(point.point()->x());
-  dataForIndices.boundingbox.max_corner().set<1>(point.point()->y());
-  dataForIndices.boundingbox.max_corner().set<2>(point.point()->z());
+  dataForIndices.boundingbox.min_corner().set<0>(point->point()->x());
+  dataForIndices.boundingbox.min_corner().set<1>(point->point()->y());
+  dataForIndices.boundingbox.min_corner().set<2>(point->point()->z());
+  dataForIndices.boundingbox.max_corner().set<0>(point->point()->x());
+  dataForIndices.boundingbox.max_corner().set<1>(point->point()->y());
+  dataForIndices.boundingbox.max_corner().set<2>(point->point()->z());
 
   // semantic
-  int labelSizeAll = 0;
-  if (point.labels_general())
+
+  if (flatbuffers::IsFieldPresent(point, seerep::fb::PointStamped::VT_LABELS_GENERAL))
   {
-    labelSizeAll += point.labels_general()->size();
+    int labelSizeAll = point->labels_general()->size();
+
+    dataForIndices.labelsWithInstances.reserve(labelSizeAll);
+    fromFbDataLabelsGeneral(point->labels_general(), dataForIndices.labelsWithInstances);
   }
-
-  dataForIndices.labelsWithInstances.reserve(labelSizeAll);
-
-  fromFbDataLabelsGeneral(point.labels_general(), dataForIndices.labelsWithInstances);
 
   return dataForIndices;
 }
@@ -203,13 +202,19 @@ void CoreFbConversion::fromFbQueryBoundingBox(const seerep::fb::Query* query,
 
 void CoreFbConversion::fromFbDataHeader(const seerep::fb::Header* header, seerep_core_msgs::Header& coreHeader)
 {
-  boost::uuids::uuid uuid = fromFbDataHeaderUuid(header->uuid_msgs()->str());
+  if (flatbuffers::IsFieldPresent(header, seerep::fb::Header::VT_UUID_MSGS))
+  {
+    coreHeader.uuidData = fromFbDataHeaderUuid(header->uuid_msgs()->str());
+  }
+  else
+  {
+    coreHeader.uuidData = boost::uuids::random_generator()();
+  }
 
   coreHeader.datatype = seerep_core_msgs::Datatype::Image;
   coreHeader.frameId = header->frame_id()->str();
   coreHeader.timestamp.seconds = header->stamp()->seconds();
   coreHeader.timestamp.nanos = header->stamp()->nanos();
-  coreHeader.uuidData = uuid;
 
   boost::uuids::string_generator gen;
   coreHeader.uuidProject = gen(header->uuid_project()->str());

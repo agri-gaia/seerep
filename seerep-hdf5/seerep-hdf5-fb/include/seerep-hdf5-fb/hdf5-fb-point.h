@@ -25,7 +25,7 @@ class Hdf5FbPoint : public Hdf5FbGeneral
 public:
   Hdf5FbPoint(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
 
-  void writePoint(const std::string& id, const seerep::fb::PointStamped& point);
+  void writePoint(const std::string& id, const seerep::fb::PointStamped* point);
   void writeAdditionalPointAttributes(const seerep::fb::AttributesStamped& attributeStamped);
 
   std::optional<flatbuffers::grpc::Message<seerep::fb::PointStamped>> readPoint(const std::string& id);
@@ -37,7 +37,7 @@ private:
 
 public:
   // datatype group names in hdf5
-  inline static const std::string HDF5_GROUP_POINT = "Points";
+  inline static const std::string HDF5_GROUP_POINT = "points";
 };
 
 }  // namespace seerep_hdf5_fb

@@ -39,7 +39,7 @@ void CoreFbPoint::getData(const seerep::fb::Query* query,
   }
 }
 
-boost::uuids::uuid CoreFbPoint::addData(const seerep::fb::PointStamped& point)
+boost::uuids::uuid CoreFbPoint::addData(const seerep::fb::PointStamped* point)
 {
   seerep_core_msgs::DatasetIndexable dataForIndices = CoreFbConversion::fromFb(point);
 

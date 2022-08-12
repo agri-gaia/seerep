@@ -68,7 +68,7 @@ public:
    * The point is stored in the hdf5 file via hdf5-io-fb. The data needed for the indices is extracted and added to the
    * core. If the uuid of point is not defined yet, a uuid is generated and returned.
    */
-  boost::uuids::uuid addData(const seerep::fb::PointStamped& point);
+  boost::uuids::uuid addData(const seerep::fb::PointStamped* point);
   /**
    * @brief Adds attributes to an existing point
    * @param uuidAttributePair a pair of the uuid of the targeted point and the attributes

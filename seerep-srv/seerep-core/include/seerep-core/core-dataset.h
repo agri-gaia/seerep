@@ -1,6 +1,7 @@
 #ifndef SEEREP_CORE_CORE_DATASET_H_
 #define SEEREP_CORE_CORE_DATASET_H_
 
+#include <cstdint>
 #include <functional>
 #include <optional>
 
@@ -175,6 +176,14 @@ private:
    * @return vector of UUIDs of the intersection result
    */
   std::vector<boost::uuids::uuid> intersectVectorOfSets(std::vector<std::set<boost::uuids::uuid>>& vectorOfSets);
+
+  /**
+   * @brief return the UUIDs of all stored datasets. Uses the timeTree, because all datasets are in there
+   * @param datatypeSpecifics the datatype specifics of the targeted data type
+   * @return vector of UUIDs of all data sets
+   */
+  std::vector<boost::uuids::uuid>
+  getAllDatasetUuids(std::shared_ptr<seerep_core::CoreDataset::DatatypeSpecifics> datatypeSpecifics);
 
   /** @brief the frame id of the spatial index*/
   std::string m_frameId;

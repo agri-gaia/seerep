@@ -73,6 +73,11 @@ std::vector<boost::uuids::uuid> CoreDataset::getData(const seerep_core_msgs::Que
     instanceResult.value() = m_coreInstances->getDatasets(query.instances.value(), query.header.datatype);
   }
 
+  if (!query.boundingbox && !query.timeinterval && !query.label && !query.instances)
+  {
+    return getAllDatasetUuids(datatypeSpecifics);
+  }
+
   return intersectQueryResults(resultRt, resultTime, resultSemantic, instanceResult);
 }
 
@@ -265,6 +270,27 @@ CoreDataset::intersectVectorOfSets(std::vector<std::set<boost::uuids::uuid>>& ve
 
   // return empty vector if input vector is empty
   return std::vector<boost::uuids::uuid>();
+}
+
+std::vector<boost::uuids::uuid>
+CoreDataset::getAllDatasetUuids(std::shared_ptr<seerep_core::CoreDataset::DatatypeSpecifics> datatypeSpecifics)
+{
+  std::vector<seerep_core_msgs::AabbTimeIdPair> allIdsFromTimeTree = std::vector<seerep_core_msgs::AabbTimeIdPair>();
+  seerep_core_msgs::AabbTime aabbtime(seerep_core_msgs::TimePoint(((int64_t)std::numeric_limits<uint32_t>::min() << 32 |
+                                                                   ((uint64_t)std::numeric_limits<uint32_t>::min()))),
+                                      seerep_core_msgs::TimePoint(((int64_t)std::numeric_limits<int32_t>::max()) << 32 |
+                                                                  ((uint64_t)std::numeric_limits<uint32_t>::max())));
+
+  datatypeSpecifics->timetree.query(boost::geometry::index::intersects(aabbtime),
+                                    std::back_inserter(allIdsFromTimeTree));
+  std::vector<boost::uuids::uuid> allIds;
+  for (auto it = std::make_move_iterator(allIdsFromTimeTree.begin()),
+            end = std::make_move_iterator(allIdsFromTimeTree.end());
+       it != end; ++it)
+  {
+    allIds.push_back(std::move(it->second));
+  }
+  return allIds;
 }
 
 void CoreDataset::addDataset(const seerep_core_msgs::DatasetIndexable& dataset)

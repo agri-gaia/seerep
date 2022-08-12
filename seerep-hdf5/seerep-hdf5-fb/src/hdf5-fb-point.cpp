@@ -9,7 +9,7 @@ Hdf5FbPoint::Hdf5FbPoint(std::shared_ptr<HighFive::File>& file, std::shared_ptr<
 {
 }
 
-void Hdf5FbPoint::writePoint(const std::string& id, const seerep::fb::PointStamped& point)
+void Hdf5FbPoint::writePoint(const std::string& id, const seerep::fb::PointStamped* point)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
@@ -18,9 +18,9 @@ void Hdf5FbPoint::writePoint(const std::string& id, const seerep::fb::PointStamp
   std::shared_ptr<HighFive::DataSet> data_set_ptr;
 
   std::vector<double> data;
-  data.push_back(point.point()->x());
-  data.push_back(point.point()->y());
-  data.push_back(point.point()->z());
+  data.push_back(point->point()->x());
+  data.push_back(point->point()->y());
+  data.push_back(point->point()->z());
 
   try
   {
@@ -39,9 +39,11 @@ void Hdf5FbPoint::writePoint(const std::string& id, const seerep::fb::PointStamp
   }
 
   data_set_ptr->write(data);
-  writeHeaderAttributes(*data_set_ptr, *point.header());
-  writeAttributeMap(data_set_ptr, *point.attribute());
-  writeLabelsGeneral(HDF5_GROUP_POINT, id, point.labels_general());
+  writeHeaderAttributes(*data_set_ptr, *point->header());
+
+  writeAttributeMap(data_set_ptr, point->attribute());
+
+  writeLabelsGeneral(HDF5_GROUP_POINT, id, point->labels_general());
 
   m_file->flush();
 }
@@ -58,7 +60,7 @@ void Hdf5FbPoint::writeAdditionalPointAttributes(const seerep::fb::AttributesSta
     std::shared_ptr<HighFive::DataSet> data_set_ptr =
         std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DatasetRawDataPath));
 
-    writeAttributeMap(data_set_ptr, *attributeStamped.attribute());
+    writeAttributeMap(data_set_ptr, attributeStamped.attribute());
   }
   catch (const std::exception& e)
   {

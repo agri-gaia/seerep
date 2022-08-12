@@ -80,14 +80,14 @@ FbPointService::TransferPoint(grpc::ServerContext* context,
   while (reader->Read(&pointMsg))
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "received image... ";
-    auto image = pointMsg.GetRoot();
+    auto point = pointMsg.GetRoot();
 
-    std::string uuidProject = image->header()->uuid_project()->str();
+    std::string uuidProject = point->header()->uuid_project()->str();
     if (!uuidProject.empty())
     {
       try
       {
-        pointFb->addData(*image);
+        pointFb->addData(point);
       }
       catch (std::runtime_error const& e)
       {

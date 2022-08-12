@@ -70,7 +70,7 @@ public:
    * @param img the flatbuffer point message
    * @return the message in seerep core format for the data needed for the indices
    */
-  static seerep_core_msgs::DatasetIndexable fromFb(const seerep::fb::PointStamped& point);
+  static seerep_core_msgs::DatasetIndexable fromFb(const seerep::fb::PointStamped* point);
 
   /**
    * @brief converts the flatbuffer tf query message to seerep core specific message

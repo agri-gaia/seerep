@@ -43,7 +43,7 @@ protected:
   // Attributes
   //################
   void writeAttributeMap(const std::shared_ptr<HighFive::DataSet> dataSetPtr,
-                         const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>>& attributes);
+                         const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>>* attributes);
   template <class T>
   flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>>>
   readAttributeMap(HighFive::AnnotateTraits<T>& object, flatbuffers::grpc::MessageBuilder& builder);
