@@ -79,8 +79,8 @@ are a couple of hints on how to fix them.
       ```
       docker volume rm seerep-vscode-extensions
       docker volume rm vscode
-      docker rmi git.ni.dfki.de:5050/agrigaia/seerep/base
-      (docker rmi git.ni.dfki.de:5050/agrigaia/seerep/server)
+      docker rmi ghcr.io/agri-gaia/seerep_base:latest
+      (docker rmi ghcr.io/agri-gaia/seerep_server:latest)
       docker rmi vsc-seerep-*
       ```
 
