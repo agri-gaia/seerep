@@ -79,7 +79,7 @@ FbPointService::TransferPoint(grpc::ServerContext* context,
   flatbuffers::grpc::Message<seerep::fb::PointStamped> pointMsg;
   while (reader->Read(&pointMsg))
   {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "received image... ";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "received point... ";
     auto point = pointMsg.GetRoot();
 
     std::string uuidProject = point->header()->uuid_project()->str();

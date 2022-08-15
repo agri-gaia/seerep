@@ -18,6 +18,7 @@ from fb import (
     PointStamped,
     ProjectInfos,
     Query,
+    String,
     TimeInterval,
     Timestamp,
     UnionMapEntry,
@@ -87,7 +88,10 @@ for responseBuf in stubImage.GetImage(bytes(buf)):
             labelWithInstanceMsg = builder.EndVector()
 
             unionMapEntryKey1 = builder.CreateString("exampleKey1")
-            unionMapEntryValue1 = builder.CreateString("exampleValue1")
+            value1String = builder.CreateString("exampleValue1")
+            String.Start(builder)
+            String.AddData(builder, value1String)
+            unionMapEntryValue1 = String.End(builder)
             unionMapEntryKey2 = builder.CreateString("exampleKey2")
             Integer.Start(builder)
             Integer.AddData(builder, 42)
@@ -112,7 +116,7 @@ for responseBuf in stubImage.GetImage(bytes(buf)):
             PointStamped.Start(builder)
             PointStamped.AddHeader(builder, header)
             PointStamped.AddPoint(builder, point)
-            PointStamped.AddAttribute(builder, attributes)
+            # PointStamped.AddAttribute(builder, attributes)
             PointStamped.AddLabelsGeneral(builder, labelWithInstanceMsg)
             pointStampedMsg = PointStamped.End(builder)
 

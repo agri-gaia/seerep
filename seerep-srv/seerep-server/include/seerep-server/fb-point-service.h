@@ -20,13 +20,13 @@ public:
   FbPointService(std::shared_ptr<seerep_core::Core> seerepCore);
 
   grpc::Status GetPoint(grpc::ServerContext* context, const flatbuffers::grpc::Message<seerep::fb::Query>* request,
-                        grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::PointStamped>>* writer);
+                        grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::PointStamped>>* writer) override;
   grpc::Status TransferPoint(grpc::ServerContext* context,
                              grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::PointStamped>>* reader,
-                             flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response);
+                             flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response) override;
   grpc::Status AddAttribute(grpc::ServerContext* context,
                             grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::AttributesStamped>>* reader,
-                            flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response);
+                            flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response) override;
 
 private:
   void createResponse(std::string msg, seerep::fb::TRANSMISSION_STATE state,
