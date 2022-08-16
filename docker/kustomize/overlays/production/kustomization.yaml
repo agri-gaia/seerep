@@ -25,6 +25,12 @@ patches:
         path: /spec/volumeName
         value: prod-seerep-data-pv
   - target:
+      kind: Service
+    patch: |-
+      - op: replace
+        path: /spec/ports/0/nodePort
+        value: 30387
+  - target:
       kind: Ingress
     patch: |-
       - op: replace
@@ -36,7 +42,6 @@ patches:
       - op: replace
         path: /spec/tls/0/secretName
         value: prod-seerep-ca
-
 
 images:
   - name: seerep-server
