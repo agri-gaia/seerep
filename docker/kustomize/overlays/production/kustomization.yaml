@@ -9,6 +9,8 @@ namespace: seerep-prod
 resources:
   - ./../../base
   - ca-secret-sealed.yaml
+patchesStrategicMerge:
+  - delete-secret.yaml
 patches:
   - target:
       kind: PersistentVolume
