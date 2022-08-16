@@ -1,5 +1,7 @@
 var NAVTREEINDEX5 =
 {
+"functions_z.html":[2,3,0,22],
+"functions_~.html":[2,3,0,23],
 "globals.html":[3,1,0],
 "globals_defs.html":[3,1,2],
 "globals_func.html":[3,1,1],
@@ -247,7 +249,5 @@ var NAVTREEINDEX5 =
 "query-result-project_8h_source.html":[3,0,3,0,6],
 "query-result_8h.html":[3,0,3,0,7],
 "query-result_8h_source.html":[3,0,3,0,7],
-"query-tf_8h.html":[3,0,3,0,8],
-"query-tf_8h_source.html":[3,0,3,0,8],
-"query_8fbs.html":[3,0,3,1,25]
+"query-tf_8h.html":[3,0,3,0,8]
 };

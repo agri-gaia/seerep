@@ -1,10 +1,11 @@
 var classseerep__hdf5__core_1_1Hdf5CoreGeneral =
 [
     [ "Hdf5CoreGeneral", "classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a8742137ed1324de30bb6e106a9efafd5", null ],
-    [ "getAttribute", "classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a6ee8514c1b5113af017bc815894e52aa", null ],
     [ "getGroupDatasets", "classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a9b5eacd573e2486080ed68c31b4e1ceb", null ],
+    [ "readAttributeFromHdf5", "classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#aa601e5706c24be57a0fb5a4bd4d4b0d4", null ],
     [ "readProjectFrameId", "classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ae39d9997316e6a6a09f0d171f6d3b152", null ],
     [ "readProjectname", "classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a169525769c17cafc12e7f93be2702218", null ],
+    [ "writeAttributeToHdf5", "classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#aa8d464d51d117baaa44595baed649265", null ],
     [ "writeProjectFrameId", "classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a6247850d07c817afb7fb3e79026a1598", null ],
     [ "writeProjectname", "classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a95033cb2048076b5d3b2dd98eb7cac26", null ],
     [ "m_file", "classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a5cc0b9aa14cb5d7a4c33524aec2809d0", null ],

@@ -13,7 +13,7 @@
     
     
       
-        <title>Package Overview - SEEREP Documentation</title>
+        <title>Kubernetes Deployment - SEEREP Documentation</title>
       
     
     
@@ -60,7 +60,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#package-overview" class="md-skip">
+        <a href="#kubernetes-deployment" class="md-skip">
           Skip to content
         </a>
       
@@ -93,7 +93,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Package Overview
+              Kubernetes Deployment
             
           </span>
         </div>
@@ -177,15 +177,13 @@
         
   
   
-    
-  
 
 
   
   
   
     <li class="md-tabs__item">
-      <a href="../installation/" class="md-tabs__link md-tabs__link--active">
+      <a href="../installation/" class="md-tabs__link">
         Getting started
       </a>
     </li>
@@ -273,14 +271,12 @@
 
   
   
-    
-  
   
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
       
       
       
@@ -315,100 +311,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Package Overview
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../packages/" class="md-nav__link">
         Package Overview
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#general-seerep-structure" class="md-nav__link">
-    General SEEREP Structure
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#packages" class="md-nav__link">
-    Packages
-  </a>
-  
-    <nav class="md-nav" aria-label="Packages">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#seerep-hdf5" class="md-nav__link">
-    seerep-hdf5
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#seerep-srv" class="md-nav__link">
-    seerep-srv
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#seerep-msgs" class="md-nav__link">
-    seerep-msgs
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#seerep-ros" class="md-nav__link">
-    seerep-ros
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#seerep-com" class="md-nav__link">
-    seerep-com
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -537,57 +444,23 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#general-seerep-structure" class="md-nav__link">
-    General SEEREP Structure
+  <a href="#relevant-files" class="md-nav__link">
+    Relevant files
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#packages" class="md-nav__link">
-    Packages
-  </a>
-  
-    <nav class="md-nav" aria-label="Packages">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#seerep-hdf5" class="md-nav__link">
-    seerep-hdf5
+  <a href="#building-with-kustomize" class="md-nav__link">
+    Building with Kustomize
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#seerep-srv" class="md-nav__link">
-    seerep-srv
+      
+        <li class="md-nav__item">
+  <a href="#sealed-secrets" class="md-nav__link">
+    Sealed Secrets
   </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#seerep-msgs" class="md-nav__link">
-    seerep-msgs
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#seerep-ros" class="md-nav__link">
-    seerep-ros
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#seerep-com" class="md-nav__link">
-    seerep-com
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -603,86 +476,58 @@
             <article class="md-content__inner md-typeset">
               
                 
-  <a href="https://github.com/agri-gaia/seerep/edit/master/docs/packages.md" title="Edit this page" class="md-content__button md-icon">
+  <a href="https://github.com/agri-gaia/seerep/edit/master/docs/kubernetes-deployment.md" title="Edit this page" class="md-content__button md-icon">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
   </a>
 
 
 
-<h1 id="package-overview">Package Overview</h1>
-<p>This page provides an overview of all the ROS-Packages used in SEEREP.</p>
-<h2 id="general-seerep-structure">General SEEREP Structure</h2>
-<p>The general structure of SEEREP is schematically illustrated in the following
-graphic.</p>
-<p>SEEREP can be split into two parts, one of which runs on the robot (left box)
-and one which runs on a server clusters (right box). The communication is
-handled via <a href="https://grpc.io/">gRPC</a> and <a href="https://developers.google.com/protocol-buffers/docs/overview">protobuffers
-(PB)</a>/
-<a href="https://google.github.io/flatbuffers/">flatbuffers (FB)</a>.</p>
-<p><img alt="" src="../imgs/SEEREP-Structure.svg" width="800" /></p>
-<h2 id="packages">Packages</h2>
-<p>In the following, each package will be described in more detail.</p>
-<h3 id="seerep-hdf5">seerep-hdf5</h3>
-<p>The <code>seerep-hd5f</code> unit provides access to the hdf5 files to store or retrieve
-data. The unit is split into three
-packages <code>seeprep-hdf5-core</code>, <code>seerep-hdf5-pb</code> and <code>seerep-hdf5-fb</code>. This is to
-have a server-core which is independent of the message format, so that it's
-possible to easily switch between PB and FB or any other message format.</p>
+<h1 id="kubernetes-deployment">Kubernetes Deployment</h1>
+<p>Besides, the local installation and the usage of an available docker container (see <a href="../installation/">installation</a>),
+one can also deploy the seerep-server within a kubernetes cluster.</p>
+<h2 id="relevant-files">Relevant files</h2>
+<p>Seerep can either be installed with the latest development state or the latest stable version. The relevant files can
+be found under</p>
 <ul>
-<li>
-<p>The main task for the <code>seerep-core</code> is to read UUIDs, bounding boxes (BB),
-  time/semantic information on provided indices from the hdf5-files. The only
-  write operation of the core is to create new hdf5-files. Due to the
-  independence of FB and PB, new communication-messages are added to seerep-msgs
-  (<code>seerep-msgs/core</code>).</p>
-</li>
-<li>
-<p><code>seerep-hdf5-pb</code> and <code>seerep-hdf5-fb</code> provide methods to read or write
-  pointclouds, images and transformations from PB or FB  messages.</p>
-</li>
+<li>/docker/kustomize/base --&gt; development</li>
+<li>/docker/kustomize/overlays/production --&gt; latest stable release</li>
 </ul>
-<h3 id="seerep-srv">seerep-srv</h3>
-<p>The <code>seerep-srv</code> is also split into three parts <code>seerep-server</code>, <code>seerep-core</code>
-and <code>seerep-core-pb</code>.</p>
+<p>The base-folder contains all yaml-files for a cluster deployments. This includes</p>
 <ul>
-<li>
-<p>The <code>seerep-server</code> provides the top level interface for the SEEREP server
-  cluster, services which clients can use are registered here. The server passes
-  request to the corresponding unit in the layer below (see graphic).</p>
-</li>
-<li>
-<p>The <code>seerep-core-pb</code> writes incoming PB messages to the hdf5 files. In case of
-  a query the <code>seerep-core</code> is asked for the UUIDs of the datasets which match
-  the query parameters. This core could be easily switched to one that uses FB.</p>
-</li>
+<li>Deplyoment</li>
+<li>PersistentVolume and PersistentVolumeClaim</li>
+<li>Service</li>
+<li>Ingress</li>
+<li>Configuration</li>
 </ul>
-<h3 id="seerep-msgs">seerep-msgs</h3>
-<p>The <code>seerep-msgs</code> package defines all the PB, FB and core messages used in
-SEEREP.</p>
-<h3 id="seerep-ros">seerep-ros</h3>
-<p><code>seerep-ros</code> provides two packages which run on the robot itself. The first
-package <code>seerep_ros_conversions</code> simply converts ROS messages to PB messages and
-vice versa. The second package <code>seerep_ros_communication</code> is used to save sensor
-information like images and point clouds on the robot, or in case of a good
-internet connection to the remote server-cluster. Further, the robot is able to
-query the server for information to support his understanding of the environment
-and aid its navigation.</p>
-<ul>
-<li>
-<p>The <code>seerep_ros_communication\client</code> is responsible for sending sensor
-  information direclty to the remote server.</p>
-</li>
-<li>
-<p>The <code>seerep_ros_communication\querier</code> is used to get information from the
-  remote server.</p>
-</li>
-<li>
-<p><code>seerep_ros_communicatio\hdf5-dump</code> is used to save sensor information on a
-  hard drive which is located on the robot.</p>
-</li>
-</ul>
-<h3 id="seerep-com">seerep-com</h3>
-<p><code>seerep-com</code> is used to define the gRPC services in PB and FB.</p>
+<p>The yaml-file for the cluster is create via <a href="https://kubectl.docs.kubernetes.io/references/kustomize/">Kustomize</a>, hence
+this folder also contains a kustomization.yaml which puts everything together.</p>
+<p>The /overlay/production folder contains a second kustomization.yaml. Within this file everything needed to install a
+production system is overridden. This means, that the sealed secret is replaced with a new one, while the base secret
+is deleted. Further, the labels and the names of PV and PVC are changed to create new storage explicitly for the
+production system. Finally, the used image is replaced with the latest stable release.</p>
+<p>The usage of an overlay, thereby, follows the principles of Kustomize.</p>
+<h2 id="building-with-kustomize">Building with Kustomize</h2>
+<p>Before one can build the kubernetes manifest, one needs to install Kustomize (<a href="https://kubectl.docs.kubernetes.io/installation/kustomize/">Kustomize installation</a>)
+The easiest way to that is the download the latest binary from the <a href="https://github.com/kubernetes-sigs/kustomize/releases">offical release page</a></p>
+<p>To install the base-version of seerep either one can run:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>kustomize build base/ &gt; seerep-deployment.yaml
+</code></pre></div>
+<p>to store the manifest in a separate yaml file. Or directly use <a href="https://kubernetes.io/docs/reference/kubectl/">kubectl</a>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>kubectl apply -k base/
+</code></pre></div>
+<p>In order to install the production version, the commands look slightly different:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>kustomize build overlays/production/ &gt; seerep-deployment.yaml
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>kubectl apply -k overlays/production/
+</code></pre></div>
+<p>If someone has a running <a href="https://argo-cd.readthedocs.io/en/stable/">ArgoCD</a> instance, it is also
+possible to integrate seerep as a project into ArgoCD.</p>
+<h2 id="sealed-secrets">Sealed Secrets</h2>
+<p>The certificates used for the secured ingress are created as <a href="https://github.com/bitnami-labs/sealed-secrets">sealed-secret</a>.
+Hence, the secret can safely be stored in a repository. The sealed secret controller installed
+within the cluster will take care of unsealing the secret and make it usable. To combine Kustomize and
+sealed secrets this blogs-post was followed <a href="https://faun.pub/sealing-secrets-with-kustomize-51d1b79105d8">faun.pub</a></p>
 
 
 
@@ -696,42 +541,6 @@ and aid its navigation.</p>
       </main>
       
         <footer class="md-footer">
-  
-    
-    <nav class="md-footer__inner md-grid" aria-label="Footer" >
-      
-        
-        <a href="../installation/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Installation" rel="prev">
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
-          </div>
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              Installation
-            </div>
-          </div>
-        </a>
-      
-      
-        
-        <a href="../docs/" class="md-footer__link md-footer__link--next" aria-label="Next: Docs" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              Docs
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
-          </div>
-        </a>
-      
-    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
