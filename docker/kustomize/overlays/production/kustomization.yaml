@@ -34,7 +34,7 @@ patches:
         path: /spec/tls/0/hosts/0
         value: seerep-prod.robot.10.249.3.13.nip.io
       - op: replace
-        path: /spec/tls/secretName
+        path: /spec/tls/0/secretName
         value: prod-seerep-ca
 
 
