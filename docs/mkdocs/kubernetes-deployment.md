@@ -58,3 +58,10 @@ kubectl apply -k overlays/production/
 
 If someone has a running [ArgoCD](https://argo-cd.readthedocs.io/en/stable/) instance, it is also
 possible to integrate seerep as a project into ArgoCD.
+
+## Sealed Secrets
+
+The certificates used for the secured ingress are created as [sealed-secret](https://github.com/bitnami-labs/sealed-secrets).
+Hence, the secret can safely be stored in a repository. The sealed secret controller installed
+within the cluster will take care of unsealing the secret and make it usable. To combine Kustomize and
+sealed secrets this blogs-post was followed [faun.pub](https://faun.pub/sealing-secrets-with-kustomize-51d1b79105d8)
