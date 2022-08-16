@@ -8,6 +8,7 @@ namespace: seerep-prod
 
 resources:
   - ./../../base
+  - ca-secret-sealed.yaml
 patches:
   - target:
       kind: PersistentVolume
