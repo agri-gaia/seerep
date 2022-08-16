@@ -1,18 +1,29 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+commonLabels:
+  app: seerep-prod
+
 namespace: seerep-prod
 
 resources:
   - ./../../base
-  - ca-secret-sealed-prod.yaml
 patches:
   - target:
       kind: PersistentVolume
     patch: |-
       - op: replace
+        path: /metadata/name
+        value: prod-seerep-data-pv
+      - op: replace
         path: /spec/hostPath/path
         value: /media/data/seerep-prod
+  - target:
+      kind: PersistentVolumeClaim
+    patch: |-
+      - op: replace
+        path: /spec/volumeName
+        value: prod-seerep-data-pv
   - target:
       kind: Ingress
     patch: |-
@@ -22,12 +33,6 @@ patches:
       - op: replace
         path: /spec/tls/0/hosts/0
         value: seerep-prod.robot.10.249.3.13.nip.io
-
-namePrefix: prod-
-
-secretGenerator:
-  - name: ca-secret-prod.yaml
-    type: Opaque
 
 images:
   - name: seerep-server

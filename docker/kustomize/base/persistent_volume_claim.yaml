@@ -4,6 +4,7 @@ metadata:
   name: seerep-pv-claim
 spec:
   storageClassName: manual
+  volumeName: seerep-data-pv
   accessModes:
     - ReadWriteOnce
   resources:
