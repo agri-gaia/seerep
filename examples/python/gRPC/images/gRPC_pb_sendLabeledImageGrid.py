@@ -19,7 +19,7 @@ util_dir = os.path.join(script_dir, '..')
 sys.path.append(util_dir)
 import util
 
-channel = util.get_gRPC_channel()
+channel = util.get_gRPC_channel("local")
 
 stub = imageService.ImageServiceStub(channel)
 stubTf = tfService.TfServiceStub(channel)

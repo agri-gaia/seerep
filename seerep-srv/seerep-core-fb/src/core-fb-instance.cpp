@@ -10,11 +10,12 @@ CoreFbInstance::~CoreFbInstance()
 {
 }
 
-void CoreFbInstance::getInstances(const flatbuffers::grpc::Message<seerep::fb::Query>* request,
+void CoreFbInstance::getInstances(const flatbuffers::grpc::Message<seerep::fb::QueryInstance>* request,
                                   flatbuffers::grpc::Message<seerep::fb::UuidsPerProject>* response)
 {
-  std::cout << "loading image from images/" << std::endl;
-  seerep_core_msgs::Query queryCore = seerep_core_fb::CoreFbConversion::fromFb(*request->GetRoot());
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "getting instances";
+
+  seerep_core_msgs::Query queryCore = seerep_core_fb::CoreFbConversion::fromFb(request->GetRoot());
 
   seerep_core_msgs::QueryResult result = m_seerepCore->getInstances(queryCore);
 

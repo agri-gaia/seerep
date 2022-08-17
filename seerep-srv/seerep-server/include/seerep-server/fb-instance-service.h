@@ -13,7 +13,8 @@ class FbInstanceService final : public seerep::fb::InstanceService::Service
 public:
   FbInstanceService(std::shared_ptr<seerep_core::Core> seerepCore);
 
-  grpc::Status GetInstances(grpc::ServerContext* context, const flatbuffers::grpc::Message<seerep::fb::Query>* request,
+  grpc::Status GetInstances(grpc::ServerContext* context,
+                            const flatbuffers::grpc::Message<seerep::fb::QueryInstance>* request,
                             flatbuffers::grpc::Message<seerep::fb::UuidsPerProject>* response);
 
 private:

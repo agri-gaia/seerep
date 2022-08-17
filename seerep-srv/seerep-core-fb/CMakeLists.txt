@@ -7,9 +7,11 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra -fPIC -DBOOST_LOG_DYN_LINK")
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
+include(FindFlatBuffers)
+
 find_package(SeerepHdf5Fb REQUIRED)
 find_package(seerep_ros_conversions_fb REQUIRED)
-find_package(Protobuf REQUIRED)
+find_package(Flatbuffers REQUIRED)
 find_package(SeerepMsgs REQUIRED)
 find_package(HighFive REQUIRED)
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
@@ -31,7 +33,7 @@ include_directories(
 	${SeerepMsgs_INCLUDE_DIRS}
 	${SeerepHdf5Fb_INCLUDE_DIRS}
 	${seerep_ros_conversions_fb_INCLUDE_DIRS}
-	${PROTOBUF_INCLUDE_DIR}
+	${FLATBUFFER_INCLUDE_DIR}
 	${HighFive_INCLUDE_DIRS}
 	${Boost_INCLUDE_DIRS}
 	${catkin_INCLUDE_DIRS}
@@ -41,6 +43,7 @@ add_library(seerepcorefb
 	src/core-fb-conversion.cpp
 	src/core-fb-image.cpp
 	src/core-fb-instance.cpp
+	src/core-fb-point.cpp
 	src/core-fb-tf.cpp
 )
 
@@ -48,22 +51,13 @@ target_link_libraries(seerepcorefb
 	${SeerepMsgs_LIBRARIES}
 	${SeerepHdf5Fb_LIBRARIES}
 	${seerep_ros_conversions_fb_LIBRARIES}
-	${PROTOBUF_LIBRARIES}
+	${FLATBUFFER_LIBRARIES}
 	${HighFive_LIBRARIES}
 	${Boost_LIBRARIES}
 	${Boost_LOG_LIBRARY} ${Boost_LOG_SETUP_LIBRARY}
 	${catkin_LIBRARIES}
 	Eigen3::Eigen
 )
-
-set(INSTALL_HEADERS
-	include/seerep-core-fb/core-fb-conversion.h
-	include/seerep-core-fb/core-fb-image.h
-	include/seerep-core-fb/core-fb-instance.h
-	include/seerep-core-fb/core-fb-tf.h
-)
-
-set_target_properties(seerepcorefb PROPERTIES PUBLIC_HEADER "${INSTALL_HEADERS}")
 
 set(CMAKE_INSTALL_INCLUDEDIR include)
 set(CMAKE_INSTALL_LIBDIR lib)
@@ -96,6 +90,8 @@ install(FILES
 	${CMAKE_CURRENT_BINARY_DIR}/SeerepCoreFbConfigVersion.cmake
 	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/seerepcorefb
 )
+
+INSTALL(DIRECTORY include/seerep-core-fb DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 install(FILES
 	"${PROJECT_BINARY_DIR}/SeerepCoreFbConfig.h"

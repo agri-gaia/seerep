@@ -55,7 +55,7 @@ grpc::Status FbImageService::GetImage(grpc::ServerContext* context,
   }
   try
   {
-    imageFb->getData(*requestRoot, writer);
+    imageFb->getData(requestRoot, writer);
   }
   catch (std::runtime_error const& e)
   {

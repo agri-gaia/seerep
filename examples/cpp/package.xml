@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>examples_cpp</name>
+  <version>0.0.1</version>
+  <description>
+    example gRPC cpp clients
+  </description>
+
+  <maintainer email="mark.hoellmann@dfki.de">Mark Höllmann</maintainer>
+
+  <license>BSD-3</license>
+
+  <url type="website">TODO</url>
+
+  <author email="mark.hoellmann@dfki.de">Mark Höllmann</author>
+
+  <depend>seerep-msgs</depend>
+  <depend>seerep-com</depend>
+  <buildtool_depend>cmake</buildtool_depend>
+
+  <export>
+    <build_type>cmake</build_type>
+  </export>
+</package>

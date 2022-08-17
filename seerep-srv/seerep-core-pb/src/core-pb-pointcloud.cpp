@@ -21,7 +21,7 @@ CorePbPointCloud::~CorePbPointCloud()
 std::vector<seerep::PointCloud2> CorePbPointCloud::getData(const seerep::Query& query)
 {
   std::cout << "loading image from images/" << std::endl;
-  seerep_core_msgs::Query queryCore = CorePbConversion::fromPb(query, seerep_core_msgs::Datatype::PointClouds);
+  seerep_core_msgs::Query queryCore = CorePbConversion::fromPb(query, seerep_core_msgs::Datatype::PointCloud);
   seerep_core_msgs::QueryResult resultCore = m_seerepCore->getDataset(queryCore);
 
   std::vector<seerep::PointCloud2> resultPointClouds;
@@ -56,7 +56,7 @@ boost::uuids::uuid CorePbPointCloud::addData(const seerep::PointCloud2& pc)
   hdf5io->writePointCloud2(boost::lexical_cast<std::string>(uuid), pc);
 
   seerep_core_msgs::DatasetIndexable dataForIndices;
-  dataForIndices.header.datatype = seerep_core_msgs::Datatype::PointClouds;
+  dataForIndices.header.datatype = seerep_core_msgs::Datatype::PointCloud;
   dataForIndices.header.frameId = pc.header().frame_id();
   dataForIndices.header.timestamp.seconds = pc.header().stamp().seconds();
   dataForIndices.header.timestamp.nanos = pc.header().stamp().nanos();

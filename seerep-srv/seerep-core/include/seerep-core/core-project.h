@@ -17,6 +17,7 @@
 #include <seerep-hdf5-core/hdf5-core-image.h>
 #include <seerep-hdf5-core/hdf5-core-instance.h>
 #include <seerep-hdf5-core/hdf5-core-point-cloud.h>
+#include <seerep-hdf5-core/hdf5-core-point.h>
 #include <seerep-hdf5-core/hdf5-core-tf.h>
 
 // seerep-core
@@ -167,6 +168,8 @@ private:
   std::shared_ptr<seerep_hdf5_core::Hdf5CoreInstance> m_ioInstance;
   /** @brief object handling the HDF5 file IO regarding point clouds */
   std::shared_ptr<seerep_hdf5_core::Hdf5CorePointCloud> m_ioPointCloud;
+  /** @brief object handling the HDF5 file IO regarding points */
+  std::shared_ptr<seerep_hdf5_core::Hdf5CorePoint> m_ioPoint;
   /** @brief object handling the HDF5 file IO regarding images */
   std::shared_ptr<seerep_hdf5_core::Hdf5CoreImage> m_ioImage;
 

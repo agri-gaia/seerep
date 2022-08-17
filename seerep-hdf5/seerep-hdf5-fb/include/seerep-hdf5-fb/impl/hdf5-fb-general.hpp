@@ -1,6 +1,38 @@
 
 namespace seerep_hdf5_fb
 {
+template <class T>
+flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>>>
+Hdf5FbGeneral::readAttributeMap(HighFive::AnnotateTraits<T>& object, flatbuffers::grpc::MessageBuilder& builder)
+{
+  std::vector<std::string> attributeList = object.listAttributeNames();
+
+  std::vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>> mapEntryVector;
+  for (std::string attributeName : attributeList)
+  {
+    auto attribute = object.getAttribute(attributeName);
+
+    if (attribute.getDataType().getClass() == HighFive::DataTypeClass::Integer)
+    {
+      int attributeValue;
+      attribute.read(attributeValue);
+
+      auto keyOffset = builder.CreateString(attributeName);
+
+      seerep::fb::IntegerBuilder integerBuilder(builder);
+      integerBuilder.add_data(attributeValue);
+      auto integerOffset = integerBuilder.Finish();
+
+      seerep::fb::UnionMapEntryBuilder unionMapEntryBuilder(builder);
+      unionMapEntryBuilder.add_key(keyOffset);
+      unionMapEntryBuilder.add_value_type(seerep::fb::Datatypes_Integer);
+      unionMapEntryBuilder.add_value(integerOffset.Union());
+
+      mapEntryVector.push_back(unionMapEntryBuilder.Finish());
+    }
+  }
+  return builder.CreateVector(mapEntryVector);
+}
 template <typename T>
 void Hdf5FbGeneral::writeAttribute(const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField,
                                    T value)

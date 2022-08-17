@@ -29,7 +29,7 @@ seerep_core_msgs::DatasetIndexable CorePbConversion::fromPb(const seerep::Image&
   }
 
   seerep_core_msgs::DatasetIndexable dataForIndices;
-  dataForIndices.header.datatype = seerep_core_msgs::Datatype::Images;
+  dataForIndices.header.datatype = seerep_core_msgs::Datatype::Image;
   dataForIndices.header.frameId = img.header().frame_id();
   dataForIndices.header.timestamp.seconds = img.header().stamp().seconds();
   dataForIndices.header.timestamp.nanos = img.header().stamp().nanos();

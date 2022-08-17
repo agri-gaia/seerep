@@ -1,0 +1,10 @@
+
+include "datatype.fbs";
+include "query.fbs";
+
+namespace seerep.fb;
+
+table QueryInstance {
+  datatype:Datatype;
+  query:Query;
+}

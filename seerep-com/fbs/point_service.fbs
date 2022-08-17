@@ -1,0 +1,13 @@
+
+include "point_stamped.fbs";
+include "query.fbs";
+include "attributes_stamped.fbs";
+include "server_response.fbs";
+
+namespace seerep.fb;
+
+rpc_service PointService {
+  GetPoint(seerep.fb.Query):seerep.fb.PointStamped (streaming: "server");
+  TransferPoint(seerep.fb.PointStamped):seerep.fb.ServerResponse  (streaming: "client");
+  AddAttribute(seerep.fb.AttributesStamped):seerep.fb.ServerResponse   (streaming: "client");
+}

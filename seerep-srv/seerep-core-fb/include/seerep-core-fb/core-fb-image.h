@@ -5,6 +5,7 @@
 #include <optional>
 
 #include "core-fb-conversion.h"
+#include "core-fb-general.h"
 
 // seerep-msgs
 #include <seerep-msgs/image_generated.h>
@@ -56,7 +57,7 @@ public:
    * Based on the query the indices are used to get the uuids of the images matching the query. Then the images are
    * loaded by the hdf5-fb-io and send via gRPC directly using the writer
    */
-  void getData(const seerep::fb::Query& query,
+  void getData(const seerep::fb::Query* query,
                grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::Image>>* const writer);
   /**
    * @brief Add an image to the indices and write the data to hdf5
@@ -74,16 +75,6 @@ public:
   void addBoundingBoxesLabeled(const seerep::fb::BoundingBoxes2DLabeledStamped& boundingBoxes2dlabeled);
 
 private:
-  /**
-   * @brief gets the file accessors (the hdf5 file object itself, the mutex, the io object) for the hdf5 file
-   * @param project the uuid of the project for which the accessors are needed
-   */
-  void getFileAccessorFromCore(boost::uuids::uuid project);
-  /**
-   * @brief extracts the hdf5-io object from the hdf5-io-map for the given project
-   * @param project the uuid of the project for which the io-object is needed
-   */
-  std::shared_ptr<seerep_hdf5_fb::Hdf5FbImage> getHdf5(boost::uuids::uuid project);
   /** @brief a shared pointer to the general core */
   std::shared_ptr<seerep_core::Core> m_seerepCore;
   /** a map from the uuids of the projects to the hdf5-io objects handling the io for the object */

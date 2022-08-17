@@ -10,6 +10,7 @@
 // seerep-msgs
 #include <seerep-msgs/boundingbox2d_labeled_generated.h>
 #include <seerep-msgs/boundingbox_labeled_generated.h>
+#include <seerep-msgs/union_map_entry_generated.h>
 
 // grpc / flatbuffer
 #include <grpcpp/grpcpp.h>
@@ -41,6 +42,12 @@ protected:
   //################
   // Attributes
   //################
+  void writeAttributeMap(const std::shared_ptr<HighFive::DataSet> dataSetPtr,
+                         const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>>* attributes);
+  template <class T>
+  flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>>>
+  readAttributeMap(HighFive::AnnotateTraits<T>& object, flatbuffers::grpc::MessageBuilder& builder);
+
   template <typename T>
   void writeAttribute(const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField, T value);
 

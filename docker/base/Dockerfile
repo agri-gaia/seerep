@@ -142,7 +142,7 @@ RUN git clone https://github.com/google/googletest.git -b release-1.12.0 \
 RUN pip3 install grpcio-tools
 
 # Install python imgeio
-RUN pip3 install imageio==2.20.0
+RUN pip3 install imageio==2.20.0 numpy-quaternion
 
 ####################################################
 #Install documentation dependencies
