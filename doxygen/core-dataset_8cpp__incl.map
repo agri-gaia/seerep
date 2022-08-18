@@ -1,37 +1,38 @@
 <map id="seerep&#45;srv/seerep&#45;core/src/core&#45;dataset.cpp" name="seerep&#45;srv/seerep&#45;core/src/core&#45;dataset.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="2063,5,2235,47"/>
-<area shape="rect" id="node2" href="$core-dataset_8h.html" title=" " alt="" coords="2051,95,2248,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="2101,326,2187,353"/>
-<area shape="rect" id="node4" title=" " alt="" coords="2229,505,2304,531"/>
-<area shape="rect" id="node5" title=" " alt="" coords="243,505,397,531"/>
-<area shape="rect" id="node6" title=" " alt="" coords="2314,326,2494,353"/>
-<area shape="rect" id="node7" title=" " alt="" coords="3621,169,3822,196"/>
-<area shape="rect" id="node8" title=" " alt="" coords="43,326,200,353"/>
-<area shape="rect" id="node9" href="$hdf5-core-datatype-interface_8h.html" title=" " alt="" coords="1781,319,1974,360"/>
-<area shape="rect" id="node11" title=" " alt="" coords="2315,415,2466,442"/>
-<area shape="rect" id="node12" href="$core-instances_8h.html" title=" " alt="" coords="2601,169,2730,196"/>
-<area shape="rect" id="node24" title=" " alt="" coords="3214,415,3405,442"/>
-<area shape="rect" id="node25" title=" " alt="" coords="3438,415,3605,442"/>
-<area shape="rect" id="node26" title=" " alt="" coords="2491,415,2717,442"/>
-<area shape="rect" id="node27" title=" " alt="" coords="3002,415,3171,442"/>
-<area shape="rect" id="node28" href="$core-tf_8h.html" title=" " alt="" coords="1101,244,1177,271"/>
-<area shape="rect" id="node10" title=" " alt="" coords="1389,497,1547,539"/>
-<area shape="rect" id="node13" href="$core-instance_8h.html" title=" " alt="" coords="2744,244,2867,271"/>
-<area shape="rect" id="node14" title=" " alt="" coords="3117,319,3291,360"/>
-<area shape="rect" id="node15" href="$hdf5-core-instance_8h.html" title=" " alt="" coords="2722,319,2889,360"/>
-<area shape="rect" id="node16" title=" " alt="" coords="1883,505,2029,531"/>
-<area shape="rect" id="node17" href="$hdf5-core-general_8h.html" title=" " alt="" coords="1671,408,1838,449"/>
-<area shape="rect" id="node18" title=" " alt="" coords="2054,505,2205,531"/>
-<area shape="rect" id="node23" title=" " alt="" coords="1329,415,1596,442"/>
-<area shape="rect" id="node19" title=" " alt="" coords="1572,505,1636,531"/>
-<area shape="rect" id="node20" title=" " alt="" coords="994,497,1187,539"/>
-<area shape="rect" id="node21" title=" " alt="" coords="1212,505,1364,531"/>
-<area shape="rect" id="node22" title=" " alt="" coords="1659,505,1858,531"/>
-<area shape="rect" id="node29" title=" " alt="" coords="224,326,283,353"/>
-<area shape="rect" id="node30" title=" " alt="" coords="357,326,531,353"/>
-<area shape="rect" id="node31" href="$hdf5-core-tf_8h.html" title=" " alt="" coords="1538,319,1705,360"/>
-<area shape="rect" id="node32" title=" " alt="" coords="555,326,643,353"/>
-<area shape="rect" id="node33" title=" " alt="" coords="666,326,865,353"/>
-<area shape="rect" id="node34" title=" " alt="" coords="889,326,1018,353"/>
-<area shape="rect" id="node35" title=" " alt="" coords="1043,326,1235,353"/>
+<area shape="rect" id="node1" title=" " alt="" coords="2015,5,2187,47"/>
+<area shape="rect" id="node2" href="$core-dataset_8h.html" title=" " alt="" coords="2003,95,2200,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,169,72,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="2078,326,2165,353"/>
+<area shape="rect" id="node5" title=" " alt="" coords="2248,505,2323,531"/>
+<area shape="rect" id="node6" title=" " alt="" coords="347,505,501,531"/>
+<area shape="rect" id="node7" title=" " alt="" coords="2291,326,2471,353"/>
+<area shape="rect" id="node8" title=" " alt="" coords="3598,169,3799,196"/>
+<area shape="rect" id="node9" title=" " alt="" coords="147,326,304,353"/>
+<area shape="rect" id="node10" href="$hdf5-core-datatype-interface_8h.html" title=" " alt="" coords="1758,319,1951,360"/>
+<area shape="rect" id="node12" title=" " alt="" coords="2293,415,2443,442"/>
+<area shape="rect" id="node13" href="$core-instances_8h.html" title=" " alt="" coords="2577,169,2706,196"/>
+<area shape="rect" id="node25" title=" " alt="" coords="3191,415,3382,442"/>
+<area shape="rect" id="node26" title=" " alt="" coords="3415,415,3582,442"/>
+<area shape="rect" id="node27" title=" " alt="" coords="2468,415,2695,442"/>
+<area shape="rect" id="node28" title=" " alt="" coords="2979,415,3149,442"/>
+<area shape="rect" id="node29" href="$core-tf_8h.html" title=" " alt="" coords="1205,244,1281,271"/>
+<area shape="rect" id="node11" title=" " alt="" coords="1407,497,1566,539"/>
+<area shape="rect" id="node14" href="$core-instance_8h.html" title=" " alt="" coords="2721,244,2844,271"/>
+<area shape="rect" id="node15" title=" " alt="" coords="3094,319,3269,360"/>
+<area shape="rect" id="node16" href="$hdf5-core-instance_8h.html" title=" " alt="" coords="2699,319,2866,360"/>
+<area shape="rect" id="node17" title=" " alt="" coords="1901,505,2048,531"/>
+<area shape="rect" id="node18" href="$hdf5-core-general_8h.html" title=" " alt="" coords="1690,408,1857,449"/>
+<area shape="rect" id="node19" title=" " alt="" coords="2073,505,2223,531"/>
+<area shape="rect" id="node24" title=" " alt="" coords="1348,415,1615,442"/>
+<area shape="rect" id="node20" title=" " alt="" coords="1591,505,1655,531"/>
+<area shape="rect" id="node21" title=" " alt="" coords="1013,497,1206,539"/>
+<area shape="rect" id="node22" title=" " alt="" coords="1231,505,1383,531"/>
+<area shape="rect" id="node23" title=" " alt="" coords="1678,505,1877,531"/>
+<area shape="rect" id="node30" title=" " alt="" coords="328,326,387,353"/>
+<area shape="rect" id="node31" title=" " alt="" coords="461,326,635,353"/>
+<area shape="rect" id="node32" href="$hdf5-core-tf_8h.html" title=" " alt="" coords="1515,319,1682,360"/>
+<area shape="rect" id="node33" title=" " alt="" coords="659,326,747,353"/>
+<area shape="rect" id="node34" title=" " alt="" coords="770,326,969,353"/>
+<area shape="rect" id="node35" title=" " alt="" coords="993,326,1122,353"/>
+<area shape="rect" id="node36" title=" " alt="" coords="1147,326,1339,353"/>
 </map>

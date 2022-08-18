@@ -1,5 +1,6 @@
 <map id="seerep_hdf5_fb::Hdf5FbGeneral" name="seerep_hdf5_fb::Hdf5FbGeneral">
-<area shape="rect" id="node1" title=" " alt="" coords="115,5,343,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="239,5,467,32"/>
 <area shape="rect" id="node2" href="$classseerep__hdf5__fb_1_1Hdf5FbImage.html" title=" " alt="" coords="5,80,224,107"/>
-<area shape="rect" id="node3" href="$classseerep__hdf5__fb_1_1Hdf5FbTf.html" title=" " alt="" coords="249,80,439,107"/>
+<area shape="rect" id="node3" href="$classseerep__hdf5__fb_1_1Hdf5FbPoint.html" title=" " alt="" coords="248,80,459,107"/>
+<area shape="rect" id="node4" href="$classseerep__hdf5__fb_1_1Hdf5FbTf.html" title=" " alt="" coords="483,80,674,107"/>
 </map>

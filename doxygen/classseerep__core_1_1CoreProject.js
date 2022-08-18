@@ -24,6 +24,7 @@ var classseerep__core_1_1CoreProject =
     [ "m_ioGeneral", "classseerep__core_1_1CoreProject.html#a87e039d0e6bff3e8b2c03f1ac73f28d0", null ],
     [ "m_ioImage", "classseerep__core_1_1CoreProject.html#ae506163021a5cdb18e7c2d6d32be1b31", null ],
     [ "m_ioInstance", "classseerep__core_1_1CoreProject.html#a06bfa64b84a218651995b120ad319ab7", null ],
+    [ "m_ioPoint", "classseerep__core_1_1CoreProject.html#a38b31d3a0354d98cd38d85c9ea071edc", null ],
     [ "m_ioPointCloud", "classseerep__core_1_1CoreProject.html#ac266b82e2236c03c7747a406ed096871", null ],
     [ "m_ioTf", "classseerep__core_1_1CoreProject.html#a26daa936dbfedbc1ffb9917b279070ce", null ],
     [ "m_logger", "classseerep__core_1_1CoreProject.html#ab68cff25c4e18c678e9d6fd9c0940105", null ],

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['images_0',['Images',['../namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0afff0d600f8a0b5e19e88bfb821dd1157',1,'seerep_core_msgs']]]
+  ['image_0',['Image',['../namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0abe53a0541a6d36f6ecb879fa2c584b08',1,'seerep_core_msgs']]]
 ];

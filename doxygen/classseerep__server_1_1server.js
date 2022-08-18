@@ -21,6 +21,7 @@ var classseerep__server_1_1server =
     [ "m_metaOperationsFb", "classseerep__server_1_1server.html#ad2bcea440b7d4418b936e490d249975a", null ],
     [ "m_metaOperationsPb", "classseerep__server_1_1server.html#a9440025fccbc0a13d437dbafa9973799", null ],
     [ "m_pointCloudServicePb", "classseerep__server_1_1server.html#ab07050fc15deafcd1d0a350c6c1a2d16", null ],
+    [ "m_pointServiceFb", "classseerep__server_1_1server.html#a71c57e4b1227e986f02647bc08a83dd3", null ],
     [ "m_programOptionsMap", "classseerep__server_1_1server.html#a9e7d1abdd3834965a6cc39dfa126525a", null ],
     [ "m_seerepCore", "classseerep__server_1_1server.html#a333ca44421848f57998f2da326899fd2", null ],
     [ "m_tfServiceFb", "classseerep__server_1_1server.html#a5e179a55a59a937c90cf7a8b2a0d9a60", null ],

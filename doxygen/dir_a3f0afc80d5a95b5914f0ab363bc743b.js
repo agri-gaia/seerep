@@ -9,6 +9,9 @@ var dir_a3f0afc80d5a95b5914f0ab363bc743b =
     [ "fb-meta-operations.h", "fb-meta-operations_8h.html", [
       [ "seerep_server::FbMetaOperations", "classseerep__server_1_1FbMetaOperations.html", "classseerep__server_1_1FbMetaOperations" ]
     ] ],
+    [ "fb-point-service.h", "fb-point-service_8h.html", [
+      [ "seerep_server::FbPointService", "classseerep__server_1_1FbPointService.html", "classseerep__server_1_1FbPointService" ]
+    ] ],
     [ "fb-tf-service.h", "fb-tf-service_8h.html", [
       [ "seerep_server::FbTfService", "classseerep__server_1_1FbTfService.html", "classseerep__server_1_1FbTfService" ]
     ] ],

@@ -152,12 +152,12 @@ Collaboration diagram for seerep_server::FbImageService:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:acab82cdf859230a2a3b6be82d3f9544b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__server_1_1FbImageService.html#acab82cdf859230a2a3b6be82d3f9544b">FbImageService</a> (std::shared_ptr&lt; <a class="el" href="classseerep__core_1_1Core.html">seerep_core::Core</a> &gt; seerepCore)</td></tr>
 <tr class="separator:acab82cdf859230a2a3b6be82d3f9544b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a85d0bfbbe6452a1aebfc25ac58fbc3be"><td class="memItemLeft" align="right" valign="top">grpc::Status&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__server_1_1FbImageService.html#a85d0bfbbe6452a1aebfc25ac58fbc3be">GetImage</a> (grpc::ServerContext *context, const flatbuffers::grpc::Message&lt; seerep::fb::Query &gt; *request, grpc::ServerWriter&lt; flatbuffers::grpc::Message&lt; seerep::fb::Image &gt; &gt; *writer)</td></tr>
-<tr class="separator:a85d0bfbbe6452a1aebfc25ac58fbc3be"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a44d1c7f7a007a5540361da1b09f46058"><td class="memItemLeft" align="right" valign="top">grpc::Status&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__server_1_1FbImageService.html#a44d1c7f7a007a5540361da1b09f46058">TransferImage</a> (grpc::ServerContext *context, grpc::ServerReader&lt; flatbuffers::grpc::Message&lt; seerep::fb::Image &gt; &gt; *reader, flatbuffers::grpc::Message&lt; seerep::fb::ServerResponse &gt; *response)</td></tr>
-<tr class="separator:a44d1c7f7a007a5540361da1b09f46058"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af606b36300a77717a7525ebf0bc64d6f"><td class="memItemLeft" align="right" valign="top">grpc::Status&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__server_1_1FbImageService.html#af606b36300a77717a7525ebf0bc64d6f">AddBoundingBoxes2dLabeled</a> (grpc::ServerContext *context, grpc::ServerReader&lt; flatbuffers::grpc::Message&lt; seerep::fb::BoundingBoxes2DLabeledStamped &gt; &gt; *reader, flatbuffers::grpc::Message&lt; seerep::fb::ServerResponse &gt; *response)</td></tr>
-<tr class="separator:af606b36300a77717a7525ebf0bc64d6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4afbb54ec5c2d3d89c9ef2b3bb4f3ee"><td class="memItemLeft" align="right" valign="top">grpc::Status&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__server_1_1FbImageService.html#ae4afbb54ec5c2d3d89c9ef2b3bb4f3ee">GetImage</a> (grpc::ServerContext *context, const flatbuffers::grpc::Message&lt; seerep::fb::Query &gt; *request, grpc::ServerWriter&lt; flatbuffers::grpc::Message&lt; seerep::fb::Image &gt; &gt; *writer) override</td></tr>
+<tr class="separator:ae4afbb54ec5c2d3d89c9ef2b3bb4f3ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea1a6f2e3a8e2480dc096f741b4913b8"><td class="memItemLeft" align="right" valign="top">grpc::Status&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__server_1_1FbImageService.html#aea1a6f2e3a8e2480dc096f741b4913b8">TransferImage</a> (grpc::ServerContext *context, grpc::ServerReader&lt; flatbuffers::grpc::Message&lt; seerep::fb::Image &gt; &gt; *reader, flatbuffers::grpc::Message&lt; seerep::fb::ServerResponse &gt; *response) override</td></tr>
+<tr class="separator:aea1a6f2e3a8e2480dc096f741b4913b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab913bb9355ccf02a58a61feff6b1792f"><td class="memItemLeft" align="right" valign="top">grpc::Status&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__server_1_1FbImageService.html#ab913bb9355ccf02a58a61feff6b1792f">AddBoundingBoxes2dLabeled</a> (grpc::ServerContext *context, grpc::ServerReader&lt; flatbuffers::grpc::Message&lt; seerep::fb::BoundingBoxes2DLabeledStamped &gt; &gt; *reader, flatbuffers::grpc::Message&lt; seerep::fb::ServerResponse &gt; *response) override</td></tr>
+<tr class="separator:ab913bb9355ccf02a58a61feff6b1792f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -191,11 +191,14 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="af606b36300a77717a7525ebf0bc64d6f" name="af606b36300a77717a7525ebf0bc64d6f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af606b36300a77717a7525ebf0bc64d6f">&#9670;&nbsp;</a></span>AddBoundingBoxes2dLabeled()</h2>
+<a id="ab913bb9355ccf02a58a61feff6b1792f" name="ab913bb9355ccf02a58a61feff6b1792f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab913bb9355ccf02a58a61feff6b1792f">&#9670;&nbsp;</a></span>AddBoundingBoxes2dLabeled()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">grpc::Status seerep_server::FbImageService::AddBoundingBoxes2dLabeled </td>
@@ -221,6 +224,11 @@ Private Attributes</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -267,11 +275,14 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a85d0bfbbe6452a1aebfc25ac58fbc3be" name="a85d0bfbbe6452a1aebfc25ac58fbc3be"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a85d0bfbbe6452a1aebfc25ac58fbc3be">&#9670;&nbsp;</a></span>GetImage()</h2>
+<a id="ae4afbb54ec5c2d3d89c9ef2b3bb4f3ee" name="ae4afbb54ec5c2d3d89c9ef2b3bb4f3ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4afbb54ec5c2d3d89c9ef2b3bb4f3ee">&#9670;&nbsp;</a></span>GetImage()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">grpc::Status seerep_server::FbImageService::GetImage </td>
@@ -297,15 +308,23 @@ Private Attributes</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a44d1c7f7a007a5540361da1b09f46058" name="a44d1c7f7a007a5540361da1b09f46058"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a44d1c7f7a007a5540361da1b09f46058">&#9670;&nbsp;</a></span>TransferImage()</h2>
+<a id="aea1a6f2e3a8e2480dc096f741b4913b8" name="aea1a6f2e3a8e2480dc096f741b4913b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea1a6f2e3a8e2480dc096f741b4913b8">&#9670;&nbsp;</a></span>TransferImage()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">grpc::Status seerep_server::FbImageService::TransferImage </td>
@@ -331,6 +350,11 @@ Private Attributes</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

@@ -137,7 +137,7 @@ $(document).ready(function(){initNavTree('classseerep__hdf5__fb_1_1Hdf5FbGeneral
 <div class="dynheader">
 Inheritance diagram for seerep_hdf5_fb::Hdf5FbGeneral:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classseerep__hdf5__fb_1_1Hdf5FbGeneral__inherit__graph.svg" width="446" height="112"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classseerep__hdf5__fb_1_1Hdf5FbGeneral__inherit__graph.svg" width="680" height="112"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -151,6 +151,11 @@ Protected Member Functions</h2></td></tr>
 <tr class="separator:a5799c8e5183beb6cce06aa737a4eaa00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b36825ea740959897121342c66e7844"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbGeneral.html#a5b36825ea740959897121342c66e7844">checkExists</a> (const std::string &amp;id)</td></tr>
 <tr class="separator:a5b36825ea740959897121342c66e7844"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a112fadec47746ca2693246d39c78db76"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbGeneral.html#a112fadec47746ca2693246d39c78db76">writeAttributeMap</a> (const std::shared_ptr&lt; HighFive::DataSet &gt; dataSetPtr, const flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::UnionMapEntry &gt; &gt; *attributes)</td></tr>
+<tr class="separator:a112fadec47746ca2693246d39c78db76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe5d37494157857e59348369a8c84c5a"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:afe5d37494157857e59348369a8c84c5a"><td class="memTemplItemLeft" align="right" valign="top">flatbuffers::Offset&lt; flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::UnionMapEntry &gt; &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbGeneral.html#afe5d37494157857e59348369a8c84c5a">readAttributeMap</a> (HighFive::AnnotateTraits&lt; T &gt; &amp;object, flatbuffers::grpc::MessageBuilder &amp;builder)</td></tr>
+<tr class="separator:afe5d37494157857e59348369a8c84c5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adbe3b7f2a3aa63614a72c9b4d3a28f3e"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:adbe3b7f2a3aa63614a72c9b4d3a28f3e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbGeneral.html#adbe3b7f2a3aa63614a72c9b4d3a28f3e">writeAttribute</a> (const std::shared_ptr&lt; HighFive::DataSet &gt; dataSetPtr, std::string attributeField, T value)</td></tr>
 <tr class="separator:adbe3b7f2a3aa63614a72c9b4d3a28f3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -521,6 +526,44 @@ template&lt;typename T &gt; </div>
           <td></td>
           <td class="paramtype">boost::geometry::model::box&lt; boost::geometry::model::point&lt; float, 3, boost::geometry::cs::cartesian &gt; &gt; &amp;&#160;</td>
           <td class="paramname"><em>aabb</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afe5d37494157857e59348369a8c84c5a" name="afe5d37494157857e59348369a8c84c5a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe5d37494157857e59348369a8c84c5a">&#9670;&nbsp;</a></span>readAttributeMap()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::Offset&lt; flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::UnionMapEntry &gt; &gt; &gt; seerep_hdf5_fb::Hdf5FbGeneral::readAttributeMap </td>
+          <td>(</td>
+          <td class="paramtype">HighFive::AnnotateTraits&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"><em>object</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">flatbuffers::grpc::MessageBuilder &amp;&#160;</td>
+          <td class="paramname"><em>builder</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -985,6 +1028,42 @@ template&lt;typename T &gt; </div>
           <td></td>
           <td class="paramtype">T&#160;</td>
           <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a112fadec47746ca2693246d39c78db76" name="a112fadec47746ca2693246d39c78db76"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a112fadec47746ca2693246d39c78db76">&#9670;&nbsp;</a></span>writeAttributeMap()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_hdf5_fb::Hdf5FbGeneral::writeAttributeMap </td>
+          <td>(</td>
+          <td class="paramtype">const std::shared_ptr&lt; HighFive::DataSet &gt;&#160;</td>
+          <td class="paramname"><em>dataSetPtr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::UnionMapEntry &gt; &gt; *&#160;</td>
+          <td class="paramname"><em>attributes</em>&#160;</td>
         </tr>
         <tr>
           <td></td>

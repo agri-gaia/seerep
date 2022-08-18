@@ -1,10 +1,12 @@
 var dir_9b2420bfceb63045482d1fa49023d131 =
 [
+    [ "attributes_stamped.fbs", "attributes__stamped_8fbs.html", null ],
     [ "boundingbox.fbs", "boundingbox_8fbs.html", null ],
     [ "boundingbox2d.fbs", "boundingbox2d_8fbs.html", null ],
     [ "boundingbox2d_labeled.fbs", "boundingbox2d__labeled_8fbs.html", null ],
     [ "boundingbox_labeled.fbs", "boundingbox__labeled_8fbs.html", null ],
     [ "boundingboxes2d_labeled_stamped.fbs", "boundingboxes2d__labeled__stamped_8fbs.html", null ],
+    [ "datatype.fbs", "datatype_8fbs.html", null ],
     [ "empty.fbs", "empty_8fbs.html", null ],
     [ "frame_infos.fbs", "frame__infos_8fbs.html", null ],
     [ "frame_query.fbs", "frame__query_8fbs.html", null ],
@@ -26,6 +28,7 @@ var dir_9b2420bfceb63045482d1fa49023d131 =
     [ "quaternion.fbs", "quaternion_8fbs.html", null ],
     [ "quaternion_stamped.fbs", "quaternion__stamped_8fbs.html", null ],
     [ "query.fbs", "query_8fbs.html", null ],
+    [ "query_instance.fbs", "query__instance_8fbs.html", null ],
     [ "server_response.fbs", "server__response_8fbs.html", null ],
     [ "time_interval.fbs", "time__interval_8fbs.html", null ],
     [ "timestamp.fbs", "timestamp_8fbs.html", null ],
@@ -36,6 +39,7 @@ var dir_9b2420bfceb63045482d1fa49023d131 =
     [ "twist_stamped.fbs", "twist__stamped_8fbs.html", null ],
     [ "twist_with_covariance.fbs", "twist__with__covariance_8fbs.html", null ],
     [ "twist_with_covariance_stamped.fbs", "twist__with__covariance__stamped_8fbs.html", null ],
+    [ "union_map_entry.fbs", "union__map__entry_8fbs.html", null ],
     [ "uuids_per_project.fbs", "uuids__per__project_8fbs.html", null ],
     [ "uuids_project_pair.fbs", "uuids__project__pair_8fbs.html", null ],
     [ "vector3.fbs", "vector3_8fbs.html", null ],

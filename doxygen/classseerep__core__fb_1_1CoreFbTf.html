@@ -127,7 +127,6 @@ $(document).ready(function(){initNavTree('classseerep__core__fb_1_1CoreFbTf.html
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classseerep__core__fb_1_1CoreFbTf-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">seerep_core_fb::CoreFbTf Class Reference</div></div>
@@ -154,15 +153,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a519e7a34a0dd1ff8c9de6e1841e43efc"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbTf.html#a519e7a34a0dd1ff8c9de6e1841e43efc">getFrames</a> (const boost::uuids::uuid &amp;projectuuid)</td></tr>
 <tr class="memdesc:a519e7a34a0dd1ff8c9de6e1841e43efc"><td class="mdescLeft">&#160;</td><td class="mdescRight">gets all the frames which are in the tf tree of the project of interest  <a href="classseerep__core__fb_1_1CoreFbTf.html#a519e7a34a0dd1ff8c9de6e1841e43efc">More...</a><br /></td></tr>
 <tr class="separator:a519e7a34a0dd1ff8c9de6e1841e43efc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
-Private Member Functions</h2></td></tr>
-<tr class="memitem:a5f8b43d345b7e1c5b3a4c634dbc54096"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbTf.html#a5f8b43d345b7e1c5b3a4c634dbc54096">getFileAccessorFromCore</a> (boost::uuids::uuid project)</td></tr>
-<tr class="memdesc:a5f8b43d345b7e1c5b3a4c634dbc54096"><td class="mdescLeft">&#160;</td><td class="mdescRight">gets the file accessors (the hdf5 file object itself, the mutex, the io object) for the hdf5 file  <a href="classseerep__core__fb_1_1CoreFbTf.html#a5f8b43d345b7e1c5b3a4c634dbc54096">More...</a><br /></td></tr>
-<tr class="separator:a5f8b43d345b7e1c5b3a4c634dbc54096"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a262ed9b030632fef8026408e848bd0bc"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbTf.html">seerep_hdf5_fb::Hdf5FbTf</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbTf.html#a262ed9b030632fef8026408e848bd0bc">getHdf5</a> (boost::uuids::uuid project)</td></tr>
-<tr class="memdesc:a262ed9b030632fef8026408e848bd0bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">extracts the hdf5-io object from the hdf5-io-map for the given project  <a href="classseerep__core__fb_1_1CoreFbTf.html#a262ed9b030632fef8026408e848bd0bc">More...</a><br /></td></tr>
-<tr class="separator:a262ed9b030632fef8026408e848bd0bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -277,40 +267,6 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a5f8b43d345b7e1c5b3a4c634dbc54096" name="a5f8b43d345b7e1c5b3a4c634dbc54096"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5f8b43d345b7e1c5b3a4c634dbc54096">&#9670;&nbsp;</a></span>getFileAccessorFromCore()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void seerep_core_fb::CoreFbTf::getFileAccessorFromCore </td>
-          <td>(</td>
-          <td class="paramtype">boost::uuids::uuid&#160;</td>
-          <td class="paramname"><em>project</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>gets the file accessors (the hdf5 file object itself, the mutex, the io object) for the hdf5 file </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">project</td><td>the uuid of the project for which the accessors are needed </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <a id="a519e7a34a0dd1ff8c9de6e1841e43efc" name="a519e7a34a0dd1ff8c9de6e1841e43efc"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a519e7a34a0dd1ff8c9de6e1841e43efc">&#9670;&nbsp;</a></span>getFrames()</h2>
 
@@ -336,40 +292,6 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a vector of all the frames in the tf tree of the project</dd></dl>
 <p>The tf is stored in the hdf5 file via hdf5-io-fb. The tf is also added to the tf buffer. </p>
-
-</div>
-</div>
-<a id="a262ed9b030632fef8026408e848bd0bc" name="a262ed9b030632fef8026408e848bd0bc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a262ed9b030632fef8026408e848bd0bc">&#9670;&nbsp;</a></span>getHdf5()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::shared_ptr&lt; <a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbTf.html">seerep_hdf5_fb::Hdf5FbTf</a> &gt; seerep_core_fb::CoreFbTf::getHdf5 </td>
-          <td>(</td>
-          <td class="paramtype">boost::uuids::uuid&#160;</td>
-          <td class="paramname"><em>project</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>extracts the hdf5-io object from the hdf5-io-map for the given project </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">project</td><td>the uuid of the project for which the io-object is needed </td></tr>
-  </table>
-  </dd>
-</dl>
 
 </div>
 </div>

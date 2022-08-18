@@ -4,8 +4,10 @@ var hierarchy =
     [ "seerep_core::Core", "classseerep__core_1_1Core.html", null ],
     [ "seerep_core::CoreDataset", "classseerep__core_1_1CoreDataset.html", null ],
     [ "seerep_core_fb::CoreFbConversion", "classseerep__core__fb_1_1CoreFbConversion.html", null ],
+    [ "seerep_core_fb::CoreFbGeneral", "classseerep__core__fb_1_1CoreFbGeneral.html", null ],
     [ "seerep_core_fb::CoreFbImage", "classseerep__core__fb_1_1CoreFbImage.html", null ],
     [ "seerep_core_fb::CoreFbInstance", "classseerep__core__fb_1_1CoreFbInstance.html", null ],
+    [ "seerep_core_fb::CoreFbPoint", "classseerep__core__fb_1_1CoreFbPoint.html", null ],
     [ "seerep_core_fb::CoreFbTf", "classseerep__core__fb_1_1CoreFbTf.html", null ],
     [ "seerep_core::CoreInstance", "classseerep__core_1_1CoreInstance.html", null ],
     [ "seerep_core::CoreInstances", "classseerep__core_1_1CoreInstances.html", null ],
@@ -20,16 +22,19 @@ var hierarchy =
     [ "seerep_grpc_ros::DumpSensorMsgs", "classseerep__grpc__ros_1_1DumpSensorMsgs.html", null ],
     [ "seerep_hdf5_core::Hdf5CoreDatatypeInterface", "classseerep__hdf5__core_1_1Hdf5CoreDatatypeInterface.html", [
       [ "seerep_hdf5_core::Hdf5CoreImage", "classseerep__hdf5__core_1_1Hdf5CoreImage.html", null ],
+      [ "seerep_hdf5_core::Hdf5CorePoint", "classseerep__hdf5__core_1_1Hdf5CorePoint.html", null ],
       [ "seerep_hdf5_core::Hdf5CorePointCloud", "classseerep__hdf5__core_1_1Hdf5CorePointCloud.html", null ]
     ] ],
     [ "seerep_hdf5_core::Hdf5CoreGeneral", "classseerep__hdf5__core_1_1Hdf5CoreGeneral.html", [
       [ "seerep_hdf5_core::Hdf5CoreImage", "classseerep__hdf5__core_1_1Hdf5CoreImage.html", null ],
       [ "seerep_hdf5_core::Hdf5CoreInstance", "classseerep__hdf5__core_1_1Hdf5CoreInstance.html", null ],
+      [ "seerep_hdf5_core::Hdf5CorePoint", "classseerep__hdf5__core_1_1Hdf5CorePoint.html", null ],
       [ "seerep_hdf5_core::Hdf5CorePointCloud", "classseerep__hdf5__core_1_1Hdf5CorePointCloud.html", null ],
       [ "seerep_hdf5_core::Hdf5CoreTf", "classseerep__hdf5__core_1_1Hdf5CoreTf.html", null ]
     ] ],
     [ "seerep_hdf5_fb::Hdf5FbGeneral", "classseerep__hdf5__fb_1_1Hdf5FbGeneral.html", [
       [ "seerep_hdf5_fb::Hdf5FbImage", "classseerep__hdf5__fb_1_1Hdf5FbImage.html", null ],
+      [ "seerep_hdf5_fb::Hdf5FbPoint", "classseerep__hdf5__fb_1_1Hdf5FbPoint.html", null ],
       [ "seerep_hdf5_fb::Hdf5FbTf", "classseerep__hdf5__fb_1_1Hdf5FbTf.html", null ]
     ] ],
     [ "seerep_hdf5_pb::Hdf5PbGeneral", "classseerep__hdf5__pb_1_1Hdf5PbGeneral.html", [
@@ -62,6 +67,9 @@ var hierarchy =
     ] ],
     [ "seerep::fb::MetaOperations::Service", null, [
       [ "seerep_server::FbMetaOperations", "classseerep__server_1_1FbMetaOperations.html", null ]
+    ] ],
+    [ "seerep::fb::PointService::Service", null, [
+      [ "seerep_server::FbPointService", "classseerep__server_1_1FbPointService.html", null ]
     ] ],
     [ "seerep::fb::TfService::Service", null, [
       [ "seerep_server::FbTfService", "classseerep__server_1_1FbTfService.html", null ]
