@@ -164,6 +164,8 @@ Now we want to query the previously send images with some criteria. Possible que
     import query_pb2 as query
     from google.protobuf import empty_pb2
 
+    # importing util functions. Assuming that this file is in the parent dir
+    # https://github.com/agri-gaia/seerep/blob/6c4da5736d4a893228e97b01a9ada18620b1a83f/examples/python/gRPC/util.py
     script_dir = os.path.dirname(__file__)
     util_dir = os.path.join(script_dir, '..')
     sys.path.append(util_dir)
@@ -268,6 +270,8 @@ Now we want to query the previously send images with some criteria. Possible que
     from fb import image_service_grpc_fb as imageService
     from fb import meta_operations_grpc_fb as metaOperations
 
+    # importing util functions. Assuming that this file is in the parent dir
+    # https://github.com/agri-gaia/seerep/blob/6c4da5736d4a893228e97b01a9ada18620b1a83f/examples/python/gRPC/util.py
     script_dir = os.path.dirname(__file__)
     util_dir = os.path.join(script_dir, '..')
     sys.path.append(util_dir)

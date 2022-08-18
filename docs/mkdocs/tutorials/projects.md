@@ -13,6 +13,8 @@ import sys
 import meta_operations_pb2_grpc as metaOperations
 import projectCreation_pb2
 
+# importing util functions. Assuming that this file is in the parent dir
+# https://github.com/agri-gaia/seerep/blob/6c4da5736d4a893228e97b01a9ada18620b1a83f/examples/python/gRPC/util.py
 script_dir = os.path.dirname(__file__)
 util_dir = os.path.join(script_dir, '..')
 sys.path.append(util_dir)
@@ -53,6 +55,8 @@ After we created two projects, we can query them. Currently the name doesn't hav
     import meta_operations_pb2_grpc as metaOperations
     from google.protobuf import empty_pb2
 
+    # importing util functions. Assuming that this file is in the parent dir
+    # https://github.com/agri-gaia/seerep/blob/6c4da5736d4a893228e97b01a9ada18620b1a83f/examples/python/gRPC/util.py
     script_dir = os.path.dirname(__file__)
     util_dir = os.path.join(script_dir, '..')
     sys.path.append(util_dir)
@@ -95,6 +99,8 @@ After we created two projects, we can query them. Currently the name doesn't hav
     from fb import Empty, ProjectInfos
     from fb import meta_operations_grpc_fb as metaOperations
 
+    # importing util functions. Assuming that this file is in the parent dir
+    # https://github.com/agri-gaia/seerep/blob/6c4da5736d4a893228e97b01a9ada18620b1a83f/examples/python/gRPC/util.py
     script_dir = os.path.dirname(__file__)
     util_dir = os.path.join(script_dir, '..')
     sys.path.append(util_dir)
