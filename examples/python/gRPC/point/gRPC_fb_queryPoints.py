@@ -4,47 +4,21 @@ import os
 import sys
 
 import flatbuffers
-from fb import (
-    Boundingbox,
-    Empty,
-    Header,
-    Point,
-    PointStamped,
-    ProjectInfos,
-    Query,
-    TimeInterval,
-    Timestamp,
-)
-from fb import meta_operations_grpc_fb as metaOperations
+from fb import Boundingbox, Header, Point, PointStamped, Query, TimeInterval, Timestamp
 from fb import point_service_grpc_fb as pointService
 
 script_dir = os.path.dirname(__file__)
 util_dir = os.path.join(script_dir, '..')
 sys.path.append(util_dir)
 import util
+import util_fb
 
-channel = util.get_gRPC_channel("local")
+PROJECT_NAME = "simulatedDataWithInstances"
+channel = util.get_gRPC_channel("dev")
+projectUuid = util_fb.get_or_create_project(channel, PROJECT_NAME, False)
 
 stub = pointService.PointServiceStub(channel)
-stubMeta = metaOperations.MetaOperationsStub(channel)
-
 builder = flatbuffers.Builder(1024)
-Empty.Start(builder)
-emptyMsg = Empty.End(builder)
-builder.Finish(emptyMsg)
-buf = builder.Output()
-
-responseBuf = stubMeta.GetProjects(bytes(buf))
-response = ProjectInfos.ProjectInfos.GetRootAs(responseBuf)
-
-projectuuid = ""
-for i in range(response.ProjectsLength()):
-    print(response.Projects(i).Name().decode("utf-8") + " " + response.Projects(i).Uuid().decode("utf-8") + "\n")
-    if response.Projects(i).Name().decode("utf-8") == "testproject":
-        projectuuid = response.Projects(i).Uuid().decode("utf-8")
-
-if projectuuid == "":
-    sys.exit()
 
 Point.Start(builder)
 Point.AddX(builder, 0.0)
@@ -84,7 +58,7 @@ TimeInterval.AddTimeMin(builder, timeMin)
 TimeInterval.AddTimeMax(builder, timeMax)
 timeInterval = TimeInterval.End(builder)
 
-projectuuidString = builder.CreateString(projectuuid)
+projectuuidString = builder.CreateString(projectUuid)
 Query.StartProjectuuidVector(builder, 1)
 builder.PrependUOffsetTRelative(projectuuidString)
 projectuuidMsg = builder.EndVector()
