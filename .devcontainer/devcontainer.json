@@ -16,7 +16,8 @@
         "GitHub.vscode-pull-request-github",
         "eamodio.gitlens",
         "streetsidesoftware.code-spell-checker",
-        "matepek.vscode-catch2-test-adapter"
+        "matepek.vscode-catch2-test-adapter",
+        "davidanson.vscode-markdownlint"
     ],
     "containerUser": "docker",
     "mounts": [

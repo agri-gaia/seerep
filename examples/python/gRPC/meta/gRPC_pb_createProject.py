@@ -16,5 +16,5 @@ channel = util.get_gRPC_channel()
 stub = metaOperations.MetaOperationsStub(channel)
 response = stub.CreateProject(projectCreation_pb2.ProjectCreation(name="testproject", mapFrameId="map"))
 
-print("The new project on the server " + server + " is (name/uuid):")
+print("The new project on the server is (name/uuid):")
 print("\t" + response.name + " " + response.uuid)

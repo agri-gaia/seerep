@@ -1,13 +1,7 @@
 #!/usr/bin/env python3
 
-import os
-import sys
-import time
-
 import cv2
-import imageio
 import numpy as np
-import yaml
 
 root = ["/seerep/seerep-data/simulatedData/lighting_01/", "/seerep/seerep-data/simulatedData/lighting_02/"]
 
