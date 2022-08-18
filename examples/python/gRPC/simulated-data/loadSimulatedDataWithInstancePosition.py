@@ -2,7 +2,6 @@
 
 import os
 import sys
-import uuid
 
 import flatbuffers
 import imageio
@@ -50,11 +49,11 @@ class LoadSimulatedDataWithInstancePosition:
 
         self.IMAGE_ENCODING = "rgb8"
 
-        self.numImages = 5
-        projectName = "simulatedDataWithInstances"
+        self.NUM_IMAGES = 80
+        self.PROJECT_NAME = "simulatedDataWithInstances"
 
         self.channel = util.get_gRPC_channel()
-        self.projectUuid = util_fb.get_or_create_project(self.channel, projectName, True)
+        self.projectUuid = util_fb.get_or_create_project(self.channel, self.PROJECT_NAME, True)
         self.theTime = [1654688921]  # 08.06.2022 13:49 #int(time.time())
         self.root = ["/seerep/seerep-data/cw_synthetic_maize/dataset_v2/"]
 
@@ -217,7 +216,7 @@ class LoadSimulatedDataWithInstancePosition:
             annotationPath = self.__getPath(folderIndex, self.BOUNDINGBOX_SUBPATH)
             pointcloudPath = self.__getPath(folderIndex, self.POINTCLOUD_SUBPATH)
 
-            for i in range(self.numImages):
+            for i in range(self.NUM_IMAGES):
                 print("image " + str(i))
 
                 builder = flatbuffers.Builder(1024)
@@ -285,7 +284,7 @@ class LoadSimulatedDataWithInstancePosition:
         for folderIndex in range(len(self.root)):
             extrinsicsPath = self.__getPath(folderIndex, self.EXTRINSICS_SUBPATH)
 
-            for i in range(self.numImages):
+            for i in range(self.NUM_IMAGES):
                 builder = flatbuffers.Builder(1024)
                 timeThisIteration = self.__getCurrentTime(folderIndex, i)
                 baseFilePath = self.__createBasePath(extrinsicsPath, i)
