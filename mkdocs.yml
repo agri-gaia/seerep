@@ -4,7 +4,9 @@ docs_dir: docs/mkdocs
 nav:
   - Home: 'home/index.md'
   - Getting started:
-    - Installation: 'getting-started/installation.md'
+    - Dev Environment: 'getting-started/installationDev.md'
+    - Kubernetes Deployment: 'getting-started/kubernetes-deployment.md'
+    - Local Deployment: 'getting-started/local-deployment.md'
     - Docs: 'getting-started/docs.md'
     - Tests: 'getting-started/tests.md'
   - Reference:
