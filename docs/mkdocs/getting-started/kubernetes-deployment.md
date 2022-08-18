@@ -13,7 +13,7 @@ be found under
 
 The base-folder contains all yaml-files for a cluster deployments. This includes
 
-* Deplyoment
+* Deployment
 * PersistentVolume and PersistentVolumeClaim
 * Service
 * Ingress

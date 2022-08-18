@@ -1,11 +1,11 @@
-# Installation
+# Development Environment Installation
 
-This page provides an overview on how to install SEEREP.
+This page provides an overview on how to install the SEEREP development environment.
 
 ## VS-Code Development Container
 
-- The VS-Code Development Container is the **easiest and recommended way** to work
-  with SEEREP.
+- The VS-Code Development Container is the **easiest and recommended way** to develop
+  SEEREP.
 
 ### Requirements
 
