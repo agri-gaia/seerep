@@ -4,22 +4,16 @@ import os
 import sys
 
 import flatbuffers
-import grpc
 from fb import (
-    Boundingbox,
-    BoundingBox2DLabeled,
     Datatypes,
-    Empty,
     Header,
     Image,
     Integer,
     LabelWithInstance,
     Point,
     PointStamped,
-    ProjectInfos,
     Query,
     String,
-    TimeInterval,
     Timestamp,
     UnionMapEntry,
 )

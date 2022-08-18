@@ -1,19 +1,7 @@
 import sys
 
 import flatbuffers
-from fb import (
-    Boundingbox,
-    Empty,
-    Header,
-    Image,
-    Point,
-    ProjectCreation,
-    ProjectInfo,
-    ProjectInfos,
-    Query,
-    TimeInterval,
-    Timestamp,
-)
+from fb import Empty, ProjectCreation, ProjectInfo, ProjectInfos
 from fb import meta_operations_grpc_fb as metaOperations
 
 
