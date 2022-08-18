@@ -13,6 +13,7 @@ find_package(Protobuf REQUIRED)
 find_package(SeerepMsgs REQUIRED)
 find_package(SeerepHdf5Core REQUIRED)
 find_package(HighFive REQUIRED)
+find_package(gRPC CONFIG REQUIRED)
 
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
@@ -47,6 +48,23 @@ target_link_libraries(seerephdf5pb
 	${Boost_LOG_LIBRARY} ${Boost_LOG_SETUP_LIBRARY}
 )
 
+add_executable(protobuf-write-load-test test/pb-write-load-test.cpp)
+add_dependencies(
+	protobuf-write-load-test
+	${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS}
+)
+
+target_link_libraries(protobuf-write-load-test
+	GTest::gtest
+	GTest::gtest_main
+	gmock_main
+	${catkin_LIBRARIES}
+	${HighFive_LIBRARIES}
+	${SeerepCore_LIBRARIES}
+	gRPC::grpc++_reflection
+	seerephdf5pb
+)
+add_test(protobuf-write-load-test protobuf-write-load-test)
 set(CMAKE_INSTALL_INCLUDEDIR include)
 set(CMAKE_INSTALL_LIBDIR lib)
 set(CMAKE_INSTALL_BINDIR bin)
