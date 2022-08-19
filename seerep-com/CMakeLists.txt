@@ -52,7 +52,7 @@ endforeach()
 add_custom_target(fbpyschemas)
 add_custom_command(
         TARGET fbpyschemas
-        COMMAND flatc -p --grpc "*.fbs"
+        COMMAND flatc -p --grpc --gen-mutable "*.fbs"
         DEPENDS fbpyschemas
         WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/fbs/")
 
