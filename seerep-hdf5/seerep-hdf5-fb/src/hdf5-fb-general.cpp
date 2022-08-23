@@ -350,6 +350,8 @@ void Hdf5FbGeneral::readBoundingBox2DLabeled(const std::string& datatypeGroup, c
                                              std::vector<std::string>& instances)
 {
   std::string id = datatypeGroup + "/" + uuid;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
+      << "reading the bounding box 2d with labels of " << id;
   try
   {
     checkExists(id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBB);
@@ -416,6 +418,7 @@ void Hdf5FbGeneral::readLabelsGeneral(const std::string& datatypeGroup, const st
                                       std::vector<std::string>& labels, std::vector<std::string>& instances)
 {
   std::string id = datatypeGroup + "/" + uuid;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "loading labels general of " << id;
   try
   {
     checkExists(id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERAL);

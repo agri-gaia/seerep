@@ -98,7 +98,10 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
   std::string hdf5DatasetRawDataPath = hdf5DatasetPath + "/" + RAWDATA;
 
   if (!m_file->exist(hdf5DatasetRawDataPath))
+  {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << hdf5DatasetRawDataPath << "does not exist";
     return std::nullopt;
+  }
 
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "loading " << hdf5DatasetRawDataPath;
 
@@ -112,6 +115,7 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
   bool isBigendian;
   try
   {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "loading attributes";
     height = getAttribute<uint32_t>(id, data_set_ptr, HEIGHT);
     width = getAttribute<uint32_t>(id, data_set_ptr, WIDTH);
     encoding = builder.CreateString(getAttribute<std::string>(id, data_set_ptr, ENCODING));
@@ -128,6 +132,7 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
   flatbuffers::Offset<flatbuffers::Vector<uint8_t>> readDataOffset;
   if (!withoutData)
   {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "loading the data";
     std::vector<std::vector<std::vector<uint8_t>>> read_data;
     data_set_ptr->read(read_data);
 
@@ -145,6 +150,10 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
 
     readDataOffset = builder.CreateVector(data);
   }
+  else
+  {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "NOT loading the data. Just Meta-Data.";
+  }
   auto headerOffset = readHeaderAttributes(*data_set_ptr, id, builder);
 
   std::vector<std::string> boundingBoxesLabels;
@@ -152,6 +161,8 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
   std::vector<std::string> boundingBoxesInstances;
   readBoundingBox2DLabeled(HDF5_GROUP_IMAGE, id, boundingBoxesLabels, boundingBoxes, boundingBoxesInstances);
 
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
+      << "creating the bounding boxes 2d with label fb msgs";
   std::vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>> bblabeledVector;
   for (long unsigned int i = 0; i < boundingBoxes.size(); i++)
   {
@@ -183,6 +194,7 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
   std::vector<std::string> labelsGeneralInstances;
   readLabelsGeneral(HDF5_GROUP_IMAGE, id, labelsGeneral, labelsGeneralInstances);
 
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "creating the label general fb msgs";
   std::vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>> labelGeneralVector;
   labelGeneralVector.reserve(labelsGeneral.size());
   for (long unsigned int i = 0; i < labelsGeneral.size(); i++)
@@ -199,6 +211,7 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
   auto labelsGeneralOffset =
       builder.CreateVector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>(labelGeneralVector);
 
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "building the fb image msg";
   seerep::fb::ImageBuilder imageBuilder(builder);
   imageBuilder.add_height(height);
   imageBuilder.add_width(width);
