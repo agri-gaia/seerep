@@ -57,4 +57,50 @@ grpc::Status FbMetaOperations::GetProjects(grpc::ServerContext* context,
   return grpc::Status::OK;
 }
 
+grpc::Status FbMetaOperations::LoadProjects(grpc::ServerContext* context,
+                                            const flatbuffers::grpc::Message<seerep::fb::Empty>* request,
+                                            flatbuffers::grpc::Message<seerep::fb::Empty>* response)
+{
+  (void)context;  // ignore that variable without causing warnings
+  (void)request;  // ignore that variable without causing warnings
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
+      << "loading all projects in the working directory... ";
+  seerepCore->loadProjectsInFolder();
+
+  flatbuffers::grpc::MessageBuilder builder;
+  seerep::fb::CreateEmpty(builder);
+  *response = builder.ReleaseMessage<seerep::fb::Empty>();
+
+  return grpc::Status::OK;
+}
+
+grpc::Status FbMetaOperations::DeleteProject(grpc::ServerContext* context,
+                                             const flatbuffers::grpc::Message<seerep::fb::ProjectInfo>* request,
+                                             flatbuffers::grpc::Message<seerep::fb::Empty>* response)
+{
+  (void)context;  // ignore that variable without causing warnings
+  (void)request;  // ignore that variable without causing warnings
+  std::string uuid = request->GetRoot()->uuid()->str();
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "deleting project... with uuid: " << uuid;
+
+  try
+  {
+    boost::uuids::string_generator gen;
+    auto uuidFromString = gen(uuid);
+    seerepCore->deleteProject(uuidFromString);
+  }
+  catch (std::runtime_error const& e)
+  {
+    // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
+    // also catching core doesn't have project with uuid error
+    std::cout << e.what() << std::endl;
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  flatbuffers::grpc::MessageBuilder builder;
+  seerep::fb::CreateEmpty(builder);
+  *response = builder.ReleaseMessage<seerep::fb::Empty>();
+
+  return grpc::Status::OK;
+}
+
 } /* namespace seerep_server */

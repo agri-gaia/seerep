@@ -6,7 +6,7 @@ Core::Core(std::string dataFolder, bool loadHdf5Files) : m_dataFolder(dataFolder
 {
   if (loadHdf5Files)
   {
-    recreateProjects();
+    loadProjectsInFolder();
   }
 }
 
@@ -62,7 +62,7 @@ seerep_core_msgs::QueryResult Core::getInstances(const seerep_core_msgs::Query& 
   return result;
 }
 
-void Core::recreateProjects()
+void Core::loadProjectsInFolder()
 {
   for (const auto& entry : std::filesystem::directory_iterator(m_dataFolder))
   {
@@ -75,8 +75,11 @@ void Core::recreateProjects()
         boost::uuids::string_generator gen;
         boost::uuids::uuid uuid = gen(entry.path().filename().stem().string());
 
-        auto project = std::make_shared<CoreProject>(uuid, entry.path().string());
-        m_projects.insert(std::make_pair(uuid, project));
+        if (m_projects.find(uuid) == m_projects.end())
+        {
+          auto project = std::make_shared<CoreProject>(uuid, entry.path().string());
+          m_projects.insert(std::make_pair(uuid, project));
+        }
       }
       catch (const std::runtime_error& e)
       {
@@ -85,6 +88,21 @@ void Core::recreateProjects()
     }
   }
 }
+
+void Core::deleteProject(boost::uuids::uuid uuid)
+{
+  auto project = m_projects.find(uuid);
+
+  if (project != m_projects.end())
+  {
+    m_projects.erase(project);
+
+    std::string filename = boost::lexical_cast<std::string>(uuid);
+    std::string path = m_dataFolder + "/" + filename + ".h5";
+
+    std::filesystem::remove(path);
+  }
+};
 
 void Core::createProject(const seerep_core_msgs::ProjectInfo& projectInfo)
 {
