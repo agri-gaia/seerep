@@ -89,7 +89,8 @@ void Hdf5FbImage::writeImageBoundingBox2DLabeled(const std::string& id,
   writeBoundingBox2DLabeled(HDF5_GROUP_IMAGE, id, bb2dLabeledStamped.labels_bb());
 }
 
-std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readImage(const std::string& id)
+std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readImage(const std::string& id,
+                                                                                    const bool withoutData)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
@@ -124,22 +125,26 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
     return std::nullopt;
   }
 
-  std::vector<std::vector<std::vector<uint8_t>>> read_data;
-  data_set_ptr->read(read_data);
-
-  int pixel_step = step / width;
-  std::vector<uint8_t> data;
-  data.reserve(height * width * pixel_step);
-  for (uint32_t row = 0; row < height; row++)
+  flatbuffers::Offset<flatbuffers::Vector<uint8_t>> readDataOffset;
+  if (!withoutData)
   {
-    for (uint32_t col = 0; col < width; col++)
-    {
-      data.insert(data.end(), std::make_move_iterator(read_data.at(row).at(col).begin()),
-                  std::make_move_iterator(read_data.at(row).at(col).end()));
-    }
-  }
+    std::vector<std::vector<std::vector<uint8_t>>> read_data;
+    data_set_ptr->read(read_data);
 
-  auto readDataOffset = builder.CreateVector(data);
+    int pixel_step = step / width;
+    std::vector<uint8_t> data;
+    data.reserve(height * width * pixel_step);
+    for (uint32_t row = 0; row < height; row++)
+    {
+      for (uint32_t col = 0; col < width; col++)
+      {
+        data.insert(data.end(), std::make_move_iterator(read_data.at(row).at(col).begin()),
+                    std::make_move_iterator(read_data.at(row).at(col).end()));
+      }
+    }
+
+    readDataOffset = builder.CreateVector(data);
+  }
   auto headerOffset = readHeaderAttributes(*data_set_ptr, id, builder);
 
   std::vector<std::string> boundingBoxesLabels;
@@ -202,7 +207,10 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
   imageBuilder.add_step(step);
   imageBuilder.add_row_step(rowStep);
 
-  imageBuilder.add_data(readDataOffset);
+  if (!withoutData)
+  {
+    imageBuilder.add_data(readDataOffset);
+  }
   imageBuilder.add_header(headerOffset);
 
   imageBuilder.add_labels_bb(bblabeledVectorOffset);

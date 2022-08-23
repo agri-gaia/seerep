@@ -18,6 +18,8 @@ struct Query
   std::optional<Timeinterval> timeinterval;                  ///< only do temporal query if set
   std::optional<std::vector<std::string>> label;             ///< only do semantic query if set
   std::optional<std::vector<boost::uuids::uuid>> instances;  ///< only query instances if set
+  std::optional<std::vector<boost::uuids::uuid>> dataUuids;  ///< only filter by data uuid if set
+  bool withoutData;
 };
 
 } /* namespace seerep_core_msgs */

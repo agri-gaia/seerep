@@ -9,4 +9,7 @@ table Query {
   timeinterval:seerep.fb.TimeInterval;
   label:[string];
   projectuuid:[string];
+  instanceuuid:[string];
+  datauuid:[string];
+  withoutdata:bool;
 }

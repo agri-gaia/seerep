@@ -73,12 +73,12 @@ std::vector<boost::uuids::uuid> CoreDataset::getData(const seerep_core_msgs::Que
     instanceResult.value() = m_coreInstances->getDatasets(query.instances.value(), query.header.datatype);
   }
 
-  if (!query.boundingbox && !query.timeinterval && !query.label && !query.instances)
+  if (!query.boundingbox && !query.timeinterval && !query.label && !query.instances && !query.dataUuids)
   {
     return getAllDatasetUuids(datatypeSpecifics);
   }
 
-  return intersectQueryResults(resultRt, resultTime, resultSemantic, instanceResult);
+  return intersectQueryResults(resultRt, resultTime, resultSemantic, instanceResult, query.dataUuids);
 }
 
 std::vector<boost::uuids::uuid> CoreDataset::getInstances(const seerep_core_msgs::Query& query)
@@ -197,7 +197,8 @@ std::vector<boost::uuids::uuid>
 CoreDataset::intersectQueryResults(std::optional<std::vector<seerep_core_msgs::AabbIdPair>>& rt_result,
                                    std::optional<std::vector<seerep_core_msgs::AabbTimeIdPair>>& timetree_result,
                                    std::optional<std::set<boost::uuids::uuid>>& semanticResult,
-                                   std::optional<std::vector<boost::uuids::uuid>>& instanceResult)
+                                   std::optional<std::vector<boost::uuids::uuid>>& instanceResult,
+                                   const std::optional<std::vector<boost::uuids::uuid>>& dataUuids)
 {
   std::vector<std::set<boost::uuids::uuid>> idsPerSingleModality;
 
@@ -234,6 +235,12 @@ CoreDataset::intersectQueryResults(std::optional<std::vector<seerep_core_msgs::A
   {
     idsPerSingleModality.push_back(
         std::move(std::set<boost::uuids::uuid>(instanceResult.value().begin(), instanceResult.value().end())));
+  }
+
+  if (dataUuids)
+  {
+    idsPerSingleModality.push_back(
+        std::move(std::set<boost::uuids::uuid>(dataUuids.value().begin(), dataUuids.value().end())));
   }
 
   return intersectVectorOfSets(idsPerSingleModality);
