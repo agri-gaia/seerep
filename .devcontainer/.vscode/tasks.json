@@ -5,12 +5,6 @@
 			"label": "catkin all",
 			"type": "shell",
 			"command": "catkin build",
-			"problemMatcher": {
-				"base": "$gcc",
-				"fileLocation": [
-					"absolute"
-				]
-			},
 			"group": {
 				"kind": "build"
 			}
@@ -19,12 +13,6 @@
 			"label": "catkin this",
 			"type": "shell",
 			"command": "cd ${fileDirname} && catkin build --this",
-			"problemMatcher": {
-				"base": "$gcc",
-				"fileLocation": [
-					"absolute"
-				]
-			},
 			"group": {
 				"kind": "build"
 			}
@@ -33,12 +21,6 @@
 			"label": "catkin this test",
 			"type": "shell",
 			"command": "cd ${fileDirname} && catkin run_tests --this",
-			"problemMatcher": {
-				"base": "$gcc",
-				"fileLocation": [
-					"absolute"
-				]
-			},
 			"group": "build"
 		},
 		{

@@ -32,7 +32,8 @@ public:
   void writeImageBoundingBox2DLabeled(const std::string& id,
                                       const seerep::fb::BoundingBoxes2DLabeledStamped& bb2dLabeledStamped);
 
-  std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> readImage(const std::string& id);
+  std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> readImage(const std::string& id,
+                                                                         const bool withoutData = false);
 
 private:
   const std::string SIZE = "size";

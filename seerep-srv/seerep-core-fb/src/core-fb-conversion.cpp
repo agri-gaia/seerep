@@ -34,9 +34,12 @@ seerep_core_msgs::Query CoreFbConversion::fromFb(const seerep::fb::Query* query,
   queryCore.header.datatype = datatype;
 
   fromFbQueryProject(query, queryCore.projects);
+  fromFbQueryInstance(query, queryCore.instances);
+  fromFbQueryDataUuids(query, queryCore.dataUuids);
   fromFbQueryLabel(query, queryCore.label);
   fromFbQueryTime(query, queryCore.timeinterval);
   fromFbQueryBoundingBox(query, queryCore.boundingbox, queryCore.header.frameId);
+  queryCore.withoutData = fromFbQueryWithoutData(query);
 
   return queryCore;
 }
@@ -157,6 +160,34 @@ void CoreFbConversion::fromFbQueryProject(const seerep::fb::Query* query,
   }
 }
 
+void CoreFbConversion::fromFbQueryInstance(const seerep::fb::Query* query,
+                                           std::optional<std::vector<boost::uuids::uuid>>& queryCoreInstances)
+{
+  if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_INSTANCEUUID))
+  {
+    boost::uuids::string_generator gen;
+    queryCoreInstances = std::vector<boost::uuids::uuid>();
+    for (auto instanceuuid : *query->instanceuuid())
+    {
+      queryCoreInstances.value().push_back(gen(instanceuuid->str()));
+    }
+  }
+}
+
+void CoreFbConversion::fromFbQueryDataUuids(const seerep::fb::Query* query,
+                                            std::optional<std::vector<boost::uuids::uuid>>& queryCoreDataUuids)
+{
+  if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_DATAUUID))
+  {
+    boost::uuids::string_generator gen;
+    queryCoreDataUuids = std::vector<boost::uuids::uuid>();
+    for (auto datauuid : *query->datauuid())
+    {
+      queryCoreDataUuids.value().push_back(gen(datauuid->str()));
+    }
+  }
+}
+
 void CoreFbConversion::fromFbQueryLabel(const seerep::fb::Query* query,
                                         std::optional<std::vector<std::string>>& queryCoreLabel)
 {
@@ -198,6 +229,16 @@ void CoreFbConversion::fromFbQueryBoundingBox(const seerep::fb::Query* query,
     queryCoreBoundingBox.value().max_corner().set<1>(query->boundingbox()->point_max()->y());
     queryCoreBoundingBox.value().max_corner().set<2>(query->boundingbox()->point_max()->z());
   }
+}
+
+bool CoreFbConversion::fromFbQueryWithoutData(const seerep::fb::Query* query)
+{
+  if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_WITHOUTDATA))
+  {
+    return query->withoutdata();
+  }
+
+  return false;
 }
 
 void CoreFbConversion::fromFbDataHeader(const seerep::fb::Header* header, seerep_core_msgs::Header& coreHeader)

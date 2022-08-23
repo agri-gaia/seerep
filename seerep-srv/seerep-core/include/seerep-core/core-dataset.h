@@ -162,13 +162,15 @@ private:
    * @param timetree_result the result of the temporal query
    * @param semanticResult the result of the semantic query
    * @param instanceResult the result of the instance based query
+   * @param dataUuids the uuids of the dataset specified in the query
    * @return vector of UUIDs of the images matching the query in all three modalities
    */
   std::vector<boost::uuids::uuid>
   intersectQueryResults(std::optional<std::vector<seerep_core_msgs::AabbIdPair>>& rt_result,
                         std::optional<std::vector<seerep_core_msgs::AabbTimeIdPair>>& timetree_result,
                         std::optional<std::set<boost::uuids::uuid>>& semanticResult,
-                        std::optional<std::vector<boost::uuids::uuid>>& instanceResult);
+                        std::optional<std::vector<boost::uuids::uuid>>& instanceResult,
+                        const std::optional<std::vector<boost::uuids::uuid>>& dataUuids);
 
   /**
    * @brief intersects a vector of sets pairwise recursively until one intersection set remains

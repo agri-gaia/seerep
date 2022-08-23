@@ -27,7 +27,7 @@ void CoreFbImage::getData(const seerep::fb::Query* query,
     for (auto uuidImg : project.dataOrInstanceUuids)
     {
       auto img = CoreFbGeneral::getHdf5(project.projectUuid, m_seerepCore, m_hdf5IoMap)
-                     ->readImage(boost::lexical_cast<std::string>(uuidImg));
+                     ->readImage(boost::lexical_cast<std::string>(uuidImg), queryCore.withoutData);
 
       if (img)
       {

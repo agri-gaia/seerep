@@ -95,11 +95,25 @@ Query.StartLabelVector(builder, 1)
 builder.PrependUOffsetTRelative(label)
 labelMsg = builder.EndVector()
 
+dataUuid = builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")
+Query.StartDatauuidVector(builder, 1)
+builder.PrependUOffsetTRelative(dataUuid)
+dataUuidMsg = builder.EndVector()
+
+# instanceUuid = builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")
+# Query.StartInstanceuuidVector(builder, 1)
+# builder.PrependUOffsetTRelative(instanceUuid)
+# instanceUuidMsg = builder.EndVector()
+
 Query.Start(builder)
 Query.AddBoundingbox(builder, boundingbox)
 Query.AddTimeinterval(builder, timeInterval)
 Query.AddProjectuuid(builder, projectuuidMsg)
 Query.AddLabel(builder, labelMsg)
+
+# Query.AddDatauuid(builder,dataUuidMsg)
+# Query.AddInstanceuuid(builder,instanceUuidMsg)
+Query.AddWithoutdata(builder, True)
 queryMsg = Query.End(builder)
 
 builder.Finish(queryMsg)

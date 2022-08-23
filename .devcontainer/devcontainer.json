@@ -2,11 +2,9 @@
     "image": "ghcr.io/agri-gaia/seerep_base:latest",
     "name": "seerep_dev",
     "extensions": [
-        "ms-vscode.cpptools",
+        "ms-vscode.cpptools-extension-pack",
         "betwo.b2-catkin-tools",
         "compulim.compulim-vscode-closetag",
-        "twxs.cmake",
-        "ms-vscode.cmake-tools",
         "ms-azuretools.vscode-docker",
         "mhutchie.git-graph",
         "ms-iot.vscode-ros",
@@ -14,7 +12,6 @@
         "gaborv.flatbuffers",
         "vscode-icons-team.vscode-icons",
         "GitHub.vscode-pull-request-github",
-        "eamodio.gitlens",
         "streetsidesoftware.code-spell-checker",
         "matepek.vscode-catch2-test-adapter",
         "davidanson.vscode-markdownlint"
