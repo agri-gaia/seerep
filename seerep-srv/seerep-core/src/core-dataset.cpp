@@ -70,7 +70,11 @@ std::vector<boost::uuids::uuid> CoreDataset::getData(const seerep_core_msgs::Que
   std::optional<std::vector<boost::uuids::uuid>> instanceResult;
   if (query.instances)
   {
-    instanceResult.value() = m_coreInstances->getDatasets(query.instances.value(), query.header.datatype);
+    auto instances = m_coreInstances->getDatasets(query.instances.value(), query.header.datatype);
+    if (!instances.empty())
+    {
+      instanceResult.value() = instances;
+    }
   }
 
   if (!query.boundingbox && !query.timeinterval && !query.label && !query.instances && !query.dataUuids)

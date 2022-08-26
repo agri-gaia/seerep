@@ -34,19 +34,19 @@ void Hdf5FbImage::writeImage(const std::string& id, const seerep::fb::Image& ima
         std::make_shared<HighFive::DataSet>(m_file->createDataSet<uint8_t>(hdf5DatasetRawDataPath, data_space));
   }
 
-  writeAttribute<uint32_t>(data_set_ptr, HEIGHT, image.height());
-  writeAttribute<uint32_t>(data_set_ptr, WIDTH, image.width());
-  writeAttribute<std::string>(data_set_ptr, ENCODING, image.encoding()->str());
-  writeAttribute<bool>(data_set_ptr, IS_BIGENDIAN, image.is_bigendian());
-  writeAttribute<uint32_t>(data_set_ptr, POINT_STEP, image.step());
-  writeAttribute<uint32_t>(data_set_ptr, ROW_STEP, image.row_step());
+  writeAttributeToHdf5<uint32_t>(*data_set_ptr, HEIGHT, image.height());
+  writeAttributeToHdf5<uint32_t>(*data_set_ptr, WIDTH, image.width());
+  writeAttributeToHdf5<std::string>(*data_set_ptr, ENCODING, image.encoding()->str());
+  writeAttributeToHdf5<bool>(*data_set_ptr, IS_BIGENDIAN, image.is_bigendian());
+  writeAttributeToHdf5<uint32_t>(*data_set_ptr, POINT_STEP, image.step());
+  writeAttributeToHdf5<uint32_t>(*data_set_ptr, ROW_STEP, image.row_step());
 
   if (image.encoding()->str() == "rgb8" || image.encoding()->str() == "8UC3")
   {
-    writeAttribute<std::string>(data_set_ptr, CLASS, "IMAGE");
-    writeAttribute<std::string>(data_set_ptr, "IMAGE_VERSION", "1.2");
-    writeAttribute<std::string>(data_set_ptr, "IMAGE_SUBCLASS", "IMAGE_TRUECOLOR");
-    writeAttribute<std::string>(data_set_ptr, "INTERLACE_MODE", "INTERLACE_PIXEL");
+    writeAttributeToHdf5<std::string>(*data_set_ptr, CLASS, "IMAGE");
+    writeAttributeToHdf5<std::string>(*data_set_ptr, "IMAGE_VERSION", "1.2");
+    writeAttributeToHdf5<std::string>(*data_set_ptr, "IMAGE_SUBCLASS", "IMAGE_TRUECOLOR");
+    writeAttributeToHdf5<std::string>(*data_set_ptr, "INTERLACE_MODE", "INTERLACE_PIXEL");
   }
   else
   {
@@ -116,12 +116,12 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
   try
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "loading attributes";
-    height = getAttribute<uint32_t>(id, data_set_ptr, HEIGHT);
-    width = getAttribute<uint32_t>(id, data_set_ptr, WIDTH);
-    encoding = builder.CreateString(getAttribute<std::string>(id, data_set_ptr, ENCODING));
-    isBigendian = getAttribute<bool>(id, data_set_ptr, IS_BIGENDIAN);
-    step = getAttribute<uint32_t>(id, data_set_ptr, POINT_STEP);
-    rowStep = getAttribute<uint32_t>(id, data_set_ptr, ROW_STEP);
+    height = readAttributeFromHdf5<uint32_t>(id, *data_set_ptr, HEIGHT);
+    width = readAttributeFromHdf5<uint32_t>(id, *data_set_ptr, WIDTH);
+    encoding = builder.CreateString(readAttributeFromHdf5<std::string>(id, *data_set_ptr, ENCODING));
+    isBigendian = readAttributeFromHdf5<bool>(id, *data_set_ptr, IS_BIGENDIAN);
+    step = readAttributeFromHdf5<uint32_t>(id, *data_set_ptr, POINT_STEP);
+    rowStep = readAttributeFromHdf5<uint32_t>(id, *data_set_ptr, ROW_STEP);
   }
   catch (const std::invalid_argument& e)
   {

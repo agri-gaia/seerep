@@ -31,19 +31,19 @@ void Hdf5PbImage::writeImage(const std::string& id, const seerep::Image& image)
     data_set_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DatasetRawDataPath));
   }
 
-  writeAttribute<uint32_t>(data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::HEIGHT, image.height());
-  writeAttribute<uint32_t>(data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::WIDTH, image.width());
-  writeAttribute<std::string>(data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::ENCODING, image.encoding());
-  writeAttribute<bool>(data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::IS_BIGENDIAN, image.is_bigendian());
-  writeAttribute<uint32_t>(data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::POINT_STEP, image.step());
-  writeAttribute<uint32_t>(data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::ROW_STEP, image.row_step());
+  writeAttributeToHdf5<uint32_t>(*data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::HEIGHT, image.height());
+  writeAttributeToHdf5<uint32_t>(*data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::WIDTH, image.width());
+  writeAttributeToHdf5<std::string>(*data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::ENCODING, image.encoding());
+  writeAttributeToHdf5<bool>(*data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::IS_BIGENDIAN, image.is_bigendian());
+  writeAttributeToHdf5<uint32_t>(*data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::POINT_STEP, image.step());
+  writeAttributeToHdf5<uint32_t>(*data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::ROW_STEP, image.row_step());
 
   if (image.encoding() == "rgb8" || image.encoding() == "8UC3")
   {
-    writeAttribute<std::string>(data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::CLASS, "IMAGE");
-    writeAttribute<std::string>(data_set_ptr, "IMAGE_VERSION", "1.2");
-    writeAttribute<std::string>(data_set_ptr, "IMAGE_SUBCLASS", "IMAGE_TRUECOLOR");
-    writeAttribute<std::string>(data_set_ptr, "INTERLACE_MODE", "INTERLACE_PIXEL");
+    writeAttributeToHdf5<std::string>(*data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::CLASS, "IMAGE");
+    writeAttributeToHdf5<std::string>(*data_set_ptr, "IMAGE_VERSION", "1.2");
+    writeAttributeToHdf5<std::string>(*data_set_ptr, "IMAGE_SUBCLASS", "IMAGE_TRUECOLOR");
+    writeAttributeToHdf5<std::string>(*data_set_ptr, "INTERLACE_MODE", "INTERLACE_PIXEL");
   }
   else
   {
@@ -99,12 +99,13 @@ std::optional<seerep::Image> Hdf5PbImage::readImage(const std::string& id)
 
   try
   {
-    image.set_height(getAttribute<uint32_t>(id, data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::HEIGHT));
-    image.set_width(getAttribute<uint32_t>(id, data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::WIDTH));
-    image.set_encoding(getAttribute<std::string>(id, data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::ENCODING));
-    image.set_is_bigendian(getAttribute<bool>(id, data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::IS_BIGENDIAN));
-    image.set_step(getAttribute<uint32_t>(id, data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::POINT_STEP));
-    image.set_row_step(getAttribute<uint32_t>(id, data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::ROW_STEP));
+    image.set_height(readAttributeFromHdf5<uint32_t>(id, *data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::HEIGHT));
+    image.set_width(readAttributeFromHdf5<uint32_t>(id, *data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::WIDTH));
+    image.set_encoding(readAttributeFromHdf5<std::string>(id, *data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::ENCODING));
+    image.set_is_bigendian(
+        readAttributeFromHdf5<bool>(id, *data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::IS_BIGENDIAN));
+    image.set_step(readAttributeFromHdf5<uint32_t>(id, *data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::POINT_STEP));
+    image.set_row_step(readAttributeFromHdf5<uint32_t>(id, *data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::ROW_STEP));
   }
   catch (const std::invalid_argument& e)
   {
