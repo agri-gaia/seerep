@@ -46,18 +46,26 @@ std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CorePointCloud::readDatase
   data.boundingbox.max_corner().set<1>(bb.at(4));
   data.boundingbox.max_corner().set<2>(bb.at(5));
 
-  std::vector<std::string> labelsGeneral = readLabelsGeneral(hdf5DatasetPath);
-  std::vector<std::string> labelsBB = readBoundingBoxLabels(hdf5DatasetPath);
-
-  for (auto label : labelsGeneral)
+  std::vector<std::string> labelsGeneral;
+  std::vector<std::string> instancesGeneral;
+  readLabelsGeneral(HDF5_GROUP_POINTCLOUD, uuid, labelsGeneral, instancesGeneral);
+  for (long unsigned int i = 0; i < labelsGeneral.size(); i++)
   {
+    auto instanceUuid = gen(instancesGeneral.at(i));
     data.labelsWithInstances.push_back(
-        seerep_core_msgs::LabelWithInstance{ .label = label, .uuidInstance = boost::uuids::nil_uuid() });
+        seerep_core_msgs::LabelWithInstance{ .label = labelsGeneral.at(i), .uuidInstance = instanceUuid });
   }
-  for (auto label : labelsBB)
+
+  std::vector<std::string> labelsBB;
+  std::vector<std::vector<double>> boundingBoxes;
+  std::vector<std::string> instances;
+  readBoundingBoxLabeled(HDF5_GROUP_POINTCLOUD, uuid, labelsBB, boundingBoxes, instances, false);
+
+  for (long unsigned int i = 0; i < labelsBB.size(); i++)
   {
+    auto instanceUuid = gen(instances.at(i));
     data.labelsWithInstances.push_back(
-        seerep_core_msgs::LabelWithInstance{ .label = label, .uuidInstance = boost::uuids::nil_uuid() });
+        seerep_core_msgs::LabelWithInstance{ .label = labelsBB.at(i), .uuidInstance = instanceUuid });
   }
 
   return data;
@@ -66,42 +74,6 @@ std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CorePointCloud::readDatase
 std::vector<std::string> Hdf5CorePointCloud::getDatasetUuids()
 {
   return getGroupDatasets(HDF5_GROUP_POINTCLOUD);
-}
-
-std::vector<std::string> Hdf5CorePointCloud::readLabelsGeneral(const std::string& dataGroup)
-{
-  if (!m_file->exist(dataGroup + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERAL))
-  {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
-        << "id " << dataGroup + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERAL << " does not exist in file "
-        << m_file->getName();
-    return std::vector<std::string>();
-  }
-
-  std::vector<std::string> labels;
-  HighFive::DataSet datasetLabels =
-      m_file->getDataSet(dataGroup + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERAL);
-  datasetLabels.read(labels);
-
-  return labels;
-}
-
-std::vector<std::string> Hdf5CorePointCloud::readBoundingBoxLabels(const std::string& dataGroup)
-{
-  if (!m_file->exist(dataGroup + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBB))
-  {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
-        << "id " << dataGroup + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBB << " does not exist in file "
-        << m_file->getName();
-    return std::vector<std::string>();
-  }
-
-  std::vector<std::string> labels;
-
-  HighFive::DataSet datasetLabels = m_file->getDataSet(dataGroup + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBB);
-  datasetLabels.read(labels);
-
-  return labels;
 }
 
 }  // namespace seerep_hdf5_core

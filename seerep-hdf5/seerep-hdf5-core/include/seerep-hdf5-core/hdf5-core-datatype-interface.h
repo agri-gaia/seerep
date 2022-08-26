@@ -17,10 +17,6 @@ public:
   virtual std::optional<seerep_core_msgs::DatasetIndexable> readDataset(const std::string& uuid) = 0;
 
   virtual std::vector<std::string> getDatasetUuids() = 0;
-
-private:
-  virtual std::vector<std::string> readLabelsGeneral(const std::string& dataGroup) = 0;
-  virtual std::vector<std::string> readBoundingBoxLabels(const std::string& dataGroup) = 0;
 };
 
 }  // namespace seerep_hdf5_core

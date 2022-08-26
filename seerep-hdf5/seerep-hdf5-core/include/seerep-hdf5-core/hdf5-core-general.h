@@ -70,9 +70,9 @@ public:
   bool hasTime(const std::string& datatypeGroup, const std::string& uuid);
 
   // BoundingBoxes
-  void readBoundingBox2DLabeled(const std::string& datatypeGroup, const std::string& uuid,
-                                std::vector<std::string>& labels, std::vector<std::vector<double>>& boundingBoxes,
-                                std::vector<std::string>& instances);
+  void readBoundingBoxLabeled(const std::string& datatypeGroup, const std::string& uuid,
+                              std::vector<std::string>& labels, std::vector<std::vector<double>>& boundingBoxes,
+                              std::vector<std::string>& instances, bool loadBoxes = true);
 
   // Labels General
   void readLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid, std::vector<std::string>& labels,
@@ -86,6 +86,12 @@ public:
 
   void writeProjectFrameId(const std::string& frameId);
   std::string readProjectFrameId();
+
+private:
+  void readLabel(const std::string& id, const std::string labelType, std::vector<std::string>& labels);
+  void readBoundingBoxes(const std::string& id, const std::string boundingBoxType,
+                         std::vector<std::vector<double>>& boundingBoxes);
+  void readInstances(const std::string& id, const std::string InstanceType, std::vector<std::string>& instances);
 
 public:
   // header attribute keys

@@ -159,7 +159,7 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
   std::vector<std::string> boundingBoxesLabels;
   std::vector<std::vector<double>> boundingBoxes;
   std::vector<std::string> boundingBoxesInstances;
-  readBoundingBox2DLabeled(HDF5_GROUP_IMAGE, id, boundingBoxesLabels, boundingBoxes, boundingBoxesInstances);
+  readBoundingBoxLabeled(HDF5_GROUP_IMAGE, id, boundingBoxesLabels, boundingBoxes, boundingBoxesInstances);
 
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
       << "creating the bounding boxes 2d with label fb msgs";

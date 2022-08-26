@@ -110,35 +110,30 @@ std::optional<std::string> Hdf5CoreGeneral::readFrameId(const std::string& datat
   }
 }
 
-void Hdf5CoreGeneral::readBoundingBox2DLabeled(const std::string& datatypeGroup, const std::string& uuid,
-                                               std::vector<std::string>& labels,
-                                               std::vector<std::vector<double>>& boundingBoxes,
-                                               std::vector<std::string>& instances)
+void Hdf5CoreGeneral::readBoundingBoxLabeled(const std::string& datatypeGroup, const std::string& uuid,
+                                             std::vector<std::string>& labels,
+                                             std::vector<std::vector<double>>& boundingBoxes,
+                                             std::vector<std::string>& instances, bool loadBoxes)
 {
   std::string id = datatypeGroup + "/" + uuid;
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
       << "reading the bounding box 2d with labels of " << id;
   try
   {
-    checkExists(id + "/" + LABELBB);
-    checkExists(id + "/" + LABELBBBOXES);
-    checkExists(id + "/" + LABELBBINSTANCES);
+    readLabel(id, LABELBB, labels);
+    readInstances(id, LABELBBINSTANCES, instances);
+
+    if (loadBoxes)
+    {
+      readBoundingBoxes(id, LABELBBBOXES, boundingBoxes);
+    }
   }
   catch (std::invalid_argument const& e)
   {
     return;
   }
 
-  HighFive::DataSet datasetLabels = m_file->getDataSet(id + "/" + LABELBB);
-  datasetLabels.read(labels);
-
-  HighFive::DataSet datasetBoxes = m_file->getDataSet(id + "/" + LABELBBBOXES);
-  datasetBoxes.read(boundingBoxes);
-
-  HighFive::DataSet datasetInstances = m_file->getDataSet(id + "/" + LABELBBINSTANCES);
-  datasetInstances.read(instances);
-
-  if (labels.size() != boundingBoxes.size() || labels.size() != instances.size())
+  if (labels.size() != instances.size() || (loadBoxes && labels.size() != boundingBoxes.size()))
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning)
         << "size of labels (" << labels.size() << "), size of bounding boxes (" << boundingBoxes.size()
@@ -157,19 +152,13 @@ void Hdf5CoreGeneral::readLabelsGeneral(const std::string& datatypeGroup, const 
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "loading labels general of " << id;
   try
   {
-    checkExists(id + "/" + LABELGENERAL);
-    checkExists(id + "/" + LABELGENERALINSTANCES);
+    readLabel(id, LABELGENERAL, labels);
+    readInstances(id, LABELGENERALINSTANCES, instances);
   }
   catch (std::invalid_argument const& e)
   {
     return;
   }
-
-  HighFive::DataSet datasetLabels = m_file->getDataSet(id + "/" + LABELGENERAL);
-  datasetLabels.read(labels);
-
-  HighFive::DataSet datasetInstances = m_file->getDataSet(id + "/" + LABELGENERALINSTANCES);
-  datasetInstances.read(instances);
 
   if (labels.size() != instances.size())
   {
@@ -354,6 +343,27 @@ void Hdf5CoreGeneral::checkExists(const std::string& id)
         << "id " << id << " does not exist in file " << m_file->getName();
     throw std::invalid_argument("id " + id + " does not exist in file " + m_file->getName());
   }
+}
+
+void Hdf5CoreGeneral::readLabel(const std::string& id, const std::string labelType, std::vector<std::string>& labels)
+{
+  checkExists(id + "/" + labelType);
+  HighFive::DataSet datasetLabels = m_file->getDataSet(id + "/" + labelType);
+  datasetLabels.read(labels);
+}
+void Hdf5CoreGeneral::readBoundingBoxes(const std::string& id, const std::string boundingBoxType,
+                                        std::vector<std::vector<double>>& boundingBoxes)
+{
+  checkExists(id + "/" + boundingBoxType);
+  HighFive::DataSet datasetBoxes = m_file->getDataSet(id + "/" + boundingBoxType);
+  datasetBoxes.read(boundingBoxes);
+}
+void Hdf5CoreGeneral::readInstances(const std::string& id, const std::string instanceType,
+                                    std::vector<std::string>& instances)
+{
+  checkExists(id + "/" + instanceType);
+  HighFive::DataSet datasetInstances = m_file->getDataSet(id + "/" + instanceType);
+  datasetInstances.read(instances);
 }
 
 }  // namespace seerep_hdf5_core

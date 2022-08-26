@@ -34,10 +34,6 @@ public:
 
   std::vector<std::string> getDatasetUuids();
 
-private:
-  std::vector<std::string> readLabelsGeneral(const std::string& dataGroup);
-  std::vector<std::string> readBoundingBoxLabels(const std::string& dataGroup);
-
 public:
   // image / pointcloud attribute keys
   inline static const std::string HEIGHT = "height";
