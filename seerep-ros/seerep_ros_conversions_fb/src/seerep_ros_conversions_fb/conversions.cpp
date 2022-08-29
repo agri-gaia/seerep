@@ -62,7 +62,7 @@ flatbuffers::Offset<seerep::fb::PointField> toFlat(const sensor_msgs::PointField
   seerep::fb::PointFieldBuilder pointFieldBuilder(builder);
   pointFieldBuilder.add_name(nameOffset);
   pointFieldBuilder.add_offset(point_field.offset);
-  pointFieldBuilder.add_datatype(seerep::fb::Datatype(point_field.datatype));
+  pointFieldBuilder.add_datatype(seerep::fb::Point_Field_Datatype(point_field.datatype));
   pointFieldBuilder.add_count(point_field.count);
   return pointFieldBuilder.Finish();
 }
