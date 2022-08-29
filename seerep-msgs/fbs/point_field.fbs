@@ -1,7 +1,7 @@
 
 namespace seerep.fb;
 
-enum Datatype : int {
+enum Point_Field_Datatype : int {
   UNSET = 0,
   INT8 = 1,
   UINT8 = 2,
@@ -16,6 +16,6 @@ enum Datatype : int {
 table PointField {
   name:string;
   offset:uint;
-  datatype:Datatype;
+  datatype:Point_Field_Datatype;
   count:uint;
 }
