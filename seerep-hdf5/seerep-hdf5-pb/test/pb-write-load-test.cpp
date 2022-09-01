@@ -94,6 +94,9 @@ auto createLabelWithInstance()
 auto createBB2DLabeled(const std::string& projectUUID, const std::string& messageUUID)
 {
   std::vector<seerep::BoundingBox2DLabeled> bbLabeled;
+  seerep::LabelWithInstance labelWithInstance[10];
+  seerep::Boundingbox2D bb2D[10];
+
   for (size_t i = 0; i < 10; i++)
   {
     auto header = createHeader(projectUUID, messageUUID);
@@ -101,15 +104,14 @@ auto createBB2DLabeled(const std::string& projectUUID, const std::string& messag
     auto pointMin = createPoint(0.01 + i / 10, 0.02 + i / 10);
     auto pointMax = createPoint(0.03 + i / 10, 0.04 + i / 10);
 
-    seerep::Boundingbox2D bb2D;
-    bb2D.set_allocated_header(&header);
-    bb2D.set_allocated_point_min(&pointMin);
-    bb2D.set_allocated_point_max(&pointMin);
+    bb2D[i].set_allocated_header(&header);
+    bb2D[i].set_allocated_point_min(&pointMin);
+    bb2D[i].set_allocated_point_max(&pointMin);
 
-    auto labelWithInstance = createLabelWithInstance();
+    labelWithInstance[i] = createLabelWithInstance();
 
     seerep::BoundingBox2DLabeled boundingBox2DLabeled;
-    boundingBox2DLabeled.set_allocated_labelwithinstance(&labelWithInstance);
+    boundingBox2DLabeled.set_allocated_labelwithinstance(&labelWithInstance[i]);
     boundingBox2DLabeled.set_allocated_boundingbox(&bb2D);
 
     bbLabeled.push_back(boundingBox2DLabeled);
