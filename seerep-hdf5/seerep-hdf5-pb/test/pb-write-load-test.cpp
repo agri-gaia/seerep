@@ -21,6 +21,12 @@ to improve the quality of the tests.
 
 void createHeader(const std::string projectUUID, const std::string messageUUID, seerep::Header* header)
 {
+  /**
+   * @brief given a pointer to an image header, sets sub field values.
+   * @param[in] projectUUID the UUID of the project
+   * @param[in] messageUUId the UUID of the message
+   * @param[in,out] header the header which will hold the fields
+   **/
   header->set_seq(5);
   header->set_frame_id("arbitrary_id");
   header->mutable_stamp()->set_seconds(5);
@@ -31,12 +37,24 @@ void createHeader(const std::string projectUUID, const std::string messageUUID, 
 
 void createPoint(const double x, const double y, seerep::Point2D* point2D)
 {
+  /**
+   * @brief sets values in a pointer to a point, given x and y co ordinate values
+   * @param[in] x x co ordinate
+   * @param[out] y y co ordinate
+   * @param[in,out] point2D pointer to a 2D point object
+   * */
   point2D->set_x(x);
   point2D->set_y(y);
 }
 
 void createImageData(const unsigned int imageHeight, const unsigned int imageWidth, seerep::Image& image)
 {
+  /**
+   * @brief creates a grid of image data given height and width of an image
+   * @param[in] imageHeight the height of the image
+   * @param[in] imageWidth the width of the image
+   * @param[in,out] image address of the image object
+   * */
   uint8_t data[imageHeight][imageWidth][3];
   for (size_t i = 0; i < imageWidth; i++)
   {
@@ -61,6 +79,10 @@ void createImageData(const unsigned int imageHeight, const unsigned int imageWid
 
 void createLabelWithInstance(seerep::LabelWithInstance* labelWithInstance)
 {
+  /**
+   * @brief given a labelWithInstance set arbitrary label and uuid
+   * @param[in,out] labelWithInstance a pointer to a label with instance
+   * */
   boost::uuids::uuid instanceUUID = boost::uuids::random_generator()();
   labelWithInstance->set_label("arbitrary_instance_label");
   labelWithInstance->set_instanceuuid(boost::lexical_cast<std::string>(instanceUUID));
@@ -68,6 +90,12 @@ void createLabelWithInstance(seerep::LabelWithInstance* labelWithInstance)
 
 void createBB2DLabeled(const std::string& projectUUID, const std::string& messageUUID, seerep::Image& image)
 {
+  /**
+   * @brief create a 2D Labeled Bounding Box
+   * @param[in] projectUUID the uuid of the project
+   * @param[in] messageUUID the uuid of the message
+   * @param[in] image the address of the image
+   * */
   std::vector<seerep::BoundingBox2DLabeled> bbLabeled;
 
   for (size_t i = 0; i < 10; i++)
@@ -86,6 +114,14 @@ void createBB2DLabeled(const std::string& projectUUID, const std::string& messag
 seerep::Image createImageMessage(const unsigned int imageHeight, const unsigned imageWidth,
                                  const std::string& projectUUID, const std::string& messageUUID)
 {
+  /**
+   * @brief give image height and width, and project and message uuid, build and return an image
+   * @param[in] imageHeight the height of the image
+   * @param[in] imageWidth the width of the image
+   * @param[in] projectUUID the uuid of the project
+   * @param[in] messageUUID the uuid of the message
+   * @return seerep:Image object
+   * */
   std::string encoding = "rgb8";
 
   // Labels are optional therefore excluded here
