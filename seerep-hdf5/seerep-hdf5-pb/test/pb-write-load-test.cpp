@@ -83,8 +83,10 @@ auto createImageData(const unsigned int imageHeight, const unsigned int imageWid
 auto createLabelWithInstance()
 {
   seerep::LabelWithInstance labelwithinstance;
+
+  boost::uuids::uuid instanceUUID = boost::uuids::random_generator()();
   labelwithinstance.set_label("arbitrary_instance_label");
-  labelwithinstance.set_instanceuuid("arbitrary_instance_uuid");
+  labelwithinstance.set_instanceuuid(boost::lexical_cast<std::string>(instanceUUID));
 
   return labelwithinstance;
 }
