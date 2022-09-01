@@ -19,7 +19,7 @@ propagate the data through all components. This should be changed in the future
 to improve the quality of the tests.
 */
 
-auto createTimeStamp(google::protobuf::int32 sec, google::protobuf::uint32 nsec)
+seerep::Timestamp createTimeStamp(google::protobuf::int32 sec, google::protobuf::uint32 nsec)
 {
   seerep::Timestamp ts;
   ts.set_seconds(sec);
@@ -28,7 +28,7 @@ auto createTimeStamp(google::protobuf::int32 sec, google::protobuf::uint32 nsec)
   return ts;
 }
 
-auto createHeader(const std::string projectUUID, const std::string messageUUID)
+seerep::Header createHeader(const std::string projectUUID, const std::string messageUUID)
 {
   seerep::Header ret;
 
@@ -42,7 +42,7 @@ auto createHeader(const std::string projectUUID, const std::string messageUUID)
   return ret;
 }
 
-auto createPoint(const double x, const double y)
+seerep::Point2D createPoint(const double x, const double y)
 {
   seerep::Point2D ret;
   ret.set_x(x);
@@ -51,9 +51,9 @@ auto createPoint(const double x, const double y)
   return ret;
 }
 
-auto createImageData(const unsigned int imageHeight, const unsigned int imageWidth)
+void createImageData(const unsigned int imageHeight, const unsigned int imageWidth, seerep::Image& image)
 {
-  std::vector<u_int8_t> data;
+  uint8_t data[imageHeight][imageWidth][3];
   for (size_t i = 0; i < imageWidth; i++)
   {
     for (size_t j = 0; j < imageHeight; j++)
@@ -66,21 +66,16 @@ auto createImageData(const unsigned int imageHeight, const unsigned int imageWid
       uint8_t g = int((y * 255.0)) % 255;
       uint8_t b = int((z * 255.0)) % 255;
 
-      data.push_back(r);
-      data.push_back(g);
-      data.push_back(b);
+      data[j][i][0] = r;
+      data[j][i][1] = g;
+      data[j][i][2] = b;
     }
   }
 
-  seerep::Image ret;
-  ret.set_width(imageWidth);
-  ret.set_height(imageHeight);
-  ret.set_data(&data.front(), data.size());
-
-  return ret;
+  image.set_data(data, sizeof(data));
 }
 
-auto createLabelWithInstance()
+seerep::LabelWithInstance createLabelWithInstance()
 {
   seerep::LabelWithInstance labelwithinstance;
 
@@ -91,11 +86,10 @@ auto createLabelWithInstance()
   return labelwithinstance;
 }
 
-auto createBB2DLabeled(const std::string& projectUUID, const std::string& messageUUID)
+std::vector<seerep::BoundingBox2DLabeled> createBB2DLabeled(const std::string& projectUUID,
+                                                            const std::string& messageUUID)
 {
   std::vector<seerep::BoundingBox2DLabeled> bbLabeled;
-  seerep::LabelWithInstance labelWithInstance[10];
-  seerep::Boundingbox2D bb2D[10];
 
   for (size_t i = 0; i < 10; i++)
   {
@@ -104,14 +98,15 @@ auto createBB2DLabeled(const std::string& projectUUID, const std::string& messag
     auto pointMin = createPoint(0.01 + i / 10, 0.02 + i / 10);
     auto pointMax = createPoint(0.03 + i / 10, 0.04 + i / 10);
 
-    bb2D[i].set_allocated_header(&header);
-    bb2D[i].set_allocated_point_min(&pointMin);
-    bb2D[i].set_allocated_point_max(&pointMin);
+    seerep::Boundingbox2D bb2D;
+    bb2D.set_allocated_header(&header);
+    bb2D.set_allocated_point_min(&pointMin);
+    bb2D.set_allocated_point_max(&pointMin);
 
-    labelWithInstance[i] = createLabelWithInstance();
+    seerep::LabelWithInstance labelWithInstance = createLabelWithInstance();
 
     seerep::BoundingBox2DLabeled boundingBox2DLabeled;
-    boundingBox2DLabeled.set_allocated_labelwithinstance(&labelWithInstance[i]);
+    boundingBox2DLabeled.set_allocated_labelwithinstance(&labelWithInstance);
     boundingBox2DLabeled.set_allocated_boundingbox(&bb2D);
 
     bbLabeled.push_back(boundingBox2DLabeled);
@@ -125,7 +120,6 @@ auto createImageMessage(const unsigned int imageHeight, const unsigned imageWidt
 {
   std::string encoding = "rgb8";
   auto header = createHeader(projectUUID, messageUUID);
-  auto image = createImageData(256, 256);
 
   // Labels are optional therefore excluded here
   // std::vector<seerep::LabelWithInstance> labelsGeneral;
@@ -139,6 +133,7 @@ auto createImageMessage(const unsigned int imageHeight, const unsigned imageWidt
   auto bB2DLabeled = createBB2DLabeled(projectUUID, messageUUID);
 
   seerep::Image imgMsg;
+  createImageData(256, 256, imgMsg);
 
   // set the header
   *imgMsg.mutable_header() = header;
@@ -148,8 +143,6 @@ auto createImageMessage(const unsigned int imageHeight, const unsigned imageWidt
   imgMsg.set_is_bigendian(true);
   imgMsg.set_step(3 * imageHeight);
   imgMsg.set_row_step(0);
-  // help 1 line
-  imgMsg.set_data(image.data());
   // imgMsg.labels_general = generalLabel;
   // imgMsg.labels_bb = bB2DLabeled;
 
