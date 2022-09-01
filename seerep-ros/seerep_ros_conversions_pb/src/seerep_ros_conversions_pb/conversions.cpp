@@ -51,10 +51,11 @@ sensor_msgs::PointField toROS(const seerep::PointField& point_field)
 /*
  * PointCloud2
  */
-seerep::PointCloud2 toProto(const sensor_msgs::PointCloud2& cloud)
+seerep::PointCloud2 toProto(const sensor_msgs::PointCloud2& cloud, std::string projectuuid)
 {
   seerep::PointCloud2 ret;
   *ret.mutable_header() = toProto(cloud.header);
+  *ret.mutable_header()->mutable_uuid_project() = projectuuid;
   ret.set_height(cloud.height);
   ret.set_width(cloud.width);
   for (auto field : cloud.fields)
@@ -86,10 +87,11 @@ sensor_msgs::PointCloud2 toROS(const seerep::PointCloud2& cloud)
 /*
  * Image
  */
-seerep::Image toProto(const sensor_msgs::Image& image)
+seerep::Image toProto(const sensor_msgs::Image& image, std::string projectuuid)
 {
   seerep::Image ret;
   *ret.mutable_header() = toProto(image.header);
+  *ret.mutable_header()->mutable_uuid_project() = projectuuid;
   ret.set_height(image.height);
   ret.set_width(image.width);
   ret.set_encoding(image.encoding);

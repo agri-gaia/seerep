@@ -27,7 +27,7 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const sensor_msgs::PointCloud2::C
   grpc::ClientContext context;
   seerep::ServerResponse response;
   grpc::Status status =
-      stubPointCloud_->TransferPointCloud2(&context, seerep_ros_conversions_pb::toProto(*msg), &response);
+      stubPointCloud_->TransferPointCloud2(&context, seerep_ros_conversions_pb::toProto(*msg, projectuuid), &response);
   checkStatus(status, response);
 }
 
@@ -35,7 +35,8 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const sensor_msgs::Image::ConstPt
 {
   grpc::ClientContext context;
   seerep::ServerResponse response;
-  grpc::Status status = stubImage_->TransferImage(&context, seerep_ros_conversions_pb::toProto(*msg), &response);
+  grpc::Status status =
+      stubImage_->TransferImage(&context, seerep_ros_conversions_pb::toProto(*msg, projectuuid), &response);
   checkStatus(status, response);
 }
 
