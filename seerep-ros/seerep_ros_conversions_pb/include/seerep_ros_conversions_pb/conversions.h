@@ -59,9 +59,10 @@ sensor_msgs::PointField toROS(const seerep::PointField& point_field);
  * @brief Converts a ROS sensor_msgs/PointCloud2 message to the corresponding
  * Protobuf PointCloud2 message
  * @param cloud sensor_msgs/PointCloud2
+ * @param optional projectuuid std::string
  * @return Protobuf PointCloud2 message
  */
-seerep::PointCloud2 toProto(const sensor_msgs::PointCloud2& cloud);
+seerep::PointCloud2 toProto(const sensor_msgs::PointCloud2& cloud, std::string projectuuid = "");
 
 /**
  * @brief Converts a Protobuf PointCloud2 message to the corresponding
@@ -75,9 +76,10 @@ sensor_msgs::PointCloud2 toROS(const seerep::PointCloud2& cloud);
  * @brief Converts a ROS sensor_msgs/Image message to the corresponding
  * Protobuf Image message
  * @param image sensor_msgs/Image
+ * @param optional projectuuid std::string
  * @return Protobuf Image message
  */
-seerep::Image toProto(const sensor_msgs::Image& image);
+seerep::Image toProto(const sensor_msgs::Image& image, std::string projectuuid = "");
 
 /**
  * @brief Converts a Protobuf Image message to the corresponding
@@ -203,7 +205,7 @@ geometry_msgs::Transform toROS(const seerep::Transform& transform);
  * @brief Converts a ROS geometry_msgs::TransformStamped message to the corresponding
  * Protobuf TransformStamped message
  * @param transform geometry_msgs::TransformStamped
- * @param projectuuid std::string
+ * @param optional projectuuid std::string
  * @return Protobuf TransformStamped message
  */
 seerep::TransformStamped toProto(const geometry_msgs::TransformStamped& transform, std::string projectuuid = "");
