@@ -33,36 +33,6 @@ Hdf5FbGeneral::readAttributeMap(HighFive::AnnotateTraits<T>& object, flatbuffers
   }
   return builder.CreateVector(mapEntryVector);
 }
-template <typename T>
-void Hdf5FbGeneral::writeAttribute(const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField,
-                                   T value)
-{
-  if (!dataSetPtr->hasAttribute(attributeField))
-  {
-    dataSetPtr->createAttribute(attributeField, value);
-  }
-  else
-  {
-    dataSetPtr->getAttribute(attributeField).write(value);
-  }
-  m_file->flush();
-}
-
-template <typename T>
-T Hdf5FbGeneral::getAttribute(const std::string& id, const std::shared_ptr<HighFive::DataSet> dataSetPtr,
-                              std::string attributeField)
-{
-  T attributeValue;
-  if (dataSetPtr->hasAttribute(attributeField))
-  {
-    dataSetPtr->getAttribute(attributeField).read(attributeValue);
-  }
-  else
-  {
-    throw std::invalid_argument("id " + id + " has no attribute " + attributeField);
-  }
-  return attributeValue;
-}
 
 template <class T>
 void Hdf5FbGeneral::writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, const seerep::fb::Header& header)
@@ -110,36 +80,6 @@ flatbuffers::Offset<seerep::fb::Header> Hdf5FbGeneral::readHeaderAttributes(High
 
   return seerep::fb::CreateHeader(builder, seq, timestamp, builder.CreateString(frameId),
                                   builder.CreateString(uuidProject), builder.CreateString(uuidMsg));
-}
-
-template <class T>
-void Hdf5FbGeneral::readTimeFromAnnotateTraits(const std::string& id, int64_t& value,
-                                               const HighFive::AnnotateTraits<T>& highFiveObject,
-                                               const std::string& attribute)
-{
-  if (highFiveObject.hasAttribute(attribute))
-  {
-    highFiveObject.getAttribute(attribute).read(value);
-  }
-  else
-  {
-    throw std::invalid_argument("id " + id + " has no attribute " + attribute);
-  }
-}
-
-template <class T>
-void Hdf5FbGeneral::writeTimeToAnnotateTraits(const int64_t& value, HighFive::AnnotateTraits<T>& highFiveObject,
-                                              const std::string& attribute)
-{
-  if (highFiveObject.hasAttribute(attribute))
-  {
-    highFiveObject.getAttribute(attribute).write(value);
-  }
-  else
-  {
-    highFiveObject.createAttribute(attribute, value);
-  }
-  m_file->flush();
 }
 
 } /* namespace seerep_hdf5_fb */

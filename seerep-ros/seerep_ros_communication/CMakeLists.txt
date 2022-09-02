@@ -1,8 +1,10 @@
+#catkin_lint: ignore critical_var_overwrite
 cmake_minimum_required(VERSION 3.0.2)
 project(seerep_ros_communication VERSION 0.1)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -fPIC -DBOOST_LOG_DYN_LINK")
 
 find_package(SeerepCom REQUIRED)
 
@@ -21,6 +23,11 @@ find_package(seerep_ros_conversions_pb REQUIRED)
 find_package(seerep_ros_conversions_fb REQUIRED)
 find_package(Protobuf REQUIRED)
 find_package(gRPC CONFIG REQUIRED)
+
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+find_package(Boost COMPONENTS log log_setup REQUIRED)
 
 # Geographiclib installs FindGeographicLib.cmake to this non-standard location
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "/usr/share/cmake/geographiclib/")
@@ -81,6 +88,8 @@ target_link_libraries(${PROJECT_NAME}_hdf5dump
 	${seerep_ros_conversions_pb_LIBRARIES}
 	${SeerepHdf5Pb_LIBRARIES}
 	${catkin_LIBRARIES}
+	${Boost_LIBRARIES}
+	${Boost_LOG_LIBRARY} ${Boost_LOG_SETUP_LIBRARY}
 )
 target_link_libraries(${PROJECT_NAME}_querier
 	${SeerepCom_LIBRARIES}

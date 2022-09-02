@@ -40,6 +40,7 @@ add_library(seerephdf5pb
 
 target_link_libraries(seerephdf5pb
 	${SeerepMsgs_LIBRARIES}
+	${SeerepHdf5Core_LIBRARIES}
 	${SeerepIoCore_LIBRARIES}
 	${PROTOBUF_LIBRARIES}
 	${HighFive_LIBRARIES}

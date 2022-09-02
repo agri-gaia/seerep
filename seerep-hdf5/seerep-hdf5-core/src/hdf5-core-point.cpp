@@ -51,15 +51,26 @@ std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CorePoint::readDataset(con
   data.boundingbox.max_corner().set<1>(read_data.at(1));
   data.boundingbox.max_corner().set<2>(read_data.at(2));
 
-  for (auto label : readLabelsGeneral(hdf5DatasetPath))
+  std::vector<std::string> labelsGeneral;
+  std::vector<std::string> instancesGeneral;
+  readLabelsGeneral(HDF5_GROUP_POINT, uuid, labelsGeneral, instancesGeneral);
+  for (long unsigned int i = 0; i < labelsGeneral.size(); i++)
   {
+    auto instanceUuid = gen(instancesGeneral.at(i));
     data.labelsWithInstances.push_back(
-        seerep_core_msgs::LabelWithInstance{ .label = label, .uuidInstance = boost::uuids::nil_uuid() });
+        seerep_core_msgs::LabelWithInstance{ .label = labelsGeneral.at(i), .uuidInstance = instanceUuid });
   }
-  for (auto label : readBoundingBoxLabels(hdf5DatasetPath))
+
+  std::vector<std::string> labelsBB;
+  std::vector<std::vector<double>> boundingBoxes;
+  std::vector<std::string> instances;
+  readBoundingBoxLabeled(HDF5_GROUP_POINT, uuid, labelsBB, boundingBoxes, instances, false);
+
+  for (long unsigned int i = 0; i < labelsBB.size(); i++)
   {
+    auto instanceUuid = gen(instances.at(i));
     data.labelsWithInstances.push_back(
-        seerep_core_msgs::LabelWithInstance{ .label = label, .uuidInstance = boost::uuids::nil_uuid() });
+        seerep_core_msgs::LabelWithInstance{ .label = labelsBB.at(i), .uuidInstance = instanceUuid });
   }
 
   return data;
@@ -68,30 +79,6 @@ std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CorePoint::readDataset(con
 std::vector<std::string> Hdf5CorePoint::getDatasetUuids()
 {
   return getGroupDatasets(HDF5_GROUP_POINT);
-}
-
-std::vector<std::string> Hdf5CorePoint::readLabelsGeneral(const std::string& dataGroup)
-{
-  std::string labelGeneralPath = dataGroup + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERAL;
-
-  if (!m_file->exist(labelGeneralPath))
-  {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
-        << "id " << labelGeneralPath << " does not exist in file " << m_file->getName();
-    return std::vector<std::string>();
-  }
-
-  std::vector<std::string> labels;
-  HighFive::DataSet datasetLabels = m_file->getDataSet(labelGeneralPath);
-  datasetLabels.read(labels);
-
-  return labels;
-}
-
-std::vector<std::string> Hdf5CorePoint::readBoundingBoxLabels(const std::string& dataGroup)
-{
-  (void)dataGroup;
-  return std::vector<std::string>();
 }
 
 }  // namespace seerep_hdf5_core
