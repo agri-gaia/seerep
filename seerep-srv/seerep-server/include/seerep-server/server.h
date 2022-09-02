@@ -134,6 +134,9 @@ private:
   /** @brief the gRPC server which serves the gRPC services*/
   std::shared_ptr<grpc::Server> m_grpcServer;
 
+  //** @brief the maximum size of grpc messages in bytes*/
+  inline static const int messageSize = 1 * 1024 * 1024 * 1024;
+
   /** @brief the protobuf service for meta operations*/
   std::shared_ptr<seerep_server::PbMetaOperations> m_metaOperationsPb;
   /** @brief the protobuf service for transformation related queries*/
