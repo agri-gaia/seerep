@@ -43,27 +43,30 @@ std::vector<seerep::PointCloud2> CorePbPointCloud::getData(const seerep::Query& 
 boost::uuids::uuid CorePbPointCloud::addData(const seerep::PointCloud2& pc)
 {
   boost::uuids::string_generator gen;
-  boost::uuids::uuid uuid;
+  boost::uuids::uuid messageuuid;
+
+  // generate uuids if not provided in the message
   if (pc.header().uuid_msgs().empty())
   {
-    uuid = boost::uuids::random_generator()();
+    messageuuid = boost::uuids::random_generator()();
   }
   else
   {
-    uuid = gen(pc.header().uuid_msgs());
+    messageuuid = gen(pc.header().uuid_msgs());
   }
+
   auto hdf5io = getHdf5(gen(pc.header().uuid_project()));
-  hdf5io->writePointCloud2(boost::lexical_cast<std::string>(uuid), pc);
+  hdf5io->writePointCloud2(boost::lexical_cast<std::string>(messageuuid), pc);
 
   seerep_core_msgs::DatasetIndexable dataForIndices;
   dataForIndices.header.datatype = seerep_core_msgs::Datatype::PointCloud;
   dataForIndices.header.frameId = pc.header().frame_id();
   dataForIndices.header.timestamp.seconds = pc.header().stamp().seconds();
   dataForIndices.header.timestamp.nanos = pc.header().stamp().nanos();
-  dataForIndices.header.uuidData = uuid;
+  dataForIndices.header.uuidData = messageuuid;
   dataForIndices.header.uuidProject = gen(pc.header().uuid_project());
 
-  std::vector<float> bb = hdf5io->loadBoundingBox(boost::lexical_cast<std::string>(uuid));
+  std::vector<float> bb = hdf5io->loadBoundingBox(boost::lexical_cast<std::string>(messageuuid));
   dataForIndices.boundingbox.min_corner().set<0>(bb.at(0));
   dataForIndices.boundingbox.min_corner().set<1>(bb.at(1));
   dataForIndices.boundingbox.min_corner().set<2>(bb.at(2));
@@ -109,7 +112,7 @@ boost::uuids::uuid CorePbPointCloud::addData(const seerep::PointCloud2& pc)
 
   m_seerepCore->addDataset(dataForIndices);
 
-  return uuid;
+  return messageuuid;
 }
 
 void CorePbPointCloud::getFileAccessorFromCore(boost::uuids::uuid project)

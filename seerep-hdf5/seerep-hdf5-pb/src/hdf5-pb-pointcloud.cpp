@@ -64,7 +64,7 @@ std::shared_ptr<HighFive::Group> Hdf5PbPointCloud::writePointCloud2(const std::s
   CloudInfo info = getCloudInfo(pointcloud2);
 
   if (info.has_points)
-    writePoints(uuid, pointcloud2);
+    writePoints(*data_group_ptr, uuid, pointcloud2);
   if (info.has_rgb)
     writeColorsRGB(uuid, pointcloud2);
   if (info.has_rgba)
@@ -78,7 +78,7 @@ std::shared_ptr<HighFive::Group> Hdf5PbPointCloud::writePointCloud2(const std::s
   return data_group_ptr;
 }
 
-void Hdf5PbPointCloud::writePoints(const std::string& uuid, const seerep::PointCloud2& cloud)
+void Hdf5PbPointCloud::writePoints(HighFive::Group& object, const std::string& uuid, const seerep::PointCloud2& cloud)
 {
   std::string points_id = seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + uuid + "/points";
   HighFive::DataSpace data_space({ cloud.height(), cloud.width(), 3 });
@@ -132,12 +132,10 @@ void Hdf5PbPointCloud::writePoints(const std::string& uuid, const seerep::PointC
   }
 
   // write bounding box as attribute to dataset
-  const std::vector boundingbox{ min[0], min[1], min[2], max[0], max[1], max[2] };
-  if (!points_dataset_ptr->hasAttribute(seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX))
-    points_dataset_ptr->createAttribute(seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX, boundingbox);
-  else
-    points_dataset_ptr->getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX).write(boundingbox);
+  const std::vector<float> boundingbox{ min[0], min[1], min[2], max[0], max[1], max[2] };
 
+  seerep_hdf5_core::Hdf5CoreGeneral::writeAttributeToHdf5(object, seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX,
+                                                          boundingbox);
   // write data to dataset
   points_dataset_ptr->write(point_data);
 }
@@ -252,7 +250,8 @@ Hdf5PbPointCloud::CloudInfo Hdf5PbPointCloud::getCloudInfo(const seerep::PointCl
   CloudInfo info;
   for (auto& field : cloud.fields())
   {
-    if (field.name() == "xyz")
+    // ToDo make this safer
+    if (field.name() == "x" || field.name() == "y" || field.name() == "z")
       info.has_points = true;
     else if (field.name() == "rgb")
       info.has_rgb = true;
@@ -454,25 +453,20 @@ void Hdf5PbPointCloud::writePointFieldAttributes(
     counts.push_back(repeatedPointField.at(i).count());
   }
 
-  if (!cloud_group.hasAttribute(seerep_hdf5_core::Hdf5CorePointCloud::FIELD_NAME))
-    cloud_group.createAttribute(seerep_hdf5_core::Hdf5CorePointCloud::FIELD_NAME, names);
-  else
-    cloud_group.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::FIELD_NAME).write(names);
+  seerep_hdf5_core::Hdf5CoreGeneral::writeAttributeToHdf5(cloud_group, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_NAME,
+                                                          names);
 
-  if (!cloud_group.hasAttribute(seerep_hdf5_core::Hdf5CorePointCloud::FIELD_OFFSET))
-    cloud_group.createAttribute(seerep_hdf5_core::Hdf5CorePointCloud::FIELD_OFFSET, offsets);
-  else
-    cloud_group.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::FIELD_OFFSET).write(offsets);
+  seerep_hdf5_core::Hdf5CoreGeneral::writeAttributeToHdf5(cloud_group,
+                                                          seerep_hdf5_core::Hdf5CorePointCloud::FIELD_OFFSET, offsets);
 
-  if (!cloud_group.hasAttribute(seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX))
-    cloud_group.createAttribute(seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX, datatypes);
-  else
-    cloud_group.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX).write(datatypes);
+  seerep_hdf5_core::Hdf5CoreGeneral::writeAttributeToHdf5(cloud_group,
+                                                          seerep_hdf5_core::Hdf5CorePointCloud::FIELD_OFFSET, offsets);
 
-  if (!cloud_group.hasAttribute(seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX))
-    cloud_group.createAttribute(seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX, counts);
-  else
-    cloud_group.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX).write(counts);
+  seerep_hdf5_core::Hdf5CoreGeneral::writeAttributeToHdf5(
+      cloud_group, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_DATATYPE, datatypes);
+
+  seerep_hdf5_core::Hdf5CoreGeneral::writeAttributeToHdf5(cloud_group,
+                                                          seerep_hdf5_core::Hdf5CorePointCloud::FIELD_COUNT, counts);
 }
 
 google::protobuf::RepeatedPtrField<seerep::PointField>
@@ -510,8 +504,11 @@ std::vector<float> Hdf5PbPointCloud::loadBoundingBox(const std::string& uuid)
 
   std::string hdf5DatasetPath = seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + uuid;
   std::shared_ptr<HighFive::Group> group_ptr = std::make_shared<HighFive::Group>(m_file->getGroup(hdf5DatasetPath));
-  std::vector<float> bb;
-  group_ptr->getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX).write(bb);
+
+  // ToDo no floats are returned from the file
+  std::vector<float> bb(50, 1);
+  auto tmp = group_ptr->getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX);
+  tmp.write(bb);
   return bb;
 }
 } /* namespace seerep_hdf5_pb */
