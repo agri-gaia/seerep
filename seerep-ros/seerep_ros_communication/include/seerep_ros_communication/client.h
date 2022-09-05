@@ -57,7 +57,7 @@ public:
 
   void send(const tf2_msgs::TFMessage::ConstPtr& msg) const;
 
-  std::string createProject(std::string projectname) const;
+  std::string createProject(const std::string& projectname, const std::string& mapFrame) const;
 
   std::string projectuuid;
 

@@ -111,13 +111,14 @@ std::optional<ros::Subscriber> TransferSensorMsgs::getSubscriber(const std::stri
   }
 }
 
-std::string TransferSensorMsgs::createProject(std::string projectname) const
+std::string TransferSensorMsgs::createProject(const std::string& projectname, const std::string& mapFrame) const
 {
   grpc::ClientContext context;
   seerep::ProjectInfo response;
 
   seerep::ProjectCreation projectcreation;
   *projectcreation.mutable_name() = projectname;
+  *projectcreation.mutable_mapframeid() = mapFrame;
 
   grpc::Status status = stubMeta_->CreateProject(&context, projectcreation, &response);
 
@@ -159,6 +160,13 @@ int main(int argc, char** argv)
   std::string server_address;
   private_nh.param<std::string>("server_address", server_address, "localhost:9090");
 
+  std::string mapFrame;
+  private_nh.param<std::string>("mapFrame", mapFrame = "");
+  if (private_nh.hasParam("mapFrame"))
+  {
+    private_nh.getParam("mapFrame", mapFrame);
+  }
+
   seerep_grpc_ros::TransferSensorMsgs transfer_sensor_msgs(
       grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()));
 
@@ -175,14 +183,14 @@ int main(int argc, char** argv)
       // mainly catching "invalid uuid string"
       std::cout << e.what() << std::endl;
 
-      transfer_sensor_msgs.projectuuid = transfer_sensor_msgs.createProject("");
+      transfer_sensor_msgs.projectuuid = transfer_sensor_msgs.createProject("", mapFrame);
       ROS_WARN_STREAM("The provided UUID is invalid! Generating a a new one. (" + transfer_sensor_msgs.projectuuid +
                       ".h5)");
     }
   }
   else
   {
-    transfer_sensor_msgs.projectuuid = transfer_sensor_msgs.createProject("");
+    transfer_sensor_msgs.projectuuid = transfer_sensor_msgs.createProject("", mapFrame);
     ROS_WARN_STREAM("Use the \"hdf5FolderPath\" parameter to specify the HDF5 file! Generating a a new one. (" +
                     transfer_sensor_msgs.projectuuid + ".h5)");
   }
