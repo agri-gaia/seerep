@@ -4,7 +4,7 @@ import os
 import sys
 
 import flatbuffers
-import imageio
+import imageio.v2 as imageio
 import numpy as np
 import quaternion
 import yaml
