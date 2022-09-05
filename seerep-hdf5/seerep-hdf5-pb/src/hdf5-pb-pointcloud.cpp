@@ -505,10 +505,8 @@ std::vector<float> Hdf5PbPointCloud::loadBoundingBox(const std::string& uuid)
   std::string hdf5DatasetPath = seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + uuid;
   std::shared_ptr<HighFive::Group> group_ptr = std::make_shared<HighFive::Group>(m_file->getGroup(hdf5DatasetPath));
 
-  // ToDo no floats are returned from the file
-  std::vector<float> bb(50, 1);
-  auto tmp = group_ptr->getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX);
-  tmp.write(bb);
+  std::vector<float> bb;
+  group_ptr->getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX).read(bb);
   return bb;
 }
 } /* namespace seerep_hdf5_pb */
