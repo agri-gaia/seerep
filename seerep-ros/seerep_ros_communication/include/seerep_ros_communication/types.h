@@ -48,14 +48,14 @@ enum SEEREP_MESSAGE_TYPE
 std::string MessageTypeNames[] = { SEEREP_MESSAGE_TYPES(M) };
 #undef SEEREP_M
 
-using StubTransferPbPtr = std::unique_ptr<seerep::TransferSensorMsgs::Stub>;
+using StubTransferSensorMsgsPbPtr = std::unique_ptr<seerep::TransferSensorMsgs::Stub>;
 using StubMetaPbPtr = std::unique_ptr<seerep::MetaOperations::Stub>;
 using StubImagePbPtr = std::unique_ptr<seerep::ImageService::Stub>;
 using StubPointCloudPbPtr = std::unique_ptr<seerep::PointCloudService::Stub>;
 using StubTfPbPtr = std::unique_ptr<seerep::TfService::Stub>;
 
 template <typename Type>
-void send(StubTransferPbPtr& stub, grpc::ClientContext* c, seerep::ServerResponse* r, Type msg)
+void send(StubTransferSensorMsgsPbPtr& stub, grpc::ClientContext* c, seerep::ServerResponse* r, Type msg)
 {
 }
 template <typename Type>

@@ -64,11 +64,11 @@ public:
 private:
   void checkStatus(const grpc::Status& status, const seerep::ServerResponse& response) const;
 
-  StubTransferPbPtr stub_;
-  StubImagePbPtr stubImage_;
-  StubPointCloudPbPtr stubPointCloud_;
-  StubTfPbPtr stubTf_;
-  StubMetaPbPtr stubMeta_;
+  StubTransferSensorMsgsPbPtr stubSensorMsgs;
+  StubImagePbPtr stubImage;
+  StubPointCloudPbPtr stubPointCloud;
+  StubTfPbPtr stubTf;
+  StubMetaPbPtr stubMeta;
   ros::NodeHandle nh;
 };
 
