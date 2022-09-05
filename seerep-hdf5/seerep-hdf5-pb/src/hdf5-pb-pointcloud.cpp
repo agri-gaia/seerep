@@ -247,12 +247,19 @@ void Hdf5PbPointCloud::writeOtherFields(const std::string& uuid, const seerep::P
 
 Hdf5PbPointCloud::CloudInfo Hdf5PbPointCloud::getCloudInfo(const seerep::PointCloud2& cloud)
 {
+  bool hasFieldx = false;
+  bool hasFieldy = false;
+  bool hasFieldz = false;
+
   CloudInfo info;
   for (auto& field : cloud.fields())
   {
-    // ToDo make this safer
-    if (field.name() == "x" || field.name() == "y" || field.name() == "z")
-      info.has_points = true;
+    if (field.name() == "x")
+      hasFieldx = true;
+    else if (field.name() == "y")
+      hasFieldy = true;
+    else if (field.name() == "z")
+      hasFieldz = true;
     else if (field.name() == "rgb")
       info.has_rgb = true;
     else if (field.name() == "rgba")
@@ -262,6 +269,8 @@ Hdf5PbPointCloud::CloudInfo Hdf5PbPointCloud::getCloudInfo(const seerep::PointCl
     else
       info.other_fields[field.name()] = field;
   }
+  if (hasFieldx && hasFieldy && hasFieldz)
+    info.has_points = true;
   return info;
 }
 
