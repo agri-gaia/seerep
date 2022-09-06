@@ -177,6 +177,8 @@ void server::createGrpcServer()
   std::string serverAddress = "[::]:" + m_programOptionsMap.at("port").as<std::string>();
   grpc::ServerBuilder serverBuilder;
   serverBuilder.AddListeningPort(serverAddress, grpc::InsecureServerCredentials());
+  serverBuilder.SetMaxReceiveMessageSize(messageSize);
+  serverBuilder.SetMaxSendMessageSize(messageSize);
 
   // add protobuf (Pb) services
   addServicesPb(serverBuilder);

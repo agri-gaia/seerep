@@ -45,10 +45,10 @@ public:
   inline static const std::string IS_DENSE = "is_dense";
 
   // pointcloud fields attribute keys
-  inline static const std::string FIELD_NAME = "field_name_";
-  inline static const std::string FIELD_OFFSET = "field_offset_";
-  inline static const std::string FIELD_DATATYPE = "field_datatype_";
-  inline static const std::string FIELD_COUNT = "field_count_";
+  inline static const std::string FIELD_NAME = "field_name";
+  inline static const std::string FIELD_OFFSET = "field_offset";
+  inline static const std::string FIELD_DATATYPE = "field_datatype";
+  inline static const std::string FIELD_COUNT = "field_count";
 
   // point and quaternion attribute keys
   const std::string X = "x";

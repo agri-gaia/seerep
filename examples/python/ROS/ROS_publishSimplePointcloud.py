@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
-# PointCloud2 color cube
-# https://answers.ros.org/question/289576/understanding-the-bytes-in-a-pcl2-message/
+
+# Note: This script must be started before the SEEREP client.
+# This is due to the client subscribing to the in here created Node
+
 import struct
 
 import rospy
 from sensor_msgs import point_cloud2
+
+# PointCloud2 color cube
+# https://answers.ros.org/question/289576/understanding-the-bytes-in-a-pcl2-message/
 from sensor_msgs.msg import PointCloud2, PointField
 from std_msgs.msg import Header
 

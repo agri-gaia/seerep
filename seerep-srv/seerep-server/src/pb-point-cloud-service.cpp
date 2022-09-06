@@ -55,16 +55,12 @@ grpc::Status PbPointCloudService::TransferPointCloud2(grpc::ServerContext* conte
 
   if (!pointCloud2->header().uuid_project().empty())
   {
-    boost::uuids::uuid uuid;
     try
     {
-      boost::uuids::string_generator gen;
-      uuid = gen(pointCloud2->header().uuid_project());
+      boost::uuids::uuid pointCloudUuid = pointCloudPb->addData(*pointCloud2);
 
-      boost::uuids::uuid uuidImg = pointCloudPb->addData(*pointCloud2);
-
-      seerep_server_util::createResponsePb(boost::lexical_cast<std::string>(uuidImg), seerep::ServerResponse::SUCCESS,
-                                           response);
+      seerep_server_util::createResponsePb(boost::lexical_cast<std::string>(pointCloudUuid),
+                                           seerep::ServerResponse::SUCCESS, response);
 
       return grpc::Status::OK;
     }

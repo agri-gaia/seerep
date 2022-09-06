@@ -7,7 +7,7 @@ import uuid
 import boundingbox2d_labeled_pb2 as bb
 import image_pb2 as image
 import image_service_pb2_grpc as imageService
-import imageio
+import imageio.v2 as imageio
 import label_with_instance_pb2 as labelWithInstance
 import meta_operations_pb2_grpc as metaOperations
 import numpy as np
@@ -120,11 +120,13 @@ for folderIndex in range(2):
         thePointcloud.fields.append(thePointfieldY)
 
         thePointfieldZ = pointfield.PointField()
-        thePointfieldZ.name = 'y'
+        thePointfieldZ.name = 'z'
         thePointfieldZ.offset = 8
         thePointfieldZ.datatype = 7  # float32
         thePointfieldZ.count = 1
         thePointcloud.fields.append(thePointfieldZ)
+
+        stubPointcloud.TransferPointCloud2(thePointcloud)
 
         annotations = np.genfromtxt(baseAnnotationPath + ".txt", delimiter=" ")
         for a in annotations:
