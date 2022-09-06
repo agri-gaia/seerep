@@ -221,7 +221,7 @@ int PointCloud2IteratorBase<T, TT, U, C, V>::set_field(const seerep::fb::PointCl
 
   for (size_t i = 0; i < cloud_msg.fields()->size(); i++)
   {
-    const seerep::fb::PointField& field = cloud_msg.fields()->Get(i);
+    const seerep::fb::PointField& field = *cloud_msg.fields()->Get(i);
     if (field.name()->str() == field_name)
     {
       return field.offset();
@@ -235,9 +235,9 @@ int PointCloud2IteratorBase<T, TT, U, C, V>::set_field(const seerep::fb::PointCl
 
   if (field_names.find(field_name) != field_names.end())
   {
-    for (int i = 0; i < cloud_msg.fields()->size(); i++)
+    for (size_t i = 0; i < cloud_msg.fields()->size(); i++)
     {
-      const seerep::fb::PointField& field = cloud_msg.fields()->Get(i);
+      const seerep::fb::PointField& field = *cloud_msg.fields()->Get(i);
 
       if (field.name()->str() == "rgb" || field.name()->str() == "rgba")
       {
