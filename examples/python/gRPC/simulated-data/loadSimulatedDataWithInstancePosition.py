@@ -35,7 +35,7 @@ import util_fb
 class LoadSimulatedDataWithInstancePosition:
     def __init__(self) -> None:
         self.IMAGE_SUBPATH = "camera_main_camera/rect/"
-        self.BOUNDINGBOX_SUBPATH = "camera_main_camera_annotations/bounding_box_uuid/"
+        self.BOUNDINGBOX_SUBPATH = "camera_main_camera_annotations/bbs_without_cluster_uuid/"
         self.POINTCLOUD_SUBPATH = "camera_main_camera_annotations/pcl/"
         self.EXTRINSICS_SUBPATH = "camera_main_camera/extrinsics/"
 
