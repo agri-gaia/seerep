@@ -75,8 +75,8 @@ void Hdf5FbImage::writeImage(const std::string& id, const seerep::fb::Image& ima
   data_set_ptr->write(tmp);
   writeHeaderAttributes(*data_set_ptr, *image.header());
 
-  writeBoundingBox2DLabeled(HDF5_GROUP_IMAGE, id, image.labels_bb());
-  writeLabelsGeneral(HDF5_GROUP_IMAGE, id, image.labels_general());
+  writeBoundingBox2DLabeled(HDF5_GROUP_IMAGE, id, *image.labels_bb());
+  writeLabelsGeneral(HDF5_GROUP_IMAGE, id, *image.labels_general());
 
   m_file->flush();
 }
@@ -86,7 +86,7 @@ void Hdf5FbImage::writeImageBoundingBox2DLabeled(const std::string& id,
 {
   const std::scoped_lock lock(*m_write_mtx);
 
-  writeBoundingBox2DLabeled(HDF5_GROUP_IMAGE, id, bb2dLabeledStamped.labels_bb());
+  writeBoundingBox2DLabeled(HDF5_GROUP_IMAGE, id, *bb2dLabeledStamped.labels_bb());
 }
 
 std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readImage(const std::string& id,
