@@ -45,10 +45,10 @@ timeNano = 0
 frame = "map"
 header = createHeader(builder, timeSec, timeNano, frame, projectUuid)
 
-childeFrameId = builder.CreateString("camera")
+childFrameId = builder.CreateString("camera")
 
 TransformStampedQuery.Start(builder)
-TransformStampedQuery.AddChildFrameId(builder, childeFrameId)
+TransformStampedQuery.AddChildFrameId(builder, childFrameId)
 TransformStampedQuery.AddHeader(builder, header)
 tfQuery = TransformStampedQuery.End(builder)
 builder.Finish(tfQuery)
