@@ -77,10 +77,10 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const geometry_msgs::PoseStamped:
 
 void seerep_grpc_ros::TransferSensorMsgs::send(const tf2_msgs::TFMessage::ConstPtr& msg) const
 {
-  grpc::ClientContext context;
-  seerep::ServerResponse response;
   for (auto tf : msg->transforms)
   {
+    grpc::ClientContext context;
+    seerep::ServerResponse response;
     grpc::Status status =
         stubTf->TransferTransformStamped(&context, seerep_ros_conversions_pb::toProto(tf, projectuuid), &response);
     checkStatus(status, response);
