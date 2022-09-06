@@ -37,7 +37,7 @@ protected:
   // Attributes
   //################
   void writeAttributeMap(const std::shared_ptr<HighFive::DataSet> dataSetPtr,
-                         const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>>* attributes);
+                         const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>>& attributes);
   template <class T>
   flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>>>
   readAttributeMap(HighFive::AnnotateTraits<T>& object, flatbuffers::grpc::MessageBuilder& builder);
@@ -54,17 +54,36 @@ protected:
   //################
   void writeBoundingBoxLabeled(
       const std::string& datatypeGroup, const std::string& uuid,
-      const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>>* boundingboxLabeled);
+      const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>>& boundingboxLabeled);
 
   void writeBoundingBox2DLabeled(
       const std::string& datatypeGroup, const std::string& uuid,
-      const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>>* boundingbox2DLabeled);
+      const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>>& boundingbox2DLabeled);
 
   //################
   // Labels General
   //################
   void writeLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid,
-                          const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>* labelsGeneral);
+                          const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>& labelsGeneral);
+
+  void readLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid, std::vector<std::string>& labels,
+                         std::vector<std::string>& instances);
+
+  //################
+  // Project
+  //################
+  void writeProjectname(const std::string& projectname);
+
+  std::string readProjectname();
+
+  void writeProjectFrameId(const std::string& frameId);
+
+  std::string readProjectFrameId();
+
+protected:
+  std::shared_ptr<HighFive::File> m_file;
+  std::shared_ptr<std::mutex> m_write_mtx;
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
 };
 
 }  // namespace seerep_hdf5_fb
