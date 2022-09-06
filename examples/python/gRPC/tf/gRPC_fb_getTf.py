@@ -33,7 +33,7 @@ def createHeader(builder, timeSec, timeNano, frame, projectUuid):
     return Header.End(builder)
 
 
-channel = util.get_gRPC_channel("dev")
+channel = util.get_gRPC_channel("local")
 PROJECT_NAME = "simulatedDataWithInstances"
 projectUuid = util_fb.get_or_create_project(channel, PROJECT_NAME, False)
 
