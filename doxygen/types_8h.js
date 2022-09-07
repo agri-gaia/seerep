@@ -15,7 +15,7 @@ var types_8h =
     [ "StubPointCloudPbPtr", "types_8h.html#a1cc9063d698efd417a62600a9c436b74", null ],
     [ "StubTfFbPtr", "types_8h.html#a5c54dc99fbafd6641e218acaedb6e381", null ],
     [ "StubTfPbPtr", "types_8h.html#a499f956bb449eeddd13c92e840079a9d", null ],
-    [ "StubTransferPbPtr", "types_8h.html#a864866efbe0b263fcabdb32c1fe61941", null ],
+    [ "StubTransferSensorMsgsPbPtr", "types_8h.html#aa36d6104efead397cc917f4224c2738e", null ],
     [ "SEEREP_MESSAGE_TYPE", "types_8h.html#afe2da7b8186f434d2e473374fccb7bf6", [
       [ "SEEREP_MESSAGE_TYPES", "types_8h.html#afe2da7b8186f434d2e473374fccb7bf6a81adeb596870910b86b1aba3b3b25c68", null ],
       [ "NumTypes", "types_8h.html#afe2da7b8186f434d2e473374fccb7bf6ac8a420ac3bcbd526747fcee3acdee9c1", null ]
@@ -27,7 +27,7 @@ var types_8h =
     [ "send", "types_8h.html#a7ba609465e09d84ee535c685b884a9e3", null ],
     [ "send", "types_8h.html#a278720d9c0cbae7e986db6174a9edcce", null ],
     [ "send", "types_8h.html#a1a5257b42203d89a5b9a8ed834fd8471", null ],
-    [ "send", "types_8h.html#a52bad940389276375c0b1ee625a3a195", null ],
+    [ "send", "types_8h.html#a91fdcd209d95c8da2f63aa6d92c13c6b", null ],
     [ "type", "types_8h.html#afe79a70abc98b6d54268414335b5e850", null ],
     [ "MessageTypeNames", "types_8h.html#a4a46c2b233160b04af4858b924ff7e46", null ]
 ];

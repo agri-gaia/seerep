@@ -1,8 +1,16 @@
 <map id="seerep_hdf5_core::Hdf5CoreGeneral" name="seerep_hdf5_core::Hdf5CoreGeneral">
-<area shape="rect" id="node1" title=" " alt="" coords="5,136,212,177"/>
-<area shape="rect" id="node2" href="$classseerep__hdf5__core_1_1Hdf5CoreImage.html" title=" " alt="" coords="266,5,473,47"/>
-<area shape="rect" id="node3" href="$classseerep__hdf5__core_1_1Hdf5CoreInstance.html" title=" " alt="" coords="266,71,473,112"/>
-<area shape="rect" id="node4" href="$classseerep__hdf5__core_1_1Hdf5CorePoint.html" title=" " alt="" coords="266,136,473,177"/>
-<area shape="rect" id="node5" href="$classseerep__hdf5__core_1_1Hdf5CorePointCloud.html" title=" " alt="" coords="266,201,473,243"/>
-<area shape="rect" id="node6" href="$classseerep__hdf5__core_1_1Hdf5CoreTf.html" title=" " alt="" coords="260,267,479,294"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,201,212,243"/>
+<area shape="rect" id="node2" href="$classseerep__hdf5__core_1_1Hdf5CoreImage.html" title=" " alt="" coords="272,5,479,47"/>
+<area shape="rect" id="node3" href="$classseerep__hdf5__core_1_1Hdf5CoreInstance.html" title=" " alt="" coords="272,71,479,112"/>
+<area shape="rect" id="node4" href="$classseerep__hdf5__core_1_1Hdf5CorePoint.html" title=" " alt="" coords="272,136,479,177"/>
+<area shape="rect" id="node5" href="$classseerep__hdf5__core_1_1Hdf5CorePointCloud.html" title=" " alt="" coords="272,201,479,243"/>
+<area shape="rect" id="node6" href="$classseerep__hdf5__core_1_1Hdf5CoreTf.html" title=" " alt="" coords="266,267,485,294"/>
+<area shape="rect" id="node7" href="$classseerep__hdf5__fb_1_1Hdf5FbGeneral.html" title=" " alt="" coords="261,318,489,345"/>
+<area shape="rect" id="node11" href="$classseerep__hdf5__pb_1_1Hdf5PbGeneral.html" title=" " alt="" coords="260,398,491,425"/>
+<area shape="rect" id="node8" href="$classseerep__hdf5__fb_1_1Hdf5FbImage.html" title=" " alt="" coords="540,231,759,258"/>
+<area shape="rect" id="node9" href="$classseerep__hdf5__fb_1_1Hdf5FbPoint.html" title=" " alt="" coords="544,282,755,309"/>
+<area shape="rect" id="node10" href="$classseerep__hdf5__fb_1_1Hdf5FbTf.html" title=" " alt="" coords="554,333,745,359"/>
+<area shape="rect" id="node12" href="$classseerep__hdf5__pb_1_1Hdf5PbImage.html" title=" " alt="" coords="539,383,760,410"/>
+<area shape="rect" id="node13" href="$classseerep__hdf5__pb_1_1Hdf5PbPointCloud.html" title=" " alt="" coords="543,435,756,476"/>
+<area shape="rect" id="node14" href="$classseerep__hdf5__pb_1_1Hdf5PbTf.html" title=" " alt="" coords="553,501,746,527"/>
 </map>

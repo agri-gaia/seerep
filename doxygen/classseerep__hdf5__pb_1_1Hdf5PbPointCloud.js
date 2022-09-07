@@ -18,5 +18,5 @@ var classseerep__hdf5__pb_1_1Hdf5PbPointCloud =
     [ "writeOtherFields", "classseerep__hdf5__pb_1_1Hdf5PbPointCloud.html#a658e05de28285ba80fca11161c8035a4", null ],
     [ "writePointCloud2", "classseerep__hdf5__pb_1_1Hdf5PbPointCloud.html#a49793259af7f7cd414b4c76c8551d609", null ],
     [ "writePointFieldAttributes", "classseerep__hdf5__pb_1_1Hdf5PbPointCloud.html#ac3552710ea5b18904e8e02db4d58ecbf", null ],
-    [ "writePoints", "classseerep__hdf5__pb_1_1Hdf5PbPointCloud.html#a38a3ec6007acd8d54ae9de096c87ae0b", null ]
+    [ "writePoints", "classseerep__hdf5__pb_1_1Hdf5PbPointCloud.html#ad8ba071f7e63333c44df09bc57b78948", null ]
 ];

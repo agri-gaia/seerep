@@ -167,6 +167,12 @@ Static Private Member Functions</h2></td></tr>
 <tr class="memitem:a6a43d7ba840742a5d8f78b32915d5a5a"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbConversion.html#a6a43d7ba840742a5d8f78b32915d5a5a">fromFbQueryProject</a> (const seerep::fb::Query *query, std::optional&lt; std::vector&lt; boost::uuids::uuid &gt; &gt; &amp;queryCoreProjects)</td></tr>
 <tr class="memdesc:a6a43d7ba840742a5d8f78b32915d5a5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">converts the project part of the flatbuffer query message to seerep core specific message  <a href="classseerep__core__fb_1_1CoreFbConversion.html#a6a43d7ba840742a5d8f78b32915d5a5a">More...</a><br /></td></tr>
 <tr class="separator:a6a43d7ba840742a5d8f78b32915d5a5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71b0587e1d31022e8ad9ed0fb1761019"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbConversion.html#a71b0587e1d31022e8ad9ed0fb1761019">fromFbQueryInstance</a> (const seerep::fb::Query *query, std::optional&lt; std::vector&lt; boost::uuids::uuid &gt; &gt; &amp;queryCoreInstances)</td></tr>
+<tr class="memdesc:a71b0587e1d31022e8ad9ed0fb1761019"><td class="mdescLeft">&#160;</td><td class="mdescRight">converts the instance part of the flatbuffer query message to seerep core specific message  <a href="classseerep__core__fb_1_1CoreFbConversion.html#a71b0587e1d31022e8ad9ed0fb1761019">More...</a><br /></td></tr>
+<tr class="separator:a71b0587e1d31022e8ad9ed0fb1761019"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b29676ea98a0ebc35bb592ba6947b8b"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbConversion.html#a4b29676ea98a0ebc35bb592ba6947b8b">fromFbQueryDataUuids</a> (const seerep::fb::Query *query, std::optional&lt; std::vector&lt; boost::uuids::uuid &gt; &gt; &amp;queryCoreDataUuids)</td></tr>
+<tr class="memdesc:a4b29676ea98a0ebc35bb592ba6947b8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">converts the instance part of the flatbuffer query message to seerep core specific message  <a href="classseerep__core__fb_1_1CoreFbConversion.html#a4b29676ea98a0ebc35bb592ba6947b8b">More...</a><br /></td></tr>
+<tr class="separator:a4b29676ea98a0ebc35bb592ba6947b8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a48d75bcaa57573a0495f55449865225f"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbConversion.html#a48d75bcaa57573a0495f55449865225f">fromFbQueryLabel</a> (const seerep::fb::Query *query, std::optional&lt; std::vector&lt; std::string &gt; &gt; &amp;queryCoreLabel)</td></tr>
 <tr class="memdesc:a48d75bcaa57573a0495f55449865225f"><td class="mdescLeft">&#160;</td><td class="mdescRight">converts the label part of the flatbuffer query message to seerep core specific message  <a href="classseerep__core__fb_1_1CoreFbConversion.html#a48d75bcaa57573a0495f55449865225f">More...</a><br /></td></tr>
 <tr class="separator:a48d75bcaa57573a0495f55449865225f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -176,6 +182,9 @@ Static Private Member Functions</h2></td></tr>
 <tr class="memitem:adecb7faa022b8878028411bd72b7a978"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbConversion.html#adecb7faa022b8878028411bd72b7a978">fromFbQueryBoundingBox</a> (const seerep::fb::Query *query, std::optional&lt; <a class="el" href="namespaceseerep__core__msgs.html#a51f23338981d650d0d2ffb8cb403adc0">seerep_core_msgs::AABB</a> &gt; &amp;queryCoreBoundingBox, std::string &amp;queryCoreHeaderFrameId)</td></tr>
 <tr class="memdesc:adecb7faa022b8878028411bd72b7a978"><td class="mdescLeft">&#160;</td><td class="mdescRight">converts the spatial part of the flatbuffer query message to seerep core specific message  <a href="classseerep__core__fb_1_1CoreFbConversion.html#adecb7faa022b8878028411bd72b7a978">More...</a><br /></td></tr>
 <tr class="separator:adecb7faa022b8878028411bd72b7a978"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5cc418fbc9786f5c3729ca65ca986b60"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbConversion.html#a5cc418fbc9786f5c3729ca65ca986b60">fromFbQueryWithoutData</a> (const seerep::fb::Query *query)</td></tr>
+<tr class="memdesc:a5cc418fbc9786f5c3729ca65ca986b60"><td class="mdescLeft">&#160;</td><td class="mdescRight">extracts the WithoutData Flag of the flatbuffer query message  <a href="classseerep__core__fb_1_1CoreFbConversion.html#a5cc418fbc9786f5c3729ca65ca986b60">More...</a><br /></td></tr>
+<tr class="separator:a5cc418fbc9786f5c3729ca65ca986b60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b16bec1fcc8d616eae892eb3dc44b93"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbConversion.html#a3b16bec1fcc8d616eae892eb3dc44b93">fromFbDataHeader</a> (const seerep::fb::Header *header, <a class="el" href="structseerep__core__msgs_1_1Header.html">seerep_core_msgs::Header</a> &amp;coreHeader)</td></tr>
 <tr class="memdesc:a3b16bec1fcc8d616eae892eb3dc44b93"><td class="mdescLeft">&#160;</td><td class="mdescRight">converts the header of the flatbuffer data message to seerep core specific message  <a href="classseerep__core__fb_1_1CoreFbConversion.html#a3b16bec1fcc8d616eae892eb3dc44b93">More...</a><br /></td></tr>
 <tr class="separator:a3b16bec1fcc8d616eae892eb3dc44b93"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -625,9 +634,99 @@ Static Private Member Functions</h2></td></tr>
 <p>converts the spatial part of the flatbuffer query message to seerep core specific message </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">boundingBox</td><td>the bounding box in the flatbuffer query message </td></tr>
+    <tr><td class="paramname">query</td><td>the flatbuffer query message </td></tr>
     <tr><td class="paramname">queryCoreBoundingBox</td><td>the bounding box in the query message in seerep core format </td></tr>
     <tr><td class="paramname">queryCoreHeaderFrameId</td><td>the frame id in the header of the query message in the seerep core format </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4b29676ea98a0ebc35bb592ba6947b8b" name="a4b29676ea98a0ebc35bb592ba6947b8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b29676ea98a0ebc35bb592ba6947b8b">&#9670;&nbsp;</a></span>fromFbQueryDataUuids()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_core_fb::CoreFbConversion::fromFbQueryDataUuids </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::fb::Query *&#160;</td>
+          <td class="paramname"><em>query</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::optional&lt; std::vector&lt; boost::uuids::uuid &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>queryCoreDataUuids</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>converts the instance part of the flatbuffer query message to seerep core specific message </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">query</td><td>the flatbuffer query message </td></tr>
+    <tr><td class="paramname">queryCoreDataUuids</td><td>the data uuids in the query message in seerep core format </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a71b0587e1d31022e8ad9ed0fb1761019" name="a71b0587e1d31022e8ad9ed0fb1761019"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71b0587e1d31022e8ad9ed0fb1761019">&#9670;&nbsp;</a></span>fromFbQueryInstance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_core_fb::CoreFbConversion::fromFbQueryInstance </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::fb::Query *&#160;</td>
+          <td class="paramname"><em>query</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::optional&lt; std::vector&lt; boost::uuids::uuid &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>queryCoreInstances</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>converts the instance part of the flatbuffer query message to seerep core specific message </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">query</td><td>the flatbuffer query message </td></tr>
+    <tr><td class="paramname">queryCoreInstances</td><td>the instances in the query message in seerep core format </td></tr>
   </table>
   </dd>
 </dl>
@@ -671,7 +770,7 @@ Static Private Member Functions</h2></td></tr>
 <p>converts the label part of the flatbuffer query message to seerep core specific message </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">label</td><td>the labels in the flatbuffer query message </td></tr>
+    <tr><td class="paramname">query</td><td>the flatbuffer query message </td></tr>
     <tr><td class="paramname">queryCoreLabel</td><td>the labels in the query message in seerep core format </td></tr>
   </table>
   </dd>
@@ -716,8 +815,8 @@ Static Private Member Functions</h2></td></tr>
 <p>converts the project part of the flatbuffer query message to seerep core specific message </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">projects</td><td>the projects in the flatbuffer query message </td></tr>
-    <tr><td class="paramname">queryCoreProjects</td><td>th eprojects in the query message in seerep core format </td></tr>
+    <tr><td class="paramname">query</td><td>the flatbuffer query message </td></tr>
+    <tr><td class="paramname">queryCoreProjects</td><td>the projects in the query message in seerep core format </td></tr>
   </table>
   </dd>
 </dl>
@@ -761,11 +860,46 @@ Static Private Member Functions</h2></td></tr>
 <p>converts the temporal part of the flatbuffer query message to seerep core specific message </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">time</td><td>the thime in the flatbuffer query message </td></tr>
+    <tr><td class="paramname">query</td><td>the flatbuffer query message </td></tr>
     <tr><td class="paramname">queryCoreTime</td><td>the time in the query message in seerep core format </td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a5cc418fbc9786f5c3729ca65ca986b60" name="a5cc418fbc9786f5c3729ca65ca986b60"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5cc418fbc9786f5c3729ca65ca986b60">&#9670;&nbsp;</a></span>fromFbQueryWithoutData()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool seerep_core_fb::CoreFbConversion::fromFbQueryWithoutData </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::fb::Query *&#160;</td>
+          <td class="paramname"><em>query</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>extracts the WithoutData Flag of the flatbuffer query message </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">query</td><td>the flatbuffer query message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>flag if the data should NOT be loaded </dd></dl>
 
 </div>
 </div>

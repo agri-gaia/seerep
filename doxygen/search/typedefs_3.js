@@ -7,5 +7,5 @@ var searchData=
   ['stubpointcloudpbptr_4',['StubPointCloudPbPtr',['../namespaceseerep__grpc__ros.html#a1cc9063d698efd417a62600a9c436b74',1,'seerep_grpc_ros']]],
   ['stubtffbptr_5',['StubTfFbPtr',['../namespaceseerep__grpc__ros.html#a5c54dc99fbafd6641e218acaedb6e381',1,'seerep_grpc_ros']]],
   ['stubtfpbptr_6',['StubTfPbPtr',['../namespaceseerep__grpc__ros.html#a499f956bb449eeddd13c92e840079a9d',1,'seerep_grpc_ros']]],
-  ['stubtransferpbptr_7',['StubTransferPbPtr',['../namespaceseerep__grpc__ros.html#a864866efbe0b263fcabdb32c1fe61941',1,'seerep_grpc_ros']]]
+  ['stubtransfersensormsgspbptr_7',['StubTransferSensorMsgsPbPtr',['../namespaceseerep__grpc__ros.html#aa36d6104efead397cc917f4224c2738e',1,'seerep_grpc_ros']]]
 ];

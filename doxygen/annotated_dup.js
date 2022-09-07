@@ -50,6 +50,9 @@ var annotated_dup =
       [ "Hdf5CoreTf", "classseerep__hdf5__core_1_1Hdf5CoreTf.html", "classseerep__hdf5__core_1_1Hdf5CoreTf" ]
     ] ],
     [ "seerep_hdf5_fb", "namespaceseerep__hdf5__fb.html", [
+      [ "tests", "namespaceseerep__hdf5__fb_1_1tests.html", [
+        [ "fbWriteLoadTest", "classseerep__hdf5__fb_1_1tests_1_1fbWriteLoadTest.html", null ]
+      ] ],
       [ "Hdf5FbGeneral", "classseerep__hdf5__fb_1_1Hdf5FbGeneral.html", "classseerep__hdf5__fb_1_1Hdf5FbGeneral" ],
       [ "Hdf5FbImage", "classseerep__hdf5__fb_1_1Hdf5FbImage.html", "classseerep__hdf5__fb_1_1Hdf5FbImage" ],
       [ "Hdf5FbPoint", "classseerep__hdf5__fb_1_1Hdf5FbPoint.html", "classseerep__hdf5__fb_1_1Hdf5FbPoint" ],
@@ -79,6 +82,5 @@ var annotated_dup =
       [ "PbReceiveSensorMsgs", "classseerep__server_1_1PbReceiveSensorMsgs.html", "classseerep__server_1_1PbReceiveSensorMsgs" ],
       [ "PbTfService", "classseerep__server_1_1PbTfService.html", "classseerep__server_1_1PbTfService" ],
       [ "server", "classseerep__server_1_1server.html", "classseerep__server_1_1server" ]
-    ] ],
-    [ "fbWriteLoadTest", "classfbWriteLoadTest.html", null ]
+    ] ]
 ];

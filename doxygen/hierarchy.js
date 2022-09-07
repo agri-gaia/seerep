@@ -30,17 +30,17 @@ var hierarchy =
       [ "seerep_hdf5_core::Hdf5CoreInstance", "classseerep__hdf5__core_1_1Hdf5CoreInstance.html", null ],
       [ "seerep_hdf5_core::Hdf5CorePoint", "classseerep__hdf5__core_1_1Hdf5CorePoint.html", null ],
       [ "seerep_hdf5_core::Hdf5CorePointCloud", "classseerep__hdf5__core_1_1Hdf5CorePointCloud.html", null ],
-      [ "seerep_hdf5_core::Hdf5CoreTf", "classseerep__hdf5__core_1_1Hdf5CoreTf.html", null ]
-    ] ],
-    [ "seerep_hdf5_fb::Hdf5FbGeneral", "classseerep__hdf5__fb_1_1Hdf5FbGeneral.html", [
-      [ "seerep_hdf5_fb::Hdf5FbImage", "classseerep__hdf5__fb_1_1Hdf5FbImage.html", null ],
-      [ "seerep_hdf5_fb::Hdf5FbPoint", "classseerep__hdf5__fb_1_1Hdf5FbPoint.html", null ],
-      [ "seerep_hdf5_fb::Hdf5FbTf", "classseerep__hdf5__fb_1_1Hdf5FbTf.html", null ]
-    ] ],
-    [ "seerep_hdf5_pb::Hdf5PbGeneral", "classseerep__hdf5__pb_1_1Hdf5PbGeneral.html", [
-      [ "seerep_hdf5_pb::Hdf5PbImage", "classseerep__hdf5__pb_1_1Hdf5PbImage.html", null ],
-      [ "seerep_hdf5_pb::Hdf5PbPointCloud", "classseerep__hdf5__pb_1_1Hdf5PbPointCloud.html", null ],
-      [ "seerep_hdf5_pb::Hdf5PbTf", "classseerep__hdf5__pb_1_1Hdf5PbTf.html", null ]
+      [ "seerep_hdf5_core::Hdf5CoreTf", "classseerep__hdf5__core_1_1Hdf5CoreTf.html", null ],
+      [ "seerep_hdf5_fb::Hdf5FbGeneral", "classseerep__hdf5__fb_1_1Hdf5FbGeneral.html", [
+        [ "seerep_hdf5_fb::Hdf5FbImage", "classseerep__hdf5__fb_1_1Hdf5FbImage.html", null ],
+        [ "seerep_hdf5_fb::Hdf5FbPoint", "classseerep__hdf5__fb_1_1Hdf5FbPoint.html", null ],
+        [ "seerep_hdf5_fb::Hdf5FbTf", "classseerep__hdf5__fb_1_1Hdf5FbTf.html", null ]
+      ] ],
+      [ "seerep_hdf5_pb::Hdf5PbGeneral", "classseerep__hdf5__pb_1_1Hdf5PbGeneral.html", [
+        [ "seerep_hdf5_pb::Hdf5PbImage", "classseerep__hdf5__pb_1_1Hdf5PbImage.html", null ],
+        [ "seerep_hdf5_pb::Hdf5PbPointCloud", "classseerep__hdf5__pb_1_1Hdf5PbPointCloud.html", null ],
+        [ "seerep_hdf5_pb::Hdf5PbTf", "classseerep__hdf5__pb_1_1Hdf5PbTf.html", null ]
+      ] ]
     ] ],
     [ "seerep_core_msgs::Header", "structseerep__core__msgs_1_1Header.html", null ],
     [ "seerep_core_msgs::LabelWithInstance", "structseerep__core__msgs_1_1LabelWithInstance.html", null ],
@@ -90,7 +90,7 @@ var hierarchy =
       [ "seerep_server::PbReceiveSensorMsgs", "classseerep__server_1_1PbReceiveSensorMsgs.html", null ]
     ] ],
     [ "testing::Test", null, [
-      [ "fbWriteLoadTest", "classfbWriteLoadTest.html", null ]
+      [ "seerep_hdf5_fb::tests::fbWriteLoadTest", "classseerep__hdf5__fb_1_1tests_1_1fbWriteLoadTest.html", null ]
     ] ],
     [ "seerep_core_msgs::Timeinterval", "structseerep__core__msgs_1_1Timeinterval.html", null ],
     [ "seerep_core_msgs::Timestamp", "structseerep__core__msgs_1_1Timestamp.html", null ],

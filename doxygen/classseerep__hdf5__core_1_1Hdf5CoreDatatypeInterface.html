@@ -127,7 +127,6 @@ $(document).ready(function(){initNavTree('classseerep__hdf5__core_1_1Hdf5CoreDat
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="classseerep__hdf5__core_1_1Hdf5CoreDatatypeInterface-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">seerep_hdf5_core::Hdf5CoreDatatypeInterface Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div></div>
 </div><!--header-->
@@ -149,13 +148,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2937743c55b28b9ced35112d7eb1dbc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a43ac26e35bc03a12aedaa18aac1626bd"><td class="memItemLeft" align="right" valign="top">virtual std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreDatatypeInterface.html#a43ac26e35bc03a12aedaa18aac1626bd">getDatasetUuids</a> ()=0</td></tr>
 <tr class="separator:a43ac26e35bc03a12aedaa18aac1626bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
-Private Member Functions</h2></td></tr>
-<tr class="memitem:a0395888b16d996bce4d8ad4e8f740cf3"><td class="memItemLeft" align="right" valign="top">virtual std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreDatatypeInterface.html#a0395888b16d996bce4d8ad4e8f740cf3">readLabelsGeneral</a> (const std::string &amp;dataGroup)=0</td></tr>
-<tr class="separator:a0395888b16d996bce4d8ad4e8f740cf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad588832404b26962ab5b16445aaa4ec0"><td class="memItemLeft" align="right" valign="top">virtual std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreDatatypeInterface.html#ad588832404b26962ab5b16445aaa4ec0">readBoundingBoxLabels</a> (const std::string &amp;dataGroup)=0</td></tr>
-<tr class="separator:ad588832404b26962ab5b16445aaa4ec0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a43ac26e35bc03a12aedaa18aac1626bd" name="a43ac26e35bc03a12aedaa18aac1626bd"></a>
@@ -182,34 +174,6 @@ Private Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implemented in <a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreImage.html#ab99da8fb8e156fc7e230d8bc8de6722d">seerep_hdf5_core::Hdf5CoreImage</a>, <a class="el" href="classseerep__hdf5__core_1_1Hdf5CorePointCloud.html#a690f70b09670ef2182ae28ae86bee1d9">seerep_hdf5_core::Hdf5CorePointCloud</a>, and <a class="el" href="classseerep__hdf5__core_1_1Hdf5CorePoint.html#ab3e06fbb723680bab55f39736c54f803">seerep_hdf5_core::Hdf5CorePoint</a>.</p>
-
-</div>
-</div>
-<a id="ad588832404b26962ab5b16445aaa4ec0" name="ad588832404b26962ab5b16445aaa4ec0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad588832404b26962ab5b16445aaa4ec0">&#9670;&nbsp;</a></span>readBoundingBoxLabels()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual std::vector&lt; std::string &gt; seerep_hdf5_core::Hdf5CoreDatatypeInterface::readBoundingBoxLabels </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>dataGroup</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Implemented in <a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreImage.html#a1a6855501e54a7558e689f6436359b8f">seerep_hdf5_core::Hdf5CoreImage</a>, <a class="el" href="classseerep__hdf5__core_1_1Hdf5CorePointCloud.html#a5e8c6d3ae1431819c03d289924356332">seerep_hdf5_core::Hdf5CorePointCloud</a>, and <a class="el" href="classseerep__hdf5__core_1_1Hdf5CorePoint.html#a63523c58499f3a7e7f8a580731e7a7a7">seerep_hdf5_core::Hdf5CorePoint</a>.</p>
 
 </div>
 </div>
@@ -266,34 +230,6 @@ Private Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implemented in <a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreImage.html#ac0cb20dba45d4e339c32f1b95706ba9a">seerep_hdf5_core::Hdf5CoreImage</a>, <a class="el" href="classseerep__hdf5__core_1_1Hdf5CorePointCloud.html#af275deb4274a27bd4e49ed5f1a0842a3">seerep_hdf5_core::Hdf5CorePointCloud</a>, and <a class="el" href="classseerep__hdf5__core_1_1Hdf5CorePoint.html#a49243cc8731a582c01ff731017f570c0">seerep_hdf5_core::Hdf5CorePoint</a>.</p>
-
-</div>
-</div>
-<a id="a0395888b16d996bce4d8ad4e8f740cf3" name="a0395888b16d996bce4d8ad4e8f740cf3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0395888b16d996bce4d8ad4e8f740cf3">&#9670;&nbsp;</a></span>readLabelsGeneral()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual std::vector&lt; std::string &gt; seerep_hdf5_core::Hdf5CoreDatatypeInterface::readLabelsGeneral </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>dataGroup</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Implemented in <a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreImage.html#a625e89e77f680e8bbbde4e2ddb3af881">seerep_hdf5_core::Hdf5CoreImage</a>, <a class="el" href="classseerep__hdf5__core_1_1Hdf5CorePointCloud.html#affbee0143328a4d0c75a1743a91876d1">seerep_hdf5_core::Hdf5CorePointCloud</a>, and <a class="el" href="classseerep__hdf5__core_1_1Hdf5CorePoint.html#a8cbfe1163b09d5e72d5b6ad59ef287d9">seerep_hdf5_core::Hdf5CorePoint</a>.</p>
 
 </div>
 </div>

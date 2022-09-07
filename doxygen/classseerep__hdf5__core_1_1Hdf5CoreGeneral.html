@@ -129,6 +129,7 @@ $(document).ready(function(){initNavTree('classseerep__hdf5__core_1_1Hdf5CoreGen
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">seerep_hdf5_core::Hdf5CoreGeneral Class Reference</div></div>
 </div><!--header-->
@@ -138,7 +139,7 @@ $(document).ready(function(){initNavTree('classseerep__hdf5__core_1_1Hdf5CoreGen
 <div class="dynheader">
 Inheritance diagram for seerep_hdf5_core::Hdf5CoreGeneral:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classseerep__hdf5__core_1_1Hdf5CoreGeneral__inherit__graph.svg" width="484" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classseerep__hdf5__core_1_1Hdf5CoreGeneral__inherit__graph.svg" width="766" height="534"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -148,12 +149,46 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a8742137ed1324de30bb6e106a9efafd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b5eacd573e2486080ed68c31b4e1ceb"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a9b5eacd573e2486080ed68c31b4e1ceb">getGroupDatasets</a> (const std::string &amp;id)</td></tr>
 <tr class="separator:a9b5eacd573e2486080ed68c31b4e1ceb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5f8af237fb6503d872b1fa6400d5596"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ad5f8af237fb6503d872b1fa6400d5596">checkExists</a> (const std::string &amp;id)</td></tr>
+<tr class="separator:ad5f8af237fb6503d872b1fa6400d5596"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad225da986fa50a2f8623af6210580337"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ad225da986fa50a2f8623af6210580337">readFrameId</a> (const std::string &amp;datatypeGroup, const std::string &amp;uuid)</td></tr>
+<tr class="separator:ad225da986fa50a2f8623af6210580337"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa601e5706c24be57a0fb5a4bd4d4b0d4"><td class="memTemplParams" colspan="2">template&lt;typename T , class C &gt; </td></tr>
 <tr class="memitem:aa601e5706c24be57a0fb5a4bd4d4b0d4"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#aa601e5706c24be57a0fb5a4bd4d4b0d4">readAttributeFromHdf5</a> (const std::string &amp;id, const HighFive::AnnotateTraits&lt; C &gt; &amp;object, std::string attributeField)</td></tr>
 <tr class="separator:aa601e5706c24be57a0fb5a4bd4d4b0d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8d464d51d117baaa44595baed649265"><td class="memTemplParams" colspan="2">template&lt;typename T , class C &gt; </td></tr>
 <tr class="memitem:aa8d464d51d117baaa44595baed649265"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#aa8d464d51d117baaa44595baed649265">writeAttributeToHdf5</a> (HighFive::AnnotateTraits&lt; C &gt; &amp;object, std::string attributeField, T attributeValue)</td></tr>
 <tr class="separator:aa8d464d51d117baaa44595baed649265"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f819558f71f25dd29ed3d962be6224c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a1f819558f71f25dd29ed3d962be6224c">deleteAttribute</a> (const std::shared_ptr&lt; HighFive::DataSet &gt; dataSetPtr, std::string attributeField)</td></tr>
+<tr class="separator:a1f819558f71f25dd29ed3d962be6224c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6769c4141bd58c1e6be1b3630505cbc1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a6769c4141bd58c1e6be1b3630505cbc1">writeAABB</a> (const std::string &amp;datatypeGroup, const std::string &amp;uuid, const boost::geometry::model::box&lt; boost::geometry::model::point&lt; float, 3, boost::geometry::cs::cartesian &gt; &gt; &amp;aabb)</td></tr>
+<tr class="separator:a6769c4141bd58c1e6be1b3630505cbc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0946dec4040af5f37c7268087c9ba98"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ae0946dec4040af5f37c7268087c9ba98">readAABB</a> (const std::string &amp;datatypeGroup, const std::string &amp;uuid, boost::geometry::model::box&lt; boost::geometry::model::point&lt; float, 3, boost::geometry::cs::cartesian &gt; &gt; &amp;aabb)</td></tr>
+<tr class="separator:ae0946dec4040af5f37c7268087c9ba98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e488fb2519c0454f4f46296b70ec654"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a2e488fb2519c0454f4f46296b70ec654">hasAABB</a> (const std::string &amp;datatypeGroup, const std::string &amp;uuid)</td></tr>
+<tr class="separator:a2e488fb2519c0454f4f46296b70ec654"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad58f33bf914e45857f9dee0daa7bae6f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ad58f33bf914e45857f9dee0daa7bae6f">readTimeFromRaw</a> (const std::string &amp;datatypeGroup, const std::string &amp;uuid, int64_t &amp;secs, int64_t &amp;nanos)</td></tr>
+<tr class="separator:ad58f33bf914e45857f9dee0daa7bae6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b458d4834bf5038dd5e3337874a777b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a6b458d4834bf5038dd5e3337874a777b">readTime</a> (const std::string &amp;datatypeGroup, const std::string &amp;uuid, int64_t &amp;secs, int64_t &amp;nanos)</td></tr>
+<tr class="separator:a6b458d4834bf5038dd5e3337874a777b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77d4d35f0c75e10524eb0ccd0ebd9688"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:a77d4d35f0c75e10524eb0ccd0ebd9688"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a77d4d35f0c75e10524eb0ccd0ebd9688">readTimeFromAnnotateTraits</a> (const std::string &amp;id, int64_t &amp;value, const HighFive::AnnotateTraits&lt; T &gt; &amp;highFiveObject, const std::string &amp;attribute)</td></tr>
+<tr class="separator:a77d4d35f0c75e10524eb0ccd0ebd9688"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a572b29dac146781046db6100d1cf2ef7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a572b29dac146781046db6100d1cf2ef7">writeTimeToRaw</a> (const std::string &amp;datatypeGroup, const std::string &amp;uuid, const int64_t &amp;secs, const int64_t &amp;nanos)</td></tr>
+<tr class="separator:a572b29dac146781046db6100d1cf2ef7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae50a96646e67ec1cafe76b08b2792a7f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ae50a96646e67ec1cafe76b08b2792a7f">writeTime</a> (const std::string &amp;datatypeGroup, const std::string &amp;uuid, const int64_t &amp;secs, const int64_t &amp;nanos)</td></tr>
+<tr class="separator:ae50a96646e67ec1cafe76b08b2792a7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af028928fd6fd2cb9147174e8dfee3954"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:af028928fd6fd2cb9147174e8dfee3954"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#af028928fd6fd2cb9147174e8dfee3954">writeTimeToAnnotateTraits</a> (const int64_t &amp;value, HighFive::AnnotateTraits&lt; T &gt; &amp;highFiveObject, const std::string &amp;attribute)</td></tr>
+<tr class="separator:af028928fd6fd2cb9147174e8dfee3954"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade4687164388bba1dc9e3b87706fbc62"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ade4687164388bba1dc9e3b87706fbc62">hasTimeRaw</a> (const std::string &amp;datatypeGroup, const std::string &amp;uuid)</td></tr>
+<tr class="separator:ade4687164388bba1dc9e3b87706fbc62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19acd52b5ed5d324dc0d7dad6b53a874"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a19acd52b5ed5d324dc0d7dad6b53a874">hasTime</a> (const std::string &amp;datatypeGroup, const std::string &amp;uuid)</td></tr>
+<tr class="separator:a19acd52b5ed5d324dc0d7dad6b53a874"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2a866e98c077d8a058673ac41de1c89"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ac2a866e98c077d8a058673ac41de1c89">readBoundingBoxLabeled</a> (const std::string &amp;datatypeGroup, const std::string &amp;uuid, std::vector&lt; std::string &gt; &amp;labels, std::vector&lt; std::vector&lt; double &gt; &gt; &amp;boundingBoxes, std::vector&lt; std::string &gt; &amp;instances, bool loadBoxes=true)</td></tr>
+<tr class="separator:ac2a866e98c077d8a058673ac41de1c89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9331a1233db0bb1a0ca3063958787d14"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a9331a1233db0bb1a0ca3063958787d14">readLabelsGeneral</a> (const std::string &amp;datatypeGroup, const std::string &amp;uuid, std::vector&lt; std::string &gt; &amp;labels, std::vector&lt; std::string &gt; &amp;instances)</td></tr>
+<tr class="separator:a9331a1233db0bb1a0ca3063958787d14"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a95033cb2048076b5d3b2dd98eb7cac26"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a95033cb2048076b5d3b2dd98eb7cac26">writeProjectname</a> (const std::string &amp;projectname)</td></tr>
 <tr class="separator:a95033cb2048076b5d3b2dd98eb7cac26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a169525769c17cafc12e7f93be2702218"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a169525769c17cafc12e7f93be2702218">readProjectname</a> ()</td></tr>
@@ -200,6 +235,15 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:a8ae8a40bcccd1a8e0d44dd0b12f1cb52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad0364ff3c788a71d171205b66d578df"><td class="memItemLeft" align="right" valign="top">boost::log::sources::severity_logger&lt; boost::log::trivial::severity_level &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#aad0364ff3c788a71d171205b66d578df">m_logger</a></td></tr>
 <tr class="separator:aad0364ff3c788a71d171205b66d578df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a60a548f65c96a165261494a1eef36589"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a60a548f65c96a165261494a1eef36589">readLabel</a> (const std::string &amp;id, const std::string labelType, std::vector&lt; std::string &gt; &amp;labels)</td></tr>
+<tr class="separator:a60a548f65c96a165261494a1eef36589"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c7f0c44869ec6eaa330d0d6c4b2feee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a9c7f0c44869ec6eaa330d0d6c4b2feee">readBoundingBoxes</a> (const std::string &amp;id, const std::string boundingBoxType, std::vector&lt; std::vector&lt; double &gt; &gt; &amp;boundingBoxes)</td></tr>
+<tr class="separator:a9c7f0c44869ec6eaa330d0d6c4b2feee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33fb6e3e8696e0cc8ad6509627db0a13"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a33fb6e3e8696e0cc8ad6509627db0a13">readInstances</a> (const std::string &amp;id, const std::string InstanceType, std::vector&lt; std::string &gt; &amp;instances)</td></tr>
+<tr class="separator:a33fb6e3e8696e0cc8ad6509627db0a13"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a8742137ed1324de30bb6e106a9efafd5" name="a8742137ed1324de30bb6e106a9efafd5"></a>
@@ -231,6 +275,52 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="ad5f8af237fb6503d872b1fa6400d5596" name="ad5f8af237fb6503d872b1fa6400d5596"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad5f8af237fb6503d872b1fa6400d5596">&#9670;&nbsp;</a></span>checkExists()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_hdf5_core::Hdf5CoreGeneral::checkExists </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1f819558f71f25dd29ed3d962be6224c" name="a1f819558f71f25dd29ed3d962be6224c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f819558f71f25dd29ed3d962be6224c">&#9670;&nbsp;</a></span>deleteAttribute()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_hdf5_core::Hdf5CoreGeneral::deleteAttribute </td>
+          <td>(</td>
+          <td class="paramtype">const std::shared_ptr&lt; HighFive::DataSet &gt;&#160;</td>
+          <td class="paramname"><em>dataSetPtr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>attributeField</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a9b5eacd573e2486080ed68c31b4e1ceb" name="a9b5eacd573e2486080ed68c31b4e1ceb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9b5eacd573e2486080ed68c31b4e1ceb">&#9670;&nbsp;</a></span>getGroupDatasets()</h2>
 
@@ -243,6 +333,124 @@ Protected Attributes</h2></td></tr>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>id</em></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2e488fb2519c0454f4f46296b70ec654" name="a2e488fb2519c0454f4f46296b70ec654"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e488fb2519c0454f4f46296b70ec654">&#9670;&nbsp;</a></span>hasAABB()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool seerep_hdf5_core::Hdf5CoreGeneral::hasAABB </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>datatypeGroup</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>uuid</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a19acd52b5ed5d324dc0d7dad6b53a874" name="a19acd52b5ed5d324dc0d7dad6b53a874"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19acd52b5ed5d324dc0d7dad6b53a874">&#9670;&nbsp;</a></span>hasTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool seerep_hdf5_core::Hdf5CoreGeneral::hasTime </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>datatypeGroup</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>uuid</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ade4687164388bba1dc9e3b87706fbc62" name="ade4687164388bba1dc9e3b87706fbc62"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade4687164388bba1dc9e3b87706fbc62">&#9670;&nbsp;</a></span>hasTimeRaw()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool seerep_hdf5_core::Hdf5CoreGeneral::hasTimeRaw </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>datatypeGroup</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>uuid</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae0946dec4040af5f37c7268087c9ba98" name="ae0946dec4040af5f37c7268087c9ba98"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0946dec4040af5f37c7268087c9ba98">&#9670;&nbsp;</a></span>readAABB()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_hdf5_core::Hdf5CoreGeneral::readAABB </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>datatypeGroup</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>uuid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">boost::geometry::model::box&lt; boost::geometry::model::point&lt; float, 3, boost::geometry::cs::cartesian &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>aabb</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -285,6 +493,252 @@ template&lt;typename T , class C &gt; </div>
 
 </div>
 </div>
+<a id="a9c7f0c44869ec6eaa330d0d6c4b2feee" name="a9c7f0c44869ec6eaa330d0d6c4b2feee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c7f0c44869ec6eaa330d0d6c4b2feee">&#9670;&nbsp;</a></span>readBoundingBoxes()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_hdf5_core::Hdf5CoreGeneral::readBoundingBoxes </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string&#160;</td>
+          <td class="paramname"><em>boundingBoxType</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::vector&lt; double &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>boundingBoxes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac2a866e98c077d8a058673ac41de1c89" name="ac2a866e98c077d8a058673ac41de1c89"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac2a866e98c077d8a058673ac41de1c89">&#9670;&nbsp;</a></span>readBoundingBoxLabeled()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_hdf5_core::Hdf5CoreGeneral::readBoundingBoxLabeled </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>datatypeGroup</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>uuid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>labels</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::vector&lt; double &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>boundingBoxes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>instances</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>loadBoxes</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad225da986fa50a2f8623af6210580337" name="ad225da986fa50a2f8623af6210580337"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad225da986fa50a2f8623af6210580337">&#9670;&nbsp;</a></span>readFrameId()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; std::string &gt; seerep_hdf5_core::Hdf5CoreGeneral::readFrameId </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>datatypeGroup</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>uuid</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a33fb6e3e8696e0cc8ad6509627db0a13" name="a33fb6e3e8696e0cc8ad6509627db0a13"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a33fb6e3e8696e0cc8ad6509627db0a13">&#9670;&nbsp;</a></span>readInstances()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_hdf5_core::Hdf5CoreGeneral::readInstances </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string&#160;</td>
+          <td class="paramname"><em>InstanceType</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>instances</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a60a548f65c96a165261494a1eef36589" name="a60a548f65c96a165261494a1eef36589"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60a548f65c96a165261494a1eef36589">&#9670;&nbsp;</a></span>readLabel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_hdf5_core::Hdf5CoreGeneral::readLabel </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string&#160;</td>
+          <td class="paramname"><em>labelType</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>labels</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9331a1233db0bb1a0ca3063958787d14" name="a9331a1233db0bb1a0ca3063958787d14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9331a1233db0bb1a0ca3063958787d14">&#9670;&nbsp;</a></span>readLabelsGeneral()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_hdf5_core::Hdf5CoreGeneral::readLabelsGeneral </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>datatypeGroup</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>uuid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>labels</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>instances</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ae39d9997316e6a6a09f0d171f6d3b152" name="ae39d9997316e6a6a09f0d171f6d3b152"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae39d9997316e6a6a09f0d171f6d3b152">&#9670;&nbsp;</a></span>readProjectFrameId()</h2>
 
@@ -313,6 +767,162 @@ template&lt;typename T , class C &gt; </div>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6b458d4834bf5038dd5e3337874a777b" name="a6b458d4834bf5038dd5e3337874a777b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b458d4834bf5038dd5e3337874a777b">&#9670;&nbsp;</a></span>readTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_hdf5_core::Hdf5CoreGeneral::readTime </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>datatypeGroup</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>uuid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int64_t &amp;&#160;</td>
+          <td class="paramname"><em>secs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int64_t &amp;&#160;</td>
+          <td class="paramname"><em>nanos</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a77d4d35f0c75e10524eb0ccd0ebd9688" name="a77d4d35f0c75e10524eb0ccd0ebd9688"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a77d4d35f0c75e10524eb0ccd0ebd9688">&#9670;&nbsp;</a></span>readTimeFromAnnotateTraits()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_hdf5_core::Hdf5CoreGeneral::readTimeFromAnnotateTraits </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int64_t &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const HighFive::AnnotateTraits&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"><em>highFiveObject</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>attribute</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad58f33bf914e45857f9dee0daa7bae6f" name="ad58f33bf914e45857f9dee0daa7bae6f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad58f33bf914e45857f9dee0daa7bae6f">&#9670;&nbsp;</a></span>readTimeFromRaw()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_hdf5_core::Hdf5CoreGeneral::readTimeFromRaw </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>datatypeGroup</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>uuid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int64_t &amp;&#160;</td>
+          <td class="paramname"><em>secs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int64_t &amp;&#160;</td>
+          <td class="paramname"><em>nanos</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6769c4141bd58c1e6be1b3630505cbc1" name="a6769c4141bd58c1e6be1b3630505cbc1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6769c4141bd58c1e6be1b3630505cbc1">&#9670;&nbsp;</a></span>writeAABB()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_hdf5_core::Hdf5CoreGeneral::writeAABB </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>datatypeGroup</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>uuid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const boost::geometry::model::box&lt; boost::geometry::model::point&lt; float, 3, boost::geometry::cs::cartesian &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>aabb</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -385,6 +995,122 @@ template&lt;typename T , class C &gt; </div>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>projectname</em></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae50a96646e67ec1cafe76b08b2792a7f" name="ae50a96646e67ec1cafe76b08b2792a7f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae50a96646e67ec1cafe76b08b2792a7f">&#9670;&nbsp;</a></span>writeTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_hdf5_core::Hdf5CoreGeneral::writeTime </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>datatypeGroup</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>uuid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int64_t &amp;&#160;</td>
+          <td class="paramname"><em>secs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int64_t &amp;&#160;</td>
+          <td class="paramname"><em>nanos</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af028928fd6fd2cb9147174e8dfee3954" name="af028928fd6fd2cb9147174e8dfee3954"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af028928fd6fd2cb9147174e8dfee3954">&#9670;&nbsp;</a></span>writeTimeToAnnotateTraits()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_hdf5_core::Hdf5CoreGeneral::writeTimeToAnnotateTraits </td>
+          <td>(</td>
+          <td class="paramtype">const int64_t &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">HighFive::AnnotateTraits&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"><em>highFiveObject</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>attribute</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a572b29dac146781046db6100d1cf2ef7" name="a572b29dac146781046db6100d1cf2ef7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a572b29dac146781046db6100d1cf2ef7">&#9670;&nbsp;</a></span>writeTimeToRaw()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_hdf5_core::Hdf5CoreGeneral::writeTimeToRaw </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>datatypeGroup</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>uuid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int64_t &amp;&#160;</td>
+          <td class="paramname"><em>secs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int64_t &amp;&#160;</td>
+          <td class="paramname"><em>nanos</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">

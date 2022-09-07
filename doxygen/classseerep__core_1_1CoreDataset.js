@@ -11,7 +11,7 @@ var classseerep__core_1_1CoreDataset =
     [ "getData", "classseerep__core_1_1CoreDataset.html#ad305677e6e4016bfb787b0fe88b86c19", null ],
     [ "getInstances", "classseerep__core_1_1CoreDataset.html#ae379ed80d8ec59c779e59691b9a94911", null ],
     [ "getUuidsFromMap", "classseerep__core_1_1CoreDataset.html#ae209fdb60eca918e524028557143e678", null ],
-    [ "intersectQueryResults", "classseerep__core_1_1CoreDataset.html#a841eec4535a2dd459d6e8224a7424276", null ],
+    [ "intersectQueryResults", "classseerep__core_1_1CoreDataset.html#a73877adc228ac0ee9b1081483c0e4aab", null ],
     [ "intersectVectorOfSets", "classseerep__core_1_1CoreDataset.html#af257b7d545468ca4b52a9cbf7815c01a", null ],
     [ "querySemantic", "classseerep__core_1_1CoreDataset.html#a8917713aa42a319502328a8b4ee03d6b", null ],
     [ "querySpatial", "classseerep__core_1_1CoreDataset.html#ac2f683ba88051cf11892f8a8e82e36c6", null ],
