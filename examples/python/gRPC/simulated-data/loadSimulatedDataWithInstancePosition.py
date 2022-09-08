@@ -127,9 +127,9 @@ class LoadSimulatedDataWithInstancePosition:
 
     def __createPointForInstance(self, pointCloudData, instanceUuid, label, imageX, imageY, time, frame, img):
         builder = flatbuffers.Builder(1024)
-        pixelX = int(img.shape[0] * imageX)
-        pixelY = int(img.shape[1] * imageY)
-        position = pointCloudData[pixelX][pixelY]
+        pixelX = int(img.shape[1] * imageX)
+        pixelY = int(img.shape[0] * imageY)
+        position = pointCloudData[pixelY][pixelX]
         point = self.__createPoint3D(builder, position[0], position[1], position[2])
 
         labelGeneral = self.__createLabelWithInstance(builder, label, instanceUuid)
