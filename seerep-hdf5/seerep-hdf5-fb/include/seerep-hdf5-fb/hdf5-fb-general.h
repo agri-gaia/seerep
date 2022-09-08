@@ -65,25 +65,6 @@ protected:
   //################
   void writeLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid,
                           const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>& labelsGeneral);
-
-  void readLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid, std::vector<std::string>& labels,
-                         std::vector<std::string>& instances);
-
-  //################
-  // Project
-  //################
-  void writeProjectname(const std::string& projectname);
-
-  std::string readProjectname();
-
-  void writeProjectFrameId(const std::string& frameId);
-
-  std::string readProjectFrameId();
-
-protected:
-  std::shared_ptr<HighFive::File> m_file;
-  std::shared_ptr<std::mutex> m_write_mtx;
-  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
 };
 
 }  // namespace seerep_hdf5_fb
