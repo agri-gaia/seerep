@@ -33,13 +33,24 @@ public:
   std::vector<float> loadBoundingBox(const std::string& uuid);
 
 private:
+  /*
+    Note: This struct is used to store the necessary information of a point field.
+    The generated seerep::fb::point struct can't be used since it doesn't have a copy
+    constructor resp. assignment operator and thus can't be used in maps (see CloudInfo struct).
+  */
+  struct PointFieldInfo
+  {
+    uint8_t datatype;
+    uint32_t count;
+  };
+
   struct CloudInfo
   {
     bool has_points = false;
     bool has_rgb = false;
     bool has_rgba = false;
     bool has_normals = false;
-    std::map<std::string, seerep::fb::PointField> other_fields;
+    std::map<std::string, PointFieldInfo> other_fields;
   };
 
   template <typename T>
@@ -94,7 +105,7 @@ private:
   void writeColorsRGBA(const std::string& uuid, const seerep::fb::PointCloud2& cloud);
 
   void writeOtherFields(const std::string& uuid, const seerep::fb::PointCloud2& cloud,
-                        const std::map<std::string, seerep::fb::PointField>& fields);
+                        const std::map<std::string, PointFieldInfo>& fields);
 
   void
   writePointFieldAttributes(HighFive::Group& cloud_group,
@@ -107,11 +118,11 @@ private:
   void readColorsRGBA(const std::string& uuid, seerep::fb::PointCloud2& cloud);
 
   void readOtherFields(const std::string& uuid, seerep::fb::PointCloud2& cloud,
-                       const std::map<std::string, seerep::fb::PointField>& fields);
+                       const std::map<std::string, PointFieldInfo>& fields);
 
   flatbuffers::Vector<flatbuffers::Offset<seerep::fb::PointField>>
   readPointFieldAttributes(HighFive::Group& cloud_group);
 };
 }  // namespace seerep_hdf5_fb
 
-#endif /* SEEREP_HDF5_PB_HDF5_FB_POINT_CLOUD_H_ */
+#endif /* SEEREP_HDF5_FB_HDF5_FB_POINT_CLOUD_H_ */

@@ -17,23 +17,23 @@ void Hdf5FbGeneral::writeAttributeMap(
   {
     if (attribute->value_type() == seerep::fb::Datatypes_Boolean)
     {
-      writeAttribute(dataSetPtr, attribute->key()->str(),
-                     static_cast<const seerep::fb::Boolean*>(attribute->value())->data());
+      writeAttributeToHdf5(*dataSetPtr, attribute->key()->str(),
+                           static_cast<const seerep::fb::Boolean*>(attribute->value())->data());
     }
     else if (attribute->value_type() == seerep::fb::Datatypes_Integer)
     {
-      writeAttribute(dataSetPtr, attribute->key()->str(),
-                     static_cast<const seerep::fb::Integer*>(attribute->value())->data());
+      writeAttributeToHdf5(*dataSetPtr, attribute->key()->str(),
+                           static_cast<const seerep::fb::Integer*>(attribute->value())->data());
     }
     else if (attribute->value_type() == seerep::fb::Datatypes_Double)
     {
-      writeAttribute(dataSetPtr, attribute->key()->str(),
-                     static_cast<const seerep::fb::Double*>(attribute->value())->data());
+      writeAttributeToHdf5(*dataSetPtr, attribute->key()->str(),
+                           static_cast<const seerep::fb::Double*>(attribute->value())->data());
     }
     else if (attribute->value_type() == seerep::fb::Datatypes_String)
     {
-      writeAttribute(dataSetPtr, attribute->key()->str(),
-                     static_cast<const seerep::fb::String*>(attribute->value())->data()->str());
+      writeAttributeToHdf5(*dataSetPtr, attribute->key()->str(),
+                           static_cast<const seerep::fb::String*>(attribute->value())->data()->str());
     }
     else
     {
