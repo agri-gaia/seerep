@@ -24,8 +24,7 @@ theme:
     - navigation.tabs
     - navigation.expand
     - navigation.sections
-  font:
-    text: false
+  font: false
 markdown_extensions:
   - admonition
   - pymdownx.highlight:
