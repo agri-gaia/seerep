@@ -102,6 +102,31 @@ seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::Po
   return dataForIndices;
 }
 
+seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::PointCloud2& cloud)
+{
+  seerep_core_msgs::DatasetIndexable dataForIndices;
+  fromFbDataHeader(cloud.header(), dataForIndices.header);
+
+  // set bounding box for images to 0. assume no spatial extent
+  dataForIndices.boundingbox.min_corner().set<0>(0);
+  dataForIndices.boundingbox.min_corner().set<1>(0);
+  dataForIndices.boundingbox.min_corner().set<2>(0);
+  dataForIndices.boundingbox.max_corner().set<0>(0);
+  dataForIndices.boundingbox.max_corner().set<1>(0);
+  dataForIndices.boundingbox.max_corner().set<2>(0);
+
+  // semantic
+  int labelSizeBB = 0;
+  if (cloud.labels_bb())
+  {
+    labelSizeBB = cloud.labels_bb()->size();
+  }
+  dataForIndices.labelsWithInstances.reserve(labelSizeBB);
+  fromFbDataLabelsGeneral(cloud.labels_bb(), dataForIndices.labelsWithInstances);
+
+  return dataForIndices;
+}
+
 seerep_core_msgs::QueryTf CoreFbConversion::fromFb(const seerep::fb::TransformStampedQuery& query)
 {
   boost::uuids::string_generator gen;
@@ -319,6 +344,30 @@ void CoreFbConversion::fromFbDataLabelsGeneral(
         uuidInstance = boost::uuids::nil_uuid();
       }
 
+      labelWithInstance.push_back(seerep_core_msgs::LabelWithInstance{
+          .label = label->labelWithInstance()->label()->str(), .uuidInstance = uuidInstance });
+    }
+  }
+}
+
+void CoreFbConversion::fromFbDataLabelsGeneral(
+    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>>* labelsBB,
+    std::vector<seerep_core_msgs::LabelWithInstance>& labelWithInstance)
+{
+  if (labelsBB)
+  {
+    for (auto label : *labelsBB)
+    {
+      boost::uuids::string_generator gen;
+      boost::uuids::uuid uuidInstance;
+      try
+      {
+        uuidInstance = gen(label->labelWithInstance()->instanceUuid()->str());
+      }
+      catch (std::runtime_error const& e)
+      {
+        uuidInstance = boost::uuids::nil_uuid();
+      }
       labelWithInstance.push_back(seerep_core_msgs::LabelWithInstance{
           .label = label->labelWithInstance()->label()->str(), .uuidInstance = uuidInstance });
     }
