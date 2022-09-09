@@ -45,6 +45,7 @@ add_library(seerepcorefb
 	src/core-fb-instance.cpp
 	src/core-fb-point.cpp
 	src/core-fb-tf.cpp
+	src/core-fb-pointcloud.cpp
 )
 
 target_link_libraries(seerepcorefb
