@@ -10,6 +10,7 @@
 // seerep-msgs
 #include <seerep-msgs/datatype_generated.h>
 #include <seerep-msgs/image_generated.h>
+#include <seerep-msgs/point_cloud_2_generated.h>
 #include <seerep-msgs/point_stamped_generated.h>
 #include <seerep-msgs/query_generated.h>
 #include <seerep-msgs/query_instance_generated.h>
@@ -67,10 +68,17 @@ public:
   static seerep_core_msgs::DatasetIndexable fromFb(const seerep::fb::Image& img);
   /**
    * @brief converts the flatbuffer point message to seerep core specific message
-   * @param img the flatbuffer point message
+   * @param point the flatbuffer point message
    * @return the message in seerep core format for the data needed for the indices
    */
   static seerep_core_msgs::DatasetIndexable fromFb(const seerep::fb::PointStamped* point);
+
+  /**
+   * @brief converts the flatbuffer point cloud message to seerep core specific message
+   * @param cloud the flatbuffer point cloud message
+   * @return the message in the seerep core format for the data needed for the indices
+   */
+  static seerep_core_msgs::DatasetIndexable fromFb(const seerep::fb::PointCloud2& cloud);
 
   /**
    * @brief converts the flatbuffer tf query message to seerep core specific message
@@ -164,6 +172,14 @@ private:
    */
   static void
   fromFbDataLabelsGeneral(const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>>* labelsBB2d,
+                          std::vector<seerep_core_msgs::LabelWithInstance>& labelWithInstance);
+  /**
+   * @brief converts the BoundingBoxLabeled with instances of the flatbuffer data message to seerep core specific message
+   * @param labelsBB the BoundingBoxLabeled with instances in the flatbuffer data message
+   * @param labelWithInstance the BoundingBoxLabeled with instances in the data message in seerep core format
+   */
+  static void
+  fromFbDataLabelsGeneral(const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>>* labelsBB,
                           std::vector<seerep_core_msgs::LabelWithInstance>& labelWithInstance);
 };
 
