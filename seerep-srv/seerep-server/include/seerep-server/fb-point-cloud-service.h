@@ -27,7 +27,7 @@ public:
   void createResponse(std::string msg, seerep::fb::TRANSMISSION_STATE state,
                       flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response);
 
-  std::shared_ptr<seerep_core_fb::CoreFbPointCloud> imageFb;
+  std::shared_ptr<seerep_core_fb::CoreFbPointCloud> pointCloudFb;
   boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
 };
 } /* namespace seerep_server */

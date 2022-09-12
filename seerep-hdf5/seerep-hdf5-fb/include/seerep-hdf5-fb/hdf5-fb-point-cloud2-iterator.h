@@ -29,8 +29,8 @@
 // This file is originally from:
 // https://github.com/ros/common_msgs/blob/275b09a/sensor_msgs/include/sensor_msgs/point_cloud2_iterator.h
 
-#ifndef SENSOR_MSGS__POINT_CLOUD2_ITERATOR_HPP_
-#define SENSOR_MSGS__POINT_CLOUD2_ITERATOR_HPP_
+#ifndef SENSOR_MSGS__POINT_CLOUD2_ITERATOR_FB_HPP_
+#define SENSOR_MSGS__POINT_CLOUD2_ITERATOR_FB_HPP_
 
 #include <flatbuffers/reflection.h>
 #include <seerep-msgs/point_cloud_2_generated.h>
@@ -331,4 +331,4 @@ public:
 
 #include "impl/hdf5-fb-point-cloud2-iterator.hpp"  // NOLINT
 
-#endif  // SENSOR_MSGS__POINT_CLOUD2_ITERATOR_HPP_
+#endif  // SENSOR_MSGS__POINT_CLOUD2_ITERATOR_FB_HPP_
