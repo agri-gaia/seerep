@@ -158,7 +158,7 @@ private:
   /** @brief the flatbuffer service for instances related queries*/
   std::shared_ptr<seerep_server::FbInstanceService> m_instanceServiceFb;
   /** @brief the flatbuffer service for point clouds */
-  // std::shared_ptr<seerep_server::FbPointCloudService> m_pointCloudServiceFb;
+  std::shared_ptr<seerep_server::FbPointCloudService> m_pointCloudServiceFb;
 
   /** @brief the logger object for logging to file and stdout*/
   boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;

@@ -24,9 +24,8 @@ public:
   grpc::Status TransferPointCloud2(grpc::ServerContext* context,
                                    grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::PointCloud2>>* reader,
                                    flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response) override;
-  void createResponse(std::string msg, seerep::fb::TRANSMISSION_STATE state,
-                      flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response);
 
+private:
   std::shared_ptr<seerep_core_fb::CoreFbPointCloud> pointCloudFb;
   boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
 };

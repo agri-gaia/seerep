@@ -53,9 +53,4 @@ grpc::Status FbPointCloudService::TransferPointCloud2(
   return grpc::Status::OK;
 }
 
-void FbPointCloudService::createResponse(std::string msg, seerep::fb::TRANSMISSION_STATE state,
-                                         flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response)
-{
-}
-
 } /* namespace seerep_server */

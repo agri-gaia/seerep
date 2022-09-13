@@ -1,5 +1,5 @@
-#ifndef SEEREP_SERVER_POINT_CLOUD_SERVICE_H_
-#define SEEREP_SERVER_POINT_CLOUD_SERVICE_H_
+#ifndef SEEREP_SERVER_PB_POINT_CLOUD_SERVICE_H_
+#define SEEREP_SERVER_PB_POINT_CLOUD_SERVICE_H_
 
 // seerep
 #include <seerep-com/point-cloud-service.grpc.pb.h>
@@ -26,4 +26,4 @@ private:
 };
 
 } /* namespace seerep_server */
-#endif  // SEEREP_SERVER_POINT_CLOUD_SERVICE_H_
+#endif  // SEEREP_SERVER_PB_POINT_CLOUD_SERVICE_H_
