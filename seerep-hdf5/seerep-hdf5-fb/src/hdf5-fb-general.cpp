@@ -127,7 +127,7 @@ void Hdf5FbGeneral::writeLabelsGeneral(
 {
   std::string id = datatypeGroup + "/" + uuid;
 
-  if (!labelsGeneral.size() == 0)
+  if (labelsGeneral.size() != 0)
   {
     std::vector<std::string> labels;
     std::vector<std::string> instances;

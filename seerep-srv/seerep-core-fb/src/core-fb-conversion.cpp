@@ -277,6 +277,7 @@ void CoreFbConversion::fromFbDataHeader(const seerep::fb::Header* header, seerep
     coreHeader.uuidData = boost::uuids::random_generator()();
   }
 
+  // ToDo change datatype accordingly
   coreHeader.datatype = seerep_core_msgs::Datatype::Image;
   coreHeader.frameId = header->frame_id()->str();
   coreHeader.timestamp.seconds = header->stamp()->seconds();

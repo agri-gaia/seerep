@@ -26,7 +26,7 @@ public:
 
   std::map<std::string, HighFive::Group> getPointClouds();
 
-  std::shared_ptr<HighFive::Group> writePointCloud2(const std::string& uuid, const seerep::fb::PointCloud2& pointcloud2);
+  std::shared_ptr<HighFive::Group> writePointCloud2(const std::string& uuid, const seerep::fb::PointCloud2* pointcloud2);
 
   std::optional<seerep::fb::PointCloud2> readPointCloud2(const std::string& uuid);
 
@@ -98,7 +98,8 @@ private:
 
   CloudInfo getCloudInfo(const seerep::fb::PointCloud2& cloud);
 
-  void writePoints(const std::string& uuid, const seerep::fb::PointCloud2& cloud);
+  void writePoints(const std::string& uuid, const std::shared_ptr<HighFive::Group>& data_group_ptr,
+                   const seerep::fb::PointCloud2& cloud);
 
   void writeColorsRGB(const std::string& uuid, const seerep::fb::PointCloud2& cloud);
 

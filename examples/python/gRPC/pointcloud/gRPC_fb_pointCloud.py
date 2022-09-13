@@ -6,7 +6,7 @@ import time
 
 import flatbuffers
 import numpy as np
-from fb import Header, PointCloud2, PointField, Timestamp
+from fb import Header, LabelWithInstance, PointCloud2, PointField, Timestamp
 from fb import point_cloud_service_grpc_fb as pointCloudService
 
 script_dir = os.path.dirname(__file__)
@@ -47,9 +47,9 @@ def createPointFields(builder, fields="xyz", datatype=7, count=1):
 
 
 def listToPointFieldVector(builder, pointFieldList):
-    '''Creates flatbuffers vector from a list of point fields'''
+    '''Creates fields vector from a list of point fields'''
     PointCloud2.StartFieldsVector(builder, len(pointFieldList))
-    for pointField in pointFieldList:
+    for pointField in reversed(pointFieldList):
         builder.PrependUOffsetTRelative(pointField)
     return builder.EndVector()
 
@@ -66,13 +66,42 @@ def createHeader(builder, time, frame, projectUuid):
     return Header.End(builder)
 
 
-def createPointCloud(builder, header):
+def createGeneralLabel(builder, label="testlabel", instanceUuid="testUuid"):
+    '''Creates a label with an instance uuid'''
+    labelStr = builder.CreateString(label)
+    instanceUuidStr = builder.CreateString(instanceUuid)
+    LabelWithInstance.Start(builder)
+    LabelWithInstance.AddLabel(builder, labelStr)
+    LabelWithInstance.AddInstanceUuid(builder, instanceUuidStr)
+    return LabelWithInstance.End(builder)
+
+
+def createGeneralLabels(builder, numOf=10):
+    '''Creates 'numOf' general labels'''
+    labelsGeneral = []
+    for i in range(numOf):
+        labelsGeneral.append(createGeneralLabel(builder, "testlabel" + str(i), "testUuid" + str(i)))
+    return labelsGeneral
+
+
+def listToGeneralLabelsVector(builder, generalLabelList):
+    '''Creates labels general vector from a list of labels'''
+    PointCloud2.StartLabelsGeneralVector(builder, len(generalLabelList))
+    for label in reversed(generalLabelList):
+        builder.PrependUOffsetTRelative(label)
+    return builder.EndVector()
+
+
+def createPointCloud(builder, header, height=960, width=1280):
     '''Creates the point cloud message'''
     pointFields = createPointFields(builder)
     pointFieldVector = listToPointFieldVector(builder, pointFields)
 
-    # generate the actual point cloud data
-    points = np.random.randn(10, 3).astype(np.float32)
+    labelsGeneral = createGeneralLabels(builder)
+    labelsGeneralVector = listToGeneralLabelsVector(builder, labelsGeneral)
+
+    # generate ordered point cloud with dim (height, width, 3)
+    points = np.random.randn(height, width, 3).astype(np.float32)
     pointsVector = builder.CreateByteVector(points.tobytes())
 
     PointCloud2.Start(builder)
@@ -80,10 +109,11 @@ def createPointCloud(builder, header):
     PointCloud2.AddHeight(builder, points.shape[0])
     PointCloud2.AddWidth(builder, points.shape[1])
     PointCloud2.AddIsBigendian(builder, False)
-    PointCloud2.AddPointStep(builder, 8)
+    PointCloud2.AddPointStep(builder, 12)
     PointCloud2.AddRowStep(builder, points.shape[0] * points.shape[1])
     PointCloud2.AddFields(builder, pointFieldVector)
     PointCloud2.AddData(builder, pointsVector)
+    PointCloud2.AddLabelsGeneral(builder, labelsGeneralVector)
     return PointCloud2.End(builder)
 
 
