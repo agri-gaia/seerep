@@ -129,7 +129,7 @@ std::optional<seerep::Image> Hdf5PbImage::readImage(const std::string& id)
 
   image.set_data(data, sizeof(data));
 
-  *image.mutable_header() = readHeaderAttributes(*data_set_ptr);
+  *image.mutable_header() = readHeaderAttributes(*data_set_ptr, id);
   auto labelsBB = readBoundingBox2DLabeled(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id);
   if (labelsBB)
   {
