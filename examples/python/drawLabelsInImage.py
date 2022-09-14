@@ -13,7 +13,7 @@ labelSwitch = {
     5.0: 'curly dock',
 }
 
-color = (0, 0, 255)
+color = (255, 255, 255)
 
 for folderIndex in range(2):
     imagePath = root[folderIndex] + "camera_main_camera/rect/"
