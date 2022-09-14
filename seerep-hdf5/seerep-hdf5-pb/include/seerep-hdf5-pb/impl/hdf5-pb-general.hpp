@@ -77,7 +77,8 @@ seerep::Header Hdf5PbGeneral::readHeaderAttributes(HighFive::AnnotateTraits<T>& 
   header.mutable_stamp()->set_seconds(seconds);
   header.mutable_stamp()->set_nanos(nanos);
   header.set_uuid_project(uuidProject);
-  header.set_uuid_msg(id);
+  header.set_uuid_msgs(id);
+  header.set_frame_id(*header.mutable_frame_id());
 
   return header;
 }
