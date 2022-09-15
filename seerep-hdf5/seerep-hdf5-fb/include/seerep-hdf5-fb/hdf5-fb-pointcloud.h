@@ -28,7 +28,7 @@ public:
 
   std::shared_ptr<HighFive::Group> writePointCloud2(const std::string& uuid, const seerep::fb::PointCloud2* pointcloud2);
 
-  std::optional<seerep::fb::PointCloud2> readPointCloud2(const std::string& uuid);
+  std::optional<flatbuffers::grpc::Message<seerep::fb::PointCloud2>> readPointCloud2(const std::string& uuid);
 
   std::vector<float> loadBoundingBox(const std::string& uuid);
 
@@ -96,6 +96,12 @@ private:
     dataset_ptr->write(data);
   }
 
+  template <typename T, typename... U>
+  bool sameVectorSize(T const& first, U const&... rest)
+  {
+    return ((first.size() == rest.size()) && ...);
+  }
+
   CloudInfo getCloudInfo(const seerep::fb::PointCloud2& cloud);
 
   void writePoints(const std::string& uuid, const std::shared_ptr<HighFive::Group>& data_group_ptr,
@@ -121,8 +127,26 @@ private:
   void readOtherFields(const std::string& uuid, seerep::fb::PointCloud2& cloud,
                        const std::map<std::string, PointFieldInfo>& fields);
 
-  flatbuffers::Vector<flatbuffers::Offset<seerep::fb::PointField>>
-  readPointFieldAttributes(HighFive::Group& cloud_group);
+  std::optional<flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::PointField>>>>
+  readPointFieldAttributes(const std::string& id, std::shared_ptr<HighFive::DataSet>& data_set_ptr);
+
+  // pointcloud attribute keys
+  inline static const std::string HEIGHT = "height";
+  inline static const std::string WIDTH = "width";
+  inline static const std::string ENCODING = "encoding";
+  inline static const std::string IS_BIGENDIAN = "is_bigendian";
+  inline static const std::string ROW_STEP = "row_step";
+  inline static const std::string POINT_STEP = "point_step";
+  inline static const std::string IS_DENSE = "is_dense";
+
+  // point field attribute keys
+  inline static const std::string FIELD_NAME = "name";
+  inline static const std::string FIELD_OFFSET = "offset";
+  inline static const std::string FIELD_DATATYPE = "datatype";
+  inline static const std::string FIELD_COUNT = "counts";
+
+public:
+  inline static const std::string HDF5_GROUP_POINTCLOUD = "pointclouds";
 };
 }  // namespace seerep_hdf5_fb
 

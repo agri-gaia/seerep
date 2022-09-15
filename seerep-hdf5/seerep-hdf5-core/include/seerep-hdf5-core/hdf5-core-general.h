@@ -112,6 +112,7 @@ public:
   inline static const std::string LABELBB = "labelBB";
   inline static const std::string LABELBBBOXES = "labelBBBoxes";
   inline static const std::string LABELBBINSTANCES = "labelBBInstances";
+  inline static const std::string POINTS = "points";
 
 protected:
   std::shared_ptr<HighFive::File> m_file;
