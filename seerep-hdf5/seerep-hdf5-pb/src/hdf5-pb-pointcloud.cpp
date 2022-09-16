@@ -279,7 +279,7 @@ std::optional<seerep::PointCloud2> Hdf5PbPointCloud::readPointCloud2(const std::
 
   seerep::PointCloud2 pointcloud2;
 
-  *pointcloud2.mutable_header() = readHeaderAttributes(cloud_group);
+  *pointcloud2.mutable_header() = readHeaderAttributes(cloud_group, uuid);
 
   uint32_t height, width, point_step, row_step;
   bool is_bigendian, is_dense;
