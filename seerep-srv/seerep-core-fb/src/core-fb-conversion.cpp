@@ -48,7 +48,7 @@ seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::Im
 {
   seerep_core_msgs::DatasetIndexable dataForIndices;
 
-  fromFbDataHeader(img.header(), dataForIndices.header);
+  fromFbDataHeader(img.header(), dataForIndices.header, seerep_core_msgs::Datatype::Image);
 
   // set bounding box for images to 0. assume no spatial extent
   dataForIndices.boundingbox.min_corner().set<0>(0);
@@ -79,7 +79,7 @@ seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::Po
 {
   seerep_core_msgs::DatasetIndexable dataForIndices;
 
-  fromFbDataHeader(point->header(), dataForIndices.header);
+  fromFbDataHeader(point->header(), dataForIndices.header, seerep_core_msgs::Datatype::Point);
 
   // set bounding box for point to point coordinates. assume no spatial extent
   dataForIndices.boundingbox.min_corner().set<0>(point->point()->x());
@@ -105,7 +105,7 @@ seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::Po
 seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::PointCloud2& cloud)
 {
   seerep_core_msgs::DatasetIndexable dataForIndices;
-  fromFbDataHeader(cloud.header(), dataForIndices.header);
+  fromFbDataHeader(cloud.header(), dataForIndices.header, seerep_core_msgs::Datatype::PointCloud);
 
   // set bounding box for images to 0. assume no spatial extent
   dataForIndices.boundingbox.min_corner().set<0>(0);
@@ -266,7 +266,8 @@ bool CoreFbConversion::fromFbQueryWithoutData(const seerep::fb::Query* query)
   return false;
 }
 
-void CoreFbConversion::fromFbDataHeader(const seerep::fb::Header* header, seerep_core_msgs::Header& coreHeader)
+void CoreFbConversion::fromFbDataHeader(const seerep::fb::Header* header, seerep_core_msgs::Header& coreHeader,
+                                        seerep_core_msgs::Datatype&& datatype)
 {
   if (flatbuffers::IsFieldPresent(header, seerep::fb::Header::VT_UUID_MSGS))
   {
@@ -278,7 +279,7 @@ void CoreFbConversion::fromFbDataHeader(const seerep::fb::Header* header, seerep
   }
 
   // ToDo change datatype accordingly
-  coreHeader.datatype = seerep_core_msgs::Datatype::Image;
+  coreHeader.datatype = datatype;
   coreHeader.frameId = header->frame_id()->str();
   coreHeader.timestamp.seconds = header->stamp()->seconds();
   coreHeader.timestamp.nanos = header->stamp()->nanos();

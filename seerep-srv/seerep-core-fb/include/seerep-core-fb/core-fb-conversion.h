@@ -149,8 +149,10 @@ private:
    * @brief converts the header of the flatbuffer data message to seerep core specific message
    * @param header the header in the flatbuffer data message
    * @param coreHeader the header in the data message in seerep core format
+   * @param datatype of the associated message
    */
-  static void fromFbDataHeader(const seerep::fb::Header* header, seerep_core_msgs::Header& coreHeader);
+  static void fromFbDataHeader(const seerep::fb::Header* header, seerep_core_msgs::Header& coreHeader,
+                               seerep_core_msgs::Datatype&& datatype);
 
   /**
    * @brief converts (or generates if not set) the msg uuid of the flatbuffer data message to seerep core specific message

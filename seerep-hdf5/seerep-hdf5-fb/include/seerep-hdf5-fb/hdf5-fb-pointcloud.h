@@ -40,7 +40,7 @@ private:
   */
   struct PointFieldInfo
   {
-    uint8_t datatype;
+    int32_t datatype;
     uint32_t count;
   };
 
@@ -104,6 +104,8 @@ private:
 
   CloudInfo getCloudInfo(const seerep::fb::PointCloud2& cloud);
 
+  CloudInfo getCloudInfo(const std::vector<std::string>& names);
+
   void writePoints(const std::string& uuid, const std::shared_ptr<HighFive::Group>& data_group_ptr,
                    const seerep::fb::PointCloud2& cloud);
 
@@ -118,7 +120,7 @@ private:
   writePointFieldAttributes(HighFive::Group& cloud_group,
                             const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::PointField>>& vectorPointField);
 
-  void readPoints(const std::string& uuid, seerep::fb::PointCloud2& cloud);
+  void readPoints(const std::string& uuid, std::vector<std::vector<std::vector<float>>>& pointData);
 
   void readColorsRGB(const std::string& uuid, seerep::fb::PointCloud2& cloud);
 
@@ -126,9 +128,6 @@ private:
 
   void readOtherFields(const std::string& uuid, seerep::fb::PointCloud2& cloud,
                        const std::map<std::string, PointFieldInfo>& fields);
-
-  std::optional<flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::PointField>>>>
-  readPointFieldAttributes(const std::string& id, std::shared_ptr<HighFive::DataSet>& data_set_ptr);
 
   // pointcloud attribute keys
   inline static const std::string HEIGHT = "height";
@@ -140,10 +139,10 @@ private:
   inline static const std::string IS_DENSE = "is_dense";
 
   // point field attribute keys
-  inline static const std::string FIELD_NAME = "name";
-  inline static const std::string FIELD_OFFSET = "offset";
-  inline static const std::string FIELD_DATATYPE = "datatype";
-  inline static const std::string FIELD_COUNT = "counts";
+  inline static const std::string FIELD_NAME = "field_name";
+  inline static const std::string FIELD_OFFSET = "field_offset";
+  inline static const std::string FIELD_DATATYPE = "field_datatype";
+  inline static const std::string FIELD_COUNT = "field_count";
 
 public:
   inline static const std::string HDF5_GROUP_POINTCLOUD = "pointclouds";

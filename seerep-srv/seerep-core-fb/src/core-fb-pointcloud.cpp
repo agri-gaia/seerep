@@ -11,30 +11,31 @@ CoreFbPointCloud::~CoreFbPointCloud()
 {
 }
 
-std::vector<seerep::fb::PointCloud2> CoreFbPointCloud::getData(const seerep::fb::Query& query)
+void CoreFbPointCloud::getData(const seerep::fb::Query* query,
+                               grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::PointCloud2>>* const writer)
 {
-  // BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "loading point cloud from pointclouds/";
-  // seerep_core_msgs::Query queryCore = CoreFbConversion::fromFb(query, seerep_core_msgs::Datatype::PointCloud);
-  // seerep_core_msgs::QueryResult resultCore = m_seerepCore->getDataset(queryCore);
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "loading point cloud from points/" << std::endl;
+  seerep_core_msgs::Query queryCore =
+      seerep_core_fb::CoreFbConversion::fromFb(query, seerep_core_msgs::Datatype::PointCloud);
 
-  // std::vector<seerep::fb::PointCloud2> resultPointClouds;
-  // for (auto project : resultCore.queryResultProjects)
-  // {
-  //   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
-  //       << "sending point cloud from project" << boost::lexical_cast<std::string>(project.projectUuid);
-  //   for (auto uuidPc : project.dataOrInstanceUuids)
-  //   {
-  //     auto img = CoreFbGeneral::getHdf5(project.projectUuid, m_seerepCore, m_hdf5IoMap)
-  //                    ->readPointCloud(boost::lexical_cast<std::string>(uuidImg), queryCore.withoutData);
-  //     if (pc)
-  //     {
-  //       BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
-  //           << "sending point cloud " << boost::lexical_cast<std::string>(uuidImg);
-  //       resultPointClouds.push_back(pc.value());
-  //     }
-  //   }
-  // }
-  // return resultPointClouds;
+  seerep_core_msgs::QueryResult resultCore = m_seerepCore->getDataset(queryCore);
+
+  for (auto project : resultCore.queryResultProjects)
+  {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
+        << "sending point cloud from project" << boost::lexical_cast<std::string>(project.projectUuid);
+    for (auto uuidPc : project.dataOrInstanceUuids)
+    {
+      auto pc = CoreFbGeneral::getHdf5(project.projectUuid, m_seerepCore, m_hdf5IoMap)
+                    ->readPointCloud2(boost::lexical_cast<std::string>(uuidPc));
+      if (pc)
+      {
+        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
+            << "sending point cloud " << boost::lexical_cast<std::string>(uuidPc);
+        writer->Write(pc.value());
+      }
+    }
+  }
 }
 
 boost::uuids::uuid CoreFbPointCloud::addData(const seerep::fb::PointCloud2& pc)

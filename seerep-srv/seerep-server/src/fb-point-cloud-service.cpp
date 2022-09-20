@@ -12,6 +12,43 @@ FbPointCloudService::GetPointCloud2(grpc::ServerContext* context,
                                     const flatbuffers::grpc::Message<seerep::fb::Query>* request,
                                     grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::PointCloud2>>* writer)
 {
+  (void)context;
+  auto requestRoot = request->GetRoot();
+  std::stringstream debuginfo;
+  debuginfo << "sending point clouds with this query parameters:";
+  if (requestRoot->boundingbox() != NULL)
+  {
+    debuginfo << "bounding box min(" << requestRoot->boundingbox()->point_min()->x() << "/"
+              << requestRoot->boundingbox()->point_min()->y() << "/" << requestRoot->boundingbox()->point_min()->z()
+              << "), max(" << requestRoot->boundingbox()->point_max()->x() << "/"
+              << requestRoot->boundingbox()->point_max()->y() << "/" << requestRoot->boundingbox()->point_max()->z()
+              << ")";
+  }
+  if (requestRoot->timeinterval() != NULL)
+  {
+    debuginfo << "time interval (" << requestRoot->timeinterval()->time_min()->seconds() << "/"
+              << requestRoot->timeinterval()->time_max()->seconds() << ")";
+  }
+  if (requestRoot->label() != NULL)
+  {
+    debuginfo << "labels general";
+    for (auto label : *requestRoot->label())
+    {
+      debuginfo << "'" << label->str() << "' ";
+    }
+  }
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << debuginfo.rdbuf();
+
+  try
+  {
+    pointCloudFb->getData(requestRoot, writer);
+  }
+  catch (std::runtime_error const& e)
+  {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  return grpc::Status::OK;
 }
 
 grpc::Status FbPointCloudService::TransferPointCloud2(

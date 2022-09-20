@@ -28,9 +28,9 @@ from util_fb import (
     getOrCreateProject,
 )
 
-NUM_GENERAL_LABELS = 10
-NUM_BB_LABELS = 10
-NUM_POINT_CLOUDS = 10
+NUM_GENERAL_LABELS = 1
+NUM_BB_LABELS = 1
+NUM_POINT_CLOUDS = 1
 
 
 def createPointCloud(builder, header, height=960, width=1280):
@@ -97,7 +97,8 @@ def createPointClouds(projectUuid, numOf):
 
 channel = util.get_gRPC_channel()
 stub = pointCloudService.PointCloudServiceStub(channel)
+builder = flatbuffers.Builder(1024)
 
-projectUuid = getOrCreateProject(channel, "testproject", True)
+projectUuid = getOrCreateProject(builder, channel, "testproject")
 
 responseBuf = stub.TransferPointCloud2(createPointClouds(projectUuid, NUM_POINT_CLOUDS))

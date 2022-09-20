@@ -14,15 +14,17 @@ from fb import (
     ProjectCreation,
     ProjectInfo,
     ProjectInfos,
+    Query,
+    TimeInterval,
     Timestamp,
 )
 from fb import meta_operations_grpc_fb as metaOperations
 
 
-def getOrCreateProject(channel, name, create=True, mapFrameId="map"):
+def getProject(builder, channel, name):
+    '''Retrieve a project by name'''
     stubMeta = metaOperations.MetaOperationsStub(channel)
 
-    builder = flatbuffers.Builder(1024)
     Empty.Start(builder)
     emptyMsg = Empty.End(builder)
     builder.Finish(emptyMsg)
@@ -31,31 +33,44 @@ def getOrCreateProject(channel, name, create=True, mapFrameId="map"):
     responseBuf = stubMeta.GetProjects(bytes(buf))
     response = ProjectInfos.ProjectInfos.GetRootAs(responseBuf)
 
-    projectuuid = ""
     for i in range(response.ProjectsLength()):
-        print(response.Projects(i).Name().decode("utf-8") + " " + response.Projects(i).Uuid().decode("utf-8") + "\n")
         if response.Projects(i).Name().decode("utf-8") == name:
-            projectuuid = response.Projects(i).Uuid().decode("utf-8")
+            return response.Projects(i).Uuid().decode("utf-8")
+    return None
 
-    if projectuuid == "":
+
+def createProject(channel, builder, name, frameId):
+    '''Create a project from the parameters'''
+    stubMeta = metaOperations.MetaOperationsStub(channel)
+
+    frameIdBuf = builder.CreateString(frameId)
+    nameBuf = builder.CreateString(name)
+
+    ProjectCreation.Start(builder)
+    ProjectCreation.AddMapFrameId(builder, frameIdBuf)
+    ProjectCreation.AddName(builder, nameBuf)
+    projectCreationMsg = ProjectCreation.End(builder)
+    builder.Finish(projectCreationMsg)
+
+    buf = builder.Output()
+
+    responseBuf = stubMeta.CreateProject(bytes(buf))
+    response = ProjectInfo.ProjectInfo.GetRootAs(responseBuf)
+
+    return response.Uuid().decode("utf-8")
+
+
+def getOrCreateProject(builder, channel, name, create=True, mapFrameId="map"):
+    '''Get the project,, or if not present, create one'''
+    projectUuid = getProject(builder, channel, name)
+
+    if projectUuid is None:
         if create:
-            mapFrameIdBuf = builder.CreateString(mapFrameId)
-            nameBuf = builder.CreateString(name)
-            ProjectCreation.Start(builder)
-            ProjectCreation.AddMapFrameId(builder, mapFrameIdBuf)
-            ProjectCreation.AddName(builder, nameBuf)
-            projectCreationMsg = ProjectCreation.End(builder)
-            builder.Finish(projectCreationMsg)
-            buf = builder.Output()
-
-            responseBuf = stubMeta.CreateProject(bytes(buf))
-            response = ProjectInfo.ProjectInfo.GetRootAs(responseBuf)
-
-            projectuuid = response.Uuid().decode("utf-8")
+            projectUuid = createProject(channel, builder, name, mapFrameId)
         else:
             sys.exit()
 
-    return projectuuid
+    return projectUuid
 
 
 # Header
@@ -187,3 +202,31 @@ def addToPointFieldVector(builder, pointFieldList):
     for pointField in reversed(pointFieldList):
         builder.PrependUOffsetTRelative(pointField)
     return builder.EndVector()
+
+
+def createQuery(builder, projectUuids, timeInterval, generalLabels):
+    # add project uuids
+    Query.StartProjectuuidVector(builder, len(projectUuids))
+    for projectUuid in reversed(projectUuids):
+        builder.PrependUOffsetTRelative(projectUuid)
+    projectUuidsOffset = builder.EndVector()
+
+    Query.StartLabelVector(builder, len(generalLabels))
+    for label in reversed(generalLabels):
+        builder.PrependUOffsetTRelative(label)
+    labelsOffset = builder.EndVector()
+
+    Query.Start(builder)
+    Query.AddProjectuuid(builder, projectUuidsOffset)
+    Query.AddTimeinterval(builder, timeInterval)
+    Query.AddLabel(builder, labelsOffset)
+
+    return Query.End(builder)
+
+
+def createTimeInterval(builder, timeMin, timeMax):
+    '''Create a time time interval in flatbuffers'''
+    TimeInterval.Start(builder)
+    TimeInterval.AddTimeMin(builder, timeMin)
+    TimeInterval.AddTimeMax(builder, timeMax)
+    return TimeInterval.End(builder)
