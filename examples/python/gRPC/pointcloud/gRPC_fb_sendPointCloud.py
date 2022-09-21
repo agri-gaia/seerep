@@ -3,6 +3,7 @@
 import os
 import sys
 import time
+import uuid
 
 import flatbuffers
 import numpy as np
@@ -42,7 +43,7 @@ def createPointCloud(builder, header, height=960, width=1280):
     labelsGeneral = createLabelsWithInstance(
         builder,
         ["GeneralLabel" + str(i) for i in range(NUM_GENERAL_LABELS)],
-        ["InstanceUuid" + str(i) for i in range(NUM_GENERAL_LABELS)],
+        [str(uuid.uuid4()) for _ in range(NUM_GENERAL_LABELS)],
     )
     labelsGeneralVector = addToGeneralLabelsVector(builder, labelsGeneral)
 
@@ -56,7 +57,7 @@ def createPointCloud(builder, header, height=960, width=1280):
     labelWithInstances = createLabelsWithInstance(
         builder,
         ["BoundingBoxLabel" + str(i) for i in range(NUM_BB_LABELS)],
-        ["InstanceUuid" + str(i) for i in range(NUM_BB_LABELS)],
+        [str(uuid.uuid4()) for _ in range(NUM_BB_LABELS)],
     )
     labelsBb = createBoundingBoxesLabeled(builder, labelWithInstances, boundingBoxes)
     labelsBbVector = addToBoundingBoxLabeledVector(builder, labelsBb)

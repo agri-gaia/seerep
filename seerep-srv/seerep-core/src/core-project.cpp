@@ -110,7 +110,7 @@ void CoreProject::recreateDatatypes()
   for (auto datatypeName : datatypeNames)
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
-        << "found datatype" << datatypeName << " in HDF5 file.";
+        << "found datatype " << datatypeName << " in HDF5 file.";
   }
 }
 

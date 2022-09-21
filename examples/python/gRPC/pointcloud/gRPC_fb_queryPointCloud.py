@@ -78,4 +78,4 @@ for responseBuf in stubPointCloud.GetPointCloud2(bytes(buf)):
         print(f"Instance {i}: {response.LabelsGeneral(i).InstanceUuid().decode('utf-8')}")
 
     print("---Points---")
-    print(response.DataAsNumpy())
+    # TODO check if the read point cloud matches
