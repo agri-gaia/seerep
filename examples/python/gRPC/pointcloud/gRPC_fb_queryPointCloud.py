@@ -65,7 +65,7 @@ for responseBuf in stubPointCloud.GetPointCloud2(bytes(buf)):
             f"(x,y,z)"
         )
         print(
-            f"Bounding Box Min {i}: "
+            f"Bounding Box Max {i}: "
             f"{response.LabelsBb(i).BoundingBox().PointMax().X()},"
             f"{response.LabelsBb(i).BoundingBox().PointMax().Y()},"
             f"{response.LabelsBb(i).BoundingBox().PointMax().Z()} "
@@ -76,3 +76,6 @@ for responseBuf in stubPointCloud.GetPointCloud2(bytes(buf)):
     for i in range(response.LabelsGeneralLength()):
         print(f"Label {i}: {response.LabelsGeneral(i).Label().decode('utf-8')}")
         print(f"Instance {i}: {response.LabelsGeneral(i).InstanceUuid().decode('utf-8')}")
+
+    print("---Points---")
+    print(response.DataAsNumpy())

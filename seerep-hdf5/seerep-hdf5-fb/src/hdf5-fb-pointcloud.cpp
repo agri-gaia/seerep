@@ -425,35 +425,50 @@ Hdf5FbPointCloud::readPointCloud2(const std::string& id)
   CloudInfo info = getCloudInfo(names);
 
   std::vector<std::vector<std::vector<float>>> points;
-  std::vector<std::vector<std::vector<float>>> pointsRGB;
-  std::vector<std::vector<std::vector<float>>> pointsRGBA;
+  std::vector<std::vector<std::vector<uint8_t>>> pointsRGB;
+  std::vector<std::vector<std::vector<uint8_t>>> pointsRGBA;
+  std::vector<std::any> otherFields;
 
   if (info.has_points)
     readPoints(id, points);
 
-  // if (info.has_rgb)
-  //   readColorsRGB(id, *pointCloud2);
+  if (info.has_rgb)
+    readColorsRGB(id, pointsRGB);
 
-  // if (info.has_rgba)
-  //   readColorsRGBA(id, *pointCloud2);
+  if (info.has_rgba)
+    readColorsRGBA(id, pointsRGBA);
 
-  // TODO normals
+  if (!info.other_fields.empty())
+    readOtherFields(id, info.other_fields, otherFields);
 
-  // if (!info.other_fields.empty())
-  //   readOtherFields(id, *pointCloud2, info.other_fields);
+  // TODO add normals
 
-  // TODO extra fields other than x,y,z
-  // converting the point cloud data into a 1D array
   std::vector<uint8_t> data;
-  data.reserve(height * width * point_step);
-  for (uint32_t row = 0; row < height; row++)
+  if (!points.empty())
   {
-    for (uint32_t col = 0; col < width; col++)
+    // converting the point cloud data into a 1D array
+    data.reserve(height * width);
+    for (size_t row = 0; row < height; row++)
     {
-      data.insert(data.end(), std::make_move_iterator(points.at(row).at(col).begin()),
-                  std::make_move_iterator(points.at(row).at(col).end()));
+      for (size_t col = 0; col < width; col++)
+      {
+        data.insert(data.end(), std::make_move_iterator(points.at(row).at(col).begin()),
+                    std::make_move_iterator(points.at(row).at(col).end()));
+        if (info.has_rgb)
+        {
+          data.insert(data.end(), std::make_move_iterator(pointsRGB.at(row).at(col).begin()),
+                      std::make_move_iterator(pointsRGB.at(row).at(col).end()));
+        }
+        if (info.has_rgba)
+        {
+          data.insert(data.end(), std::make_move_iterator(pointsRGBA.at(row).at(col).begin()),
+                      std::make_move_iterator(pointsRGBA.at(row).at(col).end()));
+        }
+        // TODO add support for other fields like laser scanner info
+      }
     }
   }
+  int vectorSize = sizeof(std::vector<uint8_t>) + (sizeof(uint8_t) * data.size());
   auto dataVector = builder.CreateVector(data);
 
   // read labeled bounding box
@@ -532,7 +547,6 @@ Hdf5FbPointCloud::readPointCloud2(const std::string& id)
   return grpcPointCloud;
 }
 
-// ToDo Exception safety?
 void Hdf5FbPointCloud::readPoints(const std::string& uuid, std::vector<std::vector<std::vector<float>>>& pointData)
 {
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "reading points from hdf5 file";
@@ -544,67 +558,28 @@ void Hdf5FbPointCloud::readPoints(const std::string& uuid, std::vector<std::vect
   pointsDataset.read(pointData);
 }
 
-void Hdf5FbPointCloud::readColorsRGB(const std::string& uuid, seerep::fb::PointCloud2& cloud)
+void Hdf5FbPointCloud::readColorsRGB(const std::string& uuid, std::vector<std::vector<std::vector<uint8_t>>>& colorData)
 {
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "reading rgb ";
-  seerep_hdf5_fb::PointCloud2Iterator<uint8_t> r_iter(cloud, "r");
-  seerep_hdf5_fb::PointCloud2Iterator<uint8_t> g_iter(cloud, "g");
-  seerep_hdf5_fb::PointCloud2Iterator<uint8_t> b_iter(cloud, "b");
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "reading rgb from hdf5 file ";
 
-  std::vector<std::vector<std::vector<uint8_t>>> color_data;
-  std::string colors_id = seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + uuid + "/colors";
+  std::string colorsId = seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + uuid + "/colors";
+  HighFive::DataSet colorsDataset = m_file->getDataSet(colorsId);
 
-  HighFive::DataSet colors_dataset = m_file->getDataSet(colors_id);
-
-  colors_dataset.read(color_data);
-
-  for (auto column : color_data)
-  {
-    for (auto row : column)
-    {
-      *r_iter = row[0];
-      *g_iter = row[1];
-      *b_iter = row[2];
-      ++r_iter, ++g_iter, ++b_iter;
-    }
-  }
+  colorsDataset.read(colorData);
 }
 
-void Hdf5FbPointCloud::readColorsRGBA(const std::string& uuid, seerep::fb::PointCloud2& cloud)
+void Hdf5FbPointCloud::readColorsRGBA(const std::string& uuid, std::vector<std::vector<std::vector<uint8_t>>>& colorData)
 {
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "reading rgb ";
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "reading rgba from hdf5 file ";
 
-  seerep_hdf5_fb::PointCloud2Iterator<uint8_t> r_iter(cloud, "r");
-  seerep_hdf5_fb::PointCloud2Iterator<uint8_t> g_iter(cloud, "g");
-  seerep_hdf5_fb::PointCloud2Iterator<uint8_t> b_iter(cloud, "b");
-  seerep_hdf5_fb::PointCloud2Iterator<uint8_t> a_iter(cloud, "a");
-
-  std::vector<std::vector<std::vector<uint8_t>>> color_data;
   std::string colors_id = seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + uuid + "/colors";
-
   HighFive::DataSet colors_dataset = m_file->getDataSet(colors_id);
 
-  colors_dataset.read(color_data);
-
-  for (auto column : color_data)
-  {
-    for (auto row : column)
-    {
-      *r_iter = row[0];
-      *g_iter = row[1];
-      *b_iter = row[2];
-      *a_iter = row[3];
-
-      ++r_iter;
-      ++g_iter;
-      ++b_iter;
-      ++a_iter;
-    }
-  }
+  colors_dataset.read(colorData);
 }
 
-void Hdf5FbPointCloud::readOtherFields(const std::string& uuid, seerep::fb::PointCloud2& cloud,
-                                       const std::map<std::string, PointFieldInfo>& fields)
+void Hdf5FbPointCloud::readOtherFields(const std::string& uuid, const std::map<std::string, PointFieldInfo>& fields,
+                                       std::vector<std::any> otherFieldsData)
 {
   for (auto field_map_entry : fields)
   {
@@ -613,31 +588,64 @@ void Hdf5FbPointCloud::readOtherFields(const std::string& uuid, seerep::fb::Poin
     switch (pointFieldInfo.datatype)
     {
       case seerep::fb::Point_Field_Datatype_INT8:
-        read<int8_t>(uuid, name, cloud, pointFieldInfo.count);
-        break;
+      {
+        std::vector<int8_t> data;
+        read<int8_t>(uuid, name, data, pointFieldInfo.count);
+        otherFieldsData.push_back(std::move(data));
+      }
+      break;
       case seerep::fb::Point_Field_Datatype_UINT8:
-        read<uint8_t>(uuid, name, cloud, pointFieldInfo.count);
-        break;
+      {
+        std::vector<uint8_t> data;
+        read<uint8_t>(uuid, name, data, pointFieldInfo.count);
+        otherFieldsData.push_back(std::move(data));
+      }
+      break;
       case seerep::fb::Point_Field_Datatype_INT16:
-        read<int16_t>(uuid, name, cloud, pointFieldInfo.count);
-        break;
+      {
+        std::vector<int16_t> data;
+        read<int16_t>(uuid, name, data, pointFieldInfo.count);
+        otherFieldsData.push_back(std::move(data));
+      }
+      break;
       case seerep::fb::Point_Field_Datatype_UINT16:
-        read<uint16_t>(uuid, name, cloud, pointFieldInfo.count);
-        break;
+      {
+        std::vector<uint16_t> data;
+        read<uint16_t>(uuid, name, data, pointFieldInfo.count);
+        otherFieldsData.push_back(std::move(data));
+      }
+      break;
       case seerep::fb::Point_Field_Datatype_INT32:
-        read<int32_t>(uuid, name, cloud, pointFieldInfo.count);
-        break;
+      {
+        std::vector<int32_t> data;
+        read<int32_t>(uuid, name, data, pointFieldInfo.count);
+        otherFieldsData.push_back(std::move(data));
+      }
+      break;
       case seerep::fb::Point_Field_Datatype_UINT32:
-        read<uint32_t>(uuid, name, cloud, pointFieldInfo.count);
-        break;
+      {
+        std::vector<uint32_t> data;
+        read<uint32_t>(uuid, name, data, pointFieldInfo.count);
+        otherFieldsData.push_back(std::move(data));
+      }
+      break;
       case seerep::fb::Point_Field_Datatype_FLOAT32:
-        read<float>(uuid, name, cloud, pointFieldInfo.count);
-        break;
+      {
+        std::vector<float> data;
+        read<float>(uuid, name, data, pointFieldInfo.count);
+        otherFieldsData.push_back(std::move(data));
+      }
+      break;
       case seerep::fb::Point_Field_Datatype_FLOAT64:
-        read<double>(uuid, name, cloud, pointFieldInfo.count);
-        break;
+      {
+        std::vector<double> data;
+        read<double>(uuid, name, data, pointFieldInfo.count);
+        otherFieldsData.push_back(std::move(data));
+      }
+      break;
       default:
-        std::cout << "datatype of pointcloud unknown" << std::endl;
+        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+            << "datatype of field in point cloud unknown";
         break;
     }
   }

@@ -14,6 +14,7 @@
 #include <seerep-msgs/point_cloud_2_generated.h>
 
 // std
+#include <any>
 #include <boost/geometry.hpp>
 #include <optional>
 
@@ -54,20 +55,12 @@ private:
   };
 
   template <typename T>
-  void read(const std::string cloud_uuid, const std::string& field_name, seerep::fb::PointCloud2& cloud, size_t size)
+  void read(const std::string cloud_uuid, const std::string& field_name, std::vector<T>& data, size_t size)
   {
     const std::string id = seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX + "/" + cloud_uuid + "/" + field_name;
-    PointCloud2Iterator<T> iter(cloud, field_name);
     HighFive::DataSet dataset = m_file->getDataSet(id);
-    std::vector<T> data;
     data.reserve(size);
     dataset.read(data);
-
-    for (auto& value : data)
-    {
-      *iter = value;
-      ++iter;
-    }
   }
 
   template <typename T>
@@ -122,12 +115,12 @@ private:
 
   void readPoints(const std::string& uuid, std::vector<std::vector<std::vector<float>>>& pointData);
 
-  void readColorsRGB(const std::string& uuid, seerep::fb::PointCloud2& cloud);
+  void readColorsRGB(const std::string& uuid, std::vector<std::vector<std::vector<uint8_t>>>& colorData);
 
-  void readColorsRGBA(const std::string& uuid, seerep::fb::PointCloud2& cloud);
+  void readColorsRGBA(const std::string& uuid, std::vector<std::vector<std::vector<uint8_t>>>& colorData);
 
-  void readOtherFields(const std::string& uuid, seerep::fb::PointCloud2& cloud,
-                       const std::map<std::string, PointFieldInfo>& fields);
+  void readOtherFields(const std::string& uuid, const std::map<std::string, PointFieldInfo>& fields,
+                       std::vector<std::any> otherFieldsData);
 
   // pointcloud attribute keys
   inline static const std::string HEIGHT = "height";

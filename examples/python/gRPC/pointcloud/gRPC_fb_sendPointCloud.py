@@ -35,7 +35,7 @@ NUM_POINT_CLOUDS = 1
 
 def createPointCloud(builder, header, height=960, width=1280):
     '''Creates a flatbuffers point cloud message'''
-    pointFields = createPointFields(builder, "xyz", 7, 4, 1)
+    pointFields = createPointFields(builder, ['x', 'y', 'z', 'rgb'], 7, 4, 1)
     pointFieldsVector = addToPointFieldVector(builder, pointFields)
 
     # create general labels
@@ -50,8 +50,8 @@ def createPointCloud(builder, header, height=960, width=1280):
     boundingBoxes = createBoundingBoxes(
         builder,
         header,
-        [createPoint(builder, np.random.rand(), np.random.rand(), np.random.rand()) for i in range(NUM_BB_LABELS)],
-        [createPoint(builder, np.random.rand(), np.random.rand(), np.random.rand()) for i in range(NUM_BB_LABELS)],
+        [createPoint(builder, np.random.rand(), np.random.rand(), np.random.rand()) for _ in range(NUM_BB_LABELS)],
+        [createPoint(builder, np.random.rand(), np.random.rand(), np.random.rand()) for _ in range(NUM_BB_LABELS)],
     )
     labelWithInstances = createLabelsWithInstance(
         builder,
@@ -61,8 +61,10 @@ def createPointCloud(builder, header, height=960, width=1280):
     labelsBb = createBoundingBoxesLabeled(builder, labelWithInstances, boundingBoxes)
     labelsBbVector = addToBoundingBoxLabeledVector(builder, labelsBb)
 
-    # create ordered point cloud with dim (height, width, 3)
-    points = np.random.randn(height, width, 3).astype(np.float32)
+    # create ordered point cloud with dim (height, width, 6)
+    points = np.random.randn(height, width, 6).astype(np.float32)
+    print(f"Data shape: {points.shape}")
+
     pointsVector = builder.CreateByteVector(points.tobytes())
 
     # add all data into the flatbuffers point cloud message
@@ -71,8 +73,8 @@ def createPointCloud(builder, header, height=960, width=1280):
     PointCloud2.AddHeight(builder, points.shape[0])
     PointCloud2.AddWidth(builder, points.shape[1])
     PointCloud2.AddIsBigendian(builder, False)
-    PointCloud2.AddPointStep(builder, 12)
-    PointCloud2.AddRowStep(builder, points.shape[1] * 12)
+    PointCloud2.AddPointStep(builder, 24)
+    PointCloud2.AddRowStep(builder, points.shape[1] * 24)
     PointCloud2.AddFields(builder, pointFieldsVector)
     PointCloud2.AddData(builder, pointsVector)
     PointCloud2.AddLabelsGeneral(builder, labelsGeneralVector)
