@@ -43,7 +43,7 @@ boost::uuids::uuid CoreFbPointCloud::addData(const seerep::fb::PointCloud2& pc)
   seerep_core_msgs::DatasetIndexable dataForIndices = CoreFbConversion::fromFb(pc);
 
   auto hdf5io = CoreFbGeneral::getHdf5(dataForIndices.header.uuidProject, m_seerepCore, m_hdf5IoMap);
-  hdf5io->writePointCloud2(boost::lexical_cast<std::string>(dataForIndices.header.uuidData), &pc);
+  hdf5io->writePointCloud2(boost::lexical_cast<std::string>(dataForIndices.header.uuidData), pc);
 
   m_seerepCore->addDataset(dataForIndices);
 

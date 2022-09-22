@@ -25,9 +25,7 @@ class Hdf5FbPointCloud : public Hdf5FbGeneral
 public:
   Hdf5FbPointCloud(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
 
-  std::map<std::string, HighFive::Group> getPointClouds();
-
-  std::shared_ptr<HighFive::Group> writePointCloud2(const std::string& uuid, const seerep::fb::PointCloud2* pointcloud2);
+  void writePointCloud2(const std::string& uuid, const seerep::fb::PointCloud2& pointcloud2);
 
   std::optional<flatbuffers::grpc::Message<seerep::fb::PointCloud2>> readPointCloud2(const std::string& uuid);
 
@@ -90,14 +88,36 @@ private:
   }
 
   template <typename T, typename... U>
-  bool sameVectorSize(T const& first, U const&... rest)
+  bool equalVectorLength(T const& first, U const&... rest)
   {
     return ((first.size() == rest.size()) && ...);
   }
 
-  CloudInfo getCloudInfo(const seerep::fb::PointCloud2& cloud);
+  template <typename T>
+  void writePointFieldAttributes(HighFive::AnnotateTraits<T>& object,
+                                 const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::PointField>>& pointFields)
+  {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "writing point field attributes to hdf5";
 
-  CloudInfo getCloudInfo(const std::vector<std::string>& names);
+    std::vector<std::string> names;
+    std::vector<uint32_t> offsets, counts;
+    std::vector<uint8_t> datatypes;
+
+    for (auto pointField : pointFields)
+    {
+      names.push_back(pointField->name()->str());
+      offsets.push_back(pointField->offset());
+      datatypes.push_back(static_cast<uint8_t>(pointField->datatype()));
+      counts.push_back(pointField->count());
+    }
+
+    writeAttributeToHdf5<std::vector<std::string>>(object, FIELD_NAME, names);
+    writeAttributeToHdf5<std::vector<uint32_t>>(object, FIELD_OFFSET, offsets);
+    writeAttributeToHdf5<std::vector<uint8_t>>(object, FIELD_DATATYPE, datatypes);
+    writeAttributeToHdf5<std::vector<uint32_t>>(object, FIELD_COUNT, counts);
+  }
+
+  CloudInfo getCloudInfo(const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::PointField>>& pointFields);
 
   void writePoints(const std::string& uuid, const std::shared_ptr<HighFive::Group>& data_group_ptr,
                    const seerep::fb::PointCloud2& cloud);
@@ -108,10 +128,6 @@ private:
 
   void writeOtherFields(const std::string& uuid, const seerep::fb::PointCloud2& cloud,
                         const std::map<std::string, PointFieldInfo>& fields);
-
-  void
-  writePointFieldAttributes(HighFive::Group& cloud_group,
-                            const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::PointField>>& vectorPointField);
 
   void readPoints(const std::string& uuid, std::vector<std::vector<std::vector<float>>>& pointData);
 
