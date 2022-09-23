@@ -7,14 +7,9 @@ CoreFbPointCloud::CoreFbPointCloud(std::shared_ptr<seerep_core::Core> seerepCore
   CoreFbGeneral::getAllFileAccessorFromCore(m_seerepCore, m_hdf5IoMap);
 }
 
-CoreFbPointCloud::~CoreFbPointCloud()
-{
-}
-
 void CoreFbPointCloud::getData(const seerep::fb::Query* query,
                                grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::PointCloud2>>* const writer)
 {
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "loading point cloud from points/" << std::endl;
   seerep_core_msgs::Query queryCore =
       seerep_core_fb::CoreFbConversion::fromFb(query, seerep_core_msgs::Datatype::PointCloud);
 
@@ -22,16 +17,17 @@ void CoreFbPointCloud::getData(const seerep::fb::Query* query,
 
   for (auto project : resultCore.queryResultProjects)
   {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
-        << "sending point cloud from project" << boost::lexical_cast<std::string>(project.projectUuid);
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
+        << "sending flatbuffer point cloud from project: " << boost::lexical_cast<std::string>(project.projectUuid);
+
     for (auto uuidPc : project.dataOrInstanceUuids)
     {
       auto pc = CoreFbGeneral::getHdf5(project.projectUuid, m_seerepCore, m_hdf5IoMap)
                     ->readPointCloud2(boost::lexical_cast<std::string>(uuidPc));
       if (pc)
       {
-        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
-            << "sending point cloud " << boost::lexical_cast<std::string>(uuidPc);
+        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
+            << "sending flatbuffers point cloud with UUID: " << boost::lexical_cast<std::string>(uuidPc);
         writer->Write(pc.value());
       }
     }

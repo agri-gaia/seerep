@@ -1,9 +1,6 @@
 #ifndef SEEREP_CORE_FB_POINTCLOUD_H_
 #define SEEREP_CORE_FB_POINTCLOUD_H_
 
-#include <functional>
-#include <optional>
-
 #include "core-fb-conversion.h"
 #include "core-fb-general.h"
 
@@ -34,7 +31,6 @@ class CoreFbPointCloud
 {
 public:
   CoreFbPointCloud(std::shared_ptr<seerep_core::Core> seerepCore);
-  ~CoreFbPointCloud();
 
   void getData(const seerep::fb::Query* query,
                grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::PointCloud2>>* const writer);
