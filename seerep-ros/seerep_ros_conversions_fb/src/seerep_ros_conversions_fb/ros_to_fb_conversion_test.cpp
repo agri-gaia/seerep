@@ -14,10 +14,10 @@
 // PointCloud2 - Done
 // Image - Done
 // Point - Done
-// Quaternion
-// Pose
-// PoseStamped
-// Vector3
+// Quaternion - Done
+// Pose - Skipped
+// PoseStamped - Skipped
+// Vector3 -Done
 // Vector3Stamped
 // Transform
 // TransformStamped
@@ -126,6 +126,42 @@ geometry_msgs::Point createPoint()
   return p;
 }
 
+// Quaternion
+geometry_msgs::Quaternion createQuaternion()
+{
+  geometry_msgs::Quaternion q;
+
+  q.x = 5;
+  q.y = 7;
+  q.z = 3;
+  q.w = 9;
+
+  return q;
+}
+
+// Pose
+geometry_msgs::Pose createPose()
+{
+  geometry_msgs::Pose pose;
+
+  pose.position = createPoint();
+  pose.orientation = createQuaternion();
+
+  return pose;
+}
+
+// Vector3
+geometry_msgs::Vector3 createVector3()
+{
+  geometry_msgs::Vector3 v;
+
+  v.x = 8;
+  v.y = 5;
+  v.z = 3;
+
+  return v;
+}
+
 class rosToFbConversionTest : public testing::Test
 {
 protected:
@@ -143,6 +179,15 @@ protected:
 
   static geometry_msgs::Point original_p;
   static geometry_msgs::Point converted_p;
+
+  static geometry_msgs::Quaternion original_q;
+  static geometry_msgs::Quaternion converted_q;
+
+  static geometry_msgs::Pose original_pose;
+  static geometry_msgs::Pose converted_pose;
+
+  static geometry_msgs::Vector3 original_v;
+  static geometry_msgs::Vector3 converted_v;
 
   static void SetUpTestSuite()
   {
@@ -201,6 +246,33 @@ protected:
 
     geometry_msgs::Point converted_p = seerep_ros_conversions_fb::toROS(*fb_point.GetRoot());
     // Point End
+
+    // Quaternion Start
+    geometry_msgs::Quaternion original_q = createQuaternion();
+
+    flatbuffers::grpc::Message<seerep::fb::Quaternion> fb_quaternion;
+    fb_quaternion = seerep_ros_conversions_fb::toFlat(original_q);
+
+    geometry_msgs::Quaternion converted_q = seerep_ros_conversions_fb::toROS(*fb_quaternion.GetRoot());
+    // Quaternion End
+
+    // Pose Start
+    geometry_msgs::Pose original_pose = createPose();
+
+    flatbuffers::grpc::Message<seerep::fb::Pose> fb_pose;
+    fb_pose = seerep_ros_conversions_fb::toFlat(original_pose);
+
+    geometry_msgs::Pose converted_pose = seerep_ros_conversions_fb::toROS(*fb_pose.GetRoot());
+    // Pose End
+
+    // Vector3 Start
+    geometry_msgs::Vector3 original_v = createVector3();
+
+    flatbuffers::grpc::Message<seerep::fb::Vector3> fb_vector3;
+    fb_vector3 = seerep_ros_conversions_fb::toFlat(original_v);
+
+    geometry_msgs::Vector3 converted_v = seerep_ros_conversions_fb::toROS(*fb_vector3.GetRoot());
+    // Vector3 End
   }
 };
 
@@ -222,8 +294,21 @@ sensor_msgs::PointCloud2 rosToFbConversionTest::converted_pc2;
 sensor_msgs::Image rosToFbConversionTest::original_img;
 sensor_msgs::Image rosToFbConversionTest::converted_img;
 
+// Point
 geometry_msgs::Point rosToFbConversionTest::original_p;
 geometry_msgs::Point rosToFbConversionTest::converted_p;
+
+// Quaternion
+geometry_msgs::Quaternion rosToFbConversionTest::original_q;
+geometry_msgs::Quaternion rosToFbConversionTest::converted_q;
+
+// Pose
+geometry_msgs::Pose rosToFbConversionTest::original_pose;
+geometry_msgs::Pose rosToFbConversionTest::converted_pose;
+
+// Vector3
+geometry_msgs::Vector3 rosToFbConversionTest::original_v;
+geometry_msgs::Vector3 rosToFbConversionTest::converted_v;
 
 // test header
 TEST_F(rosToFbConversionTest, testHeader)
@@ -257,9 +342,17 @@ TEST_F(rosToFbConversionTest, testPointCloud2)
   EXPECT_EQ(original_pc2.is_bigendian, converted_pc2.is_bigendian);
   EXPECT_EQ(original_pc2.point_step, converted_pc2.point_step);
   EXPECT_EQ(original_pc2.row_step, converted_pc2.row_step);
-  EXPECT_EQ(original_pc2.data, converted_pc2.data);
+  EXPECT_EQ(original_pc2.data, converted_pc2.data);  // test in a loop separately
 
   EXPECT_EQ(original_pc2.is_dense, converted_pc2.is_dense);
+}
+
+TEST_F(rosToFbConversionTest, testPointCloud2Data)
+{
+  for (size_t i = 0; i < original_pc2.data.size(); i++)
+  {
+    EXPECT_EQ(original_pc2.data[i], converted_pc2.data[i]);
+  }
 }
 
 TEST_F(rosToFbConversionTest, testImage)
@@ -270,14 +363,52 @@ TEST_F(rosToFbConversionTest, testImage)
   EXPECT_EQ(original_img.encoding, converted_img.encoding);
   EXPECT_EQ(original_img.is_bigendian, converted_img.is_bigendian);
   EXPECT_EQ(original_img.step, converted_img.step);
-  EXPECT_EQ(original_img.data, converted_img.data);
+  EXPECT_EQ(original_img.data, converted_img.data);  // test in a loop separately
 }
 
-TEST_F(rosToFbConversionTest, testPoint)
+TEST_F(rosToFbConversionTest, testImgData)
+{
+  for (size_t i = 0; i < original_img.data.size(); i++)
+  {
+    EXPECT_EQ(original_img.data[i], converted_img.data[i]);
+  }
+}
+
+void testPoint(geometry_msgs::Point original_p, geometry_msgs::Point converted_p)
 {
   EXPECT_EQ(original_p.x, converted_p.x);
   EXPECT_EQ(original_p.y, converted_p.y);
   EXPECT_EQ(original_p.z, converted_p.z);
+}
+
+TEST_F(rosToFbConversionTest, testPoint)
+{
+  testPoint(original_p, converted_p);
+}
+
+void testQuaternion(geometry_msgs::Quaternion original_q, geometry_msgs::Quaternion converted_q)
+{
+  EXPECT_EQ(original_q.x, converted_q.x);
+  EXPECT_EQ(original_q.y, converted_q.y);
+  EXPECT_EQ(original_q.z, converted_q.z);
+  EXPECT_EQ(original_q.w, converted_q.w);
+}
+
+TEST_F(rosToFbConversionTest, testQuaternion)
+{
+  testQuaternion(original_q, converted_q);
+}
+
+TEST_F(rosToFbConversionTest, testPose)
+{
+  // EXPECT_EQ()
+}
+
+TEST_F(rosToFbConversionTest, testVector3)
+{
+  EXPECT_EQ(original_v.x, converted_v.x);
+  EXPECT_EQ(original_v.y, converted_v.y);
+  EXPECT_EQ(original_v.z, converted_v.z);
 }
 
 int main(int argc, char** argv)
