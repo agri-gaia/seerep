@@ -66,6 +66,7 @@ void Hdf5FbPointCloud::writePointCloud2(const std::string& id, const seerep::fb:
   // TODO normals
 
   // TODO other fields
+
   // if (!info.other_fields.empty())
   //   writeOtherFields(uuid, *pointcloud2, info.other_fields);
 
@@ -314,42 +315,50 @@ Hdf5FbPointCloud::readPointCloud2(const std::string& id)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
-  const std::string hdf5DatasetPath = HDF5_GROUP_POINTCLOUD + "/" + id;
+  const std::string hdf5GroupPath = HDF5_GROUP_POINTCLOUD + "/" + id;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
+      << "loading flatbuffers point cloud from: " << hdf5GroupPath;
 
-  // check if the point cloud exists
-  if (!m_file->exist(hdf5DatasetPath))
-  {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << hdf5DatasetPath << "does not exist";
-    return std::nullopt;
-  }
-
-  std::shared_ptr<HighFive::Group> data_group_ptr =
-      std::make_shared<HighFive::Group>(m_file->getGroup(hdf5DatasetPath));
-
-  flatbuffers::grpc::MessageBuilder builder;
-
-  // read general attributes
-  uint32_t height, width, point_step, row_step;
-  bool is_bigendian, is_dense;
+  std::shared_ptr<HighFive::Group> dataGroupPtr;
 
   try
   {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "loading general attributes";
-    height = readAttributeFromHdf5<uint32_t>(id, *data_group_ptr, HEIGHT);
-    width = readAttributeFromHdf5<uint32_t>(id, *data_group_ptr, WIDTH);
-    point_step = readAttributeFromHdf5<uint32_t>(id, *data_group_ptr, POINT_STEP);
-    row_step = readAttributeFromHdf5<uint32_t>(id, *data_group_ptr, ROW_STEP);
-    is_bigendian = readAttributeFromHdf5<bool>(id, *data_group_ptr, IS_BIGENDIAN);
-    is_dense = readAttributeFromHdf5<bool>(id, *data_group_ptr, IS_DENSE);
+    checkExists(hdf5GroupPath);
+    dataGroupPtr = std::make_shared<HighFive::Group>(m_file->getGroup(hdf5GroupPath));
   }
-  catch (const std::invalid_argument& e)
+  catch (std::invalid_argument const& e)
   {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << "error: " << e.what();
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning)
+        << "hdf5 group " << hdf5GroupPath << " does not exist!";
     return std::nullopt;
   }
 
-  // read header attributes
-  auto headerAttributes = readHeaderAttributes(*data_group_ptr, id, builder);
+  flatbuffers::grpc::MessageBuilder builder;
+
+  // read general attributes from data group
+  uint32_t height, width, pointStep, rowStep;
+  bool isBigendian, isDense;
+
+  try
+  {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
+        << "loading general attributes of : " << hdf5GroupPath;
+    height = readAttributeFromHdf5<uint32_t>(id, *dataGroupPtr, HEIGHT);
+    width = readAttributeFromHdf5<uint32_t>(id, *dataGroupPtr, WIDTH);
+    pointStep = readAttributeFromHdf5<uint32_t>(id, *dataGroupPtr, POINT_STEP);
+    rowStep = readAttributeFromHdf5<uint32_t>(id, *dataGroupPtr, ROW_STEP);
+    isBigendian = readAttributeFromHdf5<bool>(id, *dataGroupPtr, IS_BIGENDIAN);
+    isDense = readAttributeFromHdf5<bool>(id, *dataGroupPtr, IS_DENSE);
+  }
+  catch (const std::invalid_argument& e)
+  {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning)
+        << "error loading general attributes of: " << hdf5GroupPath;
+    return std::nullopt;
+  }
+
+  // reads and creates a flatbuffers header with offset
+  auto headerAttributesOffset = readHeaderAttributes(builder, *dataGroupPtr, id);
 
   // read point field attributes
   std::vector<std::string> names;
@@ -358,22 +367,24 @@ Hdf5FbPointCloud::readPointCloud2(const std::string& id)
 
   try
   {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "loading point field attributes";
-    names = readAttributeFromHdf5<std::vector<std::string>>(id, *data_group_ptr, FIELD_NAME);
-    offsets = readAttributeFromHdf5<std::vector<uint32_t>>(id, *data_group_ptr, FIELD_OFFSET);
-    counts = readAttributeFromHdf5<std::vector<uint32_t>>(id, *data_group_ptr, FIELD_COUNT);
-    datatypes = readAttributeFromHdf5<std::vector<uint8_t>>(id, *data_group_ptr, FIELD_DATATYPE);
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
+        << "loading point field attributes of: " << hdf5GroupPath;
+    names = readAttributeFromHdf5<std::vector<std::string>>(id, *dataGroupPtr, FIELD_NAME);
+    offsets = readAttributeFromHdf5<std::vector<uint32_t>>(id, *dataGroupPtr, FIELD_OFFSET);
+    counts = readAttributeFromHdf5<std::vector<uint32_t>>(id, *dataGroupPtr, FIELD_COUNT);
+    datatypes = readAttributeFromHdf5<std::vector<uint8_t>>(id, *dataGroupPtr, FIELD_DATATYPE);
   }
   catch (const std::invalid_argument& e)
   {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << "error: " << e.what();
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning)
+        << "error loading point field attributes of: " << hdf5GroupPath;
     return std::nullopt;
   }
 
   if (!equalVectorLength(names, offsets, counts, datatypes))
   {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
-        << "number of read point field attributes does not match";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning)
+        << "unequal number of point field attributes: " << hdf5GroupPath;
     return std::nullopt;
   }
 
@@ -390,10 +401,11 @@ Hdf5FbPointCloud::readPointCloud2(const std::string& id)
   }
   auto pointFieldsVector = builder.CreateVector(pointFields);
 
-  // Note: Not pretty, but with this way both read and write use the same method
-  // for retrieving information about the point cloud
   CloudInfo info = getCloudInfo(*reinterpret_cast<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::PointField>>*>(
       builder.GetCurrentBufferPointer()));
+
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
+      << "reading point cloud data of: " << hdf5GroupPath;
 
   std::vector<std::vector<std::vector<float>>> points;
   std::vector<std::vector<std::vector<uint8_t>>> pointsRGB;
@@ -409,22 +421,24 @@ Hdf5FbPointCloud::readPointCloud2(const std::string& id)
   if (info.has_rgba)
     readColorsRGBA(id, pointsRGBA);
 
-  if (!info.other_fields.empty())
-    readOtherFields(id, info.other_fields, otherFields);
+  // TODO add other fields
+
+  // if (!info.other_fields.empty())
+  //   readOtherFields(id, info.other_fields, otherFields);
 
   // TODO add normals
 
   std::vector<uint8_t> data;
   if (!points.empty())
   {
-    // converting the point cloud data into a 1D array
-    data.reserve(height * width);
+    data.reserve(height * width * pointStep);
     for (size_t row = 0; row < height; row++)
     {
       for (size_t col = 0; col < width; col++)
       {
         data.insert(data.end(), std::make_move_iterator(points.at(row).at(col).begin()),
                     std::make_move_iterator(points.at(row).at(col).end()));
+
         if (info.has_rgb)
         {
           data.insert(data.end(), std::make_move_iterator(pointsRGB.at(row).at(col).begin()),
@@ -435,11 +449,11 @@ Hdf5FbPointCloud::readPointCloud2(const std::string& id)
           data.insert(data.end(), std::make_move_iterator(pointsRGBA.at(row).at(col).begin()),
                       std::make_move_iterator(pointsRGBA.at(row).at(col).end()));
         }
-        // TODO add support for other fields like laser scanner info
+        // TODO add support for other fields
       }
     }
   }
-  int vectorSize = sizeof(std::vector<uint8_t>) + (sizeof(uint8_t) * data.size());
+
   auto dataVector = builder.CreateVector(data);
 
   // read labeled bounding box
@@ -500,15 +514,15 @@ Hdf5FbPointCloud::readPointCloud2(const std::string& id)
 
   // build the point cloud message
   seerep::fb::PointCloud2Builder pointCloudBuilder(builder);
-  pointCloudBuilder.add_header(headerAttributes);
+  pointCloudBuilder.add_header(headerAttributesOffset);
   pointCloudBuilder.add_height(height);
   pointCloudBuilder.add_width(width);
   pointCloudBuilder.add_fields(pointFieldsVector);
-  pointCloudBuilder.add_is_bigendian(is_bigendian);
-  pointCloudBuilder.add_point_step(point_step);
-  pointCloudBuilder.add_row_step(row_step);
+  pointCloudBuilder.add_is_bigendian(isBigendian);
+  pointCloudBuilder.add_point_step(pointStep);
+  pointCloudBuilder.add_row_step(rowStep);
   pointCloudBuilder.add_data(dataVector);
-  pointCloudBuilder.add_is_dense(is_dense);
+  pointCloudBuilder.add_is_dense(isDense);
   pointCloudBuilder.add_labels_general(labelsGeneralVector);
   pointCloudBuilder.add_labels_bb(boundingBoxLabeledVector);
   auto pointCloudOffset = pointCloudBuilder.Finish();
@@ -520,33 +534,36 @@ Hdf5FbPointCloud::readPointCloud2(const std::string& id)
 
 void Hdf5FbPointCloud::readPoints(const std::string& uuid, std::vector<std::vector<std::vector<float>>>& pointData)
 {
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "reading points from hdf5 file";
+  const std::string hdf5DatasetPointsPath = HDF5_GROUP_POINTCLOUD + "/" + uuid + "/points";
 
-  std::string hdf5DatasetPointsPath =
-      seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + uuid + "/points";
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
+      << "reading points from: " << hdf5DatasetPointsPath;
 
   HighFive::DataSet pointsDataset = m_file->getDataSet(hdf5DatasetPointsPath);
+
   pointsDataset.read(pointData);
 }
 
 void Hdf5FbPointCloud::readColorsRGB(const std::string& uuid, std::vector<std::vector<std::vector<uint8_t>>>& colorData)
 {
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "reading rgb from hdf5 file ";
+  const std::string hdf5DatasetColorsPath = HDF5_GROUP_POINTCLOUD + "/" + uuid + "/colors";
 
-  std::string colorsId = seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + uuid + "/colors";
-  HighFive::DataSet colorsDataset = m_file->getDataSet(colorsId);
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "reading rgb from: " << hdf5DatasetColorsPath;
+
+  HighFive::DataSet colorsDataset = m_file->getDataSet(hdf5DatasetColorsPath);
 
   colorsDataset.read(colorData);
 }
 
 void Hdf5FbPointCloud::readColorsRGBA(const std::string& uuid, std::vector<std::vector<std::vector<uint8_t>>>& colorData)
 {
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "reading rgba from hdf5 file ";
+  const std::string hdf5DatasetColorsPath = HDF5_GROUP_POINTCLOUD + "/" + uuid + "/colors";
 
-  std::string colors_id = seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + uuid + "/colors";
-  HighFive::DataSet colors_dataset = m_file->getDataSet(colors_id);
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "reading rgba from: " << hdf5DatasetColorsPath;
 
-  colors_dataset.read(colorData);
+  HighFive::DataSet colorsDataset = m_file->getDataSet(hdf5DatasetColorsPath);
+
+  colorsDataset.read(colorData);
 }
 
 void Hdf5FbPointCloud::readOtherFields(const std::string& uuid, const std::map<std::string, PointFieldInfo>& fields,

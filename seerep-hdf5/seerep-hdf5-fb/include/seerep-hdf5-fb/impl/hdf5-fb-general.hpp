@@ -59,10 +59,12 @@ void Hdf5FbGeneral::writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, c
 }
 
 template <class T>
-flatbuffers::Offset<seerep::fb::Header> Hdf5FbGeneral::readHeaderAttributes(HighFive::AnnotateTraits<T>& object,
-                                                                            std::string uuidMsg,
-                                                                            flatbuffers::grpc::MessageBuilder& builder)
+flatbuffers::Offset<seerep::fb::Header> Hdf5FbGeneral::readHeaderAttributes(flatbuffers::grpc::MessageBuilder& builder,
+                                                                            HighFive::AnnotateTraits<T>& object,
+                                                                            std::string uuidMsg)
 {
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "loading flatbuffers header attributes";
+
   int64_t seconds;
   int32_t nanos;
   uint32_t seq;

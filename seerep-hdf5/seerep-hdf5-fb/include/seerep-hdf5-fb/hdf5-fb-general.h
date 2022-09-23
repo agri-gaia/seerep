@@ -46,10 +46,11 @@ protected:
   void writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, const seerep::fb::Header& header);
 
   template <class T>
-  flatbuffers::Offset<seerep::fb::Header> readHeaderAttributes(HighFive::AnnotateTraits<T>& object, std::string uuidMsg,
-                                                               flatbuffers::grpc::MessageBuilder& builder);
+  flatbuffers::Offset<seerep::fb::Header> readHeaderAttributes(flatbuffers::grpc::MessageBuilder& builder,
+                                                               HighFive::AnnotateTraits<T>& object,
+                                                               std::string uuidMsg);
 
-  //################
+  //################s
   // BoundingBoxes
   //################
   void writeBoundingBoxLabeled(

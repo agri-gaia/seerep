@@ -53,10 +53,15 @@ private:
   };
 
   template <typename T>
-  void read(const std::string cloud_uuid, const std::string& field_name, std::vector<T>& data, size_t size)
+  void read(const std::string& id, const std::string& fieldName, std::vector<T>& data, size_t size)
   {
-    const std::string id = seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX + "/" + cloud_uuid + "/" + field_name;
+    const std::string hdf5DatasetFieldPath = HDF5_GROUP_POINTCLOUD + "/" + id + "/" + fieldName;
+
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
+        << "reading " << fieldName << " from: " << hdf5DatasetFieldPath;
+
     HighFive::DataSet dataset = m_file->getDataSet(id);
+
     data.reserve(size);
     dataset.read(data);
   }

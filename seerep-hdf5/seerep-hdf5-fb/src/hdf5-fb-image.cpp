@@ -164,7 +164,7 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "NOT loading the data. Just Meta-Data.";
   }
-  auto headerOffset = readHeaderAttributes(*data_set_ptr, id, builder);
+  auto headerOffset = readHeaderAttributes(builder, *data_set_ptr, id);
 
   std::vector<std::string> boundingBoxesLabels;
   std::vector<std::vector<double>> boundingBoxes;
