@@ -3,7 +3,7 @@
 
 #include <gtest/gtest.h>
 
-#include "seerep_ros_conversions_fb/conversions.h"
+#include "conversions.cpp"
 
 // Things to test
 // Header
