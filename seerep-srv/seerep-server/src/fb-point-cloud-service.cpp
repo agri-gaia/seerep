@@ -12,31 +12,37 @@ FbPointCloudService::GetPointCloud2(grpc::ServerContext* context,
                                     const flatbuffers::grpc::Message<seerep::fb::Query>* request,
                                     grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::PointCloud2>>* writer)
 {
+  // ignore without causing a warning
   (void)context;
+
   auto requestRoot = request->GetRoot();
+
   std::stringstream debuginfo;
-  debuginfo << "sending point clouds with this query parameters:";
+
+  debuginfo << "sending point clouds with this query parameters: ";
   if (requestRoot->boundingbox() != NULL)
   {
-    debuginfo << "bounding box min(" << requestRoot->boundingbox()->point_min()->x() << "/"
-              << requestRoot->boundingbox()->point_min()->y() << "/" << requestRoot->boundingbox()->point_min()->z()
-              << "), max(" << requestRoot->boundingbox()->point_max()->x() << "/"
-              << requestRoot->boundingbox()->point_max()->y() << "/" << requestRoot->boundingbox()->point_max()->z()
-              << ")";
+    debuginfo << "\n bounding box min(x: " << requestRoot->boundingbox()->point_min()->x()
+              << ", y: " << requestRoot->boundingbox()->point_min()->y()
+              << ", z: " << requestRoot->boundingbox()->point_min()->z()
+              << "), max(x: " << requestRoot->boundingbox()->point_max()->x()
+              << ", y: " << requestRoot->boundingbox()->point_max()->y()
+              << ", z: " << requestRoot->boundingbox()->point_max()->z() << ")";
   }
   if (requestRoot->timeinterval() != NULL)
   {
-    debuginfo << "time interval (" << requestRoot->timeinterval()->time_min()->seconds() << "/"
-              << requestRoot->timeinterval()->time_max()->seconds() << ")";
+    debuginfo << "\n time interval (seconds since epoch: " << requestRoot->timeinterval()->time_min()->seconds()
+              << ", nanoseconds since epoch:" << requestRoot->timeinterval()->time_max()->seconds() << ")";
   }
   if (requestRoot->label() != NULL)
   {
-    debuginfo << "labels general";
+    debuginfo << "\n labels general:";
     for (auto label : *requestRoot->label())
     {
-      debuginfo << "'" << label->str() << "' ";
+      debuginfo << " '" << label->str() << "' ";
     }
   }
+
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << debuginfo.rdbuf();
 
   try
@@ -45,7 +51,7 @@ FbPointCloudService::GetPointCloud2(grpc::ServerContext* context,
   }
   catch (std::runtime_error const& e)
   {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning) << e.what();
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
   }
   return grpc::Status::OK;
@@ -55,16 +61,21 @@ grpc::Status FbPointCloudService::TransferPointCloud2(
     grpc::ServerContext* context, grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::PointCloud2>>* reader,
     flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response)
 {
-  (void)context;  // ignore
-  std::string answer = "everything stored!";
+  // ignore without causing warning
+  (void)context;
+
+  std::string answer = "Saved the flatbuffers point cloud message!";
 
   flatbuffers::grpc::Message<seerep::fb::PointCloud2> pointCloudMsg;
+
   while (reader->Read(&pointCloudMsg))
   {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "received point cloud ...";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "received flatbuffers point cloud";
+
     auto pointCloud = pointCloudMsg.GetRoot();
 
-    std::string uuidProject = pointCloud->header()->uuid_project()->str();
+    const std::string& uuidProject = pointCloud->header()->uuid_project()->str();
+
     if (!uuidProject.empty())
     {
       try
@@ -73,7 +84,7 @@ grpc::Status FbPointCloudService::TransferPointCloud2(
       }
       catch (std::runtime_error const& e)
       {
-        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning) << e.what();
 
         seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
 
@@ -82,7 +93,8 @@ grpc::Status FbPointCloudService::TransferPointCloud2(
     }
     else
     {
-      answer = "a msg had no project uuid!";
+      answer = "No project uuid in the header of the received flatbuffers point cloud message!";
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning) << answer;
     }
   }
   seerep_server_util::createResponseFb(answer, seerep::fb::TRANSMISSION_STATE_SUCCESS, response);
