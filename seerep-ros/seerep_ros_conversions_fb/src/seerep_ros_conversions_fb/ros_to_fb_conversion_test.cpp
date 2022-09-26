@@ -15,12 +15,14 @@
 // Image - Done
 // Point - Done
 // Quaternion - Done
-// Pose - Skipped
-// PoseStamped - Skipped
+// Pose - Done
+// PoseStamped - Done
 // Vector3 -Done
-// Vector3Stamped
-// Transform
-// TransformStamped
+// Vector3Stamped - Done
+// Transform - Done
+// TransformStamped - Done
+// BoundingBox2DLabeled
+// BoundingBox2DLabeledStamped
 
 // ROS Header
 std_msgs::Header createHeader()
@@ -150,6 +152,17 @@ geometry_msgs::Pose createPose()
   return pose;
 }
 
+// PoseStamped
+geometry_msgs::PoseStamped createPoseStamped()
+{
+  geometry_msgs::PoseStamped pose_stamped;
+
+  pose_stamped.header = createHeader();
+  pose_stamped.pose = createPose();
+
+  return pose_stamped;
+}
+
 // Vector3
 geometry_msgs::Vector3 createVector3()
 {
@@ -160,6 +173,37 @@ geometry_msgs::Vector3 createVector3()
   v.z = 3;
 
   return v;
+}
+
+geometry_msgs::Vector3Stamped createVector3Stamped()
+{
+  geometry_msgs::Vector3Stamped v3_stamped;
+
+  v3_stamped.header = createHeader();
+  v3_stamped.vector = createVector3();
+
+  return v3_stamped;
+}
+
+geometry_msgs::Transform createTransform()
+{
+  geometry_msgs::Transform t;
+
+  t.rotation = createQuaternion();
+  t.translation = createVector3();
+
+  return t;
+}
+
+geometry_msgs::TransformStamped createTransformStamped()
+{
+  geometry_msgs::TransformStamped ts;
+
+  ts.header = createHeader();
+  ts.child_frame_id = "arbitrary_child_frame_id";
+  ts.transform = createTransform();
+
+  return ts;
 }
 
 class rosToFbConversionTest : public testing::Test
@@ -186,8 +230,20 @@ protected:
   static geometry_msgs::Pose original_pose;
   static geometry_msgs::Pose converted_pose;
 
+  static geometry_msgs::PoseStamped original_pose_stamped;
+  static geometry_msgs::PoseStamped converted_pose_stamped;
+
   static geometry_msgs::Vector3 original_v;
   static geometry_msgs::Vector3 converted_v;
+
+  static geometry_msgs::Vector3Stamped original_v3_stamped;
+  static geometry_msgs::Vector3Stamped converted_v3_stamped;
+
+  static geometry_msgs::Transform original_t;
+  static geometry_msgs::Transform converted_t;
+
+  static geometry_msgs::TransformStamped original_t_stamped;
+  static geometry_msgs::TransformStamped converted_t_stamped;
 
   static void SetUpTestSuite()
   {
@@ -265,6 +321,15 @@ protected:
     geometry_msgs::Pose converted_pose = seerep_ros_conversions_fb::toROS(*fb_pose.GetRoot());
     // Pose End
 
+    // PoseStamped Start
+    geometry_msgs::PoseStamped original_pose_stamped = createPoseStamped();
+
+    flatbuffers::grpc::Message<seerep::fb::PoseStamped> fb_pose_stamped;
+    fb_pose_stamped = seerep_ros_conversions_fb::toFlat(original_pose_stamped, p_uuid);
+
+    geometry_msgs::PoseStamped converted_pose_stamped = seerep_ros_conversions_fb::toROS(*fb_pose_stamped.GetRoot());
+    // PoseStamped End
+
     // Vector3 Start
     geometry_msgs::Vector3 original_v = createVector3();
 
@@ -273,6 +338,35 @@ protected:
 
     geometry_msgs::Vector3 converted_v = seerep_ros_conversions_fb::toROS(*fb_vector3.GetRoot());
     // Vector3 End
+
+    // Vector3Stamped Start
+    geometry_msgs::Vector3Stamped original_v3_stamped = createVector3Stamped();
+
+    flatbuffers::grpc::Message<seerep::fb::Vector3Stamped> fb_vector3_stamped;
+    fb_vector3_stamped = seerep_ros_conversions_fb::toFlat(original_v3_stamped, p_uuid);
+
+    geometry_msgs::Vector3Stamped converted_v3_stamped =
+        seerep_ros_conversions_fb::toROS(*fb_vector3_stamped.GetRoot());
+    // Vector3Stamped End
+
+    // Transform Start
+    geometry_msgs::Transform original_t = createTransform();
+
+    flatbuffers::grpc::Message<seerep::fb::Transform> fb_transform;
+    fb_transform = seerep_ros_conversions_fb::toFlat(original_t);
+
+    geometry_msgs::Transform converted_t = seerep_ros_conversions_fb::toROS(*fb_transform.GetRoot());
+    // Transform End
+
+    // TransformStamped Start
+    geometry_msgs::TransformStamped original_t_stamped = createTransformStamped();
+
+    flatbuffers::grpc::Message<seerep::fb::TransformStamped> fb_transform_stamped;
+    fb_transform_stamped = seerep_ros_conversions_fb::toFlat(original_t_stamped, p_uuid);
+
+    geometry_msgs::TransformStamped converted_t_stamped =
+        seerep_ros_conversions_fb::toROS(*fb_transform_stamped.GetRoot());
+    // Transform End
   }
 };
 
@@ -306,20 +400,41 @@ geometry_msgs::Quaternion rosToFbConversionTest::converted_q;
 geometry_msgs::Pose rosToFbConversionTest::original_pose;
 geometry_msgs::Pose rosToFbConversionTest::converted_pose;
 
+// PoseStamped
+geometry_msgs::PoseStamped rosToFbConversionTest::original_pose_stamped;
+geometry_msgs::PoseStamped rosToFbConversionTest::converted_pose_stamped;
+
 // Vector3
 geometry_msgs::Vector3 rosToFbConversionTest::original_v;
 geometry_msgs::Vector3 rosToFbConversionTest::converted_v;
 
-// test header
-TEST_F(rosToFbConversionTest, testHeader)
+// Vector3Stamped
+geometry_msgs::Vector3Stamped rosToFbConversionTest::original_v3_stamped;
+geometry_msgs::Vector3Stamped rosToFbConversionTest::converted_v3_stamped;
+
+// Transform
+geometry_msgs::Transform rosToFbConversionTest::original_t;
+geometry_msgs::Transform rosToFbConversionTest::converted_t;
+
+// TransformStamped
+geometry_msgs::TransformStamped rosToFbConversionTest::original_t_stamped;
+geometry_msgs::TransformStamped rosToFbConversionTest::converted_t_stamped;
+
+void testHeader(std_msgs::Header original_header, std_msgs::Header converted_header)
 {
-  // expect that original and converted-from-fb are equal
   EXPECT_EQ(original_header.seq, converted_header.seq);
   EXPECT_EQ(original_header.stamp.sec, converted_header.stamp.sec);
   EXPECT_EQ(original_header.stamp.nsec, converted_header.stamp.nsec);
   EXPECT_EQ(original_header.frame_id, converted_header.frame_id);
   // EXPECT_EQ(original_header.uuid_project.c_str, converted_header.uuid_project.c_str);
   // EXPECT_EQ(original_header.uuid_msgs.c_str, converted_header.uuid_msgs.c_str);
+}
+
+// test header
+TEST_F(rosToFbConversionTest, testHeader)
+{
+  // expect that original and converted-from-fb are equal
+  testHeader(original_header, converted_header);
 }
 
 TEST_F(rosToFbConversionTest, testPointField)
@@ -401,14 +516,53 @@ TEST_F(rosToFbConversionTest, testQuaternion)
 
 TEST_F(rosToFbConversionTest, testPose)
 {
-  // EXPECT_EQ()
+  testPoint(original_pose.position, converted_pose.position);
+  testQuaternion(original_pose.orientation, converted_pose.orientation);
 }
 
-TEST_F(rosToFbConversionTest, testVector3)
+TEST_F(rosToFbConversionTest, testPoseStamped)
+{
+  // test the header
+  testHeader(original_pose_stamped.header, converted_pose_stamped.header);
+
+  // test the pose
+  testPoint(original_pose_stamped.pose.position, converted_pose_stamped.pose.position);
+  testQuaternion(original_pose_stamped.pose.orientation, converted_pose_stamped.pose.orientation);
+}
+
+void testVector3(geometry_msgs::Vector3 original_v, geometry_msgs::Vector3 converted_v)
 {
   EXPECT_EQ(original_v.x, converted_v.x);
   EXPECT_EQ(original_v.y, converted_v.y);
   EXPECT_EQ(original_v.z, converted_v.z);
+}
+
+TEST_F(rosToFbConversionTest, testVector3)
+{
+  testVector3(original_v, converted_v);
+}
+
+TEST_F(rosToFbConversionTest, testVector3Stamped)
+{
+  testHeader(original_v3_stamped.header, original_v3_stamped.header);
+
+  testVector3(original_v3_stamped.vector, converted_v3_stamped.vector);
+}
+
+TEST_F(rosToFbConversionTest, testTransform)
+{
+  testVector3(original_t.translation, converted_t.translation);
+  testQuaternion(original_t.rotation, converted_t.rotation);
+}
+
+TEST_F(rosToFbConversionTest, testTransformStamped)
+{
+  testHeader(original_t_stamped.header, converted_t_stamped.header);
+
+  EXPECT_EQ(original_t_stamped.child_frame_id, converted_t_stamped.child_frame_id);
+
+  testVector3(original_t.translation, converted_t.translation);
+  testQuaternion(original_t.rotation, converted_t.rotation);
 }
 
 int main(int argc, char** argv)
