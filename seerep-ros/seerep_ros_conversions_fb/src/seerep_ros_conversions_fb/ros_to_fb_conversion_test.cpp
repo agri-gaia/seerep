@@ -206,6 +206,40 @@ geometry_msgs::TransformStamped createTransformStamped()
   return ts;
 }
 
+// vision_msgs::ObjectHypothesisWithPose createObjectHypothesisWithPose()
+// {
+//   vision_msgs::ObjectHypothesisWithPose ohwp;
+
+//   ohwp.id = 4;
+//   ohwp.score = 3.3;
+
+//   // create pose with covariance
+//   ohwp.pose.pose = createPose();
+//   ohwp.pose.covariance = 2.2;
+
+//   return ohwp;
+// }
+
+// vision_msgs::Detection2D createDetection2D()
+// {
+//   vision_msgs::Detection2D d2d;
+
+//   d2d.header = createHeader();
+
+//   // create results
+//   std::vector<vision_msgs::ObjectHypothesisWithPose> ohwp;
+//   ohwp.push_back(createObjectHypothesisWithPose());
+//   ohwp.push_back(createObjectHypothesisWithPose());
+//   d2d.results = ohwp;
+
+//   // create BoundingBox
+//   // d2d.bbox = createBoundingBox();
+
+//   d2d.source_img = createImage();
+
+//   return d2d;
+// }
+
 class rosToFbConversionTest : public testing::Test
 {
 protected:
