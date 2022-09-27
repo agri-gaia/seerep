@@ -31,7 +31,7 @@ add_library(${PROJECT_NAME}
 	src/${PROJECT_NAME}/conversions.cpp
 )
 
-add_executable(ros-to-fb-conversion-test src/seerep_ros_conversions_fb/ros_to_fb_conversion_test.cpp)
+add_executable(ros-to-fb-conversion-test test/ros_to_fb_conversion_test.cpp)
 add_dependencies(
   ros-to-fb-conversion-test
   ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS}

@@ -3,10 +3,7 @@
 
 #include <gtest/gtest.h>
 
-// #include <boost/uuid/uuid.hpp>
-// #include <boost/uuid/uuid_generators.hpp>
-
-#include "conversions.cpp"
+#include "seerep_ros_conversions_fb/conversions.h"
 
 // Things to test
 // Header - Done
@@ -459,7 +456,7 @@ void testHeader(std_msgs::Header original_header, std_msgs::Header converted_hea
   EXPECT_EQ(original_header.seq, converted_header.seq);
   EXPECT_EQ(original_header.stamp.sec, converted_header.stamp.sec);
   EXPECT_EQ(original_header.stamp.nsec, converted_header.stamp.nsec);
-  EXPECT_EQ(original_header.frame_id, converted_header.frame_id);
+  EXPECT_STREQ(original_header.frame_id.c_str(), converted_header.frame_id.c_str());
   // EXPECT_EQ(original_header.uuid_project.c_str, converted_header.uuid_project.c_str);
   // EXPECT_EQ(original_header.uuid_msgs.c_str, converted_header.uuid_msgs.c_str);
 }
@@ -473,7 +470,7 @@ TEST_F(rosToFbConversionTest, testHeader)
 
 TEST_F(rosToFbConversionTest, testPointField)
 {
-  EXPECT_EQ(original_pf.name, converted_pf.name);
+  EXPECT_STREQ(original_pf.name.c_str(), converted_pf.name.c_str());
   EXPECT_EQ(original_pf.offset, converted_pf.offset);
   EXPECT_EQ(original_pf.datatype, converted_pf.datatype);
   EXPECT_EQ(original_pf.count, converted_pf.count);
@@ -506,13 +503,20 @@ TEST_F(rosToFbConversionTest, testPointCloud2Data)
 
 TEST_F(rosToFbConversionTest, testImage)
 {
-  EXPECT_EQ(original_img.header, converted_img.header);
+  testHeader(original_img.header, converted_img.header);
   EXPECT_EQ(original_img.height, converted_img.height);
   EXPECT_EQ(original_img.width, converted_img.width);
-  EXPECT_EQ(original_img.encoding, converted_img.encoding);
+  EXPECT_STREQ(original_img.encoding.c_str(), converted_img.encoding.c_str());
   EXPECT_EQ(original_img.is_bigendian, converted_img.is_bigendian);
   EXPECT_EQ(original_img.step, converted_img.step);
-  EXPECT_EQ(original_img.data, converted_img.data);  // test in a loop separately
+}
+
+TEST_F(rosToFbConversionTest, testImageData)
+{
+  for (size_t i = 0; i < original_img.data.size(); i++)
+  {
+    EXPECT_EQ(original_img.data[i], converted_img.data[i]);
+  }
 }
 
 TEST_F(rosToFbConversionTest, testImgData)
@@ -593,7 +597,7 @@ TEST_F(rosToFbConversionTest, testTransformStamped)
 {
   testHeader(original_t_stamped.header, converted_t_stamped.header);
 
-  EXPECT_EQ(original_t_stamped.child_frame_id, converted_t_stamped.child_frame_id);
+  EXPECT_STREQ(original_t_stamped.child_frame_id.c_str(), converted_t_stamped.child_frame_id.c_str());
 
   testVector3(original_t.translation, converted_t.translation);
   testQuaternion(original_t.rotation, converted_t.rotation);
