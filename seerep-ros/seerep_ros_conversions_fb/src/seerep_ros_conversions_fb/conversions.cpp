@@ -416,6 +416,10 @@ geometry_msgs::TransformStamped toROS(const seerep::fb::TransformStamped& transf
   return ret;
 }
 
+/*
+ * BoundingBox2DLabeledStamped
+ */
+
 flatbuffers::grpc::Message<seerep::fb::BoundingBoxes2DLabeledStamped>
 toFlat(const vision_msgs::Detection2DArray& detection2d, std::string projectuuid, std::string msguuid = "")
 {
@@ -428,19 +432,40 @@ flatbuffers::Offset<seerep::fb::BoundingBoxes2DLabeledStamped> toFlat(const visi
                                                                       flatbuffers::grpc::MessageBuilder& builder,
                                                                       std::string msguuid = "")
 {
+  // convert header
   auto header = toFlat(detection2d.header, projectuuid, builder, msguuid);
+
+  // create boundingbox labeled vector
   std::vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>> bblabeled;
+
+  // for each loop for saving in fb bb_labeled vector
   for (vision_msgs::Detection2D detection : detection2d.detections)
   {
     bblabeled.push_back(toFlat(detection, builder));
   }
 
+  // fb labels vector
   auto labelsOffset = builder.CreateVector(bblabeled);
   seerep::fb::BoundingBoxes2DLabeledStampedBuilder bbbuilder(builder);
   bbbuilder.add_header(header);
   bbbuilder.add_labels_bb(labelsOffset);
   return bbbuilder.Finish();
 }
+
+// vision_msgs::Detection2DArray toROS(seerep::fb::BoundingBoxes2DLabeledStamped& fb_bb2dl)
+// {
+//   vision_msgs::Detection2DArray d2da;
+
+//   // header
+//   d2da.header = toROS(*fb_bb2dl.header();
+
+//   // array of detections
+//   // d2da.detections
+// }
+
+/*
+ * BoundingBox2DLabeled
+ */
 
 flatbuffers::grpc::Message<seerep::fb::BoundingBox2DLabeled> toFlat(const vision_msgs::Detection2D& detection2d)
 {
@@ -479,5 +504,25 @@ flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled> toFlat(const vision_msgs::
   bblabeledbuilder.add_labelWithInstance(labelWithInstanceOffset);
   return bblabeledbuilder.Finish();
 }
+
+// vision_msgs::Detection2D toROS(seerep::fb::BoundingBoxes2DLabeled& fb_bb2dl)
+// {
+//   vision_msgs::Detection2D d2d;
+
+//   // Header
+//   d2d.Header = toROS(*fb_bb2dl.header())
+
+//   // minimum point of bbox
+
+//   // maximum point of bbox
+
+//   // instance uuid
+
+//   // label
+
+//   // boundingbox
+
+//   // labelwithinstance
+// }
 
 }  // namespace seerep_ros_conversions_fb
