@@ -39,7 +39,6 @@ std_msgs::Header createHeader()
  * @brief creates a ros sensor_msgs pointfield with arbitrary values
  * @return sensor_msgs::PointField
  * */
-// Point Field
 sensor_msgs::PointField createPointField()
 {
   sensor_msgs::PointField pf;
@@ -56,7 +55,6 @@ sensor_msgs::PointField createPointField()
  * @brief creates a ros sensor_msgs pointcloud with arbitrary values
  * @return sensor_msgs::PointCloud2
  * */
-// PointCloud2
 sensor_msgs::PointCloud2 createPointCloud()
 {
   sensor_msgs::PointCloud2 pc2;
@@ -79,7 +77,7 @@ sensor_msgs::PointCloud2 createPointCloud()
   {
     for (int w = 0; w < pc2.width; w++)
     {
-      // arbitrariry populate the d vector with the sum of h and w
+      // arbitrarily populate the d vector with the sum of h and w
       d.push_back(h + w);
     }
   }
@@ -94,7 +92,6 @@ sensor_msgs::PointCloud2 createPointCloud()
  * @brief creates a ros sensor_msgs image with arbitrary values
  * @return sensor_msgs::Image
  * */
-// Image
 sensor_msgs::Image createImage()
 {
   sensor_msgs::Image img;
@@ -127,7 +124,6 @@ sensor_msgs::Image createImage()
  * @brief creates a ros geometry_msgs point with arbitrary values
  * @return geometry_msgs::Point
  * */
-// Point
 geometry_msgs::Point createPoint()
 {
   geometry_msgs::Point p;
@@ -143,7 +139,6 @@ geometry_msgs::Point createPoint()
  * @brief creates a ros geometry_msgs quaternion with arbitrary values
  * @return geometry_msgs::Quaternion
  * */
-// Quaternion
 geometry_msgs::Quaternion createQuaternion()
 {
   geometry_msgs::Quaternion q;
@@ -241,40 +236,6 @@ geometry_msgs::TransformStamped createTransformStamped()
 
   return ts;
 }
-
-// vision_msgs::ObjectHypothesisWithPose createObjectHypothesisWithPose()
-// {
-//   vision_msgs::ObjectHypothesisWithPose ohwp;
-
-//   ohwp.id = 4;
-//   ohwp.score = 3.3;
-
-//   // create pose with covariance
-//   ohwp.pose.pose = createPose();
-//   ohwp.pose.covariance = 2.2;
-
-//   return ohwp;
-// }
-
-// vision_msgs::Detection2D createDetection2D()
-// {
-//   vision_msgs::Detection2D d2d;
-
-//   d2d.header = createHeader();
-
-//   // create results
-//   std::vector<vision_msgs::ObjectHypothesisWithPose> ohwp;
-//   ohwp.push_back(createObjectHypothesisWithPose());
-//   ohwp.push_back(createObjectHypothesisWithPose());
-//   d2d.results = ohwp;
-
-//   // create BoundingBox
-//   // d2d.bbox = createBoundingBox();
-
-//   d2d.source_img = createImage();
-
-//   return d2d;
-// }
 
 /**
  * @brief This class holds all the attributes which will be tested in the tests.
