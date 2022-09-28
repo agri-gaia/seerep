@@ -31,28 +31,28 @@ add_library(${PROJECT_NAME}
 	src/${PROJECT_NAME}/conversions.cpp
 )
 
-add_executable(ros-to-fb-conversion-test test/ros_to_fb_conversion_test.cpp)
-add_dependencies(
-  ros-to-fb-conversion-test
+add_executable(${PROJECT_NAME}-test test/ros_to_fb_conversion_test.cpp)
+add_dependencies(${PROJECT_NAME}-test
   ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS}
 )
 
-target_link_libraries(ros-to-fb-conversion-test
-  GTest::gtest
+target_link_libraries(${PROJECT_NAME}-test
+	GTest::gtest
 	GTest::gtest_main
 	gmock_main
 	${catkin_LIBRARIES}
 	${SeerepMsgs_LIBRARIES}
 	gRPC::grpc++_reflection
+	${PROJECT_NAME}
 )
-add_test(ros-to-fb-conversion-test ros-to-fb-conversion-test)
+add_test(${PROJECT_NAME}-test ${PROJECT_NAME}-test)
 
 enable_testing()
 find_package(GTest 1.12.0 REQUIRED)
 add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 
-install(TARGETS ros-to-fb-conversion-test
+install(TARGETS ${PROJECT_NAME}-test
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
   PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
