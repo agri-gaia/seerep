@@ -20,7 +20,10 @@
 // BoundingBox2DLabeled
 // BoundingBox2DLabeledStamped
 
-// ROS Header
+/**
+ * @brief creates a ros std_msgs header with arbitrary values
+ * @return std_msgs::Header
+ * */
 std_msgs::Header createHeader()
 {
   std_msgs::Header header;
@@ -29,13 +32,13 @@ std_msgs::Header createHeader()
   header.stamp.nsec = 20;
   header.frame_id = "a_frame_id";
 
-  // Question for Mark
-  // Should we test project_uuid and msg_uuid here?
-  // It is a part of the seerep header but not the ROS header, and the toROS function doesn't convert it.
-
   return header;
 }
 
+/**
+ * @brief creates a ros sensor_msgs pointfield with arbitrary values
+ * @return sensor_msgs::PointField
+ * */
 // Point Field
 sensor_msgs::PointField createPointField()
 {
@@ -49,6 +52,10 @@ sensor_msgs::PointField createPointField()
   return pf;
 }
 
+/**
+ * @brief creates a ros sensor_msgs pointcloud with arbitrary values
+ * @return sensor_msgs::PointCloud2
+ * */
 // PointCloud2
 sensor_msgs::PointCloud2 createPointCloud()
 {
@@ -83,6 +90,10 @@ sensor_msgs::PointCloud2 createPointCloud()
   return pc2;
 }
 
+/**
+ * @brief creates a ros sensor_msgs image with arbitrary values
+ * @return sensor_msgs::Image
+ * */
 // Image
 sensor_msgs::Image createImage()
 {
@@ -112,6 +123,10 @@ sensor_msgs::Image createImage()
   return img;
 }
 
+/**
+ * @brief creates a ros geometry_msgs point with arbitrary values
+ * @return geometry_msgs::Point
+ * */
 // Point
 geometry_msgs::Point createPoint()
 {
@@ -124,6 +139,10 @@ geometry_msgs::Point createPoint()
   return p;
 }
 
+/**
+ * @brief creates a ros geometry_msgs quaternion with arbitrary values
+ * @return geometry_msgs::Quaternion
+ * */
 // Quaternion
 geometry_msgs::Quaternion createQuaternion()
 {
@@ -137,7 +156,10 @@ geometry_msgs::Quaternion createQuaternion()
   return q;
 }
 
-// Pose
+/**
+ * @brief creates a ros geometry_msgs pose with arbitrary values
+ * @return geometry_msgs::Pose
+ * */
 geometry_msgs::Pose createPose()
 {
   geometry_msgs::Pose pose;
@@ -148,7 +170,10 @@ geometry_msgs::Pose createPose()
   return pose;
 }
 
-// PoseStamped
+/**
+ * @brief creates a ros geometry_msgs posestamped with arbitrary values
+ * @return geometry_msgs::PoseStamped
+ * */
 geometry_msgs::PoseStamped createPoseStamped()
 {
   geometry_msgs::PoseStamped pose_stamped;
@@ -159,7 +184,10 @@ geometry_msgs::PoseStamped createPoseStamped()
   return pose_stamped;
 }
 
-// Vector3
+/**
+ * @brief creates a ros geometry_msgs vector3 with arbitrary values
+ * @return geometry_msgs::Vector3
+ * */
 geometry_msgs::Vector3 createVector3()
 {
   geometry_msgs::Vector3 v;
@@ -171,6 +199,10 @@ geometry_msgs::Vector3 createVector3()
   return v;
 }
 
+/**
+ * @brief creates a ros geometry_msgs vector3stamped with arbitrary values
+ * @return geometry_msgs::Vector3Stamped
+ * */
 geometry_msgs::Vector3Stamped createVector3Stamped()
 {
   geometry_msgs::Vector3Stamped v3_stamped;
@@ -181,6 +213,10 @@ geometry_msgs::Vector3Stamped createVector3Stamped()
   return v3_stamped;
 }
 
+/**
+ * @brief creates a ros geometry_msgs transform with arbitrary values
+ * @return geometry_msgs::Vector3Stamped
+ * */
 geometry_msgs::Transform createTransform()
 {
   geometry_msgs::Transform t;
@@ -191,6 +227,10 @@ geometry_msgs::Transform createTransform()
   return t;
 }
 
+/**
+ * @brief creates a ros geometry_msgs transformstamped with arbitrary values
+ * @return geometry_msgs::TransformStamped
+ * */
 geometry_msgs::TransformStamped createTransformStamped()
 {
   geometry_msgs::TransformStamped ts;
@@ -236,6 +276,9 @@ geometry_msgs::TransformStamped createTransformStamped()
 //   return d2d;
 // }
 
+/**
+ * @brief This class holds all the attributes which will be tested in the tests.
+ * */
 class rosToFbConversionTest : public testing::Test
 {
 protected:
@@ -275,6 +318,9 @@ protected:
   static geometry_msgs::TransformStamped original_t_stamped;
   static geometry_msgs::TransformStamped converted_t_stamped;
 
+  /**
+   * @brief This function instantiates all the attributes and fills them with arbitrary values.
+   * */
   static void SetUpTestSuite()
   {
     /* This function will create all the elements we want to test
@@ -450,6 +496,9 @@ geometry_msgs::Transform rosToFbConversionTest::converted_t;
 geometry_msgs::TransformStamped rosToFbConversionTest::original_t_stamped;
 geometry_msgs::TransformStamped rosToFbConversionTest::converted_t_stamped;
 
+/**
+ * @brief Given two ROS std_msgs::Header instances, this function tests their sub attributes of equality.
+ * */
 void testHeader(std_msgs::Header original_header, std_msgs::Header converted_header)
 {
   EXPECT_EQ(original_header.seq, converted_header.seq);
@@ -461,12 +510,18 @@ void testHeader(std_msgs::Header original_header, std_msgs::Header converted_hea
 }
 
 // test header
+/**
+ * @brief Test Header for Equality
+ * */
 TEST_F(rosToFbConversionTest, testHeader)
 {
   // expect that original and converted-from-fb are equal
   testHeader(original_header, converted_header);
 }
 
+/**
+ * @brief Test PointField for Equality
+ * */
 TEST_F(rosToFbConversionTest, testPointField)
 {
   EXPECT_STREQ(original_pf.name.c_str(), converted_pf.name.c_str());
@@ -475,6 +530,9 @@ TEST_F(rosToFbConversionTest, testPointField)
   EXPECT_EQ(original_pf.count, converted_pf.count);
 }
 
+/**
+ * @brief Test PointCloud2 for Equality
+ * */
 TEST_F(rosToFbConversionTest, testPointCloud2)
 {
   EXPECT_EQ(original_pc2.header, converted_pc2.header);
@@ -492,6 +550,9 @@ TEST_F(rosToFbConversionTest, testPointCloud2)
   EXPECT_EQ(original_pc2.is_dense, converted_pc2.is_dense);
 }
 
+/**
+ * @brief Test PointCloud2Data for Equality
+ * */
 TEST_F(rosToFbConversionTest, testPointCloud2Data)
 {
   for (size_t i = 0; i < original_pc2.data.size(); i++)
@@ -500,6 +561,9 @@ TEST_F(rosToFbConversionTest, testPointCloud2Data)
   }
 }
 
+/**
+ * @brief Test Image for Equality
+ * */
 TEST_F(rosToFbConversionTest, testImage)
 {
   testHeader(original_img.header, converted_img.header);
@@ -510,6 +574,9 @@ TEST_F(rosToFbConversionTest, testImage)
   EXPECT_EQ(original_img.step, converted_img.step);
 }
 
+/**
+ * @brief Test Image for Equality
+ * */
 TEST_F(rosToFbConversionTest, testImageData)
 {
   for (size_t i = 0; i < original_img.data.size(); i++)
@@ -518,6 +585,9 @@ TEST_F(rosToFbConversionTest, testImageData)
   }
 }
 
+/**
+ * @brief Test Image Data for Equality
+ * */
 TEST_F(rosToFbConversionTest, testImgData)
 {
   for (size_t i = 0; i < original_img.data.size(); i++)
@@ -526,6 +596,9 @@ TEST_F(rosToFbConversionTest, testImgData)
   }
 }
 
+/**
+ * @brief Given two ROS geometry_msgs::Point instances, this function tests their sub attributes of equality.
+ * */
 void testPoint(geometry_msgs::Point original_p, geometry_msgs::Point converted_p)
 {
   EXPECT_EQ(original_p.x, converted_p.x);
@@ -533,11 +606,17 @@ void testPoint(geometry_msgs::Point original_p, geometry_msgs::Point converted_p
   EXPECT_EQ(original_p.z, converted_p.z);
 }
 
+/**
+ * @brief Test Point for Equality
+ * */
 TEST_F(rosToFbConversionTest, testPoint)
 {
   testPoint(original_p, converted_p);
 }
 
+/**
+ * @brief Given two ROS geometry_msgs::Quaternion instances, this function tests their sub attributes of equality.
+ * */
 void testQuaternion(geometry_msgs::Quaternion original_q, geometry_msgs::Quaternion converted_q)
 {
   EXPECT_EQ(original_q.x, converted_q.x);
@@ -546,17 +625,26 @@ void testQuaternion(geometry_msgs::Quaternion original_q, geometry_msgs::Quatern
   EXPECT_EQ(original_q.w, converted_q.w);
 }
 
+/**
+ * @brief Test Point for Equality
+ * */
 TEST_F(rosToFbConversionTest, testQuaternion)
 {
   testQuaternion(original_q, converted_q);
 }
 
+/**
+ * @brief Test Pose for Equality
+ * */
 TEST_F(rosToFbConversionTest, testPose)
 {
   testPoint(original_pose.position, converted_pose.position);
   testQuaternion(original_pose.orientation, converted_pose.orientation);
 }
 
+/**
+ * @brief Test PoseStamped for Equality
+ * */
 TEST_F(rosToFbConversionTest, testPoseStamped)
 {
   // test the header
@@ -567,6 +655,9 @@ TEST_F(rosToFbConversionTest, testPoseStamped)
   testQuaternion(original_pose_stamped.pose.orientation, converted_pose_stamped.pose.orientation);
 }
 
+/**
+ * @brief Given two ROS geometry_msgs::Vector3 instances, this function tests their sub attributes of equality.
+ * */
 void testVector3(geometry_msgs::Vector3 original_v, geometry_msgs::Vector3 converted_v)
 {
   EXPECT_EQ(original_v.x, converted_v.x);
@@ -574,11 +665,17 @@ void testVector3(geometry_msgs::Vector3 original_v, geometry_msgs::Vector3 conve
   EXPECT_EQ(original_v.z, converted_v.z);
 }
 
+/**
+ * @brief Test Vector3 for Equality
+ * */
 TEST_F(rosToFbConversionTest, testVector3)
 {
   testVector3(original_v, converted_v);
 }
 
+/**
+ * @brief Test Vector3Stamped for Equality
+ * */
 TEST_F(rosToFbConversionTest, testVector3Stamped)
 {
   testHeader(original_v3_stamped.header, original_v3_stamped.header);
@@ -586,12 +683,18 @@ TEST_F(rosToFbConversionTest, testVector3Stamped)
   testVector3(original_v3_stamped.vector, converted_v3_stamped.vector);
 }
 
+/**
+ * @brief Test Transform for Equality
+ * */
 TEST_F(rosToFbConversionTest, testTransform)
 {
   testVector3(original_t.translation, converted_t.translation);
   testQuaternion(original_t.rotation, converted_t.rotation);
 }
 
+/**
+ * @brief Test TransformStamped for Equality
+ * */
 TEST_F(rosToFbConversionTest, testTransformStamped)
 {
   testHeader(original_t_stamped.header, converted_t_stamped.header);
