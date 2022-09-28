@@ -452,17 +452,6 @@ flatbuffers::Offset<seerep::fb::BoundingBoxes2DLabeledStamped> toFlat(const visi
   return bbbuilder.Finish();
 }
 
-// vision_msgs::Detection2DArray toROS(seerep::fb::BoundingBoxes2DLabeledStamped& fb_bb2dl)
-// {
-//   vision_msgs::Detection2DArray d2da;
-
-//   // header
-//   d2da.header = toROS(*fb_bb2dl.header();
-
-//   // array of detections
-//   // d2da.detections
-// }
-
 /*
  * BoundingBox2DLabeled
  */
@@ -504,25 +493,5 @@ flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled> toFlat(const vision_msgs::
   bblabeledbuilder.add_labelWithInstance(labelWithInstanceOffset);
   return bblabeledbuilder.Finish();
 }
-
-// vision_msgs::Detection2D toROS(seerep::fb::BoundingBoxes2DLabeled& fb_bb2dl)
-// {
-//   vision_msgs::Detection2D d2d;
-
-//   // Header
-//   d2d.Header = toROS(*fb_bb2dl.header())
-
-//   // minimum point of bbox
-
-//   // maximum point of bbox
-
-//   // instance uuid
-
-//   // label
-
-//   // boundingbox
-
-//   // labelwithinstance
-// }
 
 }  // namespace seerep_ros_conversions_fb
