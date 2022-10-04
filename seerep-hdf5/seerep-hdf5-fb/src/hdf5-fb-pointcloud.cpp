@@ -520,11 +520,72 @@ Hdf5FbPointCloud::readPointCloud2(const std::string& id)
     }
   }
 
-  // if (info.has_rgb
-  //   readColorsRGB(id, pointsRGB);
+  if (info.has_rgb)
+  {
+    const std::string hdf5DatasetColorsPath = HDF5_GROUP_POINTCLOUD + "/" + id + "/colors";
 
-  // if (info.has_rgba)
-  //   readColorsRGBA(id, pointsRGBA);
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
+        << "reading rgb from: " << hdf5DatasetColorsPath;
+
+    HighFive::DataSet colorsDataset = m_file->getDataSet(hdf5DatasetColorsPath);
+
+    std::vector<std::vector<std::vector<uint8_t>>> colorData;
+    colorsDataset.read(colorData);
+
+    int rOffset = getOffset(names, offsets, "r", isBigendian, pointStep);
+    int gOffset = getOffset(names, offsets, "g", isBigendian, pointStep);
+    int bOffset = getOffset(names, offsets, "b", isBigendian, pointStep);
+
+    seerep_hdf5_fb::PointCloud2WriteIterator<uint8_t> rIter(data, rOffset, height * width, pointStep);
+    seerep_hdf5_fb::PointCloud2WriteIterator<uint8_t> gIter(data, gOffset, height * width, pointStep);
+    seerep_hdf5_fb::PointCloud2WriteIterator<uint8_t> bIter(data, bOffset, height * width, pointStep);
+
+    for (auto col : colorData)
+    {
+      for (auto row : col)
+      {
+        *rIter = row[0];
+        *gIter = row[1];
+        *bIter = row[2];
+        ++rIter, ++gIter, ++bIter;
+      }
+    }
+  }
+
+  if (info.has_rgba)
+  {
+    const std::string hdf5DatasetColorsPath = HDF5_GROUP_POINTCLOUD + "/" + id + "/colors";
+
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
+        << "reading rgba from: " << hdf5DatasetColorsPath;
+
+    HighFive::DataSet colorsDataset = m_file->getDataSet(hdf5DatasetColorsPath);
+
+    std::vector<std::vector<std::vector<uint8_t>>> colorData;
+    colorsDataset.read(colorData);
+
+    int rOffset = getOffset(names, offsets, "r", isBigendian, pointStep);
+    int gOffset = getOffset(names, offsets, "g", isBigendian, pointStep);
+    int bOffset = getOffset(names, offsets, "b", isBigendian, pointStep);
+    int aOffset = getOffset(names, offsets, "a", isBigendian, pointStep);
+
+    seerep_hdf5_fb::PointCloud2WriteIterator<uint8_t> rIter(data, rOffset, height * width, pointStep);
+    seerep_hdf5_fb::PointCloud2WriteIterator<uint8_t> gIter(data, gOffset, height * width, pointStep);
+    seerep_hdf5_fb::PointCloud2WriteIterator<uint8_t> bIter(data, bOffset, height * width, pointStep);
+    seerep_hdf5_fb::PointCloud2WriteIterator<uint8_t> aIter(data, aOffset, height * width, pointStep);
+
+    for (auto col : colorData)
+    {
+      for (auto row : col)
+      {
+        *rIter = row[0];
+        *gIter = row[1];
+        *bIter = row[2];
+        *aIter = row[3];
+        ++rIter, ++gIter, ++bIter, ++aIter;
+      }
+    }
+  }
 
   // // TODO add other fields
 
@@ -614,31 +675,10 @@ Hdf5FbPointCloud::readPointCloud2(const std::string& id)
 // TODO check if the copy into the tmp vector can be removed somehow
 void Hdf5FbPointCloud::readPoints(const std::string& uuid, uint8_t* data)
 {
-  const std::string hdf5DatasetPointsPath = HDF5_GROUP_POINTCLOUD + "/" + uuid + "/points";
-
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
-      << "reading points from: " << hdf5DatasetPointsPath;
-
-  HighFive::DataSet pointsDataset = m_file->getDataSet(hdf5DatasetPointsPath);
-
-  std::vector<std::vector<std::vector<float>>> pointData;
-  pointsDataset.read(pointData);
-
-  for (auto col : pointData)
-  {
-    for (auto row : col) {}
-  }
 }
 
 void Hdf5FbPointCloud::readColorsRGB(const std::string& uuid, std::vector<std::vector<std::vector<uint8_t>>>& colorData)
 {
-  const std::string hdf5DatasetColorsPath = HDF5_GROUP_POINTCLOUD + "/" + uuid + "/colors";
-
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "reading rgb from: " << hdf5DatasetColorsPath;
-
-  HighFive::DataSet colorsDataset = m_file->getDataSet(hdf5DatasetColorsPath);
-
-  colorsDataset.read(colorData);
 }
 
 void Hdf5FbPointCloud::readColorsRGBA(const std::string& uuid, std::vector<std::vector<std::vector<uint8_t>>>& colorData)
