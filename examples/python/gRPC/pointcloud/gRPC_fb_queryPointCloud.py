@@ -1,7 +1,9 @@
 import os
+import struct
 import sys
 
 import flatbuffers
+import numpy as np
 from fb import point_cloud_service_grpc_fb as pointCloudService
 from fb.PointCloud2 import PointCloud2
 
@@ -77,5 +79,8 @@ for responseBuf in stubPointCloud.GetPointCloud2(bytes(buf)):
         print(f"Label {i}: {response.LabelsGeneral(i).Label().decode('utf-8')}")
         print(f"Instance {i}: {response.LabelsGeneral(i).InstanceUuid().decode('utf-8')}")
 
-    print("---Points---")
-    # TODO check if the read point cloud matches
+    print("---Data--")
+    rawData = response.DataAsNumpy()
+    data = [struct.unpack('f', rawData[i : i + 4]) for i in range(0, rawData.shape[0], 4)]
+    reshapedData = np.array(data).reshape(960, 1280, 4)
+    print(f"Data: {reshapedData}")

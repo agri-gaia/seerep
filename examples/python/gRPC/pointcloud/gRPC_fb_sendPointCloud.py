@@ -63,8 +63,9 @@ def createPointCloud(builder, header, height=960, width=1280):
     labelsBbVector = addToBoundingBoxLabeledVector(builder, labelsBb)
 
     # create ordered point cloud with dim (height, width, 6)
-    points = np.random.randn(height, width, 6).astype(np.float32)
-    print(f"Data shape: {points.shape}")
+    # TODO rgb field should be int32
+    points = np.random.randn(height, width, 4).astype(np.float32)
+    print(f"Data: {points}")
 
     pointsVector = builder.CreateByteVector(points.tobytes())
 
@@ -73,9 +74,9 @@ def createPointCloud(builder, header, height=960, width=1280):
     PointCloud2.AddHeader(builder, header)
     PointCloud2.AddHeight(builder, points.shape[0])
     PointCloud2.AddWidth(builder, points.shape[1])
-    PointCloud2.AddIsBigendian(builder, False)
-    PointCloud2.AddPointStep(builder, 24)
-    PointCloud2.AddRowStep(builder, points.shape[1] * 24)
+    PointCloud2.AddIsBigendian(builder, True)
+    PointCloud2.AddPointStep(builder, 16)
+    PointCloud2.AddRowStep(builder, points.shape[1] * 16)
     PointCloud2.AddFields(builder, pointFieldsVector)
     PointCloud2.AddData(builder, pointsVector)
     PointCloud2.AddLabelsGeneral(builder, labelsGeneralVector)

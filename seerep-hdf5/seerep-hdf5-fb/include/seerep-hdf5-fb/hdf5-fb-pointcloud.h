@@ -79,7 +79,7 @@ private:
     else
       dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(id));
 
-    PointCloud2ConstIterator<T> iter(cloud, field_name);
+    PointCloud2ReadIterator<T> iter(cloud, field_name);
     std::vector<T> data;
     data.reserve(size);
 
@@ -134,7 +134,7 @@ private:
   void writeOtherFields(const std::string& uuid, const seerep::fb::PointCloud2& cloud,
                         const std::map<std::string, PointFieldInfo>& fields);
 
-  void readPoints(const std::string& uuid, std::vector<std::vector<std::vector<float>>>& pointData);
+  void readPoints(const std::string& uuid, uint8_t* data);
 
   void readColorsRGB(const std::string& uuid, std::vector<std::vector<std::vector<uint8_t>>>& colorData);
 
@@ -142,6 +142,9 @@ private:
 
   void readOtherFields(const std::string& uuid, const std::map<std::string, PointFieldInfo>& fields,
                        std::vector<std::any> otherFieldsData);
+
+  uint32_t getOffset(const std::vector<std::string>& names, const std::vector<uint32_t>& offsets,
+                     const std::string& fieldName, bool isBigendian, uint32_t pointStep);
 
   // pointcloud attribute keys
   inline static const std::string HEIGHT = "height";

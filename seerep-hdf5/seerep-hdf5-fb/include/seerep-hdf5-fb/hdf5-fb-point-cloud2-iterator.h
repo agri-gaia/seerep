@@ -175,22 +175,13 @@ namespace impl
  * T is the type of the value on which the child class will be templated
  * TT is the type of the value to be retrieved (same as T except for constness)
  * U is the type of the raw data in PointCloud2 (only uchar and const uchar are supported)
- * C is the type of the pointcloud to intialize from (const or not)
  * V is the derived class (yop, curiously recurring template pattern)
  */
-template <typename T, typename TT, typename U, typename C, template <typename> class V>
+template <typename T, typename TT, typename U, template <typename> class V>
 class PointCloud2IteratorBase
 {
 public:
-  /**
-   */
   PointCloud2IteratorBase();
-
-  /**
-   * @param cloud_msg The PointCloud2 to iterate upon
-   * @param field_name The field to iterate upon
-   */
-  PointCloud2IteratorBase(C& cloud_msg, const std::string& field_name);
 
   /** Assignment operator
    * @param iter the iterator to copy data from
@@ -236,14 +227,16 @@ public:
    */
   V<T> end() const;
 
+  // TODO find common place for calculation of the offset
+
   /** Common code to set the field of the PointCloud2
    * @param cloud_msg the PointCloud2 to modify
    * @param field_name the name of the field to iterate upon
    * @return the offset at which the field is found
    */
-  int set_field(const seerep::fb::PointCloud2& cloud_msg, const std::string& field_name);
+  uint32_t set_field(const seerep::fb::PointCloud2& cloud_msg, const std::string& field_name);
 
-  /** The "point_step" of the original cloud */
+  /** The "point_step" of the point cloud */
   int point_step_;
   /** The raw data  in uchar* where the iterator is */
   U* data_char_;
@@ -257,74 +250,53 @@ public:
 }  // namespace impl
 
 /**
- * @brief Class that can iterate over a PointCloud2
- *
- * T type of the element being iterated upon
- * E.g, you create your PointClou2 message as follows:
- * @verbatim
- *   setPointCloud2FieldsByString(cloud_msg, 2, "xyz", "rgb");
- * @endverbatim
- *
- * For iterating over XYZ, you do :
- * @verbatim
- *   seerep::PointCloud2Iterator<float> iter_x(cloud_msg, "x");
- * @endverbatim
- * and then access X through iter_x[0] or *iter_x
- * You could create an iterator for Y and Z too but as they are consecutive,
- * you can just use iter_x[1] and iter_x[2]
- *
- * For iterating over RGB, you do:
- * @verbatim
- * seerep::PointCloud2Iterator<uint8_t> iter_rgb(cloud_msg, "rgb");
- * @endverbatim
- * and then access R,G,B through  iter_rgb[0], iter_rgb[1], iter_rgb[2]
+ * @brief Helper iterators for reading and writing the data field of a flatbuffers point cloud message
  */
 template <typename T>
-class PointCloud2Iterator
-  : public impl::PointCloud2IteratorBase<T, T, unsigned char, seerep::fb::PointCloud2, PointCloud2Iterator>
+class PointCloud2WriteIterator : public impl::PointCloud2IteratorBase<T, T, unsigned char, PointCloud2WriteIterator>
 {
 public:
   /**
-   * @brief Construct a new PointCloud2Const iterator based on a cloud message.
+   * @brief Iterator to use for iterating over an pre-allocated data field and writing the values
    *
-   * @param cloud_msg the cloud message to use
-   * @param field_name the field to iterate over
+   * @param data a pointer to the start of the data field
+   * @param offset the offset of the field that should be written
+   * @param size the length of the data field
    */
-  PointCloud2Iterator(seerep::fb::PointCloud2& cloud_msg, const std::string& field_name)
-    : impl::PointCloud2IteratorBase<T, T, unsigned char, seerep::fb::PointCloud2,
-                                    seerep_hdf5_fb::PointCloud2Iterator>::PointCloud2IteratorBase(cloud_msg, field_name)
+  PointCloud2WriteIterator(uint8_t* data, uint32_t offset, uint32_t size, int32_t pointStep)
+    : impl::PointCloud2IteratorBase<T, T, unsigned char,
+                                    seerep_hdf5_fb::PointCloud2WriteIterator>::PointCloud2IteratorBase()
   {
-    int offset = this->set_field(cloud_msg, field_name);
-    this->data_char_ = reinterpret_cast<unsigned char*>(cloud_msg.mutable_data()->data() + offset);
+    uint32_t offset_ = offset;
+    this->point_step_ = pointStep;
+    this->data_char_ = reinterpret_cast<unsigned char*>(data + offset);
     this->data_ = reinterpret_cast<T*>(this->data_char_);
-    this->data_end_ = reinterpret_cast<T*>(cloud_msg.mutable_data()->data() + cloud_msg.data()->size() + offset);
+    this->data_end_ = reinterpret_cast<T*>(data + size + offset);
   }
 };
 
 /**
- * @brief Same as a PointCloud2Iterator but for const data
+ * @brief Reading iterator for the data field of a received flatbuffers point cloud message
  */
 template <typename T>
-class PointCloud2ConstIterator
-  : public impl::PointCloud2IteratorBase<T, const T, const unsigned char, const seerep::fb::PointCloud2,
-                                         PointCloud2ConstIterator>
+class PointCloud2ReadIterator
+  : public impl::PointCloud2IteratorBase<T, const T, const unsigned char, PointCloud2ReadIterator>
 {
 public:
   /**
-   * @brief Construct a new PointCloud2Const iterator based on a cloud message.
+   * @brief Iterator over the data field of a received flatbuffers point cloud message
    *
-   * @param cloud_msg the cloud message to use
-   * @param field_name the field to iterate over
+   * @param cloudMsg the flatbuffers point cloud message to use
+   * @param fieldName the field to iterate over
    */
-  PointCloud2ConstIterator(const seerep::fb::PointCloud2& cloud_msg, const std::string& field_name)
-    : impl::PointCloud2IteratorBase<T, const T, const unsigned char, const seerep::fb::PointCloud2,
-                                    seerep_hdf5_fb::PointCloud2ConstIterator>::PointCloud2IteratorBase(cloud_msg,
-                                                                                                       field_name)
+  PointCloud2ReadIterator(const seerep::fb::PointCloud2& cloudMsg, const std::string& fieldName)
+    : impl::PointCloud2IteratorBase<T, const T, const unsigned char,
+                                    seerep_hdf5_fb::PointCloud2ReadIterator>::PointCloud2IteratorBase()
   {
-    int offset = this->set_field(cloud_msg, field_name);
-    this->data_char_ = reinterpret_cast<const unsigned char*>(cloud_msg.data()->data() + offset);
+    int offset = this->set_field(cloudMsg, fieldName);
+    this->data_char_ = reinterpret_cast<const unsigned char*>(cloudMsg.data()->data() + offset);
     this->data_ = reinterpret_cast<const T*>(this->data_char_);
-    this->data_end_ = reinterpret_cast<const T*>(cloud_msg.data()->data() + cloud_msg.data()->size() + offset);
+    this->data_end_ = reinterpret_cast<const T*>(cloudMsg.data()->data() + cloudMsg.data()->size() + offset);
   }
 };
 }  // namespace seerep_hdf5_fb

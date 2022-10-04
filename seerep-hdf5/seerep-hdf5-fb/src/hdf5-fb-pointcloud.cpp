@@ -103,9 +103,9 @@ void Hdf5FbPointCloud::writePoints(const std::string& id, const std::shared_ptr<
   min[0] = min[1] = min[2] = std::numeric_limits<float>::max();
   max[0] = max[1] = max[2] = std::numeric_limits<float>::min();
 
-  seerep_hdf5_fb::PointCloud2ConstIterator<float> xIter(cloud, "x");
-  seerep_hdf5_fb::PointCloud2ConstIterator<float> yIter(cloud, "y");
-  seerep_hdf5_fb::PointCloud2ConstIterator<float> zIter(cloud, "z");
+  seerep_hdf5_fb::PointCloud2ReadIterator<float> xIter(cloud, "x");
+  seerep_hdf5_fb::PointCloud2ReadIterator<float> yIter(cloud, "y");
+  seerep_hdf5_fb::PointCloud2ReadIterator<float> zIter(cloud, "z");
 
   for (size_t row = 0; row < cloud.height(); row++)
   {
@@ -173,9 +173,9 @@ void Hdf5FbPointCloud::writeColorsRGB(const std::string& uuid, const seerep::fb:
   std::vector<std::vector<std::vector<uint8_t>>> colorsData;
   colorsData.resize(cloud.height());
 
-  seerep_hdf5_fb::PointCloud2ConstIterator<uint8_t> rIter(cloud, "r");
-  seerep_hdf5_fb::PointCloud2ConstIterator<uint8_t> gIter(cloud, "g");
-  seerep_hdf5_fb::PointCloud2ConstIterator<uint8_t> bIter(cloud, "b");
+  seerep_hdf5_fb::PointCloud2ReadIterator<uint8_t> rIter(cloud, "r");
+  seerep_hdf5_fb::PointCloud2ReadIterator<uint8_t> gIter(cloud, "g");
+  seerep_hdf5_fb::PointCloud2ReadIterator<uint8_t> bIter(cloud, "b");
 
   for (size_t row = 0; row < cloud.height(); row++)
   {
@@ -215,10 +215,10 @@ void Hdf5FbPointCloud::writeColorsRGBA(const std::string& uuid, const seerep::fb
   std::vector<std::vector<std::vector<uint8_t>>> colorsData;
   colorsData.resize(cloud.height());
 
-  seerep_hdf5_fb::PointCloud2ConstIterator<uint8_t> rIter(cloud, "r");
-  seerep_hdf5_fb::PointCloud2ConstIterator<uint8_t> gIter(cloud, "g");
-  seerep_hdf5_fb::PointCloud2ConstIterator<uint8_t> bIter(cloud, "b");
-  seerep_hdf5_fb::PointCloud2ConstIterator<uint8_t> aIter(cloud, "a");
+  seerep_hdf5_fb::PointCloud2ReadIterator<uint8_t> rIter(cloud, "r");
+  seerep_hdf5_fb::PointCloud2ReadIterator<uint8_t> gIter(cloud, "g");
+  seerep_hdf5_fb::PointCloud2ReadIterator<uint8_t> bIter(cloud, "b");
+  seerep_hdf5_fb::PointCloud2ReadIterator<uint8_t> aIter(cloud, "a");
 
   for (size_t row = 0; row < cloud.height(); row++)
   {
@@ -307,6 +307,79 @@ Hdf5FbPointCloud::getCloudInfo(const flatbuffers::Vector<flatbuffers::Offset<see
   if (hasFieldx && hasFieldy && hasFieldz)
     info.has_points = true;
   return info;
+}
+
+// Assumption: names and offsets vector have the same order of the fields
+uint32_t Hdf5FbPointCloud::getOffset(const std::vector<std::string>& names, const std::vector<uint32_t>& offsets,
+                                     const std::string& fieldName, bool isBigendian, uint32_t poinStep)
+{
+  for (size_t i = 0; i < names.size(); i++)
+  {
+    if (names[i] == fieldName)
+    {
+      return offsets[i];
+    }
+  }
+
+  // Handle the special case of rgb(a), since the rgb(a) channel is encoded in a single 32 Bit integer
+
+  // Needs C++17
+  std::set<std::string_view> fieldNames = { "r", "g", "b", "a" };
+
+  if (fieldNames.find(fieldName) != fieldNames.end())
+  {
+    for (size_t i = 0; i < names.size(); i++)
+    {
+      if (names[i] == "rgb" || names[i] == "rgba")
+      {
+        if (fieldName == "r")
+        {
+          if (isBigendian)
+          {
+            return offsets[i] + 1;
+          }
+          else
+          {
+            return offsets[i] + 2;
+          }
+        }
+        if (fieldName == "g")
+        {
+          if (isBigendian)
+          {
+            return offsets[i] + 2;
+          }
+          else
+          {
+            return offsets[i] + 1;
+          }
+        }
+        if (fieldName == "b")
+        {
+          if (isBigendian)
+          {
+            return offsets[i] + 3;
+          }
+          else
+          {
+            return offsets[i] + 0;
+          }
+        }
+        if (fieldName == "a")
+        {
+          if (isBigendian)
+          {
+            return offsets[i] + 0;
+          }
+          else
+          {
+            return offsets[i] + 3;
+          }
+        }
+      }
+    }
+  }
+  throw std::runtime_error("Field " + fieldName + " does not exist!");
 }
 
 // TODO read partial point cloud, e.g. only xyz without color, etc.
@@ -407,54 +480,60 @@ Hdf5FbPointCloud::readPointCloud2(const std::string& id)
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
       << "reading point cloud data of: " << hdf5GroupPath;
 
-  std::vector<std::vector<std::vector<float>>> points;
-  std::vector<std::vector<std::vector<uint8_t>>> pointsRGB;
-  std::vector<std::vector<std::vector<uint8_t>>> pointsRGBA;
-  std::vector<std::any> otherFields;
+  // pre allocate vector, to write values in it from the iterators
+  // should be way faster then copying it in vectors;
+
+  // pointer to the data field of the pre-allocated array
+  uint8_t* data;
+  // allocate height * width * point setp bytes
+  auto vector = builder.CreateUninitializedVector(height * width * pointStep, sizeof(uint8_t), &data);
 
   if (info.has_points)
-    readPoints(id, points);
-
-  if (info.has_rgb)
-    readColorsRGB(id, pointsRGB);
-
-  if (info.has_rgba)
-    readColorsRGBA(id, pointsRGBA);
-
-  // TODO add other fields
-
-  // if (!info.other_fields.empty())
-  //   readOtherFields(id, info.other_fields, otherFields);
-
-  // TODO add normals
-
-  std::vector<uint8_t> data;
-  if (!points.empty())
   {
-    data.reserve(height * width * pointStep);
-    for (size_t row = 0; row < height; row++)
-    {
-      for (size_t col = 0; col < width; col++)
-      {
-        data.insert(data.end(), std::make_move_iterator(points.at(row).at(col).begin()),
-                    std::make_move_iterator(points.at(row).at(col).end()));
+    const std::string hdf5DatasetPointsPath = HDF5_GROUP_POINTCLOUD + "/" + id + "/points";
 
-        if (info.has_rgb)
-        {
-          data.insert(data.end(), std::make_move_iterator(pointsRGB.at(row).at(col).begin()),
-                      std::make_move_iterator(pointsRGB.at(row).at(col).end()));
-        }
-        if (info.has_rgba)
-        {
-          data.insert(data.end(), std::make_move_iterator(pointsRGBA.at(row).at(col).begin()),
-                      std::make_move_iterator(pointsRGBA.at(row).at(col).end()));
-        }
-        // TODO add support for other fields
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
+        << "reading points from: " << hdf5DatasetPointsPath;
+
+    HighFive::DataSet pointsDataset = m_file->getDataSet(hdf5DatasetPointsPath);
+
+    std::vector<std::vector<std::vector<float>>> pointData;
+    pointsDataset.read(pointData);
+
+    int xOffset = getOffset(names, offsets, "x", isBigendian, pointStep);
+    int yOffset = getOffset(names, offsets, "y", isBigendian, pointStep);
+    int zOffset = getOffset(names, offsets, "z", isBigendian, pointStep);
+
+    seerep_hdf5_fb::PointCloud2WriteIterator<float> xIter(data, xOffset, height * width, pointStep);
+    seerep_hdf5_fb::PointCloud2WriteIterator<float> yIter(data, yOffset, height * width, pointStep);
+    seerep_hdf5_fb::PointCloud2WriteIterator<float> zIter(data, zOffset, height * width, pointStep);
+
+    for (auto col : pointData)
+    {
+      for (auto row : col)
+      {
+        *xIter = row[0];
+        *yIter = row[1];
+        *zIter = row[2];
+        ++xIter, ++yIter, ++zIter;
       }
     }
   }
 
-  auto dataVector = builder.CreateVector(data);
+  // if (info.has_rgb
+  //   readColorsRGB(id, pointsRGB);
+
+  // if (info.has_rgba)
+  //   readColorsRGBA(id, pointsRGBA);
+
+  // // TODO add other fields
+
+  // // if (!info.other_fields.empty())
+  // //   readOtherFields(id, info.other_fields, otherFields);
+
+  // // TODO add normals
+
+  // auto dataVector = builder.CreateVector(data);
 
   // read labeled bounding box
   std::vector<std::string> boundingBoxesLabels;
@@ -521,7 +600,7 @@ Hdf5FbPointCloud::readPointCloud2(const std::string& id)
   pointCloudBuilder.add_is_bigendian(isBigendian);
   pointCloudBuilder.add_point_step(pointStep);
   pointCloudBuilder.add_row_step(rowStep);
-  pointCloudBuilder.add_data(dataVector);
+  pointCloudBuilder.add_data(vector);
   pointCloudBuilder.add_is_dense(isDense);
   pointCloudBuilder.add_labels_general(labelsGeneralVector);
   pointCloudBuilder.add_labels_bb(boundingBoxLabeledVector);
@@ -532,7 +611,8 @@ Hdf5FbPointCloud::readPointCloud2(const std::string& id)
   return grpcPointCloud;
 }
 
-void Hdf5FbPointCloud::readPoints(const std::string& uuid, std::vector<std::vector<std::vector<float>>>& pointData)
+// TODO check if the copy into the tmp vector can be removed somehow
+void Hdf5FbPointCloud::readPoints(const std::string& uuid, uint8_t* data)
 {
   const std::string hdf5DatasetPointsPath = HDF5_GROUP_POINTCLOUD + "/" + uuid + "/points";
 
@@ -541,7 +621,13 @@ void Hdf5FbPointCloud::readPoints(const std::string& uuid, std::vector<std::vect
 
   HighFive::DataSet pointsDataset = m_file->getDataSet(hdf5DatasetPointsPath);
 
+  std::vector<std::vector<std::vector<float>>> pointData;
   pointsDataset.read(pointData);
+
+  for (auto col : pointData)
+  {
+    for (auto row : col) {}
+  }
 }
 
 void Hdf5FbPointCloud::readColorsRGB(const std::string& uuid, std::vector<std::vector<std::vector<uint8_t>>>& colorData)
