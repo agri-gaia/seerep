@@ -14,7 +14,6 @@
 #include <seerep-msgs/point_cloud_2_generated.h>
 
 // std
-#include <any>
 #include <boost/geometry.hpp>
 #include <optional>
 
@@ -29,27 +28,13 @@ public:
 
   std::optional<flatbuffers::grpc::Message<seerep::fb::PointCloud2>> readPointCloud2(const std::string& uuid);
 
-  std::vector<float> loadBoundingBox(const std::string& uuid);
-
 private:
-  /*
-    Note: This struct is used to store the necessary information of a point field.
-    The generated seerep::fb::point struct can't be used since it doesn't have a copy
-    constructor resp. assignment operator and thus can't be used in maps (see CloudInfo struct).
-  */
-  struct PointFieldInfo
-  {
-    int32_t datatype;
-    uint32_t count;
-  };
-
   struct CloudInfo
   {
     bool has_points = false;
     bool has_rgb = false;
     bool has_rgba = false;
     bool has_normals = false;
-    std::map<std::string, PointFieldInfo> other_fields;
   };
 
   template <typename T>
@@ -92,12 +77,6 @@ private:
     dataset_ptr->write(data);
   }
 
-  template <typename T, typename... U>
-  bool equalVectorLength(T const& first, U const&... rest)
-  {
-    return ((first.size() == rest.size()) && ...);
-  }
-
   template <typename T>
   void writePointFieldAttributes(HighFive::AnnotateTraits<T>& object,
                                  const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::PointField>>& pointFields)
@@ -122,29 +101,54 @@ private:
     writeAttributeToHdf5<std::vector<uint32_t>>(object, FIELD_COUNT, counts);
   }
 
-  CloudInfo getCloudInfo(const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::PointField>>& pointFields);
+  /** write */
+  void writePoints(const std::string& id, const std::vector<uint32_t>& offsets, uint8_t* data, uint32_t pointStep,
+                   uint32_t height, uint32_t width, const std::shared_ptr<HighFive::Group>& groupPtr);
 
-  void writePoints(const std::string& uuid, const std::shared_ptr<HighFive::Group>& data_group_ptr,
-                   const seerep::fb::PointCloud2& cloud);
+  void writeColorsRGB(const std::string& id, const std::vector<uint32_t>& offsets, uint8_t* data, uint32_t pointStep,
+                      uint32_t height, uint32_t width);
 
-  void writeColorsRGB(const std::string& uuid, const seerep::fb::PointCloud2& cloud);
+  void writeColorsRGBA(const std::string& id, const std::vector<uint32_t>& offsets, uint8_t* data, uint32_t pointStep,
+                       uint32_t height, uint32_t width);
 
-  void writeColorsRGBA(const std::string& uuid, const seerep::fb::PointCloud2& cloud);
+  /** read */
 
-  void writeOtherFields(const std::string& uuid, const seerep::fb::PointCloud2& cloud,
-                        const std::map<std::string, PointFieldInfo>& fields);
+  void readGeneralAttributes(const std::string& id, std::shared_ptr<HighFive::Group> dataGroupPtr, uint32_t& height,
+                             uint32_t& width, uint32_t& pointStep, uint32_t& rowStep, bool& isBigendian, bool& isDense);
 
-  void readPoints(const std::string& uuid, uint8_t* data);
+  void readPointFields(const std::string& id, std::shared_ptr<HighFive::Group> dataGroupPtr,
+                       std::vector<std::string>& names, std::vector<uint32_t>& offsets, std::vector<uint32_t>& counts,
+                       std::vector<uint8_t>& datatypes);
 
-  void readColorsRGB(const std::string& uuid, std::vector<std::vector<std::vector<uint8_t>>>& colorData);
+  void readPoints(const std::string& id, const std::vector<uint32_t>& offsets, uint8_t* data, uint32_t pointStep,
+                  uint32_t height, uint32_t width);
 
-  void readColorsRGBA(const std::string& uuid, std::vector<std::vector<std::vector<uint8_t>>>& colorData);
+  void readColorsRGB(const std::string& id, const std::vector<uint32_t>& offsets, uint8_t* data, uint32_t pointStep,
+                     uint32_t height, uint32_t width);
 
-  void readOtherFields(const std::string& uuid, const std::map<std::string, PointFieldInfo>& fields,
-                       std::vector<std::any> otherFieldsData);
+  void readColorsRGBA(const std::string& id, const std::vector<uint32_t>& offsets, uint8_t* data, uint32_t pointStep,
+                      uint32_t height, uint32_t width);
+
+  /** helpers for building the point cloud message*/
+  flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>>
+  readLabelsGeneralOffset(flatbuffers::grpc::MessageBuilder& builder, const std::string& id);
+
+  flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>>>
+  readLabelsBoundingBoxOffset(flatbuffers::grpc::MessageBuilder& builder, const std::string& id);
+
+  flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::PointField>>>
+  readPointFieldsOffset(flatbuffers::grpc::MessageBuilder& builder, std::vector<std::string>& names,
+                        std::vector<uint32_t>& offsets, std::vector<uint32_t>& counts, std::vector<uint8_t>& datatypes);
+
+  /** helpers for managing point cloud information*/
+  CloudInfo getCloudInfo(const seerep::fb::PointCloud2& cloud);
+
+  CloudInfo getCloudInfo(const std::vector<std::string>& fields);
+
+  uint32_t getOffset(const seerep::fb::PointCloud2& cloud, const std::string& fieldName);
 
   uint32_t getOffset(const std::vector<std::string>& names, const std::vector<uint32_t>& offsets,
-                     const std::string& fieldName, bool isBigendian, uint32_t pointStep);
+                     const std::string& fieldName, bool isBigendian);
 
   // pointcloud attribute keys
   inline static const std::string HEIGHT = "height";

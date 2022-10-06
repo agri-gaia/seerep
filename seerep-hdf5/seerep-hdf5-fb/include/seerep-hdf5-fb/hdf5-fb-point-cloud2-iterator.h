@@ -234,10 +234,7 @@ public:
    * @param field_name the name of the field to iterate upon
    * @return the offset at which the field is found
    */
-  uint32_t set_field(const seerep::fb::PointCloud2& cloud_msg, const std::string& field_name);
 
-  /** The "point_step" of the point cloud */
-  int point_step_;
   /** The raw data  in uchar* where the iterator is */
   U* data_char_;
   /** The cast data where the iterator is */
@@ -246,6 +243,10 @@ public:
   TT* data_end_;
   /** Whether the fields are stored as bigendian */
   bool is_bigendian_;
+  /** The "point_step" of the point cloud */
+  uint32_t point_step_;
+  /** Offset of the field to iterate on */
+  uint32_t field_offset_;
 };
 }  // namespace impl
 
@@ -263,15 +264,15 @@ public:
    * @param offset the offset of the field that should be written
    * @param size the length of the data field
    */
-  PointCloud2WriteIterator(uint8_t* data, uint32_t offset, uint32_t size, int32_t pointStep)
+  PointCloud2WriteIterator(uint8_t* data, uint32_t offset, uint32_t pointStep, uint32_t height, uint32_t width)
     : impl::PointCloud2IteratorBase<T, T, unsigned char,
                                     seerep_hdf5_fb::PointCloud2WriteIterator>::PointCloud2IteratorBase()
   {
-    uint32_t offset_ = offset;
+    this->field_offset_ = offset;
     this->point_step_ = pointStep;
-    this->data_char_ = reinterpret_cast<unsigned char*>(data + offset);
+    this->data_char_ = reinterpret_cast<unsigned char*>(data + this->field_offset_);
     this->data_ = reinterpret_cast<T*>(this->data_char_);
-    this->data_end_ = reinterpret_cast<T*>(data + size + offset);
+    this->data_end_ = reinterpret_cast<T*>(data + offset + (height * width - 1) * pointStep);
   }
 };
 
@@ -289,14 +290,16 @@ public:
    * @param cloudMsg the flatbuffers point cloud message to use
    * @param fieldName the field to iterate over
    */
-  PointCloud2ReadIterator(const seerep::fb::PointCloud2& cloudMsg, const std::string& fieldName)
+  PointCloud2ReadIterator(uint8_t* data, uint32_t offset, uint32_t height, uint32_t width, u_int32_t pointStep)
     : impl::PointCloud2IteratorBase<T, const T, const unsigned char,
                                     seerep_hdf5_fb::PointCloud2ReadIterator>::PointCloud2IteratorBase()
   {
-    int offset = this->set_field(cloudMsg, fieldName);
-    this->data_char_ = reinterpret_cast<const unsigned char*>(cloudMsg.data()->data() + offset);
+    this->field_offset_ = offset;
+    this->point_step_ = pointStep;
+    this->data_char_ = reinterpret_cast<const unsigned char*>(data + this->field_offset_);
     this->data_ = reinterpret_cast<const T*>(this->data_char_);
-    this->data_end_ = reinterpret_cast<const T*>(cloudMsg.data()->data() + cloudMsg.data()->size() + offset);
+    // last element is at: offset + (n -1) * pointStep
+    this->data_end_ = reinterpret_cast<const T*>(data + offset + (height * width - 1) * pointStep);
   }
 };
 }  // namespace seerep_hdf5_fb

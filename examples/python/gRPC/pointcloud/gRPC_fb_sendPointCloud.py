@@ -62,8 +62,7 @@ def createPointCloud(builder, header, height=960, width=1280):
     labelsBb = createBoundingBoxesLabeled(builder, labelWithInstances, boundingBoxes)
     labelsBbVector = addToBoundingBoxLabeledVector(builder, labelsBb)
 
-    # create ordered point cloud with dim (height, width, 6)
-    # TODO rgb field should be int32
+    # Note: rgb field is float, for simplification
     points = np.random.randn(height, width, 4).astype(np.float32)
     print(f"Data: {points}")
 
