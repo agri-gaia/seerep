@@ -26,7 +26,8 @@ public:
 
   void writePointCloud2(const std::string& uuid, const seerep::fb::PointCloud2& pointcloud2);
 
-  std::optional<flatbuffers::grpc::Message<seerep::fb::PointCloud2>> readPointCloud2(const std::string& uuid);
+  std::optional<flatbuffers::grpc::Message<seerep::fb::PointCloud2>> readPointCloud2(const std::string& uuid,
+                                                                                     const bool withoutData = false);
 
 private:
   struct CloudInfo

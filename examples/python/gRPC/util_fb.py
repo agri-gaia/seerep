@@ -204,7 +204,7 @@ def addToPointFieldVector(builder, pointFieldList):
     return builder.EndVector()
 
 
-def createQuery(builder, projectUuids, timeInterval, generalLabels):
+def createQuery(builder, projectUuids, timeInterval, generalLabels, withoutData=False):
     # add project uuids
     Query.StartProjectuuidVector(builder, len(projectUuids))
     for projectUuid in reversed(projectUuids):
@@ -220,6 +220,7 @@ def createQuery(builder, projectUuids, timeInterval, generalLabels):
     Query.AddProjectuuid(builder, projectUuidsOffset)
     Query.AddTimeinterval(builder, timeInterval)
     Query.AddLabel(builder, labelsOffset)
+    Query.AddWithoutdata(builder, withoutData)
 
     return Query.End(builder)
 

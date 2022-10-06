@@ -23,7 +23,7 @@ void CoreFbPointCloud::getData(const seerep::fb::Query* query,
     for (auto uuidPc : project.dataOrInstanceUuids)
     {
       auto pc = CoreFbGeneral::getHdf5(project.projectUuid, m_seerepCore, m_hdf5IoMap)
-                    ->readPointCloud2(boost::lexical_cast<std::string>(uuidPc));
+                    ->readPointCloud2(boost::lexical_cast<std::string>(uuidPc), queryCore.withoutData);
       if (pc)
       {
         BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)

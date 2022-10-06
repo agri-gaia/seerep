@@ -271,7 +271,7 @@ void Hdf5FbPointCloud::writeColorsRGBA(const std::string& id, const std::vector<
 
 // TODO partial point cloud read
 std::optional<flatbuffers::grpc::Message<seerep::fb::PointCloud2>>
-Hdf5FbPointCloud::readPointCloud2(const std::string& id)
+Hdf5FbPointCloud::readPointCloud2(const std::string& id, const bool withoutData)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
@@ -335,51 +335,55 @@ Hdf5FbPointCloud::readPointCloud2(const std::string& id)
 
   auto pointFieldsVectorOffset = readPointFieldsOffset(builder, names, offsets, counts, datatypes);
 
-  // get info about the point cloud
-  CloudInfo info = getCloudInfo(names);
-
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
-      << "reading point cloud data of: " << hdf5GroupPath;
-
-  // pointer to the pre-allocated array
-  uint8_t* data;
-  // allocate height * width * pointSetp bytes
-  auto vector = builder.CreateUninitializedVector(height * width * pointStep, sizeof(uint8_t), &data);
-
-  if (info.has_points)
+  flatbuffers::uoffset_t dataOffset;
+  if (!withoutData)
   {
-    const std::vector<std::string> fields = { "x", "y", "z" };
-    std::vector<uint32_t> xyzOffsets;
-    for (auto field : fields)
+    // get info about the point cloud
+    CloudInfo info = getCloudInfo(names);
+
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
+        << "reading point cloud data of: " << hdf5GroupPath;
+
+    // pointer to the pre-allocated array
+    uint8_t* data;
+    // allocate height * width * pointSetp bytes
+    dataOffset = builder.CreateUninitializedVector(height * width * pointStep, sizeof(uint8_t), &data);
+
+    if (info.has_points)
     {
-      xyzOffsets.push_back(getOffset(names, offsets, field, isBigendian));
+      const std::vector<std::string> fields = { "x", "y", "z" };
+      std::vector<uint32_t> xyzOffsets;
+      for (auto field : fields)
+      {
+        xyzOffsets.push_back(getOffset(names, offsets, field, isBigendian));
+      }
+
+      readPoints(id, xyzOffsets, data, pointStep, height, width);
     }
 
-    readPoints(id, xyzOffsets, data, pointStep, height, width);
-  }
-
-  if (info.has_rgb)
-  {
-    const std::vector<std::string> fields = { "r", "g", "b" };
-    std::vector<uint32_t> rgbOffsets;
-    for (auto field : fields)
+    if (info.has_rgb)
     {
-      rgbOffsets.push_back(getOffset(names, offsets, field, isBigendian));
+      const std::vector<std::string> fields = { "r", "g", "b" };
+      std::vector<uint32_t> rgbOffsets;
+      for (auto field : fields)
+      {
+        rgbOffsets.push_back(getOffset(names, offsets, field, isBigendian));
+      }
+
+      readColorsRGB(id, rgbOffsets, data, pointStep, height, width);
     }
 
-    readColorsRGB(id, rgbOffsets, data, pointStep, height, width);
-  }
-
-  if (info.has_rgba)
-  {
-    const std::vector<std::string> fields = { "r", "g", "b", "a" };
-    std::vector<uint32_t> rgbaOffsets;
-    for (auto field : fields)
+    if (info.has_rgba)
     {
-      rgbaOffsets.push_back(getOffset(names, offsets, field, isBigendian));
-    }
+      const std::vector<std::string> fields = { "r", "g", "b", "a" };
+      std::vector<uint32_t> rgbaOffsets;
+      for (auto field : fields)
+      {
+        rgbaOffsets.push_back(getOffset(names, offsets, field, isBigendian));
+      }
 
-    readPoints(id, rgbaOffsets, data, pointStep, height, width);
+      readPoints(id, rgbaOffsets, data, pointStep, height, width);
+    }
   }
 
   // TODO add normals
@@ -399,7 +403,10 @@ Hdf5FbPointCloud::readPointCloud2(const std::string& id)
   pointCloudBuilder.add_is_bigendian(isBigendian);
   pointCloudBuilder.add_point_step(pointStep);
   pointCloudBuilder.add_row_step(rowStep);
-  pointCloudBuilder.add_data(vector);
+  if (!withoutData)
+  {
+    pointCloudBuilder.add_data(dataOffset);
+  }
   pointCloudBuilder.add_is_dense(isDense);
   pointCloudBuilder.add_labels_general(generalLabelsOffset);
   pointCloudBuilder.add_labels_bb(boundingBoxLabeledOffset);

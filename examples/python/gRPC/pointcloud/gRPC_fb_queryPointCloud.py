@@ -80,7 +80,8 @@ for responseBuf in stubPointCloud.GetPointCloud2(bytes(buf)):
         print(f"Instance {i}: {response.LabelsGeneral(i).InstanceUuid().decode('utf-8')}")
 
     print("---Data--")
-    rawData = response.DataAsNumpy()
-    data = [struct.unpack('f', rawData[i : i + 4]) for i in range(0, rawData.shape[0], 4)]
-    reshapedData = np.array(data).reshape(960, 1280, 4)
-    print(f"Data: {reshapedData}")
+    if not response.DataIsNone():
+        rawData = response.DataAsNumpy()
+        data = [struct.unpack('f', rawData[i : i + 4]) for i in range(0, rawData.shape[0], 4)]
+        reshapedData = np.array(data).reshape(960, 1280, 4)
+        print(f"Data: {reshapedData}")
