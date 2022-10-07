@@ -163,7 +163,6 @@ protected:
   static std::shared_ptr<HighFive::File> hdf5File;
   static std::shared_ptr<seerep_hdf5_pb::Hdf5PbImage> imageIO;
 
-  // static std::string projectUUID;
   static boost::uuids::uuid projectUUID;
   static boost::uuids::uuid messageUUID;
   static std::string projectName;
@@ -252,8 +251,6 @@ TEST_F(pbWriteLoadTest, testImageBaseFields)
   EXPECT_EQ(readImage.is_bigendian(), writeImage.is_bigendian());
   EXPECT_EQ(readImage.step(), writeImage.step());
   EXPECT_EQ(readImage.row_step(), writeImage.row_step());
-  // EXPECT_EQ(readImage.labels_general(), writeImage.labels_general());
-  // EXPECT_EQ(readImage.labels_bb(), writeImage.labels_bb());
 }
 
 /**
