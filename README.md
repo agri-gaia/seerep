@@ -13,6 +13,7 @@
 - [General](#general)
 - [Quick Start](#quick-start)
 - [Documentation](#documentation)
+- [Related Publications](#related-publications)
 
 <!-- - [Related Publications](#related-publications) -->
 
