@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Niemeyer"
+  given-names: "Mark"
+title: "SEEREP: a spatio-temporal-SEmantic Environment REPresentation"
+url: "https://github.com/agri-gaia/seerep"
+preferred-citation:
+  type: conference-paper
+  authors:
+  - family-names: "Niemeyer"
+    given-names: "Mark"
+  - family-names: "Pütz"
+    given-names: "Sebastian"
+  - family-names: "Hertzberg"
+    given-names: "Joachim"
+  title: "A Spatio-Temporal-Semantic Environment Representation for Autonomous Mobile Robots equipped with various Sensor Systems"
+  conference:
+    name: "IEEE International Conference on Multisensor Fusion and Integration for Intelligent Systems"
+  collection-title: "2022 IEEE International Conference on Multisensor Fusion and Integration for Intelligent Systems, September 20-22, 2022"
+  publisher: "IEEE"
+  month: 9
+  year: 2022
