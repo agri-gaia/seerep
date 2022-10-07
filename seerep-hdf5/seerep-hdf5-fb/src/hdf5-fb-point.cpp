@@ -43,7 +43,7 @@ void Hdf5FbPoint::writePoint(const std::string& id, const seerep::fb::PointStamp
 
   writeAttributeMap(data_set_ptr, point->attribute());
 
-  writeLabelsGeneral(HDF5_GROUP_POINT, id, point->labels_general());
+  writeLabelsGeneral(seerep_hdf5_core::Hdf5CorePoint::HDF5_GROUP_POINT, id, point->labels_general());
 
   m_file->flush();
 }
@@ -99,7 +99,7 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::PointStamped>> Hdf5FbPoint:
 
   std::vector<std::string> labelsGeneral;
   std::vector<std::string> labelsGeneralInstances;
-  readLabelsGeneral(HDF5_GROUP_POINT, id, labelsGeneral, labelsGeneralInstances);
+  readLabelsGeneral(seerep_hdf5_core::Hdf5CorePoint::HDF5_GROUP_POINT, id, labelsGeneral, labelsGeneralInstances);
 
   std::vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>> labelGeneralVector;
   labelGeneralVector.reserve(labelsGeneral.size());
@@ -132,7 +132,7 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::PointStamped>> Hdf5FbPoint:
 
 std::string Hdf5FbPoint::getHdf5DatasetRawDataPath(const std::string& id)
 {
-  return HDF5_GROUP_POINT + "/" + id + "/" + RAWDATA;
+  return seerep_hdf5_core::Hdf5CorePoint::HDF5_GROUP_POINT + "/" + id + "/" + seerep_hdf5_core::Hdf5CorePoint::RAWDATA;
 }
 
 }  // namespace seerep_hdf5_fb
