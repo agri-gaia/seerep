@@ -124,15 +124,6 @@ seerep::Image createImageMessage(const unsigned int imageHeight, const unsigned 
 {
   std::string encoding = "rgb8";
 
-  // Labels are optional therefore excluded here
-  // std::vector<seerep::LabelWithInstance> labelsGeneral;
-  // for (size_t i = 0; i < 10; i++)
-  // {
-  //   auto labelWithInstance = createLabelWithInstance();
-  //   labelsGeneral.push_back(labelWithInstance);
-  // }
-  // auto generalLabels = CreateVector(labelsGeneral.data(), labelsGeneral.size());
-
   seerep::Image imgMsg;
   createHeader(projectUUID, messageUUID, imgMsg.mutable_header());
   createImageData(256, 256, imgMsg);
@@ -145,10 +136,19 @@ seerep::Image createImageMessage(const unsigned int imageHeight, const unsigned 
   imgMsg.set_is_bigendian(true);
   imgMsg.set_step(3 * imageHeight);
   imgMsg.set_row_step(0);
-  // imgMsg.labels_general = generalLabel;
-  // imgMsg.labels_bb = bB2DLabeled;
 
-  // help 1 line
+  // create label with instance
+  seerep::LabelWithInstance lwi;
+  // populate it with values
+  createLabelWithInstance(&lwi);
+  // obtain a pointer to labelWithInstance inside image
+  seerep::LabelWithInstance* x = imgMsg.add_labels_general();
+  // set it to lwi created above
+  x->set_label(lwi.label());
+  x->set_instanceuuid(lwi.instanceuuid());
+
+  createBB2DLabeled(projectUUID, messageUUID, imgMsg);
+
   return imgMsg;
 }
 
@@ -186,13 +186,6 @@ protected:
     hdf5FileName = boost::lexical_cast<std::string>(projectUUID) + ".h5";
     hdf5File = std::make_shared<HighFive::File>(hdf5FileName, HighFive::File::ReadWrite | HighFive::File::Create);
 
-    // temporary files are stored in the build directory of seerep-hdf5-pb
-    // auto seerepCore = std::make_shared<seerep_core::Core>("./", false);
-    // seerep_core_msgs::ProjectInfo projectInfo;
-    // projectInfo.name = projectName;
-    // projectInfo.uuid = projectUUID;
-    // seerepCore->createProject(projectInfo);
-
     imageIO = std::make_shared<seerep_hdf5_pb::Hdf5PbImage>(hdf5File, hdf5FileMutex);
     if (imageIO == nullptr)
     {
@@ -201,10 +194,6 @@ protected:
 
     writeImage = createImageMessage(256, 256, boost::lexical_cast<std::string>(projectUUID),
                                     boost::lexical_cast<std::string>(messageUUID));
-    // if (writeImage == NULL)
-    // {
-    //   GTEST_FATAL_FAILURE_("Error: No image data to write into HDF5 file");
-    // }
 
     imageIO->writeImage(boost::lexical_cast<std::string>(messageUUID), writeImage);
 
@@ -263,6 +252,8 @@ TEST_F(pbWriteLoadTest, testImageBaseFields)
   EXPECT_EQ(readImage.is_bigendian(), writeImage.is_bigendian());
   EXPECT_EQ(readImage.step(), writeImage.step());
   EXPECT_EQ(readImage.row_step(), writeImage.row_step());
+  // EXPECT_EQ(readImage.labels_general(), writeImage.labels_general());
+  // EXPECT_EQ(readImage.labels_bb(), writeImage.labels_bb());
 }
 
 /**
@@ -315,20 +306,22 @@ void testEqualPoints(const seerep::Point2D* readPoint, const seerep::Point2D* wr
   EXPECT_EQ(readPoint->y(), writePoint->y());
 }
 
-// // don't test the header since, it will be removed in #72
-// TEST_F(pbWriteLoadTest, testBoundingBox2DLabeled)
-// {
-//   ASSERT_EQ(readImage->labels_bb().size(), writeImage->labels_bb().size());
-//   for (size_t i = 0; i < readImage->labels_bb().size(); i++)
-//   {
-//     testLabelWithInstance(readImage->labels_bb().Get(i).labelwithinstance(),
-//                           writeImage->labels_bb().Get(i).labelwithinstance
-//     testEqualPoints(readImage->labels_bb().Get(i).boundingbox().point_min(),
-//                     writeImage->labels_bb().Get(i).boundingbox().point_min());
-//     testEqualPoints(readImage->labels_bb().Get(i).boundingbox().point_max(),
-//                     writeImage->labels_bb().Get(i).boundingbox().point_max());
-//   }
-// }
+/**
+ * @brief test original bounding box 2d labeled and converted bounding box 2d labeled read from hdf5 file for equality.
+ * */
+TEST_F(pbWriteLoadTest, testBoundingBox2DLabeled)
+{
+  ASSERT_EQ(readImage.labels_bb().size(), writeImage.labels_bb().size());
+  for (int i = 0; i < readImage.labels_bb().size(); i++)
+  {
+    testLabelWithInstance(&readImage.labels_bb().Get(i).labelwithinstance(),
+                          &writeImage.labels_bb().Get(i).labelwithinstance());
+    testEqualPoints(&readImage.labels_bb().Get(i).boundingbox().point_min(),
+                    &writeImage.labels_bb().Get(i).boundingbox().point_min());
+    testEqualPoints(&readImage.labels_bb().Get(i).boundingbox().point_max(),
+                    &writeImage.labels_bb().Get(i).boundingbox().point_max());
+  }
+}
 
 int main(int argc, char** argv)
 {
