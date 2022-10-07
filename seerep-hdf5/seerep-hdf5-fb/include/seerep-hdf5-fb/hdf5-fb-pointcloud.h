@@ -41,7 +41,8 @@ private:
   template <typename T>
   void read(const std::string& id, const std::string& fieldName, std::vector<T>& data, size_t size)
   {
-    const std::string hdf5DatasetFieldPath = HDF5_GROUP_POINTCLOUD + "/" + id + "/" + fieldName;
+    const std::string hdf5DatasetFieldPath =
+        seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + id + "/" + fieldName;
 
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
         << "reading " << fieldName << " from: " << hdf5DatasetFieldPath;
@@ -96,10 +97,10 @@ private:
       counts.push_back(pointField->count());
     }
 
-    writeAttributeToHdf5<std::vector<std::string>>(object, FIELD_NAME, names);
-    writeAttributeToHdf5<std::vector<uint32_t>>(object, FIELD_OFFSET, offsets);
-    writeAttributeToHdf5<std::vector<uint8_t>>(object, FIELD_DATATYPE, datatypes);
-    writeAttributeToHdf5<std::vector<uint32_t>>(object, FIELD_COUNT, counts);
+    writeAttributeToHdf5<std::vector<std::string>>(object, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_NAME, names);
+    writeAttributeToHdf5<std::vector<uint32_t>>(object, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_OFFSET, offsets);
+    writeAttributeToHdf5<std::vector<uint8_t>>(object, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_DATATYPE, datatypes);
+    writeAttributeToHdf5<std::vector<uint32_t>>(object, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_COUNT, counts);
   }
 
   /** write */
@@ -150,24 +151,6 @@ private:
 
   uint32_t getOffset(const std::vector<std::string>& names, const std::vector<uint32_t>& offsets,
                      const std::string& fieldName, bool isBigendian);
-
-  // pointcloud attribute keys
-  inline static const std::string HEIGHT = "height";
-  inline static const std::string WIDTH = "width";
-  inline static const std::string ENCODING = "encoding";
-  inline static const std::string IS_BIGENDIAN = "is_bigendian";
-  inline static const std::string ROW_STEP = "row_step";
-  inline static const std::string POINT_STEP = "point_step";
-  inline static const std::string IS_DENSE = "is_dense";
-
-  // point field attribute keys
-  inline static const std::string FIELD_NAME = "field_name";
-  inline static const std::string FIELD_OFFSET = "field_offset";
-  inline static const std::string FIELD_DATATYPE = "field_datatype";
-  inline static const std::string FIELD_COUNT = "field_count";
-
-public:
-  inline static const std::string HDF5_GROUP_POINTCLOUD = "pointclouds";
 };
 }  // namespace seerep_hdf5_fb
 
