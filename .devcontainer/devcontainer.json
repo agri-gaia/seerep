@@ -14,7 +14,8 @@
         "GitHub.vscode-pull-request-github",
         "streetsidesoftware.code-spell-checker",
         "matepek.vscode-catch2-test-adapter",
-        "davidanson.vscode-markdownlint"
+        "davidanson.vscode-markdownlint",
+        "cschlosser.doxdocgen"
     ],
     "containerUser": "docker",
     "mounts": [
