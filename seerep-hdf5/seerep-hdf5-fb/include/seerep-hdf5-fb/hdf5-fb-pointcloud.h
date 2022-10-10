@@ -61,49 +61,6 @@ private:
     bool has_normals = false;
   };
 
-  // TODO remove
-  template <typename T>
-  void read(const std::string& id, const std::string& fieldName, std::vector<T>& data, size_t size)
-  {
-    const std::string hdf5DatasetFieldPath =
-        seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + id + "/" + fieldName;
-
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
-        << "reading " << fieldName << " from: " << hdf5DatasetFieldPath;
-
-    HighFive::DataSet dataset = m_file->getDataSet(id);
-
-    data.reserve(size);
-    dataset.read(data);
-  }
-
-  // TODO remove
-  template <typename T>
-  void write(const std::string cloud_uuid, const std::string& field_name, const seerep::fb ::PointCloud2& cloud,
-             size_t size)
-  {
-    const std::string id = seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX + "/" + cloud_uuid + "/" + field_name;
-    HighFive::DataSpace data_space(size);
-
-    std::shared_ptr<HighFive::DataSet> dataset_ptr;
-    if (!m_file->exist(id))
-      dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->createDataSet<T>(id, data_space));
-    else
-      dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(id));
-
-    PointCloud2ConstIterator<T> iter(cloud, field_name);
-    std::vector<T> data;
-    data.reserve(size);
-
-    for (size_t i = 0; i < size; i++)
-    {
-      data.push_back(*iter);
-      ++iter;
-    }
-
-    dataset_ptr->write(data);
-  }
-
   /**
    * @brief Writes information about point fields as attributes to hdf5
    *
