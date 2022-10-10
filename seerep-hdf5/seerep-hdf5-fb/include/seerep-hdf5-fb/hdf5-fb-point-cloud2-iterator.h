@@ -53,7 +53,7 @@ template <typename T, typename TT, typename U, typename C, template <typename> c
 class PointCloud2IteratorBase
 {
 public:
-  PointCloud2IteratorBase();
+  PointCloud2IteratorBase() = default;
 
   /** Assignment operator
    * @param iter the iterator to copy data from
@@ -159,11 +159,11 @@ public:
    *
    * @param data pointer to a const uint8_t array to iterate over
    * @param offset the offset of the field to iterate on
+   * @param pointStep the pointStep of the point cloud
    * @param height the height of the point cloud (1 for unorganized point clouds)
    * @param width the width of the point cloud
-   * @param pointStep the pointStep of the point cloud
    */
-  PointCloud2ConstIterator(const uint8_t* data, uint32_t offset, uint32_t height, uint32_t width, uint32_t pointStep)
+  PointCloud2ConstIterator(const uint8_t* data, uint32_t offset, uint32_t pointStep, uint32_t height, uint32_t width)
     : impl::PointCloud2IteratorBase<T, const T, const unsigned char, const seerep::fb::PointCloud2,
                                     seerep_hdf5_fb::PointCloud2ConstIterator>::PointCloud2IteratorBase()
   {

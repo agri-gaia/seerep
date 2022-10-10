@@ -44,12 +44,6 @@ namespace seerep_hdf5_fb
 {
 namespace impl
 {
-// TODO remove default constructor
-template <typename T, typename TT, typename U, typename C, template <typename> class V>
-PointCloud2IteratorBase<T, TT, U, C, V>::PointCloud2IteratorBase()
-{
-}
-
 /** Assignment operator
  * @param iter the iterator to copy data from
  * @return a reference to *this
