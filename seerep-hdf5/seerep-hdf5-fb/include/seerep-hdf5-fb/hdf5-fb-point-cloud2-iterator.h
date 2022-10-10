@@ -41,35 +41,7 @@
 #include <vector>
 
 /**
- * @brief Tools for manipulating sensor_msgs
- *
- * This file provides two sets of utilities to modify and parse PointCloud2
- * The first set allows you to conveniently set the fields by hand:
- *
- * @verbatim
- *   #include <sensor_msgs/point_cloud_iterator.hpp>
- *   // Create a PointCloud2
- *   seerep::PointCloud2 cloud_msg;
- *   // Fill some internals of the PoinCloud2 like the header/width/height ...
- *   cloud_msgs.height = 1;  cloud_msgs.width = 4;
- *   // Set the point fields to xyzrgb and resize the vector with the following command
- *   // 4 is for the number of added fields. Each come in triplet: the name of the PointField,
- *   // the number of occurrences of the type in the PointField, the type of the PointField
- *   seerep::PointCloud2Modifier modifier(cloud_msg);
- *   modifier.setPointCloud2Fields(4, "x", 1, seerep::PointField::FLOAT32,
- *                                            "y", 1, seerep::PointField::FLOAT32,
- *                                            "z", 1, seerep::PointField::FLOAT32,
- *                                            "rgb", 1, seerep::PointField::FLOAT32);
- *   // For convenience and the xyz, rgb, rgba fields, you can also use the following overloaded function.
- *   // You have to be aware that the following function does add extra padding for backward compatibility though
- *   // so it is definitely the solution of choice for PointXYZ and PointXYZRGB
- *   // 2 is for the number of fields to add
- *   modifier.setPointCloud2FieldsByString(2, "xyz", "rgb");
- *   // You can then reserve / resize as usual
- *   modifier.resize(100);
- * @endverbatim
- *
- * The second set allows you to traverse your PointCloud using an iterator:
+ * @brief Iterator to parse a flatbuffers PointCloud2
  *
  * @verbatim
  *   // Define some raw data we'll put in the PointCloud2
@@ -101,74 +73,6 @@
 
 namespace seerep_hdf5_fb
 {
-/**
- * @brief Enables modifying a seerep::PointCloud2 like a container
- */
-// class PointCloud2Modifier
-// {
-// public:
-//   /**
-//    * @brief Default constructor
-//    * @param cloud_msg The seerep::PointCloud2 to modify
-//    */
-//   explicit PointCloud2Modifier(seerep::PointCloud2& cloud_msg);
-
-//   /**
-//    * @return the number of T's in the original seerep::PointCloud2
-//    */
-//   size_t size() const;
-
-//   /**
-//    * @param size The number of T's to reserve in the original seerep::PointCloud2 for
-//    */
-//   void reserve(size_t size);
-
-//   /**
-//    * @param size The number of T's to change the size of the original seerep::PointCloud2 by
-//    */
-//   void resize(size_t size);
-
-//   /**
-//    * @brief remove all T's from the original seerep::PointCloud2
-//    */
-//   void clear();
-
-//   /**
-//    * @brief Function setting some fields in a PointCloud and adjusting the
-//    *        internals of the PointCloud2
-//    * @param n_fields the number of fields to add. The fields are given as triplets: name of the
-//    *  field as char*, number of elements in the field, the datatype of the field, the datatype
-//    *  of the elements in the field
-//    *
-//    * E.g, you create your PointCloud2 message with XYZ/RGB as follows:
-//    * @verbatim
-//    *   setPointCloud2Fields(cloud_msg, 4, "x", 1, seerep::PointField::FLOAT32,
-//    *                                              "y", 1, seerep::PointField::FLOAT32,
-//    *                                              "z", 1, seerep::PointField::FLOAT32,
-//    *                                              "rgb", 1, seerep::PointField::FLOAT32);
-//    * @endverbatim
-//    * WARNING: THIS DOES NOT TAKE INTO ACCOUNT ANY PADDING
-//    * For simple usual cases, the overloaded setPointCloud2FieldsByString is what you want.
-//    */
-//   void setPointCloud2Fields(int n_fields, ...);
-
-//   /**
-//    * @brief Function setting some fields in a PointCloud and adjusting the
-//    *        internals of the PointCloud2
-//    * @param n_fields the number of fields to add. The fields are given as
-//    *        strings: "xyz" (3 floats), "rgb" (3 uchar stacked in a float),
-//    *        "rgba" (4 uchar stacked in a float)
-//    * @return void
-//    *
-//    * WARNING: THIS FUNCTION ADDS ANY NECESSARY PADDING TRANSPARENTLY
-//    */
-//   void setPointCloud2FieldsByString(int n_fields, ...);
-
-// protected:
-//   /** A reference to the original seerep::PointCloud2 that we read */
-//   seerep::PointCloud2& cloud_msg_;
-// };
-
 namespace impl
 {
 /** Private base class for PointCloud2Iterator and PointCloud2ConstIterator
