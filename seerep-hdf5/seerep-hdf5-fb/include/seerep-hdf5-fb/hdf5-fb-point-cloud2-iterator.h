@@ -36,7 +36,6 @@
 #include <seerep-msgs/point_cloud_2_generated.h>
 #include <seerep-msgs/point_field_generated.h>
 
-#include <cstdarg>
 #include <string>
 #include <vector>
 
@@ -81,7 +80,7 @@ namespace impl
  * U is the type of the raw data in PointCloud2 (only uchar and const uchar are supported)
  * V is the derived class (yop, curiously recurring template pattern)
  */
-template <typename T, typename TT, typename U, template <typename> class V>
+template <typename T, typename TT, typename U, typename C, template <typename> class V>
 class PointCloud2IteratorBase
 {
 public:
@@ -158,7 +157,8 @@ public:
  * @brief Helper iterators for reading and writing the data field of a flatbuffers point cloud message
  */
 template <typename T>
-class PointCloud2WriteIterator : public impl::PointCloud2IteratorBase<T, T, unsigned char, PointCloud2WriteIterator>
+class PointCloud2Iterator
+  : public impl::PointCloud2IteratorBase<T, T, unsigned char, seerep::fb::PointCloud2, PointCloud2Iterator>
 {
 public:
   /**
@@ -168,9 +168,9 @@ public:
    * @param offset the offset of the field that should be written
    * @param size the length of the data field
    */
-  PointCloud2WriteIterator(uint8_t* data, uint32_t offset, uint32_t pointStep, uint32_t height, uint32_t width)
-    : impl::PointCloud2IteratorBase<T, T, unsigned char,
-                                    seerep_hdf5_fb::PointCloud2WriteIterator>::PointCloud2IteratorBase()
+  PointCloud2Iterator(uint8_t* data, uint32_t offset, uint32_t pointStep, uint32_t height, uint32_t width)
+    : impl::PointCloud2IteratorBase<T, T, unsigned char, seerep::fb::PointCloud2,
+                                    seerep_hdf5_fb::PointCloud2Iterator>::PointCloud2IteratorBase()
   {
     this->field_offset_ = offset;
     this->point_step_ = pointStep;
@@ -184,8 +184,9 @@ public:
  * @brief Reading iterator for the data field of a received flatbuffers point cloud message
  */
 template <typename T>
-class PointCloud2ReadIterator
-  : public impl::PointCloud2IteratorBase<T, const T, const unsigned char, PointCloud2ReadIterator>
+class PointCloud2ConstIterator
+  : public impl::PointCloud2IteratorBase<T, const T, const unsigned char, const seerep::fb::PointCloud2,
+                                         PointCloud2ConstIterator>
 {
 public:
   /**
@@ -194,9 +195,9 @@ public:
    * @param cloudMsg the flatbuffers point cloud message to use
    * @param fieldName the field to iterate over
    */
-  PointCloud2ReadIterator(uint8_t* data, uint32_t offset, uint32_t height, uint32_t width, u_int32_t pointStep)
-    : impl::PointCloud2IteratorBase<T, const T, const unsigned char,
-                                    seerep_hdf5_fb::PointCloud2ReadIterator>::PointCloud2IteratorBase()
+  PointCloud2ConstIterator(const uint8_t* data, uint32_t offset, uint32_t height, uint32_t width, uint32_t pointStep)
+    : impl::PointCloud2IteratorBase<T, const T, const unsigned char, const seerep::fb::PointCloud2,
+                                    seerep_hdf5_fb::PointCloud2ConstIterator>::PointCloud2IteratorBase()
   {
     this->field_offset_ = offset;
     this->point_step_ = pointStep;

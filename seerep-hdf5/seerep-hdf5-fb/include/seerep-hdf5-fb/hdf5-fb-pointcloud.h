@@ -66,7 +66,7 @@ private:
     else
       dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(id));
 
-    PointCloud2ReadIterator<T> iter(cloud, field_name);
+    PointCloud2ConstIterator<T> iter(cloud, field_name);
     std::vector<T> data;
     data.reserve(size);
 
@@ -104,14 +104,14 @@ private:
   }
 
   /** write */
-  void writePoints(const std::string& id, const std::vector<uint32_t>& offsets, uint8_t* data, uint32_t pointStep,
+  void writePoints(const std::string& id, const std::vector<uint32_t>& offsets, const uint8_t* data, uint32_t pointStep,
                    uint32_t height, uint32_t width, const std::shared_ptr<HighFive::Group>& groupPtr);
 
-  void writeColorsRGB(const std::string& id, const std::vector<uint32_t>& offsets, uint8_t* data, uint32_t pointStep,
-                      uint32_t height, uint32_t width);
+  void writeColorsRGB(const std::string& id, const std::vector<uint32_t>& offsets, const uint8_t* data,
+                      uint32_t pointStep, uint32_t height, uint32_t width);
 
-  void writeColorsRGBA(const std::string& id, const std::vector<uint32_t>& offsets, uint8_t* data, uint32_t pointStep,
-                       uint32_t height, uint32_t width);
+  void writeColorsRGBA(const std::string& id, const std::vector<uint32_t>& offsets, const uint8_t* data,
+                       uint32_t pointStep, uint32_t height, uint32_t width);
 
   /** read */
 
