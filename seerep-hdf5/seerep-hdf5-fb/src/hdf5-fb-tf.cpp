@@ -13,7 +13,8 @@ void Hdf5FbTf::writeTransformStamped(const seerep::fb::TransformStamped& tf)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
-  std::string hdf5DatasetPath = HDF5_GROUP_TF + "/" + tf.header()->frame_id()->str() + "_" + tf.child_frame_id()->str();
+  std::string hdf5DatasetPath = seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF + "/" + tf.header()->frame_id()->str() +
+                                "_" + tf.child_frame_id()->str();
   std::string hdf5DatasetTimePath = hdf5DatasetPath + "/" + "time";
   std::string hdf5DatasetTransPath = hdf5DatasetPath + "/" + "translation";
   std::string hdf5DatasetRotPath = hdf5DatasetPath + "/" + "rotation";
@@ -65,7 +66,7 @@ void Hdf5FbTf::writeTransformStamped(const seerep::fb::TransformStamped& tf)
     data_set_rot_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DatasetRotPath));
 
     HighFive::Group group = m_file->getGroup(hdf5DatasetPath);
-    group.getAttribute(SIZE).read(size);
+    group.getAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE).read(size);
 
     // Resize the dataset to a larger size
     data_set_time_ptr->resize({ size + 1, 2 });
@@ -96,10 +97,10 @@ void Hdf5FbTf::writeTransformStamped(const seerep::fb::TransformStamped& tf)
 
   // write the size as group attribute
   HighFive::Group group = m_file->getGroup(hdf5DatasetPath);
-  if (!group.hasAttribute(SIZE))
-    group.createAttribute(SIZE, ++size);
+  if (!group.hasAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE))
+    group.createAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE, ++size);
   else
-    group.getAttribute(SIZE).write(++size);
+    group.getAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE).write(++size);
 
   m_file->flush();
 }
@@ -109,7 +110,7 @@ Hdf5FbTf::readTransformStamped(const std::string& id)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
-  std::string hdf5GroupPath = HDF5_GROUP_TF + "/" + id;
+  std::string hdf5GroupPath = seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF + "/" + id;
   std::string hdf5DatasetTimePath = hdf5GroupPath + "/" + "time";
   std::string hdf5DatasetTransPath = hdf5GroupPath + "/" + "translation";
   std::string hdf5DatasetRotPath = hdf5GroupPath + "/" + "rotation";
@@ -125,7 +126,7 @@ Hdf5FbTf::readTransformStamped(const std::string& id)
   // read size
   std::shared_ptr<HighFive::Group> group_ptr = std::make_shared<HighFive::Group>(m_file->getGroup(hdf5GroupPath));
   long unsigned int size;
-  group_ptr->getAttribute(SIZE).read(size);
+  group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE).read(size);
   if (size == 0)
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning) << "tf data has size 0.";
@@ -188,7 +189,7 @@ std::optional<std::vector<std::string>> Hdf5FbTf::readTransformStampedFrames(con
 {
   const std::scoped_lock lock(*m_write_mtx);
 
-  std::string hdf5GroupPath = HDF5_GROUP_TF + "/" + id;
+  std::string hdf5GroupPath = seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF + "/" + id;
 
   if (!m_file->exist(hdf5GroupPath))
   {

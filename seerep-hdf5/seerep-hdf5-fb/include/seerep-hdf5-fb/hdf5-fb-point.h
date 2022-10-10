@@ -5,18 +5,18 @@
 #include <highfive/H5File.hpp>
 
 // seerep-hdf5
-#include "seerep-hdf5-fb/hdf5-fb-general.h"
+#include <seerep-hdf5-core/hdf5-core-point.h>
+#include <seerep-hdf5-fb/hdf5-fb-general.h>
 
 // seerep-com
 #include <seerep-com/point_service.grpc.fb.h>
 
 // std
+#include <flatbuffers/grpc.h>
 #include <grpcpp/grpcpp.h>
 
 #include <boost/geometry.hpp>
 #include <optional>
-
-#include "flatbuffers/grpc.h"
 
 namespace seerep_hdf5_fb
 {
@@ -32,12 +32,6 @@ public:
 
 private:
   std::string getHdf5DatasetRawDataPath(const std::string& id);
-  // Point
-  inline static const std::string RAWDATA = "rawdata";
-
-public:
-  // datatype group names in hdf5
-  inline static const std::string HDF5_GROUP_POINT = "points";
 };
 
 }  // namespace seerep_hdf5_fb

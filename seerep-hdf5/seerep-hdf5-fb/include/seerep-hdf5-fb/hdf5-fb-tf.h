@@ -5,7 +5,8 @@
 #include <highfive/H5File.hpp>
 
 // seerep-hdf5
-#include "seerep-hdf5-fb/hdf5-fb-general.h"
+#include <seerep-hdf5-core/hdf5-core-tf.h>
+#include <seerep-hdf5-fb/hdf5-fb-general.h>
 
 // seerep-msgs
 #include <seerep-msgs/transform_stamped_generated.h>
@@ -26,12 +27,6 @@ public:
   std::optional<std::vector<flatbuffers::Offset<seerep::fb::TransformStamped>>>
   readTransformStamped(const std::string& id);
   std::optional<std::vector<std::string>> readTransformStampedFrames(const std::string& id);
-
-private:
-  // datatype group names in hdf5
-  inline static const std::string HDF5_GROUP_TF = "tf";
-
-  inline static const std::string SIZE = "size";
 };
 
 }  // namespace seerep_hdf5_fb

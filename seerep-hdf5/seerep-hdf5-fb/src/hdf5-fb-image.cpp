@@ -13,8 +13,8 @@ void Hdf5FbImage::writeImage(const std::string& id, const seerep::fb::Image& ima
 {
   const std::scoped_lock lock(*m_write_mtx);
 
-  std::string hdf5DatasetPath = HDF5_GROUP_IMAGE + "/" + id;
-  std::string hdf5DatasetRawDataPath = hdf5DatasetPath + "/" + RAWDATA;
+  std::string hdf5DatasetPath = seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE + "/" + id;
+  std::string hdf5DatasetRawDataPath = hdf5DatasetPath + "/" + seerep_hdf5_core::Hdf5CoreImage::RAWDATA;
 
   std::shared_ptr<HighFive::DataSet> data_set_ptr;
   HighFive::DataSpace data_space({ image.height(), image.width(), image.step() / image.width() });
@@ -34,23 +34,23 @@ void Hdf5FbImage::writeImage(const std::string& id, const seerep::fb::Image& ima
         std::make_shared<HighFive::DataSet>(m_file->createDataSet<uint8_t>(hdf5DatasetRawDataPath, data_space));
   }
 
-  writeAttributeToHdf5<uint32_t>(*data_set_ptr, HEIGHT, image.height());
-  writeAttributeToHdf5<uint32_t>(*data_set_ptr, WIDTH, image.width());
-  writeAttributeToHdf5<std::string>(*data_set_ptr, ENCODING, image.encoding()->str());
-  writeAttributeToHdf5<bool>(*data_set_ptr, IS_BIGENDIAN, image.is_bigendian());
-  writeAttributeToHdf5<uint32_t>(*data_set_ptr, POINT_STEP, image.step());
-  writeAttributeToHdf5<uint32_t>(*data_set_ptr, ROW_STEP, image.row_step());
+  writeAttributeToHdf5<uint32_t>(*data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::HEIGHT, image.height());
+  writeAttributeToHdf5<uint32_t>(*data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::WIDTH, image.width());
+  writeAttributeToHdf5<std::string>(*data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::ENCODING, image.encoding()->str());
+  writeAttributeToHdf5<bool>(*data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::IS_BIGENDIAN, image.is_bigendian());
+  writeAttributeToHdf5<uint32_t>(*data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::POINT_STEP, image.step());
+  writeAttributeToHdf5<uint32_t>(*data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::ROW_STEP, image.row_step());
 
   if (image.encoding()->str() == "rgb8" || image.encoding()->str() == "8UC3")
   {
-    writeAttributeToHdf5<std::string>(*data_set_ptr, CLASS, "IMAGE");
+    writeAttributeToHdf5<std::string>(*data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::CLASS, "IMAGE");
     writeAttributeToHdf5<std::string>(*data_set_ptr, "IMAGE_VERSION", "1.2");
     writeAttributeToHdf5<std::string>(*data_set_ptr, "IMAGE_SUBCLASS", "IMAGE_TRUECOLOR");
     writeAttributeToHdf5<std::string>(*data_set_ptr, "INTERLACE_MODE", "INTERLACE_PIXEL");
   }
   else
   {
-    deleteAttribute(data_set_ptr, CLASS);
+    deleteAttribute(data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::CLASS);
     deleteAttribute(data_set_ptr, "IMAGE_VERSION");
     deleteAttribute(data_set_ptr, "IMAGE_SUBCLASS");
     deleteAttribute(data_set_ptr, "INTERLACE_MODE");
@@ -75,8 +75,8 @@ void Hdf5FbImage::writeImage(const std::string& id, const seerep::fb::Image& ima
   data_set_ptr->write(tmp);
   writeHeaderAttributes(*data_set_ptr, *image.header());
 
-  writeBoundingBox2DLabeled(HDF5_GROUP_IMAGE, id, image.labels_bb());
-  writeLabelsGeneral(HDF5_GROUP_IMAGE, id, image.labels_general());
+  writeBoundingBox2DLabeled(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id, image.labels_bb());
+  writeLabelsGeneral(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id, image.labels_general());
 
   m_file->flush();
 }
@@ -86,7 +86,7 @@ void Hdf5FbImage::writeImageBoundingBox2DLabeled(const std::string& id,
 {
   const std::scoped_lock lock(*m_write_mtx);
 
-  writeBoundingBox2DLabeled(HDF5_GROUP_IMAGE, id, bb2dLabeledStamped.labels_bb());
+  writeBoundingBox2DLabeled(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id, bb2dLabeledStamped.labels_bb());
 }
 
 std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readImage(const std::string& id,
@@ -94,12 +94,12 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
 {
   const std::scoped_lock lock(*m_write_mtx);
 
-  std::string hdf5DatasetPath = HDF5_GROUP_IMAGE + "/" + id;
+  std::string hdf5DatasetPath = seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE + "/" + id;
   std::string hdf5DatasetRawDataPath = hdf5DatasetPath + "/" + RAWDATA;
 
   if (!m_file->exist(hdf5DatasetRawDataPath))
   {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << hdf5DatasetRawDataPath << "does not exist";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << hdf5DatasetRawDataPath << " does not exist";
     return std::nullopt;
   }
 
@@ -116,12 +116,13 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
   try
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "loading attributes";
-    height = readAttributeFromHdf5<uint32_t>(id, *data_set_ptr, HEIGHT);
-    width = readAttributeFromHdf5<uint32_t>(id, *data_set_ptr, WIDTH);
-    encoding = builder.CreateString(readAttributeFromHdf5<std::string>(id, *data_set_ptr, ENCODING));
-    isBigendian = readAttributeFromHdf5<bool>(id, *data_set_ptr, IS_BIGENDIAN);
-    step = readAttributeFromHdf5<uint32_t>(id, *data_set_ptr, POINT_STEP);
-    rowStep = readAttributeFromHdf5<uint32_t>(id, *data_set_ptr, ROW_STEP);
+    height = readAttributeFromHdf5<uint32_t>(id, *data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::HEIGHT);
+    width = readAttributeFromHdf5<uint32_t>(id, *data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::WIDTH);
+    encoding = builder.CreateString(
+        readAttributeFromHdf5<std::string>(id, *data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::ENCODING));
+    isBigendian = readAttributeFromHdf5<bool>(id, *data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::IS_BIGENDIAN);
+    step = readAttributeFromHdf5<uint32_t>(id, *data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::POINT_STEP);
+    rowStep = readAttributeFromHdf5<uint32_t>(id, *data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::ROW_STEP);
   }
   catch (const std::invalid_argument& e)
   {
@@ -159,7 +160,8 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
   std::vector<std::string> boundingBoxesLabels;
   std::vector<std::vector<double>> boundingBoxes;
   std::vector<std::string> boundingBoxesInstances;
-  readBoundingBoxLabeled(HDF5_GROUP_IMAGE, id, boundingBoxesLabels, boundingBoxes, boundingBoxesInstances);
+  readBoundingBoxLabeled(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id, boundingBoxesLabels, boundingBoxes,
+                         boundingBoxesInstances);
 
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
       << "creating the bounding boxes 2d with label fb msgs";
@@ -192,7 +194,7 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
 
   std::vector<std::string> labelsGeneral;
   std::vector<std::string> labelsGeneralInstances;
-  readLabelsGeneral(HDF5_GROUP_IMAGE, id, labelsGeneral, labelsGeneralInstances);
+  readLabelsGeneral(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id, labelsGeneral, labelsGeneralInstances);
 
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "creating the label general fb msgs";
   std::vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>> labelGeneralVector;
