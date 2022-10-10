@@ -39,37 +39,6 @@
 #include <string>
 #include <vector>
 
-/**
- * @brief Iterator to parse a flatbuffers PointCloud2
- *
- * @verbatim
- *   // Define some raw data we'll put in the PointCloud2
- *   float point_data[] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0};
- *   uint8_t color_data[] = {40, 80, 120, 160, 200, 240, 20, 40, 60, 80, 100, 120};
- *   // Define the iterators. When doing so, you define the Field you would like to iterate upon and
- *   // the type of you would like returned: it is not necessary the type of the PointField as sometimes
- *   // you pack data in another type (e.g. 3 uchar + 1 uchar for RGB are packed in a float)
- *   sensor_msgs::PointCloud2Iterator<float> iter_x(cloud_msg, "x");
- *   sensor_msgs::PointCloud2Iterator<float> iter_y(cloud_msg, "y");
- *   sensor_msgs::PointCloud2Iterator<float> iter_z(cloud_msg, "z");
- *   // Even though the r,g,b,a fields do not exist (it's usually rgb, rgba), you can create iterators for
- *   // those: they will handle data packing for you (in little endian RGB is packed as \*,R,G,B in a float
- *   // and RGBA as A,R,G,B)
- *   sensor_msgs::PointCloud2Iterator<uint8_t> iter_r(cloud_msg, "r");
- *   sensor_msgs::PointCloud2Iterator<uint8_t> iter_g(cloud_msg, "g");
- *   sensor_msgs::PointCloud2Iterator<uint8_t> iter_b(cloud_msg, "b");
- *   // Fill the PointCloud2
- *   for(size_t i=0; i<n_points; ++i, ++iter_x, ++iter_y, ++iter_z, ++iter_r, ++iter_g, ++iter_b) {
- *     \*iter_x = point_data[3*i+0];
- *     \*iter_y = point_data[3*i+1];
- *     \*iter_z = point_data[3*i+2];
- *     \*iter_r = color_data[3*i+0];
- *     \*iter_g = color_data[3*i+1];
- *     \*iter_b = color_data[3*i+2];
- *   }
- * @endverbatim
- */
-
 namespace seerep_hdf5_fb
 {
 namespace impl
@@ -130,15 +99,7 @@ public:
    */
   V<T> end() const;
 
-  // TODO find common place for calculation of the offset
-
-  /** Common code to set the field of the PointCloud2
-   * @param cloud_msg the PointCloud2 to modify
-   * @param field_name the name of the field to iterate upon
-   * @return the offset at which the field is found
-   */
-
-  /** The raw data  in uchar* where the iterator is */
+  /** The raw data in uchar* where the iterator is */
   U* data_char_;
   /** The cast data where the iterator is */
   TT* data_;
@@ -154,7 +115,7 @@ public:
 }  // namespace impl
 
 /**
- * @brief Helper iterators for reading and writing the data field of a flatbuffers point cloud message
+ * @brief Class that can iterate over a flatbuffers PointCloud2 (used for writing into the data field)
  */
 template <typename T>
 class PointCloud2Iterator
@@ -162,11 +123,13 @@ class PointCloud2Iterator
 {
 public:
   /**
-   * @brief Iterator to use for iterating over an pre-allocated data field and writing the values
+   * @brief Construct a new PointCloud2Iterator
    *
-   * @param data a pointer to the start of the data field
-   * @param offset the offset of the field that should be written
-   * @param size the length of the data field
+   * @param data pointer to a uint8_t array to iterate over
+   * @param offset the offset of the field to iterate on
+   * @param pointStep the pointStep of the point cloud
+   * @param height the height of the point cloud (1 for unorganized point clouds)
+   * @param width the width of the point cloud
    */
   PointCloud2Iterator(uint8_t* data, uint32_t offset, uint32_t pointStep, uint32_t height, uint32_t width)
     : impl::PointCloud2IteratorBase<T, T, unsigned char, seerep::fb::PointCloud2,
@@ -176,12 +139,13 @@ public:
     this->point_step_ = pointStep;
     this->data_char_ = reinterpret_cast<unsigned char*>(data + this->field_offset_);
     this->data_ = reinterpret_cast<T*>(this->data_char_);
+    // last element is at: offset + (n -1) * pointStep
     this->data_end_ = reinterpret_cast<T*>(data + offset + (height * width - 1) * pointStep);
   }
 };
 
 /**
- * @brief Reading iterator for the data field of a received flatbuffers point cloud message
+ * @brief Class that can iterate over a flatbuffers PointCloud2 (used for reading the data field)
  */
 template <typename T>
 class PointCloud2ConstIterator
@@ -189,11 +153,15 @@ class PointCloud2ConstIterator
                                          PointCloud2ConstIterator>
 {
 public:
+  // TODO same parameter order as above
   /**
-   * @brief Iterator over the data field of a received flatbuffers point cloud message
+   * @brief Construct a new PointCloud2ConstIterator
    *
-   * @param cloudMsg the flatbuffers point cloud message to use
-   * @param fieldName the field to iterate over
+   * @param data pointer to a const uint8_t array to iterate over
+   * @param offset the offset of the field to iterate on
+   * @param height the height of the point cloud (1 for unorganized point clouds)
+   * @param width the width of the point cloud
+   * @param pointStep the pointStep of the point cloud
    */
   PointCloud2ConstIterator(const uint8_t* data, uint32_t offset, uint32_t height, uint32_t width, uint32_t pointStep)
     : impl::PointCloud2IteratorBase<T, const T, const unsigned char, const seerep::fb::PointCloud2,

@@ -44,6 +44,7 @@ namespace seerep_hdf5_fb
 {
 namespace impl
 {
+// TODO remove default constructor
 template <typename T, typename TT, typename U, typename C, template <typename> class V>
 PointCloud2IteratorBase<T, TT, U, C, V>::PointCloud2IteratorBase()
 {
