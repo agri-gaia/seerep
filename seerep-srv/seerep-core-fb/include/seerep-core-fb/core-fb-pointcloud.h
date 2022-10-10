@@ -15,8 +15,6 @@
 // seerep-core
 #include <seerep-core/core.h>
 
-// add as temporary fix
-#include <seerep-com/point_cloud_service.grpc.fb.h>
 // uuid
 
 #include <boost/functional/hash.hpp>

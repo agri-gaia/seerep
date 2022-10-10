@@ -13,6 +13,9 @@
 // seerep-msgs
 #include <seerep-msgs/point_cloud_2_generated.h>
 
+// seerep-com
+#include <seerep-com/point_cloud_service.grpc.fb.h>
+
 // std
 #include <boost/geometry.hpp>
 #include <optional>
