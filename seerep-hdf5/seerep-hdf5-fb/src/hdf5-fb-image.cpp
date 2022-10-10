@@ -14,8 +14,7 @@ void Hdf5FbImage::writeImage(const std::string& id, const seerep::fb::Image& ima
   const std::scoped_lock lock(*m_write_mtx);
 
   std::string hdf5DatasetPath = seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE + "/" + id;
-  std::string hdf5DatasetRawDataPath =
-      seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE + "/" + seerep_hdf5_core::Hdf5CoreImage::RAWDATA;
+  std::string hdf5DatasetRawDataPath = hdf5DatasetPath + "/" + seerep_hdf5_core::Hdf5CoreImage::RAWDATA;
 
   std::shared_ptr<HighFive::DataSet> data_set_ptr;
   HighFive::DataSpace data_space({ image.height(), image.width(), image.step() / image.width() });
@@ -100,7 +99,7 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
 
   if (!m_file->exist(hdf5DatasetRawDataPath))
   {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << hdf5DatasetRawDataPath << "does not exist";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << hdf5DatasetRawDataPath << " does not exist";
     return std::nullopt;
   }
 
