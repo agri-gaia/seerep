@@ -62,7 +62,6 @@ target_link_libraries(protobuf-write-load-test
 	gmock_main
 	${catkin_LIBRARIES}
 	${HighFive_LIBRARIES}
-	${SeerepCore_LIBRARIES}
 	gRPC::grpc++_reflection
 	seerephdf5pb
 )

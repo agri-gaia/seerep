@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <seerep-core/core.h>
 #include <seerep-hdf5-pb/hdf5-pb-image.h>
 
 #include <H5File.hpp>
