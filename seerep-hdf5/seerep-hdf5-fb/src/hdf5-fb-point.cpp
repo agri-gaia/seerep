@@ -43,11 +43,7 @@ void Hdf5FbPoint::writePoint(const std::string& id, const seerep::fb::PointStamp
 
   writeAttributeMap(data_set_ptr, *point->attribute());
 
-<<<<<<< HEAD
-  writeLabelsGeneral(seerep_hdf5_core::Hdf5CorePoint::HDF5_GROUP_POINT, id, point->labels_general());
-=======
-  writeLabelsGeneral(HDF5_GROUP_POINT, id, *point->labels_general());
->>>>>>> refactor to only use reference where possible in hdf5 fb
+  writeLabelsGeneral(seerep_hdf5_core::Hdf5CorePoint::HDF5_GROUP_POINT, id, *point->labels_general());
 
   m_file->flush();
 }
