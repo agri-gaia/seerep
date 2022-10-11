@@ -19,20 +19,20 @@ propagate the data through all components. This should be changed in the future
 to improve the quality of the tests.
 */
 
-void createHeader(const std::string projectUUID, const std::string messageUUID, seerep::Header* header)
+/**
+ * @brief given a pointer to an image header, sets sub field values.
+ * @param[in] projectUUID the UUID of the project
+ * @param[in] messageUUId the UUID of the message
+ * @param[in,out] header reference to the header which will hold the fields
+ **/
+void createHeader(const std::string projectUUID, const std::string messageUUID, seerep::Header& header)
 {
-  /**
-   * @brief given a pointer to an image header, sets sub field values.
-   * @param[in] projectUUID the UUID of the project
-   * @param[in] messageUUId the UUID of the message
-   * @param[in,out] header the header which will hold the fields
-   **/
-  header->set_seq(5);
-  header->set_frame_id("arbitrary_id");
-  header->mutable_stamp()->set_seconds(5);
-  header->mutable_stamp()->set_nanos(5);
-  header->set_uuid_project(projectUUID);
-  header->set_uuid_msgs(messageUUID);
+  header.set_seq(5);
+  header.set_frame_id("arbitrary_id");
+  header.mutable_stamp()->set_seconds(5);
+  header.mutable_stamp()->set_nanos(5);
+  header.set_uuid_project(projectUUID);
+  header.set_uuid_msgs(messageUUID);
 }
 
 /**
@@ -41,17 +41,17 @@ void createHeader(const std::string projectUUID, const std::string messageUUID, 
  * @param[out] y y co ordinate
  * @param[in,out] point2D pointer to a 2D point object
  * */
-void createPoint(const double x, const double y, seerep::Point2D* point2D)
+void createPoint(const double x, const double y, seerep::Point2D& point2D)
 {
-  point2D->set_x(x);
-  point2D->set_y(y);
+  point2D.set_x(x);
+  point2D.set_y(y);
 }
 
 /**
  * @brief creates a grid of image data given height and width of an image
  * @param[in] imageHeight the height of the image
  * @param[in] imageWidth the width of the image
- * @param[in,out] image address of the image object
+ * @param[in,out] image reference to the image object
  * */
 void createImageData(const unsigned int imageHeight, const unsigned int imageWidth, seerep::Image& image)
 {
@@ -81,18 +81,18 @@ void createImageData(const unsigned int imageHeight, const unsigned int imageWid
  * @brief given a labelWithInstance set arbitrary label and uuid
  * @param[in,out] labelWithInstance a pointer to a label with instance
  * */
-void createLabelWithInstance(seerep::LabelWithInstance* labelWithInstance)
+void createLabelWithInstance(seerep::LabelWithInstance& labelWithInstance)
 {
   boost::uuids::uuid instanceUUID = boost::uuids::random_generator()();
-  labelWithInstance->set_label("arbitrary_instance_label");
-  labelWithInstance->set_instanceuuid(boost::lexical_cast<std::string>(instanceUUID));
+  labelWithInstance.set_label("arbitrary_instance_label");
+  labelWithInstance.set_instanceuuid(boost::lexical_cast<std::string>(instanceUUID));
 }
 
 /**
  * @brief create a 2D Labeled Bounding Box
  * @param[in] projectUUID the uuid of the project
  * @param[in] messageUUID the uuid of the message
- * @param[in] image the address of the image
+ * @param[in] image reference to the image
  * */
 void createBB2DLabeled(const std::string& projectUUID, const std::string& messageUUID, seerep::Image& image)
 {
@@ -102,12 +102,12 @@ void createBB2DLabeled(const std::string& projectUUID, const std::string& messag
   {
     seerep::BoundingBox2DLabeled* bbLabeled = image.add_labels_bb();
 
-    createHeader(projectUUID, messageUUID, bbLabeled->mutable_boundingbox()->mutable_header());
+    createHeader(projectUUID, messageUUID, *bbLabeled->mutable_boundingbox()->mutable_header());
 
-    createPoint(0.01 + i / 10, 0.02 + i / 10, bbLabeled->mutable_boundingbox()->mutable_point_min());
-    createPoint(0.03 + i / 10, 0.04 + i / 10, bbLabeled->mutable_boundingbox()->mutable_point_max());
+    createPoint(0.01 + i / 10, 0.02 + i / 10, *bbLabeled->mutable_boundingbox()->mutable_point_min());
+    createPoint(0.03 + i / 10, 0.04 + i / 10, *bbLabeled->mutable_boundingbox()->mutable_point_max());
 
-    createLabelWithInstance(bbLabeled->mutable_labelwithinstance());
+    createLabelWithInstance(*bbLabeled->mutable_labelwithinstance());
   }
 }
 
@@ -125,7 +125,7 @@ seerep::Image createImageMessage(const unsigned int imageHeight, const unsigned 
   std::string encoding = "rgb8";
 
   seerep::Image imgMsg;
-  createHeader(projectUUID, messageUUID, imgMsg.mutable_header());
+  createHeader(projectUUID, messageUUID, *imgMsg.mutable_header());
   createImageData(256, 256, imgMsg);
   createBB2DLabeled(projectUUID, messageUUID, imgMsg);
 
@@ -140,7 +140,7 @@ seerep::Image createImageMessage(const unsigned int imageHeight, const unsigned 
   // create label with instance
   seerep::LabelWithInstance lwi;
   // populate it with values
-  createLabelWithInstance(&lwi);
+  createLabelWithInstance(lwi);
   // obtain a pointer to labelWithInstance inside image
   seerep::LabelWithInstance* x = imgMsg.add_labels_general();
   // set it to lwi created above
@@ -230,6 +230,8 @@ seerep::Image pbWriteLoadTest::readImage;
 
 /**
  * @brief test original header and converted header read from hdf5 file for equality.
+ * @param[in] pbWriteLoadTest test suite class
+ * @param testImageHeader name of test
  * */
 TEST_F(pbWriteLoadTest, testImageHeader)
 {
@@ -242,6 +244,8 @@ TEST_F(pbWriteLoadTest, testImageHeader)
 
 /**
  * @brief test original image base fields and converted image base fields read from hdf5 file for equality.
+ * @param[in] pbWriteLoadTest test suite class
+ * @param testImageBaseFields name of test
  * */
 TEST_F(pbWriteLoadTest, testImageBaseFields)
 {
@@ -255,6 +259,8 @@ TEST_F(pbWriteLoadTest, testImageBaseFields)
 
 /**
  * @brief test original image data and converted image data read from hdf5 file for equality.
+ * @param[in] pbWriteLoadTest test suite class
+ * @param testImageData name of test
  * */
 TEST_F(pbWriteLoadTest, testImageData)
 {
@@ -267,6 +273,8 @@ TEST_F(pbWriteLoadTest, testImageData)
 
 /**
  * @brief test original label with instance and converted label with instance read from hdf5 file for equality.
+ * @param[in] readInstance the labelWithInstance which was read
+ * @param[in] writeInstance the labelWithInstance which was written
  * */
 void testLabelWithInstance(const seerep::LabelWithInstance* readInstance, const seerep::LabelWithInstance* writeInstance)
 {
@@ -280,6 +288,8 @@ void testLabelWithInstance(const seerep::LabelWithInstance* readInstance, const 
 
 /**
  * @brief test original general labels and converted general label read from hdf5 file for equality.
+ * @param[in] pbWriteLoadTest test suite class
+ * @param testGeneralLabels name of test
  * */
 TEST_F(pbWriteLoadTest, testGeneralLabels)
 {
@@ -292,6 +302,8 @@ TEST_F(pbWriteLoadTest, testGeneralLabels)
 
 /**
  * @brief test original point and converted point read from hdf5 file for equality.
+ * @param[in] readPoint the Point2D which was read
+ * @param[in] writePoint the Point2D which was written
  * */
 void testEqualPoints(const seerep::Point2D* readPoint, const seerep::Point2D* writePoint)
 {
@@ -305,6 +317,8 @@ void testEqualPoints(const seerep::Point2D* readPoint, const seerep::Point2D* wr
 
 /**
  * @brief test original bounding box 2d labeled and converted bounding box 2d labeled read from hdf5 file for equality.
+ * @param[in] pbWriteLoadTest test suite class
+ * @param testImageHeader name of test
  * */
 TEST_F(pbWriteLoadTest, testBoundingBox2DLabeled)
 {
