@@ -1,7 +1,5 @@
 import sys
-import time
 
-import flatbuffers
 from fb import (
     Boundingbox,
     BoundingBoxLabeled,
@@ -73,7 +71,6 @@ def getOrCreateProject(builder, channel, name, create=True, mapFrameId="map"):
     return projectUuid
 
 
-# Header
 def createTimeStamp(builder, seconds, nanoseconds=0):
     '''Create a time stamp in flatbuffers'''
     Timestamp.Start(builder)
@@ -82,14 +79,19 @@ def createTimeStamp(builder, seconds, nanoseconds=0):
     return Timestamp.End(builder)
 
 
-def createHeader(builder, timeStamp, frame, projectUuid):
-    '''Creates a message header in flatbuffers'''
-    frameStr = builder.CreateString(frame)
-    projectUuidStr = builder.CreateString(projectUuid)
+def createHeader(builder, timeStamp=None, frame=None, projectUuid=None):
+    '''Creates a message header in flatbuffers, all parameters are optional'''
+    if frame:
+        frameStr = builder.CreateString(frame)
+    if projectUuid:
+        projectUuidStr = builder.CreateString(projectUuid)
     Header.Start(builder)
-    Header.AddFrameId(builder, frameStr)
-    Header.AddStamp(builder, timeStamp)
-    Header.AddUuidProject(builder, projectUuidStr)
+    if frame:
+        Header.AddFrameId(builder, frameStr)
+    if timeStamp:
+        Header.AddStamp(builder, timeStamp)
+    if projectUuid:
+        Header.AddUuidProject(builder, projectUuidStr)
     return Header.End(builder)
 
 
@@ -204,22 +206,56 @@ def addToPointFieldVector(builder, pointFieldList):
     return builder.EndVector()
 
 
-def createQuery(builder, projectUuids, timeInterval, generalLabels, withoutData=False):
-    # add project uuids
-    Query.StartProjectuuidVector(builder, len(projectUuids))
-    for projectUuid in reversed(projectUuids):
-        builder.PrependUOffsetTRelative(projectUuid)
-    projectUuidsOffset = builder.EndVector()
+def createQuery(
+    builder,
+    boundingBox=None,
+    timeInterval=None,
+    labels=None,
+    projectUuids=None,
+    instanceUuids=None,
+    dataUuids=None,
+    withoutData=False,
+):
+    '''Create a query, all parameters are optional'''
 
-    Query.StartLabelVector(builder, len(generalLabels))
-    for label in reversed(generalLabels):
-        builder.PrependUOffsetTRelative(label)
-    labelsOffset = builder.EndVector()
+    # Note: reverse because we prepend
+    if projectUuids:
+        Query.StartProjectuuidVector(builder, len(projectUuids))
+        for projectUuid in reversed(projectUuids):
+            builder.PrependUOffsetTRelative(projectUuid)
+        projectUuidsOffset = builder.EndVector()
+
+    if labels:
+        Query.StartLabelVector(builder, len(labels))
+        for label in reversed(labels):
+            builder.PrependUOffsetTRelative(label)
+        labelsOffset = builder.EndVector()
+
+    if instanceUuids:
+        Query.StartInstanceuuidVector(builder, len(instanceUuids))
+        for instance in reversed(instanceUuids):
+            builder.PrependUOffsetTRelative(instance)
+        instanceOffset = builder.EndVector()
+
+    if dataUuids:
+        Query.StartDatauuidVector(builder, len(dataUuids))
+        for dataUuid in reversed(dataUuids):
+            builder.PrependUOffsetTRelative(dataUuid)
+        dataUuidOffset = builder.EndVector()
 
     Query.Start(builder)
-    Query.AddProjectuuid(builder, projectUuidsOffset)
-    Query.AddTimeinterval(builder, timeInterval)
-    Query.AddLabel(builder, labelsOffset)
+    if boundingBox:
+        Query.AddBoundingbox(builder, boundingBox)
+    if timeInterval:
+        Query.AddTimeinterval(builder, timeInterval)
+    if labels:
+        Query.AddLabel(builder, labelsOffset)
+    if projectUuids:
+        Query.AddProjectuuid(builder, projectUuidsOffset)
+    if instanceUuids:
+        Query.AddInstanceuuid(builder, instanceOffset)
+    if dataUuids:
+        Query.QueryAddDatauuid(builder, dataUuidOffset)
     Query.AddWithoutdata(builder, withoutData)
 
     return Query.End(builder)

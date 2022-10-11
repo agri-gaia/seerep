@@ -91,7 +91,7 @@ def createPointClouds(projectUuid, numOf):
         builder = flatbuffers.Builder(1024)
 
         timeStamp = createTimeStamp(builder, theTime + i)
-        header = createHeader(builder, timeStamp, "camera", projectUuid)
+        header = createHeader(builder, timeStamp, "map", projectUuid)
 
         pointCloudMsg = createPointCloud(builder, header)
         builder.Finish(pointCloudMsg)

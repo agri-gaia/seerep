@@ -28,14 +28,15 @@ if projectUuid is None:
 
 builder = flatbuffers.Builder(1024)
 
-# cerate time interval
-
 timeMin = util_fb.createTimeStamp(builder, 1610549273, 0)
 timeMax = util_fb.createTimeStamp(builder, 1938549273, 0)
 timeInterval = util_fb.createTimeInterval(builder, timeMin, timeMax)
 
 queryMsg = util_fb.createQuery(
-    builder, [builder.CreateString(projectUuid)], timeInterval, [builder.CreateString("BoundingBoxLabel0")]
+    builder,
+    projectUuids=[builder.CreateString(projectUuid)],
+    timeInterval=timeInterval,
+    labels=[builder.CreateString("BoundingBoxLabel0")],
 )
 builder.Finish(queryMsg)
 buf = builder.Output()
