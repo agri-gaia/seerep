@@ -1,6 +1,7 @@
 site_name: SEEREP Documentation
 repo_url: https://github.com/agri-gaia/seerep
 docs_dir: docs/mkdocs
+# define navigation structure
 nav:
   - Home: 'home/index.md'
   - Getting started:
@@ -16,20 +17,31 @@ nav:
     - Creating & retrieving projects: 'tutorials/projects.md'
     - Sending & Querying Images: 'tutorials/images.md'
 theme:
+  # use mkdocs material https://squidfunk.github.io/mkdocs-material/
   name: material
   language: en
-  theme:
+  logo: imgs/DFKI_logo_outline_w.png
+
+  # navigation features
   features:
     - navigation.tracking
     - navigation.tabs
     - navigation.expand
     - navigation.sections
+  # disable google fonts due to GDPR
   font: false
+
+# dfki color theme
+extra_css:
+  - stylesheets/extra.css
 markdown_extensions:
+  # aka call-outs, way to include side content
   - admonition
+  # syntax highlighting in code blocks
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.superfences
+  # add tabs to navigate on the top
   - pymdownx.tabbed:
       alternate_style: true
   - attr_list
