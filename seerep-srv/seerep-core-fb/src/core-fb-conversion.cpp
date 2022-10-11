@@ -116,12 +116,18 @@ seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::Po
   dataForIndices.boundingbox.max_corner().set<2>(0);
 
   // semantic
-  int labelSizeBB = 0;
+  int labelSizeAll = 0;
+  if (cloud.labels_general())
+  {
+    labelSizeAll += cloud.labels_general()->size();
+  }
   if (cloud.labels_bb())
   {
-    labelSizeBB = cloud.labels_bb()->size();
+    labelSizeAll += cloud.labels_bb()->size();
   }
-  dataForIndices.labelsWithInstances.reserve(labelSizeBB);
+  dataForIndices.labelsWithInstances.reserve(labelSizeAll);
+
+  fromFbDataLabelsGeneral(cloud.labels_general(), dataForIndices.labelsWithInstances);
   fromFbDataLabelsGeneral(cloud.labels_bb(), dataForIndices.labelsWithInstances);
 
   return dataForIndices;
