@@ -11,7 +11,8 @@ Hdf5FbPointCloud::Hdf5FbPointCloud(std::shared_ptr<HighFive::File>& file, std::s
 
 // TODO refactor again, still not happy with the API
 
-void Hdf5FbPointCloud::writePointCloud2(const std::string& id, const seerep::fb::PointCloud2& cloud)
+void Hdf5FbPointCloud::writePointCloud2(const std::string& id, const seerep::fb::PointCloud2& cloud,
+                                        std::vector<float>& boundingBox)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
@@ -67,7 +68,8 @@ void Hdf5FbPointCloud::writePointCloud2(const std::string& id, const seerep::fb:
       xyzOffsets.push_back(getOffset(cloud, field));
     }
 
-    writePoints(id, xyzOffsets, cloud.data()->data(), cloud.point_step(), cloud.height(), cloud.width(), dataGroupPtr);
+    writePoints(id, xyzOffsets, cloud.data()->data(), cloud.point_step(), cloud.height(), cloud.width(), dataGroupPtr,
+                boundingBox);
   }
 
   if (info.has_rgb)
@@ -103,7 +105,7 @@ void Hdf5FbPointCloud::writePointCloud2(const std::string& id, const seerep::fb:
 
 void Hdf5FbPointCloud::writePoints(const std::string& id, const std::vector<uint32_t>& offsets, const uint8_t* data,
                                    uint32_t pointStep, uint32_t height, uint32_t width,
-                                   const std::shared_ptr<HighFive::Group>& groupPtr)
+                                   const std::shared_ptr<HighFive::Group>& groupPtr, std::vector<float>& boundingBox)
 {
   std::string hdf5PointsPath = seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + id + "/points";
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "writing dataset to: " << hdf5PointsPath;
@@ -168,7 +170,7 @@ void Hdf5FbPointCloud::writePoints(const std::string& id, const std::vector<uint
   }
 
   // min (x, y, z), max (x,y,z)
-  const std::vector boundingBox{ min[0], min[1], min[2], max[0], max[1], max[2] };
+  boundingBox.insert(boundingBox.end(), { min[0], min[1], min[2], max[0], max[1], max[2] });
 
   // write bounding box as data group attribute
   writeAttributeToHdf5(*groupPtr, seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX, boundingBox);

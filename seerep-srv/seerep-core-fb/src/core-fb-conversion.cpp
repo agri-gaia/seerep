@@ -107,14 +107,6 @@ seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::Po
   seerep_core_msgs::DatasetIndexable dataForIndices;
   fromFbDataHeader(cloud.header(), dataForIndices.header, seerep_core_msgs::Datatype::PointCloud);
 
-  // set bounding box for images to 0. assume no spatial extent
-  dataForIndices.boundingbox.min_corner().set<0>(0);
-  dataForIndices.boundingbox.min_corner().set<1>(0);
-  dataForIndices.boundingbox.min_corner().set<2>(0);
-  dataForIndices.boundingbox.max_corner().set<0>(0);
-  dataForIndices.boundingbox.max_corner().set<1>(0);
-  dataForIndices.boundingbox.max_corner().set<2>(0);
-
   // semantic
   int labelSizeAll = 0;
   if (cloud.labels_general())

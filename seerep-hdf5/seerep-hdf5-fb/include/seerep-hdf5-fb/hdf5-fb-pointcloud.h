@@ -38,8 +38,10 @@ public:
    *
    * @param uuid the uuid of the point cloud
    * @param pointcloud2 the received PointCloud2 message
+   * @param boundingBox reference to an vector which get's the computed boundingBox during write of x,y,z
    */
-  void writePointCloud2(const std::string& uuid, const seerep::fb::PointCloud2& pointcloud2);
+  void writePointCloud2(const std::string& uuid, const seerep::fb::PointCloud2& pointcloud2,
+                        std::vector<float>& boundingBox);
 
   /**
    * @brief Method for reading a flatbuffers PointCloud2 message from hdf5
@@ -105,9 +107,11 @@ private:
    * @param width the width of the point cloud
    * @param groupPtr shared pointer to the data group of the point cloud.
    *        (Used to add a bounding box of x,y,z as an attribute of the point cloud)
+   * @param boundingBox reference to vector to write the computed boundingBox
    */
   void writePoints(const std::string& id, const std::vector<uint32_t>& offsets, const uint8_t* data, uint32_t pointStep,
-                   uint32_t height, uint32_t width, const std::shared_ptr<HighFive::Group>& groupPtr);
+                   uint32_t height, uint32_t width, const std::shared_ptr<HighFive::Group>& groupPtr,
+                   std::vector<float>& boundingBox);
 
   /**
    * @brief Write r,g,b of a point cloud to a /colors dataset

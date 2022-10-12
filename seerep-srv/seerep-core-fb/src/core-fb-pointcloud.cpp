@@ -34,12 +34,22 @@ void CoreFbPointCloud::getData(const seerep::fb::Query* query,
   }
 }
 
+// TODO refactor only a temporary solution
 boost::uuids::uuid CoreFbPointCloud::addData(const seerep::fb::PointCloud2& pc)
 {
+  std::vector<float> boundingBox;
+
   seerep_core_msgs::DatasetIndexable dataForIndices = CoreFbConversion::fromFb(pc);
 
   auto hdf5io = CoreFbGeneral::getHdf5(dataForIndices.header.uuidProject, m_seerepCore, m_hdf5IoMap);
-  hdf5io->writePointCloud2(boost::lexical_cast<std::string>(dataForIndices.header.uuidData), pc);
+  hdf5io->writePointCloud2(boost::lexical_cast<std::string>(dataForIndices.header.uuidData), pc, boundingBox);
+
+  dataForIndices.boundingbox.min_corner().set<0>(boundingBox[0]);
+  dataForIndices.boundingbox.min_corner().set<1>(boundingBox[1]);
+  dataForIndices.boundingbox.min_corner().set<2>(boundingBox[2]);
+  dataForIndices.boundingbox.max_corner().set<0>(boundingBox[3]);
+  dataForIndices.boundingbox.max_corner().set<1>(boundingBox[4]);
+  dataForIndices.boundingbox.max_corner().set<2>(boundingBox[5]);
 
   m_seerepCore->addDataset(dataForIndices);
 
