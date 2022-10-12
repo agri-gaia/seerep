@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <seerep-core/core.h>
 #include <seerep-hdf5-fb/hdf5-fb-image.h>
 
 #include <H5File.hpp>
@@ -166,13 +165,6 @@ protected:
     hdf5File = std::make_shared<HighFive::File>(hdf5FileName, HighFive::File::ReadWrite | HighFive::File::Create);
 
     fbb = flatbuffers::FlatBufferBuilder(1024);
-
-    // temporary files are stored in the build directory of seerep-hdf5-fb
-    auto seerepCore = std::make_shared<seerep_core::Core>("./", false);
-    seerep_core_msgs::ProjectInfo projectInfo;
-    projectInfo.name = projectName;
-    projectInfo.uuid = projectUUID;
-    seerepCore->createProject(projectInfo);
 
     imageIO = std::make_shared<seerep_hdf5_fb::Hdf5FbImage>(hdf5File, hdf5FileMutex);
     if (imageIO == nullptr)
