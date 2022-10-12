@@ -13,6 +13,7 @@
 - [General](#general)
 - [Quick Start](#quick-start)
 - [Documentation](#documentation)
+- [Related Publications](#related-publications)
 
 <!-- - [Related Publications](#related-publications) -->
 
@@ -43,7 +44,7 @@ high-level planning and reasoning systems using the SEEREP query server.
 
 To deploy the server locally the following `docker run` command or the following `docker-compose.yml` can be used.
 
-```
+```bash
 docker run \
   --volume=seerep-data:/mnt/seerep-data \
   --publish=9090 \
@@ -55,7 +56,7 @@ docker run \
 
 Example docker-compose.yml:
 
-```
+```bash
 version: "3.9"
 services:
   seerep:
@@ -83,4 +84,23 @@ instructions are given and basic tutorials are given.
 
 The [Doxygen](https://doxygen.nl/) based code documentation can be found [here](https://agri-gaia.github.io/seerep/doxygen).
 
-<!-- ## Related Publications -->
+## Related Publications
+
+```bibtex
+@inproceedings{hoellmann2021seerep,
+  author = {Höllmann, Mark and Hertzberg, Joachim},
+  title = {SEEREP: towards a spatio-temporal-SEmantic Environment REPresentation for robots in an agricultural context},
+  booktitle = {Perception and Navigation for Autonomous Robotics in Unstructured and Dynamic Environments Workshop on 2021 IEEE/RSJ International Conference on Intelligent Robots and Systems},
+  year = {2021},
+  month = {10}
+}
+
+@inproceedings{niemeyer2022seerep,
+  author = {Niemeyer, Mark and Pütz, Sebastian and Hertzberg, Joachim},
+  title = {A Spatio-Temporal-Semantic Environment Representation for Autonomous Mobile Robots equipped with various Sensor Systems},
+  booktitle = {2022 IEEE International Conference on Multisensor Fusion and Integration for Intelligent Systems},
+  year = {2022},
+  month = {9},
+  publisher = {IEEE}
+}
+```

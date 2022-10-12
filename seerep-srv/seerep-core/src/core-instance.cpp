@@ -9,8 +9,9 @@ CoreInstance::CoreInstance(std::shared_ptr<seerep_hdf5_core::Hdf5CoreInstance> h
   recreateInstance();
 
   // fill the map with empty vectors for each implemented datatype
-  m_typeUUIDMap.emplace(seerep_core_msgs::Datatype::Images, std::vector<boost::uuids::uuid>());
-  m_typeUUIDMap.emplace(seerep_core_msgs::Datatype::PointClouds, std::vector<boost::uuids::uuid>());
+  m_typeUUIDMap.emplace(seerep_core_msgs::Datatype::Image, std::vector<boost::uuids::uuid>());
+  m_typeUUIDMap.emplace(seerep_core_msgs::Datatype::PointCloud, std::vector<boost::uuids::uuid>());
+  m_typeUUIDMap.emplace(seerep_core_msgs::Datatype::Point, std::vector<boost::uuids::uuid>());
 }
 CoreInstance::~CoreInstance()
 {

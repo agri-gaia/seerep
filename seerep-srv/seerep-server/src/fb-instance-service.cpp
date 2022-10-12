@@ -8,7 +8,7 @@ FbInstanceService::FbInstanceService(std::shared_ptr<seerep_core::Core> seerepCo
 }
 
 grpc::Status FbInstanceService::GetInstances(grpc::ServerContext* context,
-                                             const flatbuffers::grpc::Message<seerep::fb::Query>* request,
+                                             const flatbuffers::grpc::Message<seerep::fb::QueryInstance>* request,
                                              flatbuffers::grpc::Message<seerep::fb::UuidsPerProject>* response)
 {
   (void)context;  // ignore that variable without causing warnings

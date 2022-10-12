@@ -31,4 +31,34 @@ void Hdf5CoreGeneral::writeAttributeToHdf5(HighFive::AnnotateTraits<C>& object, 
   }
 }
 
+template <class T>
+void Hdf5CoreGeneral::readTimeFromAnnotateTraits(const std::string& id, int64_t& value,
+                                                 const HighFive::AnnotateTraits<T>& highFiveObject,
+                                                 const std::string& attribute)
+{
+  if (highFiveObject.hasAttribute(attribute))
+  {
+    highFiveObject.getAttribute(attribute).read(value);
+  }
+  else
+  {
+    throw std::invalid_argument("id " + id + " has no attribute " + attribute);
+  }
+}
+
+template <class T>
+void Hdf5CoreGeneral::writeTimeToAnnotateTraits(const int64_t& value, HighFive::AnnotateTraits<T>& highFiveObject,
+                                                const std::string& attribute)
+{
+  if (highFiveObject.hasAttribute(attribute))
+  {
+    highFiveObject.getAttribute(attribute).write(value);
+  }
+  else
+  {
+    highFiveObject.createAttribute(attribute, value);
+  }
+  m_file->flush();
+}
+
 }  // namespace seerep_hdf5_core

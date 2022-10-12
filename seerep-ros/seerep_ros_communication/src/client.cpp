@@ -7,10 +7,11 @@
 namespace seerep_grpc_ros
 {
 TransferSensorMsgs::TransferSensorMsgs(std::shared_ptr<grpc::Channel> channel_ptr)
-  : stub_(seerep::TransferSensorMsgs::NewStub(channel_ptr))
-  , stubImage_(seerep::ImageService::NewStub(channel_ptr))
-  , stubPointCloud_(seerep::PointCloudService::NewStub(channel_ptr))
-  , stubMeta_(seerep::MetaOperations::NewStub(channel_ptr))
+  : stubSensorMsgs(seerep::TransferSensorMsgs::NewStub(channel_ptr))
+  , stubImage(seerep::ImageService::NewStub(channel_ptr))
+  , stubPointCloud(seerep::PointCloudService::NewStub(channel_ptr))
+  , stubTf(seerep::TfService::NewStub(channel_ptr))
+  , stubMeta(seerep::MetaOperations::NewStub(channel_ptr))
 {
 }
 
@@ -18,7 +19,7 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const std_msgs::Header::ConstPtr&
 {
   grpc::ClientContext context;
   seerep::ServerResponse response;
-  grpc::Status status = stub_->TransferHeader(&context, seerep_ros_conversions_pb::toProto(*msg), &response);
+  grpc::Status status = stubSensorMsgs->TransferHeader(&context, seerep_ros_conversions_pb::toProto(*msg), &response);
   checkStatus(status, response);
 }
 
@@ -27,7 +28,7 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const sensor_msgs::PointCloud2::C
   grpc::ClientContext context;
   seerep::ServerResponse response;
   grpc::Status status =
-      stubPointCloud_->TransferPointCloud2(&context, seerep_ros_conversions_pb::toProto(*msg), &response);
+      stubPointCloud->TransferPointCloud2(&context, seerep_ros_conversions_pb::toProto(*msg, projectuuid), &response);
   checkStatus(status, response);
 }
 
@@ -35,7 +36,8 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const sensor_msgs::Image::ConstPt
 {
   grpc::ClientContext context;
   seerep::ServerResponse response;
-  grpc::Status status = stubImage_->TransferImage(&context, seerep_ros_conversions_pb::toProto(*msg), &response);
+  grpc::Status status =
+      stubImage->TransferImage(&context, seerep_ros_conversions_pb::toProto(*msg, projectuuid), &response);
   checkStatus(status, response);
 }
 
@@ -43,7 +45,7 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const geometry_msgs::Point::Const
 {
   grpc::ClientContext context;
   seerep::ServerResponse response;
-  grpc::Status status = stub_->TransferPoint(&context, seerep_ros_conversions_pb::toProto(*msg), &response);
+  grpc::Status status = stubSensorMsgs->TransferPoint(&context, seerep_ros_conversions_pb::toProto(*msg), &response);
   checkStatus(status, response);
 }
 
@@ -51,7 +53,8 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const geometry_msgs::Quaternion::
 {
   grpc::ClientContext context;
   seerep::ServerResponse response;
-  grpc::Status status = stub_->TransferQuaternion(&context, seerep_ros_conversions_pb::toProto(*msg), &response);
+  grpc::Status status =
+      stubSensorMsgs->TransferQuaternion(&context, seerep_ros_conversions_pb::toProto(*msg), &response);
   checkStatus(status, response);
 }
 
@@ -59,7 +62,7 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const geometry_msgs::Pose::ConstP
 {
   grpc::ClientContext context;
   seerep::ServerResponse response;
-  grpc::Status status = stub_->TransferPose(&context, seerep_ros_conversions_pb::toProto(*msg), &response);
+  grpc::Status status = stubSensorMsgs->TransferPose(&context, seerep_ros_conversions_pb::toProto(*msg), &response);
   checkStatus(status, response);
 }
 
@@ -67,18 +70,19 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const geometry_msgs::PoseStamped:
 {
   grpc::ClientContext context;
   seerep::ServerResponse response;
-  grpc::Status status = stub_->TransferPoseStamped(&context, seerep_ros_conversions_pb::toProto(*msg), &response);
+  grpc::Status status =
+      stubSensorMsgs->TransferPoseStamped(&context, seerep_ros_conversions_pb::toProto(*msg), &response);
   checkStatus(status, response);
 }
 
 void seerep_grpc_ros::TransferSensorMsgs::send(const tf2_msgs::TFMessage::ConstPtr& msg) const
 {
-  grpc::ClientContext context;
-  seerep::ServerResponse response;
   for (auto tf : msg->transforms)
   {
+    grpc::ClientContext context;
+    seerep::ServerResponse response;
     grpc::Status status =
-        stubTf_->TransferTransformStamped(&context, seerep_ros_conversions_pb::toProto(tf, projectuuid), &response);
+        stubTf->TransferTransformStamped(&context, seerep_ros_conversions_pb::toProto(tf, projectuuid), &response);
     checkStatus(status, response);
   }
 }
@@ -110,15 +114,16 @@ std::optional<ros::Subscriber> TransferSensorMsgs::getSubscriber(const std::stri
   }
 }
 
-std::string TransferSensorMsgs::createProject(std::string projectname) const
+std::string TransferSensorMsgs::createProject(const std::string& projectname, const std::string& mapFrame) const
 {
   grpc::ClientContext context;
   seerep::ProjectInfo response;
 
   seerep::ProjectCreation projectcreation;
   *projectcreation.mutable_name() = projectname;
+  *projectcreation.mutable_mapframeid() = mapFrame;
 
-  grpc::Status status = stubMeta_->CreateProject(&context, projectcreation, &response);
+  grpc::Status status = stubMeta->CreateProject(&context, projectcreation, &response);
 
   if (!status.ok())
   {
@@ -158,6 +163,13 @@ int main(int argc, char** argv)
   std::string server_address;
   private_nh.param<std::string>("server_address", server_address, "localhost:9090");
 
+  std::string mapFrame;
+  private_nh.param<std::string>("mapFrame", mapFrame = "");
+  if (private_nh.hasParam("mapFrame"))
+  {
+    private_nh.getParam("mapFrame", mapFrame);
+  }
+
   seerep_grpc_ros::TransferSensorMsgs transfer_sensor_msgs(
       grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()));
 
@@ -174,14 +186,14 @@ int main(int argc, char** argv)
       // mainly catching "invalid uuid string"
       std::cout << e.what() << std::endl;
 
-      transfer_sensor_msgs.projectuuid = transfer_sensor_msgs.createProject("");
+      transfer_sensor_msgs.projectuuid = transfer_sensor_msgs.createProject("", mapFrame);
       ROS_WARN_STREAM("The provided UUID is invalid! Generating a a new one. (" + transfer_sensor_msgs.projectuuid +
                       ".h5)");
     }
   }
   else
   {
-    transfer_sensor_msgs.projectuuid = transfer_sensor_msgs.createProject("");
+    transfer_sensor_msgs.projectuuid = transfer_sensor_msgs.createProject("", mapFrame);
     ROS_WARN_STREAM("Use the \"hdf5FolderPath\" parameter to specify the HDF5 file! Generating a a new one. (" +
                     transfer_sensor_msgs.projectuuid + ".h5)");
   }

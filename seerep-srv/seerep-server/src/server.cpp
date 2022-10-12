@@ -177,6 +177,8 @@ void server::createGrpcServer()
   std::string serverAddress = "[::]:" + m_programOptionsMap.at("port").as<std::string>();
   grpc::ServerBuilder serverBuilder;
   serverBuilder.AddListeningPort(serverAddress, grpc::InsecureServerCredentials());
+  serverBuilder.SetMaxReceiveMessageSize(messageSize);
+  serverBuilder.SetMaxSendMessageSize(messageSize);
 
   // add protobuf (Pb) services
   addServicesPb(serverBuilder);
@@ -235,6 +237,7 @@ void server::addServicesFb(grpc::ServerBuilder& server_builder)
   server_builder.RegisterService(&*m_tfServiceFb);
   server_builder.RegisterService(&*m_instanceServiceFb);
   server_builder.RegisterService(&*m_imageServiceFb);
+  server_builder.RegisterService(&*m_pointServiceFb);
 }
 
 void server::createServicesPb()
@@ -251,6 +254,7 @@ void server::createServicesFb()
   m_tfServiceFb = std::make_shared<seerep_server::FbTfService>(m_seerepCore);
   m_instanceServiceFb = std::make_shared<seerep_server::FbInstanceService>(m_seerepCore);
   m_imageServiceFb = std::make_shared<seerep_server::FbImageService>(m_seerepCore);
+  m_pointServiceFb = std::make_shared<seerep_server::FbPointService>(m_seerepCore);
 }
 
 } /* namespace seerep_server */

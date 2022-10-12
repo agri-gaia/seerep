@@ -16,7 +16,6 @@ find_package(SeerepMsgs REQUIRED)
 find_package(SeerepHdf5Core REQUIRED)
 find_package(HighFive REQUIRED)
 find_package(gRPC CONFIG REQUIRED)
-find_package(SeerepCore REQUIRED)
 
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
@@ -36,18 +35,20 @@ include_directories(
 	${FLATBUFFER_INCLUDE_DIR}
 	${HighFive_INCLUDE_DIRS}
 	${Boost_INCLUDE_DIRS}
-	${SeerepCore_INCLUDE_DIRS}
 )
 
 add_library(seerephdf5fb
 	src/hdf5-fb-general.cpp
 	src/hdf5-fb-tf.cpp
 	src/hdf5-fb-image.cpp
+	src/hdf5-fb-point.cpp
 )
 
 target_link_libraries(seerephdf5fb
+	${seerep_ros_conversions_fb_LIBRARIES}
 	${SeerepMsgs_LIBRARIES}
-	${PROTOBUF_LIBRARIES}
+	${SeerepHdf5Core_LIBRARIES}
+	${FLATBUFFER_LIBRARIES}
 	${HighFive_LIBRARIES}
 	${Boost_LIBRARIES}
 	${Boost_LOG_LIBRARY} ${Boost_LOG_SETUP_LIBRARY}
@@ -66,7 +67,6 @@ target_link_libraries(flatbuffer-write-load-test
 	gmock_main
 	${catkin_LIBRARIES}
 	${HighFive_LIBRARIES}
-	${SeerepCore_LIBRARIES}
 	gRPC::grpc++_reflection
 	seerephdf5fb
 )

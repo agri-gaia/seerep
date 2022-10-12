@@ -54,11 +54,13 @@ set(MY_PROTO_FILES
 )
 
 set(MY_FBS_FILES
+	fbs/attributes_stamped.fbs
 	fbs/boundingbox_labeled.fbs
 	fbs/boundingbox.fbs
 	fbs/boundingbox2d_labeled.fbs
 	fbs/boundingbox2d.fbs
 	fbs/boundingboxes2d_labeled_stamped.fbs
+	fbs/datatype.fbs
 	fbs/empty.fbs
 	fbs/frame_infos.fbs
 	fbs/frame_query.fbs
@@ -80,6 +82,7 @@ set(MY_FBS_FILES
 	fbs/quaternion_stamped.fbs
 	fbs/quaternion.fbs
 	fbs/query.fbs
+	fbs/query_instance.fbs
 	fbs/server_response.fbs
 	fbs/time_interval.fbs
 	fbs/timestamp.fbs
@@ -90,6 +93,7 @@ set(MY_FBS_FILES
 	fbs/twist_with_covariance_stamped.fbs
 	fbs/twist_with_covariance.fbs
 	fbs/twist.fbs
+	fbs/union_map_entry.fbs
 	fbs/uuids_per_project.fbs
 	fbs/uuids_project_pair.fbs
 	fbs/vector3_stamped.fbs

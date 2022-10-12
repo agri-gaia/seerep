@@ -42,3 +42,6 @@
 **/html/**
 doxygen-output
 site
+
+# pycache
+**/__pycache__/**

@@ -51,7 +51,7 @@ seerep_core_msgs::QueryResult Core::getInstances(const seerep_core_msgs::Query& 
     {
       auto project = findProject(projectuuid);
 
-      auto instances = project->second->getDataset(query);
+      auto instances = project->second->getInstances(query);
       if (!instances.dataOrInstanceUuids.empty())
       {
         result.queryResultProjects.push_back(instances);

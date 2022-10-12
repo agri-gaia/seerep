@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <seerep-core/core.h>
 #include <seerep-hdf5-fb/hdf5-fb-image.h>
 
 #include <H5File.hpp>
@@ -12,22 +11,26 @@
 
 /*
 This test serves more as an integration test rather than a unit test. We want
-to make sure that a Flabuffers image message is the same after saving and
+to make sure that a Flatbuffers image message is the same after saving and
 reading it from a hdf5 file. Because the underlying components like the
 seerep-hdf5-core and seerep-hdf5-fb are not (fully) tested, we don't use mocks and
 propagate the data through all components. This should be changed in the future
 to improve the quality of the tests.
 */
 
-auto createTimeStamp(flatbuffers::FlatBufferBuilder& fbb)
+namespace seerep_hdf5_fb
+{
+namespace tests
+{
+flatbuffers::Offset<seerep::fb::Timestamp> createTimeStamp(flatbuffers::FlatBufferBuilder& fbb)
 {
   auto timeStampMsgOffset = seerep::fb::CreateTimestamp(fbb, std::time(0), 0);
   fbb.Finish(timeStampMsgOffset);
   return timeStampMsgOffset;
 }
 
-auto createHeader(flatbuffers::FlatBufferBuilder& fbb, const std::string& frameId, const std::string& projectUUID,
-                  const std::string& messageUUID)
+flatbuffers::Offset<seerep::fb::Header> createHeader(flatbuffers::FlatBufferBuilder& fbb, const std::string& frameId,
+                                                     const std::string& projectUUID, const std::string& messageUUID)
 {
   auto frameIdOffset = fbb.CreateString(frameId);
   auto projectUUIDOffset = fbb.CreateString(projectUUID);
@@ -39,14 +42,15 @@ auto createHeader(flatbuffers::FlatBufferBuilder& fbb, const std::string& frameI
   return headerMsgOffset;
 }
 
-auto createPoint(flatbuffers::FlatBufferBuilder& fbb, const double x, const double y)
+flatbuffers::Offset<seerep::fb::Point2D> createPoint(flatbuffers::FlatBufferBuilder& fbb, const double x, const double y)
 {
   auto pointOffset = seerep::fb::CreatePoint2D(fbb, x, y);
   fbb.Finish(pointOffset);
   return pointOffset;
 }
 
-auto createImageData(flatbuffers::FlatBufferBuilder& fbb, const unsigned int imageHeight, const unsigned int imageWidth)
+flatbuffers::Offset<flatbuffers::Vector<uint8_t>>
+createImageData(flatbuffers::FlatBufferBuilder& fbb, const unsigned int imageHeight, const unsigned int imageWidth)
 {
   std::vector<u_int8_t> data;
   for (size_t i = 0; i < imageWidth; i++)
@@ -71,7 +75,7 @@ auto createImageData(flatbuffers::FlatBufferBuilder& fbb, const unsigned int ima
   return fbImageDataOffset;
 }
 
-auto createLabelWithInstance(flatbuffers::FlatBufferBuilder& fbb)
+flatbuffers::Offset<seerep::fb::LabelWithInstance> createLabelWithInstance(flatbuffers::FlatBufferBuilder& fbb)
 {
   boost::uuids::uuid instanceUUID = boost::uuids::random_generator()();
   auto instanceUUIDOffset = fbb.CreateString(boost::lexical_cast<std::string>(instanceUUID));
@@ -81,8 +85,8 @@ auto createLabelWithInstance(flatbuffers::FlatBufferBuilder& fbb)
   return labelWithInstanceOffset;
 }
 
-auto createBB2DLabeled(flatbuffers::FlatBufferBuilder& fbb, const std::string& projectUUID,
-                       const std::string& messageUUID)
+flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>>>
+createBB2DLabeled(flatbuffers::FlatBufferBuilder& fbb, const std::string& projectUUID, const std::string& messageUUID)
 {
   std::vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>> bbLabeled;
   for (size_t i = 0; i < 10; i++)
@@ -107,8 +111,9 @@ auto createBB2DLabeled(flatbuffers::FlatBufferBuilder& fbb, const std::string& p
   return labelsBBOffset;
 }
 
-auto createImageMessage(flatbuffers::FlatBufferBuilder& fbb, const unsigned int imageHeight, const unsigned imageWidth,
-                        const std::string& projectUUID, const std::string& messageUUID)
+const seerep::fb::Image* createImageMessage(flatbuffers::FlatBufferBuilder& fbb, const unsigned int imageHeight,
+                                            const unsigned imageWidth, const std::string& projectUUID,
+                                            const std::string& messageUUID)
 {
   auto encodingOffset = fbb.CreateString("rgb8");
   auto headerOffset = createHeader(fbb, "camera", projectUUID, messageUUID);
@@ -160,13 +165,6 @@ protected:
     hdf5File = std::make_shared<HighFive::File>(hdf5FileName, HighFive::File::ReadWrite | HighFive::File::Create);
 
     fbb = flatbuffers::FlatBufferBuilder(1024);
-
-    // temporary files are stored in the build directory of seerep-hdf5-fb
-    auto seerepCore = std::make_shared<seerep_core::Core>("./", false);
-    seerep_core_msgs::ProjectInfo projectInfo;
-    projectInfo.name = projectName;
-    projectInfo.uuid = projectUUID;
-    seerepCore->createProject(projectInfo);
 
     imageIO = std::make_shared<seerep_hdf5_fb::Hdf5FbImage>(hdf5File, hdf5FileMutex);
     if (imageIO == nullptr)
@@ -290,3 +288,6 @@ int main(int argc, char** argv)
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
+
+}  // namespace tests
+}  // namespace seerep_hdf5_fb

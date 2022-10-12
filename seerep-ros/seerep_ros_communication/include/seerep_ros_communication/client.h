@@ -57,18 +57,18 @@ public:
 
   void send(const tf2_msgs::TFMessage::ConstPtr& msg) const;
 
-  std::string createProject(std::string projectname) const;
+  std::string createProject(const std::string& projectname, const std::string& mapFrame) const;
 
   std::string projectuuid;
 
 private:
   void checkStatus(const grpc::Status& status, const seerep::ServerResponse& response) const;
 
-  StubTransferPbPtr stub_;
-  StubImagePbPtr stubImage_;
-  StubPointCloudPbPtr stubPointCloud_;
-  StubTfPbPtr stubTf_;
-  StubMetaPbPtr stubMeta_;
+  StubTransferSensorMsgsPbPtr stubSensorMsgs;
+  StubImagePbPtr stubImage;
+  StubPointCloudPbPtr stubPointCloud;
+  StubTfPbPtr stubTf;
+  StubMetaPbPtr stubMeta;
   ros::NodeHandle nh;
 };
 

@@ -49,6 +49,7 @@ add_executable(${PROJECT_NAME}_server
 	src/pb-image-service.cpp
 	src/pb-point-cloud-service.cpp
 	src/fb-meta-operations.cpp
+	src/fb-point-service.cpp
 	src/fb-tf-service.cpp
 	src/fb-image-service.cpp
 	src/fb-instance-service.cpp

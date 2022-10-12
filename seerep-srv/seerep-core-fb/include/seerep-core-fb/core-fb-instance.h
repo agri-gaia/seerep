@@ -7,7 +7,7 @@
 #include "core-fb-conversion.h"
 
 // seerep-msgs
-#include <seerep-msgs/query_generated.h>
+#include <seerep-msgs/query_instance_generated.h>
 #include <seerep-msgs/uuids_per_project_generated.h>
 // seerep-core-msgs
 #include <seerep-msgs/query-result.h>
@@ -45,12 +45,14 @@ public:
    * @param request the flatbuffer query
    * @param response the gRPC flatbuffer message containing the uuids of the instances per project
    */
-  void getInstances(const flatbuffers::grpc::Message<seerep::fb::Query>* request,
+  void getInstances(const flatbuffers::grpc::Message<seerep::fb::QueryInstance>* request,
                     flatbuffers::grpc::Message<seerep::fb::UuidsPerProject>* response);
 
 private:
   /** @brief a shared pointer to the general core */
   std::shared_ptr<seerep_core::Core> m_seerepCore;
+  /** @brief object handling the logging */
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
 };
 
 }  // namespace seerep_core_fb

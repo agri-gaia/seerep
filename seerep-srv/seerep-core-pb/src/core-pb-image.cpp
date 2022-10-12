@@ -17,7 +17,7 @@ CorePbImage::~CorePbImage()
 std::vector<seerep::Image> CorePbImage::getData(const seerep::Query& query)
 {
   std::cout << "loading image from images/" << std::endl;
-  seerep_core_msgs::Query queryCore = CorePbConversion::fromPb(query, seerep_core_msgs::Datatype::Images);
+  seerep_core_msgs::Query queryCore = CorePbConversion::fromPb(query, seerep_core_msgs::Datatype::Image);
 
   seerep_core_msgs::QueryResult resultCore = m_seerepCore->getDataset(queryCore);
 

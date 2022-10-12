@@ -1,35 +1,37 @@
 
 namespace seerep_hdf5_fb
 {
-template <typename T>
-void Hdf5FbGeneral::writeAttribute(const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField,
-                                   T value)
+template <class T>
+flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>>>
+Hdf5FbGeneral::readAttributeMap(HighFive::AnnotateTraits<T>& object, flatbuffers::grpc::MessageBuilder& builder)
 {
-  if (!dataSetPtr->hasAttribute(attributeField))
-  {
-    dataSetPtr->createAttribute(attributeField, value);
-  }
-  else
-  {
-    dataSetPtr->getAttribute(attributeField).write(value);
-  }
-  m_file->flush();
-}
+  std::vector<std::string> attributeList = object.listAttributeNames();
 
-template <typename T>
-T Hdf5FbGeneral::getAttribute(const std::string& id, const std::shared_ptr<HighFive::DataSet> dataSetPtr,
-                              std::string attributeField)
-{
-  T attributeValue;
-  if (dataSetPtr->hasAttribute(attributeField))
+  std::vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>> mapEntryVector;
+  for (std::string attributeName : attributeList)
   {
-    dataSetPtr->getAttribute(attributeField).read(attributeValue);
+    auto attribute = object.getAttribute(attributeName);
+
+    if (attribute.getDataType().getClass() == HighFive::DataTypeClass::Integer)
+    {
+      int attributeValue;
+      attribute.read(attributeValue);
+
+      auto keyOffset = builder.CreateString(attributeName);
+
+      seerep::fb::IntegerBuilder integerBuilder(builder);
+      integerBuilder.add_data(attributeValue);
+      auto integerOffset = integerBuilder.Finish();
+
+      seerep::fb::UnionMapEntryBuilder unionMapEntryBuilder(builder);
+      unionMapEntryBuilder.add_key(keyOffset);
+      unionMapEntryBuilder.add_value_type(seerep::fb::Datatypes_Integer);
+      unionMapEntryBuilder.add_value(integerOffset.Union());
+
+      mapEntryVector.push_back(unionMapEntryBuilder.Finish());
+    }
   }
-  else
-  {
-    throw std::invalid_argument("id " + id + " has no attribute " + attributeField);
-  }
-  return attributeValue;
+  return builder.CreateVector(mapEntryVector);
 }
 
 template <class T>
@@ -78,36 +80,6 @@ flatbuffers::Offset<seerep::fb::Header> Hdf5FbGeneral::readHeaderAttributes(High
 
   return seerep::fb::CreateHeader(builder, seq, timestamp, builder.CreateString(frameId),
                                   builder.CreateString(uuidProject), builder.CreateString(uuidMsg));
-}
-
-template <class T>
-void Hdf5FbGeneral::readTimeFromAnnotateTraits(const std::string& id, int64_t& value,
-                                               const HighFive::AnnotateTraits<T>& highFiveObject,
-                                               const std::string& attribute)
-{
-  if (highFiveObject.hasAttribute(attribute))
-  {
-    highFiveObject.getAttribute(attribute).read(value);
-  }
-  else
-  {
-    throw std::invalid_argument("id " + id + " has no attribute " + attribute);
-  }
-}
-
-template <class T>
-void Hdf5FbGeneral::writeTimeToAnnotateTraits(const int64_t& value, HighFive::AnnotateTraits<T>& highFiveObject,
-                                              const std::string& attribute)
-{
-  if (highFiveObject.hasAttribute(attribute))
-  {
-    highFiveObject.getAttribute(attribute).write(value);
-  }
-  else
-  {
-    highFiveObject.createAttribute(attribute, value);
-  }
-  m_file->flush();
 }
 
 } /* namespace seerep_hdf5_fb */

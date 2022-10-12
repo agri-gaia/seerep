@@ -6,6 +6,8 @@ metadata:
     nginx.ingress.kubernetes.io/backend-protocol: GRPC
     nginx.ingress.kubernetes.io/service-upstream: 'true'
     nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+    nginx.ingress.kubernetes.io/proxy-body-size: 1024m
+    nginx.org/client-max-body-size: 1024m
 spec:
   ingressClassName: nginx
   tls:

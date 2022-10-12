@@ -1,0 +1,32 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+		{
+			"label": "catkin all",
+			"type": "shell",
+			"command": "catkin build",
+			"group": {
+				"kind": "build"
+			}
+		},
+		{
+			"label": "catkin this",
+			"type": "shell",
+			"command": "cd ${fileDirname} && catkin build --this",
+			"group": {
+				"kind": "build"
+			}
+		},
+		{
+			"label": "catkin this test",
+			"type": "shell",
+			"command": "cd ${fileDirname} && catkin run_tests --this",
+			"group": "build"
+		},
+		{
+			"label": "catkin clean",
+			"type": "shell",
+			"command": "catkin clean"
+		}
+	]
+}
