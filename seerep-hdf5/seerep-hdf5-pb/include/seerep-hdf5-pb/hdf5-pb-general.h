@@ -34,7 +34,7 @@ protected:
   void writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, const seerep::Header& header);
 
   template <class T>
-  seerep::Header readHeaderAttributes(HighFive::AnnotateTraits<T>& object);
+  seerep::Header readHeaderAttributes(HighFive::AnnotateTraits<T>& object, const std::string& id);
 
   //################
   // BoundingBoxes

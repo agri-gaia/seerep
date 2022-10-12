@@ -26,7 +26,7 @@ void Hdf5PbGeneral::writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, c
 }
 
 template <class T>
-seerep::Header Hdf5PbGeneral::readHeaderAttributes(HighFive::AnnotateTraits<T>& object)
+seerep::Header Hdf5PbGeneral::readHeaderAttributes(HighFive::AnnotateTraits<T>& object, const std::string& id)
 {
   seerep::Header header;
 
@@ -36,7 +36,7 @@ seerep::Header Hdf5PbGeneral::readHeaderAttributes(HighFive::AnnotateTraits<T>& 
 
   std::string uuidProject = std::filesystem::path(m_file->getName()).filename().stem();
 
-  object.getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID).read(header.mutable_frame_id());
+  object.getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID).read(*header.mutable_frame_id());
 
   object.getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS).read(seconds);
   object.getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS).read(nanos);
@@ -46,7 +46,7 @@ seerep::Header Hdf5PbGeneral::readHeaderAttributes(HighFive::AnnotateTraits<T>& 
   header.mutable_stamp()->set_seconds(seconds);
   header.mutable_stamp()->set_nanos(nanos);
   header.set_uuid_project(uuidProject);
-  /// @todo set uuidMsg
+  header.set_uuid_msgs(id);
 
   return header;
 }
