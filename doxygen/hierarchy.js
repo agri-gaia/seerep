@@ -90,6 +90,7 @@ var hierarchy =
       [ "seerep_server::PbReceiveSensorMsgs", "classseerep__server_1_1PbReceiveSensorMsgs.html", null ]
     ] ],
     [ "testing::Test", null, [
+      [ "pbWriteLoadTest", "classpbWriteLoadTest.html", null ],
       [ "seerep_hdf5_fb::tests::fbWriteLoadTest", "classseerep__hdf5__fb_1_1tests_1_1fbWriteLoadTest.html", null ]
     ] ],
     [ "seerep_core_msgs::Timeinterval", "structseerep__core__msgs_1_1Timeinterval.html", null ],

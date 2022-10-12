@@ -82,5 +82,6 @@ var annotated_dup =
       [ "PbReceiveSensorMsgs", "classseerep__server_1_1PbReceiveSensorMsgs.html", "classseerep__server_1_1PbReceiveSensorMsgs" ],
       [ "PbTfService", "classseerep__server_1_1PbTfService.html", "classseerep__server_1_1PbTfService" ],
       [ "server", "classseerep__server_1_1server.html", "classseerep__server_1_1server" ]
-    ] ]
+    ] ],
+    [ "pbWriteLoadTest", "classpbWriteLoadTest.html", null ]
 ];
