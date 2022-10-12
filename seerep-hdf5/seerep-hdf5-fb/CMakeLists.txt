@@ -16,7 +16,6 @@ find_package(SeerepMsgs REQUIRED)
 find_package(SeerepHdf5Core REQUIRED)
 find_package(HighFive REQUIRED)
 find_package(gRPC CONFIG REQUIRED)
-find_package(SeerepCore REQUIRED)
 
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
@@ -68,7 +67,6 @@ target_link_libraries(flatbuffer-write-load-test
 	gmock_main
 	${catkin_LIBRARIES}
 	${HighFive_LIBRARIES}
-	${SeerepCore_LIBRARIES}
 	gRPC::grpc++_reflection
 	seerephdf5fb
 )
