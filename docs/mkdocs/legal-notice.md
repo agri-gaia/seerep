@@ -24,13 +24,13 @@ ID-Number: DE 148 646 973
 The person responsible for the editorial content of the domain *[agri-gaia.github.io/seerep](agri-gaia.github.io/seerep/)*
 of the German Research Center for Artificial Intelligence GmbH within the meaning of § 18 para. 2 MStV is:
 
-Mark Höllmann<br>
+Mark Niemeyer<br>
 Berghoffstraße 11<br>
 49090 Osnabrück<br>
 Germany<br>
 
 Phone: [+49 541 386050 2254](tel:+495413860502254)<br>
-E-mail: [mark.hoellmann@dfki.de](mailto:mark.hoellmann@dfki.de)<br>
+E-mail: [mark.niemeyer@dfki.de](mailto:mark.niemeyer@dfki.de)<br>
 Website URL: www.dfki.de
 
 ## Liability for content

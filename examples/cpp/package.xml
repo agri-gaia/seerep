@@ -6,13 +6,13 @@
     example gRPC cpp clients
   </description>
 
-  <maintainer email="mark.hoellmann@dfki.de">Mark Höllmann</maintainer>
+  <maintainer email="mark.niemeyer@dfki.de">Mark Niemeyer</maintainer>
 
   <license>BSD-3</license>
 
   <url type="website">TODO</url>
 
-  <author email="mark.hoellmann@dfki.de">Mark Höllmann</author>
+  <author email="mark.niemeyer@dfki.de">Mark Niemeyer</author>
 
   <depend>seerep-msgs</depend>
   <depend>seerep-com</depend>

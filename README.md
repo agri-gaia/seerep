@@ -19,8 +19,8 @@
 
 ## Maintainer
 
-[Mark Höllmann](https://github.com/mhoellmann)\
-[mark.hoellmann@dfki.de](mailto:mark.hoellmann@dfki.de)
+[Mark Niemeyer](https://github.com/mhoellmann)\
+[mark.niemeyer@dfki.de](mailto:mark.niemeyer@dfki.de)
 
 [German Research Center for Artificial Intelligence\
 DFKI Niedersachsen\
