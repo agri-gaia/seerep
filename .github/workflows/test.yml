@@ -44,5 +44,5 @@ jobs:
         source $GITHUB_WORKSPACE/devel/setup.bash
         #$GITHUB_WORKSPACE/devel/lib/seerep_ros_conversion_fb/seerep_ros_conversion_fb-test
         #$GITHUB_WORKSPACE/devel/.private/seerep_ros_conversion_fb/lib/seerep_ros_conversions_fb/seerep_ros_conversion_fb-test
-        catkin test
+        catkin test seerep_ros_conversions_fb
       shell: bash
