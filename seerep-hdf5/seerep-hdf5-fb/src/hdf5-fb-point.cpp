@@ -39,11 +39,11 @@ void Hdf5FbPoint::writePoint(const std::string& id, const seerep::fb::PointStamp
   }
 
   data_set_ptr->write(data);
-  writeHeaderAttributes(*data_set_ptr, *point->header());
+  writeHeaderAttributes(*data_set_ptr, point->header());
 
-  writeAttributeMap(data_set_ptr, *point->attribute());
+  writeAttributeMap(data_set_ptr, point->attribute());
 
-  writeLabelsGeneral(seerep_hdf5_core::Hdf5CorePoint::HDF5_GROUP_POINT, id, *point->labels_general());
+  writeLabelsGeneral(seerep_hdf5_core::Hdf5CorePoint::HDF5_GROUP_POINT, id, point->labels_general());
 
   m_file->flush();
 }
@@ -60,7 +60,7 @@ void Hdf5FbPoint::writeAdditionalPointAttributes(const seerep::fb::AttributesSta
     std::shared_ptr<HighFive::DataSet> data_set_ptr =
         std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DatasetRawDataPath));
 
-    writeAttributeMap(data_set_ptr, *attributeStamped.attribute());
+    writeAttributeMap(data_set_ptr, attributeStamped.attribute());
   }
   catch (const std::exception& e)
   {

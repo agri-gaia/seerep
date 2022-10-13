@@ -43,19 +43,12 @@ void Hdf5FbPointCloud::writePointCloud2(const std::string& id, const seerep::fb:
   writeAttributeToHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::ROW_STEP, cloud.row_step());
   writeAttributeToHdf5<bool>(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::IS_DENSE, cloud.is_dense());
 
-  writeHeaderAttributes(*dataGroupPtr, *cloud.header());
+  writeHeaderAttributes(*dataGroupPtr, cloud.header());
 
   writePointFieldAttributes(*dataGroupPtr, *cloud.fields());
 
-  if (cloud.labels_bb() != nullptr)
-  {
-    writeBoundingBoxLabeled(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, id, *cloud.labels_bb());
-  }
-
-  if (cloud.labels_general() != nullptr)
-  {
-    writeLabelsGeneral(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, id, *cloud.labels_general());
-  }
+  writeBoundingBoxLabeled(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, id, cloud.labels_bb());
+  writeLabelsGeneral(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, id, cloud.labels_general());
 
   CloudInfo info = getCloudInfo(cloud);
 

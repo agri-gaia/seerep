@@ -37,13 +37,13 @@ protected:
   // Attributes
   //################
   void writeAttributeMap(const std::shared_ptr<HighFive::DataSet> dataSetPtr,
-                         const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>>& attributes);
+                         const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>>* attributes);
   template <class T>
   flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>>>
   readAttributeMap(HighFive::AnnotateTraits<T>& object, flatbuffers::grpc::MessageBuilder& builder);
 
   template <class T>
-  void writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, const seerep::fb::Header& header);
+  void writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, const seerep::fb::Header* header);
 
   template <class T>
   flatbuffers::Offset<seerep::fb::Header> readHeaderAttributes(flatbuffers::grpc::MessageBuilder& builder,
@@ -55,17 +55,17 @@ protected:
   //################
   void writeBoundingBoxLabeled(
       const std::string& datatypeGroup, const std::string& uuid,
-      const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>>& boundingboxLabeled);
+      const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>>* boundingboxLabeled);
 
   void writeBoundingBox2DLabeled(
       const std::string& datatypeGroup, const std::string& uuid,
-      const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>>& boundingbox2DLabeled);
+      const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>>* boundingbox2DLabeled);
 
   //################
   // Labels General
   //################
   void writeLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid,
-                          const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>& labelsGeneral);
+                          const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>* labelsGeneral);
 };
 
 }  // namespace seerep_hdf5_fb

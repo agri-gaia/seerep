@@ -11,53 +11,56 @@ Hdf5FbGeneral::Hdf5FbGeneral(std::shared_ptr<HighFive::File>& file, std::shared_
 
 void Hdf5FbGeneral::writeAttributeMap(
     const std::shared_ptr<HighFive::DataSet> dataSetPtr,
-    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>>& attributes)
+    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>>* attributes)
 {
-  for (auto attribute : attributes)
+  if (attributes)
   {
-    if (attribute->value_type() == seerep::fb::Datatypes_Boolean)
+    for (auto attribute : *attributes)
     {
-      writeAttributeToHdf5(*dataSetPtr, attribute->key()->str(),
-                           static_cast<const seerep::fb::Boolean*>(attribute->value())->data());
-    }
-    else if (attribute->value_type() == seerep::fb::Datatypes_Integer)
-    {
-      writeAttributeToHdf5(*dataSetPtr, attribute->key()->str(),
-                           static_cast<const seerep::fb::Integer*>(attribute->value())->data());
-    }
-    else if (attribute->value_type() == seerep::fb::Datatypes_Double)
-    {
-      writeAttributeToHdf5(*dataSetPtr, attribute->key()->str(),
-                           static_cast<const seerep::fb::Double*>(attribute->value())->data());
-    }
-    else if (attribute->value_type() == seerep::fb::Datatypes_String)
-    {
-      writeAttributeToHdf5(*dataSetPtr, attribute->key()->str(),
-                           static_cast<const seerep::fb::String*>(attribute->value())->data()->str());
-    }
-    else
-    {
-      std::stringstream errorMsg;
-      errorMsg << "type " << attribute->value_type() << " of attribute " << attribute->key()->c_str()
-               << " not implemented in hdf5-io.";
-      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << errorMsg.str();
-      throw std::invalid_argument(errorMsg.str());
+      if (attribute->value_type() == seerep::fb::Datatypes_Boolean)
+      {
+        writeAttributeToHdf5(*dataSetPtr, attribute->key()->str(),
+                             static_cast<const seerep::fb::Boolean*>(attribute->value())->data());
+      }
+      else if (attribute->value_type() == seerep::fb::Datatypes_Integer)
+      {
+        writeAttributeToHdf5(*dataSetPtr, attribute->key()->str(),
+                             static_cast<const seerep::fb::Integer*>(attribute->value())->data());
+      }
+      else if (attribute->value_type() == seerep::fb::Datatypes_Double)
+      {
+        writeAttributeToHdf5(*dataSetPtr, attribute->key()->str(),
+                             static_cast<const seerep::fb::Double*>(attribute->value())->data());
+      }
+      else if (attribute->value_type() == seerep::fb::Datatypes_String)
+      {
+        writeAttributeToHdf5(*dataSetPtr, attribute->key()->str(),
+                             static_cast<const seerep::fb::String*>(attribute->value())->data()->str());
+      }
+      else
+      {
+        std::stringstream errorMsg;
+        errorMsg << "type " << attribute->value_type() << " of attribute " << attribute->key()->c_str()
+                 << " not implemented in hdf5-io.";
+        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << errorMsg.str();
+        throw std::invalid_argument(errorMsg.str());
+      }
     }
   }
 }
 
 void Hdf5FbGeneral::writeBoundingBoxLabeled(
     const std::string& datatypeGroup, const std::string& uuid,
-    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>>& boundingboxLabeled)
+    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>>* boundingboxLabeled)
 {
-  if (!boundingboxLabeled.size() == 0)
+  if (boundingboxLabeled && boundingboxLabeled->size() != 0)
   {
     std::string id = datatypeGroup + "/" + uuid;
 
     std::vector<std::string> labels;
     std::vector<std::vector<double>> boundingBoxes;
     std::vector<std::string> instances;
-    for (auto label : boundingboxLabeled)
+    for (auto label : *boundingboxLabeled)
     {
       labels.push_back(label->labelWithInstance()->label()->str());
       std::vector<double> box{ label->bounding_box()->point_min()->x(), label->bounding_box()->point_min()->y(),
@@ -86,16 +89,16 @@ void Hdf5FbGeneral::writeBoundingBoxLabeled(
 
 void Hdf5FbGeneral::writeBoundingBox2DLabeled(
     const std::string& datatypeGroup, const std::string& uuid,
-    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>>& boundingbox2DLabeled)
+    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>>* boundingbox2DLabeled)
 {
   std::string id = datatypeGroup + "/" + uuid;
 
-  if (!boundingbox2DLabeled.size() == 0)
+  if (boundingbox2DLabeled && boundingbox2DLabeled->size() != 0)
   {
     std::vector<std::string> labels;
     std::vector<std::vector<double>> boundingBoxes;
     std::vector<std::string> instances;
-    for (auto label : boundingbox2DLabeled)
+    for (auto label : *boundingbox2DLabeled)
     {
       labels.push_back(label->labelWithInstance()->label()->str());
       std::vector<double> box{ label->bounding_box()->point_min()->x(), label->bounding_box()->point_min()->y(),
@@ -123,15 +126,15 @@ void Hdf5FbGeneral::writeBoundingBox2DLabeled(
 
 void Hdf5FbGeneral::writeLabelsGeneral(
     const std::string& datatypeGroup, const std::string& uuid,
-    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>& labelsGeneral)
+    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>* labelsGeneral)
 {
   std::string id = datatypeGroup + "/" + uuid;
 
-  if (labelsGeneral.size() != 0)
+  if (labelsGeneral && labelsGeneral->size() != 0)
   {
     std::vector<std::string> labels;
     std::vector<std::string> instances;
-    for (auto label : labelsGeneral)
+    for (auto label : *labelsGeneral)
     {
       labels.push_back(label->label()->str());
 
