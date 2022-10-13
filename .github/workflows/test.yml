@@ -43,5 +43,6 @@ jobs:
         source /opt/ros/noetic/setup.bash
         source $GITHUB_WORKSPACE/devel/setup.bash
         #$GITHUB_WORKSPACE/devel/lib/seerep_ros_conversion_fb/seerep_ros_conversion_fb-test
-        $GITHUB_WORKSPACE/devel/.private/seerep_ros_conversion_fb/lib/seerep_ros_conversions_fb/seerep_ros_conversion_fb-test
+        #$GITHUB_WORKSPACE/devel/.private/seerep_ros_conversion_fb/lib/seerep_ros_conversions_fb/seerep_ros_conversion_fb-test
+        catkin test
       shell: bash
