@@ -144,6 +144,14 @@ private:
                        uint32_t pointStep, uint32_t height, uint32_t width);
 
   /**
+   * @brief Write general attributes of the point cloud to the hdf5 group
+   *
+   * @param dataGroupPtr shared point to the data group
+   * @param cloud the point cloud to store information from
+   */
+  void writeGeneralAttributes(std::shared_ptr<HighFive::Group>& dataGroupPtr, const seerep::fb::PointCloud2& cloud);
+
+  /**
    * @brief Reads general attributes from hdf5
    *
    * @param id the uuid of the point cloud

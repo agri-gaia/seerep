@@ -36,13 +36,7 @@ void Hdf5FbPointCloud::writePointCloud2(const std::string& id, const seerep::fb:
     dataGroupPtr = std::make_shared<HighFive::Group>(m_file->createGroup(hdf5GroupPath));
   }
 
-  // TODO encapsulate in method
-  writeAttributeToHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::HEIGHT, cloud.height());
-  writeAttributeToHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::WIDTH, cloud.width());
-  writeAttributeToHdf5<bool>(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::IS_BIGENDIAN, cloud.is_bigendian());
-  writeAttributeToHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::POINT_STEP, cloud.point_step());
-  writeAttributeToHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::ROW_STEP, cloud.row_step());
-  writeAttributeToHdf5<bool>(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::IS_DENSE, cloud.is_dense());
+  writeGeneralAttributes(dataGroupPtr, cloud);
 
   writeHeaderAttributes(*dataGroupPtr, cloud.header());
 
@@ -261,6 +255,17 @@ void Hdf5FbPointCloud::writeColorsRGBA(const std::string& id, const std::vector<
   }
 
   colorsDatasetPtr->write(colorsData);
+}
+
+void Hdf5FbPointCloud::writeGeneralAttributes(std::shared_ptr<HighFive::Group>& dataGroupPtr,
+                                              const seerep::fb::PointCloud2& cloud)
+{
+  writeAttributeToHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::HEIGHT, cloud.height());
+  writeAttributeToHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::WIDTH, cloud.width());
+  writeAttributeToHdf5<bool>(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::IS_BIGENDIAN, cloud.is_bigendian());
+  writeAttributeToHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::POINT_STEP, cloud.point_step());
+  writeAttributeToHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::ROW_STEP, cloud.row_step());
+  writeAttributeToHdf5<bool>(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::IS_DENSE, cloud.is_dense());
 }
 
 // TODO partial point cloud read
