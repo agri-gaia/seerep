@@ -71,7 +71,7 @@ seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::Im
   dataForIndices.labelsWithInstances.reserve(labelSizeAll);
 
   fromFbDataLabelsGeneral(img.labels_general(), dataForIndices.labelsWithInstances);
-  fromFbDataLabelsGeneral(img.labels_bb(), dataForIndices.labelsWithInstances);
+  fromFbDataLabelsBb2d(img.labels_bb(), dataForIndices.labelsWithInstances);
 
   return dataForIndices;
 }
@@ -120,7 +120,7 @@ seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::Po
   dataForIndices.labelsWithInstances.reserve(labelSizeAll);
 
   fromFbDataLabelsGeneral(cloud.labels_general(), dataForIndices.labelsWithInstances);
-  fromFbDataLabelsGeneral(cloud.labels_bb(), dataForIndices.labelsWithInstances);
+  fromFbDataLabelsBb(cloud.labels_bb(), dataForIndices.labelsWithInstances);
 
   return dataForIndices;
 }
@@ -324,7 +324,7 @@ void CoreFbConversion::fromFbDataLabelsGeneral(
   }
 }
 
-void CoreFbConversion::fromFbDataLabelsGeneral(
+void CoreFbConversion::fromFbDataLabelsBb2d(
     const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>>* labelsBB2d,
     std::vector<seerep_core_msgs::LabelWithInstance>& labelWithInstance)
 {
@@ -349,7 +349,7 @@ void CoreFbConversion::fromFbDataLabelsGeneral(
   }
 }
 
-void CoreFbConversion::fromFbDataLabelsGeneral(
+void CoreFbConversion::fromFbDataLabelsBb(
     const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>>* labelsBB,
     std::vector<seerep_core_msgs::LabelWithInstance>& labelWithInstance)
 {

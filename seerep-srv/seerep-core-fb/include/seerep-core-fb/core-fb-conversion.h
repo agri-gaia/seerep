@@ -173,16 +173,16 @@ private:
    * @param labelWithInstance the BoundingBox2DLabeled with instances in the data message in seerep core format
    */
   static void
-  fromFbDataLabelsGeneral(const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>>* labelsBB2d,
-                          std::vector<seerep_core_msgs::LabelWithInstance>& labelWithInstance);
+  fromFbDataLabelsBb2d(const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>>* labelsBB2d,
+                       std::vector<seerep_core_msgs::LabelWithInstance>& labelWithInstance);
   /**
    * @brief converts the BoundingBoxLabeled with instances of the flatbuffer data message to seerep core specific message
    * @param labelsBB the BoundingBoxLabeled with instances in the flatbuffer data message
    * @param labelWithInstance the BoundingBoxLabeled with instances in the data message in seerep core format
    */
   static void
-  fromFbDataLabelsGeneral(const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>>* labelsBB,
-                          std::vector<seerep_core_msgs::LabelWithInstance>& labelWithInstance);
+  fromFbDataLabelsBb(const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>>* labelsBB,
+                     std::vector<seerep_core_msgs::LabelWithInstance>& labelWithInstance);
 };
 
 }  // namespace seerep_core_fb
