@@ -280,6 +280,20 @@ private:
    */
   uint32_t getOffset(const std::vector<std::string>& names, const std::vector<uint32_t>& offsets,
                      const std::string& fieldName, bool isBigendian);
+
+  /**
+   * @brief Get the offset for the special case of rgba(a)
+   *
+   * The rgb(a) channel is encoded in a single 32 bit integer.
+   * To address an individual channel (r, g, b or a ),
+   * we need to get it's offset from the start of the rgb(a) field.
+   *
+   * @param fieldName name of the field to get the offset for i.e "r", "g", "b" or "a"
+   * @param offset the offset for the start of the rgb(a) channel
+   * @param isBigendian endianness of the point cloud
+   * @return uint32_t the offset for the fieldName
+   */
+  uint32_t rgbaOffset(const std::string& fieldName, uint32_t offset, bool isBigendian);
 };
 }  // namespace seerep_hdf5_fb
 

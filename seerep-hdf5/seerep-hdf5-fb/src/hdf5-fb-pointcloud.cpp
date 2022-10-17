@@ -36,6 +36,7 @@ void Hdf5FbPointCloud::writePointCloud2(const std::string& id, const seerep::fb:
     dataGroupPtr = std::make_shared<HighFive::Group>(m_file->createGroup(hdf5GroupPath));
   }
 
+  // TODO encapsulate in method
   writeAttributeToHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::HEIGHT, cloud.height());
   writeAttributeToHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::WIDTH, cloud.width());
   writeAttributeToHdf5<bool>(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::IS_BIGENDIAN, cloud.is_bigendian());
@@ -54,6 +55,7 @@ void Hdf5FbPointCloud::writePointCloud2(const std::string& id, const seerep::fb:
 
   if (info.has_points)
   {
+    // TODO create method for calculating the offsets
     const std::vector<std::string> fields = { "x", "y", "z" };
     std::vector<uint32_t> xyzOffsets;
     for (auto field : fields)
@@ -675,8 +677,6 @@ uint32_t Hdf5FbPointCloud::getOffset(const std::vector<std::string>& names, cons
     }
   }
 
-  // Handle the special case of rgb(a), since the rgb(a) channel is encoded in a single 32 Bit integer
-
   std::set<std::string> fieldNames = { "r", "g", "b", "a" };
 
   if (fieldNames.find(fieldName) != fieldNames.end())
@@ -685,50 +685,7 @@ uint32_t Hdf5FbPointCloud::getOffset(const std::vector<std::string>& names, cons
     {
       if (names[i] == "rgb" || names[i] == "rgba")
       {
-        if (fieldName == "r")
-        {
-          if (isBigendian)
-          {
-            return offsets[i] + 1;
-          }
-          else
-          {
-            return offsets[i] + 2;
-          }
-        }
-        if (fieldName == "g")
-        {
-          if (isBigendian)
-          {
-            return offsets[i] + 2;
-          }
-          else
-          {
-            return offsets[i] + 1;
-          }
-        }
-        if (fieldName == "b")
-        {
-          if (isBigendian)
-          {
-            return offsets[i] + 3;
-          }
-          else
-          {
-            return offsets[i] + 0;
-          }
-        }
-        if (fieldName == "a")
-        {
-          if (isBigendian)
-          {
-            return offsets[i] + 0;
-          }
-          else
-          {
-            return offsets[i] + 3;
-          }
-        }
+        return rgbaOffset(fieldName, offsets[i], isBigendian);
       }
     }
   }
@@ -737,8 +694,6 @@ uint32_t Hdf5FbPointCloud::getOffset(const std::vector<std::string>& names, cons
 
 uint32_t Hdf5FbPointCloud::getOffset(const seerep::fb::PointCloud2& cloud, const std::string& fieldName)
 {
-  bool isBigendian = cloud.is_bigendian();
-
   for (size_t i = 0; i < cloud.fields()->size(); i++)
   {
     const seerep::fb::PointField& field = *cloud.fields()->Get(i);
@@ -747,9 +702,6 @@ uint32_t Hdf5FbPointCloud::getOffset(const seerep::fb::PointCloud2& cloud, const
       return field.offset();
     }
   }
-
-  // // Handle the special case of r,g,b,a (we assume they are understood as the
-  // // channels of an rgb or rgba field)
 
   std::set<std::string> field_names = { "r", "g", "b", "a" };
 
@@ -761,54 +713,59 @@ uint32_t Hdf5FbPointCloud::getOffset(const seerep::fb::PointCloud2& cloud, const
 
       if (field.name()->str() == "rgb" || field.name()->str() == "rgba")
       {
-        if (fieldName == "r")
-        {
-          if (isBigendian)
-          {
-            return field.offset() + 1;
-          }
-          else
-          {
-            return field.offset() + 2;
-          }
-        }
-        if (fieldName == "g")
-        {
-          if (isBigendian)
-          {
-            return field.offset() + 2;
-          }
-          else
-          {
-            return field.offset() + 1;
-          }
-        }
-        if (fieldName == "b")
-        {
-          if (isBigendian)
-          {
-            return field.offset() + 3;
-          }
-          else
-          {
-            return field.offset() + 0;
-          }
-        }
-        if (fieldName == "a")
-        {
-          if (isBigendian)
-          {
-            return field.offset() + 0;
-          }
-          else
-          {
-            return field.offset() + 3;
-          }
-        }
+        return rgbaOffset(fieldName, field.offset(), cloud.is_bigendian());
       }
     }
   }
   throw std::runtime_error("Field " + fieldName + " does not exist!");
+}
+
+uint32_t Hdf5FbPointCloud::rgbaOffset(const std::string& fieldName, uint32_t offset, bool isBigendian)
+{
+  if (fieldName == "r")
+  {
+    if (isBigendian)
+    {
+      return offset + 1;
+    }
+    else
+    {
+      return offset + 2;
+    }
+  }
+  if (fieldName == "g")
+  {
+    if (isBigendian)
+    {
+      return offset + 2;
+    }
+    else
+    {
+      return offset + 1;
+    }
+  }
+  if (fieldName == "b")
+  {
+    if (isBigendian)
+    {
+      return offset + 3;
+    }
+    else
+    {
+      return offset + 0;
+    }
+  }
+  if (fieldName == "a")
+  {
+    if (isBigendian)
+    {
+      return offset + 0;
+    }
+    else
+    {
+      return offset + 3;
+    }
+  }
 }
 
 }  // namespace seerep_hdf5_fb
