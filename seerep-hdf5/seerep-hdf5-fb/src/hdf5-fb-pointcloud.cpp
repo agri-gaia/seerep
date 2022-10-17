@@ -45,7 +45,7 @@ void Hdf5FbPointCloud::writePointCloud2(const std::string& id, const seerep::fb:
 
   writeHeaderAttributes(*dataGroupPtr, cloud.header());
 
-  writePointFieldAttributes(*dataGroupPtr, *cloud.fields());
+  writePointFieldAttributes(*dataGroupPtr, cloud.fields());
 
   writeBoundingBoxLabeled(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, id, cloud.labels_bb());
   writeLabelsGeneral(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, id, cloud.labels_general());

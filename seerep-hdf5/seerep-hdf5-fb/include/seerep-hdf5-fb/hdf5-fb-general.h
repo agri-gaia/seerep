@@ -50,7 +50,7 @@ protected:
                                                                HighFive::AnnotateTraits<T>& object,
                                                                std::string uuidMsg);
 
-  //################s
+  //################
   // BoundingBoxes
   //################
   void writeBoundingBoxLabeled(
