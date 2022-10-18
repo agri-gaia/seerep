@@ -25,7 +25,12 @@
 var NAVTREE =
 [
   [ "SEEREP", "index.html", [
-    [ "Home", "index.html", null ],
+    [ "Table of Contents", "index.html#autotoc_md1", null ],
+    [ "Maintainer", "index.html#autotoc_md2", null ],
+    [ "General", "index.html#autotoc_md3", null ],
+    [ "Quick Start", "index.html#autotoc_md4", null ],
+    [ "Documentation", "index.html#autotoc_md5", null ],
+    [ "Related Publications", "index.html#autotoc_md6", null ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
@@ -65,9 +70,9 @@ var NAVTREEINDEX =
 "classseerep__grpc__ros_1_1TransferSensorMsgs.html#a32fedf15069840a37f32bca37e158ae3",
 "classseerep__hdf5__pb_1_1Hdf5PbPointCloud.html#a0a0bdffeff4823bd241de46a975b92d9",
 "classseerep__server_1_1server.html#a5e179a55a59a937c90cf7a8b2a0d9a60",
-"functions_vars_x.html",
-"pb-write-load-test_8cpp.html#af0f5c3f416525a36f4e79128c91b3e03",
-"structseerep__core__msgs_1_1Query.html#a5f5aa1df77775d4246b3e1dec0d6bf6b"
+"functions_vars_z.html",
+"pb-write-load-test_8cpp.html#aaf4f3f8c6754b104fd38c9c15506ccbc",
+"structseerep__core__msgs_1_1Query.html#a39d220ff05feae20df7ca1a88648dc1f"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
