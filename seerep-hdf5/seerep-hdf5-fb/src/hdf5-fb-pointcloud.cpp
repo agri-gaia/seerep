@@ -16,25 +16,11 @@ void Hdf5FbPointCloud::writePointCloud2(const std::string& id, const seerep::fb:
 {
   const std::scoped_lock lock(*m_write_mtx);
 
-  std::string hdf5GroupPath = seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + id;
+  const std::string hdf5GroupPath = seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + id;
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
       << "writing flatbuffers point cloud to: " << hdf5GroupPath;
 
-  std::shared_ptr<HighFive::Group> dataGroupPtr;
-
-  try
-  {
-    checkExists(hdf5GroupPath);
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
-        << "hdf5 group" << hdf5GroupPath << " already exists!";
-    dataGroupPtr = std::make_shared<HighFive::Group>(m_file->getGroup(hdf5GroupPath));
-  }
-  catch (std::invalid_argument const& e)
-  {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
-        << "hdf5 group " << hdf5GroupPath << " does not exist! Creating a new group";
-    dataGroupPtr = std::make_shared<HighFive::Group>(m_file->createGroup(hdf5GroupPath));
-  }
+  std::shared_ptr<HighFive::Group> dataGroupPtr = getHdf5Group(hdf5GroupPath);
 
   writeGeneralAttributes(dataGroupPtr, cloud);
 
@@ -96,25 +82,11 @@ void Hdf5FbPointCloud::writePoints(const std::string& id, const std::vector<uint
                                    uint32_t pointStep, uint32_t height, uint32_t width,
                                    const std::shared_ptr<HighFive::Group>& groupPtr, std::vector<float>& boundingBox)
 {
-  std::string hdf5PointsPath = seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + id + "/points";
+  const std::string hdf5PointsPath = seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + id + "/points";
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "writing dataset to: " << hdf5PointsPath;
 
   HighFive::DataSpace dataSpace({ height, width, 3 });
-  std::shared_ptr<HighFive::DataSet> pointsDatasetPtr;
-
-  try
-  {
-    checkExists(hdf5PointsPath);
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
-        << "hdf5 dataset: " << hdf5PointsPath << " already exists!";
-    pointsDatasetPtr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5PointsPath));
-  }
-  catch (std::invalid_argument const& e)
-  {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
-        << "hdf5 dataset: " << hdf5PointsPath << " does not exist! Creating a new dataset";
-    pointsDatasetPtr = std::make_shared<HighFive::DataSet>(m_file->createDataSet<float>(hdf5PointsPath, dataSpace));
-  }
+  std::shared_ptr<HighFive::DataSet> pointsDatasetPtr = getHdf5DataSet<float>(hdf5PointsPath, dataSpace);
 
   std::vector<std::vector<std::vector<float>>> pointData;
   pointData.resize(height);
@@ -174,21 +146,7 @@ void Hdf5FbPointCloud::writeColorsRGB(const std::string& id, const std::vector<u
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "writing dataset to: " << hdf5ColorsPath;
 
   HighFive::DataSpace dataSpace({ height, width, 3 });
-  std::shared_ptr<HighFive::DataSet> colorsDatasetPtr;
-
-  try
-  {
-    checkExists(hdf5ColorsPath);
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
-        << "hdf5 dataset: " << hdf5ColorsPath << " already exists!";
-    colorsDatasetPtr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5ColorsPath));
-  }
-  catch (std::invalid_argument const& e)
-  {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
-        << "hdf5 dataset: " << hdf5ColorsPath << " does not exist! Creating a new dataset";
-    colorsDatasetPtr = std::make_shared<HighFive::DataSet>(m_file->createDataSet<float>(hdf5ColorsPath, dataSpace));
-  }
+  std::shared_ptr<HighFive::DataSet> colorsDatasetPtr = getHdf5DataSet<float>(hdf5ColorsPath, dataSpace);
 
   std::vector<std::vector<std::vector<uint8_t>>> colorsData;
   colorsData.resize(height);
@@ -218,20 +176,7 @@ void Hdf5FbPointCloud::writeColorsRGBA(const std::string& id, const std::vector<
 
   HighFive::DataSpace dataSpace({ height, width, 4 });
 
-  std::shared_ptr<HighFive::DataSet> colorsDatasetPtr;
-  try
-  {
-    checkExists(hdf5ColorsPath);
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
-        << "hdf5 dataset: " << hdf5ColorsPath << " already exists!";
-    colorsDatasetPtr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5ColorsPath));
-  }
-  catch (std::invalid_argument const& e)
-  {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
-        << "hdf5 dataset: " << hdf5ColorsPath << " does not exist! Creating a new dataset";
-    colorsDatasetPtr = std::make_shared<HighFive::DataSet>(m_file->createDataSet<float>(hdf5ColorsPath, dataSpace));
-  }
+  std::shared_ptr<HighFive::DataSet> colorsDatasetPtr = getHdf5DataSet<float>(hdf5ColorsPath, dataSpace);
 
   std::vector<std::vector<std::vector<uint8_t>>> colorsData;
   colorsData.resize(height);
