@@ -366,7 +366,7 @@ void Hdf5CoreGeneral::readInstances(const std::string& id, const std::string ins
   datasetInstances.read(instances);
 }
 
-std::shared_ptr<HighFive::Group> Hdf5CoreGeneral::getHdf5Group(const std::string& hdf5GroupPath)
+std::shared_ptr<HighFive::Group> Hdf5CoreGeneral::getHdf5Group(const std::string& hdf5GroupPath, bool create)
 {
   try
   {
@@ -379,7 +379,14 @@ std::shared_ptr<HighFive::Group> Hdf5CoreGeneral::getHdf5Group(const std::string
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
         << "hdf5 group " << hdf5GroupPath << " does not exist! Creating a new group";
-    return std::make_shared<HighFive::Group>(m_file->createGroup(hdf5GroupPath));
+    if (create)
+    {
+      return std::make_shared<HighFive::Group>(m_file->createGroup(hdf5GroupPath));
+    }
+    else
+    {
+      return nullptr;
+    }
   }
 }
 

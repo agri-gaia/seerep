@@ -206,17 +206,10 @@ Hdf5FbPointCloud::readPointCloud2(const std::string& id, const bool withoutData)
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
       << "loading flatbuffers point cloud from: " << hdf5GroupPath;
 
-  std::shared_ptr<HighFive::Group> dataGroupPtr;
+  std::shared_ptr<HighFive::Group> dataGroupPtr = getHdf5Group(hdf5GroupPath, false);
 
-  try
+  if (!dataGroupPtr)
   {
-    checkExists(hdf5GroupPath);
-    dataGroupPtr = std::make_shared<HighFive::Group>(m_file->getGroup(hdf5GroupPath));
-  }
-  catch (std::invalid_argument const& e)
-  {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning)
-        << "hdf5 group " << hdf5GroupPath << " does not exist!";
     return std::nullopt;
   }
 

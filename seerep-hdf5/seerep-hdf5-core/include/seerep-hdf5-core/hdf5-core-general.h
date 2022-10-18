@@ -92,14 +92,13 @@ public:
   // Hdf5
   //################
   /**
-   * @brief Get a shared pointer to a hdf5 group specified by the hdf5GroupPath.
-   *
-   * If a group with the path already exists we use that, otherwise a new one is created.
+   * @brief Get a shared pointer to a hdf5 group
    *
    * @param hdf5GroupPath path to the data group
+   * @param create create a new group if the group path can't be found?
    * @return std::shared_ptr<HighFive::Group> shared pointer to the group
    */
-  std::shared_ptr<HighFive::Group> getHdf5Group(const std::string& hdf5GroupPath);
+  std::shared_ptr<HighFive::Group> getHdf5Group(const std::string& hdf5GroupPath, bool create = true);
   /**
    * @brief Get a shared pointer to a hdf5 data set specified by the hdf5DataSetPath
    *
