@@ -19,12 +19,12 @@
 
 ## Maintainer
 
-[Mark Niemeyer](https://github.com/mhoellmann)\
+[Mark Niemeyer](https://github.com/mhoellmann) <br>
 [mark.niemeyer@dfki.de](mailto:mark.niemeyer@dfki.de)
 
-[German Research Center for Artificial Intelligence\
-DFKI Niedersachsen\
-Plan-Based Robot Control](https://www.dfki.de/en/web/research/research-departments/plan-based-robot-control)
+[German Research Center for Artificial Intelligence](https://www.dfki.de/en/web) <br>
+[DFKI Niedersachsen](https://www.dfki.de/en/web/about-us/locations-contact/osnabrueck-oldenburg) <br>
+[Plan-Based Robot Control](https://www.dfki.de/en/web/research/research-departments/plan-based-robot-control) <br>
 
 ## General
 
