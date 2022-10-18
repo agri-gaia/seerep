@@ -9,8 +9,6 @@ Hdf5FbPointCloud::Hdf5FbPointCloud(std::shared_ptr<HighFive::File>& file, std::s
 {
 }
 
-// TODO refactor again, still not happy with the API
-
 void Hdf5FbPointCloud::writePointCloud2(const std::string& id, const seerep::fb::PointCloud2& cloud,
                                         std::vector<float>& boundingBox)
 {
@@ -35,40 +33,20 @@ void Hdf5FbPointCloud::writePointCloud2(const std::string& id, const seerep::fb:
 
   if (info.has_points)
   {
-    // TODO create method for calculating the offsets
-    const std::vector<std::string> fields = { "x", "y", "z" };
-    std::vector<uint32_t> xyzOffsets;
-    for (auto field : fields)
-    {
-      xyzOffsets.push_back(getOffset(cloud, field));
-    }
-
-    writePoints(id, xyzOffsets, cloud.data()->data(), cloud.point_step(), cloud.height(), cloud.width(), dataGroupPtr,
-                boundingBox);
+    writePoints(id, getOffsets(cloud, std::vector<std::string>{ "x", "y", "z" }), cloud.data()->data(),
+                cloud.point_step(), cloud.height(), cloud.width(), dataGroupPtr, boundingBox);
   }
 
   if (info.has_rgb)
   {
-    const std::vector<std::string> fields = { "r", "g", "b" };
-    std::vector<uint32_t> rgbOffsets;
-    for (auto field : fields)
-    {
-      rgbOffsets.push_back(getOffset(cloud, field));
-    }
-
-    writeColorsRGBA(id, rgbOffsets, cloud.data()->data(), cloud.point_step(), cloud.height(), cloud.width());
+    writeColorsRGBA(id, getOffsets(cloud, std::vector<std::string>{ "r", "g", "b" }), cloud.data()->data(),
+                    cloud.point_step(), cloud.height(), cloud.width());
   }
 
   if (info.has_rgba)
   {
-    const std::vector<std::string> fields = { "r", "g", "b", "a" };
-    std::vector<uint32_t> rgbaOffsets;
-    for (auto field : fields)
-    {
-      rgbaOffsets.push_back(getOffset(cloud, field));
-    }
-
-    writeColorsRGBA(id, rgbaOffsets, cloud.data()->data(), cloud.point_step(), cloud.height(), cloud.width());
+    writeColorsRGBA(id, getOffsets(cloud, std::vector<std::string>{ "r", "g", "b", "a" }), cloud.data()->data(),
+                    cloud.point_step(), cloud.height(), cloud.width());
   }
 
   // TODO normals
@@ -300,38 +278,20 @@ Hdf5FbPointCloud::readPointCloud2(const std::string& id, const bool withoutData)
 
     if (info.has_points)
     {
-      const std::vector<std::string> fields = { "x", "y", "z" };
-      std::vector<uint32_t> xyzOffsets;
-      for (auto field : fields)
-      {
-        xyzOffsets.push_back(getOffset(names, offsets, field, isBigendian));
-      }
-
-      readPoints(id, xyzOffsets, data, pointStep, height, width);
+      readPoints(id, getOffsets(names, offsets, isBigendian, std::vector<std::string>{ "x", "y", "z" }), data,
+                 pointStep, height, width);
     }
 
     if (info.has_rgb)
     {
-      const std::vector<std::string> fields = { "r", "g", "b" };
-      std::vector<uint32_t> rgbOffsets;
-      for (auto field : fields)
-      {
-        rgbOffsets.push_back(getOffset(names, offsets, field, isBigendian));
-      }
-
-      readColorsRGB(id, rgbOffsets, data, pointStep, height, width);
+      readColorsRGB(id, getOffsets(names, offsets, isBigendian, std::vector<std::string>{ "r", "g", "b" }), data,
+                    pointStep, height, width);
     }
 
     if (info.has_rgba)
     {
-      const std::vector<std::string> fields = { "r", "g", "b", "a" };
-      std::vector<uint32_t> rgbaOffsets;
-      for (auto field : fields)
-      {
-        rgbaOffsets.push_back(getOffset(names, offsets, field, isBigendian));
-      }
-
-      readPoints(id, rgbaOffsets, data, pointStep, height, width);
+      readPoints(id, getOffsets(names, offsets, isBigendian, std::vector<std::string>{ "r", "g", "b", "a" }), data,
+                 pointStep, height, width);
     }
   }
 
@@ -647,6 +607,18 @@ uint32_t Hdf5FbPointCloud::getOffset(const std::vector<std::string>& names, cons
   throw std::runtime_error("Field " + fieldName + " does not exist!");
 }
 
+std::vector<uint32_t> Hdf5FbPointCloud::getOffsets(const std::vector<std::string>& names,
+                                                   const std::vector<uint32_t>& offsets, bool isBigendian,
+                                                   const std::vector<std::string>& fields)
+{
+  std::vector<uint32_t> calcOffsets;
+  for (auto field : fields)
+  {
+    calcOffsets.push_back(getOffset(names, offsets, field, isBigendian));
+  }
+  return calcOffsets;
+}
+
 uint32_t Hdf5FbPointCloud::getOffset(const seerep::fb::PointCloud2& cloud, const std::string& fieldName)
 {
   for (size_t i = 0; i < cloud.fields()->size(); i++)
@@ -673,6 +645,17 @@ uint32_t Hdf5FbPointCloud::getOffset(const seerep::fb::PointCloud2& cloud, const
     }
   }
   throw std::runtime_error("Field " + fieldName + " does not exist!");
+}
+
+std::vector<uint32_t> Hdf5FbPointCloud::getOffsets(const seerep::fb::PointCloud2& cloud,
+                                                   const std::vector<std::string>& fields)
+{
+  std::vector<uint32_t> calcOffsets;
+  for (auto field : fields)
+  {
+    calcOffsets.push_back(getOffset(cloud, field));
+  }
+  return calcOffsets;
 }
 
 uint32_t Hdf5FbPointCloud::rgbaOffset(const std::string& fieldName, uint32_t offset, bool isBigendian)

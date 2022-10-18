@@ -289,6 +289,8 @@ private:
    */
   uint32_t getOffset(const seerep::fb::PointCloud2& cloud, const std::string& fieldName);
 
+  std::vector<uint32_t> getOffsets(const seerep::fb::PointCloud2& cloud, const std::vector<std::string>& fields);
+
   /**
    * @brief Get the offset of a field from hdf5
    *
@@ -300,6 +302,9 @@ private:
    */
   uint32_t getOffset(const std::vector<std::string>& names, const std::vector<uint32_t>& offsets,
                      const std::string& fieldName, bool isBigendian);
+
+  std::vector<uint32_t> getOffsets(const std::vector<std::string>& names, const std::vector<uint32_t>& offsets,
+                                   bool isBigendian, const std::vector<std::string>& fields);
 
   /**
    * @brief Get the offset for the special case of rgba(a)
