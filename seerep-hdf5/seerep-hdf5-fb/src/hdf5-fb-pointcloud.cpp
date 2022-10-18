@@ -78,6 +78,25 @@ void Hdf5FbPointCloud::writePointCloud2(const std::string& id, const seerep::fb:
   m_file->flush();
 }
 
+void Hdf5FbPointCloud::computeBoundingBox(std::array<float, 3>& min, std::array<float, 3>& max, const float& x,
+                                          const float& y, const float& z)
+{
+  if (x < min[0])
+    min[0] = x;
+  if (x > max[0])
+    max[0] = x;
+
+  if (y < min[1])
+    min[1] = y;
+  if (y > max[1])
+    max[1] = y;
+
+  if (z < min[2])
+    min[2] = z;
+  if (z > max[2])
+    max[2] = z;
+}
+
 void Hdf5FbPointCloud::writePoints(const std::string& id, const std::vector<uint32_t>& offsets, const uint8_t* data,
                                    uint32_t pointStep, uint32_t height, uint32_t width,
                                    const std::shared_ptr<HighFive::Group>& groupPtr, std::vector<float>& boundingBox)
@@ -108,21 +127,7 @@ void Hdf5FbPointCloud::writePoints(const std::string& id, const std::vector<uint
       const float& y = *yIter;
       const float& z = *zIter;
 
-      // compute bounding box for indicies
-      if (x < min[0])
-        min[0] = x;
-      if (x > max[0])
-        max[0] = x;
-
-      if (y < min[1])
-        min[1] = y;
-      if (y > max[1])
-        max[1] = y;
-
-      if (z < min[2])
-        min[2] = z;
-      if (z > max[2])
-        max[2] = z;
+      computeBoundingBox(min, max, x, y, z);
 
       pointData[row].push_back(std::vector{ x, y, z });
 

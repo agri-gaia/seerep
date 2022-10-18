@@ -101,6 +101,18 @@ private:
   }
 
   /**
+   * @brief Computes the bounding box while iterating over the point cloud
+   *
+   * @param min reference to an array to store the min x, y, z
+   * @param max reference to an array to store the max x, y, z
+   * @param x current x
+   * @param y current y
+   * @param z current z
+   */
+  void computeBoundingBox(std::array<float, 3>& min, std::array<float, 3>& max, const float& x, const float& y,
+                          const float& z);
+
+  /**
    * @brief Write x,y,z of a point cloud to a /points dataset
    *
    * @param id the uuid of the point cloud
