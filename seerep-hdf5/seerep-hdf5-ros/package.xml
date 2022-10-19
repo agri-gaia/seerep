@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>seerep-hdf5-ros</name>
+  <version>0.0.1</version>
+  <description>Package to write ROS messages directly into hdf5</description>
+
+  <maintainer email="mark.niemeyer@dfki.de">Mark Niemeyer</maintainer>
+  <author email="julian.arkenau@dfki.de"> Julian Arkenau </author>
+
+  <license>BSD-3</license>
+
+  <url type="website">TODO</url>
+
+  <buildtool_depend>cmake</buildtool_depend>
+
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+
+  <export>
+    <build_type>cmake</build_type>
+  </export>
+</package>
