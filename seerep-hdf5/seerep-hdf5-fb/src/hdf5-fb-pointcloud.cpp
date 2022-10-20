@@ -39,8 +39,8 @@ void Hdf5FbPointCloud::writePointCloud2(const std::string& id, const seerep::fb:
 
   if (info.has_rgb)
   {
-    writeColorsRGBA(id, getOffsets(cloud, std::vector<std::string>{ "r", "g", "b" }), cloud.data()->data(),
-                    cloud.point_step(), cloud.height(), cloud.width());
+    writeColorsRGB(id, getOffsets(cloud, std::vector<std::string>{ "r", "g", "b" }), cloud.data()->data(),
+                   cloud.point_step(), cloud.height(), cloud.width());
   }
 
   if (info.has_rgba)
@@ -283,8 +283,8 @@ Hdf5FbPointCloud::readPointCloud2(const std::string& id, const bool withoutData)
 
     if (info.has_rgba)
     {
-      readPoints(id, getOffsets(names, offsets, isBigendian, std::vector<std::string>{ "r", "g", "b", "a" }), data,
-                 pointStep, height, width);
+      readColorsRGBA(id, getOffsets(names, offsets, isBigendian, std::vector<std::string>{ "r", "g", "b", "a" }), data,
+                     pointStep, height, width);
     }
   }
 
@@ -697,6 +697,7 @@ uint32_t Hdf5FbPointCloud::rgbaOffset(const std::string& fieldName, uint32_t off
       return offset + 3;
     }
   }
+  throw std::runtime_error("Field " + fieldName + " does not exist!");
 }
 
 }  // namespace seerep_hdf5_fb

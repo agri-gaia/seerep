@@ -38,7 +38,7 @@ NUM_POINT_CLOUDS = 1
 
 def createPointCloud(builder, header, height=960, width=1280):
     '''Creates a flatbuffers point cloud message'''
-    pointFields = createPointFields(builder, ['x', 'y', 'z', 'rgb'], 7, 4, 1)
+    pointFields = createPointFields(builder, ['x', 'y', 'z', 'rgba'], 7, 4, 1)
     pointFieldsVector = addToPointFieldVector(builder, pointFields)
 
     # create general labels
