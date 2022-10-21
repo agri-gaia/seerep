@@ -1,80 +1,48 @@
+#catkin_lint: ignore critical_var_overwrite
+#catkin_lint: ignore duplicate_find
 cmake_minimum_required(VERSION 3.10)
-project(seerep-hdf5-pb VERSION 0.1)
+project(seerep_hdf5_ros VERSION 0.1)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -fPIC -DBOOST_LOG_DYN_LINK")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -fPIC")
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+find_package(catkin REQUIRED
+	COMPONENTS
+	std_msgs
+	geometry_msgs
+	sensor_msgs
+)
 
 include(cmake/FindHighFive.cmake)
-
 find_package(HighFive REQUIRED)
-find_package(sensor_msgs REQUIRED)
-find_package(std_msgs REQUIRED)
-find_package(geometry_msgs REQUIRED)
 
-configure_file(include/SeerepHdf5RosConfig.h.in SeerepHdf5RosConfig.h)
+catkin_package(
+  INCLUDE_DIRS include
+  LIBRARIES seerep_hdf5_ros
+  CATKIN_DEPENDS std_msgs geometry_msgs sensor_msgs
+  DEPENDS HighFive
+)
 
 include_directories(
 	include
 	${HighFive_INCLUDE_DIRS}
-    ${SeerepHdf5Core_INCLUDE_DIRS}
+	${catkin_INCLUDE_DIRS}
 )
 
-add_library(seerephdf5ros
+add_library(${PROJECT_NAME}
     src/hdf5-ros.cpp
 )
 
-target_link_libraries(seerephdf5ros
-	${HighFive_LIBRARIES}
+add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
+install(TARGETS ${PROJECT_NAME}
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
 )
 
-set(CMAKE_INSTALL_INCLUDEDIR include)
-set(CMAKE_INSTALL_LIBDIR lib)
-set(CMAKE_INSTALL_BINDIR bin)
-
-install(TARGETS seerephdf5ros
-	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-	PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+install(DIRECTORY include/seerep-hdf5-ros
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+  FILES_MATCHING PATTERN "*.h"
 )
-
-include(CMakePackageConfigHelpers)
-
-configure_package_config_file(
-	cmake/SeerepHdf5RosConfig.cmake.in
-  	${CMAKE_CURRENT_BINARY_DIR}/SeerepHdf5RosConfig.cmake
-	INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
-	PATH_VARS CMAKE_INSTALL_INCLUDEDIR CMAKE_INSTALL_LIBDIR
-)
-
-# generate the version file for the config file
-write_basic_package_version_file(
-  "${CMAKE_CURRENT_BINARY_DIR}/SeerepHdf5RosConfigVersion.cmake"
-  VERSION "${seerep_hdf5_ros_VERSION_MAJOR}.${seerep_hdf5_ros_VERSION_MINOR}"
-  COMPATIBILITY AnyNewerVersion
-)
-
-# install the configuration file
-install(FILES
-	${CMAKE_CURRENT_BINARY_DIR}/SeerepHdf5RosConfig.cmake
-	${CMAKE_CURRENT_BINARY_DIR}/SeerepHdf5RosConfigVersion.cmake
-	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/SeerepHdf5Ros
-)
-
-install(FILES
-	"${PROJECT_BINARY_DIR}/SeerepHdf5RosConfig.h"
-	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
-)
-
-INSTALL(DIRECTORY include/seerep-hdf5-ros DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-
-install(FILES
-	cmake/FindHighFive.cmake
-	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/SeerepHdf5Ros/Modules
-)
-
-#add PIC gcc flag
-SET(GCC_COVERAGE_COMPILE_FLAGS "-fPIC")
-SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
