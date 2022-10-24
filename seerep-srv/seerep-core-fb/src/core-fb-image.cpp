@@ -61,18 +61,22 @@ void CoreFbImage::addBoundingBoxesLabeled(const seerep::fb::BoundingBoxes2DLabel
   hdf5io->writeImageBoundingBox2DLabeled(boost::lexical_cast<std::string>(uuidMsg), boundingBoxes2dlabeled);
 
   std::vector<std::string> labels;
-  for (auto bb : *boundingBoxes2dlabeled.labels_bb())
+  if (boundingBoxes2dlabeled.labels_bb())
   {
-    labels.push_back(bb->labelWithInstance()->label()->str());
-  }
-  // this only adds labels to the image in the core
-  // if there are already bounding box labels for this image
-  // those labels must be removed separately. The hdfio currently overrides
-  // existing labels. The data is only correct if labels are added and there
-  // weren't any bounding box labels before
+    for (auto bb : *boundingBoxes2dlabeled.labels_bb())
+    {
+      labels.push_back(bb->labelWithInstance()->label()->str());
+    }
 
-  /// @todo also add instance
-  m_seerepCore->addLabels(seerep_core_msgs::Datatype::Image, labels, uuidMsg, uuidProject);
+    // this only adds labels to the image in the core
+    // if there are already bounding box labels for this image
+    // those labels must be removed separately. The hdfio currently overrides
+    // existing labels. The data is only correct if labels are added and there
+    // weren't any bounding box labels before
+
+    /// @todo also add instance
+    m_seerepCore->addLabels(seerep_core_msgs::Datatype::Image, labels, uuidMsg, uuidProject);
+  }
 }
 
 }  // namespace seerep_core_fb
