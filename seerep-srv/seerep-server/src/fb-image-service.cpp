@@ -125,26 +125,33 @@ grpc::Status FbImageService::AddBoundingBoxes2dLabeled(
     auto bbslabeled = bbsMsg.GetRoot();
 
     std::string uuidProject = bbslabeled->header()->uuid_project()->str();
-    if (!uuidProject.empty())
+    if (uuidProject.empty())
     {
-      try
-      {
-        imageFb->addBoundingBoxesLabeled(*bbslabeled);
-      }
-      catch (std::runtime_error const& e)
-      {
-        // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
-        // also catching core doesn't have project with uuid error
-        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
-
-        seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
-
-        return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
-      }
+      answer = "a msg had no project uuid!";
     }
     else
     {
-      answer = "a msg had no project uuid!";
+      if (!bbslabeled->labels_bb())
+      {
+        answer = "a msg had no bounding boxes!";
+      }
+      else
+      {
+        try
+        {
+          imageFb->addBoundingBoxesLabeled(*bbslabeled);
+        }
+        catch (std::runtime_error const& e)
+        {
+          // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
+          // also catching core doesn't have project with uuid error
+          BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+
+          seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+
+          return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+        }
+      }
     }
   }
 
