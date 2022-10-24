@@ -50,12 +50,6 @@ public:
   inline static const std::string FIELD_DATATYPE = "field_datatype";
   inline static const std::string FIELD_COUNT = "field_count";
 
-  // point and quaternion attribute keys
-  const std::string X = "x";
-  const std::string Y = "y";
-  const std::string Z = "z";
-  const std::string W = "w";
-
   // make private again after fixing io calls of pointcloud.cpp and pointcloud-overview.cpp
   inline static const std::string BOUNDINGBOX = "boundingbox";
   // datatype group names in hdf5

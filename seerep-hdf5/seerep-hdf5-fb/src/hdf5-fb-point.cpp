@@ -39,7 +39,7 @@ void Hdf5FbPoint::writePoint(const std::string& id, const seerep::fb::PointStamp
   }
 
   data_set_ptr->write(data);
-  writeHeaderAttributes(*data_set_ptr, *point->header());
+  writeHeaderAttributes(*data_set_ptr, point->header());
 
   writeAttributeMap(data_set_ptr, point->attribute());
 
@@ -95,7 +95,7 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::PointStamped>> Hdf5FbPoint:
   pointBuilder.add_z(read_data.at(2));
   auto pointOffset = pointBuilder.Finish();
 
-  auto headerOffset = readHeaderAttributes(*data_set_ptr, id, builder);
+  auto headerOffset = readHeaderAttributes(builder, *data_set_ptr, id);
 
   std::vector<std::string> labelsGeneral;
   std::vector<std::string> labelsGeneralInstances;

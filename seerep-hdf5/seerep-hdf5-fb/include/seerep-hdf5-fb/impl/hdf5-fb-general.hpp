@@ -35,34 +35,39 @@ Hdf5FbGeneral::readAttributeMap(HighFive::AnnotateTraits<T>& object, flatbuffers
 }
 
 template <class T>
-void Hdf5FbGeneral::writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, const seerep::fb::Header& header)
+void Hdf5FbGeneral::writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, const seerep::fb::Header* header)
 {
-  if (!object.hasAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS))
-    object.createAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS, header.stamp()->seconds());
-  else
-    object.getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS).write(header.stamp()->seconds());
+  if (header)
+  {
+    if (!object.hasAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS))
+      object.createAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS, header->stamp()->seconds());
+    else
+      object.getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS).write(header->stamp()->seconds());
 
-  if (!object.hasAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS))
-    object.createAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS, header.stamp()->nanos());
-  else
-    object.getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS).write(header.stamp()->nanos());
+    if (!object.hasAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS))
+      object.createAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS, header->stamp()->nanos());
+    else
+      object.getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS).write(header->stamp()->nanos());
 
-  if (!object.hasAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID))
-    object.createAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID, header.frame_id()->str());
-  else
-    object.getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID).write(header.frame_id()->str());
+    if (!object.hasAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID))
+      object.createAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID, header->frame_id()->str());
+    else
+      object.getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID).write(header->frame_id()->str());
 
-  if (!object.hasAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ))
-    object.createAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ, header.seq());
-  else
-    object.getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ).write(header.seq());
+    if (!object.hasAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ))
+      object.createAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ, header->seq());
+    else
+      object.getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ).write(header->seq());
+  }
 }
 
 template <class T>
-flatbuffers::Offset<seerep::fb::Header> Hdf5FbGeneral::readHeaderAttributes(HighFive::AnnotateTraits<T>& object,
-                                                                            std::string uuidMsg,
-                                                                            flatbuffers::grpc::MessageBuilder& builder)
+flatbuffers::Offset<seerep::fb::Header> Hdf5FbGeneral::readHeaderAttributes(flatbuffers::grpc::MessageBuilder& builder,
+                                                                            HighFive::AnnotateTraits<T>& object,
+                                                                            std::string uuidMsg)
 {
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "loading flatbuffers header attributes";
+
   int64_t seconds;
   int32_t nanos;
   uint32_t seq;

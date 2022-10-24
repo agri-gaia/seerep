@@ -2,6 +2,7 @@
 include "header.fbs";
 include "boundingbox_labeled.fbs";
 include "point_field.fbs";
+include "label_with_instance.fbs";
 
 namespace seerep.fb;
 
@@ -15,6 +16,6 @@ table PointCloud2 {
   row_step:uint;
   data:[ubyte];
   is_dense:bool;
-  labels_general:[string];
+  labels_general:[seerep.fb.LabelWithInstance];
   labels_bb:[seerep.fb.BoundingBoxLabeled];
 }

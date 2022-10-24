@@ -19,14 +19,11 @@ std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CorePointCloud::readDatase
   const std::scoped_lock lock(*m_write_mtx);
 
   std::string hdf5DatasetPath = HDF5_GROUP_POINTCLOUD + "/" + uuid;
-  std::string hdf5DatasetRawDataPath = hdf5DatasetPath + "/" + seerep_hdf5_core::Hdf5CorePointCloud::RAWDATA;
 
-  if (!m_file->exist(hdf5DatasetPath) || !m_file->exist(hdf5DatasetRawDataPath))
+  if (!m_file->exist(hdf5DatasetPath))
     return std::nullopt;
 
   std::shared_ptr<HighFive::Group> group_ptr = std::make_shared<HighFive::Group>(m_file->getGroup(hdf5DatasetPath));
-  std::shared_ptr<HighFive::DataSet> data_set_ptr =
-      std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DatasetRawDataPath));
 
   seerep_core_msgs::DatasetIndexable data;
 
@@ -38,7 +35,7 @@ std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CorePointCloud::readDatase
   group_ptr->getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::HEADER_STAMP_NANOS).read(data.header.timestamp.nanos);
 
   std::vector<float> bb;
-  group_ptr->getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX).write(bb);
+  group_ptr->getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX).read(bb);
   data.boundingbox.min_corner().set<0>(bb.at(0));
   data.boundingbox.min_corner().set<1>(bb.at(1));
   data.boundingbox.min_corner().set<2>(bb.at(2));

@@ -68,8 +68,7 @@ void Core::recreateProjects()
   {
     if (entry.path().filename().extension() == ".h5")
     {
-      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
-          << "found " << entry.path().string() << " in HDF5 file.";
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "found " << entry.path().string();
 
       try
       {

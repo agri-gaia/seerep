@@ -53,7 +53,7 @@ void Hdf5FbGeneral::writeBoundingBoxLabeled(
     const std::string& datatypeGroup, const std::string& uuid,
     const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>>* boundingboxLabeled)
 {
-  if (boundingboxLabeled && !boundingboxLabeled->size() == 0)
+  if (boundingboxLabeled && boundingboxLabeled->size() != 0)
   {
     std::string id = datatypeGroup + "/" + uuid;
 
@@ -93,7 +93,7 @@ void Hdf5FbGeneral::writeBoundingBox2DLabeled(
 {
   std::string id = datatypeGroup + "/" + uuid;
 
-  if (boundingbox2DLabeled && !boundingbox2DLabeled->size() == 0)
+  if (boundingbox2DLabeled && boundingbox2DLabeled->size() != 0)
   {
     std::vector<std::string> labels;
     std::vector<std::vector<double>> boundingBoxes;
@@ -130,7 +130,7 @@ void Hdf5FbGeneral::writeLabelsGeneral(
 {
   std::string id = datatypeGroup + "/" + uuid;
 
-  if (labelsGeneral && !labelsGeneral->size() == 0)
+  if (labelsGeneral && labelsGeneral->size() != 0)
   {
     std::vector<std::string> labels;
     std::vector<std::string> instances;

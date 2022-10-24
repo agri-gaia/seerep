@@ -35,6 +35,7 @@ set(MY_FBS_FILES
   fbs/point_service.fbs
   fbs/tf_service.fbs
   fbs/transfer_sensor_msgs.fbs
+  fbs/point_cloud_service.fbs
 )
 
 build_flatbuffers("${MY_FBS_FILES}" "${SeerepMsgs_FLATBUFFERS_IMPORT_DIRS}" fbschemas "" "${CMAKE_CURRENT_BINARY_DIR}/fbs" "${CMAKE_CURRENT_BINARY_DIR}/fbs" "" )

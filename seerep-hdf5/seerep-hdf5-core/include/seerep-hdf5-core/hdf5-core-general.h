@@ -12,6 +12,7 @@
 #include <boost/geometry.hpp>
 #include <mutex>
 #include <optional>
+#include <type_traits>
 
 // logging
 #include <boost/log/sources/severity_logger.hpp>
@@ -78,14 +79,36 @@ public:
   void readLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid, std::vector<std::string>& labels,
                          std::vector<std::string>& instances);
 
-  // //################
-  // // Project
-  // //################
+  //################
+  // Project
+  //################
   void writeProjectname(const std::string& projectname);
   std::string readProjectname();
 
   void writeProjectFrameId(const std::string& frameId);
   std::string readProjectFrameId();
+
+  //################
+  // Hdf5
+  //################
+  /**
+   * @brief Get a shared pointer to a hdf5 group
+   *
+   * @param hdf5GroupPath path to the data group
+   * @param create create a new group if the group path can't be found?
+   * @return std::shared_ptr<HighFive::Group> shared pointer to the group
+   */
+  std::shared_ptr<HighFive::Group> getHdf5Group(const std::string& hdf5GroupPath, bool create = true);
+  /**
+   * @brief Get a shared pointer to a hdf5 data set specified by the hdf5DataSetPath
+   *
+   * @tparam T type of the dataset
+   * @param hdf5DataSetPath path to the dataset
+   * @param dataSpace the data space to specify the dimensions of the dataset
+   * @return std::shared_ptr<HighFive::DataSet> shared pointer to the data set
+   */
+  template <class T>
+  std::shared_ptr<HighFive::DataSet> getHdf5DataSet(const std::string& hdf5DataSetPath, HighFive::DataSpace& dataSpace);
 
 private:
   void readLabel(const std::string& id, const std::string labelType, std::vector<std::string>& labels);
@@ -112,6 +135,7 @@ public:
   inline static const std::string LABELBB = "labelBB";
   inline static const std::string LABELBBBOXES = "labelBBBoxes";
   inline static const std::string LABELBBINSTANCES = "labelBBInstances";
+  inline static const std::string POINTS = "points";
 
 protected:
   std::shared_ptr<HighFive::File> m_file;

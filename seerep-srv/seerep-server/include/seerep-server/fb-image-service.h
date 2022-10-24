@@ -30,9 +30,6 @@ public:
       flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response) override;
 
 private:
-  void createResponse(std::string msg, seerep::fb::TRANSMISSION_STATE state,
-                      flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response);
-
   std::shared_ptr<seerep_core_fb::CoreFbImage> imageFb;
   boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
 };

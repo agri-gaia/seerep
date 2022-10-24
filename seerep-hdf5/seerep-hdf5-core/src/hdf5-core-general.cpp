@@ -366,4 +366,28 @@ void Hdf5CoreGeneral::readInstances(const std::string& id, const std::string ins
   datasetInstances.read(instances);
 }
 
+std::shared_ptr<HighFive::Group> Hdf5CoreGeneral::getHdf5Group(const std::string& hdf5GroupPath, bool create)
+{
+  try
+  {
+    checkExists(hdf5GroupPath);
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
+        << "hdf5 group" << hdf5GroupPath << " already exists!";
+    return std::make_shared<HighFive::Group>(m_file->getGroup(hdf5GroupPath));
+  }
+  catch (std::invalid_argument const& e)
+  {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
+        << "hdf5 group " << hdf5GroupPath << " does not exist! Creating a new group";
+    if (create)
+    {
+      return std::make_shared<HighFive::Group>(m_file->createGroup(hdf5GroupPath));
+    }
+    else
+    {
+      return nullptr;
+    }
+  }
+}
+
 }  // namespace seerep_hdf5_core

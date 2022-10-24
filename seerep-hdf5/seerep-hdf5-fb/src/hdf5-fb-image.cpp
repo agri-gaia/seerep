@@ -73,7 +73,7 @@ void Hdf5FbImage::writeImage(const std::string& id, const seerep::fb::Image& ima
   }
 
   data_set_ptr->write(tmp);
-  writeHeaderAttributes(*data_set_ptr, *image.header());
+  writeHeaderAttributes(*data_set_ptr, image.header());
 
   writeBoundingBox2DLabeled(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id, image.labels_bb());
   writeLabelsGeneral(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id, image.labels_general());
@@ -155,7 +155,7 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "NOT loading the data. Just Meta-Data.";
   }
-  auto headerOffset = readHeaderAttributes(*data_set_ptr, id, builder);
+  auto headerOffset = readHeaderAttributes(builder, *data_set_ptr, id);
 
   std::vector<std::string> boundingBoxesLabels;
   std::vector<std::vector<double>> boundingBoxes;

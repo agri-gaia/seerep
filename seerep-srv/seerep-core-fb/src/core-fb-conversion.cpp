@@ -48,7 +48,7 @@ seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::Im
 {
   seerep_core_msgs::DatasetIndexable dataForIndices;
 
-  fromFbDataHeader(img.header(), dataForIndices.header);
+  fromFbDataHeader(img.header(), dataForIndices.header, seerep_core_msgs::Datatype::Image);
 
   // set bounding box for images to 0. assume no spatial extent
   dataForIndices.boundingbox.min_corner().set<0>(0);
@@ -71,7 +71,7 @@ seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::Im
   dataForIndices.labelsWithInstances.reserve(labelSizeAll);
 
   fromFbDataLabelsGeneral(img.labels_general(), dataForIndices.labelsWithInstances);
-  fromFbDataLabelsGeneral(img.labels_bb(), dataForIndices.labelsWithInstances);
+  fromFbDataLabelsBb2d(img.labels_bb(), dataForIndices.labelsWithInstances);
 
   return dataForIndices;
 }
@@ -79,7 +79,7 @@ seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::Po
 {
   seerep_core_msgs::DatasetIndexable dataForIndices;
 
-  fromFbDataHeader(point->header(), dataForIndices.header);
+  fromFbDataHeader(point->header(), dataForIndices.header, seerep_core_msgs::Datatype::Point);
 
   // set bounding box for point to point coordinates. assume no spatial extent
   dataForIndices.boundingbox.min_corner().set<0>(point->point()->x());
@@ -98,6 +98,29 @@ seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::Po
     dataForIndices.labelsWithInstances.reserve(labelSizeAll);
     fromFbDataLabelsGeneral(point->labels_general(), dataForIndices.labelsWithInstances);
   }
+
+  return dataForIndices;
+}
+
+seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::PointCloud2& cloud)
+{
+  seerep_core_msgs::DatasetIndexable dataForIndices;
+  fromFbDataHeader(cloud.header(), dataForIndices.header, seerep_core_msgs::Datatype::PointCloud);
+
+  // semantic
+  int labelSizeAll = 0;
+  if (cloud.labels_general())
+  {
+    labelSizeAll += cloud.labels_general()->size();
+  }
+  if (cloud.labels_bb())
+  {
+    labelSizeAll += cloud.labels_bb()->size();
+  }
+  dataForIndices.labelsWithInstances.reserve(labelSizeAll);
+
+  fromFbDataLabelsGeneral(cloud.labels_general(), dataForIndices.labelsWithInstances);
+  fromFbDataLabelsBb(cloud.labels_bb(), dataForIndices.labelsWithInstances);
 
   return dataForIndices;
 }
@@ -241,7 +264,8 @@ bool CoreFbConversion::fromFbQueryWithoutData(const seerep::fb::Query* query)
   return false;
 }
 
-void CoreFbConversion::fromFbDataHeader(const seerep::fb::Header* header, seerep_core_msgs::Header& coreHeader)
+void CoreFbConversion::fromFbDataHeader(const seerep::fb::Header* header, seerep_core_msgs::Header& coreHeader,
+                                        seerep_core_msgs::Datatype&& datatype)
 {
   if (flatbuffers::IsFieldPresent(header, seerep::fb::Header::VT_UUID_MSGS))
   {
@@ -252,7 +276,7 @@ void CoreFbConversion::fromFbDataHeader(const seerep::fb::Header* header, seerep
     coreHeader.uuidData = boost::uuids::random_generator()();
   }
 
-  coreHeader.datatype = seerep_core_msgs::Datatype::Image;
+  coreHeader.datatype = datatype;
   coreHeader.frameId = header->frame_id()->str();
   coreHeader.timestamp.seconds = header->stamp()->seconds();
   coreHeader.timestamp.nanos = header->stamp()->nanos();
@@ -300,7 +324,7 @@ void CoreFbConversion::fromFbDataLabelsGeneral(
   }
 }
 
-void CoreFbConversion::fromFbDataLabelsGeneral(
+void CoreFbConversion::fromFbDataLabelsBb2d(
     const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>>* labelsBB2d,
     std::vector<seerep_core_msgs::LabelWithInstance>& labelWithInstance)
 {
@@ -319,6 +343,30 @@ void CoreFbConversion::fromFbDataLabelsGeneral(
         uuidInstance = boost::uuids::nil_uuid();
       }
 
+      labelWithInstance.push_back(seerep_core_msgs::LabelWithInstance{
+          .label = label->labelWithInstance()->label()->str(), .uuidInstance = uuidInstance });
+    }
+  }
+}
+
+void CoreFbConversion::fromFbDataLabelsBb(
+    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>>* labelsBB,
+    std::vector<seerep_core_msgs::LabelWithInstance>& labelWithInstance)
+{
+  if (labelsBB)
+  {
+    for (auto label : *labelsBB)
+    {
+      boost::uuids::string_generator gen;
+      boost::uuids::uuid uuidInstance;
+      try
+      {
+        uuidInstance = gen(label->labelWithInstance()->instanceUuid()->str());
+      }
+      catch (std::runtime_error const& e)
+      {
+        uuidInstance = boost::uuids::nil_uuid();
+      }
       labelWithInstance.push_back(seerep_core_msgs::LabelWithInstance{
           .label = label->labelWithInstance()->label()->str(), .uuidInstance = uuidInstance });
     }

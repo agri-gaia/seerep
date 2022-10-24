@@ -53,6 +53,7 @@ add_executable(${PROJECT_NAME}_server
 	src/fb-tf-service.cpp
 	src/fb-image-service.cpp
 	src/fb-instance-service.cpp
+	src/fb-point-cloud-service.cpp
 )
 
 
