@@ -118,12 +118,17 @@ public:
    */
   std::shared_ptr<HighFive::File> getHdf5File(const boost::uuids::uuid& projectuuid);
 
-private:
   /**
    * @brief create the project object for each HDF5 file in the data folder
    */
-  void recreateProjects();
+  void loadProjectsInFolder();
 
+  /**
+   * @brief removes the project from the seerep server and deletes the HDF5 file
+   */
+  void deleteProject(boost::uuids::uuid uuid);
+
+private:
   /**
    * @brief Returns an iterator to the project with the given uuid. Throws an error if not found
    * @param projectuuid the UUID of the project to find

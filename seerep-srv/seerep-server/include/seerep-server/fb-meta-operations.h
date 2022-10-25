@@ -17,9 +17,14 @@ public:
 
   grpc::Status CreateProject(grpc::ServerContext* context,
                              const flatbuffers::grpc::Message<seerep::fb::ProjectCreation>* request,
-                             flatbuffers::grpc::Message<seerep::fb::ProjectInfo>* response);
+                             flatbuffers::grpc::Message<seerep::fb::ProjectInfo>* response) override;
   grpc::Status GetProjects(grpc::ServerContext* context, const flatbuffers::grpc::Message<seerep::fb::Empty>* request,
-                           flatbuffers::grpc::Message<seerep::fb::ProjectInfos>* response);
+                           flatbuffers::grpc::Message<seerep::fb::ProjectInfos>* response) override;
+  grpc::Status LoadProjects(grpc::ServerContext* context, const flatbuffers::grpc::Message<seerep::fb::Empty>* request,
+                            flatbuffers::grpc::Message<seerep::fb::Empty>* response) override;
+  grpc::Status DeleteProject(grpc::ServerContext* context,
+                             const flatbuffers::grpc::Message<seerep::fb::ProjectInfo>* request,
+                             flatbuffers::grpc::Message<seerep::fb::Empty>* response) override;
 
 private:
   std::shared_ptr<seerep_core::Core> seerepCore;
