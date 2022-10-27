@@ -2,7 +2,11 @@ import sys
 
 from fb import (
     Boundingbox,
+    Boundingbox2D,
+    BoundingBox2DLabeled,
+    BoundingBoxes2DLabeledStamped,
     BoundingBoxLabeled,
+    BoundingboxStamped,
     Empty,
     Header,
     LabelWithInstance,
@@ -79,12 +83,14 @@ def createTimeStamp(builder, seconds, nanoseconds=0):
     return Timestamp.End(builder)
 
 
-def createHeader(builder, timeStamp=None, frame=None, projectUuid=None):
+def createHeader(builder, timeStamp=None, frame=None, projectUuid=None, msgUuid=None):
     '''Creates a message header in flatbuffers, all parameters are optional'''
     if frame:
         frameStr = builder.CreateString(frame)
     if projectUuid:
         projectUuidStr = builder.CreateString(projectUuid)
+    if msgUuid:
+        msgUuidStr = builder.CreateString(msgUuid)
     Header.Start(builder)
     if frame:
         Header.AddFrameId(builder, frameStr)
@@ -92,6 +98,8 @@ def createHeader(builder, timeStamp=None, frame=None, projectUuid=None):
         Header.AddStamp(builder, timeStamp)
     if projectUuid:
         Header.AddUuidProject(builder, projectUuidStr)
+    if msgUuid:
+        Header.AddUuidMsgs(builder, msgUuidStr)
     return Header.End(builder)
 
 
@@ -136,6 +144,55 @@ def createLabelsWithInstance(builder, labels, instanceUuids):
     return labelsGeneral
 
 
+def createPoint2d(builder, x, y):
+    '''Creates a 2D point in flatbuffers'''
+    Point.Start(builder)
+    Point.AddX(builder, x)
+    Point.AddY(builder, y)
+    return Point.End(builder)
+
+
+def createBoundingBox2d(builder, point2dMin, point2dMax):
+    '''Creates a 3D bounding box in flatbuffers'''
+    Boundingbox.Start(builder)
+    Boundingbox.AddPointMin(builder, point2dMin)
+    Boundingbox.AddPointMax(builder, point2dMax)
+    return Boundingbox.End(builder)
+
+
+def createBoundingBox2dLabeled(builder, instance, boundingBox):
+    '''Creates a labeled bounding box 2d in flatbuffers'''
+    BoundingBox2DLabeled.Start(builder)
+    BoundingBox2DLabeled.AddLabelWithInstance(builder, instance)
+    BoundingBox2DLabeled.AddBoundingBox(builder, boundingBox)
+    return BoundingBox2DLabeled.End(builder)
+
+
+def createBoundingBoxes2d(builder, minPoints, maxPoints):
+    assert len(minPoints) == len(maxPoints)
+    boundingBoxes = []
+    for pointMin, pointMax in zip(minPoints, maxPoints):
+        boundingBoxes.append(createBoundingBox2d(builder, pointMin, pointMax))
+    return boundingBoxes
+
+
+def createBoundingBoxes2dLabeled(builder, instances, boundingBoxes):
+    '''Creates multiple labeled bounding boxes'''
+    assert len(instances) == len(boundingBoxes)
+    boundingBoxes2dLabeled = []
+    for instance, boundingBox in zip(instances, boundingBoxes):
+        boundingBoxes2dLabeled.append(createBoundingBox2dLabeled(builder, instance, boundingBox))
+    return boundingBoxes2dLabeled
+
+
+def createBoundingBox2dLabeledStamped(builder, header, boundingBox2dLabeledVector):
+    '''Creates a labeled bounding box 2d in flatbuffers'''
+    BoundingBoxes2DLabeledStamped.Start(builder)
+    BoundingBoxes2DLabeledStamped.AddHeader(builder, header)
+    BoundingBoxes2DLabeledStamped.AddLabelsBb(builder, boundingBox2dLabeledVector)
+    return BoundingBoxes2DLabeledStamped.End(builder)
+
+
 def createPoint(builder, x, y, z):
     '''Creates a 3D point in flatbuffers'''
     Point.Start(builder)
@@ -145,20 +202,27 @@ def createPoint(builder, x, y, z):
     return Point.End(builder)
 
 
-def createBoundingBox(builder, header, pointMin, pointMax):
+def createBoundingBox(builder, pointMin, pointMax):
     '''Creates a 3D bounding box in flatbuffers'''
     Boundingbox.Start(builder)
-    Boundingbox.AddHeader(builder, header)
     Boundingbox.AddPointMin(builder, pointMin)
     Boundingbox.AddPointMax(builder, pointMax)
     return Boundingbox.End(builder)
 
 
-def createBoundingBoxes(builder, header, minPoints, maxPoints):
+def createBoundingBoxStamped(builder, header, pointMin, pointMax):
+    '''Creates a stamped 3D bounding box in flatbuffers'''
+    BoundingboxStamped.Start(builder)
+    BoundingboxStamped.AddHeader(builder, header)
+    BoundingboxStamped.AddBoundingbox(builder, createBoundingBox(builder, pointMin, pointMax))
+    return BoundingboxStamped.End(builder)
+
+
+def createBoundingBoxes(builder, minPoints, maxPoints):
     assert len(minPoints) == len(maxPoints)
     boundingBoxes = []
     for pointMin, pointMax in zip(minPoints, maxPoints):
-        boundingBoxes.append(createBoundingBox(builder, header, pointMin, pointMax))
+        boundingBoxes.append(createBoundingBox(builder, pointMin, pointMax))
     return boundingBoxes
 
 

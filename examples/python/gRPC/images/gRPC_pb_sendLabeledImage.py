@@ -71,15 +71,15 @@ for n in range(10):
     theImage.step = 3 * lim
     theImage.data = bytes(rgb)
 
-    bb1 = bb.BoundingBox2DLabeled()
-    for i in range(0, 2):
-        bb1.labelWithInstance.label = "testlabel" + str(i)
-        bb1.labelWithInstance.instanceUuid = str(uuid.uuid4())
-        bb1.boundingBox.point_min.x = 0.01 + i / 10
-        bb1.boundingBox.point_min.y = 0.02 + i / 10
-        bb1.boundingBox.point_max.x = 0.03 + i / 10
-        bb1.boundingBox.point_max.y = 0.04 + i / 10
-        theImage.labels_bb.append(bb1)
+    # bb1 = bb.BoundingBox2DLabeled()
+    # for i in range(0, 2):
+    #     bb1.labelWithInstance.label = "testlabel" + str(i)
+    #     bb1.labelWithInstance.instanceUuid = str(uuid.uuid4())
+    #     bb1.boundingBox.point_min.x = 0.01 + i / 10
+    #     bb1.boundingBox.point_min.y = 0.02 + i / 10
+    #     bb1.boundingBox.point_max.x = 0.03 + i / 10
+    #     bb1.boundingBox.point_max.y = 0.04 + i / 10
+    #     theImage.labels_bb.append(bb1)
 
     for i in range(0, 2):
         label = labelWithInstance.LabelWithInstance()
