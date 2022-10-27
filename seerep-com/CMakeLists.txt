@@ -52,7 +52,7 @@ endforeach()
 add_custom_target(fbpyschemas)
 add_custom_command(
         TARGET fbpyschemas
-        COMMAND flatc -p --grpc "*.fbs"
+        COMMAND flatc -p -T --grpc "*.fbs"
         DEPENDS fbpyschemas
         WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/fbs/")
 
@@ -138,6 +138,13 @@ write_basic_package_version_file(
 # install the generated python sources
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
         FILES_MATCHING PATTERN "*.py")
+
+# install the generated typescript sources
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+        FILES_MATCHING PATTERN "*.ts")
+# install the generated javascript sources
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+        FILES_MATCHING PATTERN "*.js")
 
 # install the configuration file
 install(FILES
