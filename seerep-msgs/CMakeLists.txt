@@ -200,6 +200,9 @@ write_basic_package_version_file(
 # install the generated python sources
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
 		FILES_MATCHING PATTERN "*.py")
+# install the generated typescript sources
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+FILES_MATCHING PATTERN "*.ts")
 
 set(SEEREP_COM_DIR ${CMAKE_CURRENT_BINARY_DIR}/../seerep-com/fbs)
 
