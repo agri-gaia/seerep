@@ -16,8 +16,10 @@ find_package(Boost REQUIRED)
 
 set(MY_PROTO_FILES
 	protos/boundingbox_labeled.proto
+	protos/boundingbox_stamped.proto
 	protos/boundingbox.proto
 	protos/boundingbox2d_labeled.proto
+	protos/boundingbox2d_stamped.proto
 	protos/boundingbox2d.proto
 	protos/frame_infos.proto
 	protos/frame_query.proto

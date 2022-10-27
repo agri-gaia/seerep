@@ -5,6 +5,7 @@ import sys
 import flatbuffers
 import grpc
 from fb import (
+    Boundingbox,
     BoundingboxStamped,
     Empty,
     Header,
@@ -61,10 +62,14 @@ Header.Start(builder)
 Header.AddFrameId(builder, frameId)
 header = Header.End(builder)
 
+Boundingbox.Start(builder)
+Boundingbox.AddPointMin(builder, pointMin)
+Boundingbox.AddPointMax(builder, pointMax)
+boundingbox = Boundingbox.End(builder)
+
 BoundingboxStamped.Start(builder)
-BoundingboxStamped.AddPointMin(builder, pointMin)
-BoundingboxStamped.AddPointMax(builder, pointMax)
 BoundingboxStamped.AddHeader(builder, header)
+BoundingboxStamped.AddBoundingbox(builder, boundingbox)
 boundingboxStamped = BoundingboxStamped.End(builder)
 
 Timestamp.Start(builder)

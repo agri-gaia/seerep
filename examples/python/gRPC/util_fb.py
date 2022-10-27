@@ -309,7 +309,7 @@ def createQuery(
 
     Query.Start(builder)
     if boundingBox:
-        Query.AddBoundingbox(builder, boundingBox)
+        Query.AddBoundingboxStamped(builder, boundingBox)
     if timeInterval:
         Query.AddTimeinterval(builder, timeInterval)
     if labels:
