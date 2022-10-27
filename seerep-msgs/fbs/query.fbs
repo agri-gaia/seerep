@@ -1,11 +1,11 @@
 
 include "time_interval.fbs";
-include "boundingbox.fbs";
+include "boundingbox_stamped.fbs";
 
 namespace seerep.fb;
 
 table Query {
-  boundingbox:seerep.fb.Boundingbox;
+  boundingboxStamped:seerep.fb.BoundingboxStamped;
   timeinterval:seerep.fb.TimeInterval;
   label:[string];
   projectuuid:[string];
