@@ -100,7 +100,7 @@ function(build_flatbuffers flatbuffers_schemas
         COMMAND ${FLATC} ${FLATC_SCHEMA_ARGS}
         -o ${generated_includes_dir}
         ${include_params}
-        -c -p ${schema}
+        -c -p -T ${schema}
         # --filename-suffix ".fb"
         DEPENDS ${FLATC_TARGET} ${schema} ${additional_dependencies}
         WORKING_DIRECTORY "${working_dir}")
