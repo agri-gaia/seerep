@@ -64,6 +64,20 @@ grpc::Status FbImageService::GetImage(grpc::ServerContext* context,
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
   }
+  catch (const std::exception& e)
+  {
+    // specific handling for all exceptions extending std::exception, except
+    // std::runtime_error which is handled explicitly
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (...)
+  {
+    // catch any other errors (that we have no information about)
+    std::string msg = "Unknown failure occurred. Possible memory corruption";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
+  }
 
   return grpc::Status::OK;
 }
@@ -97,6 +111,22 @@ grpc::Status FbImageService::TransferImage(grpc::ServerContext* context,
         seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
 
         return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+      }
+      catch (const std::exception& e)
+      {
+        // specific handling for all exceptions extending std::exception, except
+        // std::runtime_error which is handled explicitly
+        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+        seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+        return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+      }
+      catch (...)
+      {
+        // catch any other errors (that we have no information about)
+        std::string msg = "Unknown failure occurred. Possible memory corruption";
+        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+        seerep_server_util::createResponseFb(msg, seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+        return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
       }
     }
     else
@@ -151,13 +181,27 @@ grpc::Status FbImageService::AddBoundingBoxes2dLabeled(
 
           return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
         }
+        catch (const std::exception& e)
+        {
+          // specific handling for all exceptions extending std::exception, except
+          // std::runtime_error which is handled explicitly
+          BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+          seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+          return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+        }
+        catch (...)
+        {
+          // catch any other errors (that we have no information about)
+          std::string msg = "Unknown failure occurred. Possible memory corruption";
+          BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+          seerep_server_util::createResponseFb(msg, seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+          return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
+        }
       }
     }
   }
-
   seerep_server_util::createResponseFb(answer, seerep::fb::TRANSMISSION_STATE_SUCCESS, response);
 
   return grpc::Status::OK;
 }
-
 } /* namespace seerep_server */

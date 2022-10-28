@@ -65,7 +65,32 @@ grpc::Status FbMetaOperations::LoadProjects(grpc::ServerContext* context,
   (void)request;  // ignore that variable without causing warnings
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
       << "loading all projects in the working directory... ";
-  seerepCore->loadProjectsInFolder();
+
+  try
+  {
+    seerepCore->loadProjectsInFolder();
+  }
+  catch (std::runtime_error const& e)
+  {
+    // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
+    // also catching core doesn't have project with uuid error
+    std::cout << e.what() << std::endl;
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (const std::exception& e)
+  {
+    // specific handling for all exceptions extending std::exception, except
+    // std::runtime_error which is handled explicitly
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (...)
+  {
+    // catch any other errors (that we have no information about)
+    std::string msg = "Unknown failure occurred. Possible memory corruption";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
+  }
 
   flatbuffers::grpc::MessageBuilder builder;
   seerep::fb::CreateEmpty(builder);
@@ -95,6 +120,20 @@ grpc::Status FbMetaOperations::DeleteProject(grpc::ServerContext* context,
     // also catching core doesn't have project with uuid error
     std::cout << e.what() << std::endl;
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (const std::exception& e)
+  {
+    // specific handling for all exceptions extending std::exception, except
+    // std::runtime_error which is handled explicitly
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (...)
+  {
+    // catch any other errors (that we have no information about)
+    std::string msg = "Unknown failure occurred. Possible memory corruption";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
   }
   flatbuffers::grpc::MessageBuilder builder;
   seerep::fb::CreateEmpty(builder);
