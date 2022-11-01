@@ -20,7 +20,7 @@ import util_fb
 builder = flatbuffers.Builder(1024)
 channel = util.get_gRPC_channel("local")
 
-projectuuid = util_fb.getProject(builder, channel, 'testproject')
+projectuuid = util_fb.getProject(builder, channel, 'simulatedDataWithInstances')
 
 if not projectuuid:
     exit
@@ -43,10 +43,16 @@ for responseBuf in stub.GetImage(bytes(buf)):
     )
 
     # create bounding box labels
+    x1, y1 = np.random.rand(), np.random.rand()
+    x2, y2 = np.random.rand(), np.random.rand()
+
+    print("SENDING ", x1, x2)
+    print("SENDING ", y1, y2)
+
     boundingBoxes = util_fb.createBoundingBoxes2d(
         builder,
-        [util_fb.createPoint2d(builder, np.random.rand(), np.random.rand()) for _ in range(NUM_BB_LABELS)],
-        [util_fb.createPoint2d(builder, np.random.rand(), np.random.rand()) for _ in range(NUM_BB_LABELS)],
+        [util_fb.createPoint2d(builder, x1, y1) for _ in range(NUM_BB_LABELS)],
+        [util_fb.createPoint2d(builder, x2, y2) for _ in range(NUM_BB_LABELS)],
     )
     labelWithInstances = util_fb.createLabelsWithInstance(
         builder,
