@@ -5,13 +5,19 @@ namespace seerep_ros_examples
 Hdf5Node::Hdf5Node(const ros::NodeHandle& node_handle, const ros::NodeHandle& private_node_handle)
   : nh_{ node_handle }, pnh_{ private_node_handle }
 {
-  std::string basePath;
-  if (!pnh_.getParam("basePath", basePath))
+  std::string path;
+  if (!pnh_.getParam("path", path))
   {
-    throw std::runtime_error("No base path for hdf5 files specified");
+    throw std::runtime_error("No path specified");
   }
 
-  hdf5_access_ = std::make_unique<seerep_hdf5_ros::Hdf5Ros>(basePath);
+  std::string filename;
+  if (!pnh_.getParam("filename", filename))
+  {
+    throw std::runtime_error("No filename for the hdf5 file");
+  }
+
+  hdf5_access_ = std::make_unique<seerep_hdf5_ros::Hdf5Ros>(path, filename);
 
   std::vector<std::string> topics;
   if (!pnh_.getParam("topics", topics))

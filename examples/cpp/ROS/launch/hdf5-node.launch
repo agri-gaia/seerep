@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <launch>
     <arg name="topics" default="['/image']"/>
-    <arg name="basePath" default="/seerep/seerep-data/"/>
+    <arg name="path" default="/seerep/seerep-data/"/>
+    <arg name="filename" default="hdf5-dump"/>
     <node name="seerep_ros_examples_hdf5_node" pkg="seerep_ros_examples" type="seerep_ros_examples_hdf5_node" output="screen">
         <rosparam param="topics" subst_value="True">$(arg topics)</rosparam>
-        <rosparam param="basePath" subst_value="True">$(arg basePath)</rosparam>
+        <rosparam param="path" subst_value="True">$(arg path)</rosparam>
+        <rosparam param="filename" subst_value="True">$(arg filename)</rosparam>
     </node>
 </launch>

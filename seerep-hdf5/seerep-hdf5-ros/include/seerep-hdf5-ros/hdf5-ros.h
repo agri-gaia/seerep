@@ -3,7 +3,6 @@
 
 // std
 #include <memory>
-#include <sstream>
 #include <string>
 
 // HighFive
@@ -21,14 +20,14 @@ class Hdf5Ros
 {
 public:
   Hdf5Ros() = delete;
-  explicit Hdf5Ros(const std::string& basePath);
+  explicit Hdf5Ros(const std::string& path, const std::string& filename);
 
-  bool dumpImage(const sensor_msgs::Image& image);
-  bool dumpHeader(std_msgs::Header& header);
+  bool dumpImage(const sensor_msgs::Image& image) const;
+  bool dumpHeader(const std_msgs::Header& header, const std::string& dataset_path) const;
 
 private:
-  std::string basePath_;
-  std::string imagePath_;
+  std::string path_;
+  std::string filename_;
 
   std::shared_ptr<HighFive::File> hdf5_file_;
 };
