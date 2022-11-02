@@ -242,47 +242,47 @@ geometry_msgs::TransformStamped createTransformStamped()
  * */
 class rosToFbConversionTest : public testing::Test
 {
-protected:
-  static std_msgs::Header original_header;
-  static std_msgs::Header converted_header;
+public:
+  std_msgs::Header original_header;
+  std_msgs::Header converted_header;
 
-  static sensor_msgs::PointField original_pf;
-  static sensor_msgs::PointField converted_pf;
+  sensor_msgs::PointField original_pf;
+  sensor_msgs::PointField converted_pf;
 
-  static sensor_msgs::PointCloud2 original_pc2;
-  static sensor_msgs::PointCloud2 converted_pc2;
+  sensor_msgs::PointCloud2 original_pc2;
+  sensor_msgs::PointCloud2 converted_pc2;
 
-  static sensor_msgs::Image original_img;
-  static sensor_msgs::Image converted_img;
+  sensor_msgs::Image original_img;
+  sensor_msgs::Image converted_img;
 
-  static geometry_msgs::Point original_p;
-  static geometry_msgs::Point converted_p;
+  geometry_msgs::Point original_p;
+  geometry_msgs::Point converted_p;
 
-  static geometry_msgs::Quaternion original_q;
-  static geometry_msgs::Quaternion converted_q;
+  geometry_msgs::Quaternion original_q;
+  geometry_msgs::Quaternion converted_q;
 
-  static geometry_msgs::Pose original_pose;
-  static geometry_msgs::Pose converted_pose;
+  geometry_msgs::Pose original_pose;
+  geometry_msgs::Pose converted_pose;
 
-  static geometry_msgs::PoseStamped original_pose_stamped;
-  static geometry_msgs::PoseStamped converted_pose_stamped;
+  geometry_msgs::PoseStamped original_pose_stamped;
+  geometry_msgs::PoseStamped converted_pose_stamped;
 
-  static geometry_msgs::Vector3 original_v;
-  static geometry_msgs::Vector3 converted_v;
+  geometry_msgs::Vector3 original_v;
+  geometry_msgs::Vector3 converted_v;
 
-  static geometry_msgs::Vector3Stamped original_v3_stamped;
-  static geometry_msgs::Vector3Stamped converted_v3_stamped;
+  geometry_msgs::Vector3Stamped original_v3_stamped;
+  geometry_msgs::Vector3Stamped converted_v3_stamped;
 
-  static geometry_msgs::Transform original_t;
-  static geometry_msgs::Transform converted_t;
+  geometry_msgs::Transform original_t;
+  geometry_msgs::Transform converted_t;
 
-  static geometry_msgs::TransformStamped original_t_stamped;
-  static geometry_msgs::TransformStamped converted_t_stamped;
+  geometry_msgs::TransformStamped original_t_stamped;
+  geometry_msgs::TransformStamped converted_t_stamped;
 
   /**
    * @brief This function instantiates all the attributes and fills them with arbitrary values.
    * */
-  static void SetUpTestSuite()
+  void TestBody()
   {
     /* This function will create all the elements we want to test
      * */
@@ -407,55 +407,8 @@ protected:
   }
 };
 
-// Objects created below are used by the TEST functions
-
-// Header
-std_msgs::Header rosToFbConversionTest::original_header;
-std_msgs::Header rosToFbConversionTest::converted_header;
-
-// PointField
-sensor_msgs::PointField rosToFbConversionTest::original_pf;
-sensor_msgs::PointField rosToFbConversionTest::converted_pf;
-
-// PointCloud2
-sensor_msgs::PointCloud2 rosToFbConversionTest::original_pc2;
-sensor_msgs::PointCloud2 rosToFbConversionTest::converted_pc2;
-
-// Image
-sensor_msgs::Image rosToFbConversionTest::original_img;
-sensor_msgs::Image rosToFbConversionTest::converted_img;
-
-// Point
-geometry_msgs::Point rosToFbConversionTest::original_p;
-geometry_msgs::Point rosToFbConversionTest::converted_p;
-
-// Quaternion
-geometry_msgs::Quaternion rosToFbConversionTest::original_q;
-geometry_msgs::Quaternion rosToFbConversionTest::converted_q;
-
-// Pose
-geometry_msgs::Pose rosToFbConversionTest::original_pose;
-geometry_msgs::Pose rosToFbConversionTest::converted_pose;
-
-// PoseStamped
-geometry_msgs::PoseStamped rosToFbConversionTest::original_pose_stamped;
-geometry_msgs::PoseStamped rosToFbConversionTest::converted_pose_stamped;
-
-// Vector3
-geometry_msgs::Vector3 rosToFbConversionTest::original_v;
-geometry_msgs::Vector3 rosToFbConversionTest::converted_v;
-
-// Vector3Stamped
-geometry_msgs::Vector3Stamped rosToFbConversionTest::original_v3_stamped;
-geometry_msgs::Vector3Stamped rosToFbConversionTest::converted_v3_stamped;
-
-// Transform
-geometry_msgs::Transform rosToFbConversionTest::original_t;
-geometry_msgs::Transform rosToFbConversionTest::converted_t;
-
-// TransformStamped
-geometry_msgs::TransformStamped rosToFbConversionTest::original_t_stamped;
-geometry_msgs::TransformStamped rosToFbConversionTest::converted_t_stamped;
+// object of test class for use in the TEST functions below
+rosToFbConversionTest testClass;
 
 /**
  * @brief Given two ROS std_msgs::Header instances, this function tests their sub attributes of equality.
@@ -466,8 +419,6 @@ void testHeader(std_msgs::Header original_header, std_msgs::Header converted_hea
   EXPECT_EQ(original_header.stamp.sec, converted_header.stamp.sec);
   EXPECT_EQ(original_header.stamp.nsec, converted_header.stamp.nsec);
   EXPECT_STREQ(original_header.frame_id.c_str(), converted_header.frame_id.c_str());
-  // EXPECT_EQ(original_header.uuid_project.c_str, converted_header.uuid_project.c_str);
-  // EXPECT_EQ(original_header.uuid_msgs.c_str, converted_header.uuid_msgs.c_str);
 }
 
 // test header
@@ -477,7 +428,7 @@ void testHeader(std_msgs::Header original_header, std_msgs::Header converted_hea
 TEST_F(rosToFbConversionTest, testHeader)
 {
   // expect that original and converted-from-fb are equal
-  testHeader(original_header, converted_header);
+  testHeader(original_header, testClass.converted_header);
 }
 
 /**
