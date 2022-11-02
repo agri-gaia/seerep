@@ -279,17 +279,11 @@ public:
   geometry_msgs::TransformStamped original_t_stamped;
   geometry_msgs::TransformStamped converted_t_stamped;
 
-  /**
-   * @brief This function instantiates all the attributes and fills them with arbitrary values.
-   * */
-  void TestBody()
+  std::string p_uuid = "aprojuuid";
+  std::string m_uuid = "amsguuid";
+
+  void createHeaderObjects()
   {
-    /* This function will create all the elements we want to test
-     * */
-
-    std::string p_uuid = "aprojuuid";
-    std::string m_uuid = "amsguuid";
-
     // Header Test Start
     // ROS header
     original_header = createHeader();
@@ -303,7 +297,10 @@ public:
     // convert from Flatbuffer to ROS
     converted_header = seerep_ros_conversions_fb::toROS(*fb_header.GetRoot());
     // Header Test End
+  }
 
+  void createPointFieldObjects()
+  {
     // PointField Test Start
     sensor_msgs::PointField original_pf = createPointField();
 
@@ -312,7 +309,10 @@ public:
 
     sensor_msgs::PointField converted_pf = seerep_ros_conversions_fb::toROS(*fb_pointfield.GetRoot());
     // PointField Test End
+  }
 
+  void createPointCloud2Objects()
+  {
     // PointCloud2 Test Start
     original_pc2 = createPointCloud();
 
@@ -321,7 +321,10 @@ public:
 
     converted_pc2 = seerep_ros_conversions_fb::toROS(*fb_pointcloud2.GetRoot());
     // PointCloud2 Test End
+  }
 
+  void createImageObjects()
+  {
     // Image Test Start
     sensor_msgs::Image original_img = createImage();
 
@@ -330,7 +333,10 @@ public:
 
     sensor_msgs::Image converted_img = seerep_ros_conversions_fb::toROS(*fb_image.GetRoot());
     // Image Test End
+  }
 
+  void createPointObjects()
+  {
     // Point Start
     geometry_msgs::Point original_p = createPoint();
 
@@ -339,7 +345,10 @@ public:
 
     geometry_msgs::Point converted_p = seerep_ros_conversions_fb::toROS(*fb_point.GetRoot());
     // Point End
+  }
 
+  void createQauternionObjects()
+  {
     // Quaternion Start
     geometry_msgs::Quaternion original_q = createQuaternion();
 
@@ -348,7 +357,10 @@ public:
 
     geometry_msgs::Quaternion converted_q = seerep_ros_conversions_fb::toROS(*fb_quaternion.GetRoot());
     // Quaternion End
+  }
 
+  void createPoseObjects()
+  {
     // Pose Start
     geometry_msgs::Pose original_pose = createPose();
 
@@ -357,7 +369,10 @@ public:
 
     geometry_msgs::Pose converted_pose = seerep_ros_conversions_fb::toROS(*fb_pose.GetRoot());
     // Pose End
+  }
 
+  void createPointStampedObjects()
+  {
     // PoseStamped Start
     geometry_msgs::PoseStamped original_pose_stamped = createPoseStamped();
 
@@ -366,7 +381,10 @@ public:
 
     geometry_msgs::PoseStamped converted_pose_stamped = seerep_ros_conversions_fb::toROS(*fb_pose_stamped.GetRoot());
     // PoseStamped End
+  }
 
+  void createVector3Objects()
+  {
     // Vector3 Start
     geometry_msgs::Vector3 original_v = createVector3();
 
@@ -375,7 +393,10 @@ public:
 
     geometry_msgs::Vector3 converted_v = seerep_ros_conversions_fb::toROS(*fb_vector3.GetRoot());
     // Vector3 End
+  }
 
+  void createVector3StampedObjects()
+  {
     // Vector3Stamped Start
     geometry_msgs::Vector3Stamped original_v3_stamped = createVector3Stamped();
 
@@ -385,7 +406,10 @@ public:
     geometry_msgs::Vector3Stamped converted_v3_stamped =
         seerep_ros_conversions_fb::toROS(*fb_vector3_stamped.GetRoot());
     // Vector3Stamped End
+  }
 
+  void createTransformObjects()
+  {
     // Transform Start
     geometry_msgs::Transform original_t = createTransform();
 
@@ -394,7 +418,10 @@ public:
 
     geometry_msgs::Transform converted_t = seerep_ros_conversions_fb::toROS(*fb_transform.GetRoot());
     // Transform End
+  }
 
+  void createTransformStampedObjects()
+  {
     // TransformStamped Start
     geometry_msgs::TransformStamped original_t_stamped = createTransformStamped();
 
@@ -404,6 +431,39 @@ public:
     geometry_msgs::TransformStamped converted_t_stamped =
         seerep_ros_conversions_fb::toROS(*fb_transform_stamped.GetRoot());
     // Transform End
+  }
+
+  /**
+   * @brief This function instantiates all the attributes and fills them with arbitrary values.
+   * */
+  void TestBody()
+  {
+    /* This function will create all the elements we want to test
+     * */
+
+    createHeaderObjects();
+
+    createPointFieldObjects();
+
+    createPointCloud2Objects();
+
+    createImageObjects();
+
+    createPointObjects();
+
+    createQauternionObjects();
+
+    createPoseObjects();
+
+    createPointStampedObjects();
+
+    createVector3Objects();
+
+    createVector3StampedObjects();
+
+    createTransformObjects();
+
+    createTransformStampedObjects();
   }
 };
 
