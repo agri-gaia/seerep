@@ -25,42 +25,57 @@ Hdf5Node::Hdf5Node(const ros::NodeHandle& node_handle, const ros::NodeHandle& pr
     throw std::runtime_error("No topics specified to dump");
   }
 
-  for (std::string topic : topics)
+  for (std::string& topic : topics)
   {
-    ROS_INFO_STREAM("Trying to subscribe to topic " << topic);
-  }
-
-  ros::master::V_TopicInfo topic_info;
-  ros::master::getTopics(topic_info);
-
-  for (ros::master::TopicInfo info : topic_info)
-  {
-    auto find_iter = std::find(topics.begin(), topics.end(), info.name);
-    if (find_iter != topics.end())
+    ros::master::TopicInfo topic_info;
+    ROS_INFO_STREAM("Trying to subscribe to topic: " << topic);
+    while (!topicAvailable(topic, topic_info))
     {
-      this->getSubscriber(info.datatype, info.name);
-      topics.erase(find_iter);
+      ROS_INFO_STREAM("Waiting on topic: " << topic);
+      std::this_thread::sleep_for(std::chrono::seconds(POLL_TIME));
+    }
+    std::optional<ros::Subscriber> sub = getSubscriber(topic_info.datatype, topic_info.name);
+    if (sub)
+    {
+      subscribers_[topic_info.name] = *sub;
+      ROS_INFO_STREAM("Subscribed to topic: " << topic_info.name << " of type: " << topic_info.datatype);
     }
   }
 }
 
-void Hdf5Node::getSubscriber(const std::string& message_type, const std::string& topic)
+bool Hdf5Node::topicAvailable(const std::string& topic, ros::master::TopicInfo& info)
+{
+  ros::master::V_TopicInfo topic_info;
+  ros::master::getTopics(topic_info);
+  auto find_iter = std::find_if(topic_info.begin(), topic_info.end(),
+                                [&topic](const ros::master::TopicInfo& info) { return info.name == topic; });
+  if (find_iter != topic_info.end())
+  {
+    info.name = find_iter->name;
+    info.datatype = find_iter->datatype;
+    return true;
+  }
+  return false;
+}
+
+std::optional<ros::Subscriber> Hdf5Node::getSubscriber(const std::string& message_type, const std::string& topic)
 {
   if (message_type == "sensor_msgs/Image")
   {
-    image_subscriber_ = nh_.subscribe<sensor_msgs::Image>(topic, 0, &Hdf5Node::dumpMessage, this);
+    return nh_.subscribe<sensor_msgs::Image>(topic, 0, &Hdf5Node::dumpMessage, this);
     ROS_INFO_STREAM("Subscribed to topic: " << topic << " with message type: " << message_type);
   }
   else
   {
     ROS_ERROR_STREAM("Type" << message_type << " not supported");
+    return std::nullopt;
   }
 }
 
-void Hdf5Node::dumpMessage(const sensor_msgs::Image::ConstPtr& image) const
+void Hdf5Node::dumpMessage(const sensor_msgs::Image::ConstPtr& image)
 {
   hdf5_access_->dumpImage(*image);
-  ROS_INFO("Callback for images called");
+  ROS_INFO("Saved Image");
 }
 
 } /* namespace seerep_ros_examples */

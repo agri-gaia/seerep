@@ -1,10 +1,11 @@
 #ifndef HDF5_NODE_H
 #define HDF5_NODE_H
 
-// include
-#include <iostream>
+// std
+#include <chrono>
 #include <memory>
 #include <optional>
+#include <thread>
 
 // ros
 #include "ros/master.h"
@@ -12,6 +13,8 @@
 
 // seerep
 #include "seerep-hdf5-ros/hdf5-ros.h"
+
+#define POLL_TIME 5  // in seconds
 
 namespace seerep_ros_examples
 {
@@ -27,11 +30,13 @@ private:
 
   std::unique_ptr<seerep_hdf5_ros::Hdf5Ros> hdf5_access_;
 
-  ros::Subscriber image_subscriber_;
+  std::map<std::string, ros::Subscriber> subscribers_;
 
-  void getSubscriber(const std::string& message_type, const std::string& topic);
+  bool topicAvailable(const std::string& topic, ros::master::TopicInfo& info);
 
-  void dumpMessage(const sensor_msgs::Image::ConstPtr& image) const;
+  std::optional<ros::Subscriber> getSubscriber(const std::string& message_type, const std::string& topic);
+
+  void dumpMessage(const sensor_msgs::Image::ConstPtr& image);
 };
 } /* namespace seerep_ros_examples */
 
