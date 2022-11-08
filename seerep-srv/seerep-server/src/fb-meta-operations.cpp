@@ -17,6 +17,14 @@ grpc::Status FbMetaOperations::CreateProject(grpc::ServerContext* context,
   projectInfo.frameId = requestMsg->map_frame_id()->str();
   projectInfo.name = requestMsg->name()->str();
   projectInfo.uuid = boost::uuids::random_generator()();
+
+  // extracting geodetic coordinates attribute information from flatbuffer and saving in seerep core msg struct
+  projectInfo.geodetCoords.coordinateSystem = requestMsg->geodetic_position()->coordinateSystem()->str();
+  projectInfo.geodetCoords.ellipsoid = requestMsg->geodetic_position()->ellipsoid()->str();
+  projectInfo.geodetCoords.longitude = requestMsg->geodetic_position()->longitute();
+  projectInfo.geodetCoords.latitude = requestMsg->geodetic_position()->latitude();
+  projectInfo.geodetCoords.altitude = requestMsg->geodetic_position()->altitude();
+
   seerepCore->createProject(projectInfo);
 
   flatbuffers::grpc::MessageBuilder builder;

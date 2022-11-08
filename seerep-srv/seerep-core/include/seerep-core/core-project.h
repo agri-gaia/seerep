@@ -9,6 +9,7 @@
 
 // seerep-msgs
 #include <seerep-msgs/dataset-indexable.h>
+#include <seerep-msgs/geodetic-coordinates.h>
 #include <seerep-msgs/query-result-project.h>
 #include <seerep-msgs/query-tf.h>
 #include <seerep-msgs/query.h>
@@ -60,7 +61,7 @@ public:
    * @param mapFrameId the frame id of the map frame which is used to create the spatial indices for this project
    */
   CoreProject(const boost::uuids::uuid& uuid, const std::string path, const std::string projectname,
-              const std::string mapFrameId);
+              const std::string mapFrameId, const seerep_core_msgs::geodeticCoordinates geodeticCoords);
   ~CoreProject();
 
   /**
@@ -155,6 +156,8 @@ private:
   std::string m_projectname;
   /** @brief the frame id for the spatial idices of this project */
   std::string m_frameId;
+  /** @brief the geodetic coordinates of the location where the data was collected in this project */
+  seerep_core_msgs::geodeticCoordinates m_geodeticCoordinates;
 
   /** @brief the write mutex for the HDF5 file of this project */
   std::shared_ptr<std::mutex> m_write_mtx;

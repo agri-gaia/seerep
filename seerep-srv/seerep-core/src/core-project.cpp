@@ -11,8 +11,8 @@ CoreProject::CoreProject(const boost::uuids::uuid& uuid, const std::string path)
   recreateDatatypes();
 }
 CoreProject::CoreProject(const boost::uuids::uuid& uuid, const std::string path, const std::string projectname,
-                         const std::string mapFrameId)
-  : m_uuid(uuid), m_path(path), m_projectname(projectname), m_frameId(mapFrameId)
+                         const std::string mapFrameId, const seerep_core_msgs::geodeticCoordinates geodeticCoords)
+  : m_uuid(uuid), m_path(path), m_projectname(projectname), m_frameId(mapFrameId), m_geodeticCoordinates(geodeticCoords)
 {
   createHdf5Io(m_path);
   m_ioGeneral->writeProjectname(m_projectname);
