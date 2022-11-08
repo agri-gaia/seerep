@@ -1,7 +1,10 @@
+include "geodeticCoordinates.fbs";
+
 namespace seerep.fb;
 
 table ProjectInfo
 {
   name:string;
   uuid:string;
+  geodetic_position:seerep.fb.geodeticCoordinates;
 }

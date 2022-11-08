@@ -109,7 +109,8 @@ void Core::createProject(const seerep_core_msgs::ProjectInfo& projectInfo)
   std::string filename = boost::lexical_cast<std::string>(projectInfo.uuid);
   std::string path = m_dataFolder + "/" + filename + ".h5";
 
-  auto project = std::make_shared<CoreProject>(projectInfo.uuid, path, projectInfo.name, projectInfo.frameId);
+  auto project = std::make_shared<CoreProject>(projectInfo.uuid, path, projectInfo.name, projectInfo.frameId,
+                                               projectInfo.geodetCoords);
   m_projects.insert(std::make_pair(projectInfo.uuid, project));
 }
 

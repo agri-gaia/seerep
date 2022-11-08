@@ -64,6 +64,7 @@ set(MY_FBS_FILES
 	fbs/empty.fbs
 	fbs/frame_infos.fbs
 	fbs/frame_query.fbs
+	fbs/geodeticCoordinates.fbs
 	fbs/header.fbs
 	fbs/image.fbs
 	fbs/label_with_instance.fbs
