@@ -7,9 +7,8 @@ import uuid
 
 import flatbuffers
 import numpy as np
-from fb import Boundingbox, BoundingBoxes2DLabeledStamped, Image, Query
+from fb import BoundingBoxes2DLabeledStamped, Image
 from fb import image_service_grpc_fb as imageService
-from fb import meta_operations_grpc_fb as metaOperations
 
 script_dir = os.path.dirname(__file__)
 util_dir = os.path.join(script_dir, '..')
@@ -20,10 +19,10 @@ import util_fb
 builder = flatbuffers.Builder(1024)
 channel = util.get_gRPC_channel("local")
 
-projectuuid = util_fb.getProject(builder, channel, 'simulatedDataWithInstances')
+projectuuid = util_fb.getProject(builder, channel, 'testproject')
 
 if not projectuuid:
-    exit
+    exit()
 
 stub = imageService.ImageServiceStub(channel)
 
@@ -46,8 +45,8 @@ for responseBuf in stub.GetImage(bytes(buf)):
     x1, y1 = np.random.rand(), np.random.rand()
     x2, y2 = np.random.rand(), np.random.rand()
 
-    print("SENDING ", x1, x2)
-    print("SENDING ", y1, y2)
+    print("SENDING x1, y1: ", x1, " , ", y1)
+    print("SENDING x2, y2: ", x2, " , ", y2)
 
     boundingBoxes = util_fb.createBoundingBoxes2d(
         builder,

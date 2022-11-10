@@ -89,8 +89,6 @@ void createLabelWithInstance(seerep::LabelWithInstance& labelWithInstance)
 
 /**
  * @brief create a 2D Labeled Bounding Box
- * @param[in] projectUUID the uuid of the project
- * @param[in] messageUUID the uuid of the message
  * @param[in] image reference to the image
  * */
 void createBB2DLabeled(seerep::Image& image)
