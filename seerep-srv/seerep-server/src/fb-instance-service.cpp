@@ -20,7 +20,7 @@ grpc::Status FbInstanceService::GetInstances(grpc::ServerContext* context,
   {
     // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
     // also catching core doesn't have project with uuid error
-    std::cout << e.what() << std::endl;
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
   }
   catch (const std::exception& e)
