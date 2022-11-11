@@ -7,8 +7,12 @@
 
 // HighFive
 #include <highfive/H5Easy.hpp>
+#include <highfive/H5File.hpp>
 
-#include "highfive/H5File.hpp"
+// Boost
+#include <boost/lexical_cast.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
 
 // ROS
 #include "sensor_msgs/Image.h"

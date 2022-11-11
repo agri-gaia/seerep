@@ -10,7 +10,7 @@ Hdf5Ros::Hdf5Ros(const std::string& path, const std::string& filename) : path_{ 
 
 bool Hdf5Ros::dumpImage(const sensor_msgs::Image& image) const
 {
-  const std::string dataset_path = "images/" + std::to_string(image.header.stamp.sec);
+  const std::string dataset_path = "images/" + boost::lexical_cast<std::string>(boost::uuids::random_generator()());
 
   H5Easy::dump(*hdf5_file_, dataset_path, std::move(image.data));
 
