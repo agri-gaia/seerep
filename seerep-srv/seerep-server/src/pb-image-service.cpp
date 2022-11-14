@@ -11,12 +11,13 @@ grpc::Status PbImageService::GetImage(grpc::ServerContext* context, const seerep
                                       grpc::ServerWriter<seerep::Image>* writer)
 {
   (void)context;  // ignore that variable without causing warnings
-  std::cout << "sending images in bounding box min(" << request->boundingbox().point_min().x() << "/"
-            << request->boundingbox().point_min().y() << "/" << request->boundingbox().point_min().z() << "), max("
-            << request->boundingbox().point_max().x() << "/" << request->boundingbox().point_max().y() << "/"
-            << request->boundingbox().point_max().z() << ")"
-            << " and time interval (" << request->timeinterval().time_min().seconds() << "/"
-            << request->timeinterval().time_max().seconds() << ")" << std::endl;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
+      << "sending images in bounding box min(" << request->boundingbox().point_min().x() << "/"
+      << request->boundingbox().point_min().y() << "/" << request->boundingbox().point_min().z() << "), max("
+      << request->boundingbox().point_max().x() << "/" << request->boundingbox().point_max().y() << "/"
+      << request->boundingbox().point_max().z() << ")"
+      << " and time interval (" << request->timeinterval().time_min().seconds() << "/"
+      << request->timeinterval().time_max().seconds() << ")";
 
   std::vector<seerep::Image> images;
   try
@@ -27,13 +28,28 @@ grpc::Status PbImageService::GetImage(grpc::ServerContext* context, const seerep
   {
     // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
     // also catching core doesn't have project with uuid error
-    std::cout << e.what() << std::endl;
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (const std::exception& e)
+  {
+    // specific handling for all exceptions extending std::exception, except
+    // std::runtime_error which is handled explicitly
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (...)
+  {
+    // catch any other errors (that we have no information about)
+    std::string msg = "Unknown failure occurred. Possible memory corruption";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
   }
 
   if (!images.empty())
   {
-    std::cout << "Found " << images.size() << " images that match the query" << std::endl;
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
+        << "Found " << images.size() << " images that match the query";
     for (const seerep::Image& img : images)
     {
       writer->Write(img);
@@ -41,7 +57,7 @@ grpc::Status PbImageService::GetImage(grpc::ServerContext* context, const seerep
   }
   else
   {
-    std::cout << "Found NOTHING that matches the query" << std::endl;
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "Found NOTHING that matches the query";
   }
   return grpc::Status::OK;
 }
@@ -50,7 +66,7 @@ grpc::Status PbImageService::TransferImage(grpc::ServerContext* context, const s
                                            seerep::ServerResponse* response)
 {
   (void)context;  // ignore that variable without causing warnings
-  std::cout << "received image... " << std::endl;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "received image... ";
 
   if (!image->header().uuid_project().empty())
   {
@@ -71,15 +87,31 @@ grpc::Status PbImageService::TransferImage(grpc::ServerContext* context, const s
     {
       // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
       // also catching core doesn't have project with uuid error
-      std::cout << e.what() << std::endl;
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
       seerep_server_util::createResponsePb(std::string(e.what()), seerep::ServerResponse::FAILURE, response);
 
       return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
     }
+    catch (const std::exception& e)
+    {
+      // specific handling for all exceptions extending std::exception, except
+      // std::runtime_error which is handled explicitly
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+      seerep_server_util::createResponsePb(std::string(e.what()), seerep::ServerResponse::FAILURE, response);
+      return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+    }
+    catch (...)
+    {
+      // catch any other errors (that we have no information about)
+      std::string msg = "Unknown failure occurred. Possible memory corruption";
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+      seerep_server_util::createResponsePb(msg, seerep::ServerResponse::FAILURE, response);
+      return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
+    }
   }
   else
   {
-    std::cout << "project_uuid is empty!" << std::endl;
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning) << "project_uuid is empty!";
     seerep_server_util::createResponsePb("project_uuid is empty!", seerep::ServerResponse::FAILURE, response);
 
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, "project_uuid is empty!");

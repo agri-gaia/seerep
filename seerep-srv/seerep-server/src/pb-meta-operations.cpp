@@ -10,16 +10,32 @@ grpc::Status PbMetaOperations::CreateProject(grpc::ServerContext* context, const
                                              seerep::ProjectInfo* response)
 {
   (void)context;  // ignore that variable without causing warnings
-  std::cout << "create new project... " << std::endl;
-  seerep_core_msgs::ProjectInfo projectInfo;
-  projectInfo.frameId = request->mapframeid();
-  projectInfo.name = request->name();
-  projectInfo.uuid = boost::uuids::random_generator()();
-  seerepCore->createProject(projectInfo);
+  try
+  {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "create new project... ";
+    seerep_core_msgs::ProjectInfo projectInfo;
+    projectInfo.frameId = request->mapframeid();
+    projectInfo.name = request->name();
+    projectInfo.uuid = boost::uuids::random_generator()();
+    seerepCore->createProject(projectInfo);
 
-  response->set_name(projectInfo.name);
-  response->set_uuid(boost::lexical_cast<std::string>(projectInfo.uuid));
-
+    response->set_name(projectInfo.name);
+    response->set_uuid(boost::lexical_cast<std::string>(projectInfo.uuid));
+  }
+  catch (const std::exception& e)
+  {
+    // specific handling for all exceptions extending std::exception, except
+    // std::runtime_error which is handled explicitly
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (...)
+  {
+    // catch any other errors (that we have no information about)
+    std::string msg = "Unknown failure occurred. Possible memory corruption";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
+  }
   return grpc::Status::OK;
 }
 
@@ -28,14 +44,32 @@ grpc::Status PbMetaOperations::GetProjects(grpc::ServerContext* context, const g
 {
   (void)context;  // ignore that variable without causing warnings
   (void)request;  // ignore that variable without causing warnings
-  std::cout << "query the project infos... " << std::endl;
-  auto projectInfos = seerepCore->getProjects();
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "query the project infos... ";
 
-  for (auto projectInfo : projectInfos)
+  try
   {
-    auto responseProjectInfo = response->add_projects();
-    responseProjectInfo->set_name(projectInfo.name);
-    responseProjectInfo->set_uuid(boost::lexical_cast<std::string>(projectInfo.uuid));
+    auto projectInfos = seerepCore->getProjects();
+
+    for (auto projectInfo : projectInfos)
+    {
+      auto responseProjectInfo = response->add_projects();
+      responseProjectInfo->set_name(projectInfo.name);
+      responseProjectInfo->set_uuid(boost::lexical_cast<std::string>(projectInfo.uuid));
+    }
+  }
+  catch (const std::exception& e)
+  {
+    // specific handling for all exceptions extending std::exception, except
+    // std::runtime_error which is handled explicitly
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (...)
+  {
+    // catch any other errors (that we have no information about)
+    std::string msg = "Unknown failure occurred. Possible memory corruption";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
   }
 
   return grpc::Status::OK;

@@ -11,37 +11,53 @@ grpc::Status PbPointCloudService::GetPointCloud2(grpc::ServerContext* context, c
                                                  grpc::ServerWriter<seerep::PointCloud2>* writer)
 {
   (void)context;  // ignore that variable without causing warnings
-  std::cout << "sending point cloud in bounding box min(" << request->boundingbox().point_min().x() << "/"
-            << request->boundingbox().point_min().y() << "/" << request->boundingbox().point_min().z() << "), max("
-            << request->boundingbox().point_max().x() << "/" << request->boundingbox().point_max().y() << "/"
-            << request->boundingbox().point_max().z() << ")"
-            << " and time interval (" << request->timeinterval().time_min().seconds() << "/"
-            << request->timeinterval().time_max().seconds() << ")" << std::endl;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
+      << "sending point cloud in bounding box min(" << request->boundingbox().point_min().x() << "/"
+      << request->boundingbox().point_min().y() << "/" << request->boundingbox().point_min().z() << "), max("
+      << request->boundingbox().point_max().x() << "/" << request->boundingbox().point_max().y() << "/"
+      << request->boundingbox().point_max().z() << ")"
+      << " and time interval (" << request->timeinterval().time_min().seconds() << "/"
+      << request->timeinterval().time_max().seconds() << ")";
 
   std::vector<seerep::PointCloud2> pointClouds;
   try
   {
     pointClouds = pointCloudPb->getData(*request);
+
+    if (!pointClouds.empty())
+    {
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
+          << "Found " << pointClouds.size() << " pointclouds that match the query";
+      for (const seerep::PointCloud2& pc : pointClouds)
+      {
+        writer->Write(pc);
+      }
+    }
+    else
+    {
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "Found NOTHING that matches the query";
+    }
   }
   catch (std::runtime_error const& e)
   {
     // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
     // also catching core doesn't have project with uuid error
-    std::cout << e.what() << std::endl;
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
   }
-
-  if (!pointClouds.empty())
+  catch (const std::exception& e)
   {
-    std::cout << "Found " << pointClouds.size() << " pointclouds that match the query" << std::endl;
-    for (const seerep::PointCloud2& pc : pointClouds)
-    {
-      writer->Write(pc);
-    }
+    // specific handling for all exceptions extending std::exception, except
+    // std::runtime_error which is handled explicitly
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
   }
-  else
+  catch (...)
   {
-    std::cout << "Found NOTHING that matches the query" << std::endl;
+    // catch any other errors (that we have no information about)
+    std::string msg = "Unknown failure occurred. Possible memory corruption";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
   }
   return grpc::Status::OK;
 }
@@ -51,7 +67,7 @@ grpc::Status PbPointCloudService::TransferPointCloud2(grpc::ServerContext* conte
                                                       seerep::ServerResponse* response)
 {
   (void)context;  // ignore that variable without causing warnings
-  std::cout << "received point clouds... " << std::endl;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "received point clouds... ";
 
   if (!pointCloud2->header().uuid_project().empty())
   {
@@ -68,16 +84,32 @@ grpc::Status PbPointCloudService::TransferPointCloud2(grpc::ServerContext* conte
     {
       // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
       // also catching core doesn't have project with uuid error
-      std::cout << e.what() << std::endl;
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
 
       seerep_server_util::createResponsePb(std::string(e.what()), seerep::ServerResponse::FAILURE, response);
 
       return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
     }
+    catch (const std::exception& e)
+    {
+      // specific handling for all exceptions extending std::exception, except
+      // std::runtime_error which is handled explicitly
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+      seerep_server_util::createResponsePb(std::string(e.what()), seerep::ServerResponse::FAILURE, response);
+      return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+    }
+    catch (...)
+    {
+      // catch any other errors (that we have no information about)
+      std::string msg = "Unknown failure occurred. Possible memory corruption";
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+      seerep_server_util::createResponsePb(msg, seerep::ServerResponse::FAILURE, response);
+      return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
+    }
   }
   else
   {
-    std::cout << "project_uuid is empty!" << std::endl;
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning) << "project_uuid is empty!";
     seerep_server_util::createResponsePb("project_uuid is empty!", seerep::ServerResponse::FAILURE, response);
 
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, "project_uuid is empty!");
