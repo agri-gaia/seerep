@@ -6,6 +6,7 @@ import sys
 import flatbuffers
 from fb import (
     Boundingbox,
+    BoundingboxStamped,
     Empty,
     Header,
     Image,
@@ -66,8 +67,12 @@ header = Header.End(builder)
 Boundingbox.Start(builder)
 Boundingbox.AddPointMin(builder, pointMin)
 Boundingbox.AddPointMax(builder, pointMax)
-Boundingbox.AddHeader(builder, header)
-boundingbox = Boundingbox.End(builder)
+boundingBox = Boundingbox.End(builder)
+
+BoundingboxStamped.Start(builder)
+BoundingboxStamped.AddHeader(builder, header)
+BoundingboxStamped.AddBoundingbox(builder, boundingBox)
+boundingboxStamped = BoundingboxStamped.End(builder)
 
 Timestamp.Start(builder)
 Timestamp.AddSeconds(builder, 1610549273)
@@ -106,10 +111,10 @@ dataUuidMsg = builder.EndVector()
 # instanceUuidMsg = builder.EndVector()
 
 Query.Start(builder)
-Query.AddBoundingbox(builder, boundingbox)
-Query.AddTimeinterval(builder, timeInterval)
+# Query.AddBoundingboxStamped(builder, boundingboxStamped)
+# Query.AddTimeinterval(builder, timeInterval)
 Query.AddProjectuuid(builder, projectuuidMsg)
-Query.AddLabel(builder, labelMsg)
+# Query.AddLabel(builder, labelMsg)
 
 # Query.AddDatauuid(builder,dataUuidMsg)
 # Query.AddInstanceuuid(builder,instanceUuidMsg)
@@ -135,3 +140,5 @@ for responseBuf in stub.GetImage(bytes(buf)):
         + str(response.LabelsBb(0).BoundingBox().PointMax().Y())
         + "\n"
     )
+
+print("done.")

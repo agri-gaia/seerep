@@ -12,10 +12,12 @@ grpc::Status PbImageService::GetImage(grpc::ServerContext* context, const seerep
 {
   (void)context;  // ignore that variable without causing warnings
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
-      << "sending images in bounding box min(" << request->boundingbox().point_min().x() << "/"
-      << request->boundingbox().point_min().y() << "/" << request->boundingbox().point_min().z() << "), max("
-      << request->boundingbox().point_max().x() << "/" << request->boundingbox().point_max().y() << "/"
-      << request->boundingbox().point_max().z() << ")"
+      << "sending images in bounding box min(" << request->boundingboxstamped().boundingbox().point_min().x() << "/"
+      << request->boundingboxstamped().boundingbox().point_min().y() << "/"
+      << request->boundingboxstamped().boundingbox().point_min().z() << "), max("
+      << request->boundingboxstamped().boundingbox().point_max().x() << "/"
+      << request->boundingboxstamped().boundingbox().point_max().y() << "/"
+      << request->boundingboxstamped().boundingbox().point_max().z() << ")"
       << " and time interval (" << request->timeinterval().time_min().seconds() << "/"
       << request->timeinterval().time_max().seconds() << ")";
 

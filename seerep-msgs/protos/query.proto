@@ -3,11 +3,11 @@ syntax = "proto3";
 package seerep;
 
 import "time_interval.proto";
-import "boundingbox.proto";
+import "boundingbox_stamped.proto";
 
 message Query
 {
-  Boundingbox boundingbox = 1;
+  BoundingboxStamped boundingboxStamped = 1;
   TimeInterval timeinterval = 2;
   repeated string label = 3;
   repeated string projectuuid = 4;

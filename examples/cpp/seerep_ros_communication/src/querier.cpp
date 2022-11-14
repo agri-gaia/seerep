@@ -86,12 +86,12 @@ int main(int argc, char** argv)
   private_nh.param<double>("point_max_x", maxx, 0.0);
   private_nh.param<double>("point_max_y", maxy, 0.0);
   private_nh.param<double>("point_max_z", maxz, 0.0);
-  query.mutable_boundingbox()->mutable_point_min()->set_x(minx);
-  query.mutable_boundingbox()->mutable_point_min()->set_y(miny);
-  query.mutable_boundingbox()->mutable_point_min()->set_z(minz);
-  query.mutable_boundingbox()->mutable_point_max()->set_x(maxx);
-  query.mutable_boundingbox()->mutable_point_max()->set_y(maxy);
-  query.mutable_boundingbox()->mutable_point_max()->set_z(maxz);
+  query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_point_min()->set_x(minx);
+  query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_point_min()->set_y(miny);
+  query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_point_min()->set_z(minz);
+  query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_point_max()->set_x(maxx);
+  query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_point_max()->set_y(maxy);
+  query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_point_max()->set_z(maxz);
 
   // temporal
   int mintime, maxtime;

@@ -32,10 +32,10 @@ if projectuuid == "":
 
 theQuery = query.Query()
 theQuery.projectuuid.append(projectuuid)
-theQuery.boundingbox.header.frame_id = "map"
+theQuery.boundingboxstamped.header.frame_id = "map"
 
-theQuery.boundingbox.point_min.z = -1.0
-theQuery.boundingbox.point_max.z = 1.0
+theQuery.boundingboxstamped.boundingbox.point_min.z = -1.0
+theQuery.boundingboxstamped.boundingbox.point_max.z = 1.0
 
 # since epoche
 theQuery.timeinterval.time_min.seconds = 1638549273
@@ -48,9 +48,9 @@ theQuery.label.extend(["testlabel1"])
 
 for x in range(3):
     for y in range(3):
-        theQuery.boundingbox.point_min.x = x - 0.5
-        theQuery.boundingbox.point_min.y = y - 0.5
-        theQuery.boundingbox.point_max.x = x + 0.5
-        theQuery.boundingbox.point_max.y = y + 0.5
+        theQuery.boundingboxstamped.boundingbox.point_min.x = x - 0.5
+        theQuery.boundingboxstamped.boundingbox.point_min.y = y - 0.5
+        theQuery.boundingboxstamped.boundingbox.point_max.x = x + 0.5
+        theQuery.boundingboxstamped.boundingbox.point_max.y = y + 0.5
         for img in stub.GetImage(theQuery):
             print("General label of transferred img: " + img.labels_general[0].label)

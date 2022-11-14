@@ -20,14 +20,14 @@ FbPointCloudService::GetPointCloud2(grpc::ServerContext* context,
   std::stringstream debuginfo;
 
   debuginfo << "sending point clouds with this query parameters: ";
-  if (requestRoot->boundingbox() != NULL)
+  if (requestRoot->boundingboxStamped() != NULL)
   {
-    debuginfo << "\n bounding box min(x: " << requestRoot->boundingbox()->point_min()->x()
-              << ", y: " << requestRoot->boundingbox()->point_min()->y()
-              << ", z: " << requestRoot->boundingbox()->point_min()->z()
-              << "), max(x: " << requestRoot->boundingbox()->point_max()->x()
-              << ", y: " << requestRoot->boundingbox()->point_max()->y()
-              << ", z: " << requestRoot->boundingbox()->point_max()->z() << ")";
+    debuginfo << "\n bounding box min(x: " << requestRoot->boundingboxStamped()->boundingbox()->point_min()->x()
+              << ", y: " << requestRoot->boundingboxStamped()->boundingbox()->point_min()->y()
+              << ", z: " << requestRoot->boundingboxStamped()->boundingbox()->point_min()->z()
+              << "), max(x: " << requestRoot->boundingboxStamped()->boundingbox()->point_max()->x()
+              << ", y: " << requestRoot->boundingboxStamped()->boundingbox()->point_max()->y()
+              << ", z: " << requestRoot->boundingboxStamped()->boundingbox()->point_max()->z() << ")";
   }
   if (requestRoot->timeinterval() != NULL)
   {

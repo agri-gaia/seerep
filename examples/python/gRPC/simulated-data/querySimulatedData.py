@@ -5,7 +5,7 @@ import sys
 
 import flatbuffers
 from fb import (
-    Boundingbox,
+    BoundingboxStamped,
     Empty,
     Header,
     Image,
@@ -66,8 +66,12 @@ header = Header.End(builder)
 Boundingbox.Start(builder)
 Boundingbox.AddPointMin(builder, pointMin)
 Boundingbox.AddPointMax(builder, pointMax)
-Boundingbox.AddHeader(builder, header)
 boundingbox = Boundingbox.End(builder)
+
+BoundingboxStamped.Start(builder)
+BoundingboxStamped.AddHeader(builder, header)
+BoundingboxStamped.AddBoundingbox(builder, boundingbox)
+boundingboxStamped = BoundingboxStamped.End(builder)
 
 Timestamp.Start(builder)
 Timestamp.AddSeconds(builder, 1654688920)
@@ -96,7 +100,7 @@ builder.PrependUOffsetTRelative(label)
 labelMsg = builder.EndVector()
 
 Query.Start(builder)
-Query.AddBoundingbox(builder, boundingbox)
+Query.AddBoundingboxStamped(builder, boundingboxStamped)
 Query.AddTimeinterval(builder, timeInterval)
 Query.AddProjectuuid(builder, projectuuidMsg)
 Query.AddLabel(builder, labelMsg)

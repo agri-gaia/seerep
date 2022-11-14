@@ -10,6 +10,7 @@
 // seerep-msgs
 #include <seerep-msgs/boundingbox2d_labeled.pb.h>
 #include <seerep-msgs/boundingbox_labeled.pb.h>
+#include <seerep-msgs/header.pb.h>
 
 // std
 #include <boost/geometry.hpp>
