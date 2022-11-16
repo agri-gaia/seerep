@@ -4,109 +4,55 @@ import os
 import sys
 
 import flatbuffers
-from fb import (
-    BoundingboxStamped,
-    Empty,
-    Header,
-    Image,
-    Point,
-    ProjectInfos,
-    Query,
-    TimeInterval,
-    Timestamp,
-)
+from fb import Image
 from fb import image_service_grpc_fb as imageService
-from fb import meta_operations_grpc_fb as metaOperations
 
 script_dir = os.path.dirname(__file__)
 util_dir = os.path.join(script_dir, '..')
 sys.path.append(util_dir)
 import util
-
-channel = util.get_gRPC_channel()
-
-stub = imageService.ImageServiceStub(channel)
-stubMeta = metaOperations.MetaOperationsStub(channel)
+import util_fb
 
 builder = flatbuffers.Builder(1024)
-Empty.Start(builder)
-emptyMsg = Empty.End(builder)
-builder.Finish(emptyMsg)
-buf = builder.Output()
+channel = util.get_gRPC_channel()
 
-responseBuf = stubMeta.GetProjects(bytes(buf))
-response = ProjectInfos.ProjectInfos.GetRootAs(responseBuf)
+# 1. Get all projects from the server
+projectuuid = util_fb.getProject(builder, channel, 'testproject')
 
-projectuuid = ""
-for i in range(response.ProjectsLength()):
-    print(response.Projects(i).Name().decode("utf-8") + " " + response.Projects(i).Uuid().decode("utf-8"))
-    if response.Projects(i).Name().decode("utf-8") == "simulatedData":
-        projectuuid = response.Projects(i).Uuid().decode("utf-8")
+# 2. Check if the defined project exist; if not exit
+if not projectuuid:
+    exit()
 
-if projectuuid == "":
-    sys.exit()
+# 3. Get gRPC service object
+stub = imageService.ImageServiceStub(channel)
 
-Point.Start(builder)
-Point.AddX(builder, -5.0)
-Point.AddY(builder, -5.0)
-Point.AddZ(builder, -100.0)
-pointMin = Point.End(builder)
+# Create all necessary objects for the query
+header = util_fb.createHeader(builder, frame="map")
+pointMin = util_fb.createPoint(builder, -5.0, -5.0, -100.0)
+pointMax = util_fb.createPoint(builder, 5.0, 5.0, 100.0)
+boundingboxStamped = util_fb.createBoundingBoxStamped(builder, header, pointMin, pointMax)
 
-Point.Start(builder)
-Point.AddX(builder, 5.0)
-Point.AddY(builder, 5.0)
-Point.AddZ(builder, 100.0)
-pointMax = Point.End(builder)
+timeMin = util_fb.createTimeStamp(builder, 1654688920, 0)
+timeMax = util_fb.createTimeStamp(builder, 1654688940, 0)
+timeInterval = util_fb.createTimeInterval(builder, timeMin, timeMax)
 
-frameId = builder.CreateString("map")
-Header.Start(builder)
-Header.AddFrameId(builder, frameId)
-header = Header.End(builder)
+projectUuids = [builder.CreateString(projectuuid)]
+labels = [builder.CreateString("http://aims.fao.org/aos/agrovoc/c_14385")]
 
-Boundingbox.Start(builder)
-Boundingbox.AddPointMin(builder, pointMin)
-Boundingbox.AddPointMax(builder, pointMax)
-boundingbox = Boundingbox.End(builder)
-
-BoundingboxStamped.Start(builder)
-BoundingboxStamped.AddHeader(builder, header)
-BoundingboxStamped.AddBoundingbox(builder, boundingbox)
-boundingboxStamped = BoundingboxStamped.End(builder)
-
-Timestamp.Start(builder)
-Timestamp.AddSeconds(builder, 1654688920)
-Timestamp.AddNanos(builder, 0)
-timeMin = Timestamp.End(builder)
-
-Timestamp.Start(builder)
-Timestamp.AddSeconds(builder, 1654688940)
-Timestamp.AddNanos(builder, 0)
-timeMax = Timestamp.End(builder)
-
-TimeInterval.Start(builder)
-TimeInterval.AddTimeMin(builder, timeMin)
-TimeInterval.AddTimeMax(builder, timeMax)
-timeInterval = TimeInterval.End(builder)
-
-projectuuidString = builder.CreateString(projectuuid)
-Query.StartProjectuuidVector(builder, 1)
-builder.PrependUOffsetTRelative(projectuuidString)
-projectuuidMsg = builder.EndVector()
-
-
-label = builder.CreateString("http://aims.fao.org/aos/agrovoc/c_14385")
-Query.StartLabelVector(builder, 1)
-builder.PrependUOffsetTRelative(label)
-labelMsg = builder.EndVector()
-
-Query.Start(builder)
-Query.AddBoundingboxStamped(builder, boundingboxStamped)
-Query.AddTimeinterval(builder, timeInterval)
-Query.AddProjectuuid(builder, projectuuidMsg)
-Query.AddLabel(builder, labelMsg)
-queryMsg = Query.End(builder)
-
-builder.Finish(queryMsg)
+# 4. Create a query with parameters
+# all parameters are optional
+# with all parameters set (especially with the data and instance uuids set) the result of the query will be empty. Set the query parameters to adequate values or remove them from the query creation
+query = util_fb.createQuery(
+    builder,
+    boundingBox=boundingboxStamped,
+    timeInterval=timeInterval,
+    labels=labels,
+    projectUuids=projectUuids,
+    # instanceUuids=instanceUuids,
+    # dataUuids=dataUuids,
+    withoutData=True,
+)
+builder.Finish(query)
 buf = builder.Output()
 
 i = 0

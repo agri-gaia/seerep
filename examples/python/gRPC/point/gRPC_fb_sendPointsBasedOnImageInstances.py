@@ -12,7 +12,6 @@ from fb import (
     LabelWithInstance,
     Point,
     PointStamped,
-    Query,
     String,
     Timestamp,
     UnionMapEntry,
@@ -26,7 +25,7 @@ sys.path.append(util_dir)
 import util
 import util_fb
 
-channel = util.get_gRPC_channel("local")
+channel = util.get_gRPC_channel()
 
 projectuuid = util_fb.get_or_create_project(channel, "LabeledImagesInGrid", True)
 
@@ -36,9 +35,7 @@ stubPoint = pointService.PointServiceStub(channel)
 
 builder = flatbuffers.Builder(1024)
 
-Query.Start(builder)
-queryMsg = Query.End(builder)
-
+queryMsg = util_fb.createQuery(builder)
 builder.Finish(queryMsg)
 buf = builder.Output()
 
@@ -50,36 +47,21 @@ for responseBuf in stubImage.GetImage(bytes(buf)):
     if not response.LabelsBbIsNone():
         for i in range(response.LabelsBbLength()):
             print(f"uuidlabel: {response.LabelsBb(i).LabelWithInstance().InstanceUuid().decode('utf-8')}")
-            frameId = builder.CreateString(response.Header().FrameId().decode('utf-8'))
-            uuidProject = builder.CreateString(response.Header().UuidProject().decode('utf-8'))
 
-            Timestamp.Start(builder)
-            Timestamp.AddSeconds(builder, response.Header().Stamp().Seconds())
-            Timestamp.AddNanos(builder, response.Header().Stamp().Nanos())
-            timestampMsg = Timestamp.End(builder)
+            frameId = response.Header().FrameId().decode('utf-8')
+            uuidProject = response.Header().UuidProject().decode('utf-8')
+            timestampMsg = util_fb.createTimeStamp(
+                builder, response.Header().Stamp().Seconds(), response.Header().Stamp().Nanos()
+            )
+            header = util_fb.createHeader(builder, timestampMsg, frameId, uuidProject)
 
-            Header.Start(builder)
-            Header.AddFrameId(builder, frameId)
-            Header.AddStamp(builder, timestampMsg)
-            Header.AddUuidProject(builder, uuidProject)
-            header = Header.End(builder)
+            point = util_fb.createPoint(builder, 1, 2, 3)
 
-            Point.Start(builder)
-            Point.AddX(builder, 1)
-            Point.AddY(builder, 2)
-            Point.AddZ(builder, 3)
-            point = Point.End(builder)
-
-            label = builder.CreateString(response.LabelsBb(i).LabelWithInstance().Label().decode('utf-8'))
-            instanceUuid = builder.CreateString(response.LabelsBb(i).LabelWithInstance().InstanceUuid().decode('utf-8'))
-            LabelWithInstance.Start(builder)
-            LabelWithInstance.AddLabel(builder, label)
-            LabelWithInstance.AddInstanceUuid(builder, instanceUuid)
-            labelWithInstance = LabelWithInstance.End(builder)
-
-            PointStamped.StartLabelsGeneralVector(builder, 1)
-            builder.PrependUOffsetTRelative(labelWithInstance)
-            labelWithInstanceMsg = builder.EndVector()
+            labelWithInstanceMsg = util_fb.createLabelWithInstance(
+                builder,
+                response.LabelsBb(i).LabelWithInstance().Label().decode('utf-8'),
+                response.LabelsBb(i).LabelWithInstance().InstanceUuid().decode('utf-8'),
+            )
 
             unionMapEntryKey1 = builder.CreateString("exampleKey1")
             value1String = builder.CreateString("exampleValue1")

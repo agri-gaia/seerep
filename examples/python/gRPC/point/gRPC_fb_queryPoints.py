@@ -4,16 +4,7 @@ import os
 import sys
 
 import flatbuffers
-from fb import (
-    Boundingbox,
-    BoundingboxStamped,
-    Header,
-    Point,
-    PointStamped,
-    Query,
-    TimeInterval,
-    Timestamp,
-)
+from fb import PointStamped
 from fb import point_service_grpc_fb as pointService
 
 script_dir = os.path.dirname(__file__)
@@ -22,76 +13,51 @@ sys.path.append(util_dir)
 import util
 import util_fb
 
-PROJECT_NAME = "simulatedDataWithInstances"
-channel = util.get_gRPC_channel("dev")
-projectUuid = util_fb.get_or_create_project(channel, PROJECT_NAME, False)
-
-stub = pointService.PointServiceStub(channel)
 builder = flatbuffers.Builder(1024)
 
-Point.Start(builder)
-Point.AddX(builder, 0.0)
-Point.AddY(builder, 0.0)
-Point.AddZ(builder, 0.0)
-pointMin = Point.End(builder)
+PROJECT_NAME = "simulatedDataWithInstances"
+channel = util.get_gRPC_channel()
+# 1. Get all projects from the server
+projectuuid = util_fb.getProject(builder, channel, 'testproject')
+# 2. Check if the defined project exist; if not exit
+if not projectuuid:
+    exit()
 
-Point.Start(builder)
-Point.AddX(builder, 100.0)
-Point.AddY(builder, 100.0)
-Point.AddZ(builder, 100.0)
-pointMax = Point.End(builder)
+# Create all necessary objects for the query
+header = util_fb.createHeader(builder, frame="map")
+pointMin = util_fb.createPoint(builder, 0.0, 0.0, 0.0)
+pointMax = util_fb.createPoint(builder, 100.0, 100.0, 100.0)
+boundingboxStamped = util_fb.createBoundingBoxStamped(builder, header, pointMin, pointMax)
 
-frameId = builder.CreateString("map")
-Header.Start(builder)
-Header.AddFrameId(builder, frameId)
-header = Header.End(builder)
-
-Boundingbox.Start(builder)
-Boundingbox.AddPointMin(builder, pointMin)
-Boundingbox.AddPointMax(builder, pointMax)
-boundingbox = Boundingbox.End(builder)
-
-BoundingboxStamped.Start(builder)
-BoundingboxStamped.AddHeader(builder, header)
-BoundingboxStamped.AddBoundingbox(builder, boundingbox)
-boundingboxStamped = BoundingboxStamped.End(builder)
-
-Timestamp.Start(builder)
-Timestamp.AddSeconds(builder, 1610549273)
-Timestamp.AddNanos(builder, 0)
-timeMin = Timestamp.End(builder)
-
-Timestamp.Start(builder)
-Timestamp.AddSeconds(builder, 1938549273)
-Timestamp.AddNanos(builder, 0)
-timeMax = Timestamp.End(builder)
-
-TimeInterval.Start(builder)
-TimeInterval.AddTimeMin(builder, timeMin)
-TimeInterval.AddTimeMax(builder, timeMax)
-timeInterval = TimeInterval.End(builder)
-
-projectuuidString = builder.CreateString(projectUuid)
-Query.StartProjectuuidVector(builder, 1)
-builder.PrependUOffsetTRelative(projectuuidString)
-projectuuidMsg = builder.EndVector()
+timeMin = util_fb.createTimeStamp(builder, 1610549273, 0)
+timeMax = util_fb.createTimeStamp(builder, 1938549273, 0)
+timeInterval = util_fb.createTimeInterval(builder, timeMin, timeMax)
 
 
-label = builder.CreateString("testlabel0")
-Query.StartLabelVector(builder, 1)
-builder.PrependUOffsetTRelative(label)
-labelMsg = builder.EndVector()
+projectUuids = [builder.CreateString(projectuuid)]
+labels = [builder.CreateString("testlabel0")]
+dataUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
+instanceUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 
-Query.Start(builder)
-Query.AddBoundingboxStamped(builder, boundingboxStamped)
-Query.AddTimeinterval(builder, timeInterval)
-Query.AddProjectuuid(builder, projectuuidMsg)
-Query.AddLabel(builder, labelMsg)
-queryMsg = Query.End(builder)
+# 4. Create a query with parameters
+# all parameters are optional
+# with all parameters set (especially with the data and instance uuids set) the result of the query will be empty. Set the query parameters to adequate values or remove them from the query creation
+query = util_fb.createQuery(
+    builder,
+    boundingBox=boundingboxStamped,
+    timeInterval=timeInterval,
+    labels=labels,
+    projectUuids=projectUuids,
+    # instanceUuids=instanceUuids,
+    # dataUuids=dataUuids,
+    withoutData=False,
+)
 
-builder.Finish(queryMsg)
+builder.Finish(query)
 buf = builder.Output()
 
+
+stub = pointService.PointServiceStub(channel)
 for responseBuf in stub.GetPoint(bytes(buf)):
     response = PointStamped.PointStamped.GetRootAs(responseBuf)
 
