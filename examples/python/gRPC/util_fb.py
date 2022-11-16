@@ -20,6 +20,7 @@ from fb import (
     TimeInterval,
     Timestamp,
     TransformStampedQuery,
+    geodeticCoordinates,
 )
 from fb import meta_operations_grpc_fb as metaOperations
 
@@ -42,16 +43,29 @@ def getProject(builder, channel, name):
     return None
 
 
-def createProject(channel, builder, name, frameId):
+def createProject(channel, builder, name, frameId, coordSys, ellipsoid, altitude, latitude, longitude):
     '''Create a project from the parameters'''
     stubMeta = metaOperations.MetaOperationsStub(channel)
 
     frameIdBuf = builder.CreateString(frameId)
     nameBuf = builder.CreateString(name)
 
+    # create a geodetic coordinates object
+    coordSysBuf = builder.CreateString(coordSys)
+    ellipsoidBuf = builder.CreateString(ellipsoid)
+
+    geodeticCoordinates.Start(builder)
+    geodeticCoordinates.AddCoordinateSystem(builder, coordSysBuf)
+    geodeticCoordinates.AddEllipsoid(builder, ellipsoidBuf)
+    geodeticCoordinates.AddAltitude(builder, altitude)
+    geodeticCoordinates.AddLatitude(builder, latitude)
+    geodeticCoordinates.AddLongitute(builder, longitude)
+    gc = geodeticCoordinates.End(builder)
+
     ProjectCreation.Start(builder)
     ProjectCreation.AddMapFrameId(builder, frameIdBuf)
     ProjectCreation.AddName(builder, nameBuf)
+    ProjectCreation.AddGeodeticPosition(builder, gc)
     projectCreationMsg = ProjectCreation.End(builder)
     builder.Finish(projectCreationMsg)
 
