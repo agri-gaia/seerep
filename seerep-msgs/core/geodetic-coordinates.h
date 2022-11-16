@@ -10,9 +10,9 @@ struct geodeticCoordinates
   std::string coordinateSystem;
   std::string ellipsoid;
 
-  int longitude;
-  int latitude;
-  int altitude;
+  double altitude;
+  double latitude;
+  double longitude;
 };
 }  // namespace seerep_core_msgs
 

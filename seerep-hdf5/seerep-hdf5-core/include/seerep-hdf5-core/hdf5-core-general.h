@@ -7,6 +7,7 @@
 // seerep-msgs
 #include <seerep-msgs/aabb.h>
 #include <seerep-msgs/dataset-indexable.h>
+#include <seerep-msgs/geodetic-coordinates.h>
 
 // std
 #include <boost/geometry.hpp>
@@ -90,6 +91,12 @@ public:
   std::string readProjectFrameId();
 
   //################
+  // Geodetic Coordinates
+  //################
+  void writeGeodeticLocation(const seerep_core_msgs::geodeticCoordinates geocoords);
+  std::optional<seerep_core_msgs::geodeticCoordinates> readGeodeticLocation();
+
+  //################
   // Hdf5
   //################
   /**
@@ -128,6 +135,12 @@ public:
 
   inline static const std::string PROJECTNAME = "projectname";
   inline static const std::string PROJECTFRAMEID = "projectframeid";
+
+  inline static const std::string GEODETICLOCATION_COORDINATESYSTEM = "geoloc_coordinatesystem";
+  inline static const std::string GEODETICLOCATION_ELLIPSOID = "geoloc_ellipsoid";
+  inline static const std::string GEODETICLOCATION_ALTITUDE = "geoloc_altitude";
+  inline static const std::string GEODETICLOCATION_LATITUDE = "geoloc_latitude";
+  inline static const std::string GEODETICLOCATION_LONGITUDE = "geoloc_longitude";
 
   // dataset names
   inline static const std::string RAWDATA = "rawdata";

@@ -17,6 +17,7 @@ CoreProject::CoreProject(const boost::uuids::uuid& uuid, const std::string path,
   createHdf5Io(m_path);
   m_ioGeneral->writeProjectname(m_projectname);
   m_ioGeneral->writeProjectFrameId(m_frameId);
+  m_ioGeneral->writeGeodeticLocation(m_geodeticCoordinates);
   recreateDatatypes();
 }
 CoreProject::~CoreProject()
