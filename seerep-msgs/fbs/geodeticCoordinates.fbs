@@ -7,7 +7,7 @@ table geodeticCoordinates {
 
     ellipsoid:string; // e.g EPSG::7030
 
-    longitute:int; // longitude measured in degrees
-    latitude:int; // latitude measured in degrees
-    altitude:int; // ellipsoidal height measured as a distance
+    longitute:double; // longitude measured in degrees
+    latitude:double; // latitude measured in degrees
+    altitude:double; // ellipsoidal height measured as a distance
 }
