@@ -15,7 +15,7 @@ import util_fb
 
 builder = flatbuffers.Builder(1024)
 channel = util.get_gRPC_channel("local")
-PROJECT_NAME = "simulatedDataWithInstances"
+PROJECT_NAME = "testproject"
 projectUuid = util_fb.getProject(builder, channel, PROJECT_NAME)
 
 stubTf = tfService.TfServiceStub(channel)
@@ -24,7 +24,9 @@ builder = flatbuffers.Builder(1024)
 timeSec = 1654688922
 timeNano = 0
 frame = "map"
-header = util_fb.createHeader(builder, timeSec, timeNano, frame, projectUuid)
+
+timestamp = util_fb.createTimeStamp(builder, timeSec, timeNano)
+header = util_fb.createHeader(builder, timestamp, frame, projectUuid)
 
 childFrameId = builder.CreateString("camera")
 
@@ -33,7 +35,11 @@ builder.Finish(tfQuery)
 
 tfBuf = stubTf.GetTransformStamped(bytes(builder.Output()))
 
-tf = TransformStamped.TransformStamped.GetRootAs(tfBuf)
+if tfBuf:
+    tf = TransformStamped.TransformStamped.GetRootAs(tfBuf)
+else:
+    print("No tf received")
+    exit()
 
 print("parent frame: " + tf.Header().FrameId().decode("utf-8"))
 print("child frame: " + tf.ChildFrameId().decode("utf-8"))
