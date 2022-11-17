@@ -17,7 +17,7 @@ builder = flatbuffers.Builder(1024)
 channel = util.get_gRPC_channel()
 
 # 1. Get all projects from the server
-projectuuid = util_fb.getProject(builder, channel, 'testproject')
+projectuuid = util_fb.getProject(builder, channel, 'simulatedData')
 
 # 2. Check if the defined project exist; if not exit
 if not projectuuid:
