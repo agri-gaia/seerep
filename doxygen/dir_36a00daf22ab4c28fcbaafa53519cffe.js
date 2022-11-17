@@ -3,6 +3,7 @@ var dir_36a00daf22ab4c28fcbaafa53519cffe =
     [ "fb-image-service.cpp", "fb-image-service_8cpp.html", null ],
     [ "fb-instance-service.cpp", "fb-instance-service_8cpp.html", null ],
     [ "fb-meta-operations.cpp", "fb-meta-operations_8cpp.html", null ],
+    [ "fb-point-cloud-service.cpp", "fb-point-cloud-service_8cpp.html", null ],
     [ "fb-point-service.cpp", "fb-point-service_8cpp.html", null ],
     [ "fb-tf-service.cpp", "fb-tf-service_8cpp.html", null ],
     [ "pb-image-service.cpp", "pb-image-service_8cpp.html", null ],

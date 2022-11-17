@@ -20,6 +20,7 @@ var classseerep__server_1_1server =
     [ "m_logger", "classseerep__server_1_1server.html#a0bdb015952b6965eac3dcbf4e52a7db3", null ],
     [ "m_metaOperationsFb", "classseerep__server_1_1server.html#ad2bcea440b7d4418b936e490d249975a", null ],
     [ "m_metaOperationsPb", "classseerep__server_1_1server.html#a9440025fccbc0a13d437dbafa9973799", null ],
+    [ "m_pointCloudServiceFb", "classseerep__server_1_1server.html#ae66250c8c3d3ee6b2583e4b51f6e993f", null ],
     [ "m_pointCloudServicePb", "classseerep__server_1_1server.html#ab07050fc15deafcd1d0a350c6c1a2d16", null ],
     [ "m_pointServiceFb", "classseerep__server_1_1server.html#a71c57e4b1227e986f02647bc08a83dd3", null ],
     [ "m_programOptionsMap", "classseerep__server_1_1server.html#a9e7d1abdd3834965a6cc39dfa126525a", null ],

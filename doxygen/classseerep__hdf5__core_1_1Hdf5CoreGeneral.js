@@ -4,6 +4,8 @@ var classseerep__hdf5__core_1_1Hdf5CoreGeneral =
     [ "checkExists", "classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ad5f8af237fb6503d872b1fa6400d5596", null ],
     [ "deleteAttribute", "classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a1f819558f71f25dd29ed3d962be6224c", null ],
     [ "getGroupDatasets", "classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a9b5eacd573e2486080ed68c31b4e1ceb", null ],
+    [ "getHdf5DataSet", "classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a3740ad93ae05cacb1474d6f690fe3234", null ],
+    [ "getHdf5Group", "classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a1fdca1935287c8ebeeeeb49b6b15e36a", null ],
     [ "hasAABB", "classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a2e488fb2519c0454f4f46296b70ec654", null ],
     [ "hasTime", "classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a19acd52b5ed5d324dc0d7dad6b53a874", null ],
     [ "hasTimeRaw", "classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ade4687164388bba1dc9e3b87706fbc62", null ],

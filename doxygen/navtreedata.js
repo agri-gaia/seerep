@@ -36,10 +36,8 @@ var NAVTREE =
       [ "Namespace Members", "namespacemembers.html", [
         [ "All", "namespacemembers.html", null ],
         [ "Functions", "namespacemembers_func.html", null ],
-        [ "Variables", "namespacemembers_vars.html", null ],
         [ "Typedefs", "namespacemembers_type.html", null ],
-        [ "Enumerations", "namespacemembers_enum.html", null ],
-        [ "Enumerator", "namespacemembers_eval.html", null ]
+        [ "Enumerations", "namespacemembers_enum.html", null ]
       ] ]
     ] ],
     [ "Classes", "annotated.html", [
@@ -56,8 +54,7 @@ var NAVTREE =
       [ "File List", "files.html", "files_dup" ],
       [ "File Members", "globals.html", [
         [ "All", "globals.html", null ],
-        [ "Functions", "globals_func.html", null ],
-        [ "Macros", "globals_defs.html", null ]
+        [ "Functions", "globals_func.html", null ]
       ] ]
     ] ]
   ] ]
@@ -66,13 +63,13 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "aabb_8h.html",
-"classseerep__core_1_1CoreTf.html#a283eee26639d5728f937bc3dc2ef64e4",
-"classseerep__grpc__ros_1_1TransferSensorMsgs.html#a32fedf15069840a37f32bca37e158ae3",
-"classseerep__hdf5__pb_1_1Hdf5PbPointCloud.html#a0a0bdffeff4823bd241de46a975b92d9",
-"classseerep__server_1_1server.html#a5e179a55a59a937c90cf7a8b2a0d9a60",
-"functions_vars_z.html",
-"pb-write-load-test_8cpp.html#aaf4f3f8c6754b104fd38c9c15506ccbc",
-"structseerep__core__msgs_1_1Query.html#a39d220ff05feae20df7ca1a88648dc1f"
+"classseerep__core_1_1CoreTf.html#a176739c9dbefb3218b6f5a44e2195054",
+"classseerep__hdf5__core_1_1Hdf5CoreInstance.html",
+"classseerep__hdf5__pb_1_1Hdf5PbPointCloud.html#af286918747d36a5e24bf41eb6971ac0d",
+"classseerep__server_1_1server.html#a81e85f4861be0983b5f2ab39890a0e0b",
+"hdf5-core-image_8h.html",
+"quaternion__stamped_8proto.html",
+"structseerep__core__msgs_1_1Timestamp.html#a35bbf7b7595fc7b691603bcbacebc504"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

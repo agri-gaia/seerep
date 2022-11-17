@@ -3,6 +3,7 @@ var namespaceseerep__server =
     [ "FbImageService", "classseerep__server_1_1FbImageService.html", "classseerep__server_1_1FbImageService" ],
     [ "FbInstanceService", "classseerep__server_1_1FbInstanceService.html", "classseerep__server_1_1FbInstanceService" ],
     [ "FbMetaOperations", "classseerep__server_1_1FbMetaOperations.html", "classseerep__server_1_1FbMetaOperations" ],
+    [ "FbPointCloudService", "classseerep__server_1_1FbPointCloudService.html", "classseerep__server_1_1FbPointCloudService" ],
     [ "FbPointService", "classseerep__server_1_1FbPointService.html", "classseerep__server_1_1FbPointService" ],
     [ "FbTfService", "classseerep__server_1_1FbTfService.html", "classseerep__server_1_1FbTfService" ],
     [ "PbImageService", "classseerep__server_1_1PbImageService.html", "classseerep__server_1_1PbImageService" ],

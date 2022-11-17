@@ -179,12 +179,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aade16116ff2adf933d7273a0dc2f05b4"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; HighFive::File &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1Core.html#aade16116ff2adf933d7273a0dc2f05b4">getHdf5File</a> (const boost::uuids::uuid &amp;projectuuid)</td></tr>
 <tr class="memdesc:aade16116ff2adf933d7273a0dc2f05b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a shared pointer to the HDF5 file accessor of the targeted project.  <a href="classseerep__core_1_1Core.html#aade16116ff2adf933d7273a0dc2f05b4">More...</a><br /></td></tr>
 <tr class="separator:aade16116ff2adf933d7273a0dc2f05b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7659d9183b1e05dd0615f45d51f7d38d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1Core.html#a7659d9183b1e05dd0615f45d51f7d38d">loadProjectsInFolder</a> ()</td></tr>
+<tr class="memdesc:a7659d9183b1e05dd0615f45d51f7d38d"><td class="mdescLeft">&#160;</td><td class="mdescRight">create the project object for each HDF5 file in the data folder  <a href="classseerep__core_1_1Core.html#a7659d9183b1e05dd0615f45d51f7d38d">More...</a><br /></td></tr>
+<tr class="separator:a7659d9183b1e05dd0615f45d51f7d38d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f152c2704d686ef7ae6e033248e6687"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1Core.html#a1f152c2704d686ef7ae6e033248e6687">deleteProject</a> (boost::uuids::uuid uuid)</td></tr>
+<tr class="memdesc:a1f152c2704d686ef7ae6e033248e6687"><td class="mdescLeft">&#160;</td><td class="mdescRight">removes the project from the seerep server and deletes the HDF5 file  <a href="classseerep__core_1_1Core.html#a1f152c2704d686ef7ae6e033248e6687">More...</a><br /></td></tr>
+<tr class="separator:a1f152c2704d686ef7ae6e033248e6687"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a4b1082346204a123819c7c1d70e5c640"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1Core.html#a4b1082346204a123819c7c1d70e5c640">recreateProjects</a> ()</td></tr>
-<tr class="memdesc:a4b1082346204a123819c7c1d70e5c640"><td class="mdescLeft">&#160;</td><td class="mdescRight">create the project object for each HDF5 file in the data folder  <a href="classseerep__core_1_1Core.html#a4b1082346204a123819c7c1d70e5c640">More...</a><br /></td></tr>
-<tr class="separator:a4b1082346204a123819c7c1d70e5c640"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad11047d4bd01e839eba796c08cde965a"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; boost::uuids::uuid, std::shared_ptr&lt; <a class="el" href="classseerep__core_1_1CoreProject.html">seerep_core::CoreProject</a> &gt;, boost::hash&lt; boost::uuids::uuid &gt; &gt;::iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1Core.html#ad11047d4bd01e839eba796c08cde965a">findProject</a> (const boost::uuids::uuid &amp;projectuuid)</td></tr>
 <tr class="memdesc:ad11047d4bd01e839eba796c08cde965a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an iterator to the project with the given uuid. Throws an error if not found.  <a href="classseerep__core_1_1Core.html#ad11047d4bd01e839eba796c08cde965a">More...</a><br /></td></tr>
 <tr class="separator:ad11047d4bd01e839eba796c08cde965a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -451,6 +454,26 @@ Private Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a1f152c2704d686ef7ae6e033248e6687" name="a1f152c2704d686ef7ae6e033248e6687"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f152c2704d686ef7ae6e033248e6687">&#9670;&nbsp;</a></span>deleteProject()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_core::Core::deleteProject </td>
+          <td>(</td>
+          <td class="paramtype">boost::uuids::uuid&#160;</td>
+          <td class="paramname"><em>uuid</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>removes the project from the seerep server and deletes the HDF5 file </p>
 
 </div>
 </div>
@@ -741,27 +764,19 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a4b1082346204a123819c7c1d70e5c640" name="a4b1082346204a123819c7c1d70e5c640"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4b1082346204a123819c7c1d70e5c640">&#9670;&nbsp;</a></span>recreateProjects()</h2>
+<a id="a7659d9183b1e05dd0615f45d51f7d38d" name="a7659d9183b1e05dd0615f45d51f7d38d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7659d9183b1e05dd0615f45d51f7d38d">&#9670;&nbsp;</a></span>loadProjectsInFolder()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void seerep_core::Core::recreateProjects </td>
+          <td class="memname">void seerep_core::Core::loadProjectsInFolder </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>create the project object for each HDF5 file in the data folder </p>

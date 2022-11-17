@@ -1,7 +1,8 @@
 <map id="seerep_hdf5_fb::Hdf5FbGeneral" name="seerep_hdf5_fb::Hdf5FbGeneral">
-<area shape="rect" id="node1" title=" " alt="" coords="239,95,467,121"/>
-<area shape="rect" id="node3" href="$classseerep__hdf5__fb_1_1Hdf5FbImage.html" title=" " alt="" coords="5,169,224,196"/>
-<area shape="rect" id="node4" href="$classseerep__hdf5__fb_1_1Hdf5FbPoint.html" title=" " alt="" coords="248,169,459,196"/>
-<area shape="rect" id="node5" href="$classseerep__hdf5__fb_1_1Hdf5FbTf.html" title=" " alt="" coords="483,169,674,196"/>
-<area shape="rect" id="node2" href="$classseerep__hdf5__core_1_1Hdf5CoreGeneral.html" title=" " alt="" coords="250,5,457,47"/>
+<area shape="rect" id="node1" title=" " alt="" coords="260,85,488,112"/>
+<area shape="rect" id="node3" href="$classseerep__hdf5__fb_1_1Hdf5FbImage.html" title=" " alt="" coords="536,5,755,32"/>
+<area shape="rect" id="node4" href="$classseerep__hdf5__fb_1_1Hdf5FbPoint.html" title=" " alt="" coords="540,56,751,83"/>
+<area shape="rect" id="node5" href="$classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html" title=" " alt="" coords="540,107,751,149"/>
+<area shape="rect" id="node6" href="$classseerep__hdf5__fb_1_1Hdf5FbTf.html" title=" " alt="" coords="550,173,741,200"/>
+<area shape="rect" id="node2" href="$classseerep__hdf5__core_1_1Hdf5CoreGeneral.html" title=" " alt="" coords="5,78,212,119"/>
 </map>

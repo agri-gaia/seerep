@@ -6,5 +6,6 @@ var classseerep__server_1_1PbReceiveSensorMsgs =
     [ "TransferPose", "classseerep__server_1_1PbReceiveSensorMsgs.html#ad7c8dc8812622717ccdaf4e08bfab7b6", null ],
     [ "TransferPoseStamped", "classseerep__server_1_1PbReceiveSensorMsgs.html#a937e8c558b29ddb0b1dbf125726a7087", null ],
     [ "TransferQuaternion", "classseerep__server_1_1PbReceiveSensorMsgs.html#a000ed5ae7f90ae5cefdd89f10cc25d38", null ],
+    [ "m_logger", "classseerep__server_1_1PbReceiveSensorMsgs.html#a87cce2cc7e39c00dedf7a3c8a55261f5", null ],
     [ "seerepCore", "classseerep__server_1_1PbReceiveSensorMsgs.html#a47a3475a228af0ba2bf087ffc2d00d60", null ]
 ];

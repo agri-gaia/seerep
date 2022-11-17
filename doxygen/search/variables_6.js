@@ -1,9 +1,9 @@
 var searchData=
 [
-  ['has_5fnormals_0',['has_normals',['../structseerep__hdf5__pb_1_1Hdf5PbPointCloud_1_1CloudInfo.html#ab40edb4d95bdf38f4e45cb9ed8a6079e',1,'seerep_hdf5_pb::Hdf5PbPointCloud::CloudInfo']]],
-  ['has_5fpoints_1',['has_points',['../structseerep__hdf5__pb_1_1Hdf5PbPointCloud_1_1CloudInfo.html#a41c33692353efd6da5332ce38bcfad25',1,'seerep_hdf5_pb::Hdf5PbPointCloud::CloudInfo']]],
-  ['has_5frgb_2',['has_rgb',['../structseerep__hdf5__pb_1_1Hdf5PbPointCloud_1_1CloudInfo.html#aaeea0e488d4247d17d6d522f2e5584cb',1,'seerep_hdf5_pb::Hdf5PbPointCloud::CloudInfo']]],
-  ['has_5frgba_3',['has_rgba',['../structseerep__hdf5__pb_1_1Hdf5PbPointCloud_1_1CloudInfo.html#a81cdab8a7af2e159b4d5877cd9003621',1,'seerep_hdf5_pb::Hdf5PbPointCloud::CloudInfo']]],
+  ['has_5fnormals_0',['has_normals',['../structseerep__hdf5__pb_1_1Hdf5PbPointCloud_1_1CloudInfo.html#ab40edb4d95bdf38f4e45cb9ed8a6079e',1,'seerep_hdf5_pb::Hdf5PbPointCloud::CloudInfo::has_normals()'],['../structseerep__hdf5__fb_1_1Hdf5FbPointCloud_1_1CloudInfo.html#a94f4571804ca055a6dd95864c93bc9a1',1,'seerep_hdf5_fb::Hdf5FbPointCloud::CloudInfo::has_normals()']]],
+  ['has_5fpoints_1',['has_points',['../structseerep__hdf5__fb_1_1Hdf5FbPointCloud_1_1CloudInfo.html#a51b49cd96224b8f1b43ad631fc58978f',1,'seerep_hdf5_fb::Hdf5FbPointCloud::CloudInfo::has_points()'],['../structseerep__hdf5__pb_1_1Hdf5PbPointCloud_1_1CloudInfo.html#a41c33692353efd6da5332ce38bcfad25',1,'seerep_hdf5_pb::Hdf5PbPointCloud::CloudInfo::has_points()']]],
+  ['has_5frgb_2',['has_rgb',['../structseerep__hdf5__fb_1_1Hdf5FbPointCloud_1_1CloudInfo.html#ad52e609e9d7b1410b6f7a161a2598115',1,'seerep_hdf5_fb::Hdf5FbPointCloud::CloudInfo::has_rgb()'],['../structseerep__hdf5__pb_1_1Hdf5PbPointCloud_1_1CloudInfo.html#aaeea0e488d4247d17d6d522f2e5584cb',1,'seerep_hdf5_pb::Hdf5PbPointCloud::CloudInfo::has_rgb()']]],
+  ['has_5frgba_3',['has_rgba',['../structseerep__hdf5__fb_1_1Hdf5FbPointCloud_1_1CloudInfo.html#a75c12cd19c4629f2b801399aa524a962',1,'seerep_hdf5_fb::Hdf5FbPointCloud::CloudInfo::has_rgba()'],['../structseerep__hdf5__pb_1_1Hdf5PbPointCloud_1_1CloudInfo.html#a81cdab8a7af2e159b4d5877cd9003621',1,'seerep_hdf5_pb::Hdf5PbPointCloud::CloudInfo::has_rgba()']]],
   ['hdf5_5fgroup_5fimage_4',['HDF5_GROUP_IMAGE',['../classseerep__hdf5__core_1_1Hdf5CoreImage.html#aa4d69b6362e494d187803cb1bf8fd5d9',1,'seerep_hdf5_core::Hdf5CoreImage']]],
   ['hdf5_5fgroup_5finstance_5',['HDF5_GROUP_INSTANCE',['../classseerep__hdf5__core_1_1Hdf5CoreInstance.html#a29f9f048f41e6c59848e41b709e48c6b',1,'seerep_hdf5_core::Hdf5CoreInstance']]],
   ['hdf5_5fgroup_5fpoint_6',['HDF5_GROUP_POINT',['../classseerep__hdf5__core_1_1Hdf5CorePoint.html#a5a7995a42bef60f3222049a17a228d64',1,'seerep_hdf5_core::Hdf5CorePoint']]],

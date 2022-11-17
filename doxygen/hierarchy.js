@@ -1,5 +1,6 @@
 var hierarchy =
 [
+    [ "seerep_hdf5_fb::Hdf5FbPointCloud::CloudInfo", "structseerep__hdf5__fb_1_1Hdf5FbPointCloud_1_1CloudInfo.html", null ],
     [ "seerep_hdf5_pb::Hdf5PbPointCloud::CloudInfo", "structseerep__hdf5__pb_1_1Hdf5PbPointCloud_1_1CloudInfo.html", null ],
     [ "seerep_core::Core", "classseerep__core_1_1Core.html", null ],
     [ "seerep_core::CoreDataset", "classseerep__core_1_1CoreDataset.html", null ],
@@ -8,6 +9,7 @@ var hierarchy =
     [ "seerep_core_fb::CoreFbImage", "classseerep__core__fb_1_1CoreFbImage.html", null ],
     [ "seerep_core_fb::CoreFbInstance", "classseerep__core__fb_1_1CoreFbInstance.html", null ],
     [ "seerep_core_fb::CoreFbPoint", "classseerep__core__fb_1_1CoreFbPoint.html", null ],
+    [ "seerep_core_fb::CoreFbPointCloud", "classseerep__core__fb_1_1CoreFbPointCloud.html", null ],
     [ "seerep_core_fb::CoreFbTf", "classseerep__core__fb_1_1CoreFbTf.html", null ],
     [ "seerep_core::CoreInstance", "classseerep__core_1_1CoreInstance.html", null ],
     [ "seerep_core::CoreInstances", "classseerep__core_1_1CoreInstances.html", null ],
@@ -19,7 +21,6 @@ var hierarchy =
     [ "seerep_core::CoreTf", "classseerep__core_1_1CoreTf.html", null ],
     [ "seerep_core_msgs::DatasetIndexable", "structseerep__core__msgs_1_1DatasetIndexable.html", null ],
     [ "seerep_core::CoreDataset::DatatypeSpecifics", "structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html", null ],
-    [ "seerep_grpc_ros::DumpSensorMsgs", "classseerep__grpc__ros_1_1DumpSensorMsgs.html", null ],
     [ "seerep_hdf5_core::Hdf5CoreDatatypeInterface", "classseerep__hdf5__core_1_1Hdf5CoreDatatypeInterface.html", [
       [ "seerep_hdf5_core::Hdf5CoreImage", "classseerep__hdf5__core_1_1Hdf5CoreImage.html", null ],
       [ "seerep_hdf5_core::Hdf5CorePoint", "classseerep__hdf5__core_1_1Hdf5CorePoint.html", null ],
@@ -34,6 +35,7 @@ var hierarchy =
       [ "seerep_hdf5_fb::Hdf5FbGeneral", "classseerep__hdf5__fb_1_1Hdf5FbGeneral.html", [
         [ "seerep_hdf5_fb::Hdf5FbImage", "classseerep__hdf5__fb_1_1Hdf5FbImage.html", null ],
         [ "seerep_hdf5_fb::Hdf5FbPoint", "classseerep__hdf5__fb_1_1Hdf5FbPoint.html", null ],
+        [ "seerep_hdf5_fb::Hdf5FbPointCloud", "classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html", null ],
         [ "seerep_hdf5_fb::Hdf5FbTf", "classseerep__hdf5__fb_1_1Hdf5FbTf.html", null ]
       ] ],
       [ "seerep_hdf5_pb::Hdf5PbGeneral", "classseerep__hdf5__pb_1_1Hdf5PbGeneral.html", [
@@ -44,9 +46,16 @@ var hierarchy =
     ] ],
     [ "seerep_core_msgs::Header", "structseerep__core__msgs_1_1Header.html", null ],
     [ "seerep_core_msgs::LabelWithInstance", "structseerep__core__msgs_1_1LabelWithInstance.html", null ],
+    [ "seerep_hdf5_fb::impl::PointCloud2IteratorBase< T, TT, U, C, V >", "classseerep__hdf5__fb_1_1impl_1_1PointCloud2IteratorBase.html", null ],
     [ "seerep_hdf5_pb::impl::PointCloud2IteratorBase< T, TT, U, C, V >", "classseerep__hdf5__pb_1_1impl_1_1PointCloud2IteratorBase.html", null ],
+    [ "seerep_hdf5_fb::impl::PointCloud2IteratorBase< T, const T, const unsigned char, const seerep::fb::PointCloud2, PointCloud2ConstIterator >", "classseerep__hdf5__fb_1_1impl_1_1PointCloud2IteratorBase.html", [
+      [ "seerep_hdf5_fb::PointCloud2ConstIterator< T >", "classseerep__hdf5__fb_1_1PointCloud2ConstIterator.html", null ]
+    ] ],
     [ "seerep_hdf5_pb::impl::PointCloud2IteratorBase< T, const T, const unsigned char, const seerep::PointCloud2, PointCloud2ConstIterator >", "classseerep__hdf5__pb_1_1impl_1_1PointCloud2IteratorBase.html", [
       [ "seerep_hdf5_pb::PointCloud2ConstIterator< T >", "classseerep__hdf5__pb_1_1PointCloud2ConstIterator.html", null ]
+    ] ],
+    [ "seerep_hdf5_fb::impl::PointCloud2IteratorBase< T, T, unsigned char, seerep::fb::PointCloud2, PointCloud2Iterator >", "classseerep__hdf5__fb_1_1impl_1_1PointCloud2IteratorBase.html", [
+      [ "seerep_hdf5_fb::PointCloud2Iterator< T >", "classseerep__hdf5__fb_1_1PointCloud2Iterator.html", null ]
     ] ],
     [ "seerep_hdf5_pb::impl::PointCloud2IteratorBase< T, T, unsigned char, seerep::PointCloud2, PointCloud2Iterator >", "classseerep__hdf5__pb_1_1impl_1_1PointCloud2IteratorBase.html", [
       [ "seerep_hdf5_pb::PointCloud2Iterator< T >", "classseerep__hdf5__pb_1_1PointCloud2Iterator.html", null ]
@@ -54,7 +63,6 @@ var hierarchy =
     [ "seerep_hdf5_pb::PointCloud2Modifier", "classseerep__hdf5__pb_1_1PointCloud2Modifier.html", null ],
     [ "seerep_core_msgs::ProjectInfo", "structseerep__core__msgs_1_1ProjectInfo.html", null ],
     [ "seerep_core_msgs::Query", "structseerep__core__msgs_1_1Query.html", null ],
-    [ "seerep_grpc_ros::QueryData", "classseerep__grpc__ros_1_1QueryData.html", null ],
     [ "seerep_core_msgs::QueryResult", "structseerep__core__msgs_1_1QueryResult.html", null ],
     [ "seerep_core_msgs::QueryResultProject", "structseerep__core__msgs_1_1QueryResultProject.html", null ],
     [ "seerep_core_msgs::QueryTf", "structseerep__core__msgs_1_1QueryTf.html", null ],
@@ -67,6 +75,9 @@ var hierarchy =
     ] ],
     [ "seerep::fb::MetaOperations::Service", null, [
       [ "seerep_server::FbMetaOperations", "classseerep__server_1_1FbMetaOperations.html", null ]
+    ] ],
+    [ "seerep::fb::PointCloudService::Service", null, [
+      [ "seerep_server::FbPointCloudService", "classseerep__server_1_1FbPointCloudService.html", null ]
     ] ],
     [ "seerep::fb::PointService::Service", null, [
       [ "seerep_server::FbPointService", "classseerep__server_1_1FbPointService.html", null ]
@@ -94,7 +105,5 @@ var hierarchy =
       [ "seerep_hdf5_fb::tests::fbWriteLoadTest", "classseerep__hdf5__fb_1_1tests_1_1fbWriteLoadTest.html", null ]
     ] ],
     [ "seerep_core_msgs::Timeinterval", "structseerep__core__msgs_1_1Timeinterval.html", null ],
-    [ "seerep_core_msgs::Timestamp", "structseerep__core__msgs_1_1Timestamp.html", null ],
-    [ "seerep_grpc_ros::TransferImagesWithDetection", "classseerep__grpc__ros_1_1TransferImagesWithDetection.html", null ],
-    [ "seerep_grpc_ros::TransferSensorMsgs", "classseerep__grpc__ros_1_1TransferSensorMsgs.html", null ]
+    [ "seerep_core_msgs::Timestamp", "structseerep__core__msgs_1_1Timestamp.html", null ]
 ];

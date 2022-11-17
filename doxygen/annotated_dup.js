@@ -14,6 +14,7 @@ var annotated_dup =
       [ "CoreFbImage", "classseerep__core__fb_1_1CoreFbImage.html", "classseerep__core__fb_1_1CoreFbImage" ],
       [ "CoreFbInstance", "classseerep__core__fb_1_1CoreFbInstance.html", "classseerep__core__fb_1_1CoreFbInstance" ],
       [ "CoreFbPoint", "classseerep__core__fb_1_1CoreFbPoint.html", "classseerep__core__fb_1_1CoreFbPoint" ],
+      [ "CoreFbPointCloud", "classseerep__core__fb_1_1CoreFbPointCloud.html", "classseerep__core__fb_1_1CoreFbPointCloud" ],
       [ "CoreFbTf", "classseerep__core__fb_1_1CoreFbTf.html", "classseerep__core__fb_1_1CoreFbTf" ]
     ] ],
     [ "seerep_core_msgs", "namespaceseerep__core__msgs.html", [
@@ -34,12 +35,6 @@ var annotated_dup =
       [ "CorePbPointCloud", "classseerep__core__pb_1_1CorePbPointCloud.html", "classseerep__core__pb_1_1CorePbPointCloud" ],
       [ "CorePbTf", "classseerep__core__pb_1_1CorePbTf.html", "classseerep__core__pb_1_1CorePbTf" ]
     ] ],
-    [ "seerep_grpc_ros", "namespaceseerep__grpc__ros.html", [
-      [ "DumpSensorMsgs", "classseerep__grpc__ros_1_1DumpSensorMsgs.html", "classseerep__grpc__ros_1_1DumpSensorMsgs" ],
-      [ "QueryData", "classseerep__grpc__ros_1_1QueryData.html", "classseerep__grpc__ros_1_1QueryData" ],
-      [ "TransferImagesWithDetection", "classseerep__grpc__ros_1_1TransferImagesWithDetection.html", "classseerep__grpc__ros_1_1TransferImagesWithDetection" ],
-      [ "TransferSensorMsgs", "classseerep__grpc__ros_1_1TransferSensorMsgs.html", "classseerep__grpc__ros_1_1TransferSensorMsgs" ]
-    ] ],
     [ "seerep_hdf5_core", "namespaceseerep__hdf5__core.html", [
       [ "Hdf5CoreDatatypeInterface", "classseerep__hdf5__core_1_1Hdf5CoreDatatypeInterface.html", "classseerep__hdf5__core_1_1Hdf5CoreDatatypeInterface" ],
       [ "Hdf5CoreGeneral", "classseerep__hdf5__core_1_1Hdf5CoreGeneral.html", "classseerep__hdf5__core_1_1Hdf5CoreGeneral" ],
@@ -50,13 +45,19 @@ var annotated_dup =
       [ "Hdf5CoreTf", "classseerep__hdf5__core_1_1Hdf5CoreTf.html", "classseerep__hdf5__core_1_1Hdf5CoreTf" ]
     ] ],
     [ "seerep_hdf5_fb", "namespaceseerep__hdf5__fb.html", [
+      [ "impl", "namespaceseerep__hdf5__fb_1_1impl.html", [
+        [ "PointCloud2IteratorBase", "classseerep__hdf5__fb_1_1impl_1_1PointCloud2IteratorBase.html", "classseerep__hdf5__fb_1_1impl_1_1PointCloud2IteratorBase" ]
+      ] ],
       [ "tests", "namespaceseerep__hdf5__fb_1_1tests.html", [
         [ "fbWriteLoadTest", "classseerep__hdf5__fb_1_1tests_1_1fbWriteLoadTest.html", null ]
       ] ],
       [ "Hdf5FbGeneral", "classseerep__hdf5__fb_1_1Hdf5FbGeneral.html", "classseerep__hdf5__fb_1_1Hdf5FbGeneral" ],
       [ "Hdf5FbImage", "classseerep__hdf5__fb_1_1Hdf5FbImage.html", "classseerep__hdf5__fb_1_1Hdf5FbImage" ],
       [ "Hdf5FbPoint", "classseerep__hdf5__fb_1_1Hdf5FbPoint.html", "classseerep__hdf5__fb_1_1Hdf5FbPoint" ],
-      [ "Hdf5FbTf", "classseerep__hdf5__fb_1_1Hdf5FbTf.html", "classseerep__hdf5__fb_1_1Hdf5FbTf" ]
+      [ "Hdf5FbPointCloud", "classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html", "classseerep__hdf5__fb_1_1Hdf5FbPointCloud" ],
+      [ "Hdf5FbTf", "classseerep__hdf5__fb_1_1Hdf5FbTf.html", "classseerep__hdf5__fb_1_1Hdf5FbTf" ],
+      [ "PointCloud2ConstIterator", "classseerep__hdf5__fb_1_1PointCloud2ConstIterator.html", "classseerep__hdf5__fb_1_1PointCloud2ConstIterator" ],
+      [ "PointCloud2Iterator", "classseerep__hdf5__fb_1_1PointCloud2Iterator.html", "classseerep__hdf5__fb_1_1PointCloud2Iterator" ]
     ] ],
     [ "seerep_hdf5_pb", "namespaceseerep__hdf5__pb.html", [
       [ "impl", "namespaceseerep__hdf5__pb_1_1impl.html", [
@@ -74,6 +75,7 @@ var annotated_dup =
       [ "FbImageService", "classseerep__server_1_1FbImageService.html", "classseerep__server_1_1FbImageService" ],
       [ "FbInstanceService", "classseerep__server_1_1FbInstanceService.html", "classseerep__server_1_1FbInstanceService" ],
       [ "FbMetaOperations", "classseerep__server_1_1FbMetaOperations.html", "classseerep__server_1_1FbMetaOperations" ],
+      [ "FbPointCloudService", "classseerep__server_1_1FbPointCloudService.html", "classseerep__server_1_1FbPointCloudService" ],
       [ "FbPointService", "classseerep__server_1_1FbPointService.html", "classseerep__server_1_1FbPointService" ],
       [ "FbTfService", "classseerep__server_1_1FbTfService.html", "classseerep__server_1_1FbTfService" ],
       [ "PbImageService", "classseerep__server_1_1PbImageService.html", "classseerep__server_1_1PbImageService" ],

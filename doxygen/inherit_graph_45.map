@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classseerep__hdf5__pb_1_1impl_1_1PointCloud2IteratorBase.html" title=" " alt="" coords="5,5,193,61"/>
+<area shape="rect" id="node1" href="$classseerep__hdf5__pb_1_1impl_1_1PointCloud2IteratorBase.html" title=" " alt="" coords="5,5,240,91"/>
+<area shape="rect" id="node2" href="$classseerep__hdf5__pb_1_1PointCloud2ConstIterator.html" title="Same as a PointCloud2Iterator but for const data." alt="" coords="288,27,499,69"/>
 </map>

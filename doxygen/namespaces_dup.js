@@ -4,7 +4,6 @@ var namespaces_dup =
     [ "seerep_core_fb", "namespaceseerep__core__fb.html", "namespaceseerep__core__fb" ],
     [ "seerep_core_msgs", "namespaceseerep__core__msgs.html", "namespaceseerep__core__msgs" ],
     [ "seerep_core_pb", "namespaceseerep__core__pb.html", "namespaceseerep__core__pb" ],
-    [ "seerep_grpc_ros", "namespaceseerep__grpc__ros.html", "namespaceseerep__grpc__ros" ],
     [ "seerep_hdf5_core", "namespaceseerep__hdf5__core.html", "namespaceseerep__hdf5__core" ],
     [ "seerep_hdf5_fb", "namespaceseerep__hdf5__fb.html", "namespaceseerep__hdf5__fb" ],
     [ "seerep_hdf5_pb", "namespaceseerep__hdf5__pb.html", "namespaceseerep__hdf5__pb" ],
