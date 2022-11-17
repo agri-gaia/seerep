@@ -442,18 +442,27 @@ std::optional<seerep_core_msgs::geodeticCoordinates> Hdf5CoreGeneral::readGeodet
   const std::scoped_lock lock(*m_write_mtx);
 
   seerep_core_msgs::geodeticCoordinates geocoords;
-  if (m_file->hasAttribute(GEODETICLOCATION_COORDINATESYSTEM) || m_file->hasAttribute(GEODETICLOCATION_ELLIPSOID) ||
-      m_file->hasAttribute(GEODETICLOCATION_ALTITUDE) || m_file->hasAttribute(GEODETICLOCATION_LATITUDE) ||
-      m_file->hasAttribute(GEODETICLOCATION_LONGITUDE))
+  if (m_file->hasAttribute(GEODETICLOCATION_COORDINATESYSTEM))
   {
     m_file->getAttribute(GEODETICLOCATION_COORDINATESYSTEM).read(geocoords.coordinateSystem);
-    m_file->getAttribute(GEODETICLOCATION_ELLIPSOID).read(geocoords.ellipsoid);
-    m_file->getAttribute(GEODETICLOCATION_ALTITUDE).read(geocoords.altitude);
-    m_file->getAttribute(GEODETICLOCATION_LATITUDE).read(geocoords.latitude);
-    m_file->getAttribute(GEODETICLOCATION_LONGITUDE).read(geocoords.longitude);
-    return geocoords;
   }
-  return std::nullopt;
+  if (m_file->hasAttribute(GEODETICLOCATION_ELLIPSOID))
+  {
+    m_file->getAttribute(GEODETICLOCATION_ELLIPSOID).read(geocoords.ellipsoid);
+  }
+  if (m_file->hasAttribute(GEODETICLOCATION_ALTITUDE))
+  {
+    m_file->getAttribute(GEODETICLOCATION_ALTITUDE).read(geocoords.altitude);
+  }
+  if (m_file->hasAttribute(GEODETICLOCATION_LATITUDE))
+  {
+    m_file->getAttribute(GEODETICLOCATION_LATITUDE).read(geocoords.latitude);
+  }
+  if (m_file->hasAttribute(GEODETICLOCATION_LONGITUDE))
+  {
+    m_file->getAttribute(GEODETICLOCATION_LONGITUDE).read(geocoords.longitude);
+  }
+  return geocoords;
 }
 
 }  // namespace seerep_hdf5_core

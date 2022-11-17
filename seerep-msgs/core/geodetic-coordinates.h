@@ -5,7 +5,7 @@
 
 namespace seerep_core_msgs
 {
-struct geodeticCoordinates
+struct GeodeticCoordinates
 {
   std::string coordinateSystem;
   std::string ellipsoid;

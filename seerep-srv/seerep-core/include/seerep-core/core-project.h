@@ -51,17 +51,20 @@ public:
    * @brief Constructs the project object and loads the needed information from the HDF5 file
    * @param uuid the UUID of the project. HDF5 file name is UUID + ".h5" extension
    * @param path path to the folder containing the HDF5 files
+   * @param geodetic coordinates for the location of the site of data recording
    */
-  CoreProject(const boost::uuids::uuid& uuid, const std::string path);
+  CoreProject(const boost::uuids::uuid& uuid, const std::string path,
+              const seerep_core_msgs::GeodeticCoordinates geodeticCoords);
   /**
    * @brief Constructs the project object and creates a new HDF5 file
    * @param uuid the UUID of the project. HDF5 file name is UUID + ".h5" extension
    * @param path path to the folder containing the HDF5 files
    * @param projectname a plain name for the project for easier differentiation of the projects
    * @param mapFrameId the frame id of the map frame which is used to create the spatial indices for this project
+   * @param geodetic coordinates for the location of the site of data recording
    */
   CoreProject(const boost::uuids::uuid& uuid, const std::string path, const std::string projectname,
-              const std::string mapFrameId, const seerep_core_msgs::geodeticCoordinates geodeticCoords);
+              const std::string mapFrameId, const seerep_core_msgs::GeodeticCoordinates geodeticCoords);
   ~CoreProject();
 
   /**
@@ -88,6 +91,13 @@ public:
    * @return vector of UUIDs of instances matching the query and the project UUID
    */
   seerep_core_msgs::QueryResultProject getInstances(const seerep_core_msgs::Query& query);
+
+  /**
+   * @brief Returns a vector of UUIDs of datasets that match the query and the project UUID
+   * @param query the spatio-temporal-semantic query
+   * @return vector of UUIDs of geodetic coordinates matching the query and the project UUID
+   */
+  seerep_core_msgs::QueryResultProject getGeodeticCoordinates(const seerep_core_msgs::Query& query);
 
   /**
    * @brief Adds a dataset to the spatial, temporal and semantic indices
