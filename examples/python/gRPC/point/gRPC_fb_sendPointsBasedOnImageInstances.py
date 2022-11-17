@@ -27,13 +27,11 @@ import util_fb
 
 channel = util.get_gRPC_channel()
 
-projectuuid = util_fb.get_or_create_project(channel, "LabeledImagesInGrid", True)
+builder = flatbuffers.Builder(1024)
+projectuuid = util_fb.getOrCreateProject(builder, channel, "LabeledImagesInGrid")
 
 stubImage = imageService.ImageServiceStub(channel)
 stubPoint = pointService.PointServiceStub(channel)
-
-
-builder = flatbuffers.Builder(1024)
 
 queryMsg = util_fb.createQuery(builder)
 builder.Finish(queryMsg)
