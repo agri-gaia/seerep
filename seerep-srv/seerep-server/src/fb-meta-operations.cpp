@@ -54,7 +54,17 @@ grpc::Status FbMetaOperations::GetProjects(grpc::ServerContext* context,
   {
     auto nameOffset = builder.CreateString(projectInfo.name);
     auto uuidOffset = builder.CreateString(boost::lexical_cast<std::string>(projectInfo.uuid));
-    projectInfosVector.push_back(seerep::fb::CreateProjectInfo(builder, nameOffset, uuidOffset));
+
+    seerep::fb::GeodeticCoordinatesBuilder gcbuilder(builder);
+    gcbuilder.add_coordinateSystem(projectInfo.geodetCoords.coordinateSystem);
+    gcbuilder.add_ellipsoid(projectInfo.geodetCoords.ellipsoid);
+    gcbuilder.add_altitude(projectInfo.geodetCoords.altitude);
+    gcbuilder.add_latitude(projectInfo.geodetCoords.latitude);
+    gcbuilder.add_longitude(projectInfo.geodetCoords.longitude);
+    geodeticCoordinatesOffset = gcbuilder.Finish();
+
+    projectInfosVector.push_back(
+        seerep::fb::CreateProjectInfo(builder, nameOffset, uuidOffset, geodeticCoordinatesOffset));
   }
   auto vectorOffset = builder.CreateVector(projectInfosVector);
   auto projectInfosOffset = seerep::fb::CreateProjectInfos(builder, vectorOffset);

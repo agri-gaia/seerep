@@ -2,16 +2,19 @@
 
 namespace seerep_core
 {
-CoreProject::CoreProject(const boost::uuids::uuid& uuid, const std::string path) : m_uuid(uuid), m_path(path)
+CoreProject::CoreProject(const boost::uuids::uuid& uuid, const std::string path,
+                         const seerep_core_msgs::GeodeticCoordinates geodeticCoords)
+  : m_uuid(uuid), m_path(path), m_geodeticCoordinates(geodeticCoords)
 {
   createHdf5Io(m_path);
 
   m_projectname = m_ioGeneral->readProjectname();
   m_frameId = m_ioGeneral->readProjectFrameId();
+  m_ioGeneral->writeGeodeticLocation(m_geodeticCoordinates);
   recreateDatatypes();
 }
 CoreProject::CoreProject(const boost::uuids::uuid& uuid, const std::string path, const std::string projectname,
-                         const std::string mapFrameId, const seerep_core_msgs::geodeticCoordinates geodeticCoords)
+                         const std::string mapFrameId, const seerep_core_msgs::GeodeticCoordinates geodeticCoords)
   : m_uuid(uuid), m_path(path), m_projectname(projectname), m_frameId(mapFrameId), m_geodeticCoordinates(geodeticCoords)
 {
   createHdf5Io(m_path);
@@ -46,6 +49,15 @@ seerep_core_msgs::QueryResultProject CoreProject::getInstances(const seerep_core
   seerep_core_msgs::QueryResultProject result;
   result.projectUuid = m_uuid;
   result.dataOrInstanceUuids = m_coreDatasets->getInstances(m_coreTfs->transformQuery(query, m_frameId));
+
+  return result;
+}
+
+seerep_core_msgs::QueryResultProject getGeodeticCoordinates(const seerep_core_msgs::Query& query)
+{
+  seerep_core_msgs::QueryResultProject result;
+  result.projectUuid = m_uuid;
+  result.dataOrInstanceUuids = m_coreDatasets->getGeodeticCoordinates(m_coreTfs->transformQuery(query, m_frameId));
 
   return result;
 }
