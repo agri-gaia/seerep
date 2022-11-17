@@ -436,7 +436,7 @@ public:
   /**
    * @brief This function instantiates all the attributes and fills them with arbitrary values.
    * */
-  void TestBody()
+  rosToFbConversionTest()
   {
     /* This function will create all the elements we want to test
      * */
@@ -467,9 +467,6 @@ public:
   }
 };
 
-// object of test class for use in the TEST functions below
-rosToFbConversionTest testClass;
-
 /**
  * @brief Given two ROS std_msgs::Header instances, this function tests their sub attributes of equality.
  * */
@@ -488,7 +485,7 @@ void testHeader(std_msgs::Header original_header, std_msgs::Header converted_hea
 TEST_F(rosToFbConversionTest, testHeader)
 {
   // expect that original and converted-from-fb are equal
-  testHeader(original_header, testClass.converted_header);
+  testHeader(original_header, converted_header);
 }
 
 /**
