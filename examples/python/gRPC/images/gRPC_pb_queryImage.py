@@ -38,14 +38,14 @@ if projectuuid == "":
 # 4. Create a query with parameters
 theQuery = query.Query()
 theQuery.projectuuid.append(projectuuid)
-theQuery.boundingboxstamped.header.frame_id = "map"
+theQuery.boundingboxStamped.header.frame_id = "map"
 
-theQuery.boundingboxstamped.boundingbox.point_min.x = 0.0
-theQuery.boundingboxstamped.boundingbox.point_min.y = 0.0
-theQuery.boundingboxstamped.boundingbox.point_min.z = 0.0
-theQuery.boundingboxstamped.boundingbox.point_max.x = 100.0
-theQuery.boundingboxstamped.boundingbox.point_max.y = 100.0
-theQuery.boundingboxstamped.boundingbox.point_max.z = 100.0
+theQuery.boundingboxStamped.boundingbox.point_min.x = 0.0
+theQuery.boundingboxStamped.boundingbox.point_min.y = 0.0
+theQuery.boundingboxStamped.boundingbox.point_min.z = 0.0
+theQuery.boundingboxStamped.boundingbox.point_max.x = 100.0
+theQuery.boundingboxStamped.boundingbox.point_max.y = 100.0
+theQuery.boundingboxStamped.boundingbox.point_max.z = 100.0
 
 # since epoche
 theQuery.timeinterval.time_min.seconds = 1638549273
