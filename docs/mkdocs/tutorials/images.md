@@ -5,12 +5,15 @@
 In this example we want to send images with labeled bounding boxes as well as general labels to SEEREP. Additionally
 we add some coordinate transformations at the end.
 
-Source: `examples/gRPC/images/gRPC_pb_sendLabeledImage.py`
+Source: `examples/python/gRPC/images/gRPC_pb_sendLabeledImage.py`
 
 ```python
+#!/usr/bin/env python3
+
 import os
 import sys
 import time
+import uuid
 
 import boundingbox2d_labeled_pb2 as bb
 import image_pb2 as image
@@ -29,7 +32,7 @@ sys.path.append(util_dir)
 import util
 
 # Default server is localhost !
-channel = util.get_gRPC_channel()
+channel = util.get_gRPC_channel(target = "local")
 
 # 1. Get gRPC service objects
 stub = imageService.ImageServiceStub(channel)
@@ -87,8 +90,9 @@ for n in range(10):
 
     # 5. Create bounding boxes with labels
     bb1 = bb.BoundingBox2DLabeled()
-    for i in range(0, 10):
+    for i in range(0, 2):
         bb1.labelWithInstance.label = "testlabel" + str(i)
+        bb1.labelWithInstance.instanceUuid = str(uuid.uuid4())
         bb1.boundingBox.point_min.x = 0.01 + i / 10
         bb1.boundingBox.point_min.y = 0.02 + i / 10
         bb1.boundingBox.point_max.x = 0.03 + i / 10
@@ -96,9 +100,11 @@ for n in range(10):
         theImage.labels_bb.append(bb1)
 
     # 6. Add general labels to the image
-    for i in range(0, 10):
+    for i in range(0, 2):
         label = labelWithInstance.LabelWithInstance()
         label.label = "testlabelgeneral" + str(i)
+        # assuming that that the general labels are not instance related -> no instance uuid
+        # label.instanceUuid = str(uuid.uuid4())
         theImage.labels_general.append(label)
 
     # 7. Send image to the server
@@ -153,9 +159,11 @@ Now we want to query the previously send images with some criteria. Possible que
 
 === "Protocol Buffers"
 
-    Source: `examples/gRPC/images/gRPC_pb_queryImage.py`
+    Source: `examples/python/gRPC/images/gRPC_pb_queryImage.py`
 
     ```python
+    #!/usr/bin/env python3
+
     import os
     import sys
 
@@ -165,7 +173,7 @@ Now we want to query the previously send images with some criteria. Possible que
     from google.protobuf import empty_pb2
 
     # importing util functions. Assuming that this file is in the parent dir
-    # https://github.com/agri-gaia/seerep/blob/6c4da5736d4a893228e97b01a9ada18620b1a83f/examples/python/gRPC/util.py
+    # examples/python/gRPC/util.py
     script_dir = os.path.dirname(__file__)
     util_dir = os.path.join(script_dir, '..')
     sys.path.append(util_dir)
@@ -194,26 +202,27 @@ Now we want to query the previously send images with some criteria. Possible que
     # 4. Create a query with parameters
     theQuery = query.Query()
     theQuery.projectuuid.append(projectuuid)
-    theQuery.boundingbox.header.frame_id = "map"
+    theQuery.boundingboxstamped.header.frame_id = "map"
 
-    theQuery.boundingbox.point_min.x = 0.0
-    theQuery.boundingbox.point_min.y = 0.0
-    theQuery.boundingbox.point_min.z = 0.0
-    theQuery.boundingbox.point_max.x = 100.0
-    theQuery.boundingbox.point_max.y = 100.0
-    theQuery.boundingbox.point_max.z = 100.0
+    theQuery.boundingboxstamped.boundingbox.point_min.x = 0.0
+    theQuery.boundingboxstamped.boundingbox.point_min.y = 0.0
+    theQuery.boundingboxstamped.boundingbox.point_min.z = 0.0
+    theQuery.boundingboxstamped.boundingbox.point_max.x = 100.0
+    theQuery.boundingboxstamped.boundingbox.point_max.y = 100.0
+    theQuery.boundingboxstamped.boundingbox.point_max.z = 100.0
 
-    # Since epoche
+    # since epoche
     theQuery.timeinterval.time_min.seconds = 1638549273
     theQuery.timeinterval.time_min.nanos = 0
     theQuery.timeinterval.time_max.seconds = 1938549273
     theQuery.timeinterval.time_max.nanos = 0
 
-    # Labels
+    # labels
     theQuery.label.extend(["testlabel0"])
 
     # 5. Query the server for images matching the query and iterate over them
     for img in stub.GetImage(theQuery):
+        print(f"uuidmsg: {img.header.uuid_msgs}")
         print(f"first label: {img.labels_bb[0].labelWithInstance.label}")
         print(
             "First bounding box (Xmin, Ymin, Xmax, Ymax): "
@@ -248,122 +257,74 @@ Now we want to query the previously send images with some criteria. Possible que
 
 === "Flatbuffers"
 
-    Source: `examples/gRPC/images/gRPC_pb_queryImage.py`
+    Source: `examples/images/gRPC/images/gRPC_fb_queryImage.py`
 
     ```python
+    #!/usr/bin/env python3
+
     import os
     import sys
 
     import flatbuffers
-    import grpc
-    from fb import (
-        Boundingbox,
-        Empty,
-        Header,
-        Image,
-        Point,
-        ProjectInfos,
-        Query,
-        TimeInterval,
-        Timestamp,
-    )
+    from fb import Image
     from fb import image_service_grpc_fb as imageService
-    from fb import meta_operations_grpc_fb as metaOperations
 
-    # importing util functions. Assuming that this file is in the parent dir
-    # https://github.com/agri-gaia/seerep/blob/6c4da5736d4a893228e97b01a9ada18620b1a83f/examples/python/gRPC/util.py
+    # importing util functions. Assuming that these files are in the parent dir
+    # examples/python/gRPC/util.py
+    # examples/python/gRPC/util_fb.py
     script_dir = os.path.dirname(__file__)
     util_dir = os.path.join(script_dir, '..')
     sys.path.append(util_dir)
     import util
+    import util_fb
 
+    builder = flatbuffers.Builder(1024)
     # Default server is localhost !
     channel = util.get_gRPC_channel()
 
-    # 1. Get gRPC service objects
+    # 1. Get all projects from the server
+    projectuuid = util_fb.getProject(builder, channel, 'testproject')
+
+    # 2. Check if the defined project exist; if not exit
+    if not projectuuid:
+        exit()
+
+    # 3. Get gRPC service object
     stub = imageService.ImageServiceStub(channel)
-    stubMeta = metaOperations.MetaOperationsStub(channel)
 
-    # Build an empty message
-    builder = flatbuffers.Builder(1024)
-    Empty.Start(builder)
-    emptyMsg = Empty.End(builder)
-    builder.Finish(emptyMsg)
-    buf = builder.Output()
-
-    # 2. Get all projects from the server
-    responseBuf = stubMeta.GetProjects(bytes(buf))
-    response = ProjectInfos.ProjectInfos.GetRootAs(responseBuf)
-
-    # 3. Check if we have an existing test project, if not, we stop here
-    projectuuid = ""
-    for i in range(response.ProjectsLength()):
-        print(response.Projects(i).Name().decode("utf-8") + " " + response.Projects(i).Uuid().decode("utf-8") + "\n")
-        if response.Projects(i).Name().decode("utf-8") == "testproject":
-            projectuuid = response.Projects(i).Uuid().decode("utf-8")
-
-    if projectuuid == "":
-        sys.exit()
 
     # Create all necessary objects for the query
-    Point.Start(builder)
-    Point.AddX(builder, 0.0)
-    Point.AddY(builder, 0.0)
-    Point.AddZ(builder, 0.0)
-    pointMin = Point.End(builder)
+    header = util_fb.createHeader(builder, frame="map")
+    pointMin = util_fb.createPoint(builder, 0.0, 0.0, 0.0)
+    pointMax = util_fb.createPoint(builder, 100.0, 100.0, 100.0)
+    boundingboxStamped = util_fb.createBoundingBoxStamped(builder, header, pointMin, pointMax)
 
-    Point.Start(builder)
-    Point.AddX(builder, 100.0)
-    Point.AddY(builder, 100.0)
-    Point.AddZ(builder, 100.0)
-    pointMax = Point.End(builder)
-
-    frameId = builder.CreateString("map")
-    Header.Start(builder)
-    Header.AddFrameId(builder, frameId)
-    header = Header.End(builder)
-
-    Boundingbox.Start(builder)
-    Boundingbox.AddPointMin(builder, pointMin)
-    Boundingbox.AddPointMax(builder, pointMax)
-    Boundingbox.AddHeader(builder, header)
-    boundingbox = Boundingbox.End(builder)
-
-    Timestamp.Start(builder)
-    Timestamp.AddSeconds(builder, 1610549273)
-    Timestamp.AddNanos(builder, 0)
-    timeMin = Timestamp.End(builder)
-
-    Timestamp.Start(builder)
-    Timestamp.AddSeconds(builder, 1938549273)
-    Timestamp.AddNanos(builder, 0)
-    timeMax = Timestamp.End(builder)
-
-    TimeInterval.Start(builder)
-    TimeInterval.AddTimeMin(builder, timeMin)
-    TimeInterval.AddTimeMax(builder, timeMax)
-    timeInterval = TimeInterval.End(builder)
-
-    projectuuidString = builder.CreateString(projectuuid)
-    Query.StartProjectuuidVector(builder, 1)
-    builder.PrependUOffsetTRelative(projectuuidString)
-    projectuuidMsg = builder.EndVector()
+    timeMin = util_fb.createTimeStamp(builder, 1610549273, 0)
+    timeMax = util_fb.createTimeStamp(builder, 1938549273, 0)
+    timeInterval = util_fb.createTimeInterval(builder, timeMin, timeMax)
 
 
-    label = builder.CreateString("testlabel0")
-    Query.StartLabelVector(builder, 1)
-    builder.PrependUOffsetTRelative(label)
-    labelMsg = builder.EndVector()
+    projectUuids = [builder.CreateString(projectuuid)]
+    labels = [builder.CreateString("testlabel0")]
+    dataUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
+    instanceUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 
     # 4. Create a query with parameters
-    Query.Start(builder)
-    Query.AddBoundingbox(builder, boundingbox)
-    Query.AddTimeinterval(builder, timeInterval)
-    Query.AddProjectuuid(builder, projectuuidMsg)
-    Query.AddLabel(builder, labelMsg)
-    queryMsg = Query.End(builder)
-
-    builder.Finish(queryMsg)
+    # all parameters are optional
+    # with all parameters set (especially with the data and instance uuids set) the result
+    # of the query will be empty. Set the query parameters to adequate values or remove
+    # them from the query creation
+    query = util_fb.createQuery(
+        builder,
+        # boundingBox=boundingboxStamped,
+        # timeInterval=timeInterval,
+        # labels=labels,
+        # projectUuids=projectUuids,
+        # instanceUuids=instanceUuids,
+        # dataUuids=dataUuids,
+        withoutData=True,
+    )
+    builder.Finish(query)
     buf = builder.Output()
 
     # 5. Query the server for images matching the query and iterate over them
@@ -381,8 +342,10 @@ Now we want to query the previously send images with some criteria. Possible que
             + str(response.LabelsBb(0).BoundingBox().PointMax().X())
             + " "
             + str(response.LabelsBb(0).BoundingBox().PointMax().Y())
+            + "\n"
         )
 
+    print("done.")
     ```
 
     Output:
@@ -405,4 +368,6 @@ Now we want to query the previously send images with some criteria. Possible que
     uuidmsg: 5d330208-e534-4bfb-b242-00295e6b027d
     first label: testlabel0
     first bounding box (Xmin,Ymin,Xmax,Ymax): 0.01 0.02 0.03 0.04
+
+    done.
     ```

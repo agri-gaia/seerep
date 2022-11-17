@@ -16,7 +16,7 @@ tag instead of `latest`.
 ```
 docker run \
   --volume=seerep-data:/mnt/seerep-data \
-  --publish=9090 \
+  --publish=9090:9090 \
   --name=seerep_server \
   --tty \
   ghcr.io/agri-gaia/seerep_server:latest \
@@ -34,7 +34,7 @@ without a hyphen as part of the Docker CLI replaces `docker-compose`.
 Example docker-compose.yml:
 
 ```
-version: "3.9"
+version: "3.6"
 services:
   seerep:
     image: ghcr.io/agri-gaia/seerep_server:latest
@@ -45,10 +45,11 @@ services:
       - "--data-folder=/mnt/seerep-data"
     ports:
       # the gRPC port
-      - 9090
+      - 9090:9090
     volumes:
       # persist the data folder
-      - seerep-data:/mnt/seerep-data
+      - seerep-data:/mnt/seerep-data #using docker volume
+      #- /your/local/absolute/path:/mnt/seerep-data #using host folder
 volumes:
   seerep-data:
 ```

@@ -2,7 +2,6 @@ import sys
 
 from fb import (
     Boundingbox,
-    Boundingbox2D,
     BoundingBox2DLabeled,
     BoundingBoxes2DLabeledStamped,
     BoundingBoxLabeled,
@@ -17,8 +16,10 @@ from fb import (
     ProjectInfo,
     ProjectInfos,
     Query,
+    QueryInstance,
     TimeInterval,
     Timestamp,
+    TransformStampedQuery,
 )
 from fb import meta_operations_grpc_fb as metaOperations
 
@@ -212,9 +213,10 @@ def createBoundingBox(builder, pointMin, pointMax):
 
 def createBoundingBoxStamped(builder, header, pointMin, pointMax):
     '''Creates a stamped 3D bounding box in flatbuffers'''
+    boundingBox = createBoundingBox(builder, pointMin, pointMax)
     BoundingboxStamped.Start(builder)
     BoundingboxStamped.AddHeader(builder, header)
-    BoundingboxStamped.AddBoundingbox(builder, createBoundingBox(builder, pointMin, pointMax))
+    BoundingboxStamped.AddBoundingbox(builder, boundingBox)
     return BoundingboxStamped.End(builder)
 
 
@@ -325,9 +327,24 @@ def createQuery(
     return Query.End(builder)
 
 
+def createQueryInstance(builder, query, datatype):
+    '''Create a query for instances'''
+    QueryInstance.Start(builder)
+    QueryInstance.AddDatatype(builder, datatype)
+    QueryInstance.AddQuery(builder, query)
+    return QueryInstance.End(builder)
+
+
 def createTimeInterval(builder, timeMin, timeMax):
     '''Create a time time interval in flatbuffers'''
     TimeInterval.Start(builder)
     TimeInterval.AddTimeMin(builder, timeMin)
     TimeInterval.AddTimeMax(builder, timeMax)
     return TimeInterval.End(builder)
+
+
+def createTransformStampedQuery(builder, header, childFrameId):
+    TransformStampedQuery.Start(builder)
+    TransformStampedQuery.AddHeader(builder, header)
+    TransformStampedQuery.AddChildFrameId(builder, childFrameId)
+    return TransformStampedQuery.End(builder)
