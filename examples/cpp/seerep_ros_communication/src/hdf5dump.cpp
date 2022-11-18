@@ -10,6 +10,7 @@ DumpSensorMsgs::DumpSensorMsgs(std::string hdf5FilePath)
   m_ioTf = std::make_shared<seerep_hdf5_pb::Hdf5PbTf>(hdf5_file, write_mtx);
   m_ioPointCloud = std::make_shared<seerep_hdf5_pb::Hdf5PbPointCloud>(hdf5_file, write_mtx);
   m_ioImage = std::make_shared<seerep_hdf5_pb::Hdf5PbImage>(hdf5_file, write_mtx);
+  m_ioImageCore = std::make_shared<seerep_hdf5_core::Hdf5CoreImage>(hdf5_file, write_mtx);
 }
 
 void DumpSensorMsgs::dump(const std_msgs::Header::ConstPtr& msg) const
@@ -35,9 +36,14 @@ void DumpSensorMsgs::dump(const sensor_msgs::PointCloud2::ConstPtr& msg) const
 void DumpSensorMsgs::dump(const sensor_msgs::Image::ConstPtr& msg) const
 {
   boost::uuids::uuid uuid = boost::uuids::random_generator()();
+  std::string uuidString = boost::lexical_cast<std::string>(uuid);
   try
   {
-    m_ioImage->writeImage(boost::lexical_cast<std::string>(uuid), seerep_ros_conversions_pb::toProto(*msg));
+    m_ioImage->writeImage(uuidString, seerep_ros_conversions_pb::toProto(*msg));
+
+    // fill the vectors with labels if needed
+    //  std::vector<std::string> labelsAsStdVector, instancesAsStdVector;
+    //  m_ioImageCore->writeLabelsGeneral(uuidString, labelsAsStdVector, instancesAsStdVector);
   }
   catch (const std::exception& e)
   {

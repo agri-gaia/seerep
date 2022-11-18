@@ -137,8 +137,6 @@ void Hdf5FbGeneral::writeLabelsGeneral(
     const std::string& datatypeGroup, const std::string& uuid,
     const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>* labelsGeneral)
 {
-  std::string id = datatypeGroup + "/" + uuid;
-
   if (labelsGeneral && labelsGeneral->size() != 0)
   {
     std::vector<std::string> labels;
@@ -149,16 +147,7 @@ void Hdf5FbGeneral::writeLabelsGeneral(
 
       instances.push_back(label->instanceUuid()->str());
     }
-
-    HighFive::DataSet datasetLabels = m_file->createDataSet<std::string>(
-        id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERAL, HighFive::DataSpace::From(labels));
-    datasetLabels.write(labels);
-
-    HighFive::DataSet datasetInstances = m_file->createDataSet<std::string>(
-        id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERALINSTANCES, HighFive::DataSpace::From(instances));
-    datasetInstances.write(instances);
-
-    m_file->flush();
+    Hdf5CoreGeneral::writeLabelsGeneral(datatypeGroup, uuid, labels, instances);
   }
 }
 

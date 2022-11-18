@@ -20,6 +20,7 @@
   <depend>seerep-com</depend>
   <depend>seerep-hdf5-pb</depend>
   <depend>seerep-hdf5-fb</depend>
+  <depend>seerep-hdf5-core</depend>
   <depend>roscpp</depend>
   <depend>std_msgs</depend>
   <depend>geometry_msgs</depend>
