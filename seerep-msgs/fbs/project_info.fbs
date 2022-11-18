@@ -6,5 +6,5 @@ table ProjectInfo
 {
   name:string;
   uuid:string;
-  geodetic_position:seerep.fb.geodeticCoordinates;
+  geodetic_position:seerep.fb.GeodeticCoordinates;
 }

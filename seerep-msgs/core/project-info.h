@@ -13,7 +13,7 @@ struct ProjectInfo
   std::string name;
   boost::uuids::uuid uuid;
   std::string frameId;
-  geodeticCoordinates geodetCoords;
+  GeodeticCoordinates geodetCoords;
 };
 
 } /* namespace seerep_core_msgs */

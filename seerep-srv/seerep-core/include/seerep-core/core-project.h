@@ -51,10 +51,8 @@ public:
    * @brief Constructs the project object and loads the needed information from the HDF5 file
    * @param uuid the UUID of the project. HDF5 file name is UUID + ".h5" extension
    * @param path path to the folder containing the HDF5 files
-   * @param geodetic coordinates for the location of the site of data recording
    */
-  CoreProject(const boost::uuids::uuid& uuid, const std::string path,
-              const seerep_core_msgs::GeodeticCoordinates geodeticCoords);
+  CoreProject(const boost::uuids::uuid& uuid, const std::string path);
   /**
    * @brief Constructs the project object and creates a new HDF5 file
    * @param uuid the UUID of the project. HDF5 file name is UUID + ".h5" extension
@@ -93,11 +91,10 @@ public:
   seerep_core_msgs::QueryResultProject getInstances(const seerep_core_msgs::Query& query);
 
   /**
-   * @brief Returns a vector of UUIDs of datasets that match the query and the project UUID
-   * @param query the spatio-temporal-semantic query
-   * @return vector of UUIDs of geodetic coordinates matching the query and the project UUID
+   * @brief Returns the geodetic coordinates of this project
+   * @return the geodetic coordinates
    */
-  seerep_core_msgs::QueryResultProject getGeodeticCoordinates(const seerep_core_msgs::Query& query);
+  seerep_core_msgs::GeodeticCoordinates getGeodeticCoordinates();
 
   /**
    * @brief Adds a dataset to the spatial, temporal and semantic indices
@@ -167,7 +164,7 @@ private:
   /** @brief the frame id for the spatial idices of this project */
   std::string m_frameId;
   /** @brief the geodetic coordinates of the location where the data was collected in this project */
-  seerep_core_msgs::geodeticCoordinates m_geodeticCoordinates;
+  seerep_core_msgs::GeodeticCoordinates m_geodeticCoordinates;
 
   /** @brief the write mutex for the HDF5 file of this project */
   std::shared_ptr<std::mutex> m_write_mtx;
