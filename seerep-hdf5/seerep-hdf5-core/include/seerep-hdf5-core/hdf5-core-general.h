@@ -93,8 +93,8 @@ public:
   //################
   // Geodetic Coordinates
   //################
-  void writeGeodeticLocation(const seerep_core_msgs::geodeticCoordinates geocoords);
-  std::optional<seerep_core_msgs::geodeticCoordinates> readGeodeticLocation();
+  void writeGeodeticLocation(const seerep_core_msgs::GeodeticCoordinates geocoords);
+  std::optional<seerep_core_msgs::GeodeticCoordinates> readGeodeticLocation();
 
   //################
   // Hdf5

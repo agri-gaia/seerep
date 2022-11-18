@@ -412,7 +412,7 @@ std::shared_ptr<HighFive::Group> Hdf5CoreGeneral::getHdf5Group(const std::string
   }
 }
 
-void Hdf5CoreGeneral::writeGeodeticLocation(const seerep_core_msgs::geodeticCoordinates geocoords)
+void Hdf5CoreGeneral::writeGeodeticLocation(const seerep_core_msgs::GeodeticCoordinates geocoords)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
@@ -437,11 +437,11 @@ void Hdf5CoreGeneral::writeGeodeticLocation(const seerep_core_msgs::geodeticCoor
   m_file->flush();
 }
 
-std::optional<seerep_core_msgs::geodeticCoordinates> Hdf5CoreGeneral::readGeodeticLocation()
+std::optional<seerep_core_msgs::GeodeticCoordinates> Hdf5CoreGeneral::readGeodeticLocation()
 {
   const std::scoped_lock lock(*m_write_mtx);
 
-  seerep_core_msgs::geodeticCoordinates geocoords;
+  seerep_core_msgs::GeodeticCoordinates geocoords;
   if (m_file->hasAttribute(GEODETICLOCATION_COORDINATESYSTEM))
   {
     m_file->getAttribute(GEODETICLOCATION_COORDINATESYSTEM).read(geocoords.coordinateSystem);

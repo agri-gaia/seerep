@@ -123,6 +123,7 @@ std::vector<seerep_core_msgs::ProjectInfo> Core::getProjects()
     projectinfo.name = it->second->getName();
     projectinfo.uuid = it->first;
     projectinfo.frameId = it->second->getFrameId();
+    projectinfo.geodetCoords = it->second->getGeodeticCoordinates();
 
     projectInfos.push_back(projectinfo);
   }
