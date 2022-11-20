@@ -8,7 +8,6 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra -fPIC -DBOOST_LOG_DYN_LINK")
 
 find_package(SeerepCom REQUIRED)
 
-#find_package(SeerepMsgs REQUIRED)
 find_package(SeerepHdf5Pb REQUIRED)
 find_package(SeerepHdf5Core REQUIRED)
 find_package(seerep_ros_conversions_pb REQUIRED)
@@ -47,7 +46,6 @@ catkin_package(
 include_directories(
 	include
 	${SeerepCom_INCLUDE_DIRS}
-	${SeerepMsgs_INCLUDE_DIRS}
 	${SeerepHdf5Pb_INCLUDE_DIRS}
 	${SeerepHdf5Fb_INCLUDE_DIRS}
 	${SeerepHdf5Core_INCLUDE_DIRS}
