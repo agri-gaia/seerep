@@ -52,6 +52,8 @@ public:
   void dump(const tf2_msgs::TFMessage::ConstPtr& msg) const;
 
 private:
+  std::vector<std::string> m_labelsAsStdVector, m_instancesAsStdVector;
+
   std::shared_ptr<seerep_hdf5_pb::Hdf5PbTf> m_ioTf;
   std::shared_ptr<seerep_hdf5_pb::Hdf5PbPointCloud> m_ioPointCloud;
   std::shared_ptr<seerep_hdf5_pb::Hdf5PbImage> m_ioImage;

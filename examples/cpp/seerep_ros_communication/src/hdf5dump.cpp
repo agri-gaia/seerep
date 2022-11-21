@@ -4,6 +4,13 @@ namespace seerep_grpc_ros
 {
 DumpSensorMsgs::DumpSensorMsgs(std::string hdf5FilePath)
 {
+  m_labelsAsStdVector.push_back("testlabel_0");
+  m_labelsAsStdVector.push_back("testlabel_1");
+
+  // no instances, just labels -> no uuids
+  m_instancesAsStdVector.push_back("");
+  m_instancesAsStdVector.push_back("");
+
   auto write_mtx = std::make_shared<std::mutex>();
   std::shared_ptr<HighFive::File> hdf5_file =
       std::make_shared<HighFive::File>(hdf5FilePath, HighFive::File::OpenOrCreate);
@@ -41,9 +48,8 @@ void DumpSensorMsgs::dump(const sensor_msgs::Image::ConstPtr& msg) const
   {
     m_ioImage->writeImage(uuidString, seerep_ros_conversions_pb::toProto(*msg));
 
-    // fill the vectors with labels if needed
-    //  std::vector<std::string> labelsAsStdVector, instancesAsStdVector;
-    //  m_ioImageCore->writeLabelsGeneral(uuidString, labelsAsStdVector, instancesAsStdVector);
+    // also write the labels general; filled with dummy data right now
+    m_ioImageCore->writeLabelsGeneral(uuidString, m_labelsAsStdVector, m_instancesAsStdVector);
   }
   catch (const std::exception& e)
   {
