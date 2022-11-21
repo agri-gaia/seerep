@@ -47,7 +47,7 @@ To deploy the server locally the following `docker run` command or the following
 ```bash
 docker run \
   --volume=seerep-data:/mnt/seerep-data \
-  --publish=9090 \
+  --publish=9090:9090 \
   --name=seerep_server \
   --tty \
   ghcr.io/agri-gaia/seerep_server:latest \
@@ -68,7 +68,7 @@ services:
       - "--data-folder=/mnt/seerep-data"
     ports:
       # the gRPC port
-      - 9090
+      - 9090:9090
     volumes:
       # persist the data folder
       - seerep-data:/mnt/seerep-data
