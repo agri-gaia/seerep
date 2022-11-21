@@ -170,6 +170,28 @@ void Hdf5CoreGeneral::readLabelsGeneral(const std::string& datatypeGroup, const 
   }
 }
 
+void Hdf5CoreGeneral::writeLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid,
+                                         const std::vector<std::string>& labels,
+                                         const std::vector<std::string>& instances)
+{
+  if (labels.size() != instances.size())
+  {
+    throw std::runtime_error("size of labels and instances do not match");
+  }
+
+  std::string id = datatypeGroup + "/" + uuid;
+
+  HighFive::DataSet datasetLabels = m_file->createDataSet<std::string>(
+      id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERAL, HighFive::DataSpace::From(labels));
+  datasetLabels.write(labels);
+
+  HighFive::DataSet datasetInstances = m_file->createDataSet<std::string>(
+      id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERALINSTANCES, HighFive::DataSpace::From(instances));
+  datasetInstances.write(instances);
+
+  m_file->flush();
+}
+
 bool Hdf5CoreGeneral::hasTimeRaw(const std::string& datatypeGroup, const std::string& uuid)
 {
   return hasTime(datatypeGroup, uuid + "/" + RAWDATA);

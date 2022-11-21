@@ -34,6 +34,9 @@ public:
 
   std::vector<std::string> getDatasetUuids();
 
+  void writeLabelsGeneral(const std::string& uuid, const std::vector<std::string>& labels,
+                          const std::vector<std::string>& instances);
+
 public:
   inline static const std::string SIZE = "size";
   inline static const std::string CLASS = "CLASS";

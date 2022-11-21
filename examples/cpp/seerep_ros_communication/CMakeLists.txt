@@ -8,6 +8,13 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra -fPIC -DBOOST_LOG_DYN_LINK")
 
 find_package(SeerepCom REQUIRED)
 
+find_package(SeerepHdf5Pb REQUIRED)
+find_package(SeerepHdf5Core REQUIRED)
+find_package(seerep_ros_conversions_pb REQUIRED)
+find_package(seerep_ros_conversions_fb REQUIRED)
+find_package(Protobuf REQUIRED)
+find_package(gRPC CONFIG REQUIRED)
+
 find_package(catkin REQUIRED
 	COMPONENTS
 	topic_tools
@@ -17,12 +24,6 @@ find_package(catkin REQUIRED
 	roscpp
 	tf
 )
-#find_package(SeerepMsgs REQUIRED)
-find_package(SeerepHdf5Pb REQUIRED)
-find_package(seerep_ros_conversions_pb REQUIRED)
-find_package(seerep_ros_conversions_fb REQUIRED)
-find_package(Protobuf REQUIRED)
-find_package(gRPC CONFIG REQUIRED)
 
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
@@ -45,9 +46,9 @@ catkin_package(
 include_directories(
 	include
 	${SeerepCom_INCLUDE_DIRS}
-	${SeerepMsgs_INCLUDE_DIRS}
 	${SeerepHdf5Pb_INCLUDE_DIRS}
 	${SeerepHdf5Fb_INCLUDE_DIRS}
+	${SeerepHdf5Core_INCLUDE_DIRS}
 	${seerep_ros_conversions_pb_INCLUDE_DIRS}
 	${seerep_ros_conversions_fb_INCLUDE_DIRS}
 	${catkin_INCLUDE_DIRS}
@@ -87,6 +88,7 @@ target_link_libraries(${PROJECT_NAME}_hdf5dump
 	${SeerepCom_LIBRARIES}
 	${seerep_ros_conversions_pb_LIBRARIES}
 	${SeerepHdf5Pb_LIBRARIES}
+	${SeerepHdf5Core_LIBRARIES}
 	${catkin_LIBRARIES}
 	${Boost_LIBRARIES}
 	${Boost_LOG_LIBRARY} ${Boost_LOG_SETUP_LIBRARY}
