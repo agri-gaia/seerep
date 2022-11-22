@@ -4,12 +4,12 @@ namespace seerep_grpc_ros
 {
 DumpSensorMsgs::DumpSensorMsgs(std::string hdf5FilePath)
 {
-  m_labelsAsStdVector.push_back("testlabel_0");
-  m_labelsAsStdVector.push_back("testlabel_1");
+  //m_labelsAsStdVector.push_back("testlabel_0");
+  //m_labelsAsStdVector.push_back("testlabel_1");
 
   // no instances, just labels -> no uuids
-  m_instancesAsStdVector.push_back("");
-  m_instancesAsStdVector.push_back("");
+  //m_instancesAsStdVector.push_back("");
+  //m_instancesAsStdVector.push_back("");
 
   auto write_mtx = std::make_shared<std::mutex>();
   std::shared_ptr<HighFive::File> hdf5_file =
@@ -48,7 +48,7 @@ void DumpSensorMsgs::dump(const sensor_msgs::Image::ConstPtr& msg) const
   {
     m_ioImage->writeImage(uuidString, seerep_ros_conversions_pb::toProto(*msg));
 
-    // also write the labels general; filled with dummy data right now
+    // also write the labels general
     m_ioImageCore->writeLabelsGeneral(uuidString, m_labelsAsStdVector, m_instancesAsStdVector);
   }
   catch (const std::exception& e)
@@ -121,6 +121,12 @@ std::optional<ros::Subscriber> DumpSensorMsgs::getSubscriber(const std::string& 
       return std::nullopt;
   }
 }
+
+// Add labels that will be written after image dump
+void DumpSensorMsgs::addLabel(const std::string& key, const std::string& value){
+  m_labelsAsStdVector.push_back(key);
+  m_instancesAsStdVector.push_back(value);
+}
 }  // namespace seerep_grpc_ros
 
 int main(int argc, char** argv)
@@ -131,6 +137,7 @@ int main(int argc, char** argv)
 
   std::map<std::string, ros::Subscriber> subscribers;
   std::vector<std::string> topics;
+  std::map<std::string, std::string> labels; // map with labels (key, value)
 
   std::string hdf5FolderPath;
   if (!private_nh.getParam("hdf5FolderPath", hdf5FolderPath))
@@ -178,6 +185,17 @@ int main(int argc, char** argv)
 
   ROS_INFO_STREAM("Type names: " << seerep_grpc_ros::names());
 
+  if (!private_nh.getParam("labels", labels))
+  {
+    ROS_WARN_STREAM("Use the \"labels\" parameter to specify the labels which should be added! The "
+                    "\"labels\" parameter should be key value pairs of strings, eg. weather: cloudy .");
+  }
+
+  for (auto const& label : labels)
+  {
+    ROS_INFO_STREAM("Add label \"" << label.first << ": " << label.second << "\".");
+    dumpSensorMsgs.addLabel(label.first, label.second);
+  }
   for (auto topic : topics)
   {
     ROS_INFO_STREAM("Trying to subscribe to topic \"" << topic << "\".");

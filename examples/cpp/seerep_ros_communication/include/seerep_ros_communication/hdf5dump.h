@@ -51,6 +51,8 @@ public:
 
   void dump(const tf2_msgs::TFMessage::ConstPtr& msg) const;
 
+  void addLabel(const std::string& key, const std::string& value);
+
 private:
   std::vector<std::string> m_labelsAsStdVector, m_instancesAsStdVector;
 

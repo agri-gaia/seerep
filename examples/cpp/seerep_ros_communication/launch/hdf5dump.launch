@@ -5,5 +5,9 @@
     <node name="seerep_ros_communication_hdf5dump" pkg="seerep_ros_communication" type="seerep_ros_communication_hdf5dump" output="screen">
         <rosparam param="topics" subst_value="True">$(arg topics)</rosparam>
         <rosparam param="hdf5FolderPath" subst_value="True">$(arg hdf5FolderPath)</rosparam>
+        <rosparam param="labels" subst_value="True">
+          weather: "cloudy"
+          scene: "garden"
+        </rosparam>
     </node>
 </launch>
