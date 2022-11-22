@@ -73,9 +73,9 @@ sensor_msgs::PointCloud2 createPointCloud()
   pc2.row_step = 20;
 
   std::vector<uint8_t> d;
-  for (int h = 0; h < pc2.height; h++)
+  for (unsigned int h = 0; h < pc2.height; h++)
   {
-    for (int w = 0; w < pc2.width; w++)
+    for (unsigned int w = 0; w < pc2.width; w++)
     {
       // arbitrarily populate the d vector with the sum of h and w
       d.push_back(h + w);
@@ -107,9 +107,9 @@ sensor_msgs::Image createImage()
   img.step = 44;
 
   std::vector<uint8_t> d;
-  for (int h = 0; h < img.height; h++)
+  for (unsigned int h = 0; h < img.height; h++)
   {
-    for (int w = 0; w < img.width; w++)
+    for (unsigned int w = 0; w < img.width; w++)
     {
       // arbitrariry populate the d vector with the sum of h and w
       d.push_back(h + w);
@@ -302,12 +302,12 @@ public:
   void createPointFieldObjects()
   {
     // PointField Test Start
-    sensor_msgs::PointField original_pf = createPointField();
+    original_pf = createPointField();
 
     flatbuffers::grpc::Message<seerep::fb::PointField> fb_pointfield;
     fb_pointfield = seerep_ros_conversions_fb::toFlat(original_pf);
 
-    sensor_msgs::PointField converted_pf = seerep_ros_conversions_fb::toROS(*fb_pointfield.GetRoot());
+    converted_pf = seerep_ros_conversions_fb::toROS(*fb_pointfield.GetRoot());
     // PointField Test End
   }
 
@@ -326,110 +326,108 @@ public:
   void createImageObjects()
   {
     // Image Test Start
-    sensor_msgs::Image original_img = createImage();
+    original_img = createImage();
 
     flatbuffers::grpc::Message<seerep::fb::Image> fb_image;
     fb_image = seerep_ros_conversions_fb::toFlat(original_img, p_uuid, m_uuid);
 
-    sensor_msgs::Image converted_img = seerep_ros_conversions_fb::toROS(*fb_image.GetRoot());
+    converted_img = seerep_ros_conversions_fb::toROS(*fb_image.GetRoot());
     // Image Test End
   }
 
   void createPointObjects()
   {
     // Point Start
-    geometry_msgs::Point original_p = createPoint();
+    original_p = createPoint();
 
     flatbuffers::grpc::Message<seerep::fb::Point> fb_point;
     fb_point = seerep_ros_conversions_fb::toFlat(original_p);
 
-    geometry_msgs::Point converted_p = seerep_ros_conversions_fb::toROS(*fb_point.GetRoot());
+    converted_p = seerep_ros_conversions_fb::toROS(*fb_point.GetRoot());
     // Point End
   }
 
   void createQauternionObjects()
   {
     // Quaternion Start
-    geometry_msgs::Quaternion original_q = createQuaternion();
+    original_q = createQuaternion();
 
     flatbuffers::grpc::Message<seerep::fb::Quaternion> fb_quaternion;
     fb_quaternion = seerep_ros_conversions_fb::toFlat(original_q);
 
-    geometry_msgs::Quaternion converted_q = seerep_ros_conversions_fb::toROS(*fb_quaternion.GetRoot());
+    converted_q = seerep_ros_conversions_fb::toROS(*fb_quaternion.GetRoot());
     // Quaternion End
   }
 
   void createPoseObjects()
   {
     // Pose Start
-    geometry_msgs::Pose original_pose = createPose();
+    original_pose = createPose();
 
     flatbuffers::grpc::Message<seerep::fb::Pose> fb_pose;
     fb_pose = seerep_ros_conversions_fb::toFlat(original_pose);
 
-    geometry_msgs::Pose converted_pose = seerep_ros_conversions_fb::toROS(*fb_pose.GetRoot());
+    converted_pose = seerep_ros_conversions_fb::toROS(*fb_pose.GetRoot());
     // Pose End
   }
 
   void createPointStampedObjects()
   {
     // PoseStamped Start
-    geometry_msgs::PoseStamped original_pose_stamped = createPoseStamped();
+    original_pose_stamped = createPoseStamped();
 
     flatbuffers::grpc::Message<seerep::fb::PoseStamped> fb_pose_stamped;
     fb_pose_stamped = seerep_ros_conversions_fb::toFlat(original_pose_stamped, p_uuid);
 
-    geometry_msgs::PoseStamped converted_pose_stamped = seerep_ros_conversions_fb::toROS(*fb_pose_stamped.GetRoot());
+    converted_pose_stamped = seerep_ros_conversions_fb::toROS(*fb_pose_stamped.GetRoot());
     // PoseStamped End
   }
 
   void createVector3Objects()
   {
     // Vector3 Start
-    geometry_msgs::Vector3 original_v = createVector3();
+    original_v = createVector3();
 
     flatbuffers::grpc::Message<seerep::fb::Vector3> fb_vector3;
     fb_vector3 = seerep_ros_conversions_fb::toFlat(original_v);
 
-    geometry_msgs::Vector3 converted_v = seerep_ros_conversions_fb::toROS(*fb_vector3.GetRoot());
+    converted_v = seerep_ros_conversions_fb::toROS(*fb_vector3.GetRoot());
     // Vector3 End
   }
 
   void createVector3StampedObjects()
   {
     // Vector3Stamped Start
-    geometry_msgs::Vector3Stamped original_v3_stamped = createVector3Stamped();
+    original_v3_stamped = createVector3Stamped();
 
     flatbuffers::grpc::Message<seerep::fb::Vector3Stamped> fb_vector3_stamped;
     fb_vector3_stamped = seerep_ros_conversions_fb::toFlat(original_v3_stamped, p_uuid);
 
-    geometry_msgs::Vector3Stamped converted_v3_stamped =
-        seerep_ros_conversions_fb::toROS(*fb_vector3_stamped.GetRoot());
+    converted_v3_stamped = seerep_ros_conversions_fb::toROS(*fb_vector3_stamped.GetRoot());
     // Vector3Stamped End
   }
 
   void createTransformObjects()
   {
     // Transform Start
-    geometry_msgs::Transform original_t = createTransform();
+    original_t = createTransform();
 
     flatbuffers::grpc::Message<seerep::fb::Transform> fb_transform;
     fb_transform = seerep_ros_conversions_fb::toFlat(original_t);
 
-    geometry_msgs::Transform converted_t = seerep_ros_conversions_fb::toROS(*fb_transform.GetRoot());
+    converted_t = seerep_ros_conversions_fb::toROS(*fb_transform.GetRoot());
     // Transform End
   }
 
   void createTransformStampedObjects()
   {
     // TransformStamped Start
-    geometry_msgs::TransformStamped original_t_stamped = createTransformStamped();
+    original_t_stamped = createTransformStamped();
 
     flatbuffers::grpc::Message<seerep::fb::TransformStamped> fb_transform_stamped;
     fb_transform_stamped = seerep_ros_conversions_fb::toFlat(original_t_stamped, p_uuid);
 
-    geometry_msgs::TransformStamped converted_t_stamped =
-        seerep_ros_conversions_fb::toROS(*fb_transform_stamped.GetRoot());
+    converted_t_stamped = seerep_ros_conversions_fb::toROS(*fb_transform_stamped.GetRoot());
     // Transform End
   }
 
