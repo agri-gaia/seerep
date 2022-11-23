@@ -122,8 +122,8 @@ sensor_msgs::PointCloud2 toROS(const seerep::fb::PointCloud2& cloud)
   ret.header = toROS(*cloud.header());
   ret.height = cloud.height();
   ret.width = cloud.width();
-  // for (auto field : cloud.fields())
-  //   ret.fields.push_back(toROS(field));
+  for (auto field : *cloud.fields())
+    ret.fields.push_back(toROS(*field));
   ret.is_bigendian = cloud.is_bigendian();
   ret.point_step = cloud.point_step();
   ret.row_step = cloud.row_step();
@@ -416,6 +416,10 @@ geometry_msgs::TransformStamped toROS(const seerep::fb::TransformStamped& transf
   return ret;
 }
 
+/*
+ * BoundingBox2DLabeledStamped
+ */
+
 flatbuffers::grpc::Message<seerep::fb::BoundingBoxes2DLabeledStamped>
 toFlat(const vision_msgs::Detection2DArray& detection2d, std::string projectuuid, std::string msguuid = "")
 {
@@ -428,19 +432,29 @@ flatbuffers::Offset<seerep::fb::BoundingBoxes2DLabeledStamped> toFlat(const visi
                                                                       flatbuffers::grpc::MessageBuilder& builder,
                                                                       std::string msguuid = "")
 {
+  // convert header
   auto header = toFlat(detection2d.header, projectuuid, builder, msguuid);
+
+  // create boundingbox labeled vector
   std::vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>> bblabeled;
+
+  // for each loop for saving in fb bb_labeled vector
   for (vision_msgs::Detection2D detection : detection2d.detections)
   {
     bblabeled.push_back(toFlat(detection, builder));
   }
 
+  // fb labels vector
   auto labelsOffset = builder.CreateVector(bblabeled);
   seerep::fb::BoundingBoxes2DLabeledStampedBuilder bbbuilder(builder);
   bbbuilder.add_header(header);
   bbbuilder.add_labels_bb(labelsOffset);
   return bbbuilder.Finish();
 }
+
+/*
+ * BoundingBox2DLabeled
+ */
 
 flatbuffers::grpc::Message<seerep::fb::BoundingBox2DLabeled> toFlat(const vision_msgs::Detection2D& detection2d)
 {
