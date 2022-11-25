@@ -5,6 +5,7 @@
 #include <optional>
 
 // seerep
+#include <seerep-hdf5-core/hdf5-core-image.h>
 #include <seerep-hdf5-pb/hdf5-pb-image.h>
 #include <seerep-hdf5-pb/hdf5-pb-pointcloud.h>
 #include <seerep-hdf5-pb/hdf5-pb-tf.h>
@@ -51,9 +52,12 @@ public:
   void dump(const tf2_msgs::TFMessage::ConstPtr& msg) const;
 
 private:
+  std::vector<std::string> m_labelsAsStdVector, m_instancesAsStdVector;
+
   std::shared_ptr<seerep_hdf5_pb::Hdf5PbTf> m_ioTf;
   std::shared_ptr<seerep_hdf5_pb::Hdf5PbPointCloud> m_ioPointCloud;
   std::shared_ptr<seerep_hdf5_pb::Hdf5PbImage> m_ioImage;
+  std::shared_ptr<seerep_hdf5_core::Hdf5CoreImage> m_ioImageCore;
   ros::NodeHandle nh;
 };
 

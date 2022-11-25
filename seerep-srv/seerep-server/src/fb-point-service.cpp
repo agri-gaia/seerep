@@ -16,13 +16,14 @@ grpc::Status FbPointService::GetPoint(grpc::ServerContext* context,
 
   std::stringstream debuginfo;
   debuginfo << "sending images with this query parameters:";
-  if (requestRoot->boundingbox() != NULL)
+  if (requestRoot->boundingboxStamped() != NULL)
   {
-    debuginfo << "bounding box min(" << requestRoot->boundingbox()->point_min()->x() << "/"
-              << requestRoot->boundingbox()->point_min()->y() << "/" << requestRoot->boundingbox()->point_min()->z()
-              << "), max(" << requestRoot->boundingbox()->point_max()->x() << "/"
-              << requestRoot->boundingbox()->point_max()->y() << "/" << requestRoot->boundingbox()->point_max()->z()
-              << ")";
+    debuginfo << "bounding box min(" << requestRoot->boundingboxStamped()->boundingbox()->point_min()->x() << "/"
+              << requestRoot->boundingboxStamped()->boundingbox()->point_min()->y() << "/"
+              << requestRoot->boundingboxStamped()->boundingbox()->point_min()->z() << "), max("
+              << requestRoot->boundingboxStamped()->boundingbox()->point_max()->x() << "/"
+              << requestRoot->boundingboxStamped()->boundingbox()->point_max()->y() << "/"
+              << requestRoot->boundingboxStamped()->boundingbox()->point_max()->z() << ")";
   }
   if (requestRoot->timeinterval() != NULL)
   {
@@ -40,18 +41,21 @@ grpc::Status FbPointService::GetPoint(grpc::ServerContext* context,
 
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << debuginfo.rdbuf();
 
-  if (requestRoot->boundingbox() != NULL)
+  if (requestRoot->boundingboxStamped() != NULL)
   {
-    std::cout << "in bounding box min(" << requestRoot->boundingbox()->point_min()->x() << "/"
-              << requestRoot->boundingbox()->point_min()->y() << "/" << requestRoot->boundingbox()->point_min()->z()
-              << "), max(" << requestRoot->boundingbox()->point_max()->x() << "/"
-              << requestRoot->boundingbox()->point_max()->y() << "/" << requestRoot->boundingbox()->point_max()->z()
-              << ")" << std::endl;
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
+        << "in bounding box min(" << requestRoot->boundingboxStamped()->boundingbox()->point_min()->x() << "/"
+        << requestRoot->boundingboxStamped()->boundingbox()->point_min()->y() << "/"
+        << requestRoot->boundingboxStamped()->boundingbox()->point_min()->z() << "), max("
+        << requestRoot->boundingboxStamped()->boundingbox()->point_max()->x() << "/"
+        << requestRoot->boundingboxStamped()->boundingbox()->point_max()->y() << "/"
+        << requestRoot->boundingboxStamped()->boundingbox()->point_max()->z() << ")";
   }
   if (requestRoot->timeinterval() != NULL)
   {
-    std::cout << "in time interval (" << requestRoot->timeinterval()->time_min()->seconds() << "/"
-              << requestRoot->timeinterval()->time_max()->seconds() << ")" << std::endl;
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
+        << "in time interval (" << requestRoot->timeinterval()->time_min()->seconds() << "/"
+        << requestRoot->timeinterval()->time_max()->seconds() << ")";
   }
   try
   {
@@ -63,6 +67,20 @@ grpc::Status FbPointService::GetPoint(grpc::ServerContext* context,
     // also catching core doesn't have project with uuid error
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (const std::exception& e)
+  {
+    // specific handling for all exceptions extending std::exception, except
+    // std::runtime_error which is handled explicitly
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (...)
+  {
+    // catch any other errors (that we have no information about)
+    std::string msg = "Unknown failure occurred. Possible memory corruption";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
   }
 
   return grpc::Status::OK;
@@ -98,6 +116,22 @@ FbPointService::TransferPoint(grpc::ServerContext* context,
         seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
 
         return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+      }
+      catch (const std::exception& e)
+      {
+        // specific handling for all exceptions extending std::exception, except
+        // std::runtime_error which is handled explicitly
+        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+        seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+        return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+      }
+      catch (...)
+      {
+        // catch any other errors (that we have no information about)
+        std::string msg = "Unknown failure occurred. Possible memory corruption";
+        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+        seerep_server_util::createResponseFb(msg, seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+        return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
       }
     }
     else
@@ -141,6 +175,22 @@ FbPointService::AddAttribute(grpc::ServerContext* context,
         seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
 
         return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+      }
+      catch (const std::exception& e)
+      {
+        // specific handling for all exceptions extending std::exception, except
+        // std::runtime_error which is handled explicitly
+        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+        seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+        return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+      }
+      catch (...)
+      {
+        // catch any other errors (that we have no information about)
+        std::string msg = "Unknown failure occurred. Possible memory corruption";
+        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+        seerep_server_util::createResponseFb(msg, seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+        return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
       }
     }
     else

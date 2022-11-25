@@ -78,7 +78,8 @@ public:
   // Labels General
   void readLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid, std::vector<std::string>& labels,
                          std::vector<std::string>& instances);
-
+  void writeLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid,
+                          const std::vector<std::string>& labels, const std::vector<std::string>& instances);
   //################
   // Project
   //################

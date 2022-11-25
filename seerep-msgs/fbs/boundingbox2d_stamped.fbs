@@ -1,0 +1,10 @@
+
+include "header.fbs";
+include "boundingbox2d.fbs";
+
+namespace seerep.fb;
+
+table Boundingbox2DStamped {
+  header:seerep.fb.Header;
+  boundingbox2D:seerep.fb.Boundingbox2D;
+}
