@@ -4,4 +4,5 @@ table ProjectInfo
 {
   name:string;
   uuid:string;
+  frameid:string;
 }

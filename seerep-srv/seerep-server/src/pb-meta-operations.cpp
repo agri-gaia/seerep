@@ -19,6 +19,7 @@ grpc::Status PbMetaOperations::CreateProject(grpc::ServerContext* context, const
 
   response->set_name(projectInfo.name);
   response->set_uuid(boost::lexical_cast<std::string>(projectInfo.uuid));
+  response->set_frameid(projectInfo.frameId);
 
   return grpc::Status::OK;
 }
@@ -36,6 +37,7 @@ grpc::Status PbMetaOperations::GetProjects(grpc::ServerContext* context, const g
     auto responseProjectInfo = response->add_projects();
     responseProjectInfo->set_name(projectInfo.name);
     responseProjectInfo->set_uuid(boost::lexical_cast<std::string>(projectInfo.uuid));
+    responseProjectInfo->set_frameid(projectInfo.frameId);
   }
 
   return grpc::Status::OK;
