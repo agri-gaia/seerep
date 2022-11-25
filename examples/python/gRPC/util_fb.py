@@ -4,6 +4,7 @@ from fb import (
     Boundingbox,
     BoundingBoxLabeled,
     Empty,
+    GeodeticCoordinates,
     Header,
     LabelWithInstance,
     Point,
@@ -15,7 +16,6 @@ from fb import (
     Query,
     TimeInterval,
     Timestamp,
-    geodeticCoordinates,
 )
 from fb import meta_operations_grpc_fb as metaOperations
 
@@ -49,13 +49,13 @@ def createProject(channel, builder, name, frameId, coordSys, ellipsoid, altitude
     coordSysBuf = builder.CreateString(coordSys)
     ellipsoidBuf = builder.CreateString(ellipsoid)
 
-    geodeticCoordinates.Start(builder)
-    geodeticCoordinates.AddCoordinateSystem(builder, coordSysBuf)
-    geodeticCoordinates.AddEllipsoid(builder, ellipsoidBuf)
-    geodeticCoordinates.AddAltitude(builder, altitude)
-    geodeticCoordinates.AddLatitude(builder, latitude)
-    geodeticCoordinates.AddLongitute(builder, longitude)
-    gc = geodeticCoordinates.End(builder)
+    GeodeticCoordinates.Start(builder)
+    GeodeticCoordinates.AddCoordinateSystem(builder, coordSysBuf)
+    GeodeticCoordinates.AddEllipsoid(builder, ellipsoidBuf)
+    GeodeticCoordinates.AddAltitude(builder, altitude)
+    GeodeticCoordinates.AddLatitude(builder, latitude)
+    GeodeticCoordinates.AddLongitute(builder, longitude)
+    gc = GeodeticCoordinates.End(builder)
 
     ProjectCreation.Start(builder)
     ProjectCreation.AddMapFrameId(builder, frameIdBuf)
