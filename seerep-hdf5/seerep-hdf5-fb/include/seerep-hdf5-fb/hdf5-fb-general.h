@@ -10,6 +10,7 @@
 // seerep-msgs
 #include <seerep-msgs/boundingbox2d_labeled_generated.h>
 #include <seerep-msgs/boundingbox_labeled_generated.h>
+#include <seerep-msgs/header_generated.h>
 #include <seerep-msgs/union_map_entry_generated.h>
 
 // grpc / flatbuffer

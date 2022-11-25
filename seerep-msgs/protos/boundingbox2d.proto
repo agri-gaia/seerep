@@ -2,12 +2,10 @@ syntax = "proto3";
 
 package seerep;
 
-import "header.proto";
 import "point2d.proto";
 
 message Boundingbox2D
 {
-  Header header = 1;
-  Point2D point_min = 2;
-  Point2D point_max = 3;
+  Point2D point_min = 1;
+  Point2D point_max = 2;
 }

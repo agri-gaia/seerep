@@ -142,8 +142,6 @@ void Hdf5PbGeneral::writeLabelsGeneral(
     const std::string& datatypeGroup, const std::string& uuid,
     const google::protobuf::RepeatedPtrField<seerep::LabelWithInstance>& labelsGeneralWithInstances)
 {
-  std::string id = datatypeGroup + "/" + uuid;
-
   if (!labelsGeneralWithInstances.empty())
   {
     std::vector<std::string> labels;
@@ -154,16 +152,7 @@ void Hdf5PbGeneral::writeLabelsGeneral(
 
       instances.push_back(labelWithInstances.instanceuuid());
     }
-
-    HighFive::DataSet datasetLabels = m_file->createDataSet<std::string>(
-        id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERAL, HighFive::DataSpace::From(labels));
-    datasetLabels.write(labels);
-
-    HighFive::DataSet datasetInstances = m_file->createDataSet<std::string>(
-        id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERALINSTANCES, HighFive::DataSpace::From(instances));
-    datasetInstances.write(instances);
-
-    m_file->flush();
+    Hdf5CoreGeneral::writeLabelsGeneral(datatypeGroup, uuid, labels, instances);
   }
 }
 

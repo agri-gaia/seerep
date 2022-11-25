@@ -89,20 +89,15 @@ void createLabelWithInstance(seerep::LabelWithInstance& labelWithInstance)
 
 /**
  * @brief create a 2D Labeled Bounding Box
- * @param[in] projectUUID the uuid of the project
- * @param[in] messageUUID the uuid of the message
  * @param[in] image reference to the image
  * */
-void createBB2DLabeled(const std::string& projectUUID, const std::string& messageUUID, seerep::Image& image)
+void createBB2DLabeled(seerep::Image& image)
 {
   std::vector<seerep::BoundingBox2DLabeled> bbLabeled;
 
   for (size_t i = 0; i < 10; i++)
   {
     seerep::BoundingBox2DLabeled* bbLabeled = image.add_labels_bb();
-
-    createHeader(projectUUID, messageUUID, *bbLabeled->mutable_boundingbox()->mutable_header());
-
     createPoint(0.01 + i / 10, 0.02 + i / 10, *bbLabeled->mutable_boundingbox()->mutable_point_min());
     createPoint(0.03 + i / 10, 0.04 + i / 10, *bbLabeled->mutable_boundingbox()->mutable_point_max());
 
@@ -126,7 +121,7 @@ seerep::Image createImageMessage(const unsigned int imageHeight, const unsigned 
   seerep::Image imgMsg;
   createHeader(projectUUID, messageUUID, *imgMsg.mutable_header());
   createImageData(256, 256, imgMsg);
-  createBB2DLabeled(projectUUID, messageUUID, imgMsg);
+  createBB2DLabeled(imgMsg);
 
   // set the header
   imgMsg.set_height(imageHeight);
@@ -146,7 +141,7 @@ seerep::Image createImageMessage(const unsigned int imageHeight, const unsigned 
   x->set_label(lwi.label());
   x->set_instanceuuid(lwi.instanceuuid());
 
-  createBB2DLabeled(projectUUID, messageUUID, imgMsg);
+  createBB2DLabeled(imgMsg);
 
   return imgMsg;
 }

@@ -86,17 +86,15 @@ flatbuffers::Offset<seerep::fb::LabelWithInstance> createLabelWithInstance(flatb
 }
 
 flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>>>
-createBB2DLabeled(flatbuffers::FlatBufferBuilder& fbb, const std::string& projectUUID, const std::string& messageUUID)
+createBB2DLabeled(flatbuffers::FlatBufferBuilder& fbb)
 {
   std::vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>> bbLabeled;
   for (size_t i = 0; i < 10; i++)
   {
-    auto headerOffset = createHeader(fbb, "camera", projectUUID, messageUUID);
-
     auto pointMinOffset = createPoint(fbb, 0.01 + i / 10, 0.02 + i / 10);
     auto pointMaxOffset = createPoint(fbb, 0.03 + i / 10, 0.04 + i / 10);
 
-    auto bb2DOffset = seerep::fb::CreateBoundingbox2D(fbb, headerOffset, pointMinOffset, pointMaxOffset);
+    auto bb2DOffset = seerep::fb::CreateBoundingbox2D(fbb, pointMinOffset, pointMaxOffset);
     fbb.Finish(bb2DOffset);
 
     auto labelWithInstanceOffset = createLabelWithInstance(fbb);
@@ -126,7 +124,7 @@ const seerep::fb::Image* createImageMessage(flatbuffers::FlatBufferBuilder& fbb,
     labelsGeneral.push_back(labelWithInstanceOffset);
   }
   auto generalLabelsOffset = fbb.CreateVector(labelsGeneral.data(), labelsGeneral.size());
-  auto bB2DLabeledOffset = createBB2DLabeled(fbb, projectUUID, messageUUID);
+  auto bB2DLabeledOffset = createBB2DLabeled(fbb);
 
   auto imgMsgOffset = seerep::fb::CreateImage(fbb, headerOffset, imageHeight, imageWidth, encodingOffset, true,
                                               3 * imageHeight, 0, imageOffset, generalLabelsOffset, bB2DLabeledOffset);

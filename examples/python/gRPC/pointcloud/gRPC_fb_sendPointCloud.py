@@ -52,7 +52,6 @@ def createPointCloud(builder, header, height=960, width=1280):
     # create bounding box labels
     boundingBoxes = createBoundingBoxes(
         builder,
-        header,
         [createPoint(builder, np.random.rand(), np.random.rand(), np.random.rand()) for _ in range(NUM_BB_LABELS)],
         [createPoint(builder, np.random.rand(), np.random.rand(), np.random.rand()) for _ in range(NUM_BB_LABELS)],
     )

@@ -241,16 +241,16 @@ void CoreFbConversion::fromFbQueryBoundingBox(const seerep::fb::Query* query,
                                               std::optional<seerep_core_msgs::AABB>& queryCoreBoundingBox,
                                               std::string& queryCoreHeaderFrameId)
 {
-  if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_BOUNDINGBOX))
+  if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_BOUNDINGBOXSTAMPED))
   {
-    queryCoreHeaderFrameId = query->boundingbox()->header()->frame_id()->str();
+    queryCoreHeaderFrameId = query->boundingboxStamped()->header()->frame_id()->str();
     queryCoreBoundingBox = seerep_core_msgs::AABB();
-    queryCoreBoundingBox.value().min_corner().set<0>(query->boundingbox()->point_min()->x());
-    queryCoreBoundingBox.value().min_corner().set<1>(query->boundingbox()->point_min()->y());
-    queryCoreBoundingBox.value().min_corner().set<2>(query->boundingbox()->point_min()->z());
-    queryCoreBoundingBox.value().max_corner().set<0>(query->boundingbox()->point_max()->x());
-    queryCoreBoundingBox.value().max_corner().set<1>(query->boundingbox()->point_max()->y());
-    queryCoreBoundingBox.value().max_corner().set<2>(query->boundingbox()->point_max()->z());
+    queryCoreBoundingBox.value().min_corner().set<0>(query->boundingboxStamped()->boundingbox()->point_min()->x());
+    queryCoreBoundingBox.value().min_corner().set<1>(query->boundingboxStamped()->boundingbox()->point_min()->y());
+    queryCoreBoundingBox.value().min_corner().set<2>(query->boundingboxStamped()->boundingbox()->point_min()->z());
+    queryCoreBoundingBox.value().max_corner().set<0>(query->boundingboxStamped()->boundingbox()->point_max()->x());
+    queryCoreBoundingBox.value().max_corner().set<1>(query->boundingboxStamped()->boundingbox()->point_max()->y());
+    queryCoreBoundingBox.value().max_corner().set<2>(query->boundingboxStamped()->boundingbox()->point_max()->z());
   }
 }
 
