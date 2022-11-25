@@ -78,4 +78,10 @@ std::vector<std::string> Hdf5CoreImage::getDatasetUuids()
   return getGroupDatasets(HDF5_GROUP_IMAGE);
 }
 
+void Hdf5CoreImage::writeLabelsGeneral(const std::string& uuid, const std::vector<std::string>& labels,
+                                       const std::vector<std::string>& instances)
+{
+  Hdf5CoreGeneral::writeLabelsGeneral(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, uuid, labels, instances);
+}
+
 }  // namespace seerep_hdf5_core

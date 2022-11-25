@@ -37,3 +37,10 @@ jobs:
         source $GITHUB_WORKSPACE/devel/setup.bash
         $GITHUB_WORKSPACE/devel/bin/protobuf-write-load-test
       shell: bash
+
+    - name: Test Conversion of ROS Messages to Flatbuffer
+      run: |
+        source /opt/ros/noetic/setup.bash
+        source $GITHUB_WORKSPACE/devel/setup.bash
+        catkin test seerep_ros_conversions_fb
+      shell: bash

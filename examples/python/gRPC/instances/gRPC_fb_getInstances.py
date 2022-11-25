@@ -1,108 +1,69 @@
 #!/usr/bin/env python3
 
+import os
 import sys
 
 import flatbuffers
-import grpc
-from fb import (
-    Boundingbox,
-    Empty,
-    Header,
-    Point,
-    ProjectInfos,
-    Query,
-    QueryInstance,
-    TimeInterval,
-    Timestamp,
-    UuidsPerProject,
-)
+from fb import Datatype, UuidsPerProject
 from fb import instance_service_grpc_fb as instanceService
-from fb import meta_operations_grpc_fb as metaOperations
 
-server = "localhost:9090"
-channel = grpc.insecure_channel(server)
-
-stub = instanceService.InstanceServiceStub(channel)
-stubMeta = metaOperations.MetaOperationsStub(channel)
+# importing util functions. Assuming that these files are in the parent dir
+# examples/python/gRPC/util.py
+# examples/python/gRPC/util_fb.py
+script_dir = os.path.dirname(__file__)
+util_dir = os.path.join(script_dir, '..')
+sys.path.append(util_dir)
+import util
+import util_fb
 
 builder = flatbuffers.Builder(1024)
-Empty.Start(builder)
-emptyMsg = Empty.End(builder)
-builder.Finish(emptyMsg)
-buf = builder.Output()
-
-responseBuf = stubMeta.GetProjects(bytes(buf))
-response = ProjectInfos.ProjectInfos.GetRootAs(responseBuf)
-
-projectuuid = ""
-for i in range(response.ProjectsLength()):
-    print(response.Projects(i).Name().decode("utf-8") + " " + response.Projects(i).Uuid().decode("utf-8"))
-    if response.Projects(i).Name().decode("utf-8") == "testproject":
-        projectuuid = response.Projects(i).Uuid().decode("utf-8")
-
-if projectuuid == "":
-    sys.exit()
+# Default server is localhost !
+channel = util.get_gRPC_channel()
 
 
-Point.Start(builder)
-Point.AddX(builder, -100.0)
-Point.AddY(builder, -100.0)
-Point.AddZ(builder, -100.0)
-pointMin = Point.End(builder)
+# 1. Get all projects from the server
+projectuuid = util_fb.getProject(builder, channel, 'testproject')
 
-Point.Start(builder)
-Point.AddX(builder, 100.0)
-Point.AddY(builder, 100.0)
-Point.AddZ(builder, 100.0)
-pointMax = Point.End(builder)
+# 2. Check if the defined project exist; if not exit
+if not projectuuid:
+    exit()
 
-frameId = builder.CreateString("map")
-Header.Start(builder)
-Header.AddFrameId(builder, frameId)
-header = Header.End(builder)
-
-Boundingbox.Start(builder)
-Boundingbox.AddPointMin(builder, pointMin)
-Boundingbox.AddPointMax(builder, pointMax)
-Boundingbox.AddHeader(builder, header)
-boundingbox = Boundingbox.End(builder)
-
-Timestamp.Start(builder)
-Timestamp.AddSeconds(builder, 1610549273)
-Timestamp.AddNanos(builder, 0)
-timeMin = Timestamp.End(builder)
-
-Timestamp.Start(builder)
-Timestamp.AddSeconds(builder, 1938549273)
-Timestamp.AddNanos(builder, 0)
-timeMax = Timestamp.End(builder)
-
-TimeInterval.Start(builder)
-TimeInterval.AddTimeMin(builder, timeMin)
-TimeInterval.AddTimeMax(builder, timeMax)
-timeInterval = TimeInterval.End(builder)
-
-projectuuidString = builder.CreateString(projectuuid)
-Query.StartProjectuuidVector(builder, 1)
-builder.PrependUOffsetTRelative(projectuuidString)
-projectuuidMsg = builder.EndVector()
+# 3. Get gRPC service object
+stub = instanceService.InstanceServiceStub(channel)
 
 
-label = builder.CreateString("1")
-Query.StartLabelVector(builder, 1)
-builder.PrependUOffsetTRelative(label)
-labelMsg = builder.EndVector()
+# Create all necessary objects for the query
+header = util_fb.createHeader(builder, frame="map")
+pointMin = util_fb.createPoint(builder, 0.0, 0.0, 0.0)
+pointMax = util_fb.createPoint(builder, 100.0, 100.0, 100.0)
+boundingboxStamped = util_fb.createBoundingBoxStamped(builder, header, pointMin, pointMax)
 
-Query.Start(builder)
-Query.AddBoundingbox(builder, boundingbox)
-# Query.AddTimeinterval(builder, timeInterval)
-# Query.AddProjectuuid(builder, projectuuidMsg)
-# Query.AddLabel(builder, labelMsg)
-queryMsg = Query.End(builder)
+timeMin = util_fb.createTimeStamp(builder, 1610549273, 0)
+timeMax = util_fb.createTimeStamp(builder, 1938549273, 0)
+timeInterval = util_fb.createTimeInterval(builder, timeMin, timeMax)
 
-QueryInstance.Start(builder)
-QueryInstance.AddQuery(builder, queryMsg)
-queryInstanceMsg = QueryInstance.End(builder)
+
+projectUuids = [builder.CreateString(projectuuid)]
+labels = [builder.CreateString("testlabel0")]
+dataUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
+instanceUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
+
+# 4. Create a query with parameters
+# all parameters are optional
+# with all parameters set (especially with the data and instance uuids set) the result of the query will be empty. Set the query parameters to adequate values or remove them from the query creation
+query = util_fb.createQuery(
+    builder,
+    # boundingBox=boundingboxStamped,
+    # timeInterval=timeInterval,
+    # labels=labels,
+    # projectUuids=projectUuids,
+    # instanceUuids=instanceUuids,
+    # dataUuids=dataUuids,
+    withoutData=True,
+)
+
+
+queryInstanceMsg = util_fb.createQueryInstance(builder, query, Datatype.Datatype().Image)
 
 builder.Finish(queryInstanceMsg)
 buf = builder.Output()
@@ -111,4 +72,4 @@ responseBuf = stub.GetInstances(bytes(buf))
 
 response = UuidsPerProject.UuidsPerProject.GetRootAs(responseBuf)
 
-print(response.UuidsPerProject(0))
+print(response.UuidsPerProject(0).ProjectUuid().decode('utf-8'))

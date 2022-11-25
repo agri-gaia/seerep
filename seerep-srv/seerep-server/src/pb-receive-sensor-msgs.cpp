@@ -9,7 +9,7 @@ PbReceiveSensorMsgs::PbReceiveSensorMsgs(std::shared_ptr<seerep_core::Core> seer
 grpc::Status PbReceiveSensorMsgs::TransferHeader(grpc::ServerContext* context, const seerep::Header* header,
                                                  seerep::ServerResponse* response)
 {
-  std::cout << "received header... " << std::endl;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "received header... ";
   response->set_message("okidoki");
   response->set_transmission_state(seerep::ServerResponse::SUCCESS);
   return grpc::Status::OK;
@@ -18,7 +18,7 @@ grpc::Status PbReceiveSensorMsgs::TransferHeader(grpc::ServerContext* context, c
 grpc::Status PbReceiveSensorMsgs::TransferPoint(grpc::ServerContext* context, const seerep::Point* point,
                                                 seerep::ServerResponse* response)
 {
-  std::cout << "received point... " << std::endl;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "received point... ";
   // hdf5_io.writePoint("test_id", *point);
   response->set_message("okidoki");
   response->set_transmission_state(seerep::ServerResponse::SUCCESS);
@@ -28,7 +28,7 @@ grpc::Status PbReceiveSensorMsgs::TransferPoint(grpc::ServerContext* context, co
 grpc::Status PbReceiveSensorMsgs::TransferQuaternion(grpc::ServerContext* context, const seerep::Quaternion* quaternion,
                                                      seerep::ServerResponse* response)
 {
-  std::cout << "received quaternion... " << std::endl;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "received quaternion... ";
   // hdf5_io.writeQuaternion("test_id", *quaternion);
   response->set_message("okidoki");
   response->set_transmission_state(seerep::ServerResponse::SUCCESS);
@@ -38,7 +38,7 @@ grpc::Status PbReceiveSensorMsgs::TransferQuaternion(grpc::ServerContext* contex
 grpc::Status PbReceiveSensorMsgs::TransferPose(grpc::ServerContext* context, const seerep::Pose* pose,
                                                seerep::ServerResponse* response)
 {
-  std::cout << "received pose... " << std::endl;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "received pose... ";
   // hdf5_io.writePose("test_id", *pose);
   response->set_message("okidoki");
   response->set_transmission_state(seerep::ServerResponse::SUCCESS);
@@ -48,7 +48,7 @@ grpc::Status PbReceiveSensorMsgs::TransferPose(grpc::ServerContext* context, con
 grpc::Status PbReceiveSensorMsgs::TransferPoseStamped(grpc::ServerContext* context, const seerep::PoseStamped* pose,
                                                       seerep::ServerResponse* response)
 {
-  std::cout << "received pose_stamped... " << std::endl;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "received pose_stamped... ";
   // hdf5_io.writePoseStamped("test_id", *pose);
   response->set_message("okidoki");
   response->set_transmission_state(seerep::ServerResponse::SUCCESS);

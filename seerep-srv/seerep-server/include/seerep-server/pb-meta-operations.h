@@ -5,6 +5,12 @@
 #include <seerep-com/meta-operations.grpc.pb.h>
 #include <seerep-core/core.h>
 
+#include "util.hpp"
+
+// logging
+#include <boost/log/sources/severity_logger.hpp>
+#include <boost/log/trivial.hpp>
+
 namespace seerep_server
 {
 class PbMetaOperations final : public seerep::MetaOperations::Service
@@ -19,6 +25,7 @@ public:
 
 private:
   std::shared_ptr<seerep_core::Core> seerepCore;
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
 };
 
 } /* namespace seerep_server */

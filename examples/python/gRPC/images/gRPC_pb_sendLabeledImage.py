@@ -16,19 +16,25 @@ import tf_service_pb2_grpc as tfService
 import transform_stamped_pb2 as tf
 from google.protobuf import empty_pb2
 
+# importing util functions. Assuming that this file is in the parent dir
+# https://github.com/agri-gaia/seerep/blob/6c4da5736d4a893228e97b01a9ada18620b1a83f/examples/python/gRPC/util.py
 script_dir = os.path.dirname(__file__)
 util_dir = os.path.join(script_dir, '..')
 sys.path.append(util_dir)
 import util
 
-channel = util.get_gRPC_channel("local")
+# Default server is localhost !
+channel = util.get_gRPC_channel(target="local")
 
+# 1. Get gRPC service objects
 stub = imageService.ImageServiceStub(channel)
 stubTf = tfService.TfServiceStub(channel)
 stubMeta = metaOperations.MetaOperationsStub(channel)
 
+# 2. Get all projects from the server
 response = stubMeta.GetProjects(empty_pb2.Empty())
 
+# 3. Check if we have an existing test project, if not, one is created.
 found = False
 for project in response.projects:
     print(project.name + " " + project.uuid)
@@ -44,11 +50,12 @@ if not found:
 
 theTime = int(time.time())
 
+# 4. Create ten images
 for n in range(10):
     theImage = image.Image()
 
     rgb = []
-    lim = 256
+    lim = 256  # 256 x 256 pixels
     for i in range(lim):
         for j in range(lim):
             x = float(i) / lim
@@ -61,6 +68,7 @@ for n in range(10):
             rgb.append(g)
             rgb.append(b)
 
+    # Add image meta-data
     theImage.header.frame_id = "camera"
     theImage.header.stamp.seconds = theTime + n
     theImage.header.stamp.nanos = 0
@@ -69,8 +77,10 @@ for n in range(10):
     theImage.width = lim
     theImage.encoding = "rgb8"
     theImage.step = 3 * lim
+    # Add image data
     theImage.data = bytes(rgb)
 
+    # 5. Create bounding boxes with labels
     bb1 = bb.BoundingBox2DLabeled()
     for i in range(0, 2):
         bb1.labelWithInstance.label = "testlabel" + str(i)
@@ -81,6 +91,7 @@ for n in range(10):
         bb1.boundingBox.point_max.y = 0.04 + i / 10
         theImage.labels_bb.append(bb1)
 
+    # 6. Add general labels to the image
     for i in range(0, 2):
         label = labelWithInstance.LabelWithInstance()
         label.label = "testlabelgeneral" + str(i)
@@ -88,10 +99,12 @@ for n in range(10):
         # label.instanceUuid = str(uuid.uuid4())
         theImage.labels_general.append(label)
 
+    # 7. Send image to the server
     uuidImg = stub.TransferImage(theImage)
 
     print("uuid of transfered img: " + uuidImg.message)
 
+# 8. Add coordinate transformations and send them to the server
 theTf = tf.TransformStamped()
 theTf.header.frame_id = "map"
 theTf.header.stamp.seconds = theTime

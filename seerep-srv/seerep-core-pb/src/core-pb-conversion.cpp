@@ -148,16 +148,18 @@ void CorePbConversion::fromPbTime(const seerep::Query& query, seerep_core_msgs::
 
 void CorePbConversion::fromPbBoundingBox(const seerep::Query& query, seerep_core_msgs::Query& queryCore)
 {
-  if (query.boundingbox().has_header() && query.boundingbox().has_point_min() && query.boundingbox().has_point_max())
+  if (query.boundingboxstamped().has_header() && query.boundingboxstamped().has_boundingbox() &&
+      query.boundingboxstamped().boundingbox().has_point_min() &&
+      query.boundingboxstamped().boundingbox().has_point_max())
   {
-    queryCore.header.frameId = query.boundingbox().header().frame_id();
+    queryCore.header.frameId = query.boundingboxstamped().header().frame_id();
     queryCore.boundingbox = seerep_core_msgs::AABB();
-    queryCore.boundingbox.value().min_corner().set<0>(query.boundingbox().point_min().x());
-    queryCore.boundingbox.value().min_corner().set<1>(query.boundingbox().point_min().y());
-    queryCore.boundingbox.value().min_corner().set<2>(query.boundingbox().point_min().z());
-    queryCore.boundingbox.value().max_corner().set<0>(query.boundingbox().point_max().x());
-    queryCore.boundingbox.value().max_corner().set<1>(query.boundingbox().point_max().y());
-    queryCore.boundingbox.value().max_corner().set<2>(query.boundingbox().point_max().z());
+    queryCore.boundingbox.value().min_corner().set<0>(query.boundingboxstamped().boundingbox().point_min().x());
+    queryCore.boundingbox.value().min_corner().set<1>(query.boundingboxstamped().boundingbox().point_min().y());
+    queryCore.boundingbox.value().min_corner().set<2>(query.boundingboxstamped().boundingbox().point_min().z());
+    queryCore.boundingbox.value().max_corner().set<0>(query.boundingboxstamped().boundingbox().point_max().x());
+    queryCore.boundingbox.value().max_corner().set<1>(query.boundingboxstamped().boundingbox().point_max().y());
+    queryCore.boundingbox.value().max_corner().set<2>(query.boundingboxstamped().boundingbox().point_max().z());
   }
 }
 }  // namespace seerep_core_pb

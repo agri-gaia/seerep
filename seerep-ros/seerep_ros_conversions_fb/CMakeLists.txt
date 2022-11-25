@@ -10,6 +10,10 @@ find_package(catkin REQUIRED
 
 find_package(SeerepMsgs REQUIRED)
 
+find_package(gRPC CONFIG REQUIRED)
+
+find_package(GTest 1.12.0 REQUIRED)
+
 configure_file(include/SeerepRosConversionsFbConfig.h.in SeerepRosConversionsFbConfig.h)
 
 catkin_package(
@@ -28,8 +32,20 @@ include_directories(
 add_library(${PROJECT_NAME}
 	src/${PROJECT_NAME}/conversions.cpp
 )
-
 add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
+if(CATKIN_ENABLE_TESTING)
+catkin_add_gtest(${PROJECT_NAME}-test test/ros_to_fb_conversion_test.cpp)
+target_link_libraries(${PROJECT_NAME}-test
+	GTest::gtest
+	GTest::gtest_main
+	gmock_main
+	${catkin_LIBRARIES}
+	${SeerepMsgs_LIBRARIES}
+	gRPC::grpc++_reflection
+	${PROJECT_NAME}
+)
+endif(CATKIN_ENABLE_TESTING)
 
 install(TARGETS ${PROJECT_NAME}
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}

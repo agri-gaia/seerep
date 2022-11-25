@@ -13,7 +13,7 @@
   <author email="mark.niemeyer@dfki.de">Mark Niemeyer</author>
 
   <depend>seerep-msgs</depend>
-  <depend>geometry-msgs</depend>
+  <depend>geometry_msgs</depend>
   <buildtool_depend>cmake</buildtool_depend>
 
   <export>
