@@ -12,11 +12,19 @@ grpc::Status PbMetaOperations::CreateProject(grpc::ServerContext* context, const
   (void)context;  // ignore that variable without causing warnings
   try
   {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "create new project... ";
+    std::cout << "create new project... " << std::endl;
     seerep_core_msgs::ProjectInfo projectInfo;
     projectInfo.frameId = request->mapframeid();
     projectInfo.name = request->name();
     projectInfo.uuid = boost::uuids::random_generator()();
+
+    // assigning gedetic coords attributes individually
+    projectInfo.geodetCoords.coordinateSystem = request->geodeticcoordinates().coordinatesystem();
+    projectInfo.geodetCoords.ellipsoid = request->geodeticcoordinates().ellipsoid();
+    projectInfo.geodetCoords.altitude = request->geodeticcoordinates().altitude();
+    projectInfo.geodetCoords.latitude = request->geodeticcoordinates().latitude();
+    projectInfo.geodetCoords.longitude = request->geodeticcoordinates().longitude();
+
     seerepCore->createProject(projectInfo);
 
     response->set_name(projectInfo.name);
@@ -68,10 +76,21 @@ grpc::Status PbMetaOperations::GetProjects(grpc::ServerContext* context, const g
   }
   catch (...)
   {
+<<<<<<< HEAD
     // catch any other errors (that we have no information about)
     std::string msg = "Unknown failure occurred. Possible memory corruption";
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
+=======
+    auto responseProjectInfo = response->add_projects();
+    responseProjectInfo->set_name(projectInfo.name);
+    responseProjectInfo->set_uuid(boost::lexical_cast<std::string>(projectInfo.uuid));
+
+    // assigning gedetic coords attributes individually
+    // responseProjectInfo->geodeticcoordinates().set_coordinatesystem(projectInfo.geodetCoords.coordinateSystem);
+    // responseProjectInfo->geodeticcoordinates().set_ellipsoid(projectInfo.geodetCoords.ellipsoid);
+    // responseProjectInfo->geodeticcoordinates()->set_altitude(projectInfo.geodetCoords.altitude);
+>>>>>>> unfinished proto implementation
   }
 
   return grpc::Status::OK;

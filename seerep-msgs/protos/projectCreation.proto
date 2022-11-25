@@ -2,8 +2,11 @@ syntax = "proto3";
 
 package seerep;
 
+import "geodetic_coordinates.proto";
+
 message ProjectCreation
 {
   string name = 1;
   string mapFrameId = 2;
+  GeodeticCoordinates geodeticCoordinates = 3;
 }
