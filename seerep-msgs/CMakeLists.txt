@@ -21,6 +21,7 @@ set(MY_PROTO_FILES
 	protos/boundingbox2d.proto
 	protos/frame_infos.proto
 	protos/frame_query.proto
+	protos/geodetic_coordinates.proto
 	protos/header.proto
 	protos/image.proto
 	protos/label_with_instance.proto

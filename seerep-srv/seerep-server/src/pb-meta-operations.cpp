@@ -15,6 +15,14 @@ grpc::Status PbMetaOperations::CreateProject(grpc::ServerContext* context, const
   projectInfo.frameId = request->mapframeid();
   projectInfo.name = request->name();
   projectInfo.uuid = boost::uuids::random_generator()();
+
+  // assigning gedetic coords attributes individually
+  projectInfo.geodetCoords.coordinateSystem = request->geodeticcoordinates().coordinatesystem();
+  projectInfo.geodetCoords.ellipsoid = request->geodeticcoordinates().ellipsoid();
+  projectInfo.geodetCoords.altitude = request->geodeticcoordinates().altitude();
+  projectInfo.geodetCoords.latitude = request->geodeticcoordinates().latitude();
+  projectInfo.geodetCoords.longitude = request->geodeticcoordinates().longitude();
+
   seerepCore->createProject(projectInfo);
 
   response->set_name(projectInfo.name);
@@ -36,6 +44,11 @@ grpc::Status PbMetaOperations::GetProjects(grpc::ServerContext* context, const g
     auto responseProjectInfo = response->add_projects();
     responseProjectInfo->set_name(projectInfo.name);
     responseProjectInfo->set_uuid(boost::lexical_cast<std::string>(projectInfo.uuid));
+
+    // assigning gedetic coords attributes individually
+    // responseProjectInfo->geodeticcoordinates().set_coordinatesystem(projectInfo.geodetCoords.coordinateSystem);
+    // responseProjectInfo->geodeticcoordinates().set_ellipsoid(projectInfo.geodetCoords.ellipsoid);
+    // responseProjectInfo->geodeticcoordinates()->set_altitude(projectInfo.geodetCoords.altitude);
   }
 
   return grpc::Status::OK;

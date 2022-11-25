@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package seerep;
+
+message GeodeticCoordinates
+{
+  string coordinateSystem = 1;
+  string ellipsoid = 2;
+
+  double altitude = 3;
+  double latitude = 4;
+  double longitude = 5;
+}
