@@ -67,10 +67,13 @@ grpc::Status PbMetaOperations::GetProjects(grpc::ServerContext* context, const g
       responseProjectInfo->set_name(projectInfo.name);
       responseProjectInfo->set_uuid(boost::lexical_cast<std::string>(projectInfo.uuid));
 
-      // assigning gedetic coords attributes individually
-      // responseProjectInfo->geodeticcoordinates().set_coordinatesystem(projectInfo.geodetCoords.coordinateSystem);
-      // responseProjectInfo->geodeticcoordinates().set_ellipsoid(projectInfo.geodetCoords.ellipsoid);
-      // responseProjectInfo->geodeticcoordinates()->set_altitude(projectInfo.geodetCoords.altitude);
+      // assigning goedetic coords attributes individually
+      responseProjectInfo->mutable_geodeticcoordinates()->set_coordinatesystem(
+          projectInfo.geodetCoords.coordinateSystem);
+      responseProjectInfo->mutable_geodeticcoordinates()->set_ellipsoid(projectInfo.geodetCoords.ellipsoid);
+      responseProjectInfo->mutable_geodeticcoordinates()->set_altitude(projectInfo.geodetCoords.altitude);
+      responseProjectInfo->mutable_geodeticcoordinates()->set_latitude(projectInfo.geodetCoords.latitude);
+      responseProjectInfo->mutable_geodeticcoordinates()->set_longitude(projectInfo.geodetCoords.longitude);
     }
   }
   catch (const std::exception& e)
