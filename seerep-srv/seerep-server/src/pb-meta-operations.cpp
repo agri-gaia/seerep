@@ -65,6 +65,14 @@ grpc::Status PbMetaOperations::GetProjects(grpc::ServerContext* context, const g
       responseProjectInfo->set_name(projectInfo.name);
       responseProjectInfo->set_uuid(boost::lexical_cast<std::string>(projectInfo.uuid));
       responseProjectInfo->set_frameid(projectInfo.frameId);
+
+      // assigning goedetic coords attributes individually
+      responseProjectInfo->mutable_geodeticcoordinates()->set_coordinatesystem(
+          projectInfo.geodetCoords.coordinateSystem);
+      responseProjectInfo->mutable_geodeticcoordinates()->set_ellipsoid(projectInfo.geodetCoords.ellipsoid);
+      responseProjectInfo->mutable_geodeticcoordinates()->set_altitude(projectInfo.geodetCoords.altitude);
+      responseProjectInfo->mutable_geodeticcoordinates()->set_latitude(projectInfo.geodetCoords.latitude);
+      responseProjectInfo->mutable_geodeticcoordinates()->set_longitude(projectInfo.geodetCoords.longitude);
     }
   }
   catch (const std::exception& e)
@@ -76,21 +84,10 @@ grpc::Status PbMetaOperations::GetProjects(grpc::ServerContext* context, const g
   }
   catch (...)
   {
-<<<<<<< HEAD
     // catch any other errors (that we have no information about)
     std::string msg = "Unknown failure occurred. Possible memory corruption";
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
-=======
-    auto responseProjectInfo = response->add_projects();
-    responseProjectInfo->set_name(projectInfo.name);
-    responseProjectInfo->set_uuid(boost::lexical_cast<std::string>(projectInfo.uuid));
-
-    // assigning gedetic coords attributes individually
-    // responseProjectInfo->geodeticcoordinates().set_coordinatesystem(projectInfo.geodetCoords.coordinateSystem);
-    // responseProjectInfo->geodeticcoordinates().set_ellipsoid(projectInfo.geodetCoords.ellipsoid);
-    // responseProjectInfo->geodeticcoordinates()->set_altitude(projectInfo.geodetCoords.altitude);
->>>>>>> unfinished proto implementation
   }
 
   return grpc::Status::OK;
