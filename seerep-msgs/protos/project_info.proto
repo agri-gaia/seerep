@@ -6,4 +6,5 @@ message ProjectInfo
 {
   string name = 1;
   string uuid = 2;
+  string frameid = 3;
 }

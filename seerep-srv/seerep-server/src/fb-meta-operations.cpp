@@ -22,7 +22,8 @@ grpc::Status FbMetaOperations::CreateProject(grpc::ServerContext* context,
   flatbuffers::grpc::MessageBuilder builder;
   auto nameOffset = builder.CreateString(projectInfo.name);
   auto uuidOffset = builder.CreateString(boost::lexical_cast<std::string>(projectInfo.uuid));
-  auto responseOffset = seerep::fb::CreateProjectInfo(builder, nameOffset, uuidOffset);
+  auto frameIdOffset = builder.CreateString(projectInfo.frameId);
+  auto responseOffset = seerep::fb::CreateProjectInfo(builder, nameOffset, uuidOffset, frameIdOffset);
 
   builder.Finish(responseOffset);
   *response = builder.ReleaseMessage<seerep::fb::ProjectInfo>();
@@ -46,7 +47,8 @@ grpc::Status FbMetaOperations::GetProjects(grpc::ServerContext* context,
   {
     auto nameOffset = builder.CreateString(projectInfo.name);
     auto uuidOffset = builder.CreateString(boost::lexical_cast<std::string>(projectInfo.uuid));
-    projectInfosVector.push_back(seerep::fb::CreateProjectInfo(builder, nameOffset, uuidOffset));
+    auto frameIdOffset = builder.CreateString(projectInfo.frameId);
+    projectInfosVector.push_back(seerep::fb::CreateProjectInfo(builder, nameOffset, uuidOffset, frameIdOffset));
   }
   auto vectorOffset = builder.CreateVector(projectInfosVector);
   auto projectInfosOffset = seerep::fb::CreateProjectInfos(builder, vectorOffset);
