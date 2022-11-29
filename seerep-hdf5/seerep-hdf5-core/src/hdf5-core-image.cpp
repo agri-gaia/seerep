@@ -53,7 +53,15 @@ std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CoreImage::readDataset(con
   readLabelsGeneral(HDF5_GROUP_IMAGE, uuid, labelsGeneral, instancesGeneral);
   for (long unsigned int i = 0; i < labelsGeneral.size(); i++)
   {
-    auto instanceUuid = gen(instancesGeneral.at(i));
+    boost::uuids::uuid instanceUuid;
+    try
+    {
+      instanceUuid = gen(instancesGeneral.at(i));
+    }
+    catch (std::runtime_error&)
+    {
+      instanceUuid = boost::uuids::nil_uuid();
+    }
     data.labelsWithInstances.push_back(
         seerep_core_msgs::LabelWithInstance{ .label = labelsGeneral.at(i), .uuidInstance = instanceUuid });
   }
@@ -65,7 +73,15 @@ std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CoreImage::readDataset(con
 
   for (long unsigned int i = 0; i < labelsBB.size(); i++)
   {
-    auto instanceUuid = gen(instances.at(i));
+    boost::uuids::uuid instanceUuid;
+    try
+    {
+      instanceUuid = gen(instances.at(i));
+    }
+    catch (std::runtime_error&)
+    {
+      instanceUuid = boost::uuids::nil_uuid();
+    }
     data.labelsWithInstances.push_back(
         seerep_core_msgs::LabelWithInstance{ .label = labelsBB.at(i), .uuidInstance = instanceUuid });
   }

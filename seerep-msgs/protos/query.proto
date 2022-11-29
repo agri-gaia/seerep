@@ -10,5 +10,9 @@ message Query
   BoundingboxStamped boundingboxStamped = 1;
   TimeInterval timeinterval = 2;
   repeated string label = 3;
-  repeated string projectuuid = 4;
+  bool mustHaveAllLabels = 4;
+  repeated string projectuuid = 5;
+  repeated string instanceuuid = 6;
+  repeated string datauuid = 7;
+  bool withoutdata = 8;
 }

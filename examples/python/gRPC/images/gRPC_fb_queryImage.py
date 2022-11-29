@@ -25,6 +25,7 @@ projectuuid = util_fb.getProject(builder, channel, 'testproject')
 
 # 2. Check if the defined project exist; if not exit
 if not projectuuid:
+    print("project doesn't exist!")
     exit()
 
 # 3. Get gRPC service object
@@ -43,7 +44,7 @@ timeInterval = util_fb.createTimeInterval(builder, timeMin, timeMax)
 
 
 projectUuids = [builder.CreateString(projectuuid)]
-labels = [builder.CreateString("testlabel0")]
+labels = [builder.CreateString("testlabel0"), builder.CreateString("testlabelgeneral0")]
 dataUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 instanceUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 
@@ -54,8 +55,9 @@ query = util_fb.createQuery(
     builder,
     # boundingBox=boundingboxStamped,
     # timeInterval=timeInterval,
-    # labels=labels,
-    # projectUuids=projectUuids,
+    labels=labels,
+    mustHaveAllLabels=True,
+    projectUuids=projectUuids,
     # instanceUuids=instanceUuids,
     # dataUuids=dataUuids,
     withoutData=True,

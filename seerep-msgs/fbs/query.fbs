@@ -5,9 +5,10 @@ include "boundingbox_stamped.fbs";
 namespace seerep.fb;
 
 table Query {
-  boundingboxStamped:seerep.fb.BoundingboxStamped;
-  timeinterval:seerep.fb.TimeInterval;
+  boundingboxStamped:BoundingboxStamped;
+  timeinterval:TimeInterval;
   label:[string];
+  mustHaveAllLabels:bool;
   projectuuid:[string];
   instanceuuid:[string];
   datauuid:[string];

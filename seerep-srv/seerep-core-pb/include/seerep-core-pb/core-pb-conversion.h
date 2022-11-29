@@ -79,6 +79,30 @@ private:
    * @param queryCore query message in seerep core format
    */
   static void fromPbBoundingBox(const seerep::Query& query, seerep_core_msgs::Query& queryCore);
+  /**
+   * @brief converts the mustHaveAllLabels flag of the protobuf query message to seerep core specific message
+   * @param query the protobuf query message
+   * @param queryCore query message in seerep core format
+   */
+  static void fromPbMustHaveAllLabels(const seerep::Query& query, seerep_core_msgs::Query& queryCore);
+  /**
+   * @brief converts the instance uuids of the protobuf query message to seerep core specific message
+   * @param query the protobuf query message
+   * @param queryCore query message in seerep core format
+   */
+  static void fromPbInstance(const seerep::Query& query, seerep_core_msgs::Query& queryCore);
+  /**
+   * @brief converts the data uuids of the protobuf query message to seerep core specific message
+   * @param query the protobuf query message
+   * @param queryCore query message in seerep core format
+   */
+  static void fromPbDataUuids(const seerep::Query& query, seerep_core_msgs::Query& queryCore);
+  /**
+   * @brief converts the withoutData flag of the protobuf query message to seerep core specific message
+   * @param query the protobuf query message
+   * @param queryCore query message in seerep core format
+   */
+  static void fromPbWithOutData(const seerep::Query& query, seerep_core_msgs::Query& queryCore);
 };
 
 }  // namespace seerep_core_pb
