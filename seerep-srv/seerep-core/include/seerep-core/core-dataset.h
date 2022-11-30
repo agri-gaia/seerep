@@ -156,6 +156,26 @@ private:
                                                             const seerep_core_msgs::Query& query);
 
   /**
+   * @brief queries the semantic index where the dataset contains any of the labels
+   * @param datatypeSpecifics the datatype specific information to be used in the query
+   * @param query the query parameters
+   * @return set of UUIDs of the images matching the query
+   */
+  std::optional<std::set<boost::uuids::uuid>>
+  querySemanticWithAnyOfLabels(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
+                               const seerep_core_msgs::Query& query);
+
+  /**
+   * @brief queries the semantic index where the dataset contains all of the labels
+   * @param datatypeSpecifics the datatype specific information to be used in the query
+   * @param query the query parameters
+   * @return set of UUIDs of the images matching the query
+   */
+  std::optional<std::set<boost::uuids::uuid>>
+  querySemanticWithAllTheLabels(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
+                                const seerep_core_msgs::Query& query);
+
+  /**
    * @brief intersects the results of the spatial, temporal and semantic query and returns the UUIDs
    * of the images matching the query in all three modalities
    * @param rt_result the result of the spatial query

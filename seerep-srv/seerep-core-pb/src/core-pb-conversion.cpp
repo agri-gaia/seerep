@@ -7,10 +7,15 @@ seerep_core_msgs::Query CorePbConversion::fromPb(const seerep::Query& query, see
   seerep_core_msgs::Query queryCore;
   queryCore.header.datatype = datatype;
 
-  fromPbProject(query, queryCore);
-  fromPbLabel(query, queryCore);
-  fromPbTime(query, queryCore);
   fromPbBoundingBox(query, queryCore);
+  fromPbTime(query, queryCore);
+  fromPbLabel(query, queryCore);
+
+  fromPbMustHaveAllLabels(query, queryCore);
+  fromPbProject(query, queryCore);
+  fromPbInstance(query, queryCore);
+  fromPbDataUuids(query, queryCore);
+  fromPbWithOutData(query, queryCore);
 
   return queryCore;
 }
@@ -161,5 +166,41 @@ void CorePbConversion::fromPbBoundingBox(const seerep::Query& query, seerep_core
     queryCore.boundingbox.value().max_corner().set<1>(query.boundingboxstamped().boundingbox().point_max().y());
     queryCore.boundingbox.value().max_corner().set<2>(query.boundingboxstamped().boundingbox().point_max().z());
   }
+}
+
+void CorePbConversion::fromPbMustHaveAllLabels(const seerep::Query& query, seerep_core_msgs::Query& queryCore)
+{
+  queryCore.mustHaveAllLabels = query.musthavealllabels();
+}
+
+void CorePbConversion::fromPbInstance(const seerep::Query& query, seerep_core_msgs::Query& queryCore)
+{
+  boost::uuids::string_generator gen;
+  if (!query.instanceuuid().empty())
+  {
+    queryCore.instances = std::vector<boost::uuids::uuid>();
+    for (auto instance : query.instanceuuid())
+    {
+      queryCore.instances.value().push_back(gen(instance));
+    }
+  }
+}
+
+void CorePbConversion::fromPbDataUuids(const seerep::Query& query, seerep_core_msgs::Query& queryCore)
+{
+  boost::uuids::string_generator gen;
+  if (!query.datauuid().empty())
+  {
+    queryCore.dataUuids = std::vector<boost::uuids::uuid>();
+    for (auto data : query.datauuid())
+    {
+      queryCore.dataUuids.value().push_back(gen(data));
+    }
+  }
+}
+
+void CorePbConversion::fromPbWithOutData(const seerep::Query& query, seerep_core_msgs::Query& queryCore)
+{
+  queryCore.withoutData = query.withoutdata();
 }
 }  // namespace seerep_core_pb

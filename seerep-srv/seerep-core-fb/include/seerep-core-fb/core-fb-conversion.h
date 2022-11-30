@@ -146,6 +146,13 @@ private:
   static bool fromFbQueryWithoutData(const seerep::fb::Query* query);
 
   /**
+   * @brief extracts the mustHaveAllLabels Flag of the flatbuffer query message
+   * @param query the flatbuffer query message
+   * @return flag if all labels must be present to fit semantic query
+   */
+  static bool fromFbQueryMustHaveAllLabels(const seerep::fb::Query* query);
+
+  /**
    * @brief converts the header of the flatbuffer data message to seerep core specific message
    * @param header the header in the flatbuffer data message
    * @param coreHeader the header in the data message in seerep core format

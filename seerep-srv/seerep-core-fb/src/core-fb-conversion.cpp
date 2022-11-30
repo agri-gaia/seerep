@@ -33,12 +33,13 @@ seerep_core_msgs::Query CoreFbConversion::fromFb(const seerep::fb::Query* query,
   seerep_core_msgs::Query queryCore;
   queryCore.header.datatype = datatype;
 
+  fromFbQueryBoundingBox(query, queryCore.boundingbox, queryCore.header.frameId);
+  fromFbQueryTime(query, queryCore.timeinterval);
+  fromFbQueryLabel(query, queryCore.label);
+  queryCore.mustHaveAllLabels = fromFbQueryMustHaveAllLabels(query);
   fromFbQueryProject(query, queryCore.projects);
   fromFbQueryInstance(query, queryCore.instances);
   fromFbQueryDataUuids(query, queryCore.dataUuids);
-  fromFbQueryLabel(query, queryCore.label);
-  fromFbQueryTime(query, queryCore.timeinterval);
-  fromFbQueryBoundingBox(query, queryCore.boundingbox, queryCore.header.frameId);
   queryCore.withoutData = fromFbQueryWithoutData(query);
 
   return queryCore;
@@ -259,6 +260,16 @@ bool CoreFbConversion::fromFbQueryWithoutData(const seerep::fb::Query* query)
   if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_WITHOUTDATA))
   {
     return query->withoutdata();
+  }
+
+  return false;
+}
+
+bool CoreFbConversion::fromFbQueryMustHaveAllLabels(const seerep::fb::Query* query)
+{
+  if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_MUSTHAVEALLLABELS))
+  {
+    return query->mustHaveAllLabels();
   }
 
   return false;

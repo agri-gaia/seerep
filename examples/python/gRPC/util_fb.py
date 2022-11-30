@@ -277,6 +277,7 @@ def createQuery(
     boundingBox=None,
     timeInterval=None,
     labels=None,
+    mustHaveAllLabels=False,
     projectUuids=None,
     instanceUuids=None,
     dataUuids=None,
@@ -316,6 +317,7 @@ def createQuery(
         Query.AddTimeinterval(builder, timeInterval)
     if labels:
         Query.AddLabel(builder, labelsOffset)
+    Query.AddMustHaveAllLabels(builder, mustHaveAllLabels)
     if projectUuids:
         Query.AddProjectuuid(builder, projectUuidsOffset)
     if instanceUuids:

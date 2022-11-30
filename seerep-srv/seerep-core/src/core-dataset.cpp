@@ -177,24 +177,79 @@ CoreDataset::querySemantic(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
 {
   if (query.label)
   {
-    std::optional<std::set<boost::uuids::uuid>> result = std::set<boost::uuids::uuid>();
-    // find the queried label in the label-imageID-map
-    for (std::string labelquery : query.label.value())
+    if (query.mustHaveAllLabels)
     {
-      auto labelPtr = datatypeSpecifics->labelDatasetsMap.find(labelquery);
-      if (labelPtr != datatypeSpecifics->labelDatasetsMap.end())
-      {
-        // add all imageIDs to result set
-        for (boost::uuids::uuid id : labelPtr->second)
-        {
-          result.value().insert(id);
-        }
-      }
+      return querySemanticWithAllTheLabels(datatypeSpecifics, query);
     }
-    return result;
+    else
+    {
+      return querySemanticWithAnyOfLabels(datatypeSpecifics, query);
+    }
   }
 
   return std::nullopt;
+}
+
+std::optional<std::set<boost::uuids::uuid>>
+CoreDataset::querySemanticWithAnyOfLabels(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
+                                          const seerep_core_msgs::Query& query)
+{
+  std::optional<std::set<boost::uuids::uuid>> result = std::set<boost::uuids::uuid>();
+  // find the queried label in the label-imageID-map
+  for (std::string labelquery : query.label.value())
+  {
+    auto labelPtr = datatypeSpecifics->labelDatasetsMap.find(labelquery);
+    if (labelPtr != datatypeSpecifics->labelDatasetsMap.end())
+    {
+      // add all imageIDs to result set
+      for (boost::uuids::uuid id : labelPtr->second)
+      {
+        result.value().insert(id);
+      }
+    }
+  }
+  return result;
+}
+
+std::optional<std::set<boost::uuids::uuid>>
+CoreDataset::querySemanticWithAllTheLabels(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
+                                           const seerep_core_msgs::Query& query)
+{
+  std::set<boost::uuids::uuid> result;
+  bool firstLabel = true;
+  // find the queried label in the label-imageID-map
+  for (std::string labelquery : query.label.value())
+  {
+    auto labelPtr = datatypeSpecifics->labelDatasetsMap.find(labelquery);
+    if (labelPtr != datatypeSpecifics->labelDatasetsMap.end())
+    {
+      std::set<boost::uuids::uuid> thisLabelSet;
+      // vector to set
+      for (boost::uuids::uuid id : labelPtr->second)
+      {
+        thisLabelSet.insert(id);
+      }
+
+      if (firstLabel)
+      {
+        result = std::move(thisLabelSet);
+        firstLabel = false;
+      }
+      else
+      {
+        std::set<boost::uuids::uuid> intersection;
+        std::set_intersection(result.begin(), result.end(), thisLabelSet.begin(), thisLabelSet.end(),
+                              std::inserter(intersection, intersection.begin()));
+        result = std::move(intersection);
+
+        if (result.empty())
+        {
+          return std::nullopt;
+        }
+      }
+    }
+  }
+  return result;
 }
 
 std::vector<boost::uuids::uuid>
