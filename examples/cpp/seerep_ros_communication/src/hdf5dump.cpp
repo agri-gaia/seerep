@@ -2,8 +2,11 @@
 
 namespace seerep_grpc_ros
 {
-DumpSensorMsgs::DumpSensorMsgs(std::string hdf5FilePath)
+DumpSensorMsgs::DumpSensorMsgs(std::string hdf5FilePath, std::string project_frame_id, std::string project_name)
 {
+  ROS_INFO_STREAM("creating a new project with name: \"" << project_name << "\" and frame id: \"" << project_frame_id
+                                                         << "\" in  file: \"" << hdf5FilePath << "\"");
+
   m_labelsAsStdVector.push_back("testlabel_0");
   m_labelsAsStdVector.push_back("testlabel_1");
 
@@ -14,6 +17,10 @@ DumpSensorMsgs::DumpSensorMsgs(std::string hdf5FilePath)
   auto write_mtx = std::make_shared<std::mutex>();
   std::shared_ptr<HighFive::File> hdf5_file =
       std::make_shared<HighFive::File>(hdf5FilePath, HighFive::File::OpenOrCreate);
+  auto ioGeneral = seerep_hdf5_core::Hdf5CoreGeneral(hdf5_file, write_mtx);
+  ioGeneral.writeProjectFrameId(project_frame_id);
+  ioGeneral.writeProjectname(project_name);
+
   m_ioTf = std::make_shared<seerep_hdf5_pb::Hdf5PbTf>(hdf5_file, write_mtx);
   m_ioPointCloud = std::make_shared<seerep_hdf5_pb::Hdf5PbPointCloud>(hdf5_file, write_mtx);
   m_ioImage = std::make_shared<seerep_hdf5_pb::Hdf5PbImage>(hdf5_file, write_mtx);
@@ -159,13 +166,26 @@ int main(int argc, char** argv)
   else
   {
     projectUuid = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
-    ROS_WARN_STREAM("Use the \"hdf5FolderPath\" parameter to specify the HDF5 file! Generating a a new one. (" +
+    ROS_WARN_STREAM("Use the \"projectUuid\" parameter to specify the HDF5 file! Generating a a new one. (" +
                     projectUuid + ".h5)");
   }
 
   std::string hdf5FilePath = hdf5FolderPath + "/" + projectUuid + ".h5";
 
-  seerep_grpc_ros::DumpSensorMsgs dumpSensorMsgs = seerep_grpc_ros::DumpSensorMsgs(hdf5FilePath);
+  std::string project_frame_id, project_name;
+  if (!private_nh.getParam("project_frame_id", project_frame_id))
+  {
+    ROS_WARN_STREAM("Use the \"project_frame_id\" parameter to specify the base frame id of the Seerep project! The "
+                    "\"project_frame_id\" parameter should be a string.");
+  }
+  if (!private_nh.getParam("project_name", project_name))
+  {
+    ROS_WARN_STREAM("Use the \"project_name\" parameter to specify the name of the Seerep project! The "
+                    "\"project_name\" parameter should be a string.");
+  }
+
+  seerep_grpc_ros::DumpSensorMsgs dumpSensorMsgs =
+      seerep_grpc_ros::DumpSensorMsgs(hdf5FilePath, project_frame_id, project_name);
 
   ros::master::V_TopicInfo topic_info;
   ros::master::getTopics(topic_info);

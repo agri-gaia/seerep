@@ -5,6 +5,7 @@
 #include <optional>
 
 // seerep
+#include <seerep-hdf5-core/hdf5-core-general.h>
 #include <seerep-hdf5-core/hdf5-core-image.h>
 #include <seerep-hdf5-pb/hdf5-pb-image.h>
 #include <seerep-hdf5-pb/hdf5-pb-pointcloud.h>
@@ -31,7 +32,7 @@ namespace seerep_grpc_ros
 class DumpSensorMsgs
 {
 public:
-  DumpSensorMsgs(std::string hdf5FilePath);
+  DumpSensorMsgs(std::string hdf5FilePath, std::string project_frame_id, std::string project_name);
 
   std::optional<ros::Subscriber> getSubscriber(const std::string& message_type, const std::string& topic);
 
