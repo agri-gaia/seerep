@@ -45,7 +45,11 @@ void QueryData::queryImage(const seerep::Query& query, ros::Publisher& img_pub) 
                 << " / " << labels.boundingbox().point_max().y() << std::endl;
     }
 
-    ROS_INFO_STREAM("publish image\n" << img);
+    for (auto labels : response.labels_general())
+    {
+      std::cout << "label_general: " << labels.label() << std::endl;
+    }
+
     img_pub.publish(img);
 
     ros::spinOnce();
@@ -80,30 +84,40 @@ int main(int argc, char** argv)
 
   // spatial
   double minx, miny, minz, maxx, maxy, maxz;
-  private_nh.param<double>("point_min_x", minx, 0.0);
-  private_nh.param<double>("point_min_y", miny, 0.0);
-  private_nh.param<double>("point_min_z", minz, 0.0);
-  private_nh.param<double>("point_max_x", maxx, 0.0);
-  private_nh.param<double>("point_max_y", maxy, 0.0);
-  private_nh.param<double>("point_max_z", maxz, 0.0);
-  query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_point_min()->set_x(minx);
-  query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_point_min()->set_y(miny);
-  query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_point_min()->set_z(minz);
-  query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_point_max()->set_x(maxx);
-  query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_point_max()->set_y(maxy);
-  query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_point_max()->set_z(maxz);
-
+  if (private_nh.param<double>("point_min_x", minx, 0.0) && private_nh.param<double>("point_min_y", miny, 0.0) &&
+      private_nh.param<double>("point_min_z", minz, 0.0) && private_nh.param<double>("point_max_x", maxx, 0.0) &&
+      private_nh.param<double>("point_max_y", maxy, 0.0) && private_nh.param<double>("point_max_z", maxz, 0.0))
+  {
+    query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_point_min()->set_x(minx);
+    query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_point_min()->set_y(miny);
+    query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_point_min()->set_z(minz);
+    query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_point_max()->set_x(maxx);
+    query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_point_max()->set_y(maxy);
+    query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_point_max()->set_z(maxz);
+  }
   // temporal
   int mintime, maxtime;
-  private_nh.param<int>("time_min", mintime, 0);
-  private_nh.param<int>("time_max", maxtime, 0);
-  query.mutable_timeinterval()->mutable_time_min()->set_seconds(mintime);
-  query.mutable_timeinterval()->mutable_time_max()->set_seconds(maxtime);
-
+  if (private_nh.param<int>("time_min", mintime, 0) && private_nh.param<int>("time_max", maxtime, 0))
+  {
+    query.mutable_timeinterval()->mutable_time_min()->set_seconds(mintime);
+    query.mutable_timeinterval()->mutable_time_max()->set_seconds(maxtime);
+  }
   // semantic
-  std::string label;
-  private_nh.param<std::string>("label", label, "");
-  query.mutable_label()->Add(std::move(label));
+  std::vector<std::string> labels;
+  if (private_nh.param<std::vector<std::string>>("labels", labels, std::vector<std::string>()))
+  {
+    for (auto label : labels)
+    {
+      query.mutable_label()->Add(std::move(label));
+    }
+  }
+
+  bool musthavealllabels;
+
+  if (private_nh.param<bool>("musthavealllabels", musthavealllabels, false))
+  {
+    query.set_musthavealllabels(musthavealllabels);
+  }
 
   ROS_INFO("Topic is published. Connect to it now. Press enter to resume.");
   std::cin.get();

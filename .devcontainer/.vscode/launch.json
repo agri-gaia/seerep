@@ -5,28 +5,28 @@
             "name": "ROS: Launch hdf5dump",
             "type": "ros",
             "request": "launch",
-            "target": "${workspaceFolder}/src/seerep-ros/seerep_ros_communication/launch/hdf5dump.launch",
+            "target": "${workspaceFolder}/src/examples/cpp/seerep_ros_communication/launch/hdf5dump.launch",
             "console": "integratedTerminal"
         },
         {
             "name": "ROS: Launch querier",
             "type": "ros",
             "request": "launch",
-            "target": "${workspaceFolder}/src/seerep-ros/seerep_ros_communication/launch/querier.launch",
+            "target": "${workspaceFolder}/src/examples/cpp/seerep_ros_communication/launch/querier.launch",
             "console": "integratedTerminal"
         },
         {
             "name": "ROS: Launch client",
             "type": "ros",
             "request": "launch",
-            "target": "${workspaceFolder}/src/seerep-ros/seerep_ros_communication/launch/client.launch",
+            "target": "${workspaceFolder}/src/examples/cpp/seerep_ros_communication/launch/client.launch",
             "console": "integratedTerminal"
         },
         {
             "name": "ROS: Launch client imageWithDetection",
             "type": "ros",
             "request": "launch",
-            "target": "${workspaceFolder}/src/seerep-ros/seerep_ros_communication/launch/clientImagesWithDetection.launch",
+            "target": "${workspaceFolder}/src/examples/cpp/seerep_ros_communication/launch/clientImagesWithDetection.launch",
             "console": "integratedTerminal"
         },
         {

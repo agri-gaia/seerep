@@ -11,7 +11,8 @@
     <arg name="point_max_z" default="10.0"/>
     <arg name="time_min" default="1638549273"/>
     <arg name="time_max" default="1738549276"/>
-    <arg name="label" default="testlabel40"/>
+    <arg name="labels" default="[testlabel0, testlabel1]"/>
+    <arg name="musthavealllabels" default="True"/>
     <node name="seerep_ros_communication_querier" pkg="seerep_ros_communication" type="seerep_ros_communication_querier" output="screen">
         <rosparam param="server_address" subst_value="True">$(arg server_address)</rosparam>
         <rosparam param="topicqueriedpc" subst_value="True">$(arg topicqueriedpc)</rosparam>
@@ -24,6 +25,7 @@
         <rosparam param="point_max_z" subst_value="True">$(arg point_max_z)</rosparam>
         <rosparam param="time_min" subst_value="True">$(arg time_min)</rosparam>
         <rosparam param="time_max" subst_value="True">$(arg time_max)</rosparam>
-        <rosparam param="label" subst_value="True">$(arg label)</rosparam>
+        <rosparam param="labels" subst_value="True">$(arg labels)</rosparam>
+        <rosparam param="musthavealllabels" subst_value="True">$(arg musthavealllabels)</rosparam>
     </node>
 </launch>

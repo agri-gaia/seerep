@@ -241,12 +241,12 @@ CoreDataset::querySemanticWithAllTheLabels(std::shared_ptr<DatatypeSpecifics> da
         std::set_intersection(result.begin(), result.end(), thisLabelSet.begin(), thisLabelSet.end(),
                               std::inserter(intersection, intersection.begin()));
         result = std::move(intersection);
-
-        if (result.empty())
-        {
-          return std::nullopt;
-        }
       }
+    }
+    firstLabel = false;
+    if (result.empty())
+    {
+      return std::nullopt;
     }
   }
   return result;
