@@ -113,10 +113,15 @@ int main(int argc, char** argv)
   }
 
   bool musthavealllabels;
-
   if (private_nh.param<bool>("musthavealllabels", musthavealllabels, false))
   {
     query.set_musthavealllabels(musthavealllabels);
+  }
+
+  int maxNumData;
+  if (private_nh.param<int>("maxNumData", maxNumData, 0))
+  {
+    query.set_maxnumdata(maxNumData);
   }
 
   ROS_INFO("Topic is published. Connect to it now. Press enter to resume.");

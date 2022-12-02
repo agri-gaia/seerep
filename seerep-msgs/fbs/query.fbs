@@ -13,4 +13,5 @@ table Query {
   instanceuuid:[string];
   datauuid:[string];
   withoutdata:bool;
+  maxNumData:uint;
 }

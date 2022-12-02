@@ -223,7 +223,7 @@ seerep_core_msgs::QueryResult Core::getDatasetFromAllProjects(const seerep_core_
     auto dataset = it.second->getDataset(query);
     addDatasetToResult(dataset, result);
   }
-  return result;
+  return checkSize(result, query.maxNumData);
 }
 seerep_core_msgs::QueryResult Core::getDatasetFromSpecificProjects(const seerep_core_msgs::Query& query)
 {
@@ -235,7 +235,31 @@ seerep_core_msgs::QueryResult Core::getDatasetFromSpecificProjects(const seerep_
     auto dataset = project->second->getDataset(query);
     addDatasetToResult(dataset, result);
   }
-  return result;
+  return checkSize(result, query.maxNumData);
+}
+
+seerep_core_msgs::QueryResult Core::checkSize(const seerep_core_msgs::QueryResult& queryResult, uint maxNum)
+{
+  seerep_core_msgs::QueryResult queryResultFiltered(queryResult);
+
+  uint64_t overallResultSize = 0;
+  for (auto& queryResultProject : queryResultFiltered.queryResultProjects)
+  {
+    overallResultSize += queryResultProject.dataOrInstanceUuids.size();
+  }
+
+  if (maxNum > 0 && overallResultSize > maxNum)
+  {
+    float factor = maxNum / (float)overallResultSize;
+    for (auto& queryResultProject : queryResultFiltered.queryResultProjects)
+    {
+      queryResultProject.dataOrInstanceUuids =
+          std::vector<boost::uuids::uuid>(queryResultProject.dataOrInstanceUuids.begin(),
+                                          queryResultProject.dataOrInstanceUuids.begin() +
+                                              (int)std::round(queryResultProject.dataOrInstanceUuids.size() * factor));
+    }
+  }
+  return queryResultFiltered;
 }
 
 void Core::addDatasetToResult(seerep_core_msgs::QueryResultProject& dataset, seerep_core_msgs::QueryResult& result)

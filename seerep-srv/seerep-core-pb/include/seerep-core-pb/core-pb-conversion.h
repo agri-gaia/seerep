@@ -103,6 +103,14 @@ private:
    * @param queryCore query message in seerep core format
    */
   static void fromPbWithOutData(const seerep::Query& query, seerep_core_msgs::Query& queryCore);
+
+  /**
+   * @brief extracts the maxNumData of the flatbuffer query message
+   *
+   * @param query the protobuf query message
+   * @param queryCore query message in seerep core format
+   */
+  static void fromFbQueryMaxNumData(const seerep::Query& query, seerep_core_msgs::Query& queryCore);
 };
 
 }  // namespace seerep_core_pb

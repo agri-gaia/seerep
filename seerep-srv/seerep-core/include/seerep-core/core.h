@@ -159,6 +159,15 @@ private:
    */
   void addDatasetToResult(seerep_core_msgs::QueryResultProject& dataset, seerep_core_msgs::QueryResult& result);
 
+  /**
+   * @brief checks the size of the queryResult and reduces it to the queried size
+   *
+   * @param queryResult the query result
+   * @param maxNum the max number of datasets in the result
+   * @return seerep_core_msgs::QueryResult the reduced result
+   */
+  seerep_core_msgs::QueryResult checkSize(const seerep_core_msgs::QueryResult& queryResult, uint maxNum);
+
   /** @brief the path to the folder containing the HDF5 files */
   std::string m_dataFolder;
 

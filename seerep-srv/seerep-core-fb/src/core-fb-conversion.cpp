@@ -41,6 +41,7 @@ seerep_core_msgs::Query CoreFbConversion::fromFb(const seerep::fb::Query* query,
   fromFbQueryInstance(query, queryCore.instances);
   fromFbQueryDataUuids(query, queryCore.dataUuids);
   queryCore.withoutData = fromFbQueryWithoutData(query);
+  queryCore.maxNumData = fromFbQueryMaxNumData(query);
 
   return queryCore;
 }
@@ -273,6 +274,16 @@ bool CoreFbConversion::fromFbQueryMustHaveAllLabels(const seerep::fb::Query* que
   }
 
   return false;
+}
+
+uint CoreFbConversion::fromFbQueryMaxNumData(const seerep::fb::Query* query)
+{
+  if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_MAXNUMDATA))
+  {
+    return query->maxNumData();
+  }
+
+  return 0;
 }
 
 void CoreFbConversion::fromFbDataHeader(const seerep::fb::Header* header, seerep_core_msgs::Header& coreHeader,
