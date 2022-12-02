@@ -5,6 +5,7 @@ import sys
 
 import image_service_pb2_grpc as imageService
 import meta_operations_pb2_grpc as metaOperations
+import numpy as np
 import query_pb2 as query
 from google.protobuf import empty_pb2
 
@@ -71,3 +72,7 @@ for img in stub.GetImage(theQuery):
         + str(img.labels_bb[0].boundingBox.point_max.y)
         + "\n"
     )
+
+    print("---Data--")
+    if img.data:
+        print(np.array([i for i in img.data]).reshape(img.height, img.width, 3))

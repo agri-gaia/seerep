@@ -36,6 +36,10 @@ public:
 
   std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> readImage(const std::string& id,
                                                                          const bool withoutData = false);
+
+private:
+  const std::string getHdf5GroupPath(const std::string& id) const;
+  const std::string getHdf5DataSetPath(const std::string& id) const;
 };
 
 }  // namespace seerep_hdf5_fb

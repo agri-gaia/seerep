@@ -68,6 +68,8 @@ for n in range(10):
             rgb.append(g)
             rgb.append(b)
 
+    print(str(np.array(rgb).reshape(lim, lim, 3)) + "\n")
+
     # Add image meta-data
     theImage.header.frame_id = "camera"
     theImage.header.stamp.seconds = theTime + n
