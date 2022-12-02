@@ -35,8 +35,7 @@ void Hdf5PbImage::writeImage(const std::string& id, const seerep::Image& image)
   writeAttributeToHdf5<uint32_t>(*data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::WIDTH, image.width());
   writeAttributeToHdf5<std::string>(*data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::ENCODING, image.encoding());
   writeAttributeToHdf5<bool>(*data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::IS_BIGENDIAN, image.is_bigendian());
-  writeAttributeToHdf5<uint32_t>(*data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::POINT_STEP, image.step());
-  writeAttributeToHdf5<uint32_t>(*data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::ROW_STEP, image.row_step());
+  writeAttributeToHdf5<uint32_t>(*data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::STEP, image.step());
 
   if (image.encoding() == "rgb8" || image.encoding() == "8UC3")
   {
@@ -104,8 +103,7 @@ std::optional<seerep::Image> Hdf5PbImage::readImage(const std::string& id)
     image.set_encoding(readAttributeFromHdf5<std::string>(id, *data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::ENCODING));
     image.set_is_bigendian(
         readAttributeFromHdf5<bool>(id, *data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::IS_BIGENDIAN));
-    image.set_step(readAttributeFromHdf5<uint32_t>(id, *data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::POINT_STEP));
-    image.set_row_step(readAttributeFromHdf5<uint32_t>(id, *data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::ROW_STEP));
+    image.set_step(readAttributeFromHdf5<uint32_t>(id, *data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::STEP));
   }
   catch (const std::invalid_argument& e)
   {

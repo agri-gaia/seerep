@@ -46,8 +46,7 @@ public:
   inline static const std::string WIDTH = "width";
   inline static const std::string ENCODING = "encoding";
   inline static const std::string IS_BIGENDIAN = "is_bigendian";
-  inline static const std::string ROW_STEP = "row_step";
-  inline static const std::string POINT_STEP = "point_step";
+  inline static const std::string STEP = "step";
   inline static const std::string IS_DENSE = "is_dense";
 
   inline static const std::string RAWDATA = "rawdata";

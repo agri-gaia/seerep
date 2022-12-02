@@ -158,7 +158,6 @@ flatbuffers::Offset<seerep::fb::Image> toFlat(const sensor_msgs::Image& image, s
   imagebuilder.add_encoding(encodingOffset);
   imagebuilder.add_is_bigendian(image.is_bigendian);
   imagebuilder.add_step(image.step);
-  imagebuilder.add_row_step(image.step * image.width);
   imagebuilder.add_data(dataVector);
 
   return imagebuilder.Finish();

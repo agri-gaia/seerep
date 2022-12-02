@@ -38,8 +38,7 @@ void Hdf5FbImage::writeImage(const std::string& id, const seerep::fb::Image& ima
   writeAttributeToHdf5<uint32_t>(*data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::WIDTH, image.width());
   writeAttributeToHdf5<std::string>(*data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::ENCODING, image.encoding()->str());
   writeAttributeToHdf5<bool>(*data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::IS_BIGENDIAN, image.is_bigendian());
-  writeAttributeToHdf5<uint32_t>(*data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::POINT_STEP, image.step());
-  writeAttributeToHdf5<uint32_t>(*data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::ROW_STEP, image.row_step());
+  writeAttributeToHdf5<uint32_t>(*data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::STEP, image.step());
 
   if (image.encoding()->str() == "rgb8" || image.encoding()->str() == "8UC3")
   {
@@ -110,7 +109,7 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
 
   flatbuffers::grpc::MessageBuilder builder;
 
-  uint32_t step, height, width, rowStep;
+  uint32_t step, height, width;
   flatbuffers::Offset<flatbuffers::String> encoding;
   bool isBigendian;
   try
@@ -121,8 +120,7 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
     encoding = builder.CreateString(
         readAttributeFromHdf5<std::string>(id, *data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::ENCODING));
     isBigendian = readAttributeFromHdf5<bool>(id, *data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::IS_BIGENDIAN);
-    step = readAttributeFromHdf5<uint32_t>(id, *data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::POINT_STEP);
-    rowStep = readAttributeFromHdf5<uint32_t>(id, *data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::ROW_STEP);
+    step = readAttributeFromHdf5<uint32_t>(id, *data_set_ptr, seerep_hdf5_core::Hdf5CoreImage::STEP);
   }
   catch (const std::invalid_argument& e)
   {
@@ -220,7 +218,6 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
   imageBuilder.add_encoding(encoding);
   imageBuilder.add_is_bigendian(isBigendian);
   imageBuilder.add_step(step);
-  imageBuilder.add_row_step(rowStep);
 
   if (!withoutData)
   {
