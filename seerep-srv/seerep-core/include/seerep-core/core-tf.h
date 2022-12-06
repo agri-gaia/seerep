@@ -107,6 +107,25 @@ private:
    */
   void addToTfBuffer(geometry_msgs::TransformStamped transform);
 
+  /**
+   * @brief Transforms the AABB based on the min/max coordinates into another frame. Transforms all 8 vertices of the
+   * AABB into the new frame and gets the new AABB based on all 8 transformed vertices
+   *
+   * @param transform the transform to the new frame
+   * @param x the x coordinates of the old min/max vertices
+   * @param y the y coordinates of the old min/max vertices
+   * @param z the z coordinates of the old min/max vertices
+   * @param xmin the min x value of the new AABB
+   * @param ymin the min y value of the new AABB
+   * @param zmin the min z value of the new AABB
+   * @param xmax the max x value of the new AABB
+   * @param ymax the max y value of the new AABB
+   * @param zmax the max z value of the new AABB
+   */
+  void getAABBinNewFrame(const tf2::Transform& transform, const std::vector<float>& x, const std::vector<float>& y,
+                         const std::vector<float>& z, float& xmin, float& ymin, float& zmin, float& xmax, float& ymax,
+                         float& zmax);
+
   /** @brief shared pointer to the object handling the HDF5 io for TFs */
   std::shared_ptr<seerep_hdf5_core::Hdf5CoreTf> m_hdf5_io;
   /** @brief the TF buffer */

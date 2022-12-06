@@ -27,6 +27,8 @@ std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CorePointCloud::readDatase
 
   seerep_core_msgs::DatasetIndexable data;
 
+  data.header.datatype = seerep_core_msgs::Datatype::PointCloud;
+
   boost::uuids::string_generator gen;
   data.header.uuidData = gen(uuid);
 

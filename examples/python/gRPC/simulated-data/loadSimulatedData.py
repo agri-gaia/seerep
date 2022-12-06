@@ -92,7 +92,9 @@ for folderIndex in range(2):
 
         stubImage.TransferImage(theImage)
 
-        pointcloudData = np.load(basePointcloudPath + ".npy")
+        # seerep currently assumes that point cloud coordinates are 32 Bit floats
+        pointcloudData = np.load(basePointcloudPath + ".npy").astype(np.float32)
+
         thePointcloud = pointcloud.PointCloud2()
         thePointcloud.header.frame_id = "camera"
         thePointcloud.header.stamp.seconds = timeThisIteration
