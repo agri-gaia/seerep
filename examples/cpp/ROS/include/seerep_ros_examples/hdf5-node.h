@@ -3,7 +3,6 @@
 
 // std
 #include <chrono>
-#include <memory>
 #include <optional>
 #include <thread>
 
@@ -14,27 +13,27 @@
 // seerep
 #include "seerep-hdf5-ros/hdf5-ros.h"
 
-#define POLL_TIME 5  // in seconds
-
 namespace seerep_ros_examples
 {
 class Hdf5Node
 {
 public:
   Hdf5Node() = delete;
-  Hdf5Node(const ros::NodeHandle& node_handle, const ros::NodeHandle& private_node_handle);
+  Hdf5Node(const ros::NodeHandle& nodeHandle, const ros::NodeHandle& privateNodeHandle);
 
 private:
-  ros::NodeHandle nh_;
-  ros::NodeHandle pnh_;
+  static constexpr unsigned int pollingIntervalInSeconds = 5;
 
-  std::unique_ptr<seerep_hdf5_ros::Hdf5Ros> hdf5_access_;
+  ros::NodeHandle nodeHandle_;
+  ros::NodeHandle privateNodeHandle_;
+
+  std::unique_ptr<seerep_hdf5_ros::Hdf5Ros> hdf5Access_;
 
   std::map<std::string, ros::Subscriber> subscribers_;
 
   bool topicAvailable(const std::string& topic, ros::master::TopicInfo& info);
 
-  std::optional<ros::Subscriber> getSubscriber(const std::string& message_type, const std::string& topic);
+  std::optional<ros::Subscriber> getSubscriber(const std::string& messageType, const std::string& topic);
 
   void dumpMessage(const sensor_msgs::Image::ConstPtr& image);
 };
