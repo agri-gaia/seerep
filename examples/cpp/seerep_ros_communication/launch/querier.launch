@@ -13,6 +13,7 @@
     <arg name="time_max" default="1738549276"/>
     <arg name="labels" default="[testlabel0, testlabel1]"/>
     <arg name="musthavealllabels" default="True"/>
+    <arg name="maxNumData" default="80"/>
     <node name="seerep_ros_communication_querier" pkg="seerep_ros_communication" type="seerep_ros_communication_querier" output="screen">
         <rosparam param="server_address" subst_value="True">$(arg server_address)</rosparam>
         <rosparam param="topicqueriedpc" subst_value="True">$(arg topicqueriedpc)</rosparam>
@@ -27,5 +28,6 @@
         <rosparam param="time_max" subst_value="True">$(arg time_max)</rosparam>
         <rosparam param="labels" subst_value="True">$(arg labels)</rosparam>
         <rosparam param="musthavealllabels" subst_value="True">$(arg musthavealllabels)</rosparam>
+        <rosparam param="maxNumData" subst_value="True">$(arg maxNumData)</rosparam>
     </node>
 </launch>

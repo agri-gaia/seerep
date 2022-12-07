@@ -243,6 +243,10 @@ CoreDataset::querySemanticWithAllTheLabels(std::shared_ptr<DatatypeSpecifics> da
         result = std::move(intersection);
       }
     }
+    else
+    {
+      return std::nullopt;
+    }
     firstLabel = false;
     if (result.empty())
     {

@@ -15,4 +15,5 @@ message Query
   repeated string instanceuuid = 6;
   repeated string datauuid = 7;
   bool withoutdata = 8;
+  uint32 maxNumData = 9;
 }

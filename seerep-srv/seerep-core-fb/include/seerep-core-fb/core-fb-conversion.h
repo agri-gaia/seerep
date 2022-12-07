@@ -153,6 +153,14 @@ private:
   static bool fromFbQueryMustHaveAllLabels(const seerep::fb::Query* query);
 
   /**
+   * @brief extracts the maxNumData of the flatbuffer query message
+   *
+   * @param query the flatbuffer query message
+   * @return uint max number of datasets that should be returned
+   */
+  static uint fromFbQueryMaxNumData(const seerep::fb::Query* query);
+
+  /**
    * @brief converts the header of the flatbuffer data message to seerep core specific message
    * @param header the header in the flatbuffer data message
    * @param coreHeader the header in the data message in seerep core format

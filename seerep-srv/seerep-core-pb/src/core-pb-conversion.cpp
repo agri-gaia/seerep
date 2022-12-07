@@ -16,6 +16,7 @@ seerep_core_msgs::Query CorePbConversion::fromPb(const seerep::Query& query, see
   fromPbInstance(query, queryCore);
   fromPbDataUuids(query, queryCore);
   fromPbWithOutData(query, queryCore);
+  fromFbQueryMaxNumData(query, queryCore);
 
   return queryCore;
 }
@@ -202,5 +203,10 @@ void CorePbConversion::fromPbDataUuids(const seerep::Query& query, seerep_core_m
 void CorePbConversion::fromPbWithOutData(const seerep::Query& query, seerep_core_msgs::Query& queryCore)
 {
   queryCore.withoutData = query.withoutdata();
+}
+
+void CorePbConversion::fromFbQueryMaxNumData(const seerep::Query& query, seerep_core_msgs::Query& queryCore)
+{
+  queryCore.maxNumData = query.maxnumdata();
 }
 }  // namespace seerep_core_pb
