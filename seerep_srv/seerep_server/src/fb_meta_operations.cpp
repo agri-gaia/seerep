@@ -165,4 +165,62 @@ grpc::Status FbMetaOperations::DeleteProject(grpc::ServerContext* context,
   return grpc::Status::OK;
 }
 
+flatbuffers::Offset<seerep::fb::TimeInterval>
+FbMetaOperations::GetOverallTimeInterval(grpc::ServerContext* context,
+                                         const flatbuffers::grpc::Message<seerep::fb::ProjectInfo>* request)
+{
+  std::string uuid = request->GetRoot()->uuid()->str();
+  boost::uuids::string_generator gen;
+  auto uuidFromString = gen(uuid);
+  seerep_core_msgs::AabbTime timeinterval = seerepCore->getOverallTimeInterval(uuidFromString);
+
+  flatbuffers::grpc::MessageBuilder builder;
+
+  seerep::fb::TimestampBuilder minTimeStampBuilder(builder);
+  minTimeStampBuilder.add_seconds(timeinterval.min_corner().get<0>());
+  flatbuffers::Offset<seerep::fb::Timestamp> min = minTimeStampBuilder.Finish();
+
+  seerep::fb::TimestampBuilder maxTimeStampBuilder(builder);
+  maxTimeStampBuilder.add_seconds(timeinterval.max_corner().get<0>());
+  flatbuffers::Offset<seerep::fb::Timestamp> max = maxTimeStampBuilder.Finish();
+
+  seerep::fb::TimeIntervalBuilder timeIntervalBuilder(builder);
+  timeIntervalBuilder.add_time_min(min);
+  timeIntervalBuilder.add_time_max(max);
+  flatbuffers::Offset<seerep::fb::TimeInterval> bb = timeIntervalBuilder.Finish();
+
+  return bb;
+}
+
+flatbuffers::Offset<seerep::fb::Boundingbox>
+FbMetaOperations::GetOverallBoundingBox(grpc::ServerContext* context,
+                                        const flatbuffers::grpc::Message<seerep::fb::ProjectInfo>* request)
+{
+  std::string uuid = request->GetRoot()->uuid()->str();
+  boost::uuids::string_generator gen;
+  auto uuidFromString = gen(uuid);
+  seerep_core_msgs::AABB overallBB = seerepCore->getOverallBound(uuidFromString);
+
+  flatbuffers::grpc::MessageBuilder builder;
+
+  seerep::fb::PointBuilder minPointBuilder(builder);
+  minPointBuilder.add_x(overallBB.min_corner().get<0>());
+  minPointBuilder.add_y(overallBB.min_corner().get<1>());
+  minPointBuilder.add_z(overallBB.min_corner().get<2>());
+  flatbuffers::Offset<seerep::fb::Point> minPoint = minPointBuilder.Finish();
+
+  seerep::fb::PointBuilder maxPointBuilder(builder);
+  maxPointBuilder.add_x(overallBB.max_corner().get<0>());
+  maxPointBuilder.add_y(overallBB.max_corner().get<1>());
+  maxPointBuilder.add_z(overallBB.max_corner().get<2>());
+  flatbuffers::Offset<seerep::fb::Point> maxPoint = maxPointBuilder.Finish();
+
+  seerep::fb::BoundingboxBuilder boundingBoxBuilder(builder);
+  boundingBoxBuilder.add_point_min(minPoint);
+  boundingBoxBuilder.add_point_max(maxPoint);
+  flatbuffers::Offset<seerep::fb::Boundingbox> bb = boundingBoxBuilder.Finish();
+
+  return bb;
+}
+
 } /* namespace seerep_server */

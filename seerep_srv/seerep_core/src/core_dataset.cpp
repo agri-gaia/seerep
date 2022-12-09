@@ -517,4 +517,14 @@ void CoreDataset::addLabels(const seerep_core_msgs::Datatype& datatype,
   datatypeSpecifics->datasetInstancesMap.emplace(msgUuid, instanceUuids);
 }
 
+seerep_core_msgs::AabbTime CoreDataset::getTimeBounds()
+{
+  return m_datatypeDatatypeSpecificsMap.at(seerep_core_msgs::Datatype::Point)->timetree.bounds();
+}
+
+seerep_core_msgs::AABB CoreDataset::getSpatialBounds()
+{
+  return m_datatypeDatatypeSpecificsMap.at(seerep_core_msgs::Datatype::PointCloud)->rt.bounds();
+}
+
 } /* namespace seerep_core */

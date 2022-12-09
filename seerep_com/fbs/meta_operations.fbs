@@ -3,6 +3,9 @@ include "project_info.fbs";
 include "project_infos.fbs";
 include "projectCreation.fbs";
 include "empty.fbs";
+include "boundingbox.fbs";
+include "datatype.fbs";
+include "time_interval.fbs";
 
 namespace seerep.fb;
 
@@ -11,4 +14,5 @@ rpc_service MetaOperations {
   GetProjects(seerep.fb.Empty):seerep.fb.ProjectInfos;
   LoadProjects(seerep.fb.Empty):seerep.fb.Empty;
   DeleteProject(seerep.fb.ProjectInfo):seerep.fb.Empty;
+  GetOverallTimeInterval(seerep.fb.ProjectInfo):seerep.fb.TimeInterval;
 }
