@@ -127,6 +127,14 @@ public:
   seerep_core_msgs::AabbTime getTimeBounds(std::vector<seerep_core_msgs::Datatype> datatypes);
   seerep_core_msgs::AABB getSpatialBounds(std::vector<seerep_core_msgs::Datatype> datatypes);
 
+  /**
+   * @brief Get the Time Bounds object
+   *
+   * @return seerep_core_msgs::AABB
+   */
+  seerep_core_msgs::AabbTime getTimeBounds();
+  seerep_core_msgs::AABB getSpatialBounds();
+
 private:
   /**
    * @brief fills the member variables based on the HDF5 file
