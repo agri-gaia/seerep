@@ -103,6 +103,14 @@ public:
   void addLabels(const seerep_core_msgs::Datatype& datatype, const std::vector<std::string>& labels,
                  const boost::uuids::uuid& msgUuid);
 
+  /**
+   * @brief Get the Time Bounds object
+   *
+   * @return seerep_core_msgs::AABB
+   */
+  seerep_core_msgs::AabbTime getTimeBounds();
+  seerep_core_msgs::AABB getSpatialBounds();
+
 private:
   /**
    * @brief fills the member variables based on the HDF5 file
