@@ -142,6 +142,9 @@ public:
    */
   std::shared_ptr<HighFive::File> getHdf5File();
 
+  seerep_core_msgs::AabbTime getTimeBounds();
+  seerep_core_msgs::AABB getSpatialBounds();
+
 private:
   /**
    * @brief Create the HDF5 file accessor and the mutex. Based on that create the

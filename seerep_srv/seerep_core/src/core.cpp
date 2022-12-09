@@ -274,4 +274,16 @@ void Core::addDatasetToResult(seerep_core_msgs::QueryResultProject& dataset, see
   }
 }
 
+seerep_core_msgs::AabbTime Core::getOverallTimeInterval(boost::uuids::uuid uuid)
+{
+  auto project = findProject(uuid);
+  return project->second->getTimeBounds();
+}
+
+seerep_core_msgs::AABB Core::getOverallBound(boost::uuids::uuid uuid)
+{
+  auto project = findProject(uuid);
+  return project->second->getSpatialBounds();
+}
+
 } /* namespace seerep_core */

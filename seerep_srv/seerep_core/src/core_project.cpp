@@ -137,4 +137,14 @@ void CoreProject::recreateDatatypes()
   }
 }
 
+seerep_core_msgs::AabbTime CoreProject::getTimeBounds()
+{
+  return m_coreDatasets->getTimeBounds();
+}
+
+seerep_core_msgs::AABB CoreProject::getSpatialBounds()
+{
+  return m_coreDatasets->getSpatialBounds();
+}
+
 } /* namespace seerep_core */
