@@ -25,6 +25,12 @@ public:
   grpc::Status DeleteProject(grpc::ServerContext* context,
                              const flatbuffers::grpc::Message<seerep::fb::ProjectInfo>* request,
                              flatbuffers::grpc::Message<seerep::fb::Empty>* response) override;
+  flatbuffers::Offset<seerep::fb::TimeInterval>
+  GetOverallTimeInterval(grpc::ServerContext* context,
+                         const flatbuffers::grpc::Message<seerep::fb::ProjectInfo>* request);
+  flatbuffers::Offset<seerep::fb::Boundingbox>
+  GetOverallBoundingBox(grpc::ServerContext* context,
+                        const flatbuffers::grpc::Message<seerep::fb::ProjectInfo>* request);
 
 private:
   std::shared_ptr<seerep_core::Core> seerepCore;
