@@ -11,10 +11,18 @@ Hdf5Node::Hdf5Node(const ros::NodeHandle& nodeHandle, const ros::NodeHandle& pri
     throw std::runtime_error("No path specified");
   }
 
+  // if a filename is not present or not a valid UUID, a proper UUID will be generated
   std::string filename;
   if (!privateNodeHandle_.getParam("filename", filename))
   {
-    throw std::runtime_error("No filename for the hdf5 file");
+    filename = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+    ROS_WARN_STREAM("No filename provided, using generated UUID instead");
+  }
+
+  if (!isValidUUID(filename))
+  {
+    filename = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+    ROS_WARN_STREAM("Filename is an invalid UUID, using generated UUID instead");
   }
 
   hdf5Access_ = std::make_unique<seerep_hdf5_ros::Hdf5Ros>(path, filename);
@@ -40,6 +48,19 @@ Hdf5Node::Hdf5Node(const ros::NodeHandle& nodeHandle, const ros::NodeHandle& pri
       subscribers_[topicInfo.name] = *sub;
       ROS_INFO_STREAM("Subscribed to topic: " << topicInfo.name << " of type: " << topicInfo.datatype);
     }
+  }
+}
+
+bool Hdf5Node::isValidUUID(const std::string& uuid) const
+{
+  try
+  {
+    boost::uuids::uuid result = boost::uuids::string_generator()(uuid);
+    return result.version() != boost::uuids::uuid::version_unknown;
+  }
+  catch (...)
+  {
+    return false;
   }
 }
 

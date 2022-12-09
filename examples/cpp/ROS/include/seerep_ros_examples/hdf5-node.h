@@ -10,6 +10,10 @@
 #include "ros/master.h"
 #include "ros/ros.h"
 
+// boost
+#include <boost/lexical_cast.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+
 // seerep
 #include "seerep-hdf5-ros/hdf5-ros.h"
 
@@ -31,6 +35,7 @@ private:
 
   std::map<std::string, ros::Subscriber> subscribers_;
 
+  bool isValidUUID(const std::string& uuid) const;
   bool topicAvailable(const std::string& topic, ros::master::TopicInfo& info);
 
   std::optional<ros::Subscriber> getSubscriber(const std::string& messageType, const std::string& topic);
