@@ -158,6 +158,10 @@ public:
    */
   void deleteProject(boost::uuids::uuid uuid);
 
+  seerep_core_msgs::AabbTime getOverallTimeInterval(boost::uuids::uuid uuid,
+                                                    std::vector<seerep_core_msgs::Datatype> datatypes);
+  seerep_core_msgs::AABB getOverallBound(boost::uuids::uuid uuid, std::vector<seerep_core_msgs::Datatype> datatypes);
+
 private:
   /**
    * @brief Returns an iterator to the project with the given uuid. Throws an error if not found
