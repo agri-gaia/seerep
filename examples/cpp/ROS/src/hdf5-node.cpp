@@ -25,7 +25,19 @@ Hdf5Node::Hdf5Node(const ros::NodeHandle& nodeHandle, const ros::NodeHandle& pri
     ROS_WARN_STREAM("Filename is an invalid UUID, using generated UUID instead");
   }
 
-  hdf5Access_ = std::make_unique<seerep_hdf5_ros::Hdf5Ros>(path, filename);
+  std::string projectName;
+  if (!privateNodeHandle_.getParam("project_name", projectName))
+  {
+    throw std::runtime_error("No project name specified");
+  }
+
+  std::string rootFrameId;
+  if (!privateNodeHandle_.getParam("project_root_frame", rootFrameId))
+  {
+    throw std::runtime_error("No root frame specified");
+  }
+
+  hdf5Access_ = std::make_unique<seerep_hdf5_ros::Hdf5Ros>(path, filename, rootFrameId, projectName);
 
   std::vector<std::string> topics;
   if (!privateNodeHandle_.getParam("topics", topics))

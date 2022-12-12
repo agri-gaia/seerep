@@ -2,10 +2,16 @@
 
 namespace seerep_hdf5_ros
 {
-Hdf5Ros::Hdf5Ros(const std::string& path, const std::string& filename) : path_{ path }, filename_{ filename }
+Hdf5Ros::Hdf5Ros(const std::string& path, const std::string& filename, const std::string& projectFrameId,
+                 const std::string& projectName)
+  : path_{ path }, filename_{ filename }
 {
+  auto write_mtx = std::make_shared<std::mutex>();
   hdf5File_ =
       std::make_shared<HighFive::File>(path_ + filename_ + ".h5", HighFive::File::ReadWrite | HighFive::File::Create);
+  auto ioGeneral = seerep_hdf5_core::Hdf5CoreGeneral(hdf5File_, write_mtx);
+  ioGeneral.writeProjectFrameId(projectFrameId);
+  ioGeneral.writeProjectname(projectName);
 }
 
 bool Hdf5Ros::dumpImage(const sensor_msgs::Image& image) const

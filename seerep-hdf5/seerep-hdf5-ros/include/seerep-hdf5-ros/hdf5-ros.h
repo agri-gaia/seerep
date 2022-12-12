@@ -1,7 +1,8 @@
 #ifndef SEEREP_HDF5_ROS_H_
 #define SEEREP_HDF5_ROS_H_
 
-// std
+// Std
+#include <mutex>
 #include <string>
 
 // HighFive
@@ -17,13 +18,17 @@
 #include "sensor_msgs/Image.h"
 #include "std_msgs/Header.h"
 
+// Seerep
+#include "seerep-hdf5-core/hdf5-core-general.h"
+
 namespace seerep_hdf5_ros
 {
 class Hdf5Ros
 {
 public:
   Hdf5Ros() = delete;
-  Hdf5Ros(const std::string& path, const std::string& filename);
+  Hdf5Ros(const std::string& path, const std::string& filename, const std::string& projectFrameId,
+          const std::string& projectName);
 
   bool dumpImage(const sensor_msgs::Image& image) const;
   bool dumpHeader(const std_msgs::Header& header, const std::string& datasetPath) const;

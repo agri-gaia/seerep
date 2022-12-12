@@ -14,24 +14,40 @@ find_package(catkin REQUIRED
 	sensor_msgs
 )
 
+find_package(SeerepHdf5Core REQUIRED)
+
 include(cmake/FindHighFive.cmake)
 find_package(HighFive REQUIRED)
+
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+add_definitions(-DBOOST_LOG_DYN_LINK)
 
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES seerep_hdf5_ros
   CATKIN_DEPENDS std_msgs geometry_msgs sensor_msgs
-  DEPENDS HighFive
+  DEPENDS HighFive SeerepHdf5Core
 )
 
 include_directories(
 	include
 	${HighFive_INCLUDE_DIRS}
+  ${SeerepHdf5Core_INCLUDE_DIRS}
+  ${Boost_INCLUDE_DIRS}
 	${catkin_INCLUDE_DIRS}
 )
 
 add_library(${PROJECT_NAME}
     src/hdf5-ros.cpp
+)
+
+target_link_libraries(${PROJECT_NAME}
+	${HighFive_LIBRARIES}
+  ${Boost_LIBRARIES}
+  ${SeerepHdf5Core_LIBRARIES}
+	${catkin_LIBRARIES}
 )
 
 add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
