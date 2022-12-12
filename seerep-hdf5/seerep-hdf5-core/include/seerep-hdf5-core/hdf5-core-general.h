@@ -28,9 +28,9 @@ public:
   std::vector<std::string> getGroupDatasets(const std::string& id);
   void checkExists(const std::string& id);
   std::optional<std::string> readFrameId(const std::string& datatypeGroup, const std::string& uuid);
-  //################
-  // Attributes
-  //################
+  // ################
+  //  Attributes
+  // ################
   template <typename T, class C>
   T readAttributeFromHdf5(const std::string& id, const HighFive::AnnotateTraits<C>& object, std::string attributeField);
 
@@ -38,9 +38,9 @@ public:
   void writeAttributeToHdf5(HighFive::AnnotateTraits<C>& object, std::string attributeField, T attributeValue);
 
   void deleteAttribute(const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField);
-  //################
-  // AABB
-  //################
+  // ################
+  //  AABB
+  // ################
   void writeAABB(
       const std::string& datatypeGroup, const std::string& uuid,
       const boost::geometry::model::box<boost::geometry::model::point<float, 3, boost::geometry::cs::cartesian>>& aabb);
@@ -51,9 +51,9 @@ public:
 
   bool hasAABB(const std::string& datatypeGroup, const std::string& uuid);
 
-  //################
-  // Time
-  //################
+  // ################
+  //  Time
+  // ################
   void readTimeFromRaw(const std::string& datatypeGroup, const std::string& uuid, int64_t& secs, int64_t& nanos);
   void readTime(const std::string& datatypeGroup, const std::string& uuid, int64_t& secs, int64_t& nanos);
   template <class T>
@@ -80,18 +80,18 @@ public:
                          std::vector<std::string>& instances);
   void writeLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid,
                           const std::vector<std::string>& labels, const std::vector<std::string>& instances);
-  //################
-  // Project
-  //################
+  // ################
+  //  Project
+  // ################
   void writeProjectname(const std::string& projectname);
   std::string readProjectname();
 
   void writeProjectFrameId(const std::string& frameId);
   std::string readProjectFrameId();
 
-  //################
-  // Hdf5
-  //################
+  // ################
+  //  Hdf5
+  // ################
   /**
    * @brief Get a shared pointer to a hdf5 group
    *

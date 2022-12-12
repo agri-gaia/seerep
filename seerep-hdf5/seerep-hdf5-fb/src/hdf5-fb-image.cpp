@@ -97,63 +97,10 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
 
   auto headerOffset = readHeaderAttributes(builder, *dataSetPtr, id);
 
-  std::vector<std::string> boundingBoxesLabels;
-  std::vector<std::vector<double>> boundingBoxes;
-  std::vector<std::string> boundingBoxesInstances;
-  readBoundingBoxLabeled(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id, boundingBoxesLabels, boundingBoxes,
-                         boundingBoxesInstances);
+  auto boxes2DLabeledOffset = readBoundingBoxes2DLabeled(builder, id);
 
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
-      << "creating the bounding boxes 2d with label fb msgs";
-  std::vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>> bblabeledVector;
-  for (long unsigned int i = 0; i < boundingBoxes.size(); i++)
-  {
-    auto InstanceOffset = builder.CreateString(boundingBoxesInstances.at(i));
-    auto labelOffset = builder.CreateString(boundingBoxesLabels.at(i));
+  auto generalLabelsOffset = readGeneralLabels(builder, id);
 
-    seerep::fb::LabelWithInstanceBuilder labelBuilder(builder);
-    labelBuilder.add_instanceUuid(InstanceOffset);
-    labelBuilder.add_label(labelOffset);
-    auto labelWithInstanceOffset = labelBuilder.Finish();
-
-    auto pointMin = seerep::fb::CreatePoint2D(builder, boundingBoxes.at(i).at(0), boundingBoxes.at(i).at(1));
-    auto pointMax = seerep::fb::CreatePoint2D(builder, boundingBoxes.at(i).at(2), boundingBoxes.at(i).at(3));
-
-    seerep::fb::Boundingbox2DBuilder bbBuilder(builder);
-    bbBuilder.add_point_min(pointMin);
-    bbBuilder.add_point_max(pointMax);
-    auto bb = bbBuilder.Finish();
-
-    seerep::fb::BoundingBox2DLabeledBuilder bblabeledBuilder(builder);
-    bblabeledBuilder.add_bounding_box(bb);
-    bblabeledBuilder.add_labelWithInstance(labelWithInstanceOffset);
-
-    bblabeledVector.push_back(bblabeledBuilder.Finish());
-  }
-  auto bblabeledVectorOffset = builder.CreateVector(bblabeledVector);
-
-  std::vector<std::string> labelsGeneral;
-  std::vector<std::string> labelsGeneralInstances;
-  readLabelsGeneral(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id, labelsGeneral, labelsGeneralInstances);
-
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "creating the label general fb msgs";
-  std::vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>> labelGeneralVector;
-  labelGeneralVector.reserve(labelsGeneral.size());
-  for (long unsigned int i = 0; i < labelsGeneral.size(); i++)
-  {
-    auto labelOffset = builder.CreateString(labelsGeneral.at(i));
-    auto instanceOffset = builder.CreateString(labelsGeneralInstances.at(i));
-
-    seerep::fb::LabelWithInstanceBuilder labelBuilder(builder);
-    labelBuilder.add_label(labelOffset);
-    labelBuilder.add_instanceUuid(instanceOffset);
-    labelGeneralVector.push_back(labelBuilder.Finish());
-  }
-
-  auto labelsGeneralOffset =
-      builder.CreateVector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>(labelGeneralVector);
-
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "building the fb image msg";
   flatbuffers::Offset<flatbuffers::String> encodingBuf = builder.CreateString(encoding);
 
   seerep::fb::ImageBuilder imageBuilder(builder);
@@ -169,8 +116,8 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
   }
   imageBuilder.add_header(headerOffset);
 
-  imageBuilder.add_labels_bb(bblabeledVectorOffset);
-  imageBuilder.add_labels_general(labelsGeneralOffset);
+  imageBuilder.add_labels_bb(boxes2DLabeledOffset);
+  imageBuilder.add_labels_general(generalLabelsOffset);
 
   auto imageOffset = imageBuilder.Finish();
   builder.Finish(imageOffset);
@@ -188,4 +135,67 @@ const std::string Hdf5FbImage::getHdf5DataSetPath(const std::string& id) const
   return getHdf5GroupPath(id) + "/" + seerep_hdf5_core::Hdf5CoreImage::RAWDATA;
 }
 
+BoundingBoxes2DLabeledOffset Hdf5FbImage::readBoundingBoxes2DLabeled(flatbuffers::grpc::MessageBuilder& builder,
+                                                                     const std::string& id)
+{
+  // get message type independent representation from seerep-core
+  std::vector<std::string> labels;
+  std::vector<std::vector<double>> boxes2D;
+  std::vector<std::string> instances;
+
+  readBoundingBoxLabeled(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id, labels, boxes2D, instances);
+
+  // convert into flatbuffers message
+  std::vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>> bblabeledVector;
+  for (long unsigned int i = 0; i < boxes2D.size(); i++)
+  {
+    auto InstanceOffset = builder.CreateString(instances.at(i));
+    auto labelOffset = builder.CreateString(labels.at(i));
+
+    seerep::fb::LabelWithInstanceBuilder labelBuilder(builder);
+    labelBuilder.add_instanceUuid(InstanceOffset);
+    labelBuilder.add_label(labelOffset);
+    auto labelWithInstanceOffset = labelBuilder.Finish();
+
+    auto pointMin = seerep::fb::CreatePoint2D(builder, boxes2D.at(i).at(0), boxes2D.at(i).at(1));
+    auto pointMax = seerep::fb::CreatePoint2D(builder, boxes2D.at(i).at(2), boxes2D.at(i).at(3));
+
+    seerep::fb::Boundingbox2DBuilder bbBuilder(builder);
+    bbBuilder.add_point_min(pointMin);
+    bbBuilder.add_point_max(pointMax);
+    auto bb = bbBuilder.Finish();
+
+    seerep::fb::BoundingBox2DLabeledBuilder bblabeledBuilder(builder);
+    bblabeledBuilder.add_bounding_box(bb);
+    bblabeledBuilder.add_labelWithInstance(labelWithInstanceOffset);
+
+    bblabeledVector.push_back(bblabeledBuilder.Finish());
+  }
+  return builder.CreateVector(bblabeledVector);
+}
+
+GeneralLabelsOffset Hdf5FbImage::readGeneralLabels(flatbuffers::grpc::MessageBuilder& builder, const std::string& id)
+{
+  // get message type independent representation from seerep-core
+  std::vector<std::string> labels;
+  std::vector<std::string> instances;
+
+  readLabelsGeneral(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id, labels, instances);
+
+  // convert into flatbuffers message
+  std::vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>> labelGeneralVector;
+  labelGeneralVector.reserve(labels.size());
+  for (long unsigned int i = 0; i < labels.size(); i++)
+  {
+    auto labelOffset = builder.CreateString(labels.at(i));
+    auto instanceOffset = builder.CreateString(instances.at(i));
+
+    seerep::fb::LabelWithInstanceBuilder labelBuilder(builder);
+    labelBuilder.add_label(labelOffset);
+    labelBuilder.add_instanceUuid(instanceOffset);
+    labelGeneralVector.push_back(labelBuilder.Finish());
+  }
+
+  return builder.CreateVector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>(labelGeneralVector);
+}
 }  // namespace seerep_hdf5_fb
