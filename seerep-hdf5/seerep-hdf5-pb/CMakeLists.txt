@@ -18,7 +18,11 @@ find_package(gRPC CONFIG REQUIRED)
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
-find_package(Boost COMPONENTS log log_setup REQUIRED)
+find_package(
+  Boost
+  COMPONENTS log log_setup
+  REQUIRED
+)
 
 enable_testing()
 find_package(GTest 1.12.0 REQUIRED)
@@ -26,45 +30,49 @@ find_package(GTest 1.12.0 REQUIRED)
 configure_file(include/SeerepHdf5PbConfig.h.in SeerepHdf5PbConfig.h)
 
 include_directories(
-	include
-	${SeerepMsgs_INCLUDE_DIRS}
-	${SeerepHdf5Core_INCLUDE_DIRS}
-	${PROTOBUF_INCLUDE_DIR}
-	${HighFive_INCLUDE_DIRS}
-	${Boost_INCLUDE_DIRS}
+  include
+  ${SeerepMsgs_INCLUDE_DIRS}
+  ${SeerepHdf5Core_INCLUDE_DIRS}
+  ${PROTOBUF_INCLUDE_DIR}
+  ${HighFive_INCLUDE_DIRS}
+  ${Boost_INCLUDE_DIRS}
 )
 
-add_library(seerephdf5pb
-	src/hdf5-pb-general.cpp
-	src/hdf5-pb-tf.cpp
-	src/hdf5-pb-pointcloud.cpp
-	src/hdf5-pb-image.cpp
+add_library(
+  seerephdf5pb
+  src/hdf5-pb-general.cpp
+  src/hdf5-pb-tf.cpp
+  src/hdf5-pb-pointcloud.cpp
+  src/hdf5-pb-image.cpp
 )
 
-target_link_libraries(seerephdf5pb
-	${SeerepMsgs_LIBRARIES}
-	${SeerepHdf5Core_LIBRARIES}
-	${SeerepIoCore_LIBRARIES}
-	${PROTOBUF_LIBRARIES}
-	${HighFive_LIBRARIES}
-	${Boost_LIBRARIES}
-	${Boost_LOG_LIBRARY} ${Boost_LOG_SETUP_LIBRARY}
+target_link_libraries(
+  seerephdf5pb
+  ${SeerepMsgs_LIBRARIES}
+  ${SeerepHdf5Core_LIBRARIES}
+  ${SeerepIoCore_LIBRARIES}
+  ${PROTOBUF_LIBRARIES}
+  ${HighFive_LIBRARIES}
+  ${Boost_LIBRARIES}
+  ${Boost_LOG_LIBRARY}
+  ${Boost_LOG_SETUP_LIBRARY}
 )
 
 add_executable(protobuf-write-load-test test/pb-write-load-test.cpp)
 add_dependencies(
-	protobuf-write-load-test
-	${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS}
+  protobuf-write-load-test ${${PROJECT_NAME}_EXPORTED_TARGETS}
+  ${catkin_EXPORTED_TARGETS}
 )
 
-target_link_libraries(protobuf-write-load-test
-	GTest::gtest
-	GTest::gtest_main
-	gmock_main
-	${catkin_LIBRARIES}
-	${HighFive_LIBRARIES}
-	gRPC::grpc++_reflection
-	seerephdf5pb
+target_link_libraries(
+  protobuf-write-load-test
+  GTest::gtest
+  GTest::gtest_main
+  gmock_main
+  ${catkin_LIBRARIES}
+  ${HighFive_LIBRARIES}
+  gRPC::grpc++_reflection
+  seerephdf5pb
 )
 add_test(protobuf-write-load-test protobuf-write-load-test)
 
@@ -72,25 +80,27 @@ set(CMAKE_INSTALL_INCLUDEDIR include)
 set(CMAKE_INSTALL_LIBDIR lib)
 set(CMAKE_INSTALL_BINDIR bin)
 
-install(TARGETS protobuf-write-load-test
-	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-	PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+install(
+  TARGETS protobuf-write-load-test
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
 )
 
-install(TARGETS seerephdf5pb
-	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-	PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+install(
+  TARGETS seerephdf5pb
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
 )
 
 include(CMakePackageConfigHelpers)
 
 configure_package_config_file(
-	cmake/SeerepHdf5PbConfig.cmake.in
-  	${CMAKE_CURRENT_BINARY_DIR}/SeerepHdf5PbConfig.cmake
-	INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
-	PATH_VARS CMAKE_INSTALL_INCLUDEDIR CMAKE_INSTALL_LIBDIR
+  cmake/SeerepHdf5PbConfig.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/SeerepHdf5PbConfig.cmake
+  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+  PATH_VARS CMAKE_INSTALL_INCLUDEDIR CMAKE_INSTALL_LIBDIR
 )
 
 # generate the version file for the config file
@@ -101,24 +111,23 @@ write_basic_package_version_file(
 )
 
 # install the configuration file
-install(FILES
-	${CMAKE_CURRENT_BINARY_DIR}/SeerepHdf5PbConfig.cmake
-	${CMAKE_CURRENT_BINARY_DIR}/SeerepHdf5PbConfigVersion.cmake
-	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/SeerepHdf5Pb
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/SeerepHdf5PbConfig.cmake
+              ${CMAKE_CURRENT_BINARY_DIR}/SeerepHdf5PbConfigVersion.cmake
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/SeerepHdf5Pb
 )
 
-install(FILES
-	"${PROJECT_BINARY_DIR}/SeerepHdf5PbConfig.h"
-	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+install(FILES "${PROJECT_BINARY_DIR}/SeerepHdf5PbConfig.h"
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
 )
 
-INSTALL(DIRECTORY include/seerep-hdf5-pb DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-
-install(FILES
-	cmake/FindHighFive.cmake
-	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/SeerepHdf5Pb/Modules
+install(DIRECTORY include/seerep-hdf5-pb
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
-#add PIC gcc flag
-SET(GCC_COVERAGE_COMPILE_FLAGS "-fPIC")
-SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
+install(FILES cmake/FindHighFive.cmake
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/SeerepHdf5Pb/Modules
+)
+
+# add PIC gcc flag
+set(GCC_COVERAGE_COMPILE_FLAGS "-fPIC")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")

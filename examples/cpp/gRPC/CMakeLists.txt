@@ -16,33 +16,36 @@ find_package(gRPC CONFIG REQUIRED)
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
-find_package(Boost COMPONENTS program_options log log_setup REQUIRED)
+find_package(
+  Boost
+  COMPONENTS program_options log log_setup
+  REQUIRED
+)
 
 include_directories(
-	include
-	${SeerepCom_INCLUDE_DIRS}
-	${SeerepMsgs_INCLUDE_DIRS}
-	${FLATBUFFER_INCLUDE_DIR}
-	${PROTOBUF_INCLUDE_DIR}
-	${Boost_INCLUDE_DIRS}
+  include
+  ${SeerepCom_INCLUDE_DIRS}
+  ${SeerepMsgs_INCLUDE_DIRS}
+  ${FLATBUFFER_INCLUDE_DIR}
+  ${PROTOBUF_INCLUDE_DIR}
+  ${Boost_INCLUDE_DIRS}
 )
 
-add_executable(${PROJECT_NAME}_queryImages
-	src/queryImages.cpp
-)
+add_executable(${PROJECT_NAME}_queryImages src/queryImages.cpp)
 
 set(common_link_libs
     ${SeerepCom_LIBRARIES}
     ${seerep_ros_conversions_pb_LIBRARIES}
     ${catkin_LIBRARIES}
-	${Boost_LIBRARIES}
-	${Boost_LOG_LIBRARY} ${Boost_LOG_SETUP_LIBRARY}
+    ${Boost_LIBRARIES}
+    ${Boost_LOG_LIBRARY}
+    ${Boost_LOG_SETUP_LIBRARY}
     gRPC::grpc++_reflection
 )
 target_link_libraries(${PROJECT_NAME}_queryImages ${common_link_libs})
 
-
-install(TARGETS ${PROJECT_NAME}_queryImages
+install(
+  TARGETS ${PROJECT_NAME}_queryImages
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}

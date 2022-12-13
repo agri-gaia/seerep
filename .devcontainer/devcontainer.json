@@ -15,7 +15,8 @@
         "streetsidesoftware.code-spell-checker",
         "matepek.vscode-catch2-test-adapter",
         "davidanson.vscode-markdownlint",
-        "cschlosser.doxdocgen"
+        "cschlosser.doxdocgen",
+        "cheshirekow.cmake-format"
     ],
     "containerUser": "docker",
     "mounts": [
