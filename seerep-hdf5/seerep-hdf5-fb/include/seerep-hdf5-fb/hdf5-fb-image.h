@@ -23,13 +23,11 @@
 
 #include "flatbuffers/grpc.h"
 
-// make nested flatbuffers readable
-typedef flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>>>
-    BoundingBoxes2DLabeledOffset;
-typedef flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>> GeneralLabelsOffset;
-
 namespace seerep_hdf5_fb
 {
+// make nested flatbuffers readable
+typedef flatbuffers::Vector<uint8_t> ByteArrayFb;
+
 class Hdf5FbImage : public Hdf5FbGeneral, public seerep_hdf5_core::Hdf5CoreImage
 {
 public:
@@ -41,11 +39,6 @@ public:
 
   std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> readImage(const std::string& id,
                                                                          const bool withoutData = false);
-
-private:
-  BoundingBoxes2DLabeledOffset readBoundingBoxes2DLabeled(flatbuffers::grpc::MessageBuilder& builder,
-                                                          const std::string& id);
-  GeneralLabelsOffset readGeneralLabels(flatbuffers::grpc::MessageBuilder& builder, const std::string& id);
 };
 
 }  // namespace seerep_hdf5_fb

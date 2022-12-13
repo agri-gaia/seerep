@@ -2,8 +2,8 @@
 namespace seerep_hdf5_fb
 {
 template <class T>
-flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>>>
-Hdf5FbGeneral::readAttributeMap(HighFive::AnnotateTraits<T>& object, flatbuffers::grpc::MessageBuilder& builder)
+flatbuffers::Offset<AttributeMapsFb> Hdf5FbGeneral::readAttributeMap(HighFive::AnnotateTraits<T>& object,
+                                                                     flatbuffers::grpc::MessageBuilder& builder)
 {
   std::vector<std::string> attributeList = object.listAttributeNames();
 
@@ -39,25 +39,13 @@ void Hdf5FbGeneral::writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, c
 {
   if (header)
   {
-    if (!object.hasAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS))
-      object.createAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS, header->stamp()->seconds());
-    else
-      object.getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS).write(header->stamp()->seconds());
-
-    if (!object.hasAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS))
-      object.createAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS, header->stamp()->nanos());
-    else
-      object.getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS).write(header->stamp()->nanos());
-
-    if (!object.hasAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID))
-      object.createAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID, header->frame_id()->str());
-    else
-      object.getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID).write(header->frame_id()->str());
-
-    if (!object.hasAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ))
-      object.createAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ, header->seq());
-    else
-      object.getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ).write(header->seq());
+    writeAttributeToHdf5<int64_t>(object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS,
+                                  header->stamp()->seconds());
+    writeAttributeToHdf5<int32_t>(object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS,
+                                  header->stamp()->nanos());
+    writeAttributeToHdf5<std::string>(object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID,
+                                      header->frame_id()->str());
+    writeAttributeToHdf5<int32_t>(object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ, header->seq());
   }
 }
 
@@ -66,20 +54,15 @@ flatbuffers::Offset<seerep::fb::Header> Hdf5FbGeneral::readHeaderAttributes(flat
                                                                             HighFive::AnnotateTraits<T>& object,
                                                                             std::string uuidMsg)
 {
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "loading flatbuffers header attributes";
-
-  int64_t seconds;
-  int32_t nanos;
-  uint32_t seq;
-  std::string frameId;
-
   std::string uuidProject = std::filesystem::path(m_file->getName()).filename().stem();
 
-  object.getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID).read(frameId);
-
-  object.getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS).read(seconds);
-  object.getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS).read(nanos);
-  object.getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ).read(seq);
+  int64_t seconds =
+      readAttributeFromHdf5<int64_t>(uuidMsg, object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS);
+  int32_t nanos =
+      readAttributeFromHdf5<int32_t>(uuidMsg, object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS);
+  std::string frameId =
+      readAttributeFromHdf5<std::string>(uuidMsg, object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID);
+  uint32_t seq = readAttributeFromHdf5<uint32_t>(uuidMsg, object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ);
 
   auto timestamp = seerep::fb::CreateTimestamp(builder, seconds, nanos);
 

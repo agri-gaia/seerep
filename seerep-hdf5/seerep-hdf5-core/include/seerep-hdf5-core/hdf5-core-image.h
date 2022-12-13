@@ -24,7 +24,16 @@
 
 namespace seerep_hdf5_core
 {
-class Hdf5CoreImage : public Hdf5CoreGeneral, public Hdf5CoreDatatypeInterface
+struct ImageAttributes
+{
+  uint32_t height;
+  uint32_t width;
+  uint32_t step;
+  std::string encoding;
+  bool isBigendian;
+};
+
+class Hdf5CoreImage : public virtual Hdf5CoreGeneral, public Hdf5CoreDatatypeInterface
 {
 public:
   Hdf5CoreImage(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
@@ -37,11 +46,18 @@ public:
   void writeLabelsGeneral(const std::string& uuid, const std::vector<std::string>& labels,
                           const std::vector<std::string>& instances);
 
+  void writeImageAttributes(const std::string& id, const ImageAttributes& attributes);
+
+  ImageAttributes readImageAttributes(const std::string& id);
+
+  const std::string getHdf5GroupPath(const std::string& id) const;
+  const std::string getHdf5DataSetPath(const std::string& id) const;
+
 public:
   inline static const std::string SIZE = "size";
   inline static const std::string CLASS = "CLASS";
 
-  // image / pointcloud attribute keys
+  // image attribute keys
   inline static const std::string HEIGHT = "height";
   inline static const std::string WIDTH = "width";
   inline static const std::string ENCODING = "encoding";

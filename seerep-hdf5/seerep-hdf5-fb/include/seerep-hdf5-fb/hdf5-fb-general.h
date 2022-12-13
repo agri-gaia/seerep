@@ -29,19 +29,23 @@
 #include <boost/log/trivial.hpp>
 namespace seerep_hdf5_fb
 {
+// make nested flatbuffers readable
+typedef flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>> BoundingBoxesLabeledFb;
+typedef flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>> BoundingBoxes2dLabeledFb;
+typedef flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>> GeneralLabelsFb;
+typedef flatbuffers::Vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>> AttributeMapsFb;
+
 class Hdf5FbGeneral : public virtual seerep_hdf5_core::Hdf5CoreGeneral
 {
 protected:
   Hdf5FbGeneral(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
 
-  //################
-  // Attributes
-  //################
-  void writeAttributeMap(const std::shared_ptr<HighFive::DataSet> dataSetPtr,
-                         const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>>* attributes);
+  // Attributes can be written to DataSets or DataGroups
+  void writeAttributeMap(const std::shared_ptr<HighFive::DataSet> dataSetPtr, const AttributeMapsFb* attributes);
+
   template <class T>
-  flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>>>
-  readAttributeMap(HighFive::AnnotateTraits<T>& object, flatbuffers::grpc::MessageBuilder& builder);
+  flatbuffers::Offset<AttributeMapsFb> readAttributeMap(HighFive::AnnotateTraits<T>& object,
+                                                        flatbuffers::grpc::MessageBuilder& builder);
 
   template <class T>
   void writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, const seerep::fb::Header* header);
@@ -51,22 +55,22 @@ protected:
                                                                HighFive::AnnotateTraits<T>& object,
                                                                std::string uuidMsg);
 
-  //################
-  // BoundingBoxes
-  //################
-  void writeBoundingBoxLabeled(
-      const std::string& datatypeGroup, const std::string& uuid,
-      const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>>* boundingboxLabeled);
+  // Bounding boxes are stored as a DataSet
+  void writeBoundingBoxLabeled(const std::string& datatypeGroup, const std::string& uuid,
+                               const BoundingBoxesLabeledFb* boundingboxLabeled);
 
-  void writeBoundingBox2DLabeled(
-      const std::string& datatypeGroup, const std::string& uuid,
-      const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>>* boundingbox2DLabeled);
+  void writeBoundingBox2DLabeled(const std::string& datatypeGroup, const std::string& uuid,
+                                 const BoundingBoxes2dLabeledFb* boundingbox2dLabeled);
 
-  //################
-  // Labels General
-  //################
-  void writeLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid,
-                          const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>* labelsGeneral);
+  flatbuffers::Offset<BoundingBoxes2dLabeledFb> readBoundingBoxes2DLabeled(const std::string& datatypeGroup,
+                                                                           const std::string& id,
+                                                                           flatbuffers::grpc::MessageBuilder& builder);
+  // General Labels are stored as a DataSet
+  void writeLabelsGeneral(const std::string& datatypeGroup, const std::string& sid,
+                          const GeneralLabelsFb* labelsGeneral);
+
+  flatbuffers::Offset<GeneralLabelsFb> readGeneralLabels(const std::string& datatypeGroup, const std::string& id,
+                                                         flatbuffers::grpc::MessageBuilder& builder);
 };
 
 }  // namespace seerep_hdf5_fb
