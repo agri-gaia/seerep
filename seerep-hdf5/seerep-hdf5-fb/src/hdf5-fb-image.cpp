@@ -5,7 +5,7 @@
 namespace seerep_hdf5_fb
 {
 Hdf5FbImage::Hdf5FbImage(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx)
-  : Hdf5FbGeneral(file, write_mtx)
+  : Hdf5CoreGeneral(file, write_mtx), Hdf5FbGeneral(file, write_mtx), Hdf5CoreImage(file, write_mtx)
 {
 }
 
@@ -32,7 +32,8 @@ void Hdf5FbImage::writeImage(const std::string& id, const seerep::fb::Image& ima
   writeHeaderAttributes(*dataGroupPtr, image.header());
 
   writeBoundingBox2DLabeled(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id, image.labels_bb());
-  writeLabelsGeneral(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id, image.labels_general());
+  // name is ambiguous
+  // writeLabelsGeneral(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id, image.labels_general());
 
   m_file->flush();
 }
@@ -101,12 +102,12 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
 
   auto generalLabelsOffset = readGeneralLabels(builder, id);
 
-  flatbuffers::Offset<flatbuffers::String> encodingBuf = builder.CreateString(encoding);
+  auto encodingStringOffset = builder.CreateString(encoding);
 
   seerep::fb::ImageBuilder imageBuilder(builder);
   imageBuilder.add_height(height);
   imageBuilder.add_width(width);
-  imageBuilder.add_encoding(encodingBuf);
+  imageBuilder.add_encoding(encodingStringOffset);
   imageBuilder.add_is_bigendian(isBigendian);
   imageBuilder.add_step(step);
 
@@ -123,16 +124,6 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
   builder.Finish(imageOffset);
   auto grpcImage = builder.ReleaseMessage<seerep::fb::Image>();
   return grpcImage;
-}
-
-const std::string Hdf5FbImage::getHdf5GroupPath(const std::string& id) const
-{
-  return seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE + "/" + id;
-}
-
-const std::string Hdf5FbImage::getHdf5DataSetPath(const std::string& id) const
-{
-  return getHdf5GroupPath(id) + "/" + seerep_hdf5_core::Hdf5CoreImage::RAWDATA;
 }
 
 BoundingBoxes2DLabeledOffset Hdf5FbImage::readBoundingBoxes2DLabeled(flatbuffers::grpc::MessageBuilder& builder,

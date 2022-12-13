@@ -30,7 +30,7 @@ typedef flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::
 
 namespace seerep_hdf5_fb
 {
-class Hdf5FbImage : public Hdf5FbGeneral
+class Hdf5FbImage : public Hdf5FbGeneral, public seerep_hdf5_core::Hdf5CoreImage
 {
 public:
   Hdf5FbImage(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
@@ -43,9 +43,6 @@ public:
                                                                          const bool withoutData = false);
 
 private:
-  const std::string getHdf5GroupPath(const std::string& id) const;
-  const std::string getHdf5DataSetPath(const std::string& id) const;
-
   BoundingBoxes2DLabeledOffset readBoundingBoxes2DLabeled(flatbuffers::grpc::MessageBuilder& builder,
                                                           const std::string& id);
   GeneralLabelsOffset readGeneralLabels(flatbuffers::grpc::MessageBuilder& builder, const std::string& id);

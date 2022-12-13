@@ -5,7 +5,7 @@
 namespace seerep_hdf5_fb
 {
 Hdf5FbPoint::Hdf5FbPoint(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx)
-  : Hdf5FbGeneral(file, write_mtx)
+  : Hdf5CoreGeneral(file, write_mtx), Hdf5FbGeneral(file, write_mtx)
 {
 }
 
