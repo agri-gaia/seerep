@@ -4,7 +4,7 @@ import os
 import sys
 
 import flatbuffers
-from fb import TimeInterval
+from fb import Boundingbox
 from fb import meta_operations_grpc_fb as metaOperations
 
 # importing util functions. Assuming that these files are in the parent dir
@@ -36,8 +36,22 @@ projectInfo = util_fb.createProjectInfo(builder, "name", projectuuid)
 builder.Finish(projectInfo)
 buf = builder.Output()
 
-responseBuf = stub.GetOverallTimeInterval(bytes(buf))
-response = TimeInterval.TimeInterval.GetRootAs(responseBuf)
+responseBuf = stub.GetOverallBoundingBox(bytes(buf))
+response = Boundingbox.Boundingbox.GetRootAs(responseBuf)
 
-print("time min (sec/nanos): " + str(response.TimeMin().Seconds()) + " / " + str(response.TimeMin().Nanos()))
-print("time max (sec/nanos): " + str(response.TimeMax().Seconds()) + " / " + str(response.TimeMax().Nanos()))
+print(
+    "Min Point (X, Y, Z): "
+    + str(response.PointMin().X())
+    + " , "
+    + str(response.PointMin().Y())
+    + " , "
+    + str(response.PointMin().Z())
+)
+print(
+    "Max Point (X, Y, Z): "
+    + str(response.PointMax().X())
+    + " , "
+    + str(response.PointMax().Y())
+    + " , "
+    + str(response.PointMax().Z())
+)
