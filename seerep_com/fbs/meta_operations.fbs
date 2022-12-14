@@ -15,4 +15,5 @@ rpc_service MetaOperations {
   LoadProjects(seerep.fb.Empty):seerep.fb.Empty;
   DeleteProject(seerep.fb.ProjectInfo):seerep.fb.Empty;
   GetOverallTimeInterval(seerep.fb.ProjectInfo):seerep.fb.TimeInterval;
+  GetOverallBoundingBox(seerep.fb.ProjectInfo):seerep.fb.Boundingbox;
 }
