@@ -144,9 +144,9 @@ grpc::Status FbMetaOperations::DeleteProject(grpc::ServerContext* context,
   return grpc::Status::OK;
 }
 
-flatbuffers::Offset<seerep::fb::TimeInterval>
-FbMetaOperations::GetOverallTimeInterval(grpc::ServerContext* context,
-                                         const flatbuffers::grpc::Message<seerep::fb::ProjectInfo>* request)
+grpc::Status FbMetaOperations::GetOverallTimeInterval(grpc::ServerContext* context,
+                                                      const flatbuffers::grpc::Message<seerep::fb::ProjectInfo>* request,
+                                                      flatbuffers::grpc::Message<seerep::fb::TimeInterval>* response)
 {
   std::string uuid = request->GetRoot()->uuid()->str();
   boost::uuids::string_generator gen;
@@ -168,12 +168,15 @@ FbMetaOperations::GetOverallTimeInterval(grpc::ServerContext* context,
   timeIntervalBuilder.add_time_max(max);
   flatbuffers::Offset<seerep::fb::TimeInterval> bb = timeIntervalBuilder.Finish();
 
-  return bb;
+  builder.Finish(bb);
+  *response = builder.ReleaseMessage<seerep::fb::TimeInterval>();
+
+  return grpc::Status::OK;
 }
 
-flatbuffers::Offset<seerep::fb::Boundingbox>
-FbMetaOperations::GetOverallBoundingBox(grpc::ServerContext* context,
-                                        const flatbuffers::grpc::Message<seerep::fb::ProjectInfo>* request)
+grpc::Status FbMetaOperations::GetOverallBoundingBox(grpc::ServerContext* context,
+                                                     const flatbuffers::grpc::Message<seerep::fb::ProjectInfo>* request,
+                                                     flatbuffers::grpc::Message<seerep::fb::Boundingbox>* response)
 {
   std::string uuid = request->GetRoot()->uuid()->str();
   boost::uuids::string_generator gen;
@@ -199,7 +202,10 @@ FbMetaOperations::GetOverallBoundingBox(grpc::ServerContext* context,
   boundingBoxBuilder.add_point_max(maxPoint);
   flatbuffers::Offset<seerep::fb::Boundingbox> bb = boundingBoxBuilder.Finish();
 
-  return bb;
+  builder.Finish(bb);
+  *response = builder.ReleaseMessage<seerep::fb::Boundingbox>();
+
+  return grpc::Status::OK;
 }
 
 } /* namespace seerep_server */
