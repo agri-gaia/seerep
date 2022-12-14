@@ -350,3 +350,13 @@ def createTransformStampedQuery(builder, header, childFrameId):
     TransformStampedQuery.AddHeader(builder, header)
     TransformStampedQuery.AddChildFrameId(builder, childFrameId)
     return TransformStampedQuery.End(builder)
+
+
+def createProjectInfo(builder, name, uuid):
+    nameStr = builder.CreateString(name)
+    uuidStr = builder.CreateString(uuid)
+
+    ProjectInfo.Start(builder)
+    ProjectInfo.AddName(builder, nameStr)
+    ProjectInfo.AddUuid(builder, uuidStr)
+    return ProjectInfo.End(builder)
