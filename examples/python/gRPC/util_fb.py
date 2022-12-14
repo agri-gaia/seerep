@@ -521,3 +521,11 @@ def createCameraIntrinsicsQuery(builder, ci_uuid, project_uuid):
     CameraIntrinsicsQuery.AddUuidProject(builder, project_uuid_str)
 
     return CameraIntrinsicsQuery.End(builder)
+def createProjectInfo(builder, name, uuid):
+    nameStr = builder.CreateString(name)
+    uuidStr = builder.CreateString(uuid)
+
+    ProjectInfo.Start(builder)
+    ProjectInfo.AddName(builder, nameStr)
+    ProjectInfo.AddUuid(builder, uuidStr)
+    return ProjectInfo.End(builder)
