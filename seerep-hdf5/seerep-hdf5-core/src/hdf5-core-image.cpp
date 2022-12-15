@@ -18,22 +18,24 @@ std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CoreImage::readDataset(con
 {
   const std::scoped_lock lock(*m_write_mtx);
 
-  std::string hdf5DatasetPath = HDF5_GROUP_IMAGE + "/" + uuid;
-  std::string hdf5DatasetRawDataPath = hdf5DatasetPath + "/" + seerep_hdf5_core::Hdf5CoreImage::RAWDATA;
+  std::string hdf5DataGroupPath = getHdf5GroupPath(uuid);
 
-  if (!m_file->exist(hdf5DatasetPath) || !m_file->exist(hdf5DatasetRawDataPath))
+  auto dataGroupPtr = getHdf5Group(hdf5DataGroupPath);
+
+  if (!dataGroupPtr)
+  {
     return std::nullopt;
-
-  std::shared_ptr<HighFive::DataSet> data_set_ptr =
-      std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DatasetRawDataPath));
+  }
 
   seerep_core_msgs::DatasetIndexable data;
 
-  data.header.frameId = readAttributeFromHdf5<std::string>(hdf5DatasetRawDataPath, *data_set_ptr,
+  data.header.datatype = seerep_core_msgs::Datatype::Image;
+
+  data.header.frameId = readAttributeFromHdf5<std::string>(hdf5DataGroupPath, *dataGroupPtr,
                                                            seerep_hdf5_core::Hdf5CoreImage::HEADER_FRAME_ID);
-  data.header.timestamp.seconds = readAttributeFromHdf5<int64_t>(hdf5DatasetRawDataPath, *data_set_ptr,
+  data.header.timestamp.seconds = readAttributeFromHdf5<int64_t>(hdf5DataGroupPath, *dataGroupPtr,
                                                                  seerep_hdf5_core::Hdf5CoreImage::HEADER_STAMP_SECONDS);
-  data.header.timestamp.nanos = readAttributeFromHdf5<int64_t>(hdf5DatasetRawDataPath, *data_set_ptr,
+  data.header.timestamp.nanos = readAttributeFromHdf5<int64_t>(hdf5DataGroupPath, *dataGroupPtr,
                                                                seerep_hdf5_core::Hdf5CoreImage::HEADER_STAMP_NANOS);
 
   boost::uuids::string_generator gen;
