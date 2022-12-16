@@ -52,7 +52,8 @@ flatbuffers::Offset<seerep::fb::Point2D> createPoint(flatbuffers::FlatBufferBuil
 flatbuffers::Offset<flatbuffers::Vector<uint8_t>>
 createImageData(flatbuffers::FlatBufferBuilder& fbb, const unsigned int imageHeight, const unsigned int imageWidth)
 {
-  std::vector<u_int8_t> data;
+  std::vector<uint8_t> data;
+  data.reserve(imageHeight * imageWidth * 3);
   for (size_t i = 0; i < imageWidth; i++)
   {
     for (size_t j = 0; j < imageHeight; j++)
@@ -70,6 +71,7 @@ createImageData(flatbuffers::FlatBufferBuilder& fbb, const unsigned int imageHei
       data.push_back(b);
     }
   }
+
   auto fbImageDataOffset = fbb.CreateVector(data.data(), data.size());
   fbb.Finish(fbImageDataOffset);
   return fbImageDataOffset;
