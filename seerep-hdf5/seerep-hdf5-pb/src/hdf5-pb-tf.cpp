@@ -5,7 +5,7 @@
 namespace seerep_hdf5_pb
 {
 Hdf5PbTf::Hdf5PbTf(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx)
-  : Hdf5PbGeneral(file, write_mtx)
+  : Hdf5CoreGeneral(file, write_mtx), Hdf5PbGeneral(file, write_mtx)
 {
 }
 
