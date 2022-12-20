@@ -1,5 +1,6 @@
 FROM ros:noetic
 
+ENV APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1
 ENV DEBIAN_FRONTEND="noninteractive"
 ENV HDF5_REL="https://github.com/BlueBrain/HighFive"
 ENV PB_REL="https://github.com/protocolbuffers/protobuf/releases"
@@ -14,6 +15,7 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         autoconf \
         automake \
         libtool \
+        wget \
         curl \
         make \
         g++ \
@@ -45,10 +47,10 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         && rm -rf /var/lib/apt/lists/*
 
 #Install pre-commit hooks to /root/.cache/pre-commit/
-RUN pip3 install pre-commit \
-        && wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add - \
-        && add-apt-repository "deb http://apt.llvm.org/focal/ llvm-toolchain-focal-15 main" \
-        && apt-get update -qq && apt-get -qq install -y --no-install-recommends \
+RUN pip3 install pre-commit
+RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
+RUN add-apt-repository "deb http://apt.llvm.org/focal/ llvm-toolchain-focal-15 main"
+RUN apt-get update -qq && apt-get -qq install -y --no-install-recommends \
                 ruby shellcheck \
                 clang-format-15 \
                 python3-catkin-lint \
