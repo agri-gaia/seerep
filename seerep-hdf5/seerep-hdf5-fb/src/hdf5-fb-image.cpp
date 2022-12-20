@@ -38,6 +38,15 @@ void Hdf5FbImage::writeImage(const std::string& id, const seerep::fb::Image& ima
   m_file->flush();
 }
 
+void Hdf5FbImage::writeImageBoundingBox2DLabeled(
+    const std::string& id,
+    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeledWithCategory>>* bb2DLabeledWithCategory)
+{
+  const std::scoped_lock lock(*m_write_mtx);
+
+  writeBoundingBox2DLabeled(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id, bb2DLabeledWithCategory);
+}
+
 std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readImage(const std::string& id,
                                                                                     const bool withoutData)
 {
@@ -102,11 +111,4 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
   return grpcImage;
 }
 
-void Hdf5FbImage::writeImageBoundingBox2DLabeled(const std::string& id,
-                                                 const seerep::fb::BoundingBoxes2DLabeledStamped& bb2dLabeledStamped)
-{
-  const std::scoped_lock lock(*m_write_mtx);
-
-  writeBoundingBox2DLabeled(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id, bb2dLabeledStamped.labels_bb());
-}
 }  // namespace seerep_hdf5_fb

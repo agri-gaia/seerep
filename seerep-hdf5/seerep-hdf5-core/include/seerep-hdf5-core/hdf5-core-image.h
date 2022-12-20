@@ -10,6 +10,7 @@
 
 // seerep-msgs
 #include <seerep-msgs/dataset-indexable.h>
+#include <seerep-msgs/labels-with-instance-with-category.h>
 
 // std
 #include <boost/geometry.hpp>
@@ -83,11 +84,11 @@ public:
    * @brief Write generals labels based on C++ data structures to HdF5
    *
    * @param uuid uuid of the image data group
-   * @param labels vector of labels
-   * @param instances vector of instances (string UUIDs)
+   * @param labelsWithInstanceWithCategory vector of labels with instances in multiple categories
    */
-  void writeLabelsGeneral(const std::string& uuid, const std::vector<std::string>& labels,
-                          const std::vector<std::string>& instances);
+  void writeLabelsGeneral(
+      const std::string& uuid,
+      const std::vector<seerep_core_msgs::LabelsWithInstanceWithCategory>& labelsWithInstanceWithCategory);
 
   /**
    * @brief Write the general attributes of an image to hdf5
