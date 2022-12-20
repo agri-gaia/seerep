@@ -4,6 +4,7 @@ import os
 import sys
 
 import image_service_pb2_grpc as imageService
+import labels_with_category_pb2 as labels_with_category
 import meta_operations_pb2_grpc as metaOperations
 import query_pb2 as query
 from google.protobuf import empty_pb2
@@ -44,7 +45,10 @@ theQuery.timeinterval.time_max.seconds = 1938549273
 theQuery.timeinterval.time_max.nanos = 0
 
 # labels
-theQuery.label.extend(["testlabel1"])
+label = labels_with_category.LabelsWithCategory()
+label.category = "0"
+label.labels.extend(["testlabel1"])
+theQuery.labelsWithCategory.append(label)
 
 for x in range(3):
     for y in range(3):
@@ -53,4 +57,4 @@ for x in range(3):
         theQuery.boundingboxStamped.boundingbox.point_max.x = x + 0.5
         theQuery.boundingboxStamped.boundingbox.point_max.y = y + 0.5
         for img in stub.GetImage(theQuery):
-            print("General label of transferred img: " + img.labels_general[0].label)
+            print("General label of transferred img: " + img.labels_general[0].labelWithInstance[0].label)
