@@ -517,14 +517,37 @@ void CoreDataset::addLabels(const seerep_core_msgs::Datatype& datatype,
   datatypeSpecifics->datasetInstancesMap.emplace(msgUuid, instanceUuids);
 }
 
-seerep_core_msgs::AabbTime CoreDataset::getTimeBounds()
+seerep_core_msgs::AabbTime CoreDataset::getTimeBounds(std::vector<seerep_core_msgs::Datatype> datatypes)
 {
   return m_datatypeDatatypeSpecificsMap.at(seerep_core_msgs::Datatype::Point)->timetree.bounds();
 }
 
-seerep_core_msgs::AABB CoreDataset::getSpatialBounds()
+seerep_core_msgs::AABB CoreDataset::getSpatialBounds(std::vector<seerep_core_msgs::Datatype> datatypes)
 {
-  return m_datatypeDatatypeSpecificsMap.at(seerep_core_msgs::Datatype::PointCloud)->rt.bounds();
+  seerep_core_msgs::AABB overallbb;
+  for (seerep_core_msgs::Datatype dt : datatypes)
+  {
+    seerep_core_msgs::AABB rtree_bounds = m_datatypeDatatypeSpecificsMap.at(dt)->rt.bounds();
+
+    if (rtree_bounds.max_corner().get<0>() > overallbb.max_corner().get<0>() ||
+        rtree_bounds.max_corner().get<1>() > overallbb.max_corner().get<1>() ||
+        rtree_bounds.max_corner().get<2>() > overallbb.max_corner().get<2>())
+    {
+      overallbb.max_corner().set<0>(rtree_bounds.max_corner().get<0>());
+      overallbb.max_corner().set<1>(rtree_bounds.max_corner().get<1>());
+      overallbb.max_corner().set<2>(rtree_bounds.max_corner().get<2>());
+    }
+
+    if (rtree_bounds.min_corner().get<0>() < overallbb.min_corner().get<0>() ||
+        rtree_bounds.min_corner().get<1>() < overallbb.min_corner().get<1>() ||
+        rtree_bounds.min_corner().get<2>() < overallbb.min_corner().get<2>())
+    {
+      overallbb.min_corner().set<0>(rtree_bounds.min_corner().get<0>());
+      overallbb.min_corner().set<1>(rtree_bounds.min_corner().get<1>());
+      overallbb.min_corner().set<2>(rtree_bounds.min_corner().get<2>());
+    }
+  }
+  return overallbb;
 }
 
 } /* namespace seerep_core */

@@ -22,7 +22,7 @@ channel = util.get_gRPC_channel()
 
 
 # 1. Get all projects from the server
-projectuuid = util_fb.getProject(builder, channel, 'geodeticProject')
+projectuuid = util_fb.getProject(builder, channel, 'LabeledImagesInGrid')
 
 # 2. Check if the defined project exist; if not exit
 if not projectuuid:
@@ -32,8 +32,8 @@ if not projectuuid:
 # 3. Get gRPC service object
 stub = metaOperations.MetaOperationsStub(channel)
 
-projectInfo = util_fb.createProjectInfo(builder, "name", projectuuid)
-builder.Finish(projectInfo)
+UuidDatatypePair = util_fb.createUuidDatatypePair(builder, projectuuid, ["Image"])
+builder.Finish(UuidDatatypePair)
 buf = builder.Output()
 
 responseBuf = stub.GetOverallBoundingBox(bytes(buf))

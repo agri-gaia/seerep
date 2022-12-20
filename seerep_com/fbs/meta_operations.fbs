@@ -6,6 +6,7 @@ include "empty.fbs";
 include "boundingbox.fbs";
 include "datatype.fbs";
 include "time_interval.fbs";
+include "uuid_datatype_pair.fbs";
 
 namespace seerep.fb;
 
@@ -14,6 +15,6 @@ rpc_service MetaOperations {
   GetProjects(seerep.fb.Empty):seerep.fb.ProjectInfos;
   LoadProjects(seerep.fb.Empty):seerep.fb.Empty;
   DeleteProject(seerep.fb.ProjectInfo):seerep.fb.Empty;
-  GetOverallTimeInterval(seerep.fb.ProjectInfo):seerep.fb.TimeInterval;
-  GetOverallBoundingBox(seerep.fb.ProjectInfo):seerep.fb.Boundingbox;
+  GetOverallTimeInterval(seerep.fb.UuidDatatypePair):seerep.fb.TimeInterval;
+  GetOverallBoundingBox(seerep.fb.UuidDatatypePair):seerep.fb.Boundingbox;
 }
