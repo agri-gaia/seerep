@@ -9,6 +9,7 @@ ENV DOX_VER="Release_1_9_3"
 
 #Install general required tools
 RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
+        software-properties-common \
         bash-completion \
         autoconf \
         automake \
@@ -45,9 +46,11 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
 
 #Install pre-commit hooks to /root/.cache/pre-commit/
 RUN pip3 install pre-commit \
+        && wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add - \
+        && add-apt-repository "deb http://apt.llvm.org/focal/ llvm-toolchain-focal-15 main" \
         && apt-get update -qq && apt-get -qq install -y --no-install-recommends \
                 ruby shellcheck \
-                clang-format-10 \
+                clang-format-15 \
                 python3-catkin-lint \
         && rm -rf /var/lib/apt/lists/*
 

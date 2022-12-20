@@ -123,7 +123,9 @@ sensor_msgs::PointCloud2 toROS(const seerep::fb::PointCloud2& cloud)
   ret.height = cloud.height();
   ret.width = cloud.width();
   for (auto field : *cloud.fields())
+  {
     ret.fields.push_back(toROS(*field));
+  }
   ret.is_bigendian = cloud.is_bigendian();
   ret.point_step = cloud.point_step();
   ret.row_step = cloud.row_step();

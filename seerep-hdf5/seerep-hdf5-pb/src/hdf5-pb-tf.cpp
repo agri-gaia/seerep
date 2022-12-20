@@ -93,9 +93,13 @@ void Hdf5PbTf::writeTransformStamped(const seerep::TransformStamped& tf)
   // write the size as group attribute
   HighFive::Group group = m_file->getGroup(hdf5DatasetPath);
   if (!group.hasAttribute(SIZE))
+  {
     group.createAttribute(SIZE, ++size);
+  }
   else
+  {
     group.getAttribute(SIZE).write(++size);
+  }
 
   m_file->flush();
 }

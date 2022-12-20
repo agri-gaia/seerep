@@ -271,9 +271,13 @@ void Hdf5CoreGeneral::writeAABB(
 
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "write AABB as attribute";
   if (!group.hasAttribute(AABB_FIELD))
+  {
     group.createAttribute(AABB_FIELD, aabbPoints);
+  }
   else
+  {
     group.getAttribute(AABB_FIELD).write(aabbPoints);
+  }
 
   m_file->flush();
 }

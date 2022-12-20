@@ -76,7 +76,9 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::PointStamped>> Hdf5FbPoint:
 
   std::string hdf5DatasetRawDataPath = getHdf5DatasetRawDataPath(id);
   if (!m_file->exist(hdf5DatasetRawDataPath))
+  {
     return std::nullopt;
+  }
 
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "loading " << hdf5DatasetRawDataPath;
 

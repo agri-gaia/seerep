@@ -60,19 +60,31 @@ void Hdf5FbPointCloud::computeBoundingBox(std::array<float, 3>& min, std::array<
                                           const float& y, const float& z)
 {
   if (x < min[0])
+  {
     min[0] = x;
+  }
   if (x > max[0])
+  {
     max[0] = x;
+  }
 
   if (y < min[1])
+  {
     min[1] = y;
+  }
   if (y > max[1])
+  {
     max[1] = y;
+  }
 
   if (z < min[2])
+  {
     min[2] = z;
+  }
   if (z > max[2])
+  {
     max[2] = z;
+  }
 }
 
 void Hdf5FbPointCloud::writePoints(const std::string& id, const std::vector<uint32_t>& offsets, const uint8_t* data,
@@ -529,20 +541,34 @@ Hdf5FbPointCloud::CloudInfo Hdf5FbPointCloud::getCloudInfo(const seerep::fb::Poi
   {
     const std::string& fieldName = cloud.fields()->Get(i)->name()->str();
     if (fieldName == "x")
+    {
       hasFieldx = true;
+    }
     else if (fieldName == "y")
+    {
       hasFieldy = true;
+    }
     else if (fieldName == "z")
+    {
       hasFieldz = true;
+    }
     else if (fieldName == "rgb")
+    {
       info.has_rgb = true;
+    }
     else if (fieldName == "rgba")
+    {
       info.has_rgba = true;
+    }
     else if (fieldName.find("normal") == 0)
+    {
       info.has_normals = true;
+    }
   }
   if (hasFieldx && hasFieldy && hasFieldz)
+  {
     info.has_points = true;
+  }
   return info;
 }
 
@@ -557,20 +583,34 @@ Hdf5FbPointCloud::CloudInfo Hdf5FbPointCloud::getCloudInfo(const std::vector<std
   for (auto fieldName : fields)
   {
     if (fieldName == "x")
+    {
       hasFieldx = true;
+    }
     else if (fieldName == "y")
+    {
       hasFieldy = true;
+    }
     else if (fieldName == "z")
+    {
       hasFieldz = true;
+    }
     else if (fieldName == "rgb")
+    {
       info.has_rgb = true;
+    }
     else if (fieldName == "rgba")
+    {
       info.has_rgba = true;
+    }
     else if (fieldName.find("normal") == 0)
+    {
       info.has_normals = true;
+    }
   }
   if (hasFieldx && hasFieldy && hasFieldz)
+  {
     info.has_points = true;
+  }
   return info;
 }
 

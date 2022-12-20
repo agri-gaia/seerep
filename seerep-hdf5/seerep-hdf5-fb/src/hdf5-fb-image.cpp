@@ -89,7 +89,9 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
   imageBuilder.add_is_bigendian(imageAttributes.isBigendian);
   imageBuilder.add_step(imageAttributes.step);
   if (!withoutData)
+  {
     imageBuilder.add_data(imageDataOffset);
+  }
   imageBuilder.add_header(headerOffset);
   imageBuilder.add_labels_bb(boxes2DLabeledOffset);
   imageBuilder.add_labels_general(generalLabelsOffset);
