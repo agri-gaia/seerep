@@ -4,6 +4,7 @@ import os
 import sys
 
 import image_service_pb2_grpc as imageService
+import labels_with_category_pb2 as labels_with_category
 import meta_operations_pb2_grpc as metaOperations
 import query_pb2 as query
 from google.protobuf import empty_pb2
@@ -54,20 +55,23 @@ theQuery.timeinterval.time_max.seconds = 1938549273
 theQuery.timeinterval.time_max.nanos = 0
 
 # labels
-theQuery.label.extend(["testlabel0"])
+label = labels_with_category.LabelsWithCategory()
+label.category = "0"
+label.labels.extend(["testlabel0"])
+theQuery.labelsWithCategory.append(label)
 
 # 5. Query the server for images matching the query and iterate over them
 for img in stub.GetImage(theQuery):
     print(f"uuidmsg: {img.header.uuid_msgs}")
-    print(f"first label: {img.labels_bb[0].labelWithInstance.label}")
+    print(f"first label: {img.labels_bb[0].boundingBox2DLabeled[0].labelWithInstance.label}")
     print(
         "First bounding box (Xmin, Ymin, Xmax, Ymax): "
-        + str(img.labels_bb[0].boundingBox.point_min.x)
+        + str(img.labels_bb[0].boundingBox2DLabeled[0].boundingBox.point_min.x)
         + " "
-        + str(img.labels_bb[0].boundingBox.point_min.y)
+        + str(img.labels_bb[0].boundingBox2DLabeled[0].boundingBox.point_min.y)
         + " "
-        + str(img.labels_bb[0].boundingBox.point_max.x)
+        + str(img.labels_bb[0].boundingBox2DLabeled[0].boundingBox.point_max.x)
         + " "
-        + str(img.labels_bb[0].boundingBox.point_max.y)
+        + str(img.labels_bb[0].boundingBox2DLabeled[0].boundingBox.point_max.y)
         + "\n"
     )
