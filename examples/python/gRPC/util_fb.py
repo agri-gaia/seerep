@@ -20,6 +20,7 @@ from fb import (
     TimeInterval,
     Timestamp,
     TransformStampedQuery,
+    UuidDatatypePair,
 )
 from fb import meta_operations_grpc_fb as metaOperations
 
@@ -350,6 +351,20 @@ def createTransformStampedQuery(builder, header, childFrameId):
     TransformStampedQuery.AddHeader(builder, header)
     TransformStampedQuery.AddChildFrameId(builder, childFrameId)
     return TransformStampedQuery.End(builder)
+
+
+def createUuidDatatypePair(builder, uuid, datatypes):
+    uuidStr = builder.CreateString(uuid)
+
+    UuidDatatypePair.StartLabelVector(builder, len(datatypes))
+    for datatype in reversed(datatypes):
+        builder.PrependUOffsetTRelative(datatype)
+    datatypesOffset = builder.EndVector()
+
+    UuidDatatypePair.Start(builder)
+    UuidDatatypePair.AddUuid(builder, uuidStr)
+    UuidDatatypePair.AddDatatypes(builder, datatypesOffset)
+    return UuidDatatypePair.End(builder)
 
 
 def createProjectInfo(builder, name, uuid):

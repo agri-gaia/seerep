@@ -132,8 +132,8 @@ public:
    */
   std::shared_ptr<HighFive::File> getHdf5File();
 
-  seerep_core_msgs::AabbTime getTimeBounds();
-  seerep_core_msgs::AABB getSpatialBounds();
+  seerep_core_msgs::AabbTime getTimeBounds(std::vector<seerep_core_msgs::Datatype> datatypes);
+  seerep_core_msgs::AABB getSpatialBounds(std::vector<seerep_core_msgs::Datatype> datatypes);
 
 private:
   /**
