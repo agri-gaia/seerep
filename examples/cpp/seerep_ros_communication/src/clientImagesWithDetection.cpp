@@ -2,10 +2,12 @@
 
 namespace seerep_grpc_ros
 {
-TransferImagesWithDetection::TransferImagesWithDetection(std::shared_ptr<grpc::Channel> channel_ptr)
+TransferImagesWithDetection::TransferImagesWithDetection(std::shared_ptr<grpc::Channel> channel_ptr,
+                                                         std::string categoryLabels)
   : stubMeta_(seerep::fb::MetaOperations::NewStub(channel_ptr))
   , stubTf_(seerep::fb::TfService::NewStub(channel_ptr))
   , stubImage_(seerep::fb::ImageService::NewStub(channel_ptr))
+  , categoryLabels_(categoryLabels)
 {
   writerTf_ = stubTf_->TransferTransformStamped(&contextTf_, &tfResponse_);
 
@@ -80,8 +82,8 @@ void seerep_grpc_ros::TransferImagesWithDetection::send(const vision_msgs::Detec
   }
   else
   {
-    if (writerImageDetection_->Write(seerep_ros_conversions_fb::toFlat(*msg, projectuuid_, uuidstring))) {}
-    else
+    if (!writerImageDetection_->Write(
+            seerep_ros_conversions_fb::toFlat(*msg, projectuuid_, categoryLabels_, uuidstring)))
     {
       ROS_ERROR_STREAM("error while transfering detection");
     }
@@ -164,8 +166,11 @@ int main(int argc, char** argv)
   private_nh.param<std::string>("server_address", server_address, "localhost:9090");
   ROS_INFO_STREAM("seerep server address: " << server_address);
 
+  std::string categoryLabels;
+  private_nh.param<std::string>("categoryLabels", categoryLabels, "testlabels");
+
   seerep_grpc_ros::TransferImagesWithDetection transferImagesWithDetection(
-      grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()));
+      grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()), categoryLabels);
 
   // ros::spin();
   auto spinner = ros::MultiThreadedSpinner();

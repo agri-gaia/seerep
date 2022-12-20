@@ -38,16 +38,24 @@ void QueryData::queryImage(const seerep::Query& query, ros::Publisher& img_pub) 
     sensor_msgs::Image img = seerep_ros_conversions_pb::toROS(response);
     img.header.frame_id = "map";
 
-    for (auto labels : response.labels_bb())
+    for (auto bbCat : response.labels_bb())
     {
-      std::cout << "label: " << labels.labelwithinstance().label() << " box: " << labels.boundingbox().point_min().x()
-                << " / " << labels.boundingbox().point_min().y() << " / " << labels.boundingbox().point_max().x()
-                << " / " << labels.boundingbox().point_max().y() << std::endl;
+      std::cout << "category: " << bbCat.category() << std::endl;
+      for (auto bb : bbCat.boundingbox2dlabeled())
+      {
+        std::cout << "label: " << bb.labelwithinstance().label() << " box: " << bb.boundingbox().point_min().x()
+                  << " / " << bb.boundingbox().point_min().y() << " / " << bb.boundingbox().point_max().x() << " / "
+                  << bb.boundingbox().point_max().y() << std::endl;
+      }
     }
 
-    for (auto labels : response.labels_general())
+    for (auto labelsCat : response.labels_general())
     {
-      std::cout << "label_general: " << labels.label() << std::endl;
+      std::cout << "category: " << labelsCat.category() << std::endl;
+      for (auto label : labelsCat.labelwithinstance())
+      {
+        std::cout << "label_general: " << label.label() << std::endl;
+      }
     }
 
     img_pub.publish(img);
@@ -103,12 +111,16 @@ int main(int argc, char** argv)
     query.mutable_timeinterval()->mutable_time_max()->set_seconds(maxtime);
   }
   // semantic
+  std::string category;
   std::vector<std::string> labels;
-  if (private_nh.param<std::vector<std::string>>("labels", labels, std::vector<std::string>()))
+  if (private_nh.param<std::vector<std::string>>("labels", labels, std::vector<std::string>()) &&
+      private_nh.param<std::string>("category", category, std::string()))
   {
+    auto labelWithCategory = query.add_labelswithcategory();
+    labelWithCategory->set_category(category);
     for (auto label : labels)
     {
-      query.mutable_label()->Add(std::move(label));
+      labelWithCategory->add_labels(label);
     }
   }
 
