@@ -1,0 +1,10 @@
+
+include "boundingbox_labeled.fbs";
+include "label_with_instance.fbs";
+
+namespace seerep.fb;
+
+table BoundingBoxLabeledWithCategory {
+  category:string;
+  boundingBoxLabeled:[BoundingBoxLabeled];
+}
