@@ -53,23 +53,7 @@ std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CorePoint::readDataset(con
   data.boundingbox.max_corner().set<1>(read_data.at(1));
   data.boundingbox.max_corner().set<2>(read_data.at(2));
 
-  std::vector<std::string> labelsGeneral;
-  std::vector<std::string> instancesGeneral;
-  readLabelsGeneral(HDF5_GROUP_POINT, uuid, labelsGeneral, instancesGeneral);
-  for (long unsigned int i = 0; i < labelsGeneral.size(); i++)
-  {
-    boost::uuids::uuid instanceUuid;
-    try
-    {
-      instanceUuid = gen(instancesGeneral.at(i));
-    }
-    catch (std::runtime_error&)
-    {
-      instanceUuid = boost::uuids::nil_uuid();
-    }
-    data.labelsWithInstances.push_back(
-        seerep_core_msgs::LabelWithInstance{ .label = labelsGeneral.at(i), .uuidInstance = instanceUuid });
-  }
+  readLabelsGeneralAndAddToLabelsWithInstancesWithCategory(HDF5_GROUP_POINT, uuid, data.labelsWithInstancesWithCategory);
 
   return data;
 }

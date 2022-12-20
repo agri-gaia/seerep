@@ -99,25 +99,7 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::PointStamped>> Hdf5FbPoint:
 
   auto headerOffset = readHeaderAttributes(builder, *data_set_ptr, id);
 
-  std::vector<std::string> labelsGeneral;
-  std::vector<std::string> labelsGeneralInstances;
-  readLabelsGeneral(seerep_hdf5_core::Hdf5CorePoint::HDF5_GROUP_POINT, id, labelsGeneral, labelsGeneralInstances);
-
-  std::vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>> labelGeneralVector;
-  labelGeneralVector.reserve(labelsGeneral.size());
-  for (long unsigned int i = 0; i < labelsGeneral.size(); i++)
-  {
-    auto labelOffset = builder.CreateString(labelsGeneral.at(i));
-    auto instanceOffset = builder.CreateString(labelsGeneralInstances.at(i));
-
-    seerep::fb::LabelWithInstanceBuilder labelBuilder(builder);
-    labelBuilder.add_label(labelOffset);
-    labelBuilder.add_instanceUuid(instanceOffset);
-    labelGeneralVector.push_back(labelBuilder.Finish());
-  }
-
-  auto labelsGeneralOffset =
-      builder.CreateVector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>(labelGeneralVector);
+  auto labelsGeneralOffset = readGeneralLabels(seerep_hdf5_core::Hdf5CorePoint::HDF5_GROUP_POINT, id, builder);
 
   seerep::fb::PointStampedBuilder pointStampedBuilder(builder);
 

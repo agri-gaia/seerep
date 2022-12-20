@@ -57,10 +57,12 @@ public:
    * Currently only used by the ROS dumper
    *
    * @param id the uuid of the image data group
-   * @param bb2dLabeledStamped the flatbuffers BoundingBoxes2D message
+   * @param bb2DLabeledWithCategory the flatbuffers BoundingBoxes2D with category message
    */
-  void writeImageBoundingBox2DLabeled(const std::string& id,
-                                      const seerep::fb::BoundingBoxes2DLabeledStamped& bb2dLabeledStamped);
+  void writeImageBoundingBox2DLabeled(
+      const std::string& id,
+      const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeledWithCategory>>*
+          bb2DLabeledWithCategory);
   /**
    * @brief Read an image from hdf5 and receive it as a flatbuffers message
    *

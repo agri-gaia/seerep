@@ -87,28 +87,66 @@ flatbuffers::Offset<seerep::fb::LabelWithInstance> createLabelWithInstance(flatb
   return labelWithInstanceOffset;
 }
 
-flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>>>
+flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeledWithCategory>>>
 createBB2DLabeled(flatbuffers::FlatBufferBuilder& fbb)
 {
-  std::vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>> bbLabeled;
-  for (size_t i = 0; i < 10; i++)
+  std::vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeledWithCategory>> bbCategory;
+  for (size_t iCategory = 0; iCategory < 3; iCategory++)
   {
-    auto pointMinOffset = createPoint(fbb, 0.01 + i / 10, 0.02 + i / 10);
-    auto pointMaxOffset = createPoint(fbb, 0.03 + i / 10, 0.04 + i / 10);
+    auto categoryOffset = fbb.CreateString("category" + std::to_string(iCategory));
 
-    auto bb2DOffset = seerep::fb::CreateBoundingbox2D(fbb, pointMinOffset, pointMaxOffset);
-    fbb.Finish(bb2DOffset);
+    std::vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>> bbLabeled;
+    for (size_t i = 0; i < 10; i++)
+    {
+      auto pointMinOffset = createPoint(fbb, 0.01 + i / 10, 0.02 + i / 10);
+      auto pointMaxOffset = createPoint(fbb, 0.03 + i / 10, 0.04 + i / 10);
 
-    auto labelWithInstanceOffset = createLabelWithInstance(fbb);
+      auto bb2DOffset = seerep::fb::CreateBoundingbox2D(fbb, pointMinOffset, pointMaxOffset);
+      fbb.Finish(bb2DOffset);
 
-    auto boudingBox2DLabeledOffset = seerep::fb::CreateBoundingBox2DLabeled(fbb, labelWithInstanceOffset, bb2DOffset);
-    fbb.Finish(boudingBox2DLabeledOffset);
+      auto labelWithInstanceOffset = createLabelWithInstance(fbb);
 
-    bbLabeled.push_back(boudingBox2DLabeledOffset);
+      seerep::fb::BoundingBox2DLabeledBuilder bbLabeledBuilder(fbb);
+      bbLabeledBuilder.add_bounding_box(bb2DOffset);
+      bbLabeledBuilder.add_labelWithInstance(labelWithInstanceOffset);
+      bbLabeled.push_back(bbLabeledBuilder.Finish());
+    }
+
+    auto bb2dLabeledOffset = fbb.CreateVector(bbLabeled);
+    seerep::fb::BoundingBox2DLabeledWithCategoryBuilder bbCategoryBuilder(fbb);
+    bbCategoryBuilder.add_category(categoryOffset);
+    bbCategoryBuilder.add_boundingBox2dLabeled(bb2dLabeledOffset);
+    bbCategory.push_back(bbCategoryBuilder.Finish());
   }
-  auto labelsBBOffset = fbb.CreateVector(bbLabeled.data(), bbLabeled.size());
+  auto labelsBBOffset = fbb.CreateVector(bbCategory);
   fbb.Finish(labelsBBOffset);
   return labelsBBOffset;
+}
+
+flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelsWithInstanceWithCategory>>>
+createLabelsGeneral(flatbuffers::FlatBufferBuilder& fbb)
+{
+  std::vector<flatbuffers::Offset<seerep::fb::LabelsWithInstanceWithCategory>> labelsCategories;
+  for (size_t iCategory = 0; iCategory < 3; iCategory++)
+  {
+    auto categoryOffset = fbb.CreateString("category" + std::to_string(iCategory));
+
+    std::vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>> labelsWithInstanceVector;
+    for (size_t i = 0; i < 10; i++)
+    {
+      labelsWithInstanceVector.push_back(createLabelWithInstance(fbb));
+    }
+
+    auto labelWithInstanceOffset = fbb.CreateVector(labelsWithInstanceVector);
+
+    seerep::fb::LabelsWithInstanceWithCategoryBuilder labelsCategoriesBuilder(fbb);
+    labelsCategoriesBuilder.add_category(categoryOffset);
+    labelsCategoriesBuilder.add_labelsWithInstance(labelWithInstanceOffset);
+    labelsCategories.push_back(labelsCategoriesBuilder.Finish());
+  }
+  auto labelsCategoriesOffset = fbb.CreateVector(labelsCategories);
+  fbb.Finish(labelsCategoriesOffset);
+  return labelsCategoriesOffset;
 }
 
 const seerep::fb::Image* createImageMessage(flatbuffers::FlatBufferBuilder& fbb, const unsigned int imageHeight,
@@ -118,14 +156,8 @@ const seerep::fb::Image* createImageMessage(flatbuffers::FlatBufferBuilder& fbb,
   auto encodingOffset = fbb.CreateString("rgb8");
   auto headerOffset = createHeader(fbb, "camera", projectUUID, messageUUID);
   auto imageOffset = createImageData(fbb, 256, 256);
-  std::vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>> labelsGeneral;
-  for (size_t i = 0; i < 10; i++)
-  {
-    auto labelWithInstanceOffset = createLabelWithInstance(fbb);
-    fbb.Finish(labelWithInstanceOffset);
-    labelsGeneral.push_back(labelWithInstanceOffset);
-  }
-  auto generalLabelsOffset = fbb.CreateVector(labelsGeneral.data(), labelsGeneral.size());
+
+  auto generalLabelsOffset = createLabelsGeneral(fbb);
   auto bB2DLabeledOffset = createBB2DLabeled(fbb);
 
   auto imgMsgOffset = seerep::fb::CreateImage(fbb, headerOffset, imageHeight, imageWidth, encodingOffset, true,
@@ -248,12 +280,26 @@ void testLabelWithInstance(const seerep::fb::LabelWithInstance* readInstance,
   EXPECT_STREQ(readInstance->instanceUuid()->c_str(), writeInstance->instanceUuid()->c_str());
 }
 
+void testLabelWithInstanceCategories(const seerep::fb::LabelsWithInstanceWithCategory* readInstance,
+                                     const seerep::fb::LabelsWithInstanceWithCategory* writeInstance)
+{
+  if (readInstance == nullptr || writeInstance == nullptr)
+  {
+    FAIL() << "Error: Can't compare a LabelWithInstance to nullptr";
+  }
+  EXPECT_STREQ(readInstance->category()->c_str(), writeInstance->category()->c_str());
+  for (size_t i = 0; i < readInstance->labelsWithInstance()->size(); i++)
+  {
+    testLabelWithInstance(readInstance->labelsWithInstance()->Get(i), writeInstance->labelsWithInstance()->Get(i));
+  }
+}
+
 TEST_F(fbWriteLoadTest, testGeneralLabels)
 {
   ASSERT_EQ(readImage->labels_general()->size(), writeImage->labels_general()->size());
   for (size_t i = 0; i < readImage->labels_general()->size(); i++)
   {
-    testLabelWithInstance(readImage->labels_general()->Get(i), writeImage->labels_general()->Get(i));
+    testLabelWithInstanceCategories(readImage->labels_general()->Get(i), writeImage->labels_general()->Get(i));
   }
 }
 
@@ -267,18 +313,42 @@ void testEqualPoints(const seerep::fb::Point2D* readPoint, const seerep::fb::Poi
   EXPECT_EQ(readPoint->y(), writePoint->y());
 }
 
-// don't test the header since, it will be removed in #72
+void testBB2DWithInstance(const seerep::fb::BoundingBox2DLabeled* readInstance,
+                          const seerep::fb::BoundingBox2DLabeled* writeInstance)
+{
+  if (readInstance == nullptr || writeInstance == nullptr)
+  {
+    FAIL() << "Error: Can't compare a LabelWithInstance to nullptr";
+  }
+  EXPECT_STREQ(readInstance->labelWithInstance()->label()->c_str(),
+               writeInstance->labelWithInstance()->label()->c_str());
+  EXPECT_STREQ(readInstance->labelWithInstance()->instanceUuid()->c_str(),
+               writeInstance->labelWithInstance()->instanceUuid()->c_str());
+
+  testEqualPoints(readInstance->bounding_box()->point_min(), writeInstance->bounding_box()->point_min());
+  testEqualPoints(readInstance->bounding_box()->point_max(), writeInstance->bounding_box()->point_max());
+}
+
+void testBB2DWithInstanceCategories(const seerep::fb::BoundingBox2DLabeledWithCategory* readInstance,
+                                    const seerep::fb::BoundingBox2DLabeledWithCategory* writeInstance)
+{
+  if (readInstance == nullptr || writeInstance == nullptr)
+  {
+    FAIL() << "Error: Can't compare a LabelWithInstance to nullptr";
+  }
+  EXPECT_STREQ(readInstance->category()->c_str(), writeInstance->category()->c_str());
+  for (size_t i = 0; i < readInstance->boundingBox2dLabeled()->size(); i++)
+  {
+    testBB2DWithInstance(readInstance->boundingBox2dLabeled()->Get(i), writeInstance->boundingBox2dLabeled()->Get(i));
+  }
+}
+
 TEST_F(fbWriteLoadTest, testBoundingBox2DLabeled)
 {
   ASSERT_EQ(readImage->labels_bb()->size(), writeImage->labels_bb()->size());
   for (size_t i = 0; i < readImage->labels_bb()->size(); i++)
   {
-    testLabelWithInstance(readImage->labels_bb()->Get(i)->labelWithInstance(),
-                          writeImage->labels_bb()->Get(i)->labelWithInstance());
-    testEqualPoints(readImage->labels_bb()->Get(i)->bounding_box()->point_min(),
-                    writeImage->labels_bb()->Get(i)->bounding_box()->point_min());
-    testEqualPoints(readImage->labels_bb()->Get(i)->bounding_box()->point_max(),
-                    writeImage->labels_bb()->Get(i)->bounding_box()->point_max());
+    testBB2DWithInstanceCategories(readImage->labels_bb()->Get(i), writeImage->labels_bb()->Get(i));
   }
 }
 

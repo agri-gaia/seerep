@@ -94,15 +94,35 @@ void createLabelWithInstance(seerep::LabelWithInstance& labelWithInstance)
  * */
 void createBB2DLabeled(seerep::Image& image)
 {
-  std::vector<seerep::BoundingBox2DLabeled> bbLabeled;
-
-  for (size_t i = 0; i < 10; i++)
+  for (size_t iCategory = 0; iCategory < 3; iCategory++)
   {
-    seerep::BoundingBox2DLabeled* bbLabeled = image.add_labels_bb();
-    createPoint(0.01 + i / 10, 0.02 + i / 10, *bbLabeled->mutable_boundingbox()->mutable_point_min());
-    createPoint(0.03 + i / 10, 0.04 + i / 10, *bbLabeled->mutable_boundingbox()->mutable_point_max());
+    auto boundingBox2DLabeledWithCategory = image.add_labels_bb();
+    boundingBox2DLabeledWithCategory->set_category("category" + std::to_string(iCategory));
+    for (size_t i = 0; i < 10; i++)
+    {
+      auto bbLabeled = boundingBox2DLabeledWithCategory->add_boundingbox2dlabeled();
+      createPoint(0.01 + i / 10, 0.02 + i / 10, *bbLabeled->mutable_boundingbox()->mutable_point_min());
+      createPoint(0.03 + i / 10, 0.04 + i / 10, *bbLabeled->mutable_boundingbox()->mutable_point_max());
 
-    createLabelWithInstance(*bbLabeled->mutable_labelwithinstance());
+      createLabelWithInstance(*bbLabeled->mutable_labelwithinstance());
+    }
+  }
+}
+
+/**
+ * @brief create labels general
+ * @param[in] image reference to the image
+ * */
+void createLabelsGeneral(seerep::Image& image)
+{
+  for (size_t iCategory = 0; iCategory < 3; iCategory++)
+  {
+    auto labelsGeneral = image.add_labels_general();
+    labelsGeneral->set_category("category" + std::to_string(iCategory));
+    for (size_t i = 0; i < 10; i++)
+    {
+      createLabelWithInstance(*labelsGeneral->add_labelwithinstance());
+    }
   }
 }
 
@@ -122,7 +142,6 @@ seerep::Image createImageMessage(const unsigned int imageHeight, const unsigned 
   seerep::Image imgMsg;
   createHeader(projectUUID, messageUUID, *imgMsg.mutable_header());
   createImageData(256, 256, imgMsg);
-  createBB2DLabeled(imgMsg);
 
   // set the header
   imgMsg.set_height(imageHeight);
@@ -132,16 +151,7 @@ seerep::Image createImageMessage(const unsigned int imageHeight, const unsigned 
   imgMsg.set_step(3 * imageHeight);
   imgMsg.set_row_step(0);
 
-  // create label with instance
-  seerep::LabelWithInstance lwi;
-  // populate it with values
-  createLabelWithInstance(lwi);
-  // obtain a pointer to labelWithInstance inside image
-  seerep::LabelWithInstance* x = imgMsg.add_labels_general();
-  // set it to lwi created above
-  x->set_label(lwi.label());
-  x->set_instanceuuid(lwi.instanceuuid());
-
+  createLabelsGeneral(imgMsg);
   createBB2DLabeled(imgMsg);
 
   return imgMsg;
@@ -271,14 +281,20 @@ TEST_F(pbWriteLoadTest, testImageData)
  * @param[in] readInstance the labelWithInstance which was read
  * @param[in] writeInstance the labelWithInstance which was written
  * */
-void testLabelWithInstance(const seerep::LabelWithInstance* readInstance, const seerep::LabelWithInstance* writeInstance)
+void testLabelWithInstance(const seerep::LabelWithInstance& readInstance, const seerep::LabelWithInstance& writeInstance)
 {
-  if (readInstance == nullptr || writeInstance == nullptr)
+  EXPECT_STREQ(readInstance.label().c_str(), writeInstance.label().c_str());
+  EXPECT_STREQ(readInstance.instanceuuid().c_str(), writeInstance.instanceuuid().c_str());
+}
+
+void testLabelsWithInstanceWithCategory(const seerep::LabelsWithInstanceWithCategory& readInstance,
+                                        const seerep::LabelsWithInstanceWithCategory& writeInstance)
+{
+  EXPECT_STREQ(readInstance.category().c_str(), writeInstance.category().c_str());
+  for (int i = 0; i < readInstance.labelwithinstance_size(); i++)
   {
-    FAIL() << "Error: Can't compare a LabelWithInstance to nullptr";
+    testLabelWithInstance(readInstance.labelwithinstance().Get(i), writeInstance.labelwithinstance().Get(i));
   }
-  EXPECT_STREQ(readInstance->label().c_str(), writeInstance->label().c_str());
-  EXPECT_STREQ(readInstance->instanceuuid().c_str(), writeInstance->instanceuuid().c_str());
 }
 
 /**
@@ -291,7 +307,7 @@ TEST_F(pbWriteLoadTest, testGeneralLabels)
   ASSERT_EQ(readImage.labels_general().size(), writeImage.labels_general().size());
   for (int i = 0; i < readImage.labels_general().size(); i++)
   {
-    testLabelWithInstance(&readImage.labels_general().Get(i), &writeImage.labels_general().Get(i));
+    testLabelsWithInstanceWithCategory(readImage.labels_general().Get(i), writeImage.labels_general().Get(i));
   }
 }
 
@@ -300,14 +316,10 @@ TEST_F(pbWriteLoadTest, testGeneralLabels)
  * @param[in] readPoint the Point2D which was read
  * @param[in] writePoint the Point2D which was written
  * */
-void testEqualPoints(const seerep::Point2D* readPoint, const seerep::Point2D* writePoint)
+void testEqualPoints(const seerep::Point2D& readPoint, const seerep::Point2D& writePoint)
 {
-  if (readPoint == nullptr || writePoint == nullptr)
-  {
-    FAIL() << "Error: Can't compare a point to nullptr";
-  }
-  EXPECT_EQ(readPoint->x(), writePoint->x());
-  EXPECT_EQ(readPoint->y(), writePoint->y());
+  EXPECT_EQ(readPoint.x(), writePoint.x());
+  EXPECT_EQ(readPoint.y(), writePoint.y());
 }
 
 /**
@@ -317,15 +329,20 @@ void testEqualPoints(const seerep::Point2D* readPoint, const seerep::Point2D* wr
  * */
 TEST_F(pbWriteLoadTest, testBoundingBox2DLabeled)
 {
-  ASSERT_EQ(readImage.labels_bb().size(), writeImage.labels_bb().size());
-  for (int i = 0; i < readImage.labels_bb().size(); i++)
+  for (int iCategory = 0; iCategory < readImage.labels_bb_size(); iCategory++)
   {
-    testLabelWithInstance(&readImage.labels_bb().Get(i).labelwithinstance(),
-                          &writeImage.labels_bb().Get(i).labelwithinstance());
-    testEqualPoints(&readImage.labels_bb().Get(i).boundingbox().point_min(),
-                    &writeImage.labels_bb().Get(i).boundingbox().point_min());
-    testEqualPoints(&readImage.labels_bb().Get(i).boundingbox().point_max(),
-                    &writeImage.labels_bb().Get(i).boundingbox().point_max());
+    ASSERT_EQ(readImage.labels_bb().size(), writeImage.labels_bb().size());
+    EXPECT_STREQ(readImage.labels_bb().at(iCategory).category().c_str(),
+                 writeImage.labels_bb().at(iCategory).category().c_str());
+    for (int i = 0; i < readImage.labels_bb().at(iCategory).boundingbox2dlabeled_size(); i++)
+    {
+      testLabelWithInstance(readImage.labels_bb().at(iCategory).boundingbox2dlabeled().Get(i).labelwithinstance(),
+                            writeImage.labels_bb().at(iCategory).boundingbox2dlabeled().Get(i).labelwithinstance());
+      testEqualPoints(readImage.labels_bb().at(iCategory).boundingbox2dlabeled().Get(i).boundingbox().point_min(),
+                      writeImage.labels_bb().at(iCategory).boundingbox2dlabeled().Get(i).boundingbox().point_min());
+      testEqualPoints(readImage.labels_bb().at(iCategory).boundingbox2dlabeled().Get(i).boundingbox().point_max(),
+                      writeImage.labels_bb().at(iCategory).boundingbox2dlabeled().Get(i).boundingbox().point_max());
+    }
   }
 }
 
