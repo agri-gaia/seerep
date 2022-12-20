@@ -108,8 +108,8 @@ public:
    *
    * @return seerep_core_msgs::AABB
    */
-  seerep_core_msgs::AabbTime getTimeBounds();
-  seerep_core_msgs::AABB getSpatialBounds();
+  seerep_core_msgs::AabbTime getTimeBounds(std::vector<seerep_core_msgs::Datatype> datatypes);
+  seerep_core_msgs::AABB getSpatialBounds(std::vector<seerep_core_msgs::Datatype> datatypes);
 
 private:
   /**

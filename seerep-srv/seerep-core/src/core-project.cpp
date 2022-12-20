@@ -114,14 +114,14 @@ void CoreProject::recreateDatatypes()
   }
 }
 
-seerep_core_msgs::AabbTime CoreProject::getTimeBounds()
+seerep_core_msgs::AabbTime CoreProject::getTimeBounds(std::vector<seerep_core_msgs::Datatype> datatypes)
 {
-  return m_coreDatasets->getTimeBounds();
+  return m_coreDatasets->getTimeBounds(datatypes);
 }
 
-seerep_core_msgs::AABB CoreProject::getSpatialBounds()
+seerep_core_msgs::AABB CoreProject::getSpatialBounds(std::vector<seerep_core_msgs::Datatype> datatypes)
 {
-  return m_coreDatasets->getSpatialBounds();
+  return m_coreDatasets->getSpatialBounds(datatypes);
 }
 
 } /* namespace seerep_core */

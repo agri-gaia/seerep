@@ -144,44 +144,77 @@ grpc::Status FbMetaOperations::DeleteProject(grpc::ServerContext* context,
   return grpc::Status::OK;
 }
 
-grpc::Status FbMetaOperations::GetOverallTimeInterval(grpc::ServerContext* context,
-                                                      const flatbuffers::grpc::Message<seerep::fb::ProjectInfo>* request,
-                                                      flatbuffers::grpc::Message<seerep::fb::TimeInterval>* response)
+// grpc::Status
+// FbMetaOperations::GetOverallTimeInterval(grpc::ServerContext* context,
+//                                          const flatbuffers::grpc::Message<seerep::fb::UuidDatatypePair>* request,
+//                                          flatbuffers::grpc::Message<seerep::fb::TimeInterval>* response)
+// {
+//   std::string uuid = request->GetRoot()->projectuuid()->str();
+//   boost::uuids::string_generator gen;
+//   auto uuidFromString = gen(uuid);
+
+//   std::vector<std::string> dt_vector;
+//   for (auto dt : *request->GetRoot()->datatypes())
+//   {
+//     dt_vector.push_back(dt->str());
+//   }
+
+//   seerep_core_msgs::AabbTime timeinterval = seerepCore->getOverallTimeInterval(uuidFromString);
+
+//   flatbuffers::grpc::MessageBuilder builder;
+
+//   seerep::fb::TimestampBuilder minTimeStampBuilder(builder);
+//   minTimeStampBuilder.add_seconds(timeinterval.min_corner().get<0>());
+//   flatbuffers::Offset<seerep::fb::Timestamp> min = minTimeStampBuilder.Finish();
+
+//   seerep::fb::TimestampBuilder maxTimeStampBuilder(builder);
+//   maxTimeStampBuilder.add_seconds(timeinterval.max_corner().get<0>());
+//   flatbuffers::Offset<seerep::fb::Timestamp> max = maxTimeStampBuilder.Finish();
+
+//   seerep::fb::TimeIntervalBuilder timeIntervalBuilder(builder);
+//   timeIntervalBuilder.add_time_min(min);
+//   timeIntervalBuilder.add_time_max(max);
+//   flatbuffers::Offset<seerep::fb::TimeInterval> bb = timeIntervalBuilder.Finish();
+
+//   builder.Finish(bb);
+//   *response = builder.ReleaseMessage<seerep::fb::TimeInterval>();
+
+//   return grpc::Status::OK;
+// }
+
+grpc::Status
+FbMetaOperations::GetOverallBoundingBox(grpc::ServerContext* context,
+                                        const flatbuffers::grpc::Message<seerep::fb::UuidDatatypePair>* request,
+                                        flatbuffers::grpc::Message<seerep::fb::Boundingbox>* response)
 {
-  std::string uuid = request->GetRoot()->uuid()->str();
+  (void)context;  // ignore that variable without causing warnings
+
+  std::string uuid = request->GetRoot()->projectuuid()->str();
   boost::uuids::string_generator gen;
   auto uuidFromString = gen(uuid);
-  seerep_core_msgs::AabbTime timeinterval = seerepCore->getOverallTimeInterval(uuidFromString);
 
-  flatbuffers::grpc::MessageBuilder builder;
+  std::vector<seerep_core_msgs::Datatype> dt_vector;
+  for (auto datatype : *request->GetRoot()->datatypes())
+  {
+    if (datatype == seerep::fb::Datatype_Image)
+    {
+      dt_vector.push_back(seerep_core_msgs::Datatype::Image);
+    }
+    else if (datatype == seerep::fb::Datatype_PointCloud)
+    {
+      dt_vector.push_back(seerep_core_msgs::Datatype::PointCloud);
+    }
+    else if (datatype == seerep::fb::Datatype_Point)
+    {
+      dt_vector.push_back(seerep_core_msgs::Datatype::Point);
+    }
+    else
+    {
+      dt_vector.push_back(seerep_core_msgs::Datatype::Unknown);
+    }
+  }
 
-  seerep::fb::TimestampBuilder minTimeStampBuilder(builder);
-  minTimeStampBuilder.add_seconds(timeinterval.min_corner().get<0>());
-  flatbuffers::Offset<seerep::fb::Timestamp> min = minTimeStampBuilder.Finish();
-
-  seerep::fb::TimestampBuilder maxTimeStampBuilder(builder);
-  maxTimeStampBuilder.add_seconds(timeinterval.max_corner().get<0>());
-  flatbuffers::Offset<seerep::fb::Timestamp> max = maxTimeStampBuilder.Finish();
-
-  seerep::fb::TimeIntervalBuilder timeIntervalBuilder(builder);
-  timeIntervalBuilder.add_time_min(min);
-  timeIntervalBuilder.add_time_max(max);
-  flatbuffers::Offset<seerep::fb::TimeInterval> bb = timeIntervalBuilder.Finish();
-
-  builder.Finish(bb);
-  *response = builder.ReleaseMessage<seerep::fb::TimeInterval>();
-
-  return grpc::Status::OK;
-}
-
-grpc::Status FbMetaOperations::GetOverallBoundingBox(grpc::ServerContext* context,
-                                                     const flatbuffers::grpc::Message<seerep::fb::ProjectInfo>* request,
-                                                     flatbuffers::grpc::Message<seerep::fb::Boundingbox>* response)
-{
-  std::string uuid = request->GetRoot()->uuid()->str();
-  boost::uuids::string_generator gen;
-  auto uuidFromString = gen(uuid);
-  seerep_core_msgs::AABB overallBB = seerepCore->getOverallBound(uuidFromString);
+  seerep_core_msgs::AABB overallBB = seerepCore->getOverallBound(uuidFromString, dt_vector);
 
   flatbuffers::grpc::MessageBuilder builder;
 
