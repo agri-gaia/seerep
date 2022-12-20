@@ -21,7 +21,9 @@ std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CorePointCloud::readDatase
   std::string hdf5DatasetPath = HDF5_GROUP_POINTCLOUD + "/" + uuid;
 
   if (!m_file->exist(hdf5DatasetPath))
+  {
     return std::nullopt;
+  }
 
   std::shared_ptr<HighFive::Group> group_ptr = std::make_shared<HighFive::Group>(m_file->getGroup(hdf5DatasetPath));
 

@@ -35,7 +35,7 @@ import util_fb
 class LoadSimulatedDataWithInstancePosition:
     def __init__(self) -> None:
         self.IMAGE_SUBPATH = "camera_main_camera/rect/"
-        self.BOUNDINGBOX_SUBPATH = "camera_main_camera_annotations/bbs_without_cluster_uuid/"
+        self.BOUNDINGBOX_SUBPATH = "camera_main_camera_annotations/bounding_box_uuid/"
         self.POINTCLOUD_SUBPATH = "camera_main_camera_annotations/pcl/"
         self.EXTRINSICS_SUBPATH = "camera_main_camera/extrinsics/"
 
@@ -52,8 +52,9 @@ class LoadSimulatedDataWithInstancePosition:
         self.NUM_IMAGES = 80
         self.PROJECT_NAME = "simulatedDataWithInstances"
 
+        self.builder = flatbuffers.Builder(1024)
         self.channel = util.get_gRPC_channel()
-        self.projectUuid = util_fb.get_or_create_project(self.channel, self.PROJECT_NAME, True)
+        self.projectUuid = util_fb.getOrCreateProject(self.builder, self.channel, self.PROJECT_NAME)
         self.theTime = [1654688921]  # 08.06.2022 13:49 #int(time.time())
         self.root = ["/seerep/seerep-data/cw_synthetic_maize/dataset_v2/"]
 
@@ -219,8 +220,6 @@ class LoadSimulatedDataWithInstancePosition:
             for i in range(self.NUM_IMAGES):
                 print("image " + str(i))
 
-                builder = flatbuffers.Builder(1024)
-
                 timeThisIteration = self.__getCurrentTime(folderIndex, i)
 
                 baseFilePath = self.__createBasePath(imagePath, i)
@@ -230,15 +229,15 @@ class LoadSimulatedDataWithInstancePosition:
                 img = imageio.imread(baseFilePath + self.IMAGE_FILE_EXTENSION)
 
                 boundingBox2dLabeledVectorMsg = self.__createBoundingBox2dLabeledVectorMsg(
-                    builder, baseAnnotationPath, basePointcloudPath, timeThisIteration, self.CAMERA_FRAME, img
+                    self.builder, baseAnnotationPath, basePointcloudPath, timeThisIteration, self.CAMERA_FRAME, img
                 )
 
-                header = self.__createHeader(builder, timeThisIteration, self.CAMERA_FRAME)
+                header = self.__createHeader(self.builder, timeThisIteration, self.CAMERA_FRAME)
 
-                imageMsg = self.__createImage(builder, img, header, boundingBox2dLabeledVectorMsg)
+                imageMsg = self.__createImage(self.builder, img, header, boundingBox2dLabeledVectorMsg)
 
-                builder.Finish(imageMsg)
-                yield bytes(builder.Output())
+                self.builder.Finish(imageMsg)
+                yield bytes(self.builder.Output())
 
     def __createVector3(self, builder, t):
         Vector3.Start(builder)

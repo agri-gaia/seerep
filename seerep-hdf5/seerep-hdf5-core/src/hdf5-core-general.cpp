@@ -271,9 +271,13 @@ void Hdf5CoreGeneral::writeAABB(
 
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "write AABB as attribute";
   if (!group.hasAttribute(AABB_FIELD))
+  {
     group.createAttribute(AABB_FIELD, aabbPoints);
+  }
   else
+  {
     group.getAttribute(AABB_FIELD).write(aabbPoints);
+  }
 
   m_file->flush();
 }
@@ -367,6 +371,17 @@ void Hdf5CoreGeneral::checkExists(const std::string& id)
   }
 }
 
+bool Hdf5CoreGeneral::exists(const std::string& id)
+{
+  if (!m_file->exist(id))
+  {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning)
+        << "id " << id << " does not exist in file " << m_file->getName();
+    return false;
+  }
+  return true;
+}
+
 void Hdf5CoreGeneral::readLabel(const std::string& id, const std::string labelType, std::vector<std::string>& labels)
 {
   checkExists(id + "/" + labelType);
@@ -409,6 +424,18 @@ std::shared_ptr<HighFive::Group> Hdf5CoreGeneral::getHdf5Group(const std::string
     {
       return nullptr;
     }
+  }
+}
+
+std::shared_ptr<HighFive::DataSet> Hdf5CoreGeneral::getHdf5DataSet(const std::string& hdf5DataSetPath)
+{
+  if (exists(hdf5DataSetPath))
+  {
+    return std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DataSetPath));
+  }
+  else
+  {
+    return nullptr;
   }
 }
 
