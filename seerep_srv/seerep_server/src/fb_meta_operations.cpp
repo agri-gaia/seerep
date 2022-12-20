@@ -229,66 +229,83 @@ FbMetaOperations::GetOverallTimeInterval(grpc::ServerContext* context,
   builder.Finish(bb);
   *response = builder.ReleaseMessage<seerep::fb::TimeInterval>();
 
-  return grpc::Status::OK;
-}
-
-grpc::Status
-FbMetaOperations::GetOverallBoundingBox(grpc::ServerContext* context,
-                                        const flatbuffers::grpc::Message<seerep::fb::UuidDatatypePair>* request,
-                                        flatbuffers::grpc::Message<seerep::fb::Boundingbox>* response)
-{
-  (void)context;  // ignore that variable without causing warnings
-  auto requestRoot = request->GetRoot();
-
-  std::string uuid = requestRoot->projectuuid()->str();
-  boost::uuids::string_generator gen;
-  auto uuidFromString = gen(uuid);
-
   std::vector<seerep_core_msgs::Datatype> dt_vector;
-
-  seerep::fb::Datatype casted_datatype = static_cast<seerep::fb::Datatype>(requestRoot->datatypes());
-  if (casted_datatype == seerep::fb::Datatype_Image)
+  for (auto datatype : *request->GetRoot()->datatypes())
   {
-    dt_vector.push_back(seerep_core_msgs::Datatype::Image);
+    if (datatype == seerep::fb::Datatype_Image)
+    {
+      dt_vector.push_back(seerep_core_msgs::Datatype::Image);
+    }
+    else if (datatype == seerep::fb::Datatype_PointCloud)
+    {
+      dt_vector.push_back(seerep_core_msgs::Datatype::PointCloud);
+    }
+    else if (datatype == seerep::fb::Datatype_Point)
+    {
+      dt_vector.push_back(seerep_core_msgs::Datatype::Point);
+    }
+    else
+    {
+      dt_vector.push_back(seerep_core_msgs::Datatype::Unknown);
+    }
   }
-  else if (casted_datatype == seerep::fb::Datatype_PointCloud)
+
+  grpc::Status FbMetaOperations::GetOverallBoundingBox(
+      grpc::ServerContext * context, const flatbuffers::grpc::Message<seerep::fb::UuidDatatypePair>* request,
+      flatbuffers::grpc::Message<seerep::fb::Boundingbox>* response)
   {
-    dt_vector.push_back(seerep_core_msgs::Datatype::PointCloud);
+    (void)context;  // ignore that variable without causing warnings
+    auto requestRoot = request->GetRoot();
+
+    std::string uuid = requestRoot->projectuuid()->str();
+    boost::uuids::string_generator gen;
+    auto uuidFromString = gen(uuid);
+
+    std::vector<seerep_core_msgs::Datatype> dt_vector;
+
+    seerep::fb::Datatype casted_datatype = static_cast<seerep::fb::Datatype>(requestRoot->datatypes());
+    if (casted_datatype == seerep::fb::Datatype_Image)
+    {
+      dt_vector.push_back(seerep_core_msgs::Datatype::Image);
+    }
+    else if (casted_datatype == seerep::fb::Datatype_PointCloud)
+    {
+      dt_vector.push_back(seerep_core_msgs::Datatype::PointCloud);
+    }
+    else if (casted_datatype == seerep::fb::Datatype_Point)
+    {
+      dt_vector.push_back(seerep_core_msgs::Datatype::Point);
+    }
+    else
+    {
+      dt_vector.push_back(seerep_core_msgs::Datatype::Unknown);
+    }
+
+    seerep_core_msgs::AABB overallBB = seerepCore->getOverallBound(uuidFromString, dt_vector);
+
+    flatbuffers::grpc::MessageBuilder builder;
+
+    seerep::fb::PointBuilder minPointBuilder(builder);
+    minPointBuilder.add_x(overallBB.min_corner().get<0>());
+    minPointBuilder.add_y(overallBB.min_corner().get<1>());
+    minPointBuilder.add_z(overallBB.min_corner().get<2>());
+    flatbuffers::Offset<seerep::fb::Point> minPoint = minPointBuilder.Finish();
+
+    seerep::fb::PointBuilder maxPointBuilder(builder);
+    maxPointBuilder.add_x(overallBB.max_corner().get<0>());
+    maxPointBuilder.add_y(overallBB.max_corner().get<1>());
+    maxPointBuilder.add_z(overallBB.max_corner().get<2>());
+    flatbuffers::Offset<seerep::fb::Point> maxPoint = maxPointBuilder.Finish();
+
+    seerep::fb::BoundingboxBuilder boundingBoxBuilder(builder);
+    boundingBoxBuilder.add_point_min(minPoint);
+    boundingBoxBuilder.add_point_max(maxPoint);
+    flatbuffers::Offset<seerep::fb::Boundingbox> bb = boundingBoxBuilder.Finish();
+
+    builder.Finish(bb);
+    *response = builder.ReleaseMessage<seerep::fb::Boundingbox>();
+
+    return grpc::Status::OK;
   }
-  else if (casted_datatype == seerep::fb::Datatype_Point)
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::Point);
-  }
-  else
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::Unknown);
-  }
-
-  seerep_core_msgs::AABB overallBB = seerepCore->getOverallBound(uuidFromString, dt_vector);
-
-  flatbuffers::grpc::MessageBuilder builder;
-
-  seerep::fb::PointBuilder minPointBuilder(builder);
-  minPointBuilder.add_x(overallBB.min_corner().get<0>());
-  minPointBuilder.add_y(overallBB.min_corner().get<1>());
-  minPointBuilder.add_z(overallBB.min_corner().get<2>());
-  flatbuffers::Offset<seerep::fb::Point> minPoint = minPointBuilder.Finish();
-
-  seerep::fb::PointBuilder maxPointBuilder(builder);
-  maxPointBuilder.add_x(overallBB.max_corner().get<0>());
-  maxPointBuilder.add_y(overallBB.max_corner().get<1>());
-  maxPointBuilder.add_z(overallBB.max_corner().get<2>());
-  flatbuffers::Offset<seerep::fb::Point> maxPoint = maxPointBuilder.Finish();
-
-  seerep::fb::BoundingboxBuilder boundingBoxBuilder(builder);
-  boundingBoxBuilder.add_point_min(minPoint);
-  boundingBoxBuilder.add_point_max(maxPoint);
-  flatbuffers::Offset<seerep::fb::Boundingbox> bb = boundingBoxBuilder.Finish();
-
-  builder.Finish(bb);
-  *response = builder.ReleaseMessage<seerep::fb::Boundingbox>();
-
-  return grpc::Status::OK;
-}
 
 } /* namespace seerep_server */
