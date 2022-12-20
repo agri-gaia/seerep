@@ -13,7 +13,7 @@ struct DatasetIndexable
 {
   Header header;
   AABB boundingbox;
-  std::vector<LabelWithInstance> labelsWithInstances;
+  std::unordered_map<std::string, std::vector<LabelWithInstance>> labelsWithInstancesWithCategory;
 };
 
 } /* namespace seerep_core_msgs */
