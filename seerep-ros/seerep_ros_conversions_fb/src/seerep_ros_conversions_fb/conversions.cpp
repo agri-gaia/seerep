@@ -422,16 +422,17 @@ geometry_msgs::TransformStamped toROS(const seerep::fb::TransformStamped& transf
  */
 
 flatbuffers::grpc::Message<seerep::fb::BoundingBoxes2DLabeledStamped>
-toFlat(const vision_msgs::Detection2DArray& detection2d, std::string projectuuid, std::string msguuid = "")
+toFlat(const vision_msgs::Detection2DArray& detection2d, std::string projectuuid, std::string category,
+       std::string msguuid = "")
 {
   flatbuffers::grpc::MessageBuilder builder;
-  builder.Finish(toFlat(detection2d, projectuuid, builder, msguuid));
+  builder.Finish(toFlat(detection2d, projectuuid, builder, category, msguuid));
   return builder.ReleaseMessage<seerep::fb::BoundingBoxes2DLabeledStamped>();
 }
 flatbuffers::Offset<seerep::fb::BoundingBoxes2DLabeledStamped> toFlat(const vision_msgs::Detection2DArray& detection2d,
                                                                       std::string projectuuid,
                                                                       flatbuffers::grpc::MessageBuilder& builder,
-                                                                      std::string msguuid = "")
+                                                                      std::string category, std::string msguuid = "")
 {
   // convert header
   auto header = toFlat(detection2d.header, projectuuid, builder, msguuid);
@@ -447,9 +448,21 @@ flatbuffers::Offset<seerep::fb::BoundingBoxes2DLabeledStamped> toFlat(const visi
 
   // fb labels vector
   auto labelsOffset = builder.CreateVector(bblabeled);
+
+  auto categoryOffset = builder.CreateString(category);
+
+  seerep::fb::BoundingBox2DLabeledWithCategoryBuilder bbWithCategoryBuilder(builder);
+  bbWithCategoryBuilder.add_category(categoryOffset);
+  bbWithCategoryBuilder.add_boundingBox2dLabeled(labelsOffset);
+  auto bbWithCategoryOffset = bbWithCategoryBuilder.Finish();
+
+  std::vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeledWithCategory>> bbWithCategoryVector;
+  bbWithCategoryVector.push_back(bbWithCategoryOffset);
+  auto bbWithCatbbWithCategoryVectorOffset = builder.CreateVector(bbWithCategoryVector);
+
   seerep::fb::BoundingBoxes2DLabeledStampedBuilder bbbuilder(builder);
   bbbuilder.add_header(header);
-  bbbuilder.add_labels_bb(labelsOffset);
+  bbbuilder.add_labels_bb(bbWithCatbbWithCategoryVectorOffset);
   return bbbuilder.Finish();
 }
 
