@@ -2,13 +2,11 @@ syntax = "proto3";
 
 package seerep;
 
-import "transform_stamped.proto";
-import "transform_stamped_query.proto";
-// import "query.proto";
-
-import "server_response.proto";
 import "frame_infos.proto";
 import "frame_query.proto";
+import "server_response.proto";
+import "transform_stamped.proto";
+import "transform_stamped_query.proto";
 
 service TfService
 {

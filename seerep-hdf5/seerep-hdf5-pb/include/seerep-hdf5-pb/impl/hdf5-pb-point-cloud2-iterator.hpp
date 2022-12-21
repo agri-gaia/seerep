@@ -49,17 +49,17 @@ inline int sizeOfPointField(int datatype)
 {
   switch (datatype)
   {
-    case seerep::PointField_Datatype_INT8:
-    case seerep::PointField_Datatype_UINT8:
+    case seerep::PointField_Datatype_DATATYPE_INT8:
+    case seerep::PointField_Datatype_DATATYPE_UINT8:
       return 1;
-    case seerep::PointField_Datatype_INT16:
-    case seerep::PointField_Datatype_UINT16:
+    case seerep::PointField_Datatype_DATATYPE_INT16:
+    case seerep::PointField_Datatype_DATATYPE_UINT16:
       return 2;
-    case seerep::PointField_Datatype_INT32:
-    case seerep::PointField_Datatype_UINT32:
-    case seerep::PointField_Datatype_FLOAT32:
+    case seerep::PointField_Datatype_DATATYPE_INT32:
+    case seerep::PointField_Datatype_DATATYPE_UINT32:
+    case seerep::PointField_Datatype_DATATYPE_FLOAT32:
       return 4;
-    case seerep::PointField_Datatype_FLOAT64:
+    case seerep::PointField_Datatype_DATATYPE_FLOAT64:
       return 8;
 
     default:
@@ -195,17 +195,17 @@ inline void PointCloud2Modifier::setPointCloud2FieldsByString(int n_fields, ...)
     if (field_name == "xyz")
     {
       // Do x, y and z
-      offset = addPointField(cloud_msg_, "x", 1, seerep::PointField_Datatype_FLOAT32, offset);
-      offset = addPointField(cloud_msg_, "y", 1, seerep::PointField_Datatype_FLOAT32, offset);
-      offset = addPointField(cloud_msg_, "z", 1, seerep::PointField_Datatype_FLOAT32, offset);
-      offset += sizeOfPointField(seerep::PointField_Datatype_FLOAT32);
+      offset = addPointField(cloud_msg_, "x", 1, seerep::PointField_Datatype_DATATYPE_FLOAT32, offset);
+      offset = addPointField(cloud_msg_, "y", 1, seerep::PointField_Datatype_DATATYPE_FLOAT32, offset);
+      offset = addPointField(cloud_msg_, "z", 1, seerep::PointField_Datatype_DATATYPE_FLOAT32, offset);
+      offset += sizeOfPointField(seerep::PointField_Datatype_DATATYPE_FLOAT32);
     }
     else
     {
       if ((field_name == "rgb") || (field_name == "rgba"))
       {
-        offset = addPointField(cloud_msg_, field_name, 1, seerep::PointField_Datatype_FLOAT32, offset);
-        offset += 3 * sizeOfPointField(seerep::PointField_Datatype_FLOAT32);
+        offset = addPointField(cloud_msg_, field_name, 1, seerep::PointField_Datatype_DATATYPE_FLOAT32, offset);
+        offset += 3 * sizeOfPointField(seerep::PointField_Datatype_DATATYPE_FLOAT32);
       }
       else
       {

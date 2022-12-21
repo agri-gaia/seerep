@@ -2,7 +2,7 @@
 #define SEEREP_SERVER_PB_POINT_CLOUD_SERVICE_H_
 
 // seerep
-#include <seerep-com/point-cloud-service.grpc.pb.h>
+#include <seerep-com/point_cloud_service.grpc.pb.h>
 #include <seerep-core-pb/core-pb-pointcloud.h>
 #include <seerep-core/core.h>
 

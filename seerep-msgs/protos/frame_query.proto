@@ -4,5 +4,5 @@ package seerep;
 
 message FrameQuery
 {
-  string projectuuid = 1;
+  string project_uuid = 1;
 }

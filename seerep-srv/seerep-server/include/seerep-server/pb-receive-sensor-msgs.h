@@ -9,7 +9,7 @@
 #include <grpcpp/server_context.h>
 
 // seerep
-#include <seerep-com/transfer-sensor-msgs.grpc.pb.h>
+#include <seerep-com/transfer_sensor_msgs.grpc.pb.h>
 #include <seerep-core/core.h>
 
 // logging

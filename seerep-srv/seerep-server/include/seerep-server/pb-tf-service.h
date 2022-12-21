@@ -2,7 +2,7 @@
 #define SEEREP_SERVER_TF_SERVICE_H_
 
 // seerep
-#include <seerep-com/tf-service.grpc.pb.h>
+#include <seerep-com/tf_service.grpc.pb.h>
 #include <seerep-core-pb/core-pb-tf.h>
 #include <seerep-core/core.h>
 

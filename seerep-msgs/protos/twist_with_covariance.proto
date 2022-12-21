@@ -16,5 +16,5 @@ message TwistWithCovariance
    * The orientation parameters use a fixed-axis representation.
    * In order, the parameters are: x, y, z, roll (x), pitch (y), yaw (z)
    */
-  repeated double covariance = 2;
+  repeated double covariances = 2;
 }

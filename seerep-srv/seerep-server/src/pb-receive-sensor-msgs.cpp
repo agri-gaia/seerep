@@ -11,7 +11,7 @@ grpc::Status PbReceiveSensorMsgs::TransferHeader(grpc::ServerContext* context, c
 {
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "received header... ";
   response->set_message("okidoki");
-  response->set_transmission_state(seerep::ServerResponse::SUCCESS);
+  response->set_transmission_state(seerep::ServerResponse::TRANSMISSION_STATE_SUCCESS);
   return grpc::Status::OK;
 }
 
@@ -21,7 +21,7 @@ grpc::Status PbReceiveSensorMsgs::TransferPoint(grpc::ServerContext* context, co
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "received point... ";
   // hdf5_io.writePoint("test_id", *point);
   response->set_message("okidoki");
-  response->set_transmission_state(seerep::ServerResponse::SUCCESS);
+  response->set_transmission_state(seerep::ServerResponse::TRANSMISSION_STATE_SUCCESS);
   return grpc::Status::OK;
 }
 
@@ -31,7 +31,7 @@ grpc::Status PbReceiveSensorMsgs::TransferQuaternion(grpc::ServerContext* contex
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "received quaternion... ";
   // hdf5_io.writeQuaternion("test_id", *quaternion);
   response->set_message("okidoki");
-  response->set_transmission_state(seerep::ServerResponse::SUCCESS);
+  response->set_transmission_state(seerep::ServerResponse::TRANSMISSION_STATE_SUCCESS);
   return grpc::Status::OK;
 }
 
@@ -41,7 +41,7 @@ grpc::Status PbReceiveSensorMsgs::TransferPose(grpc::ServerContext* context, con
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "received pose... ";
   // hdf5_io.writePose("test_id", *pose);
   response->set_message("okidoki");
-  response->set_transmission_state(seerep::ServerResponse::SUCCESS);
+  response->set_transmission_state(seerep::ServerResponse::TRANSMISSION_STATE_SUCCESS);
   return grpc::Status::OK;
 }
 
@@ -51,7 +51,7 @@ grpc::Status PbReceiveSensorMsgs::TransferPoseStamped(grpc::ServerContext* conte
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "received pose_stamped... ";
   // hdf5_io.writePoseStamped("test_id", *pose);
   response->set_message("okidoki");
-  response->set_transmission_state(seerep::ServerResponse::SUCCESS);
+  response->set_transmission_state(seerep::ServerResponse::TRANSMISSION_STATE_SUCCESS);
   return grpc::Status::OK;
 }
 

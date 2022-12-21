@@ -2,10 +2,10 @@ syntax = "proto3";
 
 package seerep;
 
-import "point_field.proto";
+import "bounding_box_labeled_with_category.proto";
 import "header.proto";
-import "boundingbox_labeled_with_category.proto";
 import "labels_with_instance_with_category.proto";
+import "point_field.proto";
 
 /**
  * This message holds a collection of N-dimensional points, which may
@@ -39,8 +39,8 @@ message PointCloud2
   bool is_dense = 9;
 
   // (optional) labels for the complete image
-  repeated LabelsWithInstanceWithCategory labels_general = 10;
+  repeated LabelsWithInstanceWithCategory general_labels = 10;
 
   // (optional) bounding box based labels
-  repeated BoundingBoxLabeledWithCategory labels_bb = 11;
+  repeated BoundingBoxLabeledWithCategory bounding_box_labels = 11;
 }

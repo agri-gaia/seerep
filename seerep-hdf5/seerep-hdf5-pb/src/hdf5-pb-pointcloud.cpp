@@ -58,8 +58,9 @@ std::shared_ptr<HighFive::Group> Hdf5PbPointCloud::writePointCloud2(const std::s
   writePointFieldAttributes(*data_group_ptr, pointcloud2.fields());
   writeHeaderAttributes(*data_group_ptr, pointcloud2.header());
 
-  writeLabelsGeneral(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, uuid, pointcloud2.labels_general());
-  writeBoundingBoxLabeled(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, uuid, pointcloud2.labels_bb());
+  writeLabelsGeneral(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, uuid, pointcloud2.general_labels());
+  writeBoundingBoxLabeled(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, uuid,
+                          pointcloud2.bounding_box_labels());
 
   CloudInfo info = getCloudInfo(pointcloud2);
 
@@ -246,28 +247,28 @@ void Hdf5PbPointCloud::writeOtherFields(const std::string& uuid, const seerep::P
     const auto& field = field_map_entry.second;
     switch (field.datatype())
     {
-      case seerep::PointField::INT8:
+      case seerep::PointField::DATATYPE_INT8:
         write<int8_t>(uuid, field.name(), cloud, field.count());
         break;
-      case seerep::PointField::UINT8:
+      case seerep::PointField::DATATYPE_UINT8:
         write<uint8_t>(uuid, field.name(), cloud, field.count());
         break;
-      case seerep::PointField::INT16:
+      case seerep::PointField::DATATYPE_INT16:
         write<int16_t>(uuid, field.name(), cloud, field.count());
         break;
-      case seerep::PointField::UINT16:
+      case seerep::PointField::DATATYPE_UINT16:
         write<uint16_t>(uuid, field.name(), cloud, field.count());
         break;
-      case seerep::PointField::INT32:
+      case seerep::PointField::DATATYPE_INT32:
         write<int32_t>(uuid, field.name(), cloud, field.count());
         break;
-      case seerep::PointField::UINT32:
+      case seerep::PointField::DATATYPE_UINT32:
         write<uint32_t>(uuid, field.name(), cloud, field.count());
         break;
-      case seerep::PointField::FLOAT32:
+      case seerep::PointField::DATATYPE_FLOAT32:
         write<float>(uuid, field.name(), cloud, field.count());
         break;
-      case seerep::PointField::FLOAT64:
+      case seerep::PointField::DATATYPE_FLOAT64:
         write<double>(uuid, field.name(), cloud, field.count());
         break;
       default:
@@ -473,28 +474,28 @@ void Hdf5PbPointCloud::readOtherFields(const std::string& uuid, seerep::PointClo
     const auto& field = field_map_entry.second;
     switch (field.datatype())
     {
-      case seerep::PointField::INT8:
+      case seerep::PointField::DATATYPE_INT8:
         read<int8_t>(uuid, field.name(), cloud, field.count());
         break;
-      case seerep::PointField::UINT8:
+      case seerep::PointField::DATATYPE_UINT8:
         read<uint8_t>(uuid, field.name(), cloud, field.count());
         break;
-      case seerep::PointField::INT16:
+      case seerep::PointField::DATATYPE_INT16:
         read<int16_t>(uuid, field.name(), cloud, field.count());
         break;
-      case seerep::PointField::UINT16:
+      case seerep::PointField::DATATYPE_UINT16:
         read<uint16_t>(uuid, field.name(), cloud, field.count());
         break;
-      case seerep::PointField::INT32:
+      case seerep::PointField::DATATYPE_INT32:
         read<int32_t>(uuid, field.name(), cloud, field.count());
         break;
-      case seerep::PointField::UINT32:
+      case seerep::PointField::DATATYPE_UINT32:
         read<uint32_t>(uuid, field.name(), cloud, field.count());
         break;
-      case seerep::PointField::FLOAT32:
+      case seerep::PointField::DATATYPE_FLOAT32:
         read<float>(uuid, field.name(), cloud, field.count());
         break;
-      case seerep::PointField::FLOAT64:
+      case seerep::PointField::DATATYPE_FLOAT64:
         read<double>(uuid, field.name(), cloud, field.count());
         break;
       default:

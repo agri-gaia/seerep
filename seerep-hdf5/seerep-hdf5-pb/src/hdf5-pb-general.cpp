@@ -18,19 +18,19 @@ void Hdf5PbGeneral::writeBoundingBoxLabeled(
   {
     for (auto& boundingboxLabeled : boundingboxLabeledWithCategory)
     {
-      if (!boundingboxLabeled.boundingboxlabeled().empty())
+      if (!boundingboxLabeled.labeled_bounding_boxes().empty())
       {
         std::vector<std::string> labels;
         std::vector<std::vector<double>> boundingBoxes;
         std::vector<std::string> instances;
-        for (auto label : boundingboxLabeled.boundingboxlabeled())
+        for (auto label : boundingboxLabeled.labeled_bounding_boxes())
         {
-          labels.push_back(label.labelwithinstance().label());
-          std::vector<double> box{ label.boundingbox().point_min().x(), label.boundingbox().point_min().y(),
-                                   label.boundingbox().point_min().z(), label.boundingbox().point_max().x(),
-                                   label.boundingbox().point_max().y(), label.boundingbox().point_max().z() };
+          labels.push_back(label.label_with_instance().label());
+          std::vector<double> box{ label.bounding_box().point_min().x(), label.bounding_box().point_min().y(),
+                                   label.bounding_box().point_min().z(), label.bounding_box().point_max().x(),
+                                   label.bounding_box().point_max().y(), label.bounding_box().point_max().z() };
           boundingBoxes.push_back(box);
-          instances.push_back(label.labelwithinstance().instanceuuid());
+          instances.push_back(label.label_with_instance().instance_uuid());
         }
 
         HighFive::DataSet datasetLabels = m_file->createDataSet<std::string>(
@@ -63,19 +63,19 @@ void Hdf5PbGeneral::writeBoundingBox2DLabeled(
   {
     for (auto& boundingbox2DLabeled : boundingbox2DLabeledWithCategory)
     {
-      if (!boundingbox2DLabeled.boundingbox2dlabeled().empty())
+      if (!boundingbox2DLabeled.labeled_2d_bounding_boxes().empty())
       {
         std::vector<std::string> labels;
         std::vector<std::vector<double>> boundingBoxes;
         std::vector<std::string> instances;
-        for (auto label : boundingbox2DLabeled.boundingbox2dlabeled())
+        for (auto label : boundingbox2DLabeled.labeled_2d_bounding_boxes())
         {
-          labels.push_back(label.labelwithinstance().label());
-          std::vector<double> box{ label.boundingbox().point_min().x(), label.boundingbox().point_min().y(),
-                                   label.boundingbox().point_max().x(), label.boundingbox().point_max().y() };
+          labels.push_back(label.label_with_instance().label());
+          std::vector<double> box{ label.bounding_box().point_min().x(), label.bounding_box().point_min().y(),
+                                   label.bounding_box().point_max().x(), label.bounding_box().point_max().y() };
           boundingBoxes.push_back(box);
 
-          instances.push_back(label.labelwithinstance().instanceuuid());
+          instances.push_back(label.label_with_instance().instance_uuid());
         }
 
         HighFive::DataSet datasetLabels = m_file->createDataSet<std::string>(
@@ -118,14 +118,14 @@ Hdf5PbGeneral::readBoundingBox2DLabeled(const std::string& datatypeGroup, const 
     resultCat.set_category(labelCategories.at(iCategory));
     for (size_t i = 0; i < labelsPerCategory.at(iCategory).size(); i++)
     {
-      auto bblabeled = resultCat.add_boundingbox2dlabeled();
-      bblabeled->mutable_labelwithinstance()->set_label(labelsPerCategory.at(iCategory).at(i));
-      bblabeled->mutable_labelwithinstance()->set_instanceuuid(instancesPerCategory.at(iCategory).at(i));
+      auto bblabeled = resultCat.add_labeled_2d_bounding_boxes();
+      bblabeled->mutable_label_with_instance()->set_label(labelsPerCategory.at(iCategory).at(i));
+      bblabeled->mutable_label_with_instance()->set_instance_uuid(instancesPerCategory.at(iCategory).at(i));
 
-      bblabeled->mutable_boundingbox()->mutable_point_min()->set_x(boundingBoxesPerCategory.at(iCategory).at(i).at(0));
-      bblabeled->mutable_boundingbox()->mutable_point_min()->set_y(boundingBoxesPerCategory.at(iCategory).at(i).at(1));
-      bblabeled->mutable_boundingbox()->mutable_point_max()->set_x(boundingBoxesPerCategory.at(iCategory).at(i).at(2));
-      bblabeled->mutable_boundingbox()->mutable_point_max()->set_y(boundingBoxesPerCategory.at(iCategory).at(i).at(3));
+      bblabeled->mutable_bounding_box()->mutable_point_min()->set_x(boundingBoxesPerCategory.at(iCategory).at(i).at(0));
+      bblabeled->mutable_bounding_box()->mutable_point_min()->set_y(boundingBoxesPerCategory.at(iCategory).at(i).at(1));
+      bblabeled->mutable_bounding_box()->mutable_point_max()->set_x(boundingBoxesPerCategory.at(iCategory).at(i).at(2));
+      bblabeled->mutable_bounding_box()->mutable_point_max()->set_y(boundingBoxesPerCategory.at(iCategory).at(i).at(3));
     }
     result.Add(std::move(resultCat));
   }
@@ -144,11 +144,11 @@ void Hdf5PbGeneral::writeLabelsGeneral(const std::string& datatypeGroup, const s
     {
       std::vector<std::string> labels;
       std::vector<std::string> instances;
-      for (auto& labelWithInstances : labelsWithInstanceOfCategory.labelwithinstance())
+      for (auto& labelWithInstances : labelsWithInstanceOfCategory.label_with_instances())
       {
         labels.push_back(labelWithInstances.label());
 
-        instances.push_back(labelWithInstances.instanceuuid());
+        instances.push_back(labelWithInstances.instance_uuid());
       }
       seerep_core_msgs::LabelsWithInstanceWithCategory labelsWithCategory;
       labelsWithCategory.category = labelsWithInstanceOfCategory.category();
@@ -176,9 +176,9 @@ Hdf5PbGeneral::readLabelsGeneral(const std::string& datatypeGroup, const std::st
     resultCat.set_category(labelCategoriesGeneral.at(iCategory));
     for (size_t i = 0; i < labelsWithInstancesGeneralPerCategory.at(iCategory).size(); i++)
     {
-      auto labelWithInstance = resultCat.add_labelwithinstance();
+      auto labelWithInstance = resultCat.add_label_with_instances();
       labelWithInstance->set_label(labelsWithInstancesGeneralPerCategory.at(iCategory).at(i).label);
-      labelWithInstance->set_instanceuuid(
+      labelWithInstance->set_instance_uuid(
           boost::lexical_cast<std::string>(labelsWithInstancesGeneralPerCategory.at(iCategory).at(i).uuidInstance));
     }
     result.Add(std::move(resultCat));

@@ -14,14 +14,14 @@ grpc::Status PbMetaOperations::CreateProject(grpc::ServerContext* context, const
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "create new project... ";
     seerep_core_msgs::ProjectInfo projectInfo;
-    projectInfo.frameId = request->mapframeid();
+    projectInfo.frameId = request->map_frame_id();
     projectInfo.name = request->name();
     projectInfo.uuid = boost::uuids::random_generator()();
     seerepCore->createProject(projectInfo);
 
     response->set_name(projectInfo.name);
     response->set_uuid(boost::lexical_cast<std::string>(projectInfo.uuid));
-    response->set_frameid(projectInfo.frameId);
+    response->set_frame_id(projectInfo.frameId);
   }
   catch (const std::exception& e)
   {
@@ -56,7 +56,7 @@ grpc::Status PbMetaOperations::GetProjects(grpc::ServerContext* context, const g
       auto responseProjectInfo = response->add_projects();
       responseProjectInfo->set_name(projectInfo.name);
       responseProjectInfo->set_uuid(boost::lexical_cast<std::string>(projectInfo.uuid));
-      responseProjectInfo->set_frameid(projectInfo.frameId);
+      responseProjectInfo->set_frame_id(projectInfo.frameId);
     }
   }
   catch (const std::exception& e)

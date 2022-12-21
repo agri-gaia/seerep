@@ -12,8 +12,8 @@
 #include <grpcpp/security/credentials.h>
 
 // seerep
-#include <seerep-com/image-service.grpc.pb.h>
-#include <seerep-com/point-cloud-service.grpc.pb.h>
+#include <seerep-com/image_service.grpc.pb.h>
+#include <seerep-com/point_cloud_service.grpc.pb.h>
 #include <seerep_ros_conversions_pb/conversions.h>
 
 // ros

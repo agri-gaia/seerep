@@ -104,3 +104,8 @@ repos:
     rev: 0.19.2
     hooks:
       - id: check-github-workflows
+
+  - repo: https://github.com/yoheimuta/protolint
+    rev: v0.42.2
+    hooks:
+      - id: protolint

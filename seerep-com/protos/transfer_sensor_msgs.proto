@@ -4,10 +4,9 @@ package seerep;
 
 import "header.proto";
 import "point.proto";
-import "pose_stamped.proto";
 import "pose.proto";
+import "pose_stamped.proto";
 import "quaternion.proto";
-
 import "server_response.proto";
 
 service TransferSensorMsgs

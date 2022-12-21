@@ -85,7 +85,7 @@ void createLabelWithInstance(seerep::LabelWithInstance& labelWithInstance)
 {
   boost::uuids::uuid instanceUUID = boost::uuids::random_generator()();
   labelWithInstance.set_label("arbitrary_instance_label");
-  labelWithInstance.set_instanceuuid(boost::lexical_cast<std::string>(instanceUUID));
+  labelWithInstance.set_instance_uuid(boost::lexical_cast<std::string>(instanceUUID));
 }
 
 /**
@@ -96,15 +96,15 @@ void createBB2DLabeled(seerep::Image& image)
 {
   for (size_t iCategory = 0; iCategory < 3; iCategory++)
   {
-    auto boundingBox2DLabeledWithCategory = image.add_labels_bb();
+    auto boundingBox2DLabeledWithCategory = image.add_labeled_bounding_boxes();
     boundingBox2DLabeledWithCategory->set_category("category" + std::to_string(iCategory));
     for (size_t i = 0; i < 10; i++)
     {
-      auto bbLabeled = boundingBox2DLabeledWithCategory->add_boundingbox2dlabeled();
-      createPoint(0.01 + i / 10, 0.02 + i / 10, *bbLabeled->mutable_boundingbox()->mutable_point_min());
-      createPoint(0.03 + i / 10, 0.04 + i / 10, *bbLabeled->mutable_boundingbox()->mutable_point_max());
+      auto bbLabeled = boundingBox2DLabeledWithCategory->add_labeled_2d_bounding_boxes();
+      createPoint(0.01 + i / 10, 0.02 + i / 10, *bbLabeled->mutable_bounding_box()->mutable_point_min());
+      createPoint(0.03 + i / 10, 0.04 + i / 10, *bbLabeled->mutable_bounding_box()->mutable_point_max());
 
-      createLabelWithInstance(*bbLabeled->mutable_labelwithinstance());
+      createLabelWithInstance(*bbLabeled->mutable_label_with_instance());
     }
   }
 }
@@ -117,11 +117,11 @@ void createLabelsGeneral(seerep::Image& image)
 {
   for (size_t iCategory = 0; iCategory < 3; iCategory++)
   {
-    auto labelsGeneral = image.add_labels_general();
+    auto labelsGeneral = image.add_general_labels();
     labelsGeneral->set_category("category" + std::to_string(iCategory));
     for (size_t i = 0; i < 10; i++)
     {
-      createLabelWithInstance(*labelsGeneral->add_labelwithinstance());
+      createLabelWithInstance(*labelsGeneral->add_label_with_instances());
     }
   }
 }
@@ -284,16 +284,16 @@ TEST_F(pbWriteLoadTest, testImageData)
 void testLabelWithInstance(const seerep::LabelWithInstance& readInstance, const seerep::LabelWithInstance& writeInstance)
 {
   EXPECT_STREQ(readInstance.label().c_str(), writeInstance.label().c_str());
-  EXPECT_STREQ(readInstance.instanceuuid().c_str(), writeInstance.instanceuuid().c_str());
+  EXPECT_STREQ(readInstance.instance_uuid().c_str(), writeInstance.instance_uuid().c_str());
 }
 
 void testLabelsWithInstanceWithCategory(const seerep::LabelsWithInstanceWithCategory& readInstance,
                                         const seerep::LabelsWithInstanceWithCategory& writeInstance)
 {
   EXPECT_STREQ(readInstance.category().c_str(), writeInstance.category().c_str());
-  for (int i = 0; i < readInstance.labelwithinstance_size(); i++)
+  for (int i = 0; i < readInstance.label_with_instances_size(); i++)
   {
-    testLabelWithInstance(readInstance.labelwithinstance().Get(i), writeInstance.labelwithinstance().Get(i));
+    testLabelWithInstance(readInstance.label_with_instances().Get(i), writeInstance.label_with_instances().Get(i));
   }
 }
 
@@ -304,10 +304,10 @@ void testLabelsWithInstanceWithCategory(const seerep::LabelsWithInstanceWithCate
  * */
 TEST_F(pbWriteLoadTest, testGeneralLabels)
 {
-  ASSERT_EQ(readImage.labels_general().size(), writeImage.labels_general().size());
-  for (int i = 0; i < readImage.labels_general().size(); i++)
+  ASSERT_EQ(readImage.general_labels().size(), writeImage.general_labels().size());
+  for (int i = 0; i < readImage.general_labels().size(); i++)
   {
-    testLabelsWithInstanceWithCategory(readImage.labels_general().Get(i), writeImage.labels_general().Get(i));
+    testLabelsWithInstanceWithCategory(readImage.general_labels().Get(i), writeImage.general_labels().Get(i));
   }
 }
 
@@ -329,19 +329,22 @@ void testEqualPoints(const seerep::Point2D& readPoint, const seerep::Point2D& wr
  * */
 TEST_F(pbWriteLoadTest, testBoundingBox2DLabeled)
 {
-  for (int iCategory = 0; iCategory < readImage.labels_bb_size(); iCategory++)
+  for (int iCategory = 0; iCategory < readImage.labeled_bounding_boxes_size(); iCategory++)
   {
-    ASSERT_EQ(readImage.labels_bb().size(), writeImage.labels_bb().size());
-    EXPECT_STREQ(readImage.labels_bb().at(iCategory).category().c_str(),
-                 writeImage.labels_bb().at(iCategory).category().c_str());
-    for (int i = 0; i < readImage.labels_bb().at(iCategory).boundingbox2dlabeled_size(); i++)
+    ASSERT_EQ(readImage.labeled_bounding_boxes_size(), writeImage.labeled_bounding_boxes_size());
+    EXPECT_STREQ(readImage.labeled_bounding_boxes().at(iCategory).category().c_str(),
+                 writeImage.labeled_bounding_boxes().at(iCategory).category().c_str());
+    for (int i = 0; i < readImage.labeled_bounding_boxes().at(iCategory).labeled_2d_bounding_boxes_size(); i++)
     {
-      testLabelWithInstance(readImage.labels_bb().at(iCategory).boundingbox2dlabeled().Get(i).labelwithinstance(),
-                            writeImage.labels_bb().at(iCategory).boundingbox2dlabeled().Get(i).labelwithinstance());
-      testEqualPoints(readImage.labels_bb().at(iCategory).boundingbox2dlabeled().Get(i).boundingbox().point_min(),
-                      writeImage.labels_bb().at(iCategory).boundingbox2dlabeled().Get(i).boundingbox().point_min());
-      testEqualPoints(readImage.labels_bb().at(iCategory).boundingbox2dlabeled().Get(i).boundingbox().point_max(),
-                      writeImage.labels_bb().at(iCategory).boundingbox2dlabeled().Get(i).boundingbox().point_max());
+      testLabelWithInstance(
+          readImage.labeled_bounding_boxes().at(iCategory).labeled_2d_bounding_boxes().Get(i).label_with_instance(),
+          writeImage.labeled_bounding_boxes().at(iCategory).labeled_2d_bounding_boxes().Get(i).label_with_instance());
+      testEqualPoints(
+          readImage.labeled_bounding_boxes().at(iCategory).labeled_2d_bounding_boxes().Get(i).bounding_box().point_min(),
+          writeImage.labeled_bounding_boxes().at(iCategory).labeled_2d_bounding_boxes().Get(i).bounding_box().point_min());
+      testEqualPoints(
+          readImage.labeled_bounding_boxes().at(iCategory).labeled_2d_bounding_boxes().Get(i).bounding_box().point_max(),
+          writeImage.labeled_bounding_boxes().at(iCategory).labeled_2d_bounding_boxes().Get(i).bounding_box().point_max());
     }
   }
 }

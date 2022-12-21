@@ -15,14 +15,14 @@ set(Boost_USE_STATIC_RUNTIME OFF)
 find_package(Boost REQUIRED)
 
 set(MY_PROTO_FILES
-    protos/boundingbox_labeled.proto
-    protos/boundingbox_labeled_with_category.proto
-    protos/boundingbox_stamped.proto
-    protos/boundingbox.proto
-    protos/boundingbox2d_labeled.proto
-    protos/boundingbox2d_labeled_with_category.proto
-    protos/boundingbox2d_stamped.proto
-    protos/boundingbox2d.proto
+    protos/bounding_box_labeled.proto
+    protos/bounding_box_labeled_with_category.proto
+    protos/bounding_box_stamped.proto
+    protos/bounding_box.proto
+    protos/bounding_box_2d_labeled.proto
+    protos/bounding_box_2d_labeled_with_category.proto
+    protos/bounding_box_2d_stamped.proto
+    protos/bounding_box_2d.proto
     protos/frame_infos.proto
     protos/frame_query.proto
     protos/header.proto
@@ -34,20 +34,20 @@ set(MY_PROTO_FILES
     protos/point_field.proto
     protos/point_stamped.proto
     protos/point.proto
-    protos/point2d.proto
+    protos/point_2d.proto
     protos/polygon_stamped.proto
     protos/polygon.proto
     protos/pose_stamped.proto
     protos/pose.proto
     protos/project_info.proto
     protos/project_infos.proto
-    protos/projectCreation.proto
+    protos/project_creation.proto
     protos/quaternion_stamped.proto
     protos/quaternion.proto
     protos/query.proto
     protos/server_response.proto
     protos/time_interval.proto
-    protos/timestamp.proto
+    protos/time_stamp.proto
     protos/transform_stamped.proto
     protos/transform_stamped_query.proto
     protos/transform.proto

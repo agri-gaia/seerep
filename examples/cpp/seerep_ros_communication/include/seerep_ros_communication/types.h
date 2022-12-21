@@ -6,11 +6,11 @@
 #include <string>
 
 // seerep-pb
-#include <seerep-com/image-service.grpc.pb.h>
-#include <seerep-com/meta-operations.grpc.pb.h>
-#include <seerep-com/point-cloud-service.grpc.pb.h>
-#include <seerep-com/tf-service.grpc.pb.h>
-#include <seerep-com/transfer-sensor-msgs.grpc.pb.h>
+#include <seerep-com/image_service.grpc.pb.h>
+#include <seerep-com/meta_operations.grpc.pb.h>
+#include <seerep-com/point_cloud_service.grpc.pb.h>
+#include <seerep-com/tf_service.grpc.pb.h>
+#include <seerep-com/transfer_sensor_msgs.grpc.pb.h>
 
 // seerep-fb
 #include <seerep-com/image_service.grpc.fb.h>

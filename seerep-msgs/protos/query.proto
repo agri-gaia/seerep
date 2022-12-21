@@ -2,19 +2,19 @@ syntax = "proto3";
 
 package seerep;
 
-import "time_interval.proto";
-import "boundingbox_stamped.proto";
+import "bounding_box_stamped.proto";
 import "labels_with_category.proto";
+import "time_interval.proto";
 
 message Query
 {
-  BoundingboxStamped boundingboxStamped = 1;
-  TimeInterval timeinterval = 2;
-  repeated LabelsWithCategory labelsWithCategory = 3;
-  bool mustHaveAllLabels = 4;
-  repeated string projectuuid = 5;
-  repeated string instanceuuid = 6;
-  repeated string datauuid = 7;
-  bool withoutdata = 8;
-  uint32 maxNumData = 9;
+  BoundingboxStamped bounding_box_stamped = 1;
+  TimeInterval time_interval = 2;
+  repeated LabelsWithCategory categorized_labels = 3;
+  bool must_have_all_labels = 4;
+  repeated string project_uuids = 5;
+  repeated string instance_uuids = 6;
+  repeated string data_uuids = 7;
+  bool without_data = 8;
+  uint32 max_num_data = 9;
 }

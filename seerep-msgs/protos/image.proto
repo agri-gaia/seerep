@@ -2,8 +2,8 @@ syntax = "proto3";
 
 package seerep;
 
+import "bounding_box_2d_labeled_with_category.proto";
 import "header.proto";
-import "boundingbox2d_labeled_with_category.proto";
 import "labels_with_instance_with_category.proto";
 
 /**
@@ -32,10 +32,10 @@ message Image
   // image width, that is, number of columns
   uint32 width = 3;
 
-  /*
-   * Encoding of pixels -- channel meaning, ordering, size, e.g. rgb8, rgba8, bgr8, bgra8, mono8, mono16
-   * see http://docs.ros.org/en/diamondback/api/sensor_msgs/html/image__encodings_8cpp_source.html
-   */
+  // Encoding of pixels -- channel meaning, ordering, size,
+  // e.g. rgb8, rgba8, bgr8, bgra8, mono8, mono16
+  // protolint:disable:next MAX_LINE_LENGTH
+  // see http://docs.ros.org/en/diamondback/api/sensor_msgs/html/image__encodings_8cpp_source.html
   string encoding = 4;
 
   // is this data bigendian?
@@ -49,8 +49,8 @@ message Image
   bytes data = 8;
 
   // (optional) labels for the complete image
-  repeated LabelsWithInstanceWithCategory labels_general = 9;
+  repeated LabelsWithInstanceWithCategory general_labels = 9;
 
   // (optional) bounding box based labels
-  repeated BoundingBox2DLabeledWithCategory labels_bb = 10;
+  repeated BoundingBox2DLabeledWithCategory labeled_bounding_boxes = 10;
 }

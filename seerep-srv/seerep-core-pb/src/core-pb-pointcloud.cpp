@@ -76,29 +76,29 @@ boost::uuids::uuid CorePbPointCloud::addData(const seerep::PointCloud2& pc)
 
   // semantic
   int labelSizeAll = 0;
-  if (!pc.labels_general().empty())
+  if (!pc.general_labels().empty())
   {
-    labelSizeAll += pc.labels_general().size();
+    labelSizeAll += pc.general_labels().size();
   }
-  if (!pc.labels_bb().empty())
+  if (!pc.bounding_box_labels().empty())
   {
-    labelSizeAll += pc.labels_bb().size();
+    labelSizeAll += pc.bounding_box_labels().size();
   }
 
-  if (!pc.labels_general().empty())
+  if (!pc.general_labels().empty())
   {
-    for (auto labelsCategories : pc.labels_general())
+    for (auto labelsCategories : pc.general_labels())
     {
       std::vector<seerep_core_msgs::LabelWithInstance> labelWithInstanceVector;
-      if (!labelsCategories.labelwithinstance().empty())
+      if (!labelsCategories.label_with_instances().empty())
       {
-        for (auto label : labelsCategories.labelwithinstance())
+        for (auto label : labelsCategories.label_with_instances())
         {
           boost::uuids::string_generator gen;
           boost::uuids::uuid uuidInstance;
           try
           {
-            uuidInstance = gen(label.instanceuuid());
+            uuidInstance = gen(label.instance_uuid());
           }
           catch (std::runtime_error const& e)
           {
@@ -114,20 +114,20 @@ boost::uuids::uuid CorePbPointCloud::addData(const seerep::PointCloud2& pc)
     }
   }
 
-  if (!pc.labels_bb().empty())
+  if (!pc.bounding_box_labels().empty())
   {
-    for (auto labelsCategories : pc.labels_bb())
+    for (auto labelsCategories : pc.bounding_box_labels())
     {
       std::vector<seerep_core_msgs::LabelWithInstance> labelWithInstanceVector;
-      if (!labelsCategories.boundingboxlabeled().empty())
+      if (!labelsCategories.labeled_bounding_boxes().empty())
       {
-        for (auto label : labelsCategories.boundingboxlabeled())
+        for (auto label : labelsCategories.labeled_bounding_boxes())
         {
           boost::uuids::string_generator gen;
           boost::uuids::uuid uuidInstance;
           try
           {
-            uuidInstance = gen(label.labelwithinstance().instanceuuid());
+            uuidInstance = gen(label.label_with_instance().instance_uuid());
           }
           catch (std::runtime_error const& e)
           {
@@ -135,7 +135,7 @@ boost::uuids::uuid CorePbPointCloud::addData(const seerep::PointCloud2& pc)
           }
 
           labelWithInstanceVector.push_back(seerep_core_msgs::LabelWithInstance{
-              .label = label.labelwithinstance().label(), .uuidInstance = uuidInstance });
+              .label = label.label_with_instance().label(), .uuidInstance = uuidInstance });
         }
       }
       dataForIndices.labelsWithInstancesWithCategory.emplace(labelsCategories.category().c_str(),

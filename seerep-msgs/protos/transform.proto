@@ -2,8 +2,8 @@ syntax = "proto3";
 
 package seerep;
 
-import "vector3.proto";
 import "quaternion.proto";
+import "vector3.proto";
 
 message Transform
 {

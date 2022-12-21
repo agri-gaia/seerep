@@ -50,20 +50,20 @@ seerep_core_msgs::DatasetIndexable CorePbConversion::fromPb(const seerep::Image&
   dataForIndices.boundingbox.max_corner().set<2>(0);
 
   // semantic
-  if (!img.labels_general().empty())
+  if (!img.general_labels().empty())
   {
-    for (auto labelsCategories : img.labels_general())
+    for (auto labelsCategories : img.general_labels())
     {
       std::vector<seerep_core_msgs::LabelWithInstance> labelWithInstanceVector;
-      if (!labelsCategories.labelwithinstance().empty())
+      if (!labelsCategories.label_with_instances().empty())
       {
-        for (auto label : labelsCategories.labelwithinstance())
+        for (auto label : labelsCategories.label_with_instances())
         {
           boost::uuids::string_generator gen;
           boost::uuids::uuid uuidInstance;
           try
           {
-            uuidInstance = gen(label.instanceuuid());
+            uuidInstance = gen(label.instance_uuid());
           }
           catch (std::runtime_error const& e)
           {
@@ -79,20 +79,20 @@ seerep_core_msgs::DatasetIndexable CorePbConversion::fromPb(const seerep::Image&
     }
   }
 
-  if (!img.labels_bb().empty())
+  if (!img.labeled_bounding_boxes().empty())
   {
-    for (auto labelsCategories : img.labels_bb())
+    for (auto labelsCategories : img.labeled_bounding_boxes())
     {
       std::vector<seerep_core_msgs::LabelWithInstance> labelWithInstanceVector;
-      if (!labelsCategories.boundingbox2dlabeled().empty())
+      if (!labelsCategories.labeled_2d_bounding_boxes().empty())
       {
-        for (auto label : labelsCategories.boundingbox2dlabeled())
+        for (auto label : labelsCategories.labeled_2d_bounding_boxes())
         {
           boost::uuids::string_generator gen;
           boost::uuids::uuid uuidInstance;
           try
           {
-            uuidInstance = gen(label.labelwithinstance().instanceuuid());
+            uuidInstance = gen(label.label_with_instance().instance_uuid());
           }
           catch (std::runtime_error const& e)
           {
@@ -100,7 +100,7 @@ seerep_core_msgs::DatasetIndexable CorePbConversion::fromPb(const seerep::Image&
           }
 
           labelWithInstanceVector.push_back(seerep_core_msgs::LabelWithInstance{
-              .label = label.labelwithinstance().label(), .uuidInstance = uuidInstance });
+              .label = label.label_with_instance().label(), .uuidInstance = uuidInstance });
         }
       }
       dataForIndices.labelsWithInstancesWithCategory.emplace(labelsCategories.category().c_str(),
@@ -127,10 +127,10 @@ seerep_core_msgs::QueryTf CorePbConversion::fromPb(const seerep::TransformStampe
 void CorePbConversion::fromPbProject(const seerep::Query& query, seerep_core_msgs::Query& queryCore)
 {
   boost::uuids::string_generator gen;
-  if (!query.projectuuid().empty())
+  if (!query.project_uuids().empty())
   {
     queryCore.projects = std::vector<boost::uuids::uuid>();
-    for (auto projectuuid : query.projectuuid())
+    for (auto projectuuid : query.project_uuids())
     {
       queryCore.projects.value().push_back(gen(projectuuid));
     }
@@ -139,10 +139,10 @@ void CorePbConversion::fromPbProject(const seerep::Query& query, seerep_core_msg
 
 void CorePbConversion::fromPbLabel(const seerep::Query& query, seerep_core_msgs::Query& queryCore)
 {
-  if (!query.labelswithcategory().empty())
+  if (!query.categorized_labels().empty())
   {
     queryCore.label = std::unordered_map<std::string, std::vector<std::string>>();
-    for (auto labelWithCategory : query.labelswithcategory())
+    for (auto labelWithCategory : query.categorized_labels())
     {
       std::vector<std::string> labels;
       for (auto label : labelWithCategory.labels())
@@ -156,45 +156,45 @@ void CorePbConversion::fromPbLabel(const seerep::Query& query, seerep_core_msgs:
 
 void CorePbConversion::fromPbTime(const seerep::Query& query, seerep_core_msgs::Query& queryCore)
 {
-  if (query.timeinterval().has_time_min() && query.timeinterval().has_time_max())
+  if (query.time_interval().has_time_min() && query.time_interval().has_time_max())
   {
     queryCore.timeinterval = seerep_core_msgs::Timeinterval();
-    queryCore.timeinterval.value().timeMin.seconds = query.timeinterval().time_min().seconds();
-    queryCore.timeinterval.value().timeMax.seconds = query.timeinterval().time_max().seconds();
-    queryCore.timeinterval.value().timeMin.nanos = query.timeinterval().time_min().nanos();
-    queryCore.timeinterval.value().timeMax.nanos = query.timeinterval().time_max().nanos();
+    queryCore.timeinterval.value().timeMin.seconds = query.time_interval().time_min().seconds();
+    queryCore.timeinterval.value().timeMax.seconds = query.time_interval().time_max().seconds();
+    queryCore.timeinterval.value().timeMin.nanos = query.time_interval().time_min().nanos();
+    queryCore.timeinterval.value().timeMax.nanos = query.time_interval().time_max().nanos();
   }
 }
 
 void CorePbConversion::fromPbBoundingBox(const seerep::Query& query, seerep_core_msgs::Query& queryCore)
 {
-  if (query.boundingboxstamped().has_header() && query.boundingboxstamped().has_boundingbox() &&
-      query.boundingboxstamped().boundingbox().has_point_min() &&
-      query.boundingboxstamped().boundingbox().has_point_max())
+  if (query.bounding_box_stamped().has_header() && query.bounding_box_stamped().has_bounding_box() &&
+      query.bounding_box_stamped().bounding_box().has_point_min() &&
+      query.bounding_box_stamped().bounding_box().has_point_max())
   {
-    queryCore.header.frameId = query.boundingboxstamped().header().frame_id();
+    queryCore.header.frameId = query.bounding_box_stamped().header().frame_id();
     queryCore.boundingbox = seerep_core_msgs::AABB();
-    queryCore.boundingbox.value().min_corner().set<0>(query.boundingboxstamped().boundingbox().point_min().x());
-    queryCore.boundingbox.value().min_corner().set<1>(query.boundingboxstamped().boundingbox().point_min().y());
-    queryCore.boundingbox.value().min_corner().set<2>(query.boundingboxstamped().boundingbox().point_min().z());
-    queryCore.boundingbox.value().max_corner().set<0>(query.boundingboxstamped().boundingbox().point_max().x());
-    queryCore.boundingbox.value().max_corner().set<1>(query.boundingboxstamped().boundingbox().point_max().y());
-    queryCore.boundingbox.value().max_corner().set<2>(query.boundingboxstamped().boundingbox().point_max().z());
+    queryCore.boundingbox.value().min_corner().set<0>(query.bounding_box_stamped().bounding_box().point_min().x());
+    queryCore.boundingbox.value().min_corner().set<1>(query.bounding_box_stamped().bounding_box().point_min().y());
+    queryCore.boundingbox.value().min_corner().set<2>(query.bounding_box_stamped().bounding_box().point_min().z());
+    queryCore.boundingbox.value().max_corner().set<0>(query.bounding_box_stamped().bounding_box().point_max().x());
+    queryCore.boundingbox.value().max_corner().set<1>(query.bounding_box_stamped().bounding_box().point_max().y());
+    queryCore.boundingbox.value().max_corner().set<2>(query.bounding_box_stamped().bounding_box().point_max().z());
   }
 }
 
 void CorePbConversion::fromPbMustHaveAllLabels(const seerep::Query& query, seerep_core_msgs::Query& queryCore)
 {
-  queryCore.mustHaveAllLabels = query.musthavealllabels();
+  queryCore.mustHaveAllLabels = query.must_have_all_labels();
 }
 
 void CorePbConversion::fromPbInstance(const seerep::Query& query, seerep_core_msgs::Query& queryCore)
 {
   boost::uuids::string_generator gen;
-  if (!query.instanceuuid().empty())
+  if (!query.instance_uuids().empty())
   {
     queryCore.instances = std::vector<boost::uuids::uuid>();
-    for (auto instance : query.instanceuuid())
+    for (auto instance : query.instance_uuids())
     {
       queryCore.instances.value().push_back(gen(instance));
     }
@@ -204,10 +204,10 @@ void CorePbConversion::fromPbInstance(const seerep::Query& query, seerep_core_ms
 void CorePbConversion::fromPbDataUuids(const seerep::Query& query, seerep_core_msgs::Query& queryCore)
 {
   boost::uuids::string_generator gen;
-  if (!query.datauuid().empty())
+  if (!query.data_uuids().empty())
   {
     queryCore.dataUuids = std::vector<boost::uuids::uuid>();
-    for (auto data : query.datauuid())
+    for (auto data : query.data_uuids())
     {
       queryCore.dataUuids.value().push_back(gen(data));
     }
@@ -216,11 +216,11 @@ void CorePbConversion::fromPbDataUuids(const seerep::Query& query, seerep_core_m
 
 void CorePbConversion::fromPbWithOutData(const seerep::Query& query, seerep_core_msgs::Query& queryCore)
 {
-  queryCore.withoutData = query.withoutdata();
+  queryCore.withoutData = query.without_data();
 }
 
 void CorePbConversion::fromFbQueryMaxNumData(const seerep::Query& query, seerep_core_msgs::Query& queryCore)
 {
-  queryCore.maxNumData = query.maxnumdata();
+  queryCore.maxNumData = query.max_num_data();
 }
 }  // namespace seerep_core_pb

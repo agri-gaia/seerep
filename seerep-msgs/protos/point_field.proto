@@ -11,15 +11,15 @@ message PointField
 
   enum Datatype
   {
-    UNSET = 0;
-    INT8 = 1;
-    UINT8 = 2;
-    INT16 = 3;
-    UINT16 = 4;
-    INT32 = 5;
-    UINT32 = 6;
-    FLOAT32 = 7;
-    FLOAT64 = 8;
+    DATATYPE_UNSET_UNSPECIFIED = 0;
+    DATATYPE_INT8 = 1;
+    DATATYPE_UINT8 = 2;
+    DATATYPE_INT16 = 3;
+    DATATYPE_UINT16 = 4;
+    DATATYPE_INT32 = 5;
+    DATATYPE_UINT32 = 6;
+    DATATYPE_FLOAT32 = 7;
+    DATATYPE_FLOAT64 = 8;
   }
   Datatype datatype = 3;
   // number of elements in the field

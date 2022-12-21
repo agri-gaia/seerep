@@ -12,14 +12,14 @@ grpc::Status PbPointCloudService::GetPointCloud2(grpc::ServerContext* context, c
 {
   (void)context;  // ignore that variable without causing warnings
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
-      << "sending point cloud in bounding box min(" << request->boundingboxstamped().boundingbox().point_min().x()
-      << "/" << request->boundingboxstamped().boundingbox().point_min().y() << "/"
-      << request->boundingboxstamped().boundingbox().point_min().z() << "), max("
-      << request->boundingboxstamped().boundingbox().point_max().x() << "/"
-      << request->boundingboxstamped().boundingbox().point_max().y() << "/"
-      << request->boundingboxstamped().boundingbox().point_max().z() << ")"
-      << " and time interval (" << request->timeinterval().time_min().seconds() << "/"
-      << request->timeinterval().time_max().seconds() << ")";
+      << "sending point cloud in bounding box min(" << request->bounding_box_stamped().bounding_box().point_min().x()
+      << "/" << request->bounding_box_stamped().bounding_box().point_min().y() << "/"
+      << request->bounding_box_stamped().bounding_box().point_min().z() << "), max("
+      << request->bounding_box_stamped().bounding_box().point_max().x() << "/"
+      << request->bounding_box_stamped().bounding_box().point_max().y() << "/"
+      << request->bounding_box_stamped().bounding_box().point_max().z() << ")"
+      << " and time interval (" << request->time_interval().time_min().seconds() << "/"
+      << request->time_interval().time_max().seconds() << ")";
 
   std::vector<seerep::PointCloud2> pointClouds;
   try
@@ -78,7 +78,7 @@ grpc::Status PbPointCloudService::TransferPointCloud2(grpc::ServerContext* conte
       boost::uuids::uuid pointCloudUuid = pointCloudPb->addData(*pointCloud2);
 
       seerep_server_util::createResponsePb(boost::lexical_cast<std::string>(pointCloudUuid),
-                                           seerep::ServerResponse::SUCCESS, response);
+                                           seerep::ServerResponse::TRANSMISSION_STATE_SUCCESS, response);
 
       return grpc::Status::OK;
     }
@@ -88,7 +88,8 @@ grpc::Status PbPointCloudService::TransferPointCloud2(grpc::ServerContext* conte
       // also catching core doesn't have project with uuid error
       BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
 
-      seerep_server_util::createResponsePb(std::string(e.what()), seerep::ServerResponse::FAILURE, response);
+      seerep_server_util::createResponsePb(std::string(e.what()), seerep::ServerResponse::TRANSMISSION_STATE_FAILURE,
+                                           response);
 
       return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
     }
@@ -97,7 +98,8 @@ grpc::Status PbPointCloudService::TransferPointCloud2(grpc::ServerContext* conte
       // specific handling for all exceptions extending std::exception, except
       // std::runtime_error which is handled explicitly
       BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
-      seerep_server_util::createResponsePb(std::string(e.what()), seerep::ServerResponse::FAILURE, response);
+      seerep_server_util::createResponsePb(std::string(e.what()), seerep::ServerResponse::TRANSMISSION_STATE_FAILURE,
+                                           response);
       return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
     }
     catch (...)
@@ -105,14 +107,15 @@ grpc::Status PbPointCloudService::TransferPointCloud2(grpc::ServerContext* conte
       // catch any other errors (that we have no information about)
       std::string msg = "Unknown failure occurred. Possible memory corruption";
       BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
-      seerep_server_util::createResponsePb(msg, seerep::ServerResponse::FAILURE, response);
+      seerep_server_util::createResponsePb(msg, seerep::ServerResponse::TRANSMISSION_STATE_FAILURE, response);
       return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
     }
   }
   else
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning) << "project_uuid is empty!";
-    seerep_server_util::createResponsePb("project_uuid is empty!", seerep::ServerResponse::FAILURE, response);
+    seerep_server_util::createResponsePb("project_uuid is empty!", seerep::ServerResponse::TRANSMISSION_STATE_FAILURE,
+                                         response);
 
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, "project_uuid is empty!");
   }

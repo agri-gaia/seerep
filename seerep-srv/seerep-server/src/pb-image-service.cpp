@@ -12,14 +12,14 @@ grpc::Status PbImageService::GetImage(grpc::ServerContext* context, const seerep
 {
   (void)context;  // ignore that variable without causing warnings
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
-      << "sending images in bounding box min(" << request->boundingboxstamped().boundingbox().point_min().x() << "/"
-      << request->boundingboxstamped().boundingbox().point_min().y() << "/"
-      << request->boundingboxstamped().boundingbox().point_min().z() << "), max("
-      << request->boundingboxstamped().boundingbox().point_max().x() << "/"
-      << request->boundingboxstamped().boundingbox().point_max().y() << "/"
-      << request->boundingboxstamped().boundingbox().point_max().z() << ")"
-      << " and time interval (" << request->timeinterval().time_min().seconds() << "/"
-      << request->timeinterval().time_max().seconds() << ")";
+      << "sending images in bounding box min(" << request->bounding_box_stamped().bounding_box().point_min().x() << "/"
+      << request->bounding_box_stamped().bounding_box().point_min().y() << "/"
+      << request->bounding_box_stamped().bounding_box().point_min().z() << "), max("
+      << request->bounding_box_stamped().bounding_box().point_max().x() << "/"
+      << request->bounding_box_stamped().bounding_box().point_max().y() << "/"
+      << request->bounding_box_stamped().bounding_box().point_max().z() << ")"
+      << " and time interval (" << request->time_interval().time_min().seconds() << "/"
+      << request->time_interval().time_max().seconds() << ")";
 
   std::vector<seerep::Image> images;
   try
@@ -80,8 +80,8 @@ grpc::Status PbImageService::TransferImage(grpc::ServerContext* context, const s
 
       boost::uuids::uuid uuidImg = imagePb->addData(*image);
 
-      seerep_server_util::createResponsePb(boost::lexical_cast<std::string>(uuidImg), seerep::ServerResponse::SUCCESS,
-                                           response);
+      seerep_server_util::createResponsePb(boost::lexical_cast<std::string>(uuidImg),
+                                           seerep::ServerResponse::TRANSMISSION_STATE_SUCCESS, response);
 
       return grpc::Status::OK;
     }
@@ -90,7 +90,8 @@ grpc::Status PbImageService::TransferImage(grpc::ServerContext* context, const s
       // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
       // also catching core doesn't have project with uuid error
       BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
-      seerep_server_util::createResponsePb(std::string(e.what()), seerep::ServerResponse::FAILURE, response);
+      seerep_server_util::createResponsePb(std::string(e.what()), seerep::ServerResponse::TRANSMISSION_STATE_FAILURE,
+                                           response);
 
       return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
     }
@@ -99,7 +100,8 @@ grpc::Status PbImageService::TransferImage(grpc::ServerContext* context, const s
       // specific handling for all exceptions extending std::exception, except
       // std::runtime_error which is handled explicitly
       BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
-      seerep_server_util::createResponsePb(std::string(e.what()), seerep::ServerResponse::FAILURE, response);
+      seerep_server_util::createResponsePb(std::string(e.what()), seerep::ServerResponse::TRANSMISSION_STATE_FAILURE,
+                                           response);
       return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
     }
     catch (...)
@@ -107,14 +109,15 @@ grpc::Status PbImageService::TransferImage(grpc::ServerContext* context, const s
       // catch any other errors (that we have no information about)
       std::string msg = "Unknown failure occurred. Possible memory corruption";
       BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
-      seerep_server_util::createResponsePb(msg, seerep::ServerResponse::FAILURE, response);
+      seerep_server_util::createResponsePb(msg, seerep::ServerResponse::TRANSMISSION_STATE_FAILURE, response);
       return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
     }
   }
   else
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning) << "project_uuid is empty!";
-    seerep_server_util::createResponsePb("project_uuid is empty!", seerep::ServerResponse::FAILURE, response);
+    seerep_server_util::createResponsePb("project_uuid is empty!", seerep::ServerResponse::TRANSMISSION_STATE_FAILURE,
+                                         response);
 
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, "project_uuid is empty!");
   }

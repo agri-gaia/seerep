@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package seerep;
 
-import "point2d.proto";
+import "point_2d.proto";
 
 message Boundingbox2D
 {

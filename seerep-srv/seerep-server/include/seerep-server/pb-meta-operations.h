@@ -2,7 +2,7 @@
 #define SEEREP_SERVER_META_OPERATIONS_H_
 
 // seerep
-#include <seerep-com/meta-operations.grpc.pb.h>
+#include <seerep-com/meta_operations.grpc.pb.h>
 #include <seerep-core/core.h>
 
 #include "util.hpp"

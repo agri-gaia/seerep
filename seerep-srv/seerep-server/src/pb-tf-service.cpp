@@ -24,7 +24,8 @@ grpc::Status PbTfService::TransferTransformStamped(grpc::ServerContext* context,
 
       tfPb->addData(*transform);
 
-      seerep_server_util::createResponsePb("added transform", seerep::ServerResponse::SUCCESS, response);
+      seerep_server_util::createResponsePb("added transform", seerep::ServerResponse::TRANSMISSION_STATE_SUCCESS,
+                                           response);
 
       return grpc::Status::OK;
     }
@@ -33,7 +34,8 @@ grpc::Status PbTfService::TransferTransformStamped(grpc::ServerContext* context,
       // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
       // also catching core doesn't have project with uuid error
       BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
-      seerep_server_util::createResponsePb(std::string(e.what()), seerep::ServerResponse::FAILURE, response);
+      seerep_server_util::createResponsePb(std::string(e.what()), seerep::ServerResponse::TRANSMISSION_STATE_FAILURE,
+                                           response);
 
       return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
     }
@@ -42,7 +44,8 @@ grpc::Status PbTfService::TransferTransformStamped(grpc::ServerContext* context,
       // specific handling for all exceptions extending std::exception, except
       // std::runtime_error which is handled explicitly
       BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
-      seerep_server_util::createResponsePb(std::string(e.what()), seerep::ServerResponse::FAILURE, response);
+      seerep_server_util::createResponsePb(std::string(e.what()), seerep::ServerResponse::TRANSMISSION_STATE_FAILURE,
+                                           response);
       return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
     }
     catch (...)
@@ -50,14 +53,15 @@ grpc::Status PbTfService::TransferTransformStamped(grpc::ServerContext* context,
       // catch any other errors (that we have no information about)
       std::string msg = "Unknown failure occurred. Possible memory corruption";
       BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
-      seerep_server_util::createResponsePb(msg, seerep::ServerResponse::FAILURE, response);
+      seerep_server_util::createResponsePb(msg, seerep::ServerResponse::TRANSMISSION_STATE_FAILURE, response);
       return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
     }
   }
   else
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning) << "project_uuid is empty!";
-    seerep_server_util::createResponsePb("project_uuid is empty!", seerep::ServerResponse::FAILURE, response);
+    seerep_server_util::createResponsePb("project_uuid is empty!", seerep::ServerResponse::TRANSMISSION_STATE_FAILURE,
+                                         response);
 
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, "project_uuid is empty!");
   }
@@ -71,7 +75,7 @@ grpc::Status PbTfService::GetFrames(grpc::ServerContext* context, const seerep::
   try
   {
     boost::uuids::string_generator gen;
-    uuid = gen(frameQuery->projectuuid());
+    uuid = gen(frameQuery->project_uuid());
 
     for (auto framename : tfPb->getFrames(uuid))
     {

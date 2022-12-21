@@ -121,7 +121,7 @@ std::string TransferSensorMsgs::createProject(const std::string& projectname, co
 
   seerep::ProjectCreation projectcreation;
   *projectcreation.mutable_name() = projectname;
-  *projectcreation.mutable_mapframeid() = mapFrame;
+  *projectcreation.mutable_map_frame_id() = mapFrame;
 
   grpc::Status status = stubMeta->CreateProject(&context, projectcreation, &response);
 

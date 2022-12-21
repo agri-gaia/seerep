@@ -2,10 +2,10 @@ syntax = "proto3";
 
 package seerep;
 
-import "boundingbox2d_labeled.proto";
+import "bounding_box_2d_labeled.proto";
 
 message BoundingBox2DLabeledWithCategory
 {
   string category = 1;
-  repeated BoundingBox2DLabeled boundingBox2DLabeled = 2;
+  repeated BoundingBox2DLabeled labeled_2d_bounding_boxes = 2;
 }

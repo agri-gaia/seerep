@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package seerep;
 
-import "timestamp.proto";
+import "time_stamp.proto";
 
 /**
  * Standard metadata for higher-level stamped data types.

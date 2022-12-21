@@ -3,12 +3,12 @@ syntax = "proto3";
 package seerep;
 
 import "header.proto";
-import "point.proto";
 import "labels_with_instance_with_category.proto";
+import "point.proto";
 
 message PointStamped
 {
   Header header = 1;
   Point point = 2;
-  repeated LabelsWithInstanceWithCategory labels_general = 3;
+  repeated LabelsWithInstanceWithCategory labels_generals = 3;
 }

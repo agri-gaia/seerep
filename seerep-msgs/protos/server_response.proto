@@ -13,11 +13,12 @@ message ServerResponse
 
   string message = 3;
 
-  enum TRANSMISSION_STATE
+  enum TransmissionState
   {
-    SUCCESS = 0;
-    FAILURE = 1;
+    TRANSMISSION_STATE_UNSPECIFIED = 0;
+    TRANSMISSION_STATE_SUCCESS = 1;
+    TRANSMISSION_STATE_FAILURE = 2;
   }
 
-  TRANSMISSION_STATE transmission_state = 4;
+  TransmissionState transmission_state = 4;
 }

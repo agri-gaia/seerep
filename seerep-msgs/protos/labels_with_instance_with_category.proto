@@ -7,5 +7,5 @@ import "label_with_instance.proto";
 message LabelsWithInstanceWithCategory
 {
   string category = 1;
-  repeated LabelWithInstance labelWithInstance = 2;
+  repeated LabelWithInstance label_with_instances = 2;
 }

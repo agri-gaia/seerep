@@ -5,5 +5,5 @@ package seerep;
 message LabelWithInstance
 {
   string label = 1;
-  string instanceUuid = 2;
+  string instance_uuid = 2;
 }

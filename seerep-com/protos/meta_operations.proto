@@ -4,9 +4,9 @@ package seerep;
 
 import "google/protobuf/empty.proto";
 
+import "project_creation.proto";
 import "project_info.proto";
 import "project_infos.proto";
-import "projectCreation.proto";
 
 service MetaOperations
 {

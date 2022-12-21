@@ -3,7 +3,7 @@ syntax = "proto3";
 package seerep;
 
 import "header.proto";
-import "timestamp.proto";
+import "time_stamp.proto";
 
 message TimeInterval
 {

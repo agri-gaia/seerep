@@ -2,11 +2,11 @@ syntax = "proto3";
 
 package seerep;
 
+import "bounding_box_2d.proto";
 import "header.proto";
-import "boundingbox2d.proto";
 
 message Boundingbox2DStamped
 {
   Header header = 1;
-  Boundingbox2D boundingbox2D = 2;
+  Boundingbox2D bounding_box_2d = 2;
 }

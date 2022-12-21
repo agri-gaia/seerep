@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package seerep;
+
+import "bounding_box_2d.proto";
+import "label_with_instance.proto";
+
+message BoundingBox2DLabeled
+{
+  LabelWithInstance label_with_instance = 1;
+  Boundingbox2D bounding_box = 2;
+}
