@@ -3,9 +3,9 @@
 import os
 import sys
 
-import frame_query_pb2 as frameQuery
-import meta_operations_pb2_grpc as metaOperations
-import tf_service_pb2_grpc as tfService
+import frame_query_pb2
+import meta_operations_pb2_grpc
+import tf_service_pb2_grpc
 from google.protobuf import empty_pb2
 
 script_dir = os.path.dirname(__file__)
@@ -15,8 +15,8 @@ import util
 
 channel = util.get_gRPC_channel()
 
-stub = tfService.TfServiceStub(channel)
-stubMeta = metaOperations.MetaOperationsStub(channel)
+stub = tf_service_pb2_grpc.TfServiceStub(channel)
+stubMeta = meta_operations_pb2_grpc.MetaOperationsStub(channel)
 
 response = stubMeta.GetProjects(empty_pb2.Empty())
 
@@ -30,8 +30,8 @@ if projectuuid == "":
     sys.exit()
 
 
-theQuery = frameQuery.FrameQuery()
-theQuery.projectuuid = projectuuid
+theQuery = frame_query_pb2.FrameQuery()
+theQuery.project_uuid = projectuuid
 
 
 frames = stub.GetFrames(theQuery)

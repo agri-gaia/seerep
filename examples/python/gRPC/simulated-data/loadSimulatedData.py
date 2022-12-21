@@ -4,19 +4,21 @@ import os
 import sys
 import uuid
 
-import boundingbox2d_labeled_pb2 as bb
-import image_pb2 as image
-import image_service_pb2_grpc as imageService
+import bounding_box_2d_labeled_pb2
+import bounding_box_2d_labeled_with_category_pb2
+import image_pb2
+import image_service_pb2_grpc
 import imageio.v2 as imageio
-import label_with_instance_pb2 as labelWithInstance
-import meta_operations_pb2_grpc as metaOperations
+import label_with_instance_pb2
+import labels_with_instance_with_category_pb2
+import meta_operations_pb2_grpc
 import numpy as np
-import point_cloud_2_pb2 as pointcloud
-import point_cloud_service_pb2_grpc as pointcloudService
-import point_field_pb2 as pointfield
-import projectCreation_pb2 as projectCreation
-import tf_service_pb2_grpc as tfService
-import transform_stamped_pb2 as tf
+import point_cloud_2_pb2
+import point_cloud_service_pb2_grpc
+import point_field_pb2
+import project_creation_pb2
+import tf_service_pb2_grpc
+import transform_stamped_pb2
 import yaml
 
 script_dir = os.path.dirname(__file__)
@@ -26,13 +28,13 @@ import util
 
 channel = util.get_gRPC_channel()
 
-stubImage = imageService.ImageServiceStub(channel)
-stubPointcloud = pointcloudService.PointCloudServiceStub(channel)
-stubTf = tfService.TfServiceStub(channel)
-stubMeta = metaOperations.MetaOperationsStub(channel)
+stubImage = image_service_pb2_grpc.ImageServiceStub(channel)
+stubPointcloud = point_cloud_service_pb2_grpc.PointCloudServiceStub(channel)
+stubTf = tf_service_pb2_grpc.TfServiceStub(channel)
+stubMeta = meta_operations_pb2_grpc.MetaOperationsStub(channel)
 
 # create new project
-creation = projectCreation.ProjectCreation(name="simulatedData", mapFrameId="map")
+creation = project_creation_pb2.ProjectCreation(name="simulatedData", map_frame_id="map")
 projectCreated = stubMeta.CreateProject(creation)
 projectname = projectCreated.uuid
 
@@ -64,7 +66,7 @@ for folderIndex in range(2):
         basePointcloudPath = pointcloudPath + str(i).zfill(4)
         im = imageio.imread(baseFilePath + ".png")
 
-        theImage = image.Image()
+        theImage = image_pb2.Image()
         # write the header
         theImage.header.frame_id = "camera"
         theImage.header.stamp.seconds = timeThisIteration
@@ -79,23 +81,26 @@ for folderIndex in range(2):
         annotations = np.genfromtxt(baseAnnotationPath + ".txt", delimiter=" ")
 
         # write labeled bounding boxes
-        bb1 = bb.BoundingBox2DLabeled()
+        bbCat = bounding_box_2d_labeled_with_category_pb2.BoundingBox2DLabeledWithCategory()
+        bbCat.category = "simLabels"
         for a in annotations:
-            bb1.labelWithInstance.label = labelSwitch.get(a[0])
-            bb1.labelWithInstance.instanceUuid = str(uuid.uuid4())
+            bb = bounding_box_2d_labeled_pb2.BoundingBox2DLabeled()
+            bb.label_with_instance.label = labelSwitch.get(a[0])
+            bb.label_with_instance.instance_uuid = str(uuid.uuid4())
 
-            bb1.boundingBox.point_min.x = a[1] - a[3] / 2.0
-            bb1.boundingBox.point_min.y = a[2] - a[4] / 2.0
-            bb1.boundingBox.point_max.x = a[1] + a[3] / 2.0
-            bb1.boundingBox.point_max.y = a[2] + a[4] / 2.0
-            theImage.labels_bb.append(bb1)
+            bb.bounding_box.point_min.x = a[1] - a[3] / 2.0
+            bb.bounding_box.point_min.y = a[2] - a[4] / 2.0
+            bb.bounding_box.point_max.x = a[1] + a[3] / 2.0
+            bb.bounding_box.point_max.y = a[2] + a[4] / 2.0
+            bbCat.labeled_2d_bounding_boxes.append(bb)
+        theImage.labeled_bounding_boxes.append(bbCat)
 
         stubImage.TransferImage(theImage)
 
         # seerep currently assumes that point cloud coordinates are 32 Bit floats
         pointcloudData = np.load(basePointcloudPath + ".npy").astype(np.float32)
 
-        thePointcloud = pointcloud.PointCloud2()
+        thePointcloud = point_cloud_2_pb2.PointCloud2()
         thePointcloud.header.frame_id = "camera"
         thePointcloud.header.stamp.seconds = timeThisIteration
         thePointcloud.header.stamp.nanos = 0
@@ -107,21 +112,21 @@ for folderIndex in range(2):
         thePointcloud.row_step = thePointcloud.width * thePointcloud.point_step
         thePointcloud.data = pointcloudData.tobytes()
 
-        thePointfieldX = pointfield.PointField()
+        thePointfieldX = point_field_pb2.PointField()
         thePointfieldX.name = 'x'
         thePointfieldX.offset = 0
         thePointfieldX.datatype = 7  # float32
         thePointfieldX.count = 1
         thePointcloud.fields.append(thePointfieldX)
 
-        thePointfieldY = pointfield.PointField()
+        thePointfieldY = point_field_pb2.PointField()
         thePointfieldY.name = 'y'
         thePointfieldY.offset = 4
         thePointfieldY.datatype = 7  # float32
         thePointfieldY.count = 1
         thePointcloud.fields.append(thePointfieldY)
 
-        thePointfieldZ = pointfield.PointField()
+        thePointfieldZ = point_field_pb2.PointField()
         thePointfieldZ.name = 'z'
         thePointfieldZ.offset = 8
         thePointfieldZ.datatype = 7  # float32
@@ -131,10 +136,14 @@ for folderIndex in range(2):
         stubPointcloud.TransferPointCloud2(thePointcloud)
 
         annotations = np.genfromtxt(baseAnnotationPath + ".txt", delimiter=" ")
+
+        labels = labels_with_instance_with_category_pb2.LabelsWithInstanceWithCategory()
+        labels.category = "simLabels"
         for a in annotations:
-            label = labelWithInstance.LabelWithInstance()
+            label = label_with_instance_pb2.LabelWithInstance()
             label.label = labelSwitch.get(a[0])
-            thePointcloud.labels_general.append(label)
+            labels.label_with_instances.append(label)
+        thePointcloud.general_labels.append(labels)
 
         with open(baseFilePath + ".txt", "r") as stream:
             try:
@@ -143,7 +152,7 @@ for folderIndex in range(2):
                 rotation = np.fromstring(pose.get('camera_pose_rotation_quaternion'), dtype=float, sep=' ')
 
                 # create tf with data valid for all following tfs
-                theTf = tf.TransformStamped()
+                theTf = transform_stamped_pb2.TransformStamped()
                 theTf.header.frame_id = "map"
                 theTf.header.stamp.seconds = timeThisIteration
                 theTf.header.uuid_project = projectname

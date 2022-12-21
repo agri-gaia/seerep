@@ -5,17 +5,17 @@ import sys
 import time
 import uuid
 
-import boundingbox2d_labeled_pb2 as boundingbox2d_labeled
-import boundingbox2d_labeled_with_category_pb2 as boundingbox2d_labeled_with_category
-import image_pb2 as image
-import image_service_pb2_grpc as imageService
-import label_with_instance_pb2 as labelWithInstance
-import labels_with_instance_with_category_pb2 as labels_with_instance_with_category
-import meta_operations_pb2_grpc as metaOperations
+import bounding_box_2d_labeled_pb2
+import bounding_box_2d_labeled_with_category_pb2
+import image_pb2
+import image_service_pb2_grpc
+import label_with_instance_pb2
+import labels_with_instance_with_category_pb2
+import meta_operations_pb2_grpc
 import numpy as np
-import projectCreation_pb2 as projectCreation
-import tf_service_pb2_grpc as tfService
-import transform_stamped_pb2 as tf
+import project_creation_pb2
+import tf_service_pb2_grpc
+import transform_stamped_pb2
 
 script_dir = os.path.dirname(__file__)
 util_dir = os.path.join(script_dir, '..')
@@ -24,12 +24,12 @@ import util
 
 channel = util.get_gRPC_channel("local")
 
-stub = imageService.ImageServiceStub(channel)
-stubTf = tfService.TfServiceStub(channel)
-stubMeta = metaOperations.MetaOperationsStub(channel)
+stub = image_service_pb2_grpc.ImageServiceStub(channel)
+stubTf = tf_service_pb2_grpc.TfServiceStub(channel)
+stubMeta = meta_operations_pb2_grpc.MetaOperationsStub(channel)
 
 # create new project
-creation = projectCreation.ProjectCreation(name="LabeledImagesInGrid", mapFrameId="map")
+creation = project_creation_pb2.ProjectCreation(name="LabeledImagesInGrid", map_frame_id="map")
 projectCreated = stubMeta.CreateProject(creation)
 projectname = projectCreated.uuid
 
@@ -42,7 +42,7 @@ for k in range(9):
     # create an image more per cell (1 image in first cell; 9 images in 9th cell...)
     while n <= k:
         n = n + 1
-        theImage = image.Image()
+        theImage = image_pb2.Image()
 
         # create rgb with shifted rgb values in each cell
         rgb = []
@@ -73,30 +73,30 @@ for k in range(9):
         theImage.data = bytes(rgb)
 
         for iCategory in range(0, 2):
-            bbCat = boundingbox2d_labeled_with_category.BoundingBox2DLabeledWithCategory()
+            bbCat = bounding_box_2d_labeled_with_category_pb2.BoundingBox2DLabeledWithCategory()
             bbCat.category = str(iCategory)
             # 5. Create bounding boxes with la  bels
-            bb = boundingbox2d_labeled.BoundingBox2DLabeled()
+            bb = bounding_box_2d_labeled_pb2.BoundingBox2DLabeled()
             for i in range(0, 2):
-                bb.labelWithInstance.label = "testlabel" + str(i)
-                bb.labelWithInstance.instanceUuid = str(uuid.uuid4())
-                bb.boundingBox.point_min.x = 0.01 + i / 10
-                bb.boundingBox.point_min.y = 0.02 + i / 10
-                bb.boundingBox.point_max.x = 0.03 + i / 10
-                bb.boundingBox.point_max.y = 0.04 + i / 10
-                bbCat.boundingBox2DLabeled.append(bb)
-            theImage.labels_bb.append(bbCat)
+                bb.label_with_instance.label = "testlabel" + str(i)
+                bb.label_with_instance.instance_uuid = str(uuid.uuid4())
+                bb.bounding_box.point_min.x = 0.01 + i / 10
+                bb.bounding_box.point_min.y = 0.02 + i / 10
+                bb.bounding_box.point_max.x = 0.03 + i / 10
+                bb.bounding_box.point_max.y = 0.04 + i / 10
+                bbCat.labeled_2d_bounding_boxes.append(bb)
+            theImage.labeled_bounding_boxes.append(bbCat)
 
             # # 6. Add general labels to the image
-            labelsCat = labels_with_instance_with_category.LabelsWithInstanceWithCategory()
+            labelsCat = labels_with_instance_with_category_pb2.LabelsWithInstanceWithCategory()
             labelsCat.category = str(iCategory)
             for i in range(0, 2):
-                label = labelWithInstance.LabelWithInstance()
+                label = label_with_instance_pb2.LabelWithInstance()
                 label.label = "testlabelgeneral" + str(i)
                 # assuming that that the general labels are not instance related -> no instance uuid
                 # label.instanceUuid = str(uuid.uuid4())
-                labelsCat.labelWithInstance.append(label)
-            theImage.labels_general.append(labelsCat)
+                labelsCat.label_with_instances.append(label)
+            theImage.general_labels.append(labelsCat)
 
         # transfer image
         uuidImg = stub.TransferImage(theImage)
@@ -104,7 +104,7 @@ for k in range(9):
         print("uuid of transfered img: " + uuidImg.message)
 
 # create tf with data valid for all following tfs
-theTf = tf.TransformStamped()
+theTf = transform_stamped_pb2.TransformStamped()
 theTf.header.frame_id = "map"
 theTf.header.uuid_project = projectname
 theTf.child_frame_id = "camera"

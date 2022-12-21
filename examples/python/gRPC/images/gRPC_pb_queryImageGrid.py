@@ -3,9 +3,9 @@
 import os
 import sys
 
-import image_service_pb2_grpc as imageService
-import labels_with_category_pb2 as labels_with_category
-import meta_operations_pb2_grpc as metaOperations
+import image_service_pb2_grpc
+import labels_with_category_pb2
+import meta_operations_pb2_grpc
 import query_pb2 as query
 from google.protobuf import empty_pb2
 
@@ -16,8 +16,8 @@ import util
 
 channel = util.get_gRPC_channel()
 
-stub = imageService.ImageServiceStub(channel)
-stubMeta = metaOperations.MetaOperationsStub(channel)
+stub = image_service_pb2_grpc.ImageServiceStub(channel)
+stubMeta = meta_operations_pb2_grpc.MetaOperationsStub(channel)
 
 response = stubMeta.GetProjects(empty_pb2.Empty())
 
@@ -32,29 +32,29 @@ if projectuuid == "":
 
 
 theQuery = query.Query()
-theQuery.projectuuid.append(projectuuid)
-theQuery.boundingboxStamped.header.frame_id = "map"
+theQuery.project_uuids.append(projectuuid)
+theQuery.bounding_box_stamped.header.frame_id = "map"
 
-theQuery.boundingboxStamped.boundingbox.point_min.z = -1.0
-theQuery.boundingboxStamped.boundingbox.point_max.z = 1.0
+theQuery.bounding_box_stamped.bounding_box.point_min.z = -1.0
+theQuery.bounding_box_stamped.bounding_box.point_max.z = 1.0
 
 # since epoche
-theQuery.timeinterval.time_min.seconds = 1638549273
-theQuery.timeinterval.time_min.nanos = 0
-theQuery.timeinterval.time_max.seconds = 1938549273
-theQuery.timeinterval.time_max.nanos = 0
+theQuery.time_interval.time_min.seconds = 1638549273
+theQuery.time_interval.time_min.nanos = 0
+theQuery.time_interval.time_max.seconds = 1938549273
+theQuery.time_interval.time_max.nanos = 0
 
 # labels
-label = labels_with_category.LabelsWithCategory()
+label = labels_with_category_pb2.LabelsWithCategory()
 label.category = "0"
 label.labels.extend(["testlabel1"])
-theQuery.labelsWithCategory.append(label)
+theQuery.categorized_labels.append(label)
 
 for x in range(3):
     for y in range(3):
-        theQuery.boundingboxStamped.boundingbox.point_min.x = x - 0.5
-        theQuery.boundingboxStamped.boundingbox.point_min.y = y - 0.5
-        theQuery.boundingboxStamped.boundingbox.point_max.x = x + 0.5
-        theQuery.boundingboxStamped.boundingbox.point_max.y = y + 0.5
+        theQuery.bounding_box_stamped.bounding_box.point_min.x = x - 0.5
+        theQuery.bounding_box_stamped.bounding_box.point_min.y = y - 0.5
+        theQuery.bounding_box_stamped.bounding_box.point_max.x = x + 0.5
+        theQuery.bounding_box_stamped.bounding_box.point_max.y = y + 0.5
         for img in stub.GetImage(theQuery):
             print("General label of transferred img: " + img.labels_general[0].labelWithInstance[0].label)

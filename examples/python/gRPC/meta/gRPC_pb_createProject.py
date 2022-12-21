@@ -3,8 +3,8 @@
 import os
 import sys
 
-import meta_operations_pb2_grpc as metaOperations
-import projectCreation_pb2
+import meta_operations_pb2_grpc
+import project_creation_pb2
 
 script_dir = os.path.dirname(__file__)
 util_dir = os.path.join(script_dir, '..')
@@ -13,8 +13,8 @@ import util
 
 channel = util.get_gRPC_channel()
 
-stub = metaOperations.MetaOperationsStub(channel)
-response = stub.CreateProject(projectCreation_pb2.ProjectCreation(name="testproject", mapFrameId="map"))
+stub = meta_operations_pb2_grpc.MetaOperationsStub(channel)
+response = stub.CreateProject(project_creation_pb2.ProjectCreation(name="testproject", map_frame_id="map"))
 
 print("The new project on the server is (name/uuid):")
 print("\t" + response.name + " " + response.uuid)

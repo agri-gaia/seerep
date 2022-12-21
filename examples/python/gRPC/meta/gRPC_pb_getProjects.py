@@ -3,7 +3,7 @@
 import os
 import sys
 
-import meta_operations_pb2_grpc as metaOperations
+import meta_operations_pb2_grpc
 from google.protobuf import empty_pb2
 
 script_dir = os.path.dirname(__file__)
@@ -13,7 +13,7 @@ import util
 
 channel = util.get_gRPC_channel()
 
-stub = metaOperations.MetaOperationsStub(channel)
+stub = meta_operations_pb2_grpc.MetaOperationsStub(channel)
 
 response = stub.GetProjects(empty_pb2.Empty())
 
