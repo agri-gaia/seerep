@@ -1,22 +1,108 @@
 #!/usr/bin/env python
 
+"""
+This script adds custom build steps to the python package build process.
+The python classes for the protobuf and flatbuffers interface and messages
+of SEEREP are generated using the respective compilers.
+
+The protoc compiler is installed automatically via pip, while the flatc compiler
+has to be installed manually (not available on pypi currently).
+So if the build fails, make sure flatc is installed.
+"""
+
+import glob
+import os
+import shutil
+import subprocess
+from contextlib import suppress
 from pathlib import Path
+from typing import List
 
-from dunamai import Version
-from setuptools import setup
+from setuptools import Command, setup
+from setuptools.command.build import build
 
-this_directory = Path(__file__).parent
-long_description = (this_directory / "README.md").read_text()
 
-setup(
-    name='seerep-grpc',
-    version=Version.from_any_vcs().serialize(metadata=False),
-    description='package for the SEEREP gRPC API',
-    long_description=long_description,
-    long_description_content_type='text/markdown',
-    author='Mark Niemeyer',
-    author_email='mark.niemeyer@dfki.de',
-    url='https://github.com/agri-gaia/seerep/',
-    packages=['seerep-msgs-fb', 'seerep-msgs-pb', 'seerep-com-fb', 'seerep-com-pb'],
-    license_files=('LICENSE',),
-)
+class CustomCommand(Command):
+    def initialize_options(self) -> None:
+        self.bdist_dir = None
+        self.proto_msgs_path = None
+        self.proto_api_path = None
+        self.fbs_msgs_path = None
+        self.fbs_api_path = None
+
+    def finalize_options(self) -> None:
+        self.proto_msgs_path = Path("seerep-msgs/protos/")
+        self.proto_api_path = Path("seerep-com/protos/")
+        self.fbs_msgs_path = Path("seerep-msgs/fbs/")
+        self.fbs_api_path = Path("seerep-com/fbs/")
+        with suppress(Exception):
+            self.bdist_dir = Path(self.get_finalized_command("bdist_wheel").bdist_dir)
+
+    def get_proto_files(self) -> List[str]:
+        if self.proto_api_path.is_dir() and self.proto_msgs_path.is_dir():
+            return [str(file_path) for file_path in self.proto_api_path.glob('*.proto')] + [
+                str(file_path) for file_path in self.proto_msgs_path.glob('*.proto')
+            ]
+        else:
+            return []
+
+    def build_protos(self) -> None:
+        if self.bdist_dir:
+            output_dir = self.bdist_dir / "seerep/pb/"
+            output_dir.mkdir(parents=True, exist_ok=True)
+
+            protoc_call = [
+                "python3",
+                "-m",
+                "grpc_tools.protoc",
+                f"--proto_path={self.proto_msgs_path}",
+                f"--proto_path={self.proto_api_path}",
+                f"--python_out={output_dir}",
+                *self.get_proto_files(),
+            ]
+            subprocess.call(protoc_call)
+
+    def build_fbs(self) -> None:
+        if self.bdist_dir:
+            output_dir = self.bdist_dir
+
+            """
+            Currently the flatc compiler has a bug when using --python and --grpc,
+            which prevents the use of -I and -o for specifying input and output directories.
+            https://github.com/google/flatbuffers/issues/7397
+
+            The current workaround is to copy the fbs files to the output directory,
+            then run the flatc compiler in the output dir and remove the fbs files afterwards.
+            """
+
+            shutil.copytree(self.fbs_msgs_path, self.bdist_dir, dirs_exist_ok=True)
+            shutil.copytree(self.fbs_api_path, self.bdist_dir, dirs_exist_ok=True)
+
+            os.chdir(output_dir)
+            fbs_files = glob.glob("*.fbs")
+
+            flatc_call = [
+                "flatc",
+                "--python",
+                "--grpc",
+                *fbs_files,
+            ]
+
+            subprocess.call(flatc_call)
+
+            os.chdir("../../..")
+
+            for file in fbs_files:
+                with suppress(Exception):
+                    os.remove(output_dir / file)
+
+    def run(self) -> None:
+        self.build_protos()
+        self.build_fbs()
+
+
+class CustomBuild(build):
+    sub_commands = [('build_custom', None)] + build.sub_commands
+
+
+setup(packages=[], cmdclass={'build': CustomBuild, 'build_custom': CustomCommand})
