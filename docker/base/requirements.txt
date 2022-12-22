@@ -8,3 +8,6 @@ numpy==1.17.4
 numpy-quaternion==2022.4.2
 mkdocs==1.4.2
 mkdocs-material==9.0.2
+twine==4.0.2
+build==0.10.0
+setuptools==65.7.0
