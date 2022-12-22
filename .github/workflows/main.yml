@@ -142,18 +142,14 @@ jobs:
 
       - name: prepare python package
         run: |
-          mkdir -p $GITHUB_WORKSPACE/src/python-package/seerep-msgs-pb
-          touch $GITHUB_WORKSPACE/src/python-package/seerep-msgs-pb/__init__.py
-          cp $GITHUB_WORKSPACE/devel/include/seerep-msgs/*_pb2.py $GITHUB_WORKSPACE/src/python-package/seerep-msgs-pb/
-          mkdir -p $GITHUB_WORKSPACE/src/python-package/seerep-msgs-fb
-          touch $GITHUB_WORKSPACE/src/python-package/seerep-msgs-fb/__init__.py
-          cp $GITHUB_WORKSPACE/devel/include/seerep-msgs/fbs/seerep/fb/*.py $GITHUB_WORKSPACE/src/python-package/seerep-msgs-fb/
-          mkdir -p $GITHUB_WORKSPACE/src/python-package/seerep-com-pb
-          touch $GITHUB_WORKSPACE/src/python-package/seerep-com-pb/__init__.py
-          cp $GITHUB_WORKSPACE/devel/include/seerep-com/*.py $GITHUB_WORKSPACE/src/python-package/seerep-com-pb/
-          mkdir -p $GITHUB_WORKSPACE/src/python-package/seerep-com-fb
-          touch $GITHUB_WORKSPACE/src/python-package/seerep-com-fb/__init__.py
-          cp $GITHUB_WORKSPACE/devel/include/seerep-com/fbs/seerep/fb/*_grpc_fb.py $GITHUB_WORKSPACE/src/python-package/seerep-com-fb/
+          mkdir -p $GITHUB_WORKSPACE/src/python-package/seerep_grpc_pb
+          touch $GITHUB_WORKSPACE/src/python-package/seerep_msgs_pb/__init__.py
+          cp $GITHUB_WORKSPACE/devel/include/seerep-msgs/*_pb2.py $GITHUB_WORKSPACE/src/python-package/seerep_grpc_pb/
+          cp $GITHUB_WORKSPACE/devel/include/seerep-com/*.py $GITHUB_WORKSPACE/src/python-package/seerep_grpc_pb/
+          mkdir -p $GITHUB_WORKSPACE/src/python-package/seerep_grpc_fb
+          touch $GITHUB_WORKSPACE/src/python-package/seerep_msgs_fb/__init__.py
+          cp $GITHUB_WORKSPACE/devel/include/seerep-msgs/fbs/seerep/fb/*.py $GITHUB_WORKSPACE/src/python-package/seerep_grpc_fb/
+          cp $GITHUB_WORKSPACE/devel/include/seerep-com/fbs/seerep/fb/*_grpc_fb.py $GITHUB_WORKSPACE/src/python-package/seerep_grpc_fb/
 
           cp $GITHUB_WORKSPACE/src/setup.py $GITHUB_WORKSPACE/src/python-package/
           cp $GITHUB_WORKSPACE/src/pyproject.toml $GITHUB_WORKSPACE/src/python-package/
@@ -163,15 +159,15 @@ jobs:
       - name: run setup.py
         run: |
           cd $GITHUB_WORKSPACE/src/python-package
-          python3 -m build --sdist
+          python3 setup.py bdist_wheel sdist
 
       - name: publish
-        if: github.ref_type == 'tag'
+        #if: github.ref_type == 'tag'
         env:
           TWINE_USERNAME: "__token__"
-          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_TEST_TOKEN }}
         run: |
-          twine upload $GITHUB_WORKSPACE/src/python-package/dist/*
+          twine upload --repository testpypi $GITHUB_WORKSPACE/src/python-package/dist/*
 
   build-docker-deployment:
     needs: [build-code, create-ids]

@@ -37,8 +37,8 @@ public:
   CorePbImage(std::shared_ptr<seerep_core::Core> seerepCore);
   ~CorePbImage();
 
-  void getData(const seerep::Query& query, grpc::ServerWriter<seerep::Image>* writer);
-  boost::uuids::uuid addData(const seerep::Image& img);
+  void getData(const seerep::pb::Query& query, grpc::ServerWriter<seerep::pb::Image>* writer);
+  boost::uuids::uuid addData(const seerep::pb::Image& img);
 
 private:
   void getFileAccessorFromCore(boost::uuids::uuid project);
