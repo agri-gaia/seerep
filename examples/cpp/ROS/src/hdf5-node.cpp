@@ -37,7 +37,11 @@ Hdf5Node::Hdf5Node(const ros::NodeHandle& nodeHandle, const ros::NodeHandle& pri
     throw std::runtime_error("No root frame specified");
   }
 
-  hdf5Access_ = std::make_unique<seerep_hdf5_ros::Hdf5Ros>(path, filename, rootFrameId, projectName);
+  std::shared_ptr<std::mutex> mutex = std::make_shared<std::mutex>();
+  std::shared_ptr<HighFive::File> hdf5File = std::make_shared<HighFive::File>(
+      path + "/" + filename + ".h5", HighFive::File::ReadWrite | HighFive::File::Create);
+
+  hdf5Access_ = std::make_unique<seerep_hdf5_ros::Hdf5Ros>(hdf5File, mutex, projectName, rootFrameId);
 
   std::vector<std::string> topics;
   if (!privateNodeHandle_.getParam("topics", topics))
@@ -107,7 +111,7 @@ std::optional<ros::Subscriber> Hdf5Node::getSubscriber(const std::string& messag
 
 void Hdf5Node::dumpMessage(const sensor_msgs::Image::ConstPtr& image)
 {
-  hdf5Access_->dumpImage(*image);
+  hdf5Access_->saveImage(*image);
   ROS_INFO("Saved Image");
 }
 

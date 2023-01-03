@@ -2,43 +2,43 @@
 
 namespace seerep_hdf5_ros
 {
-Hdf5Ros::Hdf5Ros(const std::string& path, const std::string& filename, const std::string& projectFrameId,
-                 const std::string& projectName)
-  : path_{ path }, filename_{ filename }
+Hdf5Ros::Hdf5Ros(std::shared_ptr<HighFive::File>& hdf5File, std::shared_ptr<std::mutex>& mutex,
+                 const std::string& projectName, const std::string& projectFrameId)
+  : Hdf5CoreGeneral(hdf5File, mutex)
 {
-  auto write_mtx = std::make_shared<std::mutex>();
-  hdf5File_ =
-      std::make_shared<HighFive::File>(path_ + filename_ + ".h5", HighFive::File::ReadWrite | HighFive::File::Create);
-  auto ioGeneral = seerep_hdf5_core::Hdf5CoreGeneral(hdf5File_, write_mtx);
-  ioGeneral.writeProjectFrameId(projectFrameId);
-  ioGeneral.writeProjectname(projectName);
+  writeProjectname(projectName);
+  writeProjectFrameId(projectFrameId);
 }
 
-bool Hdf5Ros::dumpImage(const sensor_msgs::Image& image) const
+void Hdf5Ros::saveHeader(const std::string& hdf5DataSetPath, const std_msgs::Header& header)
 {
-  const std::string datasetPath = "images/" + boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+  if (exists(hdf5DataSetPath))
+  {
+    std::shared_ptr<HighFive::DataSet> imageDataSet = getHdf5DataSet(hdf5DataSetPath);
 
-  H5Easy::dump(*hdf5File_, datasetPath, std::move(image.data));
-
-  this->dumpHeader(image.header, datasetPath);
-
-  H5Easy::dumpAttribute(*hdf5File_, datasetPath, "encoding", image.encoding);
-  H5Easy::dumpAttribute(*hdf5File_, datasetPath, "height", image.height);
-  H5Easy::dumpAttribute(*hdf5File_, datasetPath, "width", image.width);
-  H5Easy::dumpAttribute(*hdf5File_, datasetPath, "is_bigendian", image.is_bigendian);
-  H5Easy::dumpAttribute(*hdf5File_, datasetPath, "step", image.step);
-
-  return true;
+    writeAttributeToHdf5<uint32_t>(*imageDataSet, "header_seq", header.seq);
+    writeAttributeToHdf5<uint64_t>(*imageDataSet, "header_stamp_sec", header.stamp.sec);
+    writeAttributeToHdf5<uint64_t>(*imageDataSet, "header_stamp_nsec", header.stamp.nsec);
+    writeAttributeToHdf5<std::string>(*imageDataSet, "header_frame_id", header.frame_id);
+  }
 }
 
-bool Hdf5Ros::dumpHeader(const std_msgs::Header& header, const std::string& datasetPath) const
+void Hdf5Ros::saveImage(const sensor_msgs::Image& image)
 {
-  H5Easy::dumpAttribute(*hdf5File_, datasetPath, "seq", header.seq);
-  H5Easy::dumpAttribute(*hdf5File_, datasetPath, "stamp_seconds", header.stamp.sec);
-  H5Easy::dumpAttribute(*hdf5File_, datasetPath, "stamp_nanoseconds", header.stamp.nsec);
-  H5Easy::dumpAttribute(*hdf5File_, datasetPath, "frame_id", header.frame_id);
+  const std::string imageDataSetPath = "image/" + boost::lexical_cast<std::string>(boost::uuids::random_generator()());
 
-  return true;
+  HighFive::DataSpace imageDataSpace = HighFive::DataSpace(image.height * image.width * 3);
+  std::shared_ptr<HighFive::DataSet> imageDataSet = getHdf5DataSet<uint8_t>(imageDataSetPath, imageDataSpace);
+
+  saveHeader(imageDataSetPath, image.header);
+
+  writeAttributeToHdf5<uint32_t>(*imageDataSet, "height", image.height);
+  writeAttributeToHdf5<uint32_t>(*imageDataSet, "width", image.width);
+  writeAttributeToHdf5<std::string>(*imageDataSet, "encoding", image.encoding);
+  writeAttributeToHdf5<bool>(*imageDataSet, "is_bigendian", image.is_bigendian);
+  writeAttributeToHdf5<uint32_t>(*imageDataSet, "step", image.step);
+
+  imageDataSet->write(image.data.data());
 }
 
 }  // namespace seerep_hdf5_ros
