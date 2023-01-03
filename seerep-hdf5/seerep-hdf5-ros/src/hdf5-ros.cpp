@@ -42,4 +42,51 @@ void Hdf5Ros::saveImage(const sensor_msgs::Image& image)
   imageDataSet->write(image.data.data());
 }
 
+void Hdf5Ros::savePointCloud2(const sensor_msgs::PointCloud2& pointcloud2)
+{
+  const std::string pointcloud2DataSetPath =
+      "pointcloud2/" + boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+
+  HighFive::DataSpace pointcloud2DataSpace = HighFive::DataSpace(pointcloud2.data.size());
+  std::shared_ptr<HighFive::DataSet> pointcloud2DataSet =
+      getHdf5DataSet<uint8_t>(pointcloud2DataSetPath, pointcloud2DataSpace);
+
+  saveHeader(pointcloud2DataSetPath, pointcloud2.header);
+  writeAttributeToHdf5<uint32_t>(*pointcloud2DataSet, "height", pointcloud2.height);
+  writeAttributeToHdf5<uint32_t>(*pointcloud2DataSet, "width", pointcloud2.width);
+
+  std::vector<std::string> fieldsNames;
+  std::vector<uint32_t> fieldsOffsets;
+  std::vector<uint8_t> fieldsDatatypes;
+  std::vector<uint32_t> fieldsCount;
+
+  for (auto field : pointcloud2.fields)
+  {
+    fieldsNames.push_back(field.name);
+    fieldsOffsets.push_back(field.offset);
+    fieldsDatatypes.push_back(field.datatype);
+    fieldsCount.push_back(field.count);
+  }
+
+  writeAttributeToHdf5<std::vector<std::string>>(*pointcloud2DataSet, "fields_names", fieldsNames);
+  writeAttributeToHdf5<std::vector<uint32_t>>(*pointcloud2DataSet, "fields_offsets", fieldsOffsets);
+  writeAttributeToHdf5<std::vector<uint8_t>>(*pointcloud2DataSet, "fields_datatypes", fieldsDatatypes);
+  writeAttributeToHdf5<std::vector<uint32_t>>(*pointcloud2DataSet, "fields_count", fieldsCount);
+
+  writeAttributeToHdf5<bool>(*pointcloud2DataSet, "is_bigendian", pointcloud2.is_bigendian);
+  writeAttributeToHdf5<uint32_t>(*pointcloud2DataSet, "point_step", pointcloud2.point_step);
+  writeAttributeToHdf5<uint32_t>(*pointcloud2DataSet, "row_step", pointcloud2.row_step);
+
+  pointcloud2DataSet->write(pointcloud2.data.data());
+
+  writeAttributeToHdf5<bool>(*pointcloud2DataSet, "is_dense", pointcloud2.is_dense);
+}
+
+void Hdf5Ros::saveTransformation(const geometry_msgs::Transform& transform)
+{
+}
+
+void Hdf5Ros::saveTransformationStamped(const geometry_msgs::TransformStamped& transformation)
+{
+}
 }  // namespace seerep_hdf5_ros

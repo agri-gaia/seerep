@@ -14,7 +14,9 @@
 #include <boost/uuid/uuid_io.hpp>
 
 // ROS
+#include "geometry_msgs/TransformStamped.h"
 #include "sensor_msgs/Image.h"
+#include "sensor_msgs/PointCloud2.h"
 #include "std_msgs/Header.h"
 
 // Seerep
@@ -48,7 +50,7 @@ public:
           const std::string& projectFrameId);
 
   /**
-   * @brief Write ROS header message to HDF5
+   * @brief Write ROS Header message to HDF5
    *
    * The header attributes are written as attributes to a dataset
    *
@@ -59,13 +61,42 @@ public:
   void saveHeader(const std::string& hdf5DataSetPath, const std_msgs::Header& header);
 
   /**
-   * @brief Write ROS image message to HDF5
+   * @brief Write ROS Image message to HDF5
    *
    * The image data is written as a dataset, it's name (boost UUID) is generated automatically.
    *
    * @param image the ROS image message
    */
   void saveImage(const sensor_msgs::Image& image);
+
+  /**
+   * @brief Write ROS PointField message to HDF5
+   *
+   * @param hdf5DataSetPath path to the dataset, where the point field should be added to
+   * @param pointField the ROS PointField message
+   */
+  void savePointField(const std::string& hdf5DataSetPath, const sensor_msgs::PointField& pointField);
+
+  /**
+   * @brief Write ROS PointCloud2 message to HDF5
+   *
+   * @param pointcloud the ROS PointCloud2 message
+   */
+  void savePointCloud2(const sensor_msgs::PointCloud2& pointcloud2);
+
+  /**
+   * @brief Write ROS Transform message to HDF5
+   *
+   * @param transform the ROS Transform message
+   */
+  void saveTransformation(const geometry_msgs::Transform& transform);
+
+  /**
+   * @brief Write ROS TransformStamped message to HDF5
+   *
+   * @param transformation the ROS TransformStamped message
+   */
+  void saveTransformationStamped(const geometry_msgs::TransformStamped& transformation);
 };
 }  // namespace seerep_hdf5_ros
 #endif /* SEEREP_HDF5_ROS_H_ */

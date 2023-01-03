@@ -41,6 +41,7 @@ private:
   std::optional<ros::Subscriber> getSubscriber(const std::string& messageType, const std::string& topic);
 
   void dumpMessage(const sensor_msgs::Image::ConstPtr& image);
+  void dumpMessage(const sensor_msgs::PointCloud2::ConstPtr& pointCloud);
 };
 } /* namespace seerep_ros_examples */
 
