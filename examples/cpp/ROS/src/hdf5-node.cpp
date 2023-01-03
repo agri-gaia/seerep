@@ -3,68 +3,74 @@
 namespace seerep_ros_examples
 {
 Hdf5Node::Hdf5Node(const ros::NodeHandle& nodeHandle, const ros::NodeHandle& privateNodeHandle)
-  : nodeHandle_{ nodeHandle }, privateNodeHandle_{ privateNodeHandle }
+  : node_handle_{ nodeHandle }, private_node_handle_{ privateNodeHandle }
 {
-  std::string path;
-  if (!privateNodeHandle_.getParam("path", path))
+  std::string storage_path, filename, project_name, root_frame_id;
+
+  try
   {
-    throw std::runtime_error("No path specified");
+    getROSParameter<std::string>("storage_path", storage_path);
+    getROSParameter<std::string>("project_name", project_name);
+    getROSParameter<std::string>("project_root_frame", root_frame_id);
+    getROSParameter<std::string>("filename", filename, false);
+    getROSParameter<std::vector<std::string>>("topics", topics_);
+  }
+  catch (const std::runtime_error& e)
+  {
+    ROS_ERROR_STREAM(e.what());
+    ros::shutdown();
   }
 
-  // if a filename is not present or not a valid UUID, a proper UUID will be generated
-  std::string filename;
-  if (!privateNodeHandle_.getParam("filename", filename))
+  if (filename.empty() || !isValidUUID(filename))
   {
     filename = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
-    ROS_WARN_STREAM("No filename provided, using generated UUID instead");
+    ROS_WARN_STREAM("No or invalid filename UUID provided, using generated UUID instead");
   }
 
-  if (!isValidUUID(filename))
+  write_mutex_ = std::make_shared<std::mutex>();
+  hdf5_file_ = std::make_shared<HighFive::File>(storage_path + "/" + filename + ".h5",
+                                                HighFive::File::ReadWrite | HighFive::File::Create);
+
+  msg_dump_ = std::make_unique<seerep_hdf5_ros::Hdf5Ros>(hdf5_file_, write_mutex_, project_name, root_frame_id);
+
+  for (const std::string& topic : topics_)
   {
-    filename = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
-    ROS_WARN_STREAM("Filename is an invalid UUID, using generated UUID instead");
-  }
-
-  std::string projectName;
-  if (!privateNodeHandle_.getParam("project_name", projectName))
-  {
-    throw std::runtime_error("No project name specified");
-  }
-
-  std::string rootFrameId;
-  if (!privateNodeHandle_.getParam("project_root_frame", rootFrameId))
-  {
-    throw std::runtime_error("No root frame specified");
-  }
-
-  std::shared_ptr<std::mutex> mutex = std::make_shared<std::mutex>();
-  std::shared_ptr<HighFive::File> hdf5File = std::make_shared<HighFive::File>(
-      path + "/" + filename + ".h5", HighFive::File::ReadWrite | HighFive::File::Create);
-
-  hdf5Access_ = std::make_unique<seerep_hdf5_ros::Hdf5Ros>(hdf5File, mutex, projectName, rootFrameId);
-
-  std::vector<std::string> topics;
-  if (!privateNodeHandle_.getParam("topics", topics))
-  {
-    throw std::runtime_error("No topics specified to dump");
-  }
-
-  for (std::string& topic : topics)
-  {
-    ros::master::TopicInfo topicInfo;
     ROS_INFO_STREAM("Trying to subscribe to topic: " << topic);
-    while (!topicAvailable(topic, topicInfo))
+
+    std::optional<ros::master::TopicInfo> topic_info = getTopicInfo(topic);
+    if (!topic_info)
     {
-      ROS_INFO_STREAM("Waiting on topic: " << topic);
-      std::this_thread::sleep_for(std::chrono::seconds(pollingIntervalInSeconds));
+      ROS_ERROR_STREAM("Topic: " << topic << " not available");
+      ros::shutdown();
     }
-    std::optional<ros::Subscriber> sub = getSubscriber(topicInfo.datatype, topicInfo.name);
-    if (sub)
+
+    std::optional<ros::Subscriber> subscriber = getSubscriber(topic_info.value().datatype, topic_info.value().name);
+    if (subscriber)
     {
-      subscribers_[topicInfo.name] = *sub;
-      ROS_INFO_STREAM("Subscribed to topic: " << topicInfo.name << " of type: " << topicInfo.datatype);
+      subscribers_[topic_info.value().name] = *subscriber;
+      ROS_INFO_STREAM("Subscribed to topic: " << topic << " of type: " << topic_info.value().datatype);
+    }
+    else
+    {
+      ROS_ERROR_STREAM("Topic: " << topic << " of type: " << topic_info.value().datatype << " not supported");
+      ros::shutdown();
     }
   }
+}
+
+std::optional<ros::master::TopicInfo> Hdf5Node::getTopicInfo(const std::string& topic_name)
+{
+  std::vector<ros::master::TopicInfo> advertised_topics;
+  ros::master::getTopics(advertised_topics);
+
+  for (const auto& topic_info : advertised_topics)
+  {
+    if (topic_info.name == topic_name)
+    {
+      return topic_info;
+    }
+  }
+  return std::nullopt;
 }
 
 bool Hdf5Node::isValidUUID(const std::string& uuid) const
@@ -80,51 +86,20 @@ bool Hdf5Node::isValidUUID(const std::string& uuid) const
   }
 }
 
-bool Hdf5Node::topicAvailable(const std::string& topic, ros::master::TopicInfo& info)
-{
-  ros::master::V_TopicInfo topicInfo;
-  ros::master::getTopics(topicInfo);
-  auto findIter = std::find_if(topicInfo.begin(), topicInfo.end(),
-                               [&topic](const ros::master::TopicInfo& info) { return info.name == topic; });
-  if (findIter != topicInfo.end())
-  {
-    info.name = findIter->name;
-    info.datatype = findIter->datatype;
-    return true;
-  }
-  return false;
-}
-
 std::optional<ros::Subscriber> Hdf5Node::getSubscriber(const std::string& message_type, const std::string& topic)
 {
   if (message_type == "sensor_msgs/Image")
   {
-    return nodeHandle_.subscribe<sensor_msgs::Image>(topic, 0, &Hdf5Node::dumpMessage, this);
-    ROS_INFO_STREAM("Subscribed to topic: " << topic << " with message type: " << message_type);
+    return node_handle_.subscribe<sensor_msgs::Image>(topic, 0, &Hdf5Node::dumpMessage<sensor_msgs::Image>, this);
   }
   else if (message_type == "sensor_msgs/PointCloud2")
   {
-    return nodeHandle_.subscribe<sensor_msgs::PointCloud2>(topic, 0, &Hdf5Node::dumpMessage, this);
-    ROS_INFO_STREAM("Subscribed to topic: " << topic << " with message type: " << message_type);
+    return node_handle_.subscribe<sensor_msgs::PointCloud2>(topic, 0, &Hdf5Node::dumpMessage<sensor_msgs::PointCloud2>,
+                                                            this);
   }
-  else
-  {
-    ROS_ERROR_STREAM("Type" << message_type << " not supported");
-    return std::nullopt;
-  }
+  return std::nullopt;
 }
 
-void Hdf5Node::dumpMessage(const sensor_msgs::Image::ConstPtr& image)
-{
-  hdf5Access_->saveImage(*image);
-  ROS_INFO("Saved Image");
-}
-
-void Hdf5Node::dumpMessage(const sensor_msgs::PointCloud2::ConstPtr& pointCloud)
-{
-  hdf5Access_->savePointCloud2(*pointCloud);
-  ROS_INFO("Saved Point Cloud");
-}
 } /* namespace seerep_ros_examples */
 
 int main(int argc, char** argv)

@@ -23,26 +23,32 @@ class Hdf5Node
 {
 public:
   Hdf5Node() = delete;
-  Hdf5Node(const ros::NodeHandle& nodeHandle, const ros::NodeHandle& privateNodeHandle);
+  Hdf5Node(const ros::NodeHandle& nh, const ros::NodeHandle& pnh);
 
 private:
-  static constexpr unsigned int pollingIntervalInSeconds = 5;
+  template <typename T>
+  void dumpMessage(const boost::shared_ptr<const T>& message);
 
-  ros::NodeHandle nodeHandle_;
-  ros::NodeHandle privateNodeHandle_;
-
-  std::unique_ptr<seerep_hdf5_ros::Hdf5Ros> hdf5Access_;
-
-  std::map<std::string, ros::Subscriber> subscribers_;
-
-  bool isValidUUID(const std::string& uuid) const;
-  bool topicAvailable(const std::string& topic, ros::master::TopicInfo& info);
+  template <typename T>
+  void getROSParameter(const std::string& parameterName, T& parameterValue, bool required = true);
 
   std::optional<ros::Subscriber> getSubscriber(const std::string& messageType, const std::string& topic);
+  std::optional<ros::master::TopicInfo> getTopicInfo(const std::string& topic_name);
 
-  void dumpMessage(const sensor_msgs::Image::ConstPtr& image);
-  void dumpMessage(const sensor_msgs::PointCloud2::ConstPtr& pointCloud);
+  bool isValidUUID(const std::string& uuid) const;
+
+  std::vector<std::string> topics_;
+  std::map<std::string, ros::Subscriber> subscribers_;
+
+  std::shared_ptr<std::mutex> write_mutex_;
+  std::shared_ptr<HighFive::File> hdf5_file_;
+  std::unique_ptr<seerep_hdf5_ros::Hdf5Ros> msg_dump_;
+
+  ros::NodeHandle node_handle_;
+  ros::NodeHandle private_node_handle_;
 };
 } /* namespace seerep_ros_examples */
+
+#include "impl/hdf5-node.hpp"
 
 #endif /* HDF5_NODE_H_ */

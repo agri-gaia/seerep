@@ -31,7 +31,7 @@ namespace seerep_hdf5_ros
  * permissions and a mutex for thread safety is required. The data field of a message is saved as a dataset,
  * additional message attributes are stored as attributes of the dataset.
  *
- * @note Currently only supports sensor_msgs::Image
+ * @note Currently only supports sensor_msgs::Image, sensor_msgs::PointCloud2
  */
 class Hdf5Ros : public seerep_hdf5_core::Hdf5CoreGeneral
 {
@@ -58,7 +58,7 @@ public:
    * @param header the ROS header message
    */
 
-  void saveHeader(const std::string& hdf5DataSetPath, const std_msgs::Header& header);
+  void saveMessage(const std::string& hdf5DataSetPath, const std_msgs::Header& header);
 
   /**
    * @brief Write ROS Image message to HDF5
@@ -67,7 +67,7 @@ public:
    *
    * @param image the ROS image message
    */
-  void saveImage(const sensor_msgs::Image& image);
+  void saveMessage(const sensor_msgs::Image& image);
 
   /**
    * @brief Write ROS PointField message to HDF5
@@ -75,28 +75,28 @@ public:
    * @param hdf5DataSetPath path to the dataset, where the point field should be added to
    * @param pointField the ROS PointField message
    */
-  void savePointField(const std::string& hdf5DataSetPath, const sensor_msgs::PointField& pointField);
+  void saveMessage(const std::string& hdf5DataSetPath, const sensor_msgs::PointField& pointField);
 
   /**
    * @brief Write ROS PointCloud2 message to HDF5
    *
    * @param pointcloud the ROS PointCloud2 message
    */
-  void savePointCloud2(const sensor_msgs::PointCloud2& pointcloud2);
+  void saveMessage(const sensor_msgs::PointCloud2& pointcloud2);
 
   /**
    * @brief Write ROS Transform message to HDF5
    *
    * @param transform the ROS Transform message
    */
-  void saveTransformation(const geometry_msgs::Transform& transform);
+  void saveMessage(const geometry_msgs::Transform& transform);
 
   /**
    * @brief Write ROS TransformStamped message to HDF5
    *
    * @param transformation the ROS TransformStamped message
    */
-  void saveTransformationStamped(const geometry_msgs::TransformStamped& transformation);
+  void saveMessage(const geometry_msgs::TransformStamped& transformation);
 };
 }  // namespace seerep_hdf5_ros
 #endif /* SEEREP_HDF5_ROS_H_ */
