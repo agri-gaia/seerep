@@ -6,6 +6,17 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 
+# TODO clean up cmake mess
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+
+find_package(
+  Boost
+  COMPONENTS log log_setup
+  REQUIRED
+)
+
 find_package(seerep_hdf5_ros REQUIRED)
 
 find_package(
@@ -28,7 +39,10 @@ catkin_package(
 )
 
 include_directories(
-  include ${seerep_hdf5_ros_INCLUDE_DIRS} ${catkin_INCLUDE_DIRS}
+  include
+  ${seerep_hdf5_ros_INCLUDE_DIRS}
+  ${catkin_INCLUDE_DIRS}
+  ${Boost_INCLUDE_DIRS}
 )
 
 add_executable(${PROJECT_NAME}_hdf5_node src/hdf5-node.cpp)
@@ -39,7 +53,12 @@ add_dependencies(
 )
 
 target_link_libraries(
-  ${PROJECT_NAME}_hdf5_node ${seerep_hdf5_ros_LIBRARIES} ${catkin_LIBRARIES}
+  ${PROJECT_NAME}_hdf5_node
+  ${seerep_hdf5_ros_LIBRARIES}
+  ${Boost_LIBRARIES}
+  ${Boost_LOG_LIBRARY}
+  ${Boost_LOG_SETUP_LIBRARY}
+  ${catkin_LIBRARIES}
 )
 
 install(

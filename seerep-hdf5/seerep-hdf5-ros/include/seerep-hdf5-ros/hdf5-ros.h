@@ -6,7 +6,6 @@
 #include <string>
 
 // HighFive
-#include <highfive/H5Easy.hpp>
 #include <highfive/H5File.hpp>
 
 // Boost
@@ -23,21 +22,15 @@
 
 namespace seerep_hdf5_ros
 {
-class Hdf5Ros
+class Hdf5Ros : public seerep_hdf5_core::Hdf5CoreGeneral
 {
 public:
   Hdf5Ros() = delete;
-  Hdf5Ros(const std::string& path, const std::string& filename, const std::string& projectFrameId,
-          const std::string& projectName);
+  Hdf5Ros(std::shared_ptr<HighFive::File>& hdf5File, std::shared_ptr<std::mutex>& mutex, const std::string& projectName,
+          const std::string& projectFrameId);
 
-  bool dumpImage(const sensor_msgs::Image& image) const;
-  bool dumpHeader(const std_msgs::Header& header, const std::string& datasetPath) const;
-
-private:
-  std::string path_;
-  std::string filename_;
-
-  std::shared_ptr<HighFive::File> hdf5File_;
+  void saveHeader(const std::string& hdf5DataSetPath, const std_msgs::Header& header);
+  void saveImage(const sensor_msgs::Image& image);
 };
 }  // namespace seerep_hdf5_ros
 #endif /* SEEREP_HDF5_ROS_H_ */
