@@ -11,7 +11,7 @@ Hdf5Ros::Hdf5Ros(std::shared_ptr<HighFive::File>& hdf5File, std::shared_ptr<std:
 }
 
 // Assumption is that the dataset to write the header to already exists, otherwise the function will do nothing.
-void Hdf5Ros::saveHeader(const std::string& hdf5DataSetPath, const std_msgs::Header& header)
+void Hdf5Ros::saveMessage(const std::string& hdf5DataSetPath, const std_msgs::Header& header)
 {
   if (exists(hdf5DataSetPath))
   {
@@ -24,14 +24,14 @@ void Hdf5Ros::saveHeader(const std::string& hdf5DataSetPath, const std_msgs::Hea
   }
 }
 
-void Hdf5Ros::saveImage(const sensor_msgs::Image& image)
+void Hdf5Ros::saveMessage(const sensor_msgs::Image& image)
 {
   const std::string imageDataSetPath = "image/" + boost::lexical_cast<std::string>(boost::uuids::random_generator()());
 
   HighFive::DataSpace imageDataSpace = HighFive::DataSpace(image.height * image.width * 3);
   std::shared_ptr<HighFive::DataSet> imageDataSet = getHdf5DataSet<uint8_t>(imageDataSetPath, imageDataSpace);
 
-  saveHeader(imageDataSetPath, image.header);
+  saveMessage(imageDataSetPath, image.header);
 
   writeAttributeToHdf5<uint32_t>(*imageDataSet, "height", image.height);
   writeAttributeToHdf5<uint32_t>(*imageDataSet, "width", image.width);
@@ -42,7 +42,7 @@ void Hdf5Ros::saveImage(const sensor_msgs::Image& image)
   imageDataSet->write(image.data.data());
 }
 
-void Hdf5Ros::savePointCloud2(const sensor_msgs::PointCloud2& pointcloud2)
+void Hdf5Ros::saveMessage(const sensor_msgs::PointCloud2& pointcloud2)
 {
   const std::string pointcloud2DataSetPath =
       "pointcloud2/" + boost::lexical_cast<std::string>(boost::uuids::random_generator()());
@@ -51,7 +51,7 @@ void Hdf5Ros::savePointCloud2(const sensor_msgs::PointCloud2& pointcloud2)
   std::shared_ptr<HighFive::DataSet> pointcloud2DataSet =
       getHdf5DataSet<uint8_t>(pointcloud2DataSetPath, pointcloud2DataSpace);
 
-  saveHeader(pointcloud2DataSetPath, pointcloud2.header);
+  saveMessage(pointcloud2DataSetPath, pointcloud2.header);
   writeAttributeToHdf5<uint32_t>(*pointcloud2DataSet, "height", pointcloud2.height);
   writeAttributeToHdf5<uint32_t>(*pointcloud2DataSet, "width", pointcloud2.width);
 
@@ -82,11 +82,11 @@ void Hdf5Ros::savePointCloud2(const sensor_msgs::PointCloud2& pointcloud2)
   writeAttributeToHdf5<bool>(*pointcloud2DataSet, "is_dense", pointcloud2.is_dense);
 }
 
-void Hdf5Ros::saveTransformation(const geometry_msgs::Transform& transform)
+void Hdf5Ros::saveMessage(const geometry_msgs::Transform& transform)
 {
 }
 
-void Hdf5Ros::saveTransformationStamped(const geometry_msgs::TransformStamped& transformation)
+void Hdf5Ros::saveMessage(const geometry_msgs::TransformStamped& transformation)
 {
 }
 }  // namespace seerep_hdf5_ros
