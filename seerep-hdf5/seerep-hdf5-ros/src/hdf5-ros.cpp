@@ -10,6 +10,7 @@ Hdf5Ros::Hdf5Ros(std::shared_ptr<HighFive::File>& hdf5File, std::shared_ptr<std:
   writeProjectFrameId(projectFrameId);
 }
 
+// Assumption is that the dataset to write the header to already exists, otherwise the function will do nothing.
 void Hdf5Ros::saveHeader(const std::string& hdf5DataSetPath, const std_msgs::Header& header)
 {
   if (exists(hdf5DataSetPath))
