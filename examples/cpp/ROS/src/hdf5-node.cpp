@@ -102,6 +102,11 @@ std::optional<ros::Subscriber> Hdf5Node::getSubscriber(const std::string& messag
     return nodeHandle_.subscribe<sensor_msgs::Image>(topic, 0, &Hdf5Node::dumpMessage, this);
     ROS_INFO_STREAM("Subscribed to topic: " << topic << " with message type: " << message_type);
   }
+  else if (message_type == "sensor_msgs/PointCloud2")
+  {
+    return nodeHandle_.subscribe<sensor_msgs::PointCloud2>(topic, 0, &Hdf5Node::dumpMessage, this);
+    ROS_INFO_STREAM("Subscribed to topic: " << topic << " with message type: " << message_type);
+  }
   else
   {
     ROS_ERROR_STREAM("Type" << message_type << " not supported");
@@ -115,6 +120,11 @@ void Hdf5Node::dumpMessage(const sensor_msgs::Image::ConstPtr& image)
   ROS_INFO("Saved Image");
 }
 
+void Hdf5Node::dumpMessage(const sensor_msgs::PointCloud2::ConstPtr& pointCloud)
+{
+  hdf5Access_->savePointCloud2(*pointCloud);
+  ROS_INFO("Saved Point Cloud");
+}
 } /* namespace seerep_ros_examples */
 
 int main(int argc, char** argv)
