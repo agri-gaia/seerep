@@ -38,8 +38,12 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         bison \
         && rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install --upgrade pip
-#Install seerep dependencies from apt
+COPY docker/base/requirements.txt /tmp/requirements.txt
+RUN pip3 install --upgrade pip \
+        && pip3 install -r /tmp/requirements.txt \
+        && rm /tmp/requirements.txt
+
+        #Install seerep dependencies from apt
 RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         ros-noetic-tf \
         ros-noetic-vision-msgs \
