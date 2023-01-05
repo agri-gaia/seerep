@@ -25,9 +25,9 @@ public:
   grpc::Status DeleteProject(grpc::ServerContext* context,
                              const flatbuffers::grpc::Message<seerep::fb::ProjectInfo>* request,
                              flatbuffers::grpc::Message<seerep::fb::Empty>* response) override;
-  grpc::Status GetOverallTimeInterval(grpc::ServerContext* context,
-                                      const flatbuffers::grpc::Message<seerep::fb::UuidDatatypePair>* request,
-                                      flatbuffers::grpc::Message<seerep::fb::TimeInterval>* response) override;
+  // grpc::Status GetOverallTimeInterval(grpc::ServerContext* context,
+  //                                     const flatbuffers::grpc::Message<seerep::fb::UuidDatatypePair>* request,
+  //                                     flatbuffers::grpc::Message<seerep::fb::TimeInterval>* response) override;
   grpc::Status GetOverallBoundingBox(grpc::ServerContext* context,
                                      const flatbuffers::grpc::Message<seerep::fb::UuidDatatypePair>* request,
                                      flatbuffers::grpc::Message<seerep::fb::Boundingbox>* response) override;
