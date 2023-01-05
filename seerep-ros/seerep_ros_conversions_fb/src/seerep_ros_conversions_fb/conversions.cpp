@@ -123,7 +123,9 @@ sensor_msgs::PointCloud2 toROS(const seerep::fb::PointCloud2& cloud)
   ret.height = cloud.height();
   ret.width = cloud.width();
   for (auto field : *cloud.fields())
+  {
     ret.fields.push_back(toROS(*field));
+  }
   ret.is_bigendian = cloud.is_bigendian();
   ret.point_step = cloud.point_step();
   ret.row_step = cloud.row_step();
@@ -158,7 +160,6 @@ flatbuffers::Offset<seerep::fb::Image> toFlat(const sensor_msgs::Image& image, s
   imagebuilder.add_encoding(encodingOffset);
   imagebuilder.add_is_bigendian(image.is_bigendian);
   imagebuilder.add_step(image.step);
-  imagebuilder.add_row_step(image.step * image.width);
   imagebuilder.add_data(dataVector);
 
   return imagebuilder.Finish();

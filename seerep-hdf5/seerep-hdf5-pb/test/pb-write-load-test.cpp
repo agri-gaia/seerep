@@ -54,7 +54,8 @@ void createPoint(const double x, const double y, seerep::Point2D& point2D)
  * */
 void createImageData(const unsigned int imageHeight, const unsigned int imageWidth, seerep::Image& image)
 {
-  uint8_t data[imageHeight][imageWidth][3];
+  std::vector<uint8_t> data;
+  data.reserve(imageHeight * imageWidth * 3);
   for (size_t i = 0; i < imageWidth; i++)
   {
     for (size_t j = 0; j < imageHeight; j++)
@@ -67,13 +68,13 @@ void createImageData(const unsigned int imageHeight, const unsigned int imageWid
       uint8_t g = int((y * 255.0)) % 255;
       uint8_t b = int((z * 255.0)) % 255;
 
-      data[j][i][0] = r;
-      data[j][i][1] = g;
-      data[j][i][2] = b;
+      data.push_back(r);
+      data.push_back(g);
+      data.push_back(b);
     }
   }
 
-  image.set_data(data, sizeof(data));
+  *image.mutable_data() = { data.begin(), data.end() };
 }
 
 /**

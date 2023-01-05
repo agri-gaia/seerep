@@ -29,44 +29,117 @@
 #include <boost/log/trivial.hpp>
 namespace seerep_hdf5_fb
 {
-class Hdf5FbGeneral : public seerep_hdf5_core::Hdf5CoreGeneral
+// make nested flatbuffers readable
+typedef flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>> BoundingBoxesLabeledFb;
+typedef flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>> BoundingBoxes2dLabeledFb;
+typedef flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>> GeneralLabelsFb;
+typedef flatbuffers::Vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>> AttributeMapsFb;
+
+/**
+ * @brief This class encompasses all read and write operations for the hdf5-fb-io which can be used by different data types
+ *
+ */
+class Hdf5FbGeneral : public virtual seerep_hdf5_core::Hdf5CoreGeneral
 {
 protected:
+  /**
+   * @brief Construct a new general hdf5-fb-io object
+   *
+   * @param file shared pointer to the hdf5 file
+   * @param write_mtx mutex to ensure thread safety
+   */
   Hdf5FbGeneral(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
 
-  //################
-  // Attributes
-  //################
-  void writeAttributeMap(const std::shared_ptr<HighFive::DataSet> dataSetPtr,
-                         const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>>* attributes);
-  template <class T>
-  flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>>>
-  readAttributeMap(HighFive::AnnotateTraits<T>& object, flatbuffers::grpc::MessageBuilder& builder);
+  /**
+   * @brief Write a flatbuffers attribute map message to a dataset
+   *
+   * @param dataSetPtr shared pointer to the dataset, where the attributes should be written to
+   * @param attributes pointer to the flatbuffers attribute map message
+   */
+  void writeAttributeMap(const std::shared_ptr<HighFive::DataSet> dataSetPtr, const AttributeMapsFb* attributes);
 
+  /**
+   * @brief Read a attribute map from a data set or data group and receive it as a flatbuffers message
+   *
+   * @param object the HighFive data set ot data group to read from
+   * @param builder the flatbuffers message builder
+   * @return flatbuffers::Offset<AttributeMapsFb> the flatbuffers attribute map message
+   */
+  template <class T>
+  flatbuffers::Offset<AttributeMapsFb> readAttributeMap(HighFive::AnnotateTraits<T>& object,
+                                                        flatbuffers::grpc::MessageBuilder& builder);
+  /**
+   * @brief Write a flatbuffers header message to a data set or data group
+   *
+   * @param object the HighFive data set ot data group to write to
+   * @param header pointer to the flatbuffers header message
+   */
   template <class T>
   void writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, const seerep::fb::Header* header);
 
+  /**
+   * @brief Read a header from a data set or data group and receive it as a flatbuffers message
+   *
+   * @param builder the flatbuffers message builder
+   * @param object the HighFive data set ot data group to read from
+   * @param uuidMsg the uuid of the message, the header belongs to (for logging purposes)
+   * @return flatbuffers::Offset<seerep::fb::Header> the flatbuffers header message
+   */
   template <class T>
   flatbuffers::Offset<seerep::fb::Header> readHeaderAttributes(flatbuffers::grpc::MessageBuilder& builder,
                                                                HighFive::AnnotateTraits<T>& object,
                                                                std::string uuidMsg);
 
-  //################
-  // BoundingBoxes
-  //################
-  void writeBoundingBoxLabeled(
-      const std::string& datatypeGroup, const std::string& uuid,
-      const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>>* boundingboxLabeled);
+  /**
+   * @brief Write a flatbuffers 3D bounding box message to hdf5
+   *
+   * @param datatypeGroup the data type the bounding box should be written to e.g point cloud, image
+   * @param uuid the uuid of the data group, the bounding box should be written to
+   * @param boundingboxLabeled the flatbuffers 3D bounding box message
+   */
+  void writeBoundingBoxLabeled(const std::string& datatypeGroup, const std::string& uuid,
+                               const BoundingBoxesLabeledFb* boundingboxLabeled);
 
-  void writeBoundingBox2DLabeled(
-      const std::string& datatypeGroup, const std::string& uuid,
-      const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>>* boundingbox2DLabeled);
+  /**
+   * @brief Write a flatbuffers 2D bounding box message to hdf5
+   *
+   * @param datatypeGroup the data type the bounding box should be written to e.g image
+   * @param uuid the uuid of the data group, the bounding box should be written to
+   * @param boundingbox2dLabeled the flatbuffers 2D bounding box message
+   */
+  void writeBoundingBox2DLabeled(const std::string& datatypeGroup, const std::string& uuid,
+                                 const BoundingBoxes2dLabeledFb* boundingbox2dLabeled);
 
-  //################
-  // Labels General
-  //################
-  void writeLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid,
-                          const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>* labelsGeneral);
+  /**
+   * @brief Read a 2D bounding box from hdf5 and receive it as a flatbuffers message
+   *
+   * @param datatypeGroup the data type the bounding box should be written to e.g image
+   * @param id uuid of the data group, the bounding box should be written to
+   * @param builder the flatbuffers message builder
+   * @return flatbuffers::Offset<BoundingBoxes2dLabeledFb> the flatbuffers 2D bounding box message
+   */
+  flatbuffers::Offset<BoundingBoxes2dLabeledFb> readBoundingBoxes2DLabeled(const std::string& datatypeGroup,
+                                                                           const std::string& id,
+                                                                           flatbuffers::grpc::MessageBuilder& builder);
+  /**
+   * @brief Write a flatbuffers general labels message to hdf5
+   *
+   * @param datatypeGroup the data type the general labels should be written to e.g point cloud, image
+   * @param sid the uuid of the data group, the general labels should be written to
+   * @param labelsGeneral the flatbuffers general labels message
+   */
+  void writeLabelsGeneral(const std::string& datatypeGroup, const std::string& sid,
+                          const GeneralLabelsFb* labelsGeneral);
+  /**
+   * @brief Read general labels from hdf5 and receive it as a flatbuffers message
+   *
+   * @param datatypeGroup the data type the general labels should be written to e.g point cloud, image
+   * @param id the id of the data group, the general labels should be written to
+   * @param builder the flatbuffers message builder
+   * @return flatbuffers::Offset<GeneralLabelsFb> the flatbuffers general labels message
+   */
+  flatbuffers::Offset<GeneralLabelsFb> readGeneralLabels(const std::string& datatypeGroup, const std::string& id,
+                                                         flatbuffers::grpc::MessageBuilder& builder);
 };
 
 }  // namespace seerep_hdf5_fb

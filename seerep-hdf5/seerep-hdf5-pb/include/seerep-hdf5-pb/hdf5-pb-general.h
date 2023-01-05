@@ -23,23 +23,19 @@
 
 namespace seerep_hdf5_pb
 {
-class Hdf5PbGeneral : public seerep_hdf5_core::Hdf5CoreGeneral
+class Hdf5PbGeneral : public virtual seerep_hdf5_core::Hdf5CoreGeneral
 {
 protected:
   Hdf5PbGeneral(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
 
-  //################
-  // Attributes
-  //################
+  //  Attributes
   template <class T>
   void writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, const seerep::Header& header);
 
   template <class T>
   seerep::Header readHeaderAttributes(HighFive::AnnotateTraits<T>& object, const std::string& id);
 
-  //################
-  // BoundingBoxes
-  //################
+  //  BoundingBoxes
   void
   writeBoundingBoxLabeled(const std::string& datatypeGroup, const std::string& uuid,
                           const google::protobuf::RepeatedPtrField<::seerep::BoundingBoxLabeled>& boundingboxLabeled);
@@ -51,9 +47,7 @@ protected:
   std::optional<google::protobuf::RepeatedPtrField<::seerep::BoundingBox2DLabeled>>
   readBoundingBox2DLabeled(const std::string& datatypeGroup, const std::string& uuid);
 
-  //################
-  // Labels General
-  //################
+  //  Labels General
   void
   writeLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid,
                      const google::protobuf::RepeatedPtrField<seerep::LabelWithInstance>& labelsGeneralWithInstances);

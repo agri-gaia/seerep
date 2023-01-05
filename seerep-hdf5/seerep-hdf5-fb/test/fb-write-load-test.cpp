@@ -52,7 +52,8 @@ flatbuffers::Offset<seerep::fb::Point2D> createPoint(flatbuffers::FlatBufferBuil
 flatbuffers::Offset<flatbuffers::Vector<uint8_t>>
 createImageData(flatbuffers::FlatBufferBuilder& fbb, const unsigned int imageHeight, const unsigned int imageWidth)
 {
-  std::vector<u_int8_t> data;
+  std::vector<uint8_t> data;
+  data.reserve(imageHeight * imageWidth * 3);
   for (size_t i = 0; i < imageWidth; i++)
   {
     for (size_t j = 0; j < imageHeight; j++)
@@ -70,6 +71,7 @@ createImageData(flatbuffers::FlatBufferBuilder& fbb, const unsigned int imageHei
       data.push_back(b);
     }
   }
+
   auto fbImageDataOffset = fbb.CreateVector(data.data(), data.size());
   fbb.Finish(fbImageDataOffset);
   return fbImageDataOffset;
@@ -127,7 +129,7 @@ const seerep::fb::Image* createImageMessage(flatbuffers::FlatBufferBuilder& fbb,
   auto bB2DLabeledOffset = createBB2DLabeled(fbb);
 
   auto imgMsgOffset = seerep::fb::CreateImage(fbb, headerOffset, imageHeight, imageWidth, encodingOffset, true,
-                                              3 * imageHeight, 0, imageOffset, generalLabelsOffset, bB2DLabeledOffset);
+                                              3 * imageHeight, imageOffset, generalLabelsOffset, bB2DLabeledOffset);
   fbb.Finish(imgMsgOffset);
   uint8_t* buf = fbb.GetBufferPointer();
   return flatbuffers::GetRoot<seerep::fb::Image>(buf);
@@ -224,7 +226,6 @@ TEST_F(fbWriteLoadTest, testImageBaseFields)
   EXPECT_STREQ(readImage->encoding()->c_str(), writeImage->encoding()->c_str());
   EXPECT_EQ(readImage->is_bigendian(), writeImage->is_bigendian());
   EXPECT_EQ(readImage->step(), writeImage->step());
-  EXPECT_EQ(readImage->row_step(), writeImage->row_step());
 }
 
 TEST_F(fbWriteLoadTest, testImageData)

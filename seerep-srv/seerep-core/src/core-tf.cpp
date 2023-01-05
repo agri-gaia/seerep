@@ -25,8 +25,9 @@ void CoreTf::recreateDatasets()
       if (transforms)
       {
         for (auto& transform : transforms.value())
-
+        {
           addToTfBuffer(transform);
+        }
       }
     }
     catch (const std::runtime_error& e)
