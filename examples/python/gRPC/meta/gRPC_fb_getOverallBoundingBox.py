@@ -32,12 +32,8 @@ if not projectuuid:
 # 3. Get gRPC service object
 stub = metaOperations.MetaOperationsStub(channel)
 
-# 4. Create an instance of fb.Datatype
-requested_datatype = Datatype.Datatype()
+UuidDatatypePair = util_fb.createUuidDatatypePair(builder, projectuuid, Datatype.Datatype().Image)
 
-UuidDatatypePair = util_fb.createUuidDatatypePair(
-    builder, projectuuid, [requested_datatype.Image, requested_datatype.PointCloud]
-)
 builder.Finish(UuidDatatypePair)
 buf = builder.Output()
 
