@@ -522,17 +522,13 @@ def createCameraIntrinsicsQuery(builder, ci_uuid, project_uuid):
     CameraIntrinsicsQuery.AddUuidProject(builder, project_uuid_str)
 
     return CameraIntrinsicsQuery.End(builder)
-def createUuidDatatypePair(builder, uuid, datatypes):
-    uuidStr = builder.CreateString(uuid)
 
-    UuidDatatypePair.StartDatatypesVector(builder, len(datatypes))
-    for datatype in reversed(datatypes):
-        builder.PrependUOffsetTRelative(datatype)
-    datatypesOffset = builder.EndVector()
+def createUuidDatatypePair(builder, uuid, datatype):
+    uuidStr = builder.CreateString(uuid)
 
     UuidDatatypePair.Start(builder)
     UuidDatatypePair.AddProjectuuid(builder, uuidStr)
-    UuidDatatypePair.AddDatatypes(builder, datatypesOffset)
+    UuidDatatypePair.AddDatatypes(builder, datatype)
     return UuidDatatypePair.End(builder)
 
 
