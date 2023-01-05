@@ -71,13 +71,14 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 2
-      # check if Dockerfile has changed
+      # check if files have changed
       - name: Get changed files
         id: changed-files-specific-docker-base
         uses: tj-actions/changed-files@v34
         with:
           files: |
             docker/base/Dockerfile
+            docker/base/requirements.txt
       -
         name: Set up Docker Buildx
         if: github.ref_type == 'tag' || steps.changed-files-specific-docker-base.outputs.any_changed == 'true'
