@@ -69,7 +69,7 @@ grpc::Status FbMetaOperations::GetProjects(grpc::ServerContext* context,
     auto geodeticCoordinatesOffset = gcbuilder.Finish();
 
     projectInfosVector.push_back(
-        seerep::fb::CreateProjectInfo(builder, nameOffset, uuidOffset, geodeticCoordinatesOffset, frameIdOffset));
+        seerep::fb::CreateProjectInfo(builder, nameOffset, uuidOffset, frameIdOffset, geodeticCoordinatesOffset));
   }
   auto vectorOffset = builder.CreateVector(projectInfosVector);
   auto projectInfosOffset = seerep::fb::CreateProjectInfos(builder, vectorOffset);
