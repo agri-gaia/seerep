@@ -452,13 +452,13 @@ def createTransformStampedQuery(builder, header, childFrameId):
 def createUuidDatatypePair(builder, uuid, datatypes):
     uuidStr = builder.CreateString(uuid)
 
-    UuidDatatypePair.StartLabelVector(builder, len(datatypes))
+    UuidDatatypePair.StartDatatypesVector(builder, len(datatypes))
     for datatype in reversed(datatypes):
         builder.PrependUOffsetTRelative(datatype)
     datatypesOffset = builder.EndVector()
 
     UuidDatatypePair.Start(builder)
-    UuidDatatypePair.AddUuid(builder, uuidStr)
+    UuidDatatypePair.AddProjectuuid(builder, uuidStr)
     UuidDatatypePair.AddDatatypes(builder, datatypesOffset)
     return UuidDatatypePair.End(builder)
 
