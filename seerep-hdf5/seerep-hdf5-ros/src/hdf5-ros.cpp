@@ -11,33 +11,36 @@ Hdf5Ros::Hdf5Ros(std::shared_ptr<HighFive::File>& hdf5File, std::shared_ptr<std:
 }
 
 // Assumption is that the dataset to write the header to already exists, otherwise the function will do nothing.
-void Hdf5Ros::saveMessage(const std::string& hdf5DataSetPath, const std_msgs::Header& header)
+void Hdf5Ros::saveMessage(const std::string& hdf5GroupPath, const std_msgs::Header& header)
 {
-  if (exists(hdf5DataSetPath))
+  if (exists(hdf5GroupPath))
   {
-    std::shared_ptr<HighFive::DataSet> imageDataSet = getHdf5DataSet(hdf5DataSetPath);
+    std::shared_ptr<HighFive::Group> imageDataGroup = getHdf5Group(hdf5GroupPath);
 
-    writeAttributeToHdf5<uint32_t>(*imageDataSet, "header_seq", header.seq);
-    writeAttributeToHdf5<uint64_t>(*imageDataSet, "header_stamp_sec", header.stamp.sec);
-    writeAttributeToHdf5<uint64_t>(*imageDataSet, "header_stamp_nsec", header.stamp.nsec);
-    writeAttributeToHdf5<std::string>(*imageDataSet, "header_frame_id", header.frame_id);
+    writeAttributeToHdf5<uint32_t>(*imageDataGroup, "header_seq", header.seq);
+    writeAttributeToHdf5<uint64_t>(*imageDataGroup, "header_stamp_sec", header.stamp.sec);
+    writeAttributeToHdf5<uint64_t>(*imageDataGroup, "header_stamp_nsec", header.stamp.nsec);
+    writeAttributeToHdf5<std::string>(*imageDataGroup, "header_frame_id", header.frame_id);
   }
 }
 
 void Hdf5Ros::saveMessage(const sensor_msgs::Image& image)
 {
-  const std::string imageDataSetPath = "image/" + boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+  const std::string imageDataGroupPath =
+      "image/" + boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+  const std::string imageDataSetPath = imageDataGroupPath + "/rawdata";
 
   HighFive::DataSpace imageDataSpace = HighFive::DataSpace(image.height * image.width * 3);
+  std::shared_ptr<HighFive::Group> imageDataGroup = getHdf5Group(imageDataGroupPath);
   std::shared_ptr<HighFive::DataSet> imageDataSet = getHdf5DataSet<uint8_t>(imageDataSetPath, imageDataSpace);
 
-  saveMessage(imageDataSetPath, image.header);
+  saveMessage(imageDataGroupPath, image.header);
 
-  writeAttributeToHdf5<uint32_t>(*imageDataSet, "height", image.height);
-  writeAttributeToHdf5<uint32_t>(*imageDataSet, "width", image.width);
+  writeAttributeToHdf5<uint32_t>(*imageDataGroup, "height", image.height);
+  writeAttributeToHdf5<uint32_t>(*imageDataGroup, "width", image.width);
   writeAttributeToHdf5<std::string>(*imageDataSet, "encoding", image.encoding);
   writeAttributeToHdf5<bool>(*imageDataSet, "is_bigendian", image.is_bigendian);
-  writeAttributeToHdf5<uint32_t>(*imageDataSet, "step", image.step);
+  writeAttributeToHdf5<uint32_t>(*imageDataGroup, "step", image.step);
 
   imageDataSet->write(image.data.data());
 }
