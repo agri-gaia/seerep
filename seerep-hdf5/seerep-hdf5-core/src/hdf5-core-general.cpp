@@ -478,6 +478,8 @@ std::optional<seerep_core_msgs::GeodeticCoordinates> Hdf5CoreGeneral::readGeodet
     m_file->getAttribute(GEODETICLOCATION_LONGITUDE).read(geocoords.longitude);
   }
   return geocoords;
+}
+
 std::shared_ptr<HighFive::DataSet> Hdf5CoreGeneral::getHdf5DataSet(const std::string& hdf5DataSetPath)
 {
   if (exists(hdf5DataSetPath))
