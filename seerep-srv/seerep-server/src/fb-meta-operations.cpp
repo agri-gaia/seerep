@@ -188,14 +188,16 @@ FbMetaOperations::GetOverallBoundingBox(grpc::ServerContext* context,
                                         flatbuffers::grpc::Message<seerep::fb::Boundingbox>* response)
 {
   (void)context;  // ignore that variable without causing warnings
+  auto requestRoot = request->GetRoot();
 
-  std::string uuid = request->GetRoot()->projectuuid()->str();
+  std::string uuid = requestRoot->projectuuid()->str();
   boost::uuids::string_generator gen;
   auto uuidFromString = gen(uuid);
 
   std::vector<seerep_core_msgs::Datatype> dt_vector;
-  for (auto datatype : *request->GetRoot()->datatypes())
+  for (auto datatype : *requestRoot->datatypes())
   {
+    auto casted_datatype = static_cast<seerep::fb::Datatype>(datatype);
     if (datatype == seerep::fb::Datatype_Image)
     {
       dt_vector.push_back(seerep_core_msgs::Datatype::Image);

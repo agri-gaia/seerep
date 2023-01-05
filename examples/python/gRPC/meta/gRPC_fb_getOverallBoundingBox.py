@@ -4,7 +4,7 @@ import os
 import sys
 
 import flatbuffers
-from fb import Boundingbox
+from fb import Boundingbox, Datatype
 from fb import meta_operations_grpc_fb as metaOperations
 
 # importing util functions. Assuming that these files are in the parent dir
@@ -32,7 +32,12 @@ if not projectuuid:
 # 3. Get gRPC service object
 stub = metaOperations.MetaOperationsStub(channel)
 
-UuidDatatypePair = util_fb.createUuidDatatypePair(builder, projectuuid, ["Image"])
+# 4. Create an instance of fb.Datatype
+requested_datatype = Datatype.Datatype()
+
+UuidDatatypePair = util_fb.createUuidDatatypePair(
+    builder, projectuuid, [requested_datatype.Image, requested_datatype.PointCloud]
+)
 builder.Finish(UuidDatatypePair)
 buf = builder.Output()
 
