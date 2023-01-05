@@ -5,7 +5,7 @@
 namespace seerep_hdf5_pb
 {
 Hdf5PbPointCloud::Hdf5PbPointCloud(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx)
-  : Hdf5PbGeneral(file, write_mtx)
+  : Hdf5CoreGeneral(file, write_mtx), Hdf5PbGeneral(file, write_mtx)
 {
 }
 
@@ -64,15 +64,23 @@ std::shared_ptr<HighFive::Group> Hdf5PbPointCloud::writePointCloud2(const std::s
   CloudInfo info = getCloudInfo(pointcloud2);
 
   if (info.has_points)
+  {
     writePoints(*data_group_ptr, uuid, pointcloud2);
+  }
   if (info.has_rgb)
+  {
     writeColorsRGB(uuid, pointcloud2);
+  }
   if (info.has_rgba)
+  {
     writeColorsRGBA(uuid, pointcloud2);
+  }
 
   // TODO normals
   if (!info.other_fields.empty())
+  {
     writeOtherFields(uuid, pointcloud2, info.other_fields);
+  }
 
   m_file->flush();
   return data_group_ptr;
@@ -85,9 +93,13 @@ void Hdf5PbPointCloud::writePoints(HighFive::Group& object, const std::string& u
 
   std::shared_ptr<HighFive::DataSet> points_dataset_ptr;
   if (!m_file->exist(points_id))
+  {
     points_dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->createDataSet<float>(points_id, data_space));
+  }
   else
+  {
     points_dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(points_id));
+  }
 
   std::vector<std::vector<std::vector<float>>> point_data;
   point_data.resize(cloud.height());
@@ -111,19 +123,31 @@ void Hdf5PbPointCloud::writePoints(HighFive::Group& object, const std::string& u
 
       // compute bounding box
       if (x < min[0])
+      {
         min[0] = x;
+      }
       if (x > max[0])
+      {
         max[0] = x;
+      }
 
       if (y < min[1])
+      {
         min[1] = y;
+      }
       if (y > max[1])
+      {
         max[1] = y;
+      }
 
       if (z < min[2])
+      {
         min[2] = z;
+      }
       if (z > max[2])
+      {
         max[2] = z;
+      }
 
       point_data[i].push_back(std::vector{ x, y, z });
 
@@ -147,9 +171,13 @@ void Hdf5PbPointCloud::writeColorsRGB(const std::string& uuid, const seerep::Poi
 
   std::shared_ptr<HighFive::DataSet> colors_dataset_ptr;
   if (!m_file->exist(colors_id))
+  {
     colors_dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->createDataSet<uint8_t>(colors_id, data_space));
+  }
   else
+  {
     colors_dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(colors_id));
+  }
 
   std::vector<std::vector<std::vector<uint8_t>>> colors_data;
   colors_data.resize(cloud.height());
@@ -178,9 +206,13 @@ void Hdf5PbPointCloud::writeColorsRGBA(const std::string& uuid, const seerep::Po
 
   std::shared_ptr<HighFive::DataSet> colors_dataset_ptr;
   if (!m_file->exist(colors_id))
+  {
     colors_dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->createDataSet<uint8_t>(colors_id, data_space));
+  }
   else
+  {
     colors_dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(colors_id));
+  }
 
   std::vector<std::vector<std::vector<uint8_t>>> colors_data;
   colors_data.resize(cloud.height());
@@ -255,22 +287,38 @@ Hdf5PbPointCloud::CloudInfo Hdf5PbPointCloud::getCloudInfo(const seerep::PointCl
   for (auto& field : cloud.fields())
   {
     if (field.name() == "x")
+    {
       hasFieldx = true;
+    }
     else if (field.name() == "y")
+    {
       hasFieldy = true;
+    }
     else if (field.name() == "z")
+    {
       hasFieldz = true;
+    }
     else if (field.name() == "rgb")
+    {
       info.has_rgb = true;
+    }
     else if (field.name() == "rgba")
+    {
       info.has_rgba = true;
+    }
     else if (field.name().find("normal") == 0)
+    {
       info.has_normals = true;
+    }
     else
+    {
       info.other_fields[field.name()] = field;
+    }
   }
   if (hasFieldx && hasFieldy && hasFieldz)
+  {
     info.has_points = true;
+  }
   return info;
 }
 
@@ -312,18 +360,26 @@ std::optional<seerep::PointCloud2> Hdf5PbPointCloud::readPointCloud2(const std::
   CloudInfo info = getCloudInfo(pointcloud2);
 
   if (info.has_points)
+  {
     readPoints(uuid, pointcloud2);
+  }
 
   if (info.has_rgb)
+  {
     readColorsRGB(uuid, pointcloud2);
+  }
 
   if (info.has_rgba)
+  {
     readColorsRGBA(uuid, pointcloud2);
+  }
 
   // TODO normals
 
   if (!info.other_fields.empty())
+  {
     readOtherFields(uuid, pointcloud2, info.other_fields);
+  }
 
   return pointcloud2;
 }

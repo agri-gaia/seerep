@@ -66,9 +66,13 @@ private:
 
     std::shared_ptr<HighFive::DataSet> dataset_ptr;
     if (!m_file->exist(id))
+    {
       dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->createDataSet<T>(id, data_space));
+    }
     else
+    {
       dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(id));
+    }
 
     PointCloud2ConstIterator<T> iter(cloud, field_name);
     std::vector<T> data;

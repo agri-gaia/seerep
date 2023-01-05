@@ -5,7 +5,7 @@
 namespace seerep_hdf5_pb
 {
 Hdf5PbTf::Hdf5PbTf(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx)
-  : Hdf5PbGeneral(file, write_mtx)
+  : Hdf5CoreGeneral(file, write_mtx), Hdf5PbGeneral(file, write_mtx)
 {
 }
 
@@ -93,9 +93,13 @@ void Hdf5PbTf::writeTransformStamped(const seerep::TransformStamped& tf)
   // write the size as group attribute
   HighFive::Group group = m_file->getGroup(hdf5DatasetPath);
   if (!group.hasAttribute(SIZE))
+  {
     group.createAttribute(SIZE, ++size);
+  }
   else
+  {
     group.getAttribute(SIZE).write(++size);
+  }
 
   m_file->flush();
 }

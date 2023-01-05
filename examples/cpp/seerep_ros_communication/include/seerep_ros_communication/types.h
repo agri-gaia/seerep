@@ -88,7 +88,9 @@ std::string names()
 {
   std::string s;
   for (auto name : MessageTypeNames)
+  {
     s += name + ", ";
+  }
   return s;
 }
 

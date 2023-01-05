@@ -59,7 +59,9 @@ seerep::PointCloud2 toProto(const sensor_msgs::PointCloud2& cloud, std::string p
   ret.set_height(cloud.height);
   ret.set_width(cloud.width);
   for (auto field : cloud.fields)
+  {
     *ret.add_fields() = toProto(field);
+  }
   ret.set_is_bigendian(cloud.is_bigendian);
   ret.set_point_step(cloud.point_step);
   ret.set_row_step(cloud.row_step);
@@ -75,7 +77,9 @@ sensor_msgs::PointCloud2 toROS(const seerep::PointCloud2& cloud)
   ret.height = cloud.height();
   ret.width = cloud.width();
   for (auto field : cloud.fields())
+  {
     ret.fields.push_back(toROS(field));
+  }
   ret.is_bigendian = cloud.is_bigendian();
   ret.point_step = cloud.point_step();
   ret.row_step = cloud.row_step();

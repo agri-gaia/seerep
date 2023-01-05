@@ -27,7 +27,20 @@ public:
   Hdf5CoreGeneral(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
 
   std::vector<std::string> getGroupDatasets(const std::string& id);
+  /**
+   * @brief Checks if a DataSet or DataGroup exists in the file
+   * @deprecated see exists()
+   * @param id The id of the DataSet or DataGroup
+   */
   void checkExists(const std::string& id);
+
+  /**
+   * @brief Checks if a DataSet or DataGroup exists in the file
+   * @param id The id of the DataSet or DataGroup
+   * @return true if the DataSet or DataGroup exists
+   */
+  bool exists(const std::string& id);
+
   std::optional<std::string> readFrameId(const std::string& datatypeGroup, const std::string& uuid);
   // ################
   //  Attributes
@@ -123,6 +136,8 @@ public:
   template <class T>
   std::shared_ptr<HighFive::DataSet> getHdf5DataSet(const std::string& hdf5DataSetPath, HighFive::DataSpace& dataSpace);
 
+  std::shared_ptr<HighFive::DataSet> getHdf5DataSet(const std::string& hdf5DataSetPath);
+
 private:
   void readLabel(const std::string& id, const std::string labelType, std::vector<std::string>& labels);
   void readBoundingBoxes(const std::string& id, const std::string boundingBoxType,
@@ -131,9 +146,9 @@ private:
 
 public:
   // header attribute keys
-  inline static const std::string HEADER_STAMP_SECONDS = "header_stamp_seconds";
-  inline static const std::string HEADER_STAMP_NANOS = "header_stamp_nanos";
-  inline static const std::string HEADER_FRAME_ID = "header_frame_id";
+  inline static const std::string HEADER_STAMP_SECONDS = "stamp_seconds";
+  inline static const std::string HEADER_STAMP_NANOS = "stamp_nanos";
+  inline static const std::string HEADER_FRAME_ID = "frame_id";
   inline static const std::string HEADER_SEQ = "header_seq";
 
   inline static const std::string AABB_FIELD = "AABB";

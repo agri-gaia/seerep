@@ -58,6 +58,7 @@ SpaceBeforeAssignmentOperators: true
 
 # Configure each individual brace in BraceWrapping
 BreakBeforeBraces: Custom
+InsertBraces: true
 
 # Control of individual brace wrapping cases
 BraceWrapping:

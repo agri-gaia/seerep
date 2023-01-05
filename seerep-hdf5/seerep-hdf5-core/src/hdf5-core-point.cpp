@@ -22,7 +22,9 @@ std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CorePoint::readDataset(con
   std::string hdf5DatasetRawDataPath = hdf5DatasetPath + "/" + seerep_hdf5_core::Hdf5CorePoint::RAWDATA;
 
   if (!m_file->exist(hdf5DatasetPath) || !m_file->exist(hdf5DatasetRawDataPath))
+  {
     return std::nullopt;
+  }
 
   std::shared_ptr<HighFive::DataSet> data_set_ptr =
       std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DatasetRawDataPath));

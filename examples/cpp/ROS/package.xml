@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>seerep_ros_examples</name>
+  <version>0.0.1</version>
+  <description>Examples on how to use SEEREP with ROS</description>
+
+  <maintainer email="mark.niemeyer@dfki.de">Mark Niemeyer</maintainer>
+  <author email="julian.arkenau@dfki.de">Julian Arkenau</author>
+
+  <license>BSD-3</license>
+
+  <url type="website">TODO</url>
+
+  <depend>seerep_hdf5_ros</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>roscpp</depend>
+
+  <buildtool_depend>catkin</buildtool_depend>
+</package>
