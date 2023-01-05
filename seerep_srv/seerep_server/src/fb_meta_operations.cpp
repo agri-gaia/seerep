@@ -230,8 +230,9 @@ FbMetaOperations::GetOverallTimeInterval(grpc::ServerContext* context,
   *response = builder.ReleaseMessage<seerep::fb::TimeInterval>();
 
   std::vector<seerep_core_msgs::Datatype> dt_vector;
-  for (auto datatype : *request->GetRoot()->datatypes())
+  for (auto datatype : *requestRoot->datatypes())
   {
+    auto casted_datatype = static_cast<seerep::fb::Datatype>(datatype);
     if (datatype == seerep::fb::Datatype_Image)
     {
       dt_vector.push_back(seerep_core_msgs::Datatype::Image);
