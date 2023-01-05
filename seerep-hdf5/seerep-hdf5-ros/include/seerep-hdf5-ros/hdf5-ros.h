@@ -50,15 +50,15 @@ public:
           const std::string& projectFrameId);
 
   /**
-   * @brief Write ROS Header message to HDF5
+   * @brief Write ROS Header message to a HDF5 group
    *
-   * The header attributes are written as attributes to a dataset
+   * The header attributes are written as hdf5 attributes
    *
-   * @param hdf5DataSetPath path to the dataset, where the header should be added to
+   * @param hdf5DataSetPath path to the data group, where the header should be added to
    * @param header the ROS header message
    */
 
-  void saveMessage(const std::string& hdf5DataSetPath, const std_msgs::Header& header);
+  void saveMessage(const std::string& hdf5GroupPath, const std_msgs::Header& header);
 
   /**
    * @brief Write ROS Image message to HDF5
