@@ -1,0 +1,5 @@
+h5py==3.7.0
+typer==0.7.0
+rich==13.0.1
+flatbuffers==22.12.6
+grpcio==1.51.1
