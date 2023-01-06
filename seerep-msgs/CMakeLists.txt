@@ -19,6 +19,7 @@ set(MY_PROTO_FILES
     protos/boundingbox_stamped.proto
     protos/boundingbox.proto
     protos/boundingbox2d_labeled.proto
+    protos/boundingbox2d_stamped.proto
     protos/boundingbox2d.proto
     protos/frame_infos.proto
     protos/frame_query.proto
@@ -61,6 +62,7 @@ set(MY_FBS_FILES
     fbs/boundingbox_stamped.fbs
     fbs/boundingbox.fbs
     fbs/boundingbox2d_labeled.fbs
+    fbs/boundingbox2d_stamped.fbs
     fbs/boundingbox2d.fbs
     fbs/boundingboxes2d_labeled_stamped.fbs
     fbs/datatype.fbs

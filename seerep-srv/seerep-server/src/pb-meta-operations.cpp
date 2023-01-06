@@ -12,13 +12,14 @@ grpc::Status PbMetaOperations::CreateProject(grpc::ServerContext* context, const
   (void)context;  // ignore that variable without causing warnings
   try
   {
-    std::cout << "create new project... " << std::endl;
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "create new project... ";
+
     seerep_core_msgs::ProjectInfo projectInfo;
     projectInfo.frameId = request->mapframeid();
     projectInfo.name = request->name();
     projectInfo.uuid = boost::uuids::random_generator()();
 
-    // assigning gedetic coords attributes individually
+    // assigning geodetic coords attributes individually
     projectInfo.geodetCoords.coordinateSystem = request->geodeticcoordinates().coordinatesystem();
     projectInfo.geodetCoords.ellipsoid = request->geodeticcoordinates().ellipsoid();
     projectInfo.geodetCoords.altitude = request->geodeticcoordinates().altitude();
@@ -66,7 +67,7 @@ grpc::Status PbMetaOperations::GetProjects(grpc::ServerContext* context, const g
       responseProjectInfo->set_uuid(boost::lexical_cast<std::string>(projectInfo.uuid));
       responseProjectInfo->set_frameid(projectInfo.frameId);
 
-      // assigning goedetic coords attributes individually
+      // assigning geodetic coords attributes individually
       responseProjectInfo->mutable_geodeticcoordinates()->set_coordinatesystem(
           projectInfo.geodetCoords.coordinateSystem);
       responseProjectInfo->mutable_geodeticcoordinates()->set_ellipsoid(projectInfo.geodetCoords.ellipsoid);
