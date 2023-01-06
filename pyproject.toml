@@ -2,3 +2,7 @@
 line-length = 120
 target-version = ['py38']
 skip-string-normalization = true
+
+[build-system]
+requires = ["setuptools", "dunamai", "pathlib"]
+build-backend = "setuptools.build_meta"
