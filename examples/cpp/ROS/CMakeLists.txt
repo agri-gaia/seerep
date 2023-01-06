@@ -1,4 +1,5 @@
 #catkin_lint: ignore critical_var_overwrite
+#catkin_lint: ignore uninstalled_script
 cmake_minimum_required(VERSION 3.0.2)
 project(seerep_ros_examples VERSION 0.1)
 

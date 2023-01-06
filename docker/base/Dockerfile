@@ -36,6 +36,7 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         python3-pip \
         flex \
         bison \
+        rsync \
         && rm -rf /var/lib/apt/lists/*
 
 COPY docker/base/requirements.txt /tmp/requirements.txt
