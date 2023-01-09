@@ -16,7 +16,8 @@
         "matepek.vscode-catch2-test-adapter",
         "davidanson.vscode-markdownlint",
         "cschlosser.doxdocgen",
-        "cheshirekow.cmake-format"
+        "cheshirekow.cmake-format",
+        "tamasfe.even-better-toml"
     ],
     "containerUser": "docker",
     "mounts": [
