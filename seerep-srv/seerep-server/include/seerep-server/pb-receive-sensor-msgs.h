@@ -20,22 +20,24 @@
 
 namespace seerep_server
 {
-class PbReceiveSensorMsgs final : public seerep::TransferSensorMsgs::Service
+class PbReceiveSensorMsgs final : public seerep::pb::TransferSensorMsgs::Service
 {
 public:
   PbReceiveSensorMsgs(std::shared_ptr<seerep_core::Core> seerepCore);
-  grpc::Status TransferHeader(grpc::ServerContext* context, const seerep::Header* header,
-                              seerep::ServerResponse* response);
+  grpc::Status TransferHeader(grpc::ServerContext* context, const seerep::pb::Header* header,
+                              seerep::pb::ServerResponse* response);
 
-  grpc::Status TransferPoint(grpc::ServerContext* context, const seerep::Point* point, seerep::ServerResponse* response);
+  grpc::Status TransferPoint(grpc::ServerContext* context, const seerep::pb::Point* point,
+                             seerep::pb::ServerResponse* response);
 
-  grpc::Status TransferQuaternion(grpc::ServerContext* context, const seerep::Quaternion* quaternion,
-                                  seerep::ServerResponse* response);
+  grpc::Status TransferQuaternion(grpc::ServerContext* context, const seerep::pb::Quaternion* quaternion,
+                                  seerep::pb::ServerResponse* response);
 
-  grpc::Status TransferPose(grpc::ServerContext* context, const seerep::Pose* pose, seerep::ServerResponse* response);
+  grpc::Status TransferPose(grpc::ServerContext* context, const seerep::pb::Pose* pose,
+                            seerep::pb::ServerResponse* response);
 
-  grpc::Status TransferPoseStamped(grpc::ServerContext* context, const seerep::PoseStamped* pose,
-                                   seerep::ServerResponse* response);
+  grpc::Status TransferPoseStamped(grpc::ServerContext* context, const seerep::pb::PoseStamped* pose,
+                                   seerep::pb::ServerResponse* response);
 
 private:
   std::shared_ptr<seerep_core::Core> seerepCore;

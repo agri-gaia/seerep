@@ -14,16 +14,16 @@
 
 namespace seerep_server
 {
-class PbPointCloudService final : public seerep::PointCloudService::Service
+class PbPointCloudService final : public seerep::pb::PointCloudService::Service
 {
 public:
   PbPointCloudService(std::shared_ptr<seerep_core::Core> seerepCore);
 
-  grpc::Status GetPointCloud2(grpc::ServerContext* context, const seerep::Query* request,
-                              grpc::ServerWriter<seerep::PointCloud2>* writer);
+  grpc::Status GetPointCloud2(grpc::ServerContext* context, const seerep::pb::Query* request,
+                              grpc::ServerWriter<seerep::pb::PointCloud2>* writer);
 
-  grpc::Status TransferPointCloud2(grpc::ServerContext* context, const seerep::PointCloud2* pointCloud2,
-                                   seerep::ServerResponse* response);
+  grpc::Status TransferPointCloud2(grpc::ServerContext* context, const seerep::pb::PointCloud2* pointCloud2,
+                                   seerep::pb::ServerResponse* response);
 
 private:
   std::shared_ptr<seerep_core_pb::CorePbPointCloud> pointCloudPb;

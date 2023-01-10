@@ -32,8 +32,8 @@ public:
   CorePbPointCloud(std::shared_ptr<seerep_core::Core> seerepCore);
   ~CorePbPointCloud();
 
-  std::vector<seerep::PointCloud2> getData(const seerep::Query& query);
-  boost::uuids::uuid addData(const seerep::PointCloud2& pc);
+  std::vector<seerep::pb::PointCloud2> getData(const seerep::pb::Query& query);
+  boost::uuids::uuid addData(const seerep::pb::PointCloud2& pc);
 
 private:
   void getFileAccessorFromCore(boost::uuids::uuid project);

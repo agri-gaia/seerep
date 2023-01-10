@@ -6,8 +6,8 @@ PbMetaOperations::PbMetaOperations(std::shared_ptr<seerep_core::Core> seerepCore
 {
 }
 
-grpc::Status PbMetaOperations::CreateProject(grpc::ServerContext* context, const seerep::ProjectCreation* request,
-                                             seerep::ProjectInfo* response)
+grpc::Status PbMetaOperations::CreateProject(grpc::ServerContext* context, const seerep::pb::ProjectCreation* request,
+                                             seerep::pb::ProjectInfo* response)
 {
   (void)context;  // ignore that variable without causing warnings
   try
@@ -41,7 +41,7 @@ grpc::Status PbMetaOperations::CreateProject(grpc::ServerContext* context, const
 }
 
 grpc::Status PbMetaOperations::GetProjects(grpc::ServerContext* context, const google::protobuf::Empty* request,
-                                           seerep::ProjectInfos* response)
+                                           seerep::pb::ProjectInfos* response)
 {
   (void)context;  // ignore that variable without causing warnings
   (void)request;  // ignore that variable without causing warnings

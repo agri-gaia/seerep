@@ -33,23 +33,23 @@ protected:
   //  Attributes
   // ################
   template <class T>
-  void writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, const seerep::Header& header);
+  void writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, const seerep::pb::Header& header);
 
   template <class T>
-  seerep::Header readHeaderAttributes(HighFive::AnnotateTraits<T>& object, const std::string& id);
+  seerep::pb::Header readHeaderAttributes(HighFive::AnnotateTraits<T>& object, const std::string& id);
 
   // ################
   //  BoundingBoxes
   // ################
   void writeBoundingBoxLabeled(
       const std::string& datatypeGroup, const std::string& uuid,
-      const google::protobuf::RepeatedPtrField<::seerep::BoundingBoxLabeledWithCategory>& boundingboxLabeled);
+      const google::protobuf::RepeatedPtrField<::seerep::pb::BoundingBoxLabeledWithCategory>& boundingboxLabeled);
 
   void writeBoundingBox2DLabeled(
       const std::string& datatypeGroup, const std::string& uuid,
-      const google::protobuf::RepeatedPtrField<seerep::BoundingBox2DLabeledWithCategory>& boundingbox2DLabeled);
+      const google::protobuf::RepeatedPtrField<seerep::pb::BoundingBox2DLabeledWithCategory>& boundingbox2DLabeled);
 
-  std::optional<google::protobuf::RepeatedPtrField<::seerep::BoundingBox2DLabeledWithCategory>>
+  std::optional<google::protobuf::RepeatedPtrField<::seerep::pb::BoundingBox2DLabeledWithCategory>>
   readBoundingBox2DLabeled(const std::string& datatypeGroup, const std::string& uuid);
 
   // ################
@@ -57,9 +57,9 @@ protected:
   // ################
   void writeLabelsGeneral(
       const std::string& datatypeGroup, const std::string& uuid,
-      const google::protobuf::RepeatedPtrField<seerep::LabelsWithInstanceWithCategory>& labelsGeneralWithInstances);
+      const google::protobuf::RepeatedPtrField<seerep::pb::LabelsWithInstanceWithCategory>& labelsGeneralWithInstances);
 
-  std::optional<google::protobuf::RepeatedPtrField<seerep::LabelsWithInstanceWithCategory>>
+  std::optional<google::protobuf::RepeatedPtrField<seerep::pb::LabelsWithInstanceWithCategory>>
   readLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid);
 };
 

@@ -49,17 +49,17 @@ inline int sizeOfPointField(int datatype)
 {
   switch (datatype)
   {
-    case seerep::PointField_Datatype_INT8:
-    case seerep::PointField_Datatype_UINT8:
+    case seerep::pb::PointField_Datatype_INT8:
+    case seerep::pb::PointField_Datatype_UINT8:
       return 1;
-    case seerep::PointField_Datatype_INT16:
-    case seerep::PointField_Datatype_UINT16:
+    case seerep::pb::PointField_Datatype_INT16:
+    case seerep::pb::PointField_Datatype_UINT16:
       return 2;
-    case seerep::PointField_Datatype_INT32:
-    case seerep::PointField_Datatype_UINT32:
-    case seerep::PointField_Datatype_FLOAT32:
+    case seerep::pb::PointField_Datatype_INT32:
+    case seerep::pb::PointField_Datatype_UINT32:
+    case seerep::pb::PointField_Datatype_FLOAT32:
       return 4;
-    case seerep::PointField_Datatype_FLOAT64:
+    case seerep::pb::PointField_Datatype_FLOAT64:
       return 8;
 
     default:
@@ -78,13 +78,14 @@ inline int sizeOfPointField(int datatype)
  * @param offset the offset of that element
  * @return the offset of the next PointField that will be added to the PointCloud2
  */
-inline int addPointField(seerep::PointCloud2& cloud_msg, const std::string& name, int count, int datatype, int offset)
+inline int addPointField(seerep::pb::PointCloud2& cloud_msg, const std::string& name, int count, int datatype,
+                         int offset)
 {
-  seerep::PointField* field_ptr = cloud_msg.add_fields();
+  seerep::pb::PointField* field_ptr = cloud_msg.add_fields();
 
   field_ptr->set_name(name);
   field_ptr->set_count(count);
-  field_ptr->set_datatype(seerep::PointField_Datatype(datatype));
+  field_ptr->set_datatype(seerep::pb::PointField_Datatype(datatype));
   field_ptr->set_offset(offset);
 
   // Update the offset
@@ -96,7 +97,7 @@ inline int addPointField(seerep::PointCloud2& cloud_msg, const std::string& name
 
 namespace seerep_hdf5_pb
 {
-inline PointCloud2Modifier::PointCloud2Modifier(seerep::PointCloud2& cloud_msg) : cloud_msg_(cloud_msg)
+inline PointCloud2Modifier::PointCloud2Modifier(seerep::pb::PointCloud2& cloud_msg) : cloud_msg_(cloud_msg)
 {
 }
 
@@ -195,17 +196,17 @@ inline void PointCloud2Modifier::setPointCloud2FieldsByString(int n_fields, ...)
     if (field_name == "xyz")
     {
       // Do x, y and z
-      offset = addPointField(cloud_msg_, "x", 1, seerep::PointField_Datatype_FLOAT32, offset);
-      offset = addPointField(cloud_msg_, "y", 1, seerep::PointField_Datatype_FLOAT32, offset);
-      offset = addPointField(cloud_msg_, "z", 1, seerep::PointField_Datatype_FLOAT32, offset);
-      offset += sizeOfPointField(seerep::PointField_Datatype_FLOAT32);
+      offset = addPointField(cloud_msg_, "x", 1, seerep::pb::PointField_Datatype_FLOAT32, offset);
+      offset = addPointField(cloud_msg_, "y", 1, seerep::pb::PointField_Datatype_FLOAT32, offset);
+      offset = addPointField(cloud_msg_, "z", 1, seerep::pb::PointField_Datatype_FLOAT32, offset);
+      offset += sizeOfPointField(seerep::pb::PointField_Datatype_FLOAT32);
     }
     else
     {
       if ((field_name == "rgb") || (field_name == "rgba"))
       {
-        offset = addPointField(cloud_msg_, field_name, 1, seerep::PointField_Datatype_FLOAT32, offset);
-        offset += 3 * sizeOfPointField(seerep::PointField_Datatype_FLOAT32);
+        offset = addPointField(cloud_msg_, field_name, 1, seerep::pb::PointField_Datatype_FLOAT32, offset);
+        offset += 3 * sizeOfPointField(seerep::pb::PointField_Datatype_FLOAT32);
       }
       else
       {
@@ -346,7 +347,7 @@ V<T> PointCloud2IteratorBase<T, TT, U, C, V>::end() const
  * @return the offset at which the field is found
  */
 template <typename T, typename TT, typename U, typename C, template <typename> class V>
-int PointCloud2IteratorBase<T, TT, U, C, V>::set_field(const seerep::PointCloud2& cloud_msg,
+int PointCloud2IteratorBase<T, TT, U, C, V>::set_field(const seerep::pb::PointCloud2& cloud_msg,
                                                        const std::string& field_name)
 {
   is_bigendian_ = cloud_msg.is_bigendian();
@@ -355,7 +356,7 @@ int PointCloud2IteratorBase<T, TT, U, C, V>::set_field(const seerep::PointCloud2
 
   for (int i = 0; i < cloud_msg.fields_size(); i++)
   {
-    const seerep::PointField& field = cloud_msg.fields(i);
+    const seerep::pb::PointField& field = cloud_msg.fields(i);
     if (field.name() == field_name)
     {
       return field.offset();
@@ -371,7 +372,7 @@ int PointCloud2IteratorBase<T, TT, U, C, V>::set_field(const seerep::PointCloud2
   {
     for (int i = 0; i < cloud_msg.fields_size(); i++)
     {
-      const seerep::PointField& field = cloud_msg.fields(i);
+      const seerep::pb::PointField& field = cloud_msg.fields(i);
 
       if (field.name() == "rgb" || field.name() == "rgba")
       {

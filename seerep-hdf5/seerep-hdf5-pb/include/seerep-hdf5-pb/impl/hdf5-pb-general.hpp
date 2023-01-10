@@ -2,7 +2,7 @@
 namespace seerep_hdf5_pb
 {
 template <class T>
-void Hdf5PbGeneral::writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, const seerep::Header& header)
+void Hdf5PbGeneral::writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, const seerep::pb::Header& header)
 {
   if (!object.hasAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS))
   {
@@ -42,9 +42,9 @@ void Hdf5PbGeneral::writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, c
 }
 
 template <class T>
-seerep::Header Hdf5PbGeneral::readHeaderAttributes(HighFive::AnnotateTraits<T>& object, const std::string& id)
+seerep::pb::Header Hdf5PbGeneral::readHeaderAttributes(HighFive::AnnotateTraits<T>& object, const std::string& id)
 {
-  seerep::Header header;
+  seerep::pb::Header header;
 
   int64_t seconds;
   int32_t nanos;
