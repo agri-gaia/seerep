@@ -165,43 +165,72 @@ grpc::Status FbMetaOperations::DeleteProject(grpc::ServerContext* context,
   return grpc::Status::OK;
 }
 
-// grpc::Status
-// FbMetaOperations::GetOverallTimeInterval(grpc::ServerContext* context,
-//                                          const flatbuffers::grpc::Message<seerep::fb::UuidDatatypePair>* request,
-//                                          flatbuffers::grpc::Message<seerep::fb::TimeInterval>* response)
-// {
-//   std::string uuid = request->GetRoot()->projectuuid()->str();
-//   boost::uuids::string_generator gen;
-//   auto uuidFromString = gen(uuid);
+grpc::Status
+FbMetaOperations::GetOverallTimeInterval(grpc::ServerContext* context,
+                                         const flatbuffers::grpc::Message<seerep::fb::UuidDatatypePair>* request,
+                                         flatbuffers::grpc::Message<seerep::fb::TimeInterval>* response)
+{
+  (void)context;  // ignore that variable without causing warnings
+  auto requestRoot = request->GetRoot();
 
-//   std::vector<std::string> dt_vector;
-//   for (auto dt : *request->GetRoot()->datatypes())
-//   {
-//     dt_vector.push_back(dt->str());
-//   }
+  std::string uuid = request->GetRoot()->projectuuid()->str();
+  boost::uuids::string_generator gen;
+  auto uuidFromString = gen(uuid);
 
-//   seerep_core_msgs::AabbTime timeinterval = seerepCore->getOverallTimeInterval(uuidFromString);
+  std::vector<seerep_core_msgs::Datatype> dt_vector;
 
-//   flatbuffers::grpc::MessageBuilder builder;
+  seerep::fb::Datatype casted_datatype = static_cast<seerep::fb::Datatype>(requestRoot->datatypes());
+  if (casted_datatype == seerep::fb::Datatype_Image)
+  {
+    dt_vector.push_back(seerep_core_msgs::Datatype::Image);
+  }
+  else if (casted_datatype == seerep::fb::Datatype_PointCloud)
+  {
+    dt_vector.push_back(seerep_core_msgs::Datatype::PointCloud);
+  }
+  else if (casted_datatype == seerep::fb::Datatype_Point)
+  {
+    dt_vector.push_back(seerep_core_msgs::Datatype::Point);
+  }
+  else
+  {
+    dt_vector.push_back(seerep_core_msgs::Datatype::Unknown);
+  }
 
-//   seerep::fb::TimestampBuilder minTimeStampBuilder(builder);
-//   minTimeStampBuilder.add_seconds(timeinterval.min_corner().get<0>());
-//   flatbuffers::Offset<seerep::fb::Timestamp> min = minTimeStampBuilder.Finish();
+  seerep_core_msgs::AabbTime timeinterval = seerepCore->getOverallTimeInterval(uuidFromString, dt_vector);
 
-//   seerep::fb::TimestampBuilder maxTimeStampBuilder(builder);
-//   maxTimeStampBuilder.add_seconds(timeinterval.max_corner().get<0>());
-//   flatbuffers::Offset<seerep::fb::Timestamp> max = maxTimeStampBuilder.Finish();
+  // isolate second and nano second bits from min time
+  uint64_t mintime = timeinterval.min_corner().get<0>();
+  uint32_t min_nanos = (uint32_t)mintime;
+  uint32_t min_seconds = (uint32_t)(mintime >> 32);
 
-//   seerep::fb::TimeIntervalBuilder timeIntervalBuilder(builder);
-//   timeIntervalBuilder.add_time_min(min);
-//   timeIntervalBuilder.add_time_max(max);
-//   flatbuffers::Offset<seerep::fb::TimeInterval> bb = timeIntervalBuilder.Finish();
+  // isolate second and nano second bits from max time
+  uint64_t maxtime = timeinterval.max_corner().get<0>();
+  uint32_t max_nanos = (uint32_t)maxtime;
+  uint32_t max_seconds = (uint32_t)(maxtime >> 32);
 
-//   builder.Finish(bb);
-//   *response = builder.ReleaseMessage<seerep::fb::TimeInterval>();
+  flatbuffers::grpc::MessageBuilder builder;
 
-//   return grpc::Status::OK;
-// }
+  seerep::fb::TimestampBuilder minTimeStampBuilder(builder);
+  minTimeStampBuilder.add_seconds(min_seconds);
+  minTimeStampBuilder.add_nanos(min_nanos);
+  flatbuffers::Offset<seerep::fb::Timestamp> min = minTimeStampBuilder.Finish();
+
+  seerep::fb::TimestampBuilder maxTimeStampBuilder(builder);
+  maxTimeStampBuilder.add_seconds(max_seconds);
+  maxTimeStampBuilder.add_nanos(max_nanos);
+  flatbuffers::Offset<seerep::fb::Timestamp> max = maxTimeStampBuilder.Finish();
+
+  seerep::fb::TimeIntervalBuilder timeIntervalBuilder(builder);
+  timeIntervalBuilder.add_time_min(min);
+  timeIntervalBuilder.add_time_max(max);
+  flatbuffers::Offset<seerep::fb::TimeInterval> bb = timeIntervalBuilder.Finish();
+
+  builder.Finish(bb);
+  *response = builder.ReleaseMessage<seerep::fb::TimeInterval>();
+
+  return grpc::Status::OK;
+}
 
 grpc::Status
 FbMetaOperations::GetOverallBoundingBox(grpc::ServerContext* context,
