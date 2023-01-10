@@ -4,7 +4,7 @@ import os
 import sys
 
 import flatbuffers
-from fb import Boundingbox, Datatype
+from fb import Boundingbox, Datatype, TimeInterval
 from fb import meta_operations_grpc_fb as metaOperations
 
 # importing util functions. Assuming that these files are in the parent dir
@@ -56,3 +56,10 @@ print(
     + " , "
     + str(response.PointMax().Z())
 )
+
+responseBuf = stub.GetOverallTimeInterval(bytes(buf))
+response = TimeInterval.TimeInterval.GetRootAs(responseBuf)
+
+print("Min Time (Seconds, Nanoseconds): " + str(response.TimeMin().Seconds()) + " ," + str(response.TimeMin().Nanos()))
+
+print("Max Time (Seconds, Nanoseconds): " + str(response.TimeMax().Seconds()) + " ," + str(response.TimeMax().Nanos()))
