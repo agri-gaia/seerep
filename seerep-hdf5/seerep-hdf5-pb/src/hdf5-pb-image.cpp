@@ -9,7 +9,7 @@ Hdf5PbImage::Hdf5PbImage(std::shared_ptr<HighFive::File>& file, std::shared_ptr<
 {
 }
 
-void Hdf5PbImage::writeImage(const std::string& id, const seerep::Image& image)
+void Hdf5PbImage::writeImage(const std::string& id, const seerep::pb::Image& image)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
@@ -37,7 +37,7 @@ void Hdf5PbImage::writeImage(const std::string& id, const seerep::Image& image)
   m_file->flush();
 }
 
-std::optional<seerep::Image> Hdf5PbImage::readImage(const std::string& id)
+std::optional<seerep::pb::Image> Hdf5PbImage::readImage(const std::string& id)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
@@ -69,7 +69,7 @@ std::optional<seerep::Image> Hdf5PbImage::readImage(const std::string& id)
   dataSetPtr->read(data);
 
   // create pb image message
-  seerep::Image image;
+  seerep::pb::Image image;
 
   *image.mutable_header() = header;
 

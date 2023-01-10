@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package seerep;
+package seerep.pb;
 
 import "transform_stamped.proto";
 import "transform_stamped_query.proto";

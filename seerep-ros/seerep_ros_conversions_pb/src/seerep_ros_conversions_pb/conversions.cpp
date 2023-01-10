@@ -5,9 +5,9 @@ namespace seerep_ros_conversions_pb
 /*
  * Header
  */
-seerep::Header toProto(const std_msgs::Header& header)
+seerep::pb::Header toProto(const std_msgs::Header& header)
 {
-  seerep::Header ret;
+  seerep::pb::Header ret;
   ret.set_seq(header.seq);
   ret.set_frame_id(header.frame_id);
   ret.mutable_stamp()->set_seconds(header.stamp.sec);
@@ -15,7 +15,7 @@ seerep::Header toProto(const std_msgs::Header& header)
   return ret;
 }
 
-std_msgs::Header toROS(const seerep::Header& header)
+std_msgs::Header toROS(const seerep::pb::Header& header)
 {
   std_msgs::Header ret;
   ret.seq = header.seq();
@@ -28,17 +28,17 @@ std_msgs::Header toROS(const seerep::Header& header)
 /*
  * PointField
  */
-seerep::PointField toProto(const sensor_msgs::PointField& point_field)
+seerep::pb::PointField toProto(const sensor_msgs::PointField& point_field)
 {
-  seerep::PointField ret;
+  seerep::pb::PointField ret;
   ret.set_name(point_field.name);
   ret.set_offset(point_field.offset);
-  ret.set_datatype(seerep::PointField_Datatype(point_field.datatype));
+  ret.set_datatype(seerep::pb::PointField_Datatype(point_field.datatype));
   ret.set_count(point_field.count);
   return ret;
 }
 
-sensor_msgs::PointField toROS(const seerep::PointField& point_field)
+sensor_msgs::PointField toROS(const seerep::pb::PointField& point_field)
 {
   sensor_msgs::PointField ret;
   ret.name = point_field.name();
@@ -51,9 +51,9 @@ sensor_msgs::PointField toROS(const seerep::PointField& point_field)
 /*
  * PointCloud2
  */
-seerep::PointCloud2 toProto(const sensor_msgs::PointCloud2& cloud, std::string projectuuid)
+seerep::pb::PointCloud2 toProto(const sensor_msgs::PointCloud2& cloud, std::string projectuuid)
 {
-  seerep::PointCloud2 ret;
+  seerep::pb::PointCloud2 ret;
   *ret.mutable_header() = toProto(cloud.header);
   *ret.mutable_header()->mutable_uuid_project() = projectuuid;
   ret.set_height(cloud.height);
@@ -70,7 +70,7 @@ seerep::PointCloud2 toProto(const sensor_msgs::PointCloud2& cloud, std::string p
   return ret;
 }
 
-sensor_msgs::PointCloud2 toROS(const seerep::PointCloud2& cloud)
+sensor_msgs::PointCloud2 toROS(const seerep::pb::PointCloud2& cloud)
 {
   sensor_msgs::PointCloud2 ret;
   ret.header = toROS(cloud.header());
@@ -91,9 +91,9 @@ sensor_msgs::PointCloud2 toROS(const seerep::PointCloud2& cloud)
 /*
  * Image
  */
-seerep::Image toProto(const sensor_msgs::Image& image, std::string projectuuid)
+seerep::pb::Image toProto(const sensor_msgs::Image& image, std::string projectuuid)
 {
-  seerep::Image ret;
+  seerep::pb::Image ret;
   *ret.mutable_header() = toProto(image.header);
   *ret.mutable_header()->mutable_uuid_project() = projectuuid;
   ret.set_height(image.height);
@@ -105,7 +105,7 @@ seerep::Image toProto(const sensor_msgs::Image& image, std::string projectuuid)
   return ret;
 }
 
-sensor_msgs::Image toROS(const seerep::Image& image)
+sensor_msgs::Image toROS(const seerep::pb::Image& image)
 {
   sensor_msgs::Image ret;
   ret.header = toROS(image.header());
@@ -121,16 +121,16 @@ sensor_msgs::Image toROS(const seerep::Image& image)
 /*
  * Point
  */
-seerep::Point toProto(const geometry_msgs::Point& point)
+seerep::pb::Point toProto(const geometry_msgs::Point& point)
 {
-  seerep::Point ret;
+  seerep::pb::Point ret;
   ret.set_x(point.x);
   ret.set_y(point.y);
   ret.set_z(point.z);
   return ret;
 }
 
-geometry_msgs::Point toROS(const seerep::Point& point)
+geometry_msgs::Point toROS(const seerep::pb::Point& point)
 {
   geometry_msgs::Point ret;
   ret.x = point.x();
@@ -142,9 +142,9 @@ geometry_msgs::Point toROS(const seerep::Point& point)
 /*
  * Quaternion
  */
-seerep::Quaternion toProto(const geometry_msgs::Quaternion& quaternion)
+seerep::pb::Quaternion toProto(const geometry_msgs::Quaternion& quaternion)
 {
-  seerep::Quaternion ret;
+  seerep::pb::Quaternion ret;
   ret.set_x(quaternion.x);
   ret.set_y(quaternion.y);
   ret.set_z(quaternion.z);
@@ -152,7 +152,7 @@ seerep::Quaternion toProto(const geometry_msgs::Quaternion& quaternion)
   return ret;
 }
 
-geometry_msgs::Quaternion toROS(const seerep::Quaternion& quaternion)
+geometry_msgs::Quaternion toROS(const seerep::pb::Quaternion& quaternion)
 {
   geometry_msgs::Quaternion ret;
   ret.x = quaternion.x();
@@ -165,15 +165,15 @@ geometry_msgs::Quaternion toROS(const seerep::Quaternion& quaternion)
 /*
  * Pose
  */
-seerep::Pose toProto(const geometry_msgs::Pose& pose)
+seerep::pb::Pose toProto(const geometry_msgs::Pose& pose)
 {
-  seerep::Pose ret;
+  seerep::pb::Pose ret;
   *ret.mutable_position() = toProto(pose.position);
   *ret.mutable_orientation() = toProto(pose.orientation);
   return ret;
 }
 
-geometry_msgs::Pose toROS(const seerep::Pose& pose)
+geometry_msgs::Pose toROS(const seerep::pb::Pose& pose)
 {
   geometry_msgs::Pose ret;
   ret.position = toROS(pose.position());
@@ -184,15 +184,15 @@ geometry_msgs::Pose toROS(const seerep::Pose& pose)
 /*
  * PoseStamped
  */
-seerep::PoseStamped toProto(const geometry_msgs::PoseStamped& pose)
+seerep::pb::PoseStamped toProto(const geometry_msgs::PoseStamped& pose)
 {
-  seerep::PoseStamped ret;
+  seerep::pb::PoseStamped ret;
   *ret.mutable_header() = toProto(pose.header);
   *ret.mutable_pose() = toProto(pose.pose);
   return ret;
 }
 
-geometry_msgs::PoseStamped toROS(const seerep::PoseStamped& pose)
+geometry_msgs::PoseStamped toROS(const seerep::pb::PoseStamped& pose)
 {
   geometry_msgs::PoseStamped ret;
   ret.header = toROS(pose.header());
@@ -203,16 +203,16 @@ geometry_msgs::PoseStamped toROS(const seerep::PoseStamped& pose)
 /*
  * Vector3
  */
-seerep::Vector3 toProto(const geometry_msgs::Vector3& vector)
+seerep::pb::Vector3 toProto(const geometry_msgs::Vector3& vector)
 {
-  seerep::Vector3 ret;
+  seerep::pb::Vector3 ret;
   ret.set_x(vector.x);
   ret.set_y(vector.y);
   ret.set_z(vector.z);
   return ret;
 }
 
-geometry_msgs::Vector3 toROS(const seerep::Vector3& vector)
+geometry_msgs::Vector3 toROS(const seerep::pb::Vector3& vector)
 {
   geometry_msgs::Vector3 ret;
   ret.x = vector.x();
@@ -224,15 +224,15 @@ geometry_msgs::Vector3 toROS(const seerep::Vector3& vector)
 /*
  * Vector3Stamped
  */
-seerep::Vector3Stamped toProto(const geometry_msgs::Vector3Stamped& vector)
+seerep::pb::Vector3Stamped toProto(const geometry_msgs::Vector3Stamped& vector)
 {
-  seerep::Vector3Stamped ret;
+  seerep::pb::Vector3Stamped ret;
   *ret.mutable_header() = toProto(vector.header);
   *ret.mutable_vector() = toProto(vector.vector);
   return ret;
 }
 
-geometry_msgs::Vector3Stamped toROS(const seerep::Vector3Stamped& vector)
+geometry_msgs::Vector3Stamped toROS(const seerep::pb::Vector3Stamped& vector)
 {
   geometry_msgs::Vector3Stamped ret;
   ret.header = toROS(vector.header());
@@ -243,15 +243,15 @@ geometry_msgs::Vector3Stamped toROS(const seerep::Vector3Stamped& vector)
 /*
  * Transform
  */
-seerep::Transform toProto(const geometry_msgs::Transform& transform)
+seerep::pb::Transform toProto(const geometry_msgs::Transform& transform)
 {
-  seerep::Transform ret;
+  seerep::pb::Transform ret;
   *ret.mutable_translation() = toProto(transform.translation);
   *ret.mutable_rotation() = toProto(transform.rotation);
   return ret;
 }
 
-geometry_msgs::Transform toROS(const seerep::Transform& transform)
+geometry_msgs::Transform toROS(const seerep::pb::Transform& transform)
 {
   geometry_msgs::Transform ret;
   ret.translation = toROS(transform.translation());
@@ -262,9 +262,9 @@ geometry_msgs::Transform toROS(const seerep::Transform& transform)
 /*
  * TransformStamped
  */
-seerep::TransformStamped toProto(const geometry_msgs::TransformStamped& transform, std::string projectuuid)
+seerep::pb::TransformStamped toProto(const geometry_msgs::TransformStamped& transform, std::string projectuuid)
 {
-  seerep::TransformStamped ret;
+  seerep::pb::TransformStamped ret;
   *ret.mutable_header() = toProto(transform.header);
   *ret.mutable_header()->mutable_uuid_project() = projectuuid;
   *ret.mutable_child_frame_id() = transform.child_frame_id;
@@ -273,7 +273,7 @@ seerep::TransformStamped toProto(const geometry_msgs::TransformStamped& transfor
   return ret;
 }
 
-geometry_msgs::TransformStamped toROS(const seerep::TransformStamped& transform)
+geometry_msgs::TransformStamped toROS(const seerep::pb::TransformStamped& transform)
 {
   geometry_msgs::TransformStamped ret;
   ret.header = toROS(transform.header());

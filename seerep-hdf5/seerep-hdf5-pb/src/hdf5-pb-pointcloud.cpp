@@ -26,7 +26,7 @@ std::map<std::string, HighFive::Group> Hdf5PbPointCloud::getPointClouds()
 }
 
 std::shared_ptr<HighFive::Group> Hdf5PbPointCloud::writePointCloud2(const std::string& uuid,
-                                                                    const seerep::PointCloud2& pointcloud2)
+                                                                    const seerep::pb::PointCloud2& pointcloud2)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
@@ -86,7 +86,8 @@ std::shared_ptr<HighFive::Group> Hdf5PbPointCloud::writePointCloud2(const std::s
   return data_group_ptr;
 }
 
-void Hdf5PbPointCloud::writePoints(HighFive::Group& object, const std::string& uuid, const seerep::PointCloud2& cloud)
+void Hdf5PbPointCloud::writePoints(HighFive::Group& object, const std::string& uuid,
+                                   const seerep::pb::PointCloud2& cloud)
 {
   std::string points_id = seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + uuid + "/points";
   HighFive::DataSpace data_space({ cloud.height(), cloud.width(), 3 });
@@ -164,7 +165,7 @@ void Hdf5PbPointCloud::writePoints(HighFive::Group& object, const std::string& u
   points_dataset_ptr->write(point_data);
 }
 
-void Hdf5PbPointCloud::writeColorsRGB(const std::string& uuid, const seerep::PointCloud2& cloud)
+void Hdf5PbPointCloud::writeColorsRGB(const std::string& uuid, const seerep::pb::PointCloud2& cloud)
 {
   const std::string colors_id = seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + uuid + "/colors";
   HighFive::DataSpace data_space({ cloud.height(), cloud.width(), 3 });
@@ -199,7 +200,7 @@ void Hdf5PbPointCloud::writeColorsRGB(const std::string& uuid, const seerep::Poi
   colors_dataset_ptr->write(colors_data);
 }
 
-void Hdf5PbPointCloud::writeColorsRGBA(const std::string& uuid, const seerep::PointCloud2& cloud)
+void Hdf5PbPointCloud::writeColorsRGBA(const std::string& uuid, const seerep::pb::PointCloud2& cloud)
 {
   const std::string colors_id = seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + uuid + "/colors";
   HighFive::DataSpace data_space({ cloud.height(), cloud.width(), 4 });
@@ -238,36 +239,36 @@ void Hdf5PbPointCloud::writeColorsRGBA(const std::string& uuid, const seerep::Po
   colors_dataset_ptr->write(colors_data);
 }
 
-void Hdf5PbPointCloud::writeOtherFields(const std::string& uuid, const seerep::PointCloud2& cloud,
-                                        const std::map<std::string, seerep::PointField>& fields)
+void Hdf5PbPointCloud::writeOtherFields(const std::string& uuid, const seerep::pb::PointCloud2& cloud,
+                                        const std::map<std::string, seerep::pb::PointField>& fields)
 {
   for (auto field_map_entry : fields)
   {
     const auto& field = field_map_entry.second;
     switch (field.datatype())
     {
-      case seerep::PointField::INT8:
+      case seerep::pb::PointField::INT8:
         write<int8_t>(uuid, field.name(), cloud, field.count());
         break;
-      case seerep::PointField::UINT8:
+      case seerep::pb::PointField::UINT8:
         write<uint8_t>(uuid, field.name(), cloud, field.count());
         break;
-      case seerep::PointField::INT16:
+      case seerep::pb::PointField::INT16:
         write<int16_t>(uuid, field.name(), cloud, field.count());
         break;
-      case seerep::PointField::UINT16:
+      case seerep::pb::PointField::UINT16:
         write<uint16_t>(uuid, field.name(), cloud, field.count());
         break;
-      case seerep::PointField::INT32:
+      case seerep::pb::PointField::INT32:
         write<int32_t>(uuid, field.name(), cloud, field.count());
         break;
-      case seerep::PointField::UINT32:
+      case seerep::pb::PointField::UINT32:
         write<uint32_t>(uuid, field.name(), cloud, field.count());
         break;
-      case seerep::PointField::FLOAT32:
+      case seerep::pb::PointField::FLOAT32:
         write<float>(uuid, field.name(), cloud, field.count());
         break;
-      case seerep::PointField::FLOAT64:
+      case seerep::pb::PointField::FLOAT64:
         write<double>(uuid, field.name(), cloud, field.count());
         break;
       default:
@@ -277,7 +278,7 @@ void Hdf5PbPointCloud::writeOtherFields(const std::string& uuid, const seerep::P
   }
 }
 
-Hdf5PbPointCloud::CloudInfo Hdf5PbPointCloud::getCloudInfo(const seerep::PointCloud2& cloud)
+Hdf5PbPointCloud::CloudInfo Hdf5PbPointCloud::getCloudInfo(const seerep::pb::PointCloud2& cloud)
 {
   bool hasFieldx = false;
   bool hasFieldy = false;
@@ -323,7 +324,7 @@ Hdf5PbPointCloud::CloudInfo Hdf5PbPointCloud::getCloudInfo(const seerep::PointCl
 }
 
 // TODO read partial point cloud, e.g. only xyz without color, etc.
-std::optional<seerep::PointCloud2> Hdf5PbPointCloud::readPointCloud2(const std::string& uuid)
+std::optional<seerep::pb::PointCloud2> Hdf5PbPointCloud::readPointCloud2(const std::string& uuid)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
@@ -333,7 +334,7 @@ std::optional<seerep::PointCloud2> Hdf5PbPointCloud::readPointCloud2(const std::
   }
   HighFive::Group cloud_group = m_file->getGroup(uuid);
 
-  seerep::PointCloud2 pointcloud2;
+  seerep::pb::PointCloud2 pointcloud2;
 
   *pointcloud2.mutable_header() = readHeaderAttributes(cloud_group, uuid);
 
@@ -384,7 +385,7 @@ std::optional<seerep::PointCloud2> Hdf5PbPointCloud::readPointCloud2(const std::
   return pointcloud2;
 }
 
-void Hdf5PbPointCloud::readPoints(const std::string& uuid, seerep::PointCloud2& cloud)
+void Hdf5PbPointCloud::readPoints(const std::string& uuid, seerep::pb::PointCloud2& cloud)
 {
   seerep_hdf5_pb::PointCloud2Iterator<float> x_iter(cloud, "x");
   seerep_hdf5_pb::PointCloud2Iterator<float> y_iter(cloud, "y");
@@ -409,7 +410,7 @@ void Hdf5PbPointCloud::readPoints(const std::string& uuid, seerep::PointCloud2& 
   }
 }
 
-void Hdf5PbPointCloud::readColorsRGB(const std::string& uuid, seerep::PointCloud2& cloud)
+void Hdf5PbPointCloud::readColorsRGB(const std::string& uuid, seerep::pb::PointCloud2& cloud)
 {
   seerep_hdf5_pb::PointCloud2Iterator<uint8_t> r_iter(cloud, "r");
   seerep_hdf5_pb::PointCloud2Iterator<uint8_t> g_iter(cloud, "g");
@@ -434,7 +435,7 @@ void Hdf5PbPointCloud::readColorsRGB(const std::string& uuid, seerep::PointCloud
   }
 }
 
-void Hdf5PbPointCloud::readColorsRGBA(const std::string& uuid, seerep::PointCloud2& cloud)
+void Hdf5PbPointCloud::readColorsRGBA(const std::string& uuid, seerep::pb::PointCloud2& cloud)
 {
   seerep_hdf5_pb::PointCloud2Iterator<uint8_t> r_iter(cloud, "r");
   seerep_hdf5_pb::PointCloud2Iterator<uint8_t> g_iter(cloud, "g");
@@ -465,36 +466,36 @@ void Hdf5PbPointCloud::readColorsRGBA(const std::string& uuid, seerep::PointClou
   }
 }
 
-void Hdf5PbPointCloud::readOtherFields(const std::string& uuid, seerep::PointCloud2& cloud,
-                                       const std::map<std::string, seerep::PointField>& fields)
+void Hdf5PbPointCloud::readOtherFields(const std::string& uuid, seerep::pb::PointCloud2& cloud,
+                                       const std::map<std::string, seerep::pb::PointField>& fields)
 {
   for (auto field_map_entry : fields)
   {
     const auto& field = field_map_entry.second;
     switch (field.datatype())
     {
-      case seerep::PointField::INT8:
+      case seerep::pb::PointField::INT8:
         read<int8_t>(uuid, field.name(), cloud, field.count());
         break;
-      case seerep::PointField::UINT8:
+      case seerep::pb::PointField::UINT8:
         read<uint8_t>(uuid, field.name(), cloud, field.count());
         break;
-      case seerep::PointField::INT16:
+      case seerep::pb::PointField::INT16:
         read<int16_t>(uuid, field.name(), cloud, field.count());
         break;
-      case seerep::PointField::UINT16:
+      case seerep::pb::PointField::UINT16:
         read<uint16_t>(uuid, field.name(), cloud, field.count());
         break;
-      case seerep::PointField::INT32:
+      case seerep::pb::PointField::INT32:
         read<int32_t>(uuid, field.name(), cloud, field.count());
         break;
-      case seerep::PointField::UINT32:
+      case seerep::pb::PointField::UINT32:
         read<uint32_t>(uuid, field.name(), cloud, field.count());
         break;
-      case seerep::PointField::FLOAT32:
+      case seerep::pb::PointField::FLOAT32:
         read<float>(uuid, field.name(), cloud, field.count());
         break;
-      case seerep::PointField::FLOAT64:
+      case seerep::pb::PointField::FLOAT64:
         read<double>(uuid, field.name(), cloud, field.count());
         break;
       default:
@@ -505,7 +506,7 @@ void Hdf5PbPointCloud::readOtherFields(const std::string& uuid, seerep::PointClo
 }
 
 void Hdf5PbPointCloud::writePointFieldAttributes(
-    HighFive::Group& cloud_group, const google::protobuf::RepeatedPtrField<seerep::PointField> repeatedPointField)
+    HighFive::Group& cloud_group, const google::protobuf::RepeatedPtrField<seerep::pb::PointField> repeatedPointField)
 {
   std::vector<std::string> names;
   std::vector<uint32_t> offsets, counts;
@@ -534,10 +535,10 @@ void Hdf5PbPointCloud::writePointFieldAttributes(
                                                           seerep_hdf5_core::Hdf5CorePointCloud::FIELD_COUNT, counts);
 }
 
-google::protobuf::RepeatedPtrField<seerep::PointField>
+google::protobuf::RepeatedPtrField<seerep::pb::PointField>
 Hdf5PbPointCloud::readPointFieldAttributes(HighFive::Group& cloud_group)
 {
-  google::protobuf::RepeatedPtrField<seerep::PointField> repeatedPointField;
+  google::protobuf::RepeatedPtrField<seerep::pb::PointField> repeatedPointField;
 
   std::vector<std::string> names;
   std::vector<uint32_t> offsets, counts;
@@ -550,11 +551,11 @@ Hdf5PbPointCloud::readPointFieldAttributes(HighFive::Group& cloud_group)
 
   for (long unsigned int i = 0; i < names.size(); i++)
   {
-    seerep::PointField point_field;
+    seerep::pb::PointField point_field;
 
     point_field.set_name(names.at(i));
     point_field.set_offset(offsets.at(i));
-    point_field.set_datatype(static_cast<seerep::PointField::Datatype>(datatypes.at(i)));
+    point_field.set_datatype(static_cast<seerep::pb::PointField::Datatype>(datatypes.at(i)));
     point_field.set_count(counts.at(i));
 
     *repeatedPointField.Add() = point_field;

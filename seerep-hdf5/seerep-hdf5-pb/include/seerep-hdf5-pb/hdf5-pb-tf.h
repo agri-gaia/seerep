@@ -21,9 +21,9 @@ class Hdf5PbTf : public Hdf5PbGeneral
 public:
   Hdf5PbTf(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
 
-  void writeTransformStamped(const seerep::TransformStamped& tf);
+  void writeTransformStamped(const seerep::pb::TransformStamped& tf);
 
-  std::optional<std::vector<seerep::TransformStamped>> readTransformStamped(const std::string& id);
+  std::optional<std::vector<seerep::pb::TransformStamped>> readTransformStamped(const std::string& id);
   std::optional<std::vector<std::string>> readTransformStampedFrames(const std::string& id);
 
 private:

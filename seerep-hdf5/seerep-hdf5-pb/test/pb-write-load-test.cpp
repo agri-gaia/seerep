@@ -24,7 +24,7 @@ to improve the quality of the tests.
  * @param[in] messageUUId the UUID of the message
  * @param[in,out] header reference to the header which will hold the fields
  **/
-void createHeader(const std::string projectUUID, const std::string messageUUID, seerep::Header& header)
+void createHeader(const std::string projectUUID, const std::string messageUUID, seerep::pb::Header& header)
 {
   header.set_seq(5);
   header.set_frame_id("arbitrary_id");
@@ -40,7 +40,7 @@ void createHeader(const std::string projectUUID, const std::string messageUUID, 
  * @param[out] y y co ordinate
  * @param[in,out] point2D pointer to a 2D point object
  * */
-void createPoint(const double x, const double y, seerep::Point2D& point2D)
+void createPoint(const double x, const double y, seerep::pb::Point2D& point2D)
 {
   point2D.set_x(x);
   point2D.set_y(y);
@@ -52,7 +52,7 @@ void createPoint(const double x, const double y, seerep::Point2D& point2D)
  * @param[in] imageWidth the width of the image
  * @param[in,out] image reference to the image object
  * */
-void createImageData(const unsigned int imageHeight, const unsigned int imageWidth, seerep::Image& image)
+void createImageData(const unsigned int imageHeight, const unsigned int imageWidth, seerep::pb::Image& image)
 {
   std::vector<uint8_t> data;
   data.reserve(imageHeight * imageWidth * 3);
@@ -81,7 +81,7 @@ void createImageData(const unsigned int imageHeight, const unsigned int imageWid
  * @brief given a labelWithInstance set arbitrary label and uuid
  * @param[in,out] labelWithInstance a pointer to a label with instance
  * */
-void createLabelWithInstance(seerep::LabelWithInstance& labelWithInstance)
+void createLabelWithInstance(seerep::pb::LabelWithInstance& labelWithInstance)
 {
   boost::uuids::uuid instanceUUID = boost::uuids::random_generator()();
   labelWithInstance.set_label("arbitrary_instance_label");
@@ -92,7 +92,7 @@ void createLabelWithInstance(seerep::LabelWithInstance& labelWithInstance)
  * @brief create a 2D Labeled Bounding Box
  * @param[in] image reference to the image
  * */
-void createBB2DLabeled(seerep::Image& image)
+void createBB2DLabeled(seerep::pb::Image& image)
 {
   for (size_t iCategory = 0; iCategory < 3; iCategory++)
   {
@@ -113,7 +113,7 @@ void createBB2DLabeled(seerep::Image& image)
  * @brief create labels general
  * @param[in] image reference to the image
  * */
-void createLabelsGeneral(seerep::Image& image)
+void createLabelsGeneral(seerep::pb::Image& image)
 {
   for (size_t iCategory = 0; iCategory < 3; iCategory++)
   {
@@ -134,12 +134,12 @@ void createLabelsGeneral(seerep::Image& image)
  * @param[in] messageUUID the uuid of the message
  * @return seerep:Image object
  * */
-seerep::Image createImageMessage(const unsigned int imageHeight, const unsigned imageWidth,
-                                 const std::string& projectUUID, const std::string& messageUUID)
+seerep::pb::Image createImageMessage(const unsigned int imageHeight, const unsigned imageWidth,
+                                     const std::string& projectUUID, const std::string& messageUUID)
 {
   std::string encoding = "rgb8";
 
-  seerep::Image imgMsg;
+  seerep::pb::Image imgMsg;
   createHeader(projectUUID, messageUUID, *imgMsg.mutable_header());
   createImageData(256, 256, imgMsg);
 
@@ -172,8 +172,8 @@ protected:
   static boost::uuids::uuid messageUUID;
   static std::string projectName;
 
-  static seerep::Image writeImage;
-  static seerep::Image readImage;
+  static seerep::pb::Image writeImage;
+  static seerep::pb::Image readImage;
 
   // Because the tests only compare the written and read data, we create the
   // resources only once and share them between the tests
@@ -230,8 +230,8 @@ std::string pbWriteLoadTest::projectName;
 
 std::shared_ptr<seerep_hdf5_pb::Hdf5PbImage> pbWriteLoadTest::imageIO;
 
-seerep::Image pbWriteLoadTest::writeImage;
-seerep::Image pbWriteLoadTest::readImage;
+seerep::pb::Image pbWriteLoadTest::writeImage;
+seerep::pb::Image pbWriteLoadTest::readImage;
 
 /**
  * @brief test original header and converted header read from hdf5 file for equality.
@@ -281,14 +281,15 @@ TEST_F(pbWriteLoadTest, testImageData)
  * @param[in] readInstance the labelWithInstance which was read
  * @param[in] writeInstance the labelWithInstance which was written
  * */
-void testLabelWithInstance(const seerep::LabelWithInstance& readInstance, const seerep::LabelWithInstance& writeInstance)
+void testLabelWithInstance(const seerep::pb::LabelWithInstance& readInstance,
+                           const seerep::pb::LabelWithInstance& writeInstance)
 {
   EXPECT_STREQ(readInstance.label().c_str(), writeInstance.label().c_str());
   EXPECT_STREQ(readInstance.instanceuuid().c_str(), writeInstance.instanceuuid().c_str());
 }
 
-void testLabelsWithInstanceWithCategory(const seerep::LabelsWithInstanceWithCategory& readInstance,
-                                        const seerep::LabelsWithInstanceWithCategory& writeInstance)
+void testLabelsWithInstanceWithCategory(const seerep::pb::LabelsWithInstanceWithCategory& readInstance,
+                                        const seerep::pb::LabelsWithInstanceWithCategory& writeInstance)
 {
   EXPECT_STREQ(readInstance.category().c_str(), writeInstance.category().c_str());
   for (int i = 0; i < readInstance.labelwithinstance_size(); i++)
@@ -316,7 +317,7 @@ TEST_F(pbWriteLoadTest, testGeneralLabels)
  * @param[in] readPoint the Point2D which was read
  * @param[in] writePoint the Point2D which was written
  * */
-void testEqualPoints(const seerep::Point2D& readPoint, const seerep::Point2D& writePoint)
+void testEqualPoints(const seerep::pb::Point2D& readPoint, const seerep::pb::Point2D& writePoint)
 {
   EXPECT_EQ(readPoint.x(), writePoint.x());
   EXPECT_EQ(readPoint.y(), writePoint.y());

@@ -30,8 +30,8 @@ class QueryData
 public:
   QueryData(std::shared_ptr<grpc::Channel> channel_ptr);
 
-  void queryPointcloud(const seerep::Query& query, ros::Publisher& pc2_pub) const;
-  void queryImage(const seerep::Query& query, ros::Publisher& img_pub) const;
+  void queryPointcloud(const seerep::pb::Query& query, ros::Publisher& pc2_pub) const;
+  void queryImage(const seerep::pb::Query& query, ros::Publisher& img_pub) const;
 
 private:
   StubImagePbPtr stubImage_;

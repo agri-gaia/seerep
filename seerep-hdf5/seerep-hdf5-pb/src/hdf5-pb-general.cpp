@@ -11,7 +11,8 @@ Hdf5PbGeneral::Hdf5PbGeneral(std::shared_ptr<HighFive::File>& file, std::shared_
 
 void Hdf5PbGeneral::writeBoundingBoxLabeled(
     const std::string& datatypeGroup, const std::string& uuid,
-    const google::protobuf::RepeatedPtrField<::seerep::BoundingBoxLabeledWithCategory>& boundingboxLabeledWithCategory)
+    const google::protobuf::RepeatedPtrField<::seerep::pb::BoundingBoxLabeledWithCategory>&
+        boundingboxLabeledWithCategory)
 {
   std::string id = datatypeGroup + "/" + uuid;
   if (!boundingboxLabeledWithCategory.empty())
@@ -55,7 +56,7 @@ void Hdf5PbGeneral::writeBoundingBoxLabeled(
 
 void Hdf5PbGeneral::writeBoundingBox2DLabeled(
     const std::string& datatypeGroup, const std::string& uuid,
-    const google::protobuf::RepeatedPtrField<::seerep::BoundingBox2DLabeledWithCategory>&
+    const google::protobuf::RepeatedPtrField<::seerep::pb::BoundingBox2DLabeledWithCategory>&
         boundingbox2DLabeledWithCategory)
 {
   std::string id = datatypeGroup + "/" + uuid;
@@ -99,7 +100,7 @@ void Hdf5PbGeneral::writeBoundingBox2DLabeled(
   }
 }
 
-std::optional<google::protobuf::RepeatedPtrField<seerep::BoundingBox2DLabeledWithCategory>>
+std::optional<google::protobuf::RepeatedPtrField<seerep::pb::BoundingBox2DLabeledWithCategory>>
 Hdf5PbGeneral::readBoundingBox2DLabeled(const std::string& datatypeGroup, const std::string& uuid)
 {
   std::vector<std::string> labelCategories;
@@ -110,11 +111,11 @@ Hdf5PbGeneral::readBoundingBox2DLabeled(const std::string& datatypeGroup, const 
   seerep_hdf5_core::Hdf5CoreGeneral::readBoundingBoxLabeled(datatypeGroup, uuid, labelCategories, labelsPerCategory,
                                                             boundingBoxesPerCategory, instancesPerCategory);
 
-  google::protobuf::RepeatedPtrField<seerep::BoundingBox2DLabeledWithCategory> result;
+  google::protobuf::RepeatedPtrField<seerep::pb::BoundingBox2DLabeledWithCategory> result;
 
   for (size_t iCategory = 0; iCategory < labelCategories.size(); iCategory++)
   {
-    seerep::BoundingBox2DLabeledWithCategory resultCat;
+    seerep::pb::BoundingBox2DLabeledWithCategory resultCat;
     resultCat.set_category(labelCategories.at(iCategory));
     for (size_t i = 0; i < labelsPerCategory.at(iCategory).size(); i++)
     {
@@ -133,9 +134,10 @@ Hdf5PbGeneral::readBoundingBox2DLabeled(const std::string& datatypeGroup, const 
   return result;
 }
 
-void Hdf5PbGeneral::writeLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid,
-                                       const google::protobuf::RepeatedPtrField<seerep::LabelsWithInstanceWithCategory>&
-                                           labelsGeneralWithInstancesWithCategory)
+void Hdf5PbGeneral::writeLabelsGeneral(
+    const std::string& datatypeGroup, const std::string& uuid,
+    const google::protobuf::RepeatedPtrField<seerep::pb::LabelsWithInstanceWithCategory>&
+        labelsGeneralWithInstancesWithCategory)
 {
   if (!labelsGeneralWithInstancesWithCategory.empty())
   {
@@ -160,7 +162,7 @@ void Hdf5PbGeneral::writeLabelsGeneral(const std::string& datatypeGroup, const s
   }
 }
 
-std::optional<google::protobuf::RepeatedPtrField<seerep::LabelsWithInstanceWithCategory>>
+std::optional<google::protobuf::RepeatedPtrField<seerep::pb::LabelsWithInstanceWithCategory>>
 Hdf5PbGeneral::readLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid)
 {
   std::vector<std::string> labelCategoriesGeneral;
@@ -168,11 +170,11 @@ Hdf5PbGeneral::readLabelsGeneral(const std::string& datatypeGroup, const std::st
   seerep_hdf5_core::Hdf5CoreGeneral::readLabelsGeneral(datatypeGroup, uuid, labelCategoriesGeneral,
                                                        labelsWithInstancesGeneralPerCategory);
 
-  google::protobuf::RepeatedPtrField<seerep::LabelsWithInstanceWithCategory> result;
+  google::protobuf::RepeatedPtrField<seerep::pb::LabelsWithInstanceWithCategory> result;
 
   for (size_t iCategory = 0; iCategory < labelCategoriesGeneral.size(); iCategory++)
   {
-    seerep::LabelsWithInstanceWithCategory resultCat;
+    seerep::pb::LabelsWithInstanceWithCategory resultCat;
     resultCat.set_category(labelCategoriesGeneral.at(iCategory));
     for (size_t i = 0; i < labelsWithInstancesGeneralPerCategory.at(iCategory).size(); i++)
     {
