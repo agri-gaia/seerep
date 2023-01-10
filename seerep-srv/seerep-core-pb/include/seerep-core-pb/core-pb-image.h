@@ -32,8 +32,8 @@ public:
   CorePbImage(std::shared_ptr<seerep_core::Core> seerepCore);
   ~CorePbImage();
 
-  std::vector<seerep::Image> getData(const seerep::Query& query);
-  boost::uuids::uuid addData(const seerep::Image& img);
+  std::vector<seerep::pb::Image> getData(const seerep::pb::Query& query);
+  boost::uuids::uuid addData(const seerep::pb::Image& img);
 
 private:
   void getFileAccessorFromCore(boost::uuids::uuid project);

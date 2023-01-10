@@ -14,15 +14,16 @@
 
 namespace seerep_server
 {
-class PbImageService final : public seerep::ImageService::Service
+class PbImageService final : public seerep::pb::ImageService::Service
 {
 public:
   PbImageService(std::shared_ptr<seerep_core::Core> seerepCore);
 
-  grpc::Status GetImage(grpc::ServerContext* context, const seerep::Query* request,
-                        grpc::ServerWriter<seerep::Image>* writer);
+  grpc::Status GetImage(grpc::ServerContext* context, const seerep::pb::Query* request,
+                        grpc::ServerWriter<seerep::pb::Image>* writer);
 
-  grpc::Status TransferImage(grpc::ServerContext* context, const seerep::Image* image, seerep::ServerResponse* response);
+  grpc::Status TransferImage(grpc::ServerContext* context, const seerep::pb::Image* image,
+                             seerep::pb::ServerResponse* response);
 
 private:
   std::shared_ptr<seerep_core_pb::CorePbImage> imagePb;
