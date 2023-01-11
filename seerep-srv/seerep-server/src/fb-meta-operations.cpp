@@ -82,7 +82,7 @@ grpc::Status FbMetaOperations::GetProjects(grpc::ServerContext* context,
 
 grpc::Status FbMetaOperations::LoadProjects(grpc::ServerContext* context,
                                             const flatbuffers::grpc::Message<seerep::fb::Empty>* request,
-                                            flatbuffers::grpc::Message<seerep::fb::Empty>* response)
+                                            flatbuffers::grpc::Message<seerep::fb::ProjectInfos>* response)
 {
   (void)context;  // ignore that variable without causing warnings
   (void)request;  // ignore that variable without causing warnings
@@ -117,7 +117,7 @@ grpc::Status FbMetaOperations::LoadProjects(grpc::ServerContext* context,
 
   flatbuffers::grpc::MessageBuilder builder;
   seerep::fb::CreateEmpty(builder);
-  *response = builder.ReleaseMessage<seerep::fb::Empty>();
+  *response = builder.ReleaseMessage<seerep::fb::ProjectInfos>();
 
   return grpc::Status::OK;
 }

@@ -21,7 +21,7 @@ public:
   grpc::Status GetProjects(grpc::ServerContext* context, const flatbuffers::grpc::Message<seerep::fb::Empty>* request,
                            flatbuffers::grpc::Message<seerep::fb::ProjectInfos>* response) override;
   grpc::Status LoadProjects(grpc::ServerContext* context, const flatbuffers::grpc::Message<seerep::fb::Empty>* request,
-                            flatbuffers::grpc::Message<seerep::fb::Empty>* response) override;
+                            flatbuffers::grpc::Message<seerep::fb::ProjectInfos>* response) override;
   grpc::Status DeleteProject(grpc::ServerContext* context,
                              const flatbuffers::grpc::Message<seerep::fb::ProjectInfo>* request,
                              flatbuffers::grpc::Message<seerep::fb::Empty>* response) override;
