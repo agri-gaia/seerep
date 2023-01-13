@@ -7,12 +7,6 @@
 // seerep-hdf5
 #include <seerep-hdf5-core/hdf5-core-general.h>
 
-// seerep-msgs
-#include <seerep-msgs/boundingbox2d_labeled_with_category.pb.h>
-#include <seerep-msgs/boundingbox_labeled_with_category.pb.h>
-#include <seerep-msgs/header.pb.h>
-#include <seerep-msgs/labels_with_instance_with_category.pb.h>
-
 // std
 #include <boost/geometry.hpp>
 #include <filesystem>
@@ -24,6 +18,31 @@
 
 namespace seerep_hdf5_py
 {
+
+class Hdf5FileWrapper
+{
+public:
+  Hdf5FileWrapper(const std::string& filename)
+    : file_ptr_(std::make_shared<HighFive::File>(filename, HighFive::File::ReadWrite | HighFive::File::Create))
+    , write_mutex_(std::make_shared<std::mutex>())
+  {
+  }
+
+  std::shared_ptr<HighFive::File> getFile() const
+  {
+    return file_ptr_;
+  }
+
+  std::shared_ptr<std::mutex> getMutex() const
+  {
+    return write_mutex_;
+  }
+
+private:
+  std::shared_ptr<HighFive::File> file_ptr_;
+  std::shared_ptr<std::mutex> write_mutex_;
+};
+
 class Hdf5PyGeneral : public virtual seerep_hdf5_core::Hdf5CoreGeneral
 {
 protected:

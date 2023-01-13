@@ -21,11 +21,6 @@
 namespace seerep_hdf5_py
 {
 
-int addintegers(int a, int b)
-{
-  return a + b;
-}
-
 // class Hdf5PyPointCloud : public Hdf5PyGeneral
 // {
 // public:
@@ -121,12 +116,5 @@ int addintegers(int a, int b)
 //   google::protobuf::RepeatedPtrField<seerep::PointField> readPointFieldAttributes(HighFive::Group& cloud_group);
 // };
 } /* namespace seerep_hdf5_py */
-
-PYBIND11_MODULE(seerephdf5py, m)
-{
-  m.doc() = "seerep hdf5 py";
-
-  m.def("addintegers", &seerep_hdf5_py::addintegers, "A function that adds two integers");
-}
 
 #endif /* SEEREP_HDF5_PY_HDF5_PY_POINT_CLOUD_H_ */
