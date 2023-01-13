@@ -123,7 +123,7 @@ public:
   /**
    * @brief create the project object for each HDF5 file in the data folder
    */
-  void loadProjectsInFolder();
+  std::vector<seerep_core_msgs::ProjectInfo> loadProjectsInFolder();
 
   /**
    * @brief removes the project from the seerep server and deletes the HDF5 file

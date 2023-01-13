@@ -2,6 +2,7 @@
 #define SEEREP_SERVER_UTIL_H_
 
 #include <seerep-com/image_service.grpc.fb.h>
+#include <seerep-com/meta_operations.grpc.fb.h>
 #include <seerep-com/point-cloud-service.grpc.pb.h>
 
 namespace seerep_server_util

@@ -66,11 +66,27 @@ grpc::Status FbMetaOperations::LoadProjects(grpc::ServerContext* context,
   (void)context;  // ignore that variable without causing warnings
   (void)request;  // ignore that variable without causing warnings
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
-      << "loading all projects in the working directory... ";
+      << "loading new projects in the working directory... ";
 
   try
   {
-    seerepCore->loadProjectsInFolder();
+    std::vector<seerep_core_msgs::ProjectInfo> projectInfos = seerepCore->loadProjectsInFolder();
+
+    // TODO same code for creating the message as above, unify !!
+    flatbuffers::grpc::MessageBuilder builder;
+    std::vector<flatbuffers::Offset<seerep::fb::ProjectInfo>> projectInfosVector;
+    for (auto projectInfo : projectInfos)
+    {
+      auto nameOffset = builder.CreateString(projectInfo.name);
+      auto uuidOffset = builder.CreateString(boost::lexical_cast<std::string>(projectInfo.uuid));
+      auto frameIdOffset = builder.CreateString(projectInfo.frameId);
+      projectInfosVector.push_back(seerep::fb::CreateProjectInfo(builder, nameOffset, uuidOffset, frameIdOffset));
+    }
+    auto vectorOffset = builder.CreateVector(projectInfosVector);
+    auto projectInfosOffset = seerep::fb::CreateProjectInfos(builder, vectorOffset);
+    builder.Finish(projectInfosOffset);
+    *response = builder.ReleaseMessage<seerep::fb::ProjectInfos>();
+    assert(response->Verify());
   }
   catch (std::runtime_error const& e)
   {
@@ -93,10 +109,6 @@ grpc::Status FbMetaOperations::LoadProjects(grpc::ServerContext* context,
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
   }
-
-  flatbuffers::grpc::MessageBuilder builder;
-  seerep::fb::CreateEmpty(builder);
-  *response = builder.ReleaseMessage<seerep::fb::ProjectInfos>();
 
   return grpc::Status::OK;
 }

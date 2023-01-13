@@ -62,31 +62,45 @@ seerep_core_msgs::QueryResult Core::getInstances(const seerep_core_msgs::Query& 
   return result;
 }
 
-void Core::loadProjectsInFolder()
+std::vector<seerep_core_msgs::ProjectInfo> Core::loadProjectsInFolder()
 {
+  std::set<boost::uuids::uuid> currentDirFileNames;
+  std::set<boost::uuids::uuid> filesInServerIndex;
+  std::set<boost::uuids::uuid> filesToRead;
+
   for (const auto& entry : std::filesystem::directory_iterator(m_dataFolder))
   {
     if (entry.path().filename().extension() == ".h5")
     {
-      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "found " << entry.path().string();
-
-      try
-      {
-        boost::uuids::string_generator gen;
-        boost::uuids::uuid uuid = gen(entry.path().filename().stem().string());
-
-        if (m_projects.find(uuid) == m_projects.end())
-        {
-          auto project = std::make_shared<CoreProject>(uuid, entry.path().string());
-          m_projects.insert(std::make_pair(uuid, project));
-        }
-      }
-      catch (const std::runtime_error& e)
-      {
-        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
-      }
+      currentDirFileNames.insert(boost::lexical_cast<boost::uuids::uuid>(entry.path().filename().stem().string()));
     }
   }
+
+  for (const auto& imap : m_projects)
+  {
+    filesInServerIndex.insert(imap.first);
+  }
+
+  std::set_difference(currentDirFileNames.begin(), currentDirFileNames.end(), filesInServerIndex.begin(),
+                      filesInServerIndex.end(), std::inserter(filesToRead, filesToRead.begin()));
+
+  std::vector<seerep_core_msgs::ProjectInfo> projectInfos;
+  for (const boost::uuids::uuid& uuid : filesToRead)
+  {
+    if (m_projects.find(uuid) == m_projects.end())
+    {
+      const std::string filePath = m_dataFolder + "/" + boost::lexical_cast<std::string>(uuid) + ".h5";
+      auto project = std::make_shared<CoreProject>(uuid, filePath);
+      m_projects.insert(std::make_pair(uuid, project));
+
+      seerep_core_msgs::ProjectInfo projectinfo;
+      projectinfo.name = project->getName();
+      projectinfo.uuid = uuid;
+      projectinfo.frameId = project->getFrameId();
+      projectInfos.push_back(projectinfo);
+    }
+  }
+  return projectInfos;
 }
 
 void Core::deleteProject(boost::uuids::uuid uuid)
