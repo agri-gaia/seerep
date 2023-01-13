@@ -28,12 +28,12 @@ public:
   {
   }
 
-  std::shared_ptr<HighFive::File> getFile() const
+  std::shared_ptr<HighFive::File>& getFile()
   {
     return file_ptr_;
   }
 
-  std::shared_ptr<std::mutex> getMutex() const
+  std::shared_ptr<std::mutex>& getMutex()
   {
     return write_mutex_;
   }
@@ -46,7 +46,7 @@ private:
 class Hdf5PyGeneral : public virtual seerep_hdf5_core::Hdf5CoreGeneral
 {
 protected:
-  Hdf5PyGeneral(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
+  Hdf5PyGeneral(Hdf5FileWrapper& hdf5_file);
 
   // ################
   //  Attributes

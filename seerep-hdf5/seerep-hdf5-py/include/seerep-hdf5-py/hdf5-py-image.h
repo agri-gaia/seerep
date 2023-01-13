@@ -18,15 +18,16 @@
 
 namespace seerep_hdf5_py
 {
-// class Hdf5PyImage : public seerep_hdf5_core::Hdf5CoreImage, public Hdf5PyGeneral
-// {
-// public:
-//   Hdf5PyImage(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
 
-//   void writeImage(const std::string& id, const seerep::Image& image);
+class Hdf5PyImage : public seerep_hdf5_core::Hdf5CoreImage, public Hdf5PyGeneral
+{
+public:
+  Hdf5PyImage(Hdf5FileWrapper& hdf5_file);
 
-//   std::optional<seerep::Image> readImage(const std::string& id);
-// };
+  //   void writeImage(const std::string& id, const seerep::Image& image);
+
+  //   std::optional<seerep::Image> readImage(const std::string& id);
+};
 
 }  // namespace seerep_hdf5_py
 
