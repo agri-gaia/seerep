@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
+""" The SEEREP transfer CLI.
 
-# TODO add full description for the use case of the cli
+The CLI provides a simple interface to transfer and index HDF5 files from a robot to a running SEEREP server.
+The program uses rsync to transfer the files and the SEEREP grpc API to notify the server about the new data.
+
+Python 3.8 or higher is required and the dependencies are listed in the requirements.txt file.
+"""
 
 import ipaddress
 import os
@@ -156,7 +161,7 @@ def push(
         DEFAULT_DATA_FOLDER, help="Path to the storage folder on the SEEREP server.", callback=is_dir
     ),
 ):
-    """Send HDF5 file(s) to a SEEREP server and load them into the index."""
+    """Send HDF5 file(s) to a running SEEREP server and load them into the index."""
 
     if not rsync_installed():
         console.print("[red] rsync is not installed, please install rsync using apt")
