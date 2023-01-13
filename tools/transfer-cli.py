@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 
-# Debugging
-import code
+# TODO add full description for the use case of the cli
+
 import ipaddress
 import os
 import re
 import subprocess
 from pathlib import Path
+from shutil import which
 from typing import Final, Optional
 
 import flatbuffers
@@ -16,7 +17,7 @@ import typer
 from rich.console import Console
 
 # From TestPyPI https://test.pypi.org/project/seerep-grpc/
-from seerep.fb import Empty
+from seerep.fb import Empty, ProjectInfos
 from seerep.fb import meta_operations_grpc_fb as metaOperations
 
 DEFAULT_SERVER: Final[str] = "127.0.0.1"
@@ -28,7 +29,7 @@ app = typer.Typer()
 console = Console()
 
 # General TODOS
-# TODO make actions on server idempotent
+# TODO add option to send directory to server
 
 
 def is_file(path: Path):
@@ -71,8 +72,8 @@ def valid_user(user: str):
     return user
 
 
-def grpc_server_available(channel: grpc.Channel, timeout: int = 5) -> bool:
-    """Check if a gRPC server is available."""
+def server_available(channel: grpc.Channel, timeout: int = 5) -> bool:
+    """Check if the specifies SEEREP server is available."""
     try:
         grpc.channel_ready_future(channel).result(timeout)
         return True
@@ -80,32 +81,63 @@ def grpc_server_available(channel: grpc.Channel, timeout: int = 5) -> bool:
         return False
 
 
-def send_file(local_file: Path, username: str, server: str, port: int, data_folder_path: Path) -> bool:
-    """Send a single HDF5 file to a SEEREP server using rsync."""
+def rsync_installed() -> bool:
+    """Check if rsync is installed."""
+    return which("rsync") is not None
 
-    # TODO: Think about what happens, if the server goes down between here and the function calls below
-    channel = grpc.insecure_channel(server + ":" + str(port))
-    if not grpc_server_available(channel):
-        console.print(f"[bold red] No running SEEREP server on {server}:{str(port)}")
-        return False
 
-    # TODO: progress bar with current status of the transfer possible?
-    subprocess.call(["rsync", "-a", str(local_file), username + "@" + server + ":" + str(data_folder_path)])
-
-    stub = metaOperations.MetaOperationsStub(channel)
+def build_empty_msg() -> bytes:
+    """Build an empty flatbuffers message."""
     builder = flatbuffers.Builder(1024)
-
     Empty.Start(builder)
     empty_msg = Empty.End(builder)
     builder.Finish(empty_msg)
     buf = builder.Output()
+    return buf
 
-    # TODO: return how many files were read in correctly
-    response = stub.LoadProjects(bytes(buf))
-    responseBuf = Empty.Empty.GetRootAsEmpty(response)
 
-    if responseBuf:
-        console.print(f"[bold green] File '{local_file.name}' sent to server '{server}'")
+def get_projects_from_server(channel: grpc.Channel) -> ProjectInfos.ProjectInfos:
+    """Get all projects from the SEEREP server."""
+    stub = metaOperations.MetaOperationsStub(channel)
+    responseBuf = stub.GetProjects(bytes(build_empty_msg()))
+    return ProjectInfos.ProjectInfos.GetRootAs(responseBuf)
+
+
+def load_new_project(channel: grpc.Channel) -> ProjectInfos.ProjectInfos:
+    """Load a new project on the SEEREP server."""
+    stub = metaOperations.MetaOperationsStub(channel)
+    responseBuf = stub.LoadProjects(bytes(build_empty_msg()))
+    return ProjectInfos.ProjectInfos.GetRootAs(responseBuf)
+
+
+# TODO: Think about what happens, if the server goes down between here and the function calls below
+def send_file(local_file: Path, username: str, server: str, port: int, data_folder_path: Path) -> None:
+    """Send a single HDF5 file to a SEEREP server using rsync and index it."""
+
+    channel = grpc.insecure_channel(server + ":" + str(port))
+
+    local_uuid = local_file.name.split(".")[0]
+    projects_on_server = get_projects_from_server(channel)
+
+    for i in range(projects_on_server.ProjectsLength()):
+        if projects_on_server.Projects(i).Uuid().decode("utf-8") == local_uuid:
+            console.print(f"File '{local_file.name}' already present on SEEREP '{server}:{port}'")
+            return
+
+    # TODO: progress bar with current status of the transfer possible?
+    subprocess.call(["rsync", "-ap", str(local_file), username + "@" + server + ":" + str(data_folder_path)])
+
+    newly_indexed_projects = load_new_project(channel)
+
+    if newly_indexed_projects.ProjectsLength() == 0:
+        console.print(f"[red] File cloud not be read by the server.")
+        return
+
+    responseFileName = newly_indexed_projects.Projects(0).Uuid().decode("utf-8")
+    if responseFileName == local_file.name.split(".")[0]:
+        console.print(
+            f"File '{local_file.name}' successfully transferred to SEEREP '{server}:{port}' and loaded into the index"
+        )
 
 
 @app.command()
@@ -119,17 +151,31 @@ def push(
         help="Path to directory with HDF5 files to send. The current dir is used by default.",
         callback=is_dir,
     ),
+    # TODO: currently this needs the full path, relative paths do not work
     data_folder: Optional[Path] = typer.Option(
         DEFAULT_DATA_FOLDER, help="Path to the storage folder on the SEEREP server.", callback=is_dir
     ),
 ):
     """Send HDF5 file(s) to a SEEREP server and load them into the index."""
-    print("server: " + server)
-    if file and dir != DEFAULT_DIR:
-        console.print("Please specify either a file or a directory, not both")
+
+    if not rsync_installed():
+        console.print("[red] rsync is not installed, please install rsync using apt")
         raise typer.Exit()
-    if file:
-        send_file(file, user, server, port, data_folder)
+
+    if not server_available(grpc.insecure_channel(f"{server}:{str(port)}")):
+        console.print(f"[red] SEEREP server '{server}:{str(port)}' is not available")
+        raise typer.Exit()
+
+    if file and dir != DEFAULT_DIR:
+        console.print("[orange] Please specify either a file or a directory, not both")
+        raise typer.Exit()
+
+    try:
+        if file:
+            send_file(file, user, server, port, data_folder)
+    except Exception as e:
+        console.print(f"[red] Error: {e}")
+        raise typer.Exit()
 
 
 if __name__ == "__main__":
