@@ -5,6 +5,8 @@
 #include <seerep-com/meta_operations.grpc.fb.h>
 #include <seerep-core/core.h>
 
+#include "util.hpp"
+
 // logging
 #include <boost/log/sources/severity_logger.hpp>
 #include <boost/log/trivial.hpp>
