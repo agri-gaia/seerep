@@ -156,15 +156,18 @@ def push(
         help="Path to directory with HDF5 files to send. The current dir is used by default.",
         callback=is_dir,
     ),
-    # TODO: currently this needs the full path, relative paths do not work
     data_folder: Optional[Path] = typer.Option(
-        DEFAULT_DATA_FOLDER, help="Path to the storage folder on the SEEREP server.", callback=is_dir
+        DEFAULT_DATA_FOLDER, help="Full path to the storage folder on the SEEREP server.", callback=is_dir
     ),
 ):
     """Send HDF5 file(s) to a running SEEREP server and load them into the index."""
 
     if not rsync_installed():
         console.print("[red] rsync is not installed, please install rsync using apt")
+        raise typer.Exit()
+
+    if data_folder != DEFAULT_DATA_FOLDER and not data_folder.is_absolute():
+        console.print("[red] Please specify the full path to the data folder on the SEEREP server")
         raise typer.Exit()
 
     if not server_available(grpc.insecure_channel(f"{server}:{str(port)}")):
