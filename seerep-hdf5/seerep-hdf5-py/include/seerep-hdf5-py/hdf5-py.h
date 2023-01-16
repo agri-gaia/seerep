@@ -21,14 +21,17 @@ PYBIND11_MODULE(seerephdf5py, m)
       .def("__repr__",
            [](seerep_hdf5_py::Hdf5FileWrapper& f) { return "<seerephdf5py.File '" + f.getFile()->getName() + "'>"; });
 
-  py::class_<seerep_hdf5_py::Hdf5PyImage>(m, "ImageWriter")
+  py::class_<seerep_hdf5_py::Hdf5PyImage>(m, "ImageIO")
       .def(py::init<seerep_hdf5_py::Hdf5FileWrapper&>(), py::arg("hdf5_file"));
 
-  py::class_<seerep_hdf5_py::Hdf5PyPointCloud>(m, "PointCloudWriter")
-      .def(py::init<seerep_hdf5_py::Hdf5FileWrapper&>(), py::arg("hdf5_file"));
+  py::class_<seerep_hdf5_py::Hdf5PyPointCloud>(m, "PointCloudIO")
+      .def(py::init<seerep_hdf5_py::Hdf5FileWrapper&>(), py::arg("hdf5_file"))
+      .def("getPointClouds", &seerep_hdf5_py::Hdf5PyPointCloud::getPointClouds)
+      .def("writePointCloud", &seerep_hdf5_py::Hdf5PyPointCloud::writePointCloud, py::arg("uuid"), py::arg("points"),
+           py::arg("channels"));
 
-  py::class_<seerep_hdf5_py::Hdf5PyTf>(m, "TfWriter")
-      .def(py::init<seerep_hdf5_py::Hdf5FileWrapper&>(), py::arg("hdf5_file"));
+  py::class_<seerep_hdf5_py::Hdf5PyTf>(m, "TfIO").def(py::init<seerep_hdf5_py::Hdf5FileWrapper&>(),
+                                                      py::arg("hdf5_file"));
 }
 
 #endif /* SEEREP_HDF5_PY_HDF5_PY_H_ */

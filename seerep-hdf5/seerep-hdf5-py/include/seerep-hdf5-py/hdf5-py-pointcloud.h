@@ -16,19 +16,24 @@
 #include <optional>
 
 // pybind
+#include <pybind11/numpy.h>
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+
+namespace py = pybind11;
 
 namespace seerep_hdf5_py
 {
 
-class Hdf5PyPointCloud : public seerep_hdf5_core::Hdf5CorePointCloud, public Hdf5PyGeneral
+class Hdf5PyPointCloud : public Hdf5PyGeneral
 {
 public:
   Hdf5PyPointCloud(Hdf5FileWrapper& hdf5_file);
 
-  //   std::map<std::string, HighFive::Group> getPointClouds();
+  std::vector<std::string> getPointClouds();
 
-  //   std::shared_ptr<HighFive::Group> writePointCloud2(const std::string& uuid, const seerep::PointCloud2& pointcloud2);
+  void writePointCloud(const std::string& uuid, const py::array_t<double> points,
+                       const std::vector<py::array_t<double>> channels = std::vector<py::array_t<double>>());
 
   //   std::optional<seerep::PointCloud2> readPointCloud2(const std::string& uuid);
 

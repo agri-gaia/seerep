@@ -17,7 +17,7 @@
 
 namespace seerep_hdf5_py
 {
-class Hdf5PyTf : public seerep_hdf5_core::Hdf5CoreTf, public Hdf5PyGeneral
+class Hdf5PyTf : public Hdf5PyGeneral
 {
 public:
   Hdf5PyTf(Hdf5FileWrapper& hdf5_file);
