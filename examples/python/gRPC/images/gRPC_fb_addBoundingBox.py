@@ -7,7 +7,7 @@ import uuid
 
 import flatbuffers
 import numpy as np
-from fb import BoundingBoxes2DLabeledStamped, Image
+from fb import BoundingBox2DLabeledWithCategory, BoundingBoxes2DLabeledStamped, Image
 from fb import image_service_grpc_fb as imageService
 
 script_dir = os.path.dirname(__file__)
@@ -60,12 +60,11 @@ for responseBuf in stub.GetImage(bytes(buf)):
     )
     labelsBb = util_fb.createBoundingBoxes2dLabeled(builder, labelWithInstances, boundingBoxes)
 
-    BoundingBoxes2DLabeledStamped.StartLabelsBbVector(builder, len(labelsBb))
-    for labelBb in reversed(labelsBb):
-        builder.PrependUOffsetTRelative(labelBb)
-    labelsBbVector = builder.EndVector()
+    boundingBox2DLabeledWithCategory = util_fb.createBoundingBox2DLabeledWithCategory(
+        builder, builder.CreateString("laterAddedBB"), labelsBb
+    )
 
-    labelsBbVector = util_fb.createBoundingBox2dLabeledStamped(builder, header, labelsBbVector)
+    labelsBbVector = util_fb.createBoundingBox2dLabeledStamped(builder, header, [boundingBox2DLabeledWithCategory])
     builder.Finish(labelsBbVector)
     buf = builder.Output()
 

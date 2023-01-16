@@ -6,13 +6,20 @@ DumpSensorMsgs::DumpSensorMsgs(std::string hdf5FilePath, std::string project_fra
 {
   ROS_INFO_STREAM("creating a new project with name: \"" << project_name << "\" and frame id: \"" << project_frame_id
                                                          << "\" in  file: \"" << hdf5FilePath << "\"");
-
-  m_labelsAsStdVector.push_back("testlabel_0");
-  m_labelsAsStdVector.push_back("testlabel_1");
+  std::vector<std::string> labelsAsStdVector, instancesAsStdVector;
+  labelsAsStdVector.push_back("testlabel_0");
+  labelsAsStdVector.push_back("testlabel_1");
 
   // no instances, just labels -> no uuids
-  m_instancesAsStdVector.push_back("");
-  m_instancesAsStdVector.push_back("");
+  instancesAsStdVector.push_back("");
+  instancesAsStdVector.push_back("");
+
+  seerep_core_msgs::LabelsWithInstanceWithCategory labelsWithInstanceWithCategory;
+  labelsWithInstanceWithCategory.category = "testcategory";
+  labelsWithInstanceWithCategory.instances = instancesAsStdVector;
+  labelsWithInstanceWithCategory.labels = labelsAsStdVector;
+
+  m_labelsWithInstanceWithCategory.push_back(labelsWithInstanceWithCategory);
 
   auto write_mtx = std::make_shared<std::mutex>();
   std::shared_ptr<HighFive::File> hdf5_file =
@@ -56,7 +63,7 @@ void DumpSensorMsgs::dump(const sensor_msgs::Image::ConstPtr& msg) const
     m_ioImage->writeImage(uuidString, seerep_ros_conversions_pb::toProto(*msg));
 
     // also write the labels general; filled with dummy data right now
-    m_ioImageCore->writeLabelsGeneral(uuidString, m_labelsAsStdVector, m_instancesAsStdVector);
+    m_ioImageCore->writeLabelsGeneral(uuidString, m_labelsWithInstanceWithCategory);
   }
   catch (const std::exception& e)
   {

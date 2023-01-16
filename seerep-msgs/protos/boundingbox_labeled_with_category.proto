@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package seerep;
+
+import "boundingbox_labeled.proto";
+
+message BoundingBoxLabeledWithCategory
+{
+  string category = 1;
+  repeated BoundingBoxLabeled boundingBoxLabeled = 2;
+}

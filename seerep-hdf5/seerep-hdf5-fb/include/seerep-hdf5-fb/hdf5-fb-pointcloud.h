@@ -235,8 +235,8 @@ private:
    * @return flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>>
    *         flatbuffers vector of LabelWithInstance
    */
-  flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>>
-  readLabelsGeneralOffset(flatbuffers::grpc::MessageBuilder& builder, const std::string& id);
+  // flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>>
+  // readLabelsGeneralOffset(flatbuffers::grpc::MessageBuilder& builder, const std::string& id);
 
   /**
    * @brief Helper method to construct a flatbuffers vector of BoundingBoxLabeled
@@ -246,8 +246,8 @@ private:
    * @return flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>>>
    *         flatbuffers vector of BoundingBoxLabeled
    */
-  flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>>>
-  readLabelsBoundingBoxOffset(flatbuffers::grpc::MessageBuilder& builder, const std::string& id);
+  // flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>>>
+  // readLabelsBoundingBoxOffset(flatbuffers::grpc::MessageBuilder& builder, const std::string& id);
 
   /**
    * @brief Helper method to construct a flatbuffers vector of pointFields

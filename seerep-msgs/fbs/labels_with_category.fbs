@@ -1,0 +1,7 @@
+
+namespace seerep.fb;
+
+table LabelsWithCategory {
+  category:string;
+  labels:[string];
+}

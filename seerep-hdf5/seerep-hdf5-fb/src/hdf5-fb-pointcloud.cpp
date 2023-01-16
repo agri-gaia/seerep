@@ -303,10 +303,11 @@ Hdf5FbPointCloud::readPointCloud2(const std::string& id, const bool withoutData)
   // TODO add normals
 
   // TODO add other fields
+  auto labelsGeneralOffset =
+      readGeneralLabels(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, id, builder);
 
-  auto generalLabelsOffset = readLabelsGeneralOffset(builder, id);
-
-  auto boundingBoxLabeledOffset = readLabelsBoundingBoxOffset(builder, id);
+  auto boundingBoxLabeledOffset =
+      readBoundingBoxesLabeled(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, id, builder);
 
   // build the point cloud message
   seerep::fb::PointCloud2Builder pointCloudBuilder(builder);
@@ -322,7 +323,7 @@ Hdf5FbPointCloud::readPointCloud2(const std::string& id, const bool withoutData)
     pointCloudBuilder.add_data(dataOffset);
   }
   pointCloudBuilder.add_is_dense(isDense);
-  pointCloudBuilder.add_labels_general(generalLabelsOffset);
+  pointCloudBuilder.add_labels_general(labelsGeneralOffset);
   pointCloudBuilder.add_labels_bb(boundingBoxLabeledOffset);
   auto pointCloudOffset = pointCloudBuilder.Finish();
   builder.Finish(pointCloudOffset);
@@ -445,69 +446,6 @@ void Hdf5FbPointCloud::readColorsRGBA(const std::string& id, const std::vector<u
       ++rIter, ++gIter, ++bIter, ++aIter;
     }
   }
-}
-
-flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>>
-Hdf5FbPointCloud::readLabelsGeneralOffset(flatbuffers::grpc::MessageBuilder& builder, const std::string& id)
-{
-  std::vector<std::string> labelsGeneral;
-  std::vector<std::string> labelsGeneralInstances;
-  readLabelsGeneral(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, id, labelsGeneral,
-                    labelsGeneralInstances);
-
-  std::vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>> labelGeneral;
-  labelGeneral.reserve(labelsGeneral.size());
-  for (size_t i = 0; i < labelsGeneral.size(); i++)
-  {
-    auto labelOffset = builder.CreateString(labelsGeneral.at(i));
-    auto instanceOffset = builder.CreateString(labelsGeneralInstances.at(i));
-
-    seerep::fb::LabelWithInstanceBuilder labelBuilder(builder);
-    labelBuilder.add_label(labelOffset);
-    labelBuilder.add_instanceUuid(instanceOffset);
-    labelGeneral.push_back(labelBuilder.Finish());
-  }
-
-  return builder.CreateVector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>(labelGeneral);
-}
-
-flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>>>
-Hdf5FbPointCloud::readLabelsBoundingBoxOffset(flatbuffers::grpc::MessageBuilder& builder, const std::string& id)
-{
-  std::vector<std::string> boundingBoxesLabels;
-  std::vector<std::vector<double>> boundingBoxes;
-  std::vector<std::string> boundingBoxesInstances;
-  readBoundingBoxLabeled(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, id, boundingBoxesLabels,
-                         boundingBoxes, boundingBoxesInstances);
-
-  std::vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>> boundingBoxLabeled;
-  for (size_t i = 0; i < boundingBoxes.size(); i++)
-  {
-    auto instance = builder.CreateString(boundingBoxesInstances.at(i));
-    auto label = builder.CreateString(boundingBoxesLabels.at(i));
-
-    seerep::fb::LabelWithInstanceBuilder labelBuilder(builder);
-    labelBuilder.add_instanceUuid(instance);
-    labelBuilder.add_label(label);
-    auto labelWithInstance = labelBuilder.Finish();
-
-    auto pointMin = seerep::fb::CreatePoint(builder, boundingBoxes.at(i).at(0), boundingBoxes.at(i).at(1),
-                                            boundingBoxes.at(i).at(2));
-    auto pointMax = seerep::fb::CreatePoint(builder, boundingBoxes.at(i).at(3), boundingBoxes.at(i).at(4),
-                                            boundingBoxes.at(i).at(5));
-
-    seerep::fb::BoundingboxBuilder bbBuilder(builder);
-    bbBuilder.add_point_min(pointMin);
-    bbBuilder.add_point_max(pointMax);
-    auto bb = bbBuilder.Finish();
-
-    seerep::fb::BoundingBoxLabeledBuilder bblabeledBuilder(builder);
-    bblabeledBuilder.add_bounding_box(bb);
-    bblabeledBuilder.add_labelWithInstance(labelWithInstance);
-
-    boundingBoxLabeled.push_back(bblabeledBuilder.Finish());
-  }
-  return builder.CreateVector(boundingBoxLabeled);
 }
 
 flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::PointField>>>

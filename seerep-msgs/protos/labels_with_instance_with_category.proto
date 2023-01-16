@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package seerep;
+
+import "label_with_instance.proto";
+
+message LabelsWithInstanceWithCategory
+{
+  string category = 1;
+  repeated LabelWithInstance labelWithInstance = 2;
+}

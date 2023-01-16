@@ -1,18 +1,18 @@
 
 include "header.fbs";
-include "boundingbox2d_labeled.fbs";
-include "label_with_instance.fbs";
+include "boundingbox2d_labeled_with_category.fbs";
+include "labels_with_instance_with_category.fbs";
 
 namespace seerep.fb;
 
 table Image {
-  header:seerep.fb.Header;
+  header:Header;
   height:uint;
   width:uint;
   encoding:string;
   is_bigendian:bool;
   step:uint;
   data:[ubyte];
-  labels_general:[LabelWithInstance];
-  labels_bb:[seerep.fb.BoundingBox2DLabeled];
+  labels_general:[LabelsWithInstanceWithCategory];
+  labels_bb:[BoundingBox2DLabeledWithCategory];
 }
