@@ -7,13 +7,14 @@ The program uses rsync to transfer the files and the SEEREP grpc API to notify t
 Python 3.8 or higher is required and the dependencies are listed in the requirements.txt file.
 """
 
+import glob
 import ipaddress
 import os
 import re
 import subprocess
 from pathlib import Path
 from shutil import which
-from typing import Final, Optional
+from typing import Final, List, Optional
 
 import flatbuffers
 import grpc
@@ -98,7 +99,7 @@ def build_empty_msg() -> bytes:
     return buf
 
 
-def get_projects_from_server(channel: grpc.Channel) -> ProjectInfos.ProjectInfos:
+def get_projects(channel: grpc.Channel) -> ProjectInfos.ProjectInfos:
     """Get all projects from the SEEREP server."""
     stub = metaOperations.MetaOperationsStub(channel)
     responseBuf = stub.GetProjects(bytes(build_empty_msg()))
@@ -129,41 +130,45 @@ def execute_command(cmd: str) -> None:
         raise subprocess.CalledProcessError(return_code, cmd)
 
 
-# TODO: Think about what happens, if the server goes down between here and the function calls below
-def send_file(local_file: Path, username: str, server: str, port: int, data_folder_path: Path) -> None:
-    """Send a single HDF5 file to a SEEREP server using rsync and index it."""
+def send_files(file_paths_to_send: List[Path], username: str, server: str, port: int, data_folder_path: Path) -> None:
+    """Send HDF5 files to a SEEREP server using rsync and index them."""
 
     channel = grpc.insecure_channel(server + ":" + str(port))
 
-    local_uuid = local_file.name.split(".")[0]
-    projects_on_server = get_projects_from_server(channel)
+    uuids_to_send = [str(file_path.name).split(".")[0] for file_path in file_paths_to_send]
 
-    for i in range(projects_on_server.ProjectsLength()):
-        if projects_on_server.Projects(i).Uuid().decode("utf-8") == local_uuid:
-            console.print(f"File '{local_file.name}' already present on SEEREP '{server}:{port}'")
-            return
+    # get all project uuids currently in the server
+    projects_in_server = get_projects(channel)
 
-    # NOTE: currently limited to 1MB/s
-    # Uses zlib for compression (algorithm used in gzip)
-    cmd = (
-        f"{which('rsync')} -z --progress --bwlimit=100000 {str(local_file)} {username}@{server}:{str(data_folder_path)}"
-    )
+    project__uuids_in_server = []
+    for i in range(projects_in_server.ProjectsLength()):
+        project__uuids_in_server.append(projects_in_server.Projects(i).Uuid().decode("utf-8"))
 
-    print(f"\nTransfering file ...")
-    for output in execute_command(cmd):
-        print("\r " + output.strip(), end="\r", flush=True)
+    # check if the project already exists in the server
+    present_projects = list(set(project__uuids_in_server).intersection(set(uuids_to_send)))
+    if present_projects:
+        console.print(f"Project(s) with uuid(s) {present_projects} already exists in the server. Skipping...")
+        file_paths_to_send = [
+            file_path for file_path in file_paths_to_send if str(file_path.name).split(".")[0] not in present_projects
+        ]
 
-    newly_indexed_projects = load_new_project(channel)
+    if file_paths_to_send:
+        file_paths_as_string = ' '.join([str(file_path) for file_path in file_paths_to_send])
+        # uses zlib for compression (algorithm used in gzip)
+        cmd = f"{which('rsync')} -z --progress  {file_paths_as_string} {username}@{server}:{str(data_folder_path)}"
 
-    if newly_indexed_projects.ProjectsLength() == 0:
-        console.print(f"[red] File not read by the server.")
-        return
+        console.print(f"Transferring files to SEEREP instance {server}:{port} using rsync...")
 
-    responseFileName = newly_indexed_projects.Projects(0).Uuid().decode("utf-8")
-    if responseFileName == local_file.name.split(".")[0]:
-        console.print(
-            f"File '{local_file.name}' successfully transferred to SEEREP '{server}:{port}' and loaded into the index"
-        )
+        for output in execute_command(cmd):
+            print(output.strip() if len(output.strip()) > 3 else "")
+
+        load_projects_response = load_new_project(channel)
+
+        indexed_files = []
+        for i in range(load_projects_response.ProjectsLength()):
+            indexed_files.append(load_projects_response.Projects(i).Uuid().decode("utf-8"))
+
+        console.print(f"Sucessfully indexed: {indexed_files}")
 
 
 @app.command()
@@ -193,19 +198,26 @@ def push(
         raise typer.Exit()
 
     if not server_available(grpc.insecure_channel(f"{server}:{str(port)}")):
-        console.print(f"[red] SEEREP server '{server}:{str(port)}' is not available")
+        console.print(f"[red] SEEREP instance '{server}:{str(port)}' is not available")
         raise typer.Exit()
 
     if file and dir != DEFAULT_DIR:
         console.print("[orange] Please specify either a file or a directory, not both")
         raise typer.Exit()
 
-    # TODO add support for directories
     try:
         if file:
-            send_file(file, user, server, port, data_folder)
+            send_files([file], user, server, port, data_folder)
+        else:
+            hdf5_file_paths = []
+            for file in os.listdir(dir):
+                if file.endswith('.h5') and h5py.is_hdf5(os.path.join(dir, file)):
+                    hdf5_file_paths.append(Path(dir / file))
+                else:
+                    console.print(f"File {file} is not a valid HDF5 file. Skipping...")
+            send_files(hdf5_file_paths, user, server, port, data_folder)
     except Exception as e:
-        console.print(f"[red] Error: {e}")
+        console.print(f"[red]Unknown Error: {e}")
         raise typer.Exit()
 
 
