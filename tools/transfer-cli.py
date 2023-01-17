@@ -33,11 +33,8 @@ DEFAULT_DATA_FOLDER: Final[Path] = Path("/seerep/seerep-data/")
 app = typer.Typer()
 console = Console()
 
-# General TODOS
-# TODO add option to send directory to server
 
-
-def is_file(path: Path):
+def is_file(path: Path) -> Path:
     if path and not path.is_file():
         raise typer.BadParameter(f"Path '{path}' is not a file")
     if path and not is_hdf5(path):
@@ -45,19 +42,19 @@ def is_file(path: Path):
     return path
 
 
-def is_dir(path: Path):
+def is_dir(path: Path) -> Path:
     if path and not path.is_dir():
         raise typer.BadParameter(f"Path '{path}' is not a directory")
     return path
 
 
-def valid_port(port: int):
+def valid_port(port: int) -> int:
     if port < 1024 or port > 65535:
         raise typer.BadParameter(f"Port '{port}' is not a valid port number")
     return port
 
 
-def valid_ip(ip_address: str):
+def valid_ip(ip_address: str) -> str:
     try:
         ipaddress.ip_address(ip_address)
     except ValueError:
@@ -65,13 +62,13 @@ def valid_ip(ip_address: str):
     return ip_address
 
 
-def is_hdf5(file_path: Path):
+def is_hdf5(file_path: Path) -> Path:
     if not h5py.is_hdf5(file_path):
         raise typer.BadParameter(f"File '{file_path.name}' is not a HDF5 file")
     return file_path
 
 
-def valid_user(user: str):
+def valid_user(user: str) -> str:
     if not bool(re.search("^[a-z_]([a-z0-9_-]{0,31}|[a-z0-9_-]{0,30}\$)$", user)):
         raise typer.BadParameter(f"Username '{user}' is not valid")
     return user
@@ -115,6 +112,23 @@ def load_new_project(channel: grpc.Channel) -> ProjectInfos.ProjectInfos:
     return ProjectInfos.ProjectInfos.GetRootAs(responseBuf)
 
 
+def execute_command(cmd: str) -> None:
+    """Execute a command in a subprocess and get the output lines back"""
+    process = subprocess.Popen(
+        cmd,
+        shell=True,
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        universal_newlines=True,
+    )
+    for stdout_line in iter(process.stdout.readline, ""):
+        yield stdout_line
+    process.stdout.close()
+    return_code = process.wait()
+    if return_code:
+        raise subprocess.CalledProcessError(return_code, cmd)
+
+
 # TODO: Think about what happens, if the server goes down between here and the function calls below
 def send_file(local_file: Path, username: str, server: str, port: int, data_folder_path: Path) -> None:
     """Send a single HDF5 file to a SEEREP server using rsync and index it."""
@@ -129,13 +143,20 @@ def send_file(local_file: Path, username: str, server: str, port: int, data_fold
             console.print(f"File '{local_file.name}' already present on SEEREP '{server}:{port}'")
             return
 
-    # TODO: progress bar with current status of the transfer possible?
-    subprocess.call(["rsync", "-ap", str(local_file), username + "@" + server + ":" + str(data_folder_path)])
+    # NOTE: currently limited to 1MB/s
+    # Uses zlib for compression (algorithm used in gzip)
+    cmd = (
+        f"{which('rsync')} -z --progress --bwlimit=100000 {str(local_file)} {username}@{server}:{str(data_folder_path)}"
+    )
+
+    print(f"\nTransfering file ...")
+    for output in execute_command(cmd):
+        print("\r " + output.strip(), end="\r", flush=True)
 
     newly_indexed_projects = load_new_project(channel)
 
     if newly_indexed_projects.ProjectsLength() == 0:
-        console.print(f"[red] File cloud not be read by the server.")
+        console.print(f"[red] File not read by the server.")
         return
 
     responseFileName = newly_indexed_projects.Projects(0).Uuid().decode("utf-8")
@@ -156,6 +177,7 @@ def push(
         help="Path to directory with HDF5 files to send. The current dir is used by default.",
         callback=is_dir,
     ),
+    # TODO: fix dir check for remote path
     data_folder: Optional[Path] = typer.Option(
         DEFAULT_DATA_FOLDER, help="Full path to the storage folder on the SEEREP server.", callback=is_dir
     ),
@@ -178,6 +200,7 @@ def push(
         console.print("[orange] Please specify either a file or a directory, not both")
         raise typer.Exit()
 
+    # TODO add support for directories
     try:
         if file:
             send_file(file, user, server, port, data_folder)
