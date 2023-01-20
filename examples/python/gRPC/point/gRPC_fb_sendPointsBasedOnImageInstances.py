@@ -4,7 +4,7 @@ import os
 import sys
 
 import flatbuffers
-from fb import (
+from seerep.fb import (
     Datatypes,
     Header,
     Image,
@@ -16,8 +16,8 @@ from fb import (
     Timestamp,
     UnionMapEntry,
 )
-from fb import image_service_grpc_fb as imageService
-from fb import point_service_grpc_fb as pointService
+from seerep.fb import image_service_grpc_fb as imageService
+from seerep.fb import point_service_grpc_fb as pointService
 
 script_dir = os.path.dirname(__file__)
 util_dir = os.path.join(script_dir, '..')
