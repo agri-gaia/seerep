@@ -8,7 +8,7 @@ import imageio.v2 as imageio
 import numpy as np
 import quaternion
 import yaml
-from fb import (
+from seerep.fb import (
     Boundingbox2D,
     BoundingBox2DLabeled,
     Header,
@@ -23,9 +23,9 @@ from fb import (
     TransformStamped,
     Vector3,
 )
-from fb import image_service_grpc_fb as imageService
-from fb import point_service_grpc_fb as pointService
-from fb import tf_service_grpc_fb as tfService
+from seerep.fb import image_service_grpc_fb as imageService
+from seerep.fb import point_service_grpc_fb as pointService
+from seerep.fb import tf_service_grpc_fb as tfService
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import util
