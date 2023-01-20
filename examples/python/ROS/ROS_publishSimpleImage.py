@@ -1,43 +1,34 @@
 #!/usr/bin/env python3
 
-# Note: This script must be started before the SEEREP client.
-# This is due to the client subscribing to the in here created Node.
+"""
+Test script to publish a random image to the '/image' topic.
+"""
 
 import numpy as np
 import rospy
 from sensor_msgs.msg import Image
 from std_msgs.msg import Header
 
-rospy.init_node("create_image_rgb")
-pub = rospy.Publisher("image", Image, queue_size=2)
+PUB_FREQUENCY = 60
+WIDTH = 1920
+HEIGHT = 1080
 
-rgb = []
-lim = 256
-for i in range(lim):
-    for j in range(lim):
-        x = float(i) / lim
-        y = float(j) / lim
-        z = float(j) / lim
-        r = np.ubyte((x * 255.0) % 255)
-        g = np.ubyte((y * 255.0) % 255)
-        b = np.ubyte((z * 255.0) % 255)
-        print(r, g, b)
-        rgb.append(r)
-        rgb.append(g)
-        rgb.append(b)
+rospy.init_node("rgb_image")
+pub = rospy.Publisher("image", Image, queue_size=2)
 
 header = Header()
 header.frame_id = "map"
 
 theImage = Image()
 theImage.header = header
-theImage.height = lim
-theImage.width = lim
+theImage.height = HEIGHT
+theImage.width = WIDTH
 theImage.encoding = "rgb8"
-theImage.step = 3 * lim
-theImage.data = rgb
+theImage.data = np.random.randint(0, 255, (HEIGHT, WIDTH, 3), dtype=np.uint8).tobytes()
+theImage.step = 3 * WIDTH
 
+rate = rospy.Rate(PUB_FREQUENCY)
 while not rospy.is_shutdown():
     theImage.header.stamp = rospy.Time.now()
     pub.publish(theImage)
-    rospy.sleep(1.0)
+    rate.sleep()
