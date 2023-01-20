@@ -4,8 +4,8 @@ import os
 import sys
 
 import flatbuffers
-from fb import PointStamped
-from fb import point_service_grpc_fb as pointService
+from seerep.fb import PointStamped
+from seerep.fb import point_service_grpc_fb as pointService
 
 script_dir = os.path.dirname(__file__)
 util_dir = os.path.join(script_dir, '..')

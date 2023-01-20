@@ -7,8 +7,8 @@ import uuid
 
 import flatbuffers
 import numpy as np
-from fb import BoundingBox2DLabeledWithCategory, BoundingBoxes2DLabeledStamped, Image
-from fb import image_service_grpc_fb as imageService
+from seerep.fb import BoundingBoxes2DLabeledStamped, Image
+from seerep.fb import image_service_grpc_fb as imageService
 
 script_dir = os.path.dirname(__file__)
 util_dir = os.path.join(script_dir, '..')
