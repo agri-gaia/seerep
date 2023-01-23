@@ -5,6 +5,8 @@
 #include <highfive/H5File.hpp>
 
 // seerep-hdf5
+#include <seerep-hdf5-core/hdf5-core-tf.h>
+
 #include "seerep-hdf5-pb/hdf5-pb-general.h"
 
 // seerep-msgs
@@ -16,7 +18,7 @@
 
 namespace seerep_hdf5_pb
 {
-class Hdf5PbTf : public Hdf5PbGeneral
+class Hdf5PbTf : public Hdf5PbGeneral, public seerep_hdf5_core::Hdf5CoreTf
 {
 public:
   Hdf5PbTf(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
