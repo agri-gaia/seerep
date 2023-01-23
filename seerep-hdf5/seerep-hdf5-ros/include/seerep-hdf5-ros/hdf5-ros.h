@@ -14,13 +14,14 @@
 #include <boost/uuid/uuid_io.hpp>
 
 // ROS
-#include "geometry_msgs/TransformStamped.h"
 #include "sensor_msgs/Image.h"
 #include "sensor_msgs/PointCloud2.h"
 #include "std_msgs/Header.h"
+#include "tf2_msgs/TFMessage.h"
 
 // Seerep
 #include "seerep-hdf5-core/hdf5-core-general.h"
+#include "seerep-hdf5-core/hdf5-core-tf.h"
 
 namespace seerep_hdf5_ros
 {
@@ -33,7 +34,7 @@ namespace seerep_hdf5_ros
  *
  * @note Currently only supports sensor_msgs::Image, sensor_msgs::PointCloud2
  */
-class Hdf5Ros : public seerep_hdf5_core::Hdf5CoreGeneral
+class Hdf5Ros : public seerep_hdf5_core::Hdf5CoreTf
 {
 public:
   Hdf5Ros() = delete;
@@ -85,18 +86,14 @@ public:
   void saveMessage(const sensor_msgs::PointCloud2& pointcloud2);
 
   /**
-   * @brief Write ROS Transform message to HDF5
-   *
-   * @param transform the ROS Transform message
-   */
-  void saveMessage(const geometry_msgs::Transform& transform);
-
-  /**
    * @brief Write ROS TransformStamped message to HDF5
    *
    * @param transformation the ROS TransformStamped message
    */
-  void saveMessage(const geometry_msgs::TransformStamped& transformation);
+  void saveMessage(const tf2_msgs::TFMessage& transformation);
+
+private:
+  std::shared_ptr<HighFive::File> hdf5File_;
 };
 }  // namespace seerep_hdf5_ros
 #endif /* SEEREP_HDF5_ROS_H_ */

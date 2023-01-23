@@ -4,7 +4,9 @@ namespace seerep_hdf5_ros
 {
 Hdf5Ros::Hdf5Ros(std::shared_ptr<HighFive::File>& hdf5File, std::shared_ptr<std::mutex>& mutex,
                  const std::string& projectName, const std::string& projectFrameId)
-  : Hdf5CoreGeneral(hdf5File, mutex)
+  : seerep_hdf5_core::Hdf5CoreGeneral(hdf5File, mutex)
+  , seerep_hdf5_core::Hdf5CoreTf(hdf5File, mutex)
+  , hdf5File_(hdf5File)
 {
   writeProjectname(projectName);
   writeProjectFrameId(projectFrameId);
@@ -85,11 +87,34 @@ void Hdf5Ros::saveMessage(const sensor_msgs::PointCloud2& pointcloud2)
   writeAttributeToHdf5<bool>(*pointcloud2DataSet, "is_dense", pointcloud2.is_dense);
 }
 
-void Hdf5Ros::saveMessage(const geometry_msgs::Transform& transform)
+void Hdf5Ros::saveMessage(const tf2_msgs::TFMessage& transformation)
 {
-}
+  for (auto transform : transformation.transforms)
+  {
+    const std::string datagroupPath =
+        seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF + "/" + transform.header.frame_id + "_" + transform.child_frame_id;
+    std::shared_ptr<HighFive::Group> group;
+    if (!hdf5File_->exist(datagroupPath))
+    {
+      group = std::make_shared<HighFive::Group>(hdf5File_->createGroup(datagroupPath));
+      group->createAttribute<uint64_t>(seerep_hdf5_core::Hdf5CoreTf::SIZE, 0);
+      writeAttributeToHdf5<std::string>(*group, "PARENT_FRAME", transform.header.frame_id);
+      writeAttributeToHdf5<std::string>(*group, "CHILD_FRAME", transform.child_frame_id);
+    }
+    else
+    {
+      group = std::make_shared<HighFive::Group>(hdf5File_->getGroup(datagroupPath));
+    }
 
-void Hdf5Ros::saveMessage(const geometry_msgs::TransformStamped& transformation)
-{
+    writeTimestamp(datagroupPath, { transform.header.stamp.sec, transform.header.stamp.nsec });
+    writeTranslation(datagroupPath, { transform.transform.translation.x, transform.transform.translation.y,
+                                      transform.transform.translation.z });
+    writeRotation(datagroupPath, { transform.transform.rotation.x, transform.transform.rotation.y,
+                                   transform.transform.rotation.z, transform.transform.rotation.w });
+    uint64_t size = readAttributeFromHdf5<uint64_t>(std::to_string(transform.header.seq), *group,
+                                                    seerep_hdf5_core::Hdf5CoreTf::SIZE);
+    writeAttributeToHdf5<uint64_t>(*group, seerep_hdf5_core::Hdf5CoreTf::SIZE, size + 1);
+    hdf5File_->flush();
+  }
 }
 }  // namespace seerep_hdf5_ros

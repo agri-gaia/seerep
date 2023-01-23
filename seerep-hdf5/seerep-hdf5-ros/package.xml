@@ -13,6 +13,7 @@
 
   <depend>sensor_msgs</depend>
   <depend>std_msgs</depend>
+  <depend>tf2_msgs</depend>
   <depend>geometry_msgs</depend>
   <depend>seerep-hdf5-core</depend>
 

@@ -7,7 +7,6 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 
-# TODO clean up cmake mess
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
@@ -25,6 +24,7 @@ find_package(
   COMPONENTS std_msgs
              geometry_msgs
              sensor_msgs
+             tf2_msgs
              roscpp
 )
 
@@ -33,6 +33,7 @@ catkin_package(
   include
   CATKIN_DEPENDS
   std_msgs
+  tf2_msgs
   geometry_msgs
   sensor_msgs
   roscpp
