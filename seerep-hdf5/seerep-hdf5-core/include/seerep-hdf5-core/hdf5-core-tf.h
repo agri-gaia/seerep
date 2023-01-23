@@ -16,7 +16,7 @@
 
 namespace seerep_hdf5_core
 {
-class Hdf5CoreTf : public Hdf5CoreGeneral
+class Hdf5CoreTf : public virtual Hdf5CoreGeneral
 {
 public:
   Hdf5CoreTf(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
@@ -24,23 +24,30 @@ public:
   std::optional<std::vector<geometry_msgs::TransformStamped>> readTransformStamped(const std::string& id);
   std::optional<std::vector<std::string>> readTransformStampedFrames(const std::string& id);
 
-private:
   std::string readFrame(const std::string& frameName, const std::shared_ptr<const HighFive::Group>& group_ptr) const;
 
-  std::vector<std::vector<int64_t>> readTime(const std::string& hdf5DatasetTimePath) const;
-  std::vector<std::vector<double>> readTranslation(const std::string& hdf5DatasetTransPath) const;
-  std::vector<std::vector<double>> readRotation(const std::string& hdf5DatasetRotPath) const;
+  void writeTimestamp(const std::string& datasetPath, std::array<int64_t, 2> timestamp);
+  std::vector<std::vector<int64_t>> readTimestamps(const std::string& timeDatasetPath) const;
 
+  void writeTranslation(const std::string& translationDatasetPath, std::array<double, 3> translation);
+  std::vector<std::vector<double>> readTranslations(const std::string& translationDatasetPath) const;
+
+  void writeRotation(const std::string& rotationsDatasetPath, std::array<double, 4> rotation);
+  std::vector<std::vector<double>> readRotations(const std::string& rotationDatasetPath) const;
+
+private:
   std::optional<std::vector<geometry_msgs::TransformStamped>>
   convertToTfs(const long unsigned int& size, const std::string& parentframe, const std::string& childframe,
-               const std::vector<std::vector<int64_t>>& time, const std::vector<std::vector<double>>& trans,
-               const std::vector<std::vector<double>>& rot);
+               const std::vector<std::vector<int64_t>>& timestamps,
+               const std::vector<std::vector<double>>& translations, const std::vector<std::vector<double>>& rotations);
 
 public:
-  // datatype group names in hdf5
   inline static const std::string HDF5_GROUP_TF = "tf";
-
   inline static const std::string SIZE = "size";
+
+  inline static const std::string HDF5_DATASET_TIMESTAMPS = "/time";
+  inline static const std::string HDF5_DATASET_TRANSLATION = "/translation";
+  inline static const std::string HDF5_DATASET_ROTATION = "/rotation";
 };
 
 }  // namespace seerep_hdf5_core
