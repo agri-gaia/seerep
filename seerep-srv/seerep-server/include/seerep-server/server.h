@@ -79,6 +79,11 @@ private:
   void initLogging();
 
   /**
+   * @brief Logs the used time zone at server startup
+   */
+  void logTimeZone();
+
+  /**
    * @brief sets the severity level of the logging
    */
   void setSeverityLevel();
