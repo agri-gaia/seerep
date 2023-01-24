@@ -77,8 +77,9 @@ grpc::Status PbMetaOperations::GetProjects(grpc::ServerContext* context, const g
   return grpc::Status::OK;
 }
 
-grpc::Status GetOverallTimeInterval(grpc::ServerContext* context, const seerep::UuidDatatypePair* request,
-                                    seerep::TimeInterval* response)
+grpc::Status PbMetaOperations::GetOverallTimeInterval(grpc::ServerContext* context,
+                                                      const seerep::UuidDatatypePair* request,
+                                                      seerep::TimeInterval* response)
 {
   (void)context;  // ignore that variable without causing warnings
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "fetching overall time interval";
@@ -118,13 +119,17 @@ grpc::Status GetOverallTimeInterval(grpc::ServerContext* context, const seerep::
   uint32_t max_nanos = (uint32_t)maxtime;
   uint32_t max_seconds = (uint32_t)(maxtime >> 32);
 
-  response->set_time_min(mintime);
-  response->set_time_max(maxtime);
+  response->mutable_time_min()->set_nanos(min_nanos);
+  response->mutable_time_min()->set_seconds(min_seconds);
+
+  response->mutable_time_max()->set_nanos(max_nanos);
+  response->mutable_time_max()->set_seconds(max_seconds);
 
   return grpc::Status::OK;
 }
-grpc::Status GetOverallBoundingBox(grpc::ServerContext* context, const seerep::UuidDatatypePair* request,
-                                   seerep::Boundingbox* response)
+grpc::Status PbMetaOperations::GetOverallBoundingBox(grpc::ServerContext* context,
+                                                     const seerep::UuidDatatypePair* request,
+                                                     seerep::Boundingbox* response)
 {
   (void)context;  // ignore that variable without causing warnings
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "fetching overall bounding box";
@@ -156,8 +161,13 @@ grpc::Status GetOverallBoundingBox(grpc::ServerContext* context, const seerep::U
 
   flatbuffers::grpc::MessageBuilder builder;
 
-  response->set_min_corner(overallBB.min_corner());
-  response->set_max_corner(overallBB.max_corner());
+  response->mutable_point_min()->set_x(overallBB.min_corner().get<0>());
+  response->mutable_point_min()->set_y(overallBB.min_corner().get<1>());
+  response->mutable_point_min()->set_z(overallBB.min_corner().get<2>());
+
+  response->mutable_point_max()->set_x(overallBB.max_corner().get<0>());
+  response->mutable_point_max()->set_y(overallBB.max_corner().get<1>());
+  response->mutable_point_max()->set_z(overallBB.max_corner().get<2>());
 
   return grpc::Status::OK;
 }
