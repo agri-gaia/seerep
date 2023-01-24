@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package seerep;
+
+import "datatype.proto";
+
+message UuidDatatypePair
+{
+  string projectuuid = 1;
+  datatype datatype = 2;
+}

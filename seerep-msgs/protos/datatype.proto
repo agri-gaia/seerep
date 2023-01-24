@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package seerep;
+
+enum datatype
+{
+  unknown = 0;
+  image = 1;
+  pointcloud = 2;
+  point = 3;
+}
