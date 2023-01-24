@@ -25,6 +25,7 @@ set(MY_PROTO_FILES
     protos/boundingbox2d.proto
     protos/camera_intrinsics.proto
     protos/camera_intrinsics_query.proto
+    protos/datatype.proto
     protos/frame_infos.proto
     protos/frame_query.proto
     protos/geodetic_coordinates.proto
@@ -60,6 +61,7 @@ set(MY_PROTO_FILES
     protos/twist_with_covariance_stamped.proto
     protos/twist_with_covariance.proto
     protos/twist.proto
+    protos/uuid_datatype_pair.proto
     protos/vector3_stamped.proto
     protos/vector3.proto
 )

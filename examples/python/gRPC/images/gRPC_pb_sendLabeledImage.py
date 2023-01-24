@@ -16,9 +16,9 @@ from seerep.pb import camera_intrinsics_service_pb2_grpc as camintrinsics_servic
 from seerep.pb import image_pb2 as image
 from seerep.pb import image_service_pb2_grpc as imageService
 from seerep.pb import label_with_instance_pb2 as labelWithInstance
-from seerep.pb import (
-    labels_with_instance_with_category_pb2 as labels_with_instance_with_category,
-)
+from seerep.pb import \
+    labels_with_instance_with_category_pb2 as \
+    labels_with_instance_with_category
 from seerep.pb import meta_operations_pb2_grpc as metaOperations
 from seerep.pb import projectCreation_pb2 as projectCreation
 from seerep.pb import tf_service_pb2_grpc as tfService
