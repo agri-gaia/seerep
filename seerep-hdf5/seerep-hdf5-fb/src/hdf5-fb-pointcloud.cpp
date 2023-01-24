@@ -104,9 +104,9 @@ void Hdf5FbPointCloud::writePoints(const std::string& id, const std::vector<uint
   min[0] = min[1] = min[2] = std::numeric_limits<float>::max();
   max[0] = max[1] = max[2] = std::numeric_limits<float>::min();
 
-  seerep_hdf5_fb::PointCloud2ConstIterator<float> xIter(data, offsets[0], pointStep, height, width);
-  seerep_hdf5_fb::PointCloud2ConstIterator<float> yIter(data, offsets[1], pointStep, height, width);
-  seerep_hdf5_fb::PointCloud2ConstIterator<float> zIter(data, offsets[2], pointStep, height, width);
+  seerep_hdf5_core::PointCloud2ConstIterator<float> xIter(data, offsets[0], pointStep, height, width);
+  seerep_hdf5_core::PointCloud2ConstIterator<float> yIter(data, offsets[1], pointStep, height, width);
+  seerep_hdf5_core::PointCloud2ConstIterator<float> zIter(data, offsets[2], pointStep, height, width);
 
   for (size_t row = 0; row < height; row++)
   {
@@ -146,9 +146,9 @@ void Hdf5FbPointCloud::writeColorsRGB(const std::string& id, const std::vector<u
   std::vector<std::vector<std::vector<uint8_t>>> colorsData;
   colorsData.resize(height);
 
-  seerep_hdf5_fb::PointCloud2ConstIterator<uint8_t> rIter(data, offsets[0], pointStep, height, width);
-  seerep_hdf5_fb::PointCloud2ConstIterator<uint8_t> gIter(data, offsets[1], pointStep, height, width);
-  seerep_hdf5_fb::PointCloud2ConstIterator<uint8_t> bIter(data, offsets[2], pointStep, height, width);
+  seerep_hdf5_core::PointCloud2ConstIterator<uint8_t> rIter(data, offsets[0], pointStep, height, width);
+  seerep_hdf5_core::PointCloud2ConstIterator<uint8_t> gIter(data, offsets[1], pointStep, height, width);
+  seerep_hdf5_core::PointCloud2ConstIterator<uint8_t> bIter(data, offsets[2], pointStep, height, width);
 
   for (size_t row = 0; row < height; row++)
   {
@@ -176,10 +176,10 @@ void Hdf5FbPointCloud::writeColorsRGBA(const std::string& id, const std::vector<
   std::vector<std::vector<std::vector<uint8_t>>> colorsData;
   colorsData.resize(height);
 
-  seerep_hdf5_fb::PointCloud2ConstIterator<uint8_t> rIter(data, offsets[0], pointStep, height, width);
-  seerep_hdf5_fb::PointCloud2ConstIterator<uint8_t> gIter(data, offsets[1], pointStep, height, width);
-  seerep_hdf5_fb::PointCloud2ConstIterator<uint8_t> bIter(data, offsets[2], pointStep, height, width);
-  seerep_hdf5_fb::PointCloud2ConstIterator<uint8_t> aIter(data, offsets[3], pointStep, height, width);
+  seerep_hdf5_core::PointCloud2ConstIterator<uint8_t> rIter(data, offsets[0], pointStep, height, width);
+  seerep_hdf5_core::PointCloud2ConstIterator<uint8_t> gIter(data, offsets[1], pointStep, height, width);
+  seerep_hdf5_core::PointCloud2ConstIterator<uint8_t> bIter(data, offsets[2], pointStep, height, width);
+  seerep_hdf5_core::PointCloud2ConstIterator<uint8_t> aIter(data, offsets[3], pointStep, height, width);
 
   for (size_t row = 0; row < height; row++)
   {
@@ -372,9 +372,9 @@ void Hdf5FbPointCloud::readPoints(const std::string& id, const std::vector<uint3
   std::vector<std::vector<std::vector<float>>> pointData;
   pointsDataset.read(pointData);
 
-  seerep_hdf5_fb::PointCloud2Iterator<float> xIter(data, offsets[0], pointStep, height, width);
-  seerep_hdf5_fb::PointCloud2Iterator<float> yIter(data, offsets[1], pointStep, height, width);
-  seerep_hdf5_fb::PointCloud2Iterator<float> zIter(data, offsets[2], pointStep, height, width);
+  seerep_hdf5_core::PointCloud2Iterator<float> xIter(data, offsets[0], pointStep, height, width);
+  seerep_hdf5_core::PointCloud2Iterator<float> yIter(data, offsets[1], pointStep, height, width);
+  seerep_hdf5_core::PointCloud2Iterator<float> zIter(data, offsets[2], pointStep, height, width);
 
   for (auto col : pointData)
   {
@@ -401,9 +401,9 @@ void Hdf5FbPointCloud::readColorsRGB(const std::string& id, const std::vector<ui
   std::vector<std::vector<std::vector<float>>> colorData;
   colorsDataset.read(colorData);
 
-  seerep_hdf5_fb::PointCloud2Iterator<uint8_t> rIter(data, offsets[0], pointStep, height, width);
-  seerep_hdf5_fb::PointCloud2Iterator<uint8_t> gIter(data, offsets[1], pointStep, height, width);
-  seerep_hdf5_fb::PointCloud2Iterator<uint8_t> bIter(data, offsets[2], pointStep, height, width);
+  seerep_hdf5_core::PointCloud2Iterator<uint8_t> rIter(data, offsets[0], pointStep, height, width);
+  seerep_hdf5_core::PointCloud2Iterator<uint8_t> gIter(data, offsets[1], pointStep, height, width);
+  seerep_hdf5_core::PointCloud2Iterator<uint8_t> bIter(data, offsets[2], pointStep, height, width);
 
   for (auto col : colorData)
   {
@@ -430,10 +430,10 @@ void Hdf5FbPointCloud::readColorsRGBA(const std::string& id, const std::vector<u
   std::vector<std::vector<std::vector<float>>> colorData;
   colorsDataset.read(colorData);
 
-  seerep_hdf5_fb::PointCloud2Iterator<uint8_t> rIter(data, offsets[0], pointStep, height, width);
-  seerep_hdf5_fb::PointCloud2Iterator<uint8_t> gIter(data, offsets[1], pointStep, height, width);
-  seerep_hdf5_fb::PointCloud2Iterator<uint8_t> bIter(data, offsets[2], pointStep, height, width);
-  seerep_hdf5_fb::PointCloud2Iterator<uint8_t> aIter(data, offsets[3], pointStep, height, width);
+  seerep_hdf5_core::PointCloud2Iterator<uint8_t> rIter(data, offsets[0], pointStep, height, width);
+  seerep_hdf5_core::PointCloud2Iterator<uint8_t> gIter(data, offsets[1], pointStep, height, width);
+  seerep_hdf5_core::PointCloud2Iterator<uint8_t> bIter(data, offsets[2], pointStep, height, width);
+  seerep_hdf5_core::PointCloud2Iterator<uint8_t> aIter(data, offsets[3], pointStep, height, width);
 
   for (auto col : colorData)
   {
