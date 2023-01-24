@@ -14,5 +14,7 @@ services:
       # persist the data folder
       - seerep-data:/mnt/seerep-data #using docker volume
       #- /your/local/absolute/path:/mnt/seerep-data #using host folder
+    environment:
+      - TZ=Europe/Berlin
 volumes:
   seerep-data:
