@@ -79,7 +79,7 @@ volumes:
 ## Documentation
 
 The general [MkDocs](https://www.mkdocs.org/) based documentation of this project is available
-[here](https://agri-gaia.github.io/seerep/mkdocs). There the general architecture is described, installation
+[here](https://agri-gaia.github.io/seerep/mkdocs/home/). There the general architecture is described, installation
 instructions are given and basic tutorials are given.
 
 The [Doxygen](https://doxygen.nl/) based code documentation can be found [here](https://agri-gaia.github.io/seerep/doxygen).
