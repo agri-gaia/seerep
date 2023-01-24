@@ -7,8 +7,8 @@
 // seerep-hdf5
 #include <seerep-hdf5-core/hdf5-core-point-cloud.h>
 
+#include "seerep-hdf5-core/hdf5-point-cloud2-iterator.h"
 #include "seerep-hdf5-fb/hdf5-fb-general.h"
-#include "seerep-hdf5-fb/hdf5-fb-point-cloud2-iterator.h"
 
 // seerep-msgs
 #include <seerep-msgs/point_cloud_2_generated.h>
