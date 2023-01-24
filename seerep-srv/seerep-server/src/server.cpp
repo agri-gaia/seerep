@@ -8,6 +8,7 @@ server::server(int argc, char** argv)
   signal(SIGINT, signalHandler);
   parseProgramOptions(argc, argv);
   initLogging();
+  logTimeZone();
   createGrpcServer();
 }
 
@@ -109,6 +110,16 @@ void server::initLogging()
     initConsoleLogging();
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << "file logging exeption: " << e.what();
   }
+}
+
+void server::logTimeZone()
+{
+  time_t time = 0;
+  struct tm timeStruct;
+  char buf[16];
+  localtime_r(&time, &timeStruct);
+  strftime(buf, sizeof(buf), "%Z", &timeStruct);
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "Current timezone: " << buf;
 }
 
 void server::setSeverityLevel()
