@@ -7,6 +7,7 @@
 // seerep-hdf5
 #include "seerep-hdf5-core/hdf5-core-datatype-interface.h"
 #include "seerep-hdf5-core/hdf5-core-general.h"
+#include "seerep-hdf5-core/hdf5-point-cloud2-iterator.h"
 
 // seerep-msgs
 #include <seerep-msgs/dataset-indexable.h>
@@ -24,7 +25,25 @@
 
 namespace seerep_hdf5_core
 {
-class Hdf5CorePointCloud : public Hdf5CoreGeneral, public Hdf5CoreDatatypeInterface
+
+struct PCLIterInfos
+{
+  uint32_t height;
+  uint32_t width;
+  uint32_t pointStep;
+  std::map<std::string, uint32_t> offsets;
+  const uint8_t* data;
+};
+
+struct PCLChannels
+{
+  bool has_points = false;
+  bool has_rgb = false;
+  bool has_rgba = false;
+  bool has_normals = false;
+};
+
+class Hdf5CorePointCloud : public virtual Hdf5CoreGeneral, public Hdf5CoreDatatypeInterface
 {
 public:
   Hdf5CorePointCloud(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
@@ -33,6 +52,16 @@ public:
   std::optional<seerep_core_msgs::DatasetIndexable> readDataset(const std::string& uuid);
 
   std::vector<std::string> getDatasetUuids();
+
+  void writePCL(const std::string& pclUUID, PCLChannels channels, PCLIterInfos infos);
+  std::vector<float> writePoints(const std::string& plcUUID, PCLIterInfos infos);
+  void writeRGB(const std::string& plcUUID, PCLIterInfos infos);
+  void writeRGBA(const std::string& plcUUID, PCLIterInfos infos);
+
+  std::map<std::string, uint32_t> getOffsets(const std::vector<uint32_t>& offsets,
+                                             const std::vector<std::string>& fieldNames, bool isBigendian);
+
+  PCLChannels getChannels(const std::vector<std::string>& fields);
 
 public:
   // image / pointcloud attribute keys
@@ -54,6 +83,11 @@ public:
   inline static const std::string BOUNDINGBOX = "boundingbox";
   // datatype group names in hdf5
   inline static const std::string HDF5_GROUP_POINTCLOUD = "pointclouds";
+
+private:
+  uint32_t getRgbaOffset(const std::string& filename, uint32_t offset, bool isBigendian);
+  void updateBoundingBox(std::array<float, 3>& min, std::array<float, 3>& max, const float& x, const float& y,
+                         const float& z);
 };
 
 }  // namespace seerep_hdf5_core
