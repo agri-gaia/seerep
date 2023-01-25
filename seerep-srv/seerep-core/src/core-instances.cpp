@@ -89,6 +89,7 @@ void CoreInstances::addDataset(const seerep_core_msgs::LabelWithInstance& labelW
   /// only add the dataset to an existing instance if the labels match otherwise throw an error
   if (instance->getAttribute(CoreInstances::ATTRIBUTELABEL) == labelWithInstance.label)
   {
+    /// TODO: add categories to instances!
     instance->addDataset(uuidDataset, datatype);
   }
   else

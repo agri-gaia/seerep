@@ -44,7 +44,9 @@ timeInterval = util_fb.createTimeInterval(builder, timeMin, timeMax)
 
 
 projectUuids = [builder.CreateString(projectuuid)]
-labels = [builder.CreateString("testlabel0"), builder.CreateString("testlabelgeneral0")]
+category = "0"
+labels = [[builder.CreateString("testlabel0"), builder.CreateString("testlabelgeneral0")]]
+labelCategory = util_fb.createLabelWithCategory(builder, category, labels)
 dataUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 instanceUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 
@@ -55,8 +57,8 @@ query = util_fb.createQuery(
     builder,
     # boundingBox=boundingboxStamped,
     # timeInterval=timeInterval,
-    labels=labels,
-    mustHaveAllLabels=True,
+    labels=labelCategory,
+    # mustHaveAllLabels=True,
     projectUuids=projectUuids,
     # instanceUuids=instanceUuids,
     # dataUuids=dataUuids,
@@ -70,16 +72,16 @@ for responseBuf in stub.GetImage(bytes(buf)):
     response = Image.Image.GetRootAs(responseBuf)
 
     print(f"uuidmsg: {response.Header().UuidMsgs().decode('utf-8')}")
-    print("first label: " + response.LabelsBb(0).LabelWithInstance().Label().decode("utf-8"))
+    print("first label: " + response.LabelsBb(0).BoundingBox2dLabeled(0).LabelWithInstance().Label().decode("utf-8"))
     print(
         "first bounding box (Xmin,Ymin,Xmax,Ymax): "
-        + str(response.LabelsBb(0).BoundingBox().PointMin().X())
+        + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().PointMin().X())
         + " "
-        + str(response.LabelsBb(0).BoundingBox().PointMin().Y())
+        + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().PointMin().Y())
         + " "
-        + str(response.LabelsBb(0).BoundingBox().PointMax().X())
+        + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().PointMax().X())
         + " "
-        + str(response.LabelsBb(0).BoundingBox().PointMax().Y())
+        + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().PointMax().Y())
         + "\n"
     )
 

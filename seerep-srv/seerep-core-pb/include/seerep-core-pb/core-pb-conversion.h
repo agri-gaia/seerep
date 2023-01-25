@@ -6,6 +6,7 @@
 
 // seerep-msgs
 #include <seerep-msgs/image.pb.h>
+#include <seerep-msgs/point_cloud_2.pb.h>
 #include <seerep-msgs/query.pb.h>
 #include <seerep-msgs/transform_stamped.pb.h>
 #include <seerep-msgs/transform_stamped_query.pb.h>

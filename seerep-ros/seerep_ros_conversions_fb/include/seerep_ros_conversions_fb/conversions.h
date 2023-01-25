@@ -13,6 +13,7 @@
 
 // seerep flatbuffer messages
 #include <seerep-msgs/boundingbox2d_labeled_generated.h>
+#include <seerep-msgs/boundingbox2d_labeled_with_category_generated.h>
 #include <seerep-msgs/boundingboxes2d_labeled_stamped_generated.h>
 #include <seerep-msgs/header_generated.h>
 #include <seerep-msgs/image_generated.h>
@@ -364,7 +365,8 @@ geometry_msgs::TransformStamped toROS(const seerep::fb::TransformStamped& transf
  * @return gRPC Flatbuffer BoundingBoxes2D_labeled_stamped message
  */
 flatbuffers::grpc::Message<seerep::fb::BoundingBoxes2DLabeledStamped>
-toFlat(const vision_msgs::Detection2DArray& detection2d, std::string projectuuid, std::string msguuid);
+toFlat(const vision_msgs::Detection2DArray& detection2d, std::string projectuuid, std::string category,
+       std::string msguuid);
 /**
  * @brief Converts a ROS vision_msgs::Detection2DArray message to the corresponding
  * Flatbuffer BoundingBoxes2D_labeled_stamped message
@@ -377,7 +379,7 @@ toFlat(const vision_msgs::Detection2DArray& detection2d, std::string projectuuid
 flatbuffers::Offset<seerep::fb::BoundingBoxes2DLabeledStamped> toFlat(const vision_msgs::Detection2DArray& detection2d,
                                                                       std::string projectuuid,
                                                                       flatbuffers::grpc::MessageBuilder& builder,
-                                                                      std::string msguuid);
+                                                                      std::string category, std::string msguuid);
 
 /**
  * @brief Converts a Flatbuffer BoundingBoxes2D_labeled_stamped message to the corresponding

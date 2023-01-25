@@ -19,7 +19,8 @@ void CoreDataset::addDatatype(const seerep_core_msgs::Datatype& datatype,
     .dataWithMissingTF = std::vector<std::shared_ptr<seerep_core_msgs::DatasetIndexable>>(),
     .rt = seerep_core_msgs::rtree(),
     .timetree = seerep_core_msgs::timetree(),
-    .labelDatasetsMap = std::unordered_map<std::string, std::vector<boost::uuids::uuid>>(),
+    .categoryLabelDatasetsMap =
+        std::unordered_map<std::string, std::unordered_map<std::string, std::vector<boost::uuids::uuid>>>(),
     .datasetInstancesMap =
         std::unordered_map<boost::uuids::uuid, std::vector<boost::uuids::uuid>, boost::hash<boost::uuids::uuid>>()
   };
@@ -196,15 +197,23 @@ CoreDataset::querySemanticWithAnyOfLabels(std::shared_ptr<DatatypeSpecifics> dat
 {
   std::optional<std::set<boost::uuids::uuid>> result = std::set<boost::uuids::uuid>();
   // find the queried label in the label-imageID-map
-  for (std::string labelquery : query.label.value())
+  for (auto categorylabelquery : query.label.value())
   {
-    auto labelPtr = datatypeSpecifics->labelDatasetsMap.find(labelquery);
-    if (labelPtr != datatypeSpecifics->labelDatasetsMap.end())
+    auto& category = categorylabelquery.first;
+    auto categoryPtr = datatypeSpecifics->categoryLabelDatasetsMap.find(category);
+    if (categoryPtr != datatypeSpecifics->categoryLabelDatasetsMap.end())
     {
-      // add all imageIDs to result set
-      for (boost::uuids::uuid id : labelPtr->second)
+      for (std::string label : categorylabelquery.second)
       {
-        result.value().insert(id);
+        auto labelPtr = categoryPtr->second.find(label);
+        if (labelPtr != categoryPtr->second.end())
+        {
+          // add all imageIDs to result set
+          for (boost::uuids::uuid id : labelPtr->second)
+          {
+            result.value().insert(id);
+          }
+        }
       }
     }
   }
@@ -218,39 +227,51 @@ CoreDataset::querySemanticWithAllTheLabels(std::shared_ptr<DatatypeSpecifics> da
   std::set<boost::uuids::uuid> result;
   bool firstLabel = true;
   // find the queried label in the label-imageID-map
-  for (std::string labelquery : query.label.value())
+  for (auto categorylabelquery : query.label.value())
   {
-    auto labelPtr = datatypeSpecifics->labelDatasetsMap.find(labelquery);
-    if (labelPtr != datatypeSpecifics->labelDatasetsMap.end())
+    auto& category = categorylabelquery.first;
+    for (std::string label : categorylabelquery.second)
     {
-      std::set<boost::uuids::uuid> thisLabelSet;
-      // vector to set
-      for (boost::uuids::uuid id : labelPtr->second)
+      auto categoryPtr = datatypeSpecifics->categoryLabelDatasetsMap.find(category);
+      if (categoryPtr != datatypeSpecifics->categoryLabelDatasetsMap.end())
       {
-        thisLabelSet.insert(id);
-      }
+        auto labelPtr = categoryPtr->second.find(label);
+        if (labelPtr != categoryPtr->second.end())
+        {
+          std::set<boost::uuids::uuid> thisLabelSet;
+          // vector to set
+          for (boost::uuids::uuid id : labelPtr->second)
+          {
+            thisLabelSet.insert(id);
+          }
 
-      if (firstLabel)
-      {
-        result = std::move(thisLabelSet);
+          if (firstLabel)
+          {
+            result = std::move(thisLabelSet);
+            firstLabel = false;
+          }
+          else
+          {
+            std::set<boost::uuids::uuid> intersection;
+            std::set_intersection(result.begin(), result.end(), thisLabelSet.begin(), thisLabelSet.end(),
+                                  std::inserter(intersection, intersection.begin()));
+            result = std::move(intersection);
+          }
+        }
+        else
+        {
+          return std::nullopt;
+        }
         firstLabel = false;
+        if (result.empty())
+        {
+          return std::nullopt;
+        }
       }
       else
       {
-        std::set<boost::uuids::uuid> intersection;
-        std::set_intersection(result.begin(), result.end(), thisLabelSet.begin(), thisLabelSet.end(),
-                              std::inserter(intersection, intersection.begin()));
-        result = std::move(intersection);
+        return std::nullopt;
       }
-    }
-    else
-    {
-      return std::nullopt;
-    }
-    firstLabel = false;
-    if (result.empty())
-    {
-      return std::nullopt;
     }
   }
   return result;
@@ -433,60 +454,67 @@ void CoreDataset::addDatasetToIndices(const seerep_core_msgs::Datatype& datatype
                                                                   ((uint64_t)dataset.header.timestamp.nanos)));
   datatypeSpecifics->timetree.insert(std::make_pair(aabbTime, dataset.header.uuidData));
 
-  auto& labels = dataset.labelsWithInstances;
+  addLabels(datatype, datatypeSpecifics, dataset.labelsWithInstancesWithCategory, dataset.header.uuidData);
+}
 
+void CoreDataset::addLabels(const seerep_core_msgs::Datatype& datatype,
+                            const std::unordered_map<std::string, std::vector<seerep_core_msgs::LabelWithInstance>>&
+                                labelWithInstancePerCategory,
+                            const boost::uuids::uuid& msgUuid)
+{
+  addLabels(datatype, m_datatypeDatatypeSpecificsMap.at(datatype), labelWithInstancePerCategory, msgUuid);
+}
+
+void CoreDataset::addLabels(const seerep_core_msgs::Datatype& datatype,
+                            std::shared_ptr<seerep_core::CoreDataset::DatatypeSpecifics> datatypeSpecifics,
+                            const std::unordered_map<std::string, std::vector<seerep_core_msgs::LabelWithInstance>>&
+                                labelWithInstancePerCategory,
+                            const boost::uuids::uuid& msgUuid)
+{
   std::vector<boost::uuids::uuid> instanceUuids;
-  for (seerep_core_msgs::LabelWithInstance labelWithInstance : labels)
+  // loop categories
+  for (auto labelWithInstanceOfCategory : labelWithInstancePerCategory)
   {
     // check if label already exists
-    std::unordered_map<std::string, std::vector<boost::uuids::uuid>>::iterator labelmapentry =
-        datatypeSpecifics->labelDatasetsMap.find(labelWithInstance.label);
-    if (labelmapentry != datatypeSpecifics->labelDatasetsMap.end())
+    auto categoryMapEntry = datatypeSpecifics->categoryLabelDatasetsMap.find(labelWithInstanceOfCategory.first);
+    if (categoryMapEntry == datatypeSpecifics->categoryLabelDatasetsMap.end())
     {
-      // label already exists, add id of image to the vector
-      labelmapentry->second.push_back(dataset.header.uuidData);
+      auto emplaceReturn = datatypeSpecifics->categoryLabelDatasetsMap.emplace(
+          labelWithInstanceOfCategory.first, std::unordered_map<std::string, std::vector<boost::uuids::uuid>>());
+      if (!emplaceReturn.second)
+      {
+        throw std::runtime_error("could not insert label category to datatype specifics.");
+      }
+      categoryMapEntry = emplaceReturn.first;
     }
-    else
+    // loop labels
+    for (auto labelWithInstance : labelWithInstanceOfCategory.second)
     {
-      // label doesn't already exist. Create new pair of label and vector of image ids
-      datatypeSpecifics->labelDatasetsMap.insert(
-          std::make_pair(labelWithInstance.label, std::vector<boost::uuids::uuid>{ dataset.header.uuidData }));
-    }
+      // check if label already exists
+      auto labelMapEntry = categoryMapEntry->second.find(labelWithInstance.label);
+      if (labelMapEntry != categoryMapEntry->second.end())
+      {
+        // label already exists, add id of dataset to the vector
+        labelMapEntry->second.push_back(msgUuid);
+      }
+      else
+      {
+        // label doesn't already exist. Create new pair of label and vector of dataset ids
+        categoryMapEntry->second.emplace(labelWithInstance.label, std::vector<boost::uuids::uuid>{ msgUuid });
+      }
 
-    // add to instance
-    if (!labelWithInstance.uuidInstance.is_nil())
-    {
-      m_coreInstances->addDataset(labelWithInstance, dataset.header.uuidData, datatype);
+      // add to instance
+      if (!labelWithInstance.uuidInstance.is_nil())
+      {
+        m_coreInstances->addDataset(labelWithInstance, msgUuid, datatype);
 
-      // collect the instance uuids of this dataset in this vector
-      instanceUuids.push_back(labelWithInstance.uuidInstance);
+        // collect the instance uuids of this dataset in this vector
+        instanceUuids.push_back(labelWithInstance.uuidInstance);
+      }
     }
   }
   // add the vector of instance uuids to the datatypespecifics
-  datatypeSpecifics->datasetInstancesMap.emplace(dataset.header.uuidData, instanceUuids);
-}
-
-void CoreDataset::addLabels(const seerep_core_msgs::Datatype& datatype, const std::vector<std::string>& labels,
-                            const boost::uuids::uuid& msgUuid)
-{
-  auto datatypeSpecifics = m_datatypeDatatypeSpecificsMap.at(datatype);
-
-  for (std::string label : labels)
-  {
-    // check if label already exists
-    std::unordered_map<std::string, std::vector<boost::uuids::uuid>>::iterator labelmapentry =
-        datatypeSpecifics->labelDatasetsMap.find(label);
-    if (labelmapentry != datatypeSpecifics->labelDatasetsMap.end())
-    {
-      // label already exists, add id of image to the vector
-      labelmapentry->second.push_back(msgUuid);
-    }
-    else
-    {
-      // label doesn't already exist. Create new pair of label and vector of image ids
-      datatypeSpecifics->labelDatasetsMap.insert(std::make_pair(label, std::vector<boost::uuids::uuid>{ msgUuid }));
-    }
-  }
+  datatypeSpecifics->datasetInstancesMap.emplace(msgUuid, instanceUuids);
 }
 
 seerep_core_msgs::AabbTime CoreDataset::getTimeBounds(std::vector<seerep_core_msgs::Datatype> datatypes)

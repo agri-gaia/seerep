@@ -1,13 +1,14 @@
 
 include "time_interval.fbs";
 include "boundingbox_stamped.fbs";
+include "labels_with_category.fbs";
 
 namespace seerep.fb;
 
 table Query {
   boundingboxStamped:BoundingboxStamped;
   timeinterval:TimeInterval;
-  label:[string];
+  label:[LabelsWithCategory];
   mustHaveAllLabels:bool;
   projectuuid:[string];
   instanceuuid:[string];

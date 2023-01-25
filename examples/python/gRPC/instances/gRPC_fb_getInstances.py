@@ -44,7 +44,9 @@ timeInterval = util_fb.createTimeInterval(builder, timeMin, timeMax)
 
 
 projectUuids = [builder.CreateString(projectuuid)]
-labels = [builder.CreateString("testlabel0")]
+category = "0"
+labels = [[builder.CreateString("testlabel0"), builder.CreateString("testlabelgeneral0")]]
+labelCategory = util_fb.createLabelWithCategory(builder, category, labels)
 dataUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 instanceUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 
@@ -55,7 +57,7 @@ query = util_fb.createQuery(
     builder,
     # boundingBox=boundingboxStamped,
     # timeInterval=timeInterval,
-    # labels=labels,
+    # labels=labelCategory,
     # projectUuids=projectUuids,
     # instanceUuids=instanceUuids,
     # dataUuids=dataUuids,

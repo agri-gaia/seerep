@@ -61,20 +61,14 @@ seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::Im
   dataForIndices.boundingbox.max_corner().set<2>(0);
 
   // semantic
-  int labelSizeAll = 0;
-  if (img.labels_general())
+  if (flatbuffers::IsFieldPresent(&img, seerep::fb::Image::VT_LABELS_GENERAL))
   {
-    labelSizeAll += img.labels_general()->size();
+    fromFbDataLabelsGeneral(img.labels_general(), dataForIndices.labelsWithInstancesWithCategory);
   }
-  if (img.labels_bb())
+  if (flatbuffers::IsFieldPresent(&img, seerep::fb::Image::VT_LABELS_BB))
   {
-    labelSizeAll += img.labels_bb()->size();
+    fromFbDataLabelsBb2d(img.labels_bb(), dataForIndices.labelsWithInstancesWithCategory);
   }
-  dataForIndices.labelsWithInstances.reserve(labelSizeAll);
-
-  fromFbDataLabelsGeneral(img.labels_general(), dataForIndices.labelsWithInstances);
-  fromFbDataLabelsBb2d(img.labels_bb(), dataForIndices.labelsWithInstances);
-
   return dataForIndices;
 }
 seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::PointStamped* point)
@@ -95,10 +89,7 @@ seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::Po
 
   if (flatbuffers::IsFieldPresent(point, seerep::fb::PointStamped::VT_LABELS_GENERAL))
   {
-    int labelSizeAll = point->labels_general()->size();
-
-    dataForIndices.labelsWithInstances.reserve(labelSizeAll);
-    fromFbDataLabelsGeneral(point->labels_general(), dataForIndices.labelsWithInstances);
+    fromFbDataLabelsGeneral(point->labels_general(), dataForIndices.labelsWithInstancesWithCategory);
   }
 
   return dataForIndices;
@@ -110,20 +101,14 @@ seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::Po
   fromFbDataHeader(cloud.header(), dataForIndices.header, seerep_core_msgs::Datatype::PointCloud);
 
   // semantic
-  int labelSizeAll = 0;
-  if (cloud.labels_general())
+  if (flatbuffers::IsFieldPresent(&cloud, seerep::fb::PointCloud2::VT_LABELS_GENERAL))
   {
-    labelSizeAll += cloud.labels_general()->size();
+    fromFbDataLabelsGeneral(cloud.labels_general(), dataForIndices.labelsWithInstancesWithCategory);
   }
-  if (cloud.labels_bb())
+  if (flatbuffers::IsFieldPresent(&cloud, seerep::fb::PointCloud2::VT_LABELS_BB))
   {
-    labelSizeAll += cloud.labels_bb()->size();
+    fromFbDataLabelsBb(cloud.labels_bb(), dataForIndices.labelsWithInstancesWithCategory);
   }
-  dataForIndices.labelsWithInstances.reserve(labelSizeAll);
-
-  fromFbDataLabelsGeneral(cloud.labels_general(), dataForIndices.labelsWithInstances);
-  fromFbDataLabelsBb(cloud.labels_bb(), dataForIndices.labelsWithInstances);
-
   return dataForIndices;
 }
 
@@ -213,15 +198,21 @@ void CoreFbConversion::fromFbQueryDataUuids(const seerep::fb::Query* query,
   }
 }
 
-void CoreFbConversion::fromFbQueryLabel(const seerep::fb::Query* query,
-                                        std::optional<std::vector<std::string>>& queryCoreLabel)
+void CoreFbConversion::fromFbQueryLabel(
+    const seerep::fb::Query* query,
+    std::optional<std::unordered_map<std::string, std::vector<std::string>>>& queryCoreLabel)
 {
   if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_LABEL))
   {
-    queryCoreLabel = std::vector<std::string>();
-    for (auto label : *query->label())
+    queryCoreLabel = std::unordered_map<std::string, std::vector<std::string>>();
+    for (auto labelWithCategory : *query->label())
     {
-      queryCoreLabel.value().push_back(label->str());
+      std::vector<std::string> labels;
+      for (auto label : *labelWithCategory->labels())
+      {
+        labels.push_back(label->str());
+      }
+      queryCoreLabel.value().emplace(labelWithCategory->category()->c_str(), labels);
     }
   }
 }
@@ -322,75 +313,95 @@ boost::uuids::uuid CoreFbConversion::fromFbDataHeaderUuid(const std::string& uui
 }
 
 void CoreFbConversion::fromFbDataLabelsGeneral(
-    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>* labelsGeneral,
-    std::vector<seerep_core_msgs::LabelWithInstance>& labelWithInstance)
+    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelsWithInstanceWithCategory>>* labelsGeneral,
+    std::unordered_map<std::string, std::vector<seerep_core_msgs::LabelWithInstance>>& labelsWithInstancesWithCategory)
 {
   if (labelsGeneral)
   {
-    for (auto label : *labelsGeneral)
+    for (auto labelsCategories : *labelsGeneral)
     {
-      boost::uuids::string_generator gen;
-      boost::uuids::uuid uuidInstance;
-      try
+      std::vector<seerep_core_msgs::LabelWithInstance> labelWithInstanceVector;
+      if (labelsCategories->labelsWithInstance())
       {
-        uuidInstance = gen(label->instanceUuid()->str());
-      }
-      catch (std::runtime_error const& e)
-      {
-        uuidInstance = boost::uuids::nil_uuid();
-      }
+        labelWithInstanceVector.reserve(labelsCategories->labelsWithInstance()->size());
+        for (auto label : *labelsCategories->labelsWithInstance())
+        {
+          boost::uuids::string_generator gen;
+          boost::uuids::uuid uuidInstance;
+          try
+          {
+            uuidInstance = gen(label->instanceUuid()->str());
+          }
+          catch (std::runtime_error const& e)
+          {
+            uuidInstance = boost::uuids::nil_uuid();
+          }
 
-      labelWithInstance.push_back(
-          seerep_core_msgs::LabelWithInstance{ .label = label->label()->str(), .uuidInstance = uuidInstance });
+          labelWithInstanceVector.push_back(
+              seerep_core_msgs::LabelWithInstance{ .label = label->label()->str(), .uuidInstance = uuidInstance });
+        }
+        labelsWithInstancesWithCategory.emplace(labelsCategories->category()->c_str(), labelWithInstanceVector);
+      }
     }
   }
 }
 
 void CoreFbConversion::fromFbDataLabelsBb2d(
-    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>>* labelsBB2d,
-    std::vector<seerep_core_msgs::LabelWithInstance>& labelWithInstance)
+    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeledWithCategory>>* labelsBB2d,
+    std::unordered_map<std::string, std::vector<seerep_core_msgs::LabelWithInstance>>& labelsWithInstancesWithCategory)
 {
   if (labelsBB2d)
   {
-    for (auto label : *labelsBB2d)
+    for (auto labelsCategories : *labelsBB2d)
     {
-      boost::uuids::string_generator gen;
-      boost::uuids::uuid uuidInstance;
-      try
+      std::vector<seerep_core_msgs::LabelWithInstance> labelWithInstanceVector;
+      for (auto label : *labelsCategories->boundingBox2dLabeled())
       {
-        uuidInstance = gen(label->labelWithInstance()->instanceUuid()->str());
-      }
-      catch (std::runtime_error const& e)
-      {
-        uuidInstance = boost::uuids::nil_uuid();
-      }
+        boost::uuids::string_generator gen;
+        boost::uuids::uuid uuidInstance;
+        try
+        {
+          uuidInstance = gen(label->labelWithInstance()->instanceUuid()->str());
+        }
+        catch (std::runtime_error const& e)
+        {
+          uuidInstance = boost::uuids::nil_uuid();
+        }
 
-      labelWithInstance.push_back(seerep_core_msgs::LabelWithInstance{
-          .label = label->labelWithInstance()->label()->str(), .uuidInstance = uuidInstance });
+        labelWithInstanceVector.push_back(seerep_core_msgs::LabelWithInstance{
+            .label = label->labelWithInstance()->label()->str(), .uuidInstance = uuidInstance });
+      }
+      labelsWithInstancesWithCategory.emplace(labelsCategories->category()->c_str(), labelWithInstanceVector);
     }
   }
 }
 
 void CoreFbConversion::fromFbDataLabelsBb(
-    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>>* labelsBB,
-    std::vector<seerep_core_msgs::LabelWithInstance>& labelWithInstance)
+    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeledWithCategory>>* labelsBB,
+    std::unordered_map<std::string, std::vector<seerep_core_msgs::LabelWithInstance>>& labelsWithInstancesWithCategory)
 {
   if (labelsBB)
   {
-    for (auto label : *labelsBB)
+    for (auto labelsCategories : *labelsBB)
     {
-      boost::uuids::string_generator gen;
-      boost::uuids::uuid uuidInstance;
-      try
+      std::vector<seerep_core_msgs::LabelWithInstance> labelWithInstanceVector;
+      for (auto label : *labelsCategories->boundingBoxLabeled())
       {
-        uuidInstance = gen(label->labelWithInstance()->instanceUuid()->str());
+        boost::uuids::string_generator gen;
+        boost::uuids::uuid uuidInstance;
+        try
+        {
+          uuidInstance = gen(label->labelWithInstance()->instanceUuid()->str());
+        }
+        catch (std::runtime_error const& e)
+        {
+          uuidInstance = boost::uuids::nil_uuid();
+        }
+
+        labelWithInstanceVector.push_back(seerep_core_msgs::LabelWithInstance{
+            .label = label->labelWithInstance()->label()->str(), .uuidInstance = uuidInstance });
       }
-      catch (std::runtime_error const& e)
-      {
-        uuidInstance = boost::uuids::nil_uuid();
-      }
-      labelWithInstance.push_back(seerep_core_msgs::LabelWithInstance{
-          .label = label->labelWithInstance()->label()->str(), .uuidInstance = uuidInstance });
+      labelsWithInstancesWithCategory.emplace(labelsCategories->category()->c_str(), labelWithInstanceVector);
     }
   }
 }

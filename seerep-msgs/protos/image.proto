@@ -3,8 +3,8 @@ syntax = "proto3";
 package seerep;
 
 import "header.proto";
-import "boundingbox2d_labeled.proto";
-import "label_with_instance.proto";
+import "boundingbox2d_labeled_with_category.proto";
+import "labels_with_instance_with_category.proto";
 
 /**
  * This message contains an uncompressed image
@@ -49,8 +49,8 @@ message Image
   bytes data = 8;
 
   // (optional) labels for the complete image
-  repeated LabelWithInstance labels_general = 9;
+  repeated LabelsWithInstanceWithCategory labels_general = 9;
 
   // (optional) bounding box based labels
-  repeated BoundingBox2DLabeled labels_bb = 10;
+  repeated BoundingBox2DLabeledWithCategory labels_bb = 10;
 }

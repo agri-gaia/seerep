@@ -50,43 +50,10 @@ std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CoreImage::readDataset(con
   data.boundingbox.max_corner().set<1>(0);
   data.boundingbox.max_corner().set<2>(0);
 
-  std::vector<std::string> labelsGeneral;
-  std::vector<std::string> instancesGeneral;
-  readLabelsGeneral(HDF5_GROUP_IMAGE, uuid, labelsGeneral, instancesGeneral);
-  for (long unsigned int i = 0; i < labelsGeneral.size(); i++)
-  {
-    boost::uuids::uuid instanceUuid;
-    try
-    {
-      instanceUuid = gen(instancesGeneral.at(i));
-    }
-    catch (std::runtime_error&)
-    {
-      instanceUuid = boost::uuids::nil_uuid();
-    }
-    data.labelsWithInstances.push_back(
-        seerep_core_msgs::LabelWithInstance{ .label = labelsGeneral.at(i), .uuidInstance = instanceUuid });
-  }
+  readLabelsGeneralAndAddToLabelsWithInstancesWithCategory(HDF5_GROUP_IMAGE, uuid, data.labelsWithInstancesWithCategory);
 
-  std::vector<std::string> labelsBB;
-  std::vector<std::vector<double>> boundingBoxes;
-  std::vector<std::string> instances;
-  readBoundingBoxLabeled(HDF5_GROUP_IMAGE, uuid, labelsBB, boundingBoxes, instances, false);
-
-  for (long unsigned int i = 0; i < labelsBB.size(); i++)
-  {
-    boost::uuids::uuid instanceUuid;
-    try
-    {
-      instanceUuid = gen(instances.at(i));
-    }
-    catch (std::runtime_error&)
-    {
-      instanceUuid = boost::uuids::nil_uuid();
-    }
-    data.labelsWithInstances.push_back(
-        seerep_core_msgs::LabelWithInstance{ .label = labelsBB.at(i), .uuidInstance = instanceUuid });
-  }
+  readBoundingBoxLabeledAndAddToLabelsWithInstancesWithCategory(HDF5_GROUP_IMAGE, uuid,
+                                                                data.labelsWithInstancesWithCategory);
 
   return data;
 }
@@ -96,10 +63,12 @@ std::vector<std::string> Hdf5CoreImage::getDatasetUuids()
   return getGroupDatasets(HDF5_GROUP_IMAGE);
 }
 
-void Hdf5CoreImage::writeLabelsGeneral(const std::string& uuid, const std::vector<std::string>& labels,
-                                       const std::vector<std::string>& instances)
+void Hdf5CoreImage::writeLabelsGeneral(
+    const std::string& uuid,
+    const std::vector<seerep_core_msgs::LabelsWithInstanceWithCategory>& labelsWithInstanceWithCategory)
 {
-  Hdf5CoreGeneral::writeLabelsGeneral(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, uuid, labels, instances);
+  Hdf5CoreGeneral::writeLabelsGeneral(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, uuid,
+                                      labelsWithInstanceWithCategory);
 }
 
 void Hdf5CoreImage::writeImageAttributes(const std::string& id, const ImageAttributes& attributes)

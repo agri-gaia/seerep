@@ -30,7 +30,7 @@ namespace seerep_core
  *
  * a dataset can be added to the indices and spatio-temporal-semantic queries can be executed
  * to get the UUIDs of the datasets matching the query. On startup all datasets are loaded from the HDF5 file
- * Datasets added during runtime must be added to the indices via the corresponding public methode
+ * Datasets added during runtime must be added to the indices via the corresponding public method
  */
 class CoreDataset
 {
@@ -47,9 +47,10 @@ private:
     seerep_core_msgs::rtree rt = seerep_core_msgs::rtree();
     /** @brief the temporal r-tree for the temporal index*/
     seerep_core_msgs::timetree timetree = seerep_core_msgs::timetree();
-    /** @brief map from label to the UUIDs of the images annotated with this label*/
-    std::unordered_map<std::string, std::vector<boost::uuids::uuid>> labelDatasetsMap =
-        std::unordered_map<std::string, std::vector<boost::uuids::uuid>>();
+    /** @brief map from the category of labels to the map from label to the UUIDs of the datasets annotated with this label*/
+    std::unordered_map<std::string, std::unordered_map<std::string, std::vector<boost::uuids::uuid>>>
+        categoryLabelDatasetsMap =
+            std::unordered_map<std::string, std::unordered_map<std::string, std::vector<boost::uuids::uuid>>>();
     /** @brief map from the UUID of the dataset a vector of UUID of instances the dataset is showing */
     std::unordered_map<boost::uuids::uuid, std::vector<boost::uuids::uuid>, boost::hash<boost::uuids::uuid>>
         datasetInstancesMap =
@@ -97,10 +98,24 @@ public:
   /**
    * @brief Adds labels to an existing dataset
    * @param datatype the datatype to consider
-   * @param labels a vector of labels to be added to the dataset
+   * @param labelWithInstancePerCategory map from category to a vector of labels to be added to the dataset
    * @param msgUuid the UUID of the targeted dataset
    */
-  void addLabels(const seerep_core_msgs::Datatype& datatype, const std::vector<std::string>& labels,
+  void addLabels(const seerep_core_msgs::Datatype& datatype,
+                 const std::unordered_map<std::string, std::vector<seerep_core_msgs::LabelWithInstance>>&
+                     labelWithInstancePerCategory,
+                 const boost::uuids::uuid& msgUuid);
+  /**
+   * @brief Adds labels to an existing dataset
+   * @param datatype the datatype to consider
+   * @param datatypeSpecifics the datatypeSpecifics
+   * @param labelWithInstancePerCategory map from category to a vector of labels to be added to the dataset
+   * @param msgUuid the UUID of the targeted dataset
+   */
+  void addLabels(const seerep_core_msgs::Datatype& datatype,
+                 std::shared_ptr<seerep_core::CoreDataset::DatatypeSpecifics> datatypeSpecifics,
+                 const std::unordered_map<std::string, std::vector<seerep_core_msgs::LabelWithInstance>>&
+                     labelWithInstancePerCategory,
                  const boost::uuids::uuid& msgUuid);
 
   /**

@@ -34,11 +34,12 @@ timeMin = util_fb.createTimeStamp(builder, 1610549273, 0)
 timeMax = util_fb.createTimeStamp(builder, 1938549273, 0)
 timeInterval = util_fb.createTimeInterval(builder, timeMin, timeMax)
 
+category = "0"
+labels = [[builder.CreateString("testlabel0"), builder.CreateString("BoundingBoxLabel0")]]
+labelCategory = util_fb.createLabelWithCategory(builder, category, labels)
+
 queryMsg = util_fb.createQuery(
-    builder,
-    projectUuids=[builder.CreateString(projectUuid)],
-    timeInterval=timeInterval,
-    labels=[builder.CreateString("BoundingBoxLabel0")],
+    builder, projectUuids=[builder.CreateString(projectUuid)], timeInterval=timeInterval, labels=labelCategory
 )
 builder.Finish(queryMsg)
 buf = builder.Output()
@@ -64,16 +65,16 @@ for responseBuf in stubPointCloud.GetPointCloud2(bytes(buf)):
         print(f"Instance {i}: {response.LabelsBb(i).LabelWithInstance().InstanceUuid().decode('utf-8')}")
         print(
             f"Bounding Box Min {i}: "
-            f"{response.LabelsBb(i).BoundingBox().PointMin().X()},"
-            f"{response.LabelsBb(i).BoundingBox().PointMin().Y()},"
-            f"{response.LabelsBb(i).BoundingBox().PointMin().Z()} "
+            f"{response.LabelsBb(i).BoundingBoxLabeled(0).BoundingBox().PointMin().X()},"
+            f"{response.LabelsBb(i).BoundingBoxLabeled(0).BoundingBox().PointMin().Y()},"
+            f"{response.LabelsBb(i).BoundingBoxLabeled(0).BoundingBox().PointMin().Z()} "
             f"(x,y,z)"
         )
         print(
             f"Bounding Box Max {i}: "
-            f"{response.LabelsBb(i).BoundingBox().PointMax().X()},"
-            f"{response.LabelsBb(i).BoundingBox().PointMax().Y()},"
-            f"{response.LabelsBb(i).BoundingBox().PointMax().Z()} "
+            f"{response.LabelsBb(i).BoundingBoxLabeled(0).BoundingBox().PointMax().X()},"
+            f"{response.LabelsBb(i).BoundingBoxLabeled(0).BoundingBox().PointMax().Y()},"
+            f"{response.LabelsBb(i).BoundingBoxLabeled(0).BoundingBox().PointMax().Z()} "
             f"(x,y,z)"
         )
 
