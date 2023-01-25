@@ -39,10 +39,10 @@ void Hdf5FbGeneral::writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, c
 {
   if (header)
   {
-    writeAttributeToHdf5<int64_t>(object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS,
-                                  header->stamp()->seconds());
-    writeAttributeToHdf5<int32_t>(object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS,
-                                  header->stamp()->nanos());
+    writeAttributeToHdf5<uint64_t>(object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS,
+                                   header->stamp()->seconds());
+    writeAttributeToHdf5<uint64_t>(object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS,
+                                   header->stamp()->nanos());
     writeAttributeToHdf5<std::string>(object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID,
                                       header->frame_id()->str());
     writeAttributeToHdf5<int32_t>(object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ, header->seq());
