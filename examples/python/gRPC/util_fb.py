@@ -1,32 +1,14 @@
 import sys
 
-from seerep.fb import (
-    Boundingbox,
-    BoundingBox2DLabeled,
-    BoundingBox2DLabeledWithCategory,
-    BoundingBoxes2DLabeledStamped,
-    BoundingBoxLabeled,
-    BoundingBoxLabeledWithCategory,
-    BoundingboxStamped,
-    Empty,
-    GeodeticCoordinates,
-    Header,
-    Label,
-    LabelsWithCategory,
-    LabelWithInstance,
-    Point,
-    PointCloud2,
-    PointField,
-    ProjectCreation,
-    ProjectInfo,
-    ProjectInfos,
-    Query,
-    QueryInstance,
-    TimeInterval,
-    Timestamp,
-    TransformStampedQuery,
-    UuidDatatypePair,
-)
+from seerep.fb import (Boundingbox, BoundingBox2DLabeled,
+                       BoundingBox2DLabeledWithCategory,
+                       BoundingBoxes2DLabeledStamped, BoundingBoxLabeled,
+                       BoundingBoxLabeledWithCategory, BoundingboxStamped,
+                       Empty, GeodeticCoordinates, Header, Label,
+                       LabelsWithCategory, LabelWithInstance, Point,
+                       PointCloud2, PointField, ProjectCreation, ProjectInfo,
+                       ProjectInfos, Query, QueryInstance, TimeInterval,
+                       Timestamp, TransformStampedQuery, UuidDatatypePair)
 from seerep.fb import meta_operations_grpc_fb as metaOperations
 
 
