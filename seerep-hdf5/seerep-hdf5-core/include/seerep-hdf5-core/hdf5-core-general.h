@@ -160,7 +160,7 @@ public:
   inline static const std::string HEADER_STAMP_SECONDS = "stamp_seconds";
   inline static const std::string HEADER_STAMP_NANOS = "stamp_nanos";
   inline static const std::string HEADER_FRAME_ID = "frame_id";
-  inline static const std::string HEADER_SEQ = "header_seq";
+  inline static const std::string HEADER_SEQ = "seq";
 
   inline static const std::string AABB_FIELD = "AABB";
 

@@ -2,41 +2,29 @@
 
 namespace seerep_hdf5_ros
 {
+
 Hdf5Ros::Hdf5Ros(std::shared_ptr<HighFive::File>& hdf5File, std::shared_ptr<std::mutex>& mutex,
                  const std::string& projectName, const std::string& projectFrameId)
   : seerep_hdf5_core::Hdf5CoreGeneral(hdf5File, mutex)
   , seerep_hdf5_core::Hdf5CoreTf(hdf5File, mutex)
+  , seerep_hdf5_core::Hdf5CorePointCloud(hdf5File, mutex)
   , hdf5File_(hdf5File)
 {
   writeProjectname(projectName);
   writeProjectFrameId(projectFrameId);
 }
 
-// Assumption is that the dataset to write the header to already exists, otherwise the function will do nothing.
-void Hdf5Ros::saveMessage(const std::string& hdf5GroupPath, const std_msgs::Header& header)
-{
-  if (exists(hdf5GroupPath))
-  {
-    std::shared_ptr<HighFive::Group> imageDataGroup = getHdf5Group(hdf5GroupPath);
-
-    writeAttributeToHdf5<uint32_t>(*imageDataGroup, "header_seq", header.seq);
-    writeAttributeToHdf5<uint64_t>(*imageDataGroup, "header_stamp_sec", header.stamp.sec);
-    writeAttributeToHdf5<uint64_t>(*imageDataGroup, "header_stamp_nsec", header.stamp.nsec);
-    writeAttributeToHdf5<std::string>(*imageDataGroup, "header_frame_id", header.frame_id);
-  }
-}
-
 void Hdf5Ros::saveMessage(const sensor_msgs::Image& image)
 {
   const std::string imageDataGroupPath =
-      "image/" + boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+      "images/" + boost::lexical_cast<std::string>(boost::uuids::random_generator()());
   const std::string imageDataSetPath = imageDataGroupPath + "/rawdata";
 
   HighFive::DataSpace imageDataSpace = HighFive::DataSpace(image.height * image.width * 3);
   std::shared_ptr<HighFive::Group> imageDataGroup = getHdf5Group(imageDataGroupPath);
   std::shared_ptr<HighFive::DataSet> imageDataSet = getHdf5DataSet<uint8_t>(imageDataSetPath, imageDataSpace);
 
-  saveMessage(imageDataGroupPath, image.header);
+  saveHeader(imageDataGroupPath, image.header);
 
   writeAttributeToHdf5<uint32_t>(*imageDataGroup, "height", image.height);
   writeAttributeToHdf5<uint32_t>(*imageDataGroup, "width", image.width);
@@ -49,16 +37,9 @@ void Hdf5Ros::saveMessage(const sensor_msgs::Image& image)
 
 void Hdf5Ros::saveMessage(const sensor_msgs::PointCloud2& pointcloud2)
 {
-  const std::string pointcloud2DataSetPath =
-      "pointcloud2/" + boost::lexical_cast<std::string>(boost::uuids::random_generator()());
-
-  HighFive::DataSpace pointcloud2DataSpace = HighFive::DataSpace(pointcloud2.data.size());
-  std::shared_ptr<HighFive::DataSet> pointcloud2DataSet =
-      getHdf5DataSet<uint8_t>(pointcloud2DataSetPath, pointcloud2DataSpace);
-
-  saveMessage(pointcloud2DataSetPath, pointcloud2.header);
-  writeAttributeToHdf5<uint32_t>(*pointcloud2DataSet, "height", pointcloud2.height);
-  writeAttributeToHdf5<uint32_t>(*pointcloud2DataSet, "width", pointcloud2.width);
+  const std::string pclUUID = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+  const std::string pclGroupPath = "pointclouds/" + pclUUID;
+  std::shared_ptr<HighFive::Group> pclGroup = getHdf5Group(pclGroupPath);
 
   std::vector<std::string> fieldsNames;
   std::vector<uint32_t> fieldsOffsets;
@@ -73,19 +54,29 @@ void Hdf5Ros::saveMessage(const sensor_msgs::PointCloud2& pointcloud2)
     fieldsCount.push_back(field.count);
   }
 
-  writeAttributeToHdf5<std::vector<std::string>>(*pointcloud2DataSet, "fields_names", fieldsNames);
-  writeAttributeToHdf5<std::vector<uint32_t>>(*pointcloud2DataSet, "fields_offsets", fieldsOffsets);
-  writeAttributeToHdf5<std::vector<uint8_t>>(*pointcloud2DataSet, "fields_datatypes", fieldsDatatypes);
-  writeAttributeToHdf5<std::vector<uint32_t>>(*pointcloud2DataSet, "fields_count", fieldsCount);
+  saveHeader(pclGroupPath, pointcloud2.header);
 
-  writeAttributeToHdf5<bool>(*pointcloud2DataSet, "is_bigendian", pointcloud2.is_bigendian);
-  writeAttributeToHdf5<uint32_t>(*pointcloud2DataSet, "point_step", pointcloud2.point_step);
-  writeAttributeToHdf5<uint32_t>(*pointcloud2DataSet, "row_step", pointcloud2.row_step);
+  writeAttributeToHdf5<std::vector<std::string>>(*pclGroup, "fields_names", fieldsNames);
+  writeAttributeToHdf5<std::vector<uint32_t>>(*pclGroup, "fields_offsets", fieldsOffsets);
+  writeAttributeToHdf5<std::vector<uint8_t>>(*pclGroup, "fields_datatypes", fieldsDatatypes);
+  writeAttributeToHdf5<std::vector<uint32_t>>(*pclGroup, "fields_count", fieldsCount);
 
-  pointcloud2DataSet->write(pointcloud2.data.data());
+  writeAttributeToHdf5<uint32_t>(*pclGroup, "height", pointcloud2.height);
+  writeAttributeToHdf5<uint32_t>(*pclGroup, "width", pointcloud2.width);
+  writeAttributeToHdf5<bool>(*pclGroup, "is_bigendian", pointcloud2.is_bigendian);
+  writeAttributeToHdf5<uint32_t>(*pclGroup, "point_step", pointcloud2.point_step);
+  writeAttributeToHdf5<uint32_t>(*pclGroup, "row_step", pointcloud2.row_step);
+  writeAttributeToHdf5<bool>(*pclGroup, "is_dense", pointcloud2.is_dense);
 
-  writeAttributeToHdf5<bool>(*pointcloud2DataSet, "is_dense", pointcloud2.is_dense);
-}
+  seerep_hdf5_core::PCLChannels channels = getChannels(fieldsNames);
+  seerep_hdf5_core::PCLIterInfos iterInfos = { .height = pointcloud2.height,
+                                               .width = pointcloud2.width,
+                                               .pointStep = pointcloud2.point_step,
+                                               .offsets =
+                                                   getOffsets(fieldsOffsets, fieldsNames, pointcloud2.is_bigendian),
+                                               .data = pointcloud2.data.data() };
+  writePCL(pclUUID, channels, iterInfos);
+}  // namespace seerep_hdf5_ros
 
 void Hdf5Ros::saveMessage(const tf2_msgs::TFMessage& transformation)
 {
@@ -117,4 +108,15 @@ void Hdf5Ros::saveMessage(const tf2_msgs::TFMessage& transformation)
     hdf5File_->flush();
   }
 }
+
+void Hdf5Ros::saveHeader(const std::string& hdf5GroupPath, const std_msgs::Header& header)
+{
+  std::shared_ptr<HighFive::Group> imageDataGroup = getHdf5Group(hdf5GroupPath);
+
+  writeAttributeToHdf5<uint32_t>(*imageDataGroup, "seq", header.seq);
+  writeAttributeToHdf5<uint64_t>(*imageDataGroup, "stamp_seconds", header.stamp.sec);
+  writeAttributeToHdf5<uint64_t>(*imageDataGroup, "stamp_nanos", header.stamp.nsec);
+  writeAttributeToHdf5<std::string>(*imageDataGroup, "frame_id", header.frame_id);
+}
+
 }  // namespace seerep_hdf5_ros
