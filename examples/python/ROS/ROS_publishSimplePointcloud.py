@@ -7,7 +7,6 @@ import struct
 
 import rospy
 from sensor_msgs import point_cloud2
-
 # PointCloud2 color cube
 # https://answers.ros.org/question/289576/understanding-the-bytes-in-a-pcl2-message/
 from sensor_msgs.msg import PointCloud2, PointField
