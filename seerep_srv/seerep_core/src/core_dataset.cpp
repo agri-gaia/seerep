@@ -605,7 +605,7 @@ seerep_core_msgs::AabbTime CoreDataset::getTimeBounds(std::vector<seerep_core_ms
 {
   seerep_core_msgs::AabbTime overalltime;
 
-  overalltime.max_corner().set<0>(0);
+  overalltime.max_corner().set<0>(std::numeric_limits<int64_t>::min());
   overalltime.min_corner().set<0>(std::numeric_limits<int64_t>::max());
 
   for (seerep_core_msgs::Datatype dt : datatypes)
@@ -633,9 +633,9 @@ seerep_core_msgs::AABB CoreDataset::getSpatialBounds(std::vector<seerep_core_msg
   seerep_core_msgs::AABB overallbb;
 
   // set the minimum to zero
-  overallbb.max_corner().set<0>(0);
-  overallbb.max_corner().set<1>(0);
-  overallbb.max_corner().set<2>(0);
+  overallbb.max_corner().set<0>(std::numeric_limits<int64_t>::min());
+  overallbb.max_corner().set<1>(std::numeric_limits<int64_t>::min());
+  overallbb.max_corner().set<2>(std::numeric_limits<int64_t>::min());
 
   // set the maximum for the maximum possible for the datatype
   overallbb.min_corner().set<0>(std::numeric_limits<float>::max());

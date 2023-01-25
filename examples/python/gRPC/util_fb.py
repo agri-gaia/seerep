@@ -454,7 +454,7 @@ def createUuidDatatypePair(builder, uuid, datatype):
 
     UuidDatatypePair.Start(builder)
     UuidDatatypePair.AddProjectuuid(builder, uuidStr)
-    UuidDatatypePair.AddDatatypes(builder, datatype)
+    UuidDatatypePair.AddDatatype(builder, datatype)
     return UuidDatatypePair.End(builder)
 
 
