@@ -104,11 +104,17 @@ public:
                  const boost::uuids::uuid& msgUuid);
 
   /**
-   * @brief Get the Time Bounds object
-   *
-   * @return seerep_core_msgs::AABB
+   * @brief Get the minimum and maximum time interval for a dataset
+   * @param datatypes A vector of datatypes for which the time bound has to be computed
+   * @return seerep_core_msgs::AabbTime
    */
   seerep_core_msgs::AabbTime getTimeBounds(std::vector<seerep_core_msgs::Datatype> datatypes);
+
+  /**
+   * @brief Get the minimum and maximum spatial bound for a dataset
+   * @param datatypes A vector of datatypes for which the spatial bound has to be computed
+   * @return seerep_core_msgs::AABB
+   */
   seerep_core_msgs::AABB getSpatialBounds(std::vector<seerep_core_msgs::Datatype> datatypes);
 
 private:

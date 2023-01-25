@@ -152,13 +152,16 @@ FbMetaOperations::GetOverallTimeInterval(grpc::ServerContext* context,
   (void)context;  // ignore that variable without causing warnings
   auto requestRoot = request->GetRoot();
 
-  std::string uuid = request->GetRoot()->projectuuid()->str();
-  boost::uuids::string_generator gen;
-  auto uuidFromString = gen(uuid);
-
+  // It was not possible to send a vector of enum of datatypes
+  // through to this function. Therefore, on the flatbuffer service
+  // level, the UuidDatatypePair implementation has one datatype,
+  // while below this layer, in the seerep core, the implementation
+  // is a vector. We intend to make them consistent in the future
+  // by implementing a vector of enums on the flatbuffer (and protobuf)
+  // levels.
   std::vector<seerep_core_msgs::Datatype> dt_vector;
 
-  seerep::fb::Datatype casted_datatype = static_cast<seerep::fb::Datatype>(requestRoot->datatypes());
+  seerep::fb::Datatype casted_datatype = static_cast<seerep::fb::Datatype>(requestRoot->datatype());
   if (casted_datatype == seerep::fb::Datatype_Image)
   {
     dt_vector.push_back(seerep_core_msgs::Datatype::Image);
@@ -176,37 +179,65 @@ FbMetaOperations::GetOverallTimeInterval(grpc::ServerContext* context,
     dt_vector.push_back(seerep_core_msgs::Datatype::Unknown);
   }
 
-  seerep_core_msgs::AabbTime timeinterval = seerepCore->getOverallTimeInterval(uuidFromString, dt_vector);
+  try
+  {
+    std::string uuid = request->GetRoot()->projectuuid()->str();
+    boost::uuids::string_generator gen;
+    auto uuidFromString = gen(uuid);
 
-  // isolate second and nano second bits from min time
-  uint64_t mintime = timeinterval.min_corner().get<0>();
-  uint32_t min_nanos = (uint32_t)mintime;
-  uint32_t min_seconds = (uint32_t)(mintime >> 32);
+    seerep_core_msgs::AabbTime timeinterval = seerepCore->getOverallTimeInterval(uuidFromString, dt_vector);
 
-  // isolate second and nano second bits from max time
-  uint64_t maxtime = timeinterval.max_corner().get<0>();
-  uint32_t max_nanos = (uint32_t)maxtime;
-  uint32_t max_seconds = (uint32_t)(maxtime >> 32);
+    // isolate second and nano second bits from min time
+    uint64_t mintime = timeinterval.min_corner().get<0>();
+    uint32_t min_nanos = (uint32_t)mintime;
+    uint32_t min_seconds = (uint32_t)(mintime >> 32);
 
-  flatbuffers::grpc::MessageBuilder builder;
+    // isolate second and nano second bits from max time
+    uint64_t maxtime = timeinterval.max_corner().get<0>();
+    uint32_t max_nanos = (uint32_t)maxtime;
+    uint32_t max_seconds = (uint32_t)(maxtime >> 32);
 
-  seerep::fb::TimestampBuilder minTimeStampBuilder(builder);
-  minTimeStampBuilder.add_seconds(min_seconds);
-  minTimeStampBuilder.add_nanos(min_nanos);
-  flatbuffers::Offset<seerep::fb::Timestamp> min = minTimeStampBuilder.Finish();
+    flatbuffers::grpc::MessageBuilder builder;
 
-  seerep::fb::TimestampBuilder maxTimeStampBuilder(builder);
-  maxTimeStampBuilder.add_seconds(max_seconds);
-  maxTimeStampBuilder.add_nanos(max_nanos);
-  flatbuffers::Offset<seerep::fb::Timestamp> max = maxTimeStampBuilder.Finish();
+    seerep::fb::TimestampBuilder minTimeStampBuilder(builder);
+    minTimeStampBuilder.add_seconds(min_seconds);
+    minTimeStampBuilder.add_nanos(min_nanos);
+    flatbuffers::Offset<seerep::fb::Timestamp> min = minTimeStampBuilder.Finish();
 
-  seerep::fb::TimeIntervalBuilder timeIntervalBuilder(builder);
-  timeIntervalBuilder.add_time_min(min);
-  timeIntervalBuilder.add_time_max(max);
-  flatbuffers::Offset<seerep::fb::TimeInterval> bb = timeIntervalBuilder.Finish();
+    seerep::fb::TimestampBuilder maxTimeStampBuilder(builder);
+    maxTimeStampBuilder.add_seconds(max_seconds);
+    maxTimeStampBuilder.add_nanos(max_nanos);
+    flatbuffers::Offset<seerep::fb::Timestamp> max = maxTimeStampBuilder.Finish();
 
-  builder.Finish(bb);
-  *response = builder.ReleaseMessage<seerep::fb::TimeInterval>();
+    seerep::fb::TimeIntervalBuilder timeIntervalBuilder(builder);
+    timeIntervalBuilder.add_time_min(min);
+    timeIntervalBuilder.add_time_max(max);
+    flatbuffers::Offset<seerep::fb::TimeInterval> bb = timeIntervalBuilder.Finish();
+
+    builder.Finish(bb);
+    *response = builder.ReleaseMessage<seerep::fb::TimeInterval>();
+  }
+  catch (std::runtime_error const& e)
+  {
+    // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
+    // also catching core doesn't have project with uuid error
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (const std::exception& e)
+  {
+    // specific handling for all exceptions extending std::exception, except
+    // std::runtime_error which is handled explicitly
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (...)
+  {
+    // catch any other errors (that we have no information about)
+    std::string msg = "Unknown failure occurred. Possible memory corruption";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
+  }
 
   return grpc::Status::OK;
 }
@@ -219,13 +250,16 @@ FbMetaOperations::GetOverallBoundingBox(grpc::ServerContext* context,
   (void)context;  // ignore that variable without causing warnings
   auto requestRoot = request->GetRoot();
 
-  std::string uuid = requestRoot->projectuuid()->str();
-  boost::uuids::string_generator gen;
-  auto uuidFromString = gen(uuid);
-
+  // It was not possible to send a vector of enum of datatypes
+  // through to this function. Therefore, on the flatbuffer service
+  // level, the UuidDatatypePair implementation has one datatype,
+  // while below this layer, in the seerep core, the implementation
+  // is a vector. We intend to make them consistent in the future
+  // by implementing a vector of enums on the flatbuffer (and protobuf)
+  // levels.
   std::vector<seerep_core_msgs::Datatype> dt_vector;
 
-  seerep::fb::Datatype casted_datatype = static_cast<seerep::fb::Datatype>(requestRoot->datatypes());
+  seerep::fb::Datatype casted_datatype = static_cast<seerep::fb::Datatype>(requestRoot->datatype());
   if (casted_datatype == seerep::fb::Datatype_Image)
   {
     dt_vector.push_back(seerep_core_msgs::Datatype::Image);
@@ -243,29 +277,57 @@ FbMetaOperations::GetOverallBoundingBox(grpc::ServerContext* context,
     dt_vector.push_back(seerep_core_msgs::Datatype::Unknown);
   }
 
-  seerep_core_msgs::AABB overallBB = seerepCore->getOverallBound(uuidFromString, dt_vector);
+  try
+  {
+    std::string uuid = requestRoot->projectuuid()->str();
+    boost::uuids::string_generator gen;
+    auto uuidFromString = gen(uuid);
 
-  flatbuffers::grpc::MessageBuilder builder;
+    seerep_core_msgs::AABB overallBB = seerepCore->getOverallBound(uuidFromString, dt_vector);
 
-  seerep::fb::PointBuilder minPointBuilder(builder);
-  minPointBuilder.add_x(overallBB.min_corner().get<0>());
-  minPointBuilder.add_y(overallBB.min_corner().get<1>());
-  minPointBuilder.add_z(overallBB.min_corner().get<2>());
-  flatbuffers::Offset<seerep::fb::Point> minPoint = minPointBuilder.Finish();
+    flatbuffers::grpc::MessageBuilder builder;
 
-  seerep::fb::PointBuilder maxPointBuilder(builder);
-  maxPointBuilder.add_x(overallBB.max_corner().get<0>());
-  maxPointBuilder.add_y(overallBB.max_corner().get<1>());
-  maxPointBuilder.add_z(overallBB.max_corner().get<2>());
-  flatbuffers::Offset<seerep::fb::Point> maxPoint = maxPointBuilder.Finish();
+    seerep::fb::PointBuilder minPointBuilder(builder);
+    minPointBuilder.add_x(overallBB.min_corner().get<0>());
+    minPointBuilder.add_y(overallBB.min_corner().get<1>());
+    minPointBuilder.add_z(overallBB.min_corner().get<2>());
+    flatbuffers::Offset<seerep::fb::Point> minPoint = minPointBuilder.Finish();
 
-  seerep::fb::BoundingboxBuilder boundingBoxBuilder(builder);
-  boundingBoxBuilder.add_point_min(minPoint);
-  boundingBoxBuilder.add_point_max(maxPoint);
-  flatbuffers::Offset<seerep::fb::Boundingbox> bb = boundingBoxBuilder.Finish();
+    seerep::fb::PointBuilder maxPointBuilder(builder);
+    maxPointBuilder.add_x(overallBB.max_corner().get<0>());
+    maxPointBuilder.add_y(overallBB.max_corner().get<1>());
+    maxPointBuilder.add_z(overallBB.max_corner().get<2>());
+    flatbuffers::Offset<seerep::fb::Point> maxPoint = maxPointBuilder.Finish();
 
-  builder.Finish(bb);
-  *response = builder.ReleaseMessage<seerep::fb::Boundingbox>();
+    seerep::fb::BoundingboxBuilder boundingBoxBuilder(builder);
+    boundingBoxBuilder.add_point_min(minPoint);
+    boundingBoxBuilder.add_point_max(maxPoint);
+    flatbuffers::Offset<seerep::fb::Boundingbox> bb = boundingBoxBuilder.Finish();
+
+    builder.Finish(bb);
+    *response = builder.ReleaseMessage<seerep::fb::Boundingbox>();
+  }
+  catch (std::runtime_error const& e)
+  {
+    // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
+    // also catching core doesn't have project with uuid error
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (const std::exception& e)
+  {
+    // specific handling for all exceptions extending std::exception, except
+    // std::runtime_error which is handled explicitly
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (...)
+  {
+    // catch any other errors (that we have no information about)
+    std::string msg = "Unknown failure occurred. Possible memory corruption";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
+  }
 
   return grpc::Status::OK;
 }

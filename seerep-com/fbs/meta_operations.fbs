@@ -4,7 +4,6 @@ include "project_infos.fbs";
 include "projectCreation.fbs";
 include "empty.fbs";
 include "boundingbox.fbs";
-include "datatype.fbs";
 include "time_interval.fbs";
 include "uuid_datatype_pair.fbs";
 
