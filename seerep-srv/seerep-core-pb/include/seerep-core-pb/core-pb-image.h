@@ -13,6 +13,7 @@
 // seerep-hdf5-pb
 #include <seerep-hdf5-pb/hdf5-pb-image.h>
 // seerep-core
+#include <seerep-com/image-service.grpc.pb.h>
 #include <seerep-core/core.h>
 
 #include "seerep-core-pb/core-pb-conversion.h"
@@ -32,7 +33,7 @@ public:
   CorePbImage(std::shared_ptr<seerep_core::Core> seerepCore);
   ~CorePbImage();
 
-  std::vector<seerep::Image> getData(const seerep::Query& query);
+  void getData(const seerep::Query& query, grpc::ServerWriter<seerep::Image>* writer);
   boost::uuids::uuid addData(const seerep::Image& img);
 
 private:
