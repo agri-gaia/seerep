@@ -38,18 +38,25 @@ class CustomCommand(Command):
         with suppress(Exception):
             self.bdist_dir = Path(self.get_finalized_command("bdist_wheel").bdist_dir)
 
-    def get_proto_files(self) -> List[str]:
-        if self.proto_api_path.is_dir() and self.proto_msgs_path.is_dir():
-            return [str(file_path) for file_path in self.proto_api_path.glob('*.proto')] + [
-                str(file_path) for file_path in self.proto_msgs_path.glob('*.proto')
-            ]
+    @staticmethod
+    def get_files(path: Path, file_ending: str) -> List[str]:
+        if path.is_dir():
+            return [str(file_path) for file_path in path.glob(f"*.{file_ending}")]
         else:
             return []
 
     def build_protos(self) -> None:
         if self.bdist_dir:
-            output_dir = self.bdist_dir / "seerep/pb/"
+            """
+            The protoc compiler ignores the package directive in the proto files.
+            https://developers.google.com/protocol-buffers/docs/proto3#packages
+            Therefore we need to manualy put it in the correct folder structure and post
+            process it to comply with the existing flatbuffers structure.
+            """
+            output_dir = Path(self.bdist_dir / "seerep/pb/")
             output_dir.mkdir(parents=True, exist_ok=True)
+            Path(self.bdist_dir / "seerep/__init__.py").touch()
+            Path(self.bdist_dir / "seerep/pb/__init__.py").touch()
 
             protoc_call = [
                 "python3",
@@ -58,9 +65,22 @@ class CustomCommand(Command):
                 f"--proto_path={self.proto_msgs_path}",
                 f"--proto_path={self.proto_api_path}",
                 f"--python_out={output_dir}",
-                *self.get_proto_files(),
+                f"--grpc_python_out={output_dir}",
+                *CustomCommand.get_files(self.proto_msgs_path, "proto"),
+                *CustomCommand.get_files(self.proto_api_path, "proto"),
             ]
+
             subprocess.call(protoc_call)
+
+            sed_call = [
+                "sed",
+                "-i",
+                "-E",
+                "s/(import .*_pb2) as [^google]/from seerep.pb &/",
+                *CustomCommand.get_files(output_dir, "py"),
+            ]
+
+            subprocess.call(sed_call)
 
     def build_fbs(self) -> None:
         if self.bdist_dir:
