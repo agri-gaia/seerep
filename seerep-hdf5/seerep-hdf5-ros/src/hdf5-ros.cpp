@@ -76,7 +76,7 @@ void Hdf5Ros::saveMessage(const sensor_msgs::PointCloud2& pointcloud2)
                                                    getOffsets(fieldsOffsets, fieldsNames, pointcloud2.is_bigendian),
                                                .data = pointcloud2.data.data() };
   writePCL(pclUUID, channels, iterInfos);
-}  // namespace seerep_hdf5_ros
+}
 
 void Hdf5Ros::saveMessage(const tf2_msgs::TFMessage& transformation)
 {

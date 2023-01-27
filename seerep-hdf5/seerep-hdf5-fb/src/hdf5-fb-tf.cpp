@@ -36,6 +36,7 @@ void Hdf5FbTf::writeTransformStamped(const seerep::fb::TransformStamped& tf)
   uint64_t size =
       readAttributeFromHdf5<uint64_t>(tf.header()->uuid_msgs()->str(), *group, seerep_hdf5_core::Hdf5CoreTf::SIZE);
   writeAttributeToHdf5<uint64_t>(*group, seerep_hdf5_core::Hdf5CoreTf::SIZE, size + 1);
+  m_file->flush();
 }
 
 std::optional<std::vector<flatbuffers::Offset<seerep::fb::TransformStamped>>>
