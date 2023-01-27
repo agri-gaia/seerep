@@ -84,15 +84,6 @@ private:
   std::optional<ros::master::TopicInfo> getTopicInfo(const std::string& topic_name);
 
   /**
-   * @brief Checks wether the string is a valid Boost UUID
-   *
-   * @param uuid The string to check
-   * @return true If the string is a valid UUID
-   * @return false If the string is not a valid UUID
-   */
-  bool isValidUUID(const std::string& uuid) const;
-
-  /**
    * @brief Stores topics, to which this node should subscribe to
    */
   std::vector<std::string> topics_;
