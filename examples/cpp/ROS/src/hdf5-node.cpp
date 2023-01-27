@@ -12,7 +12,6 @@ Hdf5Node::Hdf5Node(const ros::NodeHandle& nodeHandle, const ros::NodeHandle& pri
     getROSParameter<std::string>("storage_path", storage_path);
     getROSParameter<std::string>("project_name", project_name);
     getROSParameter<std::string>("project_root_frame", root_frame_id);
-    getROSParameter<std::string>("filename", filename, false);
     getROSParameter<std::vector<std::string>>("topics", topics_);
   }
   catch (const std::runtime_error& e)
@@ -21,14 +20,12 @@ Hdf5Node::Hdf5Node(const ros::NodeHandle& nodeHandle, const ros::NodeHandle& pri
     ros::shutdown();
   }
 
-  if (filename.empty() || !isValidUUID(filename))
-  {
-    filename = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
-    ROS_WARN_STREAM("No or invalid filename UUID provided, using generated UUID instead");
-  }
+  // generate a random filename, to avoid appending to existing files
+  filename = boost::lexical_cast<std::string>(boost::uuids::random_generator()()) + ".h5";
+  ROS_INFO_STREAM("Saving to file: " << filename);
 
   write_mutex_ = std::make_shared<std::mutex>();
-  hdf5_file_ = std::make_shared<HighFive::File>(storage_path + "/" + filename + ".h5",
+  hdf5_file_ = std::make_shared<HighFive::File>(storage_path + "/" + filename,
                                                 HighFive::File::ReadWrite | HighFive::File::Create);
 
   msg_dump_ = std::make_unique<seerep_hdf5_ros::Hdf5Ros>(hdf5_file_, write_mutex_, project_name, root_frame_id);
@@ -73,19 +70,6 @@ std::optional<ros::master::TopicInfo> Hdf5Node::getTopicInfo(const std::string& 
   return std::nullopt;
 }
 
-bool Hdf5Node::isValidUUID(const std::string& uuid) const
-{
-  try
-  {
-    boost::uuids::uuid result = boost::uuids::string_generator()(uuid);
-    return result.version() != boost::uuids::uuid::version_unknown;
-  }
-  catch (...)
-  {
-    return false;
-  }
-}
-
 std::optional<ros::Subscriber> Hdf5Node::getSubscriber(const std::string& message_type, const std::string& topic)
 {
   if (message_type == "sensor_msgs/Image")
@@ -96,6 +80,10 @@ std::optional<ros::Subscriber> Hdf5Node::getSubscriber(const std::string& messag
   {
     return node_handle_.subscribe<sensor_msgs::PointCloud2>(topic, 0, &Hdf5Node::dumpMessage<sensor_msgs::PointCloud2>,
                                                             this);
+  }
+  else if (message_type == "tf2_msgs/TFMessage")
+  {
+    return node_handle_.subscribe<tf2_msgs::TFMessage>(topic, 0, &Hdf5Node::dumpMessage<tf2_msgs::TFMessage>, this);
   }
   return std::nullopt;
 }
