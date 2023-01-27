@@ -35,6 +35,7 @@ void Hdf5PbTf::writeTransformStamped(const seerep::TransformStamped& tf)
                                  tf.transform().rotation().z(), tf.transform().rotation().w() });
   uint64_t size = readAttributeFromHdf5<uint64_t>(tf.header().uuid_msgs(), *group, seerep_hdf5_core::Hdf5CoreTf::SIZE);
   writeAttributeToHdf5<uint64_t>(*group, seerep_hdf5_core::Hdf5CoreTf::SIZE, size + 1);
+  m_file->flush();
 }
 
 std::optional<std::vector<seerep::TransformStamped>> Hdf5PbTf::readTransformStamped(const std::string& id)
