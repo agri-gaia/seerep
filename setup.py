@@ -76,7 +76,7 @@ class CustomCommand(Command):
                 "sed",
                 "-i",
                 "-E",
-                "s/(import .*_pb2) as [^google]/from seerep.pb &/",
+                "s/^import.*_pb2/from seerep.pb &/",
                 *CustomCommand.get_files(output_dir, "py"),
             ]
 
