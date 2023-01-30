@@ -75,39 +75,72 @@ boost::uuids::uuid CorePbPointCloud::addData(const seerep::PointCloud2& pc)
   dataForIndices.boundingbox.max_corner().set<2>(bb.at(5));
 
   // semantic
-  dataForIndices.labelsWithInstances.reserve(pc.labels_general().size() + pc.labels_bb().size());
-  for (auto label : pc.labels_general())
+  int labelSizeAll = 0;
+  if (!pc.labels_general().empty())
   {
-    boost::uuids::string_generator gen;
-    boost::uuids::uuid uuidInstance;
-    try
-    {
-      uuidInstance = gen(label.instanceuuid());
-    }
-    catch (std::runtime_error const& e)
-    {
-      uuidInstance = boost::uuids::nil_uuid();
-    }
-
-    dataForIndices.labelsWithInstances.push_back(
-        seerep_core_msgs::LabelWithInstance{ .label = label.label(), .uuidInstance = uuidInstance });
+    labelSizeAll += pc.labels_general().size();
+  }
+  if (!pc.labels_bb().empty())
+  {
+    labelSizeAll += pc.labels_bb().size();
   }
 
-  for (auto label : pc.labels_bb())
+  if (!pc.labels_general().empty())
   {
-    boost::uuids::string_generator gen;
-    boost::uuids::uuid uuidInstance;
-    try
+    for (auto labelsCategories : pc.labels_general())
     {
-      uuidInstance = gen(label.labelwithinstance().instanceuuid());
-    }
-    catch (std::runtime_error const& e)
-    {
-      uuidInstance = boost::uuids::nil_uuid();
-    }
+      std::vector<seerep_core_msgs::LabelWithInstance> labelWithInstanceVector;
+      if (!labelsCategories.labelwithinstance().empty())
+      {
+        for (auto label : labelsCategories.labelwithinstance())
+        {
+          boost::uuids::string_generator gen;
+          boost::uuids::uuid uuidInstance;
+          try
+          {
+            uuidInstance = gen(label.instanceuuid());
+          }
+          catch (std::runtime_error const& e)
+          {
+            uuidInstance = boost::uuids::nil_uuid();
+          }
 
-    dataForIndices.labelsWithInstances.push_back(seerep_core_msgs::LabelWithInstance{
-        .label = label.labelwithinstance().label(), .uuidInstance = uuidInstance });
+          labelWithInstanceVector.push_back(
+              seerep_core_msgs::LabelWithInstance{ .label = label.label(), .uuidInstance = uuidInstance });
+        }
+        dataForIndices.labelsWithInstancesWithCategory.emplace(labelsCategories.category().c_str(),
+                                                               labelWithInstanceVector);
+      }
+    }
+  }
+
+  if (!pc.labels_bb().empty())
+  {
+    for (auto labelsCategories : pc.labels_bb())
+    {
+      std::vector<seerep_core_msgs::LabelWithInstance> labelWithInstanceVector;
+      if (!labelsCategories.boundingboxlabeled().empty())
+      {
+        for (auto label : labelsCategories.boundingboxlabeled())
+        {
+          boost::uuids::string_generator gen;
+          boost::uuids::uuid uuidInstance;
+          try
+          {
+            uuidInstance = gen(label.labelwithinstance().instanceuuid());
+          }
+          catch (std::runtime_error const& e)
+          {
+            uuidInstance = boost::uuids::nil_uuid();
+          }
+
+          labelWithInstanceVector.push_back(seerep_core_msgs::LabelWithInstance{
+              .label = label.labelwithinstance().label(), .uuidInstance = uuidInstance });
+        }
+      }
+      dataForIndices.labelsWithInstancesWithCategory.emplace(labelsCategories.category().c_str(),
+                                                             labelWithInstanceVector);
+    }
   }
 
   m_seerepCore->addDataset(dataForIndices);

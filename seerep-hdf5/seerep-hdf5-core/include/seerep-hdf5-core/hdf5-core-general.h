@@ -8,6 +8,7 @@
 #include <seerep-msgs/aabb.h>
 #include <seerep-msgs/dataset-indexable.h>
 #include <seerep-msgs/geodetic-coordinates.h>
+#include <seerep-msgs/labels-with-instance-with-category.h>
 
 // std
 #include <boost/geometry.hpp>
@@ -19,6 +20,12 @@
 #include <boost/log/sources/severity_logger.hpp>
 #include <boost/log/trivial.hpp>
 
+// uuid
+#include <boost/functional/hash.hpp>
+#include <boost/lexical_cast.hpp>
+#include <boost/uuid/uuid.hpp>             // uuid class
+#include <boost/uuid/uuid_generators.hpp>  // generators
+#include <boost/uuid/uuid_io.hpp>          // streaming operators etc.
 namespace seerep_hdf5_core
 {
 class Hdf5CoreGeneral
@@ -85,15 +92,40 @@ public:
   bool hasTime(const std::string& datatypeGroup, const std::string& uuid);
 
   // BoundingBoxes
+  /**
+   * @brief read the labels and instances of a dataset of all categories and add them to the category-labels/instances map
+   *
+   * @param [in] datatypeGroup the data type
+   * @param [in] uuid the uuid of the dataset
+   * @param [in,out] labelsWithInstancesWithCategory the map from category to the instances of the category
+   */
+  void readBoundingBoxLabeledAndAddToLabelsWithInstancesWithCategory(
+      const std::string& datatypeGroup, const std::string& uuid,
+      std::unordered_map<std::string, std::vector<seerep_core_msgs::LabelWithInstance>>& labelsWithInstancesWithCategory);
   void readBoundingBoxLabeled(const std::string& datatypeGroup, const std::string& uuid,
-                              std::vector<std::string>& labels, std::vector<std::vector<double>>& boundingBoxes,
-                              std::vector<std::string>& instances, bool loadBoxes = true);
+                              std::vector<std::string>& labelCategories,
+                              std::vector<std::vector<std::string>>& labelsPerCategory,
+                              std::vector<std::vector<std::vector<double>>>& boundingBoxesPerCategory,
+                              std::vector<std::vector<std::string>>& instancesPerCategory, bool loadBoxes = true);
 
   // Labels General
-  void readLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid, std::vector<std::string>& labels,
-                         std::vector<std::string>& instances);
-  void writeLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid,
-                          const std::vector<std::string>& labels, const std::vector<std::string>& instances);
+  /**
+   * @brief read the labels general and instances of a dataset of all categories and add them to the
+   * category-labels/instances map
+   *
+   * @param [in] datatypeGroup the data type
+   * @param [in] uuid the uuid of the dataset
+   * @param [in,out] labelsWithInstancesWithCategory the map from category to the instances of the category
+   */
+  void readLabelsGeneralAndAddToLabelsWithInstancesWithCategory(
+      const std::string& datatypeGroup, const std::string& uuid,
+      std::unordered_map<std::string, std::vector<seerep_core_msgs::LabelWithInstance>>& labelsWithInstancesWithCategory);
+  void readLabelsGeneral(
+      const std::string& datatypeGroup, const std::string& uuid, std::vector<std::string>& labelCategories,
+      std::vector<std::vector<seerep_core_msgs::LabelWithInstance>>& labelsWithInstancesGeneralPerCategory);
+  void writeLabelsGeneral(
+      const std::string& datatypeGroup, const std::string& uuid,
+      const std::vector<seerep_core_msgs::LabelsWithInstanceWithCategory>& labelsWithInstanceWithCategory);
   // ################
   //  Project
   // ################
@@ -137,6 +169,16 @@ public:
   std::shared_ptr<HighFive::DataSet> getHdf5DataSet(const std::string& hdf5DataSetPath, HighFive::DataSpace& dataSpace);
 
   std::shared_ptr<HighFive::DataSet> getHdf5DataSet(const std::string& hdf5DataSetPath);
+  /**
+   * @brief get the labels of a group/dataset matching the general prefix (label type) and return the labels matching
+   * the specified type. Also extract the category from the postfix
+   *
+   * @param id the id of the HDF5 group
+   * @param labelType the label type to be extracted (e.g. LABELS_GENERAL)
+   * @param matchingLabelNames the complete name of the matching labels
+   * @param matchingLabelCategory the categories of the matching labels
+   */
+  void getLabelCategories(std::string id, std::string labelType, std::vector<std::string>& matchingLabelCategory);
 
 private:
   void readLabel(const std::string& id, const std::string labelType, std::vector<std::string>& labels);

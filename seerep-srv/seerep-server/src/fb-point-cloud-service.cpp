@@ -36,10 +36,14 @@ FbPointCloudService::GetPointCloud2(grpc::ServerContext* context,
   }
   if (requestRoot->label() != NULL)
   {
-    debuginfo << "\n labels general:";
-    for (auto label : *requestRoot->label())
+    debuginfo << "\n labels general";
+    for (auto labelCategory : *requestRoot->label())
     {
-      debuginfo << " '" << label->str() << "' ";
+      debuginfo << "category: " << labelCategory->category()->c_str() << "; ";
+      for (auto label : *labelCategory->labels())
+      {
+        debuginfo << "'" << label->str() << "' ";
+      }
     }
   }
 

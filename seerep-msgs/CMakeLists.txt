@@ -16,9 +16,11 @@ find_package(Boost REQUIRED)
 
 set(MY_PROTO_FILES
     protos/boundingbox_labeled.proto
+    protos/boundingbox_labeled_with_category.proto
     protos/boundingbox_stamped.proto
     protos/boundingbox.proto
     protos/boundingbox2d_labeled.proto
+    protos/boundingbox2d_labeled_with_category.proto
     protos/boundingbox2d_stamped.proto
     protos/boundingbox2d.proto
     protos/frame_infos.proto
@@ -27,6 +29,8 @@ set(MY_PROTO_FILES
     protos/header.proto
     protos/image.proto
     protos/label_with_instance.proto
+    protos/labels_with_category.proto
+    protos/labels_with_instance_with_category.proto
     protos/point_cloud_2.proto
     protos/point_field.proto
     protos/point_stamped.proto
@@ -59,9 +63,11 @@ set(MY_PROTO_FILES
 set(MY_FBS_FILES
     fbs/attributes_stamped.fbs
     fbs/boundingbox_labeled.fbs
+    fbs/boundingbox_labeled_with_category.fbs
     fbs/boundingbox_stamped.fbs
     fbs/boundingbox.fbs
     fbs/boundingbox2d_labeled.fbs
+    fbs/boundingbox2d_labeled_with_category.fbs
     fbs/boundingbox2d_stamped.fbs
     fbs/boundingbox2d.fbs
     fbs/boundingboxes2d_labeled_stamped.fbs
@@ -73,6 +79,8 @@ set(MY_FBS_FILES
     fbs/header.fbs
     fbs/image.fbs
     fbs/label_with_instance.fbs
+    fbs/labels_with_category.fbs
+    fbs/labels_with_instance_with_category.fbs
     fbs/point_cloud_2.fbs
     fbs/point_field.fbs
     fbs/point_stamped.fbs

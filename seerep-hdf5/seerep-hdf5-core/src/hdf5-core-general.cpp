@@ -110,85 +110,171 @@ std::optional<std::string> Hdf5CoreGeneral::readFrameId(const std::string& datat
   }
 }
 
+void Hdf5CoreGeneral::readBoundingBoxLabeledAndAddToLabelsWithInstancesWithCategory(
+    const std::string& datatypeGroup, const std::string& uuid,
+    std::unordered_map<std::string, std::vector<seerep_core_msgs::LabelWithInstance>>& labelsWithInstancesWithCategory)
+{
+  boost::uuids::string_generator gen;
+
+  std::vector<std::string> labelCategoriesBB;
+  std::vector<std::vector<std::string>> labelsBBPerCategory;
+  std::vector<std::vector<std::vector<double>>> boundingBoxesPerCategory;
+  std::vector<std::vector<std::string>> instancesPerCategory;
+
+  readBoundingBoxLabeled(datatypeGroup, uuid, labelCategoriesBB, labelsBBPerCategory, boundingBoxesPerCategory,
+                         instancesPerCategory, false);
+
+  // loop the label categories
+  for (std::size_t i = 0; i < labelCategoriesBB.size(); i++)
+  {
+    auto& labelsBB = labelsBBPerCategory.at(i);
+    auto& instances = instancesPerCategory.at(i);
+
+    // check if category already exists in map
+    // create new entry if it doesn't exist
+    auto labelsWithInstanceOfCategory = labelsWithInstancesWithCategory.find(labelCategoriesBB.at(i));
+    if (labelsWithInstanceOfCategory == labelsWithInstancesWithCategory.end())
+    {
+      auto emplaceResult = labelsWithInstancesWithCategory.emplace(labelCategoriesBB.at(i),
+                                                                   std::vector<seerep_core_msgs::LabelWithInstance>());
+      labelsWithInstanceOfCategory = emplaceResult.first;
+    }
+
+    // add labels with instance to this label category
+    for (std::size_t i = 0; i < labelsBB.size(); i++)
+    {
+      boost::uuids::uuid instanceUuid;
+      try
+      {
+        instanceUuid = gen(instances.at(i));
+      }
+      catch (std::runtime_error&)
+      {
+        instanceUuid = boost::uuids::nil_uuid();
+      }
+      labelsWithInstanceOfCategory->second.push_back(
+          seerep_core_msgs::LabelWithInstance{ .label = labelsBB.at(i), .uuidInstance = instanceUuid });
+    }
+  }
+}
+
 void Hdf5CoreGeneral::readBoundingBoxLabeled(const std::string& datatypeGroup, const std::string& uuid,
-                                             std::vector<std::string>& labels,
-                                             std::vector<std::vector<double>>& boundingBoxes,
-                                             std::vector<std::string>& instances, bool loadBoxes)
+                                             std::vector<std::string>& labelCategories,
+                                             std::vector<std::vector<std::string>>& labelsPerCategory,
+                                             std::vector<std::vector<std::vector<double>>>& boundingBoxesPerCategory,
+                                             std::vector<std::vector<std::string>>& instancesPerCategory,
+                                             bool loadBoxes)
 {
   std::string id = datatypeGroup + "/" + uuid;
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
-      << "reading the bounding box 2d with labels of " << id;
-  try
+      << "reading the bounding box with labels of " << id;
+
+  getLabelCategories(id, LABELGENERAL, labelCategories);
+
+  labelsPerCategory.resize(labelCategories.size());
+  boundingBoxesPerCategory.resize(labelCategories.size());
+  instancesPerCategory.resize(labelCategories.size());
+
+  for (std::size_t i = 0; i < labelCategories.size(); i++)
   {
-    readLabel(id, LABELBB, labels);
-    readInstances(id, LABELBBINSTANCES, instances);
+    readLabel(id, LABELBB + "_" + labelCategories.at(i), labelsPerCategory.at(i));
+    readInstances(id, LABELBBINSTANCES + "_" + labelCategories.at(i), instancesPerCategory.at(i));
 
     if (loadBoxes)
     {
-      readBoundingBoxes(id, LABELBBBOXES, boundingBoxes);
+      readBoundingBoxes(id, LABELBBBOXES + "_" + labelCategories.at(i), boundingBoxesPerCategory.at(i));
+    }
+
+    if (labelsPerCategory.at(i).size() != instancesPerCategory.at(i).size() ||
+        (loadBoxes && labelsPerCategory.at(i).size() != boundingBoxesPerCategory.at(i).size()))
+    {
+      std::string errorMsg = "size of labels (" + std::to_string(labelsPerCategory.at(i).size()) +
+                             "), size of bounding boxes (" + std::to_string(boundingBoxesPerCategory.at(i).size()) +
+                             ") and size of instances (" + std::to_string(instancesPerCategory.at(i).size()) +
+                             ") do not fit.";
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning) << errorMsg;
+      throw std::runtime_error(errorMsg);
     }
   }
-  catch (std::invalid_argument const& e)
-  {
-    return;
-  }
+}
 
-  if (labels.size() != instances.size() || (loadBoxes && labels.size() != boundingBoxes.size()))
+void Hdf5CoreGeneral::readLabelsGeneralAndAddToLabelsWithInstancesWithCategory(
+    const std::string& datatypeGroup, const std::string& uuid,
+    std::unordered_map<std::string, std::vector<seerep_core_msgs::LabelWithInstance>>& labelsWithInstancesWithCategory)
+{
+  std::vector<std::string> labelCategoriesGeneral;
+  std::vector<std::vector<seerep_core_msgs::LabelWithInstance>> labelsWithInstancesGeneralPerCategory;
+  readLabelsGeneral(datatypeGroup, uuid, labelCategoriesGeneral, labelsWithInstancesGeneralPerCategory);
+
+  for (std::size_t i = 0; i < labelCategoriesGeneral.size(); i++)
   {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning)
-        << "size of labels (" << labels.size() << "), size of bounding boxes (" << boundingBoxes.size()
-        << ") and size of instances (" << instances.size() << ") do not fit.";
-    labels.clear();
-    boundingBoxes.clear();
-    instances.clear();
-    return;
+    labelsWithInstancesWithCategory.emplace(labelCategoriesGeneral.at(i), labelsWithInstancesGeneralPerCategory.at(i));
   }
 }
 
-void Hdf5CoreGeneral::readLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid,
-                                        std::vector<std::string>& labels, std::vector<std::string>& instances)
+void Hdf5CoreGeneral::readLabelsGeneral(
+    const std::string& datatypeGroup, const std::string& uuid, std::vector<std::string>& labelCategories,
+    std::vector<std::vector<seerep_core_msgs::LabelWithInstance>>& labelsWithInstancesGeneralPerCategory)
 {
+  boost::uuids::string_generator gen;
+
   std::string id = datatypeGroup + "/" + uuid;
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "loading labels general of " << id;
-  try
-  {
-    readLabel(id, LABELGENERAL, labels);
-    readInstances(id, LABELGENERALINSTANCES, instances);
-  }
-  catch (std::invalid_argument const& e)
-  {
-    return;
-  }
 
-  if (labels.size() != instances.size())
+  getLabelCategories(id, LABELGENERAL, labelCategories);
+
+  for (std::string category : labelCategories)
   {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning)
-        << "size of labels (" << labels.size() << ") and size of instances (" << instances.size() << ") do not fit.";
-    labels.clear();
-    instances.clear();
-    return;
+    std::vector<std::string> labels, instances;
+    readLabel(id, LABELGENERAL + "_" + category, labels);
+    readInstances(id, LABELGENERALINSTANCES + "_" + category, instances);
+
+    if (labels.size() != instances.size())
+    {
+      std::string errorMsg = "size of labels (" + std::to_string(labels.size()) + ") and size of instances (" +
+                             std::to_string(instances.size()) + ") do not fit.";
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning) << errorMsg;
+      throw std::runtime_error(errorMsg);
+    }
+
+    std::vector<seerep_core_msgs::LabelWithInstance> labelsWithInstancesGeneral;
+    for (long unsigned int i = 0; i < labels.size(); i++)
+    {
+      boost::uuids::uuid instanceUuid;
+      try
+      {
+        instanceUuid = gen(instances.at(i));
+      }
+      catch (std::runtime_error&)
+      {
+        instanceUuid = boost::uuids::nil_uuid();
+      }
+      labelsWithInstancesGeneral.push_back(
+          seerep_core_msgs::LabelWithInstance{ .label = labels.at(i), .uuidInstance = instanceUuid });
+    }
+
+    labelsWithInstancesGeneralPerCategory.push_back(labelsWithInstancesGeneral);
   }
 }
 
-void Hdf5CoreGeneral::writeLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid,
-                                         const std::vector<std::string>& labels,
-                                         const std::vector<std::string>& instances)
+void Hdf5CoreGeneral::writeLabelsGeneral(
+    const std::string& datatypeGroup, const std::string& uuid,
+    const std::vector<seerep_core_msgs::LabelsWithInstanceWithCategory>& labelsWithInstanceWithCategory)
 {
-  if (labels.size() != instances.size())
+  for (auto labels : labelsWithInstanceWithCategory)
   {
-    throw std::runtime_error("size of labels and instances do not match");
+    std::string id = datatypeGroup + "/" + uuid;
+
+    HighFive::DataSet datasetLabels = m_file->createDataSet<std::string>(
+        id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERAL + "_" + labels.category,
+        HighFive::DataSpace::From(labels.labels));
+    datasetLabels.write(labels.labels);
+
+    HighFive::DataSet datasetInstances = m_file->createDataSet<std::string>(
+        id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERALINSTANCES + "_" + labels.category,
+        HighFive::DataSpace::From(labels.instances));
+    datasetInstances.write(labels.instances);
   }
-
-  std::string id = datatypeGroup + "/" + uuid;
-
-  HighFive::DataSet datasetLabels = m_file->createDataSet<std::string>(
-      id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERAL, HighFive::DataSpace::From(labels));
-  datasetLabels.write(labels);
-
-  HighFive::DataSet datasetInstances = m_file->createDataSet<std::string>(
-      id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERALINSTANCES, HighFive::DataSpace::From(instances));
-  datasetInstances.write(instances);
-
   m_file->flush();
 }
 
@@ -489,6 +575,24 @@ std::shared_ptr<HighFive::DataSet> Hdf5CoreGeneral::getHdf5DataSet(const std::st
   else
   {
     return nullptr;
+  }
+}
+
+void Hdf5CoreGeneral::getLabelCategories(std::string id, std::string labelType,
+                                         std::vector<std::string>& matchingLabelCategory)
+{
+  std::vector<std::string> leafObjects = m_file->getGroup(id).listObjectNames();
+
+  std::string searchString = labelType + "_";
+
+  for (auto obj : leafObjects)
+  {
+    // check if obj name starts with labelType
+    if (obj.rfind(searchString, 0) == 0)
+    {
+      // get category from postfix
+      matchingLabelCategory.push_back(obj.substr(searchString.size()));
+    }
   }
 }
 

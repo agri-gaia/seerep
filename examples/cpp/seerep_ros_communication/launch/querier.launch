@@ -11,6 +11,7 @@
     <arg name="point_max_z" default="10.0"/>
     <arg name="time_min" default="1638549273"/>
     <arg name="time_max" default="1738549276"/>
+    <arg name="category" default="testcategory"/>
     <arg name="labels" default="[testlabel0, testlabel1]"/>
     <arg name="musthavealllabels" default="True"/>
     <arg name="maxNumData" default="80"/>
@@ -26,6 +27,7 @@
         <rosparam param="point_max_z" subst_value="True">$(arg point_max_z)</rosparam>
         <rosparam param="time_min" subst_value="True">$(arg time_min)</rosparam>
         <rosparam param="time_max" subst_value="True">$(arg time_max)</rosparam>
+        <rosparam param="category" subst_value="True">$(arg category)</rosparam>
         <rosparam param="labels" subst_value="True">$(arg labels)</rosparam>
         <rosparam param="musthavealllabels" subst_value="True">$(arg musthavealllabels)</rosparam>
         <rosparam param="maxNumData" subst_value="True">$(arg maxNumData)</rosparam>

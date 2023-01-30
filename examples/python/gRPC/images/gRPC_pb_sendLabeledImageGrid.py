@@ -3,11 +3,14 @@
 import os
 import sys
 import time
+import uuid
 
-import boundingbox2d_labeled_pb2 as bb
+import boundingbox2d_labeled_pb2 as boundingbox2d_labeled
+import boundingbox2d_labeled_with_category_pb2 as boundingbox2d_labeled_with_category
 import image_pb2 as image
 import image_service_pb2_grpc as imageService
 import label_with_instance_pb2 as labelWithInstance
+import labels_with_instance_with_category_pb2 as labels_with_instance_with_category
 import meta_operations_pb2_grpc as metaOperations
 import numpy as np
 import projectCreation_pb2 as projectCreation
@@ -69,20 +72,31 @@ for k in range(9):
         theImage.step = 3 * lim
         theImage.data = bytes(rgb)
 
-        # write labeled bounding boxes
-        bb1 = bb.BoundingBox2DLabeled()
-        for i in range(1, n + 1):
-            bb1.labelWithInstance.label = "testlabel" + str(i)
-            bb1.boundingBox.point_min.x = 0.01 + i / 10
-            bb1.boundingBox.point_min.y = 0.02 + i / 10
-            bb1.boundingBox.point_max.x = 0.03 + i / 10
-            bb1.boundingBox.point_max.y = 0.04 + i / 10
-            theImage.labels_bb.append(bb1)
+        for iCategory in range(0, 2):
+            bbCat = boundingbox2d_labeled_with_category.BoundingBox2DLabeledWithCategory()
+            bbCat.category = str(iCategory)
+            # 5. Create bounding boxes with la  bels
+            bb = boundingbox2d_labeled.BoundingBox2DLabeled()
+            for i in range(0, 2):
+                bb.labelWithInstance.label = "testlabel" + str(i)
+                bb.labelWithInstance.instanceUuid = str(uuid.uuid4())
+                bb.boundingBox.point_min.x = 0.01 + i / 10
+                bb.boundingBox.point_min.y = 0.02 + i / 10
+                bb.boundingBox.point_max.x = 0.03 + i / 10
+                bb.boundingBox.point_max.y = 0.04 + i / 10
+                bbCat.boundingBox2DLabeled.append(bb)
+            theImage.labels_bb.append(bbCat)
 
-        # write general labels
-        label = labelWithInstance.LabelWithInstance()
-        label.label = "testlabelgeneral"
-        theImage.labels_general.append(label)
+            # # 6. Add general labels to the image
+            labelsCat = labels_with_instance_with_category.LabelsWithInstanceWithCategory()
+            labelsCat.category = str(iCategory)
+            for i in range(0, 2):
+                label = labelWithInstance.LabelWithInstance()
+                label.label = "testlabelgeneral" + str(i)
+                # assuming that that the general labels are not instance related -> no instance uuid
+                # label.instanceUuid = str(uuid.uuid4())
+                labelsCat.labelWithInstance.append(label)
+            theImage.labels_general.append(labelsCat)
 
         # transfer image
         uuidImg = stub.TransferImage(theImage)

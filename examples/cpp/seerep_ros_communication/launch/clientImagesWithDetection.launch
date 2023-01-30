@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <launch>
-    <arg name="server_address" default="agrigaia-ur.ni.dfki:9090"/>
+    <arg name="server_address" default="localhost:9090"/>
+    <arg name="category" default="testcategory"/>
     <node
     name="seerep_ros_communication_client_imagesWithDetection"
     pkg="seerep_ros_communication"
     type="seerep_ros_communication_clientImagesWithDetection"
     output="screen">
         <rosparam param="server_address" subst_value="True">$(arg server_address)</rosparam>
+        <rosparam param="category" subst_value="True">$(arg category)</rosparam>
     </node>
 </launch>

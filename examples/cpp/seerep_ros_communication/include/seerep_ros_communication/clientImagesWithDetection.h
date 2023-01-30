@@ -42,7 +42,7 @@ namespace seerep_grpc_ros
 class TransferImagesWithDetection
 {
 public:
-  TransferImagesWithDetection(std::shared_ptr<grpc::Channel> channel_ptr);
+  TransferImagesWithDetection(std::shared_ptr<grpc::Channel> channel_ptr, std::string categoryLabels);
   ~TransferImagesWithDetection();
 
   void send(const sensor_msgs::Image::ConstPtr& msg);
@@ -80,6 +80,8 @@ private:
       writerImageDetection_;
   grpc::ClientContext contextImageDetection_;
   flatbuffers::grpc::Message<seerep::fb::ServerResponse> imageDetectionResponse_;
+
+  std::string categoryLabels_;
 
   // ros
   ros::NodeHandle nh_;

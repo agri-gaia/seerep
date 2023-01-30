@@ -4,9 +4,11 @@ package seerep;
 
 import "header.proto";
 import "point.proto";
+import "labels_with_instance_with_category.proto";
 
 message PointStamped
 {
   Header header = 1;
   Point point = 2;
+  repeated LabelsWithInstanceWithCategory labels_general = 3;
 }

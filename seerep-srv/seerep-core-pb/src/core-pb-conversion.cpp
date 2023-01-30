@@ -50,52 +50,61 @@ seerep_core_msgs::DatasetIndexable CorePbConversion::fromPb(const seerep::Image&
   dataForIndices.boundingbox.max_corner().set<2>(0);
 
   // semantic
-  int labelSizeAll = 0;
   if (!img.labels_general().empty())
   {
-    labelSizeAll += img.labels_general().size();
-  }
-  if (!img.labels_bb().empty())
-  {
-    labelSizeAll += img.labels_bb().size();
-  }
-  dataForIndices.labelsWithInstances.reserve(labelSizeAll);
-  if (!img.labels_general().empty())
-  {
-    for (auto label : img.labels_general())
+    for (auto labelsCategories : img.labels_general())
     {
-      boost::uuids::string_generator gen;
-      boost::uuids::uuid uuidInstance;
-      try
+      std::vector<seerep_core_msgs::LabelWithInstance> labelWithInstanceVector;
+      if (!labelsCategories.labelwithinstance().empty())
       {
-        uuidInstance = gen(label.instanceuuid());
+        for (auto label : labelsCategories.labelwithinstance())
+        {
+          boost::uuids::string_generator gen;
+          boost::uuids::uuid uuidInstance;
+          try
+          {
+            uuidInstance = gen(label.instanceuuid());
+          }
+          catch (std::runtime_error const& e)
+          {
+            uuidInstance = boost::uuids::nil_uuid();
+          }
+
+          labelWithInstanceVector.push_back(
+              seerep_core_msgs::LabelWithInstance{ .label = label.label(), .uuidInstance = uuidInstance });
+        }
+        dataForIndices.labelsWithInstancesWithCategory.emplace(labelsCategories.category().c_str(),
+                                                               labelWithInstanceVector);
       }
-      catch (std::runtime_error const& e)
-      {
-        uuidInstance = boost::uuids::nil_uuid();
-      }
-      dataForIndices.labelsWithInstances.push_back(
-          seerep_core_msgs::LabelWithInstance{ .label = label.label(), .uuidInstance = uuidInstance });
     }
   }
 
   if (!img.labels_bb().empty())
   {
-    for (auto label : img.labels_bb())
+    for (auto labelsCategories : img.labels_bb())
     {
-      boost::uuids::string_generator gen;
-      boost::uuids::uuid uuidInstance;
-      try
+      std::vector<seerep_core_msgs::LabelWithInstance> labelWithInstanceVector;
+      if (!labelsCategories.boundingbox2dlabeled().empty())
       {
-        uuidInstance = gen(label.labelwithinstance().instanceuuid());
-      }
-      catch (std::runtime_error const& e)
-      {
-        uuidInstance = boost::uuids::nil_uuid();
-      }
+        for (auto label : labelsCategories.boundingbox2dlabeled())
+        {
+          boost::uuids::string_generator gen;
+          boost::uuids::uuid uuidInstance;
+          try
+          {
+            uuidInstance = gen(label.labelwithinstance().instanceuuid());
+          }
+          catch (std::runtime_error const& e)
+          {
+            uuidInstance = boost::uuids::nil_uuid();
+          }
 
-      dataForIndices.labelsWithInstances.push_back(seerep_core_msgs::LabelWithInstance{
-          .label = label.labelwithinstance().label(), .uuidInstance = uuidInstance });
+          labelWithInstanceVector.push_back(seerep_core_msgs::LabelWithInstance{
+              .label = label.labelwithinstance().label(), .uuidInstance = uuidInstance });
+        }
+      }
+      dataForIndices.labelsWithInstancesWithCategory.emplace(labelsCategories.category().c_str(),
+                                                             labelWithInstanceVector);
     }
   }
 
@@ -130,12 +139,17 @@ void CorePbConversion::fromPbProject(const seerep::Query& query, seerep_core_msg
 
 void CorePbConversion::fromPbLabel(const seerep::Query& query, seerep_core_msgs::Query& queryCore)
 {
-  if (!query.label().empty())
+  if (!query.labelswithcategory().empty())
   {
-    queryCore.label = std::vector<std::string>();
-    for (auto label : query.label())
+    queryCore.label = std::unordered_map<std::string, std::vector<std::string>>();
+    for (auto labelWithCategory : query.labelswithcategory())
     {
-      queryCore.label.value().push_back(label);
+      std::vector<std::string> labels;
+      for (auto label : labelWithCategory.labels())
+      {
+        labels.push_back(label);
+      }
+      queryCore.label.value().emplace(labelWithCategory.category(), labels);
     }
   }
 }

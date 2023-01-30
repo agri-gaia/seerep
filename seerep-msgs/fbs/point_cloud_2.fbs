@@ -1,21 +1,21 @@
 
 include "header.fbs";
-include "boundingbox_labeled.fbs";
+include "boundingbox_labeled_with_category.fbs";
+include "labels_with_instance_with_category.fbs";
 include "point_field.fbs";
-include "label_with_instance.fbs";
 
 namespace seerep.fb;
 
 table PointCloud2 {
-  header:seerep.fb.Header;
+  header:Header;
   height:uint;
   width:uint;
-  fields:[seerep.fb.PointField];
+  fields:[PointField];
   is_bigendian:bool;
   point_step:uint;
   row_step:uint;
   data:[ubyte];
   is_dense:bool;
-  labels_general:[seerep.fb.LabelWithInstance];
-  labels_bb:[seerep.fb.BoundingBoxLabeled];
+  labels_general:[LabelsWithInstanceWithCategory];
+  labels_bb:[BoundingBoxLabeledWithCategory];
 }
