@@ -1,7 +1,9 @@
+include "geodeticCoordinates.fbs";
 
 namespace seerep.fb;
 
 table ProjectCreation {
   name:string;
   map_frame_id:string;
+  geodetic_position:seerep.fb.GeodeticCoordinates;
 }

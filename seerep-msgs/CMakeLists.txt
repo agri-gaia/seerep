@@ -25,6 +25,7 @@ set(MY_PROTO_FILES
     protos/boundingbox2d.proto
     protos/frame_infos.proto
     protos/frame_query.proto
+    protos/geodetic_coordinates.proto
     protos/header.proto
     protos/image.proto
     protos/label_with_instance.proto
@@ -74,6 +75,7 @@ set(MY_FBS_FILES
     fbs/empty.fbs
     fbs/frame_infos.fbs
     fbs/frame_query.fbs
+    fbs/geodeticCoordinates.fbs
     fbs/header.fbs
     fbs/image.fbs
     fbs/label_with_instance.fbs

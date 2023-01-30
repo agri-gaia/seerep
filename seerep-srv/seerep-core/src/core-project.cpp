@@ -8,15 +8,18 @@ CoreProject::CoreProject(const boost::uuids::uuid& uuid, const std::string path)
 
   m_projectname = m_ioGeneral->readProjectname();
   m_frameId = m_ioGeneral->readProjectFrameId();
+  /// TODO use the advantages of std::optional
+  m_geodeticCoordinates = m_ioGeneral->readGeodeticLocation().value();
   recreateDatatypes();
 }
 CoreProject::CoreProject(const boost::uuids::uuid& uuid, const std::string path, const std::string projectname,
-                         const std::string mapFrameId)
-  : m_uuid(uuid), m_path(path), m_projectname(projectname), m_frameId(mapFrameId)
+                         const std::string mapFrameId, const seerep_core_msgs::GeodeticCoordinates geodeticCoords)
+  : m_uuid(uuid), m_path(path), m_projectname(projectname), m_frameId(mapFrameId), m_geodeticCoordinates(geodeticCoords)
 {
   createHdf5Io(m_path);
   m_ioGeneral->writeProjectname(m_projectname);
   m_ioGeneral->writeProjectFrameId(m_frameId);
+  m_ioGeneral->writeGeodeticLocation(m_geodeticCoordinates);
   recreateDatatypes();
 }
 CoreProject::~CoreProject()
@@ -47,6 +50,11 @@ seerep_core_msgs::QueryResultProject CoreProject::getInstances(const seerep_core
   result.dataOrInstanceUuids = m_coreDatasets->getInstances(m_coreTfs->transformQuery(query, m_frameId));
 
   return result;
+}
+
+seerep_core_msgs::GeodeticCoordinates CoreProject::getGeodeticCoordinates()
+{
+  return m_geodeticCoordinates;
 }
 
 void CoreProject::addDataset(const seerep_core_msgs::DatasetIndexable& dataset)

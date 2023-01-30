@@ -9,6 +9,7 @@
 
 // seerep-msgs
 #include <seerep-msgs/dataset-indexable.h>
+#include <seerep-msgs/geodetic-coordinates.h>
 #include <seerep-msgs/query-result-project.h>
 #include <seerep-msgs/query-tf.h>
 #include <seerep-msgs/query.h>
@@ -58,9 +59,10 @@ public:
    * @param path path to the folder containing the HDF5 files
    * @param projectname a plain name for the project for easier differentiation of the projects
    * @param mapFrameId the frame id of the map frame which is used to create the spatial indices for this project
+   * @param geodetic coordinates for the location of the site of data recording
    */
   CoreProject(const boost::uuids::uuid& uuid, const std::string path, const std::string projectname,
-              const std::string mapFrameId);
+              const std::string mapFrameId, const seerep_core_msgs::GeodeticCoordinates geodeticCoords);
   ~CoreProject();
 
   /**
@@ -87,6 +89,12 @@ public:
    * @return vector of UUIDs of instances matching the query and the project UUID
    */
   seerep_core_msgs::QueryResultProject getInstances(const seerep_core_msgs::Query& query);
+
+  /**
+   * @brief Returns the geodetic coordinates of this project
+   * @return the geodetic coordinates
+   */
+  seerep_core_msgs::GeodeticCoordinates getGeodeticCoordinates();
 
   /**
    * @brief Adds a dataset to the spatial, temporal and semantic indices
@@ -157,6 +165,8 @@ private:
   std::string m_projectname;
   /** @brief the frame id for the spatial idices of this project */
   std::string m_frameId;
+  /** @brief the geodetic coordinates of the location where the data was collected in this project */
+  seerep_core_msgs::GeodeticCoordinates m_geodeticCoordinates;
 
   /** @brief the write mutex for the HDF5 file of this project */
   std::shared_ptr<std::mutex> m_write_mtx;

@@ -7,6 +7,7 @@
 // seerep-msgs
 #include <seerep-msgs/aabb.h>
 #include <seerep-msgs/dataset-indexable.h>
+#include <seerep-msgs/geodetic-coordinates.h>
 #include <seerep-msgs/labels-with-instance-with-category.h>
 
 // std
@@ -135,6 +136,22 @@ public:
   std::string readProjectFrameId();
 
   // ################
+  //  Geodetic Coordinates
+  // ################
+  /**
+   * @brief Writes Geodetic location of the project to its HDF5 file.
+   *
+   * @param geocoords seerep_core_msgs Geodetic Coordinates object.
+   */
+  void writeGeodeticLocation(const seerep_core_msgs::GeodeticCoordinates geocoords);
+  /**
+   * @brief Read Geodetic location of the project from its HDF5 file.
+   *
+   * @return std::optional<seerep_core_msgs::GeodeticCoordinates> Optional return of Geodetic Coordinates
+   */
+  std::optional<seerep_core_msgs::GeodeticCoordinates> readGeodeticLocation();
+
+  // ################
   //  Hdf5
   // ################
   /**
@@ -185,6 +202,12 @@ public:
 
   inline static const std::string PROJECTNAME = "projectname";
   inline static const std::string PROJECTFRAMEID = "projectframeid";
+
+  inline static const std::string GEODETICLOCATION_COORDINATESYSTEM = "geoloc_coordinatesystem";
+  inline static const std::string GEODETICLOCATION_ELLIPSOID = "geoloc_ellipsoid";
+  inline static const std::string GEODETICLOCATION_ALTITUDE = "geoloc_altitude";
+  inline static const std::string GEODETICLOCATION_LATITUDE = "geoloc_latitude";
+  inline static const std::string GEODETICLOCATION_LONGITUDE = "geoloc_longitude";
 
   // dataset names
   inline static const std::string RAWDATA = "rawdata";
