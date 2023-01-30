@@ -1,0 +1,10 @@
+
+include "camera_intrinsics.fbs";
+include "query.fbs";
+
+namespace seerep.fb;
+
+rpc_service Service {
+  GetCameraIntrinsics(seerep.fb.Query):seerep.fb.cameraIntrinsics (streaming: "server");
+  TransferCameraIntrinsics(seerep.fb.cameraIntrinsics):seerep.fb.ServerResponse  (streaming: "client");
+}
