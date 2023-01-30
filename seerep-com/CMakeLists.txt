@@ -83,6 +83,13 @@ grpc_generate_python(GRPC_PY_SOURCES ${MY_PROTO_FILES})
 
 add_custom_target(protoPythonTarget ALL DEPENDS ${GRPC_PY_SOURCES})
 
+add_custom_command(
+  TARGET protoPythonTarget
+  POST_BUILD
+  COMMAND bash -c "sed -i -E \"s/^import.*_pb2/from seerep.pb &/\" *_pb2.py"
+  VERBATIM
+)
+
 include_directories(
   ${CMAKE_BUILD_PATH} ${SeerepMsgs_INCLUDE_DIRS} ${PROTOBUF_INCLUDE_DIR}
 )
