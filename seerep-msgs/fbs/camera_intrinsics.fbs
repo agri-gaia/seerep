@@ -1,0 +1,19 @@
+
+include "header.fbs"
+include "region_of_interest.fbs"
+
+namespace seerep.fbs
+
+table cameraIntrinsics {
+    header:header;
+    height:uint32;
+    width:uint32;
+    distortion_model:string;
+    distortion:[double];
+    intrinsic_matrix:[double];
+    rectification_matrix:[double];
+    projection_matrix:[double];
+    binning_x:uint32;
+    binning_y:uint32;
+    region_of_interest:regionOfInterest;
+}
