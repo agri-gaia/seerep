@@ -14,27 +14,29 @@ CorePbImage::~CorePbImage()
 {
 }
 
-std::vector<seerep::Image> CorePbImage::getData(const seerep::Query& query)
+void CorePbImage::getData(const seerep::Query& query, grpc::ServerWriter<seerep::Image>* const writer)
 {
-  std::cout << "loading image from images/" << std::endl;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "loading image from images/" << std::endl;
   seerep_core_msgs::Query queryCore = CorePbConversion::fromPb(query, seerep_core_msgs::Datatype::Image);
 
   seerep_core_msgs::QueryResult resultCore = m_seerepCore->getDataset(queryCore);
 
-  std::vector<seerep::Image> resultImages;
   for (auto project : resultCore.queryResultProjects)
   {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
+        << "sending images from project" << boost::lexical_cast<std::string>(project.projectUuid);
     for (auto uuidImg : project.dataOrInstanceUuids)
     {
       auto hdf5io = getHdf5(project.projectUuid);
       std::optional<seerep::Image> image = hdf5io->readImage(boost::lexical_cast<std::string>(uuidImg));
       if (image)
       {
-        resultImages.push_back(image.value());
+        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
+            << "sending img " << boost::lexical_cast<std::string>(uuidImg);
+        writer->Write(image.value());
       }
     }
   }
-  return resultImages;
 }
 
 boost::uuids::uuid CorePbImage::addData(const seerep::Image& img)

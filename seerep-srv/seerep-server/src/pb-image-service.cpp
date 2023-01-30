@@ -24,7 +24,7 @@ grpc::Status PbImageService::GetImage(grpc::ServerContext* context, const seerep
   std::vector<seerep::Image> images;
   try
   {
-    images = imagePb->getData(*request);
+    imagePb->getData(*request, writer);
   }
   catch (std::runtime_error const& e)
   {
@@ -48,19 +48,6 @@ grpc::Status PbImageService::GetImage(grpc::ServerContext* context, const seerep
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
   }
 
-  if (!images.empty())
-  {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
-        << "Found " << images.size() << " images that match the query";
-    for (const seerep::Image& img : images)
-    {
-      writer->Write(img);
-    }
-  }
-  else
-  {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "Found NOTHING that matches the query";
-  }
   return grpc::Status::OK;
 }
 
