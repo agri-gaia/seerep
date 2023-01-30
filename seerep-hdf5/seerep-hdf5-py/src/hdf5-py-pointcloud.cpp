@@ -149,13 +149,10 @@ void Hdf5PyPointCloud::writePointCloud(const std::string& uuid, const std::strin
     channel_processed.insert({ name, false });
   }
   writePoints(*data_group_ptr, cloud_group_id, channel_processed, channels);
+  writeColors(cloud_group_id, channel_processed, channels);
 
   // CloudInfo info = getCloudInfo(pointcloud2);
 
-  // if (info.has_points)
-  // {
-  //   writePoints(*data_group_ptr, uuid, pointcloud2);
-  // }
   // if (info.has_rgb)
   // {
   //   writeColorsRGB(uuid, pointcloud2);
@@ -252,37 +249,152 @@ void Hdf5PyPointCloud::writePoints(HighFive::Group& cloud_group, const std::stri
 
       break;
     }
-
-    if (point_data.size() == 0)
-    {
-      throw std::invalid_argument(
-          "you need to either specify 'x', 'y' and 'z' channels individually or a 'xyz' channel");
-    }
-
-    // create dataset
-
-    std::string points_id = cloud_group_id + "/points";
-    HighFive::DataSpace data_space({ point_data.size(), point_data[0].size(), 3 });
-
-    std::shared_ptr<HighFive::DataSet> points_dataset_ptr;
-    if (!m_file->exist(points_id))
-    {
-      points_dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->createDataSet<float>(points_id, data_space));
-    }
-    else
-    {
-      points_dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(points_id));
-    }
-
-    // write bounding box as attribute to dataset
-    const std::vector<float> boundingbox{ min[0], min[1], min[2], max[0], max[1], max[2] };
-
-    seerep_hdf5_core::Hdf5CoreGeneral::writeAttributeToHdf5(
-        cloud_group, seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX, boundingbox);
-
-    // write data to dataset
-    points_dataset_ptr->write(point_data);
   }
+
+  if (point_data.size() == 0)
+  {
+    throw std::invalid_argument("you need to either specify 'x', 'y' and 'z' channels individually or a 'xyz' channel");
+  }
+
+  // create dataset
+
+  std::string points_id = cloud_group_id + "/points";
+  HighFive::DataSpace data_space({ point_data.size(), point_data[0].size(), 3 });
+
+  std::shared_ptr<HighFive::DataSet> points_dataset_ptr;
+  if (!m_file->exist(points_id))
+  {
+    points_dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->createDataSet<float>(points_id, data_space));
+  }
+  else
+  {
+    points_dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(points_id));
+  }
+
+  // write bounding box as attribute to dataset
+  const std::vector<float> boundingbox{ min[0], min[1], min[2], max[0], max[1], max[2] };
+
+  seerep_hdf5_core::Hdf5CoreGeneral::writeAttributeToHdf5(
+      cloud_group, seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX, boundingbox);
+
+  // write data to dataset
+  points_dataset_ptr->write(point_data);
+}
+
+void Hdf5PyPointCloud::writeColors(const std::string& cloud_group_id, std::map<std::string, bool>& processed,
+                                   const std::map<std::string, py::array_t<float>>& channels)
+{
+  std::vector<std::vector<std::vector<float>>> color_data(0);
+
+  // find channels to use
+  for (const auto& [name, data] : channels)
+  {
+    py::buffer_info buff_info = data.request();
+    if (name.compare("rgb") == 0)
+    {
+      // directly use 'rgb' channel
+
+      // TODO: check shape[1] for correct size
+      color_data.resize(1);
+      color_data[0].reserve(buff_info.shape[0]);
+      for (unsigned int i = 0; i < buff_info.shape[0]; i++)
+      {
+        color_data[0].push_back(std::vector{ data.at(i, 0), data.at(i, 1), data.at(i, 2) });
+      }
+
+      processed["rgb"] = true;
+
+      break;
+    }
+    else if (name.compare("rgba") == 0)
+    {
+      // directly use 'rgba' channel
+
+      // TODO: check shape[1] for correct size
+      color_data.resize(1);
+      color_data[0].reserve(buff_info.shape[0]);
+      for (unsigned int i = 0; i < buff_info.shape[0]; i++)
+      {
+        color_data[0].push_back(std::vector{ data.at(i, 0), data.at(i, 1), data.at(i, 2), data.at(i, 3) });
+      }
+
+      processed["rgba"] = true;
+
+      break;
+    }
+    else if (name.compare("r") == 0)
+    {
+      // construct color channel from individual component channels
+
+      const py::array_t<float>& data_r = data;
+
+      auto search_g = channels.find("g");
+      auto search_b = channels.find("b");
+      auto search_a = channels.find("a");
+
+      if (search_g == channels.end() || search_b == channels.end())
+      {
+        continue;
+      }
+
+      const py::array_t<float>& data_g = search_g->second;
+      const py::array_t<float>& data_b = search_b->second;
+
+      if (search_a == channels.end())
+      {
+        // TODO: check for correct shape of g and b channels
+        color_data.resize(1);
+        color_data[0].reserve(buff_info.shape[0]);
+        for (unsigned int i = 0; i < buff_info.shape[0]; i++)
+        {
+          color_data[0].push_back(std::vector{ data_r.at(i), data_g.at(i), data_b.at(i) });
+        }
+      }
+      else
+      {
+        const py::array_t<float>& data_a = search_a->second;
+
+        // TODO: check for correct shape of g, b and a channels
+        color_data.resize(1);
+        color_data[0].reserve(buff_info.shape[0]);
+        for (unsigned int i = 0; i < buff_info.shape[0]; i++)
+        {
+          color_data[0].push_back(std::vector{ data_r.at(i), data_g.at(i), data_b.at(i), data_a.at(i) });
+        }
+
+        processed["a"] = true;
+      }
+
+      processed["r"] = true;
+      processed["g"] = true;
+      processed["b"] = true;
+
+      break;
+    }
+  }
+
+  if (color_data.size() == 0)
+  {
+    // no channels found
+    return;
+  }
+
+  // create dataset
+  const std::string colors_id = cloud_group_id + "/colors";
+  HighFive::DataSpace data_space({ color_data.size(), color_data[0].size(), color_data[0][0].size() });
+
+  std::shared_ptr<HighFive::DataSet> colors_dataset_ptr;
+  if (!m_file->exist(colors_id))
+  {
+    colors_dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->createDataSet<float>(colors_id, data_space));
+  }
+  else
+  {
+    colors_dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(colors_id));
+  }
+
+  // write data
+  colors_dataset_ptr->write(color_data);
 }
 
 } /* namespace seerep_hdf5_py */
