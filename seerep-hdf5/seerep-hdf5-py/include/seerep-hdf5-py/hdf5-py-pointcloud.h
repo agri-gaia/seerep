@@ -32,8 +32,8 @@ public:
 
   std::vector<std::string> getPointClouds();
 
-  void writePointCloud(const std::string& uuid, const py::array_t<double> points,
-                       const std::vector<py::array_t<double>> channels = std::vector<py::array_t<double>>());
+  void writePointCloud(const std::string& uuid, const std::string& frame_id, int64_t seconds, int32_t nanos,
+                       uint32_t sequence, const std::map<std::string, py::array_t<float>> channels);
 
   //   std::optional<seerep::PointCloud2> readPointCloud2(const std::string& uuid);
 
@@ -97,7 +97,8 @@ public:
 
   //   CloudInfo getCloudInfo(const seerep::PointCloud2& cloud);
 
-  //   void writePoints(HighFive::Group& cloud_groups, const std::string& uuid, const seerep::PointCloud2& cloud);
+  void writePoints(HighFive::Group& cloud_group, const std::string& cloud_group_id,
+                   std::map<std::string, bool>& processed, const std::map<std::string, py::array_t<float>>& channels);
 
   //   void writeColorsRGB(const std::string& uuid, const seerep::PointCloud2& cloud);
 
