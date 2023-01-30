@@ -16,20 +16,23 @@ CorePbImage::~CorePbImage()
 
 void CorePbImage::getData(const seerep::Query& query, grpc::ServerWriter<seerep::Image>* const writer)
 {
-  std::cout << "loading image from images/" << std::endl;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "loading image from images/" << std::endl;
   seerep_core_msgs::Query queryCore = CorePbConversion::fromPb(query, seerep_core_msgs::Datatype::Image);
 
   seerep_core_msgs::QueryResult resultCore = m_seerepCore->getDataset(queryCore);
 
   for (auto project : resultCore.queryResultProjects)
   {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
+        << "sending images from project" << boost::lexical_cast<std::string>(project.projectUuid);
     for (auto uuidImg : project.dataOrInstanceUuids)
     {
       auto hdf5io = getHdf5(project.projectUuid);
       std::optional<seerep::Image> image = hdf5io->readImage(boost::lexical_cast<std::string>(uuidImg));
       if (image)
       {
-        std::cout << "sending img " << boost::lexical_cast<std::string>(uuidImg) << std::endl;
+        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
+            << "sending img " << boost::lexical_cast<std::string>(uuidImg);
         writer->Write(image.value());
       }
     }
