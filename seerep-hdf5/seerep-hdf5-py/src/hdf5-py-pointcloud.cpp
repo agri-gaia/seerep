@@ -150,6 +150,7 @@ void Hdf5PyPointCloud::writePointCloud(const std::string& uuid, const std::strin
   }
   writePoints(*data_group_ptr, cloud_group_id, channel_processed, channels);
   writeColors(cloud_group_id, channel_processed, channels);
+  writeNormals(cloud_group_id, channel_processed, channels);
 
   // CloudInfo info = getCloudInfo(pointcloud2);
 
@@ -395,6 +396,88 @@ void Hdf5PyPointCloud::writeColors(const std::string& cloud_group_id, std::map<s
 
   // write data
   colors_dataset_ptr->write(color_data);
+}
+
+void Hdf5PyPointCloud::writeNormals(const std::string& cloud_group_id, std::map<std::string, bool>& processed,
+                                    const std::map<std::string, py::array_t<float>>& channels)
+{
+  std::vector<std::vector<std::vector<float>>> normal_data(0);
+
+  // find channels to use
+  for (const auto& [name, data] : channels)
+  {
+    py::buffer_info buff_info = data.request();
+    if (name.compare("normal") == 0)
+    {
+      // directly use 'rgb' channel
+
+      // TODO: check shape[1] for correct size
+      normal_data.resize(1);
+      normal_data[0].reserve(buff_info.shape[0]);
+      for (unsigned int i = 0; i < buff_info.shape[0]; i++)
+      {
+        normal_data[0].push_back(std::vector{ data.at(i, 0), data.at(i, 1), data.at(i, 2) });
+      }
+
+      processed["normal"] = true;
+
+      break;
+    }
+    else if (name.compare("nx") == 0)
+    {
+      // construct color channel from individual component channels
+
+      const py::array_t<float>& data_nx = data;
+
+      auto search_ny = channels.find("ny");
+      auto search_nz = channels.find("nz");
+
+      if (search_ny == channels.end() || search_nz == channels.end())
+      {
+        continue;
+      }
+
+      const py::array_t<float>& data_ny = search_ny->second;
+      const py::array_t<float>& data_nz = search_nz->second;
+
+      // TODO: check for correct shape of g and b channels
+      normal_data.resize(1);
+      normal_data[0].reserve(buff_info.shape[0]);
+      for (unsigned int i = 0; i < buff_info.shape[0]; i++)
+      {
+        normal_data[0].push_back(std::vector{ data_nx.at(i), data_ny.at(i), data_nz.at(i) });
+      }
+
+      processed["nx"] = true;
+      processed["ny"] = true;
+      processed["nz"] = true;
+
+      break;
+    }
+  }
+
+  if (normal_data.size() == 0)
+  {
+    // no channels found
+    return;
+  }
+
+  // create dataset
+  const std::string colors_id = cloud_group_id + "/normal";
+  HighFive::DataSpace data_space({ normal_data.size(), normal_data[0].size(), normal_data[0][0].size() });
+
+  std::shared_ptr<HighFive::DataSet> colors_dataset_ptr;
+  if (!m_file->exist(colors_id))
+  {
+    colors_dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->createDataSet<float>(colors_id, data_space));
+  }
+  else
+  {
+    colors_dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(colors_id));
+  }
+
+  // write data
+  colors_dataset_ptr->write(normal_data);
 }
 
 } /* namespace seerep_hdf5_py */
