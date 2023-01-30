@@ -144,6 +144,11 @@ public:
    * @param geocoords seerep_core_msgs Geodetic Coordinates object.
    */
   void writeGeodeticLocation(const seerep_core_msgs::GeodeticCoordinates geocoords);
+  /**
+   * @brief Read Geodetic location of the project from its HDF5 file.
+   *
+   * @return std::optional<seerep_core_msgs::GeodeticCoordinates> Optional return of Geodetic Coordinates
+   */
   std::optional<seerep_core_msgs::GeodeticCoordinates> readGeodeticLocation();
 
   // ################
