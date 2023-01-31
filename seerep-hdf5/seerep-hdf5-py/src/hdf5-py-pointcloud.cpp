@@ -201,9 +201,16 @@ bool Hdf5PyPointCloud::getChannelData(const std::vector<std::string>& channel_na
 
     for (unsigned int i = 0; i < buff_info.shape[0]; i++)
     {
-      for (unsigned int j = 0; j < buff_info.shape[1]; j++)
+      if (buff_info.shape.size() > 1)
       {
-        channel_data[0][i].push_back(data.at(i, j));
+        for (unsigned int j = 0; j < buff_info.shape[1]; j++)
+        {
+          channel_data[0][i].push_back(data.at(i, j));
+        }
+      }
+      else
+      {
+        channel_data[0][i].push_back(data.at(i));
       }
     }
   }
@@ -381,10 +388,17 @@ void Hdf5PyPointCloud::writeOther(const std::string& cloud_group_id, std::map<st
   data[0].resize(buff_info.shape[0]);
   for (unsigned int i = 0; i < buff_info.shape[0]; i++)
   {
-    data[0][i].reserve(buff_info.shape[1]);
-    for (unsigned int j = 0; j < buff_info.shape[1]; j++)
+    if (buff_info.shape.size() > 1)
     {
-      data[0][i].push_back(channel_data.at(i, j));
+      data[0][i].reserve(buff_info.shape[1]);
+      for (unsigned int j = 0; j < buff_info.shape[1]; j++)
+      {
+        data[0][i].push_back(channel_data.at(i, j));
+      }
+    }
+    else
+    {
+      data[0][i] = std::vector{ channel_data.at(i) };
     }
   }
 
