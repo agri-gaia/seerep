@@ -86,7 +86,12 @@ add_custom_target(protoPythonTarget ALL DEPENDS ${GRPC_PY_SOURCES})
 add_custom_command(
   TARGET protoPythonTarget
   POST_BUILD
-  COMMAND bash -c "sed -i -E \"s/^import.*_pb2/from seerep.pb &/\" *_pb2.py"
+  COMMAND bash -c "sed -i -E \"s/^import.*_pb2/from seerep.pb &/\" *_pb2*.py"
+  COMMAND bash -c "mkdir -p protos/seerep/pb && mv *_pb2*.py protos/seerep/pb"
+  COMMAND
+    bash -c
+    "touch protos/seerep/pb/__init__.py && touch protos/seerep/__init__.py"
+  COMMAND bash -c "cp -r ../seerep-msgs/protos/seerep/pb protos/seerep/"
   VERBATIM
 )
 
