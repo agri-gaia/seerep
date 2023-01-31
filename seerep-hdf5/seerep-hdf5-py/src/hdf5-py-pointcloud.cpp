@@ -152,10 +152,13 @@ void Hdf5PyPointCloud::writePointCloud(const std::string& uuid, const std::strin
   writeColors(cloud_group_id, channel_processed, channels);
   writeNormals(cloud_group_id, channel_processed, channels);
 
-  // if (!info.other_fields.empty())
-  // {
-  //   writeOtherFields(uuid, pointcloud2, info.other_fields);
-  // }
+  for (const auto& [name, data] : channels)
+  {
+    if (!channel_processed[name])
+    {
+      writeOther(cloud_group_id, channel_processed, name, data);
+    }
+  }
 
   m_file->flush();
 }
@@ -366,6 +369,43 @@ void Hdf5PyPointCloud::writeNormals(const std::string& cloud_group_id, std::map<
 
   // write data
   colors_dataset_ptr->write(normal_data);
+}
+
+void Hdf5PyPointCloud::writeOther(const std::string& cloud_group_id, std::map<std::string, bool>& processed,
+                                  const std::string& channel_name, const py::array_t<float>& channel_data)
+{
+  std::vector<std::vector<std::vector<float>>> data(0);
+
+  data.resize(1);
+  py::buffer_info buff_info = channel_data.request();
+  data[0].resize(buff_info.shape[0]);
+  for (unsigned int i = 0; i < buff_info.shape[0]; i++)
+  {
+    data[0][i].reserve(buff_info.shape[1]);
+    for (unsigned int j = 0; j < buff_info.shape[1]; j++)
+    {
+      data[0][i].push_back(channel_data.at(i, j));
+    }
+  }
+
+  processed[channel_name] = true;
+
+  // create dataset
+  const std::string dataset_id = cloud_group_id + "/" + channel_name;
+  HighFive::DataSpace data_space({ data.size(), data[0].size(), data[0][0].size() });
+
+  std::shared_ptr<HighFive::DataSet> colors_dataset_ptr;
+  if (!m_file->exist(dataset_id))
+  {
+    colors_dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->createDataSet<float>(dataset_id, data_space));
+  }
+  else
+  {
+    colors_dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(dataset_id));
+  }
+
+  // write data
+  colors_dataset_ptr->write(data);
 }
 
 } /* namespace seerep_hdf5_py */

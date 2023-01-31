@@ -110,6 +110,9 @@ public:
   void writeNormals(const std::string& cloud_group_id, std::map<std::string, bool>& processed,
                     const std::map<std::string, py::array_t<float>>& channels);
 
+  void writeOther(const std::string& cloud_group_id, std::map<std::string, bool>& processed,
+                  const std::string& channel_name, const py::array_t<float>& channel_data);
+
   //   void writeOtherFields(const std::string& uuid, const seerep::PointCloud2& cloud,
   //                         const std::map<std::string, seerep::PointField>& fields);
 
