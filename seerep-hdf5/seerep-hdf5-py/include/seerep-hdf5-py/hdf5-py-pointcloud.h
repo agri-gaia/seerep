@@ -97,6 +97,10 @@ public:
 
   //   CloudInfo getCloudInfo(const seerep::PointCloud2& cloud);
 
+  bool getChannelData(const std::vector<std::string>& channel_names,
+                      const std::map<std::string, py::array_t<float>>& channels, std::map<std::string, bool>& processed,
+                      std::vector<std::vector<std::vector<float>>>& channel_data);
+
   void writePoints(HighFive::Group& cloud_group, const std::string& cloud_group_id,
                    std::map<std::string, bool>& processed, const std::map<std::string, py::array_t<float>>& channels);
 
