@@ -3,10 +3,10 @@
 import os
 import sys
 
-import frame_query_pb2 as frameQuery
-import meta_operations_pb2_grpc as metaOperations
-import tf_service_pb2_grpc as tfService
 from google.protobuf import empty_pb2
+from seerep.pb import frame_query_pb2 as frameQuery
+from seerep.pb import meta_operations_pb2_grpc as metaOperations
+from seerep.pb import tf_service_pb2_grpc as tfService
 
 script_dir = os.path.dirname(__file__)
 util_dir = os.path.join(script_dir, '..')
