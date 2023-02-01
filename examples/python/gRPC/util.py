@@ -4,6 +4,12 @@ import grpc
 
 
 def get_gRPC_channel(target="local"):
+    # set the max message size to 1GB (half the size of the server)
+    options = [
+        ('grpc.max_send_message_length', 1 * 1024 * 1024 * 1024),
+        ('grpc.max_receive_message_length', 1 * 1024 * 1024 * 1024),
+    ]
+
     if target == "prod" or target == "dev":
         if target == "prod":
             targetName = "seerep-prod"
@@ -23,11 +29,8 @@ def get_gRPC_channel(target="local"):
     elif target == "local":
         # server without certs
         server = "localhost:9090"
-        # set the max message size to 1GB (half the size of the server)
-        options = [
-            ('grpc.max_send_message_length', 1 * 1024 * 1024 * 1024),
-            ('grpc.max_receive_message_length', 1 * 1024 * 1024 * 1024),
-        ]
         channel = grpc.insecure_channel(server, options=options)
+    else:
+        channel = grpc.insecure_channel(target, options=options)
 
     return channel
