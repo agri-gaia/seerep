@@ -8,9 +8,11 @@ import imageio.v2 as imageio
 import numpy as np
 import yaml
 from seerep.pb import boundingbox2d_labeled_pb2 as bb
+from seerep.pb import boundingbox2d_labeled_with_category_pb2
 from seerep.pb import image_pb2 as image
 from seerep.pb import image_service_pb2_grpc as imageService
 from seerep.pb import label_with_instance_pb2 as labelWithInstance
+from seerep.pb import labels_with_instance_with_category_pb2
 from seerep.pb import meta_operations_pb2_grpc as metaOperations
 from seerep.pb import point_cloud_2_pb2 as pointcloud
 from seerep.pb import point_cloud_service_pb2_grpc as pointcloudService
@@ -32,7 +34,7 @@ stubTf = tfService.TfServiceStub(channel)
 stubMeta = metaOperations.MetaOperationsStub(channel)
 
 # create new project
-creation = projectCreation.ProjectCreation(name="simulatedData", mapFrameId="map")
+creation = projectCreation.ProjectCreation(name="simulatedCropsGroundTruth", mapFrameId="map")
 projectCreated = stubMeta.CreateProject(creation)
 projectname = projectCreated.uuid
 
@@ -78,7 +80,9 @@ for folderIndex in range(2):
 
         annotations = np.genfromtxt(baseAnnotationPath + ".txt", delimiter=" ")
 
-        # write labeled bounding boxes
+        # # write labeled bounding boxes
+        bbCat = boundingbox2d_labeled_with_category_pb2.BoundingBox2DLabeledWithCategory()
+        bbCat.category = "ground_truth"
         bb1 = bb.BoundingBox2DLabeled()
         for a in annotations:
             bb1.labelWithInstance.label = labelSwitch.get(a[0])
@@ -88,7 +92,9 @@ for folderIndex in range(2):
             bb1.boundingBox.point_min.y = a[2] - a[4] / 2.0
             bb1.boundingBox.point_max.x = a[1] + a[3] / 2.0
             bb1.boundingBox.point_max.y = a[2] + a[4] / 2.0
-            theImage.labels_bb.append(bb1)
+            bbCat.boundingBox2DLabeled.append(bb1)
+
+        theImage.labels_bb.append(bbCat)
 
         stubImage.TransferImage(theImage)
 
@@ -131,10 +137,14 @@ for folderIndex in range(2):
         stubPointcloud.TransferPointCloud2(thePointcloud)
 
         annotations = np.genfromtxt(baseAnnotationPath + ".txt", delimiter=" ")
+        labelsCat = labels_with_instance_with_category_pb2.LabelsWithInstanceWithCategory()
+        labelsCat.category = "ground_truth"
         for a in annotations:
             label = labelWithInstance.LabelWithInstance()
             label.label = labelSwitch.get(a[0])
-            thePointcloud.labels_general.append(label)
+            labelsCat.labelWithInstance.append(label)
+
+        thePointcloud.labels_general.append(labelsCat)
 
         with open(baseFilePath + ".txt", "r") as stream:
             try:
