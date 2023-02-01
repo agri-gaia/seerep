@@ -1,18 +1,20 @@
 var pb_write_load_test_8cpp =
 [
     [ "pbWriteLoadTest", "classpbWriteLoadTest.html", null ],
-    [ "createBB2DLabeled", "pb-write-load-test_8cpp.html#a49d0c2b59960aa8d367c0e24d72c6178", null ],
-    [ "createHeader", "pb-write-load-test_8cpp.html#aabd6f7540041cc11264a0c56cabde6b3", null ],
-    [ "createImageData", "pb-write-load-test_8cpp.html#a9702001666f9e943adc42d6d296e6766", null ],
-    [ "createImageMessage", "pb-write-load-test_8cpp.html#aaf4f3f8c6754b104fd38c9c15506ccbc", null ],
-    [ "createLabelWithInstance", "pb-write-load-test_8cpp.html#aab7f6a2172f781ae56fafdda2c931f4d", null ],
-    [ "createPoint", "pb-write-load-test_8cpp.html#afbba8f7e7d86d77461a42192ebdb3f53", null ],
+    [ "createBB2DLabeled", "pb-write-load-test_8cpp.html#abcfe3e45a9950611f05522cfb03696bd", null ],
+    [ "createHeader", "pb-write-load-test_8cpp.html#af2fe7c48a6a66b999adf4d03c85dfe50", null ],
+    [ "createImageData", "pb-write-load-test_8cpp.html#aa710644289548f19682e8491c6544ccd", null ],
+    [ "createImageMessage", "pb-write-load-test_8cpp.html#ae6a59398d37b8d8e74fa050a52af8da7", null ],
+    [ "createLabelsGeneral", "pb-write-load-test_8cpp.html#a8f20a41053a9606afc92dd3b19bf106a", null ],
+    [ "createLabelWithInstance", "pb-write-load-test_8cpp.html#a19b292d79dc278c9c44436c0bad6ba64", null ],
+    [ "createPoint", "pb-write-load-test_8cpp.html#a6a40707bbb15d2e0297de714cb75b2f2", null ],
     [ "main", "pb-write-load-test_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627", null ],
     [ "TEST_F", "pb-write-load-test_8cpp.html#a99c43e10a74d0e08a123243b87c76e84", null ],
     [ "TEST_F", "pb-write-load-test_8cpp.html#ae5bf66ec53d39c76c6858725d54357bd", null ],
     [ "TEST_F", "pb-write-load-test_8cpp.html#aae9f11050ad3e0eb03a9d8cbdf6a9e30", null ],
     [ "TEST_F", "pb-write-load-test_8cpp.html#a185810816c885b370b339ba1b0f65ff5", null ],
     [ "TEST_F", "pb-write-load-test_8cpp.html#a1794b913182ac00dd4d796708f56ce36", null ],
-    [ "testEqualPoints", "pb-write-load-test_8cpp.html#af0f5c3f416525a36f4e79128c91b3e03", null ],
-    [ "testLabelWithInstance", "pb-write-load-test_8cpp.html#a1ffaaefd240b590434ff5ee6ee183649", null ]
+    [ "testEqualPoints", "pb-write-load-test_8cpp.html#a883931a5c02f4cf061287deb6cb3c42a", null ],
+    [ "testLabelsWithInstanceWithCategory", "pb-write-load-test_8cpp.html#aa36ace71b699ddee278462ff9298161f", null ],
+    [ "testLabelWithInstance", "pb-write-load-test_8cpp.html#a0bd88661a132afbdd37ed83ba12605b8", null ]
 ];

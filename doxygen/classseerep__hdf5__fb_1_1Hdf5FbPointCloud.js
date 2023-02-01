@@ -12,8 +12,6 @@ var classseerep__hdf5__fb_1_1Hdf5FbPointCloud =
     [ "readColorsRGB", "classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a076dd5e7312b272e5a6792f878eb48a4", null ],
     [ "readColorsRGBA", "classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#ad9d57059ed253651144a983dc070c330", null ],
     [ "readGeneralAttributes", "classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#af04601adc19db5e3d1b78d47c7f4b445", null ],
-    [ "readLabelsBoundingBoxOffset", "classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#aafaaac6993c2f91786bb4fb3bf291d5d", null ],
-    [ "readLabelsGeneralOffset", "classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#ae39c4c712f82f6216b01bf8baec0666e", null ],
     [ "readPointCloud2", "classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#abb3eaef947f444b313e83d345a576489", null ],
     [ "readPointFields", "classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#aa29d104bee62d6193db9207cbeabe803", null ],
     [ "readPointFieldsOffset", "classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a420aa490e50366ec3adc61810136f193", null ],

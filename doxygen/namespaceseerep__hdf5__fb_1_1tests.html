@@ -149,8 +149,10 @@ Functions</h2></td></tr>
 <tr class="separator:ae0c5ff5792bb7a64372b343921410996"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a08d28851cb5288c3e95cc6166e97942e"><td class="memItemLeft" align="right" valign="top">flatbuffers::Offset&lt; seerep::fb::LabelWithInstance &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__hdf5__fb_1_1tests.html#a08d28851cb5288c3e95cc6166e97942e">createLabelWithInstance</a> (flatbuffers::FlatBufferBuilder &amp;fbb)</td></tr>
 <tr class="separator:a08d28851cb5288c3e95cc6166e97942e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a76d54d48db4a9288b7062656d030c1a8"><td class="memItemLeft" align="right" valign="top">flatbuffers::Offset&lt; flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::BoundingBox2DLabeled &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__hdf5__fb_1_1tests.html#a76d54d48db4a9288b7062656d030c1a8">createBB2DLabeled</a> (flatbuffers::FlatBufferBuilder &amp;fbb)</td></tr>
-<tr class="separator:a76d54d48db4a9288b7062656d030c1a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a295358489af0935ee632313afaeb97ce"><td class="memItemLeft" align="right" valign="top">flatbuffers::Offset&lt; flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::BoundingBox2DLabeledWithCategory &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__hdf5__fb_1_1tests.html#a295358489af0935ee632313afaeb97ce">createBB2DLabeled</a> (flatbuffers::FlatBufferBuilder &amp;fbb)</td></tr>
+<tr class="separator:a295358489af0935ee632313afaeb97ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a130353d2c881d8bf630ff9da777520f4"><td class="memItemLeft" align="right" valign="top">flatbuffers::Offset&lt; flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::LabelsWithInstanceWithCategory &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__hdf5__fb_1_1tests.html#a130353d2c881d8bf630ff9da777520f4">createLabelsGeneral</a> (flatbuffers::FlatBufferBuilder &amp;fbb)</td></tr>
+<tr class="separator:a130353d2c881d8bf630ff9da777520f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac6ad73b611f1a6494b46aa0f9637d879"><td class="memItemLeft" align="right" valign="top">const seerep::fb::Image *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__hdf5__fb_1_1tests.html#ac6ad73b611f1a6494b46aa0f9637d879">createImageMessage</a> (flatbuffers::FlatBufferBuilder &amp;fbb, const unsigned int imageHeight, const unsigned imageWidth, const std::string &amp;projectUUID, const std::string &amp;messageUUID)</td></tr>
 <tr class="separator:ac6ad73b611f1a6494b46aa0f9637d879"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae72ddf3e361364f97546584698b80580"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__hdf5__fb_1_1tests.html#ae72ddf3e361364f97546584698b80580">TEST_F</a> (<a class="el" href="classseerep__hdf5__fb_1_1tests_1_1fbWriteLoadTest.html">fbWriteLoadTest</a>, testImageHeader)</td></tr>
@@ -161,24 +163,30 @@ Functions</h2></td></tr>
 <tr class="separator:a9c0067b106b1488b2d776afb95447078"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af767eda9c84a1160ff2dd8920f6e2d9f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__hdf5__fb_1_1tests.html#af767eda9c84a1160ff2dd8920f6e2d9f">testLabelWithInstance</a> (const seerep::fb::LabelWithInstance *readInstance, const seerep::fb::LabelWithInstance *writeInstance)</td></tr>
 <tr class="separator:af767eda9c84a1160ff2dd8920f6e2d9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2bf1e01d9d14a30a23b80f740f37f085"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__hdf5__fb_1_1tests.html#a2bf1e01d9d14a30a23b80f740f37f085">testLabelWithInstanceCategories</a> (const seerep::fb::LabelsWithInstanceWithCategory *readInstance, const seerep::fb::LabelsWithInstanceWithCategory *writeInstance)</td></tr>
+<tr class="separator:a2bf1e01d9d14a30a23b80f740f37f085"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6181538d3dc65e58b6b3cece31e2342f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__hdf5__fb_1_1tests.html#a6181538d3dc65e58b6b3cece31e2342f">TEST_F</a> (<a class="el" href="classseerep__hdf5__fb_1_1tests_1_1fbWriteLoadTest.html">fbWriteLoadTest</a>, testGeneralLabels)</td></tr>
 <tr class="separator:a6181538d3dc65e58b6b3cece31e2342f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad8d6ad0daacf597ca0211f6719c8997b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__hdf5__fb_1_1tests.html#ad8d6ad0daacf597ca0211f6719c8997b">testEqualPoints</a> (const seerep::fb::Point2D *readPoint, const seerep::fb::Point2D *writePoint)</td></tr>
 <tr class="separator:ad8d6ad0daacf597ca0211f6719c8997b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a511e61b8e867b37dedf20d51dcd7b1ff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__hdf5__fb_1_1tests.html#a511e61b8e867b37dedf20d51dcd7b1ff">testBB2DWithInstance</a> (const seerep::fb::BoundingBox2DLabeled *readInstance, const seerep::fb::BoundingBox2DLabeled *writeInstance)</td></tr>
+<tr class="separator:a511e61b8e867b37dedf20d51dcd7b1ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9e9de7134156f58a32d68eea20d880c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__hdf5__fb_1_1tests.html#ac9e9de7134156f58a32d68eea20d880c">testBB2DWithInstanceCategories</a> (const seerep::fb::BoundingBox2DLabeledWithCategory *readInstance, const seerep::fb::BoundingBox2DLabeledWithCategory *writeInstance)</td></tr>
+<tr class="separator:ac9e9de7134156f58a32d68eea20d880c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7b982a5c5453d66b1936917abf3baec6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__hdf5__fb_1_1tests.html#a7b982a5c5453d66b1936917abf3baec6">TEST_F</a> (<a class="el" href="classseerep__hdf5__fb_1_1tests_1_1fbWriteLoadTest.html">fbWriteLoadTest</a>, testBoundingBox2DLabeled)</td></tr>
 <tr class="separator:a7b982a5c5453d66b1936917abf3baec6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e3dc1ee5020cebbebc16b6fbca86406"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__hdf5__fb_1_1tests.html#a8e3dc1ee5020cebbebc16b6fbca86406">main</a> (int argc, char **argv)</td></tr>
 <tr class="separator:a8e3dc1ee5020cebbebc16b6fbca86406"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a76d54d48db4a9288b7062656d030c1a8" name="a76d54d48db4a9288b7062656d030c1a8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a76d54d48db4a9288b7062656d030c1a8">&#9670;&nbsp;</a></span>createBB2DLabeled()</h2>
+<a id="a295358489af0935ee632313afaeb97ce" name="a295358489af0935ee632313afaeb97ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a295358489af0935ee632313afaeb97ce">&#9670;&nbsp;</a></span>createBB2DLabeled()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">flatbuffers::Offset&lt; flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::BoundingBox2DLabeled &gt; &gt; &gt; seerep_hdf5_fb::tests::createBB2DLabeled </td>
+          <td class="memname">flatbuffers::Offset&lt; flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::BoundingBox2DLabeledWithCategory &gt; &gt; &gt; seerep_hdf5_fb::tests::createBB2DLabeled </td>
           <td>(</td>
           <td class="paramtype">flatbuffers::FlatBufferBuilder &amp;&#160;</td>
           <td class="paramname"><em>fbb</em></td><td>)</td>
@@ -303,6 +311,24 @@ Functions</h2></td></tr>
           <td></td>
           <td>)</td>
           <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a130353d2c881d8bf630ff9da777520f4" name="a130353d2c881d8bf630ff9da777520f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a130353d2c881d8bf630ff9da777520f4">&#9670;&nbsp;</a></span>createLabelsGeneral()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::Offset&lt; flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::LabelsWithInstanceWithCategory &gt; &gt; &gt; seerep_hdf5_fb::tests::createLabelsGeneral </td>
+          <td>(</td>
+          <td class="paramtype">flatbuffers::FlatBufferBuilder &amp;&#160;</td>
+          <td class="paramname"><em>fbb</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -547,6 +573,62 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a511e61b8e867b37dedf20d51dcd7b1ff" name="a511e61b8e867b37dedf20d51dcd7b1ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a511e61b8e867b37dedf20d51dcd7b1ff">&#9670;&nbsp;</a></span>testBB2DWithInstance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_hdf5_fb::tests::testBB2DWithInstance </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::fb::BoundingBox2DLabeled *&#160;</td>
+          <td class="paramname"><em>readInstance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const seerep::fb::BoundingBox2DLabeled *&#160;</td>
+          <td class="paramname"><em>writeInstance</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac9e9de7134156f58a32d68eea20d880c" name="ac9e9de7134156f58a32d68eea20d880c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac9e9de7134156f58a32d68eea20d880c">&#9670;&nbsp;</a></span>testBB2DWithInstanceCategories()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_hdf5_fb::tests::testBB2DWithInstanceCategories </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::fb::BoundingBox2DLabeledWithCategory *&#160;</td>
+          <td class="paramname"><em>readInstance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const seerep::fb::BoundingBox2DLabeledWithCategory *&#160;</td>
+          <td class="paramname"><em>writeInstance</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ad8d6ad0daacf597ca0211f6719c8997b" name="ad8d6ad0daacf597ca0211f6719c8997b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad8d6ad0daacf597ca0211f6719c8997b">&#9670;&nbsp;</a></span>testEqualPoints()</h2>
 
@@ -591,6 +673,34 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const seerep::fb::LabelWithInstance *&#160;</td>
+          <td class="paramname"><em>writeInstance</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2bf1e01d9d14a30a23b80f740f37f085" name="a2bf1e01d9d14a30a23b80f740f37f085"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2bf1e01d9d14a30a23b80f740f37f085">&#9670;&nbsp;</a></span>testLabelWithInstanceCategories()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_hdf5_fb::tests::testLabelWithInstanceCategories </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::fb::LabelsWithInstanceWithCategory *&#160;</td>
+          <td class="paramname"><em>readInstance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const seerep::fb::LabelsWithInstanceWithCategory *&#160;</td>
           <td class="paramname"><em>writeInstance</em>&#160;</td>
         </tr>
         <tr>

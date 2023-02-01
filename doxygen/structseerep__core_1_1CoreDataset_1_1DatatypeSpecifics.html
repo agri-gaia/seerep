@@ -149,9 +149,9 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a7e3c7eb0635a24fc94eedbc3ed49ad5b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceseerep__core__msgs.html#ac38869c36884e9174f19f0b8d0a2b06d">seerep_core_msgs::timetree</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html#a7e3c7eb0635a24fc94eedbc3ed49ad5b">timetree</a> = <a class="el" href="namespaceseerep__core__msgs.html#ac38869c36884e9174f19f0b8d0a2b06d">seerep_core_msgs::timetree</a>()</td></tr>
 <tr class="memdesc:a7e3c7eb0635a24fc94eedbc3ed49ad5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">the temporal r-tree for the temporal index  <a href="structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html#a7e3c7eb0635a24fc94eedbc3ed49ad5b">More...</a><br /></td></tr>
 <tr class="separator:a7e3c7eb0635a24fc94eedbc3ed49ad5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a79857f03d0958990ab0b1cdd8050c593"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, std::vector&lt; boost::uuids::uuid &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html#a79857f03d0958990ab0b1cdd8050c593">labelDatasetsMap</a></td></tr>
-<tr class="memdesc:a79857f03d0958990ab0b1cdd8050c593"><td class="mdescLeft">&#160;</td><td class="mdescRight">map from label to the UUIDs of the images annotated with this label  <a href="structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html#a79857f03d0958990ab0b1cdd8050c593">More...</a><br /></td></tr>
-<tr class="separator:a79857f03d0958990ab0b1cdd8050c593"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae32c77135fd24553c8266dc15f1147fb"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, std::unordered_map&lt; std::string, std::vector&lt; boost::uuids::uuid &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html#ae32c77135fd24553c8266dc15f1147fb">categoryLabelDatasetsMap</a></td></tr>
+<tr class="memdesc:ae32c77135fd24553c8266dc15f1147fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">map from the category of labels to the map from label to the UUIDs of the datasets annotated with this label  <a href="structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html#ae32c77135fd24553c8266dc15f1147fb">More...</a><br /></td></tr>
+<tr class="separator:ae32c77135fd24553c8266dc15f1147fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac864013c3f07037c602ff6813be6733c"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; boost::uuids::uuid, std::vector&lt; boost::uuids::uuid &gt;, boost::hash&lt; boost::uuids::uuid &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html#ac864013c3f07037c602ff6813be6733c">datasetInstancesMap</a></td></tr>
 <tr class="memdesc:ac864013c3f07037c602ff6813be6733c"><td class="mdescLeft">&#160;</td><td class="mdescRight">map from the UUID of the dataset a vector of UUID of instances the dataset is showing  <a href="structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html#ac864013c3f07037c602ff6813be6733c">More...</a><br /></td></tr>
 <tr class="separator:ac864013c3f07037c602ff6813be6733c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -159,6 +159,24 @@ Public Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >a struct for the variables that are needed for each datatype </p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
+<a id="ae32c77135fd24553c8266dc15f1147fb" name="ae32c77135fd24553c8266dc15f1147fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae32c77135fd24553c8266dc15f1147fb">&#9670;&nbsp;</a></span>categoryLabelDatasetsMap</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_map&lt;std::string, std::unordered_map&lt;std::string, std::vector&lt;boost::uuids::uuid&gt; &gt; &gt; seerep_core::CoreDataset::DatatypeSpecifics::categoryLabelDatasetsMap</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">            std::unordered_map&lt;std::string, std::unordered_map&lt;std::string, std::vector&lt;boost::uuids::uuid&gt;&gt;&gt;()</div>
+</div><!-- fragment -->
+<p>map from the category of labels to the map from label to the UUIDs of the datasets annotated with this label </p>
+
+</div>
+</div>
 <a id="ac864013c3f07037c602ff6813be6733c" name="ac864013c3f07037c602ff6813be6733c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac864013c3f07037c602ff6813be6733c">&#9670;&nbsp;</a></span>datasetInstancesMap</h2>
 
@@ -208,24 +226,6 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>shared pointer to the object handling the HDF5 io for the datatype </p>
-
-</div>
-</div>
-<a id="a79857f03d0958990ab0b1cdd8050c593" name="a79857f03d0958990ab0b1cdd8050c593"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a79857f03d0958990ab0b1cdd8050c593">&#9670;&nbsp;</a></span>labelDatasetsMap</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::unordered_map&lt;std::string, std::vector&lt;boost::uuids::uuid&gt; &gt; seerep_core::CoreDataset::DatatypeSpecifics::labelDatasetsMap</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">=</div>
-<div class="line">        std::unordered_map&lt;std::string, std::vector&lt;boost::uuids::uuid&gt;&gt;()</div>
-</div><!-- fragment -->
-<p>map from label to the UUIDs of the images annotated with this label </p>
 
 </div>
 </div>

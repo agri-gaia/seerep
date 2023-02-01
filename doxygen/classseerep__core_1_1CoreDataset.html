@@ -165,9 +165,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a51a8d4dc5a8b78d6e6de9f6367644728"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#a51a8d4dc5a8b78d6e6de9f6367644728">addDataset</a> (const <a class="el" href="structseerep__core__msgs_1_1DatasetIndexable.html">seerep_core_msgs::DatasetIndexable</a> &amp;dataset)</td></tr>
 <tr class="memdesc:a51a8d4dc5a8b78d6e6de9f6367644728"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an image to the spatial, temporal and semantic indices.  <a href="classseerep__core_1_1CoreDataset.html#a51a8d4dc5a8b78d6e6de9f6367644728">More...</a><br /></td></tr>
 <tr class="separator:a51a8d4dc5a8b78d6e6de9f6367644728"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa4673393566bc13bee43617e6ece0dff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#aa4673393566bc13bee43617e6ece0dff">addLabels</a> (const <a class="el" href="namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0">seerep_core_msgs::Datatype</a> &amp;datatype, const std::vector&lt; std::string &gt; &amp;labels, const boost::uuids::uuid &amp;msgUuid)</td></tr>
-<tr class="memdesc:aa4673393566bc13bee43617e6ece0dff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds labels to an existing dataset.  <a href="classseerep__core_1_1CoreDataset.html#aa4673393566bc13bee43617e6ece0dff">More...</a><br /></td></tr>
-<tr class="separator:aa4673393566bc13bee43617e6ece0dff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aadd35ee7ad9d2f1966211af7a303bb02"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#aadd35ee7ad9d2f1966211af7a303bb02">addLabels</a> (const <a class="el" href="namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0">seerep_core_msgs::Datatype</a> &amp;datatype, const std::unordered_map&lt; std::string, std::vector&lt; <a class="el" href="structseerep__core__msgs_1_1LabelWithInstance.html">seerep_core_msgs::LabelWithInstance</a> &gt; &gt; &amp;labelWithInstancePerCategory, const boost::uuids::uuid &amp;msgUuid)</td></tr>
+<tr class="memdesc:aadd35ee7ad9d2f1966211af7a303bb02"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds labels to an existing dataset.  <a href="classseerep__core_1_1CoreDataset.html#aadd35ee7ad9d2f1966211af7a303bb02">More...</a><br /></td></tr>
+<tr class="separator:aadd35ee7ad9d2f1966211af7a303bb02"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7cc8717ee618ba935d899b8e3e73249a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#a7cc8717ee618ba935d899b8e3e73249a">addLabels</a> (const <a class="el" href="namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0">seerep_core_msgs::Datatype</a> &amp;datatype, std::shared_ptr&lt; <a class="el" href="structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html">seerep_core::CoreDataset::DatatypeSpecifics</a> &gt; datatypeSpecifics, const std::unordered_map&lt; std::string, std::vector&lt; <a class="el" href="structseerep__core__msgs_1_1LabelWithInstance.html">seerep_core_msgs::LabelWithInstance</a> &gt; &gt; &amp;labelWithInstancePerCategory, const boost::uuids::uuid &amp;msgUuid)</td></tr>
+<tr class="memdesc:a7cc8717ee618ba935d899b8e3e73249a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds labels to an existing dataset.  <a href="classseerep__core_1_1CoreDataset.html#a7cc8717ee618ba935d899b8e3e73249a">More...</a><br /></td></tr>
+<tr class="separator:a7cc8717ee618ba935d899b8e3e73249a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -191,6 +194,12 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a8917713aa42a319502328a8b4ee03d6b"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::set&lt; boost::uuids::uuid &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#a8917713aa42a319502328a8b4ee03d6b">querySemantic</a> (std::shared_ptr&lt; <a class="el" href="structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html">DatatypeSpecifics</a> &gt; datatypeSpecifics, const <a class="el" href="structseerep__core__msgs_1_1Query.html">seerep_core_msgs::Query</a> &amp;query)</td></tr>
 <tr class="memdesc:a8917713aa42a319502328a8b4ee03d6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">queries the semantic index and returns the UUIDs of the images matching the query  <a href="classseerep__core_1_1CoreDataset.html#a8917713aa42a319502328a8b4ee03d6b">More...</a><br /></td></tr>
 <tr class="separator:a8917713aa42a319502328a8b4ee03d6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49858f0450d22cc0286732e634274f5c"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::set&lt; boost::uuids::uuid &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#a49858f0450d22cc0286732e634274f5c">querySemanticWithAnyOfLabels</a> (std::shared_ptr&lt; <a class="el" href="structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html">DatatypeSpecifics</a> &gt; datatypeSpecifics, const <a class="el" href="structseerep__core__msgs_1_1Query.html">seerep_core_msgs::Query</a> &amp;query)</td></tr>
+<tr class="memdesc:a49858f0450d22cc0286732e634274f5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">queries the semantic index where the dataset contains any of the labels  <a href="classseerep__core_1_1CoreDataset.html#a49858f0450d22cc0286732e634274f5c">More...</a><br /></td></tr>
+<tr class="separator:a49858f0450d22cc0286732e634274f5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0cc1aa2e309151feb0af864fd4be9c9"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::set&lt; boost::uuids::uuid &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#ac0cc1aa2e309151feb0af864fd4be9c9">querySemanticWithAllTheLabels</a> (std::shared_ptr&lt; <a class="el" href="structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html">DatatypeSpecifics</a> &gt; datatypeSpecifics, const <a class="el" href="structseerep__core__msgs_1_1Query.html">seerep_core_msgs::Query</a> &amp;query)</td></tr>
+<tr class="memdesc:ac0cc1aa2e309151feb0af864fd4be9c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">queries the semantic index where the dataset contains all of the labels  <a href="classseerep__core_1_1CoreDataset.html#ac0cc1aa2e309151feb0af864fd4be9c9">More...</a><br /></td></tr>
+<tr class="separator:ac0cc1aa2e309151feb0af864fd4be9c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a73877adc228ac0ee9b1081483c0e4aab"><td class="memItemLeft" align="right" valign="top">std::vector&lt; boost::uuids::uuid &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#a73877adc228ac0ee9b1081483c0e4aab">intersectQueryResults</a> (std::optional&lt; std::vector&lt; <a class="el" href="namespaceseerep__core__msgs.html#a640f042e3954e22bedec9e6ad857c28e">seerep_core_msgs::AabbIdPair</a> &gt; &gt; &amp;rt_result, std::optional&lt; std::vector&lt; <a class="el" href="namespaceseerep__core__msgs.html#a0792652716be4144a5e6acb95087b451">seerep_core_msgs::AabbTimeIdPair</a> &gt; &gt; &amp;timetree_result, std::optional&lt; std::set&lt; boost::uuids::uuid &gt; &gt; &amp;semanticResult, std::optional&lt; std::vector&lt; boost::uuids::uuid &gt; &gt; &amp;instanceResult, const std::optional&lt; std::vector&lt; boost::uuids::uuid &gt; &gt; &amp;dataUuids)</td></tr>
 <tr class="memdesc:a73877adc228ac0ee9b1081483c0e4aab"><td class="mdescLeft">&#160;</td><td class="mdescRight">intersects the results of the spatial, temporal and semantic query and returns the UUIDs of the images matching the query in all three modalities  <a href="classseerep__core_1_1CoreDataset.html#a73877adc228ac0ee9b1081483c0e4aab">More...</a><br /></td></tr>
 <tr class="separator:a73877adc228ac0ee9b1081483c0e4aab"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -221,7 +230,7 @@ Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >This is the class handling the spatio-temporal-semantic indexing of a dataset. </p>
-<p >a dataset can be added to the indices and spatio-temporal-semantic queries can be executed to get the UUIDs of the datasets matching the query. On startup all datasets are loaded from the HDF5 file Datasets added during runtime must be added to the indices via the corresponding public methode </p>
+<p >a dataset can be added to the indices and spatio-temporal-semantic queries can be executed to get the UUIDs of the datasets matching the query. On startup all datasets are loaded from the HDF5 file Datasets added during runtime must be added to the indices via the corresponding public method </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a6bed25338cb3159aeb6bbb4da5246b81" name="a6bed25338cb3159aeb6bbb4da5246b81"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6bed25338cb3159aeb6bbb4da5246b81">&#9670;&nbsp;</a></span>CoreDataset()</h2>
@@ -393,8 +402,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="aa4673393566bc13bee43617e6ece0dff" name="aa4673393566bc13bee43617e6ece0dff"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa4673393566bc13bee43617e6ece0dff">&#9670;&nbsp;</a></span>addLabels()</h2>
+<a id="aadd35ee7ad9d2f1966211af7a303bb02" name="aadd35ee7ad9d2f1966211af7a303bb02"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aadd35ee7ad9d2f1966211af7a303bb02">&#9670;&nbsp;</a></span>addLabels() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -408,8 +417,8 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; std::string &gt; &amp;&#160;</td>
-          <td class="paramname"><em>labels</em>, </td>
+          <td class="paramtype">const std::unordered_map&lt; std::string, std::vector&lt; <a class="el" href="structseerep__core__msgs_1_1LabelWithInstance.html">seerep_core_msgs::LabelWithInstance</a> &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>labelWithInstancePerCategory</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -429,7 +438,58 @@ Private Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">datatype</td><td>the datatype to consider </td></tr>
-    <tr><td class="paramname">labels</td><td>a vector of labels to be added to the dataset </td></tr>
+    <tr><td class="paramname">labelWithInstancePerCategory</td><td>map from category to a vector of labels to be added to the dataset </td></tr>
+    <tr><td class="paramname">msgUuid</td><td>the UUID of the targeted dataset </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a7cc8717ee618ba935d899b8e3e73249a" name="a7cc8717ee618ba935d899b8e3e73249a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7cc8717ee618ba935d899b8e3e73249a">&#9670;&nbsp;</a></span>addLabels() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_core::CoreDataset::addLabels </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0">seerep_core_msgs::Datatype</a> &amp;&#160;</td>
+          <td class="paramname"><em>datatype</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html">seerep_core::CoreDataset::DatatypeSpecifics</a> &gt;&#160;</td>
+          <td class="paramname"><em>datatypeSpecifics</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::unordered_map&lt; std::string, std::vector&lt; <a class="el" href="structseerep__core__msgs_1_1LabelWithInstance.html">seerep_core_msgs::LabelWithInstance</a> &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>labelWithInstancePerCategory</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const boost::uuids::uuid &amp;&#160;</td>
+          <td class="paramname"><em>msgUuid</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Adds labels to an existing dataset. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">datatype</td><td>the datatype to consider </td></tr>
+    <tr><td class="paramname">datatypeSpecifics</td><td>the datatypeSpecifics </td></tr>
+    <tr><td class="paramname">labelWithInstancePerCategory</td><td>map from category to a vector of labels to be added to the dataset </td></tr>
     <tr><td class="paramname">msgUuid</td><td>the UUID of the targeted dataset </td></tr>
   </table>
   </dd>
@@ -705,6 +765,98 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>queries the semantic index and returns the UUIDs of the images matching the query </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">datatypeSpecifics</td><td>the datatype specific information to be used in the query </td></tr>
+    <tr><td class="paramname">query</td><td>the query parameters </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>set of UUIDs of the images matching the query </dd></dl>
+
+</div>
+</div>
+<a id="ac0cc1aa2e309151feb0af864fd4be9c9" name="ac0cc1aa2e309151feb0af864fd4be9c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0cc1aa2e309151feb0af864fd4be9c9">&#9670;&nbsp;</a></span>querySemanticWithAllTheLabels()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; std::set&lt; boost::uuids::uuid &gt; &gt; seerep_core::CoreDataset::querySemanticWithAllTheLabels </td>
+          <td>(</td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html">DatatypeSpecifics</a> &gt;&#160;</td>
+          <td class="paramname"><em>datatypeSpecifics</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structseerep__core__msgs_1_1Query.html">seerep_core_msgs::Query</a> &amp;&#160;</td>
+          <td class="paramname"><em>query</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>queries the semantic index where the dataset contains all of the labels </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">datatypeSpecifics</td><td>the datatype specific information to be used in the query </td></tr>
+    <tr><td class="paramname">query</td><td>the query parameters </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>set of UUIDs of the images matching the query </dd></dl>
+
+</div>
+</div>
+<a id="a49858f0450d22cc0286732e634274f5c" name="a49858f0450d22cc0286732e634274f5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49858f0450d22cc0286732e634274f5c">&#9670;&nbsp;</a></span>querySemanticWithAnyOfLabels()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; std::set&lt; boost::uuids::uuid &gt; &gt; seerep_core::CoreDataset::querySemanticWithAnyOfLabels </td>
+          <td>(</td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html">DatatypeSpecifics</a> &gt;&#160;</td>
+          <td class="paramname"><em>datatypeSpecifics</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structseerep__core__msgs_1_1Query.html">seerep_core_msgs::Query</a> &amp;&#160;</td>
+          <td class="paramname"><em>query</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>queries the semantic index where the dataset contains any of the labels </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">datatypeSpecifics</td><td>the datatype specific information to be used in the query </td></tr>

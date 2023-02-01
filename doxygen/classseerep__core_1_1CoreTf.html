@@ -173,6 +173,9 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:ab0b6228fdddcf0eff49a8faef977c781"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreTf.html#ab0b6228fdddcf0eff49a8faef977c781">addToTfBuffer</a> (geometry_msgs::TransformStamped transform)</td></tr>
 <tr class="memdesc:ab0b6228fdddcf0eff49a8faef977c781"><td class="mdescLeft">&#160;</td><td class="mdescRight">adds a transformation to the TF buffer  <a href="classseerep__core_1_1CoreTf.html#ab0b6228fdddcf0eff49a8faef977c781">More...</a><br /></td></tr>
 <tr class="separator:ab0b6228fdddcf0eff49a8faef977c781"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a113ce6257072355913950751474853cd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreTf.html#a113ce6257072355913950751474853cd">getAABBinNewFrame</a> (const tf2::Transform &amp;transform, const std::vector&lt; float &gt; &amp;x, const std::vector&lt; float &gt; &amp;y, const std::vector&lt; float &gt; &amp;z, float &amp;xmin, float &amp;ymin, float &amp;zmin, float &amp;xmax, float &amp;ymax, float &amp;zmax)</td></tr>
+<tr class="memdesc:a113ce6257072355913950751474853cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforms the AABB based on the min/max coordinates into another frame. Transforms all 8 vertices of the AABB into the new frame and gets the new AABB based on all 8 transformed vertices.  <a href="classseerep__core_1_1CoreTf.html#a113ce6257072355913950751474853cd">More...</a><br /></td></tr>
+<tr class="separator:a113ce6257072355913950751474853cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -343,6 +346,107 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if transformation is available; false otherwise </dd></dl>
+
+</div>
+</div>
+<a id="a113ce6257072355913950751474853cd" name="a113ce6257072355913950751474853cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a113ce6257072355913950751474853cd">&#9670;&nbsp;</a></span>getAABBinNewFrame()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_core::CoreTf::getAABBinNewFrame </td>
+          <td>(</td>
+          <td class="paramtype">const tf2::Transform &amp;&#160;</td>
+          <td class="paramname"><em>transform</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; float &gt; &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; float &gt; &amp;&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; float &gt; &amp;&#160;</td>
+          <td class="paramname"><em>z</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float &amp;&#160;</td>
+          <td class="paramname"><em>xmin</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float &amp;&#160;</td>
+          <td class="paramname"><em>ymin</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float &amp;&#160;</td>
+          <td class="paramname"><em>zmin</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float &amp;&#160;</td>
+          <td class="paramname"><em>xmax</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float &amp;&#160;</td>
+          <td class="paramname"><em>ymax</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float &amp;&#160;</td>
+          <td class="paramname"><em>zmax</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Transforms the AABB based on the min/max coordinates into another frame. Transforms all 8 vertices of the AABB into the new frame and gets the new AABB based on all 8 transformed vertices. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">transform</td><td>the transform to the new frame </td></tr>
+    <tr><td class="paramname">x</td><td>the x coordinates of the old min/max vertices </td></tr>
+    <tr><td class="paramname">y</td><td>the y coordinates of the old min/max vertices </td></tr>
+    <tr><td class="paramname">z</td><td>the z coordinates of the old min/max vertices </td></tr>
+    <tr><td class="paramname">xmin</td><td>the min x value of the new AABB </td></tr>
+    <tr><td class="paramname">ymin</td><td>the min y value of the new AABB </td></tr>
+    <tr><td class="paramname">zmin</td><td>the min z value of the new AABB </td></tr>
+    <tr><td class="paramname">xmax</td><td>the max x value of the new AABB </td></tr>
+    <tr><td class="paramname">ymax</td><td>the max y value of the new AABB </td></tr>
+    <tr><td class="paramname">zmax</td><td>the max z value of the new AABB </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -538,7 +642,7 @@ Private Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the query with the spatial part transformed in the target frame</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the query with the spatial part transformed in the target frame </dd></dl>
 
 </div>
 </div>

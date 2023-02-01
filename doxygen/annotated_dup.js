@@ -19,7 +19,9 @@ var annotated_dup =
     ] ],
     [ "seerep_core_msgs", "namespaceseerep__core__msgs.html", [
       [ "DatasetIndexable", "structseerep__core__msgs_1_1DatasetIndexable.html", "structseerep__core__msgs_1_1DatasetIndexable" ],
+      [ "GeodeticCoordinates", "structseerep__core__msgs_1_1GeodeticCoordinates.html", "structseerep__core__msgs_1_1GeodeticCoordinates" ],
       [ "Header", "structseerep__core__msgs_1_1Header.html", "structseerep__core__msgs_1_1Header" ],
+      [ "LabelsWithInstanceWithCategory", "structseerep__core__msgs_1_1LabelsWithInstanceWithCategory.html", "structseerep__core__msgs_1_1LabelsWithInstanceWithCategory" ],
       [ "LabelWithInstance", "structseerep__core__msgs_1_1LabelWithInstance.html", "structseerep__core__msgs_1_1LabelWithInstance" ],
       [ "ProjectInfo", "structseerep__core__msgs_1_1ProjectInfo.html", "structseerep__core__msgs_1_1ProjectInfo" ],
       [ "Query", "structseerep__core__msgs_1_1Query.html", "structseerep__core__msgs_1_1Query" ],
@@ -42,7 +44,8 @@ var annotated_dup =
       [ "Hdf5CoreInstance", "classseerep__hdf5__core_1_1Hdf5CoreInstance.html", "classseerep__hdf5__core_1_1Hdf5CoreInstance" ],
       [ "Hdf5CorePoint", "classseerep__hdf5__core_1_1Hdf5CorePoint.html", "classseerep__hdf5__core_1_1Hdf5CorePoint" ],
       [ "Hdf5CorePointCloud", "classseerep__hdf5__core_1_1Hdf5CorePointCloud.html", "classseerep__hdf5__core_1_1Hdf5CorePointCloud" ],
-      [ "Hdf5CoreTf", "classseerep__hdf5__core_1_1Hdf5CoreTf.html", "classseerep__hdf5__core_1_1Hdf5CoreTf" ]
+      [ "Hdf5CoreTf", "classseerep__hdf5__core_1_1Hdf5CoreTf.html", "classseerep__hdf5__core_1_1Hdf5CoreTf" ],
+      [ "ImageAttributes", "structseerep__hdf5__core_1_1ImageAttributes.html", "structseerep__hdf5__core_1_1ImageAttributes" ]
     ] ],
     [ "seerep_hdf5_fb", "namespaceseerep__hdf5__fb.html", [
       [ "impl", "namespaceseerep__hdf5__fb_1_1impl.html", [
@@ -71,6 +74,9 @@ var annotated_dup =
       [ "PointCloud2Iterator", "classseerep__hdf5__pb_1_1PointCloud2Iterator.html", "classseerep__hdf5__pb_1_1PointCloud2Iterator" ],
       [ "PointCloud2Modifier", "classseerep__hdf5__pb_1_1PointCloud2Modifier.html", "classseerep__hdf5__pb_1_1PointCloud2Modifier" ]
     ] ],
+    [ "seerep_hdf5_ros", "namespaceseerep__hdf5__ros.html", [
+      [ "Hdf5Ros", "classseerep__hdf5__ros_1_1Hdf5Ros.html", "classseerep__hdf5__ros_1_1Hdf5Ros" ]
+    ] ],
     [ "seerep_server", "namespaceseerep__server.html", [
       [ "FbImageService", "classseerep__server_1_1FbImageService.html", "classseerep__server_1_1FbImageService" ],
       [ "FbInstanceService", "classseerep__server_1_1FbInstanceService.html", "classseerep__server_1_1FbInstanceService" ],
@@ -85,5 +91,6 @@ var annotated_dup =
       [ "PbTfService", "classseerep__server_1_1PbTfService.html", "classseerep__server_1_1PbTfService" ],
       [ "server", "classseerep__server_1_1server.html", "classseerep__server_1_1server" ]
     ] ],
-    [ "pbWriteLoadTest", "classpbWriteLoadTest.html", null ]
+    [ "pbWriteLoadTest", "classpbWriteLoadTest.html", null ],
+    [ "rosToFbConversionTest", "classrosToFbConversionTest.html", "classrosToFbConversionTest" ]
 ];

@@ -21,7 +21,7 @@
 <!-- Node2 -->
 <g id="node2" class="node">
 <title>Node2</title>
-<g id="a_node2"><a xlink:href="classseerep__hdf5__fb_1_1Hdf5FbGeneral.html" target="_top" xlink:title=" ">
+<g id="a_node2"><a xlink:href="classseerep__hdf5__fb_1_1Hdf5FbGeneral.html" target="_top" xlink:title="This class encompasses all read and write operations for the hdf5&#45;fb&#45;io which can be used by differen...">
 <polygon fill="none" stroke="black" points="0,-67.5 0,-86.5 171,-86.5 171,-67.5 0,-67.5"/>
 <text text-anchor="middle" x="85.5" y="-74.5" font-family="Helvetica,sans-Serif" font-size="10.00">seerep_hdf5_fb::Hdf5FbGeneral</text>
 </a>

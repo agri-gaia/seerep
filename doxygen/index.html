@@ -154,7 +154,7 @@ Quick Start</h1>
 <p >To deploy the server locally the following <code>docker run</code> command or the following <code>docker-compose.yml</code> can be used.</p>
 <div class="fragment"><div class="line">docker run \</div>
 <div class="line">  --volume=seerep-data:/mnt/seerep-data \</div>
-<div class="line">  --publish=9090 \</div>
+<div class="line">  --publish=9090:9090 \</div>
 <div class="line">  --name=seerep_server \</div>
 <div class="line">  --tty \</div>
 <div class="line">  ghcr.io/agri-gaia/seerep_server:latest \</div>
@@ -171,7 +171,7 @@ Quick Start</h1>
 <div class="line">      - &quot;--data-folder=/mnt/seerep-data&quot;</div>
 <div class="line">    ports:</div>
 <div class="line">      # the gRPC port</div>
-<div class="line">      - 9090</div>
+<div class="line">      - 9090:9090</div>
 <div class="line">    volumes:</div>
 <div class="line">      # persist the data folder</div>
 <div class="line">      - seerep-data:/mnt/seerep-data</div>
@@ -179,7 +179,7 @@ Quick Start</h1>
 <div class="line">  seerep-data:</div>
 </div><!-- fragment --><h1><a class="anchor" id="autotoc_md5"></a>
 Documentation</h1>
-<p >The general <a href="https://www.mkdocs.org/">MkDocs</a> based documentation of this project is available <a href="https://agri-gaia.github.io/seerep/mkdocs">here</a>. There the general architecture is described, installation instructions are given and basic tutorials are given.</p>
+<p >The general <a href="https://www.mkdocs.org/">MkDocs</a> based documentation of this project is available <a href="https://agri-gaia.github.io/seerep/mkdocs/home/">here</a>. There the general architecture is described, installation instructions are given and basic tutorials are given.</p>
 <p >The <a href="https://doxygen.nl/">Doxygen</a> based code documentation can be found <a href="https://agri-gaia.github.io/seerep/doxygen">here</a>.</p>
 <h1><a class="anchor" id="autotoc_md6"></a>
 Related Publications</h1>

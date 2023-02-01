@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classseerep__server_1_1server.html" title="This class is the main class of SEEREP. It creates everything else and serves the gRPC interface." alt="" coords="5,5,168,32"/>
+<area shape="rect" id="node1" href="$classseerep__hdf5__pb_1_1impl_1_1PointCloud2IteratorBase.html" title=" " alt="" coords="5,5,287,76"/>
+<area shape="rect" id="node2" href="$classseerep__hdf5__pb_1_1PointCloud2Iterator.html" title="Class that can iterate over a PointCloud2." alt="" coords="335,20,545,61"/>
 </map>

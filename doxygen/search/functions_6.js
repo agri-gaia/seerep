@@ -17,5 +17,6 @@ var searchData=
   ['hdf5pbgeneral_14',['Hdf5PbGeneral',['../classseerep__hdf5__pb_1_1Hdf5PbGeneral.html#a4795067dac1f14411caacf69c635a8d5',1,'seerep_hdf5_pb::Hdf5PbGeneral']]],
   ['hdf5pbimage_15',['Hdf5PbImage',['../classseerep__hdf5__pb_1_1Hdf5PbImage.html#a3e5e52839275b3cc27bfaf1639d27b27',1,'seerep_hdf5_pb::Hdf5PbImage']]],
   ['hdf5pbpointcloud_16',['Hdf5PbPointCloud',['../classseerep__hdf5__pb_1_1Hdf5PbPointCloud.html#a421b0b3df603c9886fbd4c2dff2d2842',1,'seerep_hdf5_pb::Hdf5PbPointCloud']]],
-  ['hdf5pbtf_17',['Hdf5PbTf',['../classseerep__hdf5__pb_1_1Hdf5PbTf.html#ad70544eeef7f096bfeec736e8ef9a5bc',1,'seerep_hdf5_pb::Hdf5PbTf']]]
+  ['hdf5pbtf_17',['Hdf5PbTf',['../classseerep__hdf5__pb_1_1Hdf5PbTf.html#ad70544eeef7f096bfeec736e8ef9a5bc',1,'seerep_hdf5_pb::Hdf5PbTf']]],
+  ['hdf5ros_18',['Hdf5Ros',['../classseerep__hdf5__ros_1_1Hdf5Ros.html#ae2234548d1624b389493ae70b53660d3',1,'seerep_hdf5_ros::Hdf5Ros::Hdf5Ros()=delete'],['../classseerep__hdf5__ros_1_1Hdf5Ros.html#ad6fb96f756725b5032f0fdc4a8f2190c',1,'seerep_hdf5_ros::Hdf5Ros::Hdf5Ros(const std::string &amp;path, const std::string &amp;filename, const std::string &amp;projectFrameId, const std::string &amp;projectName)']]]
 ];

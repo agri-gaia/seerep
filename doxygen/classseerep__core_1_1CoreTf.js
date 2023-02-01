@@ -5,6 +5,7 @@ var classseerep__core_1_1CoreTf =
     [ "addDataset", "classseerep__core_1_1CoreTf.html#a03636de48e183fdea31b2c8ca67f165d", null ],
     [ "addToTfBuffer", "classseerep__core_1_1CoreTf.html#ab0b6228fdddcf0eff49a8faef977c781", null ],
     [ "canTransform", "classseerep__core_1_1CoreTf.html#a439e9312e714389d15c9f82c9dd850d0", null ],
+    [ "getAABBinNewFrame", "classseerep__core_1_1CoreTf.html#a113ce6257072355913950751474853cd", null ],
     [ "getData", "classseerep__core_1_1CoreTf.html#a9463ca41939921a7730ddf1c25eb4f7e", null ],
     [ "getFrames", "classseerep__core_1_1CoreTf.html#aa794e624a811495504d75667c75794cc", null ],
     [ "recreateDatasets", "classseerep__core_1_1CoreTf.html#aa5aed7f27571d7e8ec78cf8511e12747", null ],

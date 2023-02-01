@@ -7,8 +7,8 @@ var searchData=
   ['dataset_2dindexable_2eh_4',['dataset-indexable.h',['../dataset-indexable_8h.html',1,'']]],
   ['datasetindexable_5',['DatasetIndexable',['../structseerep__core__msgs_1_1DatasetIndexable.html',1,'seerep_core_msgs']]],
   ['datasetinstancesmap_6',['datasetInstancesMap',['../structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html#ac864013c3f07037c602ff6813be6733c',1,'seerep_core::CoreDataset::DatatypeSpecifics']]],
-  ['datatype_7',['Datatype',['../namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0',1,'seerep_core_msgs']]],
-  ['datatype_8',['datatype',['../structseerep__core__msgs_1_1QueryResult.html#af60e3aa8854a6fb3aa3379ecbbb7ff18',1,'seerep_core_msgs::QueryResult::datatype()'],['../structseerep__core__msgs_1_1Header.html#a8aa27b762036825f10146590b4664ddb',1,'seerep_core_msgs::Header::datatype()']]],
+  ['datatype_7',['datatype',['../structseerep__core__msgs_1_1Header.html#a8aa27b762036825f10146590b4664ddb',1,'seerep_core_msgs::Header::datatype()'],['../structseerep__core__msgs_1_1QueryResult.html#af60e3aa8854a6fb3aa3379ecbbb7ff18',1,'seerep_core_msgs::QueryResult::datatype()']]],
+  ['datatype_8',['Datatype',['../namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0',1,'seerep_core_msgs']]],
   ['datatype_2efbs_9',['datatype.fbs',['../datatype_8fbs.html',1,'']]],
   ['datatype_2eh_10',['datatype.h',['../datatype_8h.html',1,'']]],
   ['datatypespecifics_11',['DatatypeSpecifics',['../structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html',1,'seerep_core::CoreDataset']]],
@@ -16,5 +16,8 @@ var searchData=
   ['datawithmissingtf_13',['dataWithMissingTF',['../structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html#a8e66acd9d52071255df52a8c97ee6f2c',1,'seerep_core::CoreDataset::DatatypeSpecifics']]],
   ['deleteattribute_14',['deleteAttribute',['../classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a1f819558f71f25dd29ed3d962be6224c',1,'seerep_hdf5_core::Hdf5CoreGeneral']]],
   ['deleteproject_15',['DeleteProject',['../classseerep__server_1_1FbMetaOperations.html#a9d4de5654221edd0e372f67c31a0c87a',1,'seerep_server::FbMetaOperations']]],
-  ['deleteproject_16',['deleteProject',['../classseerep__core_1_1Core.html#a1f152c2704d686ef7ae6e033248e6687',1,'seerep_core::Core']]]
+  ['deleteproject_16',['deleteProject',['../classseerep__core_1_1Core.html#a1f152c2704d686ef7ae6e033248e6687',1,'seerep_core::Core']]],
+  ['deprecated_20list_17',['Deprecated List',['../deprecated.html',1,'']]],
+  ['dumpheader_18',['dumpHeader',['../classseerep__hdf5__ros_1_1Hdf5Ros.html#a3daed4f91bd97b8fd4e658c2651b039a',1,'seerep_hdf5_ros::Hdf5Ros']]],
+  ['dumpimage_19',['dumpImage',['../classseerep__hdf5__ros_1_1Hdf5Ros.html#a44dd89f0c116472f9211e4eddc33e0b7',1,'seerep_hdf5_ros::Hdf5Ros']]]
 ];

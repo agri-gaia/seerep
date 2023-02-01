@@ -151,10 +151,10 @@ Collaboration diagram for seerep_server::PbMetaOperations:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a1cdab4a45d4e8f55d77e39cb51310313"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__server_1_1PbMetaOperations.html#a1cdab4a45d4e8f55d77e39cb51310313">PbMetaOperations</a> (std::shared_ptr&lt; <a class="el" href="classseerep__core_1_1Core.html">seerep_core::Core</a> &gt; <a class="el" href="classseerep__server_1_1PbMetaOperations.html#a82fcdbd915c682b2b03204548935ae64">seerepCore</a>)</td></tr>
 <tr class="separator:a1cdab4a45d4e8f55d77e39cb51310313"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a13a89b6ccdeb213032f77af0b80814c6"><td class="memItemLeft" align="right" valign="top">grpc::Status&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__server_1_1PbMetaOperations.html#a13a89b6ccdeb213032f77af0b80814c6">CreateProject</a> (grpc::ServerContext *context, const seerep::ProjectCreation *request, seerep::ProjectInfo *response)</td></tr>
-<tr class="separator:a13a89b6ccdeb213032f77af0b80814c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a36f2f1be16688dc7239977ff6fc819af"><td class="memItemLeft" align="right" valign="top">grpc::Status&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__server_1_1PbMetaOperations.html#a36f2f1be16688dc7239977ff6fc819af">GetProjects</a> (grpc::ServerContext *context, const google::protobuf::Empty *request, seerep::ProjectInfos *response)</td></tr>
-<tr class="separator:a36f2f1be16688dc7239977ff6fc819af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11f4a0bbcf59f6e469458457d9bd8887"><td class="memItemLeft" align="right" valign="top">grpc::Status&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__server_1_1PbMetaOperations.html#a11f4a0bbcf59f6e469458457d9bd8887">CreateProject</a> (grpc::ServerContext *context, const seerep::pb::ProjectCreation *request, seerep::pb::ProjectInfo *response)</td></tr>
+<tr class="separator:a11f4a0bbcf59f6e469458457d9bd8887"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a486d5f76eb5cb3099f8115eea6c6a59e"><td class="memItemLeft" align="right" valign="top">grpc::Status&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__server_1_1PbMetaOperations.html#a486d5f76eb5cb3099f8115eea6c6a59e">GetProjects</a> (grpc::ServerContext *context, const google::protobuf::Empty *request, seerep::pb::ProjectInfos *response)</td></tr>
+<tr class="separator:a486d5f76eb5cb3099f8115eea6c6a59e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -183,8 +183,8 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a13a89b6ccdeb213032f77af0b80814c6" name="a13a89b6ccdeb213032f77af0b80814c6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a13a89b6ccdeb213032f77af0b80814c6">&#9670;&nbsp;</a></span>CreateProject()</h2>
+<a id="a11f4a0bbcf59f6e469458457d9bd8887" name="a11f4a0bbcf59f6e469458457d9bd8887"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a11f4a0bbcf59f6e469458457d9bd8887">&#9670;&nbsp;</a></span>CreateProject()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -198,13 +198,13 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const seerep::ProjectCreation *&#160;</td>
+          <td class="paramtype">const seerep::pb::ProjectCreation *&#160;</td>
           <td class="paramname"><em>request</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">seerep::ProjectInfo *&#160;</td>
+          <td class="paramtype">seerep::pb::ProjectInfo *&#160;</td>
           <td class="paramname"><em>response</em>&#160;</td>
         </tr>
         <tr>
@@ -217,8 +217,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a36f2f1be16688dc7239977ff6fc819af" name="a36f2f1be16688dc7239977ff6fc819af"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a36f2f1be16688dc7239977ff6fc819af">&#9670;&nbsp;</a></span>GetProjects()</h2>
+<a id="a486d5f76eb5cb3099f8115eea6c6a59e" name="a486d5f76eb5cb3099f8115eea6c6a59e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a486d5f76eb5cb3099f8115eea6c6a59e">&#9670;&nbsp;</a></span>GetProjects()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -238,7 +238,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">seerep::ProjectInfos *&#160;</td>
+          <td class="paramtype">seerep::pb::ProjectInfos *&#160;</td>
           <td class="paramname"><em>response</em>&#160;</td>
         </tr>
         <tr>

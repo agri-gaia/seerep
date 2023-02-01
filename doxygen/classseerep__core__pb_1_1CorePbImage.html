@@ -142,10 +142,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5388bfbc211e3a7c0d5c99f00772a91c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab3e63fcbb81e0af28469a981d2f05e28"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__pb_1_1CorePbImage.html#ab3e63fcbb81e0af28469a981d2f05e28">~CorePbImage</a> ()</td></tr>
 <tr class="separator:ab3e63fcbb81e0af28469a981d2f05e28"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a16ed439f0ffe661970e075d95c7827f8"><td class="memItemLeft" align="right" valign="top">std::vector&lt; seerep::Image &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__pb_1_1CorePbImage.html#a16ed439f0ffe661970e075d95c7827f8">getData</a> (const seerep::Query &amp;query)</td></tr>
-<tr class="separator:a16ed439f0ffe661970e075d95c7827f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8581b774e4421c2c538d83ac3ca433fe"><td class="memItemLeft" align="right" valign="top">boost::uuids::uuid&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__pb_1_1CorePbImage.html#a8581b774e4421c2c538d83ac3ca433fe">addData</a> (const seerep::Image &amp;img)</td></tr>
-<tr class="separator:a8581b774e4421c2c538d83ac3ca433fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d2749d55ab9db9724d59b9d91924ba3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__pb_1_1CorePbImage.html#a7d2749d55ab9db9724d59b9d91924ba3">getData</a> (const seerep::pb::Query &amp;query, grpc::ServerWriter&lt; seerep::pb::Image &gt; *writer)</td></tr>
+<tr class="separator:a7d2749d55ab9db9724d59b9d91924ba3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85c7965a5472ea42f128baa02ada1b97"><td class="memItemLeft" align="right" valign="top">boost::uuids::uuid&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__pb_1_1CorePbImage.html#a85c7965a5472ea42f128baa02ada1b97">addData</a> (const seerep::pb::Image &amp;img)</td></tr>
+<tr class="separator:a85c7965a5472ea42f128baa02ada1b97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -160,6 +160,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:adc889c811daace3534d08eb0d795a081"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd9b2fb8b7403cca6177000a3c2d6f55"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; boost::uuids::uuid, std::shared_ptr&lt; <a class="el" href="classseerep__hdf5__pb_1_1Hdf5PbImage.html">seerep_hdf5_pb::Hdf5PbImage</a> &gt;, boost::hash&lt; boost::uuids::uuid &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__pb_1_1CorePbImage.html#acd9b2fb8b7403cca6177000a3c2d6f55">m_hdf5IoMap</a></td></tr>
 <tr class="separator:acd9b2fb8b7403cca6177000a3c2d6f55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad29e95837b97675e4cb91d8563cbe329"><td class="memItemLeft" align="right" valign="top">boost::log::sources::severity_logger&lt; boost::log::trivial::severity_level &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__pb_1_1CorePbImage.html#ad29e95837b97675e4cb91d8563cbe329">m_logger</a></td></tr>
+<tr class="separator:ad29e95837b97675e4cb91d8563cbe329"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a5388bfbc211e3a7c0d5c99f00772a91c" name="a5388bfbc211e3a7c0d5c99f00772a91c"></a>
@@ -198,8 +200,8 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a8581b774e4421c2c538d83ac3ca433fe" name="a8581b774e4421c2c538d83ac3ca433fe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8581b774e4421c2c538d83ac3ca433fe">&#9670;&nbsp;</a></span>addData()</h2>
+<a id="a85c7965a5472ea42f128baa02ada1b97" name="a85c7965a5472ea42f128baa02ada1b97"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85c7965a5472ea42f128baa02ada1b97">&#9670;&nbsp;</a></span>addData()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -207,7 +209,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">boost::uuids::uuid seerep_core_pb::CorePbImage::addData </td>
           <td>(</td>
-          <td class="paramtype">const seerep::Image &amp;&#160;</td>
+          <td class="paramtype">const seerep::pb::Image &amp;&#160;</td>
           <td class="paramname"><em>img</em></td><td>)</td>
           <td></td>
         </tr>
@@ -216,18 +218,28 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a16ed439f0ffe661970e075d95c7827f8" name="a16ed439f0ffe661970e075d95c7827f8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a16ed439f0ffe661970e075d95c7827f8">&#9670;&nbsp;</a></span>getData()</h2>
+<a id="a7d2749d55ab9db9724d59b9d91924ba3" name="a7d2749d55ab9db9724d59b9d91924ba3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d2749d55ab9db9724d59b9d91924ba3">&#9670;&nbsp;</a></span>getData()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt; seerep::Image &gt; seerep_core_pb::CorePbImage::getData </td>
+          <td class="memname">void seerep_core_pb::CorePbImage::getData </td>
           <td>(</td>
-          <td class="paramtype">const seerep::Query &amp;&#160;</td>
-          <td class="paramname"><em>query</em></td><td>)</td>
+          <td class="paramtype">const seerep::pb::Query &amp;&#160;</td>
+          <td class="paramname"><em>query</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">grpc::ServerWriter&lt; seerep::pb::Image &gt; *&#160;</td>
+          <td class="paramname"><em>writer</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -306,6 +318,29 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad29e95837b97675e4cb91d8563cbe329" name="ad29e95837b97675e4cb91d8563cbe329"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad29e95837b97675e4cb91d8563cbe329">&#9670;&nbsp;</a></span>m_logger</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::log::sources::severity_logger&lt;boost::log::trivial::severity_level&gt; seerep_core_pb::CorePbImage::m_logger</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >the logger for the logging framework </p>
 
 </div>
 </div>

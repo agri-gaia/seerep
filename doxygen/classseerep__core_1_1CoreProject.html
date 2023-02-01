@@ -138,15 +138,21 @@ $(document).ready(function(){initNavTree('classseerep__core_1_1CoreProject.html'
  <a href="classseerep__core_1_1CoreProject.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="core-project_8h_source.html">core-project.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for seerep_core::CoreProject:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" frameborder="0" src="classseerep__core_1_1CoreProject__coll__graph.svg" width="275" height="142"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:af9b11ca3a7792904396d01c7d34e652b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#af9b11ca3a7792904396d01c7d34e652b">CoreProject</a> (const boost::uuids::uuid &amp;uuid, const std::string path)</td></tr>
 <tr class="memdesc:af9b11ca3a7792904396d01c7d34e652b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs the project object and loads the needed information from the HDF5 file.  <a href="classseerep__core_1_1CoreProject.html#af9b11ca3a7792904396d01c7d34e652b">More...</a><br /></td></tr>
 <tr class="separator:af9b11ca3a7792904396d01c7d34e652b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46a26757441c3d3bb071cb804cf1cc30"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#a46a26757441c3d3bb071cb804cf1cc30">CoreProject</a> (const boost::uuids::uuid &amp;uuid, const std::string path, const std::string projectname, const std::string mapFrameId)</td></tr>
-<tr class="memdesc:a46a26757441c3d3bb071cb804cf1cc30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs the project object and creates a new HDF5 file.  <a href="classseerep__core_1_1CoreProject.html#a46a26757441c3d3bb071cb804cf1cc30">More...</a><br /></td></tr>
-<tr class="separator:a46a26757441c3d3bb071cb804cf1cc30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1f60d116ef19ac6dd267e4eb3af9ce9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#ae1f60d116ef19ac6dd267e4eb3af9ce9">CoreProject</a> (const boost::uuids::uuid &amp;uuid, const std::string path, const std::string projectname, const std::string mapFrameId, const <a class="el" href="structseerep__core__msgs_1_1GeodeticCoordinates.html">seerep_core_msgs::GeodeticCoordinates</a> geodeticCoords)</td></tr>
+<tr class="memdesc:ae1f60d116ef19ac6dd267e4eb3af9ce9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs the project object and creates a new HDF5 file.  <a href="classseerep__core_1_1CoreProject.html#ae1f60d116ef19ac6dd267e4eb3af9ce9">More...</a><br /></td></tr>
+<tr class="separator:ae1f60d116ef19ac6dd267e4eb3af9ce9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a63190ba14676bacaa18385bad66a2f6c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#a63190ba14676bacaa18385bad66a2f6c">~CoreProject</a> ()</td></tr>
 <tr class="separator:a63190ba14676bacaa18385bad66a2f6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af4090473fb8c070456730e4a2ebfbf6c"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#af4090473fb8c070456730e4a2ebfbf6c">getName</a> ()</td></tr>
@@ -161,12 +167,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad7cd5199f3057673291b2f73094970d0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structseerep__core__msgs_1_1QueryResultProject.html">seerep_core_msgs::QueryResultProject</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#ad7cd5199f3057673291b2f73094970d0">getInstances</a> (const <a class="el" href="structseerep__core__msgs_1_1Query.html">seerep_core_msgs::Query</a> &amp;query)</td></tr>
 <tr class="memdesc:ad7cd5199f3057673291b2f73094970d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a vector of UUIDs of instances that match the query and the project UUID.  <a href="classseerep__core_1_1CoreProject.html#ad7cd5199f3057673291b2f73094970d0">More...</a><br /></td></tr>
 <tr class="separator:ad7cd5199f3057673291b2f73094970d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63c98ab16b1685d3f3336c3bc24ac5ff"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structseerep__core__msgs_1_1GeodeticCoordinates.html">seerep_core_msgs::GeodeticCoordinates</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#a63c98ab16b1685d3f3336c3bc24ac5ff">getGeodeticCoordinates</a> ()</td></tr>
+<tr class="memdesc:a63c98ab16b1685d3f3336c3bc24ac5ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the geodetic coordinates of this project.  <a href="classseerep__core_1_1CoreProject.html#a63c98ab16b1685d3f3336c3bc24ac5ff">More...</a><br /></td></tr>
+<tr class="separator:a63c98ab16b1685d3f3336c3bc24ac5ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab94ca56f0bf26c8f7e48e853c677a1f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#aab94ca56f0bf26c8f7e48e853c677a1f">addDataset</a> (const <a class="el" href="structseerep__core__msgs_1_1DatasetIndexable.html">seerep_core_msgs::DatasetIndexable</a> &amp;dataset)</td></tr>
 <tr class="memdesc:aab94ca56f0bf26c8f7e48e853c677a1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a dataset to the spatial, temporal and semantic indices.  <a href="classseerep__core_1_1CoreProject.html#aab94ca56f0bf26c8f7e48e853c677a1f">More...</a><br /></td></tr>
 <tr class="separator:aab94ca56f0bf26c8f7e48e853c677a1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ef92b7a3eeaa479769772ab867d5be1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#a5ef92b7a3eeaa479769772ab867d5be1">addLabels</a> (const <a class="el" href="namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0">seerep_core_msgs::Datatype</a> &amp;datatype, const std::vector&lt; std::string &gt; &amp;labels, const boost::uuids::uuid &amp;msgUuid)</td></tr>
-<tr class="memdesc:a5ef92b7a3eeaa479769772ab867d5be1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds labels to an existing dataset.  <a href="classseerep__core_1_1CoreProject.html#a5ef92b7a3eeaa479769772ab867d5be1">More...</a><br /></td></tr>
-<tr class="separator:a5ef92b7a3eeaa479769772ab867d5be1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae06cb07b888895bf109ed745401c9ff5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#ae06cb07b888895bf109ed745401c9ff5">addLabels</a> (const <a class="el" href="namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0">seerep_core_msgs::Datatype</a> &amp;datatype, const std::unordered_map&lt; std::string, std::vector&lt; <a class="el" href="structseerep__core__msgs_1_1LabelWithInstance.html">seerep_core_msgs::LabelWithInstance</a> &gt; &gt; &amp;labelWithInstancePerCategory, const boost::uuids::uuid &amp;msgUuid)</td></tr>
+<tr class="memdesc:ae06cb07b888895bf109ed745401c9ff5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds labels to an existing dataset.  <a href="classseerep__core_1_1CoreProject.html#ae06cb07b888895bf109ed745401c9ff5">More...</a><br /></td></tr>
+<tr class="separator:ae06cb07b888895bf109ed745401c9ff5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a73b3383f57e6a9ee0b0e5d309eb750cc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#a73b3383f57e6a9ee0b0e5d309eb750cc">addTF</a> (const geometry_msgs::TransformStamped &amp;tf)</td></tr>
 <tr class="memdesc:a73b3383f57e6a9ee0b0e5d309eb750cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a tf to the tf buffer.  <a href="classseerep__core_1_1CoreProject.html#a73b3383f57e6a9ee0b0e5d309eb750cc">More...</a><br /></td></tr>
 <tr class="separator:a73b3383f57e6a9ee0b0e5d309eb750cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -206,6 +215,9 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:ad5fadcb1e903f36f71f27662b638d730"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#ad5fadcb1e903f36f71f27662b638d730">m_frameId</a></td></tr>
 <tr class="memdesc:ad5fadcb1e903f36f71f27662b638d730"><td class="mdescLeft">&#160;</td><td class="mdescRight">the frame id for the spatial idices of this project  <a href="classseerep__core_1_1CoreProject.html#ad5fadcb1e903f36f71f27662b638d730">More...</a><br /></td></tr>
 <tr class="separator:ad5fadcb1e903f36f71f27662b638d730"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac80279cd66dcdc6192df00b6615eebf9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structseerep__core__msgs_1_1GeodeticCoordinates.html">seerep_core_msgs::GeodeticCoordinates</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#ac80279cd66dcdc6192df00b6615eebf9">m_geodeticCoordinates</a></td></tr>
+<tr class="memdesc:ac80279cd66dcdc6192df00b6615eebf9"><td class="mdescLeft">&#160;</td><td class="mdescRight">the geodetic coordinates of the location where the data was collected in this project  <a href="classseerep__core_1_1CoreProject.html#ac80279cd66dcdc6192df00b6615eebf9">More...</a><br /></td></tr>
+<tr class="separator:ac80279cd66dcdc6192df00b6615eebf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b3de68b24566d2110efe117f1d1ce9f"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; std::mutex &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#a6b3de68b24566d2110efe117f1d1ce9f">m_write_mtx</a></td></tr>
 <tr class="memdesc:a6b3de68b24566d2110efe117f1d1ce9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">the write mutex for the HDF5 file of this project  <a href="classseerep__core_1_1CoreProject.html#a6b3de68b24566d2110efe117f1d1ce9f">More...</a><br /></td></tr>
 <tr class="separator:a6b3de68b24566d2110efe117f1d1ce9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -282,11 +294,12 @@ Private Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
+<p >TODO use the advantages of std::optional</p>
 
 </div>
 </div>
-<a id="a46a26757441c3d3bb071cb804cf1cc30" name="a46a26757441c3d3bb071cb804cf1cc30"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a46a26757441c3d3bb071cb804cf1cc30">&#9670;&nbsp;</a></span>CoreProject() <span class="overload">[2/2]</span></h2>
+<a id="ae1f60d116ef19ac6dd267e4eb3af9ce9" name="ae1f60d116ef19ac6dd267e4eb3af9ce9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1f60d116ef19ac6dd267e4eb3af9ce9">&#9670;&nbsp;</a></span>CoreProject() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -313,7 +326,13 @@ Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string&#160;</td>
-          <td class="paramname"><em>mapFrameId</em>&#160;</td>
+          <td class="paramname"><em>mapFrameId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structseerep__core__msgs_1_1GeodeticCoordinates.html">seerep_core_msgs::GeodeticCoordinates</a>&#160;</td>
+          <td class="paramname"><em>geodeticCoords</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -330,6 +349,7 @@ Private Attributes</h2></td></tr>
     <tr><td class="paramname">path</td><td>path to the folder containing the HDF5 files </td></tr>
     <tr><td class="paramname">projectname</td><td>a plain name for the project for easier differentiation of the projects </td></tr>
     <tr><td class="paramname">mapFrameId</td><td>the frame id of the map frame which is used to create the spatial indices for this project </td></tr>
+    <tr><td class="paramname">geodetic</td><td>coordinates for the location of the site of data recording </td></tr>
   </table>
   </dd>
 </dl>
@@ -380,8 +400,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a5ef92b7a3eeaa479769772ab867d5be1" name="a5ef92b7a3eeaa479769772ab867d5be1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5ef92b7a3eeaa479769772ab867d5be1">&#9670;&nbsp;</a></span>addLabels()</h2>
+<a id="ae06cb07b888895bf109ed745401c9ff5" name="ae06cb07b888895bf109ed745401c9ff5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae06cb07b888895bf109ed745401c9ff5">&#9670;&nbsp;</a></span>addLabels()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -395,8 +415,8 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; std::string &gt; &amp;&#160;</td>
-          <td class="paramname"><em>labels</em>, </td>
+          <td class="paramtype">const std::unordered_map&lt; std::string, std::vector&lt; <a class="el" href="structseerep__core__msgs_1_1LabelWithInstance.html">seerep_core_msgs::LabelWithInstance</a> &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>labelWithInstancePerCategory</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -416,7 +436,7 @@ Private Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">datatype</td><td>the targeted datatype </td></tr>
-    <tr><td class="paramname">labels</td><td>a vector of labels to be added to the dataset </td></tr>
+    <tr><td class="paramname">labelWithInstancePerCategory</td><td>map from category to a vector of labels to be added to the dataset </td></tr>
     <tr><td class="paramname">msgUuid</td><td>the UUID of the targeted dataset </td></tr>
   </table>
   </dd>
@@ -549,6 +569,26 @@ Private Attributes</h2></td></tr>
 
 <p>Returns a vector of all frames stored in the TF tree by the TF buffer. </p>
 <dl class="section return"><dt>Returns</dt><dd>vector of frame names </dd></dl>
+
+</div>
+</div>
+<a id="a63c98ab16b1685d3f3336c3bc24ac5ff" name="a63c98ab16b1685d3f3336c3bc24ac5ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63c98ab16b1685d3f3336c3bc24ac5ff">&#9670;&nbsp;</a></span>getGeodeticCoordinates()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structseerep__core__msgs_1_1GeodeticCoordinates.html">seerep_core_msgs::GeodeticCoordinates</a> seerep_core::CoreProject::getGeodeticCoordinates </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the geodetic coordinates of this project. </p>
+<dl class="section return"><dt>Returns</dt><dd>the geodetic coordinates </dd></dl>
 
 </div>
 </div>
@@ -787,6 +827,30 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>the frame id for the spatial idices of this project </p>
+
+</div>
+</div>
+<a id="ac80279cd66dcdc6192df00b6615eebf9" name="ac80279cd66dcdc6192df00b6615eebf9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac80279cd66dcdc6192df00b6615eebf9">&#9670;&nbsp;</a></span>m_geodeticCoordinates</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structseerep__core__msgs_1_1GeodeticCoordinates.html">seerep_core_msgs::GeodeticCoordinates</a> seerep_core::CoreProject::m_geodeticCoordinates</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>the geodetic coordinates of the location where the data was collected in this project </p>
 
 </div>
 </div>

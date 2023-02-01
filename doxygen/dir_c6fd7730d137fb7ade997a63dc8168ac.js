@@ -7,6 +7,7 @@ var dir_c6fd7730d137fb7ade997a63dc8168ac =
       [ "seerep_hdf5_core::Hdf5CoreGeneral", "classseerep__hdf5__core_1_1Hdf5CoreGeneral.html", "classseerep__hdf5__core_1_1Hdf5CoreGeneral" ]
     ] ],
     [ "hdf5-core-image.h", "hdf5-core-image_8h.html", [
+      [ "seerep_hdf5_core::ImageAttributes", "structseerep__hdf5__core_1_1ImageAttributes.html", "structseerep__hdf5__core_1_1ImageAttributes" ],
       [ "seerep_hdf5_core::Hdf5CoreImage", "classseerep__hdf5__core_1_1Hdf5CoreImage.html", "classseerep__hdf5__core_1_1Hdf5CoreImage" ]
     ] ],
     [ "hdf5-core-instance.h", "hdf5-core-instance_8h.html", [

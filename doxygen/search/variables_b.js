@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['other_5ffields_0',['other_fields',['../structseerep__hdf5__pb_1_1Hdf5PbPointCloud_1_1CloudInfo.html#a0a30422e4b5dd6c3ecdd8cc174bbf650',1,'seerep_hdf5_pb::Hdf5PbPointCloud::CloudInfo']]]
+  ['name_0',['name',['../structseerep__core__msgs_1_1ProjectInfo.html#ab1ef8ba38f2a00c4f96485dfbea47ecf',1,'seerep_core_msgs::ProjectInfo']]],
+  ['nanos_1',['nanos',['../structseerep__core__msgs_1_1Timestamp.html#afb05e1048bcd4327f2ed3267e259bd67',1,'seerep_core_msgs::Timestamp']]]
 ];

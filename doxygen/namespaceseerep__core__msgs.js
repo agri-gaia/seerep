@@ -1,7 +1,9 @@
 var namespaceseerep__core__msgs =
 [
     [ "DatasetIndexable", "structseerep__core__msgs_1_1DatasetIndexable.html", "structseerep__core__msgs_1_1DatasetIndexable" ],
+    [ "GeodeticCoordinates", "structseerep__core__msgs_1_1GeodeticCoordinates.html", "structseerep__core__msgs_1_1GeodeticCoordinates" ],
     [ "Header", "structseerep__core__msgs_1_1Header.html", "structseerep__core__msgs_1_1Header" ],
+    [ "LabelsWithInstanceWithCategory", "structseerep__core__msgs_1_1LabelsWithInstanceWithCategory.html", "structseerep__core__msgs_1_1LabelsWithInstanceWithCategory" ],
     [ "LabelWithInstance", "structseerep__core__msgs_1_1LabelWithInstance.html", "structseerep__core__msgs_1_1LabelWithInstance" ],
     [ "ProjectInfo", "structseerep__core__msgs_1_1ProjectInfo.html", "structseerep__core__msgs_1_1ProjectInfo" ],
     [ "Query", "structseerep__core__msgs_1_1Query.html", "structseerep__core__msgs_1_1Query" ],

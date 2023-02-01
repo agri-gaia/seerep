@@ -140,6 +140,7 @@ $(document).ready(function(){initNavTree('seerep__ros__conversions__fb_2include_
 <code>#include &lt;std_msgs/Header.h&gt;</code><br />
 <code>#include &lt;vision_msgs/Detection2DArray.h&gt;</code><br />
 <code>#include &lt;seerep-msgs/boundingbox2d_labeled_generated.h&gt;</code><br />
+<code>#include &lt;seerep-msgs/boundingbox2d_labeled_with_category_generated.h&gt;</code><br />
 <code>#include &lt;seerep-msgs/boundingboxes2d_labeled_stamped_generated.h&gt;</code><br />
 <code>#include &lt;seerep-msgs/header_generated.h&gt;</code><br />
 <code>#include &lt;seerep-msgs/image_generated.h&gt;</code><br />
@@ -154,13 +155,13 @@ $(document).ready(function(){initNavTree('seerep__ros__conversions__fb_2include_
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for conversions.h:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="seerep__ros__conversions__fb_2include_2seerep__ros__conversions__fb_2conversions_8h__incl.svg" width="4363" height="171"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="seerep__ros__conversions__fb_2include_2seerep__ros__conversions__fb_2conversions_8h__incl.svg" width="4598" height="186"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="seerep__ros__conversions__fb_2include_2seerep__ros__conversions__fb_2conversions_8h__dep__incl.svg" width="682" height="483"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="seerep__ros__conversions__fb_2include_2seerep__ros__conversions__fb_2conversions_8h__dep__incl.svg" width="872" height="498"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </div>
@@ -281,12 +282,12 @@ Functions</h2></td></tr>
 <tr class="memitem:ae21e4433a25ab7fbbb0a2a9df5d47af7"><td class="memItemLeft" align="right" valign="top">geometry_msgs::TransformStamped&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#ae21e4433a25ab7fbbb0a2a9df5d47af7">seerep_ros_conversions_fb::toROS</a> (const seerep::fb::TransformStamped &amp;transform)</td></tr>
 <tr class="memdesc:ae21e4433a25ab7fbbb0a2a9df5d47af7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a Flatbuffer TransformStamped message to the corresponding ROS geometry_msgs::TransformStamped message.  <a href="namespaceseerep__ros__conversions__fb.html#ae21e4433a25ab7fbbb0a2a9df5d47af7">More...</a><br /></td></tr>
 <tr class="separator:ae21e4433a25ab7fbbb0a2a9df5d47af7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a323b6082cff8e0ad84ffc18aac3cd9fd"><td class="memItemLeft" align="right" valign="top">flatbuffers::grpc::Message&lt; seerep::fb::BoundingBoxes2DLabeledStamped &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a323b6082cff8e0ad84ffc18aac3cd9fd">seerep_ros_conversions_fb::toFlat</a> (const vision_msgs::Detection2DArray &amp;detection2d, std::string projectuuid, std::string msguuid)</td></tr>
-<tr class="memdesc:a323b6082cff8e0ad84ffc18aac3cd9fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS vision_msgs::Detection2DArray message to the corresponding gRPC Flatbuffer BoundingBoxes2D_labeled_stamped message.  <a href="namespaceseerep__ros__conversions__fb.html#a323b6082cff8e0ad84ffc18aac3cd9fd">More...</a><br /></td></tr>
-<tr class="separator:a323b6082cff8e0ad84ffc18aac3cd9fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade50f80f6b2108e299115502c11a5ecb"><td class="memItemLeft" align="right" valign="top">flatbuffers::Offset&lt; seerep::fb::BoundingBoxes2DLabeledStamped &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#ade50f80f6b2108e299115502c11a5ecb">seerep_ros_conversions_fb::toFlat</a> (const vision_msgs::Detection2DArray &amp;detection2d, std::string projectuuid, flatbuffers::grpc::MessageBuilder &amp;builder, std::string msguuid)</td></tr>
-<tr class="memdesc:ade50f80f6b2108e299115502c11a5ecb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS vision_msgs::Detection2DArray message to the corresponding Flatbuffer BoundingBoxes2D_labeled_stamped message.  <a href="namespaceseerep__ros__conversions__fb.html#ade50f80f6b2108e299115502c11a5ecb">More...</a><br /></td></tr>
-<tr class="separator:ade50f80f6b2108e299115502c11a5ecb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95ed694d0ee02e8784feb657c45f894d"><td class="memItemLeft" align="right" valign="top">flatbuffers::grpc::Message&lt; seerep::fb::BoundingBoxes2DLabeledStamped &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a95ed694d0ee02e8784feb657c45f894d">seerep_ros_conversions_fb::toFlat</a> (const vision_msgs::Detection2DArray &amp;detection2d, std::string projectuuid, std::string category, std::string msguuid)</td></tr>
+<tr class="memdesc:a95ed694d0ee02e8784feb657c45f894d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS vision_msgs::Detection2DArray message to the corresponding gRPC Flatbuffer BoundingBoxes2D_labeled_stamped message.  <a href="namespaceseerep__ros__conversions__fb.html#a95ed694d0ee02e8784feb657c45f894d">More...</a><br /></td></tr>
+<tr class="separator:a95ed694d0ee02e8784feb657c45f894d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7bbdc2761494517f920391e94ecedd3"><td class="memItemLeft" align="right" valign="top">flatbuffers::Offset&lt; seerep::fb::BoundingBoxes2DLabeledStamped &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#ac7bbdc2761494517f920391e94ecedd3">seerep_ros_conversions_fb::toFlat</a> (const vision_msgs::Detection2DArray &amp;detection2d, std::string projectuuid, flatbuffers::grpc::MessageBuilder &amp;builder, std::string category, std::string msguuid)</td></tr>
+<tr class="memdesc:ac7bbdc2761494517f920391e94ecedd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS vision_msgs::Detection2DArray message to the corresponding Flatbuffer BoundingBoxes2D_labeled_stamped message.  <a href="namespaceseerep__ros__conversions__fb.html#ac7bbdc2761494517f920391e94ecedd3">More...</a><br /></td></tr>
+<tr class="separator:ac7bbdc2761494517f920391e94ecedd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae694b1f3f875ae063a9ebd279c498fcf"><td class="memItemLeft" align="right" valign="top">vision_msgs::Detection2DArray&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#ae694b1f3f875ae063a9ebd279c498fcf">seerep_ros_conversions_fb::toROS</a> (const seerep::fb::BoundingBoxes2DLabeledStamped &amp;bb_labeled_stamped)</td></tr>
 <tr class="memdesc:ae694b1f3f875ae063a9ebd279c498fcf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a Flatbuffer BoundingBoxes2D_labeled_stamped message to the corresponding ROS vision_msgs::Detection2DArray message.  <a href="namespaceseerep__ros__conversions__fb.html#ae694b1f3f875ae063a9ebd279c498fcf">More...</a><br /></td></tr>
 <tr class="separator:ae694b1f3f875ae063a9ebd279c498fcf"><td class="memSeparator" colspan="2">&#160;</td></tr>

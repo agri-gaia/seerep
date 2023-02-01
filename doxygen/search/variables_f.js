@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['seconds_0',['seconds',['../structseerep__core__msgs_1_1Timestamp.html#a35bbf7b7595fc7b691603bcbacebc504',1,'seerep_core_msgs::Timestamp']]],
-  ['seerepcore_1',['seerepCore',['../classseerep__server_1_1FbMetaOperations.html#afb657806c49e19d18bf424368ea6048f',1,'seerep_server::FbMetaOperations::seerepCore()'],['../classseerep__server_1_1PbMetaOperations.html#a82fcdbd915c682b2b03204548935ae64',1,'seerep_server::PbMetaOperations::seerepCore()'],['../classseerep__server_1_1PbReceiveSensorMsgs.html#a47a3475a228af0ba2bf087ffc2d00d60',1,'seerep_server::PbReceiveSensorMsgs::seerepCore()']]],
-  ['size_2',['SIZE',['../classseerep__hdf5__core_1_1Hdf5CoreImage.html#a81ddcf836162c95b71e3004f52e48cfa',1,'seerep_hdf5_core::Hdf5CoreImage::SIZE()'],['../classseerep__hdf5__core_1_1Hdf5CoreTf.html#af951e1a5dd555fefe5630ff57d3febe7',1,'seerep_hdf5_core::Hdf5CoreTf::SIZE()'],['../classseerep__hdf5__pb_1_1Hdf5PbTf.html#aa25eaf123fabf94a840b231235e7680a',1,'seerep_hdf5_pb::Hdf5PbTf::SIZE()']]]
+  ['rawdata_0',['RAWDATA',['../classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a53b8de0c69698ba803f4052ef66bda00',1,'seerep_hdf5_core::Hdf5CoreGeneral::RAWDATA()'],['../classseerep__hdf5__core_1_1Hdf5CoreImage.html#a1ad65e897163930c786ea1142f589472',1,'seerep_hdf5_core::Hdf5CoreImage::RAWDATA()'],['../classseerep__hdf5__core_1_1Hdf5CorePoint.html#a9cd08cd7e51fe667a3b8421b5bcdb07c',1,'seerep_hdf5_core::Hdf5CorePoint::RAWDATA()']]],
+  ['readimage_1',['readImage',['../classseerep__hdf5__fb_1_1tests_1_1fbWriteLoadTest.html#aa61ff2a0598c21a5adacc7b28db4a29f',1,'seerep_hdf5_fb::tests::fbWriteLoadTest::readImage()'],['../classpbWriteLoadTest.html#a8a5e23372033a5b90314268580169263',1,'pbWriteLoadTest::readImage()']]],
+  ['row_5fstep_2',['ROW_STEP',['../classseerep__hdf5__core_1_1Hdf5CorePointCloud.html#ae31996f73893a9dc3c86228705d17295',1,'seerep_hdf5_core::Hdf5CorePointCloud']]],
+  ['rt_3',['rt',['../structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html#ae0aee2a105a3c0c37d56c8af6c90d6c4',1,'seerep_core::CoreDataset::DatatypeSpecifics']]]
 ];

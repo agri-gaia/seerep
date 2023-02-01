@@ -10,6 +10,7 @@ var classseerep__server_1_1server =
     [ "initConsoleLogging", "classseerep__server_1_1server.html#a972f16d6fabf2f56586af919e53bfa27", null ],
     [ "initFileLogging", "classseerep__server_1_1server.html#a81e85f4861be0983b5f2ab39890a0e0b", null ],
     [ "initLogging", "classseerep__server_1_1server.html#a576314842395debc250c6373bac06e5e", null ],
+    [ "logTimeZone", "classseerep__server_1_1server.html#a3123ae7354e4fc1d9e6ce0c063c06c28", null ],
     [ "parseProgramOptions", "classseerep__server_1_1server.html#a1721ad39bbaff08a87bfdd8773bef528", null ],
     [ "serve", "classseerep__server_1_1server.html#afc6fa9dd30cb833ceb1f4c9788464d50", null ],
     [ "setSeverityLevel", "classseerep__server_1_1server.html#a111e2b73f3810d666b59c9ebbbada1c6", null ],

@@ -1,10 +1,11 @@
 var namespaceseerep__hdf5__fb_1_1tests =
 [
     [ "fbWriteLoadTest", "classseerep__hdf5__fb_1_1tests_1_1fbWriteLoadTest.html", null ],
-    [ "createBB2DLabeled", "namespaceseerep__hdf5__fb_1_1tests.html#a76d54d48db4a9288b7062656d030c1a8", null ],
+    [ "createBB2DLabeled", "namespaceseerep__hdf5__fb_1_1tests.html#a295358489af0935ee632313afaeb97ce", null ],
     [ "createHeader", "namespaceseerep__hdf5__fb_1_1tests.html#a219a347073bc30a833b952f049ab71cb", null ],
     [ "createImageData", "namespaceseerep__hdf5__fb_1_1tests.html#ae0c5ff5792bb7a64372b343921410996", null ],
     [ "createImageMessage", "namespaceseerep__hdf5__fb_1_1tests.html#ac6ad73b611f1a6494b46aa0f9637d879", null ],
+    [ "createLabelsGeneral", "namespaceseerep__hdf5__fb_1_1tests.html#a130353d2c881d8bf630ff9da777520f4", null ],
     [ "createLabelWithInstance", "namespaceseerep__hdf5__fb_1_1tests.html#a08d28851cb5288c3e95cc6166e97942e", null ],
     [ "createPoint", "namespaceseerep__hdf5__fb_1_1tests.html#a5b995348159a6393f06f248828c778f2", null ],
     [ "createTimeStamp", "namespaceseerep__hdf5__fb_1_1tests.html#a70f5604b6d29fb5b6e7a76662653744b", null ],
@@ -14,6 +15,9 @@ var namespaceseerep__hdf5__fb_1_1tests =
     [ "TEST_F", "namespaceseerep__hdf5__fb_1_1tests.html#a6254a369e1b8d9cf95b1c1b2039d2d50", null ],
     [ "TEST_F", "namespaceseerep__hdf5__fb_1_1tests.html#a9c0067b106b1488b2d776afb95447078", null ],
     [ "TEST_F", "namespaceseerep__hdf5__fb_1_1tests.html#ae72ddf3e361364f97546584698b80580", null ],
+    [ "testBB2DWithInstance", "namespaceseerep__hdf5__fb_1_1tests.html#a511e61b8e867b37dedf20d51dcd7b1ff", null ],
+    [ "testBB2DWithInstanceCategories", "namespaceseerep__hdf5__fb_1_1tests.html#ac9e9de7134156f58a32d68eea20d880c", null ],
     [ "testEqualPoints", "namespaceseerep__hdf5__fb_1_1tests.html#ad8d6ad0daacf597ca0211f6719c8997b", null ],
-    [ "testLabelWithInstance", "namespaceseerep__hdf5__fb_1_1tests.html#af767eda9c84a1160ff2dd8920f6e2d9f", null ]
+    [ "testLabelWithInstance", "namespaceseerep__hdf5__fb_1_1tests.html#af767eda9c84a1160ff2dd8920f6e2d9f", null ],
+    [ "testLabelWithInstanceCategories", "namespaceseerep__hdf5__fb_1_1tests.html#a2bf1e01d9d14a30a23b80f740f37f085", null ]
 ];

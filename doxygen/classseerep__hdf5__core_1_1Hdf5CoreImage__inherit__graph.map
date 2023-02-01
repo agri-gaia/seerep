@@ -1,5 +1,7 @@
 <map id="seerep_hdf5_core::Hdf5CoreImage" name="seerep_hdf5_core::Hdf5CoreImage">
-<area shape="rect" id="node1" title=" " alt="" coords="120,95,327,136"/>
-<area shape="rect" id="node2" href="$classseerep__hdf5__core_1_1Hdf5CoreGeneral.html" title=" " alt="" coords="5,5,212,47"/>
-<area shape="rect" id="node3" href="$classseerep__hdf5__core_1_1Hdf5CoreDatatypeInterface.html" title=" " alt="" coords="236,5,443,47"/>
+<area shape="rect" id="node1" title="This class encompasses all hdf5&#45;io functions which are message type independent." alt="" coords="133,95,339,136"/>
+<area shape="rect" id="node4" href="$classseerep__hdf5__fb_1_1Hdf5FbImage.html" title="The class Hdf5FbImage is used to write and read flatbuffers image messages to/from hdf5 files." alt="" coords="5,184,224,211"/>
+<area shape="rect" id="node5" href="$classseerep__hdf5__pb_1_1Hdf5PbImage.html" title=" " alt="" coords="248,184,469,211"/>
+<area shape="rect" id="node2" href="$classseerep__hdf5__core_1_1Hdf5CoreGeneral.html" title=" " alt="" coords="18,5,225,47"/>
+<area shape="rect" id="node3" href="$classseerep__hdf5__core_1_1Hdf5CoreDatatypeInterface.html" title=" " alt="" coords="249,5,455,47"/>
 </map>

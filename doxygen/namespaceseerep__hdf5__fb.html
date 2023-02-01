@@ -127,7 +127,8 @@ $(document).ready(function(){initNavTree('namespaceseerep__hdf5__fb.html',''); i
 <div class="header">
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#nested-classes">Classes</a>  </div>
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#typedef-members">Typedefs</a>  </div>
   <div class="headertitle"><div class="title">seerep_hdf5_fb Namespace Reference</div></div>
 </div><!--header-->
 <div class="contents">
@@ -142,8 +143,10 @@ Namespaces</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbGeneral.html">Hdf5FbGeneral</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class encompasses all read and write operations for the hdf5-fb-io which can be used by different data types.  <a href="classseerep__hdf5__fb_1_1Hdf5FbGeneral.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbImage.html">Hdf5FbImage</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The class <a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbImage.html" title="The class Hdf5FbImage is used to write and read flatbuffers image messages to/from hdf5 files.">Hdf5FbImage</a> is used to write and read flatbuffers image messages to/from hdf5 files.  <a href="classseerep__hdf5__fb_1_1Hdf5FbImage.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbPoint.html">Hdf5FbPoint</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -157,7 +160,139 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1PointCloud2Iterator.html">PointCloud2Iterator</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class that can iterate over a flatbuffers PointCloud2 (used for writing into the data field)  <a href="classseerep__hdf5__fb_1_1PointCloud2Iterator.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:ad9c6cb1caf1d2971ca346f36dee0006c"><td class="memItemLeft" align="right" valign="top">typedef flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::BoundingBoxLabeled &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__hdf5__fb.html#ad9c6cb1caf1d2971ca346f36dee0006c">BoundingBoxesLabeledFb</a></td></tr>
+<tr class="separator:ad9c6cb1caf1d2971ca346f36dee0006c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a148742fbbf4b6aa26d74b59bc04c8d11"><td class="memItemLeft" align="right" valign="top">typedef flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::BoundingBoxLabeledWithCategory &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__hdf5__fb.html#a148742fbbf4b6aa26d74b59bc04c8d11">BoundingBoxesLabeledWithCategoryFb</a></td></tr>
+<tr class="separator:a148742fbbf4b6aa26d74b59bc04c8d11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a852a1a3a589e8dad6b8c1c8b51dd5800"><td class="memItemLeft" align="right" valign="top">typedef flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::BoundingBox2DLabeled &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__hdf5__fb.html#a852a1a3a589e8dad6b8c1c8b51dd5800">BoundingBoxes2dLabeledFb</a></td></tr>
+<tr class="separator:a852a1a3a589e8dad6b8c1c8b51dd5800"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41f3fbfa548690a2dc67567db0366eeb"><td class="memItemLeft" align="right" valign="top">typedef flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::BoundingBox2DLabeledWithCategory &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__hdf5__fb.html#a41f3fbfa548690a2dc67567db0366eeb">BoundingBoxes2dLabeledWithCategoryFb</a></td></tr>
+<tr class="separator:a41f3fbfa548690a2dc67567db0366eeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad278710e09d34a79c3938335567b3c24"><td class="memItemLeft" align="right" valign="top">typedef flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::LabelWithInstance &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__hdf5__fb.html#ad278710e09d34a79c3938335567b3c24">GeneralLabelsFb</a></td></tr>
+<tr class="separator:ad278710e09d34a79c3938335567b3c24"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1cc82dd04a07f782c3f035b499e7bae1"><td class="memItemLeft" align="right" valign="top">typedef flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::LabelsWithInstanceWithCategory &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__hdf5__fb.html#a1cc82dd04a07f782c3f035b499e7bae1">GeneralLabelsWithCategoryFb</a></td></tr>
+<tr class="separator:a1cc82dd04a07f782c3f035b499e7bae1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc0d43c315fa0a04fd4ece8ae3a28460"><td class="memItemLeft" align="right" valign="top">typedef flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::UnionMapEntry &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__hdf5__fb.html#abc0d43c315fa0a04fd4ece8ae3a28460">AttributeMapsFb</a></td></tr>
+<tr class="separator:abc0d43c315fa0a04fd4ece8ae3a28460"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae947f207a3694510de76460c182cc085"><td class="memItemLeft" align="right" valign="top">typedef flatbuffers::Vector&lt; uint8_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__hdf5__fb.html#ae947f207a3694510de76460c182cc085">ByteArrayFb</a></td></tr>
+<tr class="separator:ae947f207a3694510de76460c182cc085"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Typedef Documentation</h2>
+<a id="abc0d43c315fa0a04fd4ece8ae3a28460" name="abc0d43c315fa0a04fd4ece8ae3a28460"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc0d43c315fa0a04fd4ece8ae3a28460">&#9670;&nbsp;</a></span>AttributeMapsFb</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef flatbuffers::Vector&lt;flatbuffers::Offset&lt;seerep::fb::UnionMapEntry&gt; &gt; <a class="el" href="namespaceseerep__hdf5__fb.html#abc0d43c315fa0a04fd4ece8ae3a28460">seerep_hdf5_fb::AttributeMapsFb</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a852a1a3a589e8dad6b8c1c8b51dd5800" name="a852a1a3a589e8dad6b8c1c8b51dd5800"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a852a1a3a589e8dad6b8c1c8b51dd5800">&#9670;&nbsp;</a></span>BoundingBoxes2dLabeledFb</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef flatbuffers::Vector&lt;flatbuffers::Offset&lt;seerep::fb::BoundingBox2DLabeled&gt; &gt; <a class="el" href="namespaceseerep__hdf5__fb.html#a852a1a3a589e8dad6b8c1c8b51dd5800">seerep_hdf5_fb::BoundingBoxes2dLabeledFb</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a41f3fbfa548690a2dc67567db0366eeb" name="a41f3fbfa548690a2dc67567db0366eeb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a41f3fbfa548690a2dc67567db0366eeb">&#9670;&nbsp;</a></span>BoundingBoxes2dLabeledWithCategoryFb</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef flatbuffers::Vector&lt;flatbuffers::Offset&lt;seerep::fb::BoundingBox2DLabeledWithCategory&gt; &gt; <a class="el" href="namespaceseerep__hdf5__fb.html#a41f3fbfa548690a2dc67567db0366eeb">seerep_hdf5_fb::BoundingBoxes2dLabeledWithCategoryFb</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad9c6cb1caf1d2971ca346f36dee0006c" name="ad9c6cb1caf1d2971ca346f36dee0006c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad9c6cb1caf1d2971ca346f36dee0006c">&#9670;&nbsp;</a></span>BoundingBoxesLabeledFb</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef flatbuffers::Vector&lt;flatbuffers::Offset&lt;seerep::fb::BoundingBoxLabeled&gt; &gt; <a class="el" href="namespaceseerep__hdf5__fb.html#ad9c6cb1caf1d2971ca346f36dee0006c">seerep_hdf5_fb::BoundingBoxesLabeledFb</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a148742fbbf4b6aa26d74b59bc04c8d11" name="a148742fbbf4b6aa26d74b59bc04c8d11"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a148742fbbf4b6aa26d74b59bc04c8d11">&#9670;&nbsp;</a></span>BoundingBoxesLabeledWithCategoryFb</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef flatbuffers::Vector&lt;flatbuffers::Offset&lt;seerep::fb::BoundingBoxLabeledWithCategory&gt; &gt; <a class="el" href="namespaceseerep__hdf5__fb.html#a148742fbbf4b6aa26d74b59bc04c8d11">seerep_hdf5_fb::BoundingBoxesLabeledWithCategoryFb</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae947f207a3694510de76460c182cc085" name="ae947f207a3694510de76460c182cc085"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae947f207a3694510de76460c182cc085">&#9670;&nbsp;</a></span>ByteArrayFb</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef flatbuffers::Vector&lt;uint8_t&gt; <a class="el" href="namespaceseerep__hdf5__fb.html#ae947f207a3694510de76460c182cc085">seerep_hdf5_fb::ByteArrayFb</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad278710e09d34a79c3938335567b3c24" name="ad278710e09d34a79c3938335567b3c24"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad278710e09d34a79c3938335567b3c24">&#9670;&nbsp;</a></span>GeneralLabelsFb</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef flatbuffers::Vector&lt;flatbuffers::Offset&lt;seerep::fb::LabelWithInstance&gt; &gt; <a class="el" href="namespaceseerep__hdf5__fb.html#ad278710e09d34a79c3938335567b3c24">seerep_hdf5_fb::GeneralLabelsFb</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1cc82dd04a07f782c3f035b499e7bae1" name="a1cc82dd04a07f782c3f035b499e7bae1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1cc82dd04a07f782c3f035b499e7bae1">&#9670;&nbsp;</a></span>GeneralLabelsWithCategoryFb</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef flatbuffers::Vector&lt;flatbuffers::Offset&lt;seerep::fb::LabelsWithInstanceWithCategory&gt; &gt; <a class="el" href="namespaceseerep__hdf5__fb.html#a1cc82dd04a07f782c3f035b499e7bae1">seerep_hdf5_fb::GeneralLabelsWithCategoryFb</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
