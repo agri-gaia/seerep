@@ -173,4 +173,93 @@ bool Hdf5PyPointCloud::getChannelData(const std::vector<std::string>& channel_na
   return true;
 }
 
+template <typename T, int Nchannels>
+void Hdf5PyPointCloud::getMinMax(const std::vector<std::vector<std::vector<T>>>& data, std::array<T, Nchannels>& min,
+                                 std::array<T, Nchannels>& max)
+{
+  for (std::size_t i = 0; i < Nchannels; i++)
+  {
+    min[i] = std::numeric_limits<T>::max();
+    max[i] = std::numeric_limits<T>::min();
+
+    for (const auto& dat : data[0])
+    {
+      min[i] = std::min(dat[i], min[i]);
+      max[i] = std::max(dat[i], max[i]);
+    }
+  }
+}
+
+template <typename T>
+bool Hdf5PyPointCloud::writeChannelTyped(const std::string& cloud_group_id, const std::string& channel_dataset_id,
+                                         const std::vector<std::vector<std::string>>& channel_names,
+                                         std::map<std::string, bool>& processed,
+                                         const std::map<std::string, py::array>& channels, bool write_bb)
+{
+  std::vector<std::vector<std::vector<T>>> channel_data(0);
+
+  // find channels to use
+  for (const std::vector<std::string>& channel_combination : channel_names)
+  {
+    if (getChannelData<T>(channel_combination, channels, processed, channel_data))
+    {
+      break;
+    }
+  }
+
+  if (channel_data.size() == 0)
+  {
+    // no channels found
+    return false;
+  }
+
+  if (write_bb)
+  {
+    std::array<T, 3> min, max;
+    getMinMax<T, 3>(channel_data, min, max);
+
+    std::shared_ptr<HighFive::Group> cloud_group = std::make_shared<HighFive::Group>(m_file->getGroup(cloud_group_id));
+
+    // write bounding box as attribute to dataset
+    const std::vector<T> boundingbox{ min[0], min[1], min[2], max[0], max[1], max[2] };
+
+    seerep_hdf5_core::Hdf5CoreGeneral::writeAttributeToHdf5(
+        *cloud_group, seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX, boundingbox);
+  }
+
+  // create dataset
+  const std::string dataset_id = cloud_group_id + "/" + channel_dataset_id;
+  HighFive::DataSpace data_space({ channel_data.size(), channel_data[0].size(), channel_data[0][0].size() });
+
+  std::shared_ptr<HighFive::DataSet> dataset_ptr;
+  if (!m_file->exist(dataset_id))
+  {
+    dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->createDataSet<T>(dataset_id, data_space));
+  }
+  else
+  {
+    dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(dataset_id));
+  }
+
+  // write data
+  dataset_ptr->write(channel_data);
+
+  return true;
+}
+
+template <typename T, typename Second, typename... Other>
+bool Hdf5PyPointCloud::writeChannelTyped(const std::string& cloud_group_id, const std::string& channel_dataset_id,
+                                         const std::vector<std::vector<std::string>>& channel_names,
+                                         std::map<std::string, bool>& processed,
+                                         const std::map<std::string, py::array>& channels, bool write_bb)
+{
+  if (writeChannelTyped<T>(cloud_group_id, channel_dataset_id, channel_names, processed, channels, write_bb))
+  {
+    return true;
+  }
+
+  return writeChannelTyped<Second, Other...>(cloud_group_id, channel_dataset_id, channel_names, processed, channels,
+                                             write_bb);
+}
+
 } /* namespace seerep_hdf5_py */

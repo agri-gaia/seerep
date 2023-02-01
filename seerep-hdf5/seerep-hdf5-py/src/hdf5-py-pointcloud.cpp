@@ -83,12 +83,43 @@ void Hdf5PyPointCloud::writePointCloud(const std::string& uuid, const std::strin
   uint32_t offset = 0;
   for (const auto& [name, data] : channels)
   {
+    py::buffer_info channel_info = data.request();
+
     names.push_back(name);
     offsets.push_back(offset);
-    datatypes.push_back(7);  // float32
-    counts.push_back(1);
 
-    offset += sizeof(float);
+    switch (data.dtype().char_())
+    {
+      case 'b':
+        datatypes.push_back(1);  // int8
+        break;
+      case 'i':
+        datatypes.push_back(5);  // int32
+        break;
+      case 'B':
+        datatypes.push_back(2);  // uint8
+        break;
+      case 'I':
+        datatypes.push_back(6);  // uint32
+        break;
+      case 'f':
+        datatypes.push_back(7);  // float32
+        break;
+      case 'd':
+        datatypes.push_back(8);  // float64
+        break;
+    }
+
+    if (channel_info.shape.size() > 1)
+    {
+      counts.push_back(channel_info.shape[1]);
+    }
+    else
+    {
+      counts.push_back(1);
+    }
+
+    offset += data.dtype().itemsize();
   }
 
   seerep_hdf5_core::Hdf5CoreGeneral::writeAttributeToHdf5(*data_group_ptr,
@@ -148,7 +179,7 @@ void Hdf5PyPointCloud::writePointCloud(const std::string& uuid, const std::strin
   {
     channel_processed.insert({ name, false });
   }
-  writePoints(*data_group_ptr, cloud_group_id, channel_processed, channels);
+  writePoints(cloud_group_id, channel_processed, channels);
   writeColors(cloud_group_id, channel_processed, channels);
   writeNormals(cloud_group_id, channel_processed, channels);
 
@@ -156,210 +187,73 @@ void Hdf5PyPointCloud::writePointCloud(const std::string& uuid, const std::strin
   {
     if (!channel_processed[name])
     {
-      writeOther(cloud_group_id, channel_processed, name, data);
+      writeOther(cloud_group_id, channel_processed, name, channels);
     }
   }
 
   m_file->flush();
 }
 
-void Hdf5PyPointCloud::writePoints(HighFive::Group& cloud_group, const std::string& cloud_group_id,
-                                   std::map<std::string, bool>& processed,
+void Hdf5PyPointCloud::writePoints(const std::string& cloud_group_id, std::map<std::string, bool>& processed,
                                    const std::map<std::string, py::array>& channels)
 {
-  std::vector<std::vector<std::vector<float>>> point_data(0);
-
-  // find channels to use
-  bool found_channels = false;
-  std::vector<std::string> channels_names({ "xyz" });
-  found_channels = getChannelData<float>(channels_names, channels, processed, point_data);
-
-  if (!found_channels)
-  {
-    channels_names = std::vector<std::string>{ "x", "y", "z" };
-    found_channels = getChannelData<float>(channels_names, channels, processed, point_data);
-  }
-
-  if (!found_channels)
+  std::vector<std::vector<std::string>> channel_names({ { "xyz" }, { "x", "y", "z" } });
+  if (!writeChannelTyped<uint8_t, uint16_t, float, double>(cloud_group_id, "points", channel_names, processed, channels,
+                                                           true))
   {
     // no channels found
     throw std::invalid_argument("you need to either specify 'x', 'y' and 'z' channels individually or a 'xyz' channel");
   }
-
-  std::array<float, 3> min, max;
-  min[0] = min[1] = min[2] = std::numeric_limits<float>::max();
-  max[0] = max[1] = max[2] = std::numeric_limits<float>::min();
-
-  for (const auto& point : point_data[0])
-  {
-    min[0] = std::min(point[0], min[0]);
-    min[1] = std::min(point[1], min[1]);
-    min[2] = std::min(point[2], min[2]);
-
-    max[0] = std::max(point[0], max[0]);
-    max[1] = std::max(point[1], max[1]);
-    max[2] = std::max(point[2], max[2]);
-  }
-
-  // create dataset
-  std::string points_id = cloud_group_id + "/points";
-  HighFive::DataSpace data_space({ point_data.size(), point_data[0].size(), 3 });
-
-  std::shared_ptr<HighFive::DataSet> points_dataset_ptr;
-  if (!m_file->exist(points_id))
-  {
-    points_dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->createDataSet<float>(points_id, data_space));
-  }
-  else
-  {
-    points_dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(points_id));
-  }
-
-  // write bounding box as attribute to dataset
-  const std::vector<float> boundingbox{ min[0], min[1], min[2], max[0], max[1], max[2] };
-
-  seerep_hdf5_core::Hdf5CoreGeneral::writeAttributeToHdf5(
-      cloud_group, seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX, boundingbox);
-
-  // write data to dataset
-  points_dataset_ptr->write(point_data);
 }
 
 void Hdf5PyPointCloud::writeColors(const std::string& cloud_group_id, std::map<std::string, bool>& processed,
                                    const std::map<std::string, py::array>& channels)
 {
-  std::vector<std::vector<std::vector<float>>> color_data(0);
-
-  // find channels to use
-  bool found_channels = false;
-  std::vector<std::string> channels_names({ "rgba" });
-  found_channels = getChannelData<float>(channels_names, channels, processed, color_data);
-
-  if (!found_channels)
-  {
-    channels_names = std::vector<std::string>{ "r", "g", "b", "a" };
-    found_channels = getChannelData<float>(channels_names, channels, processed, color_data);
-  }
-
-  if (!found_channels)
-  {
-    channels_names = std::vector<std::string>{ "rgb" };
-    found_channels = getChannelData<float>(channels_names, channels, processed, color_data);
-  }
-
-  if (!found_channels)
-  {
-    channels_names = std::vector<std::string>{ "r", "g", "b" };
-    found_channels = getChannelData<float>(channels_names, channels, processed, color_data);
-  }
-
-  if (!found_channels)
-  {
-    // no channels found
-    return;
-  }
-
-  // create dataset
-  const std::string colors_id = cloud_group_id + "/colors";
-  HighFive::DataSpace data_space({ color_data.size(), color_data[0].size(), color_data[0][0].size() });
-
-  std::shared_ptr<HighFive::DataSet> colors_dataset_ptr;
-  if (!m_file->exist(colors_id))
-  {
-    colors_dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->createDataSet<float>(colors_id, data_space));
-  }
-  else
-  {
-    colors_dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(colors_id));
-  }
-
-  // write data
-  colors_dataset_ptr->write(color_data);
+  std::vector<std::vector<std::string>> channel_names(
+      { { "rgba" }, { "rgb" }, { "r", "g", "b" }, { "r", "g", "b", "a" } });
+  writeChannelTyped<uint8_t, uint16_t, float, double>(cloud_group_id, "colors", channel_names, processed, channels,
+                                                      false);
 }
 
 void Hdf5PyPointCloud::writeNormals(const std::string& cloud_group_id, std::map<std::string, bool>& processed,
                                     const std::map<std::string, py::array>& channels)
 {
-  std::vector<std::vector<std::vector<float>>> normal_data(0);
-
-  // find channels to use
-  bool found_channels = false;
-  std::vector<std::string> channels_names({ "normal" });
-  found_channels = getChannelData<float>(channels_names, channels, processed, normal_data);
-
-  if (!found_channels)
-  {
-    channels_names = std::vector<std::string>{ "nx", "ny", "nz" };
-    found_channels = getChannelData<float>(channels_names, channels, processed, normal_data);
-  }
-
-  if (!found_channels)
-  {
-    // no channels found
-    return;
-  }
-
-  // create dataset
-  const std::string colors_id = cloud_group_id + "/normal";
-  HighFive::DataSpace data_space({ normal_data.size(), normal_data[0].size(), normal_data[0][0].size() });
-
-  std::shared_ptr<HighFive::DataSet> colors_dataset_ptr;
-  if (!m_file->exist(colors_id))
-  {
-    colors_dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->createDataSet<float>(colors_id, data_space));
-  }
-  else
-  {
-    colors_dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(colors_id));
-  }
-
-  // write data
-  colors_dataset_ptr->write(normal_data);
+  std::vector<std::vector<std::string>> channel_names({ { "normal" }, { "nx", "ny", "nz" } });
+  writeChannelTyped<float, double>(cloud_group_id, "normals", channel_names, processed, channels, false);
 }
 
 void Hdf5PyPointCloud::writeOther(const std::string& cloud_group_id, std::map<std::string, bool>& processed,
-                                  const std::string& channel_name, const py::array& channel_data)
+                                  const std::string& channel_name, const std::map<std::string, py::array>& channels)
 {
-  std::vector<std::vector<std::vector<float>>> data(0);
+  std::vector<std::vector<std::string>> channel_names({ { channel_name } });
 
-  data.resize(1);
-  py::buffer_info buff_info = channel_data.request();
-  data[0].resize(buff_info.shape[0]);
-  const py::array_t<float>& channel_data_typed = static_cast<py::array_t<float>>(channel_data);
-  for (unsigned int i = 0; i < buff_info.shape[0]; i++)
+  auto search = channels.find(channel_name);
+  switch (search->second.dtype().char_())
   {
-    if (buff_info.shape.size() > 1)
-    {
-      data[0][i].reserve(buff_info.shape[1]);
-      for (unsigned int j = 0; j < buff_info.shape[1]; j++)
-      {
-        data[0][i].push_back(channel_data_typed.at(i, j));
-      }
-    }
-    else
-    {
-      data[0][i] = std::vector{ channel_data_typed.at(i) };
-    }
+    case 'b':
+      writeChannelTyped<char>(cloud_group_id, channel_name, channel_names, processed, channels, false);
+      break;
+
+    case 'i':
+      writeChannelTyped<int>(cloud_group_id, channel_name, channel_names, processed, channels, false);
+      break;
+
+    case 'B':
+      writeChannelTyped<uint8_t>(cloud_group_id, channel_name, channel_names, processed, channels, false);
+      break;
+
+    case 'I':
+      writeChannelTyped<unsigned int>(cloud_group_id, channel_name, channel_names, processed, channels, false);
+      break;
+
+    case 'f':
+      writeChannelTyped<float>(cloud_group_id, channel_name, channel_names, processed, channels, false);
+      break;
+
+    case 'd':
+      writeChannelTyped<double>(cloud_group_id, channel_name, channel_names, processed, channels, false);
+      break;
   }
-
-  processed[channel_name] = true;
-
-  // create dataset
-  const std::string dataset_id = cloud_group_id + "/" + channel_name;
-  HighFive::DataSpace data_space({ data.size(), data[0].size(), data[0][0].size() });
-
-  std::shared_ptr<HighFive::DataSet> colors_dataset_ptr;
-  if (!m_file->exist(dataset_id))
-  {
-    colors_dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->createDataSet<float>(dataset_id, data_space));
-  }
-  else
-  {
-    colors_dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(dataset_id));
-  }
-
-  // write data
-  colors_dataset_ptr->write(data);
 }
 
 } /* namespace seerep_hdf5_py */

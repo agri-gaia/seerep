@@ -97,25 +97,6 @@ public:
 
   //   CloudInfo getCloudInfo(const seerep::PointCloud2& cloud);
 
-  template <typename T>
-  bool checkType(const py::dtype& type);
-
-  template <typename T>
-  bool getChannelData(const std::vector<std::string>& channel_names, const std::map<std::string, py::array>& channels,
-                      std::map<std::string, bool>& processed, std::vector<std::vector<std::vector<T>>>& channel_data);
-
-  void writePoints(HighFive::Group& cloud_group, const std::string& cloud_group_id,
-                   std::map<std::string, bool>& processed, const std::map<std::string, py::array>& channels);
-
-  void writeColors(const std::string& cloud_group_id, std::map<std::string, bool>& processed,
-                   const std::map<std::string, py::array>& channels);
-
-  void writeNormals(const std::string& cloud_group_id, std::map<std::string, bool>& processed,
-                    const std::map<std::string, py::array>& channels);
-
-  void writeOther(const std::string& cloud_group_id, std::map<std::string, bool>& processed,
-                  const std::string& channel_name, const py::array& channel_data);
-
   //   void writeOtherFields(const std::string& uuid, const seerep::PointCloud2& cloud,
   //                         const std::map<std::string, seerep::PointField>& fields);
 
@@ -132,6 +113,42 @@ public:
   //                        const std::map<std::string, seerep::PointField>& fields);
 
   //   google::protobuf::RepeatedPtrField<seerep::PointField> readPointFieldAttributes(HighFive::Group& cloud_group);
+
+private:
+  template <typename T>
+  bool checkType(const py::dtype& type);
+
+  template <typename T>
+  bool getChannelData(const std::vector<std::string>& channel_names, const std::map<std::string, py::array>& channels,
+                      std::map<std::string, bool>& processed, std::vector<std::vector<std::vector<T>>>& channel_data);
+
+  template <typename T, int Nchannels>
+  void getMinMax(const std::vector<std::vector<std::vector<T>>>& data, std::array<T, Nchannels>& min,
+                 std::array<T, Nchannels>& max);
+
+  void writePoints(const std::string& cloud_group_id, std::map<std::string, bool>& processed,
+                   const std::map<std::string, py::array>& channels);
+
+  void writeColors(const std::string& cloud_group_id, std::map<std::string, bool>& processed,
+                   const std::map<std::string, py::array>& channels);
+
+  void writeNormals(const std::string& cloud_group_id, std::map<std::string, bool>& processed,
+                    const std::map<std::string, py::array>& channels);
+
+  void writeOther(const std::string& cloud_group_id, std::map<std::string, bool>& processed,
+                  const std::string& channel_name, const std::map<std::string, py::array>& channels);
+
+  template <typename T>
+  bool writeChannelTyped(const std::string& cloud_group_id, const std::string& channel_dataset_id,
+                         const std::vector<std::vector<std::string>>& channel_names,
+                         std::map<std::string, bool>& processed, const std::map<std::string, py::array>& channels,
+                         bool write_bb);
+
+  template <typename T, typename Second, typename... Other>
+  bool writeChannelTyped(const std::string& cloud_group_id, const std::string& channel_dataset_id,
+                         const std::vector<std::vector<std::string>>& channel_names,
+                         std::map<std::string, bool>& processed, const std::map<std::string, py::array>& channels,
+                         bool write_bb);
 };
 
 } /* namespace seerep_hdf5_py */
