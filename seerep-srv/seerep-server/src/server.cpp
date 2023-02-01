@@ -51,6 +51,8 @@ void server::parseProgramOptions(int argc, char** argv)
     boost::program_options::options_description visible("Allowed options");
     visible.add(generic).add(config);
 
+    store(boost::program_options::parse_environment(config, environmentVariabeNameMapper), m_programOptionsMap);
+
     store(boost::program_options::command_line_parser(argc, argv).options(cmdline_options).run(), m_programOptionsMap);
     notify(m_programOptionsMap);
 
@@ -86,6 +88,30 @@ void server::parseProgramOptions(int argc, char** argv)
     std::cout << "could not parse programming options" << std::endl;
     std::cout << e.what() << std::endl;
     exit(EXIT_FAILURE);
+  }
+}
+
+std::string server::environmentVariabeNameMapper(std::string envName)
+{
+  if (envName == "SEEREP_DATA_FOLDER")
+  {
+    return "data-folder";
+  }
+  else if (envName == "SEEREP_LOG_PATH")
+  {
+    return "log path";
+  }
+  else if (envName == "SEEREP_LOG_LEVEL")
+  {
+    return "log-level";
+  }
+  else if (envName == "SEEREP_PORT")
+  {
+    return "port";
+  }
+  else
+  {
+    return "";
   }
 }
 
