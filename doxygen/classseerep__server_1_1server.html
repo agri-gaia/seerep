@@ -194,6 +194,9 @@ Static Private Member Functions</h2></td></tr>
 <tr class="memitem:ad807f8d9b526a0c04db7616ce19116e9"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__server_1_1server.html#ad807f8d9b526a0c04db7616ce19116e9">signalHandler</a> (int signum)</td></tr>
 <tr class="memdesc:ad807f8d9b526a0c04db7616ce19116e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">signal handler to flush the logging to file on SIGTERM  <a href="classseerep__server_1_1server.html#ad807f8d9b526a0c04db7616ce19116e9">More...</a><br /></td></tr>
 <tr class="separator:ad807f8d9b526a0c04db7616ce19116e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0344e38dc422215a2c172997fa8164f"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__server_1_1server.html#aa0344e38dc422215a2c172997fa8164f">environmentVariabeNameMapper</a> (std::string envName)</td></tr>
+<tr class="memdesc:aa0344e38dc422215a2c172997fa8164f"><td class="mdescLeft">&#160;</td><td class="mdescRight">maps the environment variable names to the command line names of the options  <a href="classseerep__server_1_1server.html#aa0344e38dc422215a2c172997fa8164f">More...</a><br /></td></tr>
+<tr class="separator:aa0344e38dc422215a2c172997fa8164f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -435,6 +438,35 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>creates the protobuf services </p>
+
+</div>
+</div>
+<a id="aa0344e38dc422215a2c172997fa8164f" name="aa0344e38dc422215a2c172997fa8164f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0344e38dc422215a2c172997fa8164f">&#9670;&nbsp;</a></span>environmentVariabeNameMapper()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string seerep_server::server::environmentVariabeNameMapper </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>envName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>maps the environment variable names to the command line names of the options </p>
+<dl class="section return"><dt>Returns</dt><dd>std::string the mapped name matching the command line options name </dd></dl>
 
 </div>
 </div>
