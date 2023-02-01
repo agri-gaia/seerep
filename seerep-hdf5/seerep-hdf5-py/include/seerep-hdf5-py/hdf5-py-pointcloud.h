@@ -35,7 +35,7 @@ public:
   void writePointCloud(const std::string& uuid, const std::string& frame_id, int64_t seconds, int32_t nanos,
                        uint32_t sequence, const std::map<std::string, py::array> channels);
 
-  //   std::optional<seerep::PointCloud2> readPointCloud2(const std::string& uuid);
+  std::map<std::string, py::array> readPointCloud(const std::string& uuid);
 
   //   std::vector<float> loadBoundingBox(const std::string& uuid);
 

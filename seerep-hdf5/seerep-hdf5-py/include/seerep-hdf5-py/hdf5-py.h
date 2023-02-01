@@ -28,7 +28,8 @@ PYBIND11_MODULE(seerephdf5py, m)
       .def(py::init<seerep_hdf5_py::Hdf5FileWrapper&>(), py::arg("hdf5_file"))
       .def("getPointClouds", &seerep_hdf5_py::Hdf5PyPointCloud::getPointClouds)
       .def("writePointCloud", &seerep_hdf5_py::Hdf5PyPointCloud::writePointCloud, py::arg("uuid"), py::arg("frame_id"),
-           py::arg("seconds"), py::arg("nanos"), py::arg("sequence"), py::arg("channels"));
+           py::arg("seconds"), py::arg("nanos"), py::arg("sequence"), py::arg("channels"))
+      .def("readPointCloud", &seerep_hdf5_py::Hdf5PyPointCloud::readPointCloud, py::arg("uuid"));
 
   py::class_<seerep_hdf5_py::Hdf5PyTf>(m, "TfIO").def(py::init<seerep_hdf5_py::Hdf5FileWrapper&>(),
                                                       py::arg("hdf5_file"));

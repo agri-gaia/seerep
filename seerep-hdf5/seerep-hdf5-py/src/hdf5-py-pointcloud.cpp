@@ -196,6 +196,11 @@ void Hdf5PyPointCloud::writePointCloud(const std::string& uuid, const std::strin
   m_file->flush();
 }
 
+std::map<std::string, py::array> Hdf5PyPointCloud::readPointCloud(const std::string& uuid)
+{
+  return std::map<std::string, py::array>();
+}
+
 void Hdf5PyPointCloud::writePoints(const std::string& cloud_group_id, std::map<std::string, bool>& processed,
                                    const std::map<std::string, py::array>& channels)
 {
