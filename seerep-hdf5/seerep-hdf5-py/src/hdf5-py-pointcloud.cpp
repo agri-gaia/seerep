@@ -198,6 +198,34 @@ void Hdf5PyPointCloud::writePointCloud(const std::string& uuid, const std::strin
 
 std::map<std::string, py::array> Hdf5PyPointCloud::readPointCloud(const std::string& uuid)
 {
+  const std::scoped_lock lock(*m_write_mtx);
+
+  if (!m_file->exist(uuid))
+  {
+    return std::map<std::string, py::array>();
+  }
+
+  HighFive::Group cloud_group = m_file->getGroup(uuid);
+
+  uint32_t height, width, point_step, row_step;
+  bool is_bigendian, is_dense;
+  cloud_group.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::HEIGHT).read(height);
+  cloud_group.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::WIDTH).read(width);
+  cloud_group.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::IS_BIGENDIAN).read(is_bigendian);
+  cloud_group.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::POINT_STEP).read(point_step);
+  cloud_group.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::ROW_STEP).read(row_step);
+  cloud_group.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::IS_DENSE).read(is_dense);
+
+  std::vector<std::string> names;
+  std::vector<uint32_t> offsets;
+  std::vector<uint32_t> counts;
+  std::vector<uint8_t> datatypes;
+
+  cloud_group.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::FIELD_NAME).read(names);
+  cloud_group.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::FIELD_OFFSET).read(offsets);
+  cloud_group.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::FIELD_DATATYPE).read(datatypes);
+  cloud_group.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::FIELD_COUNT).read(counts);
+
   return std::map<std::string, py::array>();
 }
 

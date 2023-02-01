@@ -149,6 +149,9 @@ private:
                          const std::vector<std::vector<std::string>>& channel_names,
                          std::map<std::string, bool>& processed, const std::map<std::string, py::array>& channels,
                          bool write_bb);
+
+  void readPoints(const std::string& cloud_group_id, std::map<std::string, bool>& processed,
+                  const std::map<std::string, py::array>& channels);
 };
 
 } /* namespace seerep_hdf5_py */
