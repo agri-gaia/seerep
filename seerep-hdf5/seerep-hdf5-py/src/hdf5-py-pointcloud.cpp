@@ -74,63 +74,6 @@ void Hdf5PyPointCloud::writePointCloud(const std::string& uuid, const std::strin
     data_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::IS_DENSE).write(true);
   }
 
-  // write point fields
-
-  std::vector<std::string> names(channels.size());
-  std::vector<uint32_t> offsets(channels.size());
-  std::vector<uint8_t> datatypes(channels.size());
-  std::vector<uint32_t> counts(channels.size());
-  uint32_t offset = 0;
-  for (const auto& [name, data] : channels)
-  {
-    py::buffer_info channel_info = data.request();
-
-    names.push_back(name);
-    offsets.push_back(offset);
-
-    switch (data.dtype().char_())
-    {
-      case 'b':
-        datatypes.push_back(1);  // int8
-        break;
-      case 'i':
-        datatypes.push_back(5);  // int32
-        break;
-      case 'B':
-        datatypes.push_back(2);  // uint8
-        break;
-      case 'I':
-        datatypes.push_back(6);  // uint32
-        break;
-      case 'f':
-        datatypes.push_back(7);  // float32
-        break;
-      case 'd':
-        datatypes.push_back(8);  // float64
-        break;
-    }
-
-    if (channel_info.shape.size() > 1)
-    {
-      counts.push_back(channel_info.shape[1]);
-    }
-    else
-    {
-      counts.push_back(1);
-    }
-
-    offset += data.dtype().itemsize();
-  }
-
-  seerep_hdf5_core::Hdf5CoreGeneral::writeAttributeToHdf5(*data_group_ptr,
-                                                          seerep_hdf5_core::Hdf5CorePointCloud::FIELD_NAME, names);
-  seerep_hdf5_core::Hdf5CoreGeneral::writeAttributeToHdf5(*data_group_ptr,
-                                                          seerep_hdf5_core::Hdf5CorePointCloud::FIELD_OFFSET, offsets);
-  seerep_hdf5_core::Hdf5CoreGeneral::writeAttributeToHdf5(
-      *data_group_ptr, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_DATATYPE, datatypes);
-  seerep_hdf5_core::Hdf5CoreGeneral::writeAttributeToHdf5(*data_group_ptr,
-                                                          seerep_hdf5_core::Hdf5CorePointCloud::FIELD_COUNT, counts);
-
   // write header
 
   if (!data_group_ptr->hasAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS))
@@ -190,6 +133,68 @@ void Hdf5PyPointCloud::writePointCloud(const std::string& uuid, const std::strin
       writeOther(cloud_group_id, channel_processed, name, channels);
     }
   }
+
+  // write point fields
+
+  std::vector<std::string> names(channels.size());
+  std::vector<uint32_t> offsets(channels.size());
+  std::vector<uint8_t> datatypes(channels.size());
+  std::vector<uint32_t> counts(channels.size());
+  uint32_t offset = 0;
+  for (const auto& [name, data] : channels)
+  {
+    if (!channel_processed[name])
+    {
+      continue;
+    }
+
+    py::buffer_info channel_info = data.request();
+
+    names.push_back(name);
+    offsets.push_back(offset);
+
+    switch (data.dtype().char_())
+    {
+      case 'b':
+        datatypes.push_back(1);  // int8
+        break;
+      case 'i':
+        datatypes.push_back(5);  // int32
+        break;
+      case 'B':
+        datatypes.push_back(2);  // uint8
+        break;
+      case 'I':
+        datatypes.push_back(6);  // uint32
+        break;
+      case 'f':
+        datatypes.push_back(7);  // float32
+        break;
+      case 'd':
+        datatypes.push_back(8);  // float64
+        break;
+    }
+
+    if (channel_info.shape.size() > 1)
+    {
+      counts.push_back(channel_info.shape[1]);
+    }
+    else
+    {
+      counts.push_back(1);
+    }
+
+    offset += data.dtype().itemsize();
+  }
+
+  seerep_hdf5_core::Hdf5CoreGeneral::writeAttributeToHdf5(*data_group_ptr,
+                                                          seerep_hdf5_core::Hdf5CorePointCloud::FIELD_NAME, names);
+  seerep_hdf5_core::Hdf5CoreGeneral::writeAttributeToHdf5(*data_group_ptr,
+                                                          seerep_hdf5_core::Hdf5CorePointCloud::FIELD_OFFSET, offsets);
+  seerep_hdf5_core::Hdf5CoreGeneral::writeAttributeToHdf5(
+      *data_group_ptr, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_DATATYPE, datatypes);
+  seerep_hdf5_core::Hdf5CoreGeneral::writeAttributeToHdf5(*data_group_ptr,
+                                                          seerep_hdf5_core::Hdf5CorePointCloud::FIELD_COUNT, counts);
 
   m_file->flush();
 }
