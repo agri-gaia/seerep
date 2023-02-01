@@ -33,7 +33,7 @@ public:
   std::vector<std::string> getPointClouds();
 
   void writePointCloud(const std::string& uuid, const std::string& frame_id, int64_t seconds, int32_t nanos,
-                       uint32_t sequence, const std::map<std::string, py::array_t<float>> channels);
+                       uint32_t sequence, const std::map<std::string, py::array> channels);
 
   //   std::optional<seerep::PointCloud2> readPointCloud2(const std::string& uuid);
 
@@ -97,21 +97,24 @@ public:
 
   //   CloudInfo getCloudInfo(const seerep::PointCloud2& cloud);
 
-  bool getChannelData(const std::vector<std::string>& channel_names,
-                      const std::map<std::string, py::array_t<float>>& channels, std::map<std::string, bool>& processed,
-                      std::vector<std::vector<std::vector<float>>>& channel_data);
+  template <typename T>
+  bool checkType(const py::dtype& type);
+
+  template <typename T>
+  bool getChannelData(const std::vector<std::string>& channel_names, const std::map<std::string, py::array>& channels,
+                      std::map<std::string, bool>& processed, std::vector<std::vector<std::vector<T>>>& channel_data);
 
   void writePoints(HighFive::Group& cloud_group, const std::string& cloud_group_id,
-                   std::map<std::string, bool>& processed, const std::map<std::string, py::array_t<float>>& channels);
+                   std::map<std::string, bool>& processed, const std::map<std::string, py::array>& channels);
 
   void writeColors(const std::string& cloud_group_id, std::map<std::string, bool>& processed,
-                   const std::map<std::string, py::array_t<float>>& channels);
+                   const std::map<std::string, py::array>& channels);
 
   void writeNormals(const std::string& cloud_group_id, std::map<std::string, bool>& processed,
-                    const std::map<std::string, py::array_t<float>>& channels);
+                    const std::map<std::string, py::array>& channels);
 
   void writeOther(const std::string& cloud_group_id, std::map<std::string, bool>& processed,
-                  const std::string& channel_name, const py::array_t<float>& channel_data);
+                  const std::string& channel_name, const py::array& channel_data);
 
   //   void writeOtherFields(const std::string& uuid, const seerep::PointCloud2& cloud,
   //                         const std::map<std::string, seerep::PointField>& fields);
@@ -132,5 +135,7 @@ public:
 };
 
 } /* namespace seerep_hdf5_py */
+
+#include "impl/hdf5-py-pointcloud.hpp"  // NOLINT
 
 #endif /* SEEREP_HDF5_PY_HDF5_PY_POINT_CLOUD_H_ */

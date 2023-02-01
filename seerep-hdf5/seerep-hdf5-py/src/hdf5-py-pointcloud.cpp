@@ -26,7 +26,7 @@ std::vector<std::string> Hdf5PyPointCloud::getPointClouds()
 
 void Hdf5PyPointCloud::writePointCloud(const std::string& uuid, const std::string& frame_id, int64_t seconds,
                                        int32_t nanos, uint32_t sequence,
-                                       const std::map<std::string, py::array_t<float>> channels)
+                                       const std::map<std::string, py::array> channels)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
@@ -163,82 +163,21 @@ void Hdf5PyPointCloud::writePointCloud(const std::string& uuid, const std::strin
   m_file->flush();
 }
 
-bool Hdf5PyPointCloud::getChannelData(const std::vector<std::string>& channel_names,
-                                      const std::map<std::string, py::array_t<float>>& channels,
-                                      std::map<std::string, bool>& processed,
-                                      std::vector<std::vector<std::vector<float>>>& channel_data)
-{
-  // make sure that all channels exist
-  for (const auto& channel_name : channel_names)
-  {
-    auto search = channels.find(channel_name);
-    if (search == channels.end())
-    {
-      return false;
-    }
-  }
-
-  // combine channels into single channel
-  channel_data.clear();
-  channel_data.resize(1);
-  for (const auto& channel_name : channel_names)
-  {
-    auto search = channels.find(channel_name);
-    const py::array_t<float>& data = search->second;
-
-    py::buffer_info buff_info = data.request();
-    if (channel_data[0].empty())
-    {
-      // reserve space for first channel
-      channel_data[0].resize(buff_info.shape[0]);
-    }
-    else if ((std::size_t)buff_info.shape[0] != channel_data[0].size())
-    {
-      // not matching channel sizes
-      channel_data.clear();
-      return false;
-    }
-
-    for (unsigned int i = 0; i < buff_info.shape[0]; i++)
-    {
-      if (buff_info.shape.size() > 1)
-      {
-        for (unsigned int j = 0; j < buff_info.shape[1]; j++)
-        {
-          channel_data[0][i].push_back(data.at(i, j));
-        }
-      }
-      else
-      {
-        channel_data[0][i].push_back(data.at(i));
-      }
-    }
-  }
-
-  // mark channels as processed
-  for (const auto& channel_name : channel_names)
-  {
-    processed[channel_name] = true;
-  }
-
-  return true;
-}
-
 void Hdf5PyPointCloud::writePoints(HighFive::Group& cloud_group, const std::string& cloud_group_id,
                                    std::map<std::string, bool>& processed,
-                                   const std::map<std::string, py::array_t<float>>& channels)
+                                   const std::map<std::string, py::array>& channels)
 {
   std::vector<std::vector<std::vector<float>>> point_data(0);
 
   // find channels to use
   bool found_channels = false;
   std::vector<std::string> channels_names({ "xyz" });
-  found_channels = getChannelData(channels_names, channels, processed, point_data);
+  found_channels = getChannelData<float>(channels_names, channels, processed, point_data);
 
   if (!found_channels)
   {
     channels_names = std::vector<std::string>{ "x", "y", "z" };
-    found_channels = getChannelData(channels_names, channels, processed, point_data);
+    found_channels = getChannelData<float>(channels_names, channels, processed, point_data);
   }
 
   if (!found_channels)
@@ -287,31 +226,31 @@ void Hdf5PyPointCloud::writePoints(HighFive::Group& cloud_group, const std::stri
 }
 
 void Hdf5PyPointCloud::writeColors(const std::string& cloud_group_id, std::map<std::string, bool>& processed,
-                                   const std::map<std::string, py::array_t<float>>& channels)
+                                   const std::map<std::string, py::array>& channels)
 {
   std::vector<std::vector<std::vector<float>>> color_data(0);
 
   // find channels to use
   bool found_channels = false;
   std::vector<std::string> channels_names({ "rgba" });
-  found_channels = getChannelData(channels_names, channels, processed, color_data);
+  found_channels = getChannelData<float>(channels_names, channels, processed, color_data);
 
   if (!found_channels)
   {
     channels_names = std::vector<std::string>{ "r", "g", "b", "a" };
-    found_channels = getChannelData(channels_names, channels, processed, color_data);
+    found_channels = getChannelData<float>(channels_names, channels, processed, color_data);
   }
 
   if (!found_channels)
   {
     channels_names = std::vector<std::string>{ "rgb" };
-    found_channels = getChannelData(channels_names, channels, processed, color_data);
+    found_channels = getChannelData<float>(channels_names, channels, processed, color_data);
   }
 
   if (!found_channels)
   {
     channels_names = std::vector<std::string>{ "r", "g", "b" };
-    found_channels = getChannelData(channels_names, channels, processed, color_data);
+    found_channels = getChannelData<float>(channels_names, channels, processed, color_data);
   }
 
   if (!found_channels)
@@ -339,19 +278,19 @@ void Hdf5PyPointCloud::writeColors(const std::string& cloud_group_id, std::map<s
 }
 
 void Hdf5PyPointCloud::writeNormals(const std::string& cloud_group_id, std::map<std::string, bool>& processed,
-                                    const std::map<std::string, py::array_t<float>>& channels)
+                                    const std::map<std::string, py::array>& channels)
 {
   std::vector<std::vector<std::vector<float>>> normal_data(0);
 
   // find channels to use
   bool found_channels = false;
   std::vector<std::string> channels_names({ "normal" });
-  found_channels = getChannelData(channels_names, channels, processed, normal_data);
+  found_channels = getChannelData<float>(channels_names, channels, processed, normal_data);
 
   if (!found_channels)
   {
     channels_names = std::vector<std::string>{ "nx", "ny", "nz" };
-    found_channels = getChannelData(channels_names, channels, processed, normal_data);
+    found_channels = getChannelData<float>(channels_names, channels, processed, normal_data);
   }
 
   if (!found_channels)
@@ -379,13 +318,14 @@ void Hdf5PyPointCloud::writeNormals(const std::string& cloud_group_id, std::map<
 }
 
 void Hdf5PyPointCloud::writeOther(const std::string& cloud_group_id, std::map<std::string, bool>& processed,
-                                  const std::string& channel_name, const py::array_t<float>& channel_data)
+                                  const std::string& channel_name, const py::array& channel_data)
 {
   std::vector<std::vector<std::vector<float>>> data(0);
 
   data.resize(1);
   py::buffer_info buff_info = channel_data.request();
   data[0].resize(buff_info.shape[0]);
+  const py::array_t<float>& channel_data_typed = static_cast<py::array_t<float>>(channel_data);
   for (unsigned int i = 0; i < buff_info.shape[0]; i++)
   {
     if (buff_info.shape.size() > 1)
@@ -393,12 +333,12 @@ void Hdf5PyPointCloud::writeOther(const std::string& cloud_group_id, std::map<st
       data[0][i].reserve(buff_info.shape[1]);
       for (unsigned int j = 0; j < buff_info.shape[1]; j++)
       {
-        data[0][i].push_back(channel_data.at(i, j));
+        data[0][i].push_back(channel_data_typed.at(i, j));
       }
     }
     else
     {
-      data[0][i] = std::vector{ channel_data.at(i) };
+      data[0][i] = std::vector{ channel_data_typed.at(i) };
     }
   }
 
