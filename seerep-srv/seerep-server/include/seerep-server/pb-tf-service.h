@@ -14,17 +14,18 @@
 
 namespace seerep_server
 {
-class PbTfService final : public seerep::TfService::Service
+class PbTfService final : public seerep::pb::TfService::Service
 {
 public:
   PbTfService(std::shared_ptr<seerep_core::Core> seerepCore);
 
-  grpc::Status TransferTransformStamped(grpc::ServerContext* context, const seerep::TransformStamped* transform,
-                                        seerep::ServerResponse* response);
-  grpc::Status GetFrames(grpc::ServerContext* context, const seerep::FrameQuery* frameQuery,
-                         seerep::FrameInfos* response);
-  grpc::Status GetTransformStamped(grpc::ServerContext* context, const seerep::TransformStampedQuery* transformQuery,
-                                   seerep::TransformStamped* response);
+  grpc::Status TransferTransformStamped(grpc::ServerContext* context, const seerep::pb::TransformStamped* transform,
+                                        seerep::pb::ServerResponse* response);
+  grpc::Status GetFrames(grpc::ServerContext* context, const seerep::pb::FrameQuery* frameQuery,
+                         seerep::pb::FrameInfos* response);
+  grpc::Status GetTransformStamped(grpc::ServerContext* context,
+                                   const seerep::pb::TransformStampedQuery* transformQuery,
+                                   seerep::pb::TransformStamped* response);
 
 private:
   std::shared_ptr<seerep_core_pb::CorePbTf> tfPb;

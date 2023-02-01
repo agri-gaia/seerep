@@ -109,7 +109,7 @@ public:
    * @brief Default constructor
    * @param cloud_msg The seerep::PointCloud2 to modify
    */
-  explicit PointCloud2Modifier(seerep::PointCloud2& cloud_msg);
+  explicit PointCloud2Modifier(seerep::pb::PointCloud2& cloud_msg);
 
   /**
    * @return the number of T's in the original seerep::PointCloud2
@@ -164,7 +164,7 @@ public:
 
 protected:
   /** A reference to the original seerep::PointCloud2 that we read */
-  seerep::PointCloud2& cloud_msg_;
+  seerep::pb::PointCloud2& cloud_msg_;
 };
 
 namespace impl
@@ -239,7 +239,7 @@ public:
    * @param field_name the name of the field to iterate upon
    * @return the offset at which the field is found
    */
-  int set_field(const seerep::PointCloud2& cloud_msg, const std::string& field_name);
+  int set_field(const seerep::pb::PointCloud2& cloud_msg, const std::string& field_name);
 
   /** The "point_step" of the original cloud */
   int point_step_;
@@ -279,7 +279,7 @@ public:
  */
 template <typename T>
 class PointCloud2Iterator
-  : public impl::PointCloud2IteratorBase<T, T, unsigned char, seerep::PointCloud2, PointCloud2Iterator>
+  : public impl::PointCloud2IteratorBase<T, T, unsigned char, seerep::pb::PointCloud2, PointCloud2Iterator>
 {
 public:
   /**
@@ -288,8 +288,8 @@ public:
    * @param cloud_msg the cloud message to use
    * @param field_name the field to iterate over
    */
-  PointCloud2Iterator(seerep::PointCloud2& cloud_msg, const std::string& field_name)
-    : impl::PointCloud2IteratorBase<T, T, unsigned char, seerep::PointCloud2,
+  PointCloud2Iterator(seerep::pb::PointCloud2& cloud_msg, const std::string& field_name)
+    : impl::PointCloud2IteratorBase<T, T, unsigned char, seerep::pb::PointCloud2,
                                     seerep_hdf5_pb::PointCloud2Iterator>::PointCloud2IteratorBase(cloud_msg, field_name)
   {
     int offset = this->set_field(cloud_msg, field_name);
@@ -304,7 +304,7 @@ public:
  */
 template <typename T>
 class PointCloud2ConstIterator
-  : public impl::PointCloud2IteratorBase<T, const T, const unsigned char, const seerep::PointCloud2,
+  : public impl::PointCloud2IteratorBase<T, const T, const unsigned char, const seerep::pb::PointCloud2,
                                          PointCloud2ConstIterator>
 {
 public:
@@ -314,8 +314,8 @@ public:
    * @param cloud_msg the cloud message to use
    * @param field_name the field to iterate over
    */
-  PointCloud2ConstIterator(const seerep::PointCloud2& cloud_msg, const std::string& field_name)
-    : impl::PointCloud2IteratorBase<T, const T, const unsigned char, const seerep::PointCloud2,
+  PointCloud2ConstIterator(const seerep::pb::PointCloud2& cloud_msg, const std::string& field_name)
+    : impl::PointCloud2IteratorBase<T, const T, const unsigned char, const seerep::pb::PointCloud2,
                                     seerep_hdf5_pb::PointCloud2ConstIterator>::PointCloud2IteratorBase(cloud_msg,
                                                                                                        field_name)
   {

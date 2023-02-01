@@ -9,8 +9,8 @@ import flatbuffers
 import numpy as np
 
 np.set_printoptions(precision=7)
-from fb import PointCloud2
-from fb import point_cloud_service_grpc_fb as pointCloudService
+from seerep.fb import PointCloud2
+from seerep.fb import point_cloud_service_grpc_fb as pointCloudService
 
 script_dir = os.path.dirname(__file__)
 util_dir = os.path.join(script_dir, '..')

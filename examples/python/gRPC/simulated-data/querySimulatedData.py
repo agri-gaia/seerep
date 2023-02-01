@@ -4,8 +4,8 @@ import os
 import sys
 
 import flatbuffers
-from fb import Image
-from fb import image_service_grpc_fb as imageService
+from seerep.fb import Image
+from seerep.fb import image_service_grpc_fb as imageService
 
 script_dir = os.path.dirname(__file__)
 util_dir = os.path.join(script_dir, '..')

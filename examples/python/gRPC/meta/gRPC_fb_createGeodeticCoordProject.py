@@ -4,9 +4,8 @@ import os
 import sys
 
 import flatbuffers
-from fb import ProjectCreation, ProjectInfos, geodeticCoordinates
-from fb import image_service_grpc_fb as imageService
-from fb import meta_operations_grpc_fb as metaOperations
+from seerep.fb import image_service_grpc_fb as imageService
+from seerep.fb import meta_operations_grpc_fb as metaOperations
 
 script_dir = os.path.dirname(__file__)
 util_dir = os.path.join(script_dir, '..')

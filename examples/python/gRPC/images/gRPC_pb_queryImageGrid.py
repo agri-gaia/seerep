@@ -3,11 +3,11 @@
 import os
 import sys
 
-import image_service_pb2_grpc as imageService
-import labels_with_category_pb2 as labels_with_category
-import meta_operations_pb2_grpc as metaOperations
-import query_pb2 as query
 from google.protobuf import empty_pb2
+from seerep.pb import image_service_pb2_grpc as imageService
+from seerep.pb import labels_with_category_pb2 as labels_with_category
+from seerep.pb import meta_operations_pb2_grpc as metaOperations
+from seerep.pb import query_pb2 as query
 
 script_dir = os.path.dirname(__file__)
 util_dir = os.path.join(script_dir, '..')

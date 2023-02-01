@@ -30,8 +30,8 @@ public:
   CorePbTf(std::shared_ptr<seerep_core::Core> seerepCore);
   ~CorePbTf();
 
-  std::optional<seerep::TransformStamped> getData(const seerep::TransformStampedQuery& query);
-  void addData(const seerep::TransformStamped& tf);
+  std::optional<seerep::pb::TransformStamped> getData(const seerep::pb::TransformStampedQuery& query);
+  void addData(const seerep::pb::TransformStamped& tf);
   std::vector<std::string> getFrames(const boost::uuids::uuid& projectuuid);
 
 private:

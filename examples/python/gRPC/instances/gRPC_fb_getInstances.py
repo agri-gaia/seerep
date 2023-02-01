@@ -4,8 +4,8 @@ import os
 import sys
 
 import flatbuffers
-from fb import Datatype, UuidsPerProject
-from fb import instance_service_grpc_fb as instanceService
+from seerep.fb import Datatype, UuidsPerProject
+from seerep.fb import instance_service_grpc_fb as instanceService
 
 # importing util functions. Assuming that these files are in the parent dir
 # examples/python/gRPC/util.py

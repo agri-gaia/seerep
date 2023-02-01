@@ -4,8 +4,8 @@ import os
 import sys
 
 import flatbuffers
-from fb import TransformStamped, TransformStampedQuery
-from fb import tf_service_grpc_fb as tfService
+from seerep.fb import TransformStamped, TransformStampedQuery
+from seerep.fb import tf_service_grpc_fb as tfService
 
 script_dir = os.path.dirname(__file__)
 util_dir = os.path.join(script_dir, '..')

@@ -15,7 +15,7 @@ CorePbTf::~CorePbTf()
 {
 }
 
-std::optional<seerep::TransformStamped> CorePbTf::getData(const seerep::TransformStampedQuery& query)
+std::optional<seerep::pb::TransformStamped> CorePbTf::getData(const seerep::pb::TransformStampedQuery& query)
 {
   std::cout << "loading tf from tfs/" << std::endl;
   seerep_core_msgs::QueryTf queryTf = CorePbConversion::fromPb(query);
@@ -32,7 +32,7 @@ std::optional<seerep::TransformStamped> CorePbTf::getData(const seerep::Transfor
   }
 }
 
-void CorePbTf::addData(const seerep::TransformStamped& tf)
+void CorePbTf::addData(const seerep::pb::TransformStamped& tf)
 {
   boost::uuids::string_generator gen;
   boost::uuids::uuid projectuuid = gen(tf.header().uuid_project());

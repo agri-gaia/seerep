@@ -14,7 +14,7 @@ CorePbImage::~CorePbImage()
 {
 }
 
-void CorePbImage::getData(const seerep::Query& query, grpc::ServerWriter<seerep::Image>* const writer)
+void CorePbImage::getData(const seerep::pb::Query& query, grpc::ServerWriter<seerep::pb::Image>* const writer)
 {
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "loading image from images/" << std::endl;
   seerep_core_msgs::Query queryCore = CorePbConversion::fromPb(query, seerep_core_msgs::Datatype::Image);
@@ -28,7 +28,7 @@ void CorePbImage::getData(const seerep::Query& query, grpc::ServerWriter<seerep:
     for (auto uuidImg : project.dataOrInstanceUuids)
     {
       auto hdf5io = getHdf5(project.projectUuid);
-      std::optional<seerep::Image> image = hdf5io->readImage(boost::lexical_cast<std::string>(uuidImg));
+      std::optional<seerep::pb::Image> image = hdf5io->readImage(boost::lexical_cast<std::string>(uuidImg));
       if (image)
       {
         BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
@@ -39,7 +39,7 @@ void CorePbImage::getData(const seerep::Query& query, grpc::ServerWriter<seerep:
   }
 }
 
-boost::uuids::uuid CorePbImage::addData(const seerep::Image& img)
+boost::uuids::uuid CorePbImage::addData(const seerep::pb::Image& img)
 {
   seerep_core_msgs::DatasetIndexable dataForIndices = CorePbConversion::fromPb(img);
 

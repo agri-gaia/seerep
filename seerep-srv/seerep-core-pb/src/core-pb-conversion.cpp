@@ -2,7 +2,7 @@
 
 namespace seerep_core_pb
 {
-seerep_core_msgs::Query CorePbConversion::fromPb(const seerep::Query& query, seerep_core_msgs::Datatype datatype)
+seerep_core_msgs::Query CorePbConversion::fromPb(const seerep::pb::Query& query, seerep_core_msgs::Datatype datatype)
 {
   seerep_core_msgs::Query queryCore;
   queryCore.header.datatype = datatype;
@@ -21,7 +21,7 @@ seerep_core_msgs::Query CorePbConversion::fromPb(const seerep::Query& query, see
   return queryCore;
 }
 
-seerep_core_msgs::DatasetIndexable CorePbConversion::fromPb(const seerep::Image& img)
+seerep_core_msgs::DatasetIndexable CorePbConversion::fromPb(const seerep::pb::Image& img)
 {
   boost::uuids::string_generator gen;
   boost::uuids::uuid uuid;
@@ -111,7 +111,7 @@ seerep_core_msgs::DatasetIndexable CorePbConversion::fromPb(const seerep::Image&
   return dataForIndices;
 }
 
-seerep_core_msgs::QueryTf CorePbConversion::fromPb(const seerep::TransformStampedQuery& query)
+seerep_core_msgs::QueryTf CorePbConversion::fromPb(const seerep::pb::TransformStampedQuery& query)
 {
   boost::uuids::string_generator gen;
   seerep_core_msgs::QueryTf queryTf;
@@ -124,7 +124,7 @@ seerep_core_msgs::QueryTf CorePbConversion::fromPb(const seerep::TransformStampe
   return queryTf;
 }
 
-void CorePbConversion::fromPbProject(const seerep::Query& query, seerep_core_msgs::Query& queryCore)
+void CorePbConversion::fromPbProject(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
 {
   boost::uuids::string_generator gen;
   if (!query.projectuuid().empty())
@@ -137,7 +137,7 @@ void CorePbConversion::fromPbProject(const seerep::Query& query, seerep_core_msg
   }
 }
 
-void CorePbConversion::fromPbLabel(const seerep::Query& query, seerep_core_msgs::Query& queryCore)
+void CorePbConversion::fromPbLabel(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
 {
   if (!query.labelswithcategory().empty())
   {
@@ -154,7 +154,7 @@ void CorePbConversion::fromPbLabel(const seerep::Query& query, seerep_core_msgs:
   }
 }
 
-void CorePbConversion::fromPbTime(const seerep::Query& query, seerep_core_msgs::Query& queryCore)
+void CorePbConversion::fromPbTime(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
 {
   if (query.timeinterval().has_time_min() && query.timeinterval().has_time_max())
   {
@@ -166,7 +166,7 @@ void CorePbConversion::fromPbTime(const seerep::Query& query, seerep_core_msgs::
   }
 }
 
-void CorePbConversion::fromPbBoundingBox(const seerep::Query& query, seerep_core_msgs::Query& queryCore)
+void CorePbConversion::fromPbBoundingBox(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
 {
   if (query.boundingboxstamped().has_header() && query.boundingboxstamped().has_boundingbox() &&
       query.boundingboxstamped().boundingbox().has_point_min() &&
@@ -183,12 +183,12 @@ void CorePbConversion::fromPbBoundingBox(const seerep::Query& query, seerep_core
   }
 }
 
-void CorePbConversion::fromPbMustHaveAllLabels(const seerep::Query& query, seerep_core_msgs::Query& queryCore)
+void CorePbConversion::fromPbMustHaveAllLabels(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
 {
   queryCore.mustHaveAllLabels = query.musthavealllabels();
 }
 
-void CorePbConversion::fromPbInstance(const seerep::Query& query, seerep_core_msgs::Query& queryCore)
+void CorePbConversion::fromPbInstance(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
 {
   boost::uuids::string_generator gen;
   if (!query.instanceuuid().empty())
@@ -201,7 +201,7 @@ void CorePbConversion::fromPbInstance(const seerep::Query& query, seerep_core_ms
   }
 }
 
-void CorePbConversion::fromPbDataUuids(const seerep::Query& query, seerep_core_msgs::Query& queryCore)
+void CorePbConversion::fromPbDataUuids(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
 {
   boost::uuids::string_generator gen;
   if (!query.datauuid().empty())
@@ -214,12 +214,12 @@ void CorePbConversion::fromPbDataUuids(const seerep::Query& query, seerep_core_m
   }
 }
 
-void CorePbConversion::fromPbWithOutData(const seerep::Query& query, seerep_core_msgs::Query& queryCore)
+void CorePbConversion::fromPbWithOutData(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
 {
   queryCore.withoutData = query.withoutdata();
 }
 
-void CorePbConversion::fromFbQueryMaxNumData(const seerep::Query& query, seerep_core_msgs::Query& queryCore)
+void CorePbConversion::fromFbQueryMaxNumData(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
 {
   queryCore.maxNumData = query.maxnumdata();
 }

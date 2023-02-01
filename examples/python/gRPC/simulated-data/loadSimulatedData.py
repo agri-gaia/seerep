@@ -4,20 +4,20 @@ import os
 import sys
 import uuid
 
-import boundingbox2d_labeled_pb2 as bb
-import image_pb2 as image
-import image_service_pb2_grpc as imageService
 import imageio.v2 as imageio
-import label_with_instance_pb2 as labelWithInstance
-import meta_operations_pb2_grpc as metaOperations
 import numpy as np
-import point_cloud_2_pb2 as pointcloud
-import point_cloud_service_pb2_grpc as pointcloudService
-import point_field_pb2 as pointfield
-import projectCreation_pb2 as projectCreation
-import tf_service_pb2_grpc as tfService
-import transform_stamped_pb2 as tf
 import yaml
+from seerep.pb import boundingbox2d_labeled_pb2 as bb
+from seerep.pb import image_pb2 as image
+from seerep.pb import image_service_pb2_grpc as imageService
+from seerep.pb import label_with_instance_pb2 as labelWithInstance
+from seerep.pb import meta_operations_pb2_grpc as metaOperations
+from seerep.pb import point_cloud_2_pb2 as pointcloud
+from seerep.pb import point_cloud_service_pb2_grpc as pointcloudService
+from seerep.pb import point_field_pb2 as pointfield
+from seerep.pb import projectCreation_pb2 as projectCreation
+from seerep.pb import tf_service_pb2_grpc as tfService
+from seerep.pb import transform_stamped_pb2 as tf
 
 script_dir = os.path.dirname(__file__)
 util_dir = os.path.join(script_dir, '..')

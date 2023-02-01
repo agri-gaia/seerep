@@ -1,0 +1,11 @@
+global-exclude *
+
+recursive-include seerep-msgs/protos *.proto
+recursive-include seerep-com/protos *.proto
+recursive-include seerep-msgs/fbs *.fbs
+recursive-include seerep-com/fbs *.fbs
+
+include setup.py
+include pyproject.toml
+include docs/pypi/README.md
+include LICENSE

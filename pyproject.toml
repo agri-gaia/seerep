@@ -1,8 +1,33 @@
+[build-system]
+requires = ["setuptools>=45", "setuptools_scm[toml]>=6.2","grpcio-tools==1.51.1"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "seerep_grpc"
+description = "Package for the SEEREP gRPC API"
+readme = "docs/pypi/README.md"
+license = {text = "BSD 3-Clause License"}
+requires-python = ">=3.8"
+keywords = ["SEEREP, gRPC, Protocol Buffers", "Flatbuffers"]
+authors = [
+    {name = "Mark Niemeyer", email = "mark.niemeyer@dfki.de"}
+]
+dependencies = [
+    "protobuf == 4.21.12",
+    "flatbuffers == 22.12.6",
+    "grpcio == 1.51.1",
+]
+dynamic = ["version"]
+
+[tool.setuptools_scm]
+version_scheme = "no-guess-dev"
+local_scheme = "no-local-version"
+
+[project.urls]
+Repository = "https://github.com/agri-gaia/seerep"
+Documentation = "https://agri-gaia.github.io/seerep/mkdocs/home/index.html"
+
 [tool.black]
 line-length = 120
 target-version = ['py38']
 skip-string-normalization = true
-
-[build-system]
-requires = ["setuptools", "dunamai", "pathlib"]
-build-backend = "setuptools.build_meta"
