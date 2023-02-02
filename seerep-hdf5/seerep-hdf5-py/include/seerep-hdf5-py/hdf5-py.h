@@ -29,6 +29,7 @@ PYBIND11_MODULE(seerephdf5py, m)
       .def(py::init<const std::string&>(), py::arg("category"))
       .def_readwrite("category", &seerep_hdf5_py::GeneralLabel::category)
       .def_readwrite("labels", &seerep_hdf5_py::GeneralLabel::labels)
+      .def("addLabel", &seerep_hdf5_py::GeneralLabel::addLabel, py::arg("label"))
       .def("__repr__",
            [](seerep_hdf5_py::GeneralLabel& l) { return "<seerephdf5py.GeneralLabel '" + l.category + "'>"; });
 
@@ -62,6 +63,7 @@ PYBIND11_MODULE(seerephdf5py, m)
       .def(py::init<const std::string&>(), py::arg("category"))
       .def_readwrite("category", &seerep_hdf5_py::CategorizedBoundingBoxLabel<3>::category)
       .def_readwrite("labels", &seerep_hdf5_py::CategorizedBoundingBoxLabel<3>::labels)
+      .def("addLabel", &seerep_hdf5_py::CategorizedBoundingBoxLabel<3>::addLabel, py::arg("label"))
       .def("__repr__", [](seerep_hdf5_py::CategorizedBoundingBoxLabel<3>& l) {
         return "<seerephdf5py.CategorizedBoundingBoxLabel3D '" + l.category + "'>";
       });
@@ -70,6 +72,7 @@ PYBIND11_MODULE(seerephdf5py, m)
       .def(py::init<const std::string&>(), py::arg("category"))
       .def_readwrite("category", &seerep_hdf5_py::CategorizedBoundingBoxLabel<2>::category)
       .def_readwrite("labels", &seerep_hdf5_py::CategorizedBoundingBoxLabel<2>::labels)
+      .def("addLabel", &seerep_hdf5_py::CategorizedBoundingBoxLabel<2>::addLabel, py::arg("label"))
       .def("__repr__", [](seerep_hdf5_py::CategorizedBoundingBoxLabel<2>& l) {
         return "<seerephdf5py.CategorizedBoundingBoxLabel2D '" + l.category + "'>";
       });

@@ -62,6 +62,11 @@ public:
   {
   }
 
+  void addLabel(InstanceLabel& label)
+  {
+    labels.push_back(label);
+  }
+
   std::string category = "";
   std::vector<InstanceLabel> labels;
 };
@@ -87,6 +92,11 @@ struct CategorizedBoundingBoxLabel
 public:
   CategorizedBoundingBoxLabel(const std::string& new_category) : category(new_category)
   {
+  }
+
+  void addLabel(BoundingBoxLabel<NumDimensions>& label)
+  {
+    labels.push_back(label);
   }
 
   std::string category = "";
