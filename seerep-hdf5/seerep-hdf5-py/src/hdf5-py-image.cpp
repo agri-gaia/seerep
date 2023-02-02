@@ -12,4 +12,15 @@ Hdf5PyImage::Hdf5PyImage(Hdf5FileWrapper& hdf5_file)
 {
 }
 
+void Hdf5PyImage::writeImage(const std::string& uuid, const std::string& frame_id, int64_t seconds, int32_t nanos,
+                             uint32_t sequence, const py::array& image)
+{
+  // TODO
+}
+
+py::array Hdf5PyImage::readImage(const std::string& uuid)
+{
+  // TODO
+}
+
 } /* namespace seerep_hdf5_py */

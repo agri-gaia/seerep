@@ -16,6 +16,12 @@
 #include <boost/geometry.hpp>
 #include <optional>
 
+// pybind
+#include <pybind11/numpy.h>
+#include <pybind11/pybind11.h>
+
+namespace py = pybind11;
+
 namespace seerep_hdf5_py
 {
 
@@ -24,9 +30,10 @@ class Hdf5PyImage : public seerep_hdf5_core::Hdf5CoreImage, public Hdf5PyGeneral
 public:
   Hdf5PyImage(Hdf5FileWrapper& hdf5_file);
 
-  //   void writeImage(const std::string& id, const seerep::Image& image);
+  void writeImage(const std::string& uuid, const std::string& frame_id, int64_t seconds, int32_t nanos,
+                  uint32_t sequence, const py::array& image);
 
-  //   std::optional<seerep::Image> readImage(const std::string& id);
+  py::array readImage(const std::string& uuid);
 };
 
 }  // namespace seerep_hdf5_py

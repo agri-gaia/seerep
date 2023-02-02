@@ -22,7 +22,10 @@ PYBIND11_MODULE(seerephdf5py, m)
            [](seerep_hdf5_py::Hdf5FileWrapper& f) { return "<seerephdf5py.File '" + f.getFile()->getName() + "'>"; });
 
   py::class_<seerep_hdf5_py::Hdf5PyImage>(m, "ImageIO")
-      .def(py::init<seerep_hdf5_py::Hdf5FileWrapper&>(), py::arg("hdf5_file"));
+      .def(py::init<seerep_hdf5_py::Hdf5FileWrapper&>(), py::arg("hdf5_file"))
+      .def("writeImage", &seerep_hdf5_py::Hdf5PyImage::writeImage, py::arg("uuid"), py::arg("frame_id"),
+           py::arg("seconds"), py::arg("nanos"), py::arg("sequence"), py::arg("image"))
+      .def("readImage", &seerep_hdf5_py::Hdf5PyImage::readImage, py::arg("uuid"));
 
   py::class_<seerep_hdf5_py::Hdf5PyPointCloud>(m, "PointCloudIO")
       .def(py::init<seerep_hdf5_py::Hdf5FileWrapper&>(), py::arg("hdf5_file"))
