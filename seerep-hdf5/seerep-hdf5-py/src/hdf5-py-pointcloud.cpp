@@ -200,12 +200,14 @@ std::map<std::string, py::array> Hdf5PyPointCloud::readPointCloud(const std::str
 {
   const std::scoped_lock lock(*m_write_mtx);
 
-  if (!m_file->exist(uuid))
+  std::string cloud_group_id = seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + uuid;
+
+  if (!m_file->exist(cloud_group_id))
   {
     return std::map<std::string, py::array>();
   }
 
-  HighFive::Group cloud_group = m_file->getGroup(uuid);
+  HighFive::Group cloud_group = m_file->getGroup(cloud_group_id);
 
   uint32_t height, width, point_step, row_step;
   bool is_bigendian, is_dense;
@@ -225,6 +227,12 @@ std::map<std::string, py::array> Hdf5PyPointCloud::readPointCloud(const std::str
   cloud_group.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::FIELD_OFFSET).read(offsets);
   cloud_group.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::FIELD_DATATYPE).read(datatypes);
   cloud_group.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::FIELD_COUNT).read(counts);
+
+  std::string points_id = cloud_group_id + "/points";
+  if (m_file->exist(points_id))
+  {
+    // TODO: load data and reformat to match point fields
+  }
 
   return std::map<std::string, py::array>();
 }
