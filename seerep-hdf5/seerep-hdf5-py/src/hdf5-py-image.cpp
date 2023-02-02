@@ -49,30 +49,31 @@ void Hdf5PyImage::writeImage(const std::string& uuid, const std::string& frame_i
   HighFive::DataSpace dataSpace({ image_buff_info.shape[0] * image_buff_info.shape[1] * num_channels });
   auto dataGroupPtr = getHdf5Group(hdf5GroupPath);
 
-  std::shared_ptr<HighFive::DataSet> dataSetPtr = nullptr;
-
   std::size_t channel_size = 0;  // element (channel data) size in bytes
-  switch (image.dtype().char_())
+  if (image.dtype().char_() == 'B')
   {
-    case 'B':
-      // image data is uint8_t
-      dataSetPtr = getHdf5DataSet<uint8_t>(hdf5DataSetPath, dataSpace);
-      channel_size = sizeof(uint8_t);
+    // image data is uint8_t
+    auto dataSetPtr = getHdf5DataSet<uint8_t>(hdf5DataSetPath, dataSpace);
+    channel_size = sizeof(uint8_t);
 
-      // TODO: write data
-      break;
+    const auto& typed_image = static_cast<py::array_t<uint8_t>>(image);
+    dataSetPtr->write(std::vector<uint8_t>(
+        typed_image.data(), typed_image.data() + image_buff_info.shape[0] * image_buff_info.shape[1] * num_channels));
+  }
+  else if (image.dtype().char_() == 'H')
+  {
+    // image data is uint16_t
+    auto dataSetPtr = getHdf5DataSet<uint16_t>(hdf5DataSetPath, dataSpace);
+    encoding = "rgb16";
+    channel_size = sizeof(uint16_t);
 
-    case 'H':
-      // image data is uint16_t
-      dataSetPtr = getHdf5DataSet<uint16_t>(hdf5DataSetPath, dataSpace);
-      encoding = "rgb16";
-      channel_size = sizeof(uint16_t);
-
-      // TODO: write data
-      break;
-
-    default:
-      throw std::invalid_argument("image data dtype needs to be either 8 or 16 bit unsigned integer");
+    const auto& typed_image = static_cast<py::array_t<uint16_t>>(image);
+    dataSetPtr->write(std::vector<uint16_t>(
+        typed_image.data(), typed_image.data() + image_buff_info.shape[0] * image_buff_info.shape[1] * num_channels));
+  }
+  else
+  {
+    throw std::invalid_argument("image data dtype needs to be either 8 or 16 bit unsigned integer");
   }
 
   // append amount of bits per channel to encoding name
