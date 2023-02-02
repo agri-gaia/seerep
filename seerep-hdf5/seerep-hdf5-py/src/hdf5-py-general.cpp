@@ -9,4 +9,9 @@ Hdf5PyGeneral::Hdf5PyGeneral(Hdf5FileWrapper& hdf5_file) : Hdf5CoreGeneral(hdf5_
 {
 }
 
+void Hdf5PyGeneral::writeLabelsGeneral(const std::string& data_group_id, const std::string& uuid,
+                                       const std::vector<seerep_hdf5_py::GeneralLabel>& general_labels)
+{
+}
+
 } /* namespace seerep_hdf5_py */

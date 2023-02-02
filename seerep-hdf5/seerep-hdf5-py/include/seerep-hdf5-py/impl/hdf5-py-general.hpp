@@ -1,6 +1,12 @@
 
 namespace seerep_hdf5_py
 {
+template <int NumDimensions>
+void Hdf5PyGeneral::writeBoundingBoxLabeled(
+    const std::string& data_group_id, const std::string& uuid,
+    const std::vector<seerep_hdf5_py::CategorizedBoundingBoxLabel<NumDimensions>>& bb_labels)
+{
+}
 // template <class T>
 // void Hdf5PyGeneral::writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, const seerep::Header& header)
 // {
