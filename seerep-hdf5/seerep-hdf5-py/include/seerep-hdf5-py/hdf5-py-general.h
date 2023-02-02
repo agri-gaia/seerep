@@ -43,6 +43,56 @@ private:
   std::shared_ptr<std::mutex> write_mutex_;
 };
 
+struct InstanceLabel
+{
+public:
+  InstanceLabel(const std::string& new_label, const std::string& new_instance_uuid)
+    : label(new_label), instance_uuid(new_instance_uuid)
+  {
+  }
+
+  std::string label = "";
+  std::string instance_uuid = "";
+};
+
+struct GeneralLabel
+{
+public:
+  GeneralLabel(const std::string& new_category) : category(new_category)
+  {
+  }
+
+  std::string category = "";
+  std::vector<InstanceLabel> labels;
+};
+
+template <int NumDimensions>
+struct BoundingBoxLabel
+{
+public:
+  BoundingBoxLabel(InstanceLabel& new_label, std::array<double, NumDimensions>& new_min_point,
+                   std::array<double, NumDimensions>& new_max_point)
+    : label(new_label), min_point(new_min_point), max_point(new_max_point)
+  {
+  }
+
+  InstanceLabel label;
+  std::array<double, NumDimensions> min_point;
+  std::array<double, NumDimensions> max_point;
+};
+
+template <int NumDimensions>
+struct CategorizedBoundingBoxLabel
+{
+public:
+  CategorizedBoundingBoxLabel(const std::string& new_category) : category(new_category)
+  {
+  }
+
+  std::string category = "";
+  std::vector<BoundingBoxLabel<NumDimensions>> labels;
+};
+
 class Hdf5PyGeneral : public virtual seerep_hdf5_core::Hdf5CoreGeneral
 {
 protected:
