@@ -86,7 +86,9 @@ PYBIND11_MODULE(seerephdf5py, m)
   py::class_<seerep_hdf5_py::Hdf5PyImage>(m, "ImageIO")
       .def(py::init<seerep_hdf5_py::Hdf5FileWrapper&>(), py::arg("hdf5_file"))
       .def("writeImage", &seerep_hdf5_py::Hdf5PyImage::writeImage, py::arg("uuid"), py::arg("frame_id"),
-           py::arg("seconds"), py::arg("nanos"), py::arg("sequence"), py::arg("image"))
+           py::arg("seconds"), py::arg("nanos"), py::arg("sequence"), py::arg("image"),
+           py::arg("general_labels") = std::vector<seerep_hdf5_py::GeneralLabel>(),
+           py::arg("bb_labels") = std::vector<seerep_hdf5_py::CategorizedBoundingBoxLabel<2>>())
       .def("readImage", &seerep_hdf5_py::Hdf5PyImage::readImage, py::arg("uuid"));
 
   py::class_<seerep_hdf5_py::Hdf5PyPointCloud>(m, "PointCloudIO")

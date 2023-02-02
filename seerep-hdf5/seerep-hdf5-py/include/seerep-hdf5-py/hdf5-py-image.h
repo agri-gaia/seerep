@@ -31,7 +31,9 @@ public:
   Hdf5PyImage(Hdf5FileWrapper& hdf5_file);
 
   void writeImage(const std::string& uuid, const std::string& frame_id, int64_t seconds, int32_t nanos,
-                  uint32_t sequence, const py::array& image);
+                  uint32_t sequence, const py::array& image,
+                  const std::vector<seerep_hdf5_py::GeneralLabel>& general_labels,
+                  const std::vector<seerep_hdf5_py::CategorizedBoundingBoxLabel<2>>& bb_labels);
 
   py::array readImage(const std::string& uuid);
 };
