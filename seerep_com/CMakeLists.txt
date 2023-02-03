@@ -33,6 +33,7 @@ set(MY_FBS_FILES
     fbs/tf_service.fbs
     fbs/transfer_sensor_msgs.fbs
     fbs/point_cloud_service.fbs
+    fbs/camera_intrinsics_service.fbs
 )
 
 build_flatbuffers(
