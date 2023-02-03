@@ -1,11 +1,12 @@
 
-include "header.fbs"
-include "region_of_interest.fbs"
+include "header.fbs";
+include "region_of_interest.fbs";
 
-namespace seerep.fbs
+namespace seerep.fb;
 
-table cameraIntrinsics {
-    header:header;
+table CameraIntrinsics
+{
+    header:Header;
     height:uint32;
     width:uint32;
     distortion_model:string;
