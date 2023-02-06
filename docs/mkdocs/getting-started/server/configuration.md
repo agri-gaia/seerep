@@ -43,7 +43,7 @@ If one of the following environment variables is set, it will be parsed and set 
 
 | Environment variable  | command line equivalent   |
 |---                    |---                        |
-| SEEREP_DATA_FOLDER    |  --data-folder            |
-| SEEREP_LOG_PATH       |   --log-pat               |
-| SEEREP_LOG_LEVEL      |   --log-level             |
-| SEEREP_PORT           |   --port                  |
+| SEEREP_DATA_FOLDER    | --data-folder             |
+| SEEREP_LOG_PATH       | --log-path                |
+| SEEREP_LOG_LEVEL      | --log-level               |
+| SEEREP_PORT           | --port                    |
