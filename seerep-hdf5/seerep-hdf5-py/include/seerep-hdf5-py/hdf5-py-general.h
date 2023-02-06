@@ -135,8 +135,7 @@ protected:
   void writeLabelsGeneral(const std::string& data_group_id,
                           const std::vector<seerep_hdf5_py::GeneralLabel>& general_labels);
 
-  //   std::optional<google::protobuf::RepeatedPtrField<seerep::LabelsWithInstanceWithCategory>>
-  //   readLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid);
+  std::shared_ptr<std::vector<seerep_hdf5_py::GeneralLabel>> readLabelsGeneral(const std::string& data_group_id);
 };
 
 }  // namespace seerep_hdf5_py

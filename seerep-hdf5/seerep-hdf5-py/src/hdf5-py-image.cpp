@@ -97,8 +97,6 @@ void Hdf5PyImage::writeImage(const std::string& uuid, const std::string& frame_i
 
   writeImageAttributes(uuid, imageAttributes);
 
-  // TODO: write labels
-
   Hdf5PyGeneral::writeBoundingBoxLabeled(hdf5DataSetPath, bb_labels);
   Hdf5PyGeneral::writeLabelsGeneral(hdf5DataSetPath, general_labels);
 
@@ -112,7 +110,6 @@ py::array Hdf5PyImage::readImage(const std::string& uuid)
   std::string hdf5GroupPath = getHdf5GroupPath(uuid);
   std::string hdf5DataSetPath = getHdf5DataSetPath(uuid);
 
-  // TODO add logging
   if (!exists(hdf5DataSetPath) || !exists(hdf5GroupPath))
   {
     throw std::invalid_argument("image with uuid '" + uuid + "' does not exist");
@@ -164,6 +161,9 @@ py::array Hdf5PyImage::readImage(const std::string& uuid)
   {
     throw std::invalid_argument("unsupported encoding '" + imageAttributes.encoding + "'");
   }
+
+  auto general_labels = Hdf5PyGeneral::readLabelsGeneral(hdf5GroupPath);
+  // TODO: load bounding box labels
 
   return image;
 }
