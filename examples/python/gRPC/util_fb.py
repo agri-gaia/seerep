@@ -79,13 +79,26 @@ def createProject(channel, builder, name, frameId, coordSys, ellipsoid, altitude
     return response.Uuid().decode("utf-8")
 
 
-def getOrCreateProject(builder, channel, name, create=True, mapFrameId="map"):
+def getOrCreateProject(
+    builder,
+    channel,
+    name,
+    create=True,
+    mapFrameId="map",
+    coordSys="",
+    ellipsoid="",
+    altitude=0.0,
+    latitude=0.0,
+    longitude=0.0,
+):
     '''Get the project,, or if not present, create one'''
     projectUuid = getProject(builder, channel, name)
 
     if projectUuid is None:
         if create:
-            projectUuid = createProject(channel, builder, name, mapFrameId)
+            projectUuid = createProject(
+                channel, builder, name, mapFrameId, coordSys, ellipsoid, altitude, latitude, longitude
+            )
         else:
             sys.exit()
 

@@ -17,7 +17,7 @@ builder = flatbuffers.Builder(1024)
 channel = util.get_gRPC_channel()
 
 # 1. Get all projects from the server
-projectuuid = util_fb.getProject(builder, channel, 'simulatedData')
+projectuuid = util_fb.getProject(builder, channel, 'simulatedDataWithInstances')
 
 # 2. Check if the defined project exist; if not exit
 if not projectuuid:
@@ -37,15 +37,15 @@ timeMax = util_fb.createTimeStamp(builder, 1654688940, 0)
 timeInterval = util_fb.createTimeInterval(builder, timeMin, timeMax)
 
 projectUuids = [builder.CreateString(projectuuid)]
-labels = [builder.CreateString("http://aims.fao.org/aos/agrovoc/c_14385")]
+labels = util_fb.createLabelWithCategory(builder, ["ground_truth"], [[builder.CreateString("Gänseblümchen")]])
 
 # 4. Create a query with parameters
 # all parameters are optional
 # with all parameters set (especially with the data and instance uuids set) the result of the query will be empty. Set the query parameters to adequate values or remove them from the query creation
 query = util_fb.createQuery(
     builder,
-    boundingBox=boundingboxStamped,
-    timeInterval=timeInterval,
+    # boundingBox=boundingboxStamped,
+    # timeInterval=timeInterval,
     labels=labels,
     projectUuids=projectUuids,
     # instanceUuids=instanceUuids,
@@ -61,14 +61,17 @@ for responseBuf in stub.GetImage(bytes(buf)):
     print(str(i) + "uuidmsg: " + response.Header().UuidMsgs().decode("utf-8"))
     i = i + 1
     if response.LabelsBbLength() > 0:
-        print("first label: " + response.LabelsBb(0).LabelWithInstance().Label().decode("utf-8"))
+        print("category: " + response.LabelsBb(0).Category().decode("utf-8"))
+        print(
+            "first label: " + response.LabelsBb(0).BoundingBox2dLabeled(0).LabelWithInstance().Label().decode("utf-8")
+        )
         print(
             "first BoundingBox (Xmin,Ymin,Xmax,Ymax): "
-            + str(response.LabelsBb(0).BoundingBox().PointMin().X())
+            + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().PointMin().X())
             + " "
-            + str(response.LabelsBb(0).BoundingBox().PointMin().Y())
+            + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().PointMin().Y())
             + " "
-            + str(response.LabelsBb(0).BoundingBox().PointMax().X())
+            + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().PointMax().X())
             + " "
-            + str(response.LabelsBb(0).BoundingBox().PointMax().Y())
+            + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().PointMax().Y())
         )
