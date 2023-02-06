@@ -169,7 +169,7 @@ void Hdf5CoreGeneral::readBoundingBoxLabeled(const std::string& datatypeGroup, c
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
       << "reading the bounding box with labels of " << id;
 
-  getLabelCategories(id, LABELGENERAL, labelCategories);
+  getLabelCategories(id, LABELBB, labelCategories);
 
   labelsPerCategory.resize(labelCategories.size());
   boundingBoxesPerCategory.resize(labelCategories.size());
