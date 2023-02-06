@@ -2,9 +2,8 @@
 namespace seerep_hdf5_py
 {
 template <int NumDimensions>
-void Hdf5PyGeneral::writeBoundingBoxLabeled(
-    const std::string& data_group_id,
-    const std::vector<seerep_hdf5_py::CategorizedBoundingBoxLabel<NumDimensions>>& bb_labels)
+void Hdf5PyGeneral::writeBoundingBoxLabeled(const std::string& data_group_id,
+                                            const std::vector<CategorizedBoundingBoxLabel<NumDimensions>>& bb_labels)
 {
   for (auto& category_labels : bb_labels)
   {
@@ -39,34 +38,34 @@ void Hdf5PyGeneral::writeBoundingBoxLabeled(
       }
 
       HighFive::DataSpace labels_data_space = HighFive::DataSpace::From(labels);
-      auto datasetLabels = getHdf5DataSet<std::string>(
+      auto dataset_labels = getHdf5DataSet<std::string>(
           data_group_id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBB + "_" + category_labels.category,
           labels_data_space);
-      datasetLabels->write(labels);
+      dataset_labels->write(labels);
 
       HighFive::DataSpace instances_data_space = HighFive::DataSpace::From(instance_uuids);
-      auto datasetInstances = getHdf5DataSet<std::string>(
+      auto dataset_instances = getHdf5DataSet<std::string>(
           data_group_id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBBINSTANCES + "_" + category_labels.category,
           instances_data_space);
-      datasetInstances->write(instance_uuids);
+      dataset_instances->write(instance_uuids);
 
       HighFive::DataSpace boxes_data_space = HighFive::DataSpace::From(bounding_boxes);
-      auto datasetBoxes = getHdf5DataSet<double>(data_group_id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBBBOXES +
-                                                     "_" + category_labels.category,
-                                                 boxes_data_space);
-      datasetBoxes->write(bounding_boxes);
+      auto dataset_boxes = getHdf5DataSet<double>(
+          data_group_id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBBBOXES + "_" + category_labels.category,
+          boxes_data_space);
+      dataset_boxes->write(bounding_boxes);
     }
   }
   m_file->flush();
 }
 
 template <int NumDimensions>
-std::vector<seerep_hdf5_py::CategorizedBoundingBoxLabel<NumDimensions>>
+std::vector<CategorizedBoundingBoxLabel<NumDimensions>>
 Hdf5PyGeneral::readBoundingBoxLabeled(const std::string& data_group_id)
 {
   auto hdf_group_ptr = getHdf5Group(data_group_id);
 
-  std::vector<seerep_hdf5_py::CategorizedBoundingBoxLabel<NumDimensions>> bb_labels;
+  std::vector<CategorizedBoundingBoxLabel<NumDimensions>> bb_labels;
 
   const std::vector<std::string> group_datasets = hdf_group_ptr->listObjectNames();
   for (const auto& dataset_name : group_datasets)
@@ -74,7 +73,7 @@ Hdf5PyGeneral::readBoundingBoxLabeled(const std::string& data_group_id)
     if (dataset_name.rfind(seerep_hdf5_core::Hdf5CoreGeneral::LABELBBINSTANCES, 0) == 0)
     {
       std::string category = dataset_name.substr(seerep_hdf5_core::Hdf5CoreGeneral::LABELBBINSTANCES.length() + 1);
-      bb_labels.push_back(seerep_hdf5_py::CategorizedBoundingBoxLabel<NumDimensions>(category));
+      bb_labels.push_back(CategorizedBoundingBoxLabel<NumDimensions>(category));
 
       auto dataset_labels =
           getHdf5DataSet(data_group_id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBB + "_" + category);
@@ -82,6 +81,11 @@ Hdf5PyGeneral::readBoundingBoxLabeled(const std::string& data_group_id)
           getHdf5DataSet(data_group_id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBBINSTANCES + "_" + category);
       auto dataset_boxes =
           getHdf5DataSet(data_group_id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBBBOXES + "_" + category);
+
+      if (dataset_instances == nullptr || dataset_instances == nullptr || dataset_boxes == nullptr)
+      {
+        throw std::invalid_argument("cannot find all bounding box label datasets for category " + category);
+      }
 
       std::vector<std::string> labels;
       std::vector<std::string> instance_uuids;
