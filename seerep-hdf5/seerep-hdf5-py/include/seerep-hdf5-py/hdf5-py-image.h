@@ -35,7 +35,9 @@ public:
                   const std::vector<seerep_hdf5_py::GeneralLabel>& general_labels,
                   const std::vector<seerep_hdf5_py::CategorizedBoundingBoxLabel<2>>& bb_labels);
 
-  py::array readImage(const std::string& uuid);
+  std::tuple<py::array, std::vector<seerep_hdf5_py::GeneralLabel>,
+             std::vector<seerep_hdf5_py::CategorizedBoundingBoxLabel<2>>>
+  readImage(const std::string& uuid);
 };
 
 }  // namespace seerep_hdf5_py

@@ -103,7 +103,9 @@ void Hdf5PyImage::writeImage(const std::string& uuid, const std::string& frame_i
   m_file->flush();
 }
 
-py::array Hdf5PyImage::readImage(const std::string& uuid)
+std::tuple<py::array, std::vector<seerep_hdf5_py::GeneralLabel>,
+           std::vector<seerep_hdf5_py::CategorizedBoundingBoxLabel<2>>>
+Hdf5PyImage::readImage(const std::string& uuid)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
@@ -163,9 +165,9 @@ py::array Hdf5PyImage::readImage(const std::string& uuid)
   }
 
   auto general_labels = Hdf5PyGeneral::readLabelsGeneral(hdf5GroupPath);
-  // TODO: load bounding box labels
+  auto bb_labels = Hdf5PyGeneral::readBoundingBoxLabeled<2>(hdf5GroupPath);
 
-  return image;
+  return std::make_tuple(image, general_labels, bb_labels);
 }
 
 } /* namespace seerep_hdf5_py */

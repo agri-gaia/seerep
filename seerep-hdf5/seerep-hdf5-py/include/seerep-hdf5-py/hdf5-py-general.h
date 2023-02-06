@@ -125,8 +125,9 @@ protected:
   void writeBoundingBoxLabeled(const std::string& data_group_id,
                                const std::vector<seerep_hdf5_py::CategorizedBoundingBoxLabel<NumDimensions>>& bb_labels);
 
-  //   std::optional<google::protobuf::RepeatedPtrField<::seerep::BoundingBox2DLabeledWithCategory>>
-  //   readBoundingBox2DLabeled(const std::string& datatypeGroup, const std::string& uuid);
+  template <int NumDimensions>
+  std::vector<seerep_hdf5_py::CategorizedBoundingBoxLabel<NumDimensions>>
+  readBoundingBoxLabeled(const std::string& data_group_id);
 
   // ################
   //  Labels General
@@ -135,7 +136,7 @@ protected:
   void writeLabelsGeneral(const std::string& data_group_id,
                           const std::vector<seerep_hdf5_py::GeneralLabel>& general_labels);
 
-  std::shared_ptr<std::vector<seerep_hdf5_py::GeneralLabel>> readLabelsGeneral(const std::string& data_group_id);
+  std::vector<seerep_hdf5_py::GeneralLabel> readLabelsGeneral(const std::string& data_group_id);
 };
 
 }  // namespace seerep_hdf5_py
