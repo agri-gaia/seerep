@@ -28,16 +28,18 @@ void Hdf5PyGeneral::writeLabelsGeneral(const std::string& data_group_id,
         instance_uuids.push_back(instance_label.instance_uuid);
       }
 
-      HighFive::DataSet datasetLabels = m_file->createDataSet<std::string>(
+      HighFive::DataSpace labels_data_space = HighFive::DataSpace::From(labels);
+      auto datasetLabels = getHdf5DataSet<std::string>(
           data_group_id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERAL + "_" + category_labels.category,
-          HighFive::DataSpace::From(labels));
-      datasetLabels.write(labels);
+          labels_data_space);
+      datasetLabels->write(labels);
 
-      HighFive::DataSet datasetInstances = m_file->createDataSet<std::string>(
-          data_group_id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERALINSTANCES + "_" +
-              category_labels.category,
-          HighFive::DataSpace::From(instance_uuids));
-      datasetInstances.write(instance_uuids);
+      HighFive::DataSpace instances_data_space = HighFive::DataSpace::From(instance_uuids);
+      auto datasetInstances =
+          getHdf5DataSet<std::string>(data_group_id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERALINSTANCES +
+                                          "_" + category_labels.category,
+                                      instances_data_space);
+      datasetInstances->write(instance_uuids);
     }
   }
   m_file->flush();
@@ -52,24 +54,21 @@ std::vector<seerep_hdf5_py::GeneralLabel> Hdf5PyGeneral::readLabelsGeneral(const
   const std::vector<std::string> group_datasets = hdf_group_ptr->listObjectNames();
   for (const auto& dataset_name : group_datasets)
   {
-    if (dataset_name.rfind(seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERAL, 0) == 0)
+    if (dataset_name.rfind(seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERALINSTANCES, 0) == 0)
     {
-      std::string category = dataset_name.substr(seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERAL.length());
+      std::string category = dataset_name.substr(seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERALINSTANCES.length() + 1);
       general_labels.push_back(seerep_hdf5_py::GeneralLabel(category));
 
-      checkExists(data_group_id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERAL + "_" + category);
-      checkExists(data_group_id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERALINSTANCES + "_" + category);
-
-      HighFive::DataSet dataset_labels =
-          m_file->getDataSet(data_group_id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERAL + "_" + category);
-      HighFive::DataSet dataset_instances = m_file->getDataSet(
+      auto dataset_labels =
+          getHdf5DataSet(data_group_id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERAL + "_" + category);
+      auto dataset_instances = getHdf5DataSet(
           data_group_id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERALINSTANCES + "_" + category);
 
       std::vector<std::string> labels;
       std::vector<std::string> instance_uuids;
 
-      dataset_labels.read(labels);
-      dataset_instances.read(instance_uuids);
+      dataset_labels->read(labels);
+      dataset_instances->read(instance_uuids);
 
       if (labels.size() != instance_uuids.size())
       {

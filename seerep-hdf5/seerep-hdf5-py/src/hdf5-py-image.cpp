@@ -97,8 +97,8 @@ void Hdf5PyImage::writeImage(const std::string& uuid, const std::string& frame_i
 
   writeImageAttributes(uuid, imageAttributes);
 
-  Hdf5PyGeneral::writeBoundingBoxLabeled(hdf5DataSetPath, bb_labels);
-  Hdf5PyGeneral::writeLabelsGeneral(hdf5DataSetPath, general_labels);
+  Hdf5PyGeneral::writeBoundingBoxLabeled(hdf5GroupPath, bb_labels);
+  Hdf5PyGeneral::writeLabelsGeneral(hdf5GroupPath, general_labels);
 
   m_file->flush();
 }

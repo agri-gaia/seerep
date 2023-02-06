@@ -54,9 +54,8 @@ PYBIND11_MODULE(seerephdf5py, m)
       .def_readwrite("max_point", &seerep_hdf5_py::BoundingBoxLabel<2>::max_point)
       .def("__repr__", [](seerep_hdf5_py::BoundingBoxLabel<2>& l) {
         return "<seerephdf5py.BoundingBoxLabel2D min(" + std::to_string(l.min_point[0]) + ", " +
-               std::to_string(l.min_point[1]) + ", " + std::to_string(l.min_point[2]) + "), max(" +
-               std::to_string(l.max_point[0]) + ", " + std::to_string(l.max_point[1]) + ", " +
-               std::to_string(l.max_point[2]) + ")>";
+               std::to_string(l.min_point[1]) + "), max(" + std::to_string(l.max_point[0]) + ", " +
+               std::to_string(l.max_point[1]) + ")>";
       });
 
   py::class_<seerep_hdf5_py::CategorizedBoundingBoxLabel<3>>(m, "CategorizedBoundingBoxLabel3D")
