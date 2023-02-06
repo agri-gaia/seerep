@@ -122,7 +122,7 @@ protected:
   // ################
 
   template <int NumDimensions>
-  void writeBoundingBoxLabeled(const std::string& data_group_id, const std::string& uuid,
+  void writeBoundingBoxLabeled(const std::string& data_group_id,
                                const std::vector<seerep_hdf5_py::CategorizedBoundingBoxLabel<NumDimensions>>& bb_labels);
 
   //   std::optional<google::protobuf::RepeatedPtrField<::seerep::BoundingBox2DLabeledWithCategory>>
@@ -132,7 +132,7 @@ protected:
   //  Labels General
   // ################
 
-  void writeLabelsGeneral(const std::string& data_group_id, const std::string& uuid,
+  void writeLabelsGeneral(const std::string& data_group_id,
                           const std::vector<seerep_hdf5_py::GeneralLabel>& general_labels);
 
   //   std::optional<google::protobuf::RepeatedPtrField<seerep::LabelsWithInstanceWithCategory>>

@@ -3,9 +3,57 @@ namespace seerep_hdf5_py
 {
 template <int NumDimensions>
 void Hdf5PyGeneral::writeBoundingBoxLabeled(
-    const std::string& data_group_id, const std::string& uuid,
+    const std::string& data_group_id,
     const std::vector<seerep_hdf5_py::CategorizedBoundingBoxLabel<NumDimensions>>& bb_labels)
 {
+  for (auto& category_labels : bb_labels)
+  {
+    if (!category_labels.labels.empty())
+    {
+      std::vector<std::string> labels;
+      std::vector<std::string> instance_uuids;
+      std::vector<std::vector<double>> bounding_boxes;
+
+      labels.reserve(category_labels.labels.size());
+      instance_uuids.reserve(category_labels.labels.size());
+      bounding_boxes.reserve(category_labels.labels.size());
+
+      for (auto& instance_label : category_labels.labels)
+      {
+        labels.push_back(instance_label.label.label);
+        instance_uuids.push_back(instance_label.label.instance_uuid);
+
+        std::vector<double> box(2 * NumDimensions);
+
+        for (int i = 0; i < NumDimensions; i++)
+        {
+          box.push_back(instance_label.min_point[i]);
+        }
+        for (int i = 0; i < NumDimensions; i++)
+        {
+          box.push_back(instance_label.max_point[i]);
+        }
+
+        bounding_boxes.push_back(box);
+      }
+
+      HighFive::DataSet datasetLabels = m_file->createDataSet<std::string>(
+          data_group_id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBB + "_" + category_labels.category,
+          HighFive::DataSpace::From(labels));
+      datasetLabels.write(labels);
+
+      HighFive::DataSet datasetInstances = m_file->createDataSet<std::string>(
+          data_group_id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBBINSTANCES + "_" + category_labels.category,
+          HighFive::DataSpace::From(instance_uuids));
+      datasetInstances.write(instance_uuids);
+
+      HighFive::DataSet datasetBoxes = m_file->createDataSet<double>(
+          data_group_id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBBBOXES + "_" + category_labels.category,
+          HighFive::DataSpace::From(bounding_boxes));
+      datasetBoxes.write(bounding_boxes);
+    }
+  }
+  m_file->flush();
 }
 // template <class T>
 // void Hdf5PyGeneral::writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, const seerep::Header& header)
