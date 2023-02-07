@@ -15,7 +15,7 @@
         <link rel="next" href="../docs/">
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.9">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.11">
     
     
       
@@ -757,18 +757,18 @@
 <p>The local deployment is based on the <a href="https://github.com/agri-gaia/seerep/pkgs/container/seerep_server">seerep_server docker image</a>.
 The image with the latest (unstable) version can be pulled with the following command. It is recommended to use a version
 tag instead of <code>latest</code>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>docker pull ghcr.io/agri-gaia/seerep_server:latest
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>docker<span class="w"> </span>pull<span class="w"> </span>ghcr.io/agri-gaia/seerep_server:latest
 </code></pre></div>
 <h2 id="docker-run">docker run</h2>
 <p>Run the following command to start the server using <code>docker run</code>. It is recommended to use a version
 tag instead of <code>latest</code>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>docker run \
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  --volume=seerep-data:/mnt/seerep-data \
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  --publish=9090:9090 \
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  --name=seerep_server \
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  --tty \
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>  ghcr.io/agri-gaia/seerep_server:latest \
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>  --data-folder=/mnt/seerep-data
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>docker<span class="w"> </span>run<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>--volume<span class="o">=</span>seerep-data:/mnt/seerep-data<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>--publish<span class="o">=</span><span class="m">9090</span>:9090<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span>--name<span class="o">=</span>seerep_server<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span>--tty<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span>ghcr.io/agri-gaia/seerep_server:latest<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span>--data-folder<span class="o">=</span>/mnt/seerep-data
 </code></pre></div>
 <h2 id="docker-compose">docker-compose</h2>
 <p>Run <code>docker-compose up</code> in the folder of the docker-compose.yml to start the server. It is recommended to use a version
@@ -776,24 +776,26 @@ tag instead of <code>latest</code>.</p>
 <p>For this <a href="https://docs.docker.com/compose/">docker compose</a> has to be installed. In the latest version <code>docker compose</code>
 without a hyphen as part of the Docker CLI replaces <code>docker-compose</code>.</p>
 <p>Example docker-compose.yml:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>version: &quot;3.6&quot;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>version:<span class="w"> </span><span class="s2">&quot;3.6&quot;</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>services:
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>  seerep:
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    image: ghcr.io/agri-gaia/seerep_server:latest
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    tty: true
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    container_name: seerep_server
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    command:
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>      # define data-dir for seerep-server
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>      - &quot;--data-folder=/mnt/seerep-data&quot;
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    ports:
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>      # the gRPC port
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>      - 9090:9090
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>    volumes:
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>      # persist the data folder
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>      - seerep-data:/mnt/seerep-data #using docker volume
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>      #- /your/local/absolute/path:/mnt/seerep-data #using host folder
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>volumes:
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>  seerep-data:
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>seerep:
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span>image:<span class="w"> </span>ghcr.io/agri-gaia/seerep_server:latest
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span>tty:<span class="w"> </span>true
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span>container_name:<span class="w"> </span>seerep_server
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span>ports:
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">      </span>#<span class="w"> </span>the<span class="w"> </span>gRPC<span class="w"> </span>port
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">      </span>-<span class="w"> </span><span class="m">9090</span>:9090
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span>volumes:
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">      </span>#<span class="w"> </span>persist<span class="w"> </span>the<span class="w"> </span>data<span class="w"> </span>folder
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">      </span>-<span class="w"> </span>seerep-data:/mnt/seerep-data<span class="w"> </span>#using<span class="w"> </span>docker<span class="w"> </span>volume
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">      </span>#-<span class="w"> </span>/your/local/absolute/path:/mnt/seerep-data<span class="w"> </span>#using<span class="w"> </span>host<span class="w"> </span>folder
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">    </span>environment:
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">      </span>-<span class="w"> </span><span class="nv">TZ</span><span class="o">=</span>Europe/Berlin
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">      </span>-<span class="w"> </span><span class="nv">SEEREP_DATA_FOLDER</span><span class="o">=</span><span class="s2">&quot;/mnt/seerep-data&quot;</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">      </span>-<span class="w"> </span><span class="nv">SEEREP_LOG_PATH</span><span class="o">=</span><span class="s2">&quot;/mnt/seerep-data/log&quot;</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">      </span>-<span class="w"> </span><span class="nv">SEEREP_LOG_LEVEL</span><span class="o">=</span><span class="s2">&quot;info&quot;</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>volumes:
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">  </span>seerep-data:
 </code></pre></div>
 
 
@@ -840,7 +842,7 @@ without a hyphen as part of the Docker CLI replaces <code>docker-compose</code>.
     <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tracking", "navigation.tabs", "navigation.expand", "navigation.sections"], "search": "../../../assets/javascripts/workers/search.db81ec45.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.a00a7c5e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.6df46069.min.js"></script>
       
     
   </body>

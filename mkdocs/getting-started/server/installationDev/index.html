@@ -15,7 +15,7 @@
         <link rel="next" href="../kubernetes-deployment/">
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.9">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.11">
     
     
       
@@ -852,16 +852,16 @@
 <li>
 <p>Clone the SEEREP repository from
    <a href="https://github.com/agri-gaia/seerep">Github</a> and open it in VS-Code.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git clone https://github.com/agri-gaia/seerep
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>cd seerep/
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>code .
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/agri-gaia/seerep
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">cd</span><span class="w"> </span>seerep/
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>code<span class="w"> </span>.
 </code></pre></div>
 </li>
 <li>
 <p>Create a sibling folder next to the repo called <code>seerep-data</code>. This folder
    will be mounted for the data exchange between host and container. <strong>Without
    this folder, the following steps will fail!</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>mkdir ../seerep-data
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>mkdir<span class="w"> </span>../seerep-data
 </code></pre></div>
 </li>
 <li>
@@ -870,8 +870,8 @@
    and
    <a href="https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker">Docker</a>
    VS-Code extension with the following commands or via the extensions tab in Vs-Code.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>code --install-extension ms-vscode-remote.remote-containers
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>code --install-extension ms-azuretools.vscode-docker
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>code<span class="w"> </span>--install-extension<span class="w"> </span>ms-vscode-remote.remote-containers
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>code<span class="w"> </span>--install-extension<span class="w"> </span>ms-azuretools.vscode-docker
 </code></pre></div>
 </li>
 <li>
@@ -907,11 +907,11 @@ are a couple of hints on how to fix them.</p>
 <li>
 <p>Additionally, you can delete all the data regarding SEEREP, to get a fresh
    installation:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>docker volume rm seerep-vscode-extensions
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>docker volume rm vscode
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>docker rmi ghcr.io/agri-gaia/seerep_base:latest
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>(docker rmi ghcr.io/agri-gaia/seerep_server:latest)
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>docker rmi vsc-seerep-*
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>docker<span class="w"> </span>volume<span class="w"> </span>rm<span class="w"> </span>seerep-vscode-extensions
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>docker<span class="w"> </span>volume<span class="w"> </span>rm<span class="w"> </span>vscode
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>docker<span class="w"> </span>rmi<span class="w"> </span>ghcr.io/agri-gaia/seerep_base:latest
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="o">(</span>docker<span class="w"> </span>rmi<span class="w"> </span>ghcr.io/agri-gaia/seerep_server:latest<span class="o">)</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>docker<span class="w"> </span>rmi<span class="w"> </span>vsc-seerep-*
 </code></pre></div>
 </li>
 </ol>
@@ -933,12 +933,12 @@ way, follow the steps:</p>
 <p>In order to build SEEREP, we recommend the common build tool from ROS,
 <a href="https://catkin-tools.readthedocs.io/en/latest/verbs/catkin_build.html">catkin</a>.
 Follow the next steps to download and build seerep globally on your system.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>source /opt/ros/noetic/setup.bash
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>mkdir -p seerep_ws/src
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>cd seerep_ws/src
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>git clone https://github.com/agri-gaia/seerep.git
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>cd ..
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>catkin build
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">source</span><span class="w"> </span>/opt/ros/noetic/setup.bash
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>seerep_ws/src
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nb">cd</span><span class="w"> </span>seerep_ws/src
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/agri-gaia/seerep.git
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="nb">cd</span><span class="w"> </span>..
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>catkin<span class="w"> </span>build
 </code></pre></div>
 
 
@@ -985,7 +985,7 @@ Follow the next steps to download and build seerep globally on your system.</p>
     <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tracking", "navigation.tabs", "navigation.expand", "navigation.sections"], "search": "../../../assets/javascripts/workers/search.db81ec45.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.a00a7c5e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.6df46069.min.js"></script>
       
     
   </body>

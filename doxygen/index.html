@@ -166,15 +166,17 @@ Quick Start</h1>
 <div class="line">    image: ghcr.io/agri-gaia/seerep_server:latest</div>
 <div class="line">    tty: true</div>
 <div class="line">    container_name: seerep_server</div>
-<div class="line">    command:</div>
-<div class="line">      # define data-dir for seerep-server</div>
-<div class="line">      - &quot;--data-folder=/mnt/seerep-data&quot;</div>
 <div class="line">    ports:</div>
 <div class="line">      # the gRPC port</div>
 <div class="line">      - 9090:9090</div>
 <div class="line">    volumes:</div>
 <div class="line">      # persist the data folder</div>
 <div class="line">      - seerep-data:/mnt/seerep-data</div>
+<div class="line">    environment:</div>
+<div class="line">      - TZ=Europe/Berlin</div>
+<div class="line">      - SEEREP_DATA_FOLDER=&quot;/mnt/seerep-data&quot;</div>
+<div class="line">      - SEEREP_LOG_PATH=&quot;/mnt/seerep-data/log&quot;</div>
+<div class="line">      - SEEREP_LOG_LEVEL=&quot;info&quot;</div>
 <div class="line">volumes:</div>
 <div class="line">  seerep-data:</div>
 </div><!-- fragment --><h1><a class="anchor" id="autotoc_md5"></a>

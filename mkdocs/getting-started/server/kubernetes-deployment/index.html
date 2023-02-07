@@ -15,7 +15,7 @@
         <link rel="next" href="../local-deployment/">
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.9">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.11">
     
     
       
@@ -796,15 +796,15 @@ production system. Finally, the used image is replaced with the latest stable re
 <p>Before one can build the kubernetes manifest, one needs to install Kustomize (<a href="https://kubectl.docs.kubernetes.io/installation/kustomize/">Kustomize installation</a>)
 The easiest way to that is the download the latest binary from the <a href="https://github.com/kubernetes-sigs/kustomize/releases">offical release page</a></p>
 <p>To install the base-version of seerep either one can run:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>kustomize build base/ &gt; seerep-deployment.yaml
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>kustomize<span class="w"> </span>build<span class="w"> </span>base/<span class="w"> </span>&gt;<span class="w"> </span>seerep-deployment.yaml
 </code></pre></div>
 <p>to store the manifest in a separate yaml file. Or directly use <a href="https://kubernetes.io/docs/reference/kubectl/">kubectl</a>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>kubectl apply -k base/
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-k<span class="w"> </span>base/
 </code></pre></div>
 <p>In order to install the production version, the commands look slightly different:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>kustomize build overlays/production/ &gt; seerep-deployment.yaml
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>kustomize<span class="w"> </span>build<span class="w"> </span>overlays/production/<span class="w"> </span>&gt;<span class="w"> </span>seerep-deployment.yaml
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>kubectl apply -k overlays/production/
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-k<span class="w"> </span>overlays/production/
 </code></pre></div>
 <p>If someone has a running <a href="https://argo-cd.readthedocs.io/en/stable/">ArgoCD</a> instance, it is also
 possible to integrate seerep as a project into ArgoCD.</p>
@@ -858,7 +858,7 @@ sealed secrets this blogs-post was followed <a href="https://faun.pub/sealing-se
     <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tracking", "navigation.tabs", "navigation.expand", "navigation.sections"], "search": "../../../assets/javascripts/workers/search.db81ec45.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.a00a7c5e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.6df46069.min.js"></script>
       
     
   </body>
