@@ -210,7 +210,7 @@ void CoreFbConversion::fromFbQueryLabel(
       std::vector<std::string> labels;
       for (auto label : *labelWithCategory->labels())
       {
-        labels.push_back(label->str());
+        labels.push_back(label->label()->str());
       }
       queryCoreLabel.value().emplace(labelWithCategory->category()->c_str(), labels);
     }
@@ -238,12 +238,18 @@ void CoreFbConversion::fromFbQueryBoundingBox(const seerep::fb::Query* query,
   {
     queryCoreHeaderFrameId = query->boundingboxStamped()->header()->frame_id()->str();
     queryCoreBoundingBox = seerep_core_msgs::AABB();
-    queryCoreBoundingBox.value().min_corner().set<0>(query->boundingboxStamped()->boundingbox()->point_min()->x());
-    queryCoreBoundingBox.value().min_corner().set<1>(query->boundingboxStamped()->boundingbox()->point_min()->y());
-    queryCoreBoundingBox.value().min_corner().set<2>(query->boundingboxStamped()->boundingbox()->point_min()->z());
-    queryCoreBoundingBox.value().max_corner().set<0>(query->boundingboxStamped()->boundingbox()->point_max()->x());
-    queryCoreBoundingBox.value().max_corner().set<1>(query->boundingboxStamped()->boundingbox()->point_max()->y());
-    queryCoreBoundingBox.value().max_corner().set<2>(query->boundingboxStamped()->boundingbox()->point_max()->z());
+    queryCoreBoundingBox.value().min_corner().set<0>(query->boundingboxStamped()->boundingbox()->center_point()->x() -
+                                                     query->boundingboxStamped()->boundingbox()->spatial_extent()->x());
+    queryCoreBoundingBox.value().min_corner().set<1>(query->boundingboxStamped()->boundingbox()->center_point()->y() -
+                                                     query->boundingboxStamped()->boundingbox()->spatial_extent()->y());
+    queryCoreBoundingBox.value().min_corner().set<2>(query->boundingboxStamped()->boundingbox()->center_point()->z() -
+                                                     query->boundingboxStamped()->boundingbox()->spatial_extent()->z());
+    queryCoreBoundingBox.value().max_corner().set<0>(query->boundingboxStamped()->boundingbox()->center_point()->x() +
+                                                     query->boundingboxStamped()->boundingbox()->spatial_extent()->x());
+    queryCoreBoundingBox.value().max_corner().set<1>(query->boundingboxStamped()->boundingbox()->center_point()->y() +
+                                                     query->boundingboxStamped()->boundingbox()->spatial_extent()->y());
+    queryCoreBoundingBox.value().max_corner().set<2>(query->boundingboxStamped()->boundingbox()->center_point()->z() +
+                                                     query->boundingboxStamped()->boundingbox()->spatial_extent()->z());
   }
 }
 
@@ -338,7 +344,9 @@ void CoreFbConversion::fromFbDataLabelsGeneral(
           }
 
           labelWithInstanceVector.push_back(
-              seerep_core_msgs::LabelWithInstance{ .label = label->label()->str(), .uuidInstance = uuidInstance });
+              seerep_core_msgs::LabelWithInstance{ .label = label->label()->label()->str(),
+                                                   .labelConfidence = label->label()->confidence(),
+                                                   .uuidInstance = uuidInstance });
         }
         labelsWithInstancesWithCategory.emplace(labelsCategories->category()->c_str(), labelWithInstanceVector);
       }
@@ -368,8 +376,10 @@ void CoreFbConversion::fromFbDataLabelsBb2d(
           uuidInstance = boost::uuids::nil_uuid();
         }
 
-        labelWithInstanceVector.push_back(seerep_core_msgs::LabelWithInstance{
-            .label = label->labelWithInstance()->label()->str(), .uuidInstance = uuidInstance });
+        labelWithInstanceVector.push_back(
+            seerep_core_msgs::LabelWithInstance{ .label = label->labelWithInstance()->label()->label()->str(),
+                                                 .labelConfidence = label->labelWithInstance()->label()->confidence(),
+                                                 .uuidInstance = uuidInstance });
       }
       labelsWithInstancesWithCategory.emplace(labelsCategories->category()->c_str(), labelWithInstanceVector);
     }
@@ -398,8 +408,10 @@ void CoreFbConversion::fromFbDataLabelsBb(
           uuidInstance = boost::uuids::nil_uuid();
         }
 
-        labelWithInstanceVector.push_back(seerep_core_msgs::LabelWithInstance{
-            .label = label->labelWithInstance()->label()->str(), .uuidInstance = uuidInstance });
+        labelWithInstanceVector.push_back(
+            seerep_core_msgs::LabelWithInstance{ .label = label->labelWithInstance()->label()->label()->str(),
+                                                 .labelConfidence = label->labelWithInstance()->label()->confidence(),
+                                                 .uuidInstance = uuidInstance });
       }
       labelsWithInstancesWithCategory.emplace(labelsCategories->category()->c_str(), labelWithInstanceVector);
     }

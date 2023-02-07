@@ -9,6 +9,7 @@ namespace seerep_core_msgs
 struct LabelWithInstance
 {
   std::string label;
+  float labelConfidence;
   boost::uuids::uuid uuidInstance;
 };
 

@@ -84,7 +84,8 @@ void createImageData(const unsigned int imageHeight, const unsigned int imageWid
 void createLabelWithInstance(seerep::pb::LabelWithInstance& labelWithInstance)
 {
   boost::uuids::uuid instanceUUID = boost::uuids::random_generator()();
-  labelWithInstance.set_label("arbitrary_instance_label");
+  labelWithInstance.mutable_label()->set_label("arbitrary_instance_label");
+  labelWithInstance.mutable_label()->set_confidence(0.5);
   labelWithInstance.set_instanceuuid(boost::lexical_cast<std::string>(instanceUUID));
 }
 
@@ -101,8 +102,9 @@ void createBB2DLabeled(seerep::pb::Image& image)
     for (size_t i = 0; i < 10; i++)
     {
       auto bbLabeled = boundingBox2DLabeledWithCategory->add_boundingbox2dlabeled();
-      createPoint(0.01 + i / 10, 0.02 + i / 10, *bbLabeled->mutable_boundingbox()->mutable_point_min());
-      createPoint(0.03 + i / 10, 0.04 + i / 10, *bbLabeled->mutable_boundingbox()->mutable_point_max());
+      createPoint(0.01 + i / 10, 0.02 + i / 10, *bbLabeled->mutable_boundingbox()->mutable_center_point());
+      createPoint(0.03 + i / 10, 0.04 + i / 10, *bbLabeled->mutable_boundingbox()->mutable_spatial_extent());
+      bbLabeled->mutable_boundingbox()->set_rotation(1.2);
 
       createLabelWithInstance(*bbLabeled->mutable_labelwithinstance());
     }
@@ -284,7 +286,8 @@ TEST_F(pbWriteLoadTest, testImageData)
 void testLabelWithInstance(const seerep::pb::LabelWithInstance& readInstance,
                            const seerep::pb::LabelWithInstance& writeInstance)
 {
-  EXPECT_STREQ(readInstance.label().c_str(), writeInstance.label().c_str());
+  EXPECT_STREQ(readInstance.label().label().c_str(), writeInstance.label().label().c_str());
+  EXPECT_FLOAT_EQ(readInstance.label().confidence(), writeInstance.label().confidence());
   EXPECT_STREQ(readInstance.instanceuuid().c_str(), writeInstance.instanceuuid().c_str());
 }
 
@@ -339,10 +342,12 @@ TEST_F(pbWriteLoadTest, testBoundingBox2DLabeled)
     {
       testLabelWithInstance(readImage.labels_bb().at(iCategory).boundingbox2dlabeled().Get(i).labelwithinstance(),
                             writeImage.labels_bb().at(iCategory).boundingbox2dlabeled().Get(i).labelwithinstance());
-      testEqualPoints(readImage.labels_bb().at(iCategory).boundingbox2dlabeled().Get(i).boundingbox().point_min(),
-                      writeImage.labels_bb().at(iCategory).boundingbox2dlabeled().Get(i).boundingbox().point_min());
-      testEqualPoints(readImage.labels_bb().at(iCategory).boundingbox2dlabeled().Get(i).boundingbox().point_max(),
-                      writeImage.labels_bb().at(iCategory).boundingbox2dlabeled().Get(i).boundingbox().point_max());
+      testEqualPoints(readImage.labels_bb().at(iCategory).boundingbox2dlabeled().Get(i).boundingbox().center_point(),
+                      writeImage.labels_bb().at(iCategory).boundingbox2dlabeled().Get(i).boundingbox().center_point());
+      testEqualPoints(readImage.labels_bb().at(iCategory).boundingbox2dlabeled().Get(i).boundingbox().spatial_extent(),
+                      writeImage.labels_bb().at(iCategory).boundingbox2dlabeled().Get(i).boundingbox().spatial_extent());
+      EXPECT_FLOAT_EQ(readImage.labels_bb().at(iCategory).boundingbox2dlabeled().Get(i).boundingbox().rotation(),
+                      writeImage.labels_bb().at(iCategory).boundingbox2dlabeled().Get(i).boundingbox().rotation());
     }
   }
 }
