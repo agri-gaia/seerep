@@ -99,7 +99,7 @@ std::string server::environmentVariabeNameMapper(std::string envName)
   }
   else if (envName == "SEEREP_LOG_PATH")
   {
-    return "log path";
+    return "log-path";
   }
   else if (envName == "SEEREP_LOG_LEVEL")
   {

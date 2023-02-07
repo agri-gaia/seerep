@@ -63,15 +63,17 @@ services:
     image: ghcr.io/agri-gaia/seerep_server:latest
     tty: true
     container_name: seerep_server
-    command:
-      # define data-dir for seerep-server
-      - "--data-folder=/mnt/seerep-data"
     ports:
       # the gRPC port
       - 9090:9090
     volumes:
       # persist the data folder
       - seerep-data:/mnt/seerep-data
+    environment:
+      - TZ=Europe/Berlin
+      - SEEREP_DATA_FOLDER="/mnt/seerep-data"
+      - SEEREP_LOG_PATH="/mnt/seerep-data/log"
+      - SEEREP_LOG_LEVEL="info"
 volumes:
   seerep-data:
 ```
