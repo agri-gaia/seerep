@@ -76,6 +76,23 @@ PYBIND11_MODULE(seerephdf5py, m)
         return "<seerephdf5py.CategorizedBoundingBoxLabel2D '" + l.category + "'>";
       });
 
+  // Tf Types
+  py::class_<seerep_hdf5_py::TfTransform>(m, "TfTransform")
+      .def(py::init<>())
+      .def(py::init<int64_t, int32_t, const std::string&, const std::string&, const std::array<double, 3>&,
+                    const std::array<double, 4>&>(),
+           py::arg("seconds"), py::arg("nanos"), py::arg("frame_id"), py::arg("child_frame_id"), py::arg("translation"),
+           py::arg("rotation"))
+      .def_readwrite("seconds", &seerep_hdf5_py::TfTransform::seconds)
+      .def_readwrite("nanos", &seerep_hdf5_py::TfTransform::nanos)
+      .def_readwrite("frame_id", &seerep_hdf5_py::TfTransform::frame_id)
+      .def_readwrite("child_frame_id", &seerep_hdf5_py::TfTransform::child_frame_id)
+      .def_readwrite("translation", &seerep_hdf5_py::TfTransform::translation)
+      .def_readwrite("rotation", &seerep_hdf5_py::TfTransform::rotation)
+      .def("__repr__", [](seerep_hdf5_py::TfTransform& l) {
+        return "<seerephdf5py.TfTransform '" + l.frame_id + "' '" + l.child_frame_id + "'>";
+      });
+
   // IO
   py::class_<seerep_hdf5_py::Hdf5FileWrapper>(m, "File")
       .def(py::init<const std::string&>(), py::arg("filename"))
@@ -97,8 +114,10 @@ PYBIND11_MODULE(seerephdf5py, m)
            py::arg("seconds"), py::arg("nanos"), py::arg("sequence"), py::arg("channels"))
       .def("readPointCloud", &seerep_hdf5_py::Hdf5PyPointCloud::readPointCloud, py::arg("uuid"));
 
-  py::class_<seerep_hdf5_py::Hdf5PyTf>(m, "TfIO").def(py::init<seerep_hdf5_py::Hdf5FileWrapper&>(),
-                                                      py::arg("hdf5_file"));
+  py::class_<seerep_hdf5_py::Hdf5PyTf>(m, "TfIO")
+      .def(py::init<seerep_hdf5_py::Hdf5FileWrapper&>(), py::arg("hdf5_file"))
+      .def("writeTransform", &seerep_hdf5_py::Hdf5PyTf::writeTransformStamped, py::arg("tf"))
+      .def("readTransform", &seerep_hdf5_py::Hdf5PyTf::readTransformStamped, py::arg("frame_id"));
 }
 
 #endif /* SEEREP_HDF5_PY_HDF5_PY_H_ */

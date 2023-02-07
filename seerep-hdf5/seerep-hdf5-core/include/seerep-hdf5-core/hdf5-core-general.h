@@ -145,6 +145,7 @@ public:
    * @return std::shared_ptr<HighFive::Group> shared pointer to the group
    */
   std::shared_ptr<HighFive::Group> getHdf5Group(const std::string& hdf5GroupPath, bool create = true);
+
   /**
    * @brief Get a shared pointer to a hdf5 data set specified by the hdf5DataSetPath
    *
@@ -155,6 +156,19 @@ public:
    */
   template <class T>
   std::shared_ptr<HighFive::DataSet> getHdf5DataSet(const std::string& hdf5DataSetPath, HighFive::DataSpace& dataSpace);
+
+  /**
+   * @brief Get a shared pointer to a hdf5 data set specified by the hdf5DataSetPath
+   *
+   * @tparam T type of the dataset
+   * @param hdf5DataSetPath path to the dataset
+   * @param dataSpace the data space to specify the dimensions of the dataset
+   * @param createProps properties for creation of the dataset
+   * @return std::shared_ptr<HighFive::DataSet> shared pointer to the data set
+   */
+  template <class T>
+  std::shared_ptr<HighFive::DataSet> getHdf5DataSet(const std::string& hdf5DataSetPath, HighFive::DataSpace& dataSpace,
+                                                    HighFive::DataSetCreateProps& createProps);
 
   std::shared_ptr<HighFive::DataSet> getHdf5DataSet(const std::string& hdf5DataSetPath);
   /**

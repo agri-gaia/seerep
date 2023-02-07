@@ -53,7 +53,6 @@ public:
   void writeTransformStamped(const TfTransform& tf);
 
   std::vector<TfTransform> readTransformStamped(const std::string& frame_id);
-  // std::optional<std::vector<std::string>> readTransformStampedFrames(const std::string& id);
 
 private:
   // datatype group names in hdf5

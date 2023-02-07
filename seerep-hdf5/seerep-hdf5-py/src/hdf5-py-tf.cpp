@@ -25,40 +25,45 @@ void Hdf5PyTf::writeTransformStamped(const TfTransform& tf)
     throw std::invalid_argument("unable to obtain tf hdf5 group for frame " + tf.frame_id);
   }
 
-  uint64_t size = 0;
-  if (tf_group_ptr->hasAttribute(SIZE))
-  {
-    tf_group_ptr->getAttribute(SIZE).read(size);
-  }
-
   HighFive::DataSpace data_space_time({ 1, 2 }, { HighFive::DataSpace::UNLIMITED, 2 });
+  HighFive::DataSetCreateProps props_time;
+  props_time.add(HighFive::Chunking(std::vector<hsize_t>{ 1, 2 }));
   std::shared_ptr<HighFive::DataSet> data_set_time_ptr =
-      getHdf5DataSet<int64_t>(hdf5_dataset_time_path, data_space_time);
+      getHdf5DataSet<int64_t>(hdf5_dataset_time_path, data_space_time, props_time);
 
   HighFive::DataSpace data_space_trans({ 1, 3 }, { HighFive::DataSpace::UNLIMITED, 3 });
+  HighFive::DataSetCreateProps props_trans;
+  props_trans.add(HighFive::Chunking(std::vector<hsize_t>{ 1, 3 }));
   std::shared_ptr<HighFive::DataSet> data_set_trans_ptr =
-      getHdf5DataSet<double>(hdf5_dataset_trans_path, data_space_trans);
+      getHdf5DataSet<double>(hdf5_dataset_trans_path, data_space_trans, props_trans);
 
   HighFive::DataSpace data_space_rot({ 1, 4 }, { HighFive::DataSpace::UNLIMITED, 4 });
-  std::shared_ptr<HighFive::DataSet> data_set_rot_ptr = getHdf5DataSet<double>(hdf5_dataset_rot_path, data_space_rot);
+  HighFive::DataSetCreateProps props_rot;
+  props_rot.add(HighFive::Chunking(std::vector<hsize_t>{ 1, 4 }));
+  std::shared_ptr<HighFive::DataSet> data_set_rot_ptr =
+      getHdf5DataSet<double>(hdf5_dataset_rot_path, data_space_rot, props_rot);
 
   if (data_set_time_ptr == nullptr || data_set_trans_ptr == nullptr || data_set_rot_ptr == nullptr)
   {
     throw std::invalid_argument("unable to obtain the required tf hdf5 datasets for frame " + tf.frame_id);
   }
 
-  data_set_time_ptr->resize({ size + 1, 2 });
-  data_set_trans_ptr->resize({ size + 1, 3 });
-  data_set_rot_ptr->resize({ size + 1, 4 });
-
-  // write the size as group attribute
-  if (!tf_group_ptr->hasAttribute(SIZE))
+  uint64_t size = 1;
+  if (tf_group_ptr->hasAttribute(SIZE))
   {
-    tf_group_ptr->createAttribute(SIZE, ++size);
+    tf_group_ptr->getAttribute(SIZE).read(size);
+
+    size++;
+
+    data_set_time_ptr->resize({ size, 2 });
+    data_set_trans_ptr->resize({ size, 3 });
+    data_set_rot_ptr->resize({ size, 4 });
+
+    tf_group_ptr->getAttribute(SIZE).write(size);
   }
   else
   {
-    tf_group_ptr->getAttribute(SIZE).write(++size);
+    tf_group_ptr->createAttribute(SIZE, size);
   }
 
   // write frames
@@ -84,14 +89,14 @@ void Hdf5PyTf::writeTransformStamped(const TfTransform& tf)
   std::vector<int64_t> time;
   time.push_back(tf.seconds);
   time.push_back(tf.nanos);
-  data_set_time_ptr->select({ size, 0 }, { 1, 2 }).write(time);
+  data_set_time_ptr->select({ size - 1, 0 }, { 1, 2 }).write(time);
 
   // write translation
   std::vector<double> trans;
   trans.push_back(tf.translation[0]);
   trans.push_back(tf.translation[1]);
   trans.push_back(tf.translation[2]);
-  data_set_trans_ptr->select({ size, 0 }, { 1, 3 }).write(trans);
+  data_set_trans_ptr->select({ size - 1, 0 }, { 1, 3 }).write(trans);
 
   // write rotation
   std::vector<double> rot;
@@ -99,7 +104,7 @@ void Hdf5PyTf::writeTransformStamped(const TfTransform& tf)
   rot.push_back(tf.rotation[1]);
   rot.push_back(tf.rotation[2]);
   rot.push_back(tf.rotation[3]);
-  data_set_rot_ptr->select({ size, 0 }, { 1, 4 }).write(rot);
+  data_set_rot_ptr->select({ size - 1, 0 }, { 1, 4 }).write(rot);
 
   m_file->flush();
 }
