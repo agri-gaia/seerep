@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>seerep_performance_tests</name>
+  <version>0.0.1</version>
+  <description>
+    Evaluate performance of MACP against SEEREP
+  </description>
+
+  <maintainer email="julian.arkenau@dfki.de">Julian Arkenau</maintainer>
+  <license>BSD-3</license>
+
+  <author email="julian.arkenau@dfki.de">Julian Arkenau</author>
+
+  <depend>sensor_msgs</depend>
+  <depend>roscpp</depend>
+  <buildtool_depend>catkin</buildtool_depend>
+
+</package>
