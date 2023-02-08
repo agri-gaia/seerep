@@ -18,7 +18,7 @@ builder = flatbuffers.Builder(1024)
 PROJECT_NAME = "simulatedDataWithInstances"
 channel = util.get_gRPC_channel()
 # 1. Get all projects from the server
-projectuuid = util_fb.getProject(builder, channel, 'testproject')
+projectuuid = util_fb.getProject(builder, channel, 'LabeledImagesInGrid')
 # 2. Check if the defined project exist; if not exit
 if not projectuuid:
     exit()
@@ -36,7 +36,13 @@ timeInterval = util_fb.createTimeInterval(builder, timeMin, timeMax)
 
 projectUuids = [builder.CreateString(projectuuid)]
 category = "0"
-labels = [[builder.CreateString("testlabel0"), builder.CreateString("testlabelgeneral0")]]
+
+labels = [
+    [
+        util_fb.createLabelWithConfidence(builder, "testlabel0"),
+        util_fb.createLabelWithConfidence(builder, "testlabelgeneral0"),
+    ]
+]
 labelCategory = util_fb.createLabelWithCategory(builder, category, labels)
 dataUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 instanceUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
@@ -46,10 +52,10 @@ instanceUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 # with all parameters set (especially with the data and instance uuids set) the result of the query will be empty. Set the query parameters to adequate values or remove them from the query creation
 query = util_fb.createQuery(
     builder,
-    boundingBox=boundingboxStamped,
-    timeInterval=timeInterval,
-    labels=labelCategory,
-    projectUuids=projectUuids,
+    # boundingBox=boundingboxStamped,
+    # timeInterval=timeInterval,
+    # labels=labelCategory,
+    # projectUuids=projectUuids,
     # instanceUuids=instanceUuids,
     # dataUuids=dataUuids,
     withoutData=False,
@@ -65,5 +71,7 @@ for responseBuf in stub.GetPoint(bytes(buf)):
 
     print(f"uuidmsg: {response.Header().UuidMsgs().decode('utf-8')}")
     for i in range(response.LabelsGeneralLength()):
-        print(f"instance uuid: {response.LabelsGeneral(i).InstanceUuid().decode('utf-8')}")
-        print(f"Label: {response.LabelsGeneral(i).Label().decode('utf-8')}")
+        for j in range(response.LabelsGeneral(i).LabelsWithInstanceLength()):
+            print(f"instance uuid: {response.LabelsGeneral(i).LabelsWithInstance(j).InstanceUuid().decode('utf-8')}")
+            print(f"Label: {response.LabelsGeneral(i).LabelsWithInstance(j).Label().Label().decode('utf-8')}")
+            print(f"Label confidence: {response.LabelsGeneral(i).LabelsWithInstance(j).Label().Confidence()}")

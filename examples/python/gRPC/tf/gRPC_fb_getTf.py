@@ -21,7 +21,7 @@ projectUuid = util_fb.getProject(builder, channel, PROJECT_NAME)
 stubTf = tfService.TfServiceStub(channel)
 builder = flatbuffers.Builder(1024)
 
-timeSec = 1654688922
+timeSec = 1675785222
 timeNano = 0
 frame = "map"
 
