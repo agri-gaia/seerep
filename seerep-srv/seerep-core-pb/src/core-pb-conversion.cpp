@@ -179,17 +179,23 @@ void CorePbConversion::fromPbBoundingBox(const seerep::pb::Query& query, seerep_
     queryCore.header.frameId = query.boundingboxstamped().header().frame_id();
     queryCore.boundingbox = seerep_core_msgs::AABB();
     queryCore.boundingbox.value().min_corner().set<0>(query.boundingboxstamped().boundingbox().center_point().x() -
-                                                      query.boundingboxstamped().boundingbox().spatial_extent().x());
+                                                      query.boundingboxstamped().boundingbox().spatial_extent().x() /
+                                                          2.0);
     queryCore.boundingbox.value().min_corner().set<1>(query.boundingboxstamped().boundingbox().center_point().y() -
-                                                      query.boundingboxstamped().boundingbox().spatial_extent().y());
+                                                      query.boundingboxstamped().boundingbox().spatial_extent().y() /
+                                                          2.0);
     queryCore.boundingbox.value().min_corner().set<2>(query.boundingboxstamped().boundingbox().center_point().z() -
-                                                      query.boundingboxstamped().boundingbox().spatial_extent().z());
+                                                      query.boundingboxstamped().boundingbox().spatial_extent().z() /
+                                                          2.0);
     queryCore.boundingbox.value().max_corner().set<0>(query.boundingboxstamped().boundingbox().center_point().x() +
-                                                      query.boundingboxstamped().boundingbox().spatial_extent().x());
+                                                      query.boundingboxstamped().boundingbox().spatial_extent().x() /
+                                                          2.0);
     queryCore.boundingbox.value().max_corner().set<1>(query.boundingboxstamped().boundingbox().center_point().y() +
-                                                      query.boundingboxstamped().boundingbox().spatial_extent().y());
+                                                      query.boundingboxstamped().boundingbox().spatial_extent().y() /
+                                                          2.0);
     queryCore.boundingbox.value().max_corner().set<2>(query.boundingboxstamped().boundingbox().center_point().z() +
-                                                      query.boundingboxstamped().boundingbox().spatial_extent().z());
+                                                      query.boundingboxstamped().boundingbox().spatial_extent().z() /
+                                                          2.0);
   }
 }
 
