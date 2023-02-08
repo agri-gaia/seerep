@@ -32,7 +32,7 @@ void Hdf5PyPointCloud::writePointCloud(const std::string& uuid, const std::strin
 
   std::string cloud_group_id = seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + uuid;
 
-  std::shared_ptr<HighFive::Group> data_group_ptr;
+  std::shared_ptr<HighFive::Group> data_group_ptr = getHdf5Group(cloud_group_id);
 
   std::size_t num_points = 0;
   for (const auto& [name, data] : channels)
@@ -173,24 +173,57 @@ void Hdf5PyPointCloud::writePointCloud(const std::string& uuid, const std::strin
 
   // write basic attributes
 
-  if (!m_file->exist(cloud_group_id))
+  if (!data_group_ptr->hasAttribute(seerep_hdf5_core::Hdf5CorePointCloud::HEIGHT))
   {
-    data_group_ptr = std::make_shared<HighFive::Group>(m_file->createGroup(cloud_group_id));
     data_group_ptr->createAttribute(seerep_hdf5_core::Hdf5CorePointCloud::HEIGHT, 1);
+  }
+  else
+  {
+    data_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::HEIGHT).write(1);
+  }
+
+  if (!data_group_ptr->hasAttribute(seerep_hdf5_core::Hdf5CorePointCloud::WIDTH))
+  {
     data_group_ptr->createAttribute(seerep_hdf5_core::Hdf5CorePointCloud::WIDTH, num_points);
+  }
+  else
+  {
+    data_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::WIDTH).write(num_points);
+  }
+
+  if (!data_group_ptr->hasAttribute(seerep_hdf5_core::Hdf5CorePointCloud::IS_BIGENDIAN))
+  {
     data_group_ptr->createAttribute(seerep_hdf5_core::Hdf5CorePointCloud::IS_BIGENDIAN, false);
+  }
+  else
+  {
+    data_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::IS_BIGENDIAN).write(false);
+  }
+
+  if (!data_group_ptr->hasAttribute(seerep_hdf5_core::Hdf5CorePointCloud::POINT_STEP))
+  {
     data_group_ptr->createAttribute(seerep_hdf5_core::Hdf5CorePointCloud::POINT_STEP, offset);
+  }
+  else
+  {
+    data_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::POINT_STEP).write(offset);
+  }
+
+  if (!data_group_ptr->hasAttribute(seerep_hdf5_core::Hdf5CorePointCloud::ROW_STEP))
+  {
     data_group_ptr->createAttribute(seerep_hdf5_core::Hdf5CorePointCloud::ROW_STEP, num_points * offset);
+  }
+  else
+  {
+    data_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::ROW_STEP).write(num_points * offset);
+  }
+
+  if (!data_group_ptr->hasAttribute(seerep_hdf5_core::Hdf5CorePointCloud::IS_DENSE))
+  {
     data_group_ptr->createAttribute(seerep_hdf5_core::Hdf5CorePointCloud::IS_DENSE, true);
   }
   else
   {
-    data_group_ptr = std::make_shared<HighFive::Group>(m_file->getGroup(cloud_group_id));
-    data_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::HEIGHT).write(1);
-    data_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::WIDTH).write(num_points);
-    data_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::IS_BIGENDIAN).write(false);
-    data_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::POINT_STEP).write(offset);
-    data_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::ROW_STEP).write(num_points * offset);
     data_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::IS_DENSE).write(true);
   }
 
@@ -233,6 +266,32 @@ std::map<std::string, py::array> Hdf5PyPointCloud::readPointCloud(const std::str
   if (m_file->exist(points_id))
   {
     // TODO: load data and reformat to match point fields
+  }
+
+  if (names.size() != offsets.size() || names.size() != counts.size() || names.size() != datatypes.size())
+  {
+    throw std::invalid_argument("point field sizes do not match up for pointcloud " + uuid);
+  }
+
+  for (std::size_t i = 0; i < names.size(); i++)
+  {
+    if (m_file->exist(cloud_group_id + "/" + names[i]))
+    {
+      //
+    }
+    else
+    {
+      if (names[i].compare("x") == 0)
+      {
+        if (m_file->exist(cloud_group_id + "/points"))
+        {
+          std::shared_ptr<HighFive::DataSet> dataset = getHdf5DataSet(cloud_group_id + "/points");
+
+          std::cout << dataset->getDataType().getSize() << " " << (int)dataset->getDataType().getClass() << " "
+                    << dataset->getDataType().string() << std::endl;
+        }
+      }
+    }
   }
 
   return std::map<std::string, py::array>();
