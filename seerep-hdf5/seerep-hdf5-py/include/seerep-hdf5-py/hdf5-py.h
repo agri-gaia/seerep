@@ -96,6 +96,8 @@ PYBIND11_MODULE(seerephdf5py, m)
   // IO
   py::class_<seerep_hdf5_py::Hdf5FileWrapper>(m, "File")
       .def(py::init<const std::string&>(), py::arg("filename"))
+      .def("createProject", &seerep_hdf5_py::Hdf5FileWrapper::createProject, py::arg("project_name"),
+           py::arg("root_frame_id"))
       .def("__repr__",
            [](seerep_hdf5_py::Hdf5FileWrapper& f) { return "<seerephdf5py.File '" + f.getFile()->getName() + "'>"; });
 

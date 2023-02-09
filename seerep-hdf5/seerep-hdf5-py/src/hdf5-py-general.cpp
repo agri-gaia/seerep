@@ -5,6 +5,20 @@
 namespace seerep_hdf5_py
 {
 
+void Hdf5FileWrapper::createProject(const std::string& project_name, const std::string& root_frame_id)
+{
+  seerep_hdf5_core::Hdf5CoreGeneral io(getFile(), getMutex());
+
+  io.writeProjectname(project_name);
+  io.writeProjectFrameId(root_frame_id);
+}
+
+void Hdf5FileWrapper::setProjectGeolocation(const std::string& coordinate_system, const std::string& ellipsoid,
+                                            double latitude, double longitude)
+{
+  // TODO
+}
+
 Hdf5PyGeneral::Hdf5PyGeneral(Hdf5FileWrapper& hdf5_file) : Hdf5CoreGeneral(hdf5_file.getFile(), hdf5_file.getMutex())
 {
 }
