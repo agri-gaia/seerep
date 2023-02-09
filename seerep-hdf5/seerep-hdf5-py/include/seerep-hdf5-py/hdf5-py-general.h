@@ -110,9 +110,17 @@ public:
 
 class Hdf5PyGeneral : public virtual seerep_hdf5_core::Hdf5CoreGeneral
 {
-protected:
+public:
   Hdf5PyGeneral(Hdf5FileWrapper& hdf5_file);
 
+  // #########
+  //  Project
+  // #########
+
+  void setProjectGeolocation(const std::string& coordinate_system, const std::string& ellipsoid, double latitude,
+                             double longitude);
+
+protected:
   // ################
   //  Attributes
   // ################

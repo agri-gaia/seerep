@@ -7,7 +7,7 @@ namespace seerep_hdf5_py
 
 void Hdf5FileWrapper::createProject(const std::string& project_name, const std::string& root_frame_id)
 {
-  seerep_hdf5_core::Hdf5CoreGeneral io(getFile(), getMutex());
+  Hdf5PyGeneral io(*this);
 
   io.writeProjectname(project_name);
   io.writeProjectFrameId(root_frame_id);
@@ -16,7 +16,9 @@ void Hdf5FileWrapper::createProject(const std::string& project_name, const std::
 void Hdf5FileWrapper::setProjectGeolocation(const std::string& coordinate_system, const std::string& ellipsoid,
                                             double latitude, double longitude)
 {
-  // TODO
+  Hdf5PyGeneral io(*this);
+
+  io.setProjectGeolocation(coordinate_system, ellipsoid, latitude, longitude);
 }
 
 Hdf5PyGeneral::Hdf5PyGeneral(Hdf5FileWrapper& hdf5_file) : Hdf5CoreGeneral(hdf5_file.getFile(), hdf5_file.getMutex())
@@ -103,6 +105,50 @@ std::vector<GeneralLabel> Hdf5PyGeneral::readLabelsGeneral(const std::string& da
   }
 
   return general_labels;
+}
+
+void Hdf5PyGeneral::setProjectGeolocation(const std::string& coordinate_system, const std::string& ellipsoid,
+                                          double latitude, double longitude)
+{
+  const std::scoped_lock lock(*m_write_mtx);
+
+  if (!m_file->hasAttribute(GEOLOC_COORDINATE_SYSTEM))
+  {
+    m_file->createAttribute<std::string>(GEOLOC_COORDINATE_SYSTEM, coordinate_system);
+  }
+  else
+  {
+    m_file->getAttribute(GEOLOC_COORDINATE_SYSTEM).write(coordinate_system);
+  }
+
+  if (!m_file->hasAttribute(GEOLOC_ELLIPSOID))
+  {
+    m_file->createAttribute<std::string>(GEOLOC_ELLIPSOID, ellipsoid);
+  }
+  else
+  {
+    m_file->getAttribute(GEOLOC_ELLIPSOID).write(ellipsoid);
+  }
+
+  if (!m_file->hasAttribute(GEOLOC_LATITUDE))
+  {
+    m_file->createAttribute<double>(GEOLOC_LATITUDE, latitude);
+  }
+  else
+  {
+    m_file->getAttribute(GEOLOC_LATITUDE).write(latitude);
+  }
+
+  if (!m_file->hasAttribute(GEOLOC_LONGITUDE))
+  {
+    m_file->createAttribute<double>(GEOLOC_LONGITUDE, longitude);
+  }
+  else
+  {
+    m_file->getAttribute(GEOLOC_LONGITUDE).write(longitude);
+  }
+
+  m_file->flush();
 }
 
 } /* namespace seerep_hdf5_py */
