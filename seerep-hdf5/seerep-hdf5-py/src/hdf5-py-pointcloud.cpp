@@ -264,39 +264,58 @@ std::map<std::string, py::array> Hdf5PyPointCloud::readPointCloud(const std::str
   cloud_group.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::FIELD_DATATYPE).read(datatypes);
   cloud_group.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::FIELD_COUNT).read(counts);
 
-  std::string points_id = cloud_group_id + "/points";
-  if (m_file->exist(points_id))
-  {
-    // TODO: load data and reformat to match point fields
-  }
-
   if (names.size() != offsets.size() || names.size() != counts.size() || names.size() != datatypes.size())
   {
     throw std::invalid_argument("point field sizes do not match up for pointcloud " + uuid);
   }
 
+  std::map<std::string, py::array> channels;
+
   for (std::size_t i = 0; i < names.size(); i++)
   {
-    if (m_file->exist(cloud_group_id + "/" + names[i]))
+    if (counts[i] == 0)
     {
-      //
+      continue;
+    }
+
+    if (!m_file->exist(cloud_group_id + "/" + names[i]))
+    {
+      throw std::invalid_argument("pointcloud field " + names[i] + " not found in pointcloud " + uuid);
+    }
+
+    std::shared_ptr<HighFive::DataSet> dataset = getHdf5DataSet(cloud_group_id + "/" + names[i]);
+
+    if (datatypes[i] == 1)
+    {
+      channels[names[i]] = readField<int8_t>(dataset);
+    }
+    else if (datatypes[i] == 5)
+    {
+      channels[names[i]] = readField<int32_t>(dataset);
+    }
+    else if (datatypes[i] == 2)
+    {
+      channels[names[i]] = readField<uint8_t>(dataset);
+    }
+    else if (datatypes[i] == 6)
+    {
+      channels[names[i]] = readField<uint32_t>(dataset);
+    }
+    else if (datatypes[i] == 7)
+    {
+      channels[names[i]] = readField<float>(dataset);
+    }
+    else if (datatypes[i] == 7)
+    {
+      channels[names[i]] = readField<double>(dataset);
     }
     else
     {
-      if (names[i].compare("x") == 0)
-      {
-        if (m_file->exist(cloud_group_id + "/points"))
-        {
-          std::shared_ptr<HighFive::DataSet> dataset = getHdf5DataSet(cloud_group_id + "/points");
-
-          std::cout << dataset->getDataType().getSize() << " " << (int)dataset->getDataType().getClass() << " "
-                    << dataset->getDataType().string() << std::endl;
-        }
-      }
+      throw std::invalid_argument("unknown type in field " + names[i] + " of pointcloud " + uuid);
     }
   }
 
-  return std::map<std::string, py::array>();
+  return channels;
 }
 
 void Hdf5PyPointCloud::writePoints(const std::string& cloud_group_id, std::map<std::string, bool>& processed,

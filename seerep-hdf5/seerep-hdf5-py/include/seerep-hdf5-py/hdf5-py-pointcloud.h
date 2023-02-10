@@ -75,8 +75,8 @@ private:
                          std::map<std::string, bool>& processed, const std::map<std::string, py::array>& channels,
                          bool write_bb);
 
-  void readPoints(const std::string& cloud_group_id, std::map<std::string, bool>& processed,
-                  const std::map<std::string, py::array>& channels);
+  template <typename T>
+  py::array readField(std::shared_ptr<HighFive::DataSet> field_dataset);
 };
 
 } /* namespace seerep_hdf5_py */

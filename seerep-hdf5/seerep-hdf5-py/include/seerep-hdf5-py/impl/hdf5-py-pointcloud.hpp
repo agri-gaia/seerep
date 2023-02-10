@@ -262,4 +262,25 @@ bool Hdf5PyPointCloud::writeChannelTyped(const std::string& cloud_group_id, cons
                                              write_bb);
 }
 
+template <typename T>
+py::array Hdf5PyPointCloud::readField(std::shared_ptr<HighFive::DataSet> field_dataset)
+{
+  std::vector<std::size_t> dataset_dimensions = field_dataset->getSpace().getDimensions();
+
+  py::array field = py::array_t<T>(dataset_dimensions);
+
+  std::vector<T> hdf5_data;
+  field_dataset->read(hdf5_data);
+
+  py::buffer_info field_buff_info = field.request();
+  T* field_buff_data = static_cast<T*>(field_buff_info.ptr);
+
+  for (std::size_t i = 0; i < hdf5_data.size(); i++)
+  {
+    field_buff_data[i] = hdf5_data[i];
+  }
+
+  return field;
+}
+
 } /* namespace seerep_hdf5_py */
