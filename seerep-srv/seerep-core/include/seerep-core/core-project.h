@@ -166,7 +166,7 @@ private:
   /** @brief the frame id for the spatial idices of this project */
   std::string m_frameId;
   /** @brief the geodetic coordinates of the location where the data was collected in this project */
-  seerep_core_msgs::GeodeticCoordinates m_geodeticCoordinates;
+  std::optional<seerep_core_msgs::GeodeticCoordinates> m_geodeticCoordinates;
 
   /** @brief the write mutex for the HDF5 file of this project */
   std::shared_ptr<std::mutex> m_write_mtx;

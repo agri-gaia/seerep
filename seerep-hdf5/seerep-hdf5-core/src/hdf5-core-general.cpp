@@ -53,9 +53,13 @@ std::string Hdf5CoreGeneral::readProjectname()
   const std::scoped_lock lock(*m_write_mtx);
 
   std::string projectname;
-  if (m_file->hasAttribute(PROJECTNAME))
+  try
   {
     m_file->getAttribute(PROJECTNAME).read(projectname);
+  }
+  catch (...)
+  {
+    throw std::runtime_error("Project " + m_file->getName() + "  has no project name!");
   }
   return projectname;
 }
@@ -80,9 +84,13 @@ std::string Hdf5CoreGeneral::readProjectFrameId()
   const std::scoped_lock lock(*m_write_mtx);
 
   std::string frameId;
-  if (m_file->hasAttribute(PROJECTFRAMEID))
+  try
   {
     m_file->getAttribute(PROJECTFRAMEID).read(frameId);
+  }
+  catch (...)
+  {
+    throw std::runtime_error("Project " + m_file->getName() + "  has no project frame id!");
   }
   return frameId;
 }
@@ -565,25 +573,19 @@ std::optional<seerep_core_msgs::GeodeticCoordinates> Hdf5CoreGeneral::readGeodet
   const std::scoped_lock lock(*m_write_mtx);
 
   seerep_core_msgs::GeodeticCoordinates geocoords;
-  if (m_file->hasAttribute(GEODETICLOCATION_COORDINATESYSTEM))
+  try
   {
     m_file->getAttribute(GEODETICLOCATION_COORDINATESYSTEM).read(geocoords.coordinateSystem);
-  }
-  if (m_file->hasAttribute(GEODETICLOCATION_ELLIPSOID))
-  {
     m_file->getAttribute(GEODETICLOCATION_ELLIPSOID).read(geocoords.ellipsoid);
-  }
-  if (m_file->hasAttribute(GEODETICLOCATION_ALTITUDE))
-  {
     m_file->getAttribute(GEODETICLOCATION_ALTITUDE).read(geocoords.altitude);
-  }
-  if (m_file->hasAttribute(GEODETICLOCATION_LATITUDE))
-  {
     m_file->getAttribute(GEODETICLOCATION_LATITUDE).read(geocoords.latitude);
-  }
-  if (m_file->hasAttribute(GEODETICLOCATION_LONGITUDE))
-  {
     m_file->getAttribute(GEODETICLOCATION_LONGITUDE).read(geocoords.longitude);
+  }
+  catch (...)
+  {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning)
+        << "geographic coordinates of the project " << m_file->getName() << " could not be read!";
+    return std::nullopt;
   }
   return geocoords;
 }
