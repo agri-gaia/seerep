@@ -41,7 +41,7 @@ public:
   void createProject(const std::string& project_name, const std::string& root_frame_id);
 
   void setProjectGeolocation(const std::string& coordinate_system, const std::string& ellipsoid, double latitude,
-                             double longitude);
+                             double longitude, double altitude);
 
 private:
   std::shared_ptr<HighFive::File> file_ptr_;
@@ -118,7 +118,7 @@ public:
   // #########
 
   void setProjectGeolocation(const std::string& coordinate_system, const std::string& ellipsoid, double latitude,
-                             double longitude);
+                             double longitude, double altitude);
 
 protected:
   // ################

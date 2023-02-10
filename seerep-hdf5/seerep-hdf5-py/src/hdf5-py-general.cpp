@@ -14,11 +14,11 @@ void Hdf5FileWrapper::createProject(const std::string& project_name, const std::
 }
 
 void Hdf5FileWrapper::setProjectGeolocation(const std::string& coordinate_system, const std::string& ellipsoid,
-                                            double latitude, double longitude)
+                                            double latitude, double longitude, double altitude)
 {
   Hdf5PyGeneral io(*this);
 
-  io.setProjectGeolocation(coordinate_system, ellipsoid, latitude, longitude);
+  io.setProjectGeolocation(coordinate_system, ellipsoid, latitude, longitude, altitude);
 }
 
 Hdf5PyGeneral::Hdf5PyGeneral(Hdf5FileWrapper& hdf5_file) : Hdf5CoreGeneral(hdf5_file.getFile(), hdf5_file.getMutex())
@@ -108,7 +108,7 @@ std::vector<GeneralLabel> Hdf5PyGeneral::readLabelsGeneral(const std::string& da
 }
 
 void Hdf5PyGeneral::setProjectGeolocation(const std::string& coordinate_system, const std::string& ellipsoid,
-                                          double latitude, double longitude)
+                                          double latitude, double longitude, double altitude)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
@@ -146,6 +146,15 @@ void Hdf5PyGeneral::setProjectGeolocation(const std::string& coordinate_system, 
   else
   {
     m_file->getAttribute(GEOLOC_LONGITUDE).write(longitude);
+  }
+
+  if (!m_file->hasAttribute(GEOLOC_ALTITUDE))
+  {
+    m_file->createAttribute<double>(GEOLOC_ALTITUDE, altitude);
+  }
+  else
+  {
+    m_file->getAttribute(GEOLOC_ALTITUDE).write(altitude);
   }
 
   m_file->flush();

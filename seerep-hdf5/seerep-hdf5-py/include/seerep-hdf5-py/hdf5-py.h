@@ -99,7 +99,8 @@ PYBIND11_MODULE(seerephdf5py, m)
       .def("createProject", &seerep_hdf5_py::Hdf5FileWrapper::createProject, py::arg("project_name"),
            py::arg("root_frame_id"))
       .def("setProjectGeolocation", &seerep_hdf5_py::Hdf5FileWrapper::setProjectGeolocation,
-           py::arg("coordinate_system"), py::arg("ellipsoid"), py::arg("latitude"), py::arg("longitude"))
+           py::arg("coordinate_system"), py::arg("ellipsoid"), py::arg("latitude"), py::arg("longitude"),
+           py::arg("altitude"))
       .def("__repr__",
            [](seerep_hdf5_py::Hdf5FileWrapper& f) { return "<seerephdf5py.File '" + f.getFile()->getName() + "'>"; });
 

@@ -203,6 +203,7 @@ public:
   inline static const std::string GEOLOC_ELLIPSOID = "geoloc_ellipsoid";
   inline static const std::string GEOLOC_LATITUDE = "geoloc_latitude";
   inline static const std::string GEOLOC_LONGITUDE = "geoloc_longitude";
+  inline static const std::string GEOLOC_ALTITUDE = "geoloc_altitude";
 
   // dataset names
   inline static const std::string RAWDATA = "rawdata";
