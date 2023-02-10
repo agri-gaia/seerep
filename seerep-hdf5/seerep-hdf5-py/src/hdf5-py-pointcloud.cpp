@@ -101,9 +101,10 @@ void Hdf5PyPointCloud::writePointCloud(const std::string& uuid, const std::strin
   {
     channel_processed.insert({ name, false });
   }
-  writePoints(cloud_group_id, channel_processed, channels);
-  writeColors(cloud_group_id, channel_processed, channels);
-  writeNormals(cloud_group_id, channel_processed, channels);
+  // writePoints(cloud_group_id, channel_processed, channels);
+  // writeColors(cloud_group_id, channel_processed, channels);
+  // writeNormals(cloud_group_id, channel_processed, channels);
+  // TODO: re-add bounding box calculation and writing
 
   for (const auto& [name, data] : channels)
   {
@@ -314,6 +315,8 @@ std::map<std::string, py::array> Hdf5PyPointCloud::readPointCloud(const std::str
       throw std::invalid_argument("unknown type in field " + names[i] + " of pointcloud " + uuid);
     }
   }
+
+  // TODO: add label reading
 
   return channels;
 }

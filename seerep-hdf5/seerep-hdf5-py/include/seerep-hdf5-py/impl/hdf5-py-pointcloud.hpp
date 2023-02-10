@@ -266,9 +266,10 @@ template <typename T>
 py::array Hdf5PyPointCloud::readField(std::shared_ptr<HighFive::DataSet> field_dataset)
 {
   std::vector<std::size_t> dataset_dimensions = field_dataset->getSpace().getDimensions();
-
+  std::cout << dataset_dimensions[0] << dataset_dimensions[1] << std::endl;
   py::array field = py::array_t<T>(dataset_dimensions);
 
+  // TODO: allow more than 1-d channels
   std::vector<T> hdf5_data;
   field_dataset->read(hdf5_data);
 
