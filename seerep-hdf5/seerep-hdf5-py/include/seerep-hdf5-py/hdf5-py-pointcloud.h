@@ -33,7 +33,9 @@ public:
   std::vector<std::string> getPointClouds();
 
   void writePointCloud(const std::string& uuid, const std::string& frame_id, int64_t seconds, int32_t nanos,
-                       uint32_t sequence, const std::map<std::string, py::array> channels);
+                       uint32_t sequence, const std::map<std::string, py::array> channels,
+                       const std::vector<GeneralLabel>& general_labels,
+                       const std::vector<CategorizedBoundingBoxLabel<3>>& bb_labels);
 
   std::map<std::string, py::array> readPointCloud(const std::string& uuid);
 

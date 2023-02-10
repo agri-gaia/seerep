@@ -26,7 +26,9 @@ std::vector<std::string> Hdf5PyPointCloud::getPointClouds()
 
 void Hdf5PyPointCloud::writePointCloud(const std::string& uuid, const std::string& frame_id, int64_t seconds,
                                        int32_t nanos, uint32_t sequence,
-                                       const std::map<std::string, py::array> channels)
+                                       const std::map<std::string, py::array> channels,
+                                       const std::vector<GeneralLabel>& general_labels,
+                                       const std::vector<CategorizedBoundingBoxLabel<3>>& bb_labels)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
@@ -88,9 +90,9 @@ void Hdf5PyPointCloud::writePointCloud(const std::string& uuid, const std::strin
     data_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ).write(sequence);
   }
 
-  // TODO: write labels
-  // writeLabelsGeneral(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, uuid, pointcloud2.labels_general());
-  // writeBoundingBoxLabeled(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, uuid, pointcloud2.labels_bb());
+  // write labels
+  Hdf5PyGeneral::writeBoundingBoxLabeled(cloud_group_id, bb_labels);
+  Hdf5PyGeneral::writeLabelsGeneral(cloud_group_id, general_labels);
 
   // write data
 
