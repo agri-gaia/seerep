@@ -112,50 +112,11 @@ void Hdf5PyGeneral::setProjectGeolocation(const std::string& coordinate_system, 
 {
   const std::scoped_lock lock(*m_write_mtx);
 
-  if (!m_file->hasAttribute(GEOLOC_COORDINATE_SYSTEM))
-  {
-    m_file->createAttribute<std::string>(GEOLOC_COORDINATE_SYSTEM, coordinate_system);
-  }
-  else
-  {
-    m_file->getAttribute(GEOLOC_COORDINATE_SYSTEM).write(coordinate_system);
-  }
-
-  if (!m_file->hasAttribute(GEOLOC_ELLIPSOID))
-  {
-    m_file->createAttribute<std::string>(GEOLOC_ELLIPSOID, ellipsoid);
-  }
-  else
-  {
-    m_file->getAttribute(GEOLOC_ELLIPSOID).write(ellipsoid);
-  }
-
-  if (!m_file->hasAttribute(GEOLOC_LATITUDE))
-  {
-    m_file->createAttribute<double>(GEOLOC_LATITUDE, latitude);
-  }
-  else
-  {
-    m_file->getAttribute(GEOLOC_LATITUDE).write(latitude);
-  }
-
-  if (!m_file->hasAttribute(GEOLOC_LONGITUDE))
-  {
-    m_file->createAttribute<double>(GEOLOC_LONGITUDE, longitude);
-  }
-  else
-  {
-    m_file->getAttribute(GEOLOC_LONGITUDE).write(longitude);
-  }
-
-  if (!m_file->hasAttribute(GEOLOC_ALTITUDE))
-  {
-    m_file->createAttribute<double>(GEOLOC_ALTITUDE, altitude);
-  }
-  else
-  {
-    m_file->getAttribute(GEOLOC_ALTITUDE).write(altitude);
-  }
+  writeAttributeToHdf5(*m_file, GEOLOC_COORDINATE_SYSTEM, coordinate_system);
+  writeAttributeToHdf5(*m_file, GEOLOC_ELLIPSOID, ellipsoid);
+  writeAttributeToHdf5(*m_file, GEOLOC_LATITUDE, latitude);
+  writeAttributeToHdf5(*m_file, GEOLOC_LONGITUDE, longitude);
+  writeAttributeToHdf5(*m_file, GEOLOC_ALTITUDE, altitude);
 
   m_file->flush();
 }
