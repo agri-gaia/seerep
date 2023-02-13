@@ -52,41 +52,11 @@ void Hdf5PyPointCloud::writePointCloud(const std::string& uuid, const std::strin
 
   // write header
 
-  if (!data_group_ptr->hasAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS))
-  {
-    data_group_ptr->createAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS, seconds);
-  }
-  else
-  {
-    data_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS).write(seconds);
-  }
-
-  if (!data_group_ptr->hasAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS))
-  {
-    data_group_ptr->createAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS, nanos);
-  }
-  else
-  {
-    data_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS).write(nanos);
-  }
-
-  if (!data_group_ptr->hasAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID))
-  {
-    data_group_ptr->createAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID, frame_id);
-  }
-  else
-  {
-    data_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID).write(frame_id);
-  }
-
-  if (!data_group_ptr->hasAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ))
-  {
-    data_group_ptr->createAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ, sequence);
-  }
-  else
-  {
-    data_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ).write(sequence);
-  }
+  writeAttributeToHdf5(*data_group_ptr, seerep_hdf5_core::Hdf5CorePointCloud::HEADER_FRAME_ID, frame_id);
+  writeAttributeToHdf5(*data_group_ptr, seerep_hdf5_core::Hdf5CorePointCloud::HEADER_SEQ, sequence);
+  writeAttributeToHdf5(*data_group_ptr, seerep_hdf5_core::Hdf5CorePointCloud::HEADER_STAMP_SECONDS, seconds);
+  writeAttributeToHdf5(*data_group_ptr, seerep_hdf5_core::Hdf5CorePointCloud::HEADER_STAMP_NANOS, nanos);
+  writeAttributeToHdf5(*data_group_ptr, seerep_hdf5_core::Hdf5CorePointCloud::HEADER_SEQ, sequence);
 
   // write labels
 
@@ -186,59 +156,12 @@ void Hdf5PyPointCloud::writePointCloud(const std::string& uuid, const std::strin
 
   // write basic attributes
 
-  if (!data_group_ptr->hasAttribute(seerep_hdf5_core::Hdf5CorePointCloud::HEIGHT))
-  {
-    data_group_ptr->createAttribute(seerep_hdf5_core::Hdf5CorePointCloud::HEIGHT, 1);
-  }
-  else
-  {
-    data_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::HEIGHT).write(1);
-  }
-
-  if (!data_group_ptr->hasAttribute(seerep_hdf5_core::Hdf5CorePointCloud::WIDTH))
-  {
-    data_group_ptr->createAttribute(seerep_hdf5_core::Hdf5CorePointCloud::WIDTH, num_points);
-  }
-  else
-  {
-    data_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::WIDTH).write(num_points);
-  }
-
-  if (!data_group_ptr->hasAttribute(seerep_hdf5_core::Hdf5CorePointCloud::IS_BIGENDIAN))
-  {
-    data_group_ptr->createAttribute(seerep_hdf5_core::Hdf5CorePointCloud::IS_BIGENDIAN, false);
-  }
-  else
-  {
-    data_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::IS_BIGENDIAN).write(false);
-  }
-
-  if (!data_group_ptr->hasAttribute(seerep_hdf5_core::Hdf5CorePointCloud::POINT_STEP))
-  {
-    data_group_ptr->createAttribute(seerep_hdf5_core::Hdf5CorePointCloud::POINT_STEP, offset);
-  }
-  else
-  {
-    data_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::POINT_STEP).write(offset);
-  }
-
-  if (!data_group_ptr->hasAttribute(seerep_hdf5_core::Hdf5CorePointCloud::ROW_STEP))
-  {
-    data_group_ptr->createAttribute(seerep_hdf5_core::Hdf5CorePointCloud::ROW_STEP, num_points * offset);
-  }
-  else
-  {
-    data_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::ROW_STEP).write(num_points * offset);
-  }
-
-  if (!data_group_ptr->hasAttribute(seerep_hdf5_core::Hdf5CorePointCloud::IS_DENSE))
-  {
-    data_group_ptr->createAttribute(seerep_hdf5_core::Hdf5CorePointCloud::IS_DENSE, true);
-  }
-  else
-  {
-    data_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::IS_DENSE).write(true);
-  }
+  writeAttributeToHdf5(*data_group_ptr, seerep_hdf5_core::Hdf5CorePointCloud::HEIGHT, 1);
+  writeAttributeToHdf5(*data_group_ptr, seerep_hdf5_core::Hdf5CorePointCloud::WIDTH, num_points);
+  writeAttributeToHdf5(*data_group_ptr, seerep_hdf5_core::Hdf5CorePointCloud::IS_BIGENDIAN, false);
+  writeAttributeToHdf5(*data_group_ptr, seerep_hdf5_core::Hdf5CorePointCloud::POINT_STEP, offset);
+  writeAttributeToHdf5(*data_group_ptr, seerep_hdf5_core::Hdf5CorePointCloud::ROW_STEP, num_points * offset);
+  writeAttributeToHdf5(*data_group_ptr, seerep_hdf5_core::Hdf5CorePointCloud::IS_DENSE, true);
 
   m_file->flush();
 }
