@@ -53,15 +53,6 @@ public:
   void writeTransformStamped(const TfTransform& tf);
 
   std::vector<TfTransform> readTransformStamped(const std::string& frame_id);
-
-private:
-  // datatype group names in hdf5
-  inline static const std::string HDF5_GROUP_TF = "tf";
-
-  inline static const std::string SIZE = "size";
-
-  inline static const std::string PARENT_FRAME = "PARENT_FRAME";
-  inline static const std::string CHILD_FRAME = "CHILD_FRAME";
 };
 
 } /* namespace seerep_hdf5_py */

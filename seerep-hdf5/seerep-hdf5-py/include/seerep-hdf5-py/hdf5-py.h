@@ -12,6 +12,7 @@
 
 namespace py = pybind11;
 
+// define python module
 PYBIND11_MODULE(seerephdf5py, m)
 {
   m.doc() = "seerep hdf5 python bindings";

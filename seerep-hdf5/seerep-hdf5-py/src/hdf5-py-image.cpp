@@ -80,14 +80,10 @@ void Hdf5PyImage::writeImage(const std::string& uuid, const std::string& frame_i
   // append amount of bits per channel to encoding name
   encoding = encoding + std::to_string(8 * channel_size);
 
-  seerep_hdf5_core::Hdf5CoreGeneral::writeAttributeToHdf5(
-      *data_droup_ptr, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS, seconds);
-  seerep_hdf5_core::Hdf5CoreGeneral::writeAttributeToHdf5(*data_droup_ptr,
-                                                          seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS, nanos);
-  seerep_hdf5_core::Hdf5CoreGeneral::writeAttributeToHdf5(*data_droup_ptr,
-                                                          seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID, frame_id);
-  seerep_hdf5_core::Hdf5CoreGeneral::writeAttributeToHdf5(*data_droup_ptr,
-                                                          seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ, sequence);
+  writeAttributeToHdf5(*data_droup_ptr, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS, seconds);
+  writeAttributeToHdf5(*data_droup_ptr, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS, nanos);
+  writeAttributeToHdf5(*data_droup_ptr, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID, frame_id);
+  writeAttributeToHdf5(*data_droup_ptr, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ, sequence);
 
   seerep_hdf5_core::ImageAttributes image_attributes = {
     static_cast<uint32_t>(image_buff_info.shape[0]), static_cast<uint32_t>(image_buff_info.shape[1]),

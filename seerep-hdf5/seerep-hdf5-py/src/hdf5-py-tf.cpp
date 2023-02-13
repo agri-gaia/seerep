@@ -14,7 +14,7 @@ Hdf5PyTf::Hdf5PyTf(Hdf5FileWrapper& hdf5_file)
 
 void Hdf5PyTf::writeTransformStamped(const TfTransform& tf)
 {
-  std::string hdf5_group_path = HDF5_GROUP_TF + "/" + tf.frame_id;
+  std::string hdf5_group_path = seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF + "/" + tf.frame_id;
   std::string hdf5_dataset_time_path = hdf5_group_path + "/" + "time";
   std::string hdf5_dataset_trans_path = hdf5_group_path + "/" + "translation";
   std::string hdf5_dataset_rot_path = hdf5_group_path + "/" + "rotation";
@@ -49,9 +49,9 @@ void Hdf5PyTf::writeTransformStamped(const TfTransform& tf)
   }
 
   uint64_t size = 1;
-  if (tf_group_ptr->hasAttribute(SIZE))
+  if (tf_group_ptr->hasAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE))
   {
-    tf_group_ptr->getAttribute(SIZE).read(size);
+    tf_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE).read(size);
 
     size++;
 
@@ -59,31 +59,16 @@ void Hdf5PyTf::writeTransformStamped(const TfTransform& tf)
     data_set_trans_ptr->resize({ size, 3 });
     data_set_rot_ptr->resize({ size, 4 });
 
-    tf_group_ptr->getAttribute(SIZE).write(size);
+    tf_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE).write(size);
   }
   else
   {
-    tf_group_ptr->createAttribute(SIZE, size);
+    tf_group_ptr->createAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE, size);
   }
 
   // write frames
-  if (!tf_group_ptr->hasAttribute(PARENT_FRAME))
-  {
-    tf_group_ptr->createAttribute(PARENT_FRAME, tf.frame_id);
-  }
-  else
-  {
-    tf_group_ptr->getAttribute(PARENT_FRAME).write(tf.frame_id);
-  }
-
-  if (!tf_group_ptr->hasAttribute(CHILD_FRAME))
-  {
-    tf_group_ptr->createAttribute(CHILD_FRAME, tf.child_frame_id);
-  }
-  else
-  {
-    tf_group_ptr->getAttribute(CHILD_FRAME).write(tf.child_frame_id);
-  }
+  writeAttributeToHdf5(*tf_group_ptr, seerep_hdf5_core::Hdf5CoreTf::PARENT_FRAME, tf.frame_id);
+  writeAttributeToHdf5(*tf_group_ptr, seerep_hdf5_core::Hdf5CoreTf::CHILD_FRAME, tf.child_frame_id);
 
   // write time
   std::vector<int64_t> time;
@@ -111,7 +96,7 @@ void Hdf5PyTf::writeTransformStamped(const TfTransform& tf)
 
 std::vector<TfTransform> Hdf5PyTf::readTransformStamped(const std::string& frame_id)
 {
-  std::string hdf5_group_path = HDF5_GROUP_TF + "/" + frame_id;
+  std::string hdf5_group_path = seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF + "/" + frame_id;
   std::string hdf5_dataset_time_path = hdf5_group_path + "/" + "time";
   std::string hdf5_dataset_trans_path = hdf5_group_path + "/" + "translation";
   std::string hdf5_dataset_rot_path = hdf5_group_path + "/" + "rotation";
@@ -128,9 +113,9 @@ std::vector<TfTransform> Hdf5PyTf::readTransformStamped(const std::string& frame
   }
 
   uint64_t size = 0;
-  if (tf_group_ptr->hasAttribute(SIZE))
+  if (tf_group_ptr->hasAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE))
   {
-    tf_group_ptr->getAttribute(SIZE).read(size);
+    tf_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE).read(size);
   }
 
   if (size == 0)
@@ -139,15 +124,16 @@ std::vector<TfTransform> Hdf5PyTf::readTransformStamped(const std::string& frame
   }
 
   // read frames
-  if (!tf_group_ptr->hasAttribute(PARENT_FRAME) || !tf_group_ptr->hasAttribute(CHILD_FRAME))
+  if (!tf_group_ptr->hasAttribute(seerep_hdf5_core::Hdf5CoreTf::PARENT_FRAME) ||
+      !tf_group_ptr->hasAttribute(seerep_hdf5_core::Hdf5CoreTf::CHILD_FRAME))
   {
     throw std::invalid_argument("parent frame or child frame not set for transform");
   }
 
   std::string frame_id_read;
   std::string child_frame_id;
-  tf_group_ptr->getAttribute(PARENT_FRAME).read(frame_id_read);
-  tf_group_ptr->getAttribute(CHILD_FRAME).read(child_frame_id);
+  tf_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::PARENT_FRAME).read(frame_id_read);
+  tf_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::CHILD_FRAME).read(child_frame_id);
 
   if (frame_id_read.compare(frame_id) != 0)
   {
