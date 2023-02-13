@@ -243,7 +243,8 @@ void Hdf5PyPointCloud::writePointCloud(const std::string& uuid, const std::strin
   m_file->flush();
 }
 
-std::map<std::string, py::array> Hdf5PyPointCloud::readPointCloud(const std::string& uuid)
+std::tuple<std::map<std::string, py::array>, std::vector<GeneralLabel>, std::vector<CategorizedBoundingBoxLabel<3>>>
+Hdf5PyPointCloud::readPointCloud(const std::string& uuid)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
@@ -251,7 +252,8 @@ std::map<std::string, py::array> Hdf5PyPointCloud::readPointCloud(const std::str
 
   if (!m_file->exist(cloud_group_id))
   {
-    return std::map<std::string, py::array>();
+    return std::make_tuple(std::map<std::string, py::array>(), std::vector<GeneralLabel>(),
+                           std::vector<CategorizedBoundingBoxLabel<3>>());
   }
 
   HighFive::Group cloud_group = m_file->getGroup(cloud_group_id);
@@ -326,9 +328,11 @@ std::map<std::string, py::array> Hdf5PyPointCloud::readPointCloud(const std::str
     }
   }
 
-  // TODO: add label reading
+  // read labels
+  auto general_labels = Hdf5PyGeneral::readLabelsGeneral(cloud_group_id);
+  auto bb_labels = Hdf5PyGeneral::readBoundingBoxLabeled<3>(cloud_group_id);
 
-  return channels;
+  return std::make_tuple(channels, general_labels, bb_labels);
 }
 
 void Hdf5PyPointCloud::writeChannel(const std::string& cloud_group_id, const std::string& channel_name,

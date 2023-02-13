@@ -37,7 +37,8 @@ public:
                        const std::vector<GeneralLabel>& general_labels,
                        const std::vector<CategorizedBoundingBoxLabel<3>>& bb_labels);
 
-  std::map<std::string, py::array> readPointCloud(const std::string& uuid);
+  std::tuple<std::map<std::string, py::array>, std::vector<GeneralLabel>, std::vector<CategorizedBoundingBoxLabel<3>>>
+  readPointCloud(const std::string& uuid);
 
 private:
   template <typename T>
