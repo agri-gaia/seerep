@@ -513,6 +513,21 @@ std::shared_ptr<HighFive::Group> Hdf5CoreGeneral::getHdf5Group(const std::string
   }
 }
 
+void Hdf5CoreGeneral::writeHeader(const seerep_core_msgs::Header& header)
+{
+  const std::scoped_lock lock(*m_write_mtx);
+
+  // among all header attributes, enum datatype was not saved because all datatypes are saved separately and the
+  // explicit saving of this offers no value
+  m_file->createAttribute<std::string>(HEADER_FRAME_ID, header.frameId);
+  m_file->createAttribute<uint32_t>(HEADER_STAMP_SECONDS, header.timestamp.seconds);
+  m_file->createAttribute<uint32_t>(HEADER_STAMP_NANOS, header.timestamp.nanos);
+  // uuids are cast into a string from boost::uuid datatype
+  m_file->createAttribute<std::string>(HEADER_PROJECT_UUID, boost::lexical_cast<std::string>(header.uuidProject));
+  m_file->createAttribute<std::string>(HEADER_DATA_UUID, boost::lexical_cast<std::string>(header.uuidData));
+  m_file->createAttribute<uint32_t>(HEADER_SEQ, header.sequence);
+}
+
 void Hdf5CoreGeneral::writeGeodeticLocation(const seerep_core_msgs::GeodeticCoordinates geocoords)
 {
   const std::scoped_lock lock(*m_write_mtx);

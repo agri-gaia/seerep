@@ -7,13 +7,16 @@
 // grpc / flatbuffer
 #include <flatbuffers/flatbuffers.h>
 #include <flatbuffers/grpc.h>
+#include <seerep-msgs/camera_intrinsics_generated.h>
 // seerep-msgs
+#include <seerep-msgs/camera_intrinsics.h>
 #include <seerep-msgs/datatype_generated.h>
 #include <seerep-msgs/image_generated.h>
 #include <seerep-msgs/point_cloud_2_generated.h>
 #include <seerep-msgs/point_stamped_generated.h>
 #include <seerep-msgs/query_generated.h>
 #include <seerep-msgs/query_instance_generated.h>
+#include <seerep-msgs/region_of_interest.h>
 #include <seerep-msgs/transform_stamped_generated.h>
 #include <seerep-msgs/transform_stamped_query_generated.h>
 #include <seerep-msgs/uuids_per_project_generated.h>
@@ -86,6 +89,20 @@ public:
    * @return the tf query message in seerep core format
    */
   static seerep_core_msgs::QueryTf fromFb(const seerep::fb::TransformStampedQuery& query);
+
+  /**
+   * @brief converts the flatbuffer camera intrinsics message to seerep core specific message
+   * @param query the flatbuffer camera intrinsics message
+   * @return the camera intrinsics message in seerep core format
+   */
+  static seerep_core_msgs::camera_intrinsics fromFb(const seerep::fb::CameraIntrinsics& ci);
+
+  /**
+   * @brief converts the flatbuffer region of interest message to seerep core specific message
+   * @param query the flatbuffer region of interest message
+   * @return the region of interest message in seerep core format
+   */
+  static seerep_core_msgs::region_of_interest fromFb(const seerep::fb::regionOfInterest& roi);
 
   /**
    * @brief converts the query result from the seerep core format to gRPC flatbuffer message

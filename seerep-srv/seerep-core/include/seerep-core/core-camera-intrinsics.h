@@ -5,7 +5,7 @@
 #include <seerep-msgs/camera_intrinsics.h>
 
 // seerep-hdf5-core
-// #include <seerep-hdf5-core/
+#include <seerep-hdf5-core/hdf5-core-cameraintrinsics.h>
 
 namespace seerep_core
 {
@@ -15,7 +15,7 @@ public:
   CoreCameraIntrinsics(std::shared_ptr<seerep_hdf5_core::Hdf5CoreCameraIntrinsics> hdf5_io);
   ~CoreCameraIntrinsics();
 
-  std::optional<seerep_core_msgs::camera_intrinsics> getData();
+  void addData(seerep_core_msgs : camera_intrinsics& ci);
 }
 }  // namespace seerep_core
 

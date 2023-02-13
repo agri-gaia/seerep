@@ -4,6 +4,7 @@
 #include <functional>
 #include <optional>
 
+#include "core-fb-conversion.h"
 #include "core-fb-general.h"
 
 // logging
