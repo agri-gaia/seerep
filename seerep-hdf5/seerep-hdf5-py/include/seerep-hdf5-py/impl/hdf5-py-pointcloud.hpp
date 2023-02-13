@@ -271,19 +271,26 @@ template <typename T>
 py::array Hdf5PyPointCloud::readField(std::shared_ptr<HighFive::DataSet> field_dataset)
 {
   std::vector<std::size_t> dataset_dimensions = field_dataset->getSpace().getDimensions();
-  std::cout << dataset_dimensions[0] << dataset_dimensions[1] << std::endl;
-  py::array field = py::array_t<T>(dataset_dimensions);
+  std::cout << dataset_dimensions[0] << " " << dataset_dimensions[1] << " " << dataset_dimensions[2] << std::endl;
 
-  // TODO: allow more than 1-d channels
-  std::vector<T> hdf5_data;
+  // ignore hight for now -> organized pointclouds unsupported
+  py::array field = py::array_t<T>({ dataset_dimensions[0] * dataset_dimensions[1], dataset_dimensions[2] });
+
+  std::vector<std::vector<std::vector<T>>> hdf5_data;
   field_dataset->read(hdf5_data);
 
   py::buffer_info field_buff_info = field.request();
   T* field_buff_data = static_cast<T*>(field_buff_info.ptr);
 
-  for (std::size_t i = 0; i < hdf5_data.size(); i++)
+  for (std::size_t i = 0; i < dataset_dimensions[0]; i++)
   {
-    field_buff_data[i] = hdf5_data[i];
+    for (std::size_t j = 0; j < dataset_dimensions[1]; j++)
+    {
+      for (std::size_t k = 0; k < dataset_dimensions[2]; k++)
+      {
+        field_buff_data[k + dataset_dimensions[2] * (j + dataset_dimensions[1] * i)] = hdf5_data[i][j][k];
+      }
+    }
   }
 
   return field;
