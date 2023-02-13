@@ -51,18 +51,20 @@ private:
   void getMinMax(const std::vector<std::vector<std::vector<T>>>& data, std::array<T, Nchannels>& min,
                  std::array<T, Nchannels>& max);
 
+  template <typename T, int Nchannels>
+  bool writeBoundingBox(const std::string& cloud_group_id, const std::vector<std::string>& channel_names,
+                        const std::map<std::string, py::array>& channels);
+
   void writeChannel(const std::string& cloud_group_id, const std::string& channel_name,
                     const std::map<std::string, py::array>& channels);
 
   template <typename T>
   bool writeChannelTyped(const std::string& cloud_group_id, const std::string& channel_dataset_id,
-                         const std::vector<std::vector<std::string>>& channel_names,
-                         const std::map<std::string, py::array>& channels);
+                         const std::string& channel_name, const std::map<std::string, py::array>& channels);
 
   template <typename T, typename Second, typename... Other>
   bool writeChannelTyped(const std::string& cloud_group_id, const std::string& channel_dataset_id,
-                         const std::vector<std::vector<std::string>>& channel_names,
-                         const std::map<std::string, py::array>& channels);
+                         const std::string& channel_name, const std::map<std::string, py::array>& channels);
 
   template <typename T>
   py::array readField(std::shared_ptr<HighFive::DataSet> field_dataset);

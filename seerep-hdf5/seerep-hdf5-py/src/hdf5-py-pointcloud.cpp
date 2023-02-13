@@ -91,16 +91,44 @@ void Hdf5PyPointCloud::writePointCloud(const std::string& uuid, const std::strin
   }
 
   // write labels
+
   Hdf5PyGeneral::writeBoundingBoxLabeled(cloud_group_id, bb_labels);
   Hdf5PyGeneral::writeLabelsGeneral(cloud_group_id, general_labels);
 
   // write data
 
-  // TODO: re-add bounding box calculation and writing
-
   for (const auto& [name, data] : channels)
   {
     writeChannel(cloud_group_id, name, channels);
+  }
+
+  // write boundingbox
+
+  bool success = false;
+
+  if (!success)
+  {
+    success = writeBoundingBox<double, 3>(cloud_group_id, { "points" }, channels);
+  }
+  if (!success)
+  {
+    success = writeBoundingBox<float, 3>(cloud_group_id, { "points" }, channels);
+  }
+  if (!success)
+  {
+    success = writeBoundingBox<double, 3>(cloud_group_id, { "xyz" }, channels);
+  }
+  if (!success)
+  {
+    success = writeBoundingBox<float, 3>(cloud_group_id, { "xyz" }, channels);
+  }
+  if (!success)
+  {
+    success = writeBoundingBox<double, 3>(cloud_group_id, { "x", "y", "z" }, channels);
+  }
+  if (!success)
+  {
+    success = writeBoundingBox<float, 3>(cloud_group_id, { "x", "y", "z" }, channels);
   }
 
   // write point fields
@@ -310,36 +338,10 @@ void Hdf5PyPointCloud::writeChannel(const std::string& cloud_group_id, const std
 {
   std::vector<std::vector<std::string>> channel_names({ { channel_name } });
 
-  auto search = channels.find(channel_name);
-  switch (search->second.dtype().char_())
+  if (!writeChannelTyped<char, int, uint8_t, unsigned int, float, double>(cloud_group_id, channel_name, channel_name,
+                                                                          channels))
   {
-    case 'b':
-      writeChannelTyped<char>(cloud_group_id, channel_name, channel_names, channels);
-      break;
-
-    case 'i':
-      writeChannelTyped<int>(cloud_group_id, channel_name, channel_names, channels);
-      break;
-
-    case 'B':
-      writeChannelTyped<uint8_t>(cloud_group_id, channel_name, channel_names, channels);
-      break;
-
-    case 'I':
-      writeChannelTyped<unsigned int>(cloud_group_id, channel_name, channel_names, channels);
-      break;
-
-    case 'f':
-      writeChannelTyped<float>(cloud_group_id, channel_name, channel_names, channels);
-      break;
-
-    case 'd':
-      writeChannelTyped<double>(cloud_group_id, channel_name, channel_names, channels);
-      break;
-
-    default:
-      throw std::invalid_argument("datatype '" + std::string(1, search->second.dtype().char_()) + "' of field '" +
-                                  channel_name + "' ist not supported");
+    throw std::invalid_argument("unable to write field '" + channel_name + "'");
   }
 }
 

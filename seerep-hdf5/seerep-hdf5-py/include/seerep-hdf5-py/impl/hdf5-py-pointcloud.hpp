@@ -183,21 +183,15 @@ void Hdf5PyPointCloud::getMinMax(const std::vector<std::vector<std::vector<T>>>&
   }
 }
 
-template <typename T>
-bool Hdf5PyPointCloud::writeChannelTyped(const std::string& cloud_group_id, const std::string& channel_dataset_id,
-                                         const std::vector<std::vector<std::string>>& channel_names,
-                                         const std::map<std::string, py::array>& channels)
+template <typename T, int Nchannels>
+bool Hdf5PyPointCloud::writeBoundingBox(const std::string& cloud_group_id,
+                                        const std::vector<std::string>& channel_names,
+                                        const std::map<std::string, py::array>& channels)
 {
   std::vector<std::vector<std::vector<T>>> channel_data(0);
 
   // find channels to use
-  for (const std::vector<std::string>& channel_combination : channel_names)
-  {
-    if (getChannelData<T>(channel_combination, channels, channel_data))
-    {
-      break;
-    }
-  }
+  getChannelData<T>(channel_names, channels, channel_data);
 
   if (channel_data.size() == 0)
   {
@@ -205,19 +199,40 @@ bool Hdf5PyPointCloud::writeChannelTyped(const std::string& cloud_group_id, cons
     return false;
   }
 
-  // if (write_bb)
-  // {
-  //   std::array<T, 3> min, max;
-  //   getMinMax<T, 3>(channel_data, min, max);
+  std::array<T, Nchannels> min, max;
+  getMinMax<T, Nchannels>(channel_data, min, max);
 
-  //   std::shared_ptr<HighFive::Group> cloud_group = std::make_shared<HighFive::Group>(m_file->getGroup(cloud_group_id));
+  std::shared_ptr<HighFive::Group> cloud_group = std::make_shared<HighFive::Group>(m_file->getGroup(cloud_group_id));
 
-  //   // write bounding box as attribute to dataset
-  //   const std::vector<T> boundingbox{ min[0], min[1], min[2], max[0], max[1], max[2] };
+  // write bounding box as attribute to dataset
+  std::vector<T> boundingbox(2 * Nchannels);
+  for (std::size_t i = 0; i < Nchannels; i++)
+  {
+    boundingbox[i] = min[i];
+    boundingbox[i + Nchannels] = max[i];
+  }
 
-  //   seerep_hdf5_core::Hdf5CoreGeneral::writeAttributeToHdf5(
-  //       *cloud_group, seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX, boundingbox);
-  // }
+  seerep_hdf5_core::Hdf5CoreGeneral::writeAttributeToHdf5(
+      *cloud_group, seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX, boundingbox);
+
+  return true;
+}
+
+template <typename T>
+bool Hdf5PyPointCloud::writeChannelTyped(const std::string& cloud_group_id, const std::string& channel_dataset_id,
+                                         const std::string& channel_name,
+                                         const std::map<std::string, py::array>& channels)
+{
+  std::vector<std::vector<std::vector<T>>> channel_data(0);
+
+  // find channels to use
+  getChannelData<T>({ channel_name }, channels, channel_data);
+
+  if (channel_data.size() == 0)
+  {
+    // no channels found
+    return false;
+  }
 
   // create dataset
   const std::string dataset_id = cloud_group_id + "/" + channel_dataset_id;
@@ -241,15 +256,15 @@ bool Hdf5PyPointCloud::writeChannelTyped(const std::string& cloud_group_id, cons
 
 template <typename T, typename Second, typename... Other>
 bool Hdf5PyPointCloud::writeChannelTyped(const std::string& cloud_group_id, const std::string& channel_dataset_id,
-                                         const std::vector<std::vector<std::string>>& channel_names,
+                                         const std::string& channel_name,
                                          const std::map<std::string, py::array>& channels)
 {
-  if (writeChannelTyped<T>(cloud_group_id, channel_dataset_id, channel_names, channels))
+  if (writeChannelTyped<T>(cloud_group_id, channel_dataset_id, channel_name, channels))
   {
     return true;
   }
 
-  return writeChannelTyped<Second, Other...>(cloud_group_id, channel_dataset_id, channel_names, channels);
+  return writeChannelTyped<Second, Other...>(cloud_group_id, channel_dataset_id, channel_name, channels);
 }
 
 template <typename T>
