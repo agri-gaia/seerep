@@ -52,6 +52,9 @@ public:
   void writeTransformStamped(const TfTransform& tf);
 
   std::vector<TfTransform> readTransformStamped(const std::string& frameId);
+
+private:
+  std::vector<TfTransform> readGroupTransformStamped(const std::string& tfGroupId);
 };
 
 } /* namespace seerep_hdf5_py */

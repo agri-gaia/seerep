@@ -12,6 +12,18 @@ Hdf5PyImage::Hdf5PyImage(Hdf5FileWrapper& hdf5_file)
 {
 }
 
+std::vector<std::string> Hdf5PyImage::getImages()
+{
+  const std::scoped_lock lock(*m_write_mtx);
+
+  if (!m_file->exist(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE))
+  {
+    return std::vector<std::string>();
+  }
+  const HighFive::Group& cloudsGroup = m_file->getGroup(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE);
+  return cloudsGroup.listObjectNames();
+}
+
 void Hdf5PyImage::writeImage(const std::string& uuid, const std::string& frameId, int64_t seconds, int32_t nanos,
                              uint32_t sequence, const py::array& image, const std::vector<GeneralLabel>& generalLabels,
                              const std::vector<CategorizedBoundingBoxLabel<2>>& bbLabels)

@@ -125,6 +125,9 @@ img_io.writeImage(uuid="image1",
                   general_labels=[general_labels],
                   bb_labels=[bb_labels])
 
+image_uuids = img_io.getImages()
+print(image_uuids)
+
 # read image
 img, general_labels, bb_labels = img_io.readImage(uuid="image1")
 cv2.imwrite('TestImgNew.jpg', img)
