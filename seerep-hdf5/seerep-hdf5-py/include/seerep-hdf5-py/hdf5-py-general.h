@@ -23,101 +23,100 @@ class Hdf5FileWrapper
 {
 public:
   Hdf5FileWrapper(const std::string& filename)
-    : file_ptr_(std::make_shared<HighFive::File>(filename, HighFive::File::ReadWrite | HighFive::File::Create))
-    , write_mutex_(std::make_shared<std::mutex>())
+    : filePtr_(std::make_shared<HighFive::File>(filename, HighFive::File::ReadWrite | HighFive::File::Create))
+    , writeMutex_(std::make_shared<std::mutex>())
   {
   }
 
   std::shared_ptr<HighFive::File>& getFile()
   {
-    return file_ptr_;
+    return filePtr_;
   }
 
   std::shared_ptr<std::mutex>& getMutex()
   {
-    return write_mutex_;
+    return writeMutex_;
   }
 
-  void createProject(const std::string& project_name, const std::string& root_frame_id);
+  void createProject(const std::string& projectName, const std::string& rootFrameId);
 
-  void setProjectGeolocation(const std::string& coordinate_system, const std::string& ellipsoid, double latitude,
+  void setProjectGeolocation(const std::string& coordinateSystem, const std::string& ellipsoid, double latitude,
                              double longitude, double altitude);
 
 private:
-  std::shared_ptr<HighFive::File> file_ptr_;
-  std::shared_ptr<std::mutex> write_mutex_;
+  std::shared_ptr<HighFive::File> filePtr_;
+  std::shared_ptr<std::mutex> writeMutex_;
 };
 
 struct InstanceLabel
 {
 public:
-  InstanceLabel(const std::string& new_label, const std::string& new_instance_uuid)
-    : label(new_label), instance_uuid(new_instance_uuid)
+  InstanceLabel(const std::string& label, const std::string& instanceUuid) : label_(label), instanceUuid_(instanceUuid)
   {
   }
 
-  std::string label = "";
-  std::string instance_uuid = "";
+  std::string label_ = "";
+  std::string instanceUuid_ = "";
 };
 
 struct GeneralLabel
 {
 public:
-  GeneralLabel(const std::string& new_category) : category(new_category)
+  GeneralLabel(const std::string& category) : category_(category)
   {
   }
 
   void addLabel(InstanceLabel& label)
   {
-    labels.push_back(label);
+    labels_.push_back(label);
   }
 
-  std::string category = "";
-  std::vector<InstanceLabel> labels;
+  std::string category_ = "";
+  std::vector<InstanceLabel> labels_;
 };
 
 template <int NumDimensions>
 struct BoundingBoxLabel
 {
 public:
-  BoundingBoxLabel(InstanceLabel& new_label, std::array<double, NumDimensions>& new_min_point,
-                   std::array<double, NumDimensions>& new_max_point)
-    : label(new_label), min_point(new_min_point), max_point(new_max_point)
+  BoundingBoxLabel(InstanceLabel& label, std::array<double, NumDimensions>& minPoint,
+                   std::array<double, NumDimensions>& maxPoint)
+    : label_(label), minPoint_(minPoint), maxPoint_(maxPoint)
   {
   }
 
-  InstanceLabel label;
-  std::array<double, NumDimensions> min_point;
-  std::array<double, NumDimensions> max_point;
+  InstanceLabel label_;
+  std::array<double, NumDimensions> minPoint_;
+  std::array<double, NumDimensions> maxPoint_;
 };
 
 template <int NumDimensions>
 struct CategorizedBoundingBoxLabel
 {
 public:
-  CategorizedBoundingBoxLabel(const std::string& new_category) : category(new_category)
+  CategorizedBoundingBoxLabel(const std::string& category) : category_(category)
   {
   }
 
   void addLabel(BoundingBoxLabel<NumDimensions>& label)
   {
-    labels.push_back(label);
+    labels_.push_back(label);
   }
 
-  std::string category = "";
-  std::vector<BoundingBoxLabel<NumDimensions>> labels;
+  std::string category_ = "";
+  std::vector<BoundingBoxLabel<NumDimensions>> labels_;
 };
 
 class Hdf5PyGeneral : public virtual seerep_hdf5_core::Hdf5CoreGeneral
 {
 public:
-  Hdf5PyGeneral(Hdf5FileWrapper& hdf5_file);
+  Hdf5PyGeneral(Hdf5FileWrapper& hdf5File);
 
   // #########
   //  Project
   // #########
 
-  void setProjectGeolocation(const std::string& coordinate_system, const std::string& ellipsoid, double latitude,
+  void setProjectGeolocation(const std::string& coordinateSystem, const std::string& ellipsoid, double latitude,
                              double longitude, double altitude);
 
 protected:
@@ -126,21 +125,21 @@ protected:
   // ################
 
   template <int NumDimensions>
-  void writeBoundingBoxLabeled(const std::string& data_group_id,
-                               const std::vector<seerep_hdf5_py::CategorizedBoundingBoxLabel<NumDimensions>>& bb_labels);
+  void writeBoundingBoxLabeled(const std::string& dataGroupId,
+                               const std::vector<seerep_hdf5_py::CategorizedBoundingBoxLabel<NumDimensions>>& bbLabels);
 
   template <int NumDimensions>
   std::vector<seerep_hdf5_py::CategorizedBoundingBoxLabel<NumDimensions>>
-  readBoundingBoxLabeled(const std::string& data_group_id);
+  readBoundingBoxLabeled(const std::string& dataGroupId);
 
   // ################
   //  Labels General
   // ################
 
-  void writeLabelsGeneral(const std::string& data_group_id,
-                          const std::vector<seerep_hdf5_py::GeneralLabel>& general_labels);
+  void writeLabelsGeneral(const std::string& dataGroupId,
+                          const std::vector<seerep_hdf5_py::GeneralLabel>& generalLabels);
 
-  std::vector<seerep_hdf5_py::GeneralLabel> readLabelsGeneral(const std::string& data_group_id);
+  std::vector<seerep_hdf5_py::GeneralLabel> readLabelsGeneral(const std::string& dataGroupId);
 };
 
 }  // namespace seerep_hdf5_py
