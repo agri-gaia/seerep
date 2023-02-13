@@ -74,6 +74,11 @@ public:
   bool hasAABB(const std::string& datatypeGroup, const std::string& uuid);
 
   // ################
+  //  Header
+  // ################
+  void writeHeader(const seerep_core_msgs::Header& header);
+
+  // ################
   //  Time
   // ################
   void readTimeFromRaw(const std::string& datatypeGroup, const std::string& uuid, int64_t& secs, int64_t& nanos);
@@ -210,9 +215,12 @@ private:
 
 public:
   // header attribute keys
+  inline static const std::string HEADER_DATATYPE = "header_datatype";
+  inline static const std::string HEADER_FRAME_ID = "frame_id";
   inline static const std::string HEADER_STAMP_SECONDS = "stamp_seconds";
   inline static const std::string HEADER_STAMP_NANOS = "stamp_nanos";
-  inline static const std::string HEADER_FRAME_ID = "frame_id";
+  inline static const std::string HEADER_PROJECT_UUID = "header_project_uuid";
+  inline static const std::string HEADER_DATA_UUID = "header_data_uuid";
   inline static const std::string HEADER_SEQ = "header_seq";
 
   inline static const std::string AABB_FIELD = "AABB";

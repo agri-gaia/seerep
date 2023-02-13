@@ -18,7 +18,7 @@ struct camera_intrinsics
   std::vector<double> projection_matrix;
   uint32_t binning_x;
   uint32_t binning_y;
-  region_of_interest region_of_interest;
+  seerep_core_msgs::region_of_interest region_of_interest;
 };
 }  // namespace seerep_core_msgs
 

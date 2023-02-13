@@ -125,6 +125,59 @@ seerep_core_msgs::QueryTf CoreFbConversion::fromFb(const seerep::fb::TransformSt
   return queryTf;
 }
 
+seerep_core_msgs::camera_intrinsics CoreFbConversion::fromFb(const seerep::fb::CameraIntrinsics& ci)
+{
+  seerep_core_msgs::camera_intrinsics ciCore;
+
+  CoreFbConversion::fromFbDataHeader(ci.header(), ciCore.header, seerep_core_msgs::Datatype::Unknown);
+
+  ciCore.height = ci.height();
+  ciCore.width = ci.width();
+  ciCore.distortion_model = ci.distortion_model()->str();
+
+  // traverse distortion list and convert
+  for (auto distortion_val : *ci.distortion())
+  {
+    ciCore.distortion.push_back(distortion_val);
+  }
+
+  // traverse intrinsics matrix and convert
+  for (auto intrinsic_matrix_elem : *ci.intrinsic_matrix())
+  {
+    ciCore.intrinsic_matrix.push_back(intrinsic_matrix_elem);
+  }
+
+  // traverse rectification matrix and convert
+  for (auto rectification_matrix_elem : *ci.rectification_matrix())
+  {
+    ciCore.rectification_matrix.push_back(rectification_matrix_elem);
+  }
+
+  // traverse projection matrix and convert
+  for (auto projection_matrix_elem : *ci.projection_matrix())
+  {
+    ciCore.projection_matrix.push_back(projection_matrix_elem);
+  }
+
+  ciCore.binning_x = ci.binning_x();
+  ciCore.binning_y = ci.binning_y();
+
+  ciCore.region_of_interest = CoreFbConversion::fromFb(*ci.region_of_interest());
+}
+
+seerep_core_msgs::region_of_interest CoreFbConversion::fromFb(const seerep::fb::regionOfInterest& roi)
+{
+  seerep_core_msgs::region_of_interest roiCore;
+
+  roiCore.x_offset = roi.x_offset();
+  roiCore.y_offset = roi.y_offset();
+  roiCore.height = roi.height();
+  roiCore.width = roi.width();
+  roiCore.do_rectify = roi.do_rectify();
+
+  return roiCore;
+}
+
 flatbuffers::grpc::Message<seerep::fb::UuidsPerProject> CoreFbConversion::toFb(seerep_core_msgs::QueryResult& result)
 {
   flatbuffers::grpc::MessageBuilder builder;

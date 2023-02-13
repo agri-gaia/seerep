@@ -7,14 +7,14 @@ namespace seerep.fb;
 table CameraIntrinsics
 {
     header:Header;
-    height:uint32;
-    width:uint32;
+    height:uint;
+    width:uint;
     distortion_model:string;
     distortion:[double];
     intrinsic_matrix:[double];
     rectification_matrix:[double];
     projection_matrix:[double];
-    binning_x:uint32;
-    binning_y:uint32;
+    binning_x:uint;
+    binning_y:uint;
     region_of_interest:regionOfInterest;
 }
