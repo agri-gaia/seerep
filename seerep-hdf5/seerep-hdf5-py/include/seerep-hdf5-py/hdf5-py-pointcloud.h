@@ -28,14 +28,14 @@ namespace seerep_hdf5_py
 class Hdf5PyPointCloud : public Hdf5PyGeneral
 {
 public:
-  Hdf5PyPointCloud(Hdf5FileWrapper& hdf5_file);
+  Hdf5PyPointCloud(Hdf5FileWrapper& hdf5File);
 
   std::vector<std::string> getPointClouds();
 
-  void writePointCloud(const std::string& uuid, const std::string& frame_id, int64_t seconds, int32_t nanos,
-                       uint32_t sequence, const std::map<std::string, py::array> channels,
-                       const std::vector<GeneralLabel>& general_labels,
-                       const std::vector<CategorizedBoundingBoxLabel<3>>& bb_labels);
+  void writePointCloud(const std::string& uuid, const std::string& frameId, int64_t seconds, int32_t nanos,
+                       uint32_t sequence, const std::map<std::string, py::array> fields,
+                       const std::vector<GeneralLabel>& generalLabels,
+                       const std::vector<CategorizedBoundingBoxLabel<3>>& bbLabels);
 
   std::tuple<std::map<std::string, py::array>, std::vector<GeneralLabel>, std::vector<CategorizedBoundingBoxLabel<3>>>
   readPointCloud(const std::string& uuid);
@@ -45,30 +45,30 @@ private:
   bool checkType(const py::dtype& type);
 
   template <typename T>
-  bool getChannelData(const std::vector<std::string>& channel_names, const std::map<std::string, py::array>& channels,
-                      std::vector<std::vector<std::vector<T>>>& channel_data);
+  bool getFieldData(const std::vector<std::string>& fieldNames, const std::map<std::string, py::array>& fields,
+                    std::vector<std::vector<std::vector<T>>>& fieldData);
 
-  template <typename T, int Nchannels>
-  void getMinMax(const std::vector<std::vector<std::vector<T>>>& data, std::array<T, Nchannels>& min,
-                 std::array<T, Nchannels>& max);
+  template <typename T, int Nfields>
+  void getMinMax(const std::vector<std::vector<std::vector<T>>>& fieldData, std::array<T, Nfields>& min,
+                 std::array<T, Nfields>& max);
 
-  template <typename T, int Nchannels>
-  bool writeBoundingBox(const std::string& cloud_group_id, const std::vector<std::string>& channel_names,
-                        const std::map<std::string, py::array>& channels);
+  template <typename T, int Nfields>
+  bool writeBoundingBox(const std::string& cloudGroupId, const std::vector<std::string>& fieldNames,
+                        const std::map<std::string, py::array>& fields);
 
-  void writeChannel(const std::string& cloud_group_id, const std::string& channel_name,
-                    const std::map<std::string, py::array>& channels);
+  void writeField(const std::string& cloudGroupId, const std::string& fieldName,
+                  const std::map<std::string, py::array>& fields);
 
   template <typename T>
-  bool writeChannelTyped(const std::string& cloud_group_id, const std::string& channel_dataset_id,
-                         const std::string& channel_name, const std::map<std::string, py::array>& channels);
+  bool writeFieldTyped(const std::string& cloudGroupId, const std::string& fieldDatasetId, const std::string& fieldName,
+                       const std::map<std::string, py::array>& fields);
 
   template <typename T, typename Second, typename... Other>
-  bool writeChannelTyped(const std::string& cloud_group_id, const std::string& channel_dataset_id,
-                         const std::string& channel_name, const std::map<std::string, py::array>& channels);
+  bool writeFieldTyped(const std::string& cloudGroupId, const std::string& fieldDatasetId, const std::string& fieldName,
+                       const std::map<std::string, py::array>& fields);
 
   template <typename T>
-  py::array readField(std::shared_ptr<HighFive::DataSet> field_dataset);
+  py::array readField(std::shared_ptr<HighFive::DataSet> fieldDatasetPtr);
 };
 
 } /* namespace seerep_hdf5_py */

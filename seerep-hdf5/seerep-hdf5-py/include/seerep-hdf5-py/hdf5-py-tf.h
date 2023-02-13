@@ -21,15 +21,14 @@ namespace seerep_hdf5_py
 struct TfTransform
 {
 public:
-  TfTransform(int64_t seconds_new, int32_t nanos_new, const std::string& frame_id_new,
-              const std::string& child_frame_id_new, const std::array<double, 3>& translation_new,
-              const std::array<double, 4>& rotation_new)
-    : seconds(seconds_new)
-    , nanos(nanos_new)
-    , frame_id(frame_id_new)
-    , child_frame_id(child_frame_id_new)
-    , translation(translation_new)
-    , rotation(rotation_new)
+  TfTransform(int64_t seconds, int32_t nanos, const std::string& frameId, const std::string& childFrameId,
+              const std::array<double, 3>& translation, const std::array<double, 4>& rotation)
+    : seconds_(seconds)
+    , nanos_(nanos)
+    , frameId_(frameId)
+    , childFrameId_(childFrameId)
+    , translation_(translation)
+    , rotation_(rotation)
   {
   }
 
@@ -37,22 +36,22 @@ public:
   {
   }
 
-  int64_t seconds;
-  int32_t nanos;
-  std::string frame_id;
-  std::string child_frame_id;
-  std::array<double, 3> translation;
-  std::array<double, 4> rotation;
+  int64_t seconds_;
+  int32_t nanos_;
+  std::string frameId_;
+  std::string childFrameId_;
+  std::array<double, 3> translation_;
+  std::array<double, 4> rotation_;
 };
 
 class Hdf5PyTf : public Hdf5PyGeneral
 {
 public:
-  Hdf5PyTf(Hdf5FileWrapper& hdf5_file);
+  Hdf5PyTf(Hdf5FileWrapper& hdf5File);
 
   void writeTransformStamped(const TfTransform& tf);
 
-  std::vector<TfTransform> readTransformStamped(const std::string& frame_id);
+  std::vector<TfTransform> readTransformStamped(const std::string& frameId);
 };
 
 } /* namespace seerep_hdf5_py */

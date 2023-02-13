@@ -30,9 +30,9 @@ class Hdf5PyImage : public seerep_hdf5_core::Hdf5CoreImage, public Hdf5PyGeneral
 public:
   Hdf5PyImage(Hdf5FileWrapper& hdf5_file);
 
-  void writeImage(const std::string& uuid, const std::string& frame_id, int64_t seconds, int32_t nanos,
-                  uint32_t sequence, const py::array& image, const std::vector<GeneralLabel>& general_labels,
-                  const std::vector<CategorizedBoundingBoxLabel<2>>& bb_labels);
+  void writeImage(const std::string& uuid, const std::string& frameId, int64_t seconds, int32_t nanos,
+                  uint32_t sequence, const py::array& image, const std::vector<GeneralLabel>& generalLabels,
+                  const std::vector<CategorizedBoundingBoxLabel<2>>& bbLabels);
 
   std::tuple<py::array, std::vector<GeneralLabel>, std::vector<CategorizedBoundingBoxLabel<2>>>
   readImage(const std::string& uuid);

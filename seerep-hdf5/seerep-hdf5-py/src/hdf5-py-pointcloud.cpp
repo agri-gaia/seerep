@@ -5,8 +5,8 @@
 namespace seerep_hdf5_py
 {
 
-Hdf5PyPointCloud::Hdf5PyPointCloud(Hdf5FileWrapper& hdf5_file)
-  : Hdf5CoreGeneral(hdf5_file.getFile(), hdf5_file.getMutex()), Hdf5PyGeneral(hdf5_file)
+Hdf5PyPointCloud::Hdf5PyPointCloud(Hdf5FileWrapper& hdf5File)
+  : Hdf5CoreGeneral(hdf5File.getFile(), hdf5File.getMutex()), Hdf5PyGeneral(hdf5File)
 {
 }
 
@@ -18,56 +18,65 @@ std::vector<std::string> Hdf5PyPointCloud::getPointClouds()
   {
     return std::vector<std::string>();
   }
-  const HighFive::Group& clouds_group = m_file->getGroup(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD);
-  return clouds_group.listObjectNames();
+  const HighFive::Group& cloudsGroup = m_file->getGroup(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD);
+  return cloudsGroup.listObjectNames();
 }
 
-void Hdf5PyPointCloud::writePointCloud(const std::string& uuid, const std::string& frame_id, int64_t seconds,
-                                       int32_t nanos, uint32_t sequence,
-                                       const std::map<std::string, py::array> channels,
-                                       const std::vector<GeneralLabel>& general_labels,
-                                       const std::vector<CategorizedBoundingBoxLabel<3>>& bb_labels)
+void Hdf5PyPointCloud::writePointCloud(const std::string& uuid, const std::string& frameId, int64_t seconds,
+                                       int32_t nanos, uint32_t sequence, const std::map<std::string, py::array> fields,
+                                       const std::vector<GeneralLabel>& generalLabels,
+                                       const std::vector<CategorizedBoundingBoxLabel<3>>& bbLabels)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
-  std::string cloud_group_id = seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + uuid;
+  std::string cloudGroupId = seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + uuid;
 
-  std::shared_ptr<HighFive::Group> data_group_ptr = getHdf5Group(cloud_group_id);
+  std::shared_ptr<HighFive::Group> dataGroupPtr = getHdf5Group(cloudGroupId);
 
-  std::size_t num_points = 0;
-  for (const auto& [name, data] : channels)
+  std::size_t numPoints = 0;
+  for (const auto& [fieldName, fieldData] : fields)
   {
-    py::buffer_info buff_info = data.request();
-    if (name.compare("xyz") == 0)
+    py::buffer_info fieldBuffInfo = fieldData.request();
+    if (fieldName.compare("xyz") == 0)
     {
-      num_points = buff_info.shape[0];
+      numPoints = fieldBuffInfo.shape[0];
       break;
     }
-    else if (name.compare("x") == 0)
+    else if (fieldName.compare("x") == 0)
     {
-      num_points = buff_info.shape[0];
+      numPoints = fieldBuffInfo.shape[0];
+      break;
+    }
+    else if (fieldName.compare("points") == 0)
+    {
+      numPoints = fieldBuffInfo.shape[0];
       break;
     }
   }
 
+  if (numPoints == 0)
+  {
+    throw std::invalid_argument("no points found in fields. does a field 'xyz', 'x' or 'points' exist?");
+  }
+
   // write header
 
-  writeAttributeToHdf5(*data_group_ptr, seerep_hdf5_core::Hdf5CorePointCloud::HEADER_FRAME_ID, frame_id);
-  writeAttributeToHdf5(*data_group_ptr, seerep_hdf5_core::Hdf5CorePointCloud::HEADER_SEQ, sequence);
-  writeAttributeToHdf5(*data_group_ptr, seerep_hdf5_core::Hdf5CorePointCloud::HEADER_STAMP_SECONDS, seconds);
-  writeAttributeToHdf5(*data_group_ptr, seerep_hdf5_core::Hdf5CorePointCloud::HEADER_STAMP_NANOS, nanos);
-  writeAttributeToHdf5(*data_group_ptr, seerep_hdf5_core::Hdf5CorePointCloud::HEADER_SEQ, sequence);
+  writeAttributeToHdf5(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::HEADER_FRAME_ID, frameId);
+  writeAttributeToHdf5(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::HEADER_SEQ, sequence);
+  writeAttributeToHdf5(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::HEADER_STAMP_SECONDS, seconds);
+  writeAttributeToHdf5(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::HEADER_STAMP_NANOS, nanos);
+  writeAttributeToHdf5(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::HEADER_SEQ, sequence);
 
   // write labels
 
-  Hdf5PyGeneral::writeBoundingBoxLabeled(cloud_group_id, bb_labels);
-  Hdf5PyGeneral::writeLabelsGeneral(cloud_group_id, general_labels);
+  Hdf5PyGeneral::writeBoundingBoxLabeled(cloudGroupId, bbLabels);
+  Hdf5PyGeneral::writeLabelsGeneral(cloudGroupId, generalLabels);
 
   // write data
 
-  for (const auto& [name, data] : channels)
+  for (const auto& [fieldName, fieldData] : fields)
   {
-    writeChannel(cloud_group_id, name, channels);
+    writeField(cloudGroupId, fieldName, fields);
   }
 
   // write boundingbox
@@ -76,44 +85,44 @@ void Hdf5PyPointCloud::writePointCloud(const std::string& uuid, const std::strin
 
   if (!success)
   {
-    success = writeBoundingBox<double, 3>(cloud_group_id, { "points" }, channels);
+    success = writeBoundingBox<double, 3>(cloudGroupId, { "points" }, fields);
   }
   if (!success)
   {
-    success = writeBoundingBox<float, 3>(cloud_group_id, { "points" }, channels);
+    success = writeBoundingBox<float, 3>(cloudGroupId, { "points" }, fields);
   }
   if (!success)
   {
-    success = writeBoundingBox<double, 3>(cloud_group_id, { "xyz" }, channels);
+    success = writeBoundingBox<double, 3>(cloudGroupId, { "xyz" }, fields);
   }
   if (!success)
   {
-    success = writeBoundingBox<float, 3>(cloud_group_id, { "xyz" }, channels);
+    success = writeBoundingBox<float, 3>(cloudGroupId, { "xyz" }, fields);
   }
   if (!success)
   {
-    success = writeBoundingBox<double, 3>(cloud_group_id, { "x", "y", "z" }, channels);
+    success = writeBoundingBox<double, 3>(cloudGroupId, { "x", "y", "z" }, fields);
   }
   if (!success)
   {
-    success = writeBoundingBox<float, 3>(cloud_group_id, { "x", "y", "z" }, channels);
+    success = writeBoundingBox<float, 3>(cloudGroupId, { "x", "y", "z" }, fields);
   }
 
   // write point fields
 
-  std::vector<std::string> names(channels.size());
-  std::vector<uint32_t> offsets(channels.size());
-  std::vector<uint8_t> datatypes(channels.size());
-  std::vector<uint32_t> counts(channels.size());
+  std::vector<std::string> names(fields.size());
+  std::vector<uint32_t> offsets(fields.size());
+  std::vector<uint8_t> datatypes(fields.size());
+  std::vector<uint32_t> counts(fields.size());
   uint32_t offset = 0;
-  for (const auto& [name, data] : channels)
+  for (const auto& [fieldName, fieldData] : fields)
   {
-    py::buffer_info channel_info = data.request();
+    py::buffer_info fieldBuffInfo = fieldData.request();
 
-    names.push_back(name);
+    names.push_back(fieldName);
     offsets.push_back(offset);
 
-    switch (data.dtype().char_())
+    switch (fieldData.dtype().char_())
     {
       case 'b':
         datatypes.push_back(1);  // int8
@@ -135,33 +144,29 @@ void Hdf5PyPointCloud::writePointCloud(const std::string& uuid, const std::strin
         break;
     }
 
-    uint32_t num_elements = 1;
-    if (channel_info.shape.size() > 1)
+    uint32_t numElements = 1;
+    if (fieldBuffInfo.shape.size() > 1)
     {
-      num_elements = channel_info.shape[1];
+      numElements = fieldBuffInfo.shape[1];
     }
-    counts.push_back(num_elements);
+    counts.push_back(numElements);
 
-    offset += data.dtype().itemsize() * num_elements;
+    offset += fieldData.dtype().itemsize() * numElements;
   }
 
-  seerep_hdf5_core::Hdf5CoreGeneral::writeAttributeToHdf5(*data_group_ptr,
-                                                          seerep_hdf5_core::Hdf5CorePointCloud::FIELD_NAME, names);
-  seerep_hdf5_core::Hdf5CoreGeneral::writeAttributeToHdf5(*data_group_ptr,
-                                                          seerep_hdf5_core::Hdf5CorePointCloud::FIELD_OFFSET, offsets);
-  seerep_hdf5_core::Hdf5CoreGeneral::writeAttributeToHdf5(
-      *data_group_ptr, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_DATATYPE, datatypes);
-  seerep_hdf5_core::Hdf5CoreGeneral::writeAttributeToHdf5(*data_group_ptr,
-                                                          seerep_hdf5_core::Hdf5CorePointCloud::FIELD_COUNT, counts);
+  writeAttributeToHdf5(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_NAME, names);
+  writeAttributeToHdf5(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_OFFSET, offsets);
+  writeAttributeToHdf5(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_DATATYPE, datatypes);
+  writeAttributeToHdf5(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_COUNT, counts);
 
   // write basic attributes
 
-  writeAttributeToHdf5(*data_group_ptr, seerep_hdf5_core::Hdf5CorePointCloud::HEIGHT, 1);
-  writeAttributeToHdf5(*data_group_ptr, seerep_hdf5_core::Hdf5CorePointCloud::WIDTH, num_points);
-  writeAttributeToHdf5(*data_group_ptr, seerep_hdf5_core::Hdf5CorePointCloud::IS_BIGENDIAN, false);
-  writeAttributeToHdf5(*data_group_ptr, seerep_hdf5_core::Hdf5CorePointCloud::POINT_STEP, offset);
-  writeAttributeToHdf5(*data_group_ptr, seerep_hdf5_core::Hdf5CorePointCloud::ROW_STEP, num_points * offset);
-  writeAttributeToHdf5(*data_group_ptr, seerep_hdf5_core::Hdf5CorePointCloud::IS_DENSE, true);
+  writeAttributeToHdf5(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::HEIGHT, 1);
+  writeAttributeToHdf5(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::WIDTH, numPoints);
+  writeAttributeToHdf5(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::IS_BIGENDIAN, false);
+  writeAttributeToHdf5(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::POINT_STEP, offset);
+  writeAttributeToHdf5(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::ROW_STEP, numPoints * offset);
+  writeAttributeToHdf5(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::IS_DENSE, true);
 
   m_file->flush();
 }
@@ -171,41 +176,32 @@ Hdf5PyPointCloud::readPointCloud(const std::string& uuid)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
-  std::string cloud_group_id = seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + uuid;
+  std::string cloudGroupId = seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + uuid;
 
-  if (!m_file->exist(cloud_group_id))
+  if (!m_file->exist(cloudGroupId))
   {
     return std::make_tuple(std::map<std::string, py::array>(), std::vector<GeneralLabel>(),
                            std::vector<CategorizedBoundingBoxLabel<3>>());
   }
 
-  HighFive::Group cloud_group = m_file->getGroup(cloud_group_id);
-
-  uint32_t height, width, point_step, row_step;
-  bool is_bigendian, is_dense;
-  cloud_group.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::HEIGHT).read(height);
-  cloud_group.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::WIDTH).read(width);
-  cloud_group.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::IS_BIGENDIAN).read(is_bigendian);
-  cloud_group.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::POINT_STEP).read(point_step);
-  cloud_group.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::ROW_STEP).read(row_step);
-  cloud_group.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::IS_DENSE).read(is_dense);
+  HighFive::Group cloudGroup = m_file->getGroup(cloudGroupId);
 
   std::vector<std::string> names;
   std::vector<uint32_t> offsets;
   std::vector<uint32_t> counts;
   std::vector<uint8_t> datatypes;
 
-  cloud_group.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::FIELD_NAME).read(names);
-  cloud_group.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::FIELD_OFFSET).read(offsets);
-  cloud_group.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::FIELD_DATATYPE).read(datatypes);
-  cloud_group.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::FIELD_COUNT).read(counts);
+  cloudGroup.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::FIELD_NAME).read(names);
+  cloudGroup.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::FIELD_OFFSET).read(offsets);
+  cloudGroup.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::FIELD_DATATYPE).read(datatypes);
+  cloudGroup.getAttribute(seerep_hdf5_core::Hdf5CorePointCloud::FIELD_COUNT).read(counts);
 
   if (names.size() != offsets.size() || names.size() != counts.size() || names.size() != datatypes.size())
   {
     throw std::invalid_argument("point field sizes do not match up for pointcloud " + uuid);
   }
 
-  std::map<std::string, py::array> channels;
+  std::map<std::string, py::array> fields;
 
   for (std::size_t i = 0; i < names.size(); i++)
   {
@@ -214,36 +210,36 @@ Hdf5PyPointCloud::readPointCloud(const std::string& uuid)
       continue;
     }
 
-    if (!m_file->exist(cloud_group_id + "/" + names[i]))
+    if (!m_file->exist(cloudGroupId + "/" + names[i]))
     {
       throw std::invalid_argument("pointcloud field " + names[i] + " not found in pointcloud " + uuid);
     }
 
-    std::shared_ptr<HighFive::DataSet> dataset = getHdf5DataSet(cloud_group_id + "/" + names[i]);
+    std::shared_ptr<HighFive::DataSet> dataset = getHdf5DataSet(cloudGroupId + "/" + names[i]);
 
     if (datatypes[i] == 1)
     {
-      channels[names[i]] = readField<int8_t>(dataset);
+      fields[names[i]] = readField<int8_t>(dataset);
     }
     else if (datatypes[i] == 5)
     {
-      channels[names[i]] = readField<int32_t>(dataset);
+      fields[names[i]] = readField<int32_t>(dataset);
     }
     else if (datatypes[i] == 2)
     {
-      channels[names[i]] = readField<uint8_t>(dataset);
+      fields[names[i]] = readField<uint8_t>(dataset);
     }
     else if (datatypes[i] == 6)
     {
-      channels[names[i]] = readField<uint32_t>(dataset);
+      fields[names[i]] = readField<uint32_t>(dataset);
     }
     else if (datatypes[i] == 7)
     {
-      channels[names[i]] = readField<float>(dataset);
+      fields[names[i]] = readField<float>(dataset);
     }
     else if (datatypes[i] == 7)
     {
-      channels[names[i]] = readField<double>(dataset);
+      fields[names[i]] = readField<double>(dataset);
     }
     else
     {
@@ -252,21 +248,18 @@ Hdf5PyPointCloud::readPointCloud(const std::string& uuid)
   }
 
   // read labels
-  auto general_labels = Hdf5PyGeneral::readLabelsGeneral(cloud_group_id);
-  auto bb_labels = Hdf5PyGeneral::readBoundingBoxLabeled<3>(cloud_group_id);
+  auto generalLabels = Hdf5PyGeneral::readLabelsGeneral(cloudGroupId);
+  auto bbLabels = Hdf5PyGeneral::readBoundingBoxLabeled<3>(cloudGroupId);
 
-  return std::make_tuple(channels, general_labels, bb_labels);
+  return std::make_tuple(fields, generalLabels, bbLabels);
 }
 
-void Hdf5PyPointCloud::writeChannel(const std::string& cloud_group_id, const std::string& channel_name,
-                                    const std::map<std::string, py::array>& channels)
+void Hdf5PyPointCloud::writeField(const std::string& cloudGroupId, const std::string& fieldName,
+                                  const std::map<std::string, py::array>& fields)
 {
-  std::vector<std::vector<std::string>> channel_names({ { channel_name } });
-
-  if (!writeChannelTyped<char, int, uint8_t, unsigned int, float, double>(cloud_group_id, channel_name, channel_name,
-                                                                          channels))
+  if (!writeFieldTyped<char, int, uint8_t, unsigned int, float, double>(cloudGroupId, fieldName, fieldName, fields))
   {
-    throw std::invalid_argument("unable to write field '" + channel_name + "'");
+    throw std::invalid_argument("unable to write field '" + fieldName + "'");
   }
 }
 

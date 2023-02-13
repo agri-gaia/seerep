@@ -7,115 +7,113 @@
 namespace seerep_hdf5_py
 {
 
-Hdf5PyTf::Hdf5PyTf(Hdf5FileWrapper& hdf5_file)
-  : Hdf5CoreGeneral(hdf5_file.getFile(), hdf5_file.getMutex()), Hdf5PyGeneral(hdf5_file)
+Hdf5PyTf::Hdf5PyTf(Hdf5FileWrapper& hdf5File)
+  : Hdf5CoreGeneral(hdf5File.getFile(), hdf5File.getMutex()), Hdf5PyGeneral(hdf5File)
 {
 }
 
 void Hdf5PyTf::writeTransformStamped(const TfTransform& tf)
 {
-  std::string hdf5_group_path = seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF + "/" + tf.frame_id;
-  std::string hdf5_dataset_time_path = hdf5_group_path + "/" + "time";
-  std::string hdf5_dataset_trans_path = hdf5_group_path + "/" + "translation";
-  std::string hdf5_dataset_rot_path = hdf5_group_path + "/" + "rotation";
+  std::string hdf5GroupPath = seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF + "/" + tf.frameId_;
+  std::string hdf5DatasetTimePath = hdf5GroupPath + "/" + "time";
+  std::string hdf5DatasetTransPath = hdf5GroupPath + "/" + "translation";
+  std::string hdf5DatasetRotPath = hdf5GroupPath + "/" + "rotation";
 
-  std::shared_ptr<HighFive::Group> tf_group_ptr = getHdf5Group(hdf5_group_path);
-  if (tf_group_ptr == nullptr)
+  std::shared_ptr<HighFive::Group> tfGroupPtr = getHdf5Group(hdf5GroupPath);
+  if (tfGroupPtr == nullptr)
   {
-    throw std::invalid_argument("unable to obtain tf hdf5 group for frame " + tf.frame_id);
+    throw std::invalid_argument("unable to obtain tf hdf5 group for frame " + tf.frameId_);
   }
 
-  HighFive::DataSpace data_space_time({ 1, 2 }, { HighFive::DataSpace::UNLIMITED, 2 });
-  HighFive::DataSetCreateProps props_time;
-  props_time.add(HighFive::Chunking(std::vector<hsize_t>{ 1, 2 }));
-  std::shared_ptr<HighFive::DataSet> data_set_time_ptr =
-      getHdf5DataSet<int64_t>(hdf5_dataset_time_path, data_space_time, props_time);
+  HighFive::DataSpace dataSpaceTime({ 1, 2 }, { HighFive::DataSpace::UNLIMITED, 2 });
+  HighFive::DataSetCreateProps propsTime;
+  propsTime.add(HighFive::Chunking(std::vector<hsize_t>{ 1, 2 }));
+  std::shared_ptr<HighFive::DataSet> datasetTimePtr =
+      getHdf5DataSet<int64_t>(hdf5DatasetTimePath, dataSpaceTime, propsTime);
 
-  HighFive::DataSpace data_space_trans({ 1, 3 }, { HighFive::DataSpace::UNLIMITED, 3 });
-  HighFive::DataSetCreateProps props_trans;
-  props_trans.add(HighFive::Chunking(std::vector<hsize_t>{ 1, 3 }));
-  std::shared_ptr<HighFive::DataSet> data_set_trans_ptr =
-      getHdf5DataSet<double>(hdf5_dataset_trans_path, data_space_trans, props_trans);
+  HighFive::DataSpace dataSpaceTrans({ 1, 3 }, { HighFive::DataSpace::UNLIMITED, 3 });
+  HighFive::DataSetCreateProps propsTrans;
+  propsTrans.add(HighFive::Chunking(std::vector<hsize_t>{ 1, 3 }));
+  std::shared_ptr<HighFive::DataSet> datasetTransPtr =
+      getHdf5DataSet<double>(hdf5DatasetTransPath, dataSpaceTrans, propsTrans);
 
-  HighFive::DataSpace data_space_rot({ 1, 4 }, { HighFive::DataSpace::UNLIMITED, 4 });
-  HighFive::DataSetCreateProps props_rot;
-  props_rot.add(HighFive::Chunking(std::vector<hsize_t>{ 1, 4 }));
-  std::shared_ptr<HighFive::DataSet> data_set_rot_ptr =
-      getHdf5DataSet<double>(hdf5_dataset_rot_path, data_space_rot, props_rot);
+  HighFive::DataSpace dataSpaceRot({ 1, 4 }, { HighFive::DataSpace::UNLIMITED, 4 });
+  HighFive::DataSetCreateProps propsRot;
+  propsRot.add(HighFive::Chunking(std::vector<hsize_t>{ 1, 4 }));
+  std::shared_ptr<HighFive::DataSet> datasetRotPtr = getHdf5DataSet<double>(hdf5DatasetRotPath, dataSpaceRot, propsRot);
 
-  if (data_set_time_ptr == nullptr || data_set_trans_ptr == nullptr || data_set_rot_ptr == nullptr)
+  if (datasetTimePtr == nullptr || datasetTransPtr == nullptr || datasetRotPtr == nullptr)
   {
-    throw std::invalid_argument("unable to obtain the required tf hdf5 datasets for frame " + tf.frame_id);
+    throw std::invalid_argument("unable to obtain the required tf hdf5 datasets for frame " + tf.frameId_);
   }
 
   uint64_t size = 1;
-  if (tf_group_ptr->hasAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE))
+  if (tfGroupPtr->hasAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE))
   {
-    tf_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE).read(size);
+    tfGroupPtr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE).read(size);
 
     size++;
 
-    data_set_time_ptr->resize({ size, 2 });
-    data_set_trans_ptr->resize({ size, 3 });
-    data_set_rot_ptr->resize({ size, 4 });
+    datasetTimePtr->resize({ size, 2 });
+    datasetTransPtr->resize({ size, 3 });
+    datasetRotPtr->resize({ size, 4 });
 
-    tf_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE).write(size);
+    tfGroupPtr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE).write(size);
   }
   else
   {
-    tf_group_ptr->createAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE, size);
+    tfGroupPtr->createAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE, size);
   }
 
   // write frames
-  writeAttributeToHdf5(*tf_group_ptr, seerep_hdf5_core::Hdf5CoreTf::PARENT_FRAME, tf.frame_id);
-  writeAttributeToHdf5(*tf_group_ptr, seerep_hdf5_core::Hdf5CoreTf::CHILD_FRAME, tf.child_frame_id);
+  writeAttributeToHdf5(*tfGroupPtr, seerep_hdf5_core::Hdf5CoreTf::PARENT_FRAME, tf.frameId_);
+  writeAttributeToHdf5(*tfGroupPtr, seerep_hdf5_core::Hdf5CoreTf::CHILD_FRAME, tf.childFrameId_);
 
   // write time
   std::vector<int64_t> time;
-  time.push_back(tf.seconds);
-  time.push_back(tf.nanos);
-  data_set_time_ptr->select({ size - 1, 0 }, { 1, 2 }).write(time);
+  time.push_back(tf.seconds_);
+  time.push_back(tf.nanos_);
+  datasetTimePtr->select({ size - 1, 0 }, { 1, 2 }).write(time);
 
   // write translation
   std::vector<double> trans;
-  trans.push_back(tf.translation[0]);
-  trans.push_back(tf.translation[1]);
-  trans.push_back(tf.translation[2]);
-  data_set_trans_ptr->select({ size - 1, 0 }, { 1, 3 }).write(trans);
+  trans.push_back(tf.translation_[0]);
+  trans.push_back(tf.translation_[1]);
+  trans.push_back(tf.translation_[2]);
+  datasetTransPtr->select({ size - 1, 0 }, { 1, 3 }).write(trans);
 
   // write rotation
   std::vector<double> rot;
-  rot.push_back(tf.rotation[0]);
-  rot.push_back(tf.rotation[1]);
-  rot.push_back(tf.rotation[2]);
-  rot.push_back(tf.rotation[3]);
-  data_set_rot_ptr->select({ size - 1, 0 }, { 1, 4 }).write(rot);
+  rot.push_back(tf.rotation_[0]);
+  rot.push_back(tf.rotation_[1]);
+  rot.push_back(tf.rotation_[2]);
+  rot.push_back(tf.rotation_[3]);
+  datasetRotPtr->select({ size - 1, 0 }, { 1, 4 }).write(rot);
 
   m_file->flush();
 }
 
-std::vector<TfTransform> Hdf5PyTf::readTransformStamped(const std::string& frame_id)
+std::vector<TfTransform> Hdf5PyTf::readTransformStamped(const std::string& frameId)
 {
-  std::string hdf5_group_path = seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF + "/" + frame_id;
-  std::string hdf5_dataset_time_path = hdf5_group_path + "/" + "time";
-  std::string hdf5_dataset_trans_path = hdf5_group_path + "/" + "translation";
-  std::string hdf5_dataset_rot_path = hdf5_group_path + "/" + "rotation";
+  std::string hdf5GroupPath = seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF + "/" + frameId;
+  std::string hdf5DatasetTimePath = hdf5GroupPath + "/" + "time";
+  std::string hdf5DatasetTransPath = hdf5GroupPath + "/" + "translation";
+  std::string hdf5DatasetRotPath = hdf5GroupPath + "/" + "rotation";
 
-  std::shared_ptr<HighFive::Group> tf_group_ptr = getHdf5Group(hdf5_group_path);
-  std::shared_ptr<HighFive::DataSet> data_set_time_ptr = getHdf5DataSet(hdf5_dataset_time_path);
-  std::shared_ptr<HighFive::DataSet> data_set_trans_ptr = getHdf5DataSet(hdf5_dataset_trans_path);
-  std::shared_ptr<HighFive::DataSet> data_set_rot_ptr = getHdf5DataSet(hdf5_dataset_rot_path);
+  std::shared_ptr<HighFive::Group> tfGroupPtr = getHdf5Group(hdf5GroupPath);
+  std::shared_ptr<HighFive::DataSet> datasetTimePtr = getHdf5DataSet(hdf5DatasetTimePath);
+  std::shared_ptr<HighFive::DataSet> datasetTransPtr = getHdf5DataSet(hdf5DatasetTransPath);
+  std::shared_ptr<HighFive::DataSet> datasetRotPtr = getHdf5DataSet(hdf5DatasetRotPath);
 
-  if (tf_group_ptr == nullptr || data_set_time_ptr == nullptr || data_set_trans_ptr == nullptr ||
-      data_set_rot_ptr == nullptr)
+  if (tfGroupPtr == nullptr || datasetTimePtr == nullptr || datasetTransPtr == nullptr || datasetRotPtr == nullptr)
   {
-    throw std::invalid_argument("unable to obtain the required tf hdf5 group or datasets for frame " + frame_id);
+    throw std::invalid_argument("unable to obtain the required tf hdf5 group or datasets for frame " + frameId);
   }
 
   uint64_t size = 0;
-  if (tf_group_ptr->hasAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE))
+  if (tfGroupPtr->hasAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE))
   {
-    tf_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE).read(size);
+    tfGroupPtr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE).read(size);
   }
 
   if (size == 0)
@@ -124,30 +122,30 @@ std::vector<TfTransform> Hdf5PyTf::readTransformStamped(const std::string& frame
   }
 
   // read frames
-  if (!tf_group_ptr->hasAttribute(seerep_hdf5_core::Hdf5CoreTf::PARENT_FRAME) ||
-      !tf_group_ptr->hasAttribute(seerep_hdf5_core::Hdf5CoreTf::CHILD_FRAME))
+  if (!tfGroupPtr->hasAttribute(seerep_hdf5_core::Hdf5CoreTf::PARENT_FRAME) ||
+      !tfGroupPtr->hasAttribute(seerep_hdf5_core::Hdf5CoreTf::CHILD_FRAME))
   {
     throw std::invalid_argument("parent frame or child frame not set for transform");
   }
 
-  std::string frame_id_read;
-  std::string child_frame_id;
-  tf_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::PARENT_FRAME).read(frame_id_read);
-  tf_group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::CHILD_FRAME).read(child_frame_id);
+  std::string frameIdRead;
+  std::string childFrameId;
+  tfGroupPtr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::PARENT_FRAME).read(frameIdRead);
+  tfGroupPtr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::CHILD_FRAME).read(childFrameId);
 
-  if (frame_id_read.compare(frame_id) != 0)
+  if (frameIdRead.compare(frameId) != 0)
   {
-    throw std::invalid_argument("frame id of file (" + frame_id_read + ") does not match requested frame id (" +
-                                frame_id + ")");
+    throw std::invalid_argument("frame id of file (" + frameIdRead + ") does not match requested frame id (" + frameId +
+                                ")");
   }
 
   // read data
   std::vector<std::vector<int64_t>> time;
   std::vector<std::vector<double>> trans;
   std::vector<std::vector<double>> rot;
-  data_set_time_ptr->read(time);
-  data_set_trans_ptr->read(trans);
-  data_set_rot_ptr->read(rot);
+  datasetTimePtr->read(time);
+  datasetTransPtr->read(trans);
+  datasetRotPtr->read(rot);
 
   // check if all have the right size
   if (time.size() != size || trans.size() != size || rot.size() != size)
@@ -162,20 +160,20 @@ std::vector<TfTransform> Hdf5PyTf::readTransformStamped(const std::string& frame
   for (std::size_t i = 0; i < size; i++)
   {
     TfTransform tf;
-    tf.frame_id = frame_id;
-    tf.child_frame_id = child_frame_id;
+    tf.frameId_ = frameId;
+    tf.childFrameId_ = childFrameId;
 
-    tf.seconds = time.at(i).at(0);
-    tf.nanos = time.at(i).at(1);
+    tf.seconds_ = time.at(i).at(0);
+    tf.nanos_ = time.at(i).at(1);
 
-    tf.translation[0] = trans.at(i).at(0);
-    tf.translation[1] = trans.at(i).at(1);
-    tf.translation[2] = trans.at(i).at(2);
+    tf.translation_[0] = trans.at(i).at(0);
+    tf.translation_[1] = trans.at(i).at(1);
+    tf.translation_[2] = trans.at(i).at(2);
 
-    tf.rotation[0] = rot.at(i).at(0);
-    tf.rotation[1] = rot.at(i).at(1);
-    tf.rotation[2] = rot.at(i).at(2);
-    tf.rotation[3] = rot.at(i).at(3);
+    tf.rotation_[0] = rot.at(i).at(0);
+    tf.rotation_[1] = rot.at(i).at(1);
+    tf.rotation_[2] = rot.at(i).at(2);
+    tf.rotation_[3] = rot.at(i).at(3);
 
     tfs.push_back(tf);
   }

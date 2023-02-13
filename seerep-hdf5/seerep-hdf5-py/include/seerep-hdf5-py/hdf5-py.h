@@ -84,14 +84,14 @@ PYBIND11_MODULE(seerephdf5py, m)
                     const std::array<double, 4>&>(),
            py::arg("seconds"), py::arg("nanos"), py::arg("frame_id"), py::arg("child_frame_id"), py::arg("translation"),
            py::arg("rotation"))
-      .def_readwrite("seconds", &seerep_hdf5_py::TfTransform::seconds)
-      .def_readwrite("nanos", &seerep_hdf5_py::TfTransform::nanos)
-      .def_readwrite("frame_id", &seerep_hdf5_py::TfTransform::frame_id)
-      .def_readwrite("child_frame_id", &seerep_hdf5_py::TfTransform::child_frame_id)
-      .def_readwrite("translation", &seerep_hdf5_py::TfTransform::translation)
-      .def_readwrite("rotation", &seerep_hdf5_py::TfTransform::rotation)
+      .def_readwrite("seconds", &seerep_hdf5_py::TfTransform::seconds_)
+      .def_readwrite("nanos", &seerep_hdf5_py::TfTransform::nanos_)
+      .def_readwrite("frame_id", &seerep_hdf5_py::TfTransform::frameId_)
+      .def_readwrite("child_frame_id", &seerep_hdf5_py::TfTransform::childFrameId_)
+      .def_readwrite("translation", &seerep_hdf5_py::TfTransform::translation_)
+      .def_readwrite("rotation", &seerep_hdf5_py::TfTransform::rotation_)
       .def("__repr__", [](seerep_hdf5_py::TfTransform& l) {
-        return "<seerephdf5py.TfTransform '" + l.frame_id + "' '" + l.child_frame_id + "'>";
+        return "<seerephdf5py.TfTransform '" + l.frameId_ + "' '" + l.childFrameId_ + "'>";
       });
 
   // IO
@@ -117,7 +117,7 @@ PYBIND11_MODULE(seerephdf5py, m)
       .def(py::init<seerep_hdf5_py::Hdf5FileWrapper&>(), py::arg("hdf5_file"))
       .def("getPointClouds", &seerep_hdf5_py::Hdf5PyPointCloud::getPointClouds)
       .def("writePointCloud", &seerep_hdf5_py::Hdf5PyPointCloud::writePointCloud, py::arg("uuid"), py::arg("frame_id"),
-           py::arg("seconds"), py::arg("nanos"), py::arg("sequence"), py::arg("channels"),
+           py::arg("seconds"), py::arg("nanos"), py::arg("sequence"), py::arg("fields"),
            py::arg("general_labels") = std::vector<seerep_hdf5_py::GeneralLabel>(),
            py::arg("bb_labels") = std::vector<seerep_hdf5_py::CategorizedBoundingBoxLabel<3>>())
       .def("readPointCloud", &seerep_hdf5_py::Hdf5PyPointCloud::readPointCloud, py::arg("uuid"));

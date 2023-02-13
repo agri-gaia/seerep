@@ -12,30 +12,30 @@ Hdf5PyImage::Hdf5PyImage(Hdf5FileWrapper& hdf5_file)
 {
 }
 
-void Hdf5PyImage::writeImage(const std::string& uuid, const std::string& frame_id, int64_t seconds, int32_t nanos,
-                             uint32_t sequence, const py::array& image, const std::vector<GeneralLabel>& general_labels,
-                             const std::vector<CategorizedBoundingBoxLabel<2>>& bb_labels)
+void Hdf5PyImage::writeImage(const std::string& uuid, const std::string& frameId, int64_t seconds, int32_t nanos,
+                             uint32_t sequence, const py::array& image, const std::vector<GeneralLabel>& generalLabels,
+                             const std::vector<CategorizedBoundingBoxLabel<2>>& bbLabels)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
-  py::buffer_info image_buff_info = image.request();
+  py::buffer_info imageBuffInfo = image.request();
 
-  std::size_t num_channels = 1;
-  if (image_buff_info.shape.size() > 2)
+  std::size_t numChannels = 1;
+  if (imageBuffInfo.shape.size() > 2)
   {
-    num_channels = image_buff_info.shape[2];
+    numChannels = imageBuffInfo.shape[2];
   }
 
   std::string encoding = "";
-  if (num_channels == 1)
+  if (numChannels == 1)
   {
     encoding = "mono";
   }
-  else if (num_channels == 3)
+  else if (numChannels == 3)
   {
     encoding = "rgb";
   }
-  else if (num_channels == 4)
+  else if (numChannels == 4)
   {
     encoding = "rgba";
   }
@@ -44,33 +44,33 @@ void Hdf5PyImage::writeImage(const std::string& uuid, const std::string& frame_i
     throw std::invalid_argument("image must have either 1 (MONO), 3 (RGB) or 4 (RGBA) channels");
   }
 
-  std::string hdf5_group_path = getHdf5GroupPath(uuid);
-  std::string hdf5_dataset_path = getHdf5DataSetPath(uuid);
+  std::string hdf5GroupPath = getHdf5GroupPath(uuid);
+  std::string hdf5DatasetPath = getHdf5DataSetPath(uuid);
 
-  HighFive::DataSpace image_data_space({ image_buff_info.shape[0] * image_buff_info.shape[1] * num_channels });
-  auto data_droup_ptr = getHdf5Group(hdf5_group_path);
+  HighFive::DataSpace imageDataSpace({ imageBuffInfo.shape[0] * imageBuffInfo.shape[1] * numChannels });
+  auto dataGroupPtr = getHdf5Group(hdf5GroupPath);
 
-  std::size_t channel_size = 0;  // element (channel data) size in bytes
+  std::size_t channelSize = 0;  // element (channel data) size in bytes
   if (image.dtype().char_() == 'B')
   {
     // image data is uint8_t
-    auto image_dataset_ptr = getHdf5DataSet<uint8_t>(hdf5_dataset_path, image_data_space);
-    channel_size = sizeof(uint8_t);
+    auto imageDatasetPtr = getHdf5DataSet<uint8_t>(hdf5DatasetPath, imageDataSpace);
+    channelSize = sizeof(uint8_t);
 
-    const auto& typed_image = static_cast<py::array_t<uint8_t>>(image);
-    image_dataset_ptr->write(std::vector<uint8_t>(
-        typed_image.data(), typed_image.data() + image_buff_info.shape[0] * image_buff_info.shape[1] * num_channels));
+    const auto& typedImage = static_cast<py::array_t<uint8_t>>(image);
+    imageDatasetPtr->write(std::vector<uint8_t>(
+        typedImage.data(), typedImage.data() + imageBuffInfo.shape[0] * imageBuffInfo.shape[1] * numChannels));
   }
   else if (image.dtype().char_() == 'H')
   {
     // image data is uint16_t
-    auto image_dataset_ptr = getHdf5DataSet<uint16_t>(hdf5_dataset_path, image_data_space);
+    auto imageDatasetPtr = getHdf5DataSet<uint16_t>(hdf5DatasetPath, imageDataSpace);
     encoding = "rgb16";
-    channel_size = sizeof(uint16_t);
+    channelSize = sizeof(uint16_t);
 
-    const auto& typed_image = static_cast<py::array_t<uint16_t>>(image);
-    image_dataset_ptr->write(std::vector<uint16_t>(
-        typed_image.data(), typed_image.data() + image_buff_info.shape[0] * image_buff_info.shape[1] * num_channels));
+    const auto& typedImage = static_cast<py::array_t<uint16_t>>(image);
+    imageDatasetPtr->write(std::vector<uint16_t>(
+        typedImage.data(), typedImage.data() + imageBuffInfo.shape[0] * imageBuffInfo.shape[1] * numChannels));
   }
   else
   {
@@ -78,22 +78,22 @@ void Hdf5PyImage::writeImage(const std::string& uuid, const std::string& frame_i
   }
 
   // append amount of bits per channel to encoding name
-  encoding = encoding + std::to_string(8 * channel_size);
+  encoding = encoding + std::to_string(8 * channelSize);
 
-  writeAttributeToHdf5(*data_droup_ptr, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS, seconds);
-  writeAttributeToHdf5(*data_droup_ptr, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS, nanos);
-  writeAttributeToHdf5(*data_droup_ptr, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID, frame_id);
-  writeAttributeToHdf5(*data_droup_ptr, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ, sequence);
+  writeAttributeToHdf5(*dataGroupPtr, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS, seconds);
+  writeAttributeToHdf5(*dataGroupPtr, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS, nanos);
+  writeAttributeToHdf5(*dataGroupPtr, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID, frameId);
+  writeAttributeToHdf5(*dataGroupPtr, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ, sequence);
 
   seerep_hdf5_core::ImageAttributes image_attributes = {
-    static_cast<uint32_t>(image_buff_info.shape[0]), static_cast<uint32_t>(image_buff_info.shape[1]),
-    static_cast<uint32_t>(image_buff_info.shape[1] * num_channels * channel_size), encoding, false
+    static_cast<uint32_t>(imageBuffInfo.shape[0]), static_cast<uint32_t>(imageBuffInfo.shape[1]),
+    static_cast<uint32_t>(imageBuffInfo.shape[1] * numChannels * channelSize), encoding, false
   };
 
   writeImageAttributes(uuid, image_attributes);
 
-  Hdf5PyGeneral::writeBoundingBoxLabeled(hdf5_group_path, bb_labels);
-  Hdf5PyGeneral::writeLabelsGeneral(hdf5_group_path, general_labels);
+  Hdf5PyGeneral::writeBoundingBoxLabeled(hdf5GroupPath, bbLabels);
+  Hdf5PyGeneral::writeLabelsGeneral(hdf5GroupPath, generalLabels);
 
   m_file->flush();
 }
@@ -103,64 +103,64 @@ Hdf5PyImage::readImage(const std::string& uuid)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
-  std::string hdf5_group_path = getHdf5GroupPath(uuid);
-  std::string hdf5_dataset_path = getHdf5DataSetPath(uuid);
+  std::string hdf5GroupPath = getHdf5GroupPath(uuid);
+  std::string hdf5DatasetPath = getHdf5DataSetPath(uuid);
 
-  if (!exists(hdf5_dataset_path) || !exists(hdf5_group_path))
+  if (!exists(hdf5DatasetPath) || !exists(hdf5GroupPath))
   {
     throw std::invalid_argument("image with uuid '" + uuid + "' does not exist");
   }
 
   // read data from hdf5
-  auto image_dataset_ptr = getHdf5DataSet(hdf5_dataset_path);
+  auto imageDatasetPtr = getHdf5DataSet(hdf5DatasetPath);
 
-  auto image_attributes = readImageAttributes(uuid);
+  auto imageAttributes = readImageAttributes(uuid);
 
   py::array image;
 
-  if (image_attributes.encoding.compare("mono8") == 0 || image_attributes.encoding.compare("rgb8") == 0 ||
-      image_attributes.encoding.compare("rgba8") == 0)
+  if (imageAttributes.encoding.compare("mono8") == 0 || imageAttributes.encoding.compare("rgb8") == 0 ||
+      imageAttributes.encoding.compare("rgba8") == 0)
   {
     image = py::array_t<uint8_t>(
-        { image_attributes.height, image_attributes.width, image_attributes.step / image_attributes.width });
+        { imageAttributes.height, imageAttributes.width, imageAttributes.step / imageAttributes.width });
 
-    std::vector<uint8_t> hdf5_data;
-    image_dataset_ptr->read(hdf5_data);
+    std::vector<uint8_t> hdf5Data;
+    imageDatasetPtr->read(hdf5Data);
 
-    py::buffer_info image_buff_info = image.request();
-    uint8_t* image_buff_data = static_cast<uint8_t*>(image_buff_info.ptr);
+    py::buffer_info imageBuffInfo = image.request();
+    uint8_t* imageBuffData = static_cast<uint8_t*>(imageBuffInfo.ptr);
 
-    for (std::size_t i = 0; i < hdf5_data.size(); i++)
+    for (std::size_t i = 0; i < hdf5Data.size(); i++)
     {
-      image_buff_data[i] = hdf5_data[i];
+      imageBuffData[i] = hdf5Data[i];
     }
   }
-  else if (image_attributes.encoding.compare("mono16") == 0 || image_attributes.encoding.compare("rgb16") == 0 ||
-           image_attributes.encoding.compare("rgba16") == 0)
+  else if (imageAttributes.encoding.compare("mono16") == 0 || imageAttributes.encoding.compare("rgb16") == 0 ||
+           imageAttributes.encoding.compare("rgba16") == 0)
   {
     image = py::array_t<uint16_t>(
-        { image_attributes.height, image_attributes.width, image_attributes.step / image_attributes.width / 2 });
+        { imageAttributes.height, imageAttributes.width, imageAttributes.step / imageAttributes.width / 2 });
 
-    std::vector<uint16_t> hdf5_data;
-    image_dataset_ptr->read(hdf5_data);
+    std::vector<uint16_t> hdf5Data;
+    imageDatasetPtr->read(hdf5Data);
 
-    py::buffer_info image_buff_info = image.request();
-    uint16_t* image_buff_data = static_cast<uint16_t*>(image_buff_info.ptr);
+    py::buffer_info imageBuffInfo = image.request();
+    uint16_t* imageBuffData = static_cast<uint16_t*>(imageBuffInfo.ptr);
 
-    for (std::size_t i = 0; i < hdf5_data.size(); i++)
+    for (std::size_t i = 0; i < hdf5Data.size(); i++)
     {
-      image_buff_data[i] = hdf5_data[i];
+      imageBuffData[i] = hdf5Data[i];
     }
   }
   else
   {
-    throw std::invalid_argument("unsupported encoding '" + image_attributes.encoding + "'");
+    throw std::invalid_argument("unsupported encoding '" + imageAttributes.encoding + "'");
   }
 
-  auto general_labels = Hdf5PyGeneral::readLabelsGeneral(hdf5_group_path);
-  auto bb_labels = Hdf5PyGeneral::readBoundingBoxLabeled<2>(hdf5_group_path);
+  auto generalLabels = Hdf5PyGeneral::readLabelsGeneral(hdf5GroupPath);
+  auto bbLabels = Hdf5PyGeneral::readBoundingBoxLabeled<2>(hdf5GroupPath);
 
-  return std::make_tuple(image, general_labels, bb_labels);
+  return std::make_tuple(image, generalLabels, bbLabels);
 }
 
 } /* namespace seerep_hdf5_py */
