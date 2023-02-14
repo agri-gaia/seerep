@@ -7,8 +7,8 @@ PbImageService::PbImageService(std::shared_ptr<seerep_core::Core> seerepCore)
 {
 }
 
-grpc::Status PbImageService::GetImage(grpc::ServerContext* context, const seerep::Query* request,
-                                      grpc::ServerWriter<seerep::Image>* writer)
+grpc::Status PbImageService::GetImage(grpc::ServerContext* context, const seerep::pb::Query* request,
+                                      grpc::ServerWriter<seerep::pb::Image>* writer)
 {
   (void)context;  // ignore that variable without causing warnings
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
@@ -21,10 +21,10 @@ grpc::Status PbImageService::GetImage(grpc::ServerContext* context, const seerep
       << " and time interval (" << request->timeinterval().time_min().seconds() << "/"
       << request->timeinterval().time_max().seconds() << ")";
 
-  std::vector<seerep::Image> images;
+  std::vector<seerep::pb::Image> images;
   try
   {
-    images = imagePb->getData(*request);
+    imagePb->getData(*request, writer);
   }
   catch (std::runtime_error const& e)
   {
@@ -48,24 +48,11 @@ grpc::Status PbImageService::GetImage(grpc::ServerContext* context, const seerep
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
   }
 
-  if (!images.empty())
-  {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
-        << "Found " << images.size() << " images that match the query";
-    for (const seerep::Image& img : images)
-    {
-      writer->Write(img);
-    }
-  }
-  else
-  {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "Found NOTHING that matches the query";
-  }
   return grpc::Status::OK;
 }
 
-grpc::Status PbImageService::TransferImage(grpc::ServerContext* context, const seerep::Image* image,
-                                           seerep::ServerResponse* response)
+grpc::Status PbImageService::TransferImage(grpc::ServerContext* context, const seerep::pb::Image* image,
+                                           seerep::pb::ServerResponse* response)
 {
   (void)context;  // ignore that variable without causing warnings
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "received image... ";
@@ -80,8 +67,8 @@ grpc::Status PbImageService::TransferImage(grpc::ServerContext* context, const s
 
       boost::uuids::uuid uuidImg = imagePb->addData(*image);
 
-      seerep_server_util::createResponsePb(boost::lexical_cast<std::string>(uuidImg), seerep::ServerResponse::SUCCESS,
-                                           response);
+      seerep_server_util::createResponsePb(boost::lexical_cast<std::string>(uuidImg),
+                                           seerep::pb::ServerResponse::SUCCESS, response);
 
       return grpc::Status::OK;
     }
@@ -90,7 +77,7 @@ grpc::Status PbImageService::TransferImage(grpc::ServerContext* context, const s
       // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
       // also catching core doesn't have project with uuid error
       BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
-      seerep_server_util::createResponsePb(std::string(e.what()), seerep::ServerResponse::FAILURE, response);
+      seerep_server_util::createResponsePb(std::string(e.what()), seerep::pb::ServerResponse::FAILURE, response);
 
       return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
     }
@@ -99,7 +86,7 @@ grpc::Status PbImageService::TransferImage(grpc::ServerContext* context, const s
       // specific handling for all exceptions extending std::exception, except
       // std::runtime_error which is handled explicitly
       BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
-      seerep_server_util::createResponsePb(std::string(e.what()), seerep::ServerResponse::FAILURE, response);
+      seerep_server_util::createResponsePb(std::string(e.what()), seerep::pb::ServerResponse::FAILURE, response);
       return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
     }
     catch (...)
@@ -107,14 +94,14 @@ grpc::Status PbImageService::TransferImage(grpc::ServerContext* context, const s
       // catch any other errors (that we have no information about)
       std::string msg = "Unknown failure occurred. Possible memory corruption";
       BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
-      seerep_server_util::createResponsePb(msg, seerep::ServerResponse::FAILURE, response);
+      seerep_server_util::createResponsePb(msg, seerep::pb::ServerResponse::FAILURE, response);
       return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
     }
   }
   else
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning) << "project_uuid is empty!";
-    seerep_server_util::createResponsePb("project_uuid is empty!", seerep::ServerResponse::FAILURE, response);
+    seerep_server_util::createResponsePb("project_uuid is empty!", seerep::pb::ServerResponse::FAILURE, response);
 
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, "project_uuid is empty!");
   }

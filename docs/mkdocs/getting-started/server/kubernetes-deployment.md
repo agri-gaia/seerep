@@ -36,23 +36,23 @@ The easiest way to that is the download the latest binary from the [offical rele
 
 To install the base-version of seerep either one can run:
 
-```
+```bash
 kustomize build base/ > seerep-deployment.yaml
 ```
 
 to store the manifest in a separate yaml file. Or directly use [kubectl](https://kubernetes.io/docs/reference/kubectl/):
 
-```
+```bash
 kubectl apply -k base/
 ```
 
 In order to install the production version, the commands look slightly different:
 
-```
+```bash
 kustomize build overlays/production/ > seerep-deployment.yaml
 ```
 
-```
+```bash
 kubectl apply -k overlays/production/
 ```
 

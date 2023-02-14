@@ -13,15 +13,15 @@
 
 namespace seerep_server
 {
-class PbMetaOperations final : public seerep::MetaOperations::Service
+class PbMetaOperations final : public seerep::pb::MetaOperations::Service
 {
 public:
   PbMetaOperations(std::shared_ptr<seerep_core::Core> seerepCore);
 
-  grpc::Status CreateProject(grpc::ServerContext* context, const seerep::ProjectCreation* request,
-                             seerep::ProjectInfo* response);
+  grpc::Status CreateProject(grpc::ServerContext* context, const seerep::pb::ProjectCreation* request,
+                             seerep::pb::ProjectInfo* response);
   grpc::Status GetProjects(grpc::ServerContext* context, const google::protobuf::Empty* request,
-                           seerep::ProjectInfos* response);
+                           seerep::pb::ProjectInfos* response);
 
 private:
   std::shared_ptr<seerep_core::Core> seerepCore;

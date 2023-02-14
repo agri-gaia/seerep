@@ -1,6 +1,6 @@
 import sys
 
-from fb import (
+from seerep.fb import (
     Boundingbox,
     BoundingBox2DLabeled,
     BoundingBox2DLabeledWithCategory,
@@ -8,6 +8,7 @@ from fb import (
     BoundingBoxLabeled,
     BoundingboxStamped,
     Empty,
+    GeodeticCoordinates,
     Header,
     LabelsWithCategory,
     LabelWithInstance,
@@ -23,7 +24,7 @@ from fb import (
     Timestamp,
     TransformStampedQuery,
 )
-from fb import meta_operations_grpc_fb as metaOperations
+from seerep.fb import meta_operations_grpc_fb as metaOperations
 
 
 def getProject(builder, channel, name):
@@ -44,16 +45,29 @@ def getProject(builder, channel, name):
     return None
 
 
-def createProject(channel, builder, name, frameId):
+def createProject(channel, builder, name, frameId, coordSys, ellipsoid, altitude, latitude, longitude):
     '''Create a project from the parameters'''
     stubMeta = metaOperations.MetaOperationsStub(channel)
 
     frameIdBuf = builder.CreateString(frameId)
     nameBuf = builder.CreateString(name)
 
+    # create a geodetic coordinates object
+    coordSysBuf = builder.CreateString(coordSys)
+    ellipsoidBuf = builder.CreateString(ellipsoid)
+
+    GeodeticCoordinates.Start(builder)
+    GeodeticCoordinates.AddCoordinateSystem(builder, coordSysBuf)
+    GeodeticCoordinates.AddEllipsoid(builder, ellipsoidBuf)
+    GeodeticCoordinates.AddAltitude(builder, altitude)
+    GeodeticCoordinates.AddLatitude(builder, latitude)
+    GeodeticCoordinates.AddLongitude(builder, longitude)
+    gc = GeodeticCoordinates.End(builder)
+
     ProjectCreation.Start(builder)
     ProjectCreation.AddMapFrameId(builder, frameIdBuf)
     ProjectCreation.AddName(builder, nameBuf)
+    ProjectCreation.AddGeodeticPosition(builder, gc)
     projectCreationMsg = ProjectCreation.End(builder)
     builder.Finish(projectCreationMsg)
 
@@ -65,13 +79,26 @@ def createProject(channel, builder, name, frameId):
     return response.Uuid().decode("utf-8")
 
 
-def getOrCreateProject(builder, channel, name, create=True, mapFrameId="map"):
+def getOrCreateProject(
+    builder,
+    channel,
+    name,
+    create=True,
+    mapFrameId="map",
+    coordSys="",
+    ellipsoid="",
+    altitude=0.0,
+    latitude=0.0,
+    longitude=0.0,
+):
     '''Get the project,, or if not present, create one'''
     projectUuid = getProject(builder, channel, name)
 
     if projectUuid is None:
         if create:
-            projectUuid = createProject(channel, builder, name, mapFrameId)
+            projectUuid = createProject(
+                channel, builder, name, mapFrameId, coordSys, ellipsoid, altitude, latitude, longitude
+            )
         else:
             sys.exit()
 

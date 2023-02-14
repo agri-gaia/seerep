@@ -9,7 +9,7 @@ Hdf5PbTf::Hdf5PbTf(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::m
 {
 }
 
-void Hdf5PbTf::writeTransformStamped(const seerep::TransformStamped& tf)
+void Hdf5PbTf::writeTransformStamped(const seerep::pb::TransformStamped& tf)
 {
   std::string hdf5DatasetPath = HDF5_GROUP_TF + "/" + tf.header().frame_id() + "_" + tf.child_frame_id();
   std::string hdf5DatasetTimePath = hdf5DatasetPath + "/" + "time";
@@ -104,7 +104,7 @@ void Hdf5PbTf::writeTransformStamped(const seerep::TransformStamped& tf)
   m_file->flush();
 }
 
-std::optional<std::vector<seerep::TransformStamped>> Hdf5PbTf::readTransformStamped(const std::string& id)
+std::optional<std::vector<seerep::pb::TransformStamped>> Hdf5PbTf::readTransformStamped(const std::string& id)
 {
   std::string hdf5GroupPath = HDF5_GROUP_TF + "/" + id;
   std::string hdf5DatasetTimePath = hdf5GroupPath + "/" + "time";
@@ -161,23 +161,23 @@ std::optional<std::vector<seerep::TransformStamped>> Hdf5PbTf::readTransformStam
     return std::nullopt;
   }
 
-  std::vector<seerep::TransformStamped> tfs;
+  std::vector<seerep::pb::TransformStamped> tfs;
   for (long unsigned int i = 0; i < size; i++)
   {
-    seerep::TransformStamped tf;
+    seerep::pb::TransformStamped tf;
     tf.mutable_header()->set_frame_id(parentframe);
     tf.set_child_frame_id(childframe);
 
     tf.mutable_header()->mutable_stamp()->set_seconds(time.at(i).at(0));
     tf.mutable_header()->mutable_stamp()->set_nanos(time.at(i).at(1));
 
-    seerep::Vector3 translation;
+    seerep::pb::Vector3 translation;
     translation.set_x(trans.at(i).at(0));
     translation.set_y(trans.at(i).at(1));
     translation.set_z(trans.at(i).at(2));
     *tf.mutable_transform()->mutable_translation() = translation;
 
-    seerep::Quaternion rotation;
+    seerep::pb::Quaternion rotation;
     rotation.set_x(rot.at(i).at(0));
     rotation.set_y(rot.at(i).at(1));
     rotation.set_z(rot.at(i).at(2));

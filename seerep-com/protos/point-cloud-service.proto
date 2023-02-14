@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package seerep;
+package seerep.pb;
 
 import "point_cloud_2.proto";
 import "query.proto";

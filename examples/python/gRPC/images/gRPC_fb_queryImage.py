@@ -4,8 +4,8 @@ import os
 import sys
 
 import flatbuffers
-from fb import Image
-from fb import image_service_grpc_fb as imageService
+from seerep.fb import Image
+from seerep.fb import image_service_grpc_fb as imageService
 
 # importing util functions. Assuming that these files are in the parent dir
 # examples/python/gRPC/util.py

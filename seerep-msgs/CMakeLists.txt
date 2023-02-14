@@ -25,6 +25,7 @@ set(MY_PROTO_FILES
     protos/boundingbox2d.proto
     protos/frame_infos.proto
     protos/frame_query.proto
+    protos/geodetic_coordinates.proto
     protos/header.proto
     protos/image.proto
     protos/label_with_instance.proto
@@ -74,6 +75,7 @@ set(MY_FBS_FILES
     fbs/empty.fbs
     fbs/frame_infos.fbs
     fbs/frame_query.fbs
+    fbs/geodeticCoordinates.fbs
     fbs/header.fbs
     fbs/image.fbs
     fbs/label_with_instance.fbs
@@ -158,6 +160,17 @@ protobuf_generate_python(PY_SOURCES ${MY_PROTO_FILES})
 
 add_custom_target(protoPythonTarget ALL DEPENDS ${PY_SOURCES})
 
+add_custom_command(
+  TARGET protoPythonTarget
+  POST_BUILD
+  COMMAND bash -c "sed -i -E \"s/^import.*_pb2/from seerep.pb &/\" *_pb2*.py"
+  COMMAND bash -c "mkdir -p protos/seerep/pb && mv *_pb2.py protos/seerep/pb"
+  COMMAND
+    bash -c
+    "touch protos/seerep/pb/__init__.py && touch protos/seerep/__init__.py"
+  VERBATIM
+)
+
 include_directories(${CMAKE_BUILD_RPATH} ${PROTOBUF_INCLUDE_DIR})
 
 configure_file(SeerepMsgsConfig.h.in SeerepMsgsConfig.h)
@@ -205,13 +218,13 @@ write_basic_package_version_file(
   COMPATIBILITY AnyNewerVersion
 )
 
-# install the generated python sources
 install(
   DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
   FILES_MATCHING
   PATTERN "*.py"
 )
+
 # install the generated typescript sources
 install(
   DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/
@@ -220,7 +233,7 @@ install(
   PATTERN "*.ts"
 )
 
-set(SEEREP_COM_DIR ${CMAKE_CURRENT_BINARY_DIR}/../seerep-com/fbs)
+set(SEEREP_COM_DIR_FB ${CMAKE_CURRENT_BINARY_DIR}/../seerep-com/fbs)
 
 install(
   FILES ${MY_FBS_FILES}/
@@ -233,7 +246,7 @@ install(
     WORLD_READ
     WORLD_WRITE
     WORLD_EXECUTE
-  DESTINATION ${SEEREP_COM_DIR}
+  DESTINATION ${SEEREP_COM_DIR_FB}
 )
 
 # install the configuration file

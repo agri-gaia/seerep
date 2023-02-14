@@ -7,18 +7,18 @@
 namespace seerep_grpc_ros
 {
 TransferSensorMsgs::TransferSensorMsgs(std::shared_ptr<grpc::Channel> channel_ptr)
-  : stubSensorMsgs(seerep::TransferSensorMsgs::NewStub(channel_ptr))
-  , stubImage(seerep::ImageService::NewStub(channel_ptr))
-  , stubPointCloud(seerep::PointCloudService::NewStub(channel_ptr))
-  , stubTf(seerep::TfService::NewStub(channel_ptr))
-  , stubMeta(seerep::MetaOperations::NewStub(channel_ptr))
+  : stubSensorMsgs(seerep::pb::TransferSensorMsgs::NewStub(channel_ptr))
+  , stubImage(seerep::pb::ImageService::NewStub(channel_ptr))
+  , stubPointCloud(seerep::pb::PointCloudService::NewStub(channel_ptr))
+  , stubTf(seerep::pb::TfService::NewStub(channel_ptr))
+  , stubMeta(seerep::pb::MetaOperations::NewStub(channel_ptr))
 {
 }
 
 void seerep_grpc_ros::TransferSensorMsgs::send(const std_msgs::Header::ConstPtr& msg) const
 {
   grpc::ClientContext context;
-  seerep::ServerResponse response;
+  seerep::pb::ServerResponse response;
   grpc::Status status = stubSensorMsgs->TransferHeader(&context, seerep_ros_conversions_pb::toProto(*msg), &response);
   checkStatus(status, response);
 }
@@ -26,7 +26,7 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const std_msgs::Header::ConstPtr&
 void seerep_grpc_ros::TransferSensorMsgs::send(const sensor_msgs::PointCloud2::ConstPtr& msg) const
 {
   grpc::ClientContext context;
-  seerep::ServerResponse response;
+  seerep::pb::ServerResponse response;
   grpc::Status status =
       stubPointCloud->TransferPointCloud2(&context, seerep_ros_conversions_pb::toProto(*msg, projectuuid), &response);
   checkStatus(status, response);
@@ -35,7 +35,7 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const sensor_msgs::PointCloud2::C
 void seerep_grpc_ros::TransferSensorMsgs::send(const sensor_msgs::Image::ConstPtr& msg) const
 {
   grpc::ClientContext context;
-  seerep::ServerResponse response;
+  seerep::pb::ServerResponse response;
   grpc::Status status =
       stubImage->TransferImage(&context, seerep_ros_conversions_pb::toProto(*msg, projectuuid), &response);
   checkStatus(status, response);
@@ -44,7 +44,7 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const sensor_msgs::Image::ConstPt
 void seerep_grpc_ros::TransferSensorMsgs::send(const geometry_msgs::Point::ConstPtr& msg) const
 {
   grpc::ClientContext context;
-  seerep::ServerResponse response;
+  seerep::pb::ServerResponse response;
   grpc::Status status = stubSensorMsgs->TransferPoint(&context, seerep_ros_conversions_pb::toProto(*msg), &response);
   checkStatus(status, response);
 }
@@ -52,7 +52,7 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const geometry_msgs::Point::Const
 void seerep_grpc_ros::TransferSensorMsgs::send(const geometry_msgs::Quaternion::ConstPtr& msg) const
 {
   grpc::ClientContext context;
-  seerep::ServerResponse response;
+  seerep::pb::ServerResponse response;
   grpc::Status status =
       stubSensorMsgs->TransferQuaternion(&context, seerep_ros_conversions_pb::toProto(*msg), &response);
   checkStatus(status, response);
@@ -61,7 +61,7 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const geometry_msgs::Quaternion::
 void seerep_grpc_ros::TransferSensorMsgs::send(const geometry_msgs::Pose::ConstPtr& msg) const
 {
   grpc::ClientContext context;
-  seerep::ServerResponse response;
+  seerep::pb::ServerResponse response;
   grpc::Status status = stubSensorMsgs->TransferPose(&context, seerep_ros_conversions_pb::toProto(*msg), &response);
   checkStatus(status, response);
 }
@@ -69,7 +69,7 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const geometry_msgs::Pose::ConstP
 void seerep_grpc_ros::TransferSensorMsgs::send(const geometry_msgs::PoseStamped::ConstPtr& msg) const
 {
   grpc::ClientContext context;
-  seerep::ServerResponse response;
+  seerep::pb::ServerResponse response;
   grpc::Status status =
       stubSensorMsgs->TransferPoseStamped(&context, seerep_ros_conversions_pb::toProto(*msg), &response);
   checkStatus(status, response);
@@ -80,7 +80,7 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const tf2_msgs::TFMessage::ConstP
   for (auto tf : msg->transforms)
   {
     grpc::ClientContext context;
-    seerep::ServerResponse response;
+    seerep::pb::ServerResponse response;
     grpc::Status status =
         stubTf->TransferTransformStamped(&context, seerep_ros_conversions_pb::toProto(tf, projectuuid), &response);
     checkStatus(status, response);
@@ -117,9 +117,9 @@ std::optional<ros::Subscriber> TransferSensorMsgs::getSubscriber(const std::stri
 std::string TransferSensorMsgs::createProject(const std::string& projectname, const std::string& mapFrame) const
 {
   grpc::ClientContext context;
-  seerep::ProjectInfo response;
+  seerep::pb::ProjectInfo response;
 
-  seerep::ProjectCreation projectcreation;
+  seerep::pb::ProjectCreation projectcreation;
   *projectcreation.mutable_name() = projectname;
   *projectcreation.mutable_mapframeid() = mapFrame;
 
@@ -137,7 +137,7 @@ std::string TransferSensorMsgs::createProject(const std::string& projectname, co
   }
 }
 
-void TransferSensorMsgs::checkStatus(const grpc::Status& status, const seerep::ServerResponse& response) const
+void TransferSensorMsgs::checkStatus(const grpc::Status& status, const seerep::pb::ServerResponse& response) const
 {
   if (!status.ok())
   {

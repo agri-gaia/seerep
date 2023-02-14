@@ -3,16 +3,17 @@
 namespace seerep_grpc_ros
 {
 QueryData::QueryData(std::shared_ptr<grpc::Channel> channel_ptr)
-  : stubImage_(seerep::ImageService::NewStub(channel_ptr))
-  , stubPointCloud_(seerep::PointCloudService::NewStub(channel_ptr))
+  : stubImage_(seerep::pb::ImageService::NewStub(channel_ptr))
+  , stubPointCloud_(seerep::pb::PointCloudService::NewStub(channel_ptr))
 {
 }
 
-void QueryData::queryPointcloud(const seerep::Query& query, ros::Publisher& pc2_pub) const
+void QueryData::queryPointcloud(const seerep::pb::Query& query, ros::Publisher& pc2_pub) const
 {
   grpc::ClientContext context;
-  seerep::PointCloud2 response;
-  std::unique_ptr<grpc::ClientReader<seerep::PointCloud2>> reader = stubPointCloud_->GetPointCloud2(&context, query);
+  seerep::pb::PointCloud2 response;
+  std::unique_ptr<grpc::ClientReader<seerep::pb::PointCloud2>> reader =
+      stubPointCloud_->GetPointCloud2(&context, query);
 
   while (reader->Read(&response))
   {
@@ -27,11 +28,11 @@ void QueryData::queryPointcloud(const seerep::Query& query, ros::Publisher& pc2_
   grpc::Status status = reader->Finish();
 }
 
-void QueryData::queryImage(const seerep::Query& query, ros::Publisher& img_pub) const
+void QueryData::queryImage(const seerep::pb::Query& query, ros::Publisher& img_pub) const
 {
   grpc::ClientContext context;
-  seerep::Image response;
-  std::unique_ptr<grpc::ClientReader<seerep::Image>> reader = stubImage_->GetImage(&context, query);
+  seerep::pb::Image response;
+  std::unique_ptr<grpc::ClientReader<seerep::pb::Image>> reader = stubImage_->GetImage(&context, query);
 
   while (reader->Read(&response))
   {
@@ -88,7 +89,7 @@ int main(int argc, char** argv)
   private_nh.param<std::string>("topicqueriedimg", topicqueriedimg, "queried_img");
   ros::Publisher img_pub = nh.advertise<sensor_msgs::Image>(topicqueriedimg, 1000);
 
-  seerep::Query query;
+  seerep::pb::Query query;
 
   // spatial
   double minx, miny, minz, maxx, maxy, maxz;

@@ -71,13 +71,14 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 2
-      # check if Dockerfile has changed
+      # check if files have changed
       - name: Get changed files
         id: changed-files-specific-docker-base
         uses: tj-actions/changed-files@v34
         with:
           files: |
             docker/base/Dockerfile
+            docker/base/requirements.txt
       -
         name: Set up Docker Buildx
         if: github.ref_type == 'tag' || steps.changed-files-specific-docker-base.outputs.any_changed == 'true'
@@ -101,36 +102,44 @@ jobs:
           cache-from: type=registry,ref=${{ needs.create-ids.outputs.base_id }}:${{ needs.create-ids.outputs.version }}
           cache-to: type=inline
 
-  # builds the code
   build-code:
     needs: [build-docker, create-ids]
-    # run in docker container on ubuntu
     runs-on: ubuntu-20.04
     container:
       image: ${{ needs.create-ids.outputs.base_id }}:${{ needs.create-ids.outputs.version }}
       options: --user root
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
         with:
           path: src
+          fetch-depth: 0
 
-      #build workspace
-      - name: Build the ros workspace
+      - name: Build ROS workspace
         run: |
           source /opt/ros/noetic/setup.bash
           catkin build --workspace $GITHUB_WORKSPACE/
         shell: bash
 
-      #pre-commit checks
-      - name: run pre-commit tests
+      - name: Run pre-commit tests
         run: |
           source /opt/ros/noetic/setup.bash
           source $GITHUB_WORKSPACE/devel/setup.bash
           cd $GITHUB_WORKSPACE/src; pre-commit run -a
         shell: bash
+
+      - name: Build pypi packages
+        run: |
+          cd $GITHUB_WORKSPACE/src
+          python3 -m build
+
+      - name: Publish packages to pypi
+        if: github.ref_type == 'tag'
+        env:
+          TWINE_USERNAME: "__token__"
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+        run: |
+          twine upload $GITHUB_WORKSPACE/src/dist/*
 
   build-docker-deployment:
     needs: [build-code, create-ids]

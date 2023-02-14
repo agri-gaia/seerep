@@ -16,7 +16,8 @@
         "matepek.vscode-catch2-test-adapter",
         "davidanson.vscode-markdownlint",
         "cschlosser.doxdocgen",
-        "cheshirekow.cmake-format"
+        "cheshirekow.cmake-format",
+        "tamasfe.even-better-toml"
     ],
     "containerUser": "docker",
     "mounts": [
@@ -28,5 +29,8 @@
     "runArgs": [
         "--network=host"
     ],
+    "containerEnv": {
+        "TZ": "Europe/Berlin"
+    },
     "postStartCommand": "git -C ./src pull || git clone git@github.com:agri-gaia/seerep.git ./src; ./src/.devcontainer/postCreateCommand.sh"
 }

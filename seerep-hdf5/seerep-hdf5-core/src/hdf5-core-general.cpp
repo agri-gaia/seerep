@@ -169,7 +169,7 @@ void Hdf5CoreGeneral::readBoundingBoxLabeled(const std::string& datatypeGroup, c
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
       << "reading the bounding box with labels of " << id;
 
-  getLabelCategories(id, LABELGENERAL, labelCategories);
+  getLabelCategories(id, LABELBB, labelCategories);
 
   labelsPerCategory.resize(labelCategories.size());
   boundingBoxesPerCategory.resize(labelCategories.size());
@@ -511,6 +511,59 @@ std::shared_ptr<HighFive::Group> Hdf5CoreGeneral::getHdf5Group(const std::string
       return nullptr;
     }
   }
+}
+
+void Hdf5CoreGeneral::writeGeodeticLocation(const seerep_core_msgs::GeodeticCoordinates geocoords)
+{
+  const std::scoped_lock lock(*m_write_mtx);
+
+  if (!m_file->hasAttribute(GEODETICLOCATION_COORDINATESYSTEM) || !m_file->hasAttribute(GEODETICLOCATION_ELLIPSOID) ||
+      !m_file->hasAttribute(GEODETICLOCATION_ALTITUDE) || !m_file->hasAttribute(GEODETICLOCATION_LATITUDE) ||
+      !m_file->hasAttribute(GEODETICLOCATION_LONGITUDE))
+  {
+    m_file->createAttribute<std::string>(GEODETICLOCATION_COORDINATESYSTEM, geocoords.coordinateSystem);
+    m_file->createAttribute<std::string>(GEODETICLOCATION_ELLIPSOID, geocoords.ellipsoid);
+    m_file->createAttribute<double>(GEODETICLOCATION_ALTITUDE, geocoords.altitude);
+    m_file->createAttribute<double>(GEODETICLOCATION_LATITUDE, geocoords.latitude);
+    m_file->createAttribute<double>(GEODETICLOCATION_LONGITUDE, geocoords.longitude);
+  }
+  else
+  {
+    m_file->getAttribute(GEODETICLOCATION_COORDINATESYSTEM).write(geocoords.coordinateSystem);
+    m_file->getAttribute(GEODETICLOCATION_ELLIPSOID).write(geocoords.ellipsoid);
+    m_file->getAttribute(GEODETICLOCATION_ALTITUDE).write(geocoords.altitude);
+    m_file->getAttribute(GEODETICLOCATION_LATITUDE).write(geocoords.latitude);
+    m_file->getAttribute(GEODETICLOCATION_LONGITUDE).write(geocoords.longitude);
+  }
+  m_file->flush();
+}
+
+std::optional<seerep_core_msgs::GeodeticCoordinates> Hdf5CoreGeneral::readGeodeticLocation()
+{
+  const std::scoped_lock lock(*m_write_mtx);
+
+  seerep_core_msgs::GeodeticCoordinates geocoords;
+  if (m_file->hasAttribute(GEODETICLOCATION_COORDINATESYSTEM))
+  {
+    m_file->getAttribute(GEODETICLOCATION_COORDINATESYSTEM).read(geocoords.coordinateSystem);
+  }
+  if (m_file->hasAttribute(GEODETICLOCATION_ELLIPSOID))
+  {
+    m_file->getAttribute(GEODETICLOCATION_ELLIPSOID).read(geocoords.ellipsoid);
+  }
+  if (m_file->hasAttribute(GEODETICLOCATION_ALTITUDE))
+  {
+    m_file->getAttribute(GEODETICLOCATION_ALTITUDE).read(geocoords.altitude);
+  }
+  if (m_file->hasAttribute(GEODETICLOCATION_LATITUDE))
+  {
+    m_file->getAttribute(GEODETICLOCATION_LATITUDE).read(geocoords.latitude);
+  }
+  if (m_file->hasAttribute(GEODETICLOCATION_LONGITUDE))
+  {
+    m_file->getAttribute(GEODETICLOCATION_LONGITUDE).read(geocoords.longitude);
+  }
+  return geocoords;
 }
 
 std::shared_ptr<HighFive::DataSet> Hdf5CoreGeneral::getHdf5DataSet(const std::string& hdf5DataSetPath)

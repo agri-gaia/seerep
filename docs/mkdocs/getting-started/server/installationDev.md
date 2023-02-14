@@ -17,7 +17,7 @@ This page provides an overview on how to install the SEEREP development environm
 1. Clone the SEEREP repository from
    [Github](https://github.com/agri-gaia/seerep) and open it in VS-Code.
 
-      ```
+      ```bash
       git clone https://github.com/agri-gaia/seerep
       cd seerep/
       code .
@@ -27,7 +27,7 @@ This page provides an overview on how to install the SEEREP development environm
    will be mounted for the data exchange between host and container. **Without
    this folder, the following steps will fail!**
 
-      ```
+      ```bash
       mkdir ../seerep-data
       ```
 
@@ -37,7 +37,7 @@ This page provides an overview on how to install the SEEREP development environm
    [Docker](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker)
    VS-Code extension with the following commands or via the extensions tab in Vs-Code.
 
-      ```
+      ```bash
       code --install-extension ms-vscode-remote.remote-containers
       code --install-extension ms-azuretools.vscode-docker
       ```
@@ -76,7 +76,7 @@ are a couple of hints on how to fix them.
 2. Additionally, you can delete all the data regarding SEEREP, to get a fresh
    installation:
 
-      ```
+      ```bash
       docker volume rm seerep-vscode-extensions
       docker volume rm vscode
       docker rmi ghcr.io/agri-gaia/seerep_base:latest
@@ -104,7 +104,7 @@ In order to build SEEREP, we recommend the common build tool from ROS,
 [catkin](https://catkin-tools.readthedocs.io/en/latest/verbs/catkin_build.html).
 Follow the next steps to download and build seerep globally on your system.
 
-```
+```bash
 source /opt/ros/noetic/setup.bash
 mkdir -p seerep_ws/src
 cd seerep_ws/src

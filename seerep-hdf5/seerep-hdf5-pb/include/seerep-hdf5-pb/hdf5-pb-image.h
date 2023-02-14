@@ -23,9 +23,9 @@ class Hdf5PbImage : public seerep_hdf5_core::Hdf5CoreImage, public Hdf5PbGeneral
 public:
   Hdf5PbImage(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
 
-  void writeImage(const std::string& id, const seerep::Image& image);
+  void writeImage(const std::string& id, const seerep::pb::Image& image);
 
-  std::optional<seerep::Image> readImage(const std::string& id);
+  std::optional<seerep::pb::Image> readImage(const std::string& id);
 };
 
 }  // namespace seerep_hdf5_pb

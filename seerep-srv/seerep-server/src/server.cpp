@@ -8,6 +8,7 @@ server::server(int argc, char** argv)
   signal(SIGINT, signalHandler);
   parseProgramOptions(argc, argv);
   initLogging();
+  logTimeZone();
   createGrpcServer();
 }
 
@@ -50,6 +51,8 @@ void server::parseProgramOptions(int argc, char** argv)
     boost::program_options::options_description visible("Allowed options");
     visible.add(generic).add(config);
 
+    store(boost::program_options::parse_environment(config, environmentVariabeNameMapper), m_programOptionsMap);
+
     store(boost::program_options::command_line_parser(argc, argv).options(cmdline_options).run(), m_programOptionsMap);
     notify(m_programOptionsMap);
 
@@ -88,6 +91,30 @@ void server::parseProgramOptions(int argc, char** argv)
   }
 }
 
+std::string server::environmentVariabeNameMapper(std::string envName)
+{
+  if (envName == "SEEREP_DATA_FOLDER")
+  {
+    return "data-folder";
+  }
+  else if (envName == "SEEREP_LOG_PATH")
+  {
+    return "log-path";
+  }
+  else if (envName == "SEEREP_LOG_LEVEL")
+  {
+    return "log-level";
+  }
+  else if (envName == "SEEREP_PORT")
+  {
+    return "port";
+  }
+  else
+  {
+    return "";
+  }
+}
+
 void server::initLogging()
 {
   boost::log::add_common_attributes();
@@ -109,6 +136,16 @@ void server::initLogging()
     initConsoleLogging();
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << "file logging exeption: " << e.what();
   }
+}
+
+void server::logTimeZone()
+{
+  time_t time = 0;
+  struct tm timeStruct;
+  char buf[16];
+  localtime_r(&time, &timeStruct);
+  strftime(buf, sizeof(buf), "%Z", &timeStruct);
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "Current timezone: " << buf;
 }
 
 void server::setSeverityLevel()

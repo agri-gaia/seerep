@@ -4,8 +4,8 @@ import os
 import sys
 
 import flatbuffers
-from fb import Empty, ProjectInfos
-from fb import meta_operations_grpc_fb as metaOperations
+from seerep.fb import Empty, ProjectInfos
+from seerep.fb import meta_operations_grpc_fb as metaOperations
 
 script_dir = os.path.dirname(__file__)
 util_dir = os.path.join(script_dir, '..')

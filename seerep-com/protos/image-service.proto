@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package seerep;
+package seerep.pb;
 
 import "image.proto";
 import "query.proto";

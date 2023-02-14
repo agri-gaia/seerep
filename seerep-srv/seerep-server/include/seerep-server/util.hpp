@@ -20,8 +20,8 @@ inline void createResponseFb(std::string msg, seerep::fb::TRANSMISSION_STATE sta
   assert(response->Verify());
 }
 
-inline void createResponsePb(std::string msg, seerep::ServerResponse::TRANSMISSION_STATE state,
-                             seerep::ServerResponse* response)
+inline void createResponsePb(std::string msg, seerep::pb::ServerResponse::TRANSMISSION_STATE state,
+                             seerep::pb::ServerResponse* response)
 {
   response->set_message(msg);
   response->set_transmission_state(state);

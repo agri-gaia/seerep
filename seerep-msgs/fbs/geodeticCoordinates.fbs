@@ -1,0 +1,13 @@
+namespace seerep.fb;
+
+// source: https://en.wikipedia.org/wiki/Geodetic_coordinates
+
+table GeodeticCoordinates {
+    coordinateSystem:string; // e.g EPSG::4326
+
+    ellipsoid:string; // e.g EPSG::7030
+
+    longitude:double; // longitude measured in radians
+    latitude:double; // latitude measured in radians
+    altitude:double; // ellipsoidal height measured as a distance
+}

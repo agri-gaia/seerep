@@ -72,11 +72,22 @@ private:
    */
   void parseProgramOptions(int argc, char** argv);
   /**
+   * @brief maps the environment variable names to the command line names of the options
+   *
+   * @return std::string the mapped name matching the command line options name
+   */
+  static std::string environmentVariabeNameMapper(std::string envName);
+  /**
    * @brief initializes the logging
    *
    * Logs are stored in a log file and streamed to stdout
    */
   void initLogging();
+
+  /**
+   * @brief Logs the used time zone at server startup
+   */
+  void logTimeZone();
 
   /**
    * @brief sets the severity level of the logging

@@ -17,6 +17,14 @@ grpc::Status FbMetaOperations::CreateProject(grpc::ServerContext* context,
   projectInfo.frameId = requestMsg->map_frame_id()->str();
   projectInfo.name = requestMsg->name()->str();
   projectInfo.uuid = boost::uuids::random_generator()();
+
+  // extracting geodetic coordinates attribute information from flatbuffer and saving in seerep core msg struct
+  projectInfo.geodetCoords.coordinateSystem = requestMsg->geodetic_position()->coordinateSystem()->str();
+  projectInfo.geodetCoords.ellipsoid = requestMsg->geodetic_position()->ellipsoid()->str();
+  projectInfo.geodetCoords.longitude = requestMsg->geodetic_position()->longitude();
+  projectInfo.geodetCoords.latitude = requestMsg->geodetic_position()->latitude();
+  projectInfo.geodetCoords.altitude = requestMsg->geodetic_position()->altitude();
+
   seerepCore->createProject(projectInfo);
 
   flatbuffers::grpc::MessageBuilder builder;
@@ -48,7 +56,20 @@ grpc::Status FbMetaOperations::GetProjects(grpc::ServerContext* context,
     auto nameOffset = builder.CreateString(projectInfo.name);
     auto uuidOffset = builder.CreateString(boost::lexical_cast<std::string>(projectInfo.uuid));
     auto frameIdOffset = builder.CreateString(projectInfo.frameId);
-    projectInfosVector.push_back(seerep::fb::CreateProjectInfo(builder, nameOffset, uuidOffset, frameIdOffset));
+
+    auto coordinateSystemOffset = builder.CreateString(projectInfo.geodetCoords.coordinateSystem);
+    auto ellipsoidOffset = builder.CreateString(projectInfo.geodetCoords.ellipsoid);
+
+    seerep::fb::GeodeticCoordinatesBuilder gcbuilder(builder);
+    gcbuilder.add_coordinateSystem(coordinateSystemOffset);
+    gcbuilder.add_ellipsoid(ellipsoidOffset);
+    gcbuilder.add_altitude(projectInfo.geodetCoords.altitude);
+    gcbuilder.add_latitude(projectInfo.geodetCoords.latitude);
+    gcbuilder.add_longitude(projectInfo.geodetCoords.longitude);
+    auto geodeticCoordinatesOffset = gcbuilder.Finish();
+
+    projectInfosVector.push_back(
+        seerep::fb::CreateProjectInfo(builder, nameOffset, uuidOffset, frameIdOffset, geodeticCoordinatesOffset));
   }
   auto vectorOffset = builder.CreateVector(projectInfosVector);
   auto projectInfosOffset = seerep::fb::CreateProjectInfos(builder, vectorOffset);
