@@ -9,6 +9,13 @@
             "console": "integratedTerminal"
         },
         {
+            "name": "ROS: MCAP",
+            "type": "ros",
+            "request": "launch",
+            "target": "${workspaceFolder}/src/examples/performance-tests/mcap-save.launch",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "ROS: Launch querier",
             "type": "ros",
             "request": "launch",
