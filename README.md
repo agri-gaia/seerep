@@ -5,6 +5,7 @@
 [![catkin build workflow](https://github.com/agri-gaia/seerep/actions/workflows/main.yml/badge.svg)](https://github.com/agri-gaia/seerep/actions)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](./.pre-commit-config.yaml)
 [![Docker](https://img.shields.io/badge/Docker-enabled-blue?logo=docker)](./docker)
+[![PyPI](https://img.shields.io/pypi/v/seerep-grpc?label=pypi%20seerep-gRPC)](https://pypi.org/project/seerep-grpc/)
  <!-- ![Architecture](https://img.shields.io/badge/Architecture-x86-blue) -->
 
 ## Table of Contents
