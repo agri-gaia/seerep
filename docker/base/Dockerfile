@@ -38,7 +38,7 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         bison \
         && rm -rf /var/lib/apt/lists/*
 
-COPY docker/base/requirements.txt /tmp/requirements.txt
+COPY requirements.txt /tmp/requirements.txt
 RUN pip3 install --upgrade pip \
         && pip3 install -r /tmp/requirements.txt \
         && rm /tmp/requirements.txt
