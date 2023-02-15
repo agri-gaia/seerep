@@ -47,6 +47,7 @@ RUN pip3 install --upgrade pip \
 RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         ros-noetic-tf \
         ros-noetic-vision-msgs \
+        ros-noetic-pybind11-catkin \
         libgeographic-dev \
         && rm -rf /var/lib/apt/lists/*
 

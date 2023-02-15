@@ -7,7 +7,7 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra -fPIC -DBOOST_LOG_DYN_LINK")
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-add_subdirectory(extern/pybind11)
+find_package(catkin REQUIRED COMPONENTS pybind11_catkin)
 
 include(cmake/FindHighFive.cmake)
 

@@ -63,7 +63,7 @@ void Hdf5PyImage::writeImage(const std::string& uuid, const std::string& frameId
   auto dataGroupPtr = getHdf5Group(hdf5GroupPath);
 
   std::size_t channelSize = 0;  // element (channel data) size in bytes
-  if (image.dtype().char_() == 'B')
+  if (image.dtype().equal(py::dtype::of<uint8_t>()))
   {
     // image data is uint8_t
     auto imageDatasetPtr = getHdf5DataSet<uint8_t>(hdf5DatasetPath, imageDataSpace);
@@ -73,7 +73,7 @@ void Hdf5PyImage::writeImage(const std::string& uuid, const std::string& frameId
     imageDatasetPtr->write(std::vector<uint8_t>(
         typedImage.data(), typedImage.data() + imageBuffInfo.shape[0] * imageBuffInfo.shape[1] * numChannels));
   }
-  else if (image.dtype().char_() == 'H')
+  else if (image.dtype().equal(py::dtype::of<uint16_t>()))
   {
     // image data is uint16_t
     auto imageDatasetPtr = getHdf5DataSet<uint16_t>(hdf5DatasetPath, imageDataSpace);

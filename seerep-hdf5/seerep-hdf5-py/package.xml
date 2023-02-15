@@ -17,6 +17,7 @@
 
   <depend>seerep-msgs</depend>
   <depend>seerep-hdf5-core</depend>
+  <depend>pybind11_catkin</depend>
   <buildtool_depend>cmake</buildtool_depend>
 
   <export>

@@ -122,26 +122,25 @@ void Hdf5PyPointCloud::writePointCloud(const std::string& uuid, const std::strin
     names.push_back(fieldName);
     offsets.push_back(offset);
 
-    switch (fieldData.dtype().char_())
+    if (fieldData.dtype().equal(py::dtype::of<int8_t>()))
     {
-      case 'b':
-        datatypes.push_back(1);  // int8
-        break;
-      case 'i':
-        datatypes.push_back(5);  // int32
-        break;
-      case 'B':
-        datatypes.push_back(2);  // uint8
-        break;
-      case 'I':
-        datatypes.push_back(6);  // uint32
-        break;
-      case 'f':
-        datatypes.push_back(7);  // float32
-        break;
-      case 'd':
-        datatypes.push_back(8);  // float64
-        break;
+      datatypes.push_back(1);  // int8
+    }
+    else if (fieldData.dtype().equal(py::dtype::of<uint8_t>()))
+    {
+      datatypes.push_back(1);  // uint8
+    }
+    else if (fieldData.dtype().equal(py::dtype::of<uint32_t>()))
+    {
+      datatypes.push_back(1);  // uint32
+    }
+    else if (fieldData.dtype().equal(py::dtype::of<float>()))
+    {
+      datatypes.push_back(1);  // float32
+    }
+    else if (fieldData.dtype().equal(py::dtype::of<double>()))
+    {
+      datatypes.push_back(1);  // float64
     }
 
     uint32_t numElements = 1;
