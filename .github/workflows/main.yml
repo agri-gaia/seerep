@@ -96,7 +96,8 @@ jobs:
         if: github.ref_type == 'tag' || steps.changed-files-specific-docker-base.outputs.any_changed == 'true'
         uses: docker/build-push-action@v3
         with:
-          file: docker/base/Dockerfile
+          file: Dockerfile
+          context: "{{defaultContext}}:docker/base"
           push: ${{ GitHub.event_name != 'pull_request'}}
           tags: ${{ needs.create-ids.outputs.base_id }}:${{ needs.create-ids.outputs.version }}
           cache-from: type=registry,ref=${{ needs.create-ids.outputs.base_id }}:${{ needs.create-ids.outputs.version }}
