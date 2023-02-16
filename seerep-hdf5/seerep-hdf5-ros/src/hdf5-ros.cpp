@@ -20,7 +20,7 @@ void Hdf5Ros::saveMessage(const sensor_msgs::Image& image)
       "images/" + boost::lexical_cast<std::string>(boost::uuids::random_generator()());
   const std::string imageDataSetPath = imageDataGroupPath + "/rawdata";
 
-  HighFive::DataSpace imageDataSpace = HighFive::DataSpace(image.height * image.width * 3);
+  HighFive::DataSpace imageDataSpace = HighFive::DataSpace(image.height * image.step);
   std::shared_ptr<HighFive::Group> imageDataGroup = getHdf5Group(imageDataGroupPath);
   std::shared_ptr<HighFive::DataSet> imageDataSet = getHdf5DataSet<uint8_t>(imageDataSetPath, imageDataSpace);
 
