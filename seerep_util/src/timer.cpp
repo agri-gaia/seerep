@@ -1,4 +1,4 @@
-#include "timer.h"
+#include "seerep_util/timer.h"
 
 Timer::Timer(const std::string& fileName) : _fileName(fileName)
 {
@@ -14,8 +14,8 @@ void Timer::end()
 {
   _end = std::chrono::high_resolution_clock::now();
 
-  auto startNum = std::chrono::time_point_cast<std::chrono::milliseconds>(_start).time_since_epoch().count();
-  auto endNum = std::chrono::time_point_cast<std::chrono::milliseconds>(_end).time_since_epoch().count();
+  auto startNum = std::chrono::time_point_cast<std::chrono::nanoseconds>(_start).time_since_epoch().count();
+  auto endNum = std::chrono::time_point_cast<std::chrono::nanoseconds>(_end).time_since_epoch().count();
 
   auto duration = endNum - startNum;
 
@@ -23,7 +23,7 @@ void Timer::end()
   ss << startNum << "," << endNum << "," << duration << ",\n";
 
   std::ofstream file;
-  file.open(_fileName);
+  file.open(_fileName, std::ios::app);
   file << ss.str();
   file.close();
 }

@@ -16,6 +16,7 @@ Hdf5Ros::Hdf5Ros(std::shared_ptr<HighFive::File>& hdf5File, std::shared_ptr<std:
 
 void Hdf5Ros::saveMessage(const sensor_msgs::Image& image)
 {
+  Timer("/seerep/seerep-data/hdf5_data.csv");
   const std::string imageDataGroupPath =
       "images/" + boost::lexical_cast<std::string>(boost::uuids::random_generator()());
   const std::string imageDataSetPath = imageDataGroupPath + "/rawdata";

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <launch>
-    <arg name="topics" default="['/image', '/tf', '/point_cloud2']"/>
+    <arg name="topics" default="['/camera_c/depth/image_rect_raw']"/>
     <arg name="storage_path" default="/seerep/seerep-data/"/>
     <arg name="project_root_frame" default="map"/>
     <arg name="project_name" default="testproject"/>

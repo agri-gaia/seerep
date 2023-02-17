@@ -16,6 +16,7 @@ find_package(
 )
 
 find_package(SeerepHdf5Core REQUIRED)
+find_package(seerep_util REQUIRED)
 
 include(cmake/FindHighFive.cmake)
 find_package(HighFive REQUIRED)
@@ -35,6 +36,7 @@ catkin_package(
   geometry_msgs
   tf2_msgs
   sensor_msgs
+  seerep_util
   DEPENDS
   HighFive
   SeerepHdf5Core
@@ -46,6 +48,7 @@ include_directories(
   ${SeerepHdf5Core_INCLUDE_DIRS}
   ${Boost_INCLUDE_DIRS}
   ${catkin_INCLUDE_DIRS}
+  ${seerep_util_INCLUDE_DIRS}
 )
 
 add_library(${PROJECT_NAME} src/hdf5-ros.cpp)
@@ -56,6 +59,7 @@ target_link_libraries(
   ${Boost_LIBRARIES}
   ${SeerepHdf5Core_LIBRARIES}
   ${catkin_LIBRARIES}
+  ${seerep_util_LIBRARIES}
 )
 
 add_dependencies(

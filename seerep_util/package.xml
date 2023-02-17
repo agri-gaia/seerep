@@ -1,19 +1,20 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>seerep_performance_tests</name>
+  <name>seerep_util</name>
   <version>0.0.1</version>
-  <description>
-    Evaluate performance of MACP against SEEREP
-  </description>
+  <description> The seerep util package</description>
 
   <maintainer email="julian.arkenau@dfki.de">Julian Arkenau</maintainer>
+
   <license>BSD-3</license>
+
+  <url type="website">TODO</url>
 
   <author email="julian.arkenau@dfki.de">Julian Arkenau</author>
 
-  <depend>sensor_msgs</depend>
-  <depend>roscpp</depend>
-  <depend>seerep_util</depend>
   <buildtool_depend>catkin</buildtool_depend>
 
+  <export>
+    <build_type>catkin</build_type>
+  </export>
 </package>

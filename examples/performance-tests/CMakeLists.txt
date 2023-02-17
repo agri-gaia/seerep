@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 add_compile_options(-Wall -Wextra -fPIC)
 
 find_package(catkin REQUIRED COMPONENTS sensor_msgs roscpp)
+find_package(seerep_util REQUIRED)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 list(APPEND CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR})
@@ -52,21 +53,24 @@ catkin_package(
   CATKIN_DEPENDS
   sensor_msgs
   roscpp
+  seerep_util
 )
 
 include_directories(
   ${catkin_INCLUDE_DIRS}
   ${mcap_INCLUDE_DIRS}
   ${zstd_INCLUDE_DIRS}
-  include
+  ${seerep_util_INCLUDE_DIRS}
 )
 
-add_executable(${PROJECT_NAME}_ros2mcap src/ros2mcap.cpp src/timer.cpp)
+add_executable(${PROJECT_NAME}_ros2mcap src/ros2mcap.cpp)
+
 target_link_libraries(
   ${PROJECT_NAME}_ros2mcap
   ${catkin_LIBRARIES}
   ${mcap_LIBRARIES}
   ${zstd_LIBRARIES}
+  ${seerep_util_LIBRARIES}
 )
 
 install(

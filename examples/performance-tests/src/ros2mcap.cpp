@@ -6,7 +6,7 @@
 #include <mcap/writer.hpp>
 #include <string>
 
-#include "timer.h"
+#include "seerep_util/timer.h"
 
 constexpr std::string_view TOPIC = "/camera_c/depth/image_rect_raw";
 constexpr std::string_view OUT_DIR = "/seerep/seerep-data/output.mcap";
