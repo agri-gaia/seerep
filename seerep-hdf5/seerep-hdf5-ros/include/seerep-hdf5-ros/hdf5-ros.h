@@ -23,7 +23,6 @@
 #include "seerep-hdf5-core/hdf5-core-general.h"
 #include "seerep-hdf5-core/hdf5-core-point-cloud.h"
 #include "seerep-hdf5-core/hdf5-core-tf.h"
-#include "seerep_util/timer.h"
 
 namespace seerep_hdf5_ros
 {

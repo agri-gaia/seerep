@@ -6,7 +6,6 @@ set(CMAKE_CXX_STANDARD 17)
 add_compile_options(-Wall -Wextra -fPIC)
 
 find_package(catkin REQUIRED COMPONENTS sensor_msgs roscpp)
-find_package(seerep_util REQUIRED)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 list(APPEND CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR})
@@ -47,34 +46,28 @@ conan_cmake_install(
 
 find_package(mcap)
 
-catkin_package(
-  LIBRARIES
-  ${PROJECT_NAME}
-  CATKIN_DEPENDS
-  sensor_msgs
-  roscpp
-  seerep_util
-)
+catkin_package(CATKIN_DEPENDS sensor_msgs roscpp)
 
 include_directories(
+  include
   ${catkin_INCLUDE_DIRS}
   ${mcap_INCLUDE_DIRS}
   ${zstd_INCLUDE_DIRS}
-  ${seerep_util_INCLUDE_DIRS}
 )
 
-add_executable(${PROJECT_NAME}_ros2mcap src/ros2mcap.cpp)
+add_executable(
+  ${PROJECT_NAME} src/test-mcap.cpp src/message-generation.cpp src/timer.cpp
+)
 
 target_link_libraries(
-  ${PROJECT_NAME}_ros2mcap
+  ${PROJECT_NAME}
   ${catkin_LIBRARIES}
   ${mcap_LIBRARIES}
   ${zstd_LIBRARIES}
-  ${seerep_util_LIBRARIES}
 )
 
 install(
-  TARGETS ${PROJECT_NAME}_ros2mcap
+  TARGETS ${PROJECT_NAME}
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}

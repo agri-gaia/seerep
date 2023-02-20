@@ -16,7 +16,6 @@
   <depend>tf2_msgs</depend>
   <depend>geometry_msgs</depend>
   <depend>seerep-hdf5-core</depend>
-  <depend>seerep_util</depend>
 
   <buildtool_depend>catkin</buildtool_depend>
 </package>

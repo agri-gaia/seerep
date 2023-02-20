@@ -1,4 +1,8 @@
+#ifndef MCAP_TEST_H
+#define MCAP_TEST_H
+
 #define MCAP_IMPLEMENTATION  // Define this in exactly one .cpp file
+
 #include <ros/ros.h>
 #include <sensor_msgs/Image.h>
 
@@ -6,10 +10,12 @@
 #include <mcap/writer.hpp>
 #include <string>
 
-#include "seerep_util/timer.h"
+#include "message-generation.h"
+#include "timer.h"
 
 constexpr std::string_view TOPIC = "/camera_c/depth/image_rect_raw";
 constexpr std::string_view OUT_DIR = "/seerep/seerep-data/output.mcap";
+// TODO: autogenerate this
 constexpr std::string_view desc =
     "# This message contains an uncompressed image\n# (0, 0) is at top-left corner of image\n#\n\nHeader header        "
     "# Header timestamp should be acquisition time of image\n                     # Header frame_id should be optical "
@@ -32,51 +38,9 @@ constexpr std::string_view desc =
     "is called 'nsecs')\n# time-handling sugar is provided by the client library\ntime stamp\n#Frame this data is "
     "associated with\nstring frame_id\n";
 
-mcap::Timestamp now()
-{
-  return mcap::Timestamp(
-      std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count());
-}
+mcap::Timestamp now();
 
-void storeCallBack(const sensor_msgs::Image::ConstPtr& msg, mcap::McapWriter* writer, mcap::Channel& channel)
-{
-  Timer("/seerep/seerep-data/macp_data.csv");
-  // serialize the ROS message
-  uint32_t serial_size = ros::serialization::serializationLength(*msg);
-  boost::shared_array<uint8_t> buffer(new uint8_t[serial_size]);
+template <typename T>
+void saveMessages(const std::vector<T>& messages);
 
-  ros::serialization::OStream stream(buffer.get(), serial_size);
-  ros::serialization::serialize(stream, *msg);
-
-  mcap::Message mcap_msg;
-  mcap_msg.channelId = channel.id;
-  mcap_msg.logTime = now();
-  mcap_msg.publishTime = mcap_msg.logTime;
-  mcap_msg.data = reinterpret_cast<std::byte*>(buffer.get());
-  mcap_msg.dataSize = serial_size;
-  auto write_status = writer->write(mcap_msg);
-}
-
-int main(int argc, char** argv)
-{
-  ros::init(argc, argv, "MCAP Dumper");
-
-  ros::NodeHandle nh;
-
-  // setup macp file + channel
-  mcap::McapWriter writer;
-  auto status = writer.open(OUT_DIR, mcap::McapWriterOptions("ros1"));
-
-  mcap::Schema imageSchema("sensor_msgs/Image", "ros1msg", desc);
-
-  writer.addSchema(imageSchema);
-
-  mcap::Channel publisher(TOPIC, "ros1", imageSchema.id);
-  writer.addChannel(publisher);
-
-  ros::Subscriber sub =
-      nh.subscribe<sensor_msgs::Image>(std::string(TOPIC), 1000, boost::bind(storeCallBack, _1, &writer, publisher));
-
-  ros::spin();
-  writer.close();
-}
+#endif  // MCAP_TEST_H
