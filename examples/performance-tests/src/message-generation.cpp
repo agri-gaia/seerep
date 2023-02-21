@@ -63,7 +63,8 @@ std::vector<sensor_msgs::CompressedImage> generateMessages(const Config& config,
     messages.insert(messages.end(), generateMessage(messageData));
   }
 
-  // TODO shuffle the messages
+  auto rng = std::default_random_engine{};
+  std::shuffle(std::begin(messages), std::end(messages), rng);
 
   return messages;
 }

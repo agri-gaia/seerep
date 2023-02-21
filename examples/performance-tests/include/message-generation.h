@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <fstream>
+#include <random>
 
 #include "ros/ros.h"
 
