@@ -35,6 +35,23 @@ void Hdf5Ros::saveMessage(const sensor_msgs::Image& image)
   imageDataSet->write(image.data.data());
 }
 
+void Hdf5Ros::saveMessage(const sensor_msgs::CompressedImage& compressedImage)
+{
+  const std::string imageDataGroupPath =
+      "compressedImages/" + boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+  const std::string imageDataSetPath = imageDataGroupPath + "/rawdata";
+
+  HighFive::DataSpace imageDataSpace = HighFive::DataSpace(compressedImage.data.size());
+  std::shared_ptr<HighFive::Group> imageDataGroup = getHdf5Group(imageDataGroupPath);
+  std::shared_ptr<HighFive::DataSet> imageDataSet = getHdf5DataSet<uint8_t>(imageDataSetPath, imageDataSpace);
+
+  saveHeader(imageDataGroupPath, compressedImage.header);
+
+  writeAttributeToHdf5<std::string>(*imageDataSet, "format", compressedImage.format);
+
+  imageDataSet->write(compressedImage.data.data());
+}
+
 void Hdf5Ros::saveMessage(const sensor_msgs::PointCloud2& pointcloud2)
 {
   const std::string pclUUID = boost::lexical_cast<std::string>(boost::uuids::random_generator()());

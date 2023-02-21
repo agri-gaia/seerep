@@ -14,6 +14,7 @@
 #include <boost/uuid/uuid_io.hpp>
 
 // ROS
+#include "sensor_msgs/CompressedImage.h"
 #include "sensor_msgs/Image.h"
 #include "sensor_msgs/PointCloud2.h"
 #include "std_msgs/Header.h"
@@ -56,6 +57,13 @@ public:
    * @param image the ROS image message
    */
   void saveMessage(const sensor_msgs::Image& image);
+
+  /**
+   * @brief Write a ROS CompressedImage message to HDF5
+   *
+   * @param compressedImage the ROS CompressedImage message
+   */
+  void saveMessage(const sensor_msgs::CompressedImage& compressedImage);
 
   /**
    * @brief Write a ROS PointCloud2 message to HDF5

@@ -26,7 +26,7 @@ public:
   void end();
 
 private:
-  const std::string& _fileName;
+  const std::string _fileName;
   std::chrono::time_point<std::chrono::high_resolution_clock> _start;
   std::chrono::time_point<std::chrono::high_resolution_clock> _end;
 };

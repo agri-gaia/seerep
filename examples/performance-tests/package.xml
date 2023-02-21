@@ -13,6 +13,7 @@
 
   <depend>sensor_msgs</depend>
   <depend>roscpp</depend>
+  <depend>seerep_hdf5_ros</depend>
   <buildtool_depend>catkin</buildtool_depend>
 
 </package>

@@ -5,7 +5,18 @@ project(seerep_performance_tests VERSION 0.1)
 set(CMAKE_CXX_STANDARD 17)
 add_compile_options(-Wall -Wextra -fPIC)
 
-find_package(catkin REQUIRED COMPONENTS sensor_msgs roscpp)
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+add_definitions(-DBOOST_LOG_DYN_LINK)
+
+find_package(
+  Boost
+  COMPONENTS log log_setup
+  REQUIRED
+)
+
+find_package(catkin REQUIRED COMPONENTS sensor_msgs roscpp seerep_hdf5_ros)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 list(APPEND CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR})
@@ -52,17 +63,19 @@ include_directories(
   include
   ${catkin_INCLUDE_DIRS}
   ${mcap_INCLUDE_DIRS}
+  ${Boost_INCLUDE_DIRS}
   ${zstd_INCLUDE_DIRS}
 )
 
 add_executable(
-  ${PROJECT_NAME} src/test-mcap.cpp src/message-generation.cpp src/timer.cpp
+  ${PROJECT_NAME} src/analysis.cpp src/message-generation.cpp src/timer.cpp
 )
 
 target_link_libraries(
   ${PROJECT_NAME}
   ${catkin_LIBRARIES}
   ${mcap_LIBRARIES}
+  ${Boost_LIBRARIES}
   ${zstd_LIBRARIES}
 )
 

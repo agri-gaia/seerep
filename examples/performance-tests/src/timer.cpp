@@ -14,8 +14,8 @@ void Timer::end()
 {
   _end = std::chrono::high_resolution_clock::now();
 
-  auto startNum = std::chrono::time_point_cast<std::chrono::milliseconds>(_start).time_since_epoch().count();
-  auto endNum = std::chrono::time_point_cast<std::chrono::milliseconds>(_end).time_since_epoch().count();
+  auto startNum = std::chrono::time_point_cast<std::chrono::seconds>(_start).time_since_epoch().count();
+  auto endNum = std::chrono::time_point_cast<std::chrono::seconds>(_end).time_since_epoch().count();
 
   auto duration = endNum - startNum;
 
@@ -23,7 +23,13 @@ void Timer::end()
   ss << startNum << "," << endNum << "," << duration << ",\n";
 
   std::ofstream file;
-  file.open(_fileName, std::ios::app);
-  file << ss.str();
-  file.close();
+  file.open(_fileName, std::fstream::app);
+  if (file.is_open())
+  {
+    file << ss.str().c_str();
+  }
+  else
+  {
+    throw std::runtime_error("Could not open file " + _fileName);
+  }
 }
