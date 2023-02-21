@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<launch>
+    <node name="seerep_performance_tests" 
+        pkg="seerep_performance_tests" 
+        type="seerep_performance_tests" 
+        output="screen"
+        args="/home/pbrstudent/Documents/rosbags/iros/center-rgb8-only.mcap">
+    </node>
+</launch>

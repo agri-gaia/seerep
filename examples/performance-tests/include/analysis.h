@@ -11,8 +11,8 @@
 #include <string>
 
 #include "message-generation.h"
-#include "timer.h"
 #include "seerep-hdf5-ros/hdf5-ros.h"
+#include "timer.h"
 
 constexpr std::string_view TOPIC = "/camera_c/depth/image_rect_raw";
 constexpr std::string_view MCAP_FILE_PATH = "/home/pbrstudent/Documents/seerep-data/output.mcap";

@@ -9,10 +9,10 @@ mcap::Timestamp now()
 template <typename T>
 void saveInMCAP(const std::vector<T>& messages)
 {
-  // setup
   mcap::McapWriter writer;
   auto status = writer.open(MCAP_FILE_PATH, mcap::McapWriterOptions("ros1"));
 
+  // TODO change we get the message name via introsepction?
   mcap::Schema imageSchema("sensor_msgs/CompressedImage", "ros1msg", ros::message_traits::Definition<T>::value());
 
   writer.addSchema(imageSchema);
@@ -45,7 +45,6 @@ void saveInMCAP(const std::vector<T>& messages)
 template <typename T>
 void saveInHdf5(const std::vector<T>& messages)
 {
-  // setup
   std::shared_ptr<std::mutex> writeMutex = std::make_shared<std::mutex>();
   std::shared_ptr<HighFive::File> file = std::make_shared<HighFive::File>(
       HDF5_FILE_PATH, HighFive::File::ReadWrite | HighFive::File::Create | HighFive::File::Truncate);
@@ -59,10 +58,24 @@ void saveInHdf5(const std::vector<T>& messages)
   }
 }
 
-int main()
+// TODO change message sizes via args
+int main(int argc, char** argv)
 {
+  if (argc < 2)
+  {
+    std::cout << "Provide file, to use for the data field" << std::endl;
+    return -1;
+  }
+
+  std::string filePath = argv[1];
+  std::cout << "Using file: " << filePath << std::endl;
+
   Config config;
-  auto messages = generateMessages(config);
+  ros::Time::init();
+
+  std::vector<unsigned char> data = loadData(argv[1]);
+
+  auto messages = generateMessages(config, data);
   saveInMCAP(messages);
   saveInHdf5(messages);
 }
