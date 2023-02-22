@@ -1,4 +1,5 @@
 #catkin_lint: ignore external_file critical_var_append
+#catkin_lint: ignore uninstalled_script
 cmake_minimum_required(VERSION 3.10)
 project(seerep_performance_tests VERSION 0.1)
 

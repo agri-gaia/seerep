@@ -17,14 +17,27 @@ std::pair<std::vector<unsigned char>, size_t> getMessageData(size_t start, size_
   std::vector<unsigned char> output;
   output.reserve(size);
 
+  std::cout << "Required size: " << size << std::endl;
+
   while (output.size() < size)
   {
     size_t end = start + size;
+
+    // make shure we don't read more than we have
     if (end > data.size())
     {
       end = data.size();
     }
+
+    // make shure we don't write more than we need
+    if (output.size() + end - start > size)
+    {
+      end = start + size - output.size();
+    }
+
     output.insert(output.end(), &data[start], &data[end]);
+
+    // check if we need to wrap around
     if (end != data.size())
     {
       start = end;
@@ -34,6 +47,7 @@ std::pair<std::vector<unsigned char>, size_t> getMessageData(size_t start, size_
       start = 0;
     }
   }
+
   return std::make_pair(output, start);
 }
 

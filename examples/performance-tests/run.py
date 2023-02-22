@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
-# NOTE: run with rosrun seerep_performance_tests run.py
+# NOTE: run with 'rosrun seerep_performance_tests run.py'
 
-from pathlib import Path
-import subprocess
+import glob
 import math
+import os
+import subprocess
+from pathlib import Path
 
 # a file with bytes to use as a message payload
 OUTPUT_DIR = Path("/home/pbrstudent/Documents/seerep-data")
@@ -12,9 +14,10 @@ MESSAGE_DATA_PATH = Path("/home/pbrstudent/Documents/rosbags/iros/center-rgb8-on
 
 CONFIG = {
     # both sizes must be in bytes
-    "message_sizes": [1000**2 * 100],
-    "total_sizes": [1000**3, 1000**3 * 3],
+    "message_sizes": [1024**2 * 100],
+    "total_sizes": [1024**3],
 }
+
 
 def convert_bytes(num_bytes: int) -> str:
     if num_bytes == 0:
@@ -24,6 +27,7 @@ def convert_bytes(num_bytes: int) -> str:
     power = math.pow(1024, index)
     size = round(num_bytes / power, 2)
     return f"{size}{size_name[index]}"
+
 
 def build_config() -> dict:
     configs = {}
@@ -36,39 +40,49 @@ def build_config() -> dict:
             }
     return configs
 
-def executable_path() -> Path:
-    try:
-        output = subprocess.run(
-            ["catkin_find", "seerep_performance_tests",  "seerep_performance_tests"],
-            check=True, 
-            stdout=subprocess.PIPE
-        )
-    except subprocess.CalledProcessError as e:
-        raise RuntimeError("Could not find path to executable.")
+
+def executable_path() -> str:
+    output = subprocess.run(
+        ["catkin_find", "seerep_performance_tests", "seerep_performance_tests"], check=True, stdout=subprocess.PIPE
+    )
     return output.stdout.decode("utf-8").strip()
 
+
 def run_once(config: dict, label: str) -> None:
-    try:
-        output = subprocess.run(
-            [executable_path(), 
+    output = subprocess.run(
+        [
+            executable_path(),
             str(MESSAGE_DATA_PATH),
             label,
             OUTPUT_DIR,
             str(config["message_size"]),
-            str(config["total_size"])],
-            check=True,
-            stdout=subprocess.PIPE,
-        )
-        print(output.stdout.decode("utf-8").strip())
-    except subprocess.CalledProcessError as e:
-        raise RuntimeError("Error running executable.")
-    
+            str(config["total_size"]),
+        ],
+        check=True,
+        stdout=subprocess.PIPE,
+    )
+    print(output.stdout.decode("utf-8").strip())
+
+
+def cleanup() -> None:
+    for file in glob.glob(f"{OUTPUT_DIR}/*.csv"):
+        os.remove(file)
+    for dir in ["hdf5", "mcap"]:
+        path = Path(OUTPUT_DIR / dir)
+        if not path.exists():
+            path.mkdir()
+        else:
+            for file in glob.glob(f"{path}/*.{dir}"):
+                os.remove(file)
+
 
 def main():
+    cleanup()
     configs = build_config()
     for label, config in configs.items():
         print(f"Running {label} ...")
         run_once(config, label)
+
 
 if __name__ == "__main__":
     main()
