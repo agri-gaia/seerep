@@ -38,14 +38,14 @@ std::shared_ptr<HighFive::DataSet> Hdf5CoreGeneral::getHdf5DataSet(const std::st
   try
   {
     checkExists(hdf5DataSetPath);
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
-        << "hdf5 group" << hdf5DataSetPath << " already exists!";
+    // BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
+    //     << "hdf5 group" << hdf5DataSetPath << " already exists!";
     return std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DataSetPath));
   }
   catch (std::invalid_argument const& e)
   {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
-        << "hdf5 group " << hdf5DataSetPath << " does not exist! Creating a new group";
+    // BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
+    //     << "hdf5 group " << hdf5DataSetPath << " does not exist! Creating a new group";
     return std::make_shared<HighFive::DataSet>(m_file->createDataSet<T>(hdf5DataSetPath, dataSpace));
   }
 }

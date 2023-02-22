@@ -350,8 +350,8 @@ void Hdf5CoreGeneral::checkExists(const std::string& id)
 {
   if (!m_file->exist(id))
   {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning)
-        << "id " << id << " does not exist in file " << m_file->getName();
+    // BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning)
+    //     << "id " << id << " does not exist in file " << m_file->getName();
     throw std::invalid_argument("id " + id + " does not exist in file " + m_file->getName());
   }
 }
@@ -393,14 +393,14 @@ std::shared_ptr<HighFive::Group> Hdf5CoreGeneral::getHdf5Group(const std::string
   try
   {
     checkExists(hdf5GroupPath);
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
-        << "hdf5 group" << hdf5GroupPath << " already exists!";
+    // BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
+    //     << "hdf5 group" << hdf5GroupPath << " already exists!";
     return std::make_shared<HighFive::Group>(m_file->getGroup(hdf5GroupPath));
   }
   catch (std::invalid_argument const& e)
   {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
-        << "hdf5 group " << hdf5GroupPath << " does not exist! Creating a new group";
+    // BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
+    //     << "hdf5 group " << hdf5GroupPath << " does not exist! Creating a new group";
     if (create)
     {
       return std::make_shared<HighFive::Group>(m_file->createGroup(hdf5GroupPath));

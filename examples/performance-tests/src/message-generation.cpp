@@ -17,8 +17,6 @@ std::pair<std::vector<unsigned char>, size_t> getMessageData(size_t start, size_
   std::vector<unsigned char> output;
   output.reserve(size);
 
-  std::cout << "Required size: " << size << std::endl;
-
   while (output.size() < size)
   {
     size_t end = start + size;
@@ -66,8 +64,6 @@ sensor_msgs::CompressedImage generateMessage(const std::vector<unsigned char>& d
 std::vector<sensor_msgs::CompressedImage> generateMessages(const Config& config, const std::vector<unsigned char>& data)
 {
   size_t numMessages = std::ceil(config.totalSize / (config.messageSize * 1.0));
-
-  std::cout << "Generating " << numMessages << " messages." << std::endl;
 
   std::vector<sensor_msgs::CompressedImage> messages;
   messages.reserve(numMessages);
