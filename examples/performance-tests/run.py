@@ -5,7 +5,9 @@
 import glob
 import math
 import os
+import re
 import subprocess
+from collections import OrderedDict
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -18,15 +20,39 @@ MESSAGE_DATA_PATH = Path("/home/pbrstudent/Documents/rosbags/iros/center-rgb8-on
 
 CONFIG = {
     # both sizes must be in bytes
-    "message_sizes": [1024 * 50, 1024 * 100, 1024**2 * 1, 1024**2 * 10, 1024**2 * 100],
-    "total_sizes": [1024**2 * 250, 1024**2 * 500],
+    "message_sizes": [
+        1024,
+        1024 * 10,
+        1024 * 100,
+        1024 * 600,
+        1024**2 * 1,
+        1024**2 * 10,
+    ],
+    "total_sizes": [1024**2 * 250],
 }
 
 
-def convert_bytes(num_bytes: int) -> str:
+def string_to_bytes(bytes_str: str) -> int:
+    UNIT_MAP = {
+        "KiB": 1024,
+        "MiB": 1024**2,
+        "GiB": 1024**3,
+        "TiB": 1024**4,
+        "PiB": 1024**5,
+        "EiB": 1024**6,
+        "ZiB": 1024**7,
+        "YiB": 1024**8,
+    }
+    messages_size = bytes_str.split("-")[0]
+    unit = messages_size[-3:]
+    size = int(messages_size[:-3])
+    return size * UNIT_MAP[unit]
+
+
+def bytes_to_string(num_bytes: int) -> str:
     if num_bytes == 0:
         return "0B"
-    size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+    size_name = ("B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB")
     index = int(math.floor(math.log(num_bytes, 1024)))
     power = math.pow(1024, index)
     size = int(round(num_bytes / power, 2))
@@ -37,7 +63,7 @@ def build_config() -> dict:
     configs = {}
     for message_size in CONFIG["message_sizes"]:
         for total_size in CONFIG["total_sizes"]:
-            label = f"{convert_bytes(message_size)}-{convert_bytes(total_size)}"
+            label = f"{bytes_to_string(message_size)}-{bytes_to_string(total_size)}"
             configs[label] = {
                 "message_size": message_size,
                 "total_size": total_size,
@@ -85,35 +111,38 @@ def plot() -> None:
     for file in glob.glob(f"{OUTPUT_DIR}/*.csv"):
         dfs.append((Path(file).name.split('.')[0], pd.read_csv(file, names=["start", "end", "duration"])))
 
-    # TODO refactor
-    mcap, hdf5 = [], []
-    sizes = set()
+    # Still messy but now it's sorted!
+    runtimes = OrderedDict()
     for label, df in dfs:
         filetype = label.split('-')[0]
         size = "-".join(label.split('-')[1:])
-        sizes.add(size)
+        if not size in runtimes:
+            runtimes[size] = {}
         if filetype == "mcap":
-            mcap.append((size, df.loc[:, "duration"].mean() / 10**9))
+            runtimes[size]["mcap"] = df.loc[:, "duration"].mean() / 10**9
         elif filetype == "hdf5":
-            hdf5.append((size, df.loc[:, "duration"].mean() / 10**9))
+            runtimes[size]["hdf5"] = df.loc[:, "duration"].mean() / 10**9
 
-    mcap = sorted(mcap, key=lambda x: x[0])
-    hdf5 = sorted(hdf5, key=lambda x: x[0])
-    sizes = sorted(sizes)
+    sorted_keys = sorted(runtimes.keys(), key=lambda x: string_to_bytes(x))
+
+    mcap_times, hdf5_times = [], []
+    for keys in sorted_keys:
+        mcap_times.append((runtimes[keys]["mcap"]))
+        hdf5_times.append((runtimes[keys]["hdf5"]))
+
+    assert len(mcap_times) == len(hdf5_times)
 
     bar_width = 0.25
 
-    assert len(mcap) == len(hdf5)
-
-    r1 = np.arange(len(mcap))
+    r1 = np.arange(len(mcap_times))
     r2 = [x + bar_width for x in r1]
 
-    plt.bar(r1, [val for _, val in mcap], width=bar_width, edgecolor='white', label='mcap', color='#7f6d5f')
-    plt.bar(r2, [val for _, val in hdf5], width=bar_width, edgecolor='white', label='hdf5', color='#557f2d')
+    plt.bar(r1, mcap_times, width=bar_width, edgecolor='white', label='mcap', color='#7f6d5f')
+    plt.bar(r2, hdf5_times, width=bar_width, edgecolor='white', label='hdf5', color='#557f2d')
 
-    plt.xticks([r + (bar_width / 2) for r in range(len(mcap))], sizes, rotation=30, ha="right")
+    plt.xticks([r + (bar_width / 2) for r in range(len(mcap_times))], sorted_keys, rotation=30, ha="right")
+    plt.yscale("log")
     plt.ylabel("Execution time in [s]")
-    plt.xlabel("Message size - Total size")
 
     plt.tight_layout()
     plt.legend()
