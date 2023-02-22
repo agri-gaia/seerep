@@ -20,7 +20,7 @@ void Timer::end()
   auto duration = endNum - startNum;
 
   std::stringstream ss;
-  ss << startNum << "," << endNum << "," << duration << ",\n";
+  ss << startNum << "," << endNum << "," << duration << "\n";
 
   std::ofstream file;
   file.open(_fileName, std::fstream::app);
