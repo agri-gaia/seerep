@@ -16,10 +16,11 @@ import pandas as pd
 
 # a file with bytes to use as a message payload
 OUTPUT_DIR = Path("/home/pbrstudent/Documents/seerep-data")
-MESSAGE_DATA_PATH = Path("/home/pbrstudent/Documents/rosbags/iros/center-rgb8-only.mcap")
+MESSAGE_PAYLOAD = Path("/home/pbrstudent/Documents/rosbags/iros/center-rgb8-only.mcap")
 
 CONFIG = {
-    # both sizes must be in bytes
+    # all sizes must be in bytes !
+    "num_runs": 5,
     "message_sizes": [
         1024,
         1024 * 10,
@@ -82,7 +83,7 @@ def run_once(config: dict, label: str) -> None:
     output = subprocess.run(
         [
             executable_path(),
-            str(MESSAGE_DATA_PATH),
+            str(MESSAGE_PAYLOAD),
             label,
             OUTPUT_DIR,
             str(config["message_size"]),
@@ -91,12 +92,15 @@ def run_once(config: dict, label: str) -> None:
         check=True,
         stdout=subprocess.PIPE,
     )
-    print(output.stdout.decode("utf-8").strip())
+    # print(output.stdout.decode("utf-8").strip())
 
 
-def cleanup() -> None:
+def cleanup_cvs() -> None:
     for file in glob.glob(f"{OUTPUT_DIR}/*.csv"):
         os.remove(file)
+
+
+def cleanup_data() -> None:
     for dir in ["hdf5", "mcap"]:
         path = Path(OUTPUT_DIR / dir)
         if not path.exists():
@@ -137,8 +141,8 @@ def plot() -> None:
     r1 = np.arange(len(mcap_times))
     r2 = [x + bar_width for x in r1]
 
-    plt.bar(r1, mcap_times, width=bar_width, edgecolor='white', label='mcap', color='#7f6d5f')
-    plt.bar(r2, hdf5_times, width=bar_width, edgecolor='white', label='hdf5', color='#557f2d')
+    plt.bar(r1, mcap_times, width=bar_width, edgecolor='white', label='MCAP', color='#7f6d5f')
+    plt.bar(r2, hdf5_times, width=bar_width, edgecolor='white', label='HDF5', color='#557f2d')
 
     plt.xticks([r + (bar_width / 2) for r in range(len(mcap_times))], sorted_keys, rotation=30, ha="right")
     plt.yscale("log")
@@ -146,15 +150,19 @@ def plot() -> None:
 
     plt.tight_layout()
     plt.legend()
-    plt.savefig("performance.png")
+    plt.savefig(Path(OUTPUT_DIR / "results.png"), dpi=400)
 
 
 def main():
-    cleanup()
+    cleanup_cvs()
     configs = build_config()
     for label, config in configs.items():
         print(f"Running {label} ...")
-        run_once(config, label)
+        for run in range(CONFIG["num_runs"]):
+            print(f"Run {run + 1} ...")
+            cleanup_data()
+            run_once(config, label)
+    print("Generating plot ...")
     plot()
 
 

@@ -9,6 +9,8 @@ mcap::Timestamp now()
 template <typename T>
 void saveInMCAP(const std::vector<T>& messages, const std::string& outputDir, const std::string& label)
 {
+  // timer after here
+  Timer t(outputDir + "/mcap-" + label + ".csv");
   mcap::McapWriter writer;
   auto status = writer.open(outputDir + "/mcap/" + label + ".mcap", mcap::McapWriterOptions("ros1"));
 
@@ -20,8 +22,6 @@ void saveInMCAP(const std::vector<T>& messages, const std::string& outputDir, co
   mcap::Channel channel("/camera_c/depth/image_rect_raw", "ros1", imageSchema.id);
   writer.addChannel(channel);
 
-  // timer after here
-  Timer t(outputDir + "/mcap-" + label + ".csv");
   for (T message : messages)
   {
     size_t serial_size = ros::serialization::serializationLength(message);
@@ -45,14 +45,14 @@ void saveInMCAP(const std::vector<T>& messages, const std::string& outputDir, co
 template <typename T>
 void saveInHdf5(const std::vector<T>& messages, const std::string& outputDir, const std::string& label)
 {
+  // timer after here
+  Timer t(outputDir + "/hdf5-" + label + ".csv");
   std::shared_ptr<std::mutex> writeMutex = std::make_shared<std::mutex>();
   std::shared_ptr<HighFive::File> file =
       std::make_shared<HighFive::File>(outputDir + "/hdf5/" + label + ".hdf5",
                                        HighFive::File::ReadWrite | HighFive::File::Create | HighFive::File::Truncate);
   seerep_hdf5_ros::Hdf5Ros hdf5RosIO(file, writeMutex, "performance-test", "map");
 
-  // timer after here
-  Timer t(outputDir + "/hdf5-" + label + ".csv");
   for (T message : messages)
   {
     hdf5RosIO.saveMessage(message);
