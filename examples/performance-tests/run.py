@@ -20,12 +20,10 @@ MESSAGE_PAYLOAD = Path("/home/pbrstudent/Documents/rosbags/iros/center-rgb8-only
 
 CONFIG = {
     # all sizes must be in bytes !
-    "num_runs": 5,
+    "num_runs": 100,
     "message_sizes": [
-        1024,
-        1024 * 10,
+        1024 * 50,
         1024 * 100,
-        1024 * 600,
         1024**2 * 1,
         1024**2 * 10,
     ],
@@ -115,7 +113,7 @@ def plot() -> None:
     for file in glob.glob(f"{OUTPUT_DIR}/*.csv"):
         dfs.append((Path(file).name.split('.')[0], pd.read_csv(file, names=["start", "end", "duration"])))
 
-    # Still messy but now it's sorted!
+    # still messy but now it's sorted!
     runtimes = OrderedDict()
     for label, df in dfs:
         filetype = label.split('-')[0]
@@ -123,34 +121,63 @@ def plot() -> None:
         if not size in runtimes:
             runtimes[size] = {}
         if filetype == "mcap":
-            runtimes[size]["mcap"] = df.loc[:, "duration"].mean() / 10**9
+            runtimes[size]["mcap"] = {
+                "mean": df.loc[:, "duration"].mean() / 10**9,
+                "std_dev": df.loc[:, "duration"].std() / 10**9,
+            }
         elif filetype == "hdf5":
-            runtimes[size]["hdf5"] = df.loc[:, "duration"].mean() / 10**9
+            runtimes[size]["hdf5"] = {
+                "mean": df.loc[:, "duration"].mean() / 10**9,
+                "std_dev": df.loc[:, "duration"].std() / 10**9,
+            }
 
     sorted_keys = sorted(runtimes.keys(), key=lambda x: string_to_bytes(x))
 
-    mcap_times, hdf5_times = [], []
+    mcap_times, hdf5_times, = (
+        [],
+        [],
+    )
+    macp_std_devs, hdf5_std_devs = [], []
     for keys in sorted_keys:
-        mcap_times.append((runtimes[keys]["mcap"]))
-        hdf5_times.append((runtimes[keys]["hdf5"]))
+        mcap_times.append((runtimes[keys]["mcap"]["mean"]))
+        hdf5_times.append((runtimes[keys]["hdf5"]["mean"]))
+        macp_std_devs.append((runtimes[keys]["mcap"]["std_dev"]))
+        hdf5_std_devs.append((runtimes[keys]["hdf5"]["std_dev"]))
 
     assert len(mcap_times) == len(hdf5_times)
 
-    bar_width = 0.25
+    # split the keys into two lines
+    sorted_keys = [s.replace("-", "\n") for s in sorted_keys]
 
+    BAR_WIDTH = 0.25
+    FONT_SIZE = 12
+
+    # create bar positions
     r1 = np.arange(len(mcap_times))
-    r2 = [x + bar_width for x in r1]
+    r2 = [x + BAR_WIDTH for x in r1]
 
-    plt.bar(r1, mcap_times, width=bar_width, edgecolor='white', label='MCAP', color='#7f6d5f')
-    plt.bar(r2, hdf5_times, width=bar_width, edgecolor='white', label='HDF5', color='#557f2d')
+    fig = plt.figure()
+    plt.style.use("seaborn-paper")
 
-    plt.xticks([r + (bar_width / 2) for r in range(len(mcap_times))], sorted_keys, rotation=30, ha="right")
-    plt.yscale("log")
-    plt.ylabel("Execution time in [s]")
+    plt.bar(r1, mcap_times, width=BAR_WIDTH, edgecolor="white", label="MCAP", color="#a6a6a6")
+    plt.bar(r2, hdf5_times, width=BAR_WIDTH, edgecolor="white", label="HDF5", color="#548235")
+
+    plt.errorbar(r1, mcap_times, yerr=macp_std_devs, fmt="none", capsize=5, capthick=1, ecolor="black")
+    plt.errorbar(r2, hdf5_times, yerr=hdf5_std_devs, fmt="none", capsize=5, capthick=1, ecolor="black")
+
+    plt.xticks([r + (BAR_WIDTH / 2) for r in range(len(mcap_times))], sorted_keys, fontsize=FONT_SIZE)
+    plt.yticks(fontsize=FONT_SIZE)
+    plt.xlabel("Benchmark configuration with message and total written size", labelpad=10, fontsize=FONT_SIZE)
+    plt.ylabel("Execution time in seconds", fontsize=FONT_SIZE)
+
+    ax = plt.gca()
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
 
     plt.tight_layout()
-    plt.legend()
-    plt.savefig(Path(OUTPUT_DIR / "results.png"), dpi=400)
+    plt.legend(prop={"size": FONT_SIZE})
+    # plt.show()
+    plt.savefig(Path(OUTPUT_DIR / "results.png"), dpi=600)
 
 
 def main():
