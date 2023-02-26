@@ -80,8 +80,6 @@ void Hdf5CoreTf::writeTimestamp(const std::string& datagroupPath, std::array<int
 {
   std::shared_ptr<HighFive::DataSet> dataset;
 
-  std::cout << timestamp[0] << " " << timestamp[1] << std::endl;
-
   uint64_t size = 0;
   const std::string timestampDatasetPath = datagroupPath + seerep_hdf5_core::Hdf5CoreTf::HDF5_DATASET_TIMESTAMPS;
 
