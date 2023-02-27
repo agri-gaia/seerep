@@ -4,6 +4,7 @@
 #include <sensor_msgs/CompressedImage.h>
 
 #include <algorithm>
+#include <filesystem>
 #include <fstream>
 #include <random>
 

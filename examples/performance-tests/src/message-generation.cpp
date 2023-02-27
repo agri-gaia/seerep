@@ -7,6 +7,10 @@
 
 std::vector<unsigned char> loadData(const char* filePath)
 {
+  if (!std::filesystem::exists(filePath))
+  {
+    throw std::runtime_error("File does not exist");
+  }
   std::ifstream file(filePath, std::ios::binary);
   return std::vector<unsigned char>((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
 }
