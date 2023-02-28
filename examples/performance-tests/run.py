@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-# NOTE: run with 'rosrun seerep_performance_tests run.py'
-
 import glob
 import math
 import os
@@ -14,13 +12,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+# NOTE: add your paths here !!
+
 # a file with bytes to use as a message payload
-OUTPUT_DIR = Path("/home/pbrstudent/Documents/seerep-data")
-MESSAGE_PAYLOAD = Path("/home/pbrstudent/Documents/rosbags/iros/center-rgb8-only.mcap")
+OUTPUT_DIR = Path("/mnt/ram-disk/")
+MESSAGE_PAYLOAD = Path("/home/pbrstudent/Documents/rosbags/iros/2022-08-24-12-21-43_0.mcap")
 
 CONFIG = {
     # all sizes must be in bytes !
-    "num_runs": 100,
+    "num_runs": 50,
     "message_sizes": [
         1024 * 50,
         1024 * 100,
@@ -117,7 +117,7 @@ def plot() -> None:
     runtimes = OrderedDict()
     for label, df in dfs:
         filetype = label.split('-')[0]
-        size = "-".join(label.split('-')[1:])
+        size = label.split('-')[1]
         if not size in runtimes:
             runtimes[size] = {}
         if filetype == "mcap":
@@ -146,9 +146,6 @@ def plot() -> None:
 
     assert len(mcap_times) == len(hdf5_times)
 
-    # split the keys into two lines
-    sorted_keys = [s.replace("-", "\n") for s in sorted_keys]
-
     BAR_WIDTH = 0.25
     FONT_SIZE = 12
 
@@ -167,8 +164,13 @@ def plot() -> None:
 
     plt.xticks([r + (BAR_WIDTH / 2) for r in range(len(mcap_times))], sorted_keys, fontsize=FONT_SIZE)
     plt.yticks(fontsize=FONT_SIZE)
-    plt.xlabel("Benchmark configuration with message and total written size", labelpad=10, fontsize=FONT_SIZE)
+    plt.xlabel("Message Size", labelpad=10, fontsize=FONT_SIZE)
     plt.ylabel("Execution time in seconds", fontsize=FONT_SIZE)
+    plt.title(
+        "250 MiB Toal Data For Eeach Message Size \n MCAP: No Compression - Chunk-Size: 768 KiB - RAM Disk \n HDF5: No Compression - No Chunking - RAM Disk",
+        fontsize=FONT_SIZE,
+        pad=15,
+    )
 
     ax = plt.gca()
     ax.spines['top'].set_visible(False)
@@ -176,20 +178,20 @@ def plot() -> None:
 
     plt.tight_layout()
     plt.legend(prop={"size": FONT_SIZE})
-    # plt.show()
-    plt.savefig(Path(OUTPUT_DIR / "results.png"), dpi=600)
+    plt.show()
+    # plt.savefig(Path(OUTPUT_DIR / "results.png"), dpi=600)
 
 
 def main():
-    cleanup_cvs()
-    configs = build_config()
-    for label, config in configs.items():
-        print(f"Running {label} ...")
-        for run in range(CONFIG["num_runs"]):
-            print(f"Run {run + 1} ...")
-            cleanup_data()
-            run_once(config, label)
-    print("Generating plot ...")
+    # cleanup_cvs()
+    # configs = build_config()
+    # for label, config in configs.items():
+    #     print(f"Running {label} ...")
+    #     for run in range(CONFIG["num_runs"]):
+    #         print(f"Run {run + 1} ...")
+    #         cleanup_data()
+    #         run_once(config, label)
+    # print("Generating plot ...")
     plot()
 
 

@@ -4,6 +4,7 @@
 #define MCAP_IMPLEMENTATION  // Define this in exactly one .cpp file
 
 #include <cstdlib>
+#include <mcap/types.hpp>
 #include <mcap/writer.hpp>
 #include <string>
 

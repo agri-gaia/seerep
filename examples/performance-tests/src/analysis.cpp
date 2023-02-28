@@ -10,18 +10,26 @@ template <typename T>
 void saveInMCAP(const std::vector<T>& messages, const std::string& outputDir, const std::string& label)
 {
   // timer after here
-  Timer t(outputDir + "/mcap-" + label + ".csv");
   mcap::McapWriter writer;
-  auto status = writer.open(outputDir + "/mcap/" + label + ".mcap", mcap::McapWriterOptions("ros1"));
 
-  // TODO change we get the message name via introsepction?
+  mcap::McapWriterOptions options("ros1");
+  // options.chunkSize = 1024 * 1024 * 10;
+  // options.noChunking = true;
+  options.compression = mcap::Compression::None;
+  // options.compressionLevel = mcap::CompressionLevel::Default;
+
+  auto status = writer.open(outputDir + "/mcap/" + label + ".mcap", options);
+
+  // TODO: can we get the message name via ROS message introsepction?
   mcap::Schema imageSchema("sensor_msgs/CompressedImage", "ros1msg", ros::message_traits::Definition<T>::value());
 
   writer.addSchema(imageSchema);
 
+  // default channel name
   mcap::Channel channel("/camera_c/depth/image_rect_raw", "ros1", imageSchema.id);
   writer.addChannel(channel);
 
+  Timer t(outputDir + "/mcap-" + label + ".csv");
   for (T message : messages)
   {
     size_t serial_size = ros::serialization::serializationLength(message);
@@ -46,13 +54,13 @@ template <typename T>
 void saveInHdf5(const std::vector<T>& messages, const std::string& outputDir, const std::string& label)
 {
   // timer after here
-  Timer t(outputDir + "/hdf5-" + label + ".csv");
   std::shared_ptr<std::mutex> writeMutex = std::make_shared<std::mutex>();
   std::shared_ptr<HighFive::File> file =
       std::make_shared<HighFive::File>(outputDir + "/hdf5/" + label + ".hdf5",
                                        HighFive::File::ReadWrite | HighFive::File::Create | HighFive::File::Truncate);
   seerep_hdf5_ros::Hdf5Ros hdf5RosIO(file, writeMutex, "performance-test", "map");
 
+  Timer t(outputDir + "/hdf5-" + label + ".csv");
   for (T message : messages)
   {
     hdf5RosIO.saveMessage(message);
