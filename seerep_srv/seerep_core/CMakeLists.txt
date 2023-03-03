@@ -44,6 +44,7 @@ include_directories(
 
 add_library(
   seerepcore
+  src/core_camera_intrinsics.cpp
   src/core_dataset.cpp
   src/core_instance.cpp
   src/core_instances.cpp
@@ -67,6 +68,7 @@ target_link_libraries(
 )
 
 set(INSTALL_HEADERS
+    include/seerep-core/core_camera_intrinsics.h
     include/seerep_core/core_dataset.h
     include/seerep_core/core_instance.h
     include/seerep_core/core_instances.h

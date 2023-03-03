@@ -11,12 +11,13 @@ CoreFbCameraIntrinsics::~CoreFbCameraIntrinsics()
 {
 }
 
-// void getData(const seerep::fb::Query* query,
-//              grpc::ServerWriter<flatbuffers::grpc::Message::<seerep::fb::CameraIntrinsics>>* const writer)
-// {
-//   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
-//       << "loading camera intrinsics from camera_intrinsics/";
-// }
+void CoreFbCameraIntrinsics::getData(
+    const seerep::fb::cameraIntrinsicsQuery query,
+    grpc::ServerWriter<flatbuffers::grpc::Message::<seerep::fb::CameraIntrinsics>>* const writer)
+{
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
+      << "loading camera intrinsics from camera_intrinsics/";
+}
 
 boost::uuids::uuid CoreFbCameraIntrinsics::addData(const seerep::fb::CameraIntrinsics& ci)
 {

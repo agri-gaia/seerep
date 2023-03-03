@@ -16,6 +16,7 @@
 #include <seerep_core/core.h>
 
 // seerep_server
+#include "seerep-server/fb_cameraintrinsics_service.h"
 #include "seerep_server/fb_image_service.h"
 #include "seerep_server/fb_instance_service.h"
 #include "seerep_server/fb_meta_operations.h"
@@ -176,6 +177,8 @@ private:
   std::shared_ptr<seerep_server::FbInstanceService> m_instanceServiceFb;
   /** @brief the flatbuffer service for point clouds */
   std::shared_ptr<seerep_server::FbPointCloudService> m_pointCloudServiceFb;
+  /** @brief the flatbuffer service for camera intrinsics */
+  std::shared_ptr<seerep_server::FbCameraIntrinsicsService> m_cameraIntrinsicsServiceFb;
 
   /** @brief the logger object for logging to file and stdout*/
   boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
