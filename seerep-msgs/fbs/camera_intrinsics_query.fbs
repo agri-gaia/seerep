@@ -1,0 +1,7 @@
+
+namespace seerep.fb;
+
+table cameraIntrinsicsQuery {
+    uuid_camera_intrinsics:string;
+    uuid_project:string;
+}

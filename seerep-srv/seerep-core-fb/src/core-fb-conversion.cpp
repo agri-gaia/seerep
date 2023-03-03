@@ -163,6 +163,8 @@ seerep_core_msgs::camera_intrinsics CoreFbConversion::fromFb(const seerep::fb::C
   ciCore.binning_y = ci.binning_y();
 
   ciCore.region_of_interest = CoreFbConversion::fromFb(*ci.region_of_interest());
+
+  return ciCore;
 }
 
 seerep_core_msgs::region_of_interest CoreFbConversion::fromFb(const seerep::fb::regionOfInterest& roi)
@@ -176,6 +178,18 @@ seerep_core_msgs::region_of_interest CoreFbConversion::fromFb(const seerep::fb::
   roiCore.do_rectify = roi.do_rectify();
 
   return roiCore;
+}
+
+seerep_core_msgs::camera_intrinsics_query
+CoreFbConversion::fromFb(const seerep::fb::cameraIntrinsicsQuery& camIntrinsicsQuery)
+{
+  seerep_core_msgs::camera_intrinsics_query ciq;
+
+  boost::uuids::string_generator gen;
+  ciq.uuidCameraIntrinsics = gen(camIntrinsicsQuery.uuid_camera_intrinsics()->str());
+  ciq.uuidProject = gen(camIntrinsicsQuery.uuid_project()->str());
+
+  return ciq;
 }
 
 flatbuffers::grpc::Message<seerep::fb::UuidsPerProject> CoreFbConversion::toFb(seerep_core_msgs::QueryResult& result)

@@ -11,6 +11,7 @@ include(FindHighFive)
 
 find_package(SeerepMsgs REQUIRED)
 find_package(HighFive REQUIRED)
+find_package(gRPC CONFIG REQUIRED)
 
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
@@ -44,6 +45,7 @@ add_library(
   src/hdf5-core-point-cloud.cpp
   src/hdf5-core-point.cpp
   src/hdf5-core-tf.cpp
+  src/hdf5-core-cameraintrinsics.cpp
 )
 
 target_link_libraries(
@@ -56,6 +58,24 @@ target_link_libraries(
   ${Boost_LOG_SETUP_LIBRARY}
   ${catkin_LIBRARIES}
 )
+
+add_executable(core-write-load-test test/core-write-load-test.cpp)
+add_dependencies(
+  core-write-load-test ${${PROJECT_NAME}_EXPORTED_TARGETS}
+  ${catkin_EXPORTED_TARGETS}
+)
+
+target_link_libraries(
+  core-write-load-test
+  GTest::gtest
+  GTest::gtest_main
+  gmock_main
+  ${catkin_LIBRARIES}
+  ${HighFive_LIBRARIES}
+  gRPC::grpc++_reflection
+  seerephdf5core
+)
+add_test(core-write-load-test core-write-load-test)
 
 set(CMAKE_INSTALL_INCLUDEDIR include)
 set(CMAKE_INSTALL_LIBDIR lib)

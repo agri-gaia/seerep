@@ -8,8 +8,10 @@
 #include <flatbuffers/flatbuffers.h>
 #include <flatbuffers/grpc.h>
 #include <seerep-msgs/camera_intrinsics_generated.h>
+#include <seerep-msgs/camera_intrinsics_query_generated.h>
 // seerep-msgs
 #include <seerep-msgs/camera_intrinsics.h>
+#include <seerep-msgs/camera_intrinsics_query.h>
 #include <seerep-msgs/datatype_generated.h>
 #include <seerep-msgs/image_generated.h>
 #include <seerep-msgs/point_cloud_2_generated.h>
@@ -103,6 +105,7 @@ public:
    * @return the region of interest message in seerep core format
    */
   static seerep_core_msgs::region_of_interest fromFb(const seerep::fb::regionOfInterest& roi);
+  static seerep_core_msgs::camera_intrinsics_query fromFb(const seerep::fb::cameraIntrinsicsQuery& camIntrinsicsQuery);
 
   /**
    * @brief converts the query result from the seerep core format to gRPC flatbuffer message

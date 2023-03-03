@@ -63,6 +63,7 @@ add_executable(
   src/fb-image-service.cpp
   src/fb-instance-service.cpp
   src/fb-point-cloud-service.cpp
+  src/fb-cameraintrinsics-service.cpp
 )
 
 target_link_libraries(

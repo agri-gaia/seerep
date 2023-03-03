@@ -72,6 +72,7 @@ set(MY_FBS_FILES
     fbs/boundingbox2d.fbs
     fbs/boundingboxes2d_labeled_stamped.fbs
     fbs/camera_intrinsics.fbs
+    fbs/camera_intrinsics_query.fbs
     fbs/datatype.fbs
     fbs/empty.fbs
     fbs/frame_infos.fbs
@@ -119,6 +120,7 @@ set(MY_FBS_FILES
 set(MY_CORE_MSGS
     ${CMAKE_CURRENT_SOURCE_DIR}/core/aabb.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/camera_intrinsics.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/camera_intrinsics_query.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/dataset-indexable.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/header.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/datatype.h

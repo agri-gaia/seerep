@@ -19,8 +19,14 @@ class Hdf5CoreCameraIntrinsics : public Hdf5CoreGeneral
 {
 public:
   Hdf5CoreCameraIntrinsics(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
-  std::optional<std::vector<seerep_core_msgs::camera_intrinsics>> readCameraIntrinsics(const std::string& id);
-  void writeCameraIntrinsics(const seerep_core_msgs::camera_intrinsics);
+  seerep_core_msgs::camera_intrinsics readCameraIntrinsics(const boost::uuids::uuid& project_uuid,
+                                                           const boost::uuids::uuid& cameraintrinsics_uuid);
+  void writeCameraIntrinsics(const seerep_core_msgs::camera_intrinsics& camIntrinsics);
+
+private:
+  const std::shared_ptr<HighFive::DataSet> generateDatasetPointer(const std::string& attribute);
+  const std::string getHdf5GroupPath(const std::string& id) const;
+  const std::string getHdf5DataSetPath(const std::string& id) const;
 
 public:
   // datatype group names in hdf5
@@ -36,9 +42,14 @@ public:
   inline static const std::string PROJECTION_MATRIX = "projection_matrix";
   inline static const std::string BINNING_X = "binning_x";
   inline static const std::string BINNING_Y = "binning_y";
-  inline static const std::string REGION_OF_INTEREST = "region_of_interest";
+
+  inline static const std::string REGION_OF_INTEREST_X_OFFSET = "region_of_interest/x_offset";
+  inline static const std::string REGION_OF_INTEREST_Y_OFFSET = "region_of_interest/y_offset";
+  inline static const std::string REGION_OF_INTEREST_HEIGHT = "region_of_interest/height";
+  inline static const std::string REGION_OF_INTEREST_WIDTH = "region_of_interest/width";
+  inline static const std::string REGION_OF_INTEREST_DO_RECTIFY = "region_of_interest/do_rectify";
 };
-}
+
 }  // namespace seerep_hdf5_core
 
 #endif  // SEEREP_HDF5_CORE_HDF5_CORE_CAMERAINTRINSICS_H_
