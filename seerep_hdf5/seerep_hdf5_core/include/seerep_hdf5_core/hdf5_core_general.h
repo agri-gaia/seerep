@@ -76,7 +76,10 @@ public:
   // ################
   //  Header
   // ################
-  void writeHeader(const seerep_core_msgs::Header& header);
+  template <class T>
+  void writeHeader(HighFive::AnnotateTraits<T>& object, seerep_core_msgs::Header header);
+  template <class T>
+  void readHeader(const std::string& id, HighFive::AnnotateTraits<T>& object, seerep_core_msgs::Header& header);
 
   // ################
   //  Time
