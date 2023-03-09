@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 t1 = True
-gli_image = True
+gli_image = False
 
 import os
 import sys
@@ -19,6 +19,7 @@ util_dir = os.path.join(script_dir, '..')
 sys.path.append(util_dir)
 import util
 import util_fb
+import util_visualize
 
 builder = flatbuffers.Builder(1024)
 # Default server is localhost !
@@ -38,8 +39,8 @@ stub = imageService.ImageServiceStub(channel)
 
 # Create all necessary objects for the query
 header = util_fb.createHeader(builder, frame="map")
-pointMin = util_fb.createPoint(builder, 2.0, -1.0, -1.0)
-pointMax = util_fb.createPoint(builder, 2.1, 0.5, 1.0)
+pointMin = util_fb.createPoint(builder, 2.8, -1.0, -1.0)
+pointMax = util_fb.createPoint(builder, 3.0, 0.5, 1.0)
 boundingboxStamped = util_fb.createBoundingBoxStamped(builder, header, pointMin, pointMax)
 
 if t1:
@@ -53,13 +54,15 @@ timeInterval = util_fb.createTimeInterval(builder, timeMin, timeMax)
 
 
 projectUuids = [builder.CreateString(projectuuid)]
-category = ["image_type"]  # , "crops"]
+# category = ["image_type"]
+category = ["image_type", "crops"]
 if gli_image:
     imageType = [builder.CreateString("image_type_gli")]
 else:
     imageType = [builder.CreateString("image_type_rgb")]
 crops = [builder.CreateString("white_cabbage_young")]
-labels = [imageType]  # , crops]
+# labels = [imageType]
+labels = [imageType, crops]
 labelCategory = util_fb.createLabelWithCategory(builder, category, labels)
 dataUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 instanceUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
@@ -69,7 +72,7 @@ instanceUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 # with all parameters set (especially with the data and instance uuids set) the result of the query will be empty. Set the query parameters to adequate values or remove them from the query creation
 query = util_fb.createQuery(
     builder,
-    boundingBox=boundingboxStamped,
+    # boundingBox=boundingboxStamped,
     timeInterval=timeInterval,
     labels=labelCategory,
     mustHaveAllLabels=True,
@@ -109,9 +112,11 @@ for responseBuf in stub.GetImage(bytes(buf)):
             )
     if not response.DataIsNone():
         image = response.DataAsNumpy()
+        offset = 0  # image.min()
+        scale = 1.0  # 255.0/image.max()
         if response.Encoding().decode('utf-8') == "mono8":
             image.resize(response.Height(), response.Width(), 1)
-            image = (image - 100) * 4
+            image = (image - offset) * scale
         elif response.Encoding().decode('utf-8') == "rgb8":
             image.resize(response.Height(), response.Width(), 3)
 
@@ -148,9 +153,9 @@ for responseBuf in stub.GetImage(bytes(buf)):
                 ):
                     class_ids.append(2)
 
-        classnames = ["white cabbage young", "white cabbage", "white cabbage harvested"]
+        classnames = ["young", "growing", "harvested"]
 
-        util.display_instances(
+        util_visualize.display_instances(
             image,
             np.array(bb),
             np.array(class_ids),
@@ -158,6 +163,8 @@ for responseBuf in stub.GetImage(bytes(buf)):
             image_name=response.Header().UuidMsgs().decode('utf-8') + ".png",
             gli_image=gli_image,
             rotate=t1,
+            offset=offset,
+            scale=scale,
         )
 
 print(f"Received {counter} images")
