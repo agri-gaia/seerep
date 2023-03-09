@@ -19,8 +19,20 @@ class Hdf5CoreCameraIntrinsics : public Hdf5CoreGeneral
 {
 public:
   Hdf5CoreCameraIntrinsics(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
+  /**
+   * @brief Read camera intrinsics
+   *
+   * @param [in] project_uuid boost uuid of a project
+   * @param [in] cameraintrinsics_uuid boost uuid of a camera intrinsics object
+   * @return seerep_core_msgs::camera_intrinsics [out] Retrieved camera intrinsics object
+   */
   seerep_core_msgs::camera_intrinsics readCameraIntrinsics(const boost::uuids::uuid& project_uuid,
                                                            const boost::uuids::uuid& cameraintrinsics_uuid);
+  /**
+   * @brief Write camera intrinics
+   *
+   * @param camIntrinsics [out] seerep core camera intrinsics object
+   */
   void writeCameraIntrinsics(const seerep_core_msgs::camera_intrinsics& camIntrinsics);
 
 private:

@@ -75,8 +75,23 @@ public:
   // ################
   //  Header
   // ################
+  /**
+   * @brief Write header from a group within an hd5f file
+   *
+   * @tparam T Template argument of either Group or Dataset
+   * @param [in] object Pointer to Dataset or Group
+   * @param [out] header seerep core header struct
+   */
   template <class T>
   void writeHeader(HighFive::AnnotateTraits<T>& object, seerep_core_msgs::Header header);
+  /**
+   * @brief Read header from a group within an hd5f file
+   *
+   * @tparam T Write header from hd5f file from a group
+   * @param [in] id ID of Camera Intrinsics
+   * @param [in] object Group or Dataset pointer
+   * @param [out] header seerep core header struct
+   */
   template <class T>
   void readHeader(const std::string& id, HighFive::AnnotateTraits<T>& object, seerep_core_msgs::Header& header);
 

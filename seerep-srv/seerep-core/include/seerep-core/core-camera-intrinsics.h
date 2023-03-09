@@ -18,7 +18,18 @@ public:
   CoreCameraIntrinsics(std::shared_ptr<seerep_core::Core> seerepCore);
   ~CoreCameraIntrinsics();
 
+  /**
+   * @brief Save seerep core camera intrinsics
+   *
+   * @param ci seerep core messages camera intrinsics object
+   */
   void addData(const seerep_core_msgs::camera_intrinsics& ci);
+  /**
+   * @brief Get the seerep core messages camera intrinsics object
+   *
+   * @param ci_query seerep core camera intrinsics query
+   * @param ci seerep core messages camera intrinsics object
+   */
   void getData(seerep_core_msgs::camera_intrinsics_query& ci_query, seerep_core_msgs::camera_intrinsics& ci);
 
 private:
