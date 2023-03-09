@@ -18,7 +18,7 @@ void Hdf5CoreCameraIntrinsics::writeCameraIntrinsics(const seerep_core_msgs::cam
 
   if (dataGroupPtr)
   {
-    writeHeader(camIntrinsics.header);
+    writeHeader<HighFive::Group>(*dataGroupPtr, camIntrinsics.header);
     writeAttributeToHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::HEIGHT,
                                    camIntrinsics.height);
     writeAttributeToHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::WIDTH,
@@ -74,34 +74,28 @@ Hdf5CoreCameraIntrinsics::readCameraIntrinsics(const boost::uuids::uuid& project
 
   if (dataGroupPtr)
   {
+    readHeader(id, *dataGroupPtr, ci.header);
+
     ci.height = readAttributeFromHdf5<uint32_t>(id, *dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::HEIGHT);
     ci.width = readAttributeFromHdf5<uint32_t>(id, *dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::WIDTH);
     ci.distortion_model = readAttributeFromHdf5<std::string>(
         id, *dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::DISTORTION_MODEL);
 
     // read distortion
-    std::shared_ptr<HighFive::DataSet> distortion_data_set_ptr = std::make_shared<HighFive::DataSet>(
-        m_file->getDataSet(hdf5DatasetPath + "/" + seerep_hdf5_core::Hdf5CoreCameraIntrinsics::DISTORTION));
-
-    distortion_data_set_ptr->read(ci.distortion);
+    dataGroupPtr->getAttribute(seerep_hdf5_core::Hdf5CoreCameraIntrinsics::DISTORTION)
+        .read<std::vector<double>>(ci.distortion);
 
     // read intrinsic matrix
-    std::shared_ptr<HighFive::DataSet> intrinsic_matrix_data_set_ptr = std::make_shared<HighFive::DataSet>(
-        m_file->getDataSet(hdf5DatasetPath + "/" + seerep_hdf5_core::Hdf5CoreCameraIntrinsics::INTRINSIC_MATRIX));
-
-    intrinsic_matrix_data_set_ptr->read(ci.intrinsic_matrix);
+    dataGroupPtr->getAttribute(seerep_hdf5_core::Hdf5CoreCameraIntrinsics::INTRINSIC_MATRIX)
+        .read<std::vector<double>>(ci.intrinsic_matrix);
 
     // read rectification matrix
-    std::shared_ptr<HighFive::DataSet> rectification_matrix_data_set_ptr = std::make_shared<HighFive::DataSet>(
-        m_file->getDataSet(hdf5DatasetPath + "/" + seerep_hdf5_core::Hdf5CoreCameraIntrinsics::RECTIFICATION_MATRIX));
-
-    rectification_matrix_data_set_ptr->read(ci.rectification_matrix);
+    dataGroupPtr->getAttribute(seerep_hdf5_core::Hdf5CoreCameraIntrinsics::RECTIFICATION_MATRIX)
+        .read<std::vector<double>>(ci.rectification_matrix);
 
     // read projection matrix
-    std::shared_ptr<HighFive::DataSet> projection_matrix_data_set_ptr = std::make_shared<HighFive::DataSet>(
-        m_file->getDataSet(hdf5DatasetPath + "/" + seerep_hdf5_core::Hdf5CoreCameraIntrinsics::PROJECTION_MATRIX));
-
-    projection_matrix_data_set_ptr->read(ci.projection_matrix);
+    dataGroupPtr->getAttribute(seerep_hdf5_core::Hdf5CoreCameraIntrinsics::PROJECTION_MATRIX)
+        .read<std::vector<double>>(ci.projection_matrix);
 
     ci.binning_x =
         readAttributeFromHdf5<uint32_t>(id, *dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::BINNING_X);
