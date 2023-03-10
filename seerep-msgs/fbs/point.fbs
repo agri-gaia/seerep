@@ -1,6 +1,10 @@
 
 namespace seerep.fb;
 
+table Point2d {
+  x:double;
+  y:double;
+}
 table Point {
   x:double;
   y:double;
