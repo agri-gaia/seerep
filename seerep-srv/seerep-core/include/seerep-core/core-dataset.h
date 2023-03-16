@@ -51,7 +51,7 @@ private:
     std::unordered_map<std::string, std::unordered_map<std::string, std::vector<boost::uuids::uuid>>>
         categoryLabelDatasetsMap =
             std::unordered_map<std::string, std::unordered_map<std::string, std::vector<boost::uuids::uuid>>>();
-    /** @brief map from the UUID of the dataset a vector of UUID of instances the dataset is showing */
+    /** @brief map from the UUID of an instance to a list of UUIDs of datasets showing the instance */
     std::unordered_map<boost::uuids::uuid, std::vector<boost::uuids::uuid>, boost::hash<boost::uuids::uuid>>
         datasetInstancesMap =
             std::unordered_map<boost::uuids::uuid, std::vector<boost::uuids::uuid>, boost::hash<boost::uuids::uuid>>();
