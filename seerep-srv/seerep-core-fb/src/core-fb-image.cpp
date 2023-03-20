@@ -70,7 +70,8 @@ void CoreFbImage::addBoundingBoxesLabeled(const seerep::fb::BoundingBoxes2DLabel
       for (auto bb : *bbWithCategory->boundingBox2dLabeled())
       {
         seerep_core_msgs::LabelWithInstance labelWithInstance;
-        labelWithInstance.label = bb->labelWithInstance()->label()->str();
+        labelWithInstance.label = bb->labelWithInstance()->label()->label()->str();
+        labelWithInstance.labelConfidence = bb->labelWithInstance()->label()->confidence();
 
         try
         {

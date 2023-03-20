@@ -29,6 +29,7 @@ set(MY_PROTO_FILES
     protos/header.proto
     protos/image.proto
     protos/label_with_instance.proto
+    protos/label.proto
     protos/labels_with_category.proto
     protos/labels_with_instance_with_category.proto
     protos/point_cloud_2.proto
@@ -79,6 +80,7 @@ set(MY_FBS_FILES
     fbs/header.fbs
     fbs/image.fbs
     fbs/label_with_instance.fbs
+    fbs/label.fbs
     fbs/labels_with_category.fbs
     fbs/labels_with_instance_with_category.fbs
     fbs/point_cloud_2.fbs

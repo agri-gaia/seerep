@@ -18,12 +18,12 @@ grpc::Status FbPointService::GetPoint(grpc::ServerContext* context,
   debuginfo << "sending images with this query parameters:";
   if (requestRoot->boundingboxStamped() != NULL)
   {
-    debuginfo << "bounding box min(" << requestRoot->boundingboxStamped()->boundingbox()->point_min()->x() << "/"
-              << requestRoot->boundingboxStamped()->boundingbox()->point_min()->y() << "/"
-              << requestRoot->boundingboxStamped()->boundingbox()->point_min()->z() << "), max("
-              << requestRoot->boundingboxStamped()->boundingbox()->point_max()->x() << "/"
-              << requestRoot->boundingboxStamped()->boundingbox()->point_max()->y() << "/"
-              << requestRoot->boundingboxStamped()->boundingbox()->point_max()->z() << ")";
+    debuginfo << "bounding box center_point(" << requestRoot->boundingboxStamped()->boundingbox()->center_point()->x()
+              << "/" << requestRoot->boundingboxStamped()->boundingbox()->center_point()->y() << "/"
+              << requestRoot->boundingboxStamped()->boundingbox()->center_point()->z() << "), spatial_extent("
+              << requestRoot->boundingboxStamped()->boundingbox()->spatial_extent()->x() << "/"
+              << requestRoot->boundingboxStamped()->boundingbox()->spatial_extent()->y() << "/"
+              << requestRoot->boundingboxStamped()->boundingbox()->spatial_extent()->z() << ")";
   }
   if (requestRoot->timeinterval() != NULL)
   {
@@ -38,7 +38,7 @@ grpc::Status FbPointService::GetPoint(grpc::ServerContext* context,
       debuginfo << "category: " << labelCategory->category()->c_str() << "; ";
       for (auto label : *labelCategory->labels())
       {
-        debuginfo << "'" << label->str() << "' ";
+        debuginfo << "'" << label->label()->str() << "' ";
       }
     }
   }
@@ -48,12 +48,12 @@ grpc::Status FbPointService::GetPoint(grpc::ServerContext* context,
   if (requestRoot->boundingboxStamped() != NULL)
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
-        << "in bounding box min(" << requestRoot->boundingboxStamped()->boundingbox()->point_min()->x() << "/"
-        << requestRoot->boundingboxStamped()->boundingbox()->point_min()->y() << "/"
-        << requestRoot->boundingboxStamped()->boundingbox()->point_min()->z() << "), max("
-        << requestRoot->boundingboxStamped()->boundingbox()->point_max()->x() << "/"
-        << requestRoot->boundingboxStamped()->boundingbox()->point_max()->y() << "/"
-        << requestRoot->boundingboxStamped()->boundingbox()->point_max()->z() << ")";
+        << "in bounding box center_point(" << requestRoot->boundingboxStamped()->boundingbox()->center_point()->x()
+        << "/" << requestRoot->boundingboxStamped()->boundingbox()->center_point()->y() << "/"
+        << requestRoot->boundingboxStamped()->boundingbox()->center_point()->z() << "), spatial_extent("
+        << requestRoot->boundingboxStamped()->boundingbox()->spatial_extent()->x() << "/"
+        << requestRoot->boundingboxStamped()->boundingbox()->spatial_extent()->y() << "/"
+        << requestRoot->boundingboxStamped()->boundingbox()->spatial_extent()->z() << ")";
   }
   if (requestRoot->timeinterval() != NULL)
   {

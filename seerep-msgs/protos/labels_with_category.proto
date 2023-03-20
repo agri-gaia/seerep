@@ -2,8 +2,10 @@ syntax = "proto3";
 
 package seerep.pb;
 
+import "label.proto";
+
 message LabelsWithCategory
 {
   string category = 1;
-  repeated string labels = 2;
+  repeated Label labels = 2;
 }

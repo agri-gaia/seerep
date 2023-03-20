@@ -12,12 +12,12 @@ grpc::Status PbPointCloudService::GetPointCloud2(grpc::ServerContext* context, c
 {
   (void)context;  // ignore that variable without causing warnings
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
-      << "sending point cloud in bounding box min(" << request->boundingboxstamped().boundingbox().point_min().x()
-      << "/" << request->boundingboxstamped().boundingbox().point_min().y() << "/"
-      << request->boundingboxstamped().boundingbox().point_min().z() << "), max("
-      << request->boundingboxstamped().boundingbox().point_max().x() << "/"
-      << request->boundingboxstamped().boundingbox().point_max().y() << "/"
-      << request->boundingboxstamped().boundingbox().point_max().z() << ")"
+      << "sending point cloud in bounding box center(" << request->boundingboxstamped().boundingbox().center_point().x()
+      << "/" << request->boundingboxstamped().boundingbox().center_point().y() << "/"
+      << request->boundingboxstamped().boundingbox().center_point().z() << "), spatial extent("
+      << request->boundingboxstamped().boundingbox().spatial_extent().x() << "/"
+      << request->boundingboxstamped().boundingbox().spatial_extent().y() << "/"
+      << request->boundingboxstamped().boundingbox().spatial_extent().z() << ")"
       << " and time interval (" << request->timeinterval().time_min().seconds() << "/"
       << request->timeinterval().time_max().seconds() << ")";
 

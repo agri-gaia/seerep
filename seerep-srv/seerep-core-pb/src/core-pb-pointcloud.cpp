@@ -106,7 +106,9 @@ boost::uuids::uuid CorePbPointCloud::addData(const seerep::pb::PointCloud2& pc)
           }
 
           labelWithInstanceVector.push_back(
-              seerep_core_msgs::LabelWithInstance{ .label = label.label(), .uuidInstance = uuidInstance });
+              seerep_core_msgs::LabelWithInstance{ .label = label.label().label(),
+                                                   .labelConfidence = label.label().confidence(),
+                                                   .uuidInstance = uuidInstance });
         }
         dataForIndices.labelsWithInstancesWithCategory.emplace(labelsCategories.category().c_str(),
                                                                labelWithInstanceVector);
@@ -134,8 +136,10 @@ boost::uuids::uuid CorePbPointCloud::addData(const seerep::pb::PointCloud2& pc)
             uuidInstance = boost::uuids::nil_uuid();
           }
 
-          labelWithInstanceVector.push_back(seerep_core_msgs::LabelWithInstance{
-              .label = label.labelwithinstance().label(), .uuidInstance = uuidInstance });
+          labelWithInstanceVector.push_back(
+              seerep_core_msgs::LabelWithInstance{ .label = label.labelwithinstance().label().label(),
+                                                   .labelConfidence = label.labelwithinstance().label().confidence(),
+                                                   .uuidInstance = uuidInstance });
         }
       }
       dataForIndices.labelsWithInstancesWithCategory.emplace(labelsCategories.category().c_str(),
