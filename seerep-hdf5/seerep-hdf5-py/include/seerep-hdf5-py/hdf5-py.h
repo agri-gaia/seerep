@@ -8,7 +8,7 @@
 #include "seerep-hdf5-py/hdf5-py-tf.h"
 
 // pybind
-#include <pybind11/pybind11.h>
+#include <pybind11_catkin/pybind11/pybind11.h>
 
 namespace py = pybind11;
 
