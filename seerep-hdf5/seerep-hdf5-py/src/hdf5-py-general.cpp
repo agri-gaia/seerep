@@ -30,11 +30,11 @@ void Hdf5PyGeneral::setProjectGeolocation(const std::string& coordinateSystem, c
 {
   const std::scoped_lock lock(*m_write_mtx);
 
-  writeAttributeToHdf5(*m_file, GEOLOC_COORDINATE_SYSTEM, coordinateSystem);
-  writeAttributeToHdf5(*m_file, GEOLOC_ELLIPSOID, ellipsoid);
-  writeAttributeToHdf5(*m_file, GEOLOC_LATITUDE, latitude);
-  writeAttributeToHdf5(*m_file, GEOLOC_LONGITUDE, longitude);
-  writeAttributeToHdf5(*m_file, GEOLOC_ALTITUDE, altitude);
+  writeAttributeToHdf5(*m_file, GEODETICLOCATION_COORDINATESYSTEM, coordinateSystem);
+  writeAttributeToHdf5(*m_file, GEODETICLOCATION_ELLIPSOID, ellipsoid);
+  writeAttributeToHdf5(*m_file, GEODETICLOCATION_LATITUDE, latitude);
+  writeAttributeToHdf5(*m_file, GEODETICLOCATION_LONGITUDE, longitude);
+  writeAttributeToHdf5(*m_file, GEODETICLOCATION_ALTITUDE, altitude);
 
   m_file->flush();
 }

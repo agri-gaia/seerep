@@ -216,11 +216,6 @@ public:
 
   inline static const std::string PROJECTNAME = "projectname";
   inline static const std::string PROJECTFRAMEID = "projectframeid";
-  inline static const std::string GEOLOC_COORDINATE_SYSTEM = "geoloc_coordinatesystem";
-  inline static const std::string GEOLOC_ELLIPSOID = "geoloc_ellipsoid";
-  inline static const std::string GEOLOC_LATITUDE = "geoloc_latitude";
-  inline static const std::string GEOLOC_LONGITUDE = "geoloc_longitude";
-  inline static const std::string GEOLOC_ALTITUDE = "geoloc_altitude";
 
   inline static const std::string GEODETICLOCATION_COORDINATESYSTEM = "geoloc_coordinatesystem";
   inline static const std::string GEODETICLOCATION_ELLIPSOID = "geoloc_ellipsoid";
