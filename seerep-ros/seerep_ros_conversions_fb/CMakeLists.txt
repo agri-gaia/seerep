@@ -1,7 +1,13 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(seerep_ros_conversions_fb VERSION 0.1)
 
-find_package(catkin REQUIRED COMPONENTS std_msgs geometry_msgs sensor_msgs)
+find_package(
+  catkin REQUIRED
+  COMPONENTS std_msgs
+             geometry_msgs
+             sensor_msgs
+             vision_msgs
+)
 
 find_package(SeerepMsgs REQUIRED)
 
@@ -22,6 +28,7 @@ catkin_package(
   std_msgs
   geometry_msgs
   sensor_msgs
+  vision_msgs
   DEPENDS
   SeerepMsgs
 )

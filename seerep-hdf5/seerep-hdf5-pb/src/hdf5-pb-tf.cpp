@@ -2,6 +2,8 @@
 
 #include <highfive/H5DataSet.hpp>
 
+#include "seerep-hdf5-core/hdf5-core-tf.h"
+
 namespace seerep_hdf5_pb
 {
 Hdf5PbTf::Hdf5PbTf(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx)
@@ -23,8 +25,8 @@ void Hdf5PbTf::writeTransformStamped(const seerep::pb::TransformStamped& tf)
   {
     std::cout << "data id " << hdf5DatasetPath << " does not exist! Creat new dataset in hdf5" << std::endl;
     HighFive::Group group = m_file->createGroup(hdf5DatasetPath);
-    group.createAttribute("CHILD_FRAME", tf.child_frame_id());
-    group.createAttribute("PARENT_FRAME", tf.header().frame_id());
+    group.createAttribute(seerep_hdf5_core::Hdf5CoreTf::CHILD_FRAME, tf.child_frame_id());
+    group.createAttribute(seerep_hdf5_core::Hdf5CoreTf::PARENT_FRAME, tf.header().frame_id());
 
     // TIME
     // Create a dataspace with initial shape and max shape
@@ -131,9 +133,9 @@ std::optional<std::vector<seerep::pb::TransformStamped>> Hdf5PbTf::readTransform
 
   // read frames
   std::string parentframe;
-  group_ptr->getAttribute("PARENT_FRAME").read(parentframe);
+  group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::PARENT_FRAME).read(parentframe);
   std::string childframe;
-  group_ptr->getAttribute("CHILD_FRAME").read(childframe);
+  group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::CHILD_FRAME).read(childframe);
 
   // read time
   std::shared_ptr<HighFive::DataSet> data_set_time_ptr =
@@ -204,9 +206,9 @@ std::optional<std::vector<std::string>> Hdf5PbTf::readTransformStampedFrames(con
 
   // read frames
   std::string parentframe;
-  group_ptr->getAttribute("PARENT_FRAME").read(parentframe);
+  group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::PARENT_FRAME).read(parentframe);
   std::string childframe;
-  group_ptr->getAttribute("CHILD_FRAME").read(childframe);
+  group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::CHILD_FRAME).read(childframe);
 
   return std::vector<std::string>{ parentframe, childframe };
 }
