@@ -35,7 +35,7 @@ void Hdf5PyGeneral::writeBoundingBoxLabeled(const std::string& dataGroupId,
         {
           boxWithRotation.push_back(instanceLabel.bbSpatialExtent_[i]);
         }
-        for (int i = 0; i < instanceLabel.bbRotation_.size(); i++)
+        for (std::size_t i = 0; i < instanceLabel.bbRotation_.size(); i++)
         {
           boxWithRotation.push_back(instanceLabel.bbRotation_[i]);
         }
@@ -142,7 +142,7 @@ Hdf5PyGeneral::readBoundingBoxLabeled(const std::string& dataGroupId)
         {
           bbSpatialExtent[j] = boundingBoxesWithRotation[i][NumDimensions + j];
         }
-        for (int j = 0; j < bbRotation.size(); j++)
+        for (std::size_t j = 0; j < bbRotation.size(); j++)
         {
           bbRotation[j] = boundingBoxesWithRotation[i][2 * NumDimensions + j];
         }
