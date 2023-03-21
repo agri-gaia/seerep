@@ -18,7 +18,6 @@
 
 namespace seerep_hdf5_py
 {
-
 class Hdf5FileWrapper
 {
 public:
@@ -51,11 +50,13 @@ private:
 struct InstanceLabel
 {
 public:
-  InstanceLabel(const std::string& label, const std::string& instanceUuid) : label_(label), instanceUuid_(instanceUuid)
+  InstanceLabel(const std::string& label, float confidence, const std::string& instanceUuid)
+    : label_(label), confidence_(confidence), instanceUuid_(instanceUuid)
   {
   }
 
   std::string label_ = "";
+  float confidence_ = 0.0;
   std::string instanceUuid_ = "";
 };
 
@@ -79,15 +80,18 @@ template <int NumDimensions>
 struct BoundingBoxLabel
 {
 public:
-  BoundingBoxLabel(InstanceLabel& label, std::array<double, NumDimensions>& minPoint,
-                   std::array<double, NumDimensions>& maxPoint)
-    : label_(label), minPoint_(minPoint), maxPoint_(maxPoint)
+  using RotationType = std::array < double, NumDimensions<3 ? 1 : 4>;
+
+  BoundingBoxLabel(InstanceLabel& label, std::array<double, NumDimensions>& bbCenter,
+                   std::array<double, NumDimensions>& bbSpatialExtent, RotationType& bbRotation)
+    : label_(label), bbCenter_(bbCenter), bbSpatialExtent_(bbSpatialExtent), bbRotation_(bbRotation)
   {
   }
 
   InstanceLabel label_;
-  std::array<double, NumDimensions> minPoint_;
-  std::array<double, NumDimensions> maxPoint_;
+  std::array<double, NumDimensions> bbCenter_;
+  std::array<double, NumDimensions> bbSpatialExtent_;
+  RotationType bbRotation_;
 };
 
 template <int NumDimensions>

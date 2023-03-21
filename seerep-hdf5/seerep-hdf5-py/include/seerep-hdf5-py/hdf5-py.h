@@ -19,11 +19,14 @@ PYBIND11_MODULE(seerep_hdf5_py, m)
 
   // Label Types
   py::class_<seerep_hdf5_py::InstanceLabel>(m, "InstanceLabel")
-      .def(py::init<const std::string&, const std::string&>(), py::arg("label"), py::arg("instance_uuid"))
+      .def(py::init<const std::string&, float, const std::string&>(), py::arg("label"), py::arg("confidence"),
+           py::arg("instance_uuid"))
       .def_readwrite("label", &seerep_hdf5_py::InstanceLabel::label_)
+      .def_readwrite("confidence", &seerep_hdf5_py::InstanceLabel::confidence_)
       .def_readwrite("instance_uuid", &seerep_hdf5_py::InstanceLabel::instanceUuid_)
       .def("__repr__", [](seerep_hdf5_py::InstanceLabel& l) {
-        return "<seerephdf5py.InstanceLabel '" + l.label_ + "', '" + l.instanceUuid_ + "'>";
+        return "<seerep_hdf5_py.InstanceLabel '" + l.label_ + "', '" + std::to_string(l.confidence_) + "', '" +
+               l.instanceUuid_ + "'>";
       });
 
   py::class_<seerep_hdf5_py::GeneralLabel>(m, "GeneralLabel")
@@ -32,31 +35,37 @@ PYBIND11_MODULE(seerep_hdf5_py, m)
       .def_readwrite("labels", &seerep_hdf5_py::GeneralLabel::labels_)
       .def("addLabel", &seerep_hdf5_py::GeneralLabel::addLabel, py::arg("label"))
       .def("__repr__",
-           [](seerep_hdf5_py::GeneralLabel& l) { return "<seerephdf5py.GeneralLabel '" + l.category_ + "'>"; });
+           [](seerep_hdf5_py::GeneralLabel& l) { return "<seerep_hdf5_py.GeneralLabel '" + l.category_ + "'>"; });
 
   py::class_<seerep_hdf5_py::BoundingBoxLabel<3>>(m, "BoundingBoxLabel3D")
-      .def(py::init<seerep_hdf5_py::InstanceLabel&, std::array<double, 3>&, std::array<double, 3>&>(), py::arg("label"),
-           py::arg("min_point"), py::arg("max_point"))
+      .def(py::init<seerep_hdf5_py::InstanceLabel&, std::array<double, 3>&, std::array<double, 3>&,
+                    std::array<double, 4>&>(),
+           py::arg("label"), py::arg("center"), py::arg("spatial_extent"), py::arg("rotation"))
       .def_readwrite("label", &seerep_hdf5_py::BoundingBoxLabel<3>::label_)
-      .def_readwrite("min_point", &seerep_hdf5_py::BoundingBoxLabel<3>::minPoint_)
-      .def_readwrite("max_point", &seerep_hdf5_py::BoundingBoxLabel<3>::maxPoint_)
+      .def_readwrite("center", &seerep_hdf5_py::BoundingBoxLabel<3>::bbCenter_)
+      .def_readwrite("spatial_extent", &seerep_hdf5_py::BoundingBoxLabel<3>::bbSpatialExtent_)
+      .def_readwrite("rotation", &seerep_hdf5_py::BoundingBoxLabel<3>::bbRotation_)
       .def("__repr__", [](seerep_hdf5_py::BoundingBoxLabel<3>& l) {
-        return "<seerephdf5py.BoundingBoxLabel3D min(" + std::to_string(l.minPoint_[0]) + ", " +
-               std::to_string(l.minPoint_[1]) + ", " + std::to_string(l.minPoint_[2]) + "), max(" +
-               std::to_string(l.maxPoint_[0]) + ", " + std::to_string(l.maxPoint_[1]) + ", " +
-               std::to_string(l.maxPoint_[2]) + ")>";
+        return "<seerep_hdf5_py.BoundingBoxLabel3D center(" + std::to_string(l.bbCenter_[0]) + ", " +
+               std::to_string(l.bbCenter_[1]) + ", " + std::to_string(l.bbCenter_[2]) + "), extent(" +
+               std::to_string(l.bbSpatialExtent_[0]) + ", " + std::to_string(l.bbSpatialExtent_[1]) + ", " +
+               std::to_string(l.bbSpatialExtent_[2]) + "), rotation(" + std::to_string(l.bbRotation_[0]) + ", " +
+               std::to_string(l.bbRotation_[1]) + ", " + std::to_string(l.bbRotation_[2]) + ", " +
+               std::to_string(l.bbRotation_[3]) + ")>";
       });
 
   py::class_<seerep_hdf5_py::BoundingBoxLabel<2>>(m, "BoundingBoxLabel2D")
-      .def(py::init<seerep_hdf5_py::InstanceLabel&, std::array<double, 2>&, std::array<double, 2>&>(), py::arg("label"),
-           py::arg("min_point"), py::arg("max_point"))
+      .def(py::init<seerep_hdf5_py::InstanceLabel&, std::array<double, 2>&, std::array<double, 2>&,
+                    std::array<double, 1>&>(),
+           py::arg("label"), py::arg("center"), py::arg("spatial_extent"), py::arg("rotation"))
       .def_readwrite("label", &seerep_hdf5_py::BoundingBoxLabel<2>::label_)
-      .def_readwrite("min_point", &seerep_hdf5_py::BoundingBoxLabel<2>::minPoint_)
-      .def_readwrite("max_point", &seerep_hdf5_py::BoundingBoxLabel<2>::maxPoint_)
+      .def_readwrite("center", &seerep_hdf5_py::BoundingBoxLabel<2>::bbCenter_)
+      .def_readwrite("spatial_extent", &seerep_hdf5_py::BoundingBoxLabel<2>::bbSpatialExtent_)
+      .def_readwrite("rotation", &seerep_hdf5_py::BoundingBoxLabel<2>::bbRotation_)
       .def("__repr__", [](seerep_hdf5_py::BoundingBoxLabel<2>& l) {
-        return "<seerephdf5py.BoundingBoxLabel2D min(" + std::to_string(l.minPoint_[0]) + ", " +
-               std::to_string(l.minPoint_[1]) + "), max(" + std::to_string(l.maxPoint_[0]) + ", " +
-               std::to_string(l.maxPoint_[1]) + ")>";
+        return "<seerep_hdf5_py.BoundingBoxLabel2D center(" + std::to_string(l.bbCenter_[0]) + ", " +
+               std::to_string(l.bbCenter_[1]) + "), extent(" + std::to_string(l.bbSpatialExtent_[0]) + ", " +
+               std::to_string(l.bbSpatialExtent_[1]) + "), rotation(" + std::to_string(l.bbRotation_[0]) + ")>";
       });
 
   py::class_<seerep_hdf5_py::CategorizedBoundingBoxLabel<3>>(m, "CategorizedBoundingBoxLabel3D")
@@ -65,7 +74,7 @@ PYBIND11_MODULE(seerep_hdf5_py, m)
       .def_readwrite("labels", &seerep_hdf5_py::CategorizedBoundingBoxLabel<3>::labels_)
       .def("addLabel", &seerep_hdf5_py::CategorizedBoundingBoxLabel<3>::addLabel, py::arg("label"))
       .def("__repr__", [](seerep_hdf5_py::CategorizedBoundingBoxLabel<3>& l) {
-        return "<seerephdf5py.CategorizedBoundingBoxLabel3D '" + l.category_ + "'>";
+        return "<seerep_hdf5_py.CategorizedBoundingBoxLabel3D '" + l.category_ + "'>";
       });
 
   py::class_<seerep_hdf5_py::CategorizedBoundingBoxLabel<2>>(m, "CategorizedBoundingBoxLabel2D")
@@ -74,7 +83,7 @@ PYBIND11_MODULE(seerep_hdf5_py, m)
       .def_readwrite("labels", &seerep_hdf5_py::CategorizedBoundingBoxLabel<2>::labels_)
       .def("addLabel", &seerep_hdf5_py::CategorizedBoundingBoxLabel<2>::addLabel, py::arg("label"))
       .def("__repr__", [](seerep_hdf5_py::CategorizedBoundingBoxLabel<2>& l) {
-        return "<seerephdf5py.CategorizedBoundingBoxLabel2D '" + l.category_ + "'>";
+        return "<seerep_hdf5_py.CategorizedBoundingBoxLabel2D '" + l.category_ + "'>";
       });
 
   // Tf Types
@@ -91,7 +100,7 @@ PYBIND11_MODULE(seerep_hdf5_py, m)
       .def_readwrite("translation", &seerep_hdf5_py::TfTransform::translation_)
       .def_readwrite("rotation", &seerep_hdf5_py::TfTransform::rotation_)
       .def("__repr__", [](seerep_hdf5_py::TfTransform& l) {
-        return "<seerephdf5py.TfTransform '" + l.frameId_ + "' '" + l.childFrameId_ + "'>";
+        return "<seerep_hdf5_py.TfTransform '" + l.frameId_ + "' '" + l.childFrameId_ + "'>";
       });
 
   // IO
@@ -103,7 +112,7 @@ PYBIND11_MODULE(seerep_hdf5_py, m)
            py::arg("coordinate_system"), py::arg("ellipsoid"), py::arg("latitude"), py::arg("longitude"),
            py::arg("altitude"))
       .def("__repr__",
-           [](seerep_hdf5_py::Hdf5FileWrapper& f) { return "<seerephdf5py.File '" + f.getFile()->getName() + "'>"; });
+           [](seerep_hdf5_py::Hdf5FileWrapper& f) { return "<seerep_hdf5_py.File '" + f.getFile()->getName() + "'>"; });
 
   py::class_<seerep_hdf5_py::Hdf5PyImage>(m, "ImageIO")
       .def(py::init<seerep_hdf5_py::Hdf5FileWrapper&>(), py::arg("hdf5_file"))
