@@ -41,7 +41,7 @@ include_directories(
 )
 
 pybind11_add_module(
-  seerephdf5py
+  ${PROJECT_NAME}
   src/hdf5-py-general.cpp
   src/hdf5-py-tf.cpp
   src/hdf5-py-pointcloud.cpp
@@ -49,7 +49,7 @@ pybind11_add_module(
 )
 
 target_link_libraries(
-  seerephdf5py
+  ${PROJECT_NAME}
   PRIVATE ${SeerepMsgs_LIBRARIES}
           ${SeerepHdf5Core_LIBRARIES}
           ${SeerepIoCore_LIBRARIES}
@@ -81,10 +81,14 @@ set(CMAKE_INSTALL_BINDIR bin)
 # PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME} )
 
 install(
-  TARGETS seerephdf5py
-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  TARGETS ${PROJECT_NAME}
+  LIBRARY DESTINATION ${CATKIN_GLOBAL_PYTHON_DESTINATION}/${PROJECT_NAME}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
   PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+)
+
+install(FILES src/__init__.py
+        DESTINATION ${CATKIN_GLOBAL_PYTHON_DESTINATION}/${PROJECT_NAME}
 )
 
 # install( TARGETS seerephdf5py COMPONENT python LIBRARY DESTINATION
