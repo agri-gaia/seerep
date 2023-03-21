@@ -11,6 +11,7 @@ struct LabelsWithInstanceWithCategory
 {
   std::string category;
   std::vector<std::string> labels;
+  std::vector<float> labelConfidences;
   std::vector<std::string> instances;
 };
 

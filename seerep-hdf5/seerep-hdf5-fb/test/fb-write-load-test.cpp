@@ -81,8 +81,11 @@ flatbuffers::Offset<seerep::fb::LabelWithInstance> createLabelWithInstance(flatb
 {
   boost::uuids::uuid instanceUUID = boost::uuids::random_generator()();
   auto instanceUUIDOffset = fbb.CreateString(boost::lexical_cast<std::string>(instanceUUID));
-  auto labelOffset = fbb.CreateString("testLabelGeneral");
-  auto labelWithInstanceOffset = seerep::fb::CreateLabelWithInstance(fbb, labelOffset, instanceUUIDOffset);
+  auto labelStr = fbb.CreateString("testLabelGeneral");
+
+  auto label = seerep::fb::CreateLabel(fbb, labelStr, 0.5);
+
+  auto labelWithInstanceOffset = seerep::fb::CreateLabelWithInstance(fbb, label, instanceUUIDOffset);
   fbb.Finish(labelWithInstanceOffset);
   return labelWithInstanceOffset;
 }
@@ -276,7 +279,8 @@ void testLabelWithInstance(const seerep::fb::LabelWithInstance* readInstance,
   {
     FAIL() << "Error: Can't compare a LabelWithInstance to nullptr";
   }
-  EXPECT_STREQ(readInstance->label()->c_str(), writeInstance->label()->c_str());
+  EXPECT_STREQ(readInstance->label()->label()->c_str(), writeInstance->label()->label()->c_str());
+  EXPECT_FLOAT_EQ(readInstance->label()->confidence(), writeInstance->label()->confidence());
   EXPECT_STREQ(readInstance->instanceUuid()->c_str(), writeInstance->instanceUuid()->c_str());
 }
 
@@ -320,13 +324,16 @@ void testBB2DWithInstance(const seerep::fb::BoundingBox2DLabeled* readInstance,
   {
     FAIL() << "Error: Can't compare a LabelWithInstance to nullptr";
   }
-  EXPECT_STREQ(readInstance->labelWithInstance()->label()->c_str(),
-               writeInstance->labelWithInstance()->label()->c_str());
+  EXPECT_STREQ(readInstance->labelWithInstance()->label()->label()->c_str(),
+               writeInstance->labelWithInstance()->label()->label()->c_str());
+  EXPECT_FLOAT_EQ(readInstance->labelWithInstance()->label()->confidence(),
+                  writeInstance->labelWithInstance()->label()->confidence());
   EXPECT_STREQ(readInstance->labelWithInstance()->instanceUuid()->c_str(),
                writeInstance->labelWithInstance()->instanceUuid()->c_str());
 
-  testEqualPoints(readInstance->bounding_box()->point_min(), writeInstance->bounding_box()->point_min());
-  testEqualPoints(readInstance->bounding_box()->point_max(), writeInstance->bounding_box()->point_max());
+  testEqualPoints(readInstance->bounding_box()->center_point(), writeInstance->bounding_box()->center_point());
+  testEqualPoints(readInstance->bounding_box()->spatial_extent(), writeInstance->bounding_box()->spatial_extent());
+  EXPECT_FLOAT_EQ(readInstance->bounding_box()->rotation(), writeInstance->bounding_box()->rotation());
 }
 
 void testBB2DWithInstanceCategories(const seerep::fb::BoundingBox2DLabeledWithCategory* readInstance,

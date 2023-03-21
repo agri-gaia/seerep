@@ -87,10 +87,16 @@ createLabelWithInstance(flatbuffers::grpc::MessageBuilder& mb, const seerep::fb:
                         const flatbuffers::String* category)
 {
   auto instanceUuidMsg = mb.CreateString(bb->labelWithInstance()->instanceUuid()->str());
-  auto labelMsg = mb.CreateString(bb->labelWithInstance()->label()->str());
+  auto labelStr = mb.CreateString(bb->labelWithInstance()->label()->label()->str());
+  auto labelConfidence = bb->labelWithInstance()->label()->confidence();
 
   std::vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>> labelWithInstanceVector;
   std::vector<flatbuffers::Offset<seerep::fb::LabelsWithInstanceWithCategory>> labelsWithInstanceWithCategoryVector;
+
+  seerep::fb::LabelBuilder labelBuilder(mb);
+  labelBuilder.add_label(labelStr);
+  labelBuilder.add_confidence(labelConfidence);
+  auto labelMsg = labelBuilder.Finish();
 
   seerep::fb::LabelWithInstanceBuilder labelWithInstanceBuilder(mb);
   labelWithInstanceBuilder.add_instanceUuid(instanceUuidMsg);

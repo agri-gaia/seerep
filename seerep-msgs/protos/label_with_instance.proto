@@ -2,8 +2,10 @@ syntax = "proto3";
 
 package seerep.pb;
 
+import "label.proto";
+
 message LabelWithInstance
 {
-  string label = 1;
+  Label label = 1;
   string instanceUuid = 2;
 }

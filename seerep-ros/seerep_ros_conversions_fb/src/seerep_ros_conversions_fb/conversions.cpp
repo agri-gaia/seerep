@@ -479,28 +479,33 @@ flatbuffers::grpc::Message<seerep::fb::BoundingBox2DLabeled> toFlat(const vision
 flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled> toFlat(const vision_msgs::Detection2D& detection2d,
                                                              flatbuffers::grpc::MessageBuilder& builder)
 {
-  seerep::fb::Point2DBuilder pointBuilderMin(builder);
-  pointBuilderMin.add_x(detection2d.bbox.center.x - detection2d.bbox.size_x / 2.0);
-  pointBuilderMin.add_y(detection2d.bbox.center.y - detection2d.bbox.size_y / 2.0);
-  auto pointMin = pointBuilderMin.Finish();
+  seerep::fb::Point2DBuilder pointBuilderCenter(builder);
+  pointBuilderCenter.add_x(detection2d.bbox.center.x);
+  pointBuilderCenter.add_y(detection2d.bbox.center.y);
+  auto pointCenter = pointBuilderCenter.Finish();
 
-  seerep::fb::Point2DBuilder pointBuilderMax(builder);
-  pointBuilderMax.add_x(detection2d.bbox.center.x + detection2d.bbox.size_x / 2.0);
-  pointBuilderMax.add_y(detection2d.bbox.center.y + detection2d.bbox.size_y / 2.0);
-  auto pointMax = pointBuilderMax.Finish();
+  seerep::fb::Point2DBuilder pointBuilderSpatialExtent(builder);
+  pointBuilderSpatialExtent.add_x(detection2d.bbox.size_x);
+  pointBuilderSpatialExtent.add_y(detection2d.bbox.size_y);
+  auto pointSpatialExtent = pointBuilderSpatialExtent.Finish();
 
   seerep::fb::Boundingbox2DBuilder bbbuilder(builder);
-  bbbuilder.add_point_min(pointMin);
-  bbbuilder.add_point_max(pointMax);
+  bbbuilder.add_center_point(pointCenter);
+  bbbuilder.add_spatial_extent(pointSpatialExtent);
   auto bb = bbbuilder.Finish();
 
   auto InstanceOffset = builder.CreateString("");
   auto labelOffset = builder.CreateString(std::to_string(detection2d.results.at(0).id));
 
-  seerep::fb::LabelWithInstanceBuilder labelBuilder(builder);
-  labelBuilder.add_instanceUuid(InstanceOffset);
+  seerep::fb::LabelBuilder labelBuilder(builder);
   labelBuilder.add_label(labelOffset);
-  auto labelWithInstanceOffset = labelBuilder.Finish();
+  labelBuilder.add_confidence(detection2d.results.at(0).score);
+  auto label = labelBuilder.Finish();
+
+  seerep::fb::LabelWithInstanceBuilder labelInstanceBuilder(builder);
+  labelInstanceBuilder.add_instanceUuid(InstanceOffset);
+  labelInstanceBuilder.add_label(label);
+  auto labelWithInstanceOffset = labelInstanceBuilder.Finish();
 
   seerep::fb::BoundingBox2DLabeledBuilder bblabeledbuilder(builder);
   bblabeledbuilder.add_bounding_box(bb);

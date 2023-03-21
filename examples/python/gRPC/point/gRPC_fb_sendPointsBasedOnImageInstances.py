@@ -43,8 +43,10 @@ for responseBuf in stubImage.GetImage(bytes(buf)):
     response = Image.Image.GetRootAs(responseBuf)
     print(f"uuidmsg: {response.Header().UuidMsgs().decode('utf-8')}")
     if not response.LabelsBbIsNone():
-        for i in range(response.LabelsBbLength()):
-            print(f"uuidlabel: {response.LabelsBb(i).LabelWithInstance().InstanceUuid().decode('utf-8')}")
+        for i in range(response.LabelsBb(0).BoundingBox2dLabeledLength()):
+            print(
+                f"uuidlabel: {response.LabelsBb(0).BoundingBox2dLabeled(i).LabelWithInstance().InstanceUuid().decode('utf-8')}"
+            )
 
             frameId = response.Header().FrameId().decode('utf-8')
             uuidProject = response.Header().UuidProject().decode('utf-8')
@@ -57,9 +59,12 @@ for responseBuf in stubImage.GetImage(bytes(buf)):
 
             labelWithInstanceMsg = util_fb.createLabelWithInstance(
                 builder,
-                response.LabelsBb(i).LabelWithInstance().Label().decode('utf-8'),
-                response.LabelsBb(i).LabelWithInstance().InstanceUuid().decode('utf-8'),
+                response.LabelsBb(0).BoundingBox2dLabeled(i).LabelWithInstance().Label().Label().decode('utf-8'),
+                response.LabelsBb(0).BoundingBox2dLabeled(i).LabelWithInstance().Label().Confidence(),
+                response.LabelsBb(0).BoundingBox2dLabeled(i).LabelWithInstance().InstanceUuid().decode('utf-8'),
             )
+
+            labelWithCat = util_fb.createLabelWithCategory(builder, ["myCategory"], [[labelWithInstanceMsg]])
 
             unionMapEntryKey1 = builder.CreateString("exampleKey1")
             value1String = builder.CreateString("exampleValue1")
@@ -91,7 +96,7 @@ for responseBuf in stubImage.GetImage(bytes(buf)):
             PointStamped.AddHeader(builder, header)
             PointStamped.AddPoint(builder, point)
             # PointStamped.AddAttribute(builder, attributes)
-            PointStamped.AddLabelsGeneral(builder, labelWithInstanceMsg)
+            PointStamped.AddLabelsGeneral(builder, labelWithCat)
             pointStampedMsg = PointStamped.End(builder)
 
             builder.Finish(pointStampedMsg)

@@ -1,7 +1,9 @@
 
+include "label.fbs";
+
 namespace seerep.fb;
 
 table LabelWithInstance {
-  label:string;
+  label:Label;
   instanceUuid:string;
 }
