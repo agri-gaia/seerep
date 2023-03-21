@@ -5,7 +5,7 @@ Save geometries from python in hdf5 files
 ## Pointcloud example
 
 ```python
-import seerephdf5py as seerep
+import seerep_hdf5_py as seerep
 import numpy as np
 
 # create file
@@ -85,7 +85,7 @@ print("bb_labels", bb_labels)
 ## Image example
 
 ```python
-import seerephdf5py as seerep
+import seerep_hdf5_py as seerep
 import numpy as np
 import cv2
 
@@ -138,7 +138,7 @@ print("bb_labels", bb_labels)
 ## Tf example
 
 ```python
-import seerephdf5py as seerep
+import seerep_hdf5_py as seerep
 
 # create file
 file = seerep.File("testfile.h5")
