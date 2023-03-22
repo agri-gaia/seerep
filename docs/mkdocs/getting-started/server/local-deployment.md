@@ -49,9 +49,9 @@ services:
       #- /your/local/absolute/path:/mnt/seerep-data #using host folder
     environment:
       - TZ=Europe/Berlin
-      - SEEREP_DATA_FOLDER="/mnt/seerep-data"
-      - SEEREP_LOG_PATH="/mnt/seerep-data/log"
-      - SEEREP_LOG_LEVEL="info"
+      - SEEREP_DATA_FOLDER=/mnt/seerep-data
+      - SEEREP_LOG_PATH=/mnt/seerep-data/log
+      - SEEREP_LOG_LEVEL=info
 volumes:
   seerep-data:
 ```
