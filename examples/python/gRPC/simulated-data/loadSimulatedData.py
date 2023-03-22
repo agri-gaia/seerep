@@ -85,13 +85,14 @@ for folderIndex in range(2):
         bbCat.category = "ground_truth"
         bb1 = bb.BoundingBox2DLabeled()
         for a in annotations:
-            bb1.labelWithInstance.label = labelSwitch.get(a[0])
+            bb1.labelWithInstance.label.label = labelSwitch.get(a[0])
+            bb1.labelWithInstance.label.confidence = 1.0
             bb1.labelWithInstance.instanceUuid = str(uuid.uuid4())
 
-            bb1.boundingBox.point_min.x = a[1] - a[3] / 2.0
-            bb1.boundingBox.point_min.y = a[2] - a[4] / 2.0
-            bb1.boundingBox.point_max.x = a[1] + a[3] / 2.0
-            bb1.boundingBox.point_max.y = a[2] + a[4] / 2.0
+            bb1.boundingBox.center_point.x = a[1] - a[3] / 2.0
+            bb1.boundingBox.center_point.y = a[2] - a[4] / 2.0
+            bb1.boundingBox.spatial_extent.x = a[1] + a[3] / 2.0
+            bb1.boundingBox.spatial_extent.y = a[2] + a[4] / 2.0
             bbCat.boundingBox2DLabeled.append(bb1)
 
         theImage.labels_bb.append(bbCat)
@@ -134,17 +135,18 @@ for folderIndex in range(2):
         thePointfieldZ.count = 1
         thePointcloud.fields.append(thePointfieldZ)
 
-        stubPointcloud.TransferPointCloud2(thePointcloud)
-
         annotations = np.genfromtxt(baseAnnotationPath + ".txt", delimiter=" ")
         labelsCat = labels_with_instance_with_category_pb2.LabelsWithInstanceWithCategory()
         labelsCat.category = "ground_truth"
         for a in annotations:
             label = labelWithInstance.LabelWithInstance()
-            label.label = labelSwitch.get(a[0])
+            label.label.label = labelSwitch.get(a[0])
+            label.label.confidence = 1.0
             labelsCat.labelWithInstance.append(label)
 
         thePointcloud.labels_general.append(labelsCat)
+
+        stubPointcloud.TransferPointCloud2(thePointcloud)
 
         with open(baseFilePath + ".txt", "r") as stream:
             try:
