@@ -81,7 +81,7 @@ for responseBuf in stub.GetImage(bytes(buf)):
             + str(response.LabelsBb(0).BoundingBox2dLabeled(0).LabelWithInstance().Label().Confidence())
         )
         print(
-            "first bounding box (Xcenter,Ycenter,Xextent,Yextent): "
+            "first bounding box (Xcenter,Ycenter,Xextent,Yextent, rotation): "
             + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().CenterPoint().X())
             + " "
             + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().CenterPoint().Y())
@@ -89,6 +89,8 @@ for responseBuf in stub.GetImage(bytes(buf)):
             + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().SpatialExtent().X())
             + " "
             + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().SpatialExtent().Y())
+            + " "
+            + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().Rotation())
             + "\n"
         )
 
