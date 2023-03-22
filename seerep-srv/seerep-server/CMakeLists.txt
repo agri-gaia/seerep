@@ -5,6 +5,15 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -fPIC -DBOOST_LOG_DYN_LINK")
 
+# Add a custom command that produces version.cpp, plus a dummy output that's not
+# actually produced, in order to force version.cmake to always be re-run before
+# the build
+add_custom_command(
+  OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/version.cpp
+         ${CMAKE_CURRENT_BINARY_DIR}/_version.cpp
+  COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/version.cmake
+)
+
 find_package(Protobuf REQUIRED)
 find_package(gRPC CONFIG REQUIRED)
 find_package(SeerepHdf5Pb REQUIRED)
@@ -63,6 +72,7 @@ add_executable(
   src/fb-image-service.cpp
   src/fb-instance-service.cpp
   src/fb-point-cloud-service.cpp
+  ${CMAKE_CURRENT_BINARY_DIR}/version.cpp
 )
 
 target_link_libraries(

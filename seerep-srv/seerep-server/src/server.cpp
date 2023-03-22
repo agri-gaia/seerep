@@ -1,5 +1,9 @@
 #include "seerep-server/server.h"
 
+extern const char* GIT_TAG;
+extern const char* GIT_REV;
+extern const char* GIT_BRANCH;
+
 namespace seerep_server
 {
 server::server(int argc, char** argv)
@@ -79,7 +83,7 @@ void server::parseProgramOptions(int argc, char** argv)
 
     if (m_programOptionsMap.count("version"))
     {
-      std::cout << "SEEREP, version 0.0\n";
+      std::cout << "SEEREP, version " << GIT_TAG << std::endl;
       exit(EXIT_SUCCESS);
     }
   }
