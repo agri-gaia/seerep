@@ -1,17 +1,21 @@
 <map id="seerep_hdf5_core::Hdf5CoreGeneral" name="seerep_hdf5_core::Hdf5CoreGeneral">
-<area shape="rect" id="node1" title=" " alt="" coords="5,313,212,354"/>
-<area shape="rect" id="node2" href="$classseerep__hdf5__core_1_1Hdf5CoreImage.html" title="This class encompasses all hdf5&#45;io functions which are message type independent." alt="" coords="272,195,479,237"/>
-<area shape="rect" id="node5" href="$classseerep__hdf5__core_1_1Hdf5CoreInstance.html" title=" " alt="" coords="272,313,479,354"/>
-<area shape="rect" id="node6" href="$classseerep__hdf5__core_1_1Hdf5CorePoint.html" title=" " alt="" coords="272,378,479,419"/>
-<area shape="rect" id="node7" href="$classseerep__hdf5__core_1_1Hdf5CorePointCloud.html" title=" " alt="" coords="272,443,479,485"/>
-<area shape="rect" id="node8" href="$classseerep__hdf5__core_1_1Hdf5CoreTf.html" title=" " alt="" coords="266,509,485,536"/>
-<area shape="rect" id="node9" href="$classseerep__hdf5__fb_1_1Hdf5FbGeneral.html" title="This class encompasses all read and write operations for the hdf5&#45;fb&#45;io which can be used by differen..." alt="" coords="261,123,489,149"/>
-<area shape="rect" id="node13" href="$classseerep__hdf5__pb_1_1Hdf5PbGeneral.html" title=" " alt="" coords="260,261,491,288"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,385,212,426"/>
+<area shape="rect" id="node2" href="$classseerep__hdf5__core_1_1Hdf5CoreImage.html" title="This class encompasses all hdf5&#45;io functions which are message type independent." alt="" coords="272,217,479,258"/>
+<area shape="rect" id="node6" href="$classseerep__hdf5__core_1_1Hdf5CoreInstance.html" title=" " alt="" coords="272,414,479,455"/>
+<area shape="rect" id="node7" href="$classseerep__hdf5__core_1_1Hdf5CorePoint.html" title=" " alt="" coords="272,479,479,521"/>
+<area shape="rect" id="node8" href="$classseerep__hdf5__core_1_1Hdf5CorePointCloud.html" title=" " alt="" coords="272,545,479,586"/>
+<area shape="rect" id="node9" href="$classseerep__hdf5__core_1_1Hdf5CoreTf.html" title=" " alt="" coords="266,611,485,637"/>
+<area shape="rect" id="node10" href="$classseerep__hdf5__fb_1_1Hdf5FbGeneral.html" title="This class encompasses all read and write operations for the hdf5&#45;fb&#45;io which can be used by differen..." alt="" coords="261,123,489,149"/>
+<area shape="rect" id="node14" href="$classseerep__hdf5__pb_1_1Hdf5PbGeneral.html" title=" " alt="" coords="260,297,491,324"/>
+<area shape="rect" id="node17" href="$classseerep__hdf5__py_1_1Hdf5PyGeneral.html" title=" " alt="" coords="260,363,491,389"/>
 <area shape="rect" id="node3" href="$classseerep__hdf5__fb_1_1Hdf5FbImage.html" title="The class Hdf5FbImage is used to write and read flatbuffers image messages to/from hdf5 files." alt="" coords="540,173,759,200"/>
 <area shape="rect" id="node4" href="$classseerep__hdf5__pb_1_1Hdf5PbImage.html" title=" " alt="" coords="539,224,760,251"/>
-<area shape="rect" id="node10" href="$classseerep__hdf5__fb_1_1Hdf5FbPoint.html" title=" " alt="" coords="544,5,755,32"/>
-<area shape="rect" id="node11" href="$classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html" title=" " alt="" coords="544,57,755,98"/>
-<area shape="rect" id="node12" href="$classseerep__hdf5__fb_1_1Hdf5FbTf.html" title=" " alt="" coords="554,123,745,149"/>
-<area shape="rect" id="node14" href="$classseerep__hdf5__pb_1_1Hdf5PbPointCloud.html" title=" " alt="" coords="543,275,756,317"/>
-<area shape="rect" id="node15" href="$classseerep__hdf5__pb_1_1Hdf5PbTf.html" title=" " alt="" coords="553,341,746,368"/>
+<area shape="rect" id="node5" href="$classseerep__hdf5__py_1_1Hdf5PyImage.html" title=" " alt="" coords="539,392,759,419"/>
+<area shape="rect" id="node11" href="$classseerep__hdf5__fb_1_1Hdf5FbPoint.html" title=" " alt="" coords="544,5,755,32"/>
+<area shape="rect" id="node12" href="$classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html" title=" " alt="" coords="544,57,755,98"/>
+<area shape="rect" id="node13" href="$classseerep__hdf5__fb_1_1Hdf5FbTf.html" title=" " alt="" coords="554,123,745,149"/>
+<area shape="rect" id="node15" href="$classseerep__hdf5__pb_1_1Hdf5PbPointCloud.html" title=" " alt="" coords="543,275,756,317"/>
+<area shape="rect" id="node16" href="$classseerep__hdf5__pb_1_1Hdf5PbTf.html" title=" " alt="" coords="553,341,746,368"/>
+<area shape="rect" id="node18" href="$classseerep__hdf5__py_1_1Hdf5PyPointCloud.html" title=" " alt="" coords="543,443,755,485"/>
+<area shape="rect" id="node19" href="$classseerep__hdf5__py_1_1Hdf5PyTf.html" title=" " alt="" coords="553,509,745,536"/>
 </map>

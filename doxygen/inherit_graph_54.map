@@ -1,6 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" title=" " alt="" coords="5,56,107,83"/>
-<area shape="rect" id="node2" href="$classpbWriteLoadTest.html" title="class holds all the data structures which will be tested." alt="" coords="175,5,305,32"/>
-<area shape="rect" id="node3" href="$classrosToFbConversionTest.html" title="This class holds all the attributes which will be tested in the tests." alt="" coords="155,56,325,83"/>
-<area shape="rect" id="node4" href="$classseerep__hdf5__fb_1_1tests_1_1fbWriteLoadTest.html" title=" " alt="" coords="159,107,321,149"/>
+<area shape="rect" id="node1" href="$structseerep__hdf5__py_1_1GeneralLabel.html" title=" " alt="" coords="5,5,224,32"/>
 </map>

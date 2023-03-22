@@ -17,6 +17,7 @@ var dir_9b2420bfceb63045482d1fa49023d131 =
     [ "geodeticCoordinates.fbs", "geodeticCoordinates_8fbs.html", null ],
     [ "header.fbs", "header_8fbs.html", null ],
     [ "image.fbs", "image_8fbs.html", null ],
+    [ "label.fbs", "label_8fbs.html", null ],
     [ "label_with_instance.fbs", "label__with__instance_8fbs.html", null ],
     [ "labels_with_category.fbs", "labels__with__category_8fbs.html", null ],
     [ "labels_with_instance_with_category.fbs", "labels__with__instance__with__category_8fbs.html", null ],

@@ -1,8 +1,9 @@
 <map id="seerep_hdf5_core::Hdf5CoreDatatypeInterface" name="seerep_hdf5_core::Hdf5CoreDatatypeInterface">
-<area shape="rect" id="node1" title=" " alt="" coords="5,89,212,130"/>
-<area shape="rect" id="node2" href="$classseerep__hdf5__core_1_1Hdf5CoreImage.html" title="This class encompasses all hdf5&#45;io functions which are message type independent." alt="" coords="260,23,467,65"/>
-<area shape="rect" id="node5" href="$classseerep__hdf5__core_1_1Hdf5CorePoint.html" title=" " alt="" coords="260,89,467,130"/>
-<area shape="rect" id="node6" href="$classseerep__hdf5__core_1_1Hdf5CorePointCloud.html" title=" " alt="" coords="260,154,467,195"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,114,212,155"/>
+<area shape="rect" id="node2" href="$classseerep__hdf5__core_1_1Hdf5CoreImage.html" title="This class encompasses all hdf5&#45;io functions which are message type independent." alt="" coords="260,49,467,90"/>
+<area shape="rect" id="node6" href="$classseerep__hdf5__core_1_1Hdf5CorePoint.html" title=" " alt="" coords="260,114,467,155"/>
+<area shape="rect" id="node7" href="$classseerep__hdf5__core_1_1Hdf5CorePointCloud.html" title=" " alt="" coords="260,179,467,221"/>
 <area shape="rect" id="node3" href="$classseerep__hdf5__fb_1_1Hdf5FbImage.html" title="The class Hdf5FbImage is used to write and read flatbuffers image messages to/from hdf5 files." alt="" coords="516,5,735,32"/>
 <area shape="rect" id="node4" href="$classseerep__hdf5__pb_1_1Hdf5PbImage.html" title=" " alt="" coords="515,56,736,83"/>
+<area shape="rect" id="node5" href="$classseerep__hdf5__py_1_1Hdf5PyImage.html" title=" " alt="" coords="515,107,735,133"/>
 </map>

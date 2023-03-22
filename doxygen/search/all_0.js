@@ -17,13 +17,14 @@ var searchData=
   ['adddatasettoindices_14',['addDatasetToIndices',['../classseerep__core_1_1CoreDataset.html#a1b9d8a470a91065b3c898f9ea0801b21',1,'seerep_core::CoreDataset']]],
   ['adddatasettoresult_15',['addDatasetToResult',['../classseerep__core_1_1Core.html#a663771ed3a3063e790b2be478d9c679a',1,'seerep_core::Core']]],
   ['adddatatype_16',['addDatatype',['../classseerep__core_1_1CoreDataset.html#aaf45bdb21875bf2ca5cf3dd803f3762d',1,'seerep_core::CoreDataset']]],
-  ['addlabels_17',['addLabels',['../classseerep__core_1_1CoreDataset.html#a7cc8717ee618ba935d899b8e3e73249a',1,'seerep_core::CoreDataset::addLabels()'],['../classseerep__core_1_1Core.html#ac840dfe266a000e3545ca73ad218844c',1,'seerep_core::Core::addLabels()'],['../classseerep__core_1_1CoreProject.html#ae06cb07b888895bf109ed745401c9ff5',1,'seerep_core::CoreProject::addLabels()'],['../classseerep__core_1_1CoreDataset.html#aadd35ee7ad9d2f1966211af7a303bb02',1,'seerep_core::CoreDataset::addLabels()']]],
-  ['addservicesfb_18',['addServicesFb',['../classseerep__server_1_1server.html#a9c05b9d858005490b03f44f096eefe3e',1,'seerep_server::server']]],
-  ['addservicespb_19',['addServicesPb',['../classseerep__server_1_1server.html#abfdd66fcd9ae9b8f805ab019523d5da3',1,'seerep_server::server']]],
-  ['addtf_20',['addTF',['../classseerep__core_1_1CoreProject.html#a73b3383f57e6a9ee0b0e5d309eb750cc',1,'seerep_core::CoreProject::addTF()'],['../classseerep__core_1_1Core.html#a1769d6c72c2b4ff0732076a35124c88e',1,'seerep_core::Core::addTF()']]],
-  ['addtotfbuffer_21',['addToTfBuffer',['../classseerep__core_1_1CoreTf.html#ab0b6228fdddcf0eff49a8faef977c781',1,'seerep_core::CoreTf']]],
-  ['altitude_22',['altitude',['../structseerep__core__msgs_1_1GeodeticCoordinates.html#a2b2826f85726661a33410fe4215d005a',1,'seerep_core_msgs::GeodeticCoordinates']]],
-  ['attributelabel_23',['ATTRIBUTELABEL',['../classseerep__core_1_1CoreInstances.html#a2a555cdb938685b688f7ea575b2f0165',1,'seerep_core::CoreInstances']]],
-  ['attributemapsfb_24',['AttributeMapsFb',['../namespaceseerep__hdf5__fb.html#abc0d43c315fa0a04fd4ece8ae3a28460',1,'seerep_hdf5_fb']]],
-  ['attributes_5fstamped_2efbs_25',['attributes_stamped.fbs',['../attributes__stamped_8fbs.html',1,'']]]
+  ['addlabel_17',['addLabel',['../structseerep__hdf5__py_1_1GeneralLabel.html#ac3e0129b7b5560aee1ac0d063e7283a9',1,'seerep_hdf5_py::GeneralLabel::addLabel()'],['../structseerep__hdf5__py_1_1CategorizedBoundingBoxLabel.html#a0f58034490f47cac3c7f084c25f89914',1,'seerep_hdf5_py::CategorizedBoundingBoxLabel::addLabel()']]],
+  ['addlabels_18',['addLabels',['../classseerep__core_1_1CoreDataset.html#aadd35ee7ad9d2f1966211af7a303bb02',1,'seerep_core::CoreDataset::addLabels()'],['../classseerep__core_1_1Core.html#ac840dfe266a000e3545ca73ad218844c',1,'seerep_core::Core::addLabels()'],['../classseerep__core_1_1CoreProject.html#ae06cb07b888895bf109ed745401c9ff5',1,'seerep_core::CoreProject::addLabels()'],['../classseerep__core_1_1CoreDataset.html#a7cc8717ee618ba935d899b8e3e73249a',1,'seerep_core::CoreDataset::addLabels()']]],
+  ['addservicesfb_19',['addServicesFb',['../classseerep__server_1_1server.html#a9c05b9d858005490b03f44f096eefe3e',1,'seerep_server::server']]],
+  ['addservicespb_20',['addServicesPb',['../classseerep__server_1_1server.html#abfdd66fcd9ae9b8f805ab019523d5da3',1,'seerep_server::server']]],
+  ['addtf_21',['addTF',['../classseerep__core_1_1CoreProject.html#a73b3383f57e6a9ee0b0e5d309eb750cc',1,'seerep_core::CoreProject::addTF()'],['../classseerep__core_1_1Core.html#a1769d6c72c2b4ff0732076a35124c88e',1,'seerep_core::Core::addTF()']]],
+  ['addtotfbuffer_22',['addToTfBuffer',['../classseerep__core_1_1CoreTf.html#ab0b6228fdddcf0eff49a8faef977c781',1,'seerep_core::CoreTf']]],
+  ['altitude_23',['altitude',['../structseerep__core__msgs_1_1GeodeticCoordinates.html#a2b2826f85726661a33410fe4215d005a',1,'seerep_core_msgs::GeodeticCoordinates']]],
+  ['attributelabel_24',['ATTRIBUTELABEL',['../classseerep__core_1_1CoreInstances.html#a2a555cdb938685b688f7ea575b2f0165',1,'seerep_core::CoreInstances']]],
+  ['attributemapsfb_25',['AttributeMapsFb',['../namespaceseerep__hdf5__fb.html#abc0d43c315fa0a04fd4ece8ae3a28460',1,'seerep_hdf5_fb']]],
+  ['attributes_5fstamped_2efbs_26',['attributes_stamped.fbs',['../attributes__stamped_8fbs.html',1,'']]]
 ];

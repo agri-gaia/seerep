@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['labelswithinstancewithcategory_0',['LabelsWithInstanceWithCategory',['../structseerep__core__msgs_1_1LabelsWithInstanceWithCategory.html',1,'seerep_core_msgs']]],
-  ['labelwithinstance_1',['LabelWithInstance',['../structseerep__core__msgs_1_1LabelWithInstance.html',1,'seerep_core_msgs']]]
+  ['imageattributes_0',['ImageAttributes',['../structseerep__hdf5__core_1_1ImageAttributes.html',1,'seerep_hdf5_core']]],
+  ['instancelabel_1',['InstanceLabel',['../structseerep__hdf5__py_1_1InstanceLabel.html',1,'seerep_hdf5_py']]]
 ];

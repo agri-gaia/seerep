@@ -13,6 +13,7 @@ var dir_66ae93d504a9a7d0020313fd27d46447 =
     [ "geodetic_coordinates.proto", "geodetic__coordinates_8proto.html", null ],
     [ "header.proto", "header_8proto.html", null ],
     [ "image.proto", "image_8proto.html", null ],
+    [ "label.proto", "label_8proto.html", null ],
     [ "label_with_instance.proto", "label__with__instance_8proto.html", null ],
     [ "labels_with_category.proto", "labels__with__category_8proto.html", null ],
     [ "labels_with_instance_with_category.proto", "labels__with__instance__with__category_8proto.html", null ],

@@ -48,7 +48,8 @@ var NAVTREE =
       [ "Class Members", "functions.html", [
         [ "All", "functions.html", "functions_dup" ],
         [ "Functions", "functions_func.html", "functions_func" ],
-        [ "Variables", "functions_vars.html", "functions_vars" ]
+        [ "Variables", "functions_vars.html", "functions_vars" ],
+        [ "Typedefs", "functions_type.html", null ]
       ] ]
     ] ],
     [ "Files", "files.html", [
@@ -66,12 +67,12 @@ var NAVTREEINDEX =
 "aabb_8h.html",
 "classseerep__core_1_1CoreProject.html#a63c98ab16b1685d3f3336c3bc24ac5ff",
 "classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a33fb6e3e8696e0cc8ad6509627db0a13",
-"classseerep__hdf5__fb_1_1impl_1_1PointCloud2IteratorBase.html",
-"classseerep__server_1_1FbPointService.html#af7bd9d47a7df04adf2bbfd1f63097d9e",
-"dir_d6c608cc6962bb3d20210589a0b5662d.html",
-"namespaceseerep__hdf5__fb_1_1tests.html",
-"seerep__ros__conversions__fb_2src_2seerep__ros__conversions__fb_2conversions_8cpp.html#a1fe4d0011713b78163811192ca5348a0",
-"structseerep__hdf5__pb_1_1Hdf5PbPointCloud_1_1CloudInfo.html#aaeea0e488d4247d17d6d522f2e5584cb"
+"classseerep__hdf5__fb_1_1PointCloud2Iterator.html",
+"classseerep__hdf5__ros_1_1Hdf5Ros.html#a3daed4f91bd97b8fd4e658c2651b039a",
+"core-instances_8h_source.html",
+"hdf5-fb-tf_8h_source.html",
+"pose__stamped_8proto.html",
+"structseerep__core__msgs_1_1Header.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

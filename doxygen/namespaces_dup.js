@@ -7,6 +7,7 @@ var namespaces_dup =
     [ "seerep_hdf5_core", "namespaceseerep__hdf5__core.html", "namespaceseerep__hdf5__core" ],
     [ "seerep_hdf5_fb", "namespaceseerep__hdf5__fb.html", "namespaceseerep__hdf5__fb" ],
     [ "seerep_hdf5_pb", "namespaceseerep__hdf5__pb.html", "namespaceseerep__hdf5__pb" ],
+    [ "seerep_hdf5_py", "namespaceseerep__hdf5__py.html", "namespaceseerep__hdf5__py" ],
     [ "seerep_hdf5_ros", "namespaceseerep__hdf5__ros.html", "namespaceseerep__hdf5__ros" ],
     [ "seerep_ros_conversions_fb", "namespaceseerep__ros__conversions__fb.html", [
       [ "toFlat", "namespaceseerep__ros__conversions__fb.html#ac1a04f0ec517824326f5cc08d92f692e", null ],

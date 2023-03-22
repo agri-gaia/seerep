@@ -128,7 +128,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
   <div class="headertitle"><div class="title">SEEREP </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p ><a class="anchor" id="md_README"></a> <img src="https://img.shields.io/badge/stability-unstable-orange" alt="unstable" class="inline"/> <a href="./LICENSE"><img src="https://img.shields.io/badge/license-BSD_3-brightgreen" alt="License" class="inline"/></a> <a href="https://github.com/agri-gaia/seerep/actions"><img src="https://github.com/agri-gaia/seerep/actions/workflows/main.yml/badge.svg" alt="catkin build workflow" style="pointer-events: none;" class="inline"/></a> <a href="./.pre-commit-config.yaml"><img src="https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&amp;logoColor=white" alt="pre-commit" class="inline"/></a> <a href="./docker"><img src="https://img.shields.io/badge/Docker-enabled-blue?logo=docker" alt="Docker" class="inline"/></a></p>
+<div class="textblock"><p ><a class="anchor" id="md_README"></a> <img src="https://img.shields.io/badge/stability-unstable-orange" alt="unstable" class="inline"/> <a href="./LICENSE"><img src="https://img.shields.io/badge/license-BSD_3-brightgreen" alt="License" class="inline"/></a> <a href="https://github.com/agri-gaia/seerep/actions"><img src="https://github.com/agri-gaia/seerep/actions/workflows/main.yml/badge.svg" alt="catkin build workflow" style="pointer-events: none;" class="inline"/></a> <a href="./.pre-commit-config.yaml"><img src="https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&amp;logoColor=white" alt="pre-commit" class="inline"/></a> <a href="./docker"><img src="https://img.shields.io/badge/Docker-enabled-blue?logo=docker" alt="Docker" class="inline"/></a> <a href="https://pypi.org/project/seerep-grpc/"><img src="https://img.shields.io/pypi/v/seerep-grpc?label=pypi%20seerep-gRPC" alt="PyPI" class="inline"/></a></p>
 <h1><a class="anchor" id="autotoc_md1"></a>
 Table of Contents</h1>
 <ul>
@@ -174,9 +174,9 @@ Quick Start</h1>
 <div class="line">      - seerep-data:/mnt/seerep-data</div>
 <div class="line">    environment:</div>
 <div class="line">      - TZ=Europe/Berlin</div>
-<div class="line">      - SEEREP_DATA_FOLDER=&quot;/mnt/seerep-data&quot;</div>
-<div class="line">      - SEEREP_LOG_PATH=&quot;/mnt/seerep-data/log&quot;</div>
-<div class="line">      - SEEREP_LOG_LEVEL=&quot;info&quot;</div>
+<div class="line">      - SEEREP_DATA_FOLDER=/mnt/seerep-data</div>
+<div class="line">      - SEEREP_LOG_PATH=/mnt/seerep-data/log</div>
+<div class="line">      - SEEREP_LOG_LEVEL=info</div>
 <div class="line">volumes:</div>
 <div class="line">  seerep-data:</div>
 </div><!-- fragment --><h1><a class="anchor" id="autotoc_md5"></a>

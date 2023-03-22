@@ -1,5 +1,7 @@
 var hierarchy =
 [
+    [ "seerep_hdf5_py::BoundingBoxLabel< NumDimensions >", "structseerep__hdf5__py_1_1BoundingBoxLabel.html", null ],
+    [ "seerep_hdf5_py::CategorizedBoundingBoxLabel< NumDimensions >", "structseerep__hdf5__py_1_1CategorizedBoundingBoxLabel.html", null ],
     [ "seerep_hdf5_fb::Hdf5FbPointCloud::CloudInfo", "structseerep__hdf5__fb_1_1Hdf5FbPointCloud_1_1CloudInfo.html", null ],
     [ "seerep_hdf5_pb::Hdf5PbPointCloud::CloudInfo", "structseerep__hdf5__pb_1_1Hdf5PbPointCloud_1_1CloudInfo.html", null ],
     [ "seerep_core::Core", "classseerep__core_1_1Core.html", null ],
@@ -21,11 +23,13 @@ var hierarchy =
     [ "seerep_core::CoreTf", "classseerep__core_1_1CoreTf.html", null ],
     [ "seerep_core_msgs::DatasetIndexable", "structseerep__core__msgs_1_1DatasetIndexable.html", null ],
     [ "seerep_core::CoreDataset::DatatypeSpecifics", "structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html", null ],
+    [ "seerep_hdf5_py::GeneralLabel", "structseerep__hdf5__py_1_1GeneralLabel.html", null ],
     [ "seerep_core_msgs::GeodeticCoordinates", "structseerep__core__msgs_1_1GeodeticCoordinates.html", null ],
     [ "seerep_hdf5_core::Hdf5CoreDatatypeInterface", "classseerep__hdf5__core_1_1Hdf5CoreDatatypeInterface.html", [
       [ "seerep_hdf5_core::Hdf5CoreImage", "classseerep__hdf5__core_1_1Hdf5CoreImage.html", [
         [ "seerep_hdf5_fb::Hdf5FbImage", "classseerep__hdf5__fb_1_1Hdf5FbImage.html", null ],
-        [ "seerep_hdf5_pb::Hdf5PbImage", "classseerep__hdf5__pb_1_1Hdf5PbImage.html", null ]
+        [ "seerep_hdf5_pb::Hdf5PbImage", "classseerep__hdf5__pb_1_1Hdf5PbImage.html", null ],
+        [ "seerep_hdf5_py::Hdf5PyImage", "classseerep__hdf5__py_1_1Hdf5PyImage.html", null ]
       ] ],
       [ "seerep_hdf5_core::Hdf5CorePoint", "classseerep__hdf5__core_1_1Hdf5CorePoint.html", null ],
       [ "seerep_hdf5_core::Hdf5CorePointCloud", "classseerep__hdf5__core_1_1Hdf5CorePointCloud.html", null ]
@@ -46,11 +50,18 @@ var hierarchy =
         [ "seerep_hdf5_pb::Hdf5PbImage", "classseerep__hdf5__pb_1_1Hdf5PbImage.html", null ],
         [ "seerep_hdf5_pb::Hdf5PbPointCloud", "classseerep__hdf5__pb_1_1Hdf5PbPointCloud.html", null ],
         [ "seerep_hdf5_pb::Hdf5PbTf", "classseerep__hdf5__pb_1_1Hdf5PbTf.html", null ]
+      ] ],
+      [ "seerep_hdf5_py::Hdf5PyGeneral", "classseerep__hdf5__py_1_1Hdf5PyGeneral.html", [
+        [ "seerep_hdf5_py::Hdf5PyImage", "classseerep__hdf5__py_1_1Hdf5PyImage.html", null ],
+        [ "seerep_hdf5_py::Hdf5PyPointCloud", "classseerep__hdf5__py_1_1Hdf5PyPointCloud.html", null ],
+        [ "seerep_hdf5_py::Hdf5PyTf", "classseerep__hdf5__py_1_1Hdf5PyTf.html", null ]
       ] ]
     ] ],
+    [ "seerep_hdf5_py::Hdf5FileWrapper", "classseerep__hdf5__py_1_1Hdf5FileWrapper.html", null ],
     [ "seerep_hdf5_ros::Hdf5Ros", "classseerep__hdf5__ros_1_1Hdf5Ros.html", null ],
     [ "seerep_core_msgs::Header", "structseerep__core__msgs_1_1Header.html", null ],
     [ "seerep_hdf5_core::ImageAttributes", "structseerep__hdf5__core_1_1ImageAttributes.html", null ],
+    [ "seerep_hdf5_py::InstanceLabel", "structseerep__hdf5__py_1_1InstanceLabel.html", null ],
     [ "seerep_core_msgs::LabelsWithInstanceWithCategory", "structseerep__core__msgs_1_1LabelsWithInstanceWithCategory.html", null ],
     [ "seerep_core_msgs::LabelWithInstance", "structseerep__core__msgs_1_1LabelWithInstance.html", null ],
     [ "seerep_hdf5_fb::impl::PointCloud2IteratorBase< T, TT, U, C, V >", "classseerep__hdf5__fb_1_1impl_1_1PointCloud2IteratorBase.html", null ],
@@ -109,9 +120,11 @@ var hierarchy =
     ] ],
     [ "testing::Test", null, [
       [ "pbWriteLoadTest", "classpbWriteLoadTest.html", null ],
+      [ "pbWriteLoadTest", "classpbWriteLoadTest.html", null ],
       [ "rosToFbConversionTest", "classrosToFbConversionTest.html", null ],
       [ "seerep_hdf5_fb::tests::fbWriteLoadTest", "classseerep__hdf5__fb_1_1tests_1_1fbWriteLoadTest.html", null ]
     ] ],
+    [ "seerep_hdf5_py::TfTransform", "structseerep__hdf5__py_1_1TfTransform.html", null ],
     [ "seerep_core_msgs::Timeinterval", "structseerep__core__msgs_1_1Timeinterval.html", null ],
     [ "seerep_core_msgs::Timestamp", "structseerep__core__msgs_1_1Timestamp.html", null ]
 ];

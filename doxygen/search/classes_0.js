@@ -1,21 +1,4 @@
 var searchData=
 [
-  ['cloudinfo_0',['CloudInfo',['../structseerep__hdf5__fb_1_1Hdf5FbPointCloud_1_1CloudInfo.html',1,'seerep_hdf5_fb::Hdf5FbPointCloud::CloudInfo'],['../structseerep__hdf5__pb_1_1Hdf5PbPointCloud_1_1CloudInfo.html',1,'seerep_hdf5_pb::Hdf5PbPointCloud::CloudInfo']]],
-  ['core_1',['Core',['../classseerep__core_1_1Core.html',1,'seerep_core']]],
-  ['coredataset_2',['CoreDataset',['../classseerep__core_1_1CoreDataset.html',1,'seerep_core']]],
-  ['corefbconversion_3',['CoreFbConversion',['../classseerep__core__fb_1_1CoreFbConversion.html',1,'seerep_core_fb']]],
-  ['corefbgeneral_4',['CoreFbGeneral',['../classseerep__core__fb_1_1CoreFbGeneral.html',1,'seerep_core_fb']]],
-  ['corefbimage_5',['CoreFbImage',['../classseerep__core__fb_1_1CoreFbImage.html',1,'seerep_core_fb']]],
-  ['corefbinstance_6',['CoreFbInstance',['../classseerep__core__fb_1_1CoreFbInstance.html',1,'seerep_core_fb']]],
-  ['corefbpoint_7',['CoreFbPoint',['../classseerep__core__fb_1_1CoreFbPoint.html',1,'seerep_core_fb']]],
-  ['corefbpointcloud_8',['CoreFbPointCloud',['../classseerep__core__fb_1_1CoreFbPointCloud.html',1,'seerep_core_fb']]],
-  ['corefbtf_9',['CoreFbTf',['../classseerep__core__fb_1_1CoreFbTf.html',1,'seerep_core_fb']]],
-  ['coreinstance_10',['CoreInstance',['../classseerep__core_1_1CoreInstance.html',1,'seerep_core']]],
-  ['coreinstances_11',['CoreInstances',['../classseerep__core_1_1CoreInstances.html',1,'seerep_core']]],
-  ['corepbconversion_12',['CorePbConversion',['../classseerep__core__pb_1_1CorePbConversion.html',1,'seerep_core_pb']]],
-  ['corepbimage_13',['CorePbImage',['../classseerep__core__pb_1_1CorePbImage.html',1,'seerep_core_pb']]],
-  ['corepbpointcloud_14',['CorePbPointCloud',['../classseerep__core__pb_1_1CorePbPointCloud.html',1,'seerep_core_pb']]],
-  ['corepbtf_15',['CorePbTf',['../classseerep__core__pb_1_1CorePbTf.html',1,'seerep_core_pb']]],
-  ['coreproject_16',['CoreProject',['../classseerep__core_1_1CoreProject.html',1,'seerep_core']]],
-  ['coretf_17',['CoreTf',['../classseerep__core_1_1CoreTf.html',1,'seerep_core']]]
+  ['boundingboxlabel_0',['BoundingBoxLabel',['../structseerep__hdf5__py_1_1BoundingBoxLabel.html',1,'seerep_hdf5_py']]]
 ];
