@@ -17,7 +17,8 @@
         "davidanson.vscode-markdownlint",
         "cschlosser.doxdocgen",
         "cheshirekow.cmake-format",
-        "tamasfe.even-better-toml"
+        "tamasfe.even-better-toml",
+        "lochbrunner.vscode-hdf5-viewer"
     ],
     "containerUser": "docker",
     "mounts": [

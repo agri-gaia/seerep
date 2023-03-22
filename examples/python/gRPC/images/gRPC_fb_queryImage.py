@@ -21,7 +21,7 @@ builder = flatbuffers.Builder(1024)
 channel = util.get_gRPC_channel()
 
 # 1. Get all projects from the server
-projectuuid = util_fb.getProject(builder, channel, 'testproject')
+projectuuid = util_fb.getProject(builder, channel, 'simulatedCropsGroundTruth')
 
 # 2. Check if the defined project exist; if not exit
 if not projectuuid:
@@ -57,7 +57,7 @@ query = util_fb.createQuery(
     builder,
     # boundingBox=boundingboxStamped,
     # timeInterval=timeInterval,
-    labels=labelCategory,
+    # labels=labelCategory,
     # mustHaveAllLabels=True,
     projectUuids=projectUuids,
     # instanceUuids=instanceUuids,
@@ -72,17 +72,24 @@ for responseBuf in stub.GetImage(bytes(buf)):
     response = Image.Image.GetRootAs(responseBuf)
 
     print(f"uuidmsg: {response.Header().UuidMsgs().decode('utf-8')}")
-    print("first label: " + response.LabelsBb(0).BoundingBox2dLabeled(0).LabelWithInstance().Label().decode("utf-8"))
-    print(
-        "first bounding box (Xcenter,Ycenter,Xextent,Yextent): "
-        + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().CenterPoint().X())
-        + " "
-        + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().CenterPoint().Y())
-        + " "
-        + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().SpatialExtent().X())
-        + " "
-        + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().SpatialExtent().Y())
-        + "\n"
-    )
+    print(response.LabelsBbLength())
+    if response.LabelsBbLength() > 0:
+        print(
+            "first label: "
+            + response.LabelsBb(0).BoundingBox2dLabeled(0).LabelWithInstance().Label().Label().decode("utf-8")
+            + " ; confidence: "
+            + str(response.LabelsBb(0).BoundingBox2dLabeled(0).LabelWithInstance().Label().Confidence())
+        )
+        print(
+            "first bounding box (Xcenter,Ycenter,Xextent,Yextent): "
+            + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().CenterPoint().X())
+            + " "
+            + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().CenterPoint().Y())
+            + " "
+            + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().SpatialExtent().X())
+            + " "
+            + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().SpatialExtent().Y())
+            + "\n"
+        )
 
 print("done.")
