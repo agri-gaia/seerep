@@ -90,6 +90,11 @@ private:
   void logTimeZone();
 
   /**
+   * @brief Logs the version of the server
+   */
+  void logServerVersion();
+
+  /**
    * @brief sets the severity level of the logging
    */
   void setSeverityLevel();

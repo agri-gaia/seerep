@@ -13,6 +13,7 @@ server::server(int argc, char** argv)
   parseProgramOptions(argc, argv);
   initLogging();
   logTimeZone();
+  logServerVersion();
   createGrpcServer();
 }
 
@@ -150,6 +151,13 @@ void server::logTimeZone()
   localtime_r(&time, &timeStruct);
   strftime(buf, sizeof(buf), "%Z", &timeStruct);
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "Current timezone: " << buf;
+}
+
+void server::logServerVersion()
+{
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "SEEREP version: " << GIT_TAG;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "SEEREP git commit hash: " << GIT_REV;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "SEEREP git branch: " << GIT_BRANCH;
 }
 
 void server::setSeverityLevel()
