@@ -9,7 +9,7 @@
 #include "seerep-hdf5-core/hdf5-core-general.h"
 
 // seerep-msgs
-#include <seerep-msgs/dataset-indexable.h>
+#include <seerep_msgs/dataset_indexable.h>
 
 // std
 #include <boost/geometry.hpp>

@@ -32,7 +32,7 @@
 #ifndef SENSOR_MSGS__POINT_CLOUD2_ITERATOR_PB_HPP_
 #define SENSOR_MSGS__POINT_CLOUD2_ITERATOR_PB_HPP_
 
-#include <seerep-msgs/point_cloud_2.pb.h>
+#include <seerep_msgs/point_cloud_2.pb.h>
 
 #include <cstdarg>
 #include <string>

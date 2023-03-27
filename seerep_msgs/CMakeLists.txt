@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(seerep-msgs VERSION 0.1)
+project(seerep_msgs VERSION 0.1)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
 include(BuildFlatBuffers)
@@ -118,14 +118,14 @@ set(MY_FBS_FILES
 
 set(MY_CORE_MSGS
     ${CMAKE_CURRENT_SOURCE_DIR}/core/aabb.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/dataset-indexable.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/dataset_indexable.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/header.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/datatype.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/label-with-instance.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/project-info.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/query-result-project.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/query-result.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/query-tf.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/label_with_instance.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/project_info.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/query_result_project.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/query_result.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/query_tf.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/query.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/timeinterval.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/timestamp.h

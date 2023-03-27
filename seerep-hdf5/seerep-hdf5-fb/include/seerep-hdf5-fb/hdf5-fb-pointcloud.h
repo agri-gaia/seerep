@@ -11,7 +11,7 @@
 #include "seerep-hdf5-fb/hdf5-fb-point-cloud2-iterator.h"
 
 // seerep-msgs
-#include <seerep-msgs/point_cloud_2_generated.h>
+#include <seerep_msgs/point_cloud_2_generated.h>
 
 // seerep-com
 #include <seerep-com/point_cloud_service.grpc.fb.h>

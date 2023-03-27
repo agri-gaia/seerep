@@ -5,7 +5,7 @@
 
 #include "aabb.h"
 #include "header.h"
-#include "label-with-instance.h"
+#include "label_with_instance.h"
 
 namespace seerep_core_msgs
 {

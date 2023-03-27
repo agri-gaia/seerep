@@ -1,10 +1,10 @@
 #ifndef SEEREP_CORE_MSGS_PROJECT_INFO_H_
 #define SEEREP_CORE_MSGS_PROJECT_INFO_H_
 
-#include <geodetic-coordinates.h>
-
-#include <boost/uuid/uuid.hpp>  // uuid class
+#include <boost/uuid/uuid.hpp>
 #include <functional>
+
+#include "geodetic_coordinates.h"
 
 namespace seerep_core_msgs
 {

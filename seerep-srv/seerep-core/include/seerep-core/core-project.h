@@ -8,11 +8,11 @@
 #include <optional>
 
 // seerep-msgs
-#include <seerep-msgs/dataset-indexable.h>
-#include <seerep-msgs/geodetic-coordinates.h>
-#include <seerep-msgs/query-result-project.h>
-#include <seerep-msgs/query-tf.h>
-#include <seerep-msgs/query.h>
+#include <seerep_msgs/dataset_indexable.h>
+#include <seerep_msgs/geodetic_coordinates.h>
+#include <seerep_msgs/query.h>
+#include <seerep_msgs/query_result_project.h>
+#include <seerep_msgs/query_tf.h>
 
 // seerep-hdf5-core
 #include <seerep-hdf5-core/hdf5-core-image.h>

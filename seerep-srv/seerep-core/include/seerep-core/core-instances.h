@@ -7,8 +7,9 @@
 #include "core-instance.h"
 
 // seerep-msgs
-#include <seerep-msgs/datatype.h>
-#include <seerep-msgs/label-with-instance.h>
+#include <seerep_msgs/datatype.h>
+#include <seerep_msgs/label_with_instance.h>
+
 // seerep-hdf5-core
 #include <seerep-hdf5-core/hdf5-core-instance.h>
 

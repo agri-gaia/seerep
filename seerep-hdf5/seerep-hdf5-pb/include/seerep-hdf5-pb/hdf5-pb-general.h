@@ -8,10 +8,10 @@
 #include <seerep-hdf5-core/hdf5-core-general.h>
 
 // seerep-msgs
-#include <seerep-msgs/boundingbox2d_labeled_with_category.pb.h>
-#include <seerep-msgs/boundingbox_labeled_with_category.pb.h>
-#include <seerep-msgs/header.pb.h>
-#include <seerep-msgs/labels_with_instance_with_category.pb.h>
+#include <seerep_msgs/boundingbox2d_labeled_with_category.pb.h>
+#include <seerep_msgs/boundingbox_labeled_with_category.pb.h>
+#include <seerep_msgs/header.pb.h>
+#include <seerep_msgs/labels_with_instance_with_category.pb.h>
 
 // std
 #include <boost/geometry.hpp>

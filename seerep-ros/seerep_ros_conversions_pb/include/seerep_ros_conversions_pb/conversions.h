@@ -11,15 +11,15 @@
 #include <std_msgs/Header.h>
 
 // Seerep proto messages
-#include <seerep-msgs/header.pb.h>
-#include <seerep-msgs/image.pb.h>
-#include <seerep-msgs/point_cloud_2.pb.h>
-#include <seerep-msgs/point_field.pb.h>
-#include <seerep-msgs/pose_stamped.pb.h>
-#include <seerep-msgs/transform.pb.h>
-#include <seerep-msgs/transform_stamped.pb.h>
-#include <seerep-msgs/vector3.pb.h>
-#include <seerep-msgs/vector3_stamped.pb.h>
+#include <seerep_msgs/header.pb.h>
+#include <seerep_msgs/image.pb.h>
+#include <seerep_msgs/point_cloud_2.pb.h>
+#include <seerep_msgs/point_field.pb.h>
+#include <seerep_msgs/pose_stamped.pb.h>
+#include <seerep_msgs/transform.pb.h>
+#include <seerep_msgs/transform_stamped.pb.h>
+#include <seerep_msgs/vector3.pb.h>
+#include <seerep_msgs/vector3_stamped.pb.h>
 
 namespace seerep_ros_conversions_pb
 {

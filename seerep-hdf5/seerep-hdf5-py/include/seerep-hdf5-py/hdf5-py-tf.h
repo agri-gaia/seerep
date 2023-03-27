@@ -9,7 +9,7 @@
 #include "seerep-hdf5-py/hdf5-py-general.h"
 
 // seerep-msgs
-#include <seerep-msgs/transform_stamped.pb.h>
+#include <seerep_msgs/transform_stamped.pb.h>
 
 // std
 #include <boost/geometry.hpp>

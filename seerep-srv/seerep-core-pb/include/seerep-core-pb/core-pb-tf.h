@@ -5,12 +5,15 @@
 #include <optional>
 
 // seerep-msgs
-#include <seerep-msgs/transform_stamped.pb.h>
-#include <seerep-msgs/transform_stamped_query.pb.h>
-// seerep-core-msgs
-#include <seerep-msgs/query-tf.h>
+#include <seerep_msgs/transform_stamped.pb.h>
+#include <seerep_msgs/transform_stamped_query.pb.h>
+
+// seerep_core_msgs
+#include <seerep_msgs/query_tf.h>
+
 // ros
 #include <geometry_msgs/TransformStamped.h>
+
 // seerep-hdf5-pb
 #include <seerep-hdf5-pb/hdf5-pb-tf.h>
 

@@ -8,7 +8,7 @@
 #include "seerep-hdf5-pb/hdf5-pb-general.h"
 
 // seerep-msgs
-#include <seerep-msgs/transform_stamped.pb.h>
+#include <seerep_msgs/transform_stamped.pb.h>
 
 // std
 #include <boost/geometry.hpp>

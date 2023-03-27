@@ -10,7 +10,7 @@
 #include "seerep-hdf5-fb/hdf5-fb-general.h"
 
 // seerep-msgs
-#include <seerep-msgs/image_generated.h>
+#include <seerep_msgs/image_generated.h>
 
 // seerep-com
 #include <seerep-com/image_service.grpc.fb.h>

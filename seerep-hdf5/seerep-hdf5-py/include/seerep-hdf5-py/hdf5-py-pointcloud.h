@@ -9,7 +9,7 @@
 #include "seerep-hdf5-py/hdf5-py-general.h"
 
 // seerep-msgs
-#include "seerep-msgs/point_cloud_2.pb.h"
+#include "seerep_msgs/point_cloud_2.pb.h"
 
 // std
 #include <boost/geometry.hpp>

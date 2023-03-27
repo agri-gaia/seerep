@@ -5,7 +5,7 @@
 #include <boost/geometry/index/rtree.hpp>
 
 // uuid
-#include <boost/uuid/uuid.hpp>  // uuid class
+#include <boost/uuid/uuid.hpp>
 
 namespace bg = boost::geometry;
 namespace bgi = boost::geometry::index;

@@ -5,10 +5,10 @@
 #include <highfive/H5File.hpp>
 
 // seerep-msgs
-#include <seerep-msgs/aabb.h>
-#include <seerep-msgs/dataset-indexable.h>
-#include <seerep-msgs/geodetic-coordinates.h>
-#include <seerep-msgs/labels-with-instance-with-category.h>
+#include <seerep_msgs/aabb.h>
+#include <seerep_msgs/dataset_indexable.h>
+#include <seerep_msgs/geodetic_coordinates.h>
+#include <seerep_msgs/labels_with_instance_with_category.h>
 
 // std
 #include <boost/geometry.hpp>

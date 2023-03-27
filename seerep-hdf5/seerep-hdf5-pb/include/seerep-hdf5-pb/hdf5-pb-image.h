@@ -10,7 +10,7 @@
 #include "seerep-hdf5-pb/hdf5-pb-general.h"
 
 // seerep-msgs
-#include <seerep-msgs/image.pb.h>
+#include <seerep_msgs/image.pb.h>
 
 // std
 #include <boost/geometry.hpp>

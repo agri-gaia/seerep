@@ -7,15 +7,18 @@
 #include "core-fb-conversion.h"
 #include "core-fb-general.h"
 
-// seerep-msgs
-#include <seerep-msgs/attributes_stamped_generated.h>
-#include <seerep-msgs/point_stamped_generated.h>
-#include <seerep-msgs/query_generated.h>
-// seerep-core-msgs
-#include <seerep-msgs/query-result.h>
-#include <seerep-msgs/query.h>
+// seerep_msgs
+#include <seerep_msgs/attributes_stamped_generated.h>
+#include <seerep_msgs/point_stamped_generated.h>
+#include <seerep_msgs/query_generated.h>
+
+// seerep_core_msgs
+#include <seerep_msgs/query.h>
+#include <seerep_msgs/query_result.h>
+
 // seerep-hdf5-fb
 #include <seerep-hdf5-fb/hdf5-fb-point.h>
+
 // seerep-core
 #include <seerep-core/core.h>
 

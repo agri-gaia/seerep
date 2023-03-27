@@ -1,9 +1,9 @@
 @PACKAGE_INIT@
 
 set(SeerepMsgs_INCLUDE_DIRS @PACKAGE_CMAKE_INSTALL_INCLUDEDIR@)
-list(APPEND SeerepMsgs_INCLUDE_DIRS @PACKAGE_CMAKE_INSTALL_INCLUDEDIR@/seerep-msgs)
-if(EXISTS seerep-msgs)
-  list(APPEND SeerepMsgs_INCLUDE_DIRS seerep-msgs)
+list(APPEND SeerepMsgs_INCLUDE_DIRS @PACKAGE_CMAKE_INSTALL_INCLUDEDIR@/seerep_msgs)
+if(EXISTS seerep_msgs)
+  list(APPEND SeerepMsgs_INCLUDE_DIRS seerep_msgs)
 endif()
 
 set(SeerepMsgs_PROTOBUF_IMPORT_DIRS @PACKAGE_PROTOBUF_IMPORT_DIR@)

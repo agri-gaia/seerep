@@ -90,7 +90,7 @@ add_custom_command(
   COMMAND bash -c "mkdir -p fbs/seerep/pb && mv *_pb2*.py fbs/seerep/pb"
   COMMAND bash -c
           "touch fbs/seerep/pb/__init__.py && touch fbs/seerep/__init__.py"
-  COMMAND bash -c "cp -r ../seerep-msgs/protos/seerep/pb fbs/seerep"
+  COMMAND bash -c "cp -r ../seerep_msgs/protos/seerep/pb fbs/seerep"
   VERBATIM
 )
 

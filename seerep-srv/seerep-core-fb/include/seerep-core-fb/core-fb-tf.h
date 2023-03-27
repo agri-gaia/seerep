@@ -8,12 +8,15 @@
 #include "core-fb-general.h"
 
 // seerep-msgs
-#include <seerep-msgs/transform_stamped_generated.h>
-#include <seerep-msgs/transform_stamped_query_generated.h>
-// seerep-core-msgs
-#include <seerep-msgs/query-tf.h>
+#include <seerep_msgs/transform_stamped_generated.h>
+#include <seerep_msgs/transform_stamped_query_generated.h>
+
+// seerep_core_msgs
+#include <seerep_msgs/query_tf.h>
+
 // ros
 #include <geometry_msgs/TransformStamped.h>
+
 // seerep-hdf5-fb
 #include <seerep-hdf5-fb/hdf5-fb-tf.h>
 
@@ -26,6 +29,7 @@
 // logging
 #include <boost/log/sources/severity_logger.hpp>
 #include <boost/log/trivial.hpp>
+
 namespace seerep_core_fb
 {
 /**

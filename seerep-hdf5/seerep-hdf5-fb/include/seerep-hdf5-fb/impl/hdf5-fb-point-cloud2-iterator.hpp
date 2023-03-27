@@ -32,8 +32,8 @@
 #ifndef seerep_hdf5_fb__IMPL__POINT_CLOUD2_ITERATOR_HPP_
 #define seerep_hdf5_fb__IMPL__POINT_CLOUD2_ITERATOR_HPP_
 
-#include <seerep-msgs/point_cloud_2_generated.h>
-#include <seerep-msgs/point_field_generated.h>
+#include <seerep_msgs/point_cloud_2_generated.h>
+#include <seerep_msgs/point_field_generated.h>
 
 #include <cstdarg>
 #include <sstream>

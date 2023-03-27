@@ -7,13 +7,12 @@
 #include "core-fb-conversion.h"
 
 // seerep-msgs
-#include <seerep-msgs/query_instance_generated.h>
-#include <seerep-msgs/uuids_per_project_generated.h>
+#include <seerep_msgs/query_instance_generated.h>
+#include <seerep_msgs/uuids_per_project_generated.h>
+
 // seerep-core-msgs
-#include <seerep-msgs/query-result.h>
-#include <seerep-msgs/query.h>
-// seerep-hdf5-fb
-//
+#include <seerep_msgs/query.h>
+#include <seerep_msgs/query_result.h>
 
 // seerep-core
 #include <seerep-core/core.h>

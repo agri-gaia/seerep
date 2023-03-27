@@ -6,10 +6,10 @@
 #include <optional>
 
 // seerep-msgs
-#include <seerep-msgs/aabb.h>
-#include <seerep-msgs/datatype.h>
-#include <seerep-msgs/query-result.h>
-#include <seerep-msgs/query.h>
+#include <seerep_msgs/aabb.h>
+#include <seerep_msgs/datatype.h>
+#include <seerep_msgs/query.h>
+
 // seerep-hdf5-core
 #include <seerep-hdf5-core/hdf5-core-datatype-interface.h>
 // seerep-core

@@ -11,11 +11,11 @@
 #include <optional>
 
 // seerep-msgs
-#include <seerep-msgs/dataset-indexable.h>
-#include <seerep-msgs/project-info.h>
-#include <seerep-msgs/query-result.h>
-#include <seerep-msgs/query-tf.h>
-#include <seerep-msgs/query.h>
+#include <seerep_msgs/dataset_indexable.h>
+#include <seerep_msgs/project_info.h>
+#include <seerep_msgs/query.h>
+#include <seerep_msgs/query_result.h>
+#include <seerep_msgs/query_tf.h>
 
 // ros-msgs (tf)
 #include <geometry_msgs/TransformStamped.h>

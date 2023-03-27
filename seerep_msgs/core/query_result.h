@@ -4,7 +4,7 @@
 #include <functional>
 
 #include "datatype.h"
-#include "query-result-project.h"
+#include "query_result_project.h"
 
 namespace seerep_core_msgs
 {

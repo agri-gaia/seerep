@@ -12,18 +12,18 @@
 #include <vision_msgs/Detection2DArray.h>
 
 // seerep flatbuffer messages
-#include <seerep-msgs/boundingbox2d_labeled_generated.h>
-#include <seerep-msgs/boundingbox2d_labeled_with_category_generated.h>
-#include <seerep-msgs/boundingboxes2d_labeled_stamped_generated.h>
-#include <seerep-msgs/header_generated.h>
-#include <seerep-msgs/image_generated.h>
-#include <seerep-msgs/point_cloud_2_generated.h>
-#include <seerep-msgs/point_field_generated.h>
-#include <seerep-msgs/pose_stamped_generated.h>
-#include <seerep-msgs/transform_generated.h>
-#include <seerep-msgs/transform_stamped_generated.h>
-#include <seerep-msgs/vector3_generated.h>
-#include <seerep-msgs/vector3_stamped_generated.h>
+#include <seerep_msgs/boundingbox2d_labeled_generated.h>
+#include <seerep_msgs/boundingbox2d_labeled_with_category_generated.h>
+#include <seerep_msgs/boundingboxes2d_labeled_stamped_generated.h>
+#include <seerep_msgs/header_generated.h>
+#include <seerep_msgs/image_generated.h>
+#include <seerep_msgs/point_cloud_2_generated.h>
+#include <seerep_msgs/point_field_generated.h>
+#include <seerep_msgs/pose_stamped_generated.h>
+#include <seerep_msgs/transform_generated.h>
+#include <seerep_msgs/transform_stamped_generated.h>
+#include <seerep_msgs/vector3_generated.h>
+#include <seerep_msgs/vector3_stamped_generated.h>
 
 // grpc / flatbuffer
 #include <flatbuffers/grpc.h>

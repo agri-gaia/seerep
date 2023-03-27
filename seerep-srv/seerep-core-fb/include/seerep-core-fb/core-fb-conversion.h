@@ -7,21 +7,24 @@
 // grpc / flatbuffer
 #include <flatbuffers/flatbuffers.h>
 #include <flatbuffers/grpc.h>
-// seerep-msgs
-#include <seerep-msgs/datatype_generated.h>
-#include <seerep-msgs/image_generated.h>
-#include <seerep-msgs/point_cloud_2_generated.h>
-#include <seerep-msgs/point_stamped_generated.h>
-#include <seerep-msgs/query_generated.h>
-#include <seerep-msgs/query_instance_generated.h>
-#include <seerep-msgs/transform_stamped_generated.h>
-#include <seerep-msgs/transform_stamped_query_generated.h>
-#include <seerep-msgs/uuids_per_project_generated.h>
-// seerep-core-msgs
-#include <seerep-msgs/dataset-indexable.h>
-#include <seerep-msgs/query-result.h>
-#include <seerep-msgs/query-tf.h>
-#include <seerep-msgs/query.h>
+
+// seerep_msgs
+#include <seerep_msgs/datatype_generated.h>
+#include <seerep_msgs/image_generated.h>
+#include <seerep_msgs/point_cloud_2_generated.h>
+#include <seerep_msgs/point_stamped_generated.h>
+#include <seerep_msgs/query_generated.h>
+#include <seerep_msgs/query_instance_generated.h>
+#include <seerep_msgs/transform_stamped_generated.h>
+#include <seerep_msgs/transform_stamped_query_generated.h>
+#include <seerep_msgs/uuids_per_project_generated.h>
+
+// seerep_core_msgs
+#include <seerep_msgs/dataset_indexable.h>
+#include <seerep_msgs/query.h>
+#include <seerep_msgs/query_result.h>
+#include <seerep_msgs/query_tf.h>
+
 // ros
 #include <geometry_msgs/TransformStamped.h>
 

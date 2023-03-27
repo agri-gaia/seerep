@@ -5,13 +5,16 @@
 #include <optional>
 
 // seerep-msgs
-#include <seerep-msgs/point_cloud_2.pb.h>
-#include <seerep-msgs/query.pb.h>
-// seerep-core-msgs
-#include <seerep-msgs/query-result.h>
-#include <seerep-msgs/query.h>
+#include <seerep_msgs/point_cloud_2.pb.h>
+#include <seerep_msgs/query.pb.h>
+
+// seerep_core_msgs
+#include <seerep_msgs/query.h>
+#include <seerep_msgs/query_result.h>
+
 // seerep-hdf5-pb
 #include <seerep-hdf5-pb/hdf5-pb-pointcloud.h>
+
 // seerep-core
 #include <seerep-core/core.h>
 

@@ -6,9 +6,9 @@
 #include <optional>
 
 // seerep-msgs
-#include <seerep-msgs/aabb.h>
-#include <seerep-msgs/query-tf.h>
-#include <seerep-msgs/query.h>
+#include <seerep_msgs/aabb.h>
+#include <seerep_msgs/query.h>
+#include <seerep_msgs/query_tf.h>
 // ros-msgs (tf)
 #include <geometry_msgs/TransformStamped.h>
 

@@ -9,7 +9,7 @@
 #include <seerep-hdf5-fb/hdf5-fb-general.h>
 
 // seerep-msgs
-#include <seerep-msgs/transform_stamped_generated.h>
+#include <seerep_msgs/transform_stamped_generated.h>
 
 // std
 #include <boost/geometry.hpp>
