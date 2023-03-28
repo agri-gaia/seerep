@@ -177,6 +177,6 @@ public:
 };
 }  // namespace seerep_hdf5_fb
 
-#include "impl/hdf5-fb-point-cloud2-iterator.hpp"  // NOLINT
+#include "impl/hdf5_fb_point_cloud2_iterator.hpp"  // NOLINT
 
 #endif  // SENSOR_MSGS__POINT_CLOUD2_ITERATOR_FB_HPP_

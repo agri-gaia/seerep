@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(seerep-hdf5-fb VERSION 0.1)
+project(seerep_hdf5_fb VERSION 0.1)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -42,11 +42,11 @@ include_directories(
 
 add_library(
   seerephdf5fb
-  src/hdf5-fb-general.cpp
-  src/hdf5-fb-tf.cpp
-  src/hdf5-fb-image.cpp
-  src/hdf5-fb-pointcloud.cpp
-  src/hdf5-fb-point.cpp
+  src/hdf5_fb_general.cpp
+  src/hdf5_fb_tf.cpp
+  src/hdf5_fb_image.cpp
+  src/hdf5_fb_pointcloud.cpp
+  src/hdf5_fb_point.cpp
 )
 
 target_link_libraries(
@@ -62,14 +62,14 @@ target_link_libraries(
 )
 
 # create executable with tests
-add_executable(flatbuffer-write-load-test test/fb-write-load-test.cpp)
+add_executable(flatbuffer_write_load_test test/fb_write_load_test.cpp)
 add_dependencies(
-  flatbuffer-write-load-test ${${PROJECT_NAME}_EXPORTED_TARGETS}
+  flatbuffer_write_load_test ${${PROJECT_NAME}_EXPORTED_TARGETS}
   ${catkin_EXPORTED_TARGETS}
 )
 
 target_link_libraries(
-  flatbuffer-write-load-test
+  flatbuffer_write_load_test
   GTest::gtest
   GTest::gtest_main
   gmock_main
@@ -78,14 +78,14 @@ target_link_libraries(
   gRPC::grpc++_reflection
   seerephdf5fb
 )
-add_test(flatbuffer-write-load-test flatbuffer-write-load-test)
+add_test(flatbuffer_write_load_test flatbuffer_write_load_test)
 
 set(CMAKE_INSTALL_INCLUDEDIR include)
 set(CMAKE_INSTALL_LIBDIR lib)
 set(CMAKE_INSTALL_BINDIR bin)
 
 install(
-  TARGETS flatbuffer-write-load-test
+  TARGETS flatbuffer_write_load_test
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
   PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
@@ -124,7 +124,7 @@ install(FILES "${PROJECT_BINARY_DIR}/SeerepHdf5FbConfig.h"
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
 )
 
-install(DIRECTORY include/seerep-hdf5-fb
+install(DIRECTORY include/seerep_hdf5_fb
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 

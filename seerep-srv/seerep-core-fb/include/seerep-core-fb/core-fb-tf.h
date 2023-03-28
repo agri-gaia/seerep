@@ -17,8 +17,8 @@
 // ros
 #include <geometry_msgs/TransformStamped.h>
 
-// seerep-hdf5-fb
-#include <seerep-hdf5-fb/hdf5-fb-tf.h>
+// seerep_hdf5_fb
+#include <seerep_hdf5_fb/hdf5_fb_tf.h>
 
 // seerep-conversion
 #include <seerep_ros_conversions_fb/conversions.h>

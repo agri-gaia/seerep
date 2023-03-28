@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>seerep-hdf5-fb</name>
+  <name>seerep_hdf5_fb</name>
   <version>0.0.1</version>
-  <description> The seerep hdf5 flatbuffers package </description>
+  <description>
+    Interface for saving SEEREPs flatbuffer messages in HDF5
+  </description>
 
   <maintainer email="mark.niemeyer@dfki.de">Mark Niemeyer</maintainer>
   <maintainer email="spuetz@uos.de">Sebastian Pütz</maintainer>
 
-  <license>BSD-3</license>
-
-  <url type="website">TODO</url>
+  <license>BSD-3-Clause</license>
 
   <author email="mark.niemeyer@dfki.de">Mark Niemeyer</author>
   <author email="spuetz@uos.de">Sebastian Pütz</author>
@@ -17,6 +17,7 @@
   <depend>seerep_msgs</depend>
   <depend>seerep_com</depend>
   <depend>seerep_hdf5_core</depend>
+
   <buildtool_depend>cmake</buildtool_depend>
 
   <export>

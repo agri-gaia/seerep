@@ -7,7 +7,7 @@
 // seerep_hdf5
 #include <seerep_hdf5_core/hdf5_core_image.h>
 
-#include "seerep-hdf5-fb/hdf5-fb-general.h"
+#include "hdf5_fb_general.h"
 
 // seerep-msgs
 #include <seerep_msgs/image_generated.h>

@@ -7,13 +7,13 @@
 // seerep_hdf5
 #include <seerep_hdf5_core/hdf5_core_point_cloud.h>
 
-#include "seerep-hdf5-fb/hdf5-fb-general.h"
-#include "seerep-hdf5-fb/hdf5-fb-point-cloud2-iterator.h"
+#include "hdf5_fb_general.h"
+#include "hdf5_fb_point_cloud2_iterator.h"
 
-// seerep-msgs
+// seerep_msgs
 #include <seerep_msgs/point_cloud_2_generated.h>
 
-// seerep-com
+// seerep_com
 #include <seerep_com/point_cloud_service.grpc.fb.h>
 
 // std

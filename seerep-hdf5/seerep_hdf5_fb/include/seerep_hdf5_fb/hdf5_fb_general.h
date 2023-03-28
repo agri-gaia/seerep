@@ -4,7 +4,7 @@
 // highfive
 #include <highfive/H5File.hpp>
 
-// seerep_hdf5
+// seerep_hdf5_core
 #include <seerep_hdf5_core/hdf5_core_general.h>
 
 // seerep-msgs
@@ -184,6 +184,6 @@ protected:
 
 }  // namespace seerep_hdf5_fb
 
-#include "impl/hdf5-fb-general.hpp"  // NOLINT
+#include "impl/hdf5_fb_general.hpp"  // NOLINT
 
 #endif /* SEEREP_HDF5_FB_GENERAL_H_ */

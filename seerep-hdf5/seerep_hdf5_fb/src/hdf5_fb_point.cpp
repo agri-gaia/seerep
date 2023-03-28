@@ -1,4 +1,4 @@
-#include "seerep-hdf5-fb/hdf5-fb-point.h"
+#include "seerep_hdf5_fb/hdf5_fb_point.h"
 
 #include <highfive/H5DataSet.hpp>
 

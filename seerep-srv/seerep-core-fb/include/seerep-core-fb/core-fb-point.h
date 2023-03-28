@@ -16,8 +16,8 @@
 #include <seerep_msgs/query.h>
 #include <seerep_msgs/query_result.h>
 
-// seerep-hdf5-fb
-#include <seerep-hdf5-fb/hdf5-fb-point.h>
+// seerep_hdf5_fb
+#include <seerep_hdf5_fb/hdf5_fb_point.h>
 
 // seerep-core
 #include <seerep-core/core.h>

@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <seerep-hdf5-fb/hdf5-fb-image.h>
+#include <seerep_hdf5_fb/hdf5_fb_image.h>
 
 #include <H5File.hpp>
 #include <boost/uuid/uuid.hpp>
