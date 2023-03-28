@@ -2,9 +2,9 @@
 #define SEEREP_SERVER_FB_IMAGE_SERVICE_H_
 
 // seerep
-#include <seerep-com/image_service.grpc.fb.h>
 #include <seerep-core-fb/core-fb-image.h>
 #include <seerep-core/core.h>
+#include <seerep_com/image_service.grpc.fb.h>
 
 #include "util.hpp"
 

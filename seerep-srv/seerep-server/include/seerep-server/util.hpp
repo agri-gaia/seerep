@@ -1,8 +1,8 @@
 #ifndef SEEREP_SERVER_UTIL_H_
 #define SEEREP_SERVER_UTIL_H_
 
-#include <seerep-com/image_service.grpc.fb.h>
-#include <seerep-com/point-cloud-service.grpc.pb.h>
+#include <seerep_com/image_service.grpc.fb.h>
+#include <seerep_com/point_cloud_service.grpc.pb.h>
 
 namespace seerep_server_util
 {

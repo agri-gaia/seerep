@@ -6,18 +6,18 @@
 #include <string>
 
 // seerep-pb
-#include <seerep-com/image-service.grpc.pb.h>
-#include <seerep-com/meta-operations.grpc.pb.h>
-#include <seerep-com/point-cloud-service.grpc.pb.h>
-#include <seerep-com/tf-service.grpc.pb.h>
-#include <seerep-com/transfer-sensor-msgs.grpc.pb.h>
+#include <seerep_com/image_service.grpc.pb.h>
+#include <seerep_com/meta_operations.grpc.pb.h>
+#include <seerep_com/point_cloud_service.grpc.pb.h>
+#include <seerep_com/tf_service.grpc.pb.h>
+#include <seerep_com/transfer_sensor_msgs.grpc.pb.h>
 
 // seerep-fb
-#include <seerep-com/image_service.grpc.fb.h>
-#include <seerep-com/meta_operations.grpc.fb.h>
-#include <seerep-com/tf_service.grpc.fb.h>
+#include <seerep_com/image_service.grpc.fb.h>
+#include <seerep_com/meta_operations.grpc.fb.h>
+#include <seerep_com/tf_service.grpc.fb.h>
 
-// seerep-com
+// seerep_com
 #include <seerep_ros_conversions_pb/conversions.h>
 
 // Supported ROS message types

@@ -235,7 +235,7 @@ install(
   PATTERN "*.ts"
 )
 
-set(SEEREP_COM_DIR_FB ${CMAKE_CURRENT_BINARY_DIR}/../seerep-com/fbs)
+set(SEEREP_COM_DIR_FB ${CMAKE_CURRENT_BINARY_DIR}/../seerep_com/fbs)
 
 install(
   FILES ${MY_FBS_FILES}/

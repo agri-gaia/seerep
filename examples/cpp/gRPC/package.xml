@@ -15,7 +15,7 @@
   <author email="mark.niemeyer@dfki.de">Mark Niemeyer</author>
 
   <depend>seerep_msgs</depend>
-  <depend>seerep-com</depend>
+  <depend>seerep_com</depend>
   <buildtool_depend>cmake</buildtool_depend>
 
   <export>

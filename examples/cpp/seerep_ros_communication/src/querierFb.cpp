@@ -6,7 +6,7 @@
 #include <grpcpp/security/credentials.h>
 
 // seerep
-#include <seerep-com/meta_operations.grpc.fb.h>
+#include <seerep_com/meta_operations.grpc.fb.h>
 
 int main(void)
 {

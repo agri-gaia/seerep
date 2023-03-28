@@ -9,7 +9,7 @@
 #include <seerep-hdf5-fb/hdf5-fb-general.h>
 
 // seerep-com
-#include <seerep-com/point_service.grpc.fb.h>
+#include <seerep_com/point_service.grpc.fb.h>
 
 // std
 #include <flatbuffers/grpc.h>

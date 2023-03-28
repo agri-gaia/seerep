@@ -2,8 +2,8 @@
 #define SEEREP_SERVER_FB_META_OPERATIONS_H_
 
 // seerep
-#include <seerep-com/meta_operations.grpc.fb.h>
 #include <seerep-core/core.h>
+#include <seerep_com/meta_operations.grpc.fb.h>
 
 // logging
 #include <boost/log/sources/severity_logger.hpp>

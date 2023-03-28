@@ -2,9 +2,9 @@
 #define SEEREP_SERVER_FB_INSTANCE_SERVICE_H_
 
 // seerep
-#include <seerep-com/instance_service.grpc.fb.h>
 #include <seerep-core-fb/core-fb-instance.h>
 #include <seerep-core/core.h>
+#include <seerep_com/instance_service.grpc.fb.h>
 
 // logging
 #include <boost/log/sources/severity_logger.hpp>
