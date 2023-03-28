@@ -15,7 +15,7 @@
   <author email="spuetz@uos.de">Sebastian Pütz</author>
 
   <depend>seerep_msgs</depend>
-  <depend>seerep-hdf5-core</depend>
+  <depend>seerep_hdf5_core</depend>
   <buildtool_depend>cmake</buildtool_depend>
 
   <export>

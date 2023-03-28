@@ -4,8 +4,8 @@
 // highfive
 #include <highfive/H5File.hpp>
 
-// seerep-hdf5
-#include <seerep-hdf5-core/hdf5-core-point-cloud.h>
+// seerep_hdf5
+#include <seerep_hdf5_core/hdf5_core_point_cloud.h>
 
 #include "seerep-hdf5-fb/hdf5-fb-general.h"
 #include "seerep-hdf5-fb/hdf5-fb-point-cloud2-iterator.h"

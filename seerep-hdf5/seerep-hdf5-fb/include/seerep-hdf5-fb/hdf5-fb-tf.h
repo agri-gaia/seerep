@@ -5,8 +5,8 @@
 #include <highfive/H5File.hpp>
 
 // seerep-hdf5
-#include <seerep-hdf5-core/hdf5-core-tf.h>
 #include <seerep-hdf5-fb/hdf5-fb-general.h>
+#include <seerep_hdf5_core/hdf5_core_tf.h>
 
 // seerep-msgs
 #include <seerep_msgs/transform_stamped_generated.h>

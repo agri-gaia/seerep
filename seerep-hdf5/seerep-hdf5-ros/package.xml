@@ -14,7 +14,7 @@
   <depend>sensor_msgs</depend>
   <depend>std_msgs</depend>
   <depend>geometry_msgs</depend>
-  <depend>seerep-hdf5-core</depend>
+  <depend>seerep_hdf5_core</depend>
 
   <buildtool_depend>catkin</buildtool_depend>
 </package>

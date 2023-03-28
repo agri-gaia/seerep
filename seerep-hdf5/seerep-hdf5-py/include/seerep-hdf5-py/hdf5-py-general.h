@@ -4,8 +4,8 @@
 // highfive
 #include <highfive/H5File.hpp>
 
-// seerep-hdf5
-#include <seerep-hdf5-core/hdf5-core-general.h>
+// seerep_hdf5
+#include <seerep_hdf5_core/hdf5_core_general.h>
 
 // std
 #include <boost/geometry.hpp>

@@ -1,4 +1,4 @@
-#include "seerep-hdf5-core/hdf5-core-point-cloud.h"
+#include "seerep_hdf5_core/hdf5_core_point_cloud.h"
 
 #include <highfive/H5DataSet.hpp>
 

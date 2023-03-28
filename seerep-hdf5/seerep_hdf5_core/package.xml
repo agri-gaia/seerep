@@ -1,19 +1,20 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>seerep-hdf5-core</name>
+  <name>seerep_hdf5_core</name>
   <version>0.0.1</version>
-  <description> The seerep hdf5 core package </description>
+  <description>
+    Common implementations for the SEEREP HDF5 interface
+  </description>
 
   <maintainer email="mark.niemeyer@dfki.de">Mark Niemeyer</maintainer>
 
-  <license>BSD-3</license>
-
-  <url type="website">TODO</url>
+  <license>BSD-3-Clause</license>
 
   <author email="mark.niemeyer@dfki.de">Mark Niemeyer</author>
 
   <depend>seerep_msgs</depend>
   <depend>geometry_msgs</depend>
+
   <buildtool_depend>cmake</buildtool_depend>
 
   <export>

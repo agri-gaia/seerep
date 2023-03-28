@@ -14,12 +14,12 @@
 #include <seerep_msgs/query_result_project.h>
 #include <seerep_msgs/query_tf.h>
 
-// seerep-hdf5-core
-#include <seerep-hdf5-core/hdf5-core-image.h>
-#include <seerep-hdf5-core/hdf5-core-instance.h>
-#include <seerep-hdf5-core/hdf5-core-point-cloud.h>
-#include <seerep-hdf5-core/hdf5-core-point.h>
-#include <seerep-hdf5-core/hdf5-core-tf.h>
+// seerep_hdf5_core
+#include <seerep_hdf5_core/hdf5_core_image.h>
+#include <seerep_hdf5_core/hdf5_core_instance.h>
+#include <seerep_hdf5_core/hdf5_core_point.h>
+#include <seerep_hdf5_core/hdf5_core_point_cloud.h>
+#include <seerep_hdf5_core/hdf5_core_tf.h>
 
 // seerep-core
 #include "core-dataset.h"

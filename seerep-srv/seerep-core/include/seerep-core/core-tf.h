@@ -12,8 +12,8 @@
 // ros-msgs (tf)
 #include <geometry_msgs/TransformStamped.h>
 
-// seerep-hdf5-core
-#include <seerep-hdf5-core/hdf5-core-tf.h>
+// seerep_hdf5_core
+#include <seerep_hdf5_core/hdf5_core_tf.h>
 
 // ros tf2
 #include <ros/time.h>

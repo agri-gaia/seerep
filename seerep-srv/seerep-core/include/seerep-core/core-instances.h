@@ -10,8 +10,8 @@
 #include <seerep_msgs/datatype.h>
 #include <seerep_msgs/label_with_instance.h>
 
-// seerep-hdf5-core
-#include <seerep-hdf5-core/hdf5-core-instance.h>
+// seerep_hdf5_core
+#include <seerep_hdf5_core/hdf5_core_instance.h>
 
 // uuid
 #include <boost/functional/hash.hpp>

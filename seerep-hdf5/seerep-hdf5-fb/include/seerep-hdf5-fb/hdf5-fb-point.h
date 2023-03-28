@@ -5,8 +5,8 @@
 #include <highfive/H5File.hpp>
 
 // seerep-hdf5
-#include <seerep-hdf5-core/hdf5-core-point.h>
 #include <seerep-hdf5-fb/hdf5-fb-general.h>
+#include <seerep_hdf5_core/hdf5_core_point.h>
 
 // seerep-com
 #include <seerep_com/point_service.grpc.fb.h>

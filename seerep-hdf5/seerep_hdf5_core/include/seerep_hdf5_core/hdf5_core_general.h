@@ -26,6 +26,7 @@
 #include <boost/uuid/uuid.hpp>             // uuid class
 #include <boost/uuid/uuid_generators.hpp>  // generators
 #include <boost/uuid/uuid_io.hpp>          // streaming operators etc.
+
 namespace seerep_hdf5_core
 {
 class Hdf5CoreGeneral
@@ -244,6 +245,6 @@ protected:
 
 }  // namespace seerep_hdf5_core
 
-#include "impl/hdf5-core-general.hpp"  // NOLINT
+#include "impl/hdf5_core_general.hpp"  // NOLINT
 
 #endif /* SEEREP_HDF5_HDF5_GENERAL_CORE_H_ */

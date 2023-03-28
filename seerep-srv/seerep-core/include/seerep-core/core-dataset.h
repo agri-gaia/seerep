@@ -10,11 +10,12 @@
 #include <seerep_msgs/datatype.h>
 #include <seerep_msgs/query.h>
 
-// seerep-hdf5-core
-#include <seerep-hdf5-core/hdf5-core-datatype-interface.h>
-// seerep-core
-#include "core-instances.h"
-#include "core-tf.h"
+// seerep_hdf5_core
+#include <seerep_hdf5_core/hdf5_core_datatype_interface.h>
+
+// seerep_core
+#include <seerep_core/core_instances.h>
+#include <seerep_core/core_tf.h>
 
 // uuid
 #include <boost/functional/hash.hpp>

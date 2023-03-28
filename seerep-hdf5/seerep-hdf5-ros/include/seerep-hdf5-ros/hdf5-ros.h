@@ -19,7 +19,7 @@
 #include "std_msgs/Header.h"
 
 // Seerep
-#include "seerep-hdf5-core/hdf5-core-general.h"
+#include "seerep_hdf5_core/hdf5_core_general.h"
 
 namespace seerep_hdf5_ros
 {

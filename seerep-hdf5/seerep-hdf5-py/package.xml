@@ -16,7 +16,7 @@
   <author email="malte.kleine_piening@dfki.de">Malte kleine Piening</author>
 
   <depend>seerep_msgs</depend>
-  <depend>seerep-hdf5-core</depend>
+  <depend>seerep_hdf5_core</depend>
   <depend>pybind11_catkin</depend>
   <buildtool_depend>cmake</buildtool_depend>
 

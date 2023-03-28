@@ -1,4 +1,4 @@
-#include "seerep-hdf5-core/hdf5-core-tf.h"
+#include "seerep_hdf5_core/hdf5_core_tf.h"
 
 #include <highfive/H5DataSet.hpp>
 

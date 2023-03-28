@@ -4,9 +4,9 @@
 // highfive
 #include <highfive/H5File.hpp>
 
-// seerep-hdf5
-#include "seerep-hdf5-core/hdf5-core-datatype-interface.h"
-#include "seerep-hdf5-core/hdf5-core-general.h"
+// seerep_hdf5_core
+#include "hdf5_core_datatype_interface.h"
+#include "hdf5_core_general.h"
 
 // seerep-msgs
 #include <seerep_msgs/dataset_indexable.h>

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(seerep-hdf5-core VERSION 0.1)
+project(seerep_hdf5_core VERSION 0.1)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -38,12 +38,12 @@ include_directories(
 
 add_library(
   seerephdf5core
-  src/hdf5-core-general.cpp
-  src/hdf5-core-image.cpp
-  src/hdf5-core-instance.cpp
-  src/hdf5-core-point-cloud.cpp
-  src/hdf5-core-point.cpp
-  src/hdf5-core-tf.cpp
+  src/hdf5_core_general.cpp
+  src/hdf5_core_image.cpp
+  src/hdf5_core_instance.cpp
+  src/hdf5_core_point_cloud.cpp
+  src/hdf5_core_point.cpp
+  src/hdf5_core_tf.cpp
 )
 
 target_link_libraries(
@@ -94,7 +94,7 @@ install(FILES "${PROJECT_BINARY_DIR}/SeerepHdf5CoreConfig.h"
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
 )
 
-install(DIRECTORY include/seerep-hdf5-core
+install(DIRECTORY include/seerep_hdf5_core
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 

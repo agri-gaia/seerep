@@ -16,7 +16,7 @@
 
   <depend>seerep_msgs</depend>
   <depend>seerep_com</depend>
-  <depend>seerep-hdf5-core</depend>
+  <depend>seerep_hdf5_core</depend>
   <buildtool_depend>cmake</buildtool_depend>
 
   <export>
