@@ -41,7 +41,7 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_library(${PROJECT_NAME} src/hdf5-ros.cpp)
+add_library(${PROJECT_NAME} src/hdf5_ros.cpp)
 
 target_link_libraries(
   ${PROJECT_NAME}
@@ -64,7 +64,7 @@ install(
 )
 
 install(
-  DIRECTORY include/seerep-hdf5-ros
+  DIRECTORY include/seerep_hdf5_ros
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
   FILES_MATCHING
   PATTERN "*.h"

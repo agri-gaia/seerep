@@ -1,4 +1,4 @@
-#include "seerep-hdf5-ros/hdf5-ros.h"
+#include "seerep_hdf5_ros/hdf5_ros.h"
 
 namespace seerep_hdf5_ros
 {

@@ -15,7 +15,7 @@
 #include <boost/uuid/uuid_generators.hpp>
 
 // seerep
-#include "seerep-hdf5-ros/hdf5-ros.h"
+#include "seerep_hdf5_ros/hdf5_ros.h"
 
 namespace seerep_ros_examples
 {
