@@ -1,4 +1,4 @@
-#include "seerep-core-fb/core-fb-point.h"
+#include "seerep_core_fb/core_fb_point.h"
 
 namespace seerep_core_fb
 {

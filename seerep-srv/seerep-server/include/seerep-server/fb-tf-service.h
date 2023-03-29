@@ -2,9 +2,9 @@
 #define SEEREP_SERVER_FB_TF_SERVICE_H_
 
 // seerep
-#include <seerep-core-fb/core-fb-tf.h>
 #include <seerep_com/tf_service.grpc.fb.h>
 #include <seerep_core/core.h>
+#include <seerep_core_fb/core_fb_tf.h>
 
 #include "util.hpp"
 

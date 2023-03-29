@@ -1,4 +1,4 @@
-#include "seerep-core-fb/core-fb-conversion.h"
+#include "seerep_core_fb/core_fb_conversion.h"
 
 namespace seerep_core_fb
 {

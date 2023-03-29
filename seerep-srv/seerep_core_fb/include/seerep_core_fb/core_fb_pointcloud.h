@@ -1,8 +1,9 @@
 #ifndef SEEREP_CORE_FB_POINTCLOUD_H_
 #define SEEREP_CORE_FB_POINTCLOUD_H_
 
-#include "core-fb-conversion.h"
-#include "core-fb-general.h"
+// seerep_core_fb
+#include "core_fb_conversion.h"
+#include "core_fb_general.h"
 
 // seerep_msgs
 #include <seerep_msgs/point_cloud_2_generated.h>

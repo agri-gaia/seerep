@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(seerep-core-fb VERSION 0.1)
+project(seerep_core_fb VERSION 0.1)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -47,12 +47,12 @@ include_directories(
 
 add_library(
   seerepcorefb
-  src/core-fb-conversion.cpp
-  src/core-fb-image.cpp
-  src/core-fb-instance.cpp
-  src/core-fb-point.cpp
-  src/core-fb-tf.cpp
-  src/core-fb-pointcloud.cpp
+  src/core_fb_conversion.cpp
+  src/core_fb_image.cpp
+  src/core_fb_instance.cpp
+  src/core_fb_point.cpp
+  src/core_fb_tf.cpp
+  src/core_fb_pointcloud.cpp
 )
 
 target_link_libraries(
@@ -101,7 +101,7 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/SeerepCoreFbConfig.cmake
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/seerepcorefb
 )
 
-install(DIRECTORY include/seerep-core-fb
+install(DIRECTORY include/seerep_core_fb
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 

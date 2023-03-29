@@ -2,9 +2,9 @@
 #define SEEREP_SERVER_FB_POINT_SERVICE_H_
 
 // seerep
-#include <seerep-core-fb/core-fb-point.h>
 #include <seerep_com/point_service.grpc.fb.h>
 #include <seerep_core/core.h>
+#include <seerep_core_fb/core_fb_point.h>
 
 #include "util.hpp"
 

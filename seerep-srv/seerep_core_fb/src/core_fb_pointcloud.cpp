@@ -1,4 +1,4 @@
-#include "seerep-core-fb/core-fb-pointcloud.h"
+#include "seerep_core_fb/core_fb_pointcloud.h"
 
 namespace seerep_core_fb
 {

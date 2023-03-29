@@ -4,7 +4,8 @@
 #include <functional>
 #include <optional>
 
-#include "core-fb-conversion.h"
+// seerep_core_fb
+#include "core_fb_conversion.h"
 
 // seerep-core
 #include <seerep_core/core.h>
@@ -88,6 +89,6 @@ private:
 
 }  // namespace seerep_core_fb
 
-#include "impl/core-fb-general.hpp"  // NOLINT
+#include "impl/core_fb_general.hpp"  // NOLINT
 
 #endif  // SEEREP_CORE_FB_GENERAL_H_

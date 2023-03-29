@@ -1,4 +1,4 @@
-#include "seerep-core-fb/core-fb-image.h"
+#include "seerep_core_fb/core_fb_image.h"
 
 namespace seerep_core_fb
 {

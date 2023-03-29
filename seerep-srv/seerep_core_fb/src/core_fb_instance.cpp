@@ -1,4 +1,4 @@
-#include "seerep-core-fb/core-fb-instance.h"
+#include "seerep_core_fb/core_fb_instance.h"
 
 namespace seerep_core_fb
 {
