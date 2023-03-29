@@ -3,8 +3,8 @@
 
 // seerep
 #include <seerep-core-fb/core-fb-image.h>
-#include <seerep-core/core.h>
 #include <seerep_com/image_service.grpc.fb.h>
+#include <seerep_core/core.h>
 
 #include "util.hpp"
 

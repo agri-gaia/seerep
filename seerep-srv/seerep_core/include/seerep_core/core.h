@@ -21,11 +21,12 @@
 #include <geometry_msgs/TransformStamped.h>
 
 // seerep-core
-#include "core-project.h"
+#include "core_project.h"
 
 // logging
 #include <boost/log/sources/severity_logger.hpp>
 #include <boost/log/trivial.hpp>
+
 namespace seerep_core
 {
 /**

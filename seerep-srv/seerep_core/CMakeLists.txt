@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(seerep-core VERSION 0.1)
+project(seerep_core VERSION 0.1)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -44,11 +44,11 @@ include_directories(
 
 add_library(
   seerepcore
-  src/core-dataset.cpp
-  src/core-instance.cpp
-  src/core-instances.cpp
-  src/core-project.cpp
-  src/core-tf.cpp
+  src/core_dataset.cpp
+  src/core_instance.cpp
+  src/core_instances.cpp
+  src/core_project.cpp
+  src/core_tf.cpp
   src/core.cpp
 )
 
@@ -67,12 +67,12 @@ target_link_libraries(
 )
 
 set(INSTALL_HEADERS
-    include/seerep-core/core-dataset.h
-    include/seerep-core/core-instance.h
-    include/seerep-core/core-instances.h
-    include/seerep-core/core-project.h
-    include/seerep-core/core-tf.h
-    include/seerep-core/core.h
+    include/seerep_core/core_dataset.h
+    include/seerep_core/core_instance.h
+    include/seerep_core/core_instances.h
+    include/seerep_core/core_project.h
+    include/seerep_core/core_tf.h
+    include/seerep_core/core.h
 )
 
 set_target_properties(seerepcore PROPERTIES PUBLIC_HEADER "${INSTALL_HEADERS}")

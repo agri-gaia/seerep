@@ -3,8 +3,8 @@
 
 // seerep
 #include <seerep-core-fb/core-fb-tf.h>
-#include <seerep-core/core.h>
 #include <seerep_com/tf_service.grpc.fb.h>
+#include <seerep_core/core.h>
 
 #include "util.hpp"
 

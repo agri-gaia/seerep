@@ -3,8 +3,8 @@
 
 // seerep
 #include <seerep-core-fb/core-fb-instance.h>
-#include <seerep-core/core.h>
 #include <seerep_com/instance_service.grpc.fb.h>
+#include <seerep_core/core.h>
 
 // logging
 #include <boost/log/sources/severity_logger.hpp>

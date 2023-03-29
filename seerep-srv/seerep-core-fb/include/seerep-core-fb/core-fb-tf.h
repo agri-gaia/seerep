@@ -24,7 +24,7 @@
 #include <seerep_ros_conversions_fb/conversions.h>
 
 // seerep-core
-#include <seerep-core/core.h>
+#include <seerep_core/core.h>
 
 // logging
 #include <boost/log/sources/severity_logger.hpp>

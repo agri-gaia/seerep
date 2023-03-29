@@ -2,16 +2,9 @@
 #define SEEREP_SERVER_IMAGE_SERVICE_H_
 
 // seerep
-<<<<<<< Updated upstream:seerep-srv/seerep-server/include/seerep-server/pb-image-service.h
-#include <seerep-core-pb/core-pb-image.h>
-#include <seerep-core/core.h>
-#include <seerep_com/image-service.grpc.pb.h>
-=======
 #include <seerep_com/image_service.grpc.pb.h>
 #include <seerep_core/core.h>
 #include <seerep_core_pb/core_pb_image.h>
-    >>>>>>> Stashed changes : seerep_srv / seerep_server / include / seerep_server /
-                              pb_image_service.h
 
 #include "util.hpp"
 

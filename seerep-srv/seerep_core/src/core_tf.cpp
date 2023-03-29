@@ -1,4 +1,4 @@
-#include "seerep-core/core-tf.h"
+#include "seerep_core/core_tf.h"
 
 namespace seerep_core
 {

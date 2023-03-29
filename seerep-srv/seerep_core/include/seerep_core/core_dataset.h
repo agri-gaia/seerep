@@ -14,8 +14,8 @@
 #include <seerep_hdf5_core/hdf5_core_datatype_interface.h>
 
 // seerep_core
-#include <seerep_core/core_instances.h>
-#include <seerep_core/core_tf.h>
+#include "core_instances.h"
+#include "core_tf.h"
 
 // uuid
 #include <boost/functional/hash.hpp>

@@ -13,7 +13,7 @@
   <author email="mark.niemeyer@dfki.de">Mark Niemeyer</author>
 
   <depend>seerep_msgs</depend>
-  <depend>seerep-core</depend>
+  <depend>seerep_core</depend>
   <depend>seerep_hdf5_pb</depend>
   <depend>seerep_ros_conversions_pb</depend>
   <depend>tf2</depend>

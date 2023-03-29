@@ -1,4 +1,4 @@
-#include "seerep-core/core.h"
+#include "seerep_core/core.h"
 
 namespace seerep_core
 {

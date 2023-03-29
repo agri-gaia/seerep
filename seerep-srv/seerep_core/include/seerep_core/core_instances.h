@@ -4,7 +4,8 @@
 #include <functional>
 #include <optional>
 
-#include "core-instance.h"
+// seerep_core
+#include "core_instance.h"
 
 // seerep-msgs
 #include <seerep_msgs/datatype.h>

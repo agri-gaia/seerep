@@ -15,7 +15,7 @@
 #include <seerep_msgs/query_result.h>
 
 // seerep-core
-#include <seerep-core/core.h>
+#include <seerep_core/core.h>
 
 // uuid
 #include <boost/functional/hash.hpp>

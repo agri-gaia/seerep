@@ -1,4 +1,4 @@
-#include "seerep-core/core-instance.h"
+#include "seerep_core/core_instance.h"
 
 namespace seerep_core
 {

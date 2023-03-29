@@ -3,8 +3,8 @@
 
 // seerep
 #include <seerep-core-fb/core-fb-point.h>
-#include <seerep-core/core.h>
 #include <seerep_com/point_service.grpc.fb.h>
+#include <seerep_core/core.h>
 
 #include "util.hpp"
 

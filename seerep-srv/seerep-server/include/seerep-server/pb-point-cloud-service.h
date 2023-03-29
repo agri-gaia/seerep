@@ -2,16 +2,9 @@
 #define SEEREP_SERVER_PB_POINT_CLOUD_SERVICE_H_
 
 // seerep
-<<<<<<< Updated upstream:seerep-srv/seerep-server/include/seerep-server/pb-point-cloud-service.h
-#include <seerep-core-pb/core-pb-pointcloud.h>
-#include <seerep-core/core.h>
-#include <seerep_com/point-cloud-service.grpc.pb.h>
-=======
 #include <seerep_com/point_cloud_service.grpc.pb.h>
 #include <seerep_core/core.h>
 #include <seerep_core_pb/core_pb_pointcloud.h>
-    >>>>>>> Stashed changes : seerep_srv / seerep_server / include / seerep_server /
-                              pb_point_cloud_service.h
 
 #include "util.hpp"
 
@@ -19,23 +12,23 @@
 #include <boost/log/sources/severity_logger.hpp>
 #include <boost/log/trivial.hpp>
 
-                              namespace seerep_server
+namespace seerep_server
 {
-  class PbPointCloudService final : public seerep::pb::PointCloudService::Service
-  {
-  public:
-    PbPointCloudService(std::shared_ptr<seerep_core::Core> seerepCore);
+class PbPointCloudService final : public seerep::pb::PointCloudService::Service
+{
+public:
+  PbPointCloudService(std::shared_ptr<seerep_core::Core> seerepCore);
 
-    grpc::Status GetPointCloud2(grpc::ServerContext* context, const seerep::pb::Query* request,
-                                grpc::ServerWriter<seerep::pb::PointCloud2>* writer);
+  grpc::Status GetPointCloud2(grpc::ServerContext* context, const seerep::pb::Query* request,
+                              grpc::ServerWriter<seerep::pb::PointCloud2>* writer);
 
-    grpc::Status TransferPointCloud2(grpc::ServerContext* context, const seerep::pb::PointCloud2* pointCloud2,
-                                     seerep::pb::ServerResponse* response);
+  grpc::Status TransferPointCloud2(grpc::ServerContext* context, const seerep::pb::PointCloud2* pointCloud2,
+                                   seerep::pb::ServerResponse* response);
 
-  private:
-    std::shared_ptr<seerep_core_pb::CorePbPointCloud> pointCloudPb;
-    boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
-  };
+private:
+  std::shared_ptr<seerep_core_pb::CorePbPointCloud> pointCloudPb;
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
+};
 
 } /* namespace seerep_server */
 #endif  // SEEREP_SERVER_PB_POINT_CLOUD_SERVICE_H_

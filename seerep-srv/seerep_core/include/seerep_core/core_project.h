@@ -21,10 +21,10 @@
 #include <seerep_hdf5_core/hdf5_core_point_cloud.h>
 #include <seerep_hdf5_core/hdf5_core_tf.h>
 
-// seerep-core
-#include "core-dataset.h"
-#include "core-instances.h"
-#include "core-tf.h"
+// seerep_core
+#include "core_dataset.h"
+#include "core_instances.h"
+#include "core_tf.h"
 
 // logging
 #include <boost/log/sources/severity_logger.hpp>

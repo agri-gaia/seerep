@@ -1,4 +1,4 @@
-#include "seerep-core/core-dataset.h"
+#include "seerep_core/core_dataset.h"
 
 namespace seerep_core
 {

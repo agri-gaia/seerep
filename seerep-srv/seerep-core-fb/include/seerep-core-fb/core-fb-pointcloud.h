@@ -16,7 +16,7 @@
 #include <seerep_hdf5_fb/hdf5_fb_pointcloud.h>
 
 // seerep-core
-#include <seerep-core/core.h>
+#include <seerep_core/core.h>
 
 // uuid
 

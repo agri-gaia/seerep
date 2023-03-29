@@ -13,7 +13,7 @@
 #include <grpcpp/server_context.h>
 
 // seerep
-#include <seerep-core/core.h>
+#include <seerep_core/core.h>
 
 #include "seerep-server/fb-image-service.h"
 #include "seerep-server/fb-instance-service.h"

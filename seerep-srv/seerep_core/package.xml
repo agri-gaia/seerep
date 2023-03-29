@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>seerep-core</name>
+  <name>seerep_core</name>
   <version>0.0.1</version>
-  <description> The seerep-core package </description>
+  <description>
+    SEEREPs message format agnostic core
+  </description>
 
   <maintainer email="mark.niemeyer@dfki.de">Mark Niemeyer</maintainer>
 
-  <license>BSD-3</license>
-
-  <url type="website">TODO</url>
+  <license>BSD-3-Clause</license>
 
   <author email="mark.niemeyer@dfki.de">Mark Niemeyer</author>
 

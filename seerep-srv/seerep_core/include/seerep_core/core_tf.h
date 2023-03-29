@@ -9,6 +9,7 @@
 #include <seerep_msgs/aabb.h>
 #include <seerep_msgs/query.h>
 #include <seerep_msgs/query_tf.h>
+
 // ros-msgs (tf)
 #include <geometry_msgs/TransformStamped.h>
 
@@ -24,6 +25,7 @@
 // logging
 #include <boost/log/sources/severity_logger.hpp>
 #include <boost/log/trivial.hpp>
+
 namespace seerep_core
 {
 /**
