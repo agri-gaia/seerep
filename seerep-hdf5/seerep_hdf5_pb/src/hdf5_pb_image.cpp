@@ -1,4 +1,4 @@
-#include "seerep-hdf5-pb/hdf5-pb-image.h"
+#include "seerep_hdf5_pb/hdf5_pb_image.h"
 
 #include <highfive/H5DataSet.hpp>
 

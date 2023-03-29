@@ -4,10 +4,10 @@
 // highfive
 #include <highfive/H5File.hpp>
 
-// seerep-hdf5
-#include "seerep-hdf5-pb/hdf5-pb-general.h"
+// seerep_hdf5
+#include "hdf5_pb_general.h"
 
-// seerep-msgs
+// seerep_msgs
 #include <seerep_msgs/transform_stamped.pb.h>
 
 // std

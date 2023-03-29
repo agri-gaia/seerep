@@ -20,7 +20,7 @@
   <depend>seerep-core-pb</depend>
   <depend>seerep-core-fb</depend>
   <depend>seerep_hdf5_core</depend>
-  <depend>seerep-hdf5-pb</depend>
+  <depend>seerep_hdf5_pb</depend>
   <depend>seerep_hdf5_fb</depend>
   <buildtool_depend>cmake</buildtool_depend>
 

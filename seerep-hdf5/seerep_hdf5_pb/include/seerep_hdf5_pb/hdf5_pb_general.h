@@ -65,6 +65,6 @@ protected:
 
 }  // namespace seerep_hdf5_pb
 
-#include "impl/hdf5-pb-general.hpp"  // NOLINT
+#include "impl/hdf5_pb_general.hpp"  // NOLINT
 
 #endif /* SEEREP_HDF5_PB_HDF5_PB_GENERAL_H_ */

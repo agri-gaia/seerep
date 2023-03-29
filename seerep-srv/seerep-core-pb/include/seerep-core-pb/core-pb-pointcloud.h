@@ -4,7 +4,7 @@
 #include <functional>
 #include <optional>
 
-// seerep-msgs
+// seerep_msgs
 #include <seerep_msgs/point_cloud_2.pb.h>
 #include <seerep_msgs/query.pb.h>
 
@@ -12,11 +12,11 @@
 #include <seerep_msgs/query.h>
 #include <seerep_msgs/query_result.h>
 
-// seerep-hdf5-pb
-#include <seerep-hdf5-pb/hdf5-pb-pointcloud.h>
+// seerep_hdf5_pb
+#include <seerep_hdf5_pb/hdf5_pb_pointcloud.h>
 
-// seerep-core
-#include <seerep-core/core.h>
+// seerep_core
+#include <seerep_core/core.h>
 
 #include "seerep-core-pb/core-pb-conversion.h"
 

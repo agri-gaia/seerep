@@ -14,14 +14,14 @@
 // ros
 #include <geometry_msgs/TransformStamped.h>
 
-// seerep-hdf5-pb
-#include <seerep-hdf5-pb/hdf5-pb-tf.h>
+// seerep_hdf5_pb
+#include <seerep_hdf5_pb/hdf5_pb_tf.h>
 
-// seerep-conversion
+// seerep_conversion
 #include <seerep_ros_conversions_pb/conversions.h>
 
-// seerep-core
-#include <seerep-core/core.h>
+// seerep_core
+#include <seerep_core/core.h>
 
 #include "seerep-core-pb/core-pb-conversion.h"
 

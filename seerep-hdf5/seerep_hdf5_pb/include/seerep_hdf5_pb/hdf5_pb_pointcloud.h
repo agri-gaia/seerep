@@ -5,11 +5,12 @@
 #include <highfive/H5File.hpp>
 
 // seerep_hdf5
-#include "seerep-hdf5-pb/hdf5-pb-general.h"
-#include "seerep-hdf5-pb/hdf5-pb-point-cloud2-iterator.h"
-#include "seerep_hdf5_core/hdf5_core_point_cloud.h"
+#include <seerep_hdf5_core/hdf5_core_point_cloud.h>
 
-// seerep-msgs
+#include "hdf5_pb_general.h"
+#include "hdf5_pb_point_cloud2_iterator.h"
+
+// seerep_msgs
 #include "seerep_msgs/point_cloud_2.pb.h"
 
 // std

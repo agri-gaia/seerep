@@ -327,6 +327,6 @@ public:
 };
 }  // namespace seerep_hdf5_pb
 
-#include "impl/hdf5-pb-point-cloud2-iterator.hpp"  // NOLINT
+#include "impl/hdf5_pb_point_cloud2_iterator.hpp"  // NOLINT
 
 #endif  // SENSOR_MSGS__POINT_CLOUD2_ITERATOR_PB_HPP_

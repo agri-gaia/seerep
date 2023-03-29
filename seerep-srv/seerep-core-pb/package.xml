@@ -14,7 +14,7 @@
 
   <depend>seerep_msgs</depend>
   <depend>seerep-core</depend>
-  <depend>seerep-hdf5-pb</depend>
+  <depend>seerep_hdf5_pb</depend>
   <depend>seerep_ros_conversions_pb</depend>
   <depend>tf2</depend>
 
