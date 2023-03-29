@@ -16,6 +16,7 @@
 #include <seerep_msgs/query.h>
 #include <seerep_msgs/query_result.h>
 #include <seerep_msgs/query_tf.h>
+
 // ros
 #include <geometry_msgs/TransformStamped.h>
 

@@ -23,7 +23,7 @@
 // seerep_core
 #include <seerep_core/core.h>
 
-#include "seerep-core-pb/core-pb-conversion.h"
+#include "core_pb_conversion.h"
 
 namespace seerep_core_pb
 {

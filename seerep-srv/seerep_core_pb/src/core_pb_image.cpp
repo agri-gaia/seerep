@@ -1,4 +1,4 @@
-#include "seerep-core-pb/core-pb-image.h"
+#include "seerep_core_pb/core_pb_image.h"
 
 namespace seerep_core_pb
 {

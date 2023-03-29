@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(seerep-core-pb VERSION 0.1)
+project(seerep_core_pb VERSION 0.1)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -41,10 +41,10 @@ include_directories(
 
 add_library(
   seerepcorepb
-  src/core-pb-conversion.cpp
-  src/core-pb-tf.cpp
-  src/core-pb-pointcloud.cpp
-  src/core-pb-image.cpp
+  src/core_pb_conversion.cpp
+  src/core_pb_tf.cpp
+  src/core_pb_pointcloud.cpp
+  src/core_pb_image.cpp
 )
 
 target_link_libraries(
@@ -60,10 +60,10 @@ target_link_libraries(
 )
 
 set(INSTALL_HEADERS
-    include/seerep-core-pb/core-pb-conversion.h
-    include/seerep-core-pb/core-pb-tf.h
-    include/seerep-core-pb/core-pb-pointcloud.h
-    include/seerep-core-pb/core-pb-image.h
+    include/seerep_core_pb/core_pb_conversion.h
+    include/seerep_core_pb/core_pb_tf.h
+    include/seerep_core_pb/core_pb_pointcloud.h
+    include/seerep_core_pb/core_pb_image.h
 )
 
 set_target_properties(

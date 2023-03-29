@@ -1,4 +1,4 @@
-#include "seerep-core-pb/core-pb-conversion.h"
+#include "seerep_core_pb/core_pb_conversion.h"
 
 namespace seerep_core_pb
 {

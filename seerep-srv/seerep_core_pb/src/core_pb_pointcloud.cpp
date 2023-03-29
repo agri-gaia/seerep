@@ -1,4 +1,4 @@
-#include "seerep-core-pb/core-pb-pointcloud.h"
+#include "seerep_core_pb/core_pb_pointcloud.h"
 
 namespace seerep_core_pb
 {

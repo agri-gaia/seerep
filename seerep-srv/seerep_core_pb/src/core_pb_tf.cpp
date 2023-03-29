@@ -1,4 +1,4 @@
-#include "seerep-core-pb/core-pb-tf.h"
+#include "seerep_core_pb/core_pb_tf.h"
 
 namespace seerep_core_pb
 {

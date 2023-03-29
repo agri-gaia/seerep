@@ -20,7 +20,7 @@
 #include <seerep_com/image_service.grpc.pb.h>
 #include <seerep_core/core.h>
 
-#include "seerep-core-pb/core-pb-conversion.h"
+#include "core_pb_conversion.h"
 
 // uuid
 #include <boost/functional/hash.hpp>

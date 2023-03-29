@@ -18,7 +18,7 @@
 // seerep_core
 #include <seerep_core/core.h>
 
-#include "seerep-core-pb/core-pb-conversion.h"
+#include "core_pb_conversion.h"
 
 // uuid
 #include <boost/functional/hash.hpp>
