@@ -148,6 +148,6 @@ protected:
 
 }  // namespace seerep_hdf5_py
 
-#include "impl/hdf5-py-general.hpp"  // NOLINT
+#include "impl/hdf5_py_general.hpp"  // NOLINT
 
 #endif /* SEEREP_HDF5_PY_HDF5_PY_GENERAL_H_ */

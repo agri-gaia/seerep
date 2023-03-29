@@ -7,9 +7,9 @@
 // seerep_hdf5
 #include <seerep_hdf5_core/hdf5_core_image.h>
 
-#include "seerep-hdf5-py/hdf5-py-general.h"
+#include "hdf5_py_general.h"
 
-// seerep-msgs
+// seerep_msgs
 #include <seerep_msgs/image.pb.h>
 
 // std

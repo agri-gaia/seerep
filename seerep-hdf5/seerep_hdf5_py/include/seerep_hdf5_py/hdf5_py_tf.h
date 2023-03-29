@@ -4,11 +4,12 @@
 // highfive
 #include <highfive/H5File.hpp>
 
-// seerep-hdf5
-#include "seerep-hdf5-py/hdf5-py-general.h"
-#include "seerep_hdf5_core/hdf5_core_tf.h"
+// seerep_hdf5
+#include <seerep_hdf5_core/hdf5_core_tf.h>
 
-// seerep-msgs
+#include "hdf5_py_general.h"
+
+// seerep_msgs
 #include <seerep_msgs/transform_stamped.pb.h>
 
 // std

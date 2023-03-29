@@ -42,10 +42,10 @@ include_directories(
 
 pybind11_add_module(
   ${PROJECT_NAME}
-  src/hdf5-py-general.cpp
-  src/hdf5-py-tf.cpp
-  src/hdf5-py-pointcloud.cpp
-  src/hdf5-py-image.cpp
+  src/hdf5_py_general.cpp
+  src/hdf5_py_tf.cpp
+  src/hdf5_py_pointcloud.cpp
+  src/hdf5_py_image.cpp
 )
 
 target_link_libraries(
@@ -94,7 +94,7 @@ install(FILES src/__init__.py
 # install( TARGETS seerephdf5py COMPONENT python LIBRARY DESTINATION
 # ${PYTHON_LIBRARY_DIR} )
 
-install(DIRECTORY include/seerep-hdf5-py
+install(DIRECTORY include/seerep_hdf5_py
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 

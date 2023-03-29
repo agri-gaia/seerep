@@ -5,10 +5,11 @@
 #include <highfive/H5File.hpp>
 
 // seerep_hdf5
-#include "seerep-hdf5-py/hdf5-py-general.h"
-#include "seerep_hdf5_core/hdf5_core_point_cloud.h"
+#include <seerep_hdf5_core/hdf5_core_point_cloud.h>
 
-// seerep-msgs
+#include "hdf5_py_general.h"
+
+// seerep_msgs
 #include "seerep_msgs/point_cloud_2.pb.h"
 
 // std
@@ -73,6 +74,6 @@ private:
 
 } /* namespace seerep_hdf5_py */
 
-#include "impl/hdf5-py-pointcloud.hpp"  // NOLINT
+#include "impl/hdf5_py_pointcloud.hpp"  // NOLINT
 
 #endif /* SEEREP_HDF5_PY_HDF5_PY_POINT_CLOUD_H_ */

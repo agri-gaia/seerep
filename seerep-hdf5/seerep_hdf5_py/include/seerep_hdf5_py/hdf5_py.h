@@ -1,11 +1,11 @@
 #ifndef SEEREP_HDF5_PY_HDF5_PY_H_
 #define SEEREP_HDF5_PY_HDF5_PY_H_
 
-// seerep-hdf5
-#include "seerep-hdf5-py/hdf5-py-general.h"
-#include "seerep-hdf5-py/hdf5-py-image.h"
-#include "seerep-hdf5-py/hdf5-py-pointcloud.h"
-#include "seerep-hdf5-py/hdf5-py-tf.h"
+// seerep_hdf5
+#include "hdf5_py_general.h"
+#include "hdf5_py_image.h"
+#include "hdf5_py_pointcloud.h"
+#include "hdf5_py_tf.h"
 
 // pybind
 #include <pybind11_catkin/pybind11/pybind11.h>

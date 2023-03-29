@@ -1,4 +1,4 @@
-#include "seerep-hdf5-py/hdf5-py-image.h"
+#include "seerep_hdf5_py/hdf5_py_image.h"
 
 #include <highfive/H5DataSet.hpp>
 
