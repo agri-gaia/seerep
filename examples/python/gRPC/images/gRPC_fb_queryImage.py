@@ -44,8 +44,15 @@ timeInterval = util_fb.createTimeInterval(builder, timeMin, timeMax)
 
 
 projectUuids = [builder.CreateString(projectuuid)]
-category = "0"
-labels = [[builder.CreateString("testlabel0"), builder.CreateString("testlabelgeneral0")]]
+# list of categories
+category = ["0"]
+# list of labels per category
+labels = [
+    [
+        util_fb.createLabelWithConfidence(builder, "testlabel0"),
+        util_fb.createLabelWithConfidence(builder, "testlabelgeneral0"),
+    ]
+]
 labelCategory = util_fb.createLabelWithCategory(builder, category, labels)
 dataUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 instanceUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
