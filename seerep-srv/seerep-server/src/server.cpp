@@ -1,5 +1,9 @@
 #include "seerep-server/server.h"
 
+extern const char* GIT_TAG;
+extern const char* GIT_REV;
+extern const char* GIT_BRANCH;
+
 namespace seerep_server
 {
 server::server(int argc, char** argv)
@@ -9,6 +13,7 @@ server::server(int argc, char** argv)
   parseProgramOptions(argc, argv);
   initLogging();
   logTimeZone();
+  logServerVersion();
   createGrpcServer();
 }
 
@@ -79,7 +84,7 @@ void server::parseProgramOptions(int argc, char** argv)
 
     if (m_programOptionsMap.count("version"))
     {
-      std::cout << "SEEREP, version 0.0\n";
+      std::cout << "SEEREP, version " << GIT_TAG << std::endl;
       exit(EXIT_SUCCESS);
     }
   }
@@ -146,6 +151,13 @@ void server::logTimeZone()
   localtime_r(&time, &timeStruct);
   strftime(buf, sizeof(buf), "%Z", &timeStruct);
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "Current timezone: " << buf;
+}
+
+void server::logServerVersion()
+{
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "SEEREP version: " << GIT_TAG;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "SEEREP git commit hash: " << GIT_REV;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "SEEREP git branch: " << GIT_BRANCH;
 }
 
 void server::setSeverityLevel()
