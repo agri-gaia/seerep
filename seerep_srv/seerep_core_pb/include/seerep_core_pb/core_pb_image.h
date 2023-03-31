@@ -13,7 +13,7 @@
 #include <seerep_msgs/query_result.h>
 
 // seerep-hdf5-pb
-#include <seerep-hdf5-pb/hdf5-pb-image.h>
+#include <seerep_hdf5_pb/hdf5_pb_image.h>
 
 // seerep-core
 #include <seerep_com/image_service.grpc.pb.h>
