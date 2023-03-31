@@ -11,3 +11,4 @@ mkdocs-material==9.0.2
 twine==4.0.2
 build==0.10.0
 setuptools==65.7.0
+matplotlib==3.6.3
