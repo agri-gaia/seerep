@@ -1,4 +1,4 @@
-#include "seerep-server/fb-point-cloud-service.h"
+#include "seerep_server/fb_point_cloud_service.h"
 
 namespace seerep_server
 {

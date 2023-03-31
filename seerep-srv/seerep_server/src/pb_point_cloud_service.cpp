@@ -1,4 +1,4 @@
-#include "seerep-server/pb-point-cloud-service.h"
+#include "seerep_server/pb_point_cloud_service.h"
 
 namespace seerep_server
 {

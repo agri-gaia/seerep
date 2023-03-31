@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(seerep-server VERSION 0.1)
+project(seerep_server VERSION 0.1)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -62,17 +62,16 @@ include_directories(
 add_executable(
   ${PROJECT_NAME}_server
   src/server.cpp
-  src/pb-meta-operations.cpp
-  src/pb-tf-service.cpp
-  src/pb-image-service.cpp
-  src/pb-point-cloud-service.cpp
-  src/fb-meta-operations.cpp
-  src/fb-point-service.cpp
-  src/fb-tf-service.cpp
-  src/fb-image-service.cpp
-  src/fb-instance-service.cpp
-  src/fb-point-cloud-service.cpp
-  ${CMAKE_CURRENT_BINARY_DIR}/version.cpp
+  src/pb_meta_operations.cpp
+  src/pb_tf_service.cpp
+  src/pb_image_service.cpp
+  src/pb_point_cloud_service.cpp
+  src/fb_meta_operations.cpp
+  src/fb_point_service.cpp
+  src/fb_tf_service.cpp
+  src/fb_image_service.cpp
+  src/fb_instance_service.cpp
+  src/fb_point_cloud_service.cpp
 )
 
 target_link_libraries(

@@ -1,4 +1,4 @@
-#include "seerep-server/pb-receive-sensor-msgs.h"
+#include "seerep_server/pb_receive_sensor_msgs.h"
 
 namespace seerep_server
 {

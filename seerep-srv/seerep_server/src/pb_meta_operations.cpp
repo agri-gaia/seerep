@@ -1,4 +1,4 @@
-#include "seerep-server/pb-meta-operations.h"
+#include "seerep_server/pb_meta_operations.h"
 
 namespace seerep_server
 {

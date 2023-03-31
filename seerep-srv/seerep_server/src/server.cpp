@@ -1,4 +1,4 @@
-#include "seerep-server/server.h"
+#include "seerep_server/server.h"
 
 extern const char* GIT_TAG;
 extern const char* GIT_REV;

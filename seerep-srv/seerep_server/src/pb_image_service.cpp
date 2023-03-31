@@ -1,4 +1,4 @@
-#include "seerep-server/pb-image-service.h"
+#include "seerep_server/pb_image_service.h"
 
 namespace seerep_server
 {

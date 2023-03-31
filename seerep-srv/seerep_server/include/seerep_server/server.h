@@ -15,16 +15,17 @@
 // seerep
 #include <seerep_core/core.h>
 
-#include "seerep-server/fb-image-service.h"
-#include "seerep-server/fb-instance-service.h"
-#include "seerep-server/fb-meta-operations.h"
-#include "seerep-server/fb-point-cloud-service.h"
-#include "seerep-server/fb-point-service.h"
-#include "seerep-server/fb-tf-service.h"
-#include "seerep-server/pb-image-service.h"
-#include "seerep-server/pb-meta-operations.h"
-#include "seerep-server/pb-point-cloud-service.h"
-#include "seerep-server/pb-tf-service.h"
+// seerep_server
+#include "seerep_server/fb_image_service.h"
+#include "seerep_server/fb_instance_service.h"
+#include "seerep_server/fb_meta_operations.h"
+#include "seerep_server/fb_point_cloud_service.h"
+#include "seerep_server/fb_point_service.h"
+#include "seerep_server/fb_tf_service.h"
+#include "seerep_server/pb_image_service.h"
+#include "seerep_server/pb_meta_operations.h"
+#include "seerep_server/pb_point_cloud_service.h"
+#include "seerep_server/pb_tf_service.h"
 
 // logging
 #include <boost/log/core.hpp>

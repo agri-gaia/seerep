@@ -1,4 +1,4 @@
-#include "seerep-server/fb-instance-service.h"
+#include "seerep_server/fb_instance_service.h"
 
 namespace seerep_server
 {
