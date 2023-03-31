@@ -8,7 +8,7 @@
 #include <seerep_msgs/image.pb.h>
 #include <seerep_msgs/query.pb.h>
 
-// seerep_core_msgs
+// seerep-core-msgs
 #include <seerep_msgs/query.h>
 #include <seerep_msgs/query_result.h>
 
@@ -16,7 +16,6 @@
 #include <seerep-hdf5-pb/hdf5-pb-image.h>
 
 // seerep-core
-#include <seerep_com/image-service.grpc.pb.h>
 #include <seerep_com/image_service.grpc.pb.h>
 #include <seerep_core/core.h>
 
