@@ -3,7 +3,7 @@ from pycocotools import mask
 from pycocotools.coco import COCO
 from pycocotools.cocoeval import COCOeval
 
-# todo: seerep lables and confidence values for bboxes / change the reader interface / try confidence values with dumb values (0,1)
+
 # confidence is called score in coco format
 # for later
 # annotations = []
@@ -31,7 +31,7 @@ def evaluate_with_pycocotools(gt_bboxes, pred_bboxes, lable=[{"id": 1, "name": "
     cocoGt.dataset["images"] = [image_info]
     ann_id = 1
     # gt_anns=[]
-    # for the future we can use cocoGt.loadAnns(gt_bboxes)  if the ground truth annotations are already stored in a file in the COCO format
+    # for the future we can use cocoGt.loadAnns(gt_bboxes) if the ground truth annotations are already stored in a file in the COCO format
     for bbox in gt_bboxes:
         ann = {
             "id": ann_id,
@@ -92,13 +92,12 @@ if __name__ == "__main__":
     )
     pred_bboxes = np.array(
         [
-            [9, 90, 210, 210],
+            [90, 90, 210, 210],
             [310, 310, 390, 390],
             [520, 520, 580, 580],
-            [6, 6, 810, 810],
+            [690, 690, 810, 810],
         ]
     )
-    # predicted output [0.5656565656565656, 0.5777777777777777, 0.47058823529411764, 0.6190476190476191]
     iou, ap = evaluate_with_pycocotools(gt_bboxes, pred_bboxes)
     print("Average Precesion", ap)
     print("intersection over union", iou)
