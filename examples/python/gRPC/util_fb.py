@@ -11,7 +11,7 @@ from seerep.fb import (
     Empty,
     GeodeticCoordinates,
     Header,
-    Label,
+    # Label,
     LabelsWithCategory,
     LabelWithInstance,
     Point,

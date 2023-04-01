@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 import os
 import sys
 
@@ -100,5 +99,3 @@ for responseBuf in stub.GetImage(bytes(buf)):
             + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().Rotation())
             + "\n"
         )
-
-print("done.")
