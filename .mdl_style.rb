@@ -10,7 +10,7 @@ exclude_rule 'code-block-style'
 rule 'MD013', :line_length => 120, :ignore_code_blocks => true, :tables => false
 
 # Unordered list indentation
-rule 'MD007', :indent => 2
+rule 'MD007', :indent => 4
 
 # Ordered list item prefix
 rule 'MD029', :style => 'ordered'
