@@ -23,17 +23,17 @@ on the context.
 
 ## Core Features
 
-- store robotic sensor data
-  - images
-  - 3d points
-  - point clouds
+- Store robotic sensor data
+  - Images
+  - 3D-Points
+  - Point Clouds
   - TF
-- store analysis results alongside the corresponding sensor data
-  - add (bounding box based) semantic annotations with confidences to the data
-  - extend semantic annotations by object instances which are in multiple datasets
-  - store information about an instance alongside the data
-  - link 3d points to an instance to define the instance position
-  - allow multiple categories of labels (e.g. a category per CNN). Thus, enabling easy evaluation and comparison of
+- Store analysis results alongside the corresponding sensor data
+  - Add (bounding box based) semantic annotations with confidences to the data
+  - Extend semantic annotations by object instances which are in multiple datasets
+  - Store information about an instance alongside the data
+  - Link 3d points to an instance to define the instance position
+  - Allow multiple categories of labels (e.g. a category per CNN). Thus, enabling easy evaluation and comparison of
   multiple CNNs based on the same data
 - Fast spatio-temporal-semantic queries with
   [gRPC](https://grpc.io/docs/what-is-grpc/introduction/).
