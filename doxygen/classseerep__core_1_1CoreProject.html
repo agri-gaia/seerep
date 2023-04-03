@@ -138,12 +138,6 @@ $(document).ready(function(){initNavTree('classseerep__core_1_1CoreProject.html'
  <a href="classseerep__core_1_1CoreProject.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="core-project_8h_source.html">core-project.h</a>&gt;</code></p>
-<div class="dynheader">
-Collaboration diagram for seerep_core::CoreProject:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classseerep__core_1_1CoreProject__coll__graph.svg" width="275" height="142"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
-</div>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -215,9 +209,9 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:ad5fadcb1e903f36f71f27662b638d730"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#ad5fadcb1e903f36f71f27662b638d730">m_frameId</a></td></tr>
 <tr class="memdesc:ad5fadcb1e903f36f71f27662b638d730"><td class="mdescLeft">&#160;</td><td class="mdescRight">the frame id for the spatial idices of this project  <a href="classseerep__core_1_1CoreProject.html#ad5fadcb1e903f36f71f27662b638d730">More...</a><br /></td></tr>
 <tr class="separator:ad5fadcb1e903f36f71f27662b638d730"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac80279cd66dcdc6192df00b6615eebf9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structseerep__core__msgs_1_1GeodeticCoordinates.html">seerep_core_msgs::GeodeticCoordinates</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#ac80279cd66dcdc6192df00b6615eebf9">m_geodeticCoordinates</a></td></tr>
-<tr class="memdesc:ac80279cd66dcdc6192df00b6615eebf9"><td class="mdescLeft">&#160;</td><td class="mdescRight">the geodetic coordinates of the location where the data was collected in this project  <a href="classseerep__core_1_1CoreProject.html#ac80279cd66dcdc6192df00b6615eebf9">More...</a><br /></td></tr>
-<tr class="separator:ac80279cd66dcdc6192df00b6615eebf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97cc0edded54c9c86f9f626450ff193d"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="structseerep__core__msgs_1_1GeodeticCoordinates.html">seerep_core_msgs::GeodeticCoordinates</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#a97cc0edded54c9c86f9f626450ff193d">m_geodeticCoordinates</a></td></tr>
+<tr class="memdesc:a97cc0edded54c9c86f9f626450ff193d"><td class="mdescLeft">&#160;</td><td class="mdescRight">the geodetic coordinates of the location where the data was collected in this project  <a href="classseerep__core_1_1CoreProject.html#a97cc0edded54c9c86f9f626450ff193d">More...</a><br /></td></tr>
+<tr class="separator:a97cc0edded54c9c86f9f626450ff193d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b3de68b24566d2110efe117f1d1ce9f"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; std::mutex &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#a6b3de68b24566d2110efe117f1d1ce9f">m_write_mtx</a></td></tr>
 <tr class="memdesc:a6b3de68b24566d2110efe117f1d1ce9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">the write mutex for the HDF5 file of this project  <a href="classseerep__core_1_1CoreProject.html#a6b3de68b24566d2110efe117f1d1ce9f">More...</a><br /></td></tr>
 <tr class="separator:a6b3de68b24566d2110efe117f1d1ce9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -830,8 +824,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ac80279cd66dcdc6192df00b6615eebf9" name="ac80279cd66dcdc6192df00b6615eebf9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac80279cd66dcdc6192df00b6615eebf9">&#9670;&nbsp;</a></span>m_geodeticCoordinates</h2>
+<a id="a97cc0edded54c9c86f9f626450ff193d" name="a97cc0edded54c9c86f9f626450ff193d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a97cc0edded54c9c86f9f626450ff193d">&#9670;&nbsp;</a></span>m_geodeticCoordinates</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -840,7 +834,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structseerep__core__msgs_1_1GeodeticCoordinates.html">seerep_core_msgs::GeodeticCoordinates</a> seerep_core::CoreProject::m_geodeticCoordinates</td>
+          <td class="memname">std::optional&lt;<a class="el" href="structseerep__core__msgs_1_1GeodeticCoordinates.html">seerep_core_msgs::GeodeticCoordinates</a>&gt; seerep_core::CoreProject::m_geodeticCoordinates</td>
         </tr>
       </table>
   </td>

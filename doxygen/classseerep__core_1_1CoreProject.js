@@ -21,7 +21,7 @@ var classseerep__core_1_1CoreProject =
     [ "m_coreInstances", "classseerep__core_1_1CoreProject.html#a99e9cbe379fa2e6faf01d165a22c477b", null ],
     [ "m_coreTfs", "classseerep__core_1_1CoreProject.html#a43dd4365805b03d9628ece6ab62cf178", null ],
     [ "m_frameId", "classseerep__core_1_1CoreProject.html#ad5fadcb1e903f36f71f27662b638d730", null ],
-    [ "m_geodeticCoordinates", "classseerep__core_1_1CoreProject.html#ac80279cd66dcdc6192df00b6615eebf9", null ],
+    [ "m_geodeticCoordinates", "classseerep__core_1_1CoreProject.html#a97cc0edded54c9c86f9f626450ff193d", null ],
     [ "m_hdf5_file", "classseerep__core_1_1CoreProject.html#ad19c404f4d73f27d920e67d2eba02ff8", null ],
     [ "m_ioGeneral", "classseerep__core_1_1CoreProject.html#a87e039d0e6bff3e8b2c03f1ac73f28d0", null ],
     [ "m_ioImage", "classseerep__core_1_1CoreProject.html#ae506163021a5cdb18e7c2d6d32be1b31", null ],

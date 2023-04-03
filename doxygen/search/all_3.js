@@ -15,8 +15,8 @@ var searchData=
   ['datauuids_12',['dataUuids',['../structseerep__core__msgs_1_1Query.html#a1060d42b3418103ce396fc2963e37a66',1,'seerep_core_msgs::Query']]],
   ['datawithmissingtf_13',['dataWithMissingTF',['../structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html#a8e66acd9d52071255df52a8c97ee6f2c',1,'seerep_core::CoreDataset::DatatypeSpecifics']]],
   ['deleteattribute_14',['deleteAttribute',['../classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a1f819558f71f25dd29ed3d962be6224c',1,'seerep_hdf5_core::Hdf5CoreGeneral']]],
-  ['deleteproject_15',['DeleteProject',['../classseerep__server_1_1FbMetaOperations.html#a9d4de5654221edd0e372f67c31a0c87a',1,'seerep_server::FbMetaOperations']]],
-  ['deleteproject_16',['deleteProject',['../classseerep__core_1_1Core.html#a1f152c2704d686ef7ae6e033248e6687',1,'seerep_core::Core']]],
+  ['deleteproject_15',['deleteProject',['../classseerep__core_1_1Core.html#a1f152c2704d686ef7ae6e033248e6687',1,'seerep_core::Core']]],
+  ['deleteproject_16',['DeleteProject',['../classseerep__server_1_1FbMetaOperations.html#a9d4de5654221edd0e372f67c31a0c87a',1,'seerep_server::FbMetaOperations']]],
   ['deprecated_20list_17',['Deprecated List',['../deprecated.html',1,'']]],
   ['dumpheader_18',['dumpHeader',['../classseerep__hdf5__ros_1_1Hdf5Ros.html#a3daed4f91bd97b8fd4e658c2651b039a',1,'seerep_hdf5_ros::Hdf5Ros']]],
   ['dumpimage_19',['dumpImage',['../classseerep__hdf5__ros_1_1Hdf5Ros.html#a44dd89f0c116472f9211e4eddc33e0b7',1,'seerep_hdf5_ros::Hdf5Ros']]]

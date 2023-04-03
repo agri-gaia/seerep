@@ -30,6 +30,7 @@ var searchData=
   ['loadboundingbox_27',['loadBoundingBox',['../classseerep__hdf5__pb_1_1Hdf5PbPointCloud.html#af2fb09d7ee392288a45d94d95acac240',1,'seerep_hdf5_pb::Hdf5PbPointCloud']]],
   ['loadprojects_28',['LoadProjects',['../classseerep__server_1_1FbMetaOperations.html#a6e386e025093ddc5c1cd79ff011d2abc',1,'seerep_server::FbMetaOperations']]],
   ['loadprojectsinfolder_29',['loadProjectsInFolder',['../classseerep__core_1_1Core.html#a7659d9183b1e05dd0615f45d51f7d38d',1,'seerep_core::Core']]],
-  ['logtimezone_30',['logTimeZone',['../classseerep__server_1_1server.html#a3123ae7354e4fc1d9e6ce0c063c06c28',1,'seerep_server::server']]],
-  ['longitude_31',['longitude',['../structseerep__core__msgs_1_1GeodeticCoordinates.html#a320679848715b7b6e94172ca73f8bd37',1,'seerep_core_msgs::GeodeticCoordinates']]]
+  ['logserverversion_30',['logServerVersion',['../classseerep__server_1_1server.html#a88a4fb4e9a52fb0d233154a5d194dc6a',1,'seerep_server::server']]],
+  ['logtimezone_31',['logTimeZone',['../classseerep__server_1_1server.html#a3123ae7354e4fc1d9e6ce0c063c06c28',1,'seerep_server::server']]],
+  ['longitude_32',['longitude',['../structseerep__core__msgs_1_1GeodeticCoordinates.html#a320679848715b7b6e94172ca73f8bd37',1,'seerep_core_msgs::GeodeticCoordinates']]]
 ];

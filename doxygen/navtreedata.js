@@ -56,7 +56,8 @@ var NAVTREE =
       [ "File List", "files.html", "files_dup" ],
       [ "File Members", "globals.html", [
         [ "All", "globals.html", null ],
-        [ "Functions", "globals_func.html", null ]
+        [ "Functions", "globals_func.html", null ],
+        [ "Variables", "globals_vars.html", null ]
       ] ]
     ] ]
   ] ]
@@ -69,10 +70,10 @@ var NAVTREEINDEX =
 "classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a33fb6e3e8696e0cc8ad6509627db0a13",
 "classseerep__hdf5__fb_1_1PointCloud2Iterator.html",
 "classseerep__hdf5__ros_1_1Hdf5Ros.html#a3daed4f91bd97b8fd4e658c2651b039a",
-"core-instances_8h_source.html",
-"hdf5-fb-tf_8h_source.html",
-"pose__stamped_8proto.html",
-"structseerep__core__msgs_1_1Header.html"
+"core-instances_8cpp.html",
+"hdf5-fb-pointcloud_8h_source.html",
+"pose_8fbs.html",
+"structseerep__core__msgs_1_1GeodeticCoordinates.html#a320679848715b7b6e94172ca73f8bd37"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
