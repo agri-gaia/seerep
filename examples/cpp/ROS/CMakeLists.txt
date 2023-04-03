@@ -31,7 +31,7 @@ include_directories(
   include ${seerep_hdf5_ros_INCLUDE_DIRS} ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(${PROJECT_NAME}_hdf5_node src/hdf5-node.cpp)
+add_executable(${PROJECT_NAME}_hdf5_node src/hdf5_node.cpp)
 
 add_dependencies(
   ${PROJECT_NAME}_hdf5_node ${${PROJECT_NAME}_EXPORTED_TARGETS}

@@ -2,14 +2,14 @@
 <package format="2">
   <name>seerep_ros_examples</name>
   <version>0.0.1</version>
-  <description>Examples on how to use SEEREP with ROS</description>
+  <description>
+    Packages with examples on how to use SEEREP with ROS
+  </description>
 
   <maintainer email="mark.niemeyer@dfki.de">Mark Niemeyer</maintainer>
   <author email="julian.arkenau@dfki.de">Julian Arkenau</author>
 
-  <license>BSD-3</license>
-
-  <url type="website">TODO</url>
+  <license>BSD-3-Clause</license>
 
   <depend>seerep_hdf5_ros</depend>
   <depend>sensor_msgs</depend>

@@ -7,15 +7,15 @@
 #include <thread>
 
 // ros
-#include "ros/master.h"
-#include "ros/ros.h"
+#include <ros/master.h>
+#include <ros/ros.h>
 
 // boost
 #include <boost/lexical_cast.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 
 // seerep
-#include "seerep_hdf5_ros/hdf5_ros.h"
+#include <seerep_hdf5_ros/hdf5_ros.h>
 
 namespace seerep_ros_examples
 {
