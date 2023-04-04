@@ -8,6 +8,7 @@
 #include <optional>
 
 // seerep-msgs
+#include <seerep-msgs/camera_intrinsics.h>
 #include <seerep_msgs/dataset_indexable.h>
 #include <seerep_msgs/geodetic_coordinates.h>
 #include <seerep_msgs/query.h>
@@ -22,6 +23,7 @@
 #include <seerep_hdf5_core/hdf5_core_tf.h>
 
 // seerep_core
+#include "core_camera_intrinsics.h"
 #include "core_dataset.h"
 #include "core_instances.h"
 #include "core_tf.h"
@@ -129,6 +131,10 @@ public:
    * @brief Returns a vector of all frames stored in the TF tree by the TF buffer
    * @return vector of frame names
    */
+
+  // camera intrinsics
+  void addCameraIntrinsics(const seerep_core_msgs::camera_intrinsics& ci);
+
   std::vector<std::string> getFrames();
 
   /**
@@ -185,6 +191,8 @@ private:
   /** @brief object handling the HDF5 file IO regarding images */
   std::shared_ptr<seerep_hdf5_core::Hdf5CoreImage> m_ioImage;
 
+  /** @brief object handling the Camera Intrinsics */
+  std::shared_ptr<seerep_core::CoreCameraIntrinsics> m_coreCameraIntrinsics;
   /** @brief object handling the TF buffer and TF queries */
   std::shared_ptr<seerep_core::CoreTf> m_coreTfs;
   /** @brief object handling the instances */

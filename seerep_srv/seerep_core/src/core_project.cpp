@@ -97,6 +97,11 @@ std::vector<std::string> CoreProject::getFrames()
   return m_coreTfs->getFrames();
 }
 
+void CoreProject::addCameraIntrinsics(const seerep_core_msgs::camera_intrinsics& ci)
+{
+  m_coreCameraIntrinsics->addData(ci);
+}
+
 std::shared_ptr<std::mutex> CoreProject::getHdf5FileMutex()
 {
   return m_write_mtx;

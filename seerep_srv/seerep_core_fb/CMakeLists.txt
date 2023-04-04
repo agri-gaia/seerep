@@ -9,6 +9,8 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 include(FindFlatBuffers)
 
+find_package(Protobuf REQUIRED)
+find_package(gRPC CONFIG REQUIRED)
 find_package(SeerepHdf5Fb REQUIRED)
 find_package(seerep_ros_conversions_fb REQUIRED)
 find_package(Flatbuffers REQUIRED)
@@ -53,6 +55,7 @@ add_library(
   src/core_fb_point.cpp
   src/core_fb_tf.cpp
   src/core_fb_pointcloud.cpp
+  src/core_fb_camera_intrinsics.cpp
 )
 
 target_link_libraries(

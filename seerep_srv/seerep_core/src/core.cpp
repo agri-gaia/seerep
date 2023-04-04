@@ -154,6 +154,12 @@ void Core::addTF(const geometry_msgs::TransformStamped& tf, const boost::uuids::
   project->second->addTF(tf);
 }
 
+void Core::addCameraIntrinsics(const seerep_core_msgs::camera_intrinsics ci, const boost::uuids::uuid& projectuuid)
+{
+  auto project = findProject(projectuuid);
+  project->second->addCameraIntrinsics(ci);
+}
+
 std::optional<geometry_msgs::TransformStamped> Core::getTF(const seerep_core_msgs::QueryTf& transformQuery)
 {
   try

@@ -30,7 +30,7 @@ public:
    * @param ci_query seerep core camera intrinsics query
    * @param ci seerep core messages camera intrinsics object
    */
-  void getData(seerep_core_msgs::camera_intrinsics_query& ci_query, seerep_core_msgs::camera_intrinsics& ci);
+  void getData(const seerep_core_msgs::camera_intrinsics_query& ci_query, seerep_core_msgs::camera_intrinsics& ci);
 
 private:
   std::shared_ptr<seerep_core::Core> m_seerepCore;

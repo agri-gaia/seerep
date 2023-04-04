@@ -14,7 +14,7 @@ void CoreCameraIntrinsics::addData(const seerep_core_msgs::camera_intrinsics& ci
   m_hdf5_io->writeCameraIntrinsics(ci);
 }
 
-void CoreCameraIntrinsics::getData(seerep_core_msgs::camera_intrinsics_query& ci_query,
+void CoreCameraIntrinsics::getData(const seerep_core_msgs::camera_intrinsics_query& ci_query,
                                    seerep_core_msgs::camera_intrinsics& ci)
 {
   std::shared_ptr<seerep_hdf5_core::Hdf5CoreCameraIntrinsics> m_hdf5_io = getHdf5File(ci_query.uuidProject);

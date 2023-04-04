@@ -3,7 +3,7 @@
 namespace seerep_server
 {
 FbCameraIntrinsicsService::FbCameraIntrinsicsService(std::shared_ptr<seerep_core::Core> seerepCore)
-  : ciCore(std::make_shared<seerep_core::CoreCameraIntrinsics>(seerepCore))
+  : ciFbCore(std::make_shared<seerep_core_fb::CoreFbCameraIntrinsics>(seerepCore))
 {
 }
 grpc::Status FbCameraIntrinsicsService::GetCameraIntrinsics(
@@ -15,11 +15,18 @@ grpc::Status FbCameraIntrinsicsService::GetCameraIntrinsics(
 
   // TODO check both project and camera intrinsics uuid are set
 
-  seerep_core_msgs::camera_intrinsics_query ciq_coremsg;
-  ciq_coremsg = seerep_core_fb::CoreFbConversion::fromFb(*requestRoot);
+  // seerep_core_msgs::camera_intrinsics_query ciq_coremsg;
+  // ciq_coremsg = seerep_core_fb::CoreFbConversion::fromFb(*requestRoot);
 
-  seerep_core_msgs::camera_intrinsics ci;
-  ciCore->getData(ciq_coremsg, ci);
+  // seerep_core_msgs::camera_intrinsics ci;
+  // ciCore->getData(ciq_coremsg, ci);
+
+  // seerep::fb::CameraIntrinsics ci_fb;
+  // seerep_core_fb::CoreFbConversion::toFb(ciCore);
+
+  // writer->Write();
+
+  // ciFbCore->getData(*requestRoot, writer);
 
   return grpc::Status::OK;
 }
@@ -30,10 +37,12 @@ grpc::Status FbCameraIntrinsicsService::TransferCameraIntrinsics(
   (void)context;  // ignore this variable without causing warnings
   auto requestRoot = request->GetRoot();
 
-  seerep_core_msgs::camera_intrinsics ci;
-  ci = seerep_core_fb::CoreFbConversion::fromFb(*requestRoot);
+  // seerep_core_msgs::camera_intrinsics ci;
+  // ci = seerep_core_fb::CoreFbConversion::fromFb(*requestRoot);
 
-  ciCore->addData(ci);
+  // ciCore->addData(ci);
+
+  ciFbCore->setData(*requestRoot);
 
   return grpc::Status::OK;
 }
