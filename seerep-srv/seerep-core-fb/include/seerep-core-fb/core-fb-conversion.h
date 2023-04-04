@@ -100,11 +100,18 @@ public:
   static seerep_core_msgs::camera_intrinsics fromFb(const seerep::fb::CameraIntrinsics& ci);
 
   /**
-   * @brief converts the flatbuffer region of interest message to seerep core specific message
+   * @brief converts the flatbuffer region of interest message to the specific seerep core message
    * @param query the flatbuffer region of interest message
    * @return the region of interest message in seerep core format
    */
   static seerep_core_msgs::region_of_interest fromFb(const seerep::fb::regionOfInterest& roi);
+
+  /**
+   * @brief converts the flatbuffer camera intrinsics message to the specific seerep core message
+   *
+   * @param camIntrinsicsQuery
+   * @return seerep_core_msgs::camera_intrinsics_query
+   */
   static seerep_core_msgs::camera_intrinsics_query fromFb(const seerep::fb::cameraIntrinsicsQuery& camIntrinsicsQuery);
 
   /**

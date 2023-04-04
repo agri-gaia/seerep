@@ -53,8 +53,8 @@ const seerep_core_msgs::Header createHeader(const boost::uuids::uuid& projectUUI
   return header;
 }
 
-seerep_core_msgs::camera_intrinsics createCameraIntinsicsMessage(const boost::uuids::uuid& projectUUID,
-                                                                 const boost::uuids::uuid& messageUUID)
+seerep_core_msgs::camera_intrinsics createCameraIntrinsicsMessage(const boost::uuids::uuid& projectUUID,
+                                                                  const boost::uuids::uuid& messageUUID)
 {
   seerep_core_msgs::camera_intrinsics ci;
 
@@ -110,7 +110,7 @@ protected:
 
     ciIO = std::make_shared<seerep_hdf5_core::Hdf5CoreCameraIntrinsics>(hdf5File, hdf5FileMutex);
 
-    writeCI = createCameraIntinsicsMessage(projectUUID, messageUUID);
+    writeCI = createCameraIntrinsicsMessage(projectUUID, messageUUID);
     ciIO->writeCameraIntrinsics(writeCI);
 
     readCI = ciIO->readCameraIntrinsics(projectUUID, messageUUID);

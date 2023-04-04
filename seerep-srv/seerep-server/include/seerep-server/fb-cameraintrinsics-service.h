@@ -3,8 +3,8 @@
 
 // seerep
 #include <seerep-com/camera_intrinsics_service.grpc.fb.h>
+#include <seerep-core-fb/core-fb-camera-intrinsics.h>
 #include <seerep-core-fb/core-fb-conversion.h>
-#include <seerep-core/core-camera-intrinsics.h>
 #include <seerep-core/core.h>
 
 // logging
@@ -48,8 +48,8 @@ public:
                                         flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response) override;
 
 private:
-  /** @brief a shared pointer to the camera intrinsics core */
-  std::shared_ptr<seerep_core::CoreCameraIntrinsics> ciCore;
+  /** @brief a shared pointer to the camera intrinsics fb core */
+  std::shared_ptr<seerep_core_fb::CoreFbCameraIntrinsics> ciFbCore;
   /** @brief the logger for the logging framework */
   boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
 };

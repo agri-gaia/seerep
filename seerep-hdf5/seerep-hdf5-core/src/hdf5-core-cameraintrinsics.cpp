@@ -54,6 +54,8 @@ void Hdf5CoreCameraIntrinsics::writeCameraIntrinsics(const seerep_core_msgs::cam
                                    seerep_hdf5_core::Hdf5CoreCameraIntrinsics::REGION_OF_INTEREST_DO_RECTIFY,
                                    camIntrinsics.region_of_interest.do_rectify);
   }
+
+  m_file->flush();
 }
 
 seerep_core_msgs::camera_intrinsics
