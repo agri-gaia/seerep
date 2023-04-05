@@ -234,11 +234,11 @@ def createBoundingBox2dLabeled(builder, instance, boundingBox):
     return BoundingBox2DLabeled.End(builder)
 
 
-def createBoundingBoxes2d(builder, minPoints, maxPoints):
-    assert len(minPoints) == len(maxPoints)
+def createBoundingBoxes2d(builder, centerPoints, spatialExtents):
+    assert len(centerPoints) == len(spatialExtents)
     boundingBoxes = []
-    for pointMin, pointMax in zip(minPoints, maxPoints):
-        boundingBoxes.append(createBoundingBox2d(builder, pointMin, pointMax))
+    for centerPoint, spatialExtent in zip(centerPoints, spatialExtents):
+        boundingBoxes.append(createBoundingBox2d(builder, centerPoint, spatialExtent))
     return boundingBoxes
 
 
