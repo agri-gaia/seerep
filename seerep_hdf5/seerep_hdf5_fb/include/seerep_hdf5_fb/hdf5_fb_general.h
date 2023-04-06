@@ -17,9 +17,8 @@
 #include <seerep_msgs/union_map_entry_generated.h>
 
 // grpc / flatbuffer
+#include <flatbuffers/grpc.h>
 #include <grpcpp/grpcpp.h>
-
-#include "flatbuffers/grpc.h"
 
 // std
 #include <boost/geometry.hpp>

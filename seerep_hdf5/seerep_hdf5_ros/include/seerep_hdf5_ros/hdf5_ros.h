@@ -15,11 +15,11 @@
 #include <boost/uuid/uuid_io.hpp>
 
 // ROS
-#include "sensor_msgs/Image.h"
-#include "std_msgs/Header.h"
+#include <sensor_msgs/Image.h>
+#include <std_msgs/Header.h>
 
 // Seerep
-#include "seerep_hdf5_core/hdf5_core_general.h"
+#include <seerep_hdf5_core/hdf5_core_general.h>
 
 namespace seerep_hdf5_ros
 {

@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <seerep_hdf5_pb/hdf5_pb_image.h>
 
 #include <H5File.hpp>
 #include <boost/uuid/uuid.hpp>
@@ -8,6 +7,8 @@
 #include <optional>
 #include <string>
 #include <vector>
+
+#include "seerep_hdf5_pb/hdf5_pb_image.h"
 
 /*
 This test serves more as an integration test rather than a unit test. We want

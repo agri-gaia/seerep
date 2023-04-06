@@ -16,12 +16,11 @@
 #include <seerep_com/image_service.grpc.fb.h>
 
 // std
+#include <flatbuffers/grpc.h>
 #include <grpcpp/grpcpp.h>
 
 #include <boost/geometry.hpp>
 #include <optional>
-
-#include "flatbuffers/grpc.h"
 
 namespace seerep_hdf5_fb
 {
