@@ -180,6 +180,85 @@ seerep_core_msgs::region_of_interest CoreFbConversion::fromFb(const seerep::fb::
   return roiCore;
 }
 
+flatbuffers::Offset<seerep::fb::regionOfInterest>
+CoreFbConversion::toFb(flatbuffers::grpc::MessageBuilder& mb, const seerep_core_msgs::region_of_interest& roi)
+{
+  seerep::fb::regionOfInterestBuilder roi_builder(mb);
+
+  roi_builder.add_x_offset(roi.x_offset);
+  roi_builder.add_y_offset(roi.y_offset);
+  roi_builder.add_height(roi.height);
+  roi_builder.add_width(roi.width);
+  roi_builder.add_do_rectify(roi.do_rectify);
+
+  return roi_builder.Finish();
+}
+
+flatbuffers::Offset<seerep::fb::Timestamp> CoreFbConversion::toFb(flatbuffers::grpc::MessageBuilder& mb,
+                                                                  const seerep_core_msgs::Timestamp ts)
+{
+  seerep::fb::TimestampBuilder tsb(mb);
+
+  tsb.add_nanos(ts.nanos);
+  tsb.add_seconds(ts.seconds);
+
+  return tsb.Finish();
+}
+
+flatbuffers::Offset<seerep::fb::Header> CoreFbConversion::toFb(flatbuffers::grpc::MessageBuilder& mb,
+                                                               const seerep_core_msgs::Header header)
+{
+  auto timeStampMsg = CoreFbConversion::toFb(mb, header.timestamp);
+  auto uuidProject = mb.CreateString(boost::lexical_cast<std::string>(header.uuidProject));
+  auto uuidMsg = mb.CreateString(boost::lexical_cast<std::string>(header.uuidData));
+  auto frameIdMsg = mb.CreateString(boost::lexical_cast<std::string>(header.frameId));
+
+  seerep::fb::HeaderBuilder headerBuilder(mb);
+  headerBuilder.add_uuid_msgs(uuidMsg);
+  headerBuilder.add_frame_id(frameIdMsg);
+  headerBuilder.add_stamp(timeStampMsg);
+  headerBuilder.add_uuid_project(uuidProject);
+  headerBuilder.add_uuid_msgs(uuidMsg);
+
+  return headerBuilder.Finish();
+}
+
+flatbuffers::Offset<seerep::fb::CameraIntrinsics> CoreFbConversion::toFb(flatbuffers::grpc::MessageBuilder& mb,
+                                                                         const seerep_core_msgs::camera_intrinsics ci)
+{
+  auto dist_model = mb.CreateString(ci.distortion_model);
+  auto dist = mb.CreateVector<double>(ci.distortion);
+  auto im = mb.CreateVector<double>(ci.intrinsic_matrix);
+  auto rm = mb.CreateVector<double>(ci.rectification_matrix);
+  auto pm = mb.CreateVector<double>(ci.projection_matrix);
+
+  auto roi = CoreFbConversion::toFb(mb, ci.region_of_interest);
+
+  auto header = CoreFbConversion::toFb(mb, ci.header);
+
+  seerep::fb::CameraIntrinsicsBuilder cib(mb);
+
+  cib.add_header(header);
+
+  cib.add_height(ci.height);
+  cib.add_width(ci.width);
+
+  cib.add_distortion_model(dist_model);
+
+  cib.add_distortion(dist);
+
+  cib.add_intrinsic_matrix(im);
+  cib.add_rectification_matrix(rm);
+  cib.add_projection_matrix(pm);
+
+  cib.add_binning_x(ci.binning_x);
+  cib.add_binning_y(ci.binning_y);
+
+  cib.add_region_of_interest(roi);
+
+  return cib.Finish();
+}
+
 seerep_core_msgs::camera_intrinsics_query
 CoreFbConversion::fromFb(const seerep::fb::cameraIntrinsicsQuery& camIntrinsicsQuery)
 {

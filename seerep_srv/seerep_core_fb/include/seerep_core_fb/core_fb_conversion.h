@@ -106,6 +106,14 @@ public:
    * @return the camera intrinsics message in seerep core format
    */
   static seerep_core_msgs::camera_intrinsics fromFb(const seerep::fb::CameraIntrinsics& ci);
+  static flatbuffers::Offset<seerep::fb::Header> toFb(flatbuffers::grpc::MessageBuilder& mb,
+                                                      const seerep_core_msgs::Header);
+  static flatbuffers::Offset<seerep::fb::regionOfInterest> toFb(flatbuffers::grpc::MessageBuilder& mb,
+                                                                const seerep_core_msgs::region_of_interest& roi);
+  static flatbuffers::Offset<seerep::fb::Timestamp> toFb(flatbuffers::grpc::MessageBuilder& mb,
+                                                         const seerep_core_msgs::Timestamp ts);
+  static flatbuffers::Offset<seerep::fb::CameraIntrinsics> toFb(flatbuffers::grpc::MessageBuilder& mb,
+                                                                const seerep_core_msgs::camera_intrinsics ci);
 
   /**
    * @brief converts the flatbuffer region of interest message to the specific seerep core message

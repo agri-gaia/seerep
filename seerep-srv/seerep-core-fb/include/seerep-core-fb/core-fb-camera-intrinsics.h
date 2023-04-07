@@ -1,6 +1,8 @@
 #ifndef SEEREP_CORE_FB_CAMERA_INTRINSICS_SERVICE_H_
 #define SEEREP_CORE_FB_CAMERA_INTRINSICS_SERVICE_H_
 
+#include <seerep-com/camera_intrinsics_service.grpc.fb.h>
+
 #include <functional>
 #include <optional>
 
@@ -39,8 +41,8 @@ public:
    * @param query camera intrinsics query
    * @param writer the writer object used to send the camera intrinsics matching the query directly via gRPC
    */
-  void getData(const seerep::fb::cameraIntrinsicsQuery& query);
-  //  grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::CameraIntrinsics>>* const writer);
+  void getData(const seerep::fb::cameraIntrinsicsQuery& query,
+               grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::CameraIntrinsics>>* const writer);
 
   /**
    * @brief Add new camera intrinsics to an hdf5 file

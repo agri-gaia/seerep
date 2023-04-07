@@ -11,8 +11,9 @@ CoreFbCameraIntrinsics::~CoreFbCameraIntrinsics()
 {
 }
 
-void CoreFbCameraIntrinsics::getData(const seerep::fb::cameraIntrinsicsQuery& query)
-// grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::CameraIntrinsics>>* const writer)
+void CoreFbCameraIntrinsics::getData(
+    const seerep::fb::cameraIntrinsicsQuery& query,
+    grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::CameraIntrinsics>>* const writer)
 {
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
       << "loading camera intrinsics from camera_intrinsics/";
@@ -20,8 +21,25 @@ void CoreFbCameraIntrinsics::getData(const seerep::fb::cameraIntrinsicsQuery& qu
   seerep_core_msgs::camera_intrinsics_query ciq_coremsg;
   ciq_coremsg = seerep_core_fb::CoreFbConversion::fromFb(query);
 
-  seerep_core_msgs::camera_intrinsics ci;
-  m_seerepCore->getData(query, ci);
+  std::optional<seerep_core_msgs::camera_intrinsics> ci;
+  ci = m_seerepCore->getCameraIntrinsics(ciq_coremsg);
+
+  flatbuffers::grpc::MessageBuilder mb;
+
+  flatbuffers::Offset<seerep::fb::CameraIntrinsics> ci_fb;
+  ci_fb = seerep_core_fb::CoreFbConversion::toFb(mb, ci.value());
+
+  mb.Finish(ci_fb);
+  auto msg = mb.ReleaseMessage<seerep::fb::CameraIntrinsics>();
+
+  if (ci)
+  {
+    writer->Write(msg);
+  }
+  else
+  {
+    return;
+  }
 }
 
 boost::uuids::uuid CoreFbCameraIntrinsics::setData(const seerep::fb::CameraIntrinsics& ci)
@@ -33,6 +51,8 @@ boost::uuids::uuid CoreFbCameraIntrinsics::setData(const seerep::fb::CameraIntri
 
   ciCore = seerep_core_fb::CoreFbConversion::fromFb(ci);
 
-  m_seerepCore->addCameraIntrinsics(ci, projectuuid);
+  m_seerepCore->addCameraIntrinsics(ciCore, projectuuid);
+
+  return projectuuid;
 }
 }  // namespace seerep_core_fb
