@@ -4,6 +4,7 @@ import os
 import sys
 
 import flatbuffers
+from fb import CameraIntrinsics
 from fb import camera_intrinsics_service_grpc_fb as ci_service
 
 # importing util functions. Assuming that these files are in the parent dir
@@ -59,4 +60,5 @@ buf = builder.Output()
 ret = stub.GetCameraIntrinsics(bytes(buf))
 
 for ci in ret:
-    print(ci)
+    ci_fb = CameraIntrinsics.CameraIntrinsics.GetRootAs(ci)
+    print(ci_fb.DistortionModel())

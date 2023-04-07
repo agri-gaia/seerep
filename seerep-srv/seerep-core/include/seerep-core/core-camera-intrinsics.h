@@ -1,7 +1,7 @@
 #ifndef SEEREP_CORE_CORE_CAMERA_INTRINSICS_H_
 #define SEEREP_CORE_CORE_CAMERA_INTRINSICS_H_
 
-#include <seerep-core/core.h>
+#include <seerep-hdf5-core/hdf5-core-cameraintrinsics.h>
 
 // seerep-msgs
 #include <seerep-msgs/camera_intrinsics.h>
@@ -15,7 +15,7 @@ namespace seerep_core
 class CoreCameraIntrinsics
 {
 public:
-  CoreCameraIntrinsics(std::shared_ptr<seerep_core::Core> seerepCore);
+  CoreCameraIntrinsics(std::shared_ptr<seerep_hdf5_core::Hdf5CoreCameraIntrinsics> hdf5_io);
   ~CoreCameraIntrinsics();
 
   /**
@@ -30,11 +30,13 @@ public:
    * @param ci_query seerep core camera intrinsics query
    * @param ci seerep core messages camera intrinsics object
    */
-  void getData(const seerep_core_msgs::camera_intrinsics_query& ci_query, seerep_core_msgs::camera_intrinsics& ci);
+  std::optional<seerep_core_msgs::camera_intrinsics> getData(const seerep_core_msgs::camera_intrinsics_query& ci_query);
 
 private:
-  std::shared_ptr<seerep_core::Core> m_seerepCore;
-  std::shared_ptr<seerep_hdf5_core::Hdf5CoreCameraIntrinsics> getHdf5File(const boost::uuids::uuid& project_uuid);
+  /** @brief shared pointer to the object handling the HDF5 io for CI */
+  std::shared_ptr<seerep_hdf5_core::Hdf5CoreCameraIntrinsics> m_hdf5_io;
+  /** @brief object handling the logging */
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
 };
 }  // namespace seerep_core
 

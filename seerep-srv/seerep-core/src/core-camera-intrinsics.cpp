@@ -2,7 +2,8 @@
 
 namespace seerep_core
 {
-CoreCameraIntrinsics::CoreCameraIntrinsics(std::shared_ptr<seerep_core::Core> seerepCore) : m_seerepCore(seerepCore)
+CoreCameraIntrinsics::CoreCameraIntrinsics(std::shared_ptr<seerep_hdf5_core::Hdf5CoreCameraIntrinsics> hdf5_io)
+  : m_hdf5_io(hdf5_io)
 {
 }
 CoreCameraIntrinsics::~CoreCameraIntrinsics()
@@ -10,24 +11,21 @@ CoreCameraIntrinsics::~CoreCameraIntrinsics()
 }
 void CoreCameraIntrinsics::addData(const seerep_core_msgs::camera_intrinsics& ci)
 {
-  std::shared_ptr<seerep_hdf5_core::Hdf5CoreCameraIntrinsics> m_hdf5_io = getHdf5File(ci.header.uuidProject);
   m_hdf5_io->writeCameraIntrinsics(ci);
 }
 
-void CoreCameraIntrinsics::getData(const seerep_core_msgs::camera_intrinsics_query& ci_query,
-                                   seerep_core_msgs::camera_intrinsics& ci)
+std::optional<seerep_core_msgs::camera_intrinsics>
+CoreCameraIntrinsics::getData(const seerep_core_msgs::camera_intrinsics_query& ci_query)
 {
-  std::shared_ptr<seerep_hdf5_core::Hdf5CoreCameraIntrinsics> m_hdf5_io = getHdf5File(ci_query.uuidProject);
-  ci = m_hdf5_io->readCameraIntrinsics(ci_query.uuidProject, ci_query.uuidCameraIntrinsics);
-}
-
-std::shared_ptr<seerep_hdf5_core::Hdf5CoreCameraIntrinsics>
-CoreCameraIntrinsics::getHdf5File(const boost::uuids::uuid& project_uuid)
-{
-  auto file = m_seerepCore->getHdf5File(project_uuid);
-  auto mutex = m_seerepCore->getHdf5FileMutex(project_uuid);
-
-  return std::make_shared<seerep_hdf5_core::Hdf5CoreCameraIntrinsics>(file, mutex);
+  try
+  {
+    return m_hdf5_io->readCameraIntrinsics(ci_query.uuidProject, ci_query.uuidCameraIntrinsics);
+  }
+  catch (const std::exception& e)
+  {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << e.what();
+    return std::nullopt;
+  }
 }
 
 }  // namespace seerep_core
