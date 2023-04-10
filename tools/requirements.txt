@@ -3,3 +3,4 @@ typer==0.7.0
 rich==13.0.1
 flatbuffers==22.12.6
 grpcio==1.51.1
+seerep-grpc==0.2.0
