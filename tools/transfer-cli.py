@@ -155,7 +155,7 @@ def send_files(file_paths_to_send: List[Path], username: str, server: str, port:
     if file_paths_to_send:
         file_paths_as_string = ' '.join([str(file_path) for file_path in file_paths_to_send])
         # uses zlib for compression (algorithm used in gzip)
-        cmd = f"{which('rsync')} -z --progress  {file_paths_as_string} {username}@{server}:{str(data_folder_path)}"
+        cmd = f"{which('rsync')} -z --progress --partial  {file_paths_as_string} {username}@{server}:{str(data_folder_path)}"
 
         console.print(f"Transferring files to SEEREP instance {server}:{port} using rsync...")
 
