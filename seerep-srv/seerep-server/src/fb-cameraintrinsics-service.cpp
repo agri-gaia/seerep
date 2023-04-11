@@ -13,9 +13,48 @@ grpc::Status FbCameraIntrinsicsService::GetCameraIntrinsics(
   (void)context;  // ignore this variable without causing warnings
   auto requestRoot = request->GetRoot();
 
-  // TODO check both project and camera intrinsics uuid are set
+  std::stringstream debuginfo;
+  debuginfo << "sending images with this query parameters:";
 
-  ciFbCore->getData(*requestRoot, writer);
+  // TODO check both project and camera intrinsics uuid are set
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << debuginfo.rdbuf();
+
+  if (requestRoot->uuid_camera_intrinsics() != NULL)
+  {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
+        << "fetching camera intrinsics against camera intrinsics uuid " << requestRoot->uuid_camera_intrinsics()->str();
+  }
+  if (requestRoot->uuid_project() != NULL)
+  {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
+        << "fetching camera intrinsics against project uuid " << requestRoot->uuid_project()->str();
+  }
+
+  try
+  {
+    ciFbCore->getData(*requestRoot, writer);
+  }
+  catch (std::runtime_error const& e)
+  {
+    // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
+    // also catching core doesn't have project with uuid error
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (const std::exception& e)
+  {
+    // specific handling for all exceptions extending std::exception, except
+    // std::runtime_error which is handled explicitly
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (...)
+  {
+    // catch any other errors (that we have no information about)
+    std::string msg = "Unknown failure occurred. Possible memory corruption";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
+  }
 
   return grpc::Status::OK;
 }
@@ -26,7 +65,52 @@ grpc::Status FbCameraIntrinsicsService::TransferCameraIntrinsics(
   (void)context;  // ignore this variable without causing warnings
   auto requestRoot = request->GetRoot();
 
-  ciFbCore->setData(*requestRoot);
+  std::string response_message = "Camera Intrinsics saved";
+
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "received camera instrinsics for storage ";
+
+  if (requestRoot->header()->uuid_msgs()->str().empty())
+  {
+    response_message = "No UUID for Camera Intrinsics set";
+  }
+  else if (requestRoot->header()->uuid_project()->str().empty())
+  {
+    response_message = "No UUID for Project set";
+  }
+  else
+  {
+    try
+    {
+      ciFbCore->setData(*requestRoot);
+    }
+    catch (std::runtime_error const& e)
+    {
+      // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
+      // also catching core doesn't have project with uuid error
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+
+      seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+
+      return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+    }
+    catch (const std::exception& e)
+    {
+      // specific handling for all exceptions extending std::exception, except
+      // std::runtime_error which is handled explicitly
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+      seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+      return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+    }
+    catch (...)
+    {
+      // catch any other errors (that we have no information about)
+      std::string msg = "Unknown failure occurred. Possible memory corruption";
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+      seerep_server_util::createResponseFb(msg, seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+      return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
+    }
+  }
+  seerep_server_util::createResponseFb(response_message, seerep::fb::TRANSMISSION_STATE_SUCCESS, response);
 
   return grpc::Status::OK;
 }

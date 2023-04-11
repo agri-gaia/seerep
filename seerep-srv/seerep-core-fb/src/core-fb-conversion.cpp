@@ -136,27 +136,39 @@ seerep_core_msgs::camera_intrinsics CoreFbConversion::fromFb(const seerep::fb::C
   ciCore.distortion_model = ci.distortion_model()->str();
 
   // traverse distortion list and convert
-  for (auto distortion_val : *ci.distortion())
+  if (flatbuffers::IsFieldPresent(&ci, seerep::fb::CameraIntrinsics::VT_DISTORTION))
   {
-    ciCore.distortion.push_back(distortion_val);
+    for (auto distortion_val : *ci.distortion())
+    {
+      ciCore.distortion.push_back(distortion_val);
+    }
   }
 
   // traverse intrinsics matrix and convert
-  for (auto intrinsic_matrix_elem : *ci.intrinsic_matrix())
+  if (flatbuffers::IsFieldPresent(&ci, seerep::fb::CameraIntrinsics::VT_INTRINSIC_MATRIX))
   {
-    ciCore.intrinsic_matrix.push_back(intrinsic_matrix_elem);
+    for (auto intrinsic_matrix_elem : *ci.intrinsic_matrix())
+    {
+      ciCore.intrinsic_matrix.push_back(intrinsic_matrix_elem);
+    }
   }
 
   // traverse rectification matrix and convert
-  for (auto rectification_matrix_elem : *ci.rectification_matrix())
+  if (flatbuffers::IsFieldPresent(&ci, seerep::fb::CameraIntrinsics::VT_RECTIFICATION_MATRIX))
   {
-    ciCore.rectification_matrix.push_back(rectification_matrix_elem);
+    for (auto rectification_matrix_elem : *ci.rectification_matrix())
+    {
+      ciCore.rectification_matrix.push_back(rectification_matrix_elem);
+    }
   }
 
   // traverse projection matrix and convert
-  for (auto projection_matrix_elem : *ci.projection_matrix())
+  if (flatbuffers::IsFieldPresent(&ci, seerep::fb::CameraIntrinsics::VT_PROJECTION_MATRIX))
   {
-    ciCore.projection_matrix.push_back(projection_matrix_elem);
+    for (auto projection_matrix_elem : *ci.projection_matrix())
+    {
+      ciCore.projection_matrix.push_back(projection_matrix_elem);
+    }
   }
 
   ciCore.binning_x = ci.binning_x();

@@ -11,6 +11,11 @@
 #include <boost/uuid/uuid_generators.hpp>
 #include <filesystem>
 
+/*
+This test serves to test that a camera intrinsics core message is the same after saving and
+reading it from an hdf5 file.
+*/
+
 namespace seerep_hdf5_core
 {
 namespace tests
