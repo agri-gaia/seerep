@@ -7,6 +7,8 @@
 #include <seerep-core-fb/core-fb-conversion.h>
 #include <seerep-core/core.h>
 
+#include "util.hpp"
+
 // logging
 #include <boost/log/sources/severity_logger.hpp>
 #include <boost/log/trivial.hpp>
