@@ -190,12 +190,12 @@ FbMetaOperations::GetOverallTimeInterval(grpc::ServerContext* context,
     // isolate second and nano second bits from min time
     uint64_t mintime = timeinterval.min_corner().get<0>();
     uint32_t min_nanos = (uint32_t)mintime;
-    uint32_t min_seconds = (uint32_t)(mintime >> 32);
+    uint32_t min_seconds = (int32_t)(mintime >> 32);
 
     // isolate second and nano second bits from max time
     uint64_t maxtime = timeinterval.max_corner().get<0>();
     uint32_t max_nanos = (uint32_t)maxtime;
-    uint32_t max_seconds = (uint32_t)(maxtime >> 32);
+    uint32_t max_seconds = (int32_t)(maxtime >> 32);
 
     flatbuffers::grpc::MessageBuilder builder;
 
