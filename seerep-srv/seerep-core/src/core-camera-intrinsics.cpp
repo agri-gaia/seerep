@@ -9,17 +9,18 @@ CoreCameraIntrinsics::CoreCameraIntrinsics(std::shared_ptr<seerep_hdf5_core::Hdf
 CoreCameraIntrinsics::~CoreCameraIntrinsics()
 {
 }
-void CoreCameraIntrinsics::addData(const seerep_core_msgs::camera_intrinsics& ci)
+void CoreCameraIntrinsics::addData(const seerep_core_msgs::camera_intrinsics& cameraintrinsics)
 {
-  m_hdf5_io->writeCameraIntrinsics(ci);
+  m_hdf5_io->writeCameraIntrinsics(cameraintrinsics);
 }
 
 std::optional<seerep_core_msgs::camera_intrinsics>
-CoreCameraIntrinsics::getData(const seerep_core_msgs::camera_intrinsics_query& ci_query)
+CoreCameraIntrinsics::getData(const seerep_core_msgs::camera_intrinsics_query& cameraintrinsics_query)
 {
   try
   {
-    return m_hdf5_io->readCameraIntrinsics(ci_query.uuidProject, ci_query.uuidCameraIntrinsics);
+    return m_hdf5_io->readCameraIntrinsics(cameraintrinsics_query.uuidProject,
+                                           cameraintrinsics_query.uuidCameraIntrinsics);
   }
   catch (const std::exception& e)
   {

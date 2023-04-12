@@ -116,7 +116,7 @@ public:
    * @param roi seerep core region of interest to convert
    * @return flatbuffers::Offset<seerep::fb::regionOfInterest>
    */
-  static flatbuffers::Offset<seerep::fb::regionOfInterest> toFb(flatbuffers::grpc::MessageBuilder& mb,
+  static flatbuffers::Offset<seerep::fb::RegionOfInterest> toFb(flatbuffers::grpc::MessageBuilder& mb,
                                                                 const seerep_core_msgs::region_of_interest& roi);
 
   /**
@@ -144,7 +144,7 @@ public:
    * @param query the flatbuffer region of interest message
    * @return the region of interest message in seerep core format
    */
-  static seerep_core_msgs::region_of_interest fromFb(const seerep::fb::regionOfInterest& roi);
+  static seerep_core_msgs::region_of_interest fromFb(const seerep::fb::RegionOfInterest& roi);
 
   /**
    * @brief converts the flatbuffer camera intrinsics message to the specific seerep core message
@@ -152,7 +152,7 @@ public:
    * @param camIntrinsicsQuery
    * @return seerep_core_msgs::camera_intrinsics_query
    */
-  static seerep_core_msgs::camera_intrinsics_query fromFb(const seerep::fb::cameraIntrinsicsQuery& camIntrinsicsQuery);
+  static seerep_core_msgs::camera_intrinsics_query fromFb(const seerep::fb::CameraIntrinsicsQuery& camIntrinsicsQuery);
 
   /**
    * @brief converts the query result from the seerep core format to gRPC flatbuffer message

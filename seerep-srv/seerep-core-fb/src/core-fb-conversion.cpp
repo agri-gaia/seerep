@@ -179,7 +179,7 @@ seerep_core_msgs::camera_intrinsics CoreFbConversion::fromFb(const seerep::fb::C
   return ciCore;
 }
 
-seerep_core_msgs::region_of_interest CoreFbConversion::fromFb(const seerep::fb::regionOfInterest& roi)
+seerep_core_msgs::region_of_interest CoreFbConversion::fromFb(const seerep::fb::RegionOfInterest& roi)
 {
   seerep_core_msgs::region_of_interest roiCore;
 
@@ -192,10 +192,10 @@ seerep_core_msgs::region_of_interest CoreFbConversion::fromFb(const seerep::fb::
   return roiCore;
 }
 
-flatbuffers::Offset<seerep::fb::regionOfInterest>
+flatbuffers::Offset<seerep::fb::RegionOfInterest>
 CoreFbConversion::toFb(flatbuffers::grpc::MessageBuilder& mb, const seerep_core_msgs::region_of_interest& roi)
 {
-  seerep::fb::regionOfInterestBuilder roi_builder(mb);
+  seerep::fb::RegionOfInterestBuilder roi_builder(mb);
 
   roi_builder.add_x_offset(roi.x_offset);
   roi_builder.add_y_offset(roi.y_offset);
@@ -272,7 +272,7 @@ flatbuffers::Offset<seerep::fb::CameraIntrinsics> CoreFbConversion::toFb(flatbuf
 }
 
 seerep_core_msgs::camera_intrinsics_query
-CoreFbConversion::fromFb(const seerep::fb::cameraIntrinsicsQuery& camIntrinsicsQuery)
+CoreFbConversion::fromFb(const seerep::fb::CameraIntrinsicsQuery& camIntrinsicsQuery)
 {
   seerep_core_msgs::camera_intrinsics_query ciq;
 

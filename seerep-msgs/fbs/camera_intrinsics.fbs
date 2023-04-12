@@ -16,5 +16,5 @@ table CameraIntrinsics
     projection_matrix:[double];
     binning_x:uint;
     binning_y:uint;
-    region_of_interest:regionOfInterest;
+    region_of_interest:RegionOfInterest;
 }

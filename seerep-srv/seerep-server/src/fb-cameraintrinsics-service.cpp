@@ -7,7 +7,7 @@ FbCameraIntrinsicsService::FbCameraIntrinsicsService(std::shared_ptr<seerep_core
 {
 }
 grpc::Status FbCameraIntrinsicsService::GetCameraIntrinsics(
-    grpc::ServerContext* context, const flatbuffers::grpc::Message<seerep::fb::cameraIntrinsicsQuery>* request,
+    grpc::ServerContext* context, const flatbuffers::grpc::Message<seerep::fb::CameraIntrinsicsQuery>* request,
     grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::CameraIntrinsics>>* writer)
 {
   (void)context;  // ignore this variable without causing warnings
@@ -16,7 +16,6 @@ grpc::Status FbCameraIntrinsicsService::GetCameraIntrinsics(
   std::stringstream debuginfo;
   debuginfo << "sending images with this query parameters:";
 
-  // TODO check both project and camera intrinsics uuid are set
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << debuginfo.rdbuf();
 
   if (requestRoot->uuid_camera_intrinsics() != NULL)

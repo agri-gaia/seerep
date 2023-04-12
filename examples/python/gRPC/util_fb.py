@@ -8,6 +8,7 @@ from fb import (
     BoundingBoxLabeled,
     BoundingboxStamped,
     CameraIntrinsics,
+    CameraIntrinsicsQuery,
     Empty,
     GeodeticCoordinates,
     Header,
@@ -21,13 +22,12 @@ from fb import (
     ProjectInfos,
     Query,
     QueryInstance,
+    RegionOfInterest,
     TimeInterval,
     Timestamp,
     TransformStampedQuery,
-    cameraIntrinsicsQuery,
 )
 from fb import meta_operations_grpc_fb as metaOperations
-from fb import regionOfInterest
 
 
 def getProject(builder, channel, name):
