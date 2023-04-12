@@ -1,7 +1,7 @@
 
 namespace seerep.fb;
 
-table regionOfInterest
+table RegionOfInterest
 {
     x_offset:uint32;
     y_offset:uint32;

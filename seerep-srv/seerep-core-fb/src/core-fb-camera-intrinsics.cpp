@@ -4,7 +4,6 @@ namespace seerep_core_fb
 {
 CoreFbCameraIntrinsics::CoreFbCameraIntrinsics(std::shared_ptr<seerep_core::Core> seerepCore) : m_seerepCore(seerepCore)
 {
-  // CoreFbGeneral::getAllFileAccessorFromCore(m_seerepCore, m_hdf5IoMap);
 }
 
 CoreFbCameraIntrinsics::~CoreFbCameraIntrinsics()
@@ -12,7 +11,7 @@ CoreFbCameraIntrinsics::~CoreFbCameraIntrinsics()
 }
 
 void CoreFbCameraIntrinsics::getData(
-    const seerep::fb::cameraIntrinsicsQuery& query,
+    const seerep::fb::CameraIntrinsicsQuery& query,
     grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::CameraIntrinsics>>* const writer)
 {
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
@@ -21,18 +20,18 @@ void CoreFbCameraIntrinsics::getData(
   seerep_core_msgs::camera_intrinsics_query ciq_coremsg;
   ciq_coremsg = seerep_core_fb::CoreFbConversion::fromFb(query);
 
-  std::optional<seerep_core_msgs::camera_intrinsics> ci;
-  ci = m_seerepCore->getCameraIntrinsics(ciq_coremsg);
+  std::optional<seerep_core_msgs::camera_intrinsics> cameraintrinsics;
+  cameraintrinsics = m_seerepCore->getCameraIntrinsics(ciq_coremsg);
 
   flatbuffers::grpc::MessageBuilder mb;
 
   flatbuffers::Offset<seerep::fb::CameraIntrinsics> ci_fb;
-  ci_fb = seerep_core_fb::CoreFbConversion::toFb(mb, ci.value());
+  ci_fb = seerep_core_fb::CoreFbConversion::toFb(mb, cameraintrinsics.value());
 
   mb.Finish(ci_fb);
   auto msg = mb.ReleaseMessage<seerep::fb::CameraIntrinsics>();
 
-  if (ci)
+  if (cameraintrinsics)
   {
     writer->Write(msg);
   }
@@ -42,14 +41,14 @@ void CoreFbCameraIntrinsics::getData(
   }
 }
 
-boost::uuids::uuid CoreFbCameraIntrinsics::setData(const seerep::fb::CameraIntrinsics& ci)
+boost::uuids::uuid CoreFbCameraIntrinsics::setData(const seerep::fb::CameraIntrinsics& cameraintrinsics)
 {
   boost::uuids::string_generator gen;
-  boost::uuids::uuid projectuuid = gen(ci.header()->uuid_project()->str());
+  boost::uuids::uuid projectuuid = gen(cameraintrinsics.header()->uuid_project()->str());
 
   seerep_core_msgs::camera_intrinsics ciCore;
 
-  ciCore = seerep_core_fb::CoreFbConversion::fromFb(ci);
+  ciCore = seerep_core_fb::CoreFbConversion::fromFb(cameraintrinsics);
 
   m_seerepCore->addCameraIntrinsics(ciCore, projectuuid);
 

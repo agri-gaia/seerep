@@ -21,19 +21,19 @@ public:
   /**
    * @brief Save seerep core camera intrinsics
    *
-   * @param ci seerep core messages camera intrinsics object
+   * @param cameraintrinsics seerep core messages camera intrinsics object
    */
-  void addData(const seerep_core_msgs::camera_intrinsics& ci);
+  void addData(const seerep_core_msgs::camera_intrinsics& cameraintrinsics);
   /**
    * @brief Get the seerep core messages camera intrinsics object
    *
-   * @param ci_query seerep core camera intrinsics query
-   * @param ci seerep core messages camera intrinsics object
+   * @param cameraintrinsics_query seerep core camera intrinsics query
    */
-  std::optional<seerep_core_msgs::camera_intrinsics> getData(const seerep_core_msgs::camera_intrinsics_query& ci_query);
+  std::optional<seerep_core_msgs::camera_intrinsics>
+  getData(const seerep_core_msgs::camera_intrinsics_query& cameraintrinsics_query);
 
 private:
-  /** @brief shared pointer to the object handling the HDF5 io for CI */
+  /** @brief shared pointer to the object handling the HDF5 io for Camera Intrinsics */
   std::shared_ptr<seerep_hdf5_core::Hdf5CoreCameraIntrinsics> m_hdf5_io;
   /** @brief object handling the logging */
   boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;

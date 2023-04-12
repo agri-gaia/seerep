@@ -41,7 +41,7 @@ public:
    * @param query camera intrinsics query
    * @param writer the writer object used to send the camera intrinsics matching the query directly via gRPC
    */
-  void getData(const seerep::fb::cameraIntrinsicsQuery& query,
+  void getData(const seerep::fb::CameraIntrinsicsQuery& query,
                grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::CameraIntrinsics>>* const writer);
 
   /**
@@ -50,7 +50,7 @@ public:
    * @param ci seerep flatbuffers camera intrinsics object
    * @return boost::uuids::uuid uuid of the stored camera intrinsics
    */
-  boost::uuids::uuid setData(const seerep::fb::CameraIntrinsics& ci);
+  boost::uuids::uuid setData(const seerep::fb::CameraIntrinsics& cameraintrinsics);
 
 private:
   /** @brief a shared pointer to the general core */

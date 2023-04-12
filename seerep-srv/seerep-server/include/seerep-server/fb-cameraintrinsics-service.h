@@ -35,7 +35,7 @@ public:
    */
   grpc::Status
   GetCameraIntrinsics(grpc::ServerContext* context,
-                      const flatbuffers::grpc::Message<seerep::fb::cameraIntrinsicsQuery>* request,
+                      const flatbuffers::grpc::Message<seerep::fb::CameraIntrinsicsQuery>* request,
                       grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::CameraIntrinsics>>* writer) override;
   /**
    * @brief Save the Camera Intrinsics object
