@@ -18,19 +18,19 @@ CorePbPointCloud::~CorePbPointCloud()
 {
 }
 
-std::vector<seerep::PointCloud2> CorePbPointCloud::getData(const seerep::Query& query)
+std::vector<seerep::pb::PointCloud2> CorePbPointCloud::getData(const seerep::pb::Query& query)
 {
   std::cout << "loading image from images/" << std::endl;
   seerep_core_msgs::Query queryCore = CorePbConversion::fromPb(query, seerep_core_msgs::Datatype::PointCloud);
   seerep_core_msgs::QueryResult resultCore = m_seerepCore->getDataset(queryCore);
 
-  std::vector<seerep::PointCloud2> resultPointClouds;
+  std::vector<seerep::pb::PointCloud2> resultPointClouds;
   for (auto project : resultCore.queryResultProjects)
   {
     for (auto uuidPc : project.dataOrInstanceUuids)
     {
       auto hdf5io = getHdf5(project.projectUuid);
-      std::optional<seerep::PointCloud2> pc = hdf5io->readPointCloud2(boost::lexical_cast<std::string>(uuidPc));
+      std::optional<seerep::pb::PointCloud2> pc = hdf5io->readPointCloud2(boost::lexical_cast<std::string>(uuidPc));
       if (pc)
       {
         resultPointClouds.push_back(pc.value());
@@ -40,7 +40,7 @@ std::vector<seerep::PointCloud2> CorePbPointCloud::getData(const seerep::Query& 
   return resultPointClouds;
 }
 
-boost::uuids::uuid CorePbPointCloud::addData(const seerep::PointCloud2& pc)
+boost::uuids::uuid CorePbPointCloud::addData(const seerep::pb::PointCloud2& pc)
 {
   boost::uuids::string_generator gen;
   boost::uuids::uuid messageuuid;
@@ -106,7 +106,9 @@ boost::uuids::uuid CorePbPointCloud::addData(const seerep::PointCloud2& pc)
           }
 
           labelWithInstanceVector.push_back(
-              seerep_core_msgs::LabelWithInstance{ .label = label.label(), .uuidInstance = uuidInstance });
+              seerep_core_msgs::LabelWithInstance{ .label = label.label().label(),
+                                                   .labelConfidence = label.label().confidence(),
+                                                   .uuidInstance = uuidInstance });
         }
         dataForIndices.labelsWithInstancesWithCategory.emplace(labelsCategories.category().c_str(),
                                                                labelWithInstanceVector);
@@ -134,8 +136,10 @@ boost::uuids::uuid CorePbPointCloud::addData(const seerep::PointCloud2& pc)
             uuidInstance = boost::uuids::nil_uuid();
           }
 
-          labelWithInstanceVector.push_back(seerep_core_msgs::LabelWithInstance{
-              .label = label.labelwithinstance().label(), .uuidInstance = uuidInstance });
+          labelWithInstanceVector.push_back(
+              seerep_core_msgs::LabelWithInstance{ .label = label.labelwithinstance().label().label(),
+                                                   .labelConfidence = label.labelwithinstance().label().confidence(),
+                                                   .uuidInstance = uuidInstance });
         }
       }
       dataForIndices.labelsWithInstancesWithCategory.emplace(labelsCategories.category().c_str(),

@@ -1,0 +1,8 @@
+#ifndef SeerepHdf5Py_CONFIG_H_
+#define SeerepHdf5Py_CONFIG_H_
+
+// the configured options and settings for seerep_hdf5_py
+#define SEEREP_HDF5_PY_VERSION_MAJOR @seerep_hdf5_py_VERSION_MAJOR @
+#define SEEREP_HDF5_PY_VERSION_MINOR @seerep_hdf5_py_VERSION_MINOR @
+
+#endif /* SeerepHdf5Py_CONFIG_H_ */

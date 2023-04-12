@@ -8,11 +8,13 @@ import imageio.v2 as imageio
 import numpy as np
 import quaternion
 import yaml
-from fb import (
+from seerep.fb import (
     Boundingbox2D,
     BoundingBox2DLabeled,
+    BoundingBox2DLabeledWithCategory,
     Header,
     Image,
+    LabelsWithCategory,
     LabelWithInstance,
     Point,
     Point2D,
@@ -23,9 +25,9 @@ from fb import (
     TransformStamped,
     Vector3,
 )
-from fb import image_service_grpc_fb as imageService
-from fb import point_service_grpc_fb as pointService
-from fb import tf_service_grpc_fb as tfService
+from seerep.fb import image_service_grpc_fb as imageService
+from seerep.fb import point_service_grpc_fb as pointService
+from seerep.fb import tf_service_grpc_fb as tfService
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import util
@@ -51,6 +53,8 @@ class LoadSimulatedDataWithInstancePosition:
 
         self.NUM_IMAGES = 80
         self.PROJECT_NAME = "simulatedDataWithInstances"
+
+        self.labelCategory = "ground_truth"
 
         self.builder = flatbuffers.Builder(1024)
         self.channel = util.get_gRPC_channel()
@@ -114,8 +118,20 @@ class LoadSimulatedDataWithInstancePosition:
         BoundingBox2DLabeled.AddLabelWithInstance(builder, labelWithInstance)
         return BoundingBox2DLabeled.End(builder)
 
+    def __listToCategoryLabelsVector(self, builder, dataList):
+        BoundingBox2DLabeledWithCategory.StartBoundingBox2dLabeledVector(builder, len(dataList))
+        for data in dataList:
+            builder.PrependUOffsetTRelative(data)
+        return builder.EndVector()
+
     def __listToImageLabelsVector(self, builder, dataList):
         Image.StartLabelsBbVector(builder, len(dataList))
+        for data in dataList:
+            builder.PrependUOffsetTRelative(data)
+        return builder.EndVector()
+
+    def __listToLabelCategoryLabelVector(self, builder, dataList):
+        LabelsWithCategory.StartLabelsVector(builder, len(dataList))
         for data in dataList:
             builder.PrependUOffsetTRelative(data)
         return builder.EndVector()
@@ -126,6 +142,14 @@ class LoadSimulatedDataWithInstancePosition:
             builder.PrependUOffsetTRelative(data)
         return builder.EndVector()
 
+    def __createLabelWithInstanceCategory(self, builder, category, labelGeneralVector):
+        categoryStr = builder.CreateString(category)
+
+        LabelsWithCategory.Start(builder)
+        LabelsWithCategory.AddCategory(builder, categoryStr)
+        LabelsWithCategory.AddLabels(builder, labelGeneralVector)
+        return LabelsWithCategory.End(builder)
+
     def __createPointForInstance(self, pointCloudData, instanceUuid, label, imageX, imageY, time, frame, img):
         builder = flatbuffers.Builder(1024)
         pixelX = int(img.shape[1] * imageX)
@@ -134,14 +158,17 @@ class LoadSimulatedDataWithInstancePosition:
         point = self.__createPoint3D(builder, position[0], position[1], position[2])
 
         labelGeneral = self.__createLabelWithInstance(builder, label, instanceUuid)
-        labelGeneralVector = self.__listToPointStampedLabelsVector(builder, [labelGeneral])
+        labelGeneralVector = self.__listToLabelCategoryLabelVector(builder, [labelGeneral])
+
+        labelGeneralCategory = self.__createLabelWithInstanceCategory(builder, self.labelCategory, labelGeneralVector)
+        labelGeneralCategoryVector = self.__listToPointStampedLabelsVector(builder, [labelGeneralCategory])
 
         header = self.__createHeader(builder, time, frame)
 
         PointStamped.Start(builder)
         PointStamped.AddPoint(builder, point)
         PointStamped.AddHeader(builder, header)
-        PointStamped.AddLabelsGeneral(builder, labelGeneralVector)
+        PointStamped.AddLabelsGeneral(builder, labelGeneralCategoryVector)
         pointStamped = PointStamped.End(builder)
         builder.Finish(pointStamped)
 
@@ -167,7 +194,15 @@ class LoadSimulatedDataWithInstancePosition:
                 self.__createPointForInstance(pointCloudData, instanceUuid, label, x, y, time, frame, img)
                 self.instanceUuidSet.append(instanceUuid)
 
-        return self.__listToImageLabelsVector(builder, boundingBox2dLabeledVector)
+        return self.__listToCategoryLabelsVector(builder, boundingBox2dLabeledVector)
+
+    def __createBoundingBox2dWithCategory(self, builder, category, boundingBox2dLabeledVector):
+        categoryStr = builder.CreateString(category)
+
+        BoundingBox2DLabeledWithCategory.Start(builder)
+        BoundingBox2DLabeledWithCategory.AddCategory(builder, categoryStr)
+        BoundingBox2DLabeledWithCategory.AddBoundingBox2dLabeled(builder, boundingBox2dLabeledVector)
+        return self.__listToImageLabelsVector(builder, [BoundingBox2DLabeledWithCategory.End(builder)])
 
     def __createTimeStamp(self, builder, time):
         Timestamp.Start(builder)
@@ -232,9 +267,13 @@ class LoadSimulatedDataWithInstancePosition:
                     self.builder, baseAnnotationPath, basePointcloudPath, timeThisIteration, self.CAMERA_FRAME, img
                 )
 
+                bb2dWithCategory = self.__createBoundingBox2dWithCategory(
+                    self.builder, self.labelCategory, boundingBox2dLabeledVectorMsg
+                )
+
                 header = self.__createHeader(self.builder, timeThisIteration, self.CAMERA_FRAME)
 
-                imageMsg = self.__createImage(self.builder, img, header, boundingBox2dLabeledVectorMsg)
+                imageMsg = self.__createImage(self.builder, img, header, bb2dWithCategory)
 
                 self.builder.Finish(imageMsg)
                 yield bytes(self.builder.Output())

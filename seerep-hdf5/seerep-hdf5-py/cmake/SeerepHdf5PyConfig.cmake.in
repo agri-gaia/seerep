@@ -1,0 +1,33 @@
+@PACKAGE_INIT@
+
+list(APPEND CMAKE_MODULE_PATH "${CURRENT_LIST_DIR}/Modules")
+
+set(SeerepHdf5Py_INCLUDE_DIRS @PACKAGE_CMAKE_INSTALL_INCLUDEDIR@)
+
+find_package(PkgConfig REQUIRED)
+find_library(SeerepHdf5Py_LIBRARY NAMES seerepHdf5Py)
+set(SeerepHdf5Py_LIBRARIES ${SeerepHdf5Py_LIBRARY})
+
+find_package(Protobuf REQUIRED)
+list(APPEND SeerepHdf5Py_INCLUDE_DIRS ${Protobuf_INCLUDE_DIR})
+list(APPEND SeerepHdf5Py_LIBRARIES ${Protobuf_LIBRARY})
+
+find_package(HDF5 REQUIRED)
+list(APPEND SeerepHdf5Py_INCLUDE_DIRS ${HDF5_INCLUDE_DIRS})
+list(APPEND SeerepHdf5Py_LIBRARIES ${HDF5_LIBRARIES})
+
+find_package(HighFive REQUIRED)
+list(APPEND SeerepHdf5Py_INCLUDE_DIRS ${HighFive_INCLUDE_DIRS})
+list(APPEND SeerepHdf5Py_LIBRARIES ${HighFive_LIBRARIES})
+
+find_package(SeerepMsgs REQUIRED)
+list(APPEND SeerepHdf5Py_INCLUDE_DIRS ${SeerepMsgs_INCLUDE_DIRS})
+list(APPEND SeerepHdf5Py_LIBRARIES ${SeerepMsgs_LIBRARIES})
+
+#find_package(SeerepHdf5Core REQUIRED)
+#list(APPEND SeerepHdf5Py_INCLUDE_DIRS ${SeerepHdf5Core_INCLUDE_DIRS})
+#list(APPEND SeerepHdf5Py_LIBRARIES ${SeerepHdf5Core_LIBRARIES})
+
+# find_package(catkin REQUIRED COMPONENTS sensor_msgs)
+# list(APPEND SeerepHdf5Py_INCLUDE_DIRS ${catkin_INCLUDE_DIRS})
+# list(APPEND SeerepHdf5Py_LIBRARIES ${catkin_LIBRARIES})

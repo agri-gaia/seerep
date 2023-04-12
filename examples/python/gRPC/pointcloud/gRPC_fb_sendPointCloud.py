@@ -9,8 +9,8 @@ import flatbuffers
 import numpy as np
 
 np.set_printoptions(precision=7)
-from fb import PointCloud2
-from fb import point_cloud_service_grpc_fb as pointCloudService
+from seerep.fb import PointCloud2
+from seerep.fb import point_cloud_service_grpc_fb as pointCloudService
 
 script_dir = os.path.dirname(__file__)
 util_dir = os.path.join(script_dir, '..')
@@ -23,8 +23,10 @@ from util_fb import (
     addToPointFieldVector,
     createBoundingBoxes,
     createBoundingBoxesLabeled,
+    createBoundingBoxLabeledWithCategory,
     createHeader,
     createLabelsWithInstance,
+    createLabelWithCategory,
     createPoint,
     createPointFields,
     createTimeStamp,
@@ -45,9 +47,11 @@ def createPointCloud(builder, header, height=960, width=1280):
     labelsGeneral = createLabelsWithInstance(
         builder,
         ["GeneralLabel" + str(i) for i in range(NUM_GENERAL_LABELS)],
+        [i * 10.0 for i in range(NUM_GENERAL_LABELS)],
         [str(uuid.uuid4()) for _ in range(NUM_GENERAL_LABELS)],
     )
-    labelsGeneralVector = addToGeneralLabelsVector(builder, labelsGeneral)
+    labelsGeneralCat = createLabelWithCategory(builder, ["myCategory"], [[labelsGeneral]])
+    # labelsGeneralVector = addToGeneralLabelsVector(builder, labelsGeneralCat)
 
     # create bounding box labels
     boundingBoxes = createBoundingBoxes(
@@ -58,10 +62,12 @@ def createPointCloud(builder, header, height=960, width=1280):
     labelWithInstances = createLabelsWithInstance(
         builder,
         ["BoundingBoxLabel" + str(i) for i in range(NUM_BB_LABELS)],
+        [i * 10.0 for i in range(NUM_BB_LABELS)],
         [str(uuid.uuid4()) for _ in range(NUM_BB_LABELS)],
     )
     labelsBb = createBoundingBoxesLabeled(builder, labelWithInstances, boundingBoxes)
-    labelsBbVector = addToBoundingBoxLabeledVector(builder, labelsBb)
+    labelsBBCat = createBoundingBoxLabeledWithCategory(builder, builder.CreateString("myCategory"), labelsBb)
+    # labelsBbVector = addToBoundingBoxLabeledVector(builder, labelsBBCat)
 
     # Note: rgb field is float, for simplification
     points = np.random.randn(height, width, 4).astype(np.float32)
@@ -79,8 +85,8 @@ def createPointCloud(builder, header, height=960, width=1280):
     PointCloud2.AddRowStep(builder, points.shape[1] * 16)
     PointCloud2.AddFields(builder, pointFieldsVector)
     PointCloud2.AddData(builder, pointsVector)
-    PointCloud2.AddLabelsGeneral(builder, labelsGeneralVector)
-    PointCloud2.AddLabelsBb(builder, labelsBbVector)
+    PointCloud2.AddLabelsGeneral(builder, labelsGeneralCat)
+    PointCloud2.AddLabelsBb(builder, labelsBBCat)
     return PointCloud2.End(builder)
 
 

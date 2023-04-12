@@ -4,7 +4,7 @@ The local deployment is based on the [seerep_server docker image](https://github
 The image with the latest (unstable) version can be pulled with the following command. It is recommended to use a version
 tag instead of `latest`.
 
-```
+```bash
 docker pull ghcr.io/agri-gaia/seerep_server:latest
 ```
 
@@ -13,7 +13,7 @@ docker pull ghcr.io/agri-gaia/seerep_server:latest
 Run the following command to start the server using `docker run`. It is recommended to use a version
 tag instead of `latest`.
 
-```
+```bash
 docker run \
   --volume=seerep-data:/mnt/seerep-data \
   --publish=9090:9090 \
@@ -33,16 +33,13 @@ without a hyphen as part of the Docker CLI replaces `docker-compose`.
 
 Example docker-compose.yml:
 
-```
+```docker
 version: "3.6"
 services:
   seerep:
     image: ghcr.io/agri-gaia/seerep_server:latest
     tty: true
     container_name: seerep_server
-    command:
-      # define data-dir for seerep-server
-      - "--data-folder=/mnt/seerep-data"
     ports:
       # the gRPC port
       - 9090:9090
@@ -50,6 +47,11 @@ services:
       # persist the data folder
       - seerep-data:/mnt/seerep-data #using docker volume
       #- /your/local/absolute/path:/mnt/seerep-data #using host folder
+    environment:
+      - TZ=Europe/Berlin
+      - SEEREP_DATA_FOLDER=/mnt/seerep-data
+      - SEEREP_LOG_PATH=/mnt/seerep-data/log
+      - SEEREP_LOG_LEVEL=info
 volumes:
   seerep-data:
 ```

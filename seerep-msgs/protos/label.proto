@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package seerep.pb;
+
+message Label
+{
+  string label = 1;
+  float confidence = 2;
+}

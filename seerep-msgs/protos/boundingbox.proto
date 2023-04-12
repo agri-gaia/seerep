@@ -1,11 +1,13 @@
 syntax = "proto3";
 
-package seerep;
+package seerep.pb;
 
 import "point.proto";
+import "quaternion.proto";
 
 message Boundingbox
 {
-  Point point_min = 1;
-  Point point_max = 2;
+  Point center_point = 1;
+  Point spatial_extent = 2;
+  Quaternion rotation = 3;
 }

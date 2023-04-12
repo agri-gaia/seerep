@@ -45,3 +45,17 @@ site
 
 # pycache
 **/__pycache__/**
+
+
+# Python Distribution / packaging
+**/seerep/**
+build/
+dist/
+eggs/
+.eggs/
+sdist/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST

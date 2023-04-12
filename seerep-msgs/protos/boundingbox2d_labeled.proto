@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package seerep;
+package seerep.pb;
 
 import "boundingbox2d.proto";
 import "label_with_instance.proto";

@@ -65,6 +65,15 @@ template <class T>
 std::shared_ptr<HighFive::DataSet> Hdf5CoreGeneral::getHdf5DataSet(const std::string& hdf5DataSetPath,
                                                                    HighFive::DataSpace& dataSpace)
 {
+  HighFive::DataSetCreateProps emptyProps;
+  return getHdf5DataSet<T>(hdf5DataSetPath, dataSpace, emptyProps);
+}
+
+template <class T>
+std::shared_ptr<HighFive::DataSet> Hdf5CoreGeneral::getHdf5DataSet(const std::string& hdf5DataSetPath,
+                                                                   HighFive::DataSpace& dataSpace,
+                                                                   HighFive::DataSetCreateProps& createProps)
+{
   try
   {
     checkExists(hdf5DataSetPath);
@@ -76,7 +85,7 @@ std::shared_ptr<HighFive::DataSet> Hdf5CoreGeneral::getHdf5DataSet(const std::st
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
         << "hdf5 group " << hdf5DataSetPath << " does not exist! Creating a new group";
-    return std::make_shared<HighFive::DataSet>(m_file->createDataSet<T>(hdf5DataSetPath, dataSpace));
+    return std::make_shared<HighFive::DataSet>(m_file->createDataSet<T>(hdf5DataSetPath, dataSpace, createProps));
   }
 }
 

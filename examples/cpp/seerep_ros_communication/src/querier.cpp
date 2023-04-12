@@ -3,16 +3,17 @@
 namespace seerep_grpc_ros
 {
 QueryData::QueryData(std::shared_ptr<grpc::Channel> channel_ptr)
-  : stubImage_(seerep::ImageService::NewStub(channel_ptr))
-  , stubPointCloud_(seerep::PointCloudService::NewStub(channel_ptr))
+  : stubImage_(seerep::pb::ImageService::NewStub(channel_ptr))
+  , stubPointCloud_(seerep::pb::PointCloudService::NewStub(channel_ptr))
 {
 }
 
-void QueryData::queryPointcloud(const seerep::Query& query, ros::Publisher& pc2_pub) const
+void QueryData::queryPointcloud(const seerep::pb::Query& query, ros::Publisher& pc2_pub) const
 {
   grpc::ClientContext context;
-  seerep::PointCloud2 response;
-  std::unique_ptr<grpc::ClientReader<seerep::PointCloud2>> reader = stubPointCloud_->GetPointCloud2(&context, query);
+  seerep::pb::PointCloud2 response;
+  std::unique_ptr<grpc::ClientReader<seerep::pb::PointCloud2>> reader =
+      stubPointCloud_->GetPointCloud2(&context, query);
 
   while (reader->Read(&response))
   {
@@ -27,11 +28,11 @@ void QueryData::queryPointcloud(const seerep::Query& query, ros::Publisher& pc2_
   grpc::Status status = reader->Finish();
 }
 
-void QueryData::queryImage(const seerep::Query& query, ros::Publisher& img_pub) const
+void QueryData::queryImage(const seerep::pb::Query& query, ros::Publisher& img_pub) const
 {
   grpc::ClientContext context;
-  seerep::Image response;
-  std::unique_ptr<grpc::ClientReader<seerep::Image>> reader = stubImage_->GetImage(&context, query);
+  seerep::pb::Image response;
+  std::unique_ptr<grpc::ClientReader<seerep::pb::Image>> reader = stubImage_->GetImage(&context, query);
 
   while (reader->Read(&response))
   {
@@ -43,9 +44,11 @@ void QueryData::queryImage(const seerep::Query& query, ros::Publisher& img_pub) 
       std::cout << "category: " << bbCat.category() << std::endl;
       for (auto bb : bbCat.boundingbox2dlabeled())
       {
-        std::cout << "label: " << bb.labelwithinstance().label() << " box: " << bb.boundingbox().point_min().x()
-                  << " / " << bb.boundingbox().point_min().y() << " / " << bb.boundingbox().point_max().x() << " / "
-                  << bb.boundingbox().point_max().y() << std::endl;
+        std::cout << "label: " << bb.labelwithinstance().label().label()
+                  << "with confidence: " << bb.labelwithinstance().label().confidence()
+                  << " box: " << bb.boundingbox().center_point().x() << " / " << bb.boundingbox().center_point().y()
+                  << " / " << bb.boundingbox().spatial_extent().x() << " / " << bb.boundingbox().spatial_extent().y()
+                  << std::endl;
       }
     }
 
@@ -54,7 +57,7 @@ void QueryData::queryImage(const seerep::Query& query, ros::Publisher& img_pub) 
       std::cout << "category: " << labelsCat.category() << std::endl;
       for (auto label : labelsCat.labelwithinstance())
       {
-        std::cout << "label_general: " << label.label() << std::endl;
+        std::cout << "label_general: " << label.label().label() << std::endl;
       }
     }
 
@@ -88,7 +91,7 @@ int main(int argc, char** argv)
   private_nh.param<std::string>("topicqueriedimg", topicqueriedimg, "queried_img");
   ros::Publisher img_pub = nh.advertise<sensor_msgs::Image>(topicqueriedimg, 1000);
 
-  seerep::Query query;
+  seerep::pb::Query query;
 
   // spatial
   double minx, miny, minz, maxx, maxy, maxz;
@@ -96,12 +99,12 @@ int main(int argc, char** argv)
       private_nh.param<double>("point_min_z", minz, 0.0) && private_nh.param<double>("point_max_x", maxx, 0.0) &&
       private_nh.param<double>("point_max_y", maxy, 0.0) && private_nh.param<double>("point_max_z", maxz, 0.0))
   {
-    query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_point_min()->set_x(minx);
-    query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_point_min()->set_y(miny);
-    query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_point_min()->set_z(minz);
-    query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_point_max()->set_x(maxx);
-    query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_point_max()->set_y(maxy);
-    query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_point_max()->set_z(maxz);
+    query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_center_point()->set_x(minx);
+    query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_center_point()->set_y(miny);
+    query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_center_point()->set_z(minz);
+    query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_spatial_extent()->set_x(maxx);
+    query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_spatial_extent()->set_y(maxy);
+    query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_spatial_extent()->set_z(maxz);
   }
   // temporal
   int mintime, maxtime;
@@ -120,7 +123,8 @@ int main(int argc, char** argv)
     labelWithCategory->set_category(category);
     for (auto label : labels)
     {
-      labelWithCategory->add_labels(label);
+      auto labelPb = labelWithCategory->add_labels();
+      labelPb->set_label(label);
     }
   }
 

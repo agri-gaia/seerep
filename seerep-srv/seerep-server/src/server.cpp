@@ -1,5 +1,9 @@
 #include "seerep-server/server.h"
 
+extern const char* GIT_TAG;
+extern const char* GIT_REV;
+extern const char* GIT_BRANCH;
+
 namespace seerep_server
 {
 server::server(int argc, char** argv)
@@ -9,6 +13,7 @@ server::server(int argc, char** argv)
   parseProgramOptions(argc, argv);
   initLogging();
   logTimeZone();
+  logServerVersion();
   createGrpcServer();
 }
 
@@ -51,6 +56,8 @@ void server::parseProgramOptions(int argc, char** argv)
     boost::program_options::options_description visible("Allowed options");
     visible.add(generic).add(config);
 
+    store(boost::program_options::parse_environment(config, environmentVariabeNameMapper), m_programOptionsMap);
+
     store(boost::program_options::command_line_parser(argc, argv).options(cmdline_options).run(), m_programOptionsMap);
     notify(m_programOptionsMap);
 
@@ -77,7 +84,7 @@ void server::parseProgramOptions(int argc, char** argv)
 
     if (m_programOptionsMap.count("version"))
     {
-      std::cout << "SEEREP, version 0.0\n";
+      std::cout << "SEEREP, version " << GIT_TAG << std::endl;
       exit(EXIT_SUCCESS);
     }
   }
@@ -86,6 +93,30 @@ void server::parseProgramOptions(int argc, char** argv)
     std::cout << "could not parse programming options" << std::endl;
     std::cout << e.what() << std::endl;
     exit(EXIT_FAILURE);
+  }
+}
+
+std::string server::environmentVariabeNameMapper(std::string envName)
+{
+  if (envName == "SEEREP_DATA_FOLDER")
+  {
+    return "data-folder";
+  }
+  else if (envName == "SEEREP_LOG_PATH")
+  {
+    return "log-path";
+  }
+  else if (envName == "SEEREP_LOG_LEVEL")
+  {
+    return "log-level";
+  }
+  else if (envName == "SEEREP_PORT")
+  {
+    return "port";
+  }
+  else
+  {
+    return "";
   }
 }
 
@@ -120,6 +151,13 @@ void server::logTimeZone()
   localtime_r(&time, &timeStruct);
   strftime(buf, sizeof(buf), "%Z", &timeStruct);
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "Current timezone: " << buf;
+}
+
+void server::logServerVersion()
+{
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "SEEREP version: " << GIT_TAG;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "SEEREP git commit hash: " << GIT_REV;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "SEEREP git branch: " << GIT_BRANCH;
 }
 
 void server::setSeverityLevel()

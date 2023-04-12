@@ -22,12 +22,13 @@ FbPointCloudService::GetPointCloud2(grpc::ServerContext* context,
   debuginfo << "sending point clouds with this query parameters: ";
   if (requestRoot->boundingboxStamped() != NULL)
   {
-    debuginfo << "\n bounding box min(x: " << requestRoot->boundingboxStamped()->boundingbox()->point_min()->x()
-              << ", y: " << requestRoot->boundingboxStamped()->boundingbox()->point_min()->y()
-              << ", z: " << requestRoot->boundingboxStamped()->boundingbox()->point_min()->z()
-              << "), max(x: " << requestRoot->boundingboxStamped()->boundingbox()->point_max()->x()
-              << ", y: " << requestRoot->boundingboxStamped()->boundingbox()->point_max()->y()
-              << ", z: " << requestRoot->boundingboxStamped()->boundingbox()->point_max()->z() << ")";
+    debuginfo
+        << "\n bounding box center_point(x: " << requestRoot->boundingboxStamped()->boundingbox()->center_point()->x()
+        << ", y: " << requestRoot->boundingboxStamped()->boundingbox()->center_point()->y()
+        << ", z: " << requestRoot->boundingboxStamped()->boundingbox()->center_point()->z()
+        << "), spatial_extent(x: " << requestRoot->boundingboxStamped()->boundingbox()->spatial_extent()->x()
+        << ", y: " << requestRoot->boundingboxStamped()->boundingbox()->spatial_extent()->y()
+        << ", z: " << requestRoot->boundingboxStamped()->boundingbox()->spatial_extent()->z() << ")";
   }
   if (requestRoot->timeinterval() != NULL)
   {
@@ -42,7 +43,7 @@ FbPointCloudService::GetPointCloud2(grpc::ServerContext* context,
       debuginfo << "category: " << labelCategory->category()->c_str() << "; ";
       for (auto label : *labelCategory->labels())
       {
-        debuginfo << "'" << label->str() << "' ";
+        debuginfo << "'" << label->label()->str() << "' ";
       }
     }
   }

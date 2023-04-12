@@ -37,8 +37,8 @@ std::optional<std::vector<geometry_msgs::TransformStamped>> Hdf5CoreTf::readTran
   }
 
   // read frames
-  std::string parentframe = readFrame("PARENT_FRAME", group_ptr);
-  std::string childframe = readFrame("CHILD_FRAME", group_ptr);
+  std::string parentframe = readFrame(PARENT_FRAME, group_ptr);
+  std::string childframe = readFrame(CHILD_FRAME, group_ptr);
   std::vector<std::vector<int64_t>> time = readTime(hdf5DatasetTimePath);
   std::vector<std::vector<double>> trans = readTranslation(hdf5DatasetTransPath);
   std::vector<std::vector<double>> rot = readRotation(hdf5DatasetRotPath);
@@ -62,8 +62,8 @@ std::optional<std::vector<std::string>> Hdf5CoreTf::readTransformStampedFrames(c
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "loading parent frame of " << hdf5GroupPath;
 
   // read frames
-  std::string parentframe = readFrame("PARENT_FRAME", group_ptr);
-  std::string childframe = readFrame("CHILD_FRAME", group_ptr);
+  std::string parentframe = readFrame(PARENT_FRAME, group_ptr);
+  std::string childframe = readFrame(CHILD_FRAME, group_ptr);
 
   return std::vector<std::string>{ parentframe, childframe };
 }

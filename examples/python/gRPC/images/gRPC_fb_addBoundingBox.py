@@ -7,8 +7,8 @@ import uuid
 
 import flatbuffers
 import numpy as np
-from fb import BoundingBox2DLabeledWithCategory, BoundingBoxes2DLabeledStamped, Image
-from fb import image_service_grpc_fb as imageService
+from seerep.fb import Image
+from seerep.fb import image_service_grpc_fb as imageService
 
 script_dir = os.path.dirname(__file__)
 util_dir = os.path.join(script_dir, '..')
@@ -56,6 +56,7 @@ for responseBuf in stub.GetImage(bytes(buf)):
     labelWithInstances = util_fb.createLabelsWithInstance(
         builder,
         ["BoundingBoxLabel" + str(i) for i in range(NUM_BB_LABELS)],
+        [1.0 / (i + 0.1) for i in range(NUM_BB_LABELS)],
         [str(uuid.uuid4()) for _ in range(NUM_BB_LABELS)],
     )
     labelsBb = util_fb.createBoundingBoxes2dLabeled(builder, labelWithInstances, boundingBoxes)

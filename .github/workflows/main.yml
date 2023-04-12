@@ -96,82 +96,51 @@ jobs:
         if: github.ref_type == 'tag' || steps.changed-files-specific-docker-base.outputs.any_changed == 'true'
         uses: docker/build-push-action@v3
         with:
-          file: docker/base/Dockerfile
+          file: Dockerfile
+          context: "{{defaultContext}}:docker/base"
           push: ${{ GitHub.event_name != 'pull_request'}}
           tags: ${{ needs.create-ids.outputs.base_id }}:${{ needs.create-ids.outputs.version }}
           cache-from: type=registry,ref=${{ needs.create-ids.outputs.base_id }}:${{ needs.create-ids.outputs.version }}
           cache-to: type=inline
 
-  # builds the code
   build-code:
     needs: [build-docker, create-ids]
-    # run in docker container on ubuntu
     runs-on: ubuntu-20.04
     container:
       image: ${{ needs.create-ids.outputs.base_id }}:${{ needs.create-ids.outputs.version }}
       options: --user root
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
         with:
           path: src
           fetch-depth: 0
 
-      #build workspace
-      - name: Build the ros workspace
+      - name: Build ROS workspace
         run: |
           source /opt/ros/noetic/setup.bash
           catkin build --workspace $GITHUB_WORKSPACE/
         shell: bash
 
-      #pre-commit checks
-      - name: run pre-commit tests
+      - name: Run pre-commit tests
         run: |
           source /opt/ros/noetic/setup.bash
           source $GITHUB_WORKSPACE/devel/setup.bash
           cd $GITHUB_WORKSPACE/src; pre-commit run -a
         shell: bash
 
-      #python package
-      - name: Install dependencies
+      - name: Build pypi packages
         run: |
-          python3 -m pip install --upgrade pip
-          python3 -m pip install setuptools wheel twine build dunamai
+          cd $GITHUB_WORKSPACE/src
+          python3 -m build
 
-      - name: prepare python package
-        run: |
-          mkdir -p $GITHUB_WORKSPACE/src/python-package/seerep-msgs-pb
-          touch $GITHUB_WORKSPACE/src/python-package/seerep-msgs-pb/__init__.py
-          cp $GITHUB_WORKSPACE/devel/include/seerep-msgs/*_pb2.py $GITHUB_WORKSPACE/src/python-package/seerep-msgs-pb/
-          mkdir -p $GITHUB_WORKSPACE/src/python-package/seerep-msgs-fb
-          touch $GITHUB_WORKSPACE/src/python-package/seerep-msgs-fb/__init__.py
-          cp $GITHUB_WORKSPACE/devel/include/seerep-msgs/fbs/seerep/fb/*.py $GITHUB_WORKSPACE/src/python-package/seerep-msgs-fb/
-          mkdir -p $GITHUB_WORKSPACE/src/python-package/seerep-com-pb
-          touch $GITHUB_WORKSPACE/src/python-package/seerep-com-pb/__init__.py
-          cp $GITHUB_WORKSPACE/devel/include/seerep-com/*.py $GITHUB_WORKSPACE/src/python-package/seerep-com-pb/
-          mkdir -p $GITHUB_WORKSPACE/src/python-package/seerep-com-fb
-          touch $GITHUB_WORKSPACE/src/python-package/seerep-com-fb/__init__.py
-          cp $GITHUB_WORKSPACE/devel/include/seerep-com/fbs/seerep/fb/*_grpc_fb.py $GITHUB_WORKSPACE/src/python-package/seerep-com-fb/
-
-          cp $GITHUB_WORKSPACE/src/setup.py $GITHUB_WORKSPACE/src/python-package/
-          cp $GITHUB_WORKSPACE/src/pyproject.toml $GITHUB_WORKSPACE/src/python-package/
-          cp $GITHUB_WORKSPACE/src/LICENSE $GITHUB_WORKSPACE/src/python-package/
-          cp $GITHUB_WORKSPACE/src/README.md $GITHUB_WORKSPACE/src/python-package/
-
-      - name: run setup.py
-        run: |
-          cd $GITHUB_WORKSPACE/src/python-package
-          python3 -m build --sdist
-
-      - name: publish
+      - name: Publish packages to pypi
         if: github.ref_type == 'tag'
         env:
           TWINE_USERNAME: "__token__"
           TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
         run: |
-          twine upload $GITHUB_WORKSPACE/src/python-package/dist/*
+          twine upload $GITHUB_WORKSPACE/src/dist/*
 
   build-docker-deployment:
     needs: [build-code, create-ids]

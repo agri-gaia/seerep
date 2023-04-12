@@ -3,8 +3,8 @@
 import os
 import sys
 
-import meta_operations_pb2_grpc as metaOperations
-import projectCreation_pb2
+from seerep.pb import meta_operations_pb2_grpc as metaOperations
+from seerep.pb import projectCreation_pb2
 
 script_dir = os.path.dirname(__file__)
 util_dir = os.path.join(script_dir, '..')

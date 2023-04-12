@@ -38,7 +38,7 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         bison \
         && rm -rf /var/lib/apt/lists/*
 
-COPY docker/base/requirements.txt /tmp/requirements.txt
+COPY requirements.txt /tmp/requirements.txt
 RUN pip3 install --upgrade pip \
         && pip3 install -r /tmp/requirements.txt \
         && rm /tmp/requirements.txt
@@ -47,6 +47,7 @@ RUN pip3 install --upgrade pip \
 RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         ros-noetic-tf \
         ros-noetic-vision-msgs \
+        ros-noetic-pybind11-catkin \
         libgeographic-dev \
         && rm -rf /var/lib/apt/lists/*
 
@@ -178,6 +179,6 @@ RUN echo "source /opt/ros/noetic/setup.bash" >> /home/docker/.bashrc \
         && echo "[[ -e /seerep/devel/setup.bash ]] && source /seerep/devel/setup.bash" >> /home/docker/.bashrc \
         && echo "[[ -e /seerep/devel/setup.zsh ]] && source /seerep/devel/setup.zsh" >> /home/docker/.zshrc
 
-RUN echo 'export PYTHONPATH="${PYTHONPATH}:/seerep/devel/include/seerep-msgs:/seerep/devel/include/seerep-msgs/fbs:/seerep/devel/include/seerep-com:/seerep/devel/include/seerep-com/fbs/seerep"' >> /home/docker/.bashrc
+RUN echo 'export PYTHONPATH="${PYTHONPATH}:/seerep/devel/lib:/seerep/devel/include/seerep-com/fbs/"' >> /home/docker/.bashrc
 
 ENTRYPOINT [ "/bin/sh", "-c", "while sleep 1000; do :; done" ]

@@ -11,7 +11,8 @@ Hdf5PbGeneral::Hdf5PbGeneral(std::shared_ptr<HighFive::File>& file, std::shared_
 
 void Hdf5PbGeneral::writeBoundingBoxLabeled(
     const std::string& datatypeGroup, const std::string& uuid,
-    const google::protobuf::RepeatedPtrField<::seerep::BoundingBoxLabeledWithCategory>& boundingboxLabeledWithCategory)
+    const google::protobuf::RepeatedPtrField<::seerep::pb::BoundingBoxLabeledWithCategory>&
+        boundingboxLabeledWithCategory)
 {
   std::string id = datatypeGroup + "/" + uuid;
   if (!boundingboxLabeledWithCategory.empty())
@@ -21,15 +22,21 @@ void Hdf5PbGeneral::writeBoundingBoxLabeled(
       if (!boundingboxLabeled.boundingboxlabeled().empty())
       {
         std::vector<std::string> labels;
-        std::vector<std::vector<double>> boundingBoxes;
+        std::vector<float> labelConfidences;
+        std::vector<std::vector<double>> boundingBoxesWithRotation;
         std::vector<std::string> instances;
         for (auto label : boundingboxLabeled.boundingboxlabeled())
         {
-          labels.push_back(label.labelwithinstance().label());
-          std::vector<double> box{ label.boundingbox().point_min().x(), label.boundingbox().point_min().y(),
-                                   label.boundingbox().point_min().z(), label.boundingbox().point_max().x(),
-                                   label.boundingbox().point_max().y(), label.boundingbox().point_max().z() };
-          boundingBoxes.push_back(box);
+          labels.push_back(label.labelwithinstance().label().label());
+          labelConfidences.push_back(label.labelwithinstance().label().confidence());
+          std::vector<double> boxWithRotation{
+            label.boundingbox().center_point().x(),   label.boundingbox().center_point().y(),
+            label.boundingbox().center_point().z(),   label.boundingbox().spatial_extent().x(),
+            label.boundingbox().spatial_extent().y(), label.boundingbox().spatial_extent().z(),
+            label.boundingbox().rotation().x(),       label.boundingbox().rotation().y(),
+            label.boundingbox().rotation().z(),       label.boundingbox().rotation().w()
+          };
+          boundingBoxesWithRotation.push_back(boxWithRotation);
           instances.push_back(label.labelwithinstance().instanceuuid());
         }
 
@@ -38,10 +45,16 @@ void Hdf5PbGeneral::writeBoundingBoxLabeled(
             HighFive::DataSpace::From(labels));
         datasetLabels.write(labels);
 
-        HighFive::DataSet datasetBoxes = m_file->createDataSet<double>(
-            id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBBBOXES + "_" + boundingboxLabeled.category(),
-            HighFive::DataSpace::From(boundingBoxes));
-        datasetBoxes.write(boundingBoxes);
+        HighFive::DataSet datasetLabelConfidences = m_file->createDataSet<float>(
+            id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBBCONFIDENCES + "_" + boundingboxLabeled.category(),
+            HighFive::DataSpace::From(labelConfidences));
+        datasetLabelConfidences.write(labelConfidences);
+
+        HighFive::DataSet datasetBoxesWithRotation =
+            m_file->createDataSet<double>(id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBBBOXESWITHROTATION + "_" +
+                                              boundingboxLabeled.category(),
+                                          HighFive::DataSpace::From(boundingBoxesWithRotation));
+        datasetBoxesWithRotation.write(boundingBoxesWithRotation);
 
         HighFive::DataSet datasetInstances = m_file->createDataSet<std::string>(
             id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBBINSTANCES + "_" + boundingboxLabeled.category(),
@@ -55,7 +68,7 @@ void Hdf5PbGeneral::writeBoundingBoxLabeled(
 
 void Hdf5PbGeneral::writeBoundingBox2DLabeled(
     const std::string& datatypeGroup, const std::string& uuid,
-    const google::protobuf::RepeatedPtrField<::seerep::BoundingBox2DLabeledWithCategory>&
+    const google::protobuf::RepeatedPtrField<::seerep::pb::BoundingBox2DLabeledWithCategory>&
         boundingbox2DLabeledWithCategory)
 {
   std::string id = datatypeGroup + "/" + uuid;
@@ -66,14 +79,19 @@ void Hdf5PbGeneral::writeBoundingBox2DLabeled(
       if (!boundingbox2DLabeled.boundingbox2dlabeled().empty())
       {
         std::vector<std::string> labels;
-        std::vector<std::vector<double>> boundingBoxes;
+        std::vector<float> labelConfidences;
+        std::vector<std::vector<double>> boundingBoxesWithRotation;
         std::vector<std::string> instances;
         for (auto label : boundingbox2DLabeled.boundingbox2dlabeled())
         {
-          labels.push_back(label.labelwithinstance().label());
-          std::vector<double> box{ label.boundingbox().point_min().x(), label.boundingbox().point_min().y(),
-                                   label.boundingbox().point_max().x(), label.boundingbox().point_max().y() };
-          boundingBoxes.push_back(box);
+          labels.push_back(label.labelwithinstance().label().label());
+          labelConfidences.push_back(label.labelwithinstance().label().confidence());
+          std::vector<double> boxWithRotation{ label.boundingbox().center_point().x(),
+                                               label.boundingbox().center_point().y(),
+                                               label.boundingbox().spatial_extent().x(),
+                                               label.boundingbox().spatial_extent().y(),
+                                               label.boundingbox().rotation() };
+          boundingBoxesWithRotation.push_back(boxWithRotation);
 
           instances.push_back(label.labelwithinstance().instanceuuid());
         }
@@ -83,10 +101,16 @@ void Hdf5PbGeneral::writeBoundingBox2DLabeled(
             HighFive::DataSpace::From(labels));
         datasetLabels.write(labels);
 
-        HighFive::DataSet datasetBoxes = m_file->createDataSet<double>(
-            id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBBBOXES + "_" + boundingbox2DLabeled.category(),
-            HighFive::DataSpace::From(boundingBoxes));
-        datasetBoxes.write(boundingBoxes);
+        HighFive::DataSet datasetLabelConfidences = m_file->createDataSet<float>(
+            id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBBCONFIDENCES + "_" + boundingbox2DLabeled.category(),
+            HighFive::DataSpace::From(labelConfidences));
+        datasetLabelConfidences.write(labelConfidences);
+
+        HighFive::DataSet datasetBoxesWithRotation =
+            m_file->createDataSet<double>(id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBBBOXESWITHROTATION + "_" +
+                                              boundingbox2DLabeled.category(),
+                                          HighFive::DataSpace::From(boundingBoxesWithRotation));
+        datasetBoxesWithRotation.write(boundingBoxesWithRotation);
 
         HighFive::DataSet datasetInstances = m_file->createDataSet<std::string>(
             id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBBINSTANCES + "_" + boundingbox2DLabeled.category(),
@@ -99,33 +123,42 @@ void Hdf5PbGeneral::writeBoundingBox2DLabeled(
   }
 }
 
-std::optional<google::protobuf::RepeatedPtrField<seerep::BoundingBox2DLabeledWithCategory>>
+std::optional<google::protobuf::RepeatedPtrField<seerep::pb::BoundingBox2DLabeledWithCategory>>
 Hdf5PbGeneral::readBoundingBox2DLabeled(const std::string& datatypeGroup, const std::string& uuid)
 {
   std::vector<std::string> labelCategories;
   std::vector<std::vector<std::string>> labelsPerCategory;
+  std::vector<std::vector<float>> labelConfidencesPerCategory;
   std::vector<std::vector<std::vector<double>>> boundingBoxesPerCategory;
   std::vector<std::vector<std::string>> instancesPerCategory;
 
   seerep_hdf5_core::Hdf5CoreGeneral::readBoundingBoxLabeled(datatypeGroup, uuid, labelCategories, labelsPerCategory,
-                                                            boundingBoxesPerCategory, instancesPerCategory);
+                                                            labelConfidencesPerCategory, boundingBoxesPerCategory,
+                                                            instancesPerCategory);
 
-  google::protobuf::RepeatedPtrField<seerep::BoundingBox2DLabeledWithCategory> result;
+  google::protobuf::RepeatedPtrField<seerep::pb::BoundingBox2DLabeledWithCategory> result;
 
   for (size_t iCategory = 0; iCategory < labelCategories.size(); iCategory++)
   {
-    seerep::BoundingBox2DLabeledWithCategory resultCat;
+    seerep::pb::BoundingBox2DLabeledWithCategory resultCat;
     resultCat.set_category(labelCategories.at(iCategory));
     for (size_t i = 0; i < labelsPerCategory.at(iCategory).size(); i++)
     {
       auto bblabeled = resultCat.add_boundingbox2dlabeled();
-      bblabeled->mutable_labelwithinstance()->set_label(labelsPerCategory.at(iCategory).at(i));
+      bblabeled->mutable_labelwithinstance()->mutable_label()->set_label(labelsPerCategory.at(iCategory).at(i));
+      bblabeled->mutable_labelwithinstance()->mutable_label()->set_confidence(
+          labelConfidencesPerCategory.at(iCategory).at(i));
       bblabeled->mutable_labelwithinstance()->set_instanceuuid(instancesPerCategory.at(iCategory).at(i));
 
-      bblabeled->mutable_boundingbox()->mutable_point_min()->set_x(boundingBoxesPerCategory.at(iCategory).at(i).at(0));
-      bblabeled->mutable_boundingbox()->mutable_point_min()->set_y(boundingBoxesPerCategory.at(iCategory).at(i).at(1));
-      bblabeled->mutable_boundingbox()->mutable_point_max()->set_x(boundingBoxesPerCategory.at(iCategory).at(i).at(2));
-      bblabeled->mutable_boundingbox()->mutable_point_max()->set_y(boundingBoxesPerCategory.at(iCategory).at(i).at(3));
+      bblabeled->mutable_boundingbox()->mutable_center_point()->set_x(
+          boundingBoxesPerCategory.at(iCategory).at(i).at(0));
+      bblabeled->mutable_boundingbox()->mutable_center_point()->set_y(
+          boundingBoxesPerCategory.at(iCategory).at(i).at(1));
+      bblabeled->mutable_boundingbox()->mutable_spatial_extent()->set_x(
+          boundingBoxesPerCategory.at(iCategory).at(i).at(2));
+      bblabeled->mutable_boundingbox()->mutable_spatial_extent()->set_y(
+          boundingBoxesPerCategory.at(iCategory).at(i).at(3));
+      bblabeled->mutable_boundingbox()->set_rotation(boundingBoxesPerCategory.at(iCategory).at(i).at(4));
     }
     result.Add(std::move(resultCat));
   }
@@ -133,9 +166,10 @@ Hdf5PbGeneral::readBoundingBox2DLabeled(const std::string& datatypeGroup, const 
   return result;
 }
 
-void Hdf5PbGeneral::writeLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid,
-                                       const google::protobuf::RepeatedPtrField<seerep::LabelsWithInstanceWithCategory>&
-                                           labelsGeneralWithInstancesWithCategory)
+void Hdf5PbGeneral::writeLabelsGeneral(
+    const std::string& datatypeGroup, const std::string& uuid,
+    const google::protobuf::RepeatedPtrField<seerep::pb::LabelsWithInstanceWithCategory>&
+        labelsGeneralWithInstancesWithCategory)
 {
   if (!labelsGeneralWithInstancesWithCategory.empty())
   {
@@ -143,16 +177,19 @@ void Hdf5PbGeneral::writeLabelsGeneral(const std::string& datatypeGroup, const s
     for (auto& labelsWithInstanceOfCategory : labelsGeneralWithInstancesWithCategory)
     {
       std::vector<std::string> labels;
+      std::vector<float> labelConfidences;
       std::vector<std::string> instances;
       for (auto& labelWithInstances : labelsWithInstanceOfCategory.labelwithinstance())
       {
-        labels.push_back(labelWithInstances.label());
+        labels.push_back(labelWithInstances.label().label());
+        labelConfidences.push_back(labelWithInstances.label().confidence());
 
         instances.push_back(labelWithInstances.instanceuuid());
       }
       seerep_core_msgs::LabelsWithInstanceWithCategory labelsWithCategory;
       labelsWithCategory.category = labelsWithInstanceOfCategory.category();
       labelsWithCategory.labels = labels;
+      labelsWithCategory.labelConfidences = labelConfidences;
       labelsWithCategory.instances = instances;
       labelsWithCategoryVector.push_back(labelsWithCategory);
     }
@@ -160,7 +197,7 @@ void Hdf5PbGeneral::writeLabelsGeneral(const std::string& datatypeGroup, const s
   }
 }
 
-std::optional<google::protobuf::RepeatedPtrField<seerep::LabelsWithInstanceWithCategory>>
+std::optional<google::protobuf::RepeatedPtrField<seerep::pb::LabelsWithInstanceWithCategory>>
 Hdf5PbGeneral::readLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid)
 {
   std::vector<std::string> labelCategoriesGeneral;
@@ -168,16 +205,18 @@ Hdf5PbGeneral::readLabelsGeneral(const std::string& datatypeGroup, const std::st
   seerep_hdf5_core::Hdf5CoreGeneral::readLabelsGeneral(datatypeGroup, uuid, labelCategoriesGeneral,
                                                        labelsWithInstancesGeneralPerCategory);
 
-  google::protobuf::RepeatedPtrField<seerep::LabelsWithInstanceWithCategory> result;
+  google::protobuf::RepeatedPtrField<seerep::pb::LabelsWithInstanceWithCategory> result;
 
   for (size_t iCategory = 0; iCategory < labelCategoriesGeneral.size(); iCategory++)
   {
-    seerep::LabelsWithInstanceWithCategory resultCat;
+    seerep::pb::LabelsWithInstanceWithCategory resultCat;
     resultCat.set_category(labelCategoriesGeneral.at(iCategory));
     for (size_t i = 0; i < labelsWithInstancesGeneralPerCategory.at(iCategory).size(); i++)
     {
       auto labelWithInstance = resultCat.add_labelwithinstance();
-      labelWithInstance->set_label(labelsWithInstancesGeneralPerCategory.at(iCategory).at(i).label);
+      labelWithInstance->mutable_label()->set_label(labelsWithInstancesGeneralPerCategory.at(iCategory).at(i).label);
+      labelWithInstance->mutable_label()->set_confidence(
+          labelsWithInstancesGeneralPerCategory.at(iCategory).at(i).labelConfidence);
       labelWithInstance->set_instanceuuid(
           boost::lexical_cast<std::string>(labelsWithInstancesGeneralPerCategory.at(iCategory).at(i).uuidInstance));
     }

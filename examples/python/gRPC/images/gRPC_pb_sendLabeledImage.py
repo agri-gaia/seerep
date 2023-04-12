@@ -5,18 +5,22 @@ import sys
 import time
 import uuid
 
-import boundingbox2d_labeled_pb2 as boundingbox2d_labeled
-import boundingbox2d_labeled_with_category_pb2 as boundingbox2d_labeled_with_category
-import image_pb2 as image
-import image_service_pb2_grpc as imageService
-import label_with_instance_pb2 as labelWithInstance
-import labels_with_instance_with_category_pb2 as labels_with_instance_with_category
-import meta_operations_pb2_grpc as metaOperations
 import numpy as np
-import projectCreation_pb2 as projectCreation
-import tf_service_pb2_grpc as tfService
-import transform_stamped_pb2 as tf
 from google.protobuf import empty_pb2
+from seerep.pb import boundingbox2d_labeled_pb2 as boundingbox2d_labeled
+from seerep.pb import (
+    boundingbox2d_labeled_with_category_pb2 as boundingbox2d_labeled_with_category,
+)
+from seerep.pb import image_pb2 as image
+from seerep.pb import image_service_pb2_grpc as imageService
+from seerep.pb import label_with_instance_pb2 as labelWithInstance
+from seerep.pb import (
+    labels_with_instance_with_category_pb2 as labels_with_instance_with_category,
+)
+from seerep.pb import meta_operations_pb2_grpc as metaOperations
+from seerep.pb import projectCreation_pb2 as projectCreation
+from seerep.pb import tf_service_pb2_grpc as tfService
+from seerep.pb import transform_stamped_pb2 as tf
 
 # importing util functions. Assuming that this file is in the parent dir
 # https://github.com/agri-gaia/seerep/blob/6c4da5736d4a893228e97b01a9ada18620b1a83f/examples/python/gRPC/util.py
@@ -85,15 +89,16 @@ for n in range(10):
     for iCategory in range(0, 2):
         bbCat = boundingbox2d_labeled_with_category.BoundingBox2DLabeledWithCategory()
         bbCat.category = str(iCategory)
-        # 5. Create bounding boxes with la  bels
+        # 5. Create bounding boxes with labels
         bb = boundingbox2d_labeled.BoundingBox2DLabeled()
         for i in range(0, 2):
-            bb.labelWithInstance.label = "testlabel" + str(i)
+            bb.labelWithInstance.label.label = "testlabel" + str(i)
+            bb.labelWithInstance.label.confidence = i / 10.0
             bb.labelWithInstance.instanceUuid = str(uuid.uuid4())
-            bb.boundingBox.point_min.x = 0.01 + i / 10
-            bb.boundingBox.point_min.y = 0.02 + i / 10
-            bb.boundingBox.point_max.x = 0.03 + i / 10
-            bb.boundingBox.point_max.y = 0.04 + i / 10
+            bb.boundingBox.center_point.x = 0.01 + i / 10
+            bb.boundingBox.center_point.y = 0.02 + i / 10
+            bb.boundingBox.spatial_extent.x = 0.03 + i / 10
+            bb.boundingBox.spatial_extent.y = 0.04 + i / 10
             bbCat.boundingBox2DLabeled.append(bb)
         theImage.labels_bb.append(bbCat)
 
@@ -102,7 +107,8 @@ for n in range(10):
         labelsCat.category = str(iCategory)
         for i in range(0, 2):
             label = labelWithInstance.LabelWithInstance()
-            label.label = "testlabelgeneral" + str(i)
+            label.label.label = "testlabelgeneral" + str(i)
+            label.label.confidence = i / 10.0
             # assuming that that the general labels are not instance related -> no instance uuid
             # label.instanceUuid = str(uuid.uuid4())
             labelsCat.labelWithInstance.append(label)

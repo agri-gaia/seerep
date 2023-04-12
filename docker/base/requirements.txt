@@ -4,7 +4,11 @@ protobuf== 4.21.12
 grpcio-tools==1.51.1
 grpcio==1.51.1
 imageio==2.20.0
-numpy==1.17.4
+numpy==1.22.0
 numpy-quaternion==2022.4.2
 mkdocs==1.4.2
 mkdocs-material==9.0.2
+twine==4.0.2
+build==0.10.0
+setuptools==65.7.0
+matplotlib==3.6.3

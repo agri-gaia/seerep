@@ -1,17 +1,19 @@
 import sys
 
-from fb import (
+from seerep.fb import (
     Boundingbox,
     BoundingBox2DLabeled,
     BoundingBox2DLabeledWithCategory,
     BoundingBoxes2DLabeledStamped,
     BoundingBoxLabeled,
+    BoundingBoxLabeledWithCategory,
     BoundingboxStamped,
     CameraIntrinsics,
     CameraIntrinsicsQuery,
     Empty,
     GeodeticCoordinates,
     Header,
+    Label,
     LabelsWithCategory,
     LabelWithInstance,
     Point,
@@ -27,7 +29,7 @@ from fb import (
     Timestamp,
     TransformStampedQuery,
 )
-from fb import meta_operations_grpc_fb as metaOperations
+from seerep.fb import meta_operations_grpc_fb as metaOperations
 
 
 def getProject(builder, channel, name):
@@ -64,7 +66,7 @@ def createProject(channel, builder, name, frameId, coordSys, ellipsoid, altitude
     GeodeticCoordinates.AddEllipsoid(builder, ellipsoidBuf)
     GeodeticCoordinates.AddAltitude(builder, altitude)
     GeodeticCoordinates.AddLatitude(builder, latitude)
-    GeodeticCoordinates.AddLongitute(builder, longitude)
+    GeodeticCoordinates.AddLongitude(builder, longitude)
     gc = GeodeticCoordinates.End(builder)
 
     ProjectCreation.Start(builder)
@@ -82,13 +84,26 @@ def createProject(channel, builder, name, frameId, coordSys, ellipsoid, altitude
     return response.Uuid().decode("utf-8")
 
 
-def getOrCreateProject(builder, channel, name, create=True, mapFrameId="map"):
+def getOrCreateProject(
+    builder,
+    channel,
+    name,
+    create=True,
+    mapFrameId="map",
+    coordSys="",
+    ellipsoid="",
+    altitude=0.0,
+    latitude=0.0,
+    longitude=0.0,
+):
     '''Get the project,, or if not present, create one'''
     projectUuid = getProject(builder, channel, name)
 
     if projectUuid is None:
         if create:
-            projectUuid = createProject(channel, builder, name, mapFrameId)
+            projectUuid = createProject(
+                channel, builder, name, mapFrameId, coordSys, ellipsoid, altitude, latitude, longitude
+            )
         else:
             sys.exit()
 
@@ -145,12 +160,21 @@ def createPointFields(builder, channels, datatype, dataTypeOffset, count):
     return pointFieldsList
 
 
-def createLabelWithInstance(builder, label, instanceUuid):
-    '''Creates a label with an associated instance uuid in flatbuffers'''
+def createLabelWithConfidence(builder, label, confidence=None):
     labelStr = builder.CreateString(label)
+    Label.Start(builder)
+    Label.AddLabel(builder, labelStr)
+    if confidence:
+        Label.AddConfidence(builder, confidence)
+    return Label.End(builder)
+
+
+def createLabelWithInstance(builder, label, confidence, instanceUuid):
+    '''Creates a label with an associated instance uuid in flatbuffers'''
+    labelConfidence = createLabelWithConfidence(builder, label, confidence)
     instanceUuidStr = builder.CreateString(instanceUuid)
     LabelWithInstance.Start(builder)
-    LabelWithInstance.AddLabel(builder, labelStr)
+    LabelWithInstance.AddLabel(builder, labelConfidence)
     LabelWithInstance.AddInstanceUuid(builder, instanceUuidStr)
     return LabelWithInstance.End(builder)
 
@@ -179,12 +203,12 @@ def createLabelWithCategory(builder, category, labels):
     return builder.EndVector()
 
 
-def createLabelsWithInstance(builder, labels, instanceUuids):
+def createLabelsWithInstance(builder, labels, confidences, instanceUuids):
     '''Creates multiple general labels'''
     assert len(labels) == len(instanceUuids)
     labelsGeneral = []
-    for label, uuid in zip(labels, instanceUuids):
-        labelsGeneral.append(createLabelWithInstance(builder, label, uuid))
+    for label, confidence, uuid in zip(labels, confidences, instanceUuids):
+        labelsGeneral.append(createLabelWithInstance(builder, label, confidence, uuid))
     return labelsGeneral
 
 
@@ -196,11 +220,12 @@ def createPoint2d(builder, x, y):
     return Point.End(builder)
 
 
-def createBoundingBox2d(builder, point2dMin, point2dMax):
+def createBoundingBox2d(builder, centerPoint, spatialExtent, rotation=0):
     '''Creates a 3D bounding box in flatbuffers'''
     Boundingbox.Start(builder)
-    Boundingbox.AddPointMin(builder, point2dMin)
-    Boundingbox.AddPointMax(builder, point2dMax)
+    Boundingbox.AddCenterPoint(builder, centerPoint)
+    Boundingbox.AddSpatialExtent(builder, spatialExtent)
+    Boundingbox.AddRotation(builder, rotation)
     return Boundingbox.End(builder)
 
 
@@ -212,11 +237,11 @@ def createBoundingBox2dLabeled(builder, instance, boundingBox):
     return BoundingBox2DLabeled.End(builder)
 
 
-def createBoundingBoxes2d(builder, minPoints, maxPoints):
-    assert len(minPoints) == len(maxPoints)
+def createBoundingBoxes2d(builder, centerPoints, spatialExtents):
+    assert len(centerPoints) == len(spatialExtents)
     boundingBoxes = []
-    for pointMin, pointMax in zip(minPoints, maxPoints):
-        boundingBoxes.append(createBoundingBox2d(builder, pointMin, pointMax))
+    for centerPoint, spatialExtent in zip(centerPoints, spatialExtents):
+        boundingBoxes.append(createBoundingBox2d(builder, centerPoint, spatialExtent))
     return boundingBoxes
 
 
@@ -263,28 +288,34 @@ def createPoint(builder, x, y, z):
     return Point.End(builder)
 
 
-def createBoundingBox(builder, pointMin, pointMax):
+def createBoundingBox(builder, centerPoint, spatialExtent, rotation=None):
     '''Creates a 3D bounding box in flatbuffers'''
     Boundingbox.Start(builder)
-    Boundingbox.AddPointMin(builder, pointMin)
-    Boundingbox.AddPointMax(builder, pointMax)
+    Boundingbox.AddCenterPoint(builder, centerPoint)
+    Boundingbox.AddSpatialExtent(builder, spatialExtent)
+    if rotation:
+        Boundingbox.AddRotation(builder, rotation)
     return Boundingbox.End(builder)
 
 
-def createBoundingBoxStamped(builder, header, pointMin, pointMax):
+def createBoundingBoxStamped(builder, header, centerPoint, spatialExtent, rotation=None):
     '''Creates a stamped 3D bounding box in flatbuffers'''
-    boundingBox = createBoundingBox(builder, pointMin, pointMax)
+    boundingBox = createBoundingBox(builder, centerPoint, spatialExtent, rotation)
     BoundingboxStamped.Start(builder)
     BoundingboxStamped.AddHeader(builder, header)
     BoundingboxStamped.AddBoundingbox(builder, boundingBox)
     return BoundingboxStamped.End(builder)
 
 
-def createBoundingBoxes(builder, minPoints, maxPoints):
-    assert len(minPoints) == len(maxPoints)
+def createBoundingBoxes(builder, centerPoint, spatialExtent, rotation=None):
+    assert len(centerPoint) == len(spatialExtent)
     boundingBoxes = []
-    for pointMin, pointMax in zip(minPoints, maxPoints):
-        boundingBoxes.append(createBoundingBox(builder, pointMin, pointMax))
+    if rotation:
+        for center, extent, rot in zip(centerPoint, spatialExtent, rotation):
+            boundingBoxes.append(createBoundingBox(builder, center, extent, rot))
+    else:
+        for center, extent in zip(centerPoint, spatialExtent):
+            boundingBoxes.append(createBoundingBox(builder, center, extent))
     return boundingBoxes
 
 
@@ -303,6 +334,18 @@ def createBoundingBoxesLabeled(builder, instances, boundingBoxes):
     for instance, boundingBox in zip(instances, boundingBoxes):
         boundingBoxesLabeled.append(createBoundingBoxLabeled(builder, instance, boundingBox))
     return boundingBoxesLabeled
+
+
+def createBoundingBoxLabeledWithCategory(builder, category, bbLabeled):
+    BoundingBoxLabeledWithCategory.StartBoundingBoxLabeledVector(builder, len(bbLabeled))
+    for labelBb in reversed(bbLabeled):
+        builder.PrependUOffsetTRelative(labelBb)
+    labelsBbVector = builder.EndVector()
+
+    BoundingBoxLabeledWithCategory.Start(builder)
+    BoundingBoxLabeledWithCategory.AddCategory(builder, category)
+    BoundingBoxLabeledWithCategory.AddBoundingBox2dLabeled(builder, labelsBbVector)
+    return BoundingBoxLabeledWithCategory.End(builder)
 
 
 def addToBoundingBoxLabeledVector(builder, boundingBoxLabeledList):

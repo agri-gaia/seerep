@@ -3,11 +3,12 @@
 import os
 import sys
 
-import image_service_pb2_grpc as imageService
-import labels_with_category_pb2 as labels_with_category
-import meta_operations_pb2_grpc as metaOperations
-import query_pb2 as query
 from google.protobuf import empty_pb2
+from seerep.pb import image_service_pb2_grpc as imageService
+from seerep.pb import label_pb2
+from seerep.pb import labels_with_category_pb2 as labels_with_category
+from seerep.pb import meta_operations_pb2_grpc as metaOperations
+from seerep.pb import query_pb2 as query
 
 # importing util functions. Assuming that this file is in the parent dir
 # https://github.com/agri-gaia/seerep/blob/6c4da5736d4a893228e97b01a9ada18620b1a83f/examples/python/gRPC/util.py
@@ -41,12 +42,12 @@ theQuery = query.Query()
 theQuery.projectuuid.append(projectuuid)
 theQuery.boundingboxStamped.header.frame_id = "map"
 
-theQuery.boundingboxStamped.boundingbox.point_min.x = 0.0
-theQuery.boundingboxStamped.boundingbox.point_min.y = 0.0
-theQuery.boundingboxStamped.boundingbox.point_min.z = 0.0
-theQuery.boundingboxStamped.boundingbox.point_max.x = 100.0
-theQuery.boundingboxStamped.boundingbox.point_max.y = 100.0
-theQuery.boundingboxStamped.boundingbox.point_max.z = 100.0
+theQuery.boundingboxStamped.boundingbox.center_point.x = 50.0
+theQuery.boundingboxStamped.boundingbox.center_point.y = 50.0
+theQuery.boundingboxStamped.boundingbox.center_point.z = 50.0
+theQuery.boundingboxStamped.boundingbox.spatial_extent.x = 100.0
+theQuery.boundingboxStamped.boundingbox.spatial_extent.y = 100.0
+theQuery.boundingboxStamped.boundingbox.spatial_extent.z = 100.0
 
 # since epoche
 theQuery.timeinterval.time_min.seconds = 1638549273
@@ -57,21 +58,28 @@ theQuery.timeinterval.time_max.nanos = 0
 # labels
 label = labels_with_category.LabelsWithCategory()
 label.category = "0"
-label.labels.extend(["testlabel0"])
+labelWithConfidence = label_pb2.Label()
+labelWithConfidence.label = "testlabel0"
+label.labels.extend([labelWithConfidence])
 theQuery.labelsWithCategory.append(label)
 
 # 5. Query the server for images matching the query and iterate over them
 for img in stub.GetImage(theQuery):
-    print(f"uuidmsg: {img.header.uuid_msgs}")
-    print(f"first label: {img.labels_bb[0].boundingBox2DLabeled[0].labelWithInstance.label}")
     print(
-        "First bounding box (Xmin, Ymin, Xmax, Ymax): "
-        + str(img.labels_bb[0].boundingBox2DLabeled[0].boundingBox.point_min.x)
+        f"uuidmsg: {img.header.uuid_msgs}"
+        + "\n"
+        + f"first label: {img.labels_bb[0].boundingBox2DLabeled[0].labelWithInstance.label.label}"
+        + "\n"
+        + f"first label confidence: {img.labels_bb[0].boundingBox2DLabeled[0].labelWithInstance.label.confidence}"
+        + "\n"
+        + "First bounding box (Xcenter,Ycenter,Xextent,Yextent):"
         + " "
-        + str(img.labels_bb[0].boundingBox2DLabeled[0].boundingBox.point_min.y)
+        + str(img.labels_bb[0].boundingBox2DLabeled[0].boundingBox.center_point.x)
         + " "
-        + str(img.labels_bb[0].boundingBox2DLabeled[0].boundingBox.point_max.x)
+        + str(img.labels_bb[0].boundingBox2DLabeled[0].boundingBox.center_point.y)
         + " "
-        + str(img.labels_bb[0].boundingBox2DLabeled[0].boundingBox.point_max.y)
+        + str(img.labels_bb[0].boundingBox2DLabeled[0].boundingBox.spatial_extent.x)
+        + " "
+        + str(img.labels_bb[0].boundingBox2DLabeled[0].boundingBox.spatial_extent.y)
         + "\n"
     )

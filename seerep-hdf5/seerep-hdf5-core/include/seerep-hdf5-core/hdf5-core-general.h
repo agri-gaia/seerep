@@ -128,6 +128,7 @@ public:
   void readBoundingBoxLabeled(const std::string& datatypeGroup, const std::string& uuid,
                               std::vector<std::string>& labelCategories,
                               std::vector<std::vector<std::string>>& labelsPerCategory,
+                              std::vector<std::vector<float>>& labelConfidencesPerCategory,
                               std::vector<std::vector<std::vector<double>>>& boundingBoxesPerCategory,
                               std::vector<std::vector<std::string>>& instancesPerCategory, bool loadBoxes = true);
 
@@ -185,6 +186,7 @@ public:
    * @return std::shared_ptr<HighFive::Group> shared pointer to the group
    */
   std::shared_ptr<HighFive::Group> getHdf5Group(const std::string& hdf5GroupPath, bool create = true);
+
   /**
    * @brief Get a shared pointer to a hdf5 data set specified by the hdf5DataSetPath
    *
@@ -195,6 +197,19 @@ public:
    */
   template <class T>
   std::shared_ptr<HighFive::DataSet> getHdf5DataSet(const std::string& hdf5DataSetPath, HighFive::DataSpace& dataSpace);
+
+  /**
+   * @brief Get a shared pointer to a hdf5 data set specified by the hdf5DataSetPath
+   *
+   * @tparam T type of the dataset
+   * @param hdf5DataSetPath path to the dataset
+   * @param dataSpace the data space to specify the dimensions of the dataset
+   * @param createProps properties for creation of the dataset
+   * @return std::shared_ptr<HighFive::DataSet> shared pointer to the data set
+   */
+  template <class T>
+  std::shared_ptr<HighFive::DataSet> getHdf5DataSet(const std::string& hdf5DataSetPath, HighFive::DataSpace& dataSpace,
+                                                    HighFive::DataSetCreateProps& createProps);
 
   std::shared_ptr<HighFive::DataSet> getHdf5DataSet(const std::string& hdf5DataSetPath);
   /**
@@ -210,6 +225,7 @@ public:
 
 private:
   void readLabel(const std::string& id, const std::string labelType, std::vector<std::string>& labels);
+  void readlabelConfidences(const std::string& id, const std::string labelType, std::vector<float>& labelConfidences);
   void readBoundingBoxes(const std::string& id, const std::string boundingBoxType,
                          std::vector<std::vector<double>>& boundingBoxes);
   void readInstances(const std::string& id, const std::string InstanceType, std::vector<std::string>& instances);
@@ -238,9 +254,11 @@ public:
   // dataset names
   inline static const std::string RAWDATA = "rawdata";
   inline static const std::string LABELGENERAL = "labelGeneral";
+  inline static const std::string LABELGENERALCONFIDENCES = "labelGeneralConfidences";
   inline static const std::string LABELGENERALINSTANCES = "labelGeneralInstances";
   inline static const std::string LABELBB = "labelBB";
-  inline static const std::string LABELBBBOXES = "labelBBBoxes";
+  inline static const std::string LABELBBCONFIDENCES = "labelBBConfidences";
+  inline static const std::string LABELBBBOXESWITHROTATION = "labelBBBoxesWithRotation";
   inline static const std::string LABELBBINSTANCES = "labelBBInstances";
   inline static const std::string POINTS = "points";
 

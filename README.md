@@ -5,6 +5,7 @@
 [![catkin build workflow](https://github.com/agri-gaia/seerep/actions/workflows/main.yml/badge.svg)](https://github.com/agri-gaia/seerep/actions)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](./.pre-commit-config.yaml)
 [![Docker](https://img.shields.io/badge/Docker-enabled-blue?logo=docker)](./docker)
+[![PyPI](https://img.shields.io/pypi/v/seerep-grpc?label=pypi%20seerep-gRPC)](https://pypi.org/project/seerep-grpc/)
  <!-- ![Architecture](https://img.shields.io/badge/Architecture-x86-blue) -->
 
 ## Table of Contents
@@ -63,15 +64,17 @@ services:
     image: ghcr.io/agri-gaia/seerep_server:latest
     tty: true
     container_name: seerep_server
-    command:
-      # define data-dir for seerep-server
-      - "--data-folder=/mnt/seerep-data"
     ports:
       # the gRPC port
       - 9090:9090
     volumes:
       # persist the data folder
       - seerep-data:/mnt/seerep-data
+    environment:
+      - TZ=Europe/Berlin
+      - SEEREP_DATA_FOLDER=/mnt/seerep-data
+      - SEEREP_LOG_PATH=/mnt/seerep-data/log
+      - SEEREP_LOG_LEVEL=info
 volumes:
   seerep-data:
 ```
