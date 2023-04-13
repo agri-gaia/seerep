@@ -7,11 +7,11 @@ USER root
 WORKDIR /seerep
 
 COPY certs src/certs/
-COPY seerep-com src/seerep-com/
-COPY seerep-hdf5 src/seerep-hdf5/
-COPY seerep-msgs src/seerep-msgs/
-COPY seerep-ros src/seerep-ros/
-COPY seerep-srv src/seerep-srv/
+COPY seerep_com src/seerep_com/
+COPY seerep_hdf5 src/seerep_hdf5/
+COPY seerep_msgs src/seerep_msgs/
+COPY seerep_ros src/seerep_ros/
+COPY seerep_srv src/seerep_srv/
 COPY examples src/examples/
 COPY docker/start_server.sh src/start_server.sh
 
