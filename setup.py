@@ -31,10 +31,10 @@ class CustomCommand(Command):
         self.fbs_api_path = None
 
     def finalize_options(self) -> None:
-        self.proto_msgs_path = Path("seerep-msgs/protos/")
-        self.proto_api_path = Path("seerep-com/protos/")
-        self.fbs_msgs_path = Path("seerep-msgs/fbs/")
-        self.fbs_api_path = Path("seerep-com/fbs/")
+        self.proto_msgs_path = Path("seerep_msgs/protos/")
+        self.proto_api_path = Path("seerep_com/protos/")
+        self.fbs_msgs_path = Path("seerep_msgs/fbs/")
+        self.fbs_api_path = Path("seerep_com/fbs/")
         with suppress(Exception):
             self.bdist_dir = Path(self.get_finalized_command("bdist_wheel").bdist_dir)
 

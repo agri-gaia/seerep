@@ -1,13 +1,12 @@
 
 #include <grpcpp/create_channel.h>
+#include <seerep_com/image_service.grpc.fb.h>
+#include <seerep_com/meta_operations.grpc.fb.h>
+#include <seerep_com/point_service.grpc.fb.h>
 
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 #include <iostream>
-
-#include "seerep-com/image_service.grpc.fb.h"
-#include "seerep-com/meta_operations.grpc.fb.h"
-#include "seerep-com/point_service.grpc.fb.h"
 
 std::shared_ptr<grpc::Channel> getChannel()
 {

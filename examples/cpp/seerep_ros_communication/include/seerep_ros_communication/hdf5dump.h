@@ -5,11 +5,11 @@
 #include <optional>
 
 // seerep
-#include <seerep-hdf5-core/hdf5-core-general.h>
-#include <seerep-hdf5-core/hdf5-core-image.h>
-#include <seerep-hdf5-pb/hdf5-pb-image.h>
-#include <seerep-hdf5-pb/hdf5-pb-pointcloud.h>
-#include <seerep-hdf5-pb/hdf5-pb-tf.h>
+#include <seerep_hdf5_core/hdf5_core_general.h>
+#include <seerep_hdf5_core/hdf5_core_image.h>
+#include <seerep_hdf5_pb/hdf5_pb_image.h>
+#include <seerep_hdf5_pb/hdf5_pb_pointcloud.h>
+#include <seerep_hdf5_pb/hdf5_pb_tf.h>
 #include <seerep_ros_conversions_pb/conversions.h>
 
 // uuid

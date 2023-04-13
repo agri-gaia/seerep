@@ -3,19 +3,17 @@
   <name>examples_cpp</name>
   <version>0.0.1</version>
   <description>
-    example gRPC cpp clients
+    Example gRPC clients in C++
   </description>
 
   <maintainer email="mark.niemeyer@dfki.de">Mark Niemeyer</maintainer>
 
-  <license>BSD-3</license>
-
-  <url type="website">TODO</url>
+  <license>BSD-3-Clause</license>
 
   <author email="mark.niemeyer@dfki.de">Mark Niemeyer</author>
 
-  <depend>seerep-msgs</depend>
-  <depend>seerep-com</depend>
+  <depend>seerep_msgs</depend>
+  <depend>seerep_com</depend>
   <buildtool_depend>cmake</buildtool_depend>
 
   <export>

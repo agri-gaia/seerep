@@ -1,0 +1,18 @@
+@PACKAGE_INIT@
+
+set(SeerepMsgs_INCLUDE_DIRS @PACKAGE_CMAKE_INSTALL_INCLUDEDIR@)
+list(APPEND SeerepMsgs_INCLUDE_DIRS @PACKAGE_CMAKE_INSTALL_INCLUDEDIR@/seerep_msgs)
+if(EXISTS seerep_msgs)
+  list(APPEND SeerepMsgs_INCLUDE_DIRS seerep_msgs)
+endif()
+
+set(SeerepMsgs_PROTOBUF_IMPORT_DIRS @PACKAGE_PROTOBUF_IMPORT_DIR@)
+set(SeerepMsgs_FLATBUFFERS_IMPORT_DIRS @PACKAGE_FLATBUFFERS_IMPORT_DIR@)
+
+find_package(PkgConfig REQUIRED)
+find_library(SeerepMsgs_LIBRARY NAMES seerepmsgs)
+set(SeerepMsgs_LIBRARIES ${SeerepMsgs_LIBRARY})
+
+find_package(Protobuf REQUIRED)
+list(APPEND SeerepMsgs_INCLUDE_DIRS ${Protobuf_INCLUDE_DIR})
+list(APPEND SeerepMsgs_LIBRARIES ${Protobuf_LIBRARY})

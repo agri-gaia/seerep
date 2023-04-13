@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>seerep_msgs</name>
+  <version>0.0.1</version>
+  <description>
+    Package defining the flatbuffers and protocol buffer messages of SEEREP
+  </description>
+
+  <maintainer email="mark.niemeyer@dfki.de">Mark Niemeyer</maintainer>
+  <maintainer email="spuetz@uos.de">Sebastian Pütz</maintainer>
+
+  <license>BSD-3-Clause</license>
+
+  <author email="mark.niemeyer@dfki.de">Mark Niemeyer</author>
+  <author email="spuetz@uos.de">Sebastian Pütz</author>
+
+  <buildtool_depend>cmake</buildtool_depend>
+
+  <export>
+    <build_type>cmake</build_type>
+  </export>
+</package>

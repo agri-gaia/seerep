@@ -12,9 +12,9 @@
 #include <grpcpp/security/credentials.h>
 
 // seerep
-#include <seerep-com/image_service.grpc.fb.h>
-#include <seerep-com/meta_operations.grpc.fb.h>
-#include <seerep-com/tf_service.grpc.fb.h>
+#include <seerep_com/image_service.grpc.fb.h>
+#include <seerep_com/meta_operations.grpc.fb.h>
+#include <seerep_com/tf_service.grpc.fb.h>
 #include <seerep_ros_conversions_fb/conversions.h>
 
 // ros
