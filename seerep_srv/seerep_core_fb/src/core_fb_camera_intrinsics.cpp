@@ -1,4 +1,4 @@
-#include "seerep-core-fb/core-fb-camera-intrinsics.h"
+#include "seerep_core_fb/core_fb_camera_intrinsics.h"
 
 namespace seerep_core_fb
 {

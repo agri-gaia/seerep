@@ -1,10 +1,10 @@
 
 #include <gtest/gtest.h>
-#include <seerep-hdf5-core/hdf5-core-cameraintrinsics.h>
-#include <seerep-msgs/camera_intrinsics.h>
-#include <seerep-msgs/datatype.h>
-#include <seerep-msgs/region_of_interest.h>
-#include <seerep-msgs/timestamp.h>
+#include <seerep_hdf5_core/hdf5_core_cameraintrinsics.h>
+#include <seerep_msgs/camera_intrinsics.h>
+#include <seerep_msgs/datatype.h>
+#include <seerep_msgs/region_of_interest.h>
+#include <seerep_msgs/timestamp.h>
 
 #include <H5File.hpp>
 #include <boost/uuid/uuid.hpp>

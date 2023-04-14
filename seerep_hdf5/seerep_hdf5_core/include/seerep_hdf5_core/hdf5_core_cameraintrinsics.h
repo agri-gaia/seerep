@@ -6,12 +6,12 @@
 #include <highfive/H5File.hpp>
 
 // seerephdf5
-#include "seerep-hdf5-core/hdf5-core-general.h"
+#include "seerep_hdf5_core/hdf5_core_general.h"
 
 // seerep-msgs
 #include <header.h>
 #include <region_of_interest.h>
-#include <seerep-msgs/camera_intrinsics.h>
+#include <seerep_msgs/camera_intrinsics.h>
 
 namespace seerep_hdf5_core
 {

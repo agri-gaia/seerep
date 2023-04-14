@@ -68,7 +68,7 @@ target_link_libraries(
 )
 
 set(INSTALL_HEADERS
-    include/seerep-core/core_camera_intrinsics.h
+    include/seerep_core/core_camera_intrinsics.h
     include/seerep_core/core_dataset.h
     include/seerep_core/core_instance.h
     include/seerep_core/core_instances.h

@@ -1,14 +1,14 @@
 #ifndef SEEREP_CORE_CORE_CAMERA_INTRINSICS_H_
 #define SEEREP_CORE_CORE_CAMERA_INTRINSICS_H_
 
-#include <seerep-hdf5-core/hdf5-core-cameraintrinsics.h>
+#include <seerep_hdf5_core/hdf5_core_cameraintrinsics.h>
 
 // seerep-msgs
-#include <seerep-msgs/camera_intrinsics.h>
-#include <seerep-msgs/camera_intrinsics_query.h>
+#include <seerep_msgs/camera_intrinsics.h>
+#include <seerep_msgs/camera_intrinsics_query.h>
 
 // seerep-hdf5-core
-#include <seerep-hdf5-core/hdf5-core-cameraintrinsics.h>
+#include <seerep_hdf5_core/hdf5_core_cameraintrinsics.h>
 
 namespace seerep_core
 {

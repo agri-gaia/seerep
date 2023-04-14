@@ -8,7 +8,7 @@
 #include <optional>
 
 // seerep-msgs
-#include <seerep-msgs/camera_intrinsics.h>
+#include <seerep_msgs/camera_intrinsics.h>
 #include <seerep_msgs/dataset_indexable.h>
 #include <seerep_msgs/geodetic_coordinates.h>
 #include <seerep_msgs/query.h>

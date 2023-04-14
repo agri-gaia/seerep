@@ -1,5 +1,6 @@
 import sys
 
+from fb import meta_operations_grpc_fb as metaOperations
 from seerep.fb import (
     Boundingbox,
     BoundingBox2DLabeled,
@@ -29,7 +30,6 @@ from seerep.fb import (
     Timestamp,
     TransformStampedQuery,
 )
-from fb import meta_operations_grpc_fb as metaOperations
 
 
 def getProject(builder, channel, name):

@@ -6,12 +6,12 @@
 #include <functional>
 #include <optional>
 
-#include "core-fb-conversion.h"
-#include "core-fb-general.h"
+#include "core_fb_conversion.h"
+#include "core_fb_general.h"
 
 // seerep-core
-#include <seerep-core/core-camera-intrinsics.h>
-#include <seerep-core/core.h>
+#include <seerep_core/core.h>
+#include <seerep_core/core_camera_intrinsics.h>
 
 // logging
 #include <boost/log/sources/severity_logger.hpp>

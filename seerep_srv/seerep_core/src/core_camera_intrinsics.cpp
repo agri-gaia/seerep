@@ -1,4 +1,4 @@
-#include "seerep-core/core-camera-intrinsics.h"
+#include "seerep_core/core_camera_intrinsics.h"
 
 namespace seerep_core
 {

@@ -1,4 +1,4 @@
-#include "seerep-server/fb-cameraintrinsics-service.h"
+#include "seerep_server/fb_cameraintrinsics_service.h"
 
 namespace seerep_server
 {

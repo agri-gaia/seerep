@@ -1,4 +1,4 @@
-#include "seerep-hdf5-core/hdf5-core-cameraintrinsics.h"
+#include "seerep_hdf5_core/hdf5_core_cameraintrinsics.h"
 
 namespace seerep_hdf5_core
 {

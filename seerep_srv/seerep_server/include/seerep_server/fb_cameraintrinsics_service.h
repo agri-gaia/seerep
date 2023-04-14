@@ -2,10 +2,10 @@
 #define SEEREP_SERVER_FB_CAMERA_INTRINSICS_SERVICE_H_
 
 // seerep
-#include <seerep-com/camera_intrinsics_service.grpc.fb.h>
-#include <seerep-core-fb/core-fb-camera-intrinsics.h>
-#include <seerep-core-fb/core-fb-conversion.h>
-#include <seerep-core/core.h>
+#include <seerep_com/camera_intrinsics_service.grpc.fb.h>
+#include <seerep_core/core.h>
+#include <seerep_core_fb/core_fb_camera_intrinsics.h>
+#include <seerep_core_fb/core_fb_conversion.h>
 
 #include "util.hpp"
 
