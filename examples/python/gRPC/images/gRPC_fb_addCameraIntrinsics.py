@@ -4,8 +4,8 @@ import os
 import sys
 
 import flatbuffers
-from fb import CameraIntrinsics
-from fb import camera_intrinsics_service_grpc_fb as ci_service
+from seerep.fb import CameraIntrinsics
+from seerep.fb import camera_intrinsics_service_grpc_fb as ci_service
 
 # importing util functions. Assuming that these files are in the parent dir
 # examples/python/gRPC/util.py

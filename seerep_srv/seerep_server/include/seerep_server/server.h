@@ -16,7 +16,7 @@
 #include <seerep_core/core.h>
 
 // seerep_server
-#include "seerep-server/fb_cameraintrinsics_service.h"
+#include "seerep_server/fb_cameraintrinsics_service.h"
 #include "seerep_server/fb_image_service.h"
 #include "seerep_server/fb_instance_service.h"
 #include "seerep_server/fb_meta_operations.h"

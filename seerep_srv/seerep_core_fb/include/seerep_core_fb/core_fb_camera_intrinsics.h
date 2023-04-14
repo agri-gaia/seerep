@@ -1,7 +1,7 @@
 #ifndef SEEREP_CORE_FB_CAMERA_INTRINSICS_SERVICE_H_
 #define SEEREP_CORE_FB_CAMERA_INTRINSICS_SERVICE_H_
 
-#include <seerep-com/camera_intrinsics_service.grpc.fb.h>
+#include <seerep_com/camera_intrinsics_service.grpc.fb.h>
 
 #include <functional>
 #include <optional>
