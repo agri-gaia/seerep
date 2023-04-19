@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package seerep.pb;
+
+message CameraIntrinsicsQuery
+{
+  string uuid_camera_intrinsics = 1;
+  string uuid_project = 2;
+}

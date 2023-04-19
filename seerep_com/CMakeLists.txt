@@ -21,6 +21,7 @@ set(MY_PROTO_FILES
     protos/tf_service.proto
     protos/image_service.proto
     protos/point_cloud_service.proto
+    protos/camera_intrinsics_service.proto
 )
 
 protobuf_generate_cpp(PROTO_SOURCES PROTO_HEADERS ${MY_PROTO_FILES})

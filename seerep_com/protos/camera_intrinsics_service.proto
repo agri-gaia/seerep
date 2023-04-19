@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package seerep.pb;
+
+import "camera_intrinsics.proto";
+
+import "camera_intrinsics_query.proto";
+import "server_response.proto";
+
+service CameraIntrinsicsService
+{
+  rpc GetCameraIntrinsics(CameraIntrinsicsQuery) returns (stream CameraIntrinsics);
+  rpc TransferCameraIntrinsics(CameraIntrinsics) returns (ServerResponse);
+}

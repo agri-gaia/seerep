@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package seerep.pb;
+
+message RegionOfInterest
+{
+  uint32 x_offset = 1;
+  uint32 y_offset = 2;
+  uint32 height = 3;
+  uint32 width = 4;
+  bool do_rectify = 5;
+}

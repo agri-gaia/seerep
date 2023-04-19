@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package seerep.pb;
+
+import "header.proto";
+import "region_of_interest.proto";
+
+message CameraIntrinsics
+{
+  Header header = 1;
+  uint32 height = 2;
+  uint32 width = 3;
+  string distortion_model = 4;
+  repeated double distortion = 5;
+  repeated double intrinsic_matrix = 6;
+  repeated double rectification_matrix = 7;
+  repeated double projection_matrix = 8;
+  uint32 binning_x = 9;
+  uint32 binning_y = 10;
+  RegionOfInterest region_of_interest = 11;
+}
