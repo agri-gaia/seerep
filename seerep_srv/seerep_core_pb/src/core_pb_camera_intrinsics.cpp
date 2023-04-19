@@ -7,11 +7,12 @@ CorePbCameraIntrinsics::CorePbCameraIntrinsics(std::shared_ptr<seerep_core::Core
 {
 }
 
-CorePbCameraIntrinsics::~CorePbCameraIntrinsics();
+CorePbCameraIntrinsics::~CorePbCameraIntrinsics()
 {
 }
 
-std::optional<seerep::pb::CameraIntrinsics> getData(const seerep::pb::CameraIntrinsicsQuery& query);
+std::optional<seerep::pb::CameraIntrinsics>
+CorePbCameraIntrinsics::getData(const seerep::pb::CameraIntrinsicsQuery& query)
 {
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
       << "loading camera intrinsics from camera_intrinsics/";
@@ -29,10 +30,10 @@ std::optional<seerep::pb::CameraIntrinsics> getData(const seerep::pb::CameraIntr
   return camintrinsics_pb;
 }
 
-boost::uuids::uuid addData(const seerep::pb::CameraIntrinsics& camintrinsics);
+boost::uuids::uuid CorePbCameraIntrinsics::addData(const seerep::pb::CameraIntrinsics& camintrinsics)
 {
   boost::uuids::string_generator gen;
-  boost::uuids::uuid projectuuid = gen(cameraintrinsics.header()->uuid_project()->str());
+  boost::uuids::uuid projectuuid = gen(camintrinsics.header().uuid_project());
 
   seerep_core_msgs::camera_intrinsics ciCore;
   // convert pb camintrinsics to agnostic camintrinsics
