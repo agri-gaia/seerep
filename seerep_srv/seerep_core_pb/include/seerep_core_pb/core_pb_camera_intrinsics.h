@@ -38,6 +38,8 @@ public:
 
 private:
   std::shared_ptr<seerep_core::Core> m_seerepCore;
+  /** the logger for the logging framework */
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
 };
 
 }  // namespace seerep_core_pb

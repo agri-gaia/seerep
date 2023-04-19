@@ -191,8 +191,8 @@ seerep::pb::Header CorePbConversion::toPb(const seerep_core_msgs::Header& header
   seerep::pb::Timestamp ts_pb = CorePbConversion::toPb(header.timestamp);
   header_pb.set_allocated_stamp(&ts_pb);
 
-  header_pb.set_uuid_msgs(header.uuidData);
-  header_pb.set_uuid_project(header.uuidProject);
+  header_pb.set_uuid_msgs(boost::lexical_cast<std::string>(header.uuidData));
+  header_pb.set_uuid_project(boost::lexical_cast<std::string>(header.uuidProject));
 
   return header_pb;
 }
