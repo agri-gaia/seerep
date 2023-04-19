@@ -1,6 +1,5 @@
 import sys
 
-from fb import meta_operations_grpc_fb as metaOperations
 from seerep.fb import (
     Boundingbox,
     BoundingBox2DLabeled,
@@ -30,6 +29,7 @@ from seerep.fb import (
     Timestamp,
     TransformStampedQuery,
 )
+from seerep.fb import meta_operations_grpc_fb as metaOperations
 
 
 def getProject(builder, channel, name):
@@ -452,13 +452,13 @@ def createTransformStampedQuery(builder, header, childFrameId):
 
 
 def createRegionOfInterest(builder, x_offset, y_offset, height, width, do_rectify):
-    regionOfInterest.Start(builder)
-    regionOfInterest.AddXOffset(builder, x_offset)
-    regionOfInterest.AddYOffset(builder, y_offset)
-    regionOfInterest.AddHeight(builder, height)
-    regionOfInterest.AddWidth(builder, width)
-    regionOfInterest.AddDoRectify(builder, do_rectify)
-    return regionOfInterest.End(builder)
+    RegionOfInterest.Start(builder)
+    RegionOfInterest.AddXOffset(builder, x_offset)
+    RegionOfInterest.AddYOffset(builder, y_offset)
+    RegionOfInterest.AddHeight(builder, height)
+    RegionOfInterest.AddWidth(builder, width)
+    RegionOfInterest.AddDoRectify(builder, do_rectify)
+    return RegionOfInterest.End(builder)
 
 
 def createCameraIntrinsics(
@@ -516,8 +516,8 @@ def createCameraIntrinsics(
 def createCameraIntrinsicsQuery(builder, ci_uuid, project_uuid):
     ci_uuid_str = builder.CreateString(ci_uuid)
     project_uuid_str = builder.CreateString(project_uuid)
-    cameraIntrinsicsQuery.Start(builder)
-    cameraIntrinsicsQuery.AddUuidCameraIntrinsics(builder, ci_uuid_str)
-    cameraIntrinsicsQuery.AddUuidProject(builder, project_uuid_str)
+    CameraIntrinsicsQuery.Start(builder)
+    CameraIntrinsicsQuery.AddUuidCameraIntrinsics(builder, ci_uuid_str)
+    CameraIntrinsicsQuery.AddUuidProject(builder, project_uuid_str)
 
-    return cameraIntrinsicsQuery.End(builder)
+    return CameraIntrinsicsQuery.End(builder)

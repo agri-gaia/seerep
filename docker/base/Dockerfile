@@ -164,7 +164,7 @@ RUN echo "source /opt/ros/noetic/setup.bash" >> /root/.bashrc \
         && echo "[[ -e /seerep/devel/setup.bash ]] && source /seerep/devel/setup.bash" >> /root/.bashrc \
         && echo "[[ -e /seerep/devel/setup.zsh ]] && source /seerep/devel/setup.zsh" >> /root/.zshrc
 
-RUN echo 'export PYTHONPATH="${PYTHONPATH}:/seerep/build/seerep-msgs:/seerep/build/seerep-com"' >> /root/.bashrc
+RUN echo 'export PYTHONPATH="${PYTHONPATH}:/seerep/build/seerep_msgs:/seerep/build/seerep_com"' >> /root/.bashrc
 
 # add non root user
 RUN useradd -u 1000 --create-home --shell /bin/bash docker && echo "docker:docker" | chpasswd && adduser docker sudo
@@ -179,6 +179,6 @@ RUN echo "source /opt/ros/noetic/setup.bash" >> /home/docker/.bashrc \
         && echo "[[ -e /seerep/devel/setup.bash ]] && source /seerep/devel/setup.bash" >> /home/docker/.bashrc \
         && echo "[[ -e /seerep/devel/setup.zsh ]] && source /seerep/devel/setup.zsh" >> /home/docker/.zshrc
 
-RUN echo 'export PYTHONPATH="${PYTHONPATH}:/seerep/devel/lib:/seerep/devel/include/seerep-com/fbs/"' >> /home/docker/.bashrc
+RUN echo 'export PYTHONPATH="${PYTHONPATH}:/seerep/devel/lib:/seerep/devel/include/seerep_com/fbs/"' >> /home/docker/.bashrc
 
 ENTRYPOINT [ "/bin/sh", "-c", "while sleep 1000; do :; done" ]
