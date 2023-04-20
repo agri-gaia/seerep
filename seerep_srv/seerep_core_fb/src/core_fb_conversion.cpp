@@ -230,7 +230,7 @@ flatbuffers::Offset<seerep::fb::Header> CoreFbConversion::toFb(flatbuffers::grpc
   headerBuilder.add_frame_id(frameIdMsg);
   headerBuilder.add_stamp(timeStampMsg);
   headerBuilder.add_uuid_project(uuidProject);
-  headerBuilder.add_uuid_msgs(uuidMsg);
+  headerBuilder.add_seq(header.sequence);
 
   return headerBuilder.Finish();
 }

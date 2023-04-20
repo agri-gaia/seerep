@@ -59,15 +59,14 @@ void Hdf5CoreCameraIntrinsics::writeCameraIntrinsics(const seerep_core_msgs::cam
 }
 
 seerep_core_msgs::camera_intrinsics
-Hdf5CoreCameraIntrinsics::readCameraIntrinsics(const boost::uuids::uuid& project_uuid,
-                                               const boost::uuids::uuid& cameraintrinsics_uuid)
+Hdf5CoreCameraIntrinsics::readCameraIntrinsics(const boost::uuids::uuid& cameraintrinsics_uuid)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
-  std::string uuid = boost::lexical_cast<std::string>(project_uuid);
+  //   std::string uuid = boost::lexical_cast<std::string>(project_uuid);
   std::string id = boost::lexical_cast<std::string>(cameraintrinsics_uuid);
 
-  std::string hdf5DatasetPath = getHdf5DataSetPath(uuid);
+  //   std::string hdf5DatasetPath = getHdf5DataSetPath(uuid);
   std::string hdf5GroupPath = getHdf5GroupPath(id);
 
   auto dataGroupPtr = getHdf5Group(hdf5GroupPath, false);

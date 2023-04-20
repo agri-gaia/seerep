@@ -27,10 +27,9 @@ public:
   /**
    * @brief Get the seerep core messages camera intrinsics object
    *
-   * @param cameraintrinsics_query seerep core camera intrinsics query
+   * @param camIntrinsicsUuid [in] UUID of the camera intrinsics to be fetched
    */
-  std::optional<seerep_core_msgs::camera_intrinsics>
-  getData(const seerep_core_msgs::camera_intrinsics_query& cameraintrinsics_query);
+  std::optional<seerep_core_msgs::camera_intrinsics> getData(boost::uuids::uuid camIntrinsicsUuid);
 
 private:
   /** @brief shared pointer to the object handling the HDF5 io for Camera Intrinsics */

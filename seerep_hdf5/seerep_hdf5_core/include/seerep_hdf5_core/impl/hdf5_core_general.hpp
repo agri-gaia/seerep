@@ -1,3 +1,4 @@
+#include <filesystem>
 
 namespace seerep_hdf5_core
 {
@@ -104,6 +105,11 @@ template <class T>
 void Hdf5CoreGeneral::readHeader(const std::string& id, HighFive::AnnotateTraits<T>& object,
                                  seerep_core_msgs::Header& header)
 {
+  header.uuidData = boost::lexical_cast<boost::uuids::uuid>(id);
+
+  std::string uuidproject_str = std::filesystem::path(m_file->getName()).filename().stem();
+  header.uuidProject = boost::lexical_cast<boost::uuids::uuid>(uuidproject_str);
+
   header.timestamp.seconds = Hdf5CoreGeneral::readAttributeFromHdf5<int32_t>(id, object, HEADER_STAMP_SECONDS);
   header.timestamp.nanos = Hdf5CoreGeneral::readAttributeFromHdf5<int32_t>(id, object, HEADER_STAMP_NANOS);
   header.frameId = Hdf5CoreGeneral::readAttributeFromHdf5<std::string>(id, object, HEADER_FRAME_ID);

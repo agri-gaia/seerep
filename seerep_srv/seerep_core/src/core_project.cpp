@@ -102,10 +102,9 @@ void CoreProject::addCameraIntrinsics(const seerep_core_msgs::camera_intrinsics&
   m_coreCameraIntrinsics->addData(ci);
 }
 
-std::optional<seerep_core_msgs::camera_intrinsics>
-CoreProject::getCameraIntrinsics(const seerep_core_msgs::camera_intrinsics_query& ci_query)
+std::optional<seerep_core_msgs::camera_intrinsics> CoreProject::getCameraIntrinsics(boost::uuids::uuid camIntrinsicsUuid)
 {
-  return m_coreCameraIntrinsics->getData(ci_query);
+  return m_coreCameraIntrinsics->getData(camIntrinsicsUuid);
 }
 
 std::shared_ptr<std::mutex> CoreProject::getHdf5FileMutex()

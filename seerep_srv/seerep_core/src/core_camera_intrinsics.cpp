@@ -14,13 +14,11 @@ void CoreCameraIntrinsics::addData(const seerep_core_msgs::camera_intrinsics& ca
   m_hdf5_io->writeCameraIntrinsics(cameraintrinsics);
 }
 
-std::optional<seerep_core_msgs::camera_intrinsics>
-CoreCameraIntrinsics::getData(const seerep_core_msgs::camera_intrinsics_query& cameraintrinsics_query)
+std::optional<seerep_core_msgs::camera_intrinsics> CoreCameraIntrinsics::getData(boost::uuids::uuid camIntrinsicsUuid)
 {
   try
   {
-    return m_hdf5_io->readCameraIntrinsics(cameraintrinsics_query.uuidProject,
-                                           cameraintrinsics_query.uuidCameraIntrinsics);
+    return m_hdf5_io->readCameraIntrinsics(camIntrinsicsUuid);
   }
   catch (const std::exception& e)
   {

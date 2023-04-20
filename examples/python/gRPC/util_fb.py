@@ -479,22 +479,22 @@ def createCameraIntrinsics(
 
     CameraIntrinsics.StartDistortionVector(builder, len(distortion))
     for d in reversed(distortion):
-        builder.PrependUOffsetTRelative(d)
+        builder.PrependFloat64(d)
     distortionOffset = builder.EndVector()
 
     CameraIntrinsics.StartIntrinsicMatrixVector(builder, len(intrinsics_matrix))
     for im in reversed(intrinsics_matrix):
-        builder.PrependUOffsetTRelative(im)
+        builder.PrependFloat64(im)
     IMOffset = builder.EndVector()
 
     CameraIntrinsics.StartRectificationMatrixVector(builder, len(rectification_matrix))
     for rm in reversed(rectification_matrix):
-        builder.PrependUOffsetTRelative(rm)
+        builder.PrependFloat64(rm)
     RMOffset = builder.EndVector()
 
     CameraIntrinsics.StartProjectionMatrixVector(builder, len(projection_matrix))
     for pm in reversed(projection_matrix):
-        builder.PrependUOffsetTRelative(pm)
+        builder.PrependFloat64(pm)
     PMOffset = builder.EndVector()
 
     CameraIntrinsics.Start(builder)
@@ -507,7 +507,7 @@ def createCameraIntrinsics(
     CameraIntrinsics.AddRectificationMatrix(builder, RMOffset)
     CameraIntrinsics.AddProjectionMatrix(builder, PMOffset)
     CameraIntrinsics.AddBinningX(builder, binning_x)
-    CameraIntrinsics.AddBinningX(builder, binning_y)
+    CameraIntrinsics.AddBinningY(builder, binning_y)
     CameraIntrinsics.AddRegionOfInterest(builder, region_of_interest)
 
     return CameraIntrinsics.End(builder)

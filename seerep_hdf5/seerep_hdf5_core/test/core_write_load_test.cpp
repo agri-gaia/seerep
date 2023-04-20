@@ -118,7 +118,7 @@ protected:
     writeCI = createCameraIntrinsicsMessage(projectUUID, messageUUID);
     ciIO->writeCameraIntrinsics(writeCI);
 
-    readCI = ciIO->readCameraIntrinsics(projectUUID, messageUUID);
+    readCI = ciIO->readCameraIntrinsics(messageUUID);
   }
 
   static void TearDownTestSuite()

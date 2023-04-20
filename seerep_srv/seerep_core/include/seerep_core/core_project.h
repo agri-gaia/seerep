@@ -133,9 +133,20 @@ public:
    */
 
   // camera intrinsics
+  /**
+   * @brief A function for passing camera intrinsics to the camera intrinsics agnostic for for saving
+   *
+   * @param ci [in] Camera Intrinsics to be saved
+   */
   void addCameraIntrinsics(const seerep_core_msgs::camera_intrinsics& ci);
-  std::optional<seerep_core_msgs::camera_intrinsics>
-  getCameraIntrinsics(const seerep_core_msgs::camera_intrinsics_query& ci_query);
+
+  /**
+   * @brief Get the Camera Intrinsics object
+   *
+   * @param camIntrinsicsUuid [in] Uuid of the Camera Intrinsics
+   * @return std::optional<seerep_core_msgs::camera_intrinsics>
+   */
+  std::optional<seerep_core_msgs::camera_intrinsics> getCameraIntrinsics(boost::uuids::uuid camIntrinsicsUuid);
 
   std::vector<std::string> getFrames();
 

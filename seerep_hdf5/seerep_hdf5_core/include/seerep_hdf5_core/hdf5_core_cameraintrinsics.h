@@ -22,16 +22,14 @@ public:
   /**
    * @brief Read camera intrinsics
    *
-   * @param [in] project_uuid boost uuid of a project
    * @param [in] cameraintrinsics_uuid boost uuid of a camera intrinsics object
    * @return seerep_core_msgs::camera_intrinsics [out] Retrieved camera intrinsics object
    */
-  seerep_core_msgs::camera_intrinsics readCameraIntrinsics(const boost::uuids::uuid& project_uuid,
-                                                           const boost::uuids::uuid& cameraintrinsics_uuid);
+  seerep_core_msgs::camera_intrinsics readCameraIntrinsics(const boost::uuids::uuid& cameraintrinsics_uuid);
   /**
    * @brief Write camera intrinics
    *
-   * @param camIntrinsics [out] seerep core camera intrinsics object
+   * @param camIntrinsics [in] seerep core camera intrinsics object
    */
   void writeCameraIntrinsics(const seerep_core_msgs::camera_intrinsics& camIntrinsics);
 

@@ -166,7 +166,7 @@ Core::getCameraIntrinsics(const seerep_core_msgs::camera_intrinsics_query& ci_qu
   try
   {
     auto project = findProject(ci_query.uuidProject);
-    return project->second->getCameraIntrinsics(ci_query);
+    return project->second->getCameraIntrinsics(ci_query.uuidCameraIntrinsics);
   }
   catch (const std::runtime_error& e)
   {
