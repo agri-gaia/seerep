@@ -273,6 +273,7 @@ void server::addServicesPb(grpc::ServerBuilder& server_builder)
   server_builder.RegisterService(&*m_tfServicePb);
   server_builder.RegisterService(&*m_imageServicePb);
   server_builder.RegisterService(&*m_pointCloudServicePb);
+  server_builder.RegisterService(&*m_cameraIntrinsicsServicePb);
   // server_builder.RegisterService(receiveSensorMsgs);
 }
 
@@ -297,6 +298,7 @@ void server::createServicesPb()
   m_tfServicePb = std::make_shared<seerep_server::PbTfService>(m_seerepCore);
   m_imageServicePb = std::make_shared<seerep_server::PbImageService>(m_seerepCore);
   m_pointCloudServicePb = std::make_shared<seerep_server::PbPointCloudService>(m_seerepCore);
+  m_cameraIntrinsicsServicePb = std::make_shared<seerep_server::PbCameraIntrinsicsService>(m_seerepCore);
 }
 
 void server::createServicesFb()

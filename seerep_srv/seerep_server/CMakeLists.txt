@@ -66,6 +66,7 @@ add_executable(
   src/pb_tf_service.cpp
   src/pb_image_service.cpp
   src/pb_point_cloud_service.cpp
+  src/pb_camera_intrinsics_service.cpp
   src/fb_meta_operations.cpp
   src/fb_point_service.cpp
   src/fb_tf_service.cpp

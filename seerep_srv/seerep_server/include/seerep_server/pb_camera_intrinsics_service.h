@@ -26,7 +26,7 @@ public:
                                    seerep::pb::CameraIntrinsics* response);
 
 private:
-  std::shared_ptr<seerep_core_pb::CorePbCamIntrinsics> camIntrinsicsPb;
+  std::shared_ptr<seerep_core_pb::CorePbCameraIntrinsics> camIntrinsicsPb;
   boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
 };
 

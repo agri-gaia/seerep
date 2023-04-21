@@ -236,7 +236,7 @@ seerep_core_msgs::camera_intrinsics CorePbConversion::fromPb(const seerep::pb::C
 
   for (double rm : camintrinsics.rectification_matrix())
   {
-    camintrinsics_core.projection_matrix.push_back(rm);
+    camintrinsics_core.rectification_matrix.push_back(rm);
   }
 
   camintrinsics_core.region_of_interest = CorePbConversion::fromPb(camintrinsics.region_of_interest());
