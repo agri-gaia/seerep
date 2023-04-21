@@ -3,17 +3,18 @@
 namespace seerep_server
 {
 PbCameraIntrinsicsService::PbCameraIntrinsicsService(std::shared_ptr<seerep_core::Core> seerepCore)
-  : camIntrinsicsPb(std::make_shared<seerep_core_pb::CorePbCamIntrinsics>(seerepCore))
+  : camIntrinsicsPb(std::make_shared<seerep_core_pb::CorePbCameraIntrinsics>(seerepCore))
 {
 }
 
-grpc::Status TransferCameraIntrinsics(grpc::ServerContext* context, const seerep::pb::CameraIntrinsics* camintrinsics,
-                                      seerep::pb::ServerResponse* response);
+grpc::Status PbCameraIntrinsicsService::TransferCameraIntrinsics(grpc::ServerContext* context,
+                                                                 const seerep::pb::CameraIntrinsics* camintrinsics,
+                                                                 seerep::pb::ServerResponse* response)
 {
   (void)context;  // ignore that variable without causing warnings
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "received camera intrinsics... ";
 
-  if (!transform->header().uuid_project().empty())
+  if (!camintrinsics->header().uuid_project().empty())
   {
     boost::uuids::uuid uuid;
     try
@@ -62,9 +63,9 @@ grpc::Status TransferCameraIntrinsics(grpc::ServerContext* context, const seerep
   }
 }
 
-grpc::Status GetCameraIntrinsics(grpc::ServerContext* context,
-                                 const seerep::pb::CameraIntrinsicsQuery* camintrinsicsQuery,
-                                 seerep::pb::CameraIntrinsics* response);
+grpc::Status PbCameraIntrinsicsService::GetCameraIntrinsics(grpc::ServerContext* context,
+                                                            const seerep::pb::CameraIntrinsicsQuery* camintrinsicsQuery,
+                                                            seerep::pb::CameraIntrinsics* response)
 {
   (void)context;  // ignore that variable without causing warnings
   try

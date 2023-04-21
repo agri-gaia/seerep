@@ -1,5 +1,5 @@
-#ifndef SEEREP_CORE_PB_TF_H_
-#define SEEREP_CORE_PB_TF_H_
+#ifndef SEEREP_CORE_PB_CAMERAINTRINSICS_H_
+#define SEEREP_CORE_PB_CAMERAINTRINSICS_H_
 
 #include <functional>
 #include <optional>

@@ -23,6 +23,7 @@
 #include "seerep_server/fb_point_cloud_service.h"
 #include "seerep_server/fb_point_service.h"
 #include "seerep_server/fb_tf_service.h"
+#include "seerep_server/pb_camera_intrinsics_service.h"
 #include "seerep_server/pb_image_service.h"
 #include "seerep_server/pb_meta_operations.h"
 #include "seerep_server/pb_point_cloud_service.h"
@@ -164,6 +165,8 @@ private:
   std::shared_ptr<seerep_server::PbImageService> m_imageServicePb;
   /** @brief the protobuf service for point cloud related queries*/
   std::shared_ptr<seerep_server::PbPointCloudService> m_pointCloudServicePb;
+  /** @brief the protobuf service for camera intrinsics related queries*/
+  std::shared_ptr<seerep_server::PbCameraIntrinsicsService> m_cameraIntrinsicsServicePb;
 
   /** @brief the flatbuffer service for meta operations*/
   std::shared_ptr<seerep_server::FbMetaOperations> m_metaOperationsFb;
