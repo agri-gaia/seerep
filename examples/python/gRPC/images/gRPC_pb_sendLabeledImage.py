@@ -53,8 +53,9 @@ if not found:
     projectCreated = stubMeta.CreateProject(creation)
     projectuuid = projectCreated.uuid
 
-
 theTime = int(time.time())
+
+camintrinsics_uuid = str(uuid.uuid4())
 
 # 4. Create ten images
 for n in range(10):
@@ -83,6 +84,8 @@ for n in range(10):
     theImage.width = lim
     theImage.encoding = "rgb8"
     theImage.step = 3 * lim
+    theImage.uuid_camera_intrinsics = camintrinsics_uuid
+
     # Add image data
     theImage.data = bytes(rgb)
 
