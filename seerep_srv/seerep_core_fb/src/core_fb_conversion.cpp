@@ -463,6 +463,7 @@ void CoreFbConversion::fromFbDataHeader(const seerep::fb::Header* header, seerep
   coreHeader.frameId = header->frame_id()->str();
   coreHeader.timestamp.seconds = header->stamp()->seconds();
   coreHeader.timestamp.nanos = header->stamp()->nanos();
+  coreHeader.sequence = header->seq();
 
   boost::uuids::string_generator gen;
   coreHeader.uuidProject = gen(header->uuid_project()->str());
