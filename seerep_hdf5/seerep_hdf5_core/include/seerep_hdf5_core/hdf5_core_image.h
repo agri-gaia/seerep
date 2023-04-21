@@ -36,6 +36,7 @@ struct ImageAttributes
   uint32_t step;
   std::string encoding;
   bool isBigendian;
+  std::string cameraIntrinsicsUuid;
 };
 
 /**
@@ -130,6 +131,7 @@ public:
   inline static const std::string IS_BIGENDIAN = "is_bigendian";
   inline static const std::string STEP = "step";
   inline static const std::string IS_DENSE = "is_dense";
+  inline static const std::string CAMERA_INTRINSICS_UUID = "camera_intrinsics_uuid";
 
   inline static const std::string RAWDATA = "rawdata";
 

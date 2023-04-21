@@ -22,8 +22,9 @@ void Hdf5PbImage::writeImage(const std::string& id, const seerep::pb::Image& ima
 
   writeHeaderAttributes(*dataGroupPtr, image.header());
 
-  seerep_hdf5_core::ImageAttributes imageAttributes = { image.height(), image.width(), image.step(), image.encoding(),
-                                                        image.is_bigendian() };
+  seerep_hdf5_core::ImageAttributes imageAttributes = { image.height(),       image.width(),
+                                                        image.step(),         image.encoding(),
+                                                        image.is_bigendian(), image.uuid_camera_intrinsics() };
 
   writeImageAttributes(id, imageAttributes);
 
