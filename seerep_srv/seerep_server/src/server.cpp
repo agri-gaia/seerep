@@ -288,6 +288,7 @@ void server::addServicesFb(grpc::ServerBuilder& server_builder)
   server_builder.RegisterService(&*m_imageServiceFb);
   server_builder.RegisterService(&*m_pointServiceFb);
   server_builder.RegisterService(&*m_pointCloudServiceFb);
+  server_builder.RegisterService(&*m_cameraIntrinsicsServiceFb);
 }
 
 void server::createServicesPb()
@@ -306,6 +307,7 @@ void server::createServicesFb()
   m_imageServiceFb = std::make_shared<seerep_server::FbImageService>(m_seerepCore);
   m_pointServiceFb = std::make_shared<seerep_server::FbPointService>(m_seerepCore);
   m_pointCloudServiceFb = std::make_shared<seerep_server::FbPointCloudService>(m_seerepCore);
+  m_cameraIntrinsicsServiceFb = std::make_shared<seerep_server::FbCameraIntrinsicsService>(m_seerepCore);
 }
 
 } /* namespace seerep_server */

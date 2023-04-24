@@ -15,6 +15,7 @@ struct Header
   Timestamp timestamp;
   boost::uuids::uuid uuidProject;
   boost::uuids::uuid uuidData;
+  uint32_t sequence;
 };
 
 } /* namespace seerep_core_msgs */

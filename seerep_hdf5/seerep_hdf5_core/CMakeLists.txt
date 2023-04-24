@@ -21,6 +21,9 @@ find_package(
   REQUIRED
 )
 
+enable_testing()
+find_package(GTest 1.12.0 REQUIRED)
+
 find_package(catkin REQUIRED COMPONENTS geometry_msgs)
 
 configure_file(include/SeerepHdf5CoreConfig.h.in SeerepHdf5CoreConfig.h)
@@ -44,6 +47,7 @@ add_library(
   src/hdf5_core_point_cloud.cpp
   src/hdf5_core_point.cpp
   src/hdf5_core_tf.cpp
+  src/hdf5_core_cameraintrinsics.cpp
 )
 
 target_link_libraries(
@@ -56,6 +60,24 @@ target_link_libraries(
   ${Boost_LOG_SETUP_LIBRARY}
   ${catkin_LIBRARIES}
 )
+
+# create executable with tests
+add_executable(core_write_load_test test/core_write_load_test.cpp)
+add_dependencies(
+  core_write_load_test ${${PROJECT_NAME}_EXPORTED_TARGETS}
+  ${catkin_EXPORTED_TARGETS}
+)
+
+target_link_libraries(
+  core_write_load_test
+  GTest::gtest
+  GTest::gtest_main
+  gmock_main
+  ${catkin_LIBRARIES}
+  ${HighFive_LIBRARIES}
+  seerephdf5core
+)
+add_test(core_write_load_test core_write_load_test)
 
 set(CMAKE_INSTALL_INCLUDEDIR include)
 set(CMAKE_INSTALL_LIBDIR lib)

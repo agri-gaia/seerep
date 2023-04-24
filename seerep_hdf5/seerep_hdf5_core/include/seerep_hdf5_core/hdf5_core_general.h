@@ -74,6 +74,29 @@ public:
   bool hasAABB(const std::string& datatypeGroup, const std::string& uuid);
 
   // ################
+  //  Header
+  // ################
+  /**
+   * @brief Write header from a group within an hd5f file
+   *
+   * @tparam T Template argument of either Group or Dataset
+   * @param [in] object Pointer to Dataset or Group
+   * @param [out] header seerep core header struct
+   */
+  template <class T>
+  void writeHeader(HighFive::AnnotateTraits<T>& object, seerep_core_msgs::Header header);
+  /**
+   * @brief Read header from a group within an hd5f file
+   *
+   * @tparam T Write header from hd5f file from a group
+   * @param [in] id ID of Camera Intrinsics
+   * @param [in] object Group or Dataset pointer
+   * @param [out] header seerep core header struct
+   */
+  template <class T>
+  void readHeader(const std::string& id, HighFive::AnnotateTraits<T>& object, seerep_core_msgs::Header& header);
+
+  // ################
   //  Time
   // ################
   void readTimeFromRaw(const std::string& datatypeGroup, const std::string& uuid, int64_t& secs, int64_t& nanos);
@@ -210,9 +233,12 @@ private:
 
 public:
   // header attribute keys
+  inline static const std::string HEADER_DATATYPE = "header_datatype";
+  inline static const std::string HEADER_FRAME_ID = "frame_id";
   inline static const std::string HEADER_STAMP_SECONDS = "stamp_seconds";
   inline static const std::string HEADER_STAMP_NANOS = "stamp_nanos";
-  inline static const std::string HEADER_FRAME_ID = "frame_id";
+  inline static const std::string HEADER_PROJECT_UUID = "header_project_uuid";
+  inline static const std::string HEADER_DATA_UUID = "header_data_uuid";
   inline static const std::string HEADER_SEQ = "header_seq";
 
   inline static const std::string AABB_FIELD = "AABB";

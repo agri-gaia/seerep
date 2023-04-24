@@ -53,6 +53,7 @@ add_library(
   src/core_fb_point.cpp
   src/core_fb_tf.cpp
   src/core_fb_pointcloud.cpp
+  src/core_fb_camera_intrinsics.cpp
 )
 
 target_link_libraries(

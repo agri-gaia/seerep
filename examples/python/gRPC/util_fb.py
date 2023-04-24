@@ -8,6 +8,8 @@ from seerep.fb import (
     BoundingBoxLabeled,
     BoundingBoxLabeledWithCategory,
     BoundingboxStamped,
+    CameraIntrinsics,
+    CameraIntrinsicsQuery,
     Empty,
     GeodeticCoordinates,
     Header,
@@ -22,6 +24,7 @@ from seerep.fb import (
     ProjectInfos,
     Query,
     QueryInstance,
+    RegionOfInterest,
     TimeInterval,
     Timestamp,
     TransformStampedQuery,
@@ -446,3 +449,75 @@ def createTransformStampedQuery(builder, header, childFrameId):
     TransformStampedQuery.AddHeader(builder, header)
     TransformStampedQuery.AddChildFrameId(builder, childFrameId)
     return TransformStampedQuery.End(builder)
+
+
+def createRegionOfInterest(builder, x_offset, y_offset, height, width, do_rectify):
+    RegionOfInterest.Start(builder)
+    RegionOfInterest.AddXOffset(builder, x_offset)
+    RegionOfInterest.AddYOffset(builder, y_offset)
+    RegionOfInterest.AddHeight(builder, height)
+    RegionOfInterest.AddWidth(builder, width)
+    RegionOfInterest.AddDoRectify(builder, do_rectify)
+    return RegionOfInterest.End(builder)
+
+
+def createCameraIntrinsics(
+    builder,
+    header,
+    height,
+    width,
+    distortion_model,
+    distortion,
+    intrinsics_matrix,
+    rectification_matrix,
+    projection_matrix,
+    binning_x,
+    binning_y,
+    region_of_interest,
+):
+    dm_buf = builder.CreateString(distortion_model)
+
+    CameraIntrinsics.StartDistortionVector(builder, len(distortion))
+    for d in reversed(distortion):
+        builder.PrependFloat64(d)
+    distortionOffset = builder.EndVector()
+
+    CameraIntrinsics.StartIntrinsicMatrixVector(builder, len(intrinsics_matrix))
+    for im in reversed(intrinsics_matrix):
+        builder.PrependFloat64(im)
+    IMOffset = builder.EndVector()
+
+    CameraIntrinsics.StartRectificationMatrixVector(builder, len(rectification_matrix))
+    for rm in reversed(rectification_matrix):
+        builder.PrependFloat64(rm)
+    RMOffset = builder.EndVector()
+
+    CameraIntrinsics.StartProjectionMatrixVector(builder, len(projection_matrix))
+    for pm in reversed(projection_matrix):
+        builder.PrependFloat64(pm)
+    PMOffset = builder.EndVector()
+
+    CameraIntrinsics.Start(builder)
+    CameraIntrinsics.AddHeader(builder, header)
+    CameraIntrinsics.AddHeight(builder, height)
+    CameraIntrinsics.AddWidth(builder, width)
+    CameraIntrinsics.AddDistortionModel(builder, dm_buf)
+    CameraIntrinsics.AddDistortion(builder, distortionOffset)
+    CameraIntrinsics.AddIntrinsicMatrix(builder, IMOffset)
+    CameraIntrinsics.AddRectificationMatrix(builder, RMOffset)
+    CameraIntrinsics.AddProjectionMatrix(builder, PMOffset)
+    CameraIntrinsics.AddBinningX(builder, binning_x)
+    CameraIntrinsics.AddBinningY(builder, binning_y)
+    CameraIntrinsics.AddRegionOfInterest(builder, region_of_interest)
+
+    return CameraIntrinsics.End(builder)
+
+
+def createCameraIntrinsicsQuery(builder, ci_uuid, project_uuid):
+    ci_uuid_str = builder.CreateString(ci_uuid)
+    project_uuid_str = builder.CreateString(project_uuid)
+    CameraIntrinsicsQuery.Start(builder)
+    CameraIntrinsicsQuery.AddUuidCameraIntrinsics(builder, ci_uuid_str)
+    CameraIntrinsicsQuery.AddUuidProject(builder, project_uuid_str)
+
+    return CameraIntrinsicsQuery.End(builder)

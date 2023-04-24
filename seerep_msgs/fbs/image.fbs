@@ -15,4 +15,5 @@ table Image {
   data:[ubyte];
   labels_general:[LabelsWithInstanceWithCategory];
   labels_bb:[BoundingBox2DLabeledWithCategory];
+  uuid_cameraintrinsics:string;
 }

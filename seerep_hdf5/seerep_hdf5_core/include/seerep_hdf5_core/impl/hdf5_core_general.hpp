@@ -1,3 +1,4 @@
+#include <filesystem>
 
 namespace seerep_hdf5_core
 {
@@ -89,4 +90,29 @@ std::shared_ptr<HighFive::DataSet> Hdf5CoreGeneral::getHdf5DataSet(const std::st
   }
 }
 
+template <class T>
+void Hdf5CoreGeneral::writeHeader(HighFive::AnnotateTraits<T>& object, seerep_core_msgs::Header header)
+{
+  // among all header attributes, enum datatype was not saved because all datatypes are saved separately and the
+  // explicit saving of this offers no value
+  Hdf5CoreGeneral::writeAttributeToHdf5<int32_t>(object, HEADER_STAMP_SECONDS, header.timestamp.seconds);
+  Hdf5CoreGeneral::writeAttributeToHdf5<int32_t>(object, HEADER_STAMP_NANOS, header.timestamp.nanos);
+  Hdf5CoreGeneral::writeAttributeToHdf5<std::string>(object, HEADER_FRAME_ID, header.frameId);
+  Hdf5CoreGeneral::writeAttributeToHdf5<uint32_t>(object, HEADER_SEQ, header.sequence);
+}
+
+template <class T>
+void Hdf5CoreGeneral::readHeader(const std::string& id, HighFive::AnnotateTraits<T>& object,
+                                 seerep_core_msgs::Header& header)
+{
+  header.uuidData = boost::lexical_cast<boost::uuids::uuid>(id);
+
+  std::string uuidproject_str = std::filesystem::path(m_file->getName()).filename().stem();
+  header.uuidProject = boost::lexical_cast<boost::uuids::uuid>(uuidproject_str);
+
+  header.timestamp.seconds = Hdf5CoreGeneral::readAttributeFromHdf5<int32_t>(id, object, HEADER_STAMP_SECONDS);
+  header.timestamp.nanos = Hdf5CoreGeneral::readAttributeFromHdf5<int32_t>(id, object, HEADER_STAMP_NANOS);
+  header.frameId = Hdf5CoreGeneral::readAttributeFromHdf5<std::string>(id, object, HEADER_FRAME_ID);
+  header.sequence = Hdf5CoreGeneral::readAttributeFromHdf5<int32_t>(id, object, HEADER_SEQ);
+}
 }  // namespace seerep_hdf5_core

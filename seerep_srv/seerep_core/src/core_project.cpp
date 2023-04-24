@@ -97,6 +97,16 @@ std::vector<std::string> CoreProject::getFrames()
   return m_coreTfs->getFrames();
 }
 
+void CoreProject::addCameraIntrinsics(const seerep_core_msgs::camera_intrinsics& ci)
+{
+  m_coreCameraIntrinsics->addData(ci);
+}
+
+std::optional<seerep_core_msgs::camera_intrinsics> CoreProject::getCameraIntrinsics(boost::uuids::uuid camIntrinsicsUuid)
+{
+  return m_coreCameraIntrinsics->getData(camIntrinsicsUuid);
+}
+
 std::shared_ptr<std::mutex> CoreProject::getHdf5FileMutex()
 {
   return m_write_mtx;
@@ -113,6 +123,7 @@ void CoreProject::createHdf5Io(std::string path)
 
   m_ioGeneral = std::make_shared<seerep_hdf5_core::Hdf5CoreGeneral>(m_hdf5_file, m_write_mtx);
   m_ioTf = std::make_shared<seerep_hdf5_core::Hdf5CoreTf>(m_hdf5_file, m_write_mtx);
+  m_ioCI = std::make_shared<seerep_hdf5_core::Hdf5CoreCameraIntrinsics>(m_hdf5_file, m_write_mtx);
   m_ioInstance = std::make_shared<seerep_hdf5_core::Hdf5CoreInstance>(m_hdf5_file, m_write_mtx);
 
   m_ioPointCloud = std::make_shared<seerep_hdf5_core::Hdf5CorePointCloud>(m_hdf5_file, m_write_mtx);
@@ -122,6 +133,7 @@ void CoreProject::createHdf5Io(std::string path)
 void CoreProject::recreateDatatypes()
 {
   m_coreTfs = std::make_shared<seerep_core::CoreTf>(m_ioTf);
+  m_coreCameraIntrinsics = std::make_shared<seerep_core::CoreCameraIntrinsics>(m_ioCI);
   m_coreInstances = std::make_shared<seerep_core::CoreInstances>(m_ioInstance);
   m_coreDatasets = std::make_unique<seerep_core::CoreDataset>(m_coreTfs, m_coreInstances, m_frameId);
 

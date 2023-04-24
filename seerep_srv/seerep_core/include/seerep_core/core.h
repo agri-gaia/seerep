@@ -98,6 +98,16 @@ public:
   std::vector<std::string> getFrames(const boost::uuids::uuid& projectuuid);
 
   /**
+   * @brief Adds a ci to the project
+   * @param ci the Camera Intrinsics to be added
+   * @param projectuuid the UUID of the targeted project
+   */
+  void addCameraIntrinsics(const seerep_core_msgs::camera_intrinsics& ci, const boost::uuids::uuid& projectuuid);
+
+  std::optional<seerep_core_msgs::camera_intrinsics>
+  getCameraIntrinsics(const seerep_core_msgs::camera_intrinsics_query& ci_query);
+
+  /**
    * @brief creates a new project / HDF5 file with the given project information
    * @param projectInfo the data needed for project creation (name, UUID, map frame etc.)
    */

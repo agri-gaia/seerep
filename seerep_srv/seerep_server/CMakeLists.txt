@@ -73,6 +73,7 @@ add_executable(
   src/fb_instance_service.cpp
   src/fb_point_cloud_service.cpp
   ${CMAKE_CURRENT_BINARY_DIR}/version.cpp
+  src/fb_cameraintrinsics_service.cpp
 )
 
 target_link_libraries(
