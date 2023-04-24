@@ -107,6 +107,8 @@ public:
   std::optional<seerep_core_msgs::camera_intrinsics>
   getCameraIntrinsics(const seerep_core_msgs::camera_intrinsics_query& ci_query);
 
+  bool checkCameraIntrinsicsExists(const seerep_core_msgs::camera_intrinsics_query& ci_query);
+
   /**
    * @brief creates a new project / HDF5 file with the given project information
    * @param projectInfo the data needed for project creation (name, UUID, map frame etc.)

@@ -33,6 +33,8 @@ public:
    */
   void writeCameraIntrinsics(const seerep_core_msgs::camera_intrinsics& camIntrinsics);
 
+  bool checkCameraIntrinsicsExists(const boost::uuids::uuid& cameraintrinsics_uuid);
+
 private:
   const std::shared_ptr<HighFive::DataSet> generateDatasetPointer(const std::string& attribute);
   const std::string getHdf5GroupPath(const std::string& id) const;

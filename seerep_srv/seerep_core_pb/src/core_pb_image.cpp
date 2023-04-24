@@ -43,12 +43,23 @@ boost::uuids::uuid CorePbImage::addData(const seerep::pb::Image& img)
 {
   seerep_core_msgs::DatasetIndexable dataForIndices = CorePbConversion::fromPb(img);
 
-  auto hdf5io = getHdf5(dataForIndices.header.uuidProject);
-  hdf5io->writeImage(boost::lexical_cast<std::string>(dataForIndices.header.uuidData), img);
+  seerep_core_msgs::camera_intrinsics_query camintrinsics_query;
+  camintrinsics_query.uuidCameraIntrinsics = boost::lexical_cast<boost::uuids::uuid>(img.uuid_camera_intrinsics());
+  camintrinsics_query.uuidProject = boost::lexical_cast<boost::uuids::uuid>(img.header().uuid_project());
 
-  m_seerepCore->addDataset(dataForIndices);
+  if (m_seerepCore->checkCameraIntrinsicsExists(camintrinsics_query))
+  {
+    auto hdf5io = getHdf5(dataForIndices.header.uuidProject);
+    hdf5io->writeImage(boost::lexical_cast<std::string>(dataForIndices.header.uuidData), img);
 
-  return dataForIndices.header.uuidData;
+    m_seerepCore->addDataset(dataForIndices);
+
+    return dataForIndices.header.uuidData;
+  }
+  else
+  {
+    throw std::invalid_argument("Invalid uuid for camera intrinsics or project recieved");
+  }
 }
 
 void CorePbImage::getFileAccessorFromCore(boost::uuids::uuid project)

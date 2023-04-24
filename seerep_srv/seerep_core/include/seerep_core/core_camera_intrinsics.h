@@ -31,6 +31,8 @@ public:
    */
   std::optional<seerep_core_msgs::camera_intrinsics> getData(boost::uuids::uuid camIntrinsicsUuid);
 
+  bool checkCameraIntrinsicsExists(boost::uuids::uuid camIntrinsicsUuid);
+
 private:
   /** @brief shared pointer to the object handling the HDF5 io for Camera Intrinsics */
   std::shared_ptr<seerep_hdf5_core::Hdf5CoreCameraIntrinsics> m_hdf5_io;

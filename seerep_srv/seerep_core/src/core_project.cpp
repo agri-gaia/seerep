@@ -107,6 +107,11 @@ std::optional<seerep_core_msgs::camera_intrinsics> CoreProject::getCameraIntrins
   return m_coreCameraIntrinsics->getData(camIntrinsicsUuid);
 }
 
+bool CoreProject::checkCameraIntrinsicsExists(boost::uuids::uuid camIntrinsicsUuid)
+{
+  return m_coreCameraIntrinsics->checkCameraIntrinsicsExists(camIntrinsicsUuid);
+}
+
 std::shared_ptr<std::mutex> CoreProject::getHdf5FileMutex()
 {
   return m_write_mtx;
