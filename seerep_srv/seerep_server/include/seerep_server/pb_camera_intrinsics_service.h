@@ -20,10 +20,10 @@ public:
   PbCameraIntrinsicsService(std::shared_ptr<seerep_core::Core> seerepCore);
 
   grpc::Status TransferCameraIntrinsics(grpc::ServerContext* context, const seerep::pb::CameraIntrinsics* camintrinsics,
-                                        seerep::pb::ServerResponse* response);
+                                        seerep::pb::ServerResponse* response) override;
   grpc::Status GetCameraIntrinsics(grpc::ServerContext* context,
                                    const seerep::pb::CameraIntrinsicsQuery* camintrinsicsQuery,
-                                   seerep::pb::CameraIntrinsics* response);
+                                   grpc::ServerWriter<seerep::pb::CameraIntrinsics>* response) override;
 
 private:
   std::shared_ptr<seerep_core_pb::CorePbCameraIntrinsics> camIntrinsicsPb;

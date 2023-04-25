@@ -33,6 +33,13 @@ public:
    */
   void writeCameraIntrinsics(const seerep_core_msgs::camera_intrinsics& camIntrinsics);
 
+  /**
+   * @brief Check if there is an existing Camera Intrinsics against the provided UUID
+   *
+   * @param [in] cameraintrinsics_uuid boost uuid of a camera intrinsics object
+   * @return true If camera intrinsics exist
+   * @return false If camera intrinsics do not exist
+   */
   bool checkCameraIntrinsicsExists(const boost::uuids::uuid& cameraintrinsics_uuid);
 
 private:

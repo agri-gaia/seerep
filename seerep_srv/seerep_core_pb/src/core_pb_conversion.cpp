@@ -185,11 +185,13 @@ seerep_core_msgs::Header CorePbConversion::fromPb(const seerep::pb::Header& head
 seerep::pb::Header CorePbConversion::toPb(const seerep_core_msgs::Header& header)
 {
   seerep::pb::Header header_pb;
-  header_pb.set_frame_id(header.frameId);
+
+  *header_pb.mutable_frame_id() = header.frameId;
+
   header_pb.set_seq(header.sequence);
 
   seerep::pb::Timestamp ts_pb = CorePbConversion::toPb(header.timestamp);
-  header_pb.set_allocated_stamp(&ts_pb);
+  *header_pb.mutable_stamp() = ts_pb;
 
   header_pb.set_uuid_msgs(boost::lexical_cast<std::string>(header.uuidData));
   header_pb.set_uuid_project(boost::lexical_cast<std::string>(header.uuidProject));
@@ -256,10 +258,11 @@ seerep::pb::CameraIntrinsics CorePbConversion::toPb(const seerep_core_msgs::came
   }
 
   std::string dm = camintrinsics.distortion_model;
-  ci_pb.set_allocated_distortion_model(&dm);
+  ci_pb.set_distortion_model(dm);
 
   seerep::pb::Header header_pb = CorePbConversion::toPb(camintrinsics.header);
-  ci_pb.set_allocated_header(&header_pb);
+  *ci_pb.mutable_header() = header_pb;
+
   ci_pb.set_height(camintrinsics.height);
   ci_pb.set_width(camintrinsics.width);
 
@@ -279,7 +282,7 @@ seerep::pb::CameraIntrinsics CorePbConversion::toPb(const seerep_core_msgs::came
   }
 
   seerep::pb::RegionOfInterest roi_pb = CorePbConversion::toPb(camintrinsics.region_of_interest);
-  ci_pb.set_allocated_region_of_interest(&roi_pb);
+  *ci_pb.mutable_region_of_interest() = roi_pb;
 
   return ci_pb;
 }

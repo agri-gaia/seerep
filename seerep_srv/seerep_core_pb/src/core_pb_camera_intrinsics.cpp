@@ -11,8 +11,8 @@ CorePbCameraIntrinsics::~CorePbCameraIntrinsics()
 {
 }
 
-std::optional<seerep::pb::CameraIntrinsics>
-CorePbCameraIntrinsics::getData(const seerep::pb::CameraIntrinsicsQuery& query)
+void CorePbCameraIntrinsics::getData(const seerep::pb::CameraIntrinsicsQuery& query,
+                                     grpc::ServerWriter<seerep::pb::CameraIntrinsics>* const writer)
 {
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
       << "loading camera intrinsics from camera_intrinsics/";
@@ -27,7 +27,7 @@ CorePbCameraIntrinsics::getData(const seerep::pb::CameraIntrinsicsQuery& query)
   seerep::pb::CameraIntrinsics camintrinsics_pb;
   // convert from agnostic cam intrinsics to pb cam intrinsics
   camintrinsics_pb = CorePbConversion::toPb(cameraintrinsics.value());
-  return camintrinsics_pb;
+  writer->Write(camintrinsics_pb);
 }
 
 boost::uuids::uuid CorePbCameraIntrinsics::addData(const seerep::pb::CameraIntrinsics& camintrinsics)

@@ -1,12 +1,10 @@
 #ifndef SEEREP_CORE_PB_CAMERAINTRINSICS_H_
 #define SEEREP_CORE_PB_CAMERAINTRINSICS_H_
 
+#include <seerep_com/camera_intrinsics_service.grpc.pb.h>
+
 #include <functional>
 #include <optional>
-
-// seerep-msgs
-// #include <seerep_msgs/transform_stamped.pb.h>
-// #include <seerep_msgs/transform_stamped_query.pb.h>
 
 // seerep_core_msgs
 #include <seerep_msgs/camera_intrinsics.h>
@@ -33,7 +31,8 @@ public:
   CorePbCameraIntrinsics(std::shared_ptr<seerep_core::Core> seerepCore);
   ~CorePbCameraIntrinsics();
 
-  std::optional<seerep::pb::CameraIntrinsics> getData(const seerep::pb::CameraIntrinsicsQuery& query);
+  void getData(const seerep::pb::CameraIntrinsicsQuery& query,
+               grpc::ServerWriter<seerep::pb::CameraIntrinsics>* const writer);
   boost::uuids::uuid addData(const seerep::pb::CameraIntrinsics& camintrinsics);
 
 private:

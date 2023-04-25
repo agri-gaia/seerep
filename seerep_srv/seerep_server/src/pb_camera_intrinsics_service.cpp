@@ -65,16 +65,12 @@ grpc::Status PbCameraIntrinsicsService::TransferCameraIntrinsics(grpc::ServerCon
 
 grpc::Status PbCameraIntrinsicsService::GetCameraIntrinsics(grpc::ServerContext* context,
                                                             const seerep::pb::CameraIntrinsicsQuery* camintrinsicsQuery,
-                                                            seerep::pb::CameraIntrinsics* response)
+                                                            grpc::ServerWriter<seerep::pb::CameraIntrinsics>* writer)
 {
   (void)context;  // ignore that variable without causing warnings
   try
   {
-    auto result = camIntrinsicsPb->getData(*camintrinsicsQuery);
-    if (result)
-    {
-      *response = result.value();
-    }
+    camIntrinsicsPb->getData(*camintrinsicsQuery, writer);
   }
   catch (std::runtime_error const& e)
   {
