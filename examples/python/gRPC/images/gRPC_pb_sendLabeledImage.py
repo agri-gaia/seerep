@@ -55,7 +55,10 @@ if not found:
 
 theTime = int(time.time())
 
-camintrinsics_uuid = str(uuid.uuid4())
+# A valid camera intrinsics UUID is needed here for succesful storage of Images
+# Run the gRPC_pb_addCameraIntrinsics.py script to add a new camera intrinsics
+# and paste the id below
+camintrinsics_uuid = "c7efb9b3-a952-465a-8038-2d9c9dc39c29"
 
 # 4. Create ten images
 for n in range(10):

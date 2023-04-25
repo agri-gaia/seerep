@@ -123,7 +123,11 @@ bool Hdf5CoreCameraIntrinsics::checkCameraIntrinsicsExists(const boost::uuids::u
   try
   {
     // call check exists for the provided camera intrinsics id
-    checkExists(id);
+    std::string id = boost::lexical_cast<std::string>(cameraintrinsics_uuid);
+
+    std::string cameraIntrinsicsGroupPath = getHdf5GroupPath(id);
+
+    checkExists(cameraIntrinsicsGroupPath);
   }
   catch (std::invalid_argument const& e)
   {

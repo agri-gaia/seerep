@@ -287,16 +287,6 @@ seerep::pb::CameraIntrinsics CorePbConversion::toPb(const seerep_core_msgs::came
   return ci_pb;
 }
 
-// seerep::pb::CameraIntrinsicsQuery
-// CorePbConversion::toPb(const seerep_core_msgs::camera_intrinsics_query& camintrinsics_query)
-// {
-//   seerep::pb::CameraIntrinsicsQuery camintrinsics_query_pb;
-//   camintrinsics_query_pb.set_uuid_camera_intrinsics(camintrinsics_query.uuidCameraIntrinsics);
-//   camintrinsics_query_pb.set_uuid_project(camintrinsics_query.uuidProject);
-
-//   return camintrinsics_query_pb;
-// }
-
 void CorePbConversion::fromPbProject(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
 {
   boost::uuids::string_generator gen;
