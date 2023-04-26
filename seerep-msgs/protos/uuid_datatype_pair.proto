@@ -1,8 +1,6 @@
 syntax = "proto3";
 
-package seerep.pb;
-
-import "point.proto";
+package seerep;
 
 import "datatype.proto";
 
