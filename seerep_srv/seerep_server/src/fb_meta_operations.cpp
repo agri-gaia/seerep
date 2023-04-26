@@ -306,23 +306,33 @@ FbMetaOperations::GetOverallBoundingBox(grpc::ServerContext* context,
 
     seerep_core_msgs::AABB overallBB = seerepCore->getOverallBound(uuidFromString, dt_vector);
 
+    // center
+    int center_x = (overallBB.min_corner().get<0>() + overallBB.max_corner().get<0>()) / 2;
+    int center_y = (overallBB.min_corner().get<1>() + overallBB.max_corner().get<1>()) / 2;
+    int center_z = (overallBB.min_corner().get<2>() + overallBB.max_corner().get<2>()) / 2;
+
+    // spatial extent
+    int se_x = (overallBB.max_corner().get<0>() - overallBB.min_corner().get<0>());
+    int se_y = (overallBB.max_corner().get<1>() - overallBB.min_corner().get<1>());
+    int se_z = (overallBB.max_corner().get<2>() - overallBB.min_corner().get<2>());
+
     flatbuffers::grpc::MessageBuilder builder;
 
-    seerep::fb::PointBuilder minPointBuilder(builder);
-    minPointBuilder.add_x(overallBB.min_corner().get<0>());
-    minPointBuilder.add_y(overallBB.min_corner().get<1>());
-    minPointBuilder.add_z(overallBB.min_corner().get<2>());
-    flatbuffers::Offset<seerep::fb::Point> minPoint = minPointBuilder.Finish();
+    seerep::fb::PointBuilder centerPointBuilder(builder);
+    centerPointBuilder.add_x(center_x);
+    centerPointBuilder.add_y(center_y);
+    centerPointBuilder.add_z(center_z);
+    flatbuffers::Offset<seerep::fb::Point> centerPoint = centerPointBuilder.Finish();
 
-    seerep::fb::PointBuilder maxPointBuilder(builder);
-    maxPointBuilder.add_x(overallBB.max_corner().get<0>());
-    maxPointBuilder.add_y(overallBB.max_corner().get<1>());
-    maxPointBuilder.add_z(overallBB.max_corner().get<2>());
-    flatbuffers::Offset<seerep::fb::Point> maxPoint = maxPointBuilder.Finish();
+    seerep::fb::PointBuilder spatialExtentBuilder(builder);
+    spatialExtentBuilder.add_x(se_x);
+    spatialExtentBuilder.add_y(se_y);
+    spatialExtentBuilder.add_z(se_z);
+    flatbuffers::Offset<seerep::fb::Point> spatialExtent = spatialExtentBuilder.Finish();
 
     seerep::fb::BoundingboxBuilder boundingBoxBuilder(builder);
-    boundingBoxBuilder.add_point_min(minPoint);
-    boundingBoxBuilder.add_point_max(maxPoint);
+    boundingBoxBuilder.add_center_point(centerPoint);
+    boundingBoxBuilder.add_spatial_extent(spatialExtent);
     flatbuffers::Offset<seerep::fb::Boundingbox> bb = boundingBoxBuilder.Finish();
 
     builder.Finish(bb);

@@ -95,8 +95,8 @@ grpc::Status PbMetaOperations::GetProjects(grpc::ServerContext* context, const g
 }
 
 grpc::Status PbMetaOperations::GetOverallTimeInterval(grpc::ServerContext* context,
-                                                      const seerep::UuidDatatypePair* request,
-                                                      seerep::TimeInterval* response)
+                                                      const seerep::pb::UuidDatatypePair* request,
+                                                      seerep::pb::TimeInterval* response)
 {
   (void)context;  // ignore that variable without causing warnings
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "fetching overall time interval";
@@ -162,8 +162,8 @@ grpc::Status PbMetaOperations::GetOverallTimeInterval(grpc::ServerContext* conte
   return grpc::Status::OK;
 }
 grpc::Status PbMetaOperations::GetOverallBoundingBox(grpc::ServerContext* context,
-                                                     const seerep::UuidDatatypePair* request,
-                                                     seerep::Boundingbox* response)
+                                                     const seerep::pb::UuidDatatypePair* request,
+                                                     seerep::pb::Boundingbox* response)
 {
   (void)context;  // ignore that variable without causing warnings
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "fetching overall bounding box";
@@ -195,15 +195,25 @@ grpc::Status PbMetaOperations::GetOverallBoundingBox(grpc::ServerContext* contex
 
     seerep_core_msgs::AABB overallBB = seerepCore->getOverallBound(uuidFromString, dt_vector);
 
+    // center
+    int center_x = (overallBB.min_corner().get<0>() + overallBB.max_corner().get<0>()) / 2;
+    int center_y = (overallBB.min_corner().get<1>() + overallBB.max_corner().get<1>()) / 2;
+    int center_z = (overallBB.min_corner().get<2>() + overallBB.max_corner().get<2>()) / 2;
+
+    // spatial extent
+    int se_x = (overallBB.max_corner().get<0>() - overallBB.min_corner().get<0>());
+    int se_y = (overallBB.max_corner().get<1>() - overallBB.min_corner().get<1>());
+    int se_z = (overallBB.max_corner().get<2>() - overallBB.min_corner().get<2>());
+
     flatbuffers::grpc::MessageBuilder builder;
 
-    response->mutable_point_min()->set_x(overallBB.min_corner().get<0>());
-    response->mutable_point_min()->set_y(overallBB.min_corner().get<1>());
-    response->mutable_point_min()->set_z(overallBB.min_corner().get<2>());
+    response->mutable_center_point()->set_x(center_x);
+    response->mutable_center_point()->set_y(center_y);
+    response->mutable_center_point()->set_z(center_z);
 
-    response->mutable_point_max()->set_x(overallBB.max_corner().get<0>());
-    response->mutable_point_max()->set_y(overallBB.max_corner().get<1>());
-    response->mutable_point_max()->set_z(overallBB.max_corner().get<2>());
+    response->mutable_spatial_extent()->set_x(se_x);
+    response->mutable_spatial_extent()->set_y(se_y);
+    response->mutable_spatial_extent()->set_z(se_z);
   }
   catch (const std::exception& e)
   {
