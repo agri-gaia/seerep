@@ -158,14 +158,17 @@ const seerep::fb::Image* createImageMessage(flatbuffers::FlatBufferBuilder& fbb,
                                             const std::string& messageUUID, const std::string& camintrinsicsUUID)
 {
   auto encodingOffset = fbb.CreateString("rgb8");
+  auto camintrinsicsUUIDOffset = fbb.CreateString(camintrinsicsUUID);
+
   auto headerOffset = createHeader(fbb, "camera", projectUUID, messageUUID);
   auto imageOffset = createImageData(fbb, 256, 256);
 
   auto generalLabelsOffset = createLabelsGeneral(fbb);
   auto bB2DLabeledOffset = createBB2DLabeled(fbb);
 
-  auto imgMsgOffset = seerep::fb::CreateImage(fbb, headerOffset, imageHeight, imageWidth, encodingOffset, true,
-                                              3 * imageHeight, imageOffset, generalLabelsOffset, bB2DLabeledOffset);
+  auto imgMsgOffset =
+      seerep::fb::CreateImage(fbb, headerOffset, imageHeight, imageWidth, encodingOffset, true, 3 * imageHeight,
+                              imageOffset, generalLabelsOffset, bB2DLabeledOffset, camintrinsicsUUIDOffset);
   fbb.Finish(imgMsgOffset);
   uint8_t* buf = fbb.GetBufferPointer();
   return flatbuffers::GetRoot<seerep::fb::Image>(buf);
