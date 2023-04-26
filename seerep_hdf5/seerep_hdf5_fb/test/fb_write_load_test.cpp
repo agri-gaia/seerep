@@ -155,7 +155,7 @@ createLabelsGeneral(flatbuffers::FlatBufferBuilder& fbb)
 
 const seerep::fb::Image* createImageMessage(flatbuffers::FlatBufferBuilder& fbb, const unsigned int imageHeight,
                                             const unsigned imageWidth, const std::string& projectUUID,
-                                            const std::string& messageUUID)
+                                            const std::string& messageUUID, const std::string& camintrinsicsUUID)
 {
   auto encodingOffset = fbb.CreateString("rgb8");
   auto headerOffset = createHeader(fbb, "camera", projectUUID, messageUUID);
@@ -181,6 +181,7 @@ protected:
 
   static boost::uuids::uuid projectUUID;
   static boost::uuids::uuid messageUUID;
+  static boost::uuids::uuid cameraintrinsicsUUID;
   static std::string projectName;
 
   static const seerep::fb::Image* writeImage;
@@ -195,6 +196,7 @@ protected:
     projectName = "testProject";
     projectUUID = boost::uuids::random_generator()();
     messageUUID = boost::uuids::random_generator()();
+    cameraintrinsicsUUID = boost::uuids::random_generator()();
 
     hdf5FileMutex = std::make_shared<std::mutex>();
     hdf5FileName = boost::lexical_cast<std::string>(projectUUID) + ".h5";
@@ -209,7 +211,8 @@ protected:
     }
 
     writeImage = createImageMessage(fbb, 256, 256, boost::lexical_cast<std::string>(projectUUID),
-                                    boost::lexical_cast<std::string>(messageUUID));
+                                    boost::lexical_cast<std::string>(messageUUID),
+                                    boost::lexical_cast<std::string>(cameraintrinsicsUUID));
     if (writeImage == nullptr)
     {
       GTEST_FATAL_FAILURE_("Error: No image data to write into HDF5 file");
@@ -238,6 +241,7 @@ std::string fbWriteLoadTest::hdf5FileName;
 
 boost::uuids::uuid fbWriteLoadTest::projectUUID;
 boost::uuids::uuid fbWriteLoadTest::messageUUID;
+boost::uuids::uuid fbWriteLoadTest::cameraintrinsicsUUID;
 std::string fbWriteLoadTest::projectName;
 
 flatbuffers::FlatBufferBuilder fbWriteLoadTest::fbb;
@@ -262,6 +266,7 @@ TEST_F(fbWriteLoadTest, testImageBaseFields)
   EXPECT_STREQ(readImage->encoding()->c_str(), writeImage->encoding()->c_str());
   EXPECT_EQ(readImage->is_bigendian(), writeImage->is_bigendian());
   EXPECT_EQ(readImage->step(), writeImage->step());
+  EXPECT_EQ(readImage->uuid_cameraintrinsics(), writeImage->uuid_cameraintrinsics());
 }
 
 TEST_F(fbWriteLoadTest, testImageData)

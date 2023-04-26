@@ -79,6 +79,7 @@ std::optional<seerep::pb::Image> Hdf5PbImage::readImage(const std::string& id)
   image.set_step(ImageAttributes.step);
   image.set_encoding(ImageAttributes.encoding);
   image.set_is_bigendian(ImageAttributes.isBigendian);
+  *image.mutable_uuid_camera_intrinsics() = ImageAttributes.cameraIntrinsicsUuid;
 
   *image.mutable_data() = { data.begin(), data.end() };
 
