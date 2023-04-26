@@ -269,7 +269,7 @@ TEST_F(fbWriteLoadTest, testImageBaseFields)
   EXPECT_STREQ(readImage->encoding()->c_str(), writeImage->encoding()->c_str());
   EXPECT_EQ(readImage->is_bigendian(), writeImage->is_bigendian());
   EXPECT_EQ(readImage->step(), writeImage->step());
-  EXPECT_EQ(readImage->uuid_cameraintrinsics(), writeImage->uuid_cameraintrinsics());
+  EXPECT_EQ(readImage->uuid_cameraintrinsics()->str(), writeImage->uuid_cameraintrinsics()->str());
 }
 
 TEST_F(fbWriteLoadTest, testImageData)
