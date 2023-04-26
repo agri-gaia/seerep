@@ -334,8 +334,6 @@ void testEqualPoints(const seerep::pb::Point2D& readPoint, const seerep::pb::Poi
   EXPECT_EQ(readPoint.y(), writePoint.y());
 }
 
-// void testEqualCameraIntrinsics(const seerep::pb::)
-
 /**
  * @brief test original bounding box 2d labeled and converted bounding box 2d labeled read from hdf5 file for equality.
  * @param[in] pbWriteLoadTest test suite class
