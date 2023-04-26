@@ -17,21 +17,13 @@ util_dir = os.path.join(script_dir, '..')
 sys.path.append(util_dir)
 
 import util
-from util_fb import (
-    addToBoundingBoxLabeledVector,
-    addToGeneralLabelsVector,
-    addToPointFieldVector,
-    createBoundingBoxes,
-    createBoundingBoxesLabeled,
-    createBoundingBoxLabeledWithCategory,
-    createHeader,
-    createLabelsWithInstance,
-    createLabelWithCategory,
-    createPoint,
-    createPointFields,
-    createTimeStamp,
-    getOrCreateProject,
-)
+from util_fb import (addToBoundingBoxLabeledVector, addToGeneralLabelsVector,
+                     addToPointFieldVector, createBoundingBoxes,
+                     createBoundingBoxesLabeled,
+                     createBoundingBoxLabeledWithCategory, createHeader,
+                     createLabelsWithInstance, createLabelWithCategory,
+                     createPoint, createPointFields, createTimeStamp,
+                     getOrCreateProject)
 
 NUM_GENERAL_LABELS = 1
 NUM_BB_LABELS = 1
