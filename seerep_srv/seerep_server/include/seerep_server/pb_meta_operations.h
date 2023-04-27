@@ -23,9 +23,9 @@ public:
   grpc::Status GetProjects(grpc::ServerContext* context, const google::protobuf::Empty* request,
                            seerep::pb::ProjectInfos* response);
   grpc::Status GetOverallTimeInterval(grpc::ServerContext* context, const seerep::UuidDatatypePair* request,
-                                      seerep::ProjectInfos* response);
+                                      seerep::TimeInterval* response);
   grpc::Status GetOverallBoundingBox(grpc::ServerContext* context, const seerep::UuidDatatypePair* request,
-                                     seerep::ProjectInfos* response);
+                                     seerep::Boundingbox* response);
 
 private:
   std::shared_ptr<seerep_core::Core> seerepCore;
