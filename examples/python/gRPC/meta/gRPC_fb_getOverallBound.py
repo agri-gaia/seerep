@@ -4,8 +4,8 @@ import os
 import sys
 
 import flatbuffers
-from fb import Boundingbox, Datatype
-from fb import meta_operations_grpc_fb as metaOperations
+from seerep.fb import Boundingbox, Datatype, TimeInterval
+from seerep.fb import meta_operations_grpc_fb as metaOperations
 
 # importing util functions. Assuming that these files are in the parent dir
 # examples/python/gRPC/util.py
@@ -22,7 +22,7 @@ channel = util.get_gRPC_channel()
 
 
 # 1. Get all projects from the server
-projectuuid = util_fb.getProject(builder, channel, 'LabeledImagesInGrid')
+projectuuid = util_fb.getProject(builder, channel, 'testproject')
 
 # 2. Check if the defined project exist; if not exit
 if not projectuuid:
@@ -41,18 +41,35 @@ responseBuf = stub.GetOverallBoundingBox(bytes(buf))
 response = Boundingbox.Boundingbox.GetRootAs(responseBuf)
 
 print(
-    "Min Point (X, Y, Z): "
-    + str(response.PointMin().X())
+    "Center Point (X, Y, Z): "
+    + str(response.CenterPoint().X())
     + " , "
-    + str(response.PointMin().Y())
+    + str(response.CenterPoint().Y())
     + " , "
-    + str(response.PointMin().Z())
+    + str(response.CenterPoint().Z())
 )
+
 print(
-    "Max Point (X, Y, Z): "
-    + str(response.PointMax().X())
+    "Spatial Things Point (X, Y, Z): "
+    + str(response.SpatialExtent().X())
     + " , "
-    + str(response.PointMax().Y())
+    + str(response.SpatialExtent().Y())
     + " , "
-    + str(response.PointMax().Z())
+    + str(response.SpatialExtent().Z())
+)
+
+responseBuf = stub.GetOverallTimeInterval(bytes(buf))
+response = TimeInterval.TimeInterval.GetRootAs(responseBuf)
+
+print(
+    " Minimum Time "
+    + str(response.TimeMin().Seconds())
+    + "s and "
+    + str(response.TimeMin().Nanos())
+    + "ms\n"
+    + " Maximum Time "
+    + str(response.TimeMax().Seconds())
+    + "s and "
+    + str(response.TimeMax().Nanos())
+    + "ms"
 )
