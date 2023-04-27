@@ -182,4 +182,15 @@ seerep_core_msgs::AABB CoreProject::getSpatialBounds(std::vector<seerep_core_msg
   return m_coreDatasets->getSpatialBounds(datatypes);
 }
 
+std::vector<std::string> CoreProject::getAllCategories(std::vector<seerep_core_msgs::Datatype> datatypes)
+{
+  return m_coreDatasets->getAllCategories(datatypes);
+}
+
+std::vector<std::string> CoreProject::getAllLabels(std::vector<seerep_core_msgs::Datatype> datatypes,
+                                                   std::string category)
+{
+  return m_coreDatasets->getAllLabels(datatypes, category);
+}
+
 } /* namespace seerep_core */

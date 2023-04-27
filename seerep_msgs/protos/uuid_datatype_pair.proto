@@ -2,8 +2,6 @@ syntax = "proto3";
 
 package seerep.pb;
 
-import "point.proto";
-
 import "datatype.proto";
 
 message UuidDatatypePair
