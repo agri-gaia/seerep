@@ -4,8 +4,18 @@ import os
 import sys
 
 import flatbuffers
-from seerep.fb import (Datatypes, Header, Image, Integer, LabelWithInstance,
-                       Point, PointStamped, String, Timestamp, UnionMapEntry)
+from seerep.fb import (
+    Datatypes,
+    Header,
+    Image,
+    Integer,
+    LabelWithInstance,
+    Point,
+    PointStamped,
+    String,
+    Timestamp,
+    UnionMapEntry,
+)
 from seerep.fb import image_service_grpc_fb as imageService
 from seerep.fb import point_service_grpc_fb as pointService
 
