@@ -8,11 +8,23 @@ import imageio.v2 as imageio
 import numpy as np
 import quaternion
 import yaml
-from seerep.fb import (Boundingbox2D, BoundingBox2DLabeled,
-                       BoundingBox2DLabeledWithCategory, Header, Image,
-                       LabelsWithCategory, LabelWithInstance, Point, Point2D,
-                       PointStamped, Quaternion, Timestamp, Transform,
-                       TransformStamped, Vector3)
+from seerep.fb import (
+    Boundingbox2D,
+    BoundingBox2DLabeled,
+    BoundingBox2DLabeledWithCategory,
+    Header,
+    Image,
+    LabelsWithCategory,
+    LabelWithInstance,
+    Point,
+    Point2D,
+    PointStamped,
+    Quaternion,
+    Timestamp,
+    Transform,
+    TransformStamped,
+    Vector3,
+)
 from seerep.fb import image_service_grpc_fb as imageService
 from seerep.fb import point_service_grpc_fb as pointService
 from seerep.fb import tf_service_grpc_fb as tfService
