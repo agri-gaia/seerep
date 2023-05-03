@@ -9,7 +9,8 @@ enum class Datatype
   Unknown,  // default value
   Image,
   PointCloud,
-  Point
+  Point,
+  All
 };
 
 } /* namespace seerep_core_msgs */

@@ -8,4 +8,5 @@ enum datatype
   image = 1;
   pointcloud = 2;
   point = 3;
+  all = 4;
 }

@@ -43,7 +43,7 @@ print(response)
 uuiddt_category = uuid_datatype_with_category.UuidDatatypeWithCategory()
 uuiddt_category.category = "3"
 uuiddt_category.uuid_with_datatype.projectuuid = projectuuid
-uuiddt_category.uuid_with_datatype.datatype = datatype.image
+uuiddt_category.uuid_with_datatype.datatype = datatype.all
 
 response = stub.GetAllLabels(uuiddt_category)
 print(response)
