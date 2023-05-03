@@ -524,6 +524,7 @@ def createCameraIntrinsicsQuery(builder, ci_uuid, project_uuid):
 
     return CameraIntrinsicsQuery.End(builder)
 
+
 def createUuidDatatypePair(builder, uuid, datatype):
     uuidStr = builder.CreateString(uuid)
 

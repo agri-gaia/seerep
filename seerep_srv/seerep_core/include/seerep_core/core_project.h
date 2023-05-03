@@ -176,17 +176,36 @@ public:
    */
   std::shared_ptr<HighFive::File> getHdf5File();
 
+  /**
+   * @brief Get the the earliest and latest recorded time in a project
+   *
+   * @param datatypes datatypes across which this is determined
+   * @return seerep_core_msgs::AabbTime Time bound object
+   */
   seerep_core_msgs::AabbTime getTimeBounds(std::vector<seerep_core_msgs::Datatype> datatypes);
+
+  /**
+   * @brief Get the Spatial Bounds of project
+   *
+   * @param datatypes datatypes across which this is determined
+   * @return seerep_core_msgs::AABB axis aligned bounding box of spatial information
+   */
   seerep_core_msgs::AABB getSpatialBounds(std::vector<seerep_core_msgs::Datatype> datatypes);
 
-  std::vector<std::string> getAllCategories(std::vector<seerep_core_msgs::Datatype> datatypes);
+  /**
+   * @brief Get the All Categories saved in a project
+   *
+   * @param datatypes datatypes across which this is determined
+   * @return std::vector<std::string> a vector of all categories
+   */
+  std::unordered_set<std::string> getAllCategories(std::vector<seerep_core_msgs::Datatype> datatypes);
 
   /**
    * @brief Get the all labels saved in a project
    *
    * @return std::vector<std::string> vector of labels
    */
-  std::vector<std::string> getAllLabels(std::vector<seerep_core_msgs::Datatype> datatypes, std::string category);
+  std::unordered_set<std::string> getAllLabels(std::vector<seerep_core_msgs::Datatype> datatypes, std::string category);
 
 private:
   /**

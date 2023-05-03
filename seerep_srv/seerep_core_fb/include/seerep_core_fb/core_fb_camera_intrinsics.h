@@ -52,6 +52,13 @@ public:
    */
   boost::uuids::uuid setData(const seerep::fb::CameraIntrinsics& cameraintrinsics);
 
+  /**
+   * @brief
+   *
+   * @param dt
+   * @return std::vector<seerep_core_msgs::Datatype>
+   */
+
 private:
   /** @brief a shared pointer to the general core */
   std::shared_ptr<seerep_core::Core> m_seerepCore;

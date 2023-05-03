@@ -2,7 +2,6 @@
 namespace seerep.fb;
 
 enum Datatype:byte {
-  Unknown=0,
   Image,
   PointCloud,
   Point,

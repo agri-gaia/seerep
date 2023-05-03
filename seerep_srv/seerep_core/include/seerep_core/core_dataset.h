@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <functional>
 #include <optional>
+#include <unordered_set>
 
 // seerep-msgs
 #include <seerep_msgs/aabb.h>
@@ -140,14 +141,14 @@ public:
    * @param datatypes A vector of datatypes for which the categories have to be fetched
    * @return std::vector<std::string> vector of categories
    */
-  std::vector<std::string> getAllCategories(std::vector<seerep_core_msgs::Datatype> datatypes);
+  std::unordered_set<std::string> getAllCategories(std::vector<seerep_core_msgs::Datatype> datatypes);
 
   /**
    * @brief Get the all labels saved in a project
    *
    * @return std::vector<std::string> vector of labels
    */
-  std::vector<std::string> getAllLabels(std::vector<seerep_core_msgs::Datatype> datatypes, std::string category);
+  std::unordered_set<std::string> getAllLabels(std::vector<seerep_core_msgs::Datatype> datatypes, std::string category);
 
 private:
   /**

@@ -182,15 +182,16 @@ public:
    * @param datatypes A vector of datatypes
    * @return std::vector<std::string> vectir if categories
    */
-  std::vector<std::string> getAllCategories(boost::uuids::uuid uuid, std::vector<seerep_core_msgs::Datatype> datatypes);
+  std::unordered_set<std::string> getAllCategories(boost::uuids::uuid uuid,
+                                                   std::vector<seerep_core_msgs::Datatype> datatypes);
 
   /**
    * @brief Get the all labels saved in a project
    *
    * @return std::vector<std::string> uuid of project
    */
-  std::vector<std::string> getAllLabels(boost::uuids::uuid uuid, std::vector<seerep_core_msgs::Datatype> datatypes,
-                                        std::string category);
+  std::unordered_set<std::string> getAllLabels(boost::uuids::uuid uuid,
+                                               std::vector<seerep_core_msgs::Datatype> datatypes, std::string category);
 
 private:
   /**

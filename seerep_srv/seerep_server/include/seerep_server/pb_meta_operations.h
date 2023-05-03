@@ -4,6 +4,7 @@
 // seerep
 #include <seerep_com/meta_operations.grpc.pb.h>
 #include <seerep_core/core.h>
+#include <seerep_core_pb/core_pb_conversion.h>
 
 #include "util.hpp"
 
@@ -34,8 +35,6 @@ public:
 private:
   std::shared_ptr<seerep_core::Core> seerepCore;
   boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
-
-  std::vector<seerep_core_msgs::Datatype> convertPbDatatypeVector(const seerep::datatype dt);
 };
 
 } /* namespace seerep_server */

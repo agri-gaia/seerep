@@ -4,6 +4,7 @@
 // seerep
 #include <seerep_com/meta_operations.grpc.fb.h>
 #include <seerep_core/core.h>
+#include <seerep_core_fb/core_fb_conversion.h>
 
 // logging
 #include <boost/log/sources/severity_logger.hpp>
@@ -41,8 +42,6 @@ public:
 private:
   std::shared_ptr<seerep_core::Core> seerepCore;
   boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
-
-  std::vector<seerep_core_msgs::Datatype> convertFbDatatypeVector(const seerep::fb::Datatype dt);
 };
 
 } /* namespace seerep_server */

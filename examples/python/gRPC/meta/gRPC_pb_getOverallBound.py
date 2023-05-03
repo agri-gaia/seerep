@@ -24,7 +24,7 @@ response = stub.GetProjects(empty_pb2.Empty())
 projectuuid = ""
 for project in response.projects:
     print(project.name + " " + project.uuid + "\n")
-    if project.name == "testproject":
+    if project.name == "LabeledImagesInGrid":
         projectuuid = project.uuid
 
 uuiddt = uuid_datatype_pair.UuidDatatypePair()
@@ -41,7 +41,7 @@ response = stub.GetAllCategories(uuiddt)
 print(response)
 
 uuiddt_category = uuid_datatype_with_category.UuidDatatypeWithCategory()
-uuiddt_category.category = "3"
+uuiddt_category.category = "1"
 uuiddt_category.uuid_with_datatype.projectuuid = projectuuid
 uuiddt_category.uuid_with_datatype.datatype = datatype.all
 

@@ -22,7 +22,7 @@ channel = util.get_gRPC_channel()
 
 
 # 1. Get all projects from the server
-projectuuid = util_fb.getProject(builder, channel, 'testproject')
+projectuuid = util_fb.getProject(builder, channel, 'LabeledImagesInGrid')
 
 # 2. Check if the defined project exist; if not exit
 if not projectuuid:
@@ -53,7 +53,7 @@ print(
 )
 
 print(
-    "Spatial Things Point (X, Y, Z): "
+    "Spatial Extent Point (X, Y, Z): "
     + str(response.SpatialExtent().X())
     + " , "
     + str(response.SpatialExtent().Y())
@@ -95,7 +95,7 @@ for idx in range(response.CategoriesLength()):
 
 builder = flatbuffers.Builder(1024)
 
-UuidDatatypeWithCategory = util_fb.createUuidDatatypeWithCategory(builder, projectuuid, Datatype.Datatype().Image, "3")
+UuidDatatypeWithCategory = util_fb.createUuidDatatypeWithCategory(builder, projectuuid, Datatype.Datatype().Image, "1")
 
 builder.Finish(UuidDatatypeWithCategory)
 buf = builder.Output()
