@@ -4,9 +4,8 @@ package seerep;
 
 enum datatype
 {
-  unknown = 0;
-  image = 1;
-  pointcloud = 2;
-  point = 3;
-  all = 4;
+  image = 0;
+  pointcloud = 1;
+  point = 2;
+  all = 3;
 }

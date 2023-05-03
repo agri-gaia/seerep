@@ -307,10 +307,6 @@ std::vector<seerep_core_msgs::Datatype> PbMetaOperations::convertPbDatatypeVecto
     dt_vector.push_back(seerep_core_msgs::Datatype::PointCloud);
     dt_vector.push_back(seerep_core_msgs::Datatype::Point);
   }
-  else
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::Unknown);
-  }
 
   return dt_vector;
 }
