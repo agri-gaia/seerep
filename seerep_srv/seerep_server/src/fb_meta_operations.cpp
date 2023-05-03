@@ -363,4 +363,176 @@ FbMetaOperations::GetOverallBoundingBox(grpc::ServerContext* context,
   return grpc::Status::OK;
 }
 
+grpc::Status FbMetaOperations::GetAllCategories(grpc::ServerContext* context,
+                                                const flatbuffers::grpc::Message<seerep::fb::UuidDatatypePair>* request,
+                                                flatbuffers::grpc::Message<seerep::fb::Categories>* response)
+{
+  (void)context;  // ignore that variable without causing warnings
+  auto requestRoot = request->GetRoot();
+
+  // It was not possible to send a vector of enum of datatypes
+  // through to this function. Therefore, on the flatbuffer service
+  // level, the UuidDatatypePair implementation has one datatype,
+  // while below this layer, in the seerep core, the implementation
+  // is a vector. We intend to make them consistent in the future
+  // by implementing a vector of enums on the flatbuffer (and protobuf)
+  // levels.
+  std::vector<seerep_core_msgs::Datatype> dt_vector;
+
+  seerep::fb::Datatype casted_datatype = static_cast<seerep::fb::Datatype>(requestRoot->datatype());
+  if (casted_datatype == seerep::fb::Datatype_Image)
+  {
+    dt_vector.push_back(seerep_core_msgs::Datatype::Image);
+  }
+  else if (casted_datatype == seerep::fb::Datatype_PointCloud)
+  {
+    dt_vector.push_back(seerep_core_msgs::Datatype::PointCloud);
+  }
+  else if (casted_datatype == seerep::fb::Datatype_Point)
+  {
+    dt_vector.push_back(seerep_core_msgs::Datatype::Point);
+  }
+  else
+  {
+    dt_vector.push_back(seerep_core_msgs::Datatype::Unknown);
+  }
+
+  try
+  {
+    std::string uuid = requestRoot->projectuuid()->str();
+    boost::uuids::string_generator gen;
+    auto uuidFromString = gen(uuid);
+
+    std::vector<std::string> categories = seerepCore->getAllCategories(uuidFromString, dt_vector);
+
+    flatbuffers::grpc::MessageBuilder builder;
+
+    std::vector<flatbuffers::Offset<flatbuffers::String>> fb_categories;
+
+    for (std::string cat : categories)
+    {
+      flatbuffers::Offset<flatbuffers::String> fb_category = builder.CreateString(cat);
+      fb_categories.push_back(fb_category);
+    }
+
+    auto fb_categories_vector = builder.CreateVector(fb_categories);
+
+    seerep::fb::CategoriesBuilder cb(builder);
+    cb.add_categories(fb_categories_vector);
+    builder.Finish(cb.Finish());
+
+    *response = builder.ReleaseMessage<seerep::fb::Categories>();
+  }
+  catch (std::runtime_error const& e)
+  {
+    // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
+    // also catching core doesn't have project with uuid error
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (const std::exception& e)
+  {
+    // specific handling for all exceptions extending std::exception, except
+    // std::runtime_error which is handled explicitly
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (...)
+  {
+    // catch any other errors (that we have no information about)
+    std::string msg = "Unknown failure occurred. Possible memory corruption";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
+  }
+
+  return grpc::Status::OK;
+}
+
+grpc::Status
+FbMetaOperations::GetAllLabels(grpc::ServerContext* context,
+                               const flatbuffers::grpc::Message<seerep::fb::UuidDatatypeWithCategory>* request,
+                               flatbuffers::grpc::Message<seerep::fb::Labels>* response)
+{
+  (void)context;  // ignore that variable without causing warnings
+  auto requestRoot = request->GetRoot();
+
+  // It was not possible to send a vector of enum of datatypes
+  // through to this function. Therefore, on the flatbuffer service
+  // level, the UuidDatatypePair implementation has one datatype,
+  // while below this layer, in the seerep core, the implementation
+  // is a vector. We intend to make them consistent in the future
+  // by implementing a vector of enums on the flatbuffer (and protobuf)
+  // levels.
+  std::vector<seerep_core_msgs::Datatype> dt_vector;
+
+  seerep::fb::Datatype casted_datatype = static_cast<seerep::fb::Datatype>(requestRoot->UuidAndDatatype()->datatype());
+  if (casted_datatype == seerep::fb::Datatype_Image)
+  {
+    dt_vector.push_back(seerep_core_msgs::Datatype::Image);
+  }
+  else if (casted_datatype == seerep::fb::Datatype_PointCloud)
+  {
+    dt_vector.push_back(seerep_core_msgs::Datatype::PointCloud);
+  }
+  else if (casted_datatype == seerep::fb::Datatype_Point)
+  {
+    dt_vector.push_back(seerep_core_msgs::Datatype::Point);
+  }
+  else
+  {
+    dt_vector.push_back(seerep_core_msgs::Datatype::Unknown);
+  }
+
+  try
+  {
+    std::string category = requestRoot->category()->str();
+
+    std::string uuid = requestRoot->UuidAndDatatype()->projectuuid()->str();
+    boost::uuids::string_generator gen;
+    auto uuidFromString = gen(uuid);
+
+    std::vector<std::string> allLabels = seerepCore->getAllLabels(uuidFromString, dt_vector, category);
+
+    flatbuffers::grpc::MessageBuilder builder;
+
+    std::vector<flatbuffers::Offset<flatbuffers::String>> fb_labels;
+
+    for (std::string lbl : allLabels)
+    {
+      flatbuffers::Offset<flatbuffers::String> fb_label = builder.CreateString(lbl);
+      fb_labels.push_back(fb_label);
+    }
+
+    auto fb_labels_vector = builder.CreateVector(fb_labels);
+
+    seerep::fb::LabelsBuilder lb(builder);
+    lb.add_labels(fb_labels_vector);
+    builder.Finish(lb.Finish());
+
+    *response = builder.ReleaseMessage<seerep::fb::Labels>();
+  }
+  catch (std::runtime_error const& e)
+  {
+    // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
+    // also catching core doesn't have project with uuid error
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (const std::exception& e)
+  {
+    // specific handling for all exceptions extending std::exception, except
+    // std::runtime_error which is handled explicitly
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (...)
+  {
+    // catch any other errors (that we have no information about)
+    std::string msg = "Unknown failure occurred. Possible memory corruption";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
+  }
+  return grpc::Status::OK;
+}
+
 } /* namespace seerep_server */

@@ -4,7 +4,7 @@ import os
 import sys
 
 import flatbuffers
-from seerep.fb import Boundingbox, Datatype, TimeInterval
+from seerep.fb import Boundingbox, Categories, Datatype, Labels, TimeInterval
 from seerep.fb import meta_operations_grpc_fb as metaOperations
 
 # importing util functions. Assuming that these files are in the parent dir
@@ -37,6 +37,9 @@ UuidDatatypePair = util_fb.createUuidDatatypePair(builder, projectuuid, Datatype
 builder.Finish(UuidDatatypePair)
 buf = builder.Output()
 
+###
+# Fetching overall spatial bound
+
 responseBuf = stub.GetOverallBoundingBox(bytes(buf))
 response = Boundingbox.Boundingbox.GetRootAs(responseBuf)
 
@@ -58,6 +61,9 @@ print(
     + str(response.SpatialExtent().Z())
 )
 
+###
+# Fetching overall temporal bound
+
 responseBuf = stub.GetOverallTimeInterval(bytes(buf))
 response = TimeInterval.TimeInterval.GetRootAs(responseBuf)
 
@@ -73,3 +79,30 @@ print(
     + str(response.TimeMax().Nanos())
     + "ms"
 )
+
+###
+# Fetching all category names
+
+responseBuf = stub.GetAllCategories(bytes(buf))
+response = Categories.Categories.GetRootAs(responseBuf)
+
+print("Saved Category names are:")
+for idx in range(response.CategoriesLength()):
+    print(response.Categories(idx).decode())
+
+###
+# Fetching all label names for a given category
+
+builder = flatbuffers.Builder(1024)
+
+UuidDatatypeWithCategory = util_fb.createUuidDatatypeWithCategory(builder, projectuuid, Datatype.Datatype().Image, "3")
+
+builder.Finish(UuidDatatypeWithCategory)
+buf = builder.Output()
+
+responseBuf = stub.GetAllLabels(bytes(buf))
+response = Labels.Labels.GetRootAs(responseBuf)
+
+print("Saved Label names are:")
+for idx in range(response.LabelsLength()):
+    print(response.Labels(idx).decode())

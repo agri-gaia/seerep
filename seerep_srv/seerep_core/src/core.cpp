@@ -307,4 +307,18 @@ seerep_core_msgs::AABB Core::getOverallBound(boost::uuids::uuid uuid, std::vecto
   return project->second->getSpatialBounds(datatypes);
 }
 
+std::vector<std::string> Core::getAllCategories(boost::uuids::uuid uuid,
+                                                std::vector<seerep_core_msgs::Datatype> datatypes)
+{
+  auto project = findProject(uuid);
+  return project->second->getAllCategories(datatypes);
+}
+
+std::vector<std::string> Core::getAllLabels(boost::uuids::uuid uuid, std::vector<seerep_core_msgs::Datatype> datatypes,
+                                            std::string category)
+{
+  auto project = findProject(uuid);
+  return project->second->getAllLabels(datatypes, category);
+}
+
 } /* namespace seerep_core */

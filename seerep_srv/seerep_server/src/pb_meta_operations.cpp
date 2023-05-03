@@ -233,4 +233,120 @@ grpc::Status PbMetaOperations::GetOverallBoundingBox(grpc::ServerContext* contex
   return grpc::Status::OK;
 }
 
+grpc::Status PbMetaOperations::GetAllCategories(grpc::ServerContext* context,
+                                                const seerep::pb::UuidDatatypePair* request,
+                                                seerep::pb::Categories* response)
+{
+  (void)context;  // ignore that variable without causing warnings
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "fetching all categories";
+
+  std::vector<seerep_core_msgs::Datatype> dt_vector;
+
+  if (request->datatype() == seerep::datatype::image)
+  {
+    dt_vector.push_back(seerep_core_msgs::Datatype::Image);
+  }
+  else if (request->datatype() == seerep::datatype::pointcloud)
+  {
+    dt_vector.push_back(seerep_core_msgs::Datatype::PointCloud);
+  }
+  else if (request->datatype() == seerep::datatype::point)
+  {
+    dt_vector.push_back(seerep_core_msgs::Datatype::Point);
+  }
+  else
+  {
+    dt_vector.push_back(seerep_core_msgs::Datatype::Unknown);
+  }
+
+  try
+  {
+    std::string uuid = request->projectuuid();
+    boost::uuids::string_generator gen;
+    auto uuidFromString = gen(uuid);
+
+    std::vector<std::string> categories = seerepCore->getAllCategories(uuidFromString, dt_vector);
+
+    for (std::string category : categories)
+    {
+      response->add_categories(category);
+    }
+  }
+  catch (const std::exception& e)
+  {
+    // specific handling for all exceptions extending std::exception, except
+    // std::runtime_error which is handled explicitly
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (...)
+  {
+    // catch any other errors (that we have no information about)
+    std::string msg = "Unknown failure occurred. Possible memory corruption";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
+  }
+
+  return grpc::Status::OK;
+}
+
+grpc::Status PbMetaOperations::GetAllLabels(grpc::ServerContext* context,
+                                            const seerep::pb::UuidDatatypeWithCategory* request,
+                                            seerep::pb::Labels* response)
+{
+  (void)context;  // ignore that variable without causing warnings
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "fetching overall bounding box";
+
+  std::vector<seerep_core_msgs::Datatype> dt_vector;
+
+  if (request->uuid_with_datatype().datatype() == seerep::datatype::image)
+  {
+    dt_vector.push_back(seerep_core_msgs::Datatype::Image);
+  }
+  else if (request->uuid_with_datatype().datatype() == seerep::datatype::pointcloud)
+  {
+    dt_vector.push_back(seerep_core_msgs::Datatype::PointCloud);
+  }
+  else if (request->uuid_with_datatype().datatype() == seerep::datatype::point)
+  {
+    dt_vector.push_back(seerep_core_msgs::Datatype::Point);
+  }
+  else
+  {
+    dt_vector.push_back(seerep_core_msgs::Datatype::Unknown);
+  }
+
+  try
+  {
+    std::string category = request->category();
+
+    std::string uuid = request->uuid_with_datatype().projectuuid();
+    boost::uuids::string_generator gen;
+    auto uuidFromString = gen(uuid);
+
+    std::vector<std::string> allLabels = seerepCore->getAllLabels(uuidFromString, dt_vector, category);
+
+    for (std::string label : allLabels)
+    {
+      response->add_labels(label);
+    }
+  }
+  catch (const std::exception& e)
+  {
+    // specific handling for all exceptions extending std::exception, except
+    // std::runtime_error which is handled explicitly
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (...)
+  {
+    // catch any other errors (that we have no information about)
+    std::string msg = "Unknown failure occurred. Possible memory corruption";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
+  }
+
+  return grpc::Status::OK;
+}
+
 } /* namespace seerep_server */

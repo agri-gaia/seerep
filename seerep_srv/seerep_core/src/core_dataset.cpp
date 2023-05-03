@@ -601,4 +601,62 @@ seerep_core_msgs::AABB CoreDataset::getSpatialBounds(std::vector<seerep_core_msg
   return overallbb;
 }
 
+std::vector<std::string> CoreDataset::getAllCategories(std::vector<seerep_core_msgs::Datatype> datatypes)
+{
+  std::vector<std::string> categories;
+
+  // traverse all datatypes
+  for (seerep_core_msgs::Datatype dt : datatypes)
+  {
+    // obtain the map which holds the categories
+    auto categories_map = m_datatypeDatatypeSpecificsMap.at(dt)->categoryLabelDatasetsMap;
+
+    // traverse this map
+    for (auto& [key, value] : categories_map)
+    {
+      // obtain the key of this map
+      std::string category = key;
+
+      // verify this key (label) is not already added
+      if (std::find(categories.begin(), categories.end(), category) == categories.end())
+      {
+        // if not, add it
+        categories.push_back(category);
+      }
+    }
+  }
+  // return the prepared vector
+  return categories;
+}
+
+std::vector<std::string> CoreDataset::getAllLabels(std::vector<seerep_core_msgs::Datatype> datatypes,
+                                                   std::string category)
+{
+  std::vector<std::string> labels;
+
+  // traverse all datatypes
+  for (seerep_core_msgs::Datatype dt : datatypes)
+  {
+    // obtain the map pertaining to the provided label
+    std::unordered_map<std::string, std::vector<boost::uuids::uuid>> label_to_uuid_map =
+        m_datatypeDatatypeSpecificsMap.at(dt)->categoryLabelDatasetsMap[category];
+
+    // traverse this map
+    for (auto& [key, value] : label_to_uuid_map)
+    {
+      // obtain the key of this map
+      std::string label = key;
+
+      // verify this key (label) is not already added
+      if (std::find(labels.begin(), labels.end(), label) == labels.end())
+      {
+        // if not, add it
+        labels.push_back(label);
+      }
+    }
+  }
+  // return the prepared vector
+  return labels;
+}
+
 } /* namespace seerep_core */

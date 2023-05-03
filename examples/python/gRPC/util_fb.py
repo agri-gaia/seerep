@@ -29,6 +29,7 @@ from seerep.fb import (
     Timestamp,
     TransformStampedQuery,
     UuidDatatypePair,
+    UuidDatatypeWithCategory,
 )
 from seerep.fb import meta_operations_grpc_fb as metaOperations
 
@@ -530,6 +531,17 @@ def createUuidDatatypePair(builder, uuid, datatype):
     UuidDatatypePair.AddProjectuuid(builder, uuidStr)
     UuidDatatypePair.AddDatatype(builder, datatype)
     return UuidDatatypePair.End(builder)
+
+
+def createUuidDatatypeWithCategory(builder, uuid, datatype, category):
+    categoryStr = builder.CreateString(category)
+
+    UuidDatatypePair = createUuidDatatypePair(builder, uuid, datatype)
+
+    UuidDatatypeWithCategory.Start(builder)
+    UuidDatatypeWithCategory.AddCategory(builder, categoryStr)
+    UuidDatatypeWithCategory.AddUuidAndDatatype(builder, UuidDatatypePair)
+    return UuidDatatypeWithCategory.End(builder)
 
 
 def createProjectInfo(builder, name, uuid):

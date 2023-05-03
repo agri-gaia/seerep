@@ -164,6 +164,15 @@ public:
   seerep_core_msgs::AabbTime getTimeBounds(std::vector<seerep_core_msgs::Datatype> datatypes);
   seerep_core_msgs::AABB getSpatialBounds(std::vector<seerep_core_msgs::Datatype> datatypes);
 
+  std::vector<std::string> getAllCategories(std::vector<seerep_core_msgs::Datatype> datatypes);
+
+  /**
+   * @brief Get the all labels saved in a project
+   *
+   * @return std::vector<std::string> vector of labels
+   */
+  std::vector<std::string> getAllLabels(std::vector<seerep_core_msgs::Datatype> datatypes, std::string category);
+
 private:
   /**
    * @brief Create the HDF5 file accessor and the mutex. Based on that create the

@@ -26,6 +26,10 @@ public:
                                       seerep::pb::TimeInterval* response);
   grpc::Status GetOverallBoundingBox(grpc::ServerContext* context, const seerep::pb::UuidDatatypePair* request,
                                      seerep::pb::Boundingbox* response);
+  grpc::Status GetAllCategories(grpc::ServerContext* context, const seerep::pb::UuidDatatypePair* request,
+                                seerep::pb::Categories* response) override;
+  grpc::Status GetAllLabels(grpc::ServerContext* context, const seerep::pb::UuidDatatypeWithCategory* request,
+                            seerep::pb::Labels* response);
 
 private:
   std::shared_ptr<seerep_core::Core> seerepCore;
