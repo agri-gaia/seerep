@@ -106,23 +106,7 @@ grpc::Status PbMetaOperations::GetOverallTimeInterval(grpc::ServerContext* conte
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "fetching overall time interval";
 
   std::vector<seerep_core_msgs::Datatype> dt_vector;
-
-  if (request->datatype() == seerep::datatype::image)
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::Image);
-  }
-  else if (request->datatype() == seerep::datatype::pointcloud)
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::PointCloud);
-  }
-  else if (request->datatype() == seerep::datatype::point)
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::Point);
-  }
-  else
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::Unknown);
-  }
+  dt_vector = convertPbDatatypeVector(request->datatype());
 
   try
   {
@@ -173,23 +157,7 @@ grpc::Status PbMetaOperations::GetOverallBoundingBox(grpc::ServerContext* contex
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "fetching overall bounding box";
 
   std::vector<seerep_core_msgs::Datatype> dt_vector;
-
-  if (request->datatype() == seerep::datatype::image)
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::Image);
-  }
-  else if (request->datatype() == seerep::datatype::pointcloud)
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::PointCloud);
-  }
-  else if (request->datatype() == seerep::datatype::point)
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::Point);
-  }
-  else
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::Unknown);
-  }
+  dt_vector = convertPbDatatypeVector(request->datatype());
 
   try
   {
@@ -245,23 +213,7 @@ grpc::Status PbMetaOperations::GetAllCategories(grpc::ServerContext* context,
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "fetching all categories";
 
   std::vector<seerep_core_msgs::Datatype> dt_vector;
-
-  if (request->datatype() == seerep::datatype::image)
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::Image);
-  }
-  else if (request->datatype() == seerep::datatype::pointcloud)
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::PointCloud);
-  }
-  else if (request->datatype() == seerep::datatype::point)
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::Point);
-  }
-  else
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::Unknown);
-  }
+  dt_vector = convertPbDatatypeVector(request->datatype());
 
   try
   {
@@ -302,23 +254,7 @@ grpc::Status PbMetaOperations::GetAllLabels(grpc::ServerContext* context,
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "fetching overall bounding box";
 
   std::vector<seerep_core_msgs::Datatype> dt_vector;
-
-  if (request->uuid_with_datatype().datatype() == seerep::datatype::image)
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::Image);
-  }
-  else if (request->uuid_with_datatype().datatype() == seerep::datatype::pointcloud)
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::PointCloud);
-  }
-  else if (request->uuid_with_datatype().datatype() == seerep::datatype::point)
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::Point);
-  }
-  else
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::Unknown);
-  }
+  dt_vector = convertPbDatatypeVector(request->uuid_with_datatype().datatype());
 
   try
   {
@@ -351,6 +287,36 @@ grpc::Status PbMetaOperations::GetAllLabels(grpc::ServerContext* context,
   }
 
   return grpc::Status::OK;
+}
+
+std::vector<seerep_core_msgs::Datatype> PbMetaOperations::convertPbDatatypeVector(const seerep::datatype datatype)
+{
+  std::vector<seerep_core_msgs::Datatype> dt_vector;
+
+  if (datatype == seerep::datatype::image)
+  {
+    dt_vector.push_back(seerep_core_msgs::Datatype::Image);
+  }
+  else if (datatype == seerep::datatype::pointcloud)
+  {
+    dt_vector.push_back(seerep_core_msgs::Datatype::PointCloud);
+  }
+  else if (datatype == seerep::datatype::point)
+  {
+    dt_vector.push_back(seerep_core_msgs::Datatype::Point);
+  }
+  else if (datatype == seerep::datatype::all)
+  {
+    dt_vector.push_back(seerep_core_msgs::Datatype::Image);
+    dt_vector.push_back(seerep_core_msgs::Datatype::PointCloud);
+    dt_vector.push_back(seerep_core_msgs::Datatype::Point);
+  }
+  else
+  {
+    dt_vector.push_back(seerep_core_msgs::Datatype::Unknown);
+  }
+
+  return dt_vector;
 }
 
 } /* namespace seerep_server */

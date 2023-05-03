@@ -187,22 +187,7 @@ FbMetaOperations::GetOverallTimeInterval(grpc::ServerContext* context,
   std::vector<seerep_core_msgs::Datatype> dt_vector;
 
   seerep::fb::Datatype casted_datatype = static_cast<seerep::fb::Datatype>(requestRoot->datatype());
-  if (casted_datatype == seerep::fb::Datatype_Image)
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::Image);
-  }
-  else if (casted_datatype == seerep::fb::Datatype_PointCloud)
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::PointCloud);
-  }
-  else if (casted_datatype == seerep::fb::Datatype_Point)
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::Point);
-  }
-  else
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::Unknown);
-  }
+  dt_vector = convertFbDatatypeVector(casted_datatype);
 
   try
   {
@@ -284,23 +269,11 @@ FbMetaOperations::GetOverallBoundingBox(grpc::ServerContext* context,
   // levels.
   std::vector<seerep_core_msgs::Datatype> dt_vector;
 
+  // flatbuffers::IsFieldPresent(requestRoot, seerep::fb::UuidDatatypePair::datatype);
+  // requestRoot->CheckField(seerep::fb::UuidDatatypePair::datatype);
+
   seerep::fb::Datatype casted_datatype = static_cast<seerep::fb::Datatype>(requestRoot->datatype());
-  if (casted_datatype == seerep::fb::Datatype_Image)
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::Image);
-  }
-  else if (casted_datatype == seerep::fb::Datatype_PointCloud)
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::PointCloud);
-  }
-  else if (casted_datatype == seerep::fb::Datatype_Point)
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::Point);
-  }
-  else
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::Unknown);
-  }
+  dt_vector = convertFbDatatypeVector(casted_datatype);
 
   try
   {
@@ -384,22 +357,7 @@ grpc::Status FbMetaOperations::GetAllCategories(grpc::ServerContext* context,
   std::vector<seerep_core_msgs::Datatype> dt_vector;
 
   seerep::fb::Datatype casted_datatype = static_cast<seerep::fb::Datatype>(requestRoot->datatype());
-  if (casted_datatype == seerep::fb::Datatype_Image)
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::Image);
-  }
-  else if (casted_datatype == seerep::fb::Datatype_PointCloud)
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::PointCloud);
-  }
-  else if (casted_datatype == seerep::fb::Datatype_Point)
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::Point);
-  }
-  else
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::Unknown);
-  }
+  dt_vector = convertFbDatatypeVector(casted_datatype);
 
   try
   {
@@ -470,22 +428,7 @@ FbMetaOperations::GetAllLabels(grpc::ServerContext* context,
   std::vector<seerep_core_msgs::Datatype> dt_vector;
 
   seerep::fb::Datatype casted_datatype = static_cast<seerep::fb::Datatype>(requestRoot->UuidAndDatatype()->datatype());
-  if (casted_datatype == seerep::fb::Datatype_Image)
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::Image);
-  }
-  else if (casted_datatype == seerep::fb::Datatype_PointCloud)
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::PointCloud);
-  }
-  else if (casted_datatype == seerep::fb::Datatype_Point)
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::Point);
-  }
-  else
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::Unknown);
-  }
+  dt_vector = convertFbDatatypeVector(casted_datatype);
 
   try
   {
@@ -537,6 +480,36 @@ FbMetaOperations::GetAllLabels(grpc::ServerContext* context,
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
   }
   return grpc::Status::OK;
+}
+
+std::vector<seerep_core_msgs::Datatype> FbMetaOperations::convertFbDatatypeVector(const seerep::fb::Datatype dt)
+{
+  std::vector<seerep_core_msgs::Datatype> dt_vector;
+
+  if (dt == seerep::fb::Datatype_Image)
+  {
+    dt_vector.push_back(seerep_core_msgs::Datatype::Image);
+  }
+  else if (dt == seerep::fb::Datatype_PointCloud)
+  {
+    dt_vector.push_back(seerep_core_msgs::Datatype::PointCloud);
+  }
+  else if (dt == seerep::fb::Datatype_Point)
+  {
+    dt_vector.push_back(seerep_core_msgs::Datatype::Point);
+  }
+  else if (dt == seerep::fb::Datatype_All)
+  {
+    dt_vector.push_back(seerep_core_msgs::Datatype::Image);
+    dt_vector.push_back(seerep_core_msgs::Datatype::PointCloud);
+    dt_vector.push_back(seerep_core_msgs::Datatype::Point);
+  }
+  else
+  {
+    dt_vector.push_back(seerep_core_msgs::Datatype::Unknown);
+  }
+
+  return dt_vector;
 }
 
 } /* namespace seerep_server */

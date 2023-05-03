@@ -34,6 +34,8 @@ public:
 private:
   std::shared_ptr<seerep_core::Core> seerepCore;
   boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
+
+  std::vector<seerep_core_msgs::Datatype> convertPbDatatypeVector(const seerep::datatype dt);
 };
 
 } /* namespace seerep_server */
