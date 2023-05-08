@@ -160,6 +160,9 @@ public:
   void writeProjectFrameId(const std::string& frameId);
   std::string readProjectFrameId();
 
+  void writeVersion(const std::string& version);
+  const std::string readVersion();
+
   // ################
   //  Geodetic Coordinates
   // ################
@@ -245,6 +248,7 @@ public:
 
   inline static const std::string PROJECTNAME = "projectname";
   inline static const std::string PROJECTFRAMEID = "projectframeid";
+  inline static const std::string VERSION = "version";
 
   inline static const std::string GEODETICLOCATION_COORDINATESYSTEM = "geoloc_coordinatesystem";
   inline static const std::string GEODETICLOCATION_ELLIPSOID = "geoloc_ellipsoid";

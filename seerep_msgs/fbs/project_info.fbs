@@ -8,4 +8,5 @@ table ProjectInfo
   uuid:string;
   frameid:string;
   geodetic_position:seerep.fb.GeodeticCoordinates;
+  version:string;
 }

@@ -1,5 +1,7 @@
 #include "seerep_server/pb_meta_operations.h"
 
+extern const char* GIT_TAG;
+
 namespace seerep_server
 {
 PbMetaOperations::PbMetaOperations(std::shared_ptr<seerep_core::Core> seerepCore) : seerepCore(seerepCore)
@@ -17,6 +19,7 @@ grpc::Status PbMetaOperations::CreateProject(grpc::ServerContext* context, const
     seerep_core_msgs::ProjectInfo projectInfo;
     projectInfo.frameId = request->mapframeid();
     projectInfo.name = request->name();
+    projectInfo.version = GIT_TAG;
     projectInfo.uuid = boost::uuids::random_generator()();
 
     // assigning geodetic coords attributes individually
@@ -66,6 +69,7 @@ grpc::Status PbMetaOperations::GetProjects(grpc::ServerContext* context, const g
       responseProjectInfo->set_name(projectInfo.name);
       responseProjectInfo->set_uuid(boost::lexical_cast<std::string>(projectInfo.uuid));
       responseProjectInfo->set_frameid(projectInfo.frameId);
+      responseProjectInfo->set_version(projectInfo.version);
 
       // assigning geodetic coords attributes individually
       responseProjectInfo->mutable_geodeticcoordinates()->set_coordinatesystem(

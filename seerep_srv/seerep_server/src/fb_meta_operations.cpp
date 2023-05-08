@@ -1,5 +1,7 @@
 #include "seerep_server/fb_meta_operations.h"
 
+extern const char* GIT_TAG;
+
 namespace seerep_server
 {
 FbMetaOperations::FbMetaOperations(std::shared_ptr<seerep_core::Core> seerepCore) : seerepCore(seerepCore)
@@ -16,6 +18,7 @@ grpc::Status FbMetaOperations::CreateProject(grpc::ServerContext* context,
   seerep_core_msgs::ProjectInfo projectInfo;
   projectInfo.frameId = requestMsg->map_frame_id()->str();
   projectInfo.name = requestMsg->name()->str();
+  projectInfo.version = GIT_TAG;
   projectInfo.uuid = boost::uuids::random_generator()();
 
   // extracting geodetic coordinates attribute information from flatbuffer and saving in seerep core msg struct
@@ -56,6 +59,7 @@ grpc::Status FbMetaOperations::GetProjects(grpc::ServerContext* context,
     auto nameOffset = builder.CreateString(projectInfo.name);
     auto uuidOffset = builder.CreateString(boost::lexical_cast<std::string>(projectInfo.uuid));
     auto frameIdOffset = builder.CreateString(projectInfo.frameId);
+    auto versionOffset = builder.CreateString(projectInfo.version);
 
     auto coordinateSystemOffset = builder.CreateString(projectInfo.geodetCoords.coordinateSystem);
     auto ellipsoidOffset = builder.CreateString(projectInfo.geodetCoords.ellipsoid);
@@ -68,8 +72,8 @@ grpc::Status FbMetaOperations::GetProjects(grpc::ServerContext* context,
     gcbuilder.add_longitude(projectInfo.geodetCoords.longitude);
     auto geodeticCoordinatesOffset = gcbuilder.Finish();
 
-    projectInfosVector.push_back(
-        seerep::fb::CreateProjectInfo(builder, nameOffset, uuidOffset, frameIdOffset, geodeticCoordinatesOffset));
+    projectInfosVector.push_back(seerep::fb::CreateProjectInfo(builder, nameOffset, uuidOffset, frameIdOffset,
+                                                               geodeticCoordinatesOffset, versionOffset));
   }
   auto vectorOffset = builder.CreateVector(projectInfosVector);
   auto projectInfosOffset = seerep::fb::CreateProjectInfos(builder, vectorOffset);
