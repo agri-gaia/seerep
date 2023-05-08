@@ -18,4 +18,5 @@ message CameraIntrinsics
   uint32 binning_x = 9;
   uint32 binning_y = 10;
   RegionOfInterest region_of_interest = 11;
+  uint32 maximum_viewing_distance = 12;
 }

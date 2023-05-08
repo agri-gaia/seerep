@@ -5,6 +5,7 @@
 #include <highfive/H5File.hpp>
 
 // seerep_hdf5_core
+#include "hdf5_core_cameraintrinsics.h"
 #include "hdf5_core_datatype_interface.h"
 #include "hdf5_core_general.h"
 
@@ -137,6 +138,10 @@ public:
 
   // datatype group name in hdf5
   inline static const std::string HDF5_GROUP_IMAGE = "images";
+
+private:
+  /** @brief object handling the HDF5 file IO regarding CIs */
+  std::shared_ptr<seerep_hdf5_core::Hdf5CoreCameraIntrinsics> m_ioCI;
 };
 
 }  // namespace seerep_hdf5_core

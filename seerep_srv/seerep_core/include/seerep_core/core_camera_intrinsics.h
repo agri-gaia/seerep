@@ -15,7 +15,7 @@ namespace seerep_core
 class CoreCameraIntrinsics
 {
 public:
-  CoreCameraIntrinsics(std::shared_ptr<seerep_hdf5_core::Hdf5CoreCameraIntrinsics> hdf5_io);
+  CoreCameraIntrinsics(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
   ~CoreCameraIntrinsics();
 
   /**

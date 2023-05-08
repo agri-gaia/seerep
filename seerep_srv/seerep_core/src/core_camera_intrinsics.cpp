@@ -2,9 +2,9 @@
 
 namespace seerep_core
 {
-CoreCameraIntrinsics::CoreCameraIntrinsics(std::shared_ptr<seerep_hdf5_core::Hdf5CoreCameraIntrinsics> hdf5_io)
-  : m_hdf5_io(hdf5_io)
+CoreCameraIntrinsics::CoreCameraIntrinsics(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx)
 {
+  m_hdf5_io = std::make_shared<seerep_hdf5_core::Hdf5CoreCameraIntrinsics>(file, write_mtx);
 }
 CoreCameraIntrinsics::~CoreCameraIntrinsics()
 {

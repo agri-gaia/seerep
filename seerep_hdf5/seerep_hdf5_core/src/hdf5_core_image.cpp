@@ -7,6 +7,7 @@ namespace seerep_hdf5_core
 Hdf5CoreImage::Hdf5CoreImage(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx)
   : Hdf5CoreGeneral(file, write_mtx)
 {
+  m_ioCI = std::make_shared<seerep_hdf5_core::Hdf5CoreCameraIntrinsics>(file, write_mtx);
 }
 
 std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CoreImage::readDataset(const boost::uuids::uuid& uuid)
@@ -38,22 +39,34 @@ std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CoreImage::readDataset(con
   data.header.timestamp.nanos = readAttributeFromHdf5<int64_t>(hdf5DataGroupPath, *dataGroupPtr,
                                                                seerep_hdf5_core::Hdf5CoreImage::HEADER_STAMP_NANOS);
 
-  boost::uuids::string_generator gen;
-  boost::uuids::uuid uuid_generated = gen(uuid);
-  data.header.uuidData = uuid_generated;
-
-  // set bounding box for images to 0. assume no spatial extent
-  data.boundingbox.min_corner().set<0>(0);
-  data.boundingbox.min_corner().set<1>(0);
-  data.boundingbox.min_corner().set<2>(0);
-  data.boundingbox.max_corner().set<0>(0);
-  data.boundingbox.max_corner().set<1>(0);
-  data.boundingbox.max_corner().set<2>(0);
-
   readLabelsGeneralAndAddToLabelsWithInstancesWithCategory(HDF5_GROUP_IMAGE, uuid, data.labelsWithInstancesWithCategory);
 
   readBoundingBoxLabeledAndAddToLabelsWithInstancesWithCategory(HDF5_GROUP_IMAGE, uuid,
                                                                 data.labelsWithInstancesWithCategory);
+
+  // fetch cam intrinsics uuid from hdf5_core_cameraintrinsics
+  std::string camintrinsics_uuid = readAttributeFromHdf5<std::string>(
+      hdf5DataGroupPath, *dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::CAMERA_INTRINSICS_UUID);
+
+  // release the lock to start the read out of camera intrinsics
+  lock.~scoped_lock();
+
+  seerep_core_msgs::camera_intrinsics ci =
+      m_ioCI->readCameraIntrinsics(boost::lexical_cast<boost::uuids::uuid>(camintrinsics_uuid));
+
+  // compute frustrum
+  double object_dist = ci.maximum_viewing_distance;
+
+  double field_of_view_x = object_dist * ci.height / ci.intrinsic_matrix[0];
+  double field_of_view_y = object_dist * ci.width / ci.intrinsic_matrix[4];
+
+  // generate bounding box
+  data.boundingbox.min_corner().set<0>(field_of_view_x / 2);
+  data.boundingbox.min_corner().set<1>(field_of_view_y / 2);
+  data.boundingbox.min_corner().set<2>(object_dist);
+  data.boundingbox.max_corner().set<0>(field_of_view_x / -2);
+  data.boundingbox.max_corner().set<1>(field_of_view_y / -2);
+  data.boundingbox.max_corner().set<2>(object_dist);
 
   return data;
 }

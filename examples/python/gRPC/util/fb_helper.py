@@ -476,6 +476,7 @@ def createCameraIntrinsics(
     binning_x,
     binning_y,
     region_of_interest,
+    max_viewing_dist,
 ):
     dm_buf = builder.CreateString(distortion_model)
 
@@ -511,6 +512,7 @@ def createCameraIntrinsics(
     CameraIntrinsics.AddBinningX(builder, binning_x)
     CameraIntrinsics.AddBinningY(builder, binning_y)
     CameraIntrinsics.AddRegionOfInterest(builder, region_of_interest)
+    CameraIntrinsics.AddMaximumViewingDistance(builder, max_viewing_dist)
 
     return CameraIntrinsics.End(builder)
 

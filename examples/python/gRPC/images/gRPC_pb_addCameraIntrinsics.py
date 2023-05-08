@@ -71,6 +71,8 @@ camin.projection_matrix.extend([3, 4, 5])
 camin.binning_x = 6
 camin.binning_y = 7
 
+camin.maximum_viewing_distance = 5
+
 stub.TransferCameraIntrinsics(camin)
 
 # Fetch the saved CI

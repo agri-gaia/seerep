@@ -76,6 +76,14 @@ grpc::Status FbCameraIntrinsicsService::TransferCameraIntrinsics(
   {
     response_message = "No UUID for Project set";
   }
+  else if (requestRoot->maximum_viewing_distance() == 0)
+  {
+    std::string msg = "Max Viewing Distance is not set. Using default value of 0.";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+
+    response_message = "Max Viewing Distance is the distance to the farthest object in view and is used to compute a "
+                       "frustrum of the camera's view. This value is not set. Using default value of 0.";
+  }
   else
   {
     try
