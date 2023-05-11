@@ -6,6 +6,7 @@
 
 #include "aabb.h"
 #include "header.h"
+#include "quaternion.h"
 #include "timeinterval.h"
 
 namespace seerep_core_msgs
@@ -22,6 +23,7 @@ struct Query
   std::optional<std::vector<boost::uuids::uuid>> dataUuids;  ///< only filter by data uuid if set
   bool withoutData;                                          ///< do not return the data itself if set
   uint maxNumData;                                           ///< max number of datasets that should be returned
+  quaternion rotation;
 };
 
 } /* namespace seerep_core_msgs */

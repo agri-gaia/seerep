@@ -359,6 +359,8 @@ void CorePbConversion::fromPbBoundingBox(const seerep::pb::Query& query, seerep_
     queryCore.boundingbox.value().max_corner().set<2>(query.boundingboxstamped().boundingbox().center_point().z() +
                                                       query.boundingboxstamped().boundingbox().spatial_extent().z() /
                                                           2.0);
+
+    fromPbQuaternion(query.boundingboxstamped().boundingbox().rotation(), queryCore.rotation);
   }
 }
 
@@ -464,6 +466,13 @@ void CorePbConversion::toPb(const seerep_core_msgs::AABB& aabb, seerep::pb::Boun
   bb_pb->mutable_spatial_extent()->set_x(se_x);
   bb_pb->mutable_spatial_extent()->set_y(se_y);
   bb_pb->mutable_spatial_extent()->set_z(se_z);
-}
+  void CorePbConversion::fromPbQuaternion(const seerep::pb::Quaternion& quaternion,
+                                          seerep_core_msgs::quaternion& quaternionCore)
+  {
+    quaternionCore.x = quaternion.x();
+    quaternionCore.y = quaternion.y();
+    quaternionCore.z = quaternion.z();
+    quaternionCore.w = quaternion.w();
+  }
 
 }  // namespace seerep_core_pb

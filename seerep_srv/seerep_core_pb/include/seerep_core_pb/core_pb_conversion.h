@@ -157,6 +157,8 @@ private:
    * @param queryCore query message in seerep core format
    */
   static void fromFbQueryMaxNumData(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore);
+
+  static void fromPbQuaternion(const seerep::pb::Quaternion& quaternion, seerep_core_msgs::quaternion& quaternionCore);
 };
 
 }  // namespace seerep_core_pb

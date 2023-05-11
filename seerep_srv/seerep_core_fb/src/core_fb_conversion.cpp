@@ -42,6 +42,7 @@ seerep_core_msgs::Query CoreFbConversion::fromFb(const seerep::fb::Query* query,
   fromFbQueryDataUuids(query, queryCore.dataUuids);
   queryCore.withoutData = fromFbQueryWithoutData(query);
   queryCore.maxNumData = fromFbQueryMaxNumData(query);
+  queryCore.rotation = fromFbQuaternion(query->boundingboxStamped()->boundingbox()->rotation());
 
   return queryCore;
 }
@@ -666,6 +667,16 @@ std::vector<seerep_core_msgs::Datatype> CoreFbConversion::fromFbDatatypeVector(c
   }
 
   return dt_vector;
-}
+  seerep_core_msgs::quaternion CoreFbConversion::fromFbQuaternion(const seerep::fb::Quaternion* quaternion)
+  {
+    seerep_core_msgs::quaternion quaternionCore;
+
+    quaternionCore.x = quaternion->x();
+    quaternionCore.y = quaternion->y();
+    quaternionCore.z = quaternion->z();
+    quaternionCore.w = quaternion->w();
+
+    return quaternionCore;
+  }
 
 }  // namespace seerep_core_fb

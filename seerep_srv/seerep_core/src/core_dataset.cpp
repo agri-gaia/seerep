@@ -132,8 +132,10 @@ CoreDataset::querySpatial(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics, 
 {
   if (query.boundingbox)
   {
+    // a data structure for holding the result of a query to the r tree
     std::optional<std::vector<seerep_core_msgs::AabbIdPair>> rt_result = std::vector<seerep_core_msgs::AabbIdPair>();
-    // axis-aligned bounding box
+
+    // retrieve axis-aligned bounding box from the requested query
     seerep_core_msgs::AABB aabb(seerep_core_msgs::Point(bg::get<bg::min_corner, 0>(query.boundingbox.value()),
                                                         bg::get<bg::min_corner, 1>(query.boundingbox.value()),
                                                         bg::get<bg::min_corner, 2>(query.boundingbox.value())),
@@ -141,8 +143,15 @@ CoreDataset::querySpatial(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics, 
                                                         bg::get<bg::max_corner, 1>(query.boundingbox.value()),
                                                         bg::get<bg::max_corner, 2>(query.boundingbox.value())));
 
+    // perform the query on the rtree
     datatypeSpecifics->rt.query(boost::geometry::index::intersects(aabb), std::back_inserter(rt_result.value()));
-    return rt_result;
+
+    // perform intersection of oriented(!) bounding box from the query and the resultant
+
+    // if the bounding box is not of volume zero, push into the rt_result and return
+    // return rt_result;
+
+    // otherwise return std::nullopt
   }
   else
   {
