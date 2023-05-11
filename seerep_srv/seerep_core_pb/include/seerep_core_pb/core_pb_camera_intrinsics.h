@@ -9,15 +9,6 @@
 // seerep_core_msgs
 #include <seerep_msgs/camera_intrinsics.h>
 
-// ros
-#include <geometry_msgs/TransformStamped.h>
-
-// seerep_hdf5_pb
-#include <seerep_hdf5_pb/hdf5_pb_tf.h>
-
-// seerep_conversion
-#include <seerep_ros_conversions_pb/conversions.h>
-
 // seerep_core
 #include <seerep_core/core.h>
 
