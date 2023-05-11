@@ -8,7 +8,7 @@ FbCameraIntrinsicsService::FbCameraIntrinsicsService(std::shared_ptr<seerep_core
 }
 grpc::Status FbCameraIntrinsicsService::GetCameraIntrinsics(
     grpc::ServerContext* context, const flatbuffers::grpc::Message<seerep::fb::CameraIntrinsicsQuery>* request,
-    grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::CameraIntrinsics>>* writer)
+    flatbuffers::grpc::Message<seerep::fb::CameraIntrinsics>* response)
 {
   (void)context;  // ignore this variable without causing warnings
   auto requestRoot = request->GetRoot();
@@ -31,7 +31,7 @@ grpc::Status FbCameraIntrinsicsService::GetCameraIntrinsics(
 
   try
   {
-    ciFbCore->getData(*requestRoot, writer);
+    ciFbCore->getData(*requestRoot, response);
   }
   catch (std::runtime_error const& e)
   {

@@ -79,5 +79,5 @@ ci_query = cameraintrinsicsquery.CameraIntrinsicsQuery()
 ci_query.uuid_camera_intrinsics = ciuuid
 ci_query.uuid_project = projectuuid
 
-for fetched_camintrinsics in stub.GetCameraIntrinsics(ci_query):
-    print(fetched_camintrinsics.binning_x)
+fetched_camintrinsics = stub.GetCameraIntrinsics(ci_query)
+print(fetched_camintrinsics)

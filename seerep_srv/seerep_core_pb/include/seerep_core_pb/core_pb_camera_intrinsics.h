@@ -22,8 +22,7 @@ public:
   CorePbCameraIntrinsics(std::shared_ptr<seerep_core::Core> seerepCore);
   ~CorePbCameraIntrinsics();
 
-  void getData(const seerep::pb::CameraIntrinsicsQuery& query,
-               grpc::ServerWriter<seerep::pb::CameraIntrinsics>* const writer);
+  std::optional<seerep::pb::CameraIntrinsics> getData(const seerep::pb::CameraIntrinsicsQuery& query);
   boost::uuids::uuid addData(const seerep::pb::CameraIntrinsics& camintrinsics);
 
 private:

@@ -9,6 +9,6 @@ import "server_response.proto";
 
 service CameraIntrinsicsService
 {
-  rpc GetCameraIntrinsics(CameraIntrinsicsQuery) returns (stream CameraIntrinsics);
+  rpc GetCameraIntrinsics(CameraIntrinsicsQuery) returns (CameraIntrinsics);
   rpc TransferCameraIntrinsics(CameraIntrinsics) returns (ServerResponse);
 }

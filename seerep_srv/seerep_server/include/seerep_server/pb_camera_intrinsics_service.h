@@ -23,7 +23,7 @@ public:
                                         seerep::pb::ServerResponse* response) override;
   grpc::Status GetCameraIntrinsics(grpc::ServerContext* context,
                                    const seerep::pb::CameraIntrinsicsQuery* camintrinsicsQuery,
-                                   grpc::ServerWriter<seerep::pb::CameraIntrinsics>* response) override;
+                                   seerep::pb::CameraIntrinsics* response) override;
 
 private:
   std::shared_ptr<seerep_core_pb::CorePbCameraIntrinsics> camIntrinsicsPb;
