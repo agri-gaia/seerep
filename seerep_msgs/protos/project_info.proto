@@ -10,4 +10,5 @@ message ProjectInfo
   string uuid = 2;
   string frameid = 3;
   GeodeticCoordinates geodeticCoordinates = 4;
+  string version = 5;
 }

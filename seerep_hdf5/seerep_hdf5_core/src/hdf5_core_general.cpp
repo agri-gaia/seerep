@@ -95,6 +95,36 @@ std::string Hdf5CoreGeneral::readProjectFrameId()
   return frameId;
 }
 
+void Hdf5CoreGeneral::writeVersion(const std::string& version)
+{
+  const std::scoped_lock lock(*m_write_mtx);
+
+  if (!m_file->hasAttribute(VERSION))
+  {
+    m_file->createAttribute<std::string>(VERSION, version);
+  }
+  else
+  {
+    m_file->getAttribute(VERSION).write(version);
+  }
+  m_file->flush();
+}
+const std::string Hdf5CoreGeneral::readVersion()
+{
+  const std::scoped_lock lock(*m_write_mtx);
+
+  std::string version;
+  try
+  {
+    m_file->getAttribute(VERSION).read(version);
+  }
+  catch (...)
+  {
+    throw std::runtime_error("Project " + m_file->getName() + "  has no version defined.");
+  }
+  return version;
+}
+
 std::optional<std::string> Hdf5CoreGeneral::readFrameId(const std::string& datatypeGroup, const std::string& uuid)
 {
   std::string id = datatypeGroup + "/" + uuid;

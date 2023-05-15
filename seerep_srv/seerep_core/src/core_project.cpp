@@ -8,6 +8,7 @@ CoreProject::CoreProject(const boost::uuids::uuid& uuid, const std::string path)
 
   m_projectname = m_ioGeneral->readProjectname();
   m_frameId = m_ioGeneral->readProjectFrameId();
+  m_version = m_ioGeneral->readVersion();
   /// TODO use the advantages of std::optional
   auto geodeticCoordinates = m_ioGeneral->readGeodeticLocation();
 
@@ -19,13 +20,20 @@ CoreProject::CoreProject(const boost::uuids::uuid& uuid, const std::string path)
   recreateDatatypes();
 }
 CoreProject::CoreProject(const boost::uuids::uuid& uuid, const std::string path, const std::string projectname,
-                         const std::string mapFrameId, const seerep_core_msgs::GeodeticCoordinates geodeticCoords)
-  : m_uuid(uuid), m_path(path), m_projectname(projectname), m_frameId(mapFrameId), m_geodeticCoordinates(geodeticCoords)
+                         const std::string mapFrameId, const seerep_core_msgs::GeodeticCoordinates geodeticCoords,
+                         const std::string version)
+  : m_uuid(uuid)
+  , m_path(path)
+  , m_projectname(projectname)
+  , m_frameId(mapFrameId)
+  , m_geodeticCoordinates(geodeticCoords)
+  , m_version(version)
 {
   createHdf5Io(m_path);
   m_ioGeneral->writeProjectname(m_projectname);
   m_ioGeneral->writeProjectFrameId(m_frameId);
   m_ioGeneral->writeGeodeticLocation(m_geodeticCoordinates.value());
+  m_ioGeneral->writeVersion(m_version);
   recreateDatatypes();
 }
 CoreProject::~CoreProject()
@@ -39,6 +47,10 @@ std::string CoreProject::getName()
 std::string CoreProject::getFrameId()
 {
   return m_frameId;
+}
+const std::string CoreProject::getVersion()
+{
+  return m_version;
 }
 
 seerep_core_msgs::QueryResultProject CoreProject::getDataset(const seerep_core_msgs::Query& query)
