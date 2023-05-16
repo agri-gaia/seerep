@@ -15,18 +15,27 @@ CoreTf::~CoreTf()
 void CoreTf::recreateDatasets()
 {
   std::vector<std::string> tfs = m_hdf5_io->getGroupDatasets(seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF);
+  loadTfs(tfs, false);
+
+  std::vector<std::string> tfs_static = m_hdf5_io->getGroupDatasets(seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF_STATIC);
+  loadTfs(tfs_static, true);
+}
+
+void CoreTf::loadTfs(std::vector<std::string> tfs, const bool isStatic)
+{
   for (auto const& name : tfs)
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "found " << name << " in HDF5 file.";
 
     try
     {
-      std::optional<std::vector<geometry_msgs::TransformStamped>> transforms = m_hdf5_io->readTransformStamped(name);
+      std::optional<std::vector<geometry_msgs::TransformStamped>> transforms =
+          m_hdf5_io->readTransformStamped(name, isStatic);
       if (transforms)
       {
         for (auto& transform : transforms.value())
         {
-          addToTfBuffer(transform);
+          addToTfBuffer(transform, isStatic);
         }
       }
     }
@@ -52,9 +61,9 @@ std::optional<geometry_msgs::TransformStamped> CoreTf::getData(const int64_t& ti
   }
 }
 
-void CoreTf::addDataset(const geometry_msgs::TransformStamped& transform)
+void CoreTf::addDataset(const geometry_msgs::TransformStamped& transform, const bool isStatic)
 {
-  addToTfBuffer(transform);
+  addToTfBuffer(transform, isStatic);
 }
 
 // TODO optimise!
@@ -117,9 +126,9 @@ std::vector<std::string> CoreTf::getFrames()
   return std::vector<std::string>{ m_tfBuffer.allFramesAsYAML() };
 }
 
-void CoreTf::addToTfBuffer(geometry_msgs::TransformStamped transform)
+void CoreTf::addToTfBuffer(geometry_msgs::TransformStamped transform, const bool isStatic)
 {
-  m_tfBuffer.setTransform(transform, "fromHDF5");
+  m_tfBuffer.setTransform(transform, "fromHDF5", isStatic);
 }
 
 void CoreTf::getAABBinNewFrame(const tf2::Transform& transform, const std::vector<float>& x,

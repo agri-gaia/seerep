@@ -59,7 +59,7 @@ public:
    * @brief Adds a tf to the tf buffer
    * @param tf the TransformStamped to be added to the buffer
    */
-  void addDataset(const geometry_msgs::TransformStamped& tf);
+  void addDataset(const geometry_msgs::TransformStamped& tf, const bool isStatic = false);
 
   /**
    * @brief Transforms an AABB into the target frame
@@ -103,11 +103,13 @@ private:
    * @brief loads the TFs into the buffer from the HDF5 file
    */
   void recreateDatasets();
+
+  void loadTfs(const std::vector<std::string> tfs, const bool isStatic);
   /**
    * @brief adds a transformation to the TF buffer
    * @param transform the transformation to be added to the buffer
    */
-  void addToTfBuffer(geometry_msgs::TransformStamped transform);
+  void addToTfBuffer(geometry_msgs::TransformStamped transform, const bool isStatic);
 
   /**
    * @brief Transforms the AABB based on the min/max coordinates into another frame. Transforms all 8 vertices of the

@@ -24,7 +24,7 @@ std::optional<seerep::pb::TransformStamped> CorePbTf::getData(const seerep::pb::
 
   if (result)
   {
-    return seerep_ros_conversions_pb::toProto(result.value());
+    return seerep_ros_conversions_pb::toProto(result.value(), false);
   }
   else
   {
