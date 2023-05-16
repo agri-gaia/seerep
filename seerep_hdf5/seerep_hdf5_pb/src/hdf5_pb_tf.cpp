@@ -13,7 +13,19 @@ Hdf5PbTf::Hdf5PbTf(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::m
 
 void Hdf5PbTf::writeTransformStamped(const seerep::pb::TransformStamped& tf)
 {
-  std::string hdf5DatasetPath = HDF5_GROUP_TF + "/" + tf.header().frame_id() + "_" + tf.child_frame_id();
+  const std::scoped_lock lock(*m_write_mtx);
+
+  std::string hdf5_group_tf;
+  if (tf.is_static())
+  {
+    hdf5_group_tf = seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF_STATIC;
+  }
+  else
+  {
+    hdf5_group_tf = seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF;
+  }
+
+  std::string hdf5DatasetPath = hdf5_group_tf + "/" + tf.header().frame_id() + "_" + tf.child_frame_id();
   std::string hdf5DatasetTimePath = hdf5DatasetPath + "/" + "time";
   std::string hdf5DatasetTransPath = hdf5DatasetPath + "/" + "translation";
   std::string hdf5DatasetRotPath = hdf5DatasetPath + "/" + "rotation";
@@ -63,7 +75,7 @@ void Hdf5PbTf::writeTransformStamped(const seerep::pb::TransformStamped& tf)
     data_set_rot_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DatasetRotPath));
 
     HighFive::Group group = m_file->getGroup(hdf5DatasetPath);
-    group.getAttribute(SIZE).read(size);
+    group.getAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE).read(size);
 
     // Resize the dataset to a larger size
     data_set_time_ptr->resize({ size + 1, 2 });
@@ -94,21 +106,34 @@ void Hdf5PbTf::writeTransformStamped(const seerep::pb::TransformStamped& tf)
 
   // write the size as group attribute
   HighFive::Group group = m_file->getGroup(hdf5DatasetPath);
-  if (!group.hasAttribute(SIZE))
+  if (!group.hasAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE))
   {
-    group.createAttribute(SIZE, ++size);
+    group.createAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE, ++size);
   }
   else
   {
-    group.getAttribute(SIZE).write(++size);
+    group.getAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE).write(++size);
   }
 
   m_file->flush();
 }
 
-std::optional<std::vector<seerep::pb::TransformStamped>> Hdf5PbTf::readTransformStamped(const std::string& id)
+std::optional<std::vector<seerep::pb::TransformStamped>> Hdf5PbTf::readTransformStamped(const std::string& id,
+                                                                                        const bool isStatic)
 {
-  std::string hdf5GroupPath = HDF5_GROUP_TF + "/" + id;
+  const std::scoped_lock lock(*m_write_mtx);
+
+  std::string hdf5_group_tf;
+  if (isStatic)
+  {
+    hdf5_group_tf = seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF_STATIC;
+  }
+  else
+  {
+    hdf5_group_tf = seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF;
+  }
+
+  std::string hdf5GroupPath = hdf5_group_tf + "/" + id;
   std::string hdf5DatasetTimePath = hdf5GroupPath + "/" + "time";
   std::string hdf5DatasetTransPath = hdf5GroupPath + "/" + "translation";
   std::string hdf5DatasetRotPath = hdf5GroupPath + "/" + "rotation";
@@ -124,7 +149,7 @@ std::optional<std::vector<seerep::pb::TransformStamped>> Hdf5PbTf::readTransform
   // read size
   std::shared_ptr<HighFive::Group> group_ptr = std::make_shared<HighFive::Group>(m_file->getGroup(hdf5GroupPath));
   long unsigned int size;
-  group_ptr->getAttribute(SIZE).read(size);
+  group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE).read(size);
   if (size == 0)
   {
     std::cout << "tf data has size 0." << std::endl;
@@ -191,9 +216,21 @@ std::optional<std::vector<seerep::pb::TransformStamped>> Hdf5PbTf::readTransform
   return tfs;
 }
 
-std::optional<std::vector<std::string>> Hdf5PbTf::readTransformStampedFrames(const std::string& id)
+std::optional<std::vector<std::string>> Hdf5PbTf::readTransformStampedFrames(const std::string& id, const bool isStatic)
 {
-  std::string hdf5GroupPath = HDF5_GROUP_TF + "/" + id;
+  const std::scoped_lock lock(*m_write_mtx);
+
+  std::string hdf5_group_tf;
+  if (isStatic)
+  {
+    hdf5_group_tf = seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF_STATIC;
+  }
+  else
+  {
+    hdf5_group_tf = seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF;
+  }
+
+  std::string hdf5GroupPath = hdf5_group_tf + "/" + id;
 
   if (!m_file->exist(hdf5GroupPath))
   {

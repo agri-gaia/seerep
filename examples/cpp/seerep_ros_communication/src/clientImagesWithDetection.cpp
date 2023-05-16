@@ -112,7 +112,7 @@ void seerep_grpc_ros::TransferImagesWithDetection::send(const sensor_msgs::NavSa
   transform.transform.rotation.z = 0;
   transform.transform.rotation.w = 1;
 
-  if (!writerTf_->Write(seerep_ros_conversions_fb::toFlat(transform, projectuuid_)))
+  if (!writerTf_->Write(seerep_ros_conversions_fb::toFlat(transform, projectuuid_, false)))
   {
     ROS_ERROR_STREAM("error while transfering tf");
   }

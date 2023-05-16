@@ -26,8 +26,8 @@ public:
   void writeTransformStamped(const seerep::fb::TransformStamped& tf);
 
   std::optional<std::vector<flatbuffers::Offset<seerep::fb::TransformStamped>>>
-  readTransformStamped(const std::string& id);
-  std::optional<std::vector<std::string>> readTransformStampedFrames(const std::string& id);
+  readTransformStamped(const std::string& id, const bool isStatic);
+  std::optional<std::vector<std::string>> readTransformStampedFrames(const std::string& id, const bool isStatic);
 };
 
 }  // namespace seerep_hdf5_fb

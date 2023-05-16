@@ -139,14 +139,14 @@ sensor_msgs::PointCloud2 toROS(const seerep::fb::PointCloud2& cloud)
  * Image
  */
 flatbuffers::grpc::Message<seerep::fb::Image> toFlat(const sensor_msgs::Image& image, std::string projectuuid,
-                                                     std::string msguuid = "")
+                                                     std::string msguuid)
 {
   flatbuffers::grpc::MessageBuilder builder;
   builder.Finish(toFlat(image, projectuuid, builder, msguuid));
   return builder.ReleaseMessage<seerep::fb::Image>();
 }
 flatbuffers::Offset<seerep::fb::Image> toFlat(const sensor_msgs::Image& image, std::string projectuuid,
-                                              flatbuffers::grpc::MessageBuilder& builder, std::string msguuid = "")
+                                              flatbuffers::grpc::MessageBuilder& builder, std::string msguuid)
 {
   auto header = toFlat(image.header, projectuuid, builder, msguuid);
 
@@ -387,14 +387,14 @@ geometry_msgs::Transform toROS(const seerep::fb::Transform& transform)
  * TransformStamped
  */
 flatbuffers::grpc::Message<seerep::fb::TransformStamped> toFlat(const geometry_msgs::TransformStamped& transform,
-                                                                std::string projectuuid)
+                                                                std::string projectuuid, const bool isStatic)
 {
   flatbuffers::grpc::MessageBuilder builder;
-  builder.Finish(toFlat(transform, projectuuid, builder));
+  builder.Finish(toFlat(transform, projectuuid, isStatic, builder));
   return builder.ReleaseMessage<seerep::fb::TransformStamped>();
 }
 flatbuffers::Offset<seerep::fb::TransformStamped> toFlat(const geometry_msgs::TransformStamped& transform,
-                                                         std::string projectuuid,
+                                                         std::string projectuuid, const bool isStatic,
                                                          flatbuffers::grpc::MessageBuilder& builder)
 {
   auto headerOffset = toFlat(transform.header, projectuuid, builder);
@@ -405,6 +405,7 @@ flatbuffers::Offset<seerep::fb::TransformStamped> toFlat(const geometry_msgs::Tr
   transformbuilder.add_header(headerOffset);
   transformbuilder.add_child_frame_id(frameIdOffset);
   transformbuilder.add_transform(transformOffset);
+  transformbuilder.add_is_static(isStatic);
   return transformbuilder.Finish();
 }
 
@@ -423,16 +424,16 @@ geometry_msgs::TransformStamped toROS(const seerep::fb::TransformStamped& transf
 
 flatbuffers::grpc::Message<seerep::fb::BoundingBoxes2DLabeledStamped>
 toFlat(const vision_msgs::Detection2DArray& detection2d, std::string projectuuid, std::string category,
-       std::string msguuid = "")
+       std::string msguuid, std::vector<std::string> labels, std::vector<std::string> instances)
 {
   flatbuffers::grpc::MessageBuilder builder;
-  builder.Finish(toFlat(detection2d, projectuuid, builder, category, msguuid));
+  builder.Finish(toFlat(detection2d, projectuuid, builder, category, msguuid, labels, instances));
   return builder.ReleaseMessage<seerep::fb::BoundingBoxes2DLabeledStamped>();
 }
-flatbuffers::Offset<seerep::fb::BoundingBoxes2DLabeledStamped> toFlat(const vision_msgs::Detection2DArray& detection2d,
-                                                                      std::string projectuuid,
-                                                                      flatbuffers::grpc::MessageBuilder& builder,
-                                                                      std::string category, std::string msguuid = "")
+flatbuffers::Offset<seerep::fb::BoundingBoxes2DLabeledStamped>
+toFlat(const vision_msgs::Detection2DArray& detection2d, std::string projectuuid,
+       flatbuffers::grpc::MessageBuilder& builder, std::string category, std::string msguuid,
+       std::vector<std::string> labels, std::vector<std::string> instances)
 {
   // convert header
   auto header = toFlat(detection2d.header, projectuuid, builder, msguuid);
@@ -440,10 +441,20 @@ flatbuffers::Offset<seerep::fb::BoundingBoxes2DLabeledStamped> toFlat(const visi
   // create boundingbox labeled vector
   std::vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>> bblabeled;
 
-  // for each loop for saving in fb bb_labeled vector
-  for (vision_msgs::Detection2D detection : detection2d.detections)
+  if (detection2d.detections.size() == labels.size() && detection2d.detections.size() == instances.size())
   {
-    bblabeled.push_back(toFlat(detection, builder));
+    for (long unsigned int i = 0; i < bblabeled.size(); i++)
+    {
+      bblabeled.push_back(toFlat(detection2d.detections.at(i), builder));
+    }
+  }
+  else
+  {
+    // for each loop for saving in fb bb_labeled vector
+    for (vision_msgs::Detection2D detection : detection2d.detections)
+    {
+      bblabeled.push_back(toFlat(detection, builder));
+    }
   }
 
   // fb labels vector
@@ -477,7 +488,8 @@ flatbuffers::grpc::Message<seerep::fb::BoundingBox2DLabeled> toFlat(const vision
   return builder.ReleaseMessage<seerep::fb::BoundingBox2DLabeled>();
 }
 flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled> toFlat(const vision_msgs::Detection2D& detection2d,
-                                                             flatbuffers::grpc::MessageBuilder& builder)
+                                                             flatbuffers::grpc::MessageBuilder& builder,
+                                                             std::string label, std::string instanceUUID)
 {
   seerep::fb::Point2DBuilder pointBuilderCenter(builder);
   pointBuilderCenter.add_x(detection2d.bbox.center.x);
@@ -494,17 +506,26 @@ flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled> toFlat(const vision_msgs::
   bbbuilder.add_spatial_extent(pointSpatialExtent);
   auto bb = bbbuilder.Finish();
 
-  auto InstanceOffset = builder.CreateString("");
-  auto labelOffset = builder.CreateString(std::to_string(detection2d.results.at(0).id));
+  flatbuffers::Offset<flatbuffers::String> labelOffset;
+  if (label == "")
+  {
+    labelOffset = builder.CreateString(std::to_string(detection2d.results.at(0).id));
+  }
+  else
+  {
+    labelOffset = builder.CreateString(label);
+  }
+
+  flatbuffers::Offset<flatbuffers::String> InstanceOffset = builder.CreateString(instanceUUID);
 
   seerep::fb::LabelBuilder labelBuilder(builder);
   labelBuilder.add_label(labelOffset);
   labelBuilder.add_confidence(detection2d.results.at(0).score);
-  auto label = labelBuilder.Finish();
+  auto labelMsg = labelBuilder.Finish();
 
   seerep::fb::LabelWithInstanceBuilder labelInstanceBuilder(builder);
   labelInstanceBuilder.add_instanceUuid(InstanceOffset);
-  labelInstanceBuilder.add_label(label);
+  labelInstanceBuilder.add_label(labelMsg);
   auto labelWithInstanceOffset = labelInstanceBuilder.Finish();
 
   seerep::fb::BoundingBox2DLabeledBuilder bblabeledbuilder(builder);

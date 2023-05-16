@@ -25,6 +25,8 @@ find_package(
   REQUIRED
 )
 
+find_package(catkin REQUIRED COMPONENTS geometry_msgs)
+
 enable_testing()
 find_package(GTest 1.12.0 REQUIRED)
 
@@ -38,6 +40,7 @@ include_directories(
   ${FLATBUFFER_INCLUDE_DIR}
   ${HighFive_INCLUDE_DIRS}
   ${Boost_INCLUDE_DIRS}
+  ${catkin_INCLUDE_DIRS}
 )
 
 add_library(

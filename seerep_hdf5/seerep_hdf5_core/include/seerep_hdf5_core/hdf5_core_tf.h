@@ -21,8 +21,9 @@ class Hdf5CoreTf : public Hdf5CoreGeneral
 public:
   Hdf5CoreTf(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
 
-  std::optional<std::vector<geometry_msgs::TransformStamped>> readTransformStamped(const std::string& id);
-  std::optional<std::vector<std::string>> readTransformStampedFrames(const std::string& id);
+  std::optional<std::vector<geometry_msgs::TransformStamped>> readTransformStamped(const std::string& id,
+                                                                                   const bool isStatic);
+  std::optional<std::vector<std::string>> readTransformStampedFrames(const std::string& id, const bool isStatic);
 
 private:
   std::string readFrame(const std::string& frameName, const std::shared_ptr<const HighFive::Group>& group_ptr) const;
@@ -39,6 +40,7 @@ private:
 public:
   // datatype group names in hdf5
   inline static const std::string HDF5_GROUP_TF = "tf";
+  inline static const std::string HDF5_GROUP_TF_STATIC = "tf_static";
 
   inline static const std::string SIZE = "size";
 

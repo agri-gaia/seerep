@@ -23,14 +23,9 @@ public:
 
   void writeTransformStamped(const seerep::pb::TransformStamped& tf);
 
-  std::optional<std::vector<seerep::pb::TransformStamped>> readTransformStamped(const std::string& id);
-  std::optional<std::vector<std::string>> readTransformStampedFrames(const std::string& id);
-
-private:
-  // datatype group names in hdf5
-  inline static const std::string HDF5_GROUP_TF = "tf";
-
-  inline static const std::string SIZE = "size";
+  std::optional<std::vector<seerep::pb::TransformStamped>> readTransformStamped(const std::string& id,
+                                                                                const bool isStatic);
+  std::optional<std::vector<std::string>> readTransformStampedFrames(const std::string& id, const bool isStatic);
 };
 
 } /* namespace seerep_hdf5_pb */

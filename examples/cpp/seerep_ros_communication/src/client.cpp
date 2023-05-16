@@ -81,8 +81,8 @@ void seerep_grpc_ros::TransferSensorMsgs::send(const tf2_msgs::TFMessage::ConstP
   {
     grpc::ClientContext context;
     seerep::pb::ServerResponse response;
-    grpc::Status status =
-        stubTf->TransferTransformStamped(&context, seerep_ros_conversions_pb::toProto(tf, projectuuid), &response);
+    grpc::Status status = stubTf->TransferTransformStamped(
+        &context, seerep_ros_conversions_pb::toProto(tf, false, projectuuid), &response);
     checkStatus(status, response);
   }
 }

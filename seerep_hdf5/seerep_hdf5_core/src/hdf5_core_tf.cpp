@@ -9,11 +9,22 @@ Hdf5CoreTf::Hdf5CoreTf(std::shared_ptr<HighFive::File>& file, std::shared_ptr<st
 {
 }
 
-std::optional<std::vector<geometry_msgs::TransformStamped>> Hdf5CoreTf::readTransformStamped(const std::string& id)
+std::optional<std::vector<geometry_msgs::TransformStamped>> Hdf5CoreTf::readTransformStamped(const std::string& id,
+                                                                                             const bool isStatic)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
-  std::string hdf5GroupPath = HDF5_GROUP_TF + "/" + id;
+  std::string hdf5_group_tf;
+  if (isStatic)
+  {
+    hdf5_group_tf = HDF5_GROUP_TF_STATIC;
+  }
+  else
+  {
+    hdf5_group_tf = HDF5_GROUP_TF;
+  }
+
+  std::string hdf5GroupPath = hdf5_group_tf + "/" + id;
   std::string hdf5DatasetTimePath = hdf5GroupPath + "/" + "time";
   std::string hdf5DatasetTransPath = hdf5GroupPath + "/" + "translation";
   std::string hdf5DatasetRotPath = hdf5GroupPath + "/" + "rotation";
@@ -46,11 +57,22 @@ std::optional<std::vector<geometry_msgs::TransformStamped>> Hdf5CoreTf::readTran
   return convertToTfs(size, parentframe, childframe, time, trans, rot);
 }
 
-std::optional<std::vector<std::string>> Hdf5CoreTf::readTransformStampedFrames(const std::string& id)
+std::optional<std::vector<std::string>> Hdf5CoreTf::readTransformStampedFrames(const std::string& id,
+                                                                               const bool isStatic)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
-  std::string hdf5GroupPath = HDF5_GROUP_TF + "/" + id;
+  std::string hdf5_group_tf;
+  if (isStatic)
+  {
+    hdf5_group_tf = HDF5_GROUP_TF_STATIC;
+  }
+  else
+  {
+    hdf5_group_tf = HDF5_GROUP_TF;
+  }
+
+  std::string hdf5GroupPath = hdf5_group_tf + "/" + id;
 
   if (!m_file->exist(hdf5GroupPath))
   {

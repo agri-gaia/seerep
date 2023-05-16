@@ -15,8 +15,17 @@ void Hdf5FbTf::writeTransformStamped(const seerep::fb::TransformStamped& tf)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
-  std::string hdf5DatasetPath = seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF + "/" + tf.header()->frame_id()->str() +
-                                "_" + tf.child_frame_id()->str();
+  std::string hdf5_group_tf;
+  if (tf.is_static())
+  {
+    hdf5_group_tf = seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF_STATIC;
+  }
+  else
+  {
+    hdf5_group_tf = seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF;
+  }
+
+  std::string hdf5DatasetPath = hdf5_group_tf + "/" + tf.header()->frame_id()->str() + "_" + tf.child_frame_id()->str();
   std::string hdf5DatasetTimePath = hdf5DatasetPath + "/" + "time";
   std::string hdf5DatasetTransPath = hdf5DatasetPath + "/" + "translation";
   std::string hdf5DatasetRotPath = hdf5DatasetPath + "/" + "rotation";
@@ -112,11 +121,21 @@ void Hdf5FbTf::writeTransformStamped(const seerep::fb::TransformStamped& tf)
 }
 
 std::optional<std::vector<flatbuffers::Offset<seerep::fb::TransformStamped>>>
-Hdf5FbTf::readTransformStamped(const std::string& id)
+Hdf5FbTf::readTransformStamped(const std::string& id, const bool isStatic)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
-  std::string hdf5GroupPath = seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF + "/" + id;
+  std::string hdf5_group_tf;
+  if (isStatic)
+  {
+    hdf5_group_tf = seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF_STATIC;
+  }
+  else
+  {
+    hdf5_group_tf = seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF;
+  }
+
+  std::string hdf5GroupPath = hdf5_group_tf + "/" + id;
   std::string hdf5DatasetTimePath = hdf5GroupPath + "/" + "time";
   std::string hdf5DatasetTransPath = hdf5GroupPath + "/" + "translation";
   std::string hdf5DatasetRotPath = hdf5GroupPath + "/" + "rotation";
@@ -191,11 +210,21 @@ Hdf5FbTf::readTransformStamped(const std::string& id)
   return tfs;
 }
 
-std::optional<std::vector<std::string>> Hdf5FbTf::readTransformStampedFrames(const std::string& id)
+std::optional<std::vector<std::string>> Hdf5FbTf::readTransformStampedFrames(const std::string& id, const bool isStatic)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
-  std::string hdf5GroupPath = seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF + "/" + id;
+  std::string hdf5_group_tf;
+  if (isStatic)
+  {
+    hdf5_group_tf = seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF_STATIC;
+  }
+  else
+  {
+    hdf5_group_tf = seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF;
+  }
+
+  std::string hdf5GroupPath = hdf5_group_tf + "/" + id;
 
   if (!m_file->exist(hdf5GroupPath))
   {

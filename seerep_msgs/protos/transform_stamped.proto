@@ -10,4 +10,5 @@ message TransformStamped
   Header header = 1;
   string child_frame_id = 2;
   Transform transform = 3;
+  bool is_static = 4;
 }

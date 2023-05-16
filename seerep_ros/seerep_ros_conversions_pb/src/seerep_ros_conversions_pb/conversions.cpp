@@ -262,7 +262,8 @@ geometry_msgs::Transform toROS(const seerep::pb::Transform& transform)
 /*
  * TransformStamped
  */
-seerep::pb::TransformStamped toProto(const geometry_msgs::TransformStamped& transform, std::string projectuuid)
+seerep::pb::TransformStamped toProto(const geometry_msgs::TransformStamped& transform, const bool isStatic,
+                                     std::string projectuuid)
 {
   seerep::pb::TransformStamped ret;
   *ret.mutable_header() = toProto(transform.header);
@@ -270,6 +271,7 @@ seerep::pb::TransformStamped toProto(const geometry_msgs::TransformStamped& tran
   *ret.mutable_child_frame_id() = transform.child_frame_id;
   *ret.mutable_header()->mutable_uuid_project() = projectuuid;
   *ret.mutable_transform() = toProto(transform.transform);
+  ret.set_is_static(isStatic);
   return ret;
 }
 
