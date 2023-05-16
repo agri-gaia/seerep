@@ -10,6 +10,7 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra -fPIC -DBOOST_LOG_DYN_LINK")
 find_package(SeerepCom REQUIRED)
 
 find_package(SeerepHdf5Pb REQUIRED)
+find_package(SeerepHdf5Fb REQUIRED)
 find_package(SeerepHdf5Core REQUIRED)
 find_package(seerep_ros_conversions_pb REQUIRED)
 find_package(seerep_ros_conversions_fb REQUIRED)
@@ -21,9 +22,11 @@ find_package(
   COMPONENTS topic_tools
              std_msgs
              geometry_msgs
+             geographic_msgs
              sensor_msgs
              roscpp
              tf
+             rosbag
 )
 
 set(Boost_USE_STATIC_LIBS OFF)
@@ -46,6 +49,7 @@ catkin_package(
   CATKIN_DEPENDS
   std_msgs
   geometry_msgs
+  geographic_msgs
   sensor_msgs
   roscpp
   seerep_ros_conversions_pb
@@ -53,6 +57,7 @@ catkin_package(
   roscpp
   topic_tools
   tf
+  rosbag
   DEPENDS
   GeographicLib
 )
@@ -72,6 +77,7 @@ add_executable(${PROJECT_NAME}_client src/client.cpp)
 add_executable(${PROJECT_NAME}_hdf5dump src/hdf5dump.cpp)
 add_executable(${PROJECT_NAME}_querier src/querier.cpp)
 add_executable(${PROJECT_NAME}_querierFb src/querierFb.cpp)
+add_executable(${PROJECT_NAME}_rosbagDumper src/rosbagDumper.cpp)
 
 add_executable(
   ${PROJECT_NAME}_clientImagesWithDetection src/clientImagesWithDetection.cpp
@@ -91,6 +97,10 @@ add_dependencies(
 )
 add_dependencies(
   ${PROJECT_NAME}_querierFb ${${PROJECT_NAME}_EXPORTED_TARGETS}
+  ${catkin_EXPORTED_TARGETS}
+)
+add_dependencies(
+  ${PROJECT_NAME}_rosbagDumper ${${PROJECT_NAME}_EXPORTED_TARGETS}
   ${catkin_EXPORTED_TARGETS}
 )
 add_dependencies(
@@ -131,6 +141,18 @@ target_link_libraries(
   gRPC::grpc++_reflection
 )
 target_link_libraries(
+  ${PROJECT_NAME}_rosbagDumper
+  ${seerep_ros_conversions_fb_LIBRARIES}
+  ${SeerepHdf5Fb_LIBRARIES}
+  ${SeerepHdf5Core_LIBRARIES}
+  ${catkin_LIBRARIES}
+  ${GeographicLib_LIBRARIES}
+  gRPC::grpc++_reflection
+  ${Boost_LIBRARIES}
+  ${Boost_LOG_LIBRARY}
+  ${Boost_LOG_SETUP_LIBRARY}
+)
+target_link_libraries(
   ${PROJECT_NAME}_clientImagesWithDetection
   ${SeerepCom_LIBRARIES}
   ${seerep_ros_conversions_fb_LIBRARIES}
@@ -144,6 +166,7 @@ install(
           ${PROJECT_NAME}_hdf5dump
           ${PROJECT_NAME}_querier
           ${PROJECT_NAME}_querierFb
+          ${PROJECT_NAME}_rosbagDumper
           ${PROJECT_NAME}_clientImagesWithDetection
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}

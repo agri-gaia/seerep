@@ -23,10 +23,12 @@
   <depend>roscpp</depend>
   <depend>std_msgs</depend>
   <depend>geometry_msgs</depend>
+  <depend>geographic_msgs</depend>
   <depend>sensor_msgs</depend>
   <depend>topic_tools</depend>
   <depend>seerep_ros_conversions_pb</depend>
   <depend>seerep_ros_conversions_fb</depend>
   <depend>tf</depend>
+  <depend>rosbag</depend>
   <buildtool_depend>catkin</buildtool_depend>
 </package>
