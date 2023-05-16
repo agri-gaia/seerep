@@ -15,4 +15,5 @@ table Query {
   datauuid:[string];
   withoutdata:bool;
   maxNumData:uint;
+  encapsulated:bool;
 }

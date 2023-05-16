@@ -1,6 +1,10 @@
 #ifndef SEEREP_CORE_CORE_DATASET_H_
 #define SEEREP_CORE_CORE_DATASET_H_
 
+#include <CGAL/Boolean_set_operations_2.h>
+#include <CGAL/Exact_predicates_exact_constructions_kernel.h>
+
+#include <Eigen/Dense>
 #include <algorithm>
 #include <cstdint>
 #include <functional>
@@ -25,6 +29,17 @@
 #include <boost/uuid/uuid.hpp>             // uuid class
 #include <boost/uuid/uuid_generators.hpp>  // generators
 #include <boost/uuid/uuid_io.hpp>          // streaming operators etc.
+
+struct orientedBoundingBox
+{
+  seerep_core_msgs::Point2D bottom_right;
+  seerep_core_msgs::Point2D top_right;
+  seerep_core_msgs::Point2D bottom_left;
+  seerep_core_msgs::Point2D top_left;
+  float height;
+};
+
+typedef CGAL::Exact_predicates_exact_constructions_kernel Kernel;
 
 namespace seerep_core
 {
@@ -121,38 +136,12 @@ public:
                      labelWithInstancePerCategory,
                  const boost::uuids::uuid& msgUuid);
 
-  /**
-   * @brief Get the minimum and maximum time interval for a dataset
-   * @param datatypes A vector of datatypes for which the time bound has to be computed
-   * @return seerep_core_msgs::AabbTime
-   */
-  seerep_core_msgs::AabbTime getTimeBounds(std::vector<seerep_core_msgs::Datatype> datatypes);
-
-  /**
-   * @brief Get the minimum and maximum spatial bound for a dataset
-   * @param datatypes A vector of datatypes for which the spatial bound has to be computed
-   * @return seerep_core_msgs::AABB
-   */
-  seerep_core_msgs::AABB getSpatialBounds(std::vector<seerep_core_msgs::Datatype> datatypes);
-
-  /**
-   * @brief Get the all categories saved in a project
-   *
-   * @param datatypes A vector of datatypes for which the categories have to be fetched
-   * @return std::vector<std::string> vector of categories
-   */
-  std::unordered_set<std::string> getAllCategories(std::vector<seerep_core_msgs::Datatype> datatypes);
-
-  /**
-   * @brief Get the all labels saved in a project
-   *
-   * @param datatypes datatypes across which this is determined
-   * @param category the category across which all labels have to be aggregated
-   * @return std::vector<std::string> vector of labels
-   */
-  std::unordered_set<std::string> getAllLabels(std::vector<seerep_core_msgs::Datatype> datatypes, std::string category);
-
 private:
+  orientedBoundingBox orientAABB(const seerep_core_msgs::AABB& aabb, const seerep_core_msgs::quaternion& quaternion);
+
+  void intersectionDegree(const seerep_core_msgs::AABB& aabb, const orientedBoundingBox& obb, bool fullEncapsulation,
+                          bool partialEncapsulation);
+
   /**
    * @brief fills the member variables based on the HDF5 file
    * @param datatype the datatype to consider

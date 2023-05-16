@@ -17,6 +17,7 @@ seerep_core_msgs::Query CorePbConversion::fromPb(const seerep::pb::Query& query,
   fromPbDataUuids(query, queryCore);
   fromPbWithOutData(query, queryCore);
   fromFbQueryMaxNumData(query, queryCore);
+  fromPbQueryEncapsulated(query, queryCore);
 
   return queryCore;
 }
@@ -466,13 +467,20 @@ void CorePbConversion::toPb(const seerep_core_msgs::AABB& aabb, seerep::pb::Boun
   bb_pb->mutable_spatial_extent()->set_x(se_x);
   bb_pb->mutable_spatial_extent()->set_y(se_y);
   bb_pb->mutable_spatial_extent()->set_z(se_z);
-  void CorePbConversion::fromPbQuaternion(const seerep::pb::Quaternion& quaternion,
-                                          seerep_core_msgs::quaternion& quaternionCore)
-  {
-    quaternionCore.x = quaternion.x();
-    quaternionCore.y = quaternion.y();
-    quaternionCore.z = quaternion.z();
-    quaternionCore.w = quaternion.w();
-  }
+}
+
+void CorePbConversion::fromPbQuaternion(const seerep::pb::Quaternion& quaternion,
+                                        seerep_core_msgs::quaternion& quaternionCore)
+{
+  quaternionCore.x = quaternion.x();
+  quaternionCore.y = quaternion.y();
+  quaternionCore.z = quaternion.z();
+  quaternionCore.w = quaternion.w();
+}
+
+void CorePbConversion::fromPbQueryEncapsulated(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
+{
+  queryCore.encapsulated = query.encapsulated();
+}
 
 }  // namespace seerep_core_pb

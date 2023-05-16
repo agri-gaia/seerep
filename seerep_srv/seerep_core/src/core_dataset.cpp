@@ -143,15 +143,42 @@ CoreDataset::querySpatial(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics, 
                                                         bg::get<bg::max_corner, 1>(query.boundingbox.value()),
                                                         bg::get<bg::max_corner, 2>(query.boundingbox.value())));
 
+    // orient aabb
+    orientedBoundingBox obb = orientAABB(aabb, query.rotation);
+
     // perform the query on the rtree
     datatypeSpecifics->rt.query(boost::geometry::index::intersects(aabb), std::back_inserter(rt_result.value()));
 
-    // perform intersection of oriented(!) bounding box from the query and the resultant
+    bool fullyEncapsulated;
+    bool completelyDistant;
+    std::vector<seerep_core_msgs::AabbIdPair>::iterator it;
 
-    // if the bounding box is not of volume zero, push into the rt_result and return
-    // return rt_result;
+    for (it = rt_result.value().begin(); it != rt_result.value().end();)
+    {
+      // check if query result is not fully distant to the oriented bb box provided in the query
+      intersectionDegree(it->first, obb, fullyEncapsulated, completelyDistant);
 
-    // otherwise return std::nullopt
+      // if there is no intersection between the result and the user's request, remove it from the iterator
+      if (!completelyDistant)
+      {
+        it = rt_result.value().erase(it);
+      }
+
+      // does the user want only results fully encapsulated by the requested bb
+      // and is this query result not fully encapsulated
+      else if (query.encapsulated && !fullyEncapsulated)
+      {
+        // if yes, then delete partially encapsulated query results from the result set
+        it = rt_result.value().erase(it);
+      }
+      else
+      {
+        ++it;
+      }
+    }
+
+    // return the result after deletion of undesired elements has been performed
+    return rt_result.value();
   }
   else
   {
@@ -524,6 +551,209 @@ void CoreDataset::addLabels(const seerep_core_msgs::Datatype& datatype,
   }
   // add the vector of instance uuids to the datatypespecifics
   datatypeSpecifics->datasetInstancesMap.emplace(msgUuid, instanceUuids);
+}
+
+orientedBoundingBox CoreDataset::orientAABB(const seerep_core_msgs::AABB& aabb,
+                                            const seerep_core_msgs::quaternion& quaternion)
+{
+  // https://www.cc.gatech.edu/classes/AY2015/cs4496_spring/Eigen.html
+
+  float height = bg::get<bg::min_corner, 2>(aabb);
+
+  // A quaternion is made using the min and max points of the BB, such that the x, y and z coordinates make up the
+  // vector and the scalar is set to 0
+  Eigen::Quaterniond bottom_left = { bg::get<bg::min_corner, 0>(aabb), bg::get<bg::min_corner, 1>(aabb), height, 0 };
+  Eigen::Quaterniond top_left = { bg::get<bg::min_corner, 0>(aabb), bg::get<bg::max_corner, 1>(aabb), height, 0 };
+  Eigen::Quaterniond bottom_right = { bg::get<bg::max_corner, 0>(aabb), bg::get<bg::min_corner, 1>(aabb), height, 0 };
+  Eigen::Quaterniond top_right = { bg::get<bg::max_corner, 0>(aabb), bg::get<bg::max_corner, 1>(aabb), height, 0 };
+  Eigen::Quaterniond q = { quaternion.x, quaternion.y, quaternion.z, quaternion.w };
+
+  // rotate min point of AABB
+  Eigen::Quaterniond rotated_bottom_left = q * bottom_left * q.inverse();
+  Eigen::Quaterniond rotated_top_left = q * top_left * q.inverse();
+  Eigen::Quaterniond rotated_bottom_right = q * bottom_right * q.inverse();
+  Eigen::Quaterniond rotated_top_right = q * top_right * q.inverse();
+
+  orientedBoundingBox obb;
+  obb.bottom_left.set<0>(rotated_bottom_left.x());
+  obb.bottom_left.set<1>(rotated_bottom_left.y());
+  obb.top_left.set<0>(rotated_top_left.x());
+  obb.top_left.set<1>(rotated_top_left.y());
+  obb.top_right.set<0>(rotated_top_right.x());
+  obb.top_right.set<1>(rotated_top_right.y());
+  obb.bottom_right.set<0>(rotated_bottom_right.x());
+  obb.bottom_right.set<1>(rotated_bottom_right.y());
+
+  obb.height = height;
+
+  return obb;
+}
+
+void CoreDataset::intersectionDegree(const seerep_core_msgs::AABB& aabb, const orientedBoundingBox& obb,
+                                     bool fullEncapsulation, bool partialEncapsulation)
+{
+  // convert seerep core aabb to cgal polygon
+  CGAL::Polygon_2<Kernel> aabb_cgal;
+  aabb_cgal.push_back(
+      Kernel::Point_2(bg::get<bg::min_corner, 0>(aabb), bg::get<bg::min_corner, 1>(aabb)));  // bottom left
+  aabb_cgal.push_back(Kernel::Point_2(bg::get<bg::min_corner, 0>(aabb), bg::get<bg::max_corner, 1>(aabb)));  // top left
+  aabb_cgal.push_back(
+      Kernel::Point_2(bg::get<bg::max_corner, 0>(aabb), bg::get<bg::max_corner, 1>(aabb)));  // top right
+  aabb_cgal.push_back(
+      Kernel::Point_2(bg::get<bg::min_corner, 0>(aabb), bg::get<bg::max_corner, 1>(aabb)));  // bottom right
+
+  // convert seerep core obb to cgal polygon
+  CGAL::Polygon_2<Kernel> obb_cgal;
+  obb_cgal.push_back(Kernel::Point_2(obb.bottom_left.get<0>(), obb.bottom_left.get<1>()));
+  obb_cgal.push_back(Kernel::Point_2(obb.top_left.get<0>(), obb.top_left.get<1>()));
+  obb_cgal.push_back(Kernel::Point_2(obb.top_right.get<0>(), obb.top_right.get<1>()));
+  obb_cgal.push_back(Kernel::Point_2(obb.bottom_right.get<0>(), obb.bottom_right.get<1>()));
+
+  // intersect
+  std::list<CGAL::Polygon_with_holes_2<Kernel>> intersection;
+  CGAL::intersection(aabb_cgal, obb_cgal, std::back_inserter(intersection));
+
+  // if there is no intersection, the iterator will be empty
+  if (intersection.size() == 0)
+  {
+    partialEncapsulation = false;
+    fullEncapsulation = false;
+
+    return;
+  }
+
+  // for our use case there will only be one intersection polygon
+  CGAL::Polygon_2<Kernel> intersection_polygon = intersection.front().outer_boundary();
+
+  // are all the points of the intersection inside the obb
+  bool isInside;
+  // traverse the intersection
+  for (CGAL::Polygon_2<Kernel>::Vertex_iterator vi = intersection_polygon.vertices_begin();
+       vi != intersection_polygon.vertices_end(); ++vi)
+  {
+    // check if this point is inside the obb
+    isInside = (obb_cgal.bounded_side(*vi) == CGAL::ON_BOUNDED_SIDE);
+
+    // if isInside is false even once then there is only partial encapsulation
+    if (!isInside)
+    {
+      partialEncapsulation = true;
+      fullEncapsulation = false;
+
+      return;
+    }
+  }
+
+  // otherwise there is full encapsulation
+  partialEncapsulation = false;
+  fullEncapsulation = true;
+
+  return;
+}
+
+orientedBoundingBox CoreDataset::orientAABB(const seerep_core_msgs::AABB& aabb,
+                                            const seerep_core_msgs::quaternion& quaternion)
+{
+  // https://gamedev.stackexchange.com/questions/28395/rotating-vector3-by-a-quaternion
+
+  float height = bg::get<bg::max_corner, 2>(aabb) - bg::get<bg::min_corner, 2>(aabb);
+
+  // A quaternion is made using the min and max points of the BB, such that the x, y and z coordinates make up the
+  // vector and the scalar is set to 0
+  Eigen::Vector3d bottom_left(bg::get<bg::min_corner, 0>(aabb), bg::get<bg::min_corner, 1>(aabb), height);
+  Eigen::Vector3d top_left(bg::get<bg::min_corner, 0>(aabb), bg::get<bg::max_corner, 1>(aabb), height);
+  Eigen::Vector3d bottom_right(bg::get<bg::max_corner, 0>(aabb), bg::get<bg::min_corner, 1>(aabb), height);
+  Eigen::Vector3d top_right(bg::get<bg::max_corner, 0>(aabb), bg::get<bg::max_corner, 1>(aabb), height);
+  Eigen::Quaterniond q(quaternion.w, quaternion.x, quaternion.y, quaternion.z);
+
+  // rotate min point of AABB
+  Eigen::Vector3d rotated_bottom_left = rotateVector(bottom_left, q);
+  Eigen::Vector3d rotated_top_left = rotateVector(top_left, q);
+  Eigen::Vector3d rotated_bottom_right = rotateVector(bottom_right, q);
+  Eigen::Vector3d rotated_top_right = rotateVector(top_right, q);
+
+  orientedBoundingBox obb;
+  obb.bottom_left.set<0>(rotated_bottom_left.x());
+  obb.bottom_left.set<1>(rotated_bottom_left.y());
+  obb.top_left.set<0>(rotated_top_left.x());
+  obb.top_left.set<1>(rotated_top_left.y());
+  obb.top_right.set<0>(rotated_top_right.x());
+  obb.top_right.set<1>(rotated_top_right.y());
+  obb.bottom_right.set<0>(rotated_bottom_right.x());
+  obb.bottom_right.set<1>(rotated_bottom_right.y());
+
+  obb.height = height;
+
+  return obb;
+}
+
+Eigen::Vector3d CoreDataset::rotateVector(const Eigen::Vector3d vec, const Eigen::Quaterniond quaternion)
+{
+  return 2.0f * vec.dot(quaternion.vec()) * quaternion.vec() +
+         ((quaternion.w() * quaternion.w() - vec.dot(quaternion.vec())) * vec) +
+         2.0f * quaternion.w() * quaternion.vec().cross(vec);
+}
+
+void CoreDataset::intersectionDegree(const seerep_core_msgs::AABB& aabb, const orientedBoundingBox& obb,
+                                     bool fullEncapsulation, bool partialEncapsulation)
+{
+  // convert seerep core aabb to cgal polygon
+  CGAL::Polygon_2<Kernel> aabb_cgal;
+  aabb_cgal.push_back(
+      Kernel::Point_2(bg::get<bg::min_corner, 0>(aabb), bg::get<bg::min_corner, 1>(aabb)));  // bottom left
+  aabb_cgal.push_back(Kernel::Point_2(bg::get<bg::min_corner, 0>(aabb), bg::get<bg::max_corner, 1>(aabb)));  // top left
+  aabb_cgal.push_back(
+      Kernel::Point_2(bg::get<bg::max_corner, 0>(aabb), bg::get<bg::max_corner, 1>(aabb)));  // top right
+  aabb_cgal.push_back(
+      Kernel::Point_2(bg::get<bg::max_corner, 0>(aabb), bg::get<bg::min_corner, 1>(aabb)));  // bottom right
+
+  // convert seerep core obb to cgal polygon
+  CGAL::Polygon_2<Kernel> obb_cgal;
+  obb_cgal.push_back(Kernel::Point_2(obb.bottom_left.get<0>(), obb.bottom_left.get<1>()));
+  obb_cgal.push_back(Kernel::Point_2(obb.top_left.get<0>(), obb.top_left.get<1>()));
+  obb_cgal.push_back(Kernel::Point_2(obb.top_right.get<0>(), obb.top_right.get<1>()));
+  obb_cgal.push_back(Kernel::Point_2(obb.bottom_right.get<0>(), obb.bottom_right.get<1>()));
+
+  // intersect
+  std::list<CGAL::Polygon_with_holes_2<Kernel>> intersection;
+  CGAL::intersection(aabb_cgal, obb_cgal, std::back_inserter(intersection));
+
+  // if there is no intersection, the iterator will be empty
+  if (intersection.size() == 0)
+  {
+    partialEncapsulation = false;
+    fullEncapsulation = false;
+
+    return;
+  }
+
+  // for our use case there will only be one intersection polygon
+  CGAL::Polygon_2<Kernel> intersection_polygon = intersection.front().outer_boundary();
+
+  // are all the points of the intersection inside the obb
+  bool isInside;
+  // traverse the intersection
+  for (CGAL::Polygon_2<Kernel>::Vertex_iterator vi = intersection_polygon.vertices_begin();
+       vi != intersection_polygon.vertices_end(); ++vi)
+  {
+    // check if this point is inside the obb
+    isInside = (obb_cgal.bounded_side(*vi) == CGAL::ON_BOUNDED_SIDE);
+
+    // if isInside is false even once then there is only partial encapsulation
+    if (!isInside)
+    {
+      partialEncapsulation = true;
+      fullEncapsulation = false;
+
+      return;
+    }
+  }
+
+  // otherwise there is full encapsulation
+  partialEncapsulation = false;
+  fullEncapsulation = true;
+
+  return;
 }
 
 seerep_core_msgs::AabbTime CoreDataset::getTimeBounds(std::vector<seerep_core_msgs::Datatype> datatypes)

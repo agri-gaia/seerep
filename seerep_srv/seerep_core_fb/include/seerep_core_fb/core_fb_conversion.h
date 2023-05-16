@@ -239,6 +239,8 @@ private:
    */
   static uint fromFbQueryMaxNumData(const seerep::fb::Query* query);
 
+  static uint fromFbQueryEncapsulated(const seerep::fb::Query* query);
+
   /**
    * @brief converts the header of the flatbuffer data message to seerep core specific message
    * @param header the header in the flatbuffer data message

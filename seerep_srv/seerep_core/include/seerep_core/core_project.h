@@ -31,6 +31,7 @@
 // logging
 #include <boost/log/sources/severity_logger.hpp>
 #include <boost/log/trivial.hpp>
+
 namespace seerep_core
 {
 /**

@@ -134,6 +134,7 @@ std::shared_ptr<std::mutex> CoreProject::getHdf5FileMutex()
 {
   return m_write_mtx;
 }
+
 std::shared_ptr<HighFive::File> CoreProject::getHdf5File()
 {
   return m_hdf5_file;

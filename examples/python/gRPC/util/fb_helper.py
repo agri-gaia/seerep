@@ -22,6 +22,7 @@ from seerep.fb import (
     ProjectCreation,
     ProjectInfo,
     ProjectInfos,
+    Quaternion,
     Query,
     QueryInstance,
     RegionOfInterest,
@@ -555,3 +556,12 @@ def createProjectInfo(builder, name, uuid):
     ProjectInfo.AddName(builder, nameStr)
     ProjectInfo.AddUuid(builder, uuidStr)
     return ProjectInfo.End(builder)
+
+
+def createQuaternion(builder, w, x, y, z):
+    Quaternion.Start(builder)
+    Quaternion.AddW(builder, w)
+    Quaternion.AddX(builder, x)
+    Quaternion.AddY(builder, y)
+    Quaternion.AddZ(builder, z)
+    return Quaternion.End(builder)

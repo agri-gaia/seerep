@@ -24,6 +24,7 @@ struct Query
   bool withoutData;                                          ///< do not return the data itself if set
   uint maxNumData;                                           ///< max number of datasets that should be returned
   quaternion rotation;
+  bool encapsulated;
 };
 
 } /* namespace seerep_core_msgs */

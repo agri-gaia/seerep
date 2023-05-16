@@ -17,4 +17,5 @@ message Query
   repeated string datauuid = 7;
   bool withoutdata = 8;
   uint32 maxNumData = 9;
+  bool encapsulated = 10;
 }

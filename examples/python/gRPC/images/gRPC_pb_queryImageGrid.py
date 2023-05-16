@@ -20,7 +20,7 @@ response = stubMeta.GetProjects(empty_pb2.Empty())
 projectuuid = ""
 for project in response.projects:
     print(project.name + " " + project.uuid)
-    if project.name == "LabeledImagesInGrid":
+    if project.name == "testproject":
         projectuuid = project.uuid
 
 if projectuuid == "":
@@ -35,6 +35,12 @@ theQuery.boundingboxStamped.boundingbox.center_point.z = 0.0
 theQuery.boundingboxStamped.boundingbox.spatial_extent.z = 1.0
 theQuery.boundingboxStamped.boundingbox.spatial_extent.x = 1.0
 theQuery.boundingboxStamped.boundingbox.spatial_extent.y = 1.0
+
+# unit quaternion, causes no rotation
+theQuery.boundingboxStamped.boundingbox.rotation.w = 1
+theQuery.boundingboxStamped.boundingbox.rotation.x = 0
+theQuery.boundingboxStamped.boundingbox.rotation.y = 0
+theQuery.boundingboxStamped.boundingbox.rotation.z = 0
 
 # since epoche
 theQuery.timeinterval.time_min.seconds = 1638549273

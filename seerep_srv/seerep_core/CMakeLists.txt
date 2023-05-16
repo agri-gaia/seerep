@@ -3,7 +3,7 @@ project(seerep_core VERSION 0.1)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -fPIC -DBOOST_LOG_DYN_LINK")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -fPIC -DBOOST_LOG_DYN_LINK ")
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
@@ -28,6 +28,8 @@ find_package(
 )
 
 find_package(catkin REQUIRED COMPONENTS tf2)
+
+find_package(CGAL REQUIRED)
 
 configure_file(include/SeerepCoreConfig.h.in SeerepCoreConfig.h)
 
@@ -65,6 +67,7 @@ target_link_libraries(
   ${Boost_LOG_SETUP_LIBRARY}
   ${catkin_LIBRARIES}
   Eigen3::Eigen
+  CGAL::CGAL
 )
 
 set(INSTALL_HEADERS
