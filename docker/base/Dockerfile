@@ -3,8 +3,6 @@ FROM ros:noetic
 ENV APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1
 ENV DEBIAN_FRONTEND="noninteractive"
 ENV HDF5_REL="https://github.com/BlueBrain/HighFive"
-ENV PB_REL="https://github.com/protocolbuffers/protobuf/releases"
-ENV PB_VER="21.12"
 ENV DOX_REL="https://github.com/doxygen/doxygen/archive/refs/tags"
 ENV DOX_VER="Release_1_9_3"
 
@@ -87,48 +85,6 @@ RUN git clone --depth 1 -b v2.4.0 $HDF5_REL.git \
         && make -j"$(nproc)" -C /HighFive/build \
         && make install -C /HighFive/build \
         && rm -rf HighFive
-
-####################################################
-#Install flatbuffer
-####################################################
-RUN wget https://github.com/google/flatbuffers/archive/refs/tags/v2.0.0.tar.gz \
-        && tar -xf v2.0.0.tar.gz \
-        && mkdir flatbuffers-2.0.0/build \
-        && cd flatbuffers-2.0.0/build \
-        && cmake .. \
-        && make -j"$(nproc)" -C /flatbuffers-2.0.0/build \
-        && make install -C /flatbuffers-2.0.0/build \
-        && cd ../.. \
-        && rm -rf flatbuffers-2.0.0 v2.0.0.tar.gz
-
-####################################################
-#Install gRPC
-####################################################
-
-#Clone the grpc repo
-RUN git clone --recurse-submodules --depth 1 -b v1.35.0 https://github.com/grpc/grpc \
-        && mkdir -p grpc/cmake/build \
-        && cd grpc/cmake/build \
-        && cmake -DgRPC_INSTALL=ON -DgRPC_BUILD_TESTS=OFF ../.. \
-        && make -j"$(nproc)" \
-        && make install \
-        && cd ../../.. \
-        && rm -rf grpc
-
-####################################################
-#Install protobuf from github
-####################################################
-RUN curl -LO $PB_REL/download/v$PB_VER/protobuf-cpp-3.$PB_VER.zip \
-        && unzip protobuf-cpp-3.$PB_VER.zip \
-        && cd /protobuf-3.$PB_VER/ \
-        && mkdir -p build \
-        && cd build \
-        && cmake .. -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
-        && make -j"$(nproc)" \
-        && make install \
-        && cd ../.. \
-        && rm protobuf-cpp-3.$PB_VER.zip \
-        && rm -rf protobuf-$3.PB_VER
 
 ####################################################
 #Install current googletest release
