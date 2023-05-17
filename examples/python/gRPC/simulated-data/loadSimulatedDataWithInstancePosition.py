@@ -5,23 +5,7 @@ import imageio.v2 as imageio
 import numpy as np
 import quaternion
 import yaml
-from seerep.fb import (
-    Boundingbox2D,
-    BoundingBox2DLabeled,
-    BoundingBox2DLabeledWithCategory,
-    Header,
-    Image,
-    LabelsWithCategory,
-    LabelWithInstance,
-    Point,
-    Point2D,
-    PointStamped,
-    Quaternion,
-    Timestamp,
-    Transform,
-    TransformStamped,
-    Vector3,
-)
+from seerep.fb import Transform
 from seerep.fb import image_service_grpc_fb as imageService
 from seerep.fb import point_service_grpc_fb as pointService
 from seerep.fb import tf_service_grpc_fb as tfService
@@ -77,99 +61,26 @@ class LoadSimulatedDataWithInstancePosition:
         self.stubTf.TransferTransformStamped(self.__loadTf())
         self.stubPoint.TransferPoint(iter(self.points))
 
-    def __createLabelWithInstance(self, builder, label, theInstanceUuid):
-        instanceUuid = builder.CreateString(theInstanceUuid)
-        labelString = builder.CreateString(label)
-        LabelWithInstance.Start(builder)
-        LabelWithInstance.AddInstanceUuid(builder, instanceUuid)
-        LabelWithInstance.AddLabel(builder, labelString)
-        return LabelWithInstance.End(builder)
-
-    def __createPoint2D(self, builder, x, y):
-        Point2D.Start(builder)
-        Point2D.AddX(builder, x)
-        Point2D.AddY(builder, y)
-        return Point2D.End(builder)
-
-    def __createPoint3D(self, builder, x, y, z):
-        Point.Start(builder)
-        Point.AddX(builder, x)
-        Point.AddY(builder, y)
-        Point.AddZ(builder, z)
-        return Point.End(builder)
-
-    def __createBoundingBox2D(self, builder, x, y, xExtent, yExtent):
-        pointMin = self.__createPoint2D(builder, x - xExtent / 2.0, y - yExtent / 2.0)
-        pointMax = self.__createPoint2D(builder, x + xExtent / 2.0, y + yExtent / 2.0)
-
-        Boundingbox2D.Start(builder)
-        Boundingbox2D.AddPointMin(builder, pointMin)
-        Boundingbox2D.AddPointMax(builder, pointMax)
-        return Boundingbox2D.End(builder)
-
-    def __createBoundingBox2DLabeled(self, builder, boundingBox2D, labelWithInstance):
-        BoundingBox2DLabeled.Start(builder)
-        BoundingBox2DLabeled.AddBoundingBox(builder, boundingBox2D)
-        BoundingBox2DLabeled.AddLabelWithInstance(builder, labelWithInstance)
-        return BoundingBox2DLabeled.End(builder)
-
-    def __listToCategoryLabelsVector(self, builder, dataList):
-        BoundingBox2DLabeledWithCategory.StartBoundingBox2dLabeledVector(builder, len(dataList))
-        for data in dataList:
-            builder.PrependUOffsetTRelative(data)
-        return builder.EndVector()
-
-    def __listToImageLabelsVector(self, builder, dataList):
-        Image.StartLabelsBbVector(builder, len(dataList))
-        for data in dataList:
-            builder.PrependUOffsetTRelative(data)
-        return builder.EndVector()
-
-    def __listToLabelCategoryLabelVector(self, builder, dataList):
-        LabelsWithCategory.StartLabelsVector(builder, len(dataList))
-        for data in dataList:
-            builder.PrependUOffsetTRelative(data)
-        return builder.EndVector()
-
-    def __listToPointStampedLabelsVector(self, builder, dataList):
-        PointStamped.StartLabelsGeneralVector(builder, len(dataList))
-        for data in dataList:
-            builder.PrependUOffsetTRelative(data)
-        return builder.EndVector()
-
-    def __createLabelWithInstanceCategory(self, builder, category, labelGeneralVector):
-        categoryStr = builder.CreateString(category)
-
-        LabelsWithCategory.Start(builder)
-        LabelsWithCategory.AddCategory(builder, categoryStr)
-        LabelsWithCategory.AddLabels(builder, labelGeneralVector)
-        return LabelsWithCategory.End(builder)
-
     def __createPointForInstance(self, pointCloudData, instanceUuid, label, imageX, imageY, time, frame, img):
         builder = flatbuffers.Builder(1024)
         pixelX = int(img.shape[1] * imageX)
         pixelY = int(img.shape[0] * imageY)
         position = pointCloudData[pixelY][pixelX]
-        point = self.__createPoint3D(builder, position[0], position[1], position[2])
+        point = util_fb.createPoint(builder, position[0], position[1], position[2])
 
-        labelGeneral = self.__createLabelWithInstance(builder, label, instanceUuid)
-        labelGeneralVector = self.__listToLabelCategoryLabelVector(builder, [labelGeneral])
+        labelGeneral = []
+        labelGeneral.append(util_fb.createLabelWithInstance(builder, label, 1.0, instanceUuid))
+        labelGeneralCategory = util_fb.createLabelWithCategory(builder, [self.labelCategory], [labelGeneral])
 
-        labelGeneralCategory = self.__createLabelWithInstanceCategory(builder, self.labelCategory, labelGeneralVector)
-        labelGeneralCategoryVector = self.__listToPointStampedLabelsVector(builder, [labelGeneralCategory])
+        timestamp = util_fb.createTimeStamp(builder, time)
+        header = util_fb.createHeader(builder, timestamp, frame, self.projectUuid)
 
-        header = self.__createHeader(builder, time, frame)
-
-        PointStamped.Start(builder)
-        PointStamped.AddPoint(builder, point)
-        PointStamped.AddHeader(builder, header)
-        PointStamped.AddLabelsGeneral(builder, labelGeneralCategoryVector)
-        pointStamped = PointStamped.End(builder)
+        pointStamped = util_fb.createPointStamped(builder, point, header, labelGeneralCategory)
         builder.Finish(pointStamped)
 
         self.points.append(bytes(builder.Output()))
 
-    def __createBoundingBox2dLabeledVectorMsg(self, builder, baseAnnotationPath, basePointCloudPath, time, frame, img):
+    def __createBoundingBox2dCategory(self, builder, baseAnnotationPath, basePointCloudPath, time, frame, img):
         annotations = np.genfromtxt(baseAnnotationPath + self.ANNOTATIONS_FILE_EXTENSION, dtype="<U40")
         pointCloudData = np.load(basePointCloudPath + self.POINTCLOUD_FILE_EXTENSION)
         boundingBox2dLabeledVector = []
@@ -179,56 +90,24 @@ class LoadSimulatedDataWithInstancePosition:
             print("uuid: " + instanceUuid)
 
             label = self.labelSwitch.get(int(round(labelFloat)))
-            labelWithInstance = self.__createLabelWithInstance(builder, label, instanceUuid)
-            boundingBox2D = self.__createBoundingBox2D(builder, x, y, xExtent, yExtent)
+            labelWithInstance = util_fb.createLabelWithInstance(builder, label, 1.0, instanceUuid)
+            centerPoint = util_fb.createPoint2d(builder, x, y)
+            spatialExtent = util_fb.createPoint2d(builder, xExtent, yExtent)
+            boundingBox2D = util_fb.createBoundingBox2d(builder, centerPoint, spatialExtent)
+
             boundingBox2dLabeledVector.append(
-                self.__createBoundingBox2DLabeled(builder, boundingBox2D, labelWithInstance)
+                util_fb.createBoundingBox2dLabeled(builder, labelWithInstance, boundingBox2D)
             )
 
             if instanceUuid not in self.instanceUuidSet:
                 self.__createPointForInstance(pointCloudData, instanceUuid, label, x, y, time, frame, img)
                 self.instanceUuidSet.append(instanceUuid)
-
-        return self.__listToCategoryLabelsVector(builder, boundingBox2dLabeledVector)
-
-    def __createBoundingBox2dWithCategory(self, builder, category, boundingBox2dLabeledVector):
-        categoryStr = builder.CreateString(category)
-
-        BoundingBox2DLabeledWithCategory.Start(builder)
-        BoundingBox2DLabeledWithCategory.AddCategory(builder, categoryStr)
-        BoundingBox2DLabeledWithCategory.AddBoundingBox2dLabeled(builder, boundingBox2dLabeledVector)
-        return self.__listToImageLabelsVector(builder, [BoundingBox2DLabeledWithCategory.End(builder)])
-
-    def __createTimeStamp(self, builder, time):
-        Timestamp.Start(builder)
-        Timestamp.AddSeconds(builder, time)
-        Timestamp.AddNanos(builder, 0)
-        return Timestamp.End(builder)
-
-    def __createHeader(self, builder, time, frame):
-        timeStamp = self.__createTimeStamp(builder, time)
-
-        frameId = builder.CreateString(frame)
-        projectUuidStr = builder.CreateString(self.projectUuid)
-        Header.Start(builder)
-        Header.AddFrameId(builder, frameId)
-        Header.AddStamp(builder, timeStamp)
-        Header.AddUuidProject(builder, projectUuidStr)
-        return Header.End(builder)
-
-    def __createImage(self, builder, image, header, boundingBox2dLabeledVectorMsg):
-        encoding = builder.CreateString(self.IMAGE_ENCODING)
-
-        imData = builder.CreateByteVector(image.tobytes())
-        Image.Start(builder)
-        Image.AddHeader(builder, header)
-        Image.AddHeight(builder, image.shape[0])
-        Image.AddWidth(builder, image.shape[1])
-        Image.AddEncoding(builder, encoding)
-        Image.AddStep(builder, 3 * image.shape[1])
-        Image.AddData(builder, imData)
-        Image.AddLabelsBb(builder, boundingBox2dLabeledVectorMsg)
-        return Image.End(builder)
+        categoryString = builder.CreateString(self.labelCategory)
+        boundingBox2dCategoryVector = []
+        boundingBox2dCategoryVector.append(
+            util_fb.createBoundingBox2DLabeledWithCategory(self.builder, categoryString, boundingBox2dLabeledVector)
+        )
+        return boundingBox2dCategoryVector
 
     def __createBasePath(self, path, i):
         return path + str(i).zfill(4)
@@ -258,35 +137,16 @@ class LoadSimulatedDataWithInstancePosition:
 
                 img = imageio.imread(baseFilePath + self.IMAGE_FILE_EXTENSION)
 
-                boundingBox2dLabeledVectorMsg = self.__createBoundingBox2dLabeledVectorMsg(
+                bb2dWithCategory = self.__createBoundingBox2dCategory(
                     self.builder, baseAnnotationPath, basePointcloudPath, timeThisIteration, self.CAMERA_FRAME, img
                 )
+                timestamp = util_fb.createTimeStamp(self.builder, timeThisIteration)
+                header = util_fb.createHeader(self.builder, timestamp, self.CAMERA_FRAME, self.projectUuid)
 
-                bb2dWithCategory = self.__createBoundingBox2dWithCategory(
-                    self.builder, self.labelCategory, boundingBox2dLabeledVectorMsg
-                )
-
-                header = self.__createHeader(self.builder, timeThisIteration, self.CAMERA_FRAME)
-
-                imageMsg = self.__createImage(self.builder, img, header, bb2dWithCategory)
+                imageMsg = util_fb.createImage(self.builder, img, header, self.IMAGE_ENCODING, bb2dWithCategory)
 
                 self.builder.Finish(imageMsg)
                 yield bytes(self.builder.Output())
-
-    def __createVector3(self, builder, t):
-        Vector3.Start(builder)
-        Vector3.AddX(builder, t[0])
-        Vector3.AddY(builder, t[1])
-        Vector3.AddZ(builder, t[2])
-        return Vector3.End(builder)
-
-    def __createQuaternion(self, builder, quat):
-        Quaternion.Start(builder)
-        Quaternion.AddX(builder, quat.x)
-        Quaternion.AddY(builder, quat.y)
-        Quaternion.AddZ(builder, quat.z)
-        Quaternion.AddW(builder, quat.w)
-        return Quaternion.End(builder)
 
     def __createTransformFromQuaternion(self, builder, extrinsics):
 
@@ -295,23 +155,15 @@ class LoadSimulatedDataWithInstancePosition:
 
         r = calib_e[:3, :3]
         quat = quaternion.from_rotation_matrix(r)
-        rotation = self.__createQuaternion(builder, quat)
+        rotation = util_fb.createQuaternion(builder, quat)
 
         t = calib_e[:3, -1]
-        translation = self.__createVector3(builder, t)
+        translation = util_fb.createVector3(builder, t)
 
         Transform.Start(builder)
         Transform.AddTranslation(builder, translation)
         Transform.AddRotation(builder, rotation)
         return Transform.End(builder)
-
-    def __createTransformStamped(self, builder, childFrame, headerTf, transform):
-        childFrame = builder.CreateString(childFrame)
-        TransformStamped.Start(builder)
-        TransformStamped.AddChildFrameId(builder, childFrame)
-        TransformStamped.AddHeader(builder, headerTf)
-        TransformStamped.AddTransform(builder, transform)
-        return TransformStamped.End(builder)
 
     def __loadTf(self):
         for folderIndex in range(len(self.root)):
@@ -325,8 +177,9 @@ class LoadSimulatedDataWithInstancePosition:
                 with open(baseFilePath + self.EXTRINSICS_FILE_EXTENSION, "r") as extrinsics:
                     try:
                         transform = self.__createTransformFromQuaternion(builder, extrinsics)
-                        headerTf = self.__createHeader(builder, timeThisIteration, self.MAP_FRAME)
-                        tf = self.__createTransformStamped(builder, self.CAMERA_FRAME, headerTf, transform)
+                        timestamp = util_fb.createTimeStamp(builder, timeThisIteration)
+                        headerTf = util_fb.createHeader(builder, timestamp, self.MAP_FRAME, self.projectUuid)
+                        tf = util_fb.createTransformStamped(builder, self.CAMERA_FRAME, headerTf, transform)
 
                         builder.Finish(tf)
                         yield bytes(builder.Output())

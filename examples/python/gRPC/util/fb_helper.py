@@ -13,23 +13,28 @@ from seerep.fb import (
     Empty,
     GeodeticCoordinates,
     Header,
+    Image,
     Label,
     LabelsWithCategory,
     LabelWithInstance,
     Point,
     PointCloud2,
     PointField,
+    PointStamped,
     ProjectCreation,
     ProjectInfo,
     ProjectInfos,
+    Quaternion,
     Query,
     QueryInstance,
     RegionOfInterest,
     TimeInterval,
     Timestamp,
+    TransformStamped,
     TransformStampedQuery,
     UuidDatatypePair,
     UuidDatatypeWithCategory,
+    Vector3,
 )
 from seerep.fb import meta_operations_grpc_fb as metaOperations
 
@@ -288,6 +293,16 @@ def createPoint(builder, x, y, z):
     Point.AddY(builder, y)
     Point.AddZ(builder, z)
     return Point.End(builder)
+
+
+def createPointStamped(builder, point, header, labelGeneralCategoryVector):
+    '''Creates a 3D point stamped in flatbuffers'''
+
+    PointStamped.Start(builder)
+    PointStamped.AddPoint(builder, point)
+    PointStamped.AddHeader(builder, header)
+    PointStamped.AddLabelsGeneral(builder, labelGeneralCategoryVector)
+    return PointStamped.End(builder)
 
 
 def createBoundingBox(builder, centerPoint, spatialExtent, rotation=None):
@@ -555,3 +570,59 @@ def createProjectInfo(builder, name, uuid):
     ProjectInfo.AddName(builder, nameStr)
     ProjectInfo.AddUuid(builder, uuidStr)
     return ProjectInfo.End(builder)
+
+
+def createVector3(builder, t):
+    Vector3.Start(builder)
+    Vector3.AddX(builder, t[0])
+    Vector3.AddY(builder, t[1])
+    Vector3.AddZ(builder, t[2])
+    return Vector3.End(builder)
+
+
+def createQuaternion(builder, quat):
+    Quaternion.Start(builder)
+    Quaternion.AddX(builder, quat.x)
+    Quaternion.AddY(builder, quat.y)
+    Quaternion.AddZ(builder, quat.z)
+    Quaternion.AddW(builder, quat.w)
+    return Quaternion.End(builder)
+
+
+def createTransformStamped(builder, childFrame, headerTf, transform):
+    childFrame = builder.CreateString(childFrame)
+    TransformStamped.Start(builder)
+    TransformStamped.AddChildFrameId(builder, childFrame)
+    TransformStamped.AddHeader(builder, headerTf)
+    TransformStamped.AddTransform(builder, transform)
+    return TransformStamped.End(builder)
+
+
+def createImage(builder, image, header, encoding, boundingBox2dLabeledVector=None, labelsGeneral=None):
+    encoding = builder.CreateString(encoding)
+
+    if boundingBox2dLabeledVector:
+        Image.StartLabelsBbVector(builder, len(boundingBox2dLabeledVector))
+        for bb in reversed(boundingBox2dLabeledVector):
+            builder.PrependUOffsetTRelative(bb)
+        bbs = builder.EndVector()
+
+    if labelsGeneral:
+        Image.StartLabelsGeneralVector(builder, len(labelsGeneral))
+        for label in reversed(labelsGeneral):
+            builder.PrependUOffsetTRelative(label)
+        labelsGeneralVector = builder.EndVector()
+
+    imData = builder.CreateByteVector(image.tobytes())
+    Image.Start(builder)
+    Image.AddHeader(builder, header)
+    Image.AddHeight(builder, image.shape[0])
+    Image.AddWidth(builder, image.shape[1])
+    Image.AddEncoding(builder, encoding)
+    Image.AddStep(builder, 3 * image.shape[1])
+    Image.AddData(builder, imData)
+    if boundingBox2dLabeledVector:
+        Image.AddLabelsBb(builder, bbs)
+    if labelsGeneral:
+        Image.AddLabelsGeneral(builder, labelsGeneralVector)
+    return Image.End(builder)
