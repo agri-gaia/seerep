@@ -6,9 +6,6 @@ include(BuildFlatBuffers)
 include(FindFlatBuffers)
 include(FindProtobuf)
 
-find_package(Protobuf REQUIRED)
-find_package(Flatbuffers REQUIRED)
-
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
