@@ -9,9 +9,7 @@ include(ProtobufGenerateGrpcPython)
 include(FindFlatBuffers)
 include(BuildFlatBuffers)
 
-find_package(Protobuf REQUIRED)
 find_package(SeerepMsgs REQUIRED)
-find_package(Flatbuffers REQUIRED)
 
 list(APPEND PROTOBUF_IMPORT_DIRS ${SeerepMsgs_PROTOBUF_IMPORT_DIRS})
 
