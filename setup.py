@@ -22,7 +22,9 @@ from setuptools import Command, setup
 from setuptools.command.build import build
 
 
-class CustomCommand(Command):
+class GeneratePythonFiles(Command):
+    """A custom command to generate python files from the .pb and .fbs definitions"""
+
     def initialize_options(self) -> None:
         self.bdist_dir = None
         self.proto_msgs_path = None
@@ -66,8 +68,8 @@ class CustomCommand(Command):
                 f"--proto_path={self.proto_api_path}",
                 f"--python_out={output_dir}",
                 f"--grpc_python_out={output_dir}",
-                *CustomCommand.get_files(self.proto_msgs_path, "proto"),
-                *CustomCommand.get_files(self.proto_api_path, "proto"),
+                *GeneratePythonFiles.get_files(self.proto_msgs_path, "proto"),
+                *GeneratePythonFiles.get_files(self.proto_api_path, "proto"),
             ]
 
             subprocess.call(protoc_call)
@@ -77,7 +79,7 @@ class CustomCommand(Command):
                 "-i",
                 "-E",
                 "s/^import.*_pb2/from seerep.pb &/",
-                *CustomCommand.get_files(output_dir, "py"),
+                *GeneratePythonFiles.get_files(output_dir, "py"),
             ]
 
             subprocess.call(sed_call)
@@ -121,8 +123,29 @@ class CustomCommand(Command):
         self.build_fbs()
 
 
+class ChangeUtilPath(Command):
+    """Change the import path for the gRPC util scripts from 'examples/python/gRPC/uitl' to 'seerep/util'"""
+
+    def initialize_options(self) -> None:
+        self.current_util_path = Path("examples/python/gRPC/util/")
+        self.new_util_path = Path("seerep/util/")
+        self.bdist_dir = None
+
+    def finalize_options(self) -> None:
+        with suppress(Exception):
+            self.bdist_dir = Path(self.get_finalized_command("bdist_wheel").bdist_dir)
+
+    def run(self) -> None:
+        new_path_in_bdist = Path(self.bdist_dir / self.new_util_path)
+        shutil.copytree(self.current_util_path, new_path_in_bdist)
+        Path(new_path_in_bdist / "__init__.py").touch()
+
+
 class CustomBuild(build):
-    sub_commands = [('build_custom', None)] + build.sub_commands
+    sub_commands = [('build_python', None), ('change_util_path', None)] + build.sub_commands
 
 
-setup(packages=[], cmdclass={'build': CustomBuild, 'build_custom': CustomCommand})
+setup(
+    packages=[],
+    cmdclass={'build': CustomBuild, 'build_python': GeneratePythonFiles, 'change_util_path': ChangeUtilPath},
+)

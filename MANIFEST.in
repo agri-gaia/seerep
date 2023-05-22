@@ -1,9 +1,11 @@
 global-exclude *
 
-recursive-include seerep_msgs/protos *.proto
-recursive-include seerep_com/protos *.proto
-recursive-include seerep_msgs/fbs *.fbs
-recursive-include seerep_com/fbs *.fbs
+include seerep_msgs/protos/*.proto
+include seerep_com/protos/*.proto
+include seerep_msgs/fbs/*.fbs
+include seerep_com/fbs/*.fbs
+
+include examples/python/gRPC/util/*.py
 
 include setup.py
 include pyproject.toml
