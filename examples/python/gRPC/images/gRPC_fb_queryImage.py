@@ -1,27 +1,27 @@
 #!/usr/bin/env python3
 
-import os
-import sys
-
 import flatbuffers
 from seerep.fb import Image
 from seerep.fb import image_service_grpc_fb as imageService
-
-# importing util functions. Assuming that these files are in the parent dir
-# examples/python/gRPC/util.py
-# examples/python/gRPC/util_fb.py
-script_dir = os.path.dirname(__file__)
-util_dir = os.path.join(script_dir, '..')
-sys.path.append(util_dir)
-import util
-import util_fb
+from seerep.util.common import get_gRPC_channel
+from seerep.util.fb_helper import (
+    createBoundingBoxStamped,
+    createHeader,
+    createLabelWithCategory,
+    createLabelWithConfidence,
+    createPoint,
+    createQuery,
+    createTimeInterval,
+    createTimeStamp,
+    getProject,
+)
 
 builder = flatbuffers.Builder(1024)
 # Default server is localhost !
-channel = util.get_gRPC_channel()
+channel = get_gRPC_channel()
 
 # 1. Get all projects from the server
-projectuuid = util_fb.getProject(builder, channel, 'simulatedCropsGroundTruth')
+projectuuid = getProject(builder, channel, 'simulatedCropsGroundTruth')
 
 # 2. Check if the defined project exist; if not exit
 if not projectuuid:
@@ -33,14 +33,14 @@ stub = imageService.ImageServiceStub(channel)
 
 
 # Create all necessary objects for the query
-header = util_fb.createHeader(builder, frame="map")
-pointMin = util_fb.createPoint(builder, 0.0, 0.0, 0.0)
-pointMax = util_fb.createPoint(builder, 100.0, 100.0, 100.0)
-boundingboxStamped = util_fb.createBoundingBoxStamped(builder, header, pointMin, pointMax)
+header = createHeader(builder, frame="map")
+pointMin = createPoint(builder, 0.0, 0.0, 0.0)
+pointMax = createPoint(builder, 100.0, 100.0, 100.0)
+boundingboxStamped = createBoundingBoxStamped(builder, header, pointMin, pointMax)
 
-timeMin = util_fb.createTimeStamp(builder, 1610549273, 0)
-timeMax = util_fb.createTimeStamp(builder, 1938549273, 0)
-timeInterval = util_fb.createTimeInterval(builder, timeMin, timeMax)
+timeMin = createTimeStamp(builder, 1610549273, 0)
+timeMax = createTimeStamp(builder, 1938549273, 0)
+timeInterval = createTimeInterval(builder, timeMin, timeMax)
 
 
 projectUuids = [builder.CreateString(projectuuid)]
@@ -49,18 +49,18 @@ category = ["0"]
 # list of labels per category
 labels = [
     [
-        util_fb.createLabelWithConfidence(builder, "testlabel0"),
-        util_fb.createLabelWithConfidence(builder, "testlabelgeneral0"),
+        createLabelWithConfidence(builder, "testlabel0"),
+        createLabelWithConfidence(builder, "testlabelgeneral0"),
     ]
 ]
-labelCategory = util_fb.createLabelWithCategory(builder, category, labels)
+labelCategory = createLabelWithCategory(builder, category, labels)
 dataUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 instanceUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 
 # 4. Create a query with parameters
 # all parameters are optional
 # with all parameters set (especially with the data and instance uuids set) the result of the query will be empty. Set the query parameters to adequate values or remove them from the query creation
-query = util_fb.createQuery(
+query = createQuery(
     builder,
     # boundingBox=boundingboxStamped,
     # timeInterval=timeInterval,

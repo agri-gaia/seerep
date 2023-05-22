@@ -1,4 +1,3 @@
-import os
 import struct
 import sys
 
@@ -6,22 +5,25 @@ import flatbuffers
 import numpy as np
 
 np.set_printoptions(precision=7)
+
 from seerep.fb import PointCloud2
 from seerep.fb import point_cloud_service_grpc_fb as pointCloudService
+from seerep.util.common import get_gRPC_channel
+from seerep.util.fb_helper import (
+    createLabelWithCategory,
+    createQuery,
+    createTimeInterval,
+    createTimeStamp,
+    getProject,
+)
 
-script_dir = os.path.dirname(__file__)
-util_dir = os.path.join(script_dir, '..')
-sys.path.append(util_dir)
-import util
-import util_fb
-
-channel = util.get_gRPC_channel()
+channel = get_gRPC_channel()
 
 stubPointCloud = pointCloudService.PointCloudServiceStub(channel)
 builder = flatbuffers.Builder(1024)
 
 PROJECTNAME = "testproject"
-projectUuid = util_fb.getProject(builder, channel, PROJECTNAME)
+projectUuid = getProject(builder, channel, PROJECTNAME)
 
 if projectUuid is None:
     print(f"Project: {PROJECTNAME} does not exist")
@@ -30,15 +32,15 @@ if projectUuid is None:
 
 builder = flatbuffers.Builder(1024)
 
-timeMin = util_fb.createTimeStamp(builder, 1610549273, 0)
-timeMax = util_fb.createTimeStamp(builder, 1938549273, 0)
-timeInterval = util_fb.createTimeInterval(builder, timeMin, timeMax)
+timeMin = createTimeStamp(builder, 1610549273, 0)
+timeMax = createTimeStamp(builder, 1938549273, 0)
+timeInterval = createTimeInterval(builder, timeMin, timeMax)
 
 category = "0"
 labels = [[builder.CreateString("testlabel0"), builder.CreateString("BoundingBoxLabel0")]]
-labelCategory = util_fb.createLabelWithCategory(builder, category, labels)
+labelCategory = createLabelWithCategory(builder, category, labels)
 
-queryMsg = util_fb.createQuery(
+queryMsg = createQuery(
     builder, projectUuids=[builder.CreateString(projectUuid)], timeInterval=timeInterval, labels=labelCategory
 )
 builder.Finish(queryMsg)

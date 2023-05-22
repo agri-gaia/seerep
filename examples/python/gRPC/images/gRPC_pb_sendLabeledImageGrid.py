@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-import os
-import sys
 import time
 import uuid
 
@@ -20,13 +18,9 @@ from seerep.pb import meta_operations_pb2_grpc as metaOperations
 from seerep.pb import projectCreation_pb2 as projectCreation
 from seerep.pb import tf_service_pb2_grpc as tfService
 from seerep.pb import transform_stamped_pb2 as tf
+from seerep.util.common import get_gRPC_channel
 
-script_dir = os.path.dirname(__file__)
-util_dir = os.path.join(script_dir, '..')
-sys.path.append(util_dir)
-import util
-
-channel = util.get_gRPC_channel("local")
+channel = get_gRPC_channel("local")
 
 stub = imageService.ImageServiceStub(channel)
 stubTf = tfService.TfServiceStub(channel)

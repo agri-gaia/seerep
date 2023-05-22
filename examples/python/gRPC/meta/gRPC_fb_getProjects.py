@@ -1,18 +1,11 @@
 #!/usr/bin/env python3
 
-import os
-import sys
-
 import flatbuffers
 from seerep.fb import Empty, ProjectInfos
 from seerep.fb import meta_operations_grpc_fb as metaOperations
+from seerep.util.common import get_gRPC_channel
 
-script_dir = os.path.dirname(__file__)
-util_dir = os.path.join(script_dir, '..')
-sys.path.append(util_dir)
-import util
-
-channel = util.get_gRPC_channel()
+channel = get_gRPC_channel()
 
 stub = metaOperations.MetaOperationsStub(channel)
 
