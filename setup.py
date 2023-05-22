@@ -21,7 +21,7 @@ from setuptools.command.build import build
 
 
 class GeneratePythonFiles(Command):
-    "A custom command to generate python files from the .pb and .fbs definitions"
+    """A custom command to generate python files from the .pb and .fbs definitions"""
 
     def initialize_options(self) -> None:
         self.proto_msgs_path = Path("seerep_msgs/protos/")
@@ -108,8 +108,29 @@ class GeneratePythonFiles(Command):
         self.from_fb()
 
 
+class ChangeUtilPath(Command):
+    """Change the import path for the gRPC util scripts from 'examples/python/gRPC/uitl' to 'seerep/util'"""
+
+    def initialize_options(self) -> None:
+        self.current_util_path = Path("examples/python/gRPC/util/")
+        self.new_util_path = Path("seerep/util/")
+        self.bdist_dir = None
+
+    def finalize_options(self) -> None:
+        with suppress(Exception):
+            self.bdist_dir = Path(self.get_finalized_command("bdist_wheel").bdist_dir)
+
+    def run(self) -> None:
+        new_path_in_bdist = Path(self.bdist_dir / self.new_util_path)
+        shutil.copytree(self.current_util_path, new_path_in_bdist)
+        Path(new_path_in_bdist / "__init__.py").touch()
+
+
 class CustomBuild(build):
-    sub_commands = [('build_custom', None)] + build.sub_commands
+    sub_commands = [('build_python', None), ('change_util_path', None)] + build.sub_commands
 
 
-setup(packages=[], cmdclass={'build': CustomBuild, 'build_custom': GeneratePythonFiles})
+setup(
+    packages=[],
+    cmdclass={'build': CustomBuild, 'build_python': GeneratePythonFiles, 'change_util_path': ChangeUtilPath},
+)
