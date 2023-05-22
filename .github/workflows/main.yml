@@ -132,7 +132,7 @@ jobs:
       - name: Build pypi packages
         run: |
           cd $GITHUB_WORKSPACE/src
-          python3 -m build
+          python3 -m build --wheel
 
       - name: Publish packages to pypi
         if: github.ref_type == 'tag'
