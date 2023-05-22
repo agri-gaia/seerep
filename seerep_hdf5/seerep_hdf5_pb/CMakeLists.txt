@@ -13,7 +13,6 @@ find_package(Protobuf REQUIRED)
 find_package(SeerepMsgs REQUIRED)
 find_package(SeerepHdf5Core REQUIRED)
 find_package(HighFive REQUIRED)
-find_package(gRPC CONFIG REQUIRED)
 
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
@@ -71,7 +70,6 @@ target_link_libraries(
   gmock_main
   ${catkin_LIBRARIES}
   ${HighFive_LIBRARIES}
-  gRPC::grpc++_reflection
   seerephdf5pb
 )
 add_test(protobuf_write_load_test protobuf_write_load_test)
