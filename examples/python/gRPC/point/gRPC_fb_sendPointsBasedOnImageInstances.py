@@ -1,39 +1,29 @@
 #!/usr/bin/env python3
 
-import os
-import sys
-
 import flatbuffers
-from seerep.fb import (
-    Datatypes,
-    Header,
-    Image,
-    Integer,
-    LabelWithInstance,
-    Point,
-    PointStamped,
-    String,
-    Timestamp,
-    UnionMapEntry,
-)
+from seerep.fb import Datatypes, Image, Integer, PointStamped, String, UnionMapEntry
 from seerep.fb import image_service_grpc_fb as imageService
 from seerep.fb import point_service_grpc_fb as pointService
+from seerep.util.common import get_gRPC_channel
+from seerep.util.fb_helper import (
+    createHeader,
+    createLabelWithCategory,
+    createLabelWithInstance,
+    createPoint,
+    createQuery,
+    createTimeStamp,
+    getOrCreateProject,
+)
 
-script_dir = os.path.dirname(__file__)
-util_dir = os.path.join(script_dir, '..')
-sys.path.append(util_dir)
-import util
-import util_fb
-
-channel = util.get_gRPC_channel()
+channel = get_gRPC_channel()
 
 builder = flatbuffers.Builder(1024)
-projectuuid = util_fb.getOrCreateProject(builder, channel, "LabeledImagesInGrid")
+projectuuid = getOrCreateProject(builder, channel, "LabeledImagesInGrid")
 
 stubImage = imageService.ImageServiceStub(channel)
 stubPoint = pointService.PointServiceStub(channel)
 
-queryMsg = util_fb.createQuery(builder)
+queryMsg = createQuery(builder)
 builder.Finish(queryMsg)
 buf = builder.Output()
 
@@ -50,21 +40,21 @@ for responseBuf in stubImage.GetImage(bytes(buf)):
 
             frameId = response.Header().FrameId().decode('utf-8')
             uuidProject = response.Header().UuidProject().decode('utf-8')
-            timestampMsg = util_fb.createTimeStamp(
+            timestampMsg = createTimeStamp(
                 builder, response.Header().Stamp().Seconds(), response.Header().Stamp().Nanos()
             )
-            header = util_fb.createHeader(builder, timestampMsg, frameId, uuidProject)
+            header = createHeader(builder, timestampMsg, frameId, uuidProject)
 
-            point = util_fb.createPoint(builder, 1, 2, 3)
+            point = createPoint(builder, 1, 2, 3)
 
-            labelWithInstanceMsg = util_fb.createLabelWithInstance(
+            labelWithInstanceMsg = createLabelWithInstance(
                 builder,
                 response.LabelsBb(0).BoundingBox2dLabeled(i).LabelWithInstance().Label().Label().decode('utf-8'),
                 response.LabelsBb(0).BoundingBox2dLabeled(i).LabelWithInstance().Label().Confidence(),
                 response.LabelsBb(0).BoundingBox2dLabeled(i).LabelWithInstance().InstanceUuid().decode('utf-8'),
             )
 
-            labelWithCat = util_fb.createLabelWithCategory(builder, ["myCategory"], [[labelWithInstanceMsg]])
+            labelWithCat = createLabelWithCategory(builder, ["myCategory"], [[labelWithInstanceMsg]])
 
             unionMapEntryKey1 = builder.CreateString("exampleKey1")
             value1String = builder.CreateString("exampleValue1")

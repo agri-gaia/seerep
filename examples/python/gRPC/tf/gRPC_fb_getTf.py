@@ -1,22 +1,20 @@
 #!/usr/bin/env python3
 
-import os
-import sys
-
 import flatbuffers
-from seerep.fb import TransformStamped, TransformStampedQuery
+from seerep.fb import TransformStamped
 from seerep.fb import tf_service_grpc_fb as tfService
-
-script_dir = os.path.dirname(__file__)
-util_dir = os.path.join(script_dir, '..')
-sys.path.append(util_dir)
-import util
-import util_fb
+from seerep.util.common import get_gRPC_channel
+from seerep.util.fb_helper import (
+    createHeader,
+    createTimeStamp,
+    createTransformStampedQuery,
+    getProject,
+)
 
 builder = flatbuffers.Builder(1024)
-channel = util.get_gRPC_channel("local")
+channel = get_gRPC_channel("local")
 PROJECT_NAME = "plantmap01"
-projectUuid = util_fb.getProject(builder, channel, PROJECT_NAME)
+projectUuid = getProject(builder, channel, PROJECT_NAME)
 
 stubTf = tfService.TfServiceStub(channel)
 for time in range(1661336507, 1661336550, 10):  # range(1663003789, 1663003834, 10):
@@ -26,12 +24,12 @@ for time in range(1661336507, 1661336550, 10):  # range(1663003789, 1663003834, 
     timeNano = 4148245
     frame = "map"
 
-    timestamp = util_fb.createTimeStamp(builder, timeSec, timeNano)
-    header = util_fb.createHeader(builder, timestamp, frame, projectUuid)
+    timestamp = createTimeStamp(builder, timeSec, timeNano)
+    header = createHeader(builder, timestamp, frame, projectUuid)
 
     childFrameId = builder.CreateString("camera")
 
-    tfQuery = util_fb.createTransformStampedQuery(builder, header, childFrameId)
+    tfQuery = createTransformStampedQuery(builder, header, childFrameId)
     builder.Finish(tfQuery)
 
     tfBuf = stubTf.GetTransformStamped(bytes(builder.Output()))

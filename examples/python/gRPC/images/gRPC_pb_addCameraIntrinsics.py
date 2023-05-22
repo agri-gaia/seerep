@@ -16,10 +16,10 @@ util_dir = os.path.join(script_dir, '..')
 sys.path.append(util_dir)
 import uuid
 
-import util
+from seerep.util.common import get_gRPC_channel
 
 # Default server is localhost !
-channel = util.get_gRPC_channel()
+channel = get_gRPC_channel()
 
 # 1. Get gRPC service objects
 stub = camintrinsics_service.CameraIntrinsicsServiceStub(channel)
