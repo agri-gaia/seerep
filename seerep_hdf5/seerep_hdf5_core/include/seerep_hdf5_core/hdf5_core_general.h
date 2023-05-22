@@ -161,7 +161,7 @@ public:
   std::string readProjectFrameId();
 
   void writeVersion(const std::string& version);
-  const std::string readVersion();
+  const std::optional<std::string> readVersion();
 
   // ################
   //  Geodetic Coordinates
