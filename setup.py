@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 
 """
-A custom command is added to the python packaging process to generate python files from the protobuf
-and flatbuffer definitions. Further details and needed workarounds are described below.
+Two custom commands are added to the packaging process:
+1. GeneratePythonFiles - Generates Python files from the Protobuf and Flatbuffer definitions. Additionally
+   the import paths are changed to `seerep.pb` and `seerep.fbs`.
+2. ChangeUtilPath - Changes the import path for the gRPC util scripts from `examples/python/gRPC/uitl` to `seerep/util`.
 
-Note: The flatc compiler can not be installted via pip (https://github.com/google/flatbuffers/issues/7793) and
-therefore has to be installed manually. Instructions for that can be found
+Note: The flatc compiler can not be installted via pip (https://github.com/google/flatbuffers/issues/7793) during the
+build process and therefore has to be installed manually. Instructions for that can be found
 here: https://flatbuffers.dev/flatbuffers_guide_building.html
 """
 
@@ -21,7 +23,7 @@ from setuptools.command.build import build
 
 
 class GeneratePythonFiles(Command):
-    "A custom command to generate python files from the .pb and .fbs definitions"
+    """A custom command to generate Python files from the .pb and .fbs definitions"""
 
     def initialize_options(self) -> None:
         self.proto_msgs_path = Path("seerep_msgs/protos/")
@@ -36,11 +38,10 @@ class GeneratePythonFiles(Command):
 
     def from_pb(self) -> None:
         """
-        The protoc compiler ignores the package directive for python
-        https://developers.google.com/protocol-buffers/docs/proto3#packages.
-
-        The correct folder structure therefore has to be created manually and the files must be post processed
-        wih sed. The result is the same import path for pb and fb.
+        The protoc compiler ignores the package directive for Python, since Python modules are organized according
+        to their filesystem path. https://developers.google.com/protocol-buffers/docs/proto3#packages.
+        The correct folder strcuture therefore has to be created manually. Additionally the import path inside the
+        files need to be adjusted to the new structure with sed.
         """
         # other __init__.py files are automatically created by the flatc compiler
         pb_dir = Path(self.bdist_dir / "seerep/pb")
@@ -61,7 +62,7 @@ class GeneratePythonFiles(Command):
         if call(protoc_call) != 0:
             raise Exception("protoc call failed")
 
-        # change the import paths in the files to new folder structure
+        # Change the import paths in the files to new folder structure
         sed_call = [
             "sed",
             "-i",
@@ -75,12 +76,10 @@ class GeneratePythonFiles(Command):
 
     def from_fb(self) -> None:
         """
-        Currently the flatc compiler has a bug when using --python and --grpc,
-        which prevents the use of -I and -o for specifying input and output directories.
-        https://github.com/google/flatbuffers/issues/7397
-
-        The current workaround is to copy the fbs files to the output directory,
-        then run the flatc compiler in the output dir and remove the .fbs files afterwards.
+        Currently the flatc compiler has a bug when using --python and --grpc, which prevents the use of -I and -o
+        for specifying input and output directories https://github.com/google/flatbuffers/issues/7397.
+        The current workaround is to copy the fbs files to the output directory, then run the flatc compiler in the
+        output dir and remove the .fbs files afterwards.
         """
         shutil.copytree(self.fbs_msgs_path, self.bdist_dir, dirs_exist_ok=True)
         shutil.copytree(self.fbs_interface_path, self.bdist_dir, dirs_exist_ok=True)
@@ -91,14 +90,14 @@ class GeneratePythonFiles(Command):
             "flatc",
             "--python",
             "--grpc",
-            # Note: the flatc compiler ONLY excepts file names, no paths!
+            # The compiler ONLY accepts filenames, no paths!
             *[os.path.basename(file) for file in fbs_files],
         ]
 
         if call(flatc_call, cwd=self.bdist_dir) != 0:
             raise Exception("flatc call failed")
 
-        # remove the .fbs definitions
+        # Remove the .fbs files
         for file in fbs_files:
             with suppress(Exception):
                 os.remove(file)
@@ -111,7 +110,10 @@ class GeneratePythonFiles(Command):
 
 
 class ChangeUtilPath(Command):
-    """Change the import path for the gRPC util scripts from 'examples/python/gRPC/uitl' to 'seerep/util'"""
+    """
+    Change the import path for the gRPC util scripts from 'examples/python/gRPC/uitl' to 'seerep/util' by copying
+    into the bdist directory.
+    """
 
     def initialize_options(self) -> None:
         self.current_util_path = Path("examples/python/gRPC/util/")
