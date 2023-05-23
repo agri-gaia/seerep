@@ -109,19 +109,22 @@ void Hdf5CoreGeneral::writeVersion(const std::string& version)
   }
   m_file->flush();
 }
-const std::string Hdf5CoreGeneral::readVersion()
+
+const std::optional<std::string> Hdf5CoreGeneral::readVersion()
 {
   const std::scoped_lock lock(*m_write_mtx);
 
   std::string version;
   try
   {
-    m_file->getAttribute(VERSION).read(version);
+    version = readAttributeFromHdf5<std::string>(m_file->getName(), *m_file, VERSION);
   }
-  catch (...)
+  catch (const std::exception& e)
   {
-    throw std::runtime_error("Project " + m_file->getName() + "  has no version defined.");
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning) << e.what();
+    return std::nullopt;
   }
+
   return version;
 }
 

@@ -8,17 +8,23 @@ CoreProject::CoreProject(const boost::uuids::uuid& uuid, const std::string path)
 
   m_projectname = m_ioGeneral->readProjectname();
   m_frameId = m_ioGeneral->readProjectFrameId();
-  m_version = m_ioGeneral->readVersion();
-  /// TODO use the advantages of std::optional
+
+  /* get optional class members */
   auto geodeticCoordinates = m_ioGeneral->readGeodeticLocation();
+  auto version = m_ioGeneral->readVersion();
+
+  if (version)
+  {
+    m_version = version.value();
+  }
 
   if (geodeticCoordinates)
   {
     m_geodeticCoordinates = geodeticCoordinates.value();
   }
-
   recreateDatatypes();
 }
+
 CoreProject::CoreProject(const boost::uuids::uuid& uuid, const std::string path, const std::string projectname,
                          const std::string mapFrameId, const seerep_core_msgs::GeodeticCoordinates geodeticCoords,
                          const std::string version)
