@@ -27,4 +27,9 @@ std::optional<seerep_core_msgs::camera_intrinsics> CoreCameraIntrinsics::getData
   }
 }
 
+bool CoreCameraIntrinsics::checkCameraIntrinsicsExists(boost::uuids::uuid camIntrinsicsUuid)
+{
+  return m_hdf5_io->checkCameraIntrinsicsExists(camIntrinsicsUuid);
+}
+
 }  // namespace seerep_core

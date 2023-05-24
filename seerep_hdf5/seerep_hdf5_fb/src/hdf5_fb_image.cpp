@@ -22,8 +22,9 @@ void Hdf5FbImage::writeImage(const std::string& id, const seerep::fb::Image& ima
 
   writeHeaderAttributes(*dataGroupPtr, image.header());
 
-  seerep_hdf5_core::ImageAttributes imageAttributes = { image.height(), image.width(), image.step(),
-                                                        image.encoding()->str(), image.is_bigendian() };
+  seerep_hdf5_core::ImageAttributes imageAttributes = { image.height(),       image.width(),
+                                                        image.step(),         image.encoding()->str(),
+                                                        image.is_bigendian(), image.uuid_cameraintrinsics()->str() };
   writeImageAttributes(id, imageAttributes);
 
   const uint8_t* arrayStartPtr = image.data()->Data();
@@ -91,11 +92,15 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
 
   // construct flatbuffers image message
 
+  flatbuffers::Offset<flatbuffers::String> camintrinsics_offset =
+      builder.CreateString(imageAttributes.cameraIntrinsicsUuid);
+
   seerep::fb::ImageBuilder imageBuilder(builder);
   imageBuilder.add_height(imageAttributes.height);
   imageBuilder.add_width(imageAttributes.width);
   imageBuilder.add_encoding(encodingStringOffset);
   imageBuilder.add_is_bigendian(imageAttributes.isBigendian);
+  imageBuilder.add_uuid_cameraintrinsics(camintrinsics_offset);
   imageBuilder.add_step(imageAttributes.step);
   if (!withoutData)
   {

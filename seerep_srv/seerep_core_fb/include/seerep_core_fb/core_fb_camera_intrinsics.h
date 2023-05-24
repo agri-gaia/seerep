@@ -42,7 +42,7 @@ public:
    * @param writer the writer object used to send the camera intrinsics matching the query directly via gRPC
    */
   void getData(const seerep::fb::CameraIntrinsicsQuery& query,
-               grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::CameraIntrinsics>>* const writer);
+               flatbuffers::grpc::Message<seerep::fb::CameraIntrinsics>* const response);
 
   /**
    * @brief Add new camera intrinsics to an hdf5 file

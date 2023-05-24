@@ -138,7 +138,8 @@ void createLabelsGeneral(seerep::pb::Image& image)
  * @return seerep:Image object
  * */
 seerep::pb::Image createImageMessage(const unsigned int imageHeight, const unsigned imageWidth,
-                                     const std::string& projectUUID, const std::string& messageUUID)
+                                     const std::string& projectUUID, const std::string& messageUUID,
+                                     const std::string& cameraintrinsicsUUID)
 {
   std::string encoding = "rgb8";
 
@@ -153,6 +154,7 @@ seerep::pb::Image createImageMessage(const unsigned int imageHeight, const unsig
   imgMsg.set_is_bigendian(true);
   imgMsg.set_step(3 * imageHeight);
   imgMsg.set_row_step(0);
+  imgMsg.set_uuid_camera_intrinsics(cameraintrinsicsUUID);
 
   createLabelsGeneral(imgMsg);
   createBB2DLabeled(imgMsg);
@@ -173,6 +175,7 @@ protected:
 
   static boost::uuids::uuid projectUUID;
   static boost::uuids::uuid messageUUID;
+  static boost::uuids::uuid cameraintrinsicsUUID;
   static std::string projectName;
 
   static seerep::pb::Image writeImage;
@@ -188,6 +191,7 @@ protected:
     projectName = "testProject";
     projectUUID = boost::uuids::random_generator()();
     messageUUID = boost::uuids::random_generator()();
+    cameraintrinsicsUUID = boost::uuids::random_generator()();
 
     hdf5FileMutex = std::make_shared<std::mutex>();
     hdf5FileName = boost::lexical_cast<std::string>(projectUUID) + ".h5";
@@ -200,7 +204,8 @@ protected:
     }
 
     writeImage = createImageMessage(256, 256, boost::lexical_cast<std::string>(projectUUID),
-                                    boost::lexical_cast<std::string>(messageUUID));
+                                    boost::lexical_cast<std::string>(messageUUID),
+                                    boost::lexical_cast<std::string>(cameraintrinsicsUUID));
 
     imageIO->writeImage(boost::lexical_cast<std::string>(messageUUID), writeImage);
 
@@ -229,6 +234,7 @@ std::string pbWriteLoadTest::hdf5FileName;
 
 boost::uuids::uuid pbWriteLoadTest::projectUUID;
 boost::uuids::uuid pbWriteLoadTest::messageUUID;
+boost::uuids::uuid pbWriteLoadTest::cameraintrinsicsUUID;
 std::string pbWriteLoadTest::projectName;
 
 std::shared_ptr<seerep_hdf5_pb::Hdf5PbImage> pbWriteLoadTest::imageIO;
@@ -263,6 +269,7 @@ TEST_F(pbWriteLoadTest, testImageBaseFields)
   EXPECT_EQ(readImage.is_bigendian(), writeImage.is_bigendian());
   EXPECT_EQ(readImage.step(), writeImage.step());
   EXPECT_EQ(readImage.row_step(), writeImage.row_step());
+  EXPECT_EQ(readImage.uuid_camera_intrinsics(), writeImage.uuid_camera_intrinsics());
 }
 
 /**

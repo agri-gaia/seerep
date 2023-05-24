@@ -175,6 +175,19 @@ Core::getCameraIntrinsics(const seerep_core_msgs::camera_intrinsics_query& ci_qu
   }
 }
 
+bool Core::checkCameraIntrinsicsExists(const seerep_core_msgs::camera_intrinsics_query& ci_query)
+{
+  try
+  {
+    auto project = findProject(ci_query.uuidProject);
+    return project->second->checkCameraIntrinsicsExists(ci_query.uuidCameraIntrinsics);
+  }
+  catch (const std::runtime_error& e)
+  {
+    return false;
+  }
+}
+
 std::optional<geometry_msgs::TransformStamped> Core::getTF(const seerep_core_msgs::QueryTf& transformQuery)
 {
   try

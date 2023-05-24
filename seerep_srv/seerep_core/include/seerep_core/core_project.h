@@ -154,6 +154,15 @@ public:
    */
   std::optional<seerep_core_msgs::camera_intrinsics> getCameraIntrinsics(boost::uuids::uuid camIntrinsicsUuid);
 
+  /**
+   * @brief Check if there exists a camera intrinsics against the provided uuid
+   *
+   * @param camIntrinsicsUuid UUID of Camera Intrinsics
+   * @return true If Camera Intrinsics Exists
+   * @return false If Camera Intrinsics Exists
+   */
+  bool checkCameraIntrinsicsExists(boost::uuids::uuid camIntrinsicsUuid);
+
   std::vector<std::string> getFrames();
 
   /**

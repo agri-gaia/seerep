@@ -86,6 +86,8 @@ void Hdf5CoreImage::writeImageAttributes(const std::string& id, const ImageAttri
     writeAttributeToHdf5<std::string>(*dataSetPtr, seerep_hdf5_core::Hdf5CoreImage::ENCODING, attributes.encoding);
     writeAttributeToHdf5<bool>(*dataSetPtr, seerep_hdf5_core::Hdf5CoreImage::IS_BIGENDIAN, attributes.isBigendian);
     writeAttributeToHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::STEP, attributes.step);
+    writeAttributeToHdf5<std::string>(*dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::CAMERA_INTRINSICS_UUID,
+                                      attributes.cameraIntrinsicsUuid);
   }
 }
 
@@ -108,6 +110,8 @@ ImageAttributes Hdf5CoreImage::readImageAttributes(const std::string& id)
     attributes.isBigendian =
         readAttributeFromHdf5<bool>(id, *dataSetPtr, seerep_hdf5_core::Hdf5CoreImage::IS_BIGENDIAN);
     attributes.step = readAttributeFromHdf5<uint32_t>(id, *dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::STEP);
+    attributes.cameraIntrinsicsUuid =
+        readAttributeFromHdf5<std::string>(id, *dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::CAMERA_INTRINSICS_UUID);
   }
   return attributes;
 }

@@ -104,8 +104,25 @@ public:
    */
   void addCameraIntrinsics(const seerep_core_msgs::camera_intrinsics& ci, const boost::uuids::uuid& projectuuid);
 
+  /**
+   * @brief Get the Camera Intrinsics object
+   *
+   * @param ci_query Camera Intrinsics query which has the Camera Intrinsics and Project UUIDs against which Camera
+   * Intrinsics are searched for
+   * @return std::optional<seerep_core_msgs::camera_intrinsics> Option Camera Intrinsics object
+   */
   std::optional<seerep_core_msgs::camera_intrinsics>
   getCameraIntrinsics(const seerep_core_msgs::camera_intrinsics_query& ci_query);
+
+  /**
+   * @brief Check if Camera Intrinsics exist for the given project and camera intrinsics UUID
+   *
+   * @param ci_query Camera Intrinsics query which has the Camera Intrinsics and Project UUIDs against which Camera
+   * Intrinsics are searched for
+   * @return true Camera Intrinsics exist
+   * @return false Camera Intrinsics do not exist
+   */
+  bool checkCameraIntrinsicsExists(const seerep_core_msgs::camera_intrinsics_query& ci_query);
 
   /**
    * @brief creates a new project / HDF5 file with the given project information

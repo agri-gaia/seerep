@@ -23,6 +23,8 @@ set(MY_PROTO_FILES
     protos/boundingbox2d_labeled_with_category.proto
     protos/boundingbox2d_stamped.proto
     protos/boundingbox2d.proto
+    protos/camera_intrinsics.proto
+    protos/camera_intrinsics_query.proto
     protos/frame_infos.proto
     protos/frame_query.proto
     protos/geodetic_coordinates.proto
@@ -47,6 +49,7 @@ set(MY_PROTO_FILES
     protos/quaternion_stamped.proto
     protos/quaternion.proto
     protos/query.proto
+    protos/region_of_interest.proto
     protos/server_response.proto
     protos/time_interval.proto
     protos/timestamp.proto

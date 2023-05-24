@@ -33,10 +33,9 @@ public:
    * @param writer object used to stream the camera intrinsics
    * @return grpc::Status status of the request. holds success status
    */
-  grpc::Status
-  GetCameraIntrinsics(grpc::ServerContext* context,
-                      const flatbuffers::grpc::Message<seerep::fb::CameraIntrinsicsQuery>* request,
-                      grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::CameraIntrinsics>>* writer) override;
+  grpc::Status GetCameraIntrinsics(grpc::ServerContext* context,
+                                   const flatbuffers::grpc::Message<seerep::fb::CameraIntrinsicsQuery>* request,
+                                   flatbuffers::grpc::Message<seerep::fb::CameraIntrinsics>*) override;
   /**
    * @brief Save the Camera Intrinsics object
    *

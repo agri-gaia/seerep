@@ -45,6 +45,7 @@ add_library(
   src/core_pb_tf.cpp
   src/core_pb_pointcloud.cpp
   src/core_pb_image.cpp
+  src/core_pb_camera_intrinsics.cpp
 )
 
 target_link_libraries(
@@ -64,6 +65,7 @@ set(INSTALL_HEADERS
     include/seerep_core_pb/core_pb_tf.h
     include/seerep_core_pb/core_pb_pointcloud.h
     include/seerep_core_pb/core_pb_image.h
+    include/seerep_core_pb/core_pb_camera_intrinsics.h
 )
 
 set_target_properties(

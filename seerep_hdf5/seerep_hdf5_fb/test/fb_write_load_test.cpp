@@ -155,17 +155,20 @@ createLabelsGeneral(flatbuffers::FlatBufferBuilder& fbb)
 
 const seerep::fb::Image* createImageMessage(flatbuffers::FlatBufferBuilder& fbb, const unsigned int imageHeight,
                                             const unsigned imageWidth, const std::string& projectUUID,
-                                            const std::string& messageUUID)
+                                            const std::string& messageUUID, const std::string& camintrinsicsUUID)
 {
   auto encodingOffset = fbb.CreateString("rgb8");
+  auto camintrinsicsUUIDOffset = fbb.CreateString(camintrinsicsUUID);
+
   auto headerOffset = createHeader(fbb, "camera", projectUUID, messageUUID);
   auto imageOffset = createImageData(fbb, 256, 256);
 
   auto generalLabelsOffset = createLabelsGeneral(fbb);
   auto bB2DLabeledOffset = createBB2DLabeled(fbb);
 
-  auto imgMsgOffset = seerep::fb::CreateImage(fbb, headerOffset, imageHeight, imageWidth, encodingOffset, true,
-                                              3 * imageHeight, imageOffset, generalLabelsOffset, bB2DLabeledOffset);
+  auto imgMsgOffset =
+      seerep::fb::CreateImage(fbb, headerOffset, imageHeight, imageWidth, encodingOffset, true, 3 * imageHeight,
+                              imageOffset, generalLabelsOffset, bB2DLabeledOffset, camintrinsicsUUIDOffset);
   fbb.Finish(imgMsgOffset);
   uint8_t* buf = fbb.GetBufferPointer();
   return flatbuffers::GetRoot<seerep::fb::Image>(buf);
@@ -181,6 +184,7 @@ protected:
 
   static boost::uuids::uuid projectUUID;
   static boost::uuids::uuid messageUUID;
+  static boost::uuids::uuid cameraintrinsicsUUID;
   static std::string projectName;
 
   static const seerep::fb::Image* writeImage;
@@ -195,6 +199,7 @@ protected:
     projectName = "testProject";
     projectUUID = boost::uuids::random_generator()();
     messageUUID = boost::uuids::random_generator()();
+    cameraintrinsicsUUID = boost::uuids::random_generator()();
 
     hdf5FileMutex = std::make_shared<std::mutex>();
     hdf5FileName = boost::lexical_cast<std::string>(projectUUID) + ".h5";
@@ -209,7 +214,8 @@ protected:
     }
 
     writeImage = createImageMessage(fbb, 256, 256, boost::lexical_cast<std::string>(projectUUID),
-                                    boost::lexical_cast<std::string>(messageUUID));
+                                    boost::lexical_cast<std::string>(messageUUID),
+                                    boost::lexical_cast<std::string>(cameraintrinsicsUUID));
     if (writeImage == nullptr)
     {
       GTEST_FATAL_FAILURE_("Error: No image data to write into HDF5 file");
@@ -238,6 +244,7 @@ std::string fbWriteLoadTest::hdf5FileName;
 
 boost::uuids::uuid fbWriteLoadTest::projectUUID;
 boost::uuids::uuid fbWriteLoadTest::messageUUID;
+boost::uuids::uuid fbWriteLoadTest::cameraintrinsicsUUID;
 std::string fbWriteLoadTest::projectName;
 
 flatbuffers::FlatBufferBuilder fbWriteLoadTest::fbb;
@@ -262,6 +269,7 @@ TEST_F(fbWriteLoadTest, testImageBaseFields)
   EXPECT_STREQ(readImage->encoding()->c_str(), writeImage->encoding()->c_str());
   EXPECT_EQ(readImage->is_bigendian(), writeImage->is_bigendian());
   EXPECT_EQ(readImage->step(), writeImage->step());
+  EXPECT_EQ(readImage->uuid_cameraintrinsics()->str(), writeImage->uuid_cameraintrinsics()->str());
 }
 
 TEST_F(fbWriteLoadTest, testImageData)

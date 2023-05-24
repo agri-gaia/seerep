@@ -43,12 +43,23 @@ boost::uuids::uuid CoreFbImage::addData(const seerep::fb::Image& img)
 {
   seerep_core_msgs::DatasetIndexable dataForIndices = CoreFbConversion::fromFb(img);
 
-  auto hdf5io = CoreFbGeneral::getHdf5(dataForIndices.header.uuidProject, m_seerepCore, m_hdf5IoMap);
-  hdf5io->writeImage(boost::lexical_cast<std::string>(dataForIndices.header.uuidData), img);
+  seerep_core_msgs::camera_intrinsics_query camintrinsics_query;
+  camintrinsics_query.uuidCameraIntrinsics = boost::lexical_cast<boost::uuids::uuid>(img.uuid_cameraintrinsics());
+  camintrinsics_query.uuidProject = boost::lexical_cast<boost::uuids::uuid>(img.header()->uuid_project());
 
-  m_seerepCore->addDataset(dataForIndices);
+  if (m_seerepCore->checkCameraIntrinsicsExists(camintrinsics_query))
+  {
+    auto hdf5io = CoreFbGeneral::getHdf5(dataForIndices.header.uuidProject, m_seerepCore, m_hdf5IoMap);
+    hdf5io->writeImage(boost::lexical_cast<std::string>(dataForIndices.header.uuidData), img);
 
-  return dataForIndices.header.uuidData;
+    m_seerepCore->addDataset(dataForIndices);
+
+    return dataForIndices.header.uuidData;
+  }
+  else
+  {
+    throw std::invalid_argument("Invalid uuid for camera intrinsics or project recieved");
+  }
 }
 
 void CoreFbImage::addBoundingBoxesLabeled(const seerep::fb::BoundingBoxes2DLabeledStamped& boundingBoxes2dlabeled)

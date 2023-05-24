@@ -59,6 +59,7 @@ buf = builder.Output()
 
 ret = stub.GetCameraIntrinsics(bytes(buf))
 
-for ci in ret:
-    ci_fb = CameraIntrinsics.CameraIntrinsics.GetRootAs(ci)
-    print(ci_fb.DistortionModel())
+retrieved_ci = CameraIntrinsics.CameraIntrinsics.GetRootAs(ret)
+
+# printing the uuid of the retrieved camera intrinsics
+print(retrieved_ci.Header().UuidMsgs().decode('utf-8'))

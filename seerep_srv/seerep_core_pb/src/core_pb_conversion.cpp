@@ -128,6 +128,165 @@ seerep_core_msgs::QueryTf CorePbConversion::fromPb(const seerep::pb::TransformSt
   return queryTf;
 }
 
+seerep_core_msgs::region_of_interest CorePbConversion::fromPb(const seerep::pb::RegionOfInterest& roi)
+{
+  seerep_core_msgs::region_of_interest roi_core;
+  roi_core.height = roi.height();
+  roi_core.width = roi.width();
+  roi_core.x_offset = roi.x_offset();
+  roi_core.y_offset = roi.y_offset();
+  roi_core.do_rectify = roi.do_rectify();
+
+  return roi_core;
+}
+
+seerep::pb::RegionOfInterest CorePbConversion::toPb(const seerep_core_msgs::region_of_interest& roi_core)
+{
+  seerep::pb::RegionOfInterest roi;
+  roi.set_height(roi_core.height);
+  roi.set_width(roi_core.width);
+  roi.set_x_offset(roi_core.x_offset);
+  roi.set_y_offset(roi_core.y_offset);
+  roi.set_do_rectify(roi_core.do_rectify);
+
+  return roi;
+}
+
+seerep_core_msgs::Timestamp CorePbConversion::fromPb(const seerep::pb::Timestamp& timestamp)
+{
+  seerep_core_msgs::Timestamp ts_core;
+  ts_core.nanos = timestamp.nanos();
+  ts_core.seconds = timestamp.seconds();
+
+  return ts_core;
+}
+
+seerep::pb::Timestamp CorePbConversion::toPb(const seerep_core_msgs::Timestamp& timestamp)
+{
+  seerep::pb::Timestamp ts_pb;
+  ts_pb.set_nanos(timestamp.nanos);
+  ts_pb.set_seconds(timestamp.seconds);
+
+  return ts_pb;
+}
+
+seerep_core_msgs::Header CorePbConversion::fromPb(const seerep::pb::Header& header)
+{
+  seerep_core_msgs::Header header_core;
+  header_core.frameId = header.frame_id();
+  header_core.sequence = header.seq();
+  header_core.timestamp = CorePbConversion::fromPb(header.stamp());
+  header_core.uuidData = boost::lexical_cast<boost::uuids::uuid>(header.uuid_msgs());
+  header_core.uuidProject = boost::lexical_cast<boost::uuids::uuid>(header.uuid_project());
+
+  return header_core;
+}
+
+seerep::pb::Header CorePbConversion::toPb(const seerep_core_msgs::Header& header)
+{
+  seerep::pb::Header header_pb;
+
+  *header_pb.mutable_frame_id() = header.frameId;
+
+  header_pb.set_seq(header.sequence);
+
+  seerep::pb::Timestamp ts_pb = CorePbConversion::toPb(header.timestamp);
+  *header_pb.mutable_stamp() = ts_pb;
+
+  header_pb.set_uuid_msgs(boost::lexical_cast<std::string>(header.uuidData));
+  header_pb.set_uuid_project(boost::lexical_cast<std::string>(header.uuidProject));
+
+  return header_pb;
+}
+
+seerep_core_msgs::camera_intrinsics_query
+CorePbConversion::fromPb(const seerep::pb::CameraIntrinsicsQuery& camintrinsics_query)
+{
+  seerep_core_msgs::camera_intrinsics_query camintrinsics_query_core;
+  camintrinsics_query_core.uuidCameraIntrinsics =
+      boost::lexical_cast<boost::uuids::uuid>(camintrinsics_query.uuid_camera_intrinsics());
+  camintrinsics_query_core.uuidProject = boost::lexical_cast<boost::uuids::uuid>(camintrinsics_query.uuid_project());
+
+  return camintrinsics_query_core;
+}
+
+seerep_core_msgs::camera_intrinsics CorePbConversion::fromPb(const seerep::pb::CameraIntrinsics& camintrinsics)
+{
+  seerep_core_msgs::camera_intrinsics camintrinsics_core;
+  camintrinsics_core.binning_x = camintrinsics.binning_x();
+  camintrinsics_core.binning_y = camintrinsics.binning_y();
+
+  for (double d : camintrinsics.distortion())
+  {
+    camintrinsics_core.distortion.push_back(d);
+  }
+
+  camintrinsics_core.distortion_model = camintrinsics.distortion_model();
+  camintrinsics_core.header = CorePbConversion::fromPb(camintrinsics.header());
+  camintrinsics_core.height = camintrinsics.height();
+  camintrinsics_core.width = camintrinsics.width();
+
+  for (double im : camintrinsics.intrinsic_matrix())
+  {
+    camintrinsics_core.intrinsic_matrix.push_back(im);
+  }
+
+  for (double pm : camintrinsics.projection_matrix())
+  {
+    camintrinsics_core.projection_matrix.push_back(pm);
+  }
+
+  for (double rm : camintrinsics.rectification_matrix())
+  {
+    camintrinsics_core.rectification_matrix.push_back(rm);
+  }
+
+  camintrinsics_core.region_of_interest = CorePbConversion::fromPb(camintrinsics.region_of_interest());
+
+  return camintrinsics_core;
+}
+
+seerep::pb::CameraIntrinsics CorePbConversion::toPb(const seerep_core_msgs::camera_intrinsics& camintrinsics)
+{
+  seerep::pb::CameraIntrinsics ci_pb;
+  ci_pb.set_binning_x(camintrinsics.binning_x);
+  ci_pb.set_binning_y(camintrinsics.binning_y);
+
+  for (auto d : camintrinsics.distortion)
+  {
+    ci_pb.add_distortion(d);
+  }
+
+  std::string dm = camintrinsics.distortion_model;
+  ci_pb.set_distortion_model(dm);
+
+  seerep::pb::Header header_pb = CorePbConversion::toPb(camintrinsics.header);
+  *ci_pb.mutable_header() = header_pb;
+
+  ci_pb.set_height(camintrinsics.height);
+  ci_pb.set_width(camintrinsics.width);
+
+  for (auto im : camintrinsics.intrinsic_matrix)
+  {
+    ci_pb.add_intrinsic_matrix(im);
+  }
+
+  for (auto pm : camintrinsics.projection_matrix)
+  {
+    ci_pb.add_projection_matrix(pm);
+  }
+
+  for (auto rm : camintrinsics.rectification_matrix)
+  {
+    ci_pb.add_projection_matrix(rm);
+  }
+
+  seerep::pb::RegionOfInterest roi_pb = CorePbConversion::toPb(camintrinsics.region_of_interest);
+  *ci_pb.mutable_region_of_interest() = roi_pb;
+
+  return ci_pb;
+}
+
 void CorePbConversion::fromPbProject(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
 {
   boost::uuids::string_generator gen;
@@ -239,4 +398,5 @@ void CorePbConversion::fromFbQueryMaxNumData(const seerep::pb::Query& query, see
 {
   queryCore.maxNumData = query.maxnumdata();
 }
+
 }  // namespace seerep_core_pb

@@ -53,4 +53,7 @@ message Image
 
   // (optional) bounding box based labels
   repeated BoundingBox2DLabeledWithCategory labels_bb = 10;
+
+  // camera intrinsics of the camera used to capture the image
+  string uuid_camera_intrinsics = 11;
 }

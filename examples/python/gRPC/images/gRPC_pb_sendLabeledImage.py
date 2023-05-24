@@ -11,6 +11,8 @@ from seerep.pb import boundingbox2d_labeled_pb2 as boundingbox2d_labeled
 from seerep.pb import (
     boundingbox2d_labeled_with_category_pb2 as boundingbox2d_labeled_with_category,
 )
+from seerep.pb import camera_intrinsics_pb2 as cameraintrinsics
+from seerep.pb import camera_intrinsics_service_pb2_grpc as camintrinsics_service
 from seerep.pb import image_pb2 as image
 from seerep.pb import image_service_pb2_grpc as imageService
 from seerep.pb import label_with_instance_pb2 as labelWithInstance
@@ -36,6 +38,7 @@ channel = util.get_gRPC_channel(target="local")
 stub = imageService.ImageServiceStub(channel)
 stubTf = tfService.TfServiceStub(channel)
 stubMeta = metaOperations.MetaOperationsStub(channel)
+stubCI = camintrinsics_service.CameraIntrinsicsServiceStub(channel)
 
 # 2. Get all projects from the server
 response = stubMeta.GetProjects(empty_pb2.Empty())
@@ -53,8 +56,46 @@ if not found:
     projectCreated = stubMeta.CreateProject(creation)
     projectuuid = projectCreated.uuid
 
-
 theTime = int(time.time())
+
+#####
+# A valid camera intrinsics UUID is needed here for succesful storage of Images
+# Add new Camera Intrinsics
+
+ciuuid = str(uuid.uuid4())
+print("Camera Intrinsics will be saved against the uuid: ", ciuuid)
+
+camin = cameraintrinsics.CameraIntrinsics()
+
+camin.header.stamp.seconds = 4
+camin.header.stamp.nanos = 3
+
+camin.header.frame_id = "camintrinsics"
+
+camin.header.uuid_project = projectuuid
+camin.header.uuid_msgs = ciuuid
+
+camin.region_of_interest.x_offset = 2
+camin.region_of_interest.y_offset = 1
+camin.region_of_interest.height = 5
+camin.region_of_interest.width = 4
+camin.region_of_interest.do_rectify = 4
+
+camin.height = 5
+camin.width = 4
+
+camin.distortion_model = "plump_bob"
+
+camin.distortion.extend([3, 4, 5])
+
+camin.intrinsic_matrix.extend([3, 4, 5])
+camin.rectification_matrix.extend([3, 4, 5])
+camin.projection_matrix.extend([3, 4, 5])
+
+camin.binning_x = 6
+camin.binning_y = 7
+
+stubCI.TransferCameraIntrinsics(camin)
 
 # 4. Create ten images
 for n in range(10):
@@ -83,6 +124,8 @@ for n in range(10):
     theImage.width = lim
     theImage.encoding = "rgb8"
     theImage.step = 3 * lim
+    theImage.uuid_camera_intrinsics = ciuuid
+
     # Add image data
     theImage.data = bytes(rgb)
 

@@ -5,17 +5,23 @@
 #include <optional>
 
 // seerep_msgs
+#include <seerep_msgs/camera_intrinsics.pb.h>
+#include <seerep_msgs/camera_intrinsics_query.pb.h>
 #include <seerep_msgs/image.pb.h>
 #include <seerep_msgs/point_cloud_2.pb.h>
 #include <seerep_msgs/query.pb.h>
+#include <seerep_msgs/region_of_interest.pb.h>
 #include <seerep_msgs/transform_stamped.pb.h>
 #include <seerep_msgs/transform_stamped_query.pb.h>
 
 // seerep_core_msgs
+#include <seerep_msgs/camera_intrinsics.h>
+#include <seerep_msgs/camera_intrinsics_query.h>
 #include <seerep_msgs/dataset_indexable.h>
 #include <seerep_msgs/query.h>
 #include <seerep_msgs/query_result.h>
 #include <seerep_msgs/query_tf.h>
+#include <seerep_msgs/region_of_interest.h>
 
 // ros
 #include <geometry_msgs/TransformStamped.h>
@@ -55,6 +61,20 @@ public:
    * @return the tf query message in seerep core format
    */
   static seerep_core_msgs::QueryTf fromPb(const seerep::pb::TransformStampedQuery& query);
+
+  static seerep_core_msgs::region_of_interest fromPb(const seerep::pb::RegionOfInterest& roi);
+  static seerep::pb::RegionOfInterest toPb(const seerep_core_msgs::region_of_interest& roi);
+
+  static seerep_core_msgs::Header fromPb(const seerep::pb::Header& header);
+  static seerep::pb::Header toPb(const seerep_core_msgs::Header& header);
+
+  static seerep_core_msgs::Timestamp fromPb(const seerep::pb::Timestamp& timestamp);
+  static seerep::pb::Timestamp toPb(const seerep_core_msgs::Timestamp& timestamp);
+
+  static seerep_core_msgs::camera_intrinsics fromPb(const seerep::pb::CameraIntrinsics& camintrinsics);
+  static seerep::pb::CameraIntrinsics toPb(const seerep_core_msgs::camera_intrinsics& camintrinsics);
+
+  static seerep_core_msgs::camera_intrinsics_query fromPb(const seerep::pb::CameraIntrinsicsQuery& camintrinsics_query);
 
 private:
   /**
