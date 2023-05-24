@@ -6,9 +6,8 @@ Two custom commands are added to the packaging process:
    the import paths are changed to `seerep.pb` and `seerep.fbs`.
 2. ChangeUtilPath - Changes the import path for the gRPC util scripts from `examples/python/gRPC/uitl` to `seerep/util`.
 
-Note: The flatc compiler can not be installted via pip (https://github.com/google/flatbuffers/issues/7793) during the
-build process and therefore has to be installed manually. Instructions for that can be found
-here: https://flatbuffers.dev/flatbuffers_guide_building.html
+Note: The flatc and protoc compilers must be installed on the system running the packaging process. They are NOT
+      installed automatically.
 """
 
 import os
@@ -48,13 +47,12 @@ class GeneratePythonFiles(Command):
         Path(pb_dir / "__init__.py").touch()
 
         protoc_call = [
-            "python3",
-            "-m",
-            "grpc_tools.protoc",
+            "protoc",
             f"--proto_path={self.proto_msgs_path}",
             f"--proto_path={self.proto_interface_path}",
             f"--python_out={pb_dir}",
-            f"--grpc_python_out={pb_dir}",
+            f"--grpc_out={pb_dir}",
+            f"--plugin=protoc-gen-grpc={shutil.which('grpc_python_plugin')}",
             *glob(f"{self.proto_msgs_path}/*.proto"),
             *glob(f"{self.proto_interface_path}/*.proto"),
         ]
