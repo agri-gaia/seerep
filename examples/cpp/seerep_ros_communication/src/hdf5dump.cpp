@@ -101,7 +101,7 @@ void DumpSensorMsgs::dump(const tf2_msgs::TFMessage::ConstPtr& msg) const
   {
     try
     {
-      m_ioTf->writeTransformStamped(seerep_ros_conversions_pb::toProto(transform));
+      m_ioTf->writeTransformStamped(seerep_ros_conversions_pb::toProto(transform, false));
     }
     catch (const std::exception& e)
     {

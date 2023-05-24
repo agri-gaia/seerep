@@ -64,7 +64,8 @@ public:
    * @param geodetic coordinates for the location of the site of data recording
    */
   CoreProject(const boost::uuids::uuid& uuid, const std::string path, const std::string projectname,
-              const std::string mapFrameId, const seerep_core_msgs::GeodeticCoordinates geodeticCoords);
+              const std::string mapFrameId, const seerep_core_msgs::GeodeticCoordinates geodeticCoords,
+              const std::string version);
   ~CoreProject();
 
   /**
@@ -77,6 +78,11 @@ public:
    * @return the map frame id
    */
   std::string getFrameId();
+  /**
+   * @brief Returns the version of seerep used to create the project
+   * @return seerep version string
+   */
+  const std::string getVersion();
 
   /**
    * @brief Returns a vector of UUIDs of datasets that match the query and the project UUID
@@ -195,6 +201,8 @@ private:
   std::string m_frameId;
   /** @brief the geodetic coordinates of the location where the data was collected in this project */
   std::optional<seerep_core_msgs::GeodeticCoordinates> m_geodeticCoordinates;
+  /** @brief the version of seerep used for this project */
+  std::string m_version;
 
   /** @brief the write mutex for the HDF5 file of this project */
   std::shared_ptr<std::mutex> m_write_mtx;

@@ -208,7 +208,8 @@ geometry_msgs::Transform toROS(const seerep::pb::Transform& transform);
  * @param optional projectuuid std::string
  * @return Protobuf TransformStamped message
  */
-seerep::pb::TransformStamped toProto(const geometry_msgs::TransformStamped& transform, std::string projectuuid = "");
+seerep::pb::TransformStamped toProto(const geometry_msgs::TransformStamped& transform, const bool isStatic,
+                                     std::string projectuuid = "");
 
 /**
  * @brief Converts a Protobuf TransformStamped message to the corresponding

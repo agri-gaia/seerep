@@ -40,7 +40,7 @@
             "name": "seerep server",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/devel/bin/seerep-server_server",
+            "program": "${workspaceFolder}/devel/bin/seerep_server_server",
             "args": ["-c/seerep/src/seerep.cfg"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/seerep-data",

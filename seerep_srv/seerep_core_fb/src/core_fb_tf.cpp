@@ -22,7 +22,7 @@ void CoreFbTf::getData(const seerep::fb::TransformStampedQuery& query,
 
   if (result)
   {
-    *response = seerep_ros_conversions_fb::toFlat(result.value(), query.header()->uuid_project()->str());
+    *response = seerep_ros_conversions_fb::toFlat(result.value(), query.header()->uuid_project()->str(), false);
   }
   else
   {

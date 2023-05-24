@@ -426,7 +426,7 @@ public:
     original_t_stamped = createTransformStamped();
 
     flatbuffers::grpc::Message<seerep::fb::TransformStamped> fb_transform_stamped;
-    fb_transform_stamped = seerep_ros_conversions_fb::toFlat(original_t_stamped, p_uuid);
+    fb_transform_stamped = seerep_ros_conversions_fb::toFlat(original_t_stamped, p_uuid, false);
 
     converted_t_stamped = seerep_ros_conversions_fb::toROS(*fb_transform_stamped.GetRoot());
     // Transform End

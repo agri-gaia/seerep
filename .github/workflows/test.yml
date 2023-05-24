@@ -1,46 +1,48 @@
-name: Integration Tests
+name: Tests
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
-  Build-and-run-tests:
+  hdf5-interface:
+    name: HDF5 Interface
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/agri-gaia/seerep_base:latest
-      options: --user root
-
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
       with:
         path: src
-
-    - name: Build the ros workspace
+    - name: Build seerep_hdf5 packages
       run: |
         source /opt/ros/noetic/setup.bash
-        catkin build --workspace $GITHUB_WORKSPACE/
+        catkin build seerep_hdf5_* --workspace $GITHUB_WORKSPACE/
+        source $GITHUB_WORKSPACE/devel/setup.bash
+      shell: bash
+    - name: Run flatbuffer tests
+      run: catkin test seerep_hdf5_fb
+      shell: bash
+    - name: Run protobuf tests
+      run: catkin test seerep_hdf5_pb
       shell: bash
 
-    - name: Test FlatBuffers write/load of image
+  ros-converions:
+    name: ROS Conversions
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/agri-gaia/seerep_base:latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        path: src
+    - name: Build seerep_ros packages
       run: |
         source /opt/ros/noetic/setup.bash
+        catkin build seerep_ros_* --workspace $GITHUB_WORKSPACE/
         source $GITHUB_WORKSPACE/devel/setup.bash
-        $GITHUB_WORKSPACE/devel/bin/flatbuffer_write_load_test
       shell: bash
-
-    - name: Test Protobuf write/load of image
-      run: |
-        source /opt/ros/noetic/setup.bash
-        source $GITHUB_WORKSPACE/devel/setup.bash
-        $GITHUB_WORKSPACE/devel/bin/protobuf_write_load_test
-      shell: bash
-
-    - name: Test Conversion of ROS Messages to Flatbuffer
-      run: |
-        source /opt/ros/noetic/setup.bash
-        source $GITHUB_WORKSPACE/devel/setup.bash
-        catkin test seerep_ros_conversions_fb
+    - name: Test flatbuffer conversions
+      run: catkin test seerep_ros_conversions_fb
       shell: bash

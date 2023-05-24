@@ -110,7 +110,7 @@ void Core::createProject(const seerep_core_msgs::ProjectInfo& projectInfo)
   std::string path = m_dataFolder + "/" + filename + ".h5";
 
   auto project = std::make_shared<CoreProject>(projectInfo.uuid, path, projectInfo.name, projectInfo.frameId,
-                                               projectInfo.geodetCoords);
+                                               projectInfo.geodetCoords, projectInfo.version);
   m_projects.insert(std::make_pair(projectInfo.uuid, project));
 }
 
@@ -123,6 +123,7 @@ std::vector<seerep_core_msgs::ProjectInfo> Core::getProjects()
     projectinfo.name = it->second->getName();
     projectinfo.uuid = it->first;
     projectinfo.frameId = it->second->getFrameId();
+    projectinfo.version = it->second->getVersion();
     projectinfo.geodetCoords = it->second->getGeodeticCoordinates();
 
     projectInfos.push_back(projectinfo);
