@@ -5,7 +5,8 @@ namespace seerep_grpc_ros
 RosbagDumper::RosbagDumper(std::string bagPath, std::string hdf5FilePath, std::string project_frame_id,
                            std::string project_name, std::string topicImage, std::string topicCameraIntrinsics,
                            std::string topicDetection, std::string detectionCategory, std::string topicTf,
-                           std::string topicTfStatic, std::string topicGeoAnchor, float distanceCameraGround)
+                           std::string topicTfStatic, std::string topicGeoAnchor, float distanceCameraGround,
+                           bool storeImages)
   : hdf5FilePath(hdf5FilePath)
   , project_frame_id(project_frame_id)
   , project_name(project_name)
@@ -29,14 +30,18 @@ RosbagDumper::RosbagDumper(std::string bagPath, std::string hdf5FilePath, std::s
 
   m_ioCoreGeneral->writeProjectname(std::filesystem::path(bagPath).filename());
   m_ioCoreGeneral->writeProjectFrameId("map");
+  m_ioCoreGeneral->writeVersion("0.0.0");
 
   bag.open(bagPath);
 
   getGeoAnchor();
   getCameraIntrinsic();
   iterateAndDumpTf();
-  iterateAndDumpImages();
-  iterateAndDumpDetections();
+  if (storeImages)
+  {
+    iterateAndDumpImages();
+  }
+  iterateAndDumpDetections(storeImages);
 }
 
 RosbagDumper::~RosbagDumper()
@@ -98,7 +103,7 @@ void RosbagDumper::iterateAndDumpImages()
     }
   }
 }
-void RosbagDumper::iterateAndDumpDetections()
+void RosbagDumper::iterateAndDumpDetections(bool storeImages)
 {
   for (rosbag::MessageInstance const m : rosbag::View(bag, rosbag::TopicQuery(topicDetection)))
   {
@@ -107,16 +112,24 @@ void RosbagDumper::iterateAndDumpDetections()
     {
       uint64_t time = (uint64_t)msg->header.stamp.sec << 32 | msg->header.stamp.nsec;
       std::string uuidstring;
-      {  // scope of lock
-        const std::scoped_lock lock(timeUuidMapMutex_);
-        auto result = timeUuidMap_.find(time);
-        if (result != timeUuidMap_.end())
-        {
-          uuidstring = result->second;
+      if (storeImages)
+      {
+        {  // scope of lock
+          const std::scoped_lock lock(timeUuidMapMutex_);
+          auto result = timeUuidMap_.find(time);
+          if (result != timeUuidMap_.end())
+          {
+            uuidstring = result->second;
+          }
         }
+        ROS_INFO_STREAM("storing detections: " << uuidstring << " time: " << msg->header.stamp.sec << " / "
+                                               << msg->header.stamp.nsec);
       }
-      ROS_INFO_STREAM("storing detections: " << uuidstring << " time: " << msg->header.stamp.sec << " / "
-                                             << msg->header.stamp.nsec);
+      else
+      {
+        // generate a new uuid if image are not stored
+        uuidstring = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+      }
 
       if (uuidstring.empty())
       {
@@ -154,11 +167,14 @@ void RosbagDumper::iterateAndDumpDetections()
                                     .GetRoot());
         }
 
-        m_ioImage->writeImageBoundingBox2DLabeled(
-            uuidstring, seerep_ros_conversions_fb::toFlat(*msg, projectuuiddummy, detectionCategory, std::string(""),
-                                                          detections, instanceUUIDs)
-                            .GetRoot()
-                            ->labels_bb());
+        if (storeImages)
+        {
+          m_ioImage->writeImageBoundingBox2DLabeled(
+              uuidstring, seerep_ros_conversions_fb::toFlat(*msg, projectuuiddummy, detectionCategory, std::string(""),
+                                                            detections, instanceUUIDs)
+                              .GetRoot()
+                              ->labels_bb());
+        }
       }
     }
     else
@@ -301,6 +317,7 @@ int main(int argc, char** argv)
   std::string bagPath, hdf5FilePath, project_frame_id, project_name, topic_image, topic_camera_intrinsics,
       topic_detection, detection_category, topic_tf, topic_tf_static, topic_geo_anchor;
   float distance_camera_ground;
+  bool store_images;
 
   hdf5FilePath = getHDF5FilePath(private_nh);
 
@@ -311,7 +328,8 @@ int main(int argc, char** argv)
       private_nh.getParam("detection_category", detection_category) && private_nh.getParam("topic_tf", topic_tf) &&
       private_nh.getParam("topic_tf_static", topic_tf_static) &&
       private_nh.getParam("topic_geo_anchor", topic_geo_anchor) &&
-      private_nh.param<float>("distance_camera_ground", distance_camera_ground, 0.0))
+      private_nh.param<float>("distance_camera_ground", distance_camera_ground, 0.0) &&
+      private_nh.param<bool>("store_images", store_images, true))
   {
     ROS_INFO_STREAM("hdf5FilePath: " << hdf5FilePath);
     ROS_INFO_STREAM("bagPath: " << bagPath);
@@ -325,10 +343,11 @@ int main(int argc, char** argv)
     ROS_INFO_STREAM("topic_tf_static: " << topic_tf_static);
     ROS_INFO_STREAM("topic_geo_anchor: " << topic_geo_anchor);
     ROS_INFO_STREAM("distance_camera_ground: " << distance_camera_ground);
+    ROS_INFO_STREAM("store_images: " << store_images);
 
     seerep_grpc_ros::RosbagDumper rosbagDumper(bagPath, hdf5FilePath, project_frame_id, project_name, topic_image,
                                                topic_camera_intrinsics, topic_detection, detection_category, topic_tf,
-                                               topic_tf_static, topic_geo_anchor, distance_camera_ground);
+                                               topic_tf_static, topic_geo_anchor, distance_camera_ground, store_images);
   }
   else
   {

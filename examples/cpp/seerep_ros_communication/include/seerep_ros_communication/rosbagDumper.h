@@ -46,14 +46,14 @@ public:
   RosbagDumper(std::string bagPath, std::string hdf5FilePath, std::string project_frame_id, std::string project_name,
                std::string topicImage, std::string topicCameraIntrinsics, std::string topicDetection,
                std::string detectionCategory, std::string topicTf, std::string topicTfStatic,
-               std::string topicGeoAnchor, float distanceCameraGround);
+               std::string topicGeoAnchor, float distanceCameraGround, bool storeImages = true);
   ~RosbagDumper();
 
 private:
   void getGeoAnchor();
   void getCameraIntrinsic();
   void iterateAndDumpImages();
-  void iterateAndDumpDetections();
+  void iterateAndDumpDetections(bool storeImages);
   void iterateAndDumpTf();
   void iterateAndDumpTf(const std::string topicTf, const bool isStatic);
 

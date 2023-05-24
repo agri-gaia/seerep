@@ -12,6 +12,7 @@
     <arg name="topic_tf_static" default="/tf_static"/>
     <arg name="topic_geo_anchor" default="/anchor"/>
     <arg name="distance_camera_ground" default="0.5"/>
+    <arg name="store_images" default="false"/>
 
     <node name="seerep_ros_communication_rosbagDumper" pkg="seerep_ros_communication" type="seerep_ros_communication_rosbagDumper" output="screen">
         <rosparam param="bag_path" subst_value="True">$(arg bag_path)</rosparam>
@@ -26,5 +27,6 @@
         <rosparam param="topic_tf_static" subst_value="True">$(arg topic_tf_static)</rosparam>
         <rosparam param="topic_geo_anchor" subst_value="True">$(arg topic_geo_anchor)</rosparam>
         <rosparam param="distance_camera_ground" subst_value="True">$(arg distance_camera_ground)</rosparam>
+        <rosparam param="store_images" subst_value="True">$(arg store_images)</rosparam>
     </node>
 </launch>
