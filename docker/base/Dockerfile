@@ -91,22 +91,21 @@ RUN git clone --depth 1 -b v2.4.0 $HDF5_REL.git \
 ####################################################
 #Install flatbuffer
 ####################################################
-RUN wget https://github.com/google/flatbuffers/archive/refs/tags/v2.0.0.tar.gz \
-        && tar -xf v2.0.0.tar.gz \
-        && mkdir flatbuffers-2.0.0/build \
-        && cd flatbuffers-2.0.0/build \
+RUN git clone -b v22.10.25 https://github.com/google/flatbuffers.git \
+        && mkdir -p flatbuffers/build \
+        && cd flatbuffers/build \
         && cmake .. \
-        && make -j"$(nproc)" -C /flatbuffers-2.0.0/build \
-        && make install -C /flatbuffers-2.0.0/build \
+        && make -j"$(nproc)" \
+        && make install\
         && cd ../.. \
-        && rm -rf flatbuffers-2.0.0 v2.0.0.tar.gz
+        && rm -rf flatbuffers
 
 ####################################################
 #Install gRPC
 ####################################################
 
 #Clone the grpc repo
-RUN git clone --recurse-submodules --depth 1 -b v1.35.0 https://github.com/grpc/grpc \
+RUN git clone --recurse-submodules --depth 1 -b v1.52.0 https://github.com/grpc/grpc \
         && mkdir -p grpc/cmake/build \
         && cd grpc/cmake/build \
         && cmake -DgRPC_INSTALL=ON -DgRPC_BUILD_TESTS=OFF ../.. \
