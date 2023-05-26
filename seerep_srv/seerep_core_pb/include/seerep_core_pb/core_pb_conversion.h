@@ -157,14 +157,6 @@ private:
    * @param queryCore query message in seerep core format
    */
   static void fromFbQueryMaxNumData(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore);
-
-  /**
-   * @brief Convert Pb datatype to a vector containing core message datatypes
-   *
-   * @param datatype protobuf datatype
-   * @param dtCore std::vector<seerep_core_msgs::Datatype> vector of core msg datatype
-   */
-  void fromPbDatatypeVector(const seerep::datatype& datatype, std::vector<seerep_core_msgs::Datatype>& dtCore);
 };
 
 }  // namespace seerep_core_pb
