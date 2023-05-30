@@ -45,45 +45,44 @@ namespace seerep_grpc_ros
 class RosbagDumper
 {
 public:
-  RosbagDumper(std::string bagPath, std::string classes_mapping_path, std::string hdf5FilePath,
-               std::string project_frame_id, std::string project_name, std::string topicImage,
-               std::string topicCameraIntrinsics, std::string topicDetection, std::string detectionCategory,
-               std::string topicTf, std::string topicTfStatic, std::string topicGeoAnchor, float distanceCameraGround,
-               bool storeImages = true);
+  RosbagDumper(const std::string& bagPath, const std::string& classesMappingPath, const std::string& hdf5FilePath,
+               const std::string& projectFrameId, const std::string& projectName, const std::string& topicImage,
+               const std::string& topicCameraIntrinsics, const std::string& topicDetection,
+               const std::string& detectionCategory, const std::string& topicTf, const std::string& topicTfStatic,
+               const std::string& topicGeoAnchor, float distanceCameraGround, bool storeImages = true);
   ~RosbagDumper();
 
 private:
-  void readClassesMapping(std::string classes_mapping_path);
+  void readClassesMapping(const std::string& classesMappingPath);
   void getGeoAnchor();
   void getCameraIntrinsic();
   void iterateAndDumpImages();
   void iterateAndDumpDetections(bool storeImages);
   void iterateAndDumpTf();
-  void iterateAndDumpTf(const std::string topicTf, const bool isStatic);
+  void iterateAndDumpTf(const std::string& topicTf, const bool isStatic);
 
-  flatbuffers::grpc::Message<seerep::fb::PointStamped> createPointForDetection(vision_msgs::Detection2D detection,
-                                                                               int32_t stampSecs, uint32_t stampNanos,
-                                                                               std::string frameId, std::string label,
-                                                                               std::string instanceUUID);
+  flatbuffers::grpc::Message<seerep::fb::PointStamped>
+  createPointForDetection(vision_msgs::Detection2D detection, int32_t stampSecs, uint32_t stampNanos,
+                          const std::string& frameId, const std::string& label, const std::string& instanceUUID);
   void projectPixel(const float u, const float v, const float d, float& X, float& Y, float& Z);
   float calcDiameter(vision_msgs::Detection2D detection);
 
-  std::shared_ptr<seerep_hdf5_core::Hdf5CoreGeneral> m_ioCoreGeneral;
-  std::shared_ptr<seerep_hdf5_fb::Hdf5FbTf> m_ioTf;
-  std::shared_ptr<seerep_hdf5_fb::Hdf5FbPoint> m_ioPoint;
-  std::shared_ptr<seerep_hdf5_fb::Hdf5FbImage> m_ioImage;
-  std::shared_ptr<seerep_hdf5_core::Hdf5CoreImage> m_ioImageCore;
+  std::shared_ptr<seerep_hdf5_core::Hdf5CoreGeneral> ioCoreGeneral;
+  std::shared_ptr<seerep_hdf5_fb::Hdf5FbTf> ioTf;
+  std::shared_ptr<seerep_hdf5_fb::Hdf5FbPoint> ioPoint;
+  std::shared_ptr<seerep_hdf5_fb::Hdf5FbImage> ioImage;
+  std::shared_ptr<seerep_hdf5_core::Hdf5CoreImage> ioImageCore;
 
   std::unordered_map<int64_t, std::string> classesMapping;
 
   rosbag::Bag bag;
   std::string hdf5FilePath;
-  std::string project_frame_id;
-  std::string project_name;
+  std::string projectFrameId;
+  std::string projectName;
 
   // map from pair of seconds/nanoseconds of the header to the uuid
-  std::map<uint64_t, std::string> timeUuidMap_;
-  std::mutex timeUuidMapMutex_;
+  std::map<uint64_t, std::string> timeUuidMap;
+  std::mutex timeUuidMapMutex;
 
   std::string topicImage;
   std::string topicCameraIntrinsics;
