@@ -2,11 +2,11 @@
 
 namespace seerep_grpc_ros
 {
-RosbagDumper::RosbagDumper(std::string bagPath, std::string hdf5FilePath, std::string project_frame_id,
-                           std::string project_name, std::string topicImage, std::string topicCameraIntrinsics,
-                           std::string topicDetection, std::string detectionCategory, std::string topicTf,
-                           std::string topicTfStatic, std::string topicGeoAnchor, float distanceCameraGround,
-                           bool storeImages)
+RosbagDumper::RosbagDumper(std::string bagPath, std::string classes_mapping_path, std::string hdf5FilePath,
+                           std::string project_frame_id, std::string project_name, std::string topicImage,
+                           std::string topicCameraIntrinsics, std::string topicDetection, std::string detectionCategory,
+                           std::string topicTf, std::string topicTfStatic, std::string topicGeoAnchor,
+                           float distanceCameraGround, bool storeImages)
   : hdf5FilePath(hdf5FilePath)
   , project_frame_id(project_frame_id)
   , project_name(project_name)
@@ -32,6 +32,8 @@ RosbagDumper::RosbagDumper(std::string bagPath, std::string hdf5FilePath, std::s
   m_ioCoreGeneral->writeProjectFrameId("map");
   m_ioCoreGeneral->writeVersion("0.0.0");
 
+  readClassesMapping(classes_mapping_path);
+
   bag.open(bagPath);
 
   getGeoAnchor();
@@ -47,6 +49,21 @@ RosbagDumper::RosbagDumper(std::string bagPath, std::string hdf5FilePath, std::s
 RosbagDumper::~RosbagDumper()
 {
   bag.close();
+}
+
+void RosbagDumper::readClassesMapping(std::string classes_mapping_path)
+{
+  Json::Value classes;
+  std::ifstream classes_file(classes_mapping_path, std::ifstream::binary);
+  classes_file >> classes;
+  for (auto root : classes)
+  {
+    for (Json::Value::const_iterator itr = root.begin(); itr != root.end(); itr++)
+    {
+      ROS_INFO_STREAM(std::stoi(itr.key().asCString()) << " ; " << itr->asCString());
+      classesMapping.emplace(std::stoi(itr.key().asCString()), itr->asCString());
+    }
+  }
 }
 
 void RosbagDumper::getGeoAnchor()
@@ -142,21 +159,8 @@ void RosbagDumper::iterateAndDumpDetections(bool storeImages)
         std::vector<std::string> detections, instanceUUIDs;
         for (auto detection : msg->detections)
         {
-          std::string label;
-          switch (detection.results.at(0).id)
-          {
-            case 0:
-              label = "MarkerYellow";
-              break;
-            case 1:
-              label = "MarkerGreen";
-              break;
-            case 2:
-              label = "Background";
-              break;
-            default:
-              label = "error";
-          }
+          std::string label = classesMapping.at(detection.results.at(0).id);
+          ROS_INFO_STREAM("the label: " << label);
           detections.push_back(label);
           std::string instanceUUID = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
           instanceUUIDs.push_back(instanceUUID);
@@ -314,15 +318,16 @@ int main(int argc, char** argv)
   ros::init(argc, argv, "seerep_ros_communication_rosbagDumper");
   ros::NodeHandle private_nh("~");
 
-  std::string bagPath, hdf5FilePath, project_frame_id, project_name, topic_image, topic_camera_intrinsics,
-      topic_detection, detection_category, topic_tf, topic_tf_static, topic_geo_anchor;
+  std::string bagPath, classes_mapping_path, hdf5FilePath, project_frame_id, project_name, topic_image,
+      topic_camera_intrinsics, topic_detection, detection_category, topic_tf, topic_tf_static, topic_geo_anchor;
   float distance_camera_ground;
   bool store_images;
 
   hdf5FilePath = getHDF5FilePath(private_nh);
 
-  if (private_nh.getParam("bag_path", bagPath) && private_nh.getParam("project_frame_id", project_frame_id) &&
-      private_nh.getParam("project_name", project_name) && private_nh.getParam("topic_image", topic_image) &&
+  if (private_nh.getParam("bag_path", bagPath) && private_nh.getParam("classes_mapping_path", classes_mapping_path) &&
+      private_nh.getParam("project_frame_id", project_frame_id) && private_nh.getParam("project_name", project_name) &&
+      private_nh.getParam("topic_image", topic_image) &&
       private_nh.getParam("topic_camera_intrinsics", topic_camera_intrinsics) &&
       private_nh.getParam("topic_detection", topic_detection) &&
       private_nh.getParam("detection_category", detection_category) && private_nh.getParam("topic_tf", topic_tf) &&
@@ -333,6 +338,7 @@ int main(int argc, char** argv)
   {
     ROS_INFO_STREAM("hdf5FilePath: " << hdf5FilePath);
     ROS_INFO_STREAM("bagPath: " << bagPath);
+    ROS_INFO_STREAM("classes_mapping_path: " << classes_mapping_path);
     ROS_INFO_STREAM("project_frame_id: " << project_frame_id);
     ROS_INFO_STREAM("project_name: " << project_name);
     ROS_INFO_STREAM("topic_image: " << topic_image);
@@ -345,9 +351,10 @@ int main(int argc, char** argv)
     ROS_INFO_STREAM("distance_camera_ground: " << distance_camera_ground);
     ROS_INFO_STREAM("store_images: " << store_images);
 
-    seerep_grpc_ros::RosbagDumper rosbagDumper(bagPath, hdf5FilePath, project_frame_id, project_name, topic_image,
-                                               topic_camera_intrinsics, topic_detection, detection_category, topic_tf,
-                                               topic_tf_static, topic_geo_anchor, distance_camera_ground, store_images);
+    seerep_grpc_ros::RosbagDumper rosbagDumper(bagPath, classes_mapping_path, hdf5FilePath, project_frame_id,
+                                               project_name, topic_image, topic_camera_intrinsics, topic_detection,
+                                               detection_category, topic_tf, topic_tf_static, topic_geo_anchor,
+                                               distance_camera_ground, store_images);
   }
   else
   {

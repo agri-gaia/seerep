@@ -1,6 +1,7 @@
 #ifndef SEEREP_GRPC_ROS_ROSBAG_DUMPER
 #define SEEREP_GRPC_ROS_ROSBAG_DUMPER
 
+#include <jsoncpp/json/json.h>
 #include <seerep_hdf5_core/hdf5_core_general.h>
 #include <seerep_hdf5_core/hdf5_core_image.h>
 #include <seerep_hdf5_fb/hdf5_fb_image.h>
@@ -9,6 +10,7 @@
 #include <seerep_ros_conversions_fb/conversions.h>
 
 #include <filesystem>
+#include <fstream>
 
 // seerep msgs
 #include <seerep_msgs/point_stamped_generated.h>
@@ -43,13 +45,15 @@ namespace seerep_grpc_ros
 class RosbagDumper
 {
 public:
-  RosbagDumper(std::string bagPath, std::string hdf5FilePath, std::string project_frame_id, std::string project_name,
-               std::string topicImage, std::string topicCameraIntrinsics, std::string topicDetection,
-               std::string detectionCategory, std::string topicTf, std::string topicTfStatic,
-               std::string topicGeoAnchor, float distanceCameraGround, bool storeImages = true);
+  RosbagDumper(std::string bagPath, std::string classes_mapping_path, std::string hdf5FilePath,
+               std::string project_frame_id, std::string project_name, std::string topicImage,
+               std::string topicCameraIntrinsics, std::string topicDetection, std::string detectionCategory,
+               std::string topicTf, std::string topicTfStatic, std::string topicGeoAnchor, float distanceCameraGround,
+               bool storeImages = true);
   ~RosbagDumper();
 
 private:
+  void readClassesMapping(std::string classes_mapping_path);
   void getGeoAnchor();
   void getCameraIntrinsic();
   void iterateAndDumpImages();
@@ -69,6 +73,8 @@ private:
   std::shared_ptr<seerep_hdf5_fb::Hdf5FbPoint> m_ioPoint;
   std::shared_ptr<seerep_hdf5_fb::Hdf5FbImage> m_ioImage;
   std::shared_ptr<seerep_hdf5_core::Hdf5CoreImage> m_ioImageCore;
+
+  std::unordered_map<int64_t, std::string> classesMapping;
 
   rosbag::Bag bag;
   std::string hdf5FilePath;
