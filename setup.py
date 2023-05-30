@@ -84,6 +84,8 @@ class GeneratePythonFiles(Command):
 
         fbs_files = glob(f"{self.bdist_dir}/*.fbs")
 
+        os.chdir(self.bdist_dir)
+
         flatc_call = [
             "flatc",
             "--python",
@@ -92,8 +94,10 @@ class GeneratePythonFiles(Command):
             *[os.path.basename(file) for file in fbs_files],
         ]
 
-        if call(flatc_call, cwd=self.bdist_dir) != 0:
+        if call(flatc_call) != 0:
             raise Exception("flatc call not")
+
+        os.chdir("../../..")
 
         # Remove the .fbs files
         for file in fbs_files:
