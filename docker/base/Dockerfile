@@ -37,6 +37,7 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         python3-pip \
         flex \
         bison \
+        libjsoncpp-dev \
         && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt /tmp/requirements.txt
