@@ -12,10 +12,10 @@ Note: The flatc and protoc compilers must be installed on the system running the
 
 import os
 import shutil
+import subprocess
 from contextlib import suppress
 from glob import glob
 from pathlib import Path
-from subprocess import call
 
 from setuptools import Command, setup
 from setuptools.command.build import build
@@ -57,7 +57,7 @@ class GeneratePythonFiles(Command):
             *glob(f"{self.proto_interface_path}/*.proto"),
         ]
 
-        if call(protoc_call) != 0:
+        if subprocess.call(protoc_call) != 0:
             raise Exception("protoc call failed")
 
         # Change the import paths in the files to new folder structure
@@ -69,7 +69,7 @@ class GeneratePythonFiles(Command):
             *glob(f"{pb_dir}/*.py"),
         ]
 
-        if call(sed_call) != 0:
+        if subprocess.call(sed_call) != 0:
             raise Exception("sed call failed")
 
     def from_fb(self) -> None:
@@ -84,6 +84,18 @@ class GeneratePythonFiles(Command):
 
         fbs_files = glob(f"{self.bdist_dir}/*.fbs")
 
+        proc = subprocess.Popen(["flatc", "--version"], stdout=subprocess.PIPE)
+        print(f"Version {proc.stdout.read()}")
+
+        proc = subprocess.Popen(["which", "flatc"], stdout=subprocess.PIPE)
+        print(f"Which {proc.stdout.read()}")
+
+        print(f"Bdist dir {self.bdist_dir}")
+
+        filenames = [os.path.basename(file) for file in fbs_files]
+
+        print(f"Filenames {filenames}")
+
         os.chdir(self.bdist_dir)
 
         flatc_call = [
@@ -91,10 +103,10 @@ class GeneratePythonFiles(Command):
             "--python",
             "--grpc",
             # The compiler ONLY accepts the filenames, no paths!
-            *[os.path.basename(file) for file in fbs_files],
+            *filenames,
         ]
 
-        if call(flatc_call) != 0:
+        if subprocess.call(flatc_call) != 0:
             raise Exception("flatc call not")
 
         os.chdir("../../..")
