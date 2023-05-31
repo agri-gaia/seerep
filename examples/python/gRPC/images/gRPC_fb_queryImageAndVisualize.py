@@ -26,7 +26,7 @@ builder = flatbuffers.Builder(1024)
 channel = util.get_gRPC_channel()
 
 # 1. Get all projects from the server
-projectuuid = util_fb.getProject(builder, channel, 'plantmap01')
+projectuuid = util_fb.getProject(builder, channel, 'aitf-triton-data')
 
 # 2. Check if the defined project exist; if not exit
 if not projectuuid:

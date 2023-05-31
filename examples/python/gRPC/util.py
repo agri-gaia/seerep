@@ -28,7 +28,7 @@ def get_gRPC_channel(target="local"):
 
     elif target == "local":
         # server without certs
-        server = "localhost:9090"
+        server = "agrigaia-ur.ni.dfki:9090"
         channel = grpc.insecure_channel(server, options=options)
     else:
         channel = grpc.insecure_channel(target, options=options)

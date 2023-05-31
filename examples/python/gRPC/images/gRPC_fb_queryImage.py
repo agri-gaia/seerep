@@ -5,10 +5,19 @@ import sys
 import flatbuffers
 from seerep.fb import Image
 from seerep.fb import image_service_grpc_fb as imageService
+from preprocess_response import (
+    extract_data_from_response,
+    create_coco_format,
+    separate_gt_and_predictions,
+)
+import json
+from evaluate_new import evaluate_predictions, compute_iou
+from collections import defaultdict
+import numpy as np
+
 
 # importing util functions. Assuming that these files are in the parent dir
-# examples/python/gRPC/util.py
-# examples/python/gRPC/util_fb.py
+
 script_dir = os.path.dirname(__file__)
 util_dir = os.path.join(script_dir, '..')
 sys.path.append(util_dir)
@@ -17,10 +26,10 @@ import util_fb
 
 builder = flatbuffers.Builder(1024)
 # Default server is localhost !
-channel = util.get_gRPC_channel()
+channel = util.get_gRPC_channel("agrigaia-ur.ni.dfki:9090")
 
 # 1. Get all projects from the server
-projectuuid = util_fb.getProject(builder, channel, 'simulatedCropsGroundTruth')
+projectuuid = util_fb.getProject(builder, channel, 'aitf-triton-data')
 
 # 2. Check if the defined project exist; if not exit
 if not projectuuid:
@@ -47,9 +56,10 @@ projectUuids = [builder.CreateString(projectuuid)]
 category = ["0"]
 # list of labels per category
 labels = [
-    [
-        util_fb.createLabelWithConfidence(builder, "testlabel0"),
-        util_fb.createLabelWithConfidence(builder, "testlabelgeneral0"),
+    [  # weather_general_sun
+        util_fb.createLabelWithConfidence(builder, "weather_general_sun")
+        # util_fb.createLabelWithConfidence(builder, "testlabel0"),
+        # util_fb.createLabelWithConfidence(builder, "testlabelgeneral0"),
     ]
 ]
 labelCategory = util_fb.createLabelWithCategory(builder, category, labels)
@@ -73,29 +83,69 @@ query = util_fb.createQuery(
 builder.Finish(query)
 buf = builder.Output()
 
-# 5. Query the server for images matching the query and iterate over them
+# Query the server for images matching the query and iterate over them, extract the data from the response and save it in a list
+output = []
 for responseBuf in stub.GetImage(bytes(buf)):
     response = Image.Image.GetRootAs(responseBuf)
+    data = extract_data_from_response(response)
+    output.append(data)
+# print(f"data from seerep is: {output[19]}")
+coco_format_data = create_coco_format(output)
 
-    print(f"uuidmsg: {response.Header().UuidMsgs().decode('utf-8')}")
-    print(response.LabelsBbLength())
-    if response.LabelsBbLength() > 0:
-        print(
-            "first label: "
-            + response.LabelsBb(0).BoundingBox2dLabeled(0).LabelWithInstance().Label().Label().decode("utf-8")
-            + " ; confidence: "
-            + str(response.LabelsBb(0).BoundingBox2dLabeled(0).LabelWithInstance().Label().Confidence())
-        )
-        print(
-            "first bounding box (Xcenter,Ycenter,Xextent,Yextent, rotation): "
-            + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().CenterPoint().X())
-            + " "
-            + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().CenterPoint().Y())
-            + " "
-            + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().SpatialExtent().X())
-            + " "
-            + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().SpatialExtent().Y())
-            + " "
-            + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().Rotation())
-            + "\n"
-        )
+# save the coco format data to a json file
+file_path = "examples/python/gRPC/images/output_coco_format5.json"
+with open(file_path, "w") as f:
+    json.dump(coco_format_data, f)
+separate_gt_and_predictions(
+    "examples/python/gRPC/images/output_coco_format5.json",
+    "examples/python/gRPC/images/ground_truth5.json",
+    "examples/python/gRPC/images/predictions5.json",
+)
+# coco general evaluation
+coco_eval = evaluate_predictions(
+    "examples/python/gRPC/images/ground_truth5.json", "examples/python/gRPC/images/predictions5.json"
+)
+# load ground truth and predictions
+with open("examples/python/gRPC/images/ground_truth5.json") as f:
+    ground_truth = json.load(f)
+with open("examples/python/gRPC/images/predictions5.json") as f:
+    predictions = json.load(f)
+
+# index annotations by image_id to calculate individual iou
+ground_truth_by_image = defaultdict(list)
+predictions_by_image = defaultdict(list)
+for ann in ground_truth['annotations']:
+    ground_truth_by_image[ann['image_id']].append(ann['bbox'])
+for ann in predictions['annotations']:
+    predictions_by_image[ann['image_id']].append(ann['bbox'])
+
+
+iou_values = {}
+
+for image_id in ground_truth_by_image:
+    gt_boxes = ground_truth_by_image[image_id]
+    pred_boxes = predictions_by_image[image_id]
+    iou_list = []
+    for gt_box in gt_boxes:
+        for pred_box in pred_boxes:
+            if len(gt_box) >= 4 and len(pred_box) >= 4:
+                gt_box_np = np.array(gt_box)
+                pred_box_np = np.array(pred_box)
+
+                try:
+                    iou = compute_iou(gt_box_np, pred_box_np)
+                    print(
+                        f"Image {image_id} - IoU between ground truth box {gt_box} and predicted box {pred_box} is {iou}"
+                    )
+                    iou_list.append(iou)
+                except IndexError:
+                    print(f"Error computing IoU for Image {image_id} - GT Box: {gt_box}, Predicted Box: {pred_box}")
+            else:
+                print(f"Image {image_id} - Bounding box has less than four elements: GT {gt_box}, Pred {pred_box}")
+
+    iou_values[image_id] = iou_list
+# print(f"iou values calculated: {len(iou_values)}")
+
+# save the iou values
+with open("examples/python/gRPC/images/iou_values.json", "w") as f:
+    json.dump(iou_values, f)
