@@ -203,6 +203,8 @@ public:
   /**
    * @brief Get the all labels saved in a project
    *
+   * @param datatypes datatypes across which this is determined
+   * @param category the category across which all labels have to be aggregated
    * @return std::vector<std::string> vector of labels
    */
   std::unordered_set<std::string> getAllLabels(std::vector<seerep_core_msgs::Datatype> datatypes, std::string category);

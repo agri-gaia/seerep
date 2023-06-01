@@ -424,17 +424,15 @@ void CorePbConversion::fromPbDatatypeVector(const seerep::datatype& datatype,
 
 void CorePbConversion::toPb(const seerep_core_msgs::AabbTime& timeinterval, seerep::pb::TimeInterval* ti_pb)
 {
-  // seerep::pb::TimeInterval ti_pb;
-
   // isolate second and nano second bits from min time
-  uint64_t mintime = timeinterval.min_corner().get<0>();
-  uint32_t min_nanos = (uint32_t)mintime;
-  uint32_t min_seconds = (int32_t)(mintime >> 32);
+  int64_t mintime = timeinterval.min_corner().get<0>();
+  int32_t min_nanos = (int32_t)mintime;
+  uint32_t min_seconds = (uint32_t)(mintime >> 32);
 
   // isolate second and nano second bits from max time
-  uint64_t maxtime = timeinterval.max_corner().get<0>();
-  uint32_t max_nanos = (uint32_t)maxtime;
-  uint32_t max_seconds = (int32_t)(maxtime >> 32);
+  int64_t maxtime = timeinterval.max_corner().get<0>();
+  int32_t max_nanos = (int32_t)maxtime;
+  uint32_t max_seconds = (uint32_t)(maxtime >> 32);
 
   ti_pb->mutable_time_min()->set_nanos(min_nanos);
   ti_pb->mutable_time_min()->set_seconds(min_seconds);
@@ -446,14 +444,14 @@ void CorePbConversion::toPb(const seerep_core_msgs::AabbTime& timeinterval, seer
 void CorePbConversion::toPb(const seerep_core_msgs::AABB& aabb, seerep::pb::Boundingbox* bb_pb)
 {
   // center
-  int center_x = (aabb.min_corner().get<0>() + aabb.max_corner().get<0>()) / 2;
-  int center_y = (aabb.min_corner().get<1>() + aabb.max_corner().get<1>()) / 2;
-  int center_z = (aabb.min_corner().get<2>() + aabb.max_corner().get<2>()) / 2;
+  float center_x = (aabb.min_corner().get<0>() + aabb.max_corner().get<0>()) / 2;
+  float center_y = (aabb.min_corner().get<1>() + aabb.max_corner().get<1>()) / 2;
+  float center_z = (aabb.min_corner().get<2>() + aabb.max_corner().get<2>()) / 2;
 
   // spatial extent
-  int se_x = (aabb.max_corner().get<0>() - aabb.min_corner().get<0>());
-  int se_y = (aabb.max_corner().get<1>() - aabb.min_corner().get<1>());
-  int se_z = (aabb.max_corner().get<2>() - aabb.min_corner().get<2>());
+  float se_x = (aabb.max_corner().get<0>() - aabb.min_corner().get<0>());
+  float se_y = (aabb.max_corner().get<1>() - aabb.min_corner().get<1>());
+  float se_z = (aabb.max_corner().get<2>() - aabb.min_corner().get<2>());
 
   bb_pb->mutable_center_point()->set_x(center_x);
   bb_pb->mutable_center_point()->set_y(center_y);

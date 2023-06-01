@@ -188,6 +188,9 @@ public:
   /**
    * @brief Get the all labels saved in a project
    *
+   * @param uuid of project
+   * @param datatypes A vector of datatypes
+   * @param category the category across which all labels have to be aggregated
    * @return std::vector<std::string> uuid of project
    */
   std::unordered_set<std::string> getAllLabels(boost::uuids::uuid uuid,

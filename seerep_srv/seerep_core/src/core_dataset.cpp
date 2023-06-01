@@ -549,9 +549,9 @@ seerep_core_msgs::AABB CoreDataset::getSpatialBounds(std::vector<seerep_core_msg
   seerep_core_msgs::AABB overallbb;
 
   // set the minimum to minimum possible for the datatype
-  overallbb.max_corner().set<0>(std::numeric_limits<int64_t>::min());
-  overallbb.max_corner().set<1>(std::numeric_limits<int64_t>::min());
-  overallbb.max_corner().set<2>(std::numeric_limits<int64_t>::min());
+  overallbb.max_corner().set<0>(std::numeric_limits<float>::min());
+  overallbb.max_corner().set<1>(std::numeric_limits<float>::min());
+  overallbb.max_corner().set<2>(std::numeric_limits<float>::min());
 
   // set the maximum for the maximum possible for the datatype
   overallbb.min_corner().set<0>(std::numeric_limits<float>::max());

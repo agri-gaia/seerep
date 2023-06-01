@@ -318,14 +318,14 @@ flatbuffers::Offset<seerep::fb::Boundingbox> CoreFbConversion::toFb(flatbuffers:
                                                                     seerep_core_msgs::AABB& aabb)
 {
   // center
-  int center_x = (aabb.min_corner().get<0>() + aabb.max_corner().get<0>()) / 2;
-  int center_y = (aabb.min_corner().get<1>() + aabb.max_corner().get<1>()) / 2;
-  int center_z = (aabb.min_corner().get<2>() + aabb.max_corner().get<2>()) / 2;
+  float center_x = (aabb.min_corner().get<0>() + aabb.max_corner().get<0>()) / 2;
+  float center_y = (aabb.min_corner().get<1>() + aabb.max_corner().get<1>()) / 2;
+  float center_z = (aabb.min_corner().get<2>() + aabb.max_corner().get<2>()) / 2;
 
   // spatial extent
-  int se_x = (aabb.max_corner().get<0>() - aabb.min_corner().get<0>());
-  int se_y = (aabb.max_corner().get<1>() - aabb.min_corner().get<1>());
-  int se_z = (aabb.max_corner().get<2>() - aabb.min_corner().get<2>());
+  float se_x = (aabb.max_corner().get<0>() - aabb.min_corner().get<0>());
+  float se_y = (aabb.max_corner().get<1>() - aabb.min_corner().get<1>());
+  float se_z = (aabb.max_corner().get<2>() - aabb.min_corner().get<2>());
 
   seerep::fb::PointBuilder centerPointBuilder(mb);
   centerPointBuilder.add_x(center_x);
@@ -350,14 +350,14 @@ flatbuffers::Offset<seerep::fb::TimeInterval> CoreFbConversion::toFb(flatbuffers
                                                                      seerep_core_msgs::AabbTime& timeinterval)
 {
   // isolate second and nano second bits from min time
-  uint64_t mintime = timeinterval.min_corner().get<0>();
-  uint32_t min_nanos = (uint32_t)mintime;
-  uint32_t min_seconds = (int32_t)(mintime >> 32);
+  int64_t mintime = timeinterval.min_corner().get<0>();
+  int32_t min_nanos = (int32_t)mintime;
+  uint32_t min_seconds = (uint32_t)(mintime >> 32);
 
   // isolate second and nano second bits from max time
-  uint64_t maxtime = timeinterval.max_corner().get<0>();
-  uint32_t max_nanos = (uint32_t)maxtime;
-  uint32_t max_seconds = (int32_t)(maxtime >> 32);
+  int64_t maxtime = timeinterval.max_corner().get<0>();
+  int32_t max_nanos = (int32_t)maxtime;
+  uint32_t max_seconds = (uint32_t)(maxtime >> 32);
 
   seerep::fb::TimestampBuilder minTimeStampBuilder(mb);
   minTimeStampBuilder.add_seconds(min_seconds);
@@ -649,23 +649,16 @@ std::vector<seerep_core_msgs::Datatype> CoreFbConversion::fromFbDatatypeVector(c
 {
   std::vector<seerep_core_msgs::Datatype> dt_vector;
 
-  if (dt == seerep::fb::Datatype_Image)
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::Image);
-  }
-  else if (dt == seerep::fb::Datatype_PointCloud)
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::PointCloud);
-  }
-  else if (dt == seerep::fb::Datatype_Point)
-  {
-    dt_vector.push_back(seerep_core_msgs::Datatype::Point);
-  }
-  else if (dt == seerep::fb::Datatype_All)
+  if (dt == seerep::fb::Datatype_All)
   {
     dt_vector.push_back(seerep_core_msgs::Datatype::Image);
     dt_vector.push_back(seerep_core_msgs::Datatype::PointCloud);
     dt_vector.push_back(seerep_core_msgs::Datatype::Point);
+  }
+  else
+  {
+    seerep_core_msgs::Datatype dtCore = fromFb(dt);
+    dt_vector.push_back(dtCore);
   }
 
   return dt_vector;

@@ -186,8 +186,7 @@ FbMetaOperations::GetOverallTimeInterval(grpc::ServerContext* context,
   // levels.
   std::vector<seerep_core_msgs::Datatype> dt_vector;
 
-  seerep::fb::Datatype casted_datatype = static_cast<seerep::fb::Datatype>(requestRoot->datatype());
-  dt_vector = seerep_core_fb::CoreFbConversion::fromFbDatatypeVector(casted_datatype);
+  dt_vector = seerep_core_fb::CoreFbConversion::fromFbDatatypeVector(requestRoot->datatype());
 
   try
   {
@@ -245,11 +244,8 @@ FbMetaOperations::GetOverallBoundingBox(grpc::ServerContext* context,
   // levels.
   std::vector<seerep_core_msgs::Datatype> dt_vector;
 
-  // flatbuffers::IsFieldPresent(requestRoot, seerep::fb::UuidDatatypePair::datatype);
-  // requestRoot->CheckField(seerep::fb::UuidDatatypePair::datatype);
-
   seerep::fb::Datatype casted_datatype = static_cast<seerep::fb::Datatype>(requestRoot->datatype());
-  dt_vector = seerep_core_fb::CoreFbConversion::fromFbDatatypeVector(casted_datatype);
+  dt_vector = seerep_core_fb::CoreFbConversion::fromFbDatatypeVector(requestRoot->datatype());
 
   try
   {
@@ -307,8 +303,7 @@ grpc::Status FbMetaOperations::GetAllCategories(grpc::ServerContext* context,
   // levels.
   std::vector<seerep_core_msgs::Datatype> dt_vector;
 
-  seerep::fb::Datatype casted_datatype = static_cast<seerep::fb::Datatype>(requestRoot->datatype());
-  dt_vector = seerep_core_fb::CoreFbConversion::fromFbDatatypeVector(casted_datatype);
+  dt_vector = seerep_core_fb::CoreFbConversion::fromFbDatatypeVector(requestRoot->datatype());
 
   try
   {
@@ -378,8 +373,7 @@ FbMetaOperations::GetAllLabels(grpc::ServerContext* context,
   // levels.
   std::vector<seerep_core_msgs::Datatype> dt_vector;
 
-  seerep::fb::Datatype casted_datatype = static_cast<seerep::fb::Datatype>(requestRoot->UuidAndDatatype()->datatype());
-  dt_vector = seerep_core_fb::CoreFbConversion::fromFbDatatypeVector(casted_datatype);
+  dt_vector = seerep_core_fb::CoreFbConversion::fromFbDatatypeVector(requestRoot->UuidAndDatatype()->datatype());
 
   try
   {
