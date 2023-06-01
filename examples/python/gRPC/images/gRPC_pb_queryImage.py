@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import os
 import sys
 
 from google.protobuf import empty_pb2
@@ -9,16 +8,10 @@ from seerep.pb import label_pb2
 from seerep.pb import labels_with_category_pb2 as labels_with_category
 from seerep.pb import meta_operations_pb2_grpc as metaOperations
 from seerep.pb import query_pb2 as query
-
-# importing util functions. Assuming that this file is in the parent dir
-# https://github.com/agri-gaia/seerep/blob/6c4da5736d4a893228e97b01a9ada18620b1a83f/examples/python/gRPC/util.py
-script_dir = os.path.dirname(__file__)
-util_dir = os.path.join(script_dir, '..')
-sys.path.append(util_dir)
-import util
+from seerep.util.common import get_gRPC_channel
 
 # Default server is localhost !
-channel = util.get_gRPC_channel()
+channel = get_gRPC_channel()
 
 # 1. Get gRPC service objects
 stub = imageService.ImageServiceStub(channel)

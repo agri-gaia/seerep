@@ -1,128 +1,140 @@
 #!/usr/bin/env python
 
 """
-This script adds custom build steps to the python package build process.
-The python classes for the protobuf and flatbuffers interface and messages
-of SEEREP are generated using the respective compilers.
+Two custom commands are added to the packaging process:
+1. GeneratePythonFiles - Generates Python files from the Protobuf and Flatbuffer definitions. Additionally
+   the import paths are changed to `seerep.pb` and `seerep.fbs`.
+2. ChangeUtilPath - Changes the import path for the gRPC util scripts from `examples/python/gRPC/uitl` to `seerep/util`.
 
-The protoc compiler is installed automatically via pip, while the flatc compiler
-has to be installed manually (not available on pypi currently).
-So if the build fails, make sure flatc is installed.
+Note: The flatc compiler can not be installted via pip (https://github.com/google/flatbuffers/issues/7793) during the
+build process and therefore has to be installed manually. Instructions for that can be found
+here: https://flatbuffers.dev/flatbuffers_guide_building.html
 """
 
-import glob
 import os
 import shutil
-import subprocess
 from contextlib import suppress
+from glob import glob
 from pathlib import Path
-from typing import List
+from subprocess import call
 
 from setuptools import Command, setup
 from setuptools.command.build import build
 
 
-class CustomCommand(Command):
+class GeneratePythonFiles(Command):
+    """A custom command to generate Python files from the .pb and .fbs definitions"""
+
     def initialize_options(self) -> None:
+        self.proto_msgs_path = Path("seerep_msgs/protos/")
+        self.proto_interface_path = Path("seerep_com/protos/")
+        self.fbs_msgs_path = Path("seerep_msgs/fbs/")
+        self.fbs_interface_path = Path("seerep_com/fbs/")
         self.bdist_dir = None
-        self.proto_msgs_path = None
-        self.proto_api_path = None
-        self.fbs_msgs_path = None
-        self.fbs_api_path = None
 
     def finalize_options(self) -> None:
-        self.proto_msgs_path = Path("seerep_msgs/protos/")
-        self.proto_api_path = Path("seerep_com/protos/")
-        self.fbs_msgs_path = Path("seerep_msgs/fbs/")
-        self.fbs_api_path = Path("seerep_com/fbs/")
         with suppress(Exception):
             self.bdist_dir = Path(self.get_finalized_command("bdist_wheel").bdist_dir)
 
-    @staticmethod
-    def get_files(path: Path, file_ending: str) -> List[str]:
-        if path.is_dir():
-            return [str(file_path) for file_path in path.glob(f"*.{file_ending}")]
-        else:
-            return []
+    def from_pb(self) -> None:
+        """
+        The protoc compiler ignores the package directive for Python, since Python modules are organized according
+        to their filesystem path. https://developers.google.com/protocol-buffers/docs/proto3#packages.
+        The correct folder strcuture therefore has to be created manually. Additionally the import path inside the
+        files need to be adjusted to the new structure with sed.
+        """
+        # other __init__.py files are automatically created by the flatc compiler
+        pb_dir = Path(self.bdist_dir / "seerep/pb")
+        Path(pb_dir / "__init__.py").touch()
 
-    def build_protos(self) -> None:
-        if self.bdist_dir:
-            """
-            The protoc compiler ignores the package directive in the proto files.
-            https://developers.google.com/protocol-buffers/docs/proto3#packages
-            Therefore we need to manualy put it in the correct folder structure and post
-            process it to comply with the existing flatbuffers structure.
-            """
-            output_dir = Path(self.bdist_dir / "seerep/pb/")
-            output_dir.mkdir(parents=True, exist_ok=True)
-            Path(self.bdist_dir / "seerep/__init__.py").touch()
-            Path(self.bdist_dir / "seerep/pb/__init__.py").touch()
+        protoc_call = [
+            "python3",
+            "-m",
+            "grpc_tools.protoc",
+            f"--proto_path={self.proto_msgs_path}",
+            f"--proto_path={self.proto_interface_path}",
+            f"--python_out={pb_dir}",
+            f"--grpc_python_out={pb_dir}",
+            *glob(f"{self.proto_msgs_path}/*.proto"),
+            *glob(f"{self.proto_interface_path}/*.proto"),
+        ]
 
-            protoc_call = [
-                "python3",
-                "-m",
-                "grpc_tools.protoc",
-                f"--proto_path={self.proto_msgs_path}",
-                f"--proto_path={self.proto_api_path}",
-                f"--python_out={output_dir}",
-                f"--grpc_python_out={output_dir}",
-                *CustomCommand.get_files(self.proto_msgs_path, "proto"),
-                *CustomCommand.get_files(self.proto_api_path, "proto"),
-            ]
+        if call(protoc_call) != 0:
+            raise Exception("protoc call failed")
 
-            subprocess.call(protoc_call)
+        # Change the import paths in the files to new folder structure
+        sed_call = [
+            "sed",
+            "-i",
+            "-E",
+            "s/^import.*_pb2/from seerep.pb &/",
+            *glob(f"{pb_dir}/*.py"),
+        ]
 
-            sed_call = [
-                "sed",
-                "-i",
-                "-E",
-                "s/^import.*_pb2/from seerep.pb &/",
-                *CustomCommand.get_files(output_dir, "py"),
-            ]
+        if call(sed_call) != 0:
+            raise Exception("sed call failed")
 
-            subprocess.call(sed_call)
+    def from_fb(self) -> None:
+        """
+        Currently the flatc compiler has a bug when using --python and --grpc, which prevents the use of -I and -o
+        for specifying input and output directories https://github.com/google/flatbuffers/issues/7397.
+        The current workaround is to copy the fbs files to the output directory, then run the flatc compiler in the
+        output dir and remove the .fbs files afterwards.
+        """
+        shutil.copytree(self.fbs_msgs_path, self.bdist_dir, dirs_exist_ok=True)
+        shutil.copytree(self.fbs_interface_path, self.bdist_dir, dirs_exist_ok=True)
 
-    def build_fbs(self) -> None:
-        if self.bdist_dir:
-            output_dir = self.bdist_dir
+        fbs_files = glob(f"{self.bdist_dir}/*.fbs")
 
-            """
-            Currently the flatc compiler has a bug when using --python and --grpc,
-            which prevents the use of -I and -o for specifying input and output directories.
-            https://github.com/google/flatbuffers/issues/7397
+        flatc_call = [
+            "flatc",
+            "--python",
+            "--grpc",
+            # The compiler ONLY accepts filenames, no paths!
+            *[os.path.basename(file) for file in fbs_files],
+        ]
 
-            The current workaround is to copy the fbs files to the output directory,
-            then run the flatc compiler in the output dir and remove the fbs files afterwards.
-            """
+        if call(flatc_call, cwd=self.bdist_dir) != 0:
+            raise Exception("flatc call failed")
 
-            shutil.copytree(self.fbs_msgs_path, self.bdist_dir, dirs_exist_ok=True)
-            shutil.copytree(self.fbs_api_path, self.bdist_dir, dirs_exist_ok=True)
-
-            os.chdir(output_dir)
-            fbs_files = glob.glob("*.fbs")
-
-            flatc_call = [
-                "flatc",
-                "--python",
-                "--grpc",
-                *fbs_files,
-            ]
-
-            subprocess.call(flatc_call)
-
-            os.chdir("../../..")
-
-            for file in fbs_files:
-                with suppress(Exception):
-                    os.remove(output_dir / file)
+        # Remove the .fbs files
+        for file in fbs_files:
+            with suppress(Exception):
+                os.remove(file)
 
     def run(self) -> None:
-        self.build_protos()
-        self.build_fbs()
+        Path(self.bdist_dir / "seerep/pb/").mkdir(parents=True, exist_ok=True)
+        Path(self.bdist_dir / "seerep/fb").mkdir(parents=True, exist_ok=True)
+        self.from_pb()
+        self.from_fb()
+
+
+class ChangeUtilPath(Command):
+    """
+    Change the import path for the gRPC util scripts from 'examples/python/gRPC/uitl' to 'seerep/util' by copying
+    into the bdist directory.
+    """
+
+    def initialize_options(self) -> None:
+        self.current_util_path = Path("examples/python/gRPC/util/")
+        self.new_util_path = Path("seerep/util/")
+        self.bdist_dir = None
+
+    def finalize_options(self) -> None:
+        with suppress(Exception):
+            self.bdist_dir = Path(self.get_finalized_command("bdist_wheel").bdist_dir)
+
+    def run(self) -> None:
+        new_path_in_bdist = Path(self.bdist_dir / self.new_util_path)
+        shutil.copytree(self.current_util_path, new_path_in_bdist)
+        Path(new_path_in_bdist / "__init__.py").touch()
 
 
 class CustomBuild(build):
-    sub_commands = [('build_custom', None)] + build.sub_commands
+    sub_commands = [('build_python', None), ('change_util_path', None)] + build.sub_commands
 
 
-setup(packages=[], cmdclass={'build': CustomBuild, 'build_custom': CustomCommand})
+setup(
+    packages=[],
+    cmdclass={'build': CustomBuild, 'build_python': GeneratePythonFiles, 'change_util_path': ChangeUtilPath},
+)

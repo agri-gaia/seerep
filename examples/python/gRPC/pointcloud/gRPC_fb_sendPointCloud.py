@@ -1,7 +1,5 @@
 #!/user/bin/env python3
 
-import os
-import sys
 import time
 import uuid
 
@@ -11,15 +9,8 @@ import numpy as np
 np.set_printoptions(precision=7)
 from seerep.fb import PointCloud2
 from seerep.fb import point_cloud_service_grpc_fb as pointCloudService
-
-script_dir = os.path.dirname(__file__)
-util_dir = os.path.join(script_dir, '..')
-sys.path.append(util_dir)
-
-import util
-from util_fb import (
-    addToBoundingBoxLabeledVector,
-    addToGeneralLabelsVector,
+from seerep.util.common import get_gRPC_channel
+from seerep.util.fb_helper import (
     addToPointFieldVector,
     createBoundingBoxes,
     createBoundingBoxesLabeled,
@@ -105,7 +96,7 @@ def createPointClouds(projectUuid, numOf):
         yield bytes(builder.Output())
 
 
-channel = util.get_gRPC_channel()
+channel = get_gRPC_channel()
 stub = pointCloudService.PointCloudServiceStub(channel)
 builder = flatbuffers.Builder(1024)
 

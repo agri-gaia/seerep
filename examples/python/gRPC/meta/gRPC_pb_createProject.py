@@ -1,17 +1,10 @@
 #!/usr/bin/env python3
 
-import os
-import sys
-
 from seerep.pb import meta_operations_pb2_grpc as metaOperations
 from seerep.pb import projectCreation_pb2
+from seerep.util.common import get_gRPC_channel
 
-script_dir = os.path.dirname(__file__)
-util_dir = os.path.join(script_dir, '..')
-sys.path.append(util_dir)
-import util
-
-channel = util.get_gRPC_channel()
+channel = get_gRPC_channel()
 
 stub = metaOperations.MetaOperationsStub(channel)
 response = stub.CreateProject(projectCreation_pb2.ProjectCreation(name="testproject", mapFrameId="map"))

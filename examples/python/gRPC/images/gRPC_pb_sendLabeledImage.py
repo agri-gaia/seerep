@@ -23,16 +23,10 @@ from seerep.pb import meta_operations_pb2_grpc as metaOperations
 from seerep.pb import projectCreation_pb2 as projectCreation
 from seerep.pb import tf_service_pb2_grpc as tfService
 from seerep.pb import transform_stamped_pb2 as tf
-
-# importing util functions. Assuming that this file is in the parent dir
-# https://github.com/agri-gaia/seerep/blob/6c4da5736d4a893228e97b01a9ada18620b1a83f/examples/python/gRPC/util.py
-script_dir = os.path.dirname(__file__)
-util_dir = os.path.join(script_dir, '..')
-sys.path.append(util_dir)
-import util
+from seerep.util.common import get_gRPC_channel
 
 # Default server is localhost !
-channel = util.get_gRPC_channel(target="local")
+channel = get_gRPC_channel(target="local")
 
 # 1. Get gRPC service objects
 stub = imageService.ImageServiceStub(channel)

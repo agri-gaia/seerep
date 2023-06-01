@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-import os
-import sys
 import uuid
 
 import imageio.v2 as imageio
@@ -20,13 +18,9 @@ from seerep.pb import point_field_pb2 as pointfield
 from seerep.pb import projectCreation_pb2 as projectCreation
 from seerep.pb import tf_service_pb2_grpc as tfService
 from seerep.pb import transform_stamped_pb2 as tf
+from seerep.util.common import get_gRPC_channel
 
-script_dir = os.path.dirname(__file__)
-util_dir = os.path.join(script_dir, '..')
-sys.path.append(util_dir)
-import util
-
-channel = util.get_gRPC_channel()
+channel = get_gRPC_channel()
 
 stubImage = imageService.ImageServiceStub(channel)
 stubPointcloud = pointcloudService.PointCloudServiceStub(channel)

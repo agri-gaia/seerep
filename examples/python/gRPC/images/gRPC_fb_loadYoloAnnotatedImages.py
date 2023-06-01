@@ -2,19 +2,25 @@
 
 import csv
 import os
-import sys
 import uuid
 
 import flatbuffers
 import imageio.v2 as imageio
-import numpy as np
 import yaml
 from seerep.fb import Image
 from seerep.fb import image_service_grpc_fb as imageService
-
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-import util
-import util_fb
+from seerep.util.common import get_gRPC_channel
+from seerep.util.fb_helper import (
+    createBoundingBox2DLabeledWithCategory,
+    createBoundingBoxes2d,
+    createBoundingBoxes2dLabeled,
+    createHeader,
+    createLabelsWithInstance,
+    createLabelWithCategory,
+    createPoint2d,
+    createTimeStamp,
+    getOrCreateProject,
+)
 
 
 class yoloAnnotatedImageLoader:
@@ -24,8 +30,8 @@ class yoloAnnotatedImageLoader:
         self.PROJECT_NAME = "aitf-triton-data"
         self.labelCategory = "ground_truth"
         self.builder = flatbuffers.Builder(1024)
-        self.channel = util.get_gRPC_channel()
-        self.projectUuid = util_fb.getOrCreateProject(self.builder, self.channel, self.PROJECT_NAME)
+        self.channel = get_gRPC_channel()
+        self.projectUuid = getOrCreateProject(self.builder, self.channel, self.PROJECT_NAME)
 
         self.time = 1680705904
         self.rootFolder = "/seerep/seerep-data/ai-tf-triton-paper-data"
@@ -63,19 +69,19 @@ class yoloAnnotatedImageLoader:
             labelStrings = []
             for label in labels:
                 labelStrings.append('person')
-                centerPoints.append(util_fb.createPoint2d(self.builder, float(label[1]), float(label[2])))
-                spatialExtents.append(util_fb.createPoint2d(self.builder, float(label[3]), float(label[4])))
+                centerPoints.append(createPoint2d(self.builder, float(label[1]), float(label[2])))
+                spatialExtents.append(createPoint2d(self.builder, float(label[3]), float(label[4])))
 
-            boundingBoxes = util_fb.createBoundingBoxes2d(self.builder, centerPoints, spatialExtents)
-            labelWithInstances = util_fb.createLabelsWithInstance(
+            boundingBoxes = createBoundingBoxes2d(self.builder, centerPoints, spatialExtents)
+            labelWithInstances = createLabelsWithInstance(
                 self.builder,
                 labelStrings,
                 [1.0 for _ in range(len(labelStrings))],
                 [str(uuid.uuid4()) for _ in range(len(labelStrings))],
             )
-            labelsBb = util_fb.createBoundingBoxes2dLabeled(self.builder, labelWithInstances, boundingBoxes)
+            labelsBb = createBoundingBoxes2dLabeled(self.builder, labelWithInstances, boundingBoxes)
 
-            boundingBox2DLabeledWithCategory = util_fb.createBoundingBox2DLabeledWithCategory(
+            boundingBox2DLabeledWithCategory = createBoundingBox2DLabeledWithCategory(
                 self.builder, self.builder.CreateString(self.labelCategory), labelsBb
             )
 
@@ -83,17 +89,17 @@ class yoloAnnotatedImageLoader:
             self.builder.PrependUOffsetTRelative(boundingBox2DLabeledWithCategory)
             boundingBox2DLabeledWithCategoryVector = self.builder.EndVector()
 
-        labelsGeneral = util_fb.createLabelsWithInstance(
+        labelsGeneral = createLabelsWithInstance(
             self.builder,
             labelGeneral,
             [1.0 for _ in range(len(labelGeneral))],
             [str(uuid.uuid4()) for _ in range(len(labelGeneral))],
         )
-        labelsGeneralCat = util_fb.createLabelWithCategory(self.builder, [self.labelCategory], [labelsGeneral])
+        labelsGeneralCat = createLabelWithCategory(self.builder, [self.labelCategory], [labelsGeneral])
 
-        header = util_fb.createHeader(
+        header = createHeader(
             self.builder,
-            timeStamp=util_fb.createTimeStamp(self.builder, self.time, 0.0),
+            timeStamp=createTimeStamp(self.builder, self.time, 0.0),
             frame="map",
             projectUuid=self.projectUuid,
         )

@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 
-import os
-import sys
-
 import flatbuffers
 import imageio.v2 as imageio
 import numpy as np
@@ -28,10 +25,8 @@ from seerep.fb import (
 from seerep.fb import image_service_grpc_fb as imageService
 from seerep.fb import point_service_grpc_fb as pointService
 from seerep.fb import tf_service_grpc_fb as tfService
-
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-import util
-import util_fb
+from seerep.util.common import get_gRPC_channel
+from seerep.util.fb_helper import getOrCreateProject
 
 
 class LoadSimulatedDataWithInstancePosition:
@@ -57,8 +52,8 @@ class LoadSimulatedDataWithInstancePosition:
         self.labelCategory = "ground_truth"
 
         self.builder = flatbuffers.Builder(1024)
-        self.channel = util.get_gRPC_channel()
-        self.projectUuid = util_fb.getOrCreateProject(self.builder, self.channel, self.PROJECT_NAME)
+        self.channel = get_gRPC_channel()
+        self.projectUuid = getOrCreateProject(self.builder, self.channel, self.PROJECT_NAME)
         self.theTime = [1654688921]  # 08.06.2022 13:49 #int(time.time())
         self.root = ["/seerep/seerep-data/cw_synthetic_maize/dataset_v2/"]
 
