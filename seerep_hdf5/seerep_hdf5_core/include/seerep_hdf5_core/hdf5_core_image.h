@@ -124,6 +124,16 @@ public:
    */
   const std::string getHdf5DataSetPath(const std::string& id) const;
 
+private:
+  /**
+   * @brief fetch the camera intrinsics using the provided uuid, compute the frustrum of the camera and apply them to
+   * the provided bounding box
+   *
+   * @param camintrinsics_uuid uuid of camera intrinsics to be fetched
+   * @param bb boundingbox in which the computed frustrum has to be saved
+   */
+  void fetchCameraIntrinsics(const std::string& camintrinsics_uuid, seerep_core_msgs::AABB& bb);
+
 public:
   // image attribute keys
   inline static const std::string HEIGHT = "height";

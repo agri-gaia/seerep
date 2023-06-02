@@ -17,56 +17,49 @@ std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CoreImage::readDataset(con
 
 std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CoreImage::readDataset(const std::string& uuid)
 {
-  const std::scoped_lock lock(*m_write_mtx);
-
-  std::string hdf5DataGroupPath = getHdf5GroupPath(uuid);
-
-  auto dataGroupPtr = getHdf5Group(hdf5DataGroupPath);
-
-  if (!dataGroupPtr)
-  {
-    return std::nullopt;
-  }
-
   seerep_core_msgs::DatasetIndexable data;
+  std::string camintrinsics_uuid;
 
-  data.header.datatype = seerep_core_msgs::Datatype::Image;
+  {
+    // perform the read of the dataset in this scope to release the lock as this scope ends
+    // the lock needs to be released to allow for the readout of camera intrinsics
+    const std::scoped_lock lock(*m_write_mtx);
 
-  data.header.frameId = readAttributeFromHdf5<std::string>(hdf5DataGroupPath, *dataGroupPtr,
-                                                           seerep_hdf5_core::Hdf5CoreImage::HEADER_FRAME_ID);
-  data.header.timestamp.seconds = readAttributeFromHdf5<int64_t>(hdf5DataGroupPath, *dataGroupPtr,
-                                                                 seerep_hdf5_core::Hdf5CoreImage::HEADER_STAMP_SECONDS);
-  data.header.timestamp.nanos = readAttributeFromHdf5<int64_t>(hdf5DataGroupPath, *dataGroupPtr,
-                                                               seerep_hdf5_core::Hdf5CoreImage::HEADER_STAMP_NANOS);
+    std::string hdf5DataGroupPath = getHdf5GroupPath(uuid);
 
-  readLabelsGeneralAndAddToLabelsWithInstancesWithCategory(HDF5_GROUP_IMAGE, uuid, data.labelsWithInstancesWithCategory);
+    auto dataGroupPtr = getHdf5Group(hdf5DataGroupPath);
 
-  readBoundingBoxLabeledAndAddToLabelsWithInstancesWithCategory(HDF5_GROUP_IMAGE, uuid,
-                                                                data.labelsWithInstancesWithCategory);
+    if (!dataGroupPtr)
+    {
+      return std::nullopt;
+    }
 
-  // fetch cam intrinsics uuid from hdf5_core_cameraintrinsics
-  std::string camintrinsics_uuid = readAttributeFromHdf5<std::string>(
-      hdf5DataGroupPath, *dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::CAMERA_INTRINSICS_UUID);
+    data.header.datatype = seerep_core_msgs::Datatype::Image;
 
-  // release the lock to start the read out of camera intrinsics
-  lock.~scoped_lock();
+    data.header.frameId = readAttributeFromHdf5<std::string>(hdf5DataGroupPath, *dataGroupPtr,
+                                                             seerep_hdf5_core::Hdf5CoreImage::HEADER_FRAME_ID);
+    data.header.timestamp.seconds = readAttributeFromHdf5<int64_t>(
+        hdf5DataGroupPath, *dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::HEADER_STAMP_SECONDS);
+    data.header.timestamp.nanos = readAttributeFromHdf5<int64_t>(hdf5DataGroupPath, *dataGroupPtr,
+                                                                 seerep_hdf5_core::Hdf5CoreImage::HEADER_STAMP_NANOS);
 
-  seerep_core_msgs::camera_intrinsics ci =
-      m_ioCI->readCameraIntrinsics(boost::lexical_cast<boost::uuids::uuid>(camintrinsics_uuid));
+    boost::uuids::string_generator gen;
+    boost::uuids::uuid uuid_generated = gen(uuid);
+    data.header.uuidData = uuid_generated;
 
-  // compute frustrum
-  double object_dist = ci.maximum_viewing_distance;
+    readLabelsGeneralAndAddToLabelsWithInstancesWithCategory(HDF5_GROUP_IMAGE, uuid,
+                                                             data.labelsWithInstancesWithCategory);
 
-  double field_of_view_x = object_dist * ci.height / ci.intrinsic_matrix[0];
-  double field_of_view_y = object_dist * ci.width / ci.intrinsic_matrix[4];
+    readBoundingBoxLabeledAndAddToLabelsWithInstancesWithCategory(HDF5_GROUP_IMAGE, uuid,
+                                                                  data.labelsWithInstancesWithCategory);
 
-  // generate bounding box
-  data.boundingbox.min_corner().set<0>(field_of_view_x / 2);
-  data.boundingbox.min_corner().set<1>(field_of_view_y / 2);
-  data.boundingbox.min_corner().set<2>(object_dist);
-  data.boundingbox.max_corner().set<0>(field_of_view_x / -2);
-  data.boundingbox.max_corner().set<1>(field_of_view_y / -2);
-  data.boundingbox.max_corner().set<2>(object_dist);
+    // fetch cam intrinsics uuid from hdf5_core_cameraintrinsics
+    std::string camintrinsics_uuid = readAttributeFromHdf5<std::string>(
+        hdf5DataGroupPath, *dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::CAMERA_INTRINSICS_UUID);
+  }
+  // lock released
+
+  fetchCameraIntrinsics(camintrinsics_uuid, data.boundingbox);
 
   return data;
 }
@@ -137,5 +130,25 @@ const std::string Hdf5CoreImage::getHdf5GroupPath(const std::string& id) const
 const std::string Hdf5CoreImage::getHdf5DataSetPath(const std::string& id) const
 {
   return getHdf5GroupPath(id) + "/" + RAWDATA;
+}
+
+void Hdf5CoreImage::fetchCameraIntrinsics(const std::string& camintrinsics_uuid, seerep_core_msgs::AABB& bb)
+{
+  seerep_core_msgs::camera_intrinsics ci =
+      m_ioCI->readCameraIntrinsics(boost::lexical_cast<boost::uuids::uuid>(camintrinsics_uuid));
+
+  // compute frustrum
+  double object_dist = ci.maximum_viewing_distance;
+
+  double field_of_view_x = object_dist * ci.height / ci.intrinsic_matrix[0];
+  double field_of_view_y = object_dist * ci.width / ci.intrinsic_matrix[4];
+
+  // generate bounding box
+  bb.min_corner().set<0>(field_of_view_x / -2);
+  bb.min_corner().set<1>(field_of_view_y / -2);
+  bb.min_corner().set<2>(0);
+  bb.max_corner().set<0>(field_of_view_x / 2);
+  bb.max_corner().set<1>(field_of_view_y / 2);
+  bb.max_corner().set<2>(object_dist);
 }
 }  // namespace seerep_hdf5_core
