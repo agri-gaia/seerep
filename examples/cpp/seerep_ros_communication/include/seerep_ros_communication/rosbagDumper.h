@@ -82,7 +82,6 @@ private:
 
   // map from pair of seconds/nanoseconds of the header to the uuid
   std::map<uint64_t, std::string> timeUuidMap;
-  std::mutex timeUuidMapMutex;
 
   std::string topicImage;
   std::string topicCameraIntrinsics;

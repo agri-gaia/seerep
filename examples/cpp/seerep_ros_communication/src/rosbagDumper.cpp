@@ -32,7 +32,6 @@ RosbagDumper::RosbagDumper(const std::string& bagPath, const std::string& classe
 
   ioCoreGeneral->writeProjectname(std::filesystem::path(bagPath).filename());
   ioCoreGeneral->writeProjectFrameId("map");
-  ioCoreGeneral->writeVersion("0.0.0");
 
   readClassesMapping(classesMappingPath);
 
@@ -73,14 +72,16 @@ void RosbagDumper::getGeoAnchor()
   for (const rosbag::MessageInstance& m : rosbag::View(bag, rosbag::TopicQuery(topicGeoAnchor)))
   {
     geographic_msgs::GeoPointStamped::ConstPtr msg = m.instantiate<geographic_msgs::GeoPointStamped>();
-
-    seerep_core_msgs::GeodeticCoordinates geoCoordinates;
-    geoCoordinates.latitude = msg->position.latitude;
-    geoCoordinates.longitude = msg->position.longitude;
-    geoCoordinates.altitude = msg->position.altitude;
-    geoCoordinates.ellipsoid = "";
-    geoCoordinates.coordinateSystem = "";
-    ioCoreGeneral->writeGeodeticLocation(geoCoordinates);
+    if (msg != nullptr)
+    {
+      seerep_core_msgs::GeodeticCoordinates geoCoordinates;
+      geoCoordinates.latitude = msg->position.latitude;
+      geoCoordinates.longitude = msg->position.longitude;
+      geoCoordinates.altitude = msg->position.altitude;
+      geoCoordinates.ellipsoid = "";
+      geoCoordinates.coordinateSystem = "";
+      ioCoreGeneral->writeGeodeticLocation(geoCoordinates);
+    }
   }
 }
 
@@ -89,9 +90,11 @@ void RosbagDumper::getCameraIntrinsic()
   for (const rosbag::MessageInstance& m : rosbag::View(bag, rosbag::TopicQuery(topicCameraIntrinsics)))
   {
     sensor_msgs::CameraInfo::ConstPtr msg = m.instantiate<sensor_msgs::CameraInfo>();
-
-    cameraInfo = *msg;
-    break;
+    if (msg != nullptr)
+    {
+      cameraInfo = *msg;
+      break;
+    }
   }
 }
 
@@ -107,10 +110,9 @@ void RosbagDumper::iterateAndDumpImages()
       ROS_DEBUG_STREAM(uuidstring << " storing image"
                                   << " time: " << msg->header.stamp.sec << " / " << msg->header.stamp.nsec);
       uint64_t time = (uint64_t)msg->header.stamp.sec << 32 | msg->header.stamp.nsec;
-      {  // scope of lock
-        const std::scoped_lock lock(timeUuidMapMutex);
-        timeUuidMap.emplace(time, uuidstring);
-      }
+
+      timeUuidMap.emplace(time, uuidstring);
+
       std::string projectuuiddummy = "";
       auto imgMsg = seerep_ros_conversions_fb::toFlat(*msg, projectuuiddummy);
 
@@ -134,14 +136,12 @@ void RosbagDumper::iterateAndDumpDetections(bool storeImages)
       std::string uuidstring;
       if (storeImages)
       {
-        {  // scope of lock
-          const std::scoped_lock lock(timeUuidMapMutex);
-          auto result = timeUuidMap.find(time);
-          if (result != timeUuidMap.end())
-          {
-            uuidstring = result->second;
-          }
+        auto result = timeUuidMap.find(time);
+        if (result != timeUuidMap.end())
+        {
+          uuidstring = result->second;
         }
+
         ROS_INFO_STREAM("storing detections: " << uuidstring << " time: " << msg->header.stamp.sec << " / "
                                                << msg->header.stamp.nsec);
       }
@@ -331,7 +331,7 @@ int main(int argc, char** argv)
 
   const std::string hdf5FilePath = getHDF5FilePath(privateNh);
 
-  if (privateNh.getParam("bag_path", bagPath) && privateNh.getParam("classesMappingPath", classesMappingPath) &&
+  if (privateNh.getParam("bagPath", bagPath) && privateNh.getParam("classesMappingPath", classesMappingPath) &&
       privateNh.getParam("projectFrameId", projectFrameId) && privateNh.getParam("projectName", projectName) &&
       privateNh.getParam("topicImage", topicImage) &&
       privateNh.getParam("topicCameraIntrinsics", topicCameraIntrinsics) &&
