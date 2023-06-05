@@ -98,4 +98,163 @@ grpc::Status PbMetaOperations::GetProjects(grpc::ServerContext* context, const g
   return grpc::Status::OK;
 }
 
+grpc::Status PbMetaOperations::GetOverallTimeInterval(grpc::ServerContext* context,
+                                                      const seerep::pb::UuidDatatypePair* request,
+                                                      seerep::pb::TimeInterval* response)
+{
+  (void)context;  // ignore that variable without causing warnings
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "fetching overall time interval";
+
+  std::vector<seerep_core_msgs::Datatype> dt_vector;
+  seerep_core_pb::CorePbConversion::fromPbDatatypeVector(request->datatype(), dt_vector);
+
+  try
+  {
+    std::string uuid = request->projectuuid();
+    boost::uuids::string_generator gen;
+    auto uuidFromString = gen(uuid);
+
+    seerep_core_msgs::AabbTime timeinterval = seerepCore->getOverallTimeInterval(uuidFromString, dt_vector);
+
+    seerep_core_pb::CorePbConversion::toPb(timeinterval, response);
+  }
+  catch (const std::exception& e)
+  {
+    // specific handling for all exceptions extending std::exception, except
+    // std::runtime_error which is handled explicitly
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (...)
+  {
+    // catch any other errors (that we have no information about)
+    std::string msg = "Unknown failure occurred. Possible memory corruption";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
+  }
+
+  return grpc::Status::OK;
+}
+grpc::Status PbMetaOperations::GetOverallBoundingBox(grpc::ServerContext* context,
+                                                     const seerep::pb::UuidDatatypePair* request,
+                                                     seerep::pb::Boundingbox* response)
+{
+  (void)context;  // ignore that variable without causing warnings
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "fetching overall bounding box";
+
+  std::vector<seerep_core_msgs::Datatype> dt_vector;
+  seerep_core_pb::CorePbConversion::fromPbDatatypeVector(request->datatype(), dt_vector);
+
+  try
+  {
+    std::string uuid = request->projectuuid();
+    boost::uuids::string_generator gen;
+    auto uuidFromString = gen(uuid);
+
+    seerep_core_msgs::AABB overallBB = seerepCore->getOverallBound(uuidFromString, dt_vector);
+
+    seerep_core_pb::CorePbConversion::toPb(overallBB, response);
+  }
+  catch (const std::exception& e)
+  {
+    // specific handling for all exceptions extending std::exception, except
+    // std::runtime_error which is handled explicitly
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (...)
+  {
+    // catch any other errors (that we have no information about)
+    std::string msg = "Unknown failure occurred. Possible memory corruption";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
+  }
+
+  return grpc::Status::OK;
+}
+
+grpc::Status PbMetaOperations::GetAllCategories(grpc::ServerContext* context,
+                                                const seerep::pb::UuidDatatypePair* request,
+                                                seerep::pb::Categories* response)
+{
+  (void)context;  // ignore that variable without causing warnings
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "fetching all categories";
+
+  std::vector<seerep_core_msgs::Datatype> dt_vector;
+  seerep_core_pb::CorePbConversion::fromPbDatatypeVector(request->datatype(), dt_vector);
+
+  try
+  {
+    std::string uuid = request->projectuuid();
+    boost::uuids::string_generator gen;
+    auto uuidFromString = gen(uuid);
+
+    std::unordered_set<std::string> categories = seerepCore->getAllCategories(uuidFromString, dt_vector);
+
+    for (std::string category : categories)
+    {
+      response->add_categories(category);
+    }
+  }
+  catch (const std::exception& e)
+  {
+    // specific handling for all exceptions extending std::exception, except
+    // std::runtime_error which is handled explicitly
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (...)
+  {
+    // catch any other errors (that we have no information about)
+    std::string msg = "Unknown failure occurred. Possible memory corruption";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
+  }
+
+  return grpc::Status::OK;
+}
+
+grpc::Status PbMetaOperations::GetAllLabels(grpc::ServerContext* context,
+                                            const seerep::pb::UuidDatatypeWithCategory* request,
+                                            seerep::pb::Labels* response)
+{
+  (void)context;  // ignore that variable without causing warnings
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "fetching overall bounding box";
+
+  std::vector<seerep_core_msgs::Datatype> dt_vector;
+  seerep_core_pb::CorePbConversion::fromPbDatatypeVector(request->uuid_with_datatype().datatype(), dt_vector);
+
+  try
+  {
+    std::string category = request->category();
+
+    std::string uuid = request->uuid_with_datatype().projectuuid();
+    boost::uuids::string_generator gen;
+    auto uuidFromString = gen(uuid);
+
+    std::unordered_set<std::string> allLabels = seerepCore->getAllLabels(uuidFromString, dt_vector, category);
+
+    for (std::string label : allLabels)
+    {
+      response->add_labels(label);
+    }
+  }
+  catch (const std::exception& e)
+  {
+    // specific handling for all exceptions extending std::exception, except
+    // std::runtime_error which is handled explicitly
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (...)
+  {
+    // catch any other errors (that we have no information about)
+    std::string msg = "Unknown failure occurred. Possible memory corruption";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
+  }
+
+  return grpc::Status::OK;
+}
+
 } /* namespace seerep_server */

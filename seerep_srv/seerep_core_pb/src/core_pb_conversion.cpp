@@ -399,4 +399,67 @@ void CorePbConversion::fromFbQueryMaxNumData(const seerep::pb::Query& query, see
   queryCore.maxNumData = query.maxnumdata();
 }
 
+void CorePbConversion::fromPbDatatypeVector(const seerep::datatype& datatype,
+                                            std::vector<seerep_core_msgs::Datatype>& dtCore)
+{
+  if (datatype == seerep::datatype::image)
+  {
+    dtCore.push_back(seerep_core_msgs::Datatype::Image);
+  }
+  else if (datatype == seerep::datatype::pointcloud)
+  {
+    dtCore.push_back(seerep_core_msgs::Datatype::PointCloud);
+  }
+  else if (datatype == seerep::datatype::point)
+  {
+    dtCore.push_back(seerep_core_msgs::Datatype::Point);
+  }
+  else if (datatype == seerep::datatype::all)
+  {
+    dtCore.push_back(seerep_core_msgs::Datatype::Image);
+    dtCore.push_back(seerep_core_msgs::Datatype::PointCloud);
+    dtCore.push_back(seerep_core_msgs::Datatype::Point);
+  }
+}
+
+void CorePbConversion::toPb(const seerep_core_msgs::AabbTime& timeinterval, seerep::pb::TimeInterval* ti_pb)
+{
+  // isolate second and nano second bits from min time
+  int64_t mintime = timeinterval.min_corner().get<0>();
+  int32_t min_nanos = (int32_t)mintime;
+  uint32_t min_seconds = (uint32_t)(mintime >> 32);
+
+  // isolate second and nano second bits from max time
+  int64_t maxtime = timeinterval.max_corner().get<0>();
+  int32_t max_nanos = (int32_t)maxtime;
+  uint32_t max_seconds = (uint32_t)(maxtime >> 32);
+
+  ti_pb->mutable_time_min()->set_nanos(min_nanos);
+  ti_pb->mutable_time_min()->set_seconds(min_seconds);
+
+  ti_pb->mutable_time_max()->set_nanos(max_nanos);
+  ti_pb->mutable_time_max()->set_seconds(max_seconds);
+}
+
+void CorePbConversion::toPb(const seerep_core_msgs::AABB& aabb, seerep::pb::Boundingbox* bb_pb)
+{
+  // center
+  float center_x = (aabb.min_corner().get<0>() + aabb.max_corner().get<0>()) / 2;
+  float center_y = (aabb.min_corner().get<1>() + aabb.max_corner().get<1>()) / 2;
+  float center_z = (aabb.min_corner().get<2>() + aabb.max_corner().get<2>()) / 2;
+
+  // spatial extent
+  float se_x = (aabb.max_corner().get<0>() - aabb.min_corner().get<0>());
+  float se_y = (aabb.max_corner().get<1>() - aabb.min_corner().get<1>());
+  float se_z = (aabb.max_corner().get<2>() - aabb.min_corner().get<2>());
+
+  bb_pb->mutable_center_point()->set_x(center_x);
+  bb_pb->mutable_center_point()->set_y(center_y);
+  bb_pb->mutable_center_point()->set_z(center_z);
+
+  bb_pb->mutable_spatial_extent()->set_x(se_x);
+  bb_pb->mutable_spatial_extent()->set_y(se_y);
+  bb_pb->mutable_spatial_extent()->set_z(se_z);
+}
+
 }  // namespace seerep_core_pb

@@ -4,6 +4,7 @@
 // seerep
 #include <seerep_com/meta_operations.grpc.fb.h>
 #include <seerep_core/core.h>
+#include <seerep_core_fb/core_fb_conversion.h>
 
 // logging
 #include <boost/log/sources/severity_logger.hpp>
@@ -25,6 +26,18 @@ public:
   grpc::Status DeleteProject(grpc::ServerContext* context,
                              const flatbuffers::grpc::Message<seerep::fb::ProjectInfo>* request,
                              flatbuffers::grpc::Message<seerep::fb::Empty>* response) override;
+  grpc::Status GetOverallTimeInterval(grpc::ServerContext* context,
+                                      const flatbuffers::grpc::Message<seerep::fb::UuidDatatypePair>* request,
+                                      flatbuffers::grpc::Message<seerep::fb::TimeInterval>* response) override;
+  grpc::Status GetOverallBoundingBox(grpc::ServerContext* context,
+                                     const flatbuffers::grpc::Message<seerep::fb::UuidDatatypePair>* request,
+                                     flatbuffers::grpc::Message<seerep::fb::Boundingbox>* response) override;
+  grpc::Status GetAllCategories(grpc::ServerContext* context,
+                                const flatbuffers::grpc::Message<seerep::fb::UuidDatatypePair>* request,
+                                flatbuffers::grpc::Message<seerep::fb::Categories>* response) override;
+  grpc::Status GetAllLabels(grpc::ServerContext* context,
+                            const flatbuffers::grpc::Message<seerep::fb::UuidDatatypeWithCategory>* request,
+                            flatbuffers::grpc::Message<seerep::fb::Labels>* response) override;
 
 private:
   std::shared_ptr<seerep_core::Core> seerepCore;

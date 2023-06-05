@@ -28,6 +28,8 @@ from seerep.fb import (
     TimeInterval,
     Timestamp,
     TransformStampedQuery,
+    UuidDatatypePair,
+    UuidDatatypeWithCategory,
 )
 from seerep.fb import meta_operations_grpc_fb as metaOperations
 
@@ -521,3 +523,33 @@ def createCameraIntrinsicsQuery(builder, ci_uuid, project_uuid):
     CameraIntrinsicsQuery.AddUuidProject(builder, project_uuid_str)
 
     return CameraIntrinsicsQuery.End(builder)
+
+
+def createUuidDatatypePair(builder, uuid, datatype):
+    uuidStr = builder.CreateString(uuid)
+
+    UuidDatatypePair.Start(builder)
+    UuidDatatypePair.AddProjectuuid(builder, uuidStr)
+    UuidDatatypePair.AddDatatype(builder, datatype)
+    return UuidDatatypePair.End(builder)
+
+
+def createUuidDatatypeWithCategory(builder, uuid, datatype, category):
+    categoryStr = builder.CreateString(category)
+
+    UuidDatatypePair = createUuidDatatypePair(builder, uuid, datatype)
+
+    UuidDatatypeWithCategory.Start(builder)
+    UuidDatatypeWithCategory.AddCategory(builder, categoryStr)
+    UuidDatatypeWithCategory.AddUuidAndDatatype(builder, UuidDatatypePair)
+    return UuidDatatypeWithCategory.End(builder)
+
+
+def createProjectInfo(builder, name, uuid):
+    nameStr = builder.CreateString(name)
+    uuidStr = builder.CreateString(uuid)
+
+    ProjectInfo.Start(builder)
+    ProjectInfo.AddName(builder, nameStr)
+    ProjectInfo.AddUuid(builder, uuidStr)
+    return ProjectInfo.End(builder)

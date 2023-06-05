@@ -10,6 +10,7 @@
 #include <seerep_msgs/camera_intrinsics_generated.h>
 #include <seerep_msgs/camera_intrinsics_query_generated.h>
 // seerep-msgs
+#include <seerep_msgs/aabb.h>
 #include <seerep_msgs/camera_intrinsics.h>
 #include <seerep_msgs/camera_intrinsics_query.h>
 #include <seerep_msgs/datatype_generated.h>
@@ -156,12 +157,20 @@ public:
    */
   static seerep_core_msgs::camera_intrinsics_query fromFb(const seerep::fb::CameraIntrinsicsQuery& camIntrinsicsQuery);
 
+  static flatbuffers::Offset<seerep::fb::Boundingbox> toFb(flatbuffers::grpc::MessageBuilder& mb,
+                                                           seerep_core_msgs::AABB& aabb);
+
+  static flatbuffers::Offset<seerep::fb::TimeInterval> toFb(flatbuffers::grpc::MessageBuilder& mb,
+                                                            seerep_core_msgs::AabbTime& aabb);
+
   /**
    * @brief converts the query result from the seerep core format to gRPC flatbuffer message
    * @param result the query result in seerep core specific format
    * @return the result as gRPC flatbuffer message
    */
   static flatbuffers::grpc::Message<seerep::fb::UuidsPerProject> toFb(seerep_core_msgs::QueryResult& result);
+
+  static std::vector<seerep_core_msgs::Datatype> fromFbDatatypeVector(const seerep::fb::Datatype& dt);
 
 private:
   /**

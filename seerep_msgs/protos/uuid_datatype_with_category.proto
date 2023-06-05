@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package seerep.pb;
+
+import "uuid_datatype_pair.proto";
+
+message UuidDatatypeWithCategory
+{
+  string category = 1;
+  UuidDatatypePair uuid_with_datatype = 2;
+}

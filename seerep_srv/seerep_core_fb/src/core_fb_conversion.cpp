@@ -314,6 +314,68 @@ flatbuffers::grpc::Message<seerep::fb::UuidsPerProject> CoreFbConversion::toFb(s
   return builder.ReleaseMessage<seerep::fb::UuidsPerProject>();
 }
 
+flatbuffers::Offset<seerep::fb::Boundingbox> CoreFbConversion::toFb(flatbuffers::grpc::MessageBuilder& mb,
+                                                                    seerep_core_msgs::AABB& aabb)
+{
+  // center
+  float center_x = (aabb.min_corner().get<0>() + aabb.max_corner().get<0>()) / 2;
+  float center_y = (aabb.min_corner().get<1>() + aabb.max_corner().get<1>()) / 2;
+  float center_z = (aabb.min_corner().get<2>() + aabb.max_corner().get<2>()) / 2;
+
+  // spatial extent
+  float se_x = (aabb.max_corner().get<0>() - aabb.min_corner().get<0>());
+  float se_y = (aabb.max_corner().get<1>() - aabb.min_corner().get<1>());
+  float se_z = (aabb.max_corner().get<2>() - aabb.min_corner().get<2>());
+
+  seerep::fb::PointBuilder centerPointBuilder(mb);
+  centerPointBuilder.add_x(center_x);
+  centerPointBuilder.add_y(center_y);
+  centerPointBuilder.add_z(center_z);
+  flatbuffers::Offset<seerep::fb::Point> centerPoint = centerPointBuilder.Finish();
+
+  seerep::fb::PointBuilder spatialExtentBuilder(mb);
+  spatialExtentBuilder.add_x(se_x);
+  spatialExtentBuilder.add_y(se_y);
+  spatialExtentBuilder.add_z(se_z);
+  flatbuffers::Offset<seerep::fb::Point> spatialExtent = spatialExtentBuilder.Finish();
+
+  seerep::fb::BoundingboxBuilder boundingBoxBuilder(mb);
+  boundingBoxBuilder.add_center_point(centerPoint);
+  boundingBoxBuilder.add_spatial_extent(spatialExtent);
+
+  return boundingBoxBuilder.Finish();
+}
+
+flatbuffers::Offset<seerep::fb::TimeInterval> CoreFbConversion::toFb(flatbuffers::grpc::MessageBuilder& mb,
+                                                                     seerep_core_msgs::AabbTime& timeinterval)
+{
+  // isolate second and nano second bits from min time
+  int64_t mintime = timeinterval.min_corner().get<0>();
+  int32_t min_nanos = (int32_t)mintime;
+  uint32_t min_seconds = (uint32_t)(mintime >> 32);
+
+  // isolate second and nano second bits from max time
+  int64_t maxtime = timeinterval.max_corner().get<0>();
+  int32_t max_nanos = (int32_t)maxtime;
+  uint32_t max_seconds = (uint32_t)(maxtime >> 32);
+
+  seerep::fb::TimestampBuilder minTimeStampBuilder(mb);
+  minTimeStampBuilder.add_seconds(min_seconds);
+  minTimeStampBuilder.add_nanos(min_nanos);
+  flatbuffers::Offset<seerep::fb::Timestamp> min = minTimeStampBuilder.Finish();
+
+  seerep::fb::TimestampBuilder maxTimeStampBuilder(mb);
+  maxTimeStampBuilder.add_seconds(max_seconds);
+  maxTimeStampBuilder.add_nanos(max_nanos);
+  flatbuffers::Offset<seerep::fb::Timestamp> max = maxTimeStampBuilder.Finish();
+
+  seerep::fb::TimeIntervalBuilder timeIntervalBuilder(mb);
+  timeIntervalBuilder.add_time_min(min);
+  timeIntervalBuilder.add_time_max(max);
+
+  return timeIntervalBuilder.Finish();
+}
+
 void CoreFbConversion::fromFbQueryProject(const seerep::fb::Query* query,
                                           std::optional<std::vector<boost::uuids::uuid>>& queryCoreProjects)
 {
@@ -582,4 +644,24 @@ void CoreFbConversion::fromFbDataLabelsBb(
     }
   }
 }
+
+std::vector<seerep_core_msgs::Datatype> CoreFbConversion::fromFbDatatypeVector(const seerep::fb::Datatype& dt)
+{
+  std::vector<seerep_core_msgs::Datatype> dt_vector;
+
+  if (dt == seerep::fb::Datatype_All)
+  {
+    dt_vector.push_back(seerep_core_msgs::Datatype::Image);
+    dt_vector.push_back(seerep_core_msgs::Datatype::PointCloud);
+    dt_vector.push_back(seerep_core_msgs::Datatype::Point);
+  }
+  else
+  {
+    seerep_core_msgs::Datatype dtCore = fromFb(dt);
+    dt_vector.push_back(dtCore);
+  }
+
+  return dt_vector;
+}
+
 }  // namespace seerep_core_fb

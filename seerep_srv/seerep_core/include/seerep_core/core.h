@@ -158,6 +158,44 @@ public:
    */
   void deleteProject(boost::uuids::uuid uuid);
 
+  /**
+   * @brief Get the minimum and maximum time interval for a dataset
+   * @param uuid UUID of a dataset
+   * @param datatypes A vector of datatypes for which the time bound has to be computed
+   * @return seerep_core_msgs::AabbTime
+   */
+  seerep_core_msgs::AabbTime getOverallTimeInterval(boost::uuids::uuid uuid,
+                                                    std::vector<seerep_core_msgs::Datatype> datatypes);
+
+  /**
+   * @brief Get the minimum and maximum spatial bound for a dataset
+   * @param uuid UUID of a dataset
+   * @param datatypes A vector of datatypes for which the spatial bound has to be computed
+   * @return seerep_core_msgs::AABB
+   */
+  seerep_core_msgs::AABB getOverallBound(boost::uuids::uuid uuid, std::vector<seerep_core_msgs::Datatype> datatypes);
+
+  /**
+   * @brief Get the all categories saved in a project
+   *
+   * @param uuid of project
+   * @param datatypes A vector of datatypes
+   * @return std::vector<std::string> vectir if categories
+   */
+  std::unordered_set<std::string> getAllCategories(boost::uuids::uuid uuid,
+                                                   std::vector<seerep_core_msgs::Datatype> datatypes);
+
+  /**
+   * @brief Get the all labels saved in a project
+   *
+   * @param uuid of project
+   * @param datatypes A vector of datatypes
+   * @param category the category across which all labels have to be aggregated
+   * @return std::vector<std::string> uuid of project
+   */
+  std::unordered_set<std::string> getAllLabels(boost::uuids::uuid uuid,
+                                               std::vector<seerep_core_msgs::Datatype> datatypes, std::string category);
+
 private:
   /**
    * @brief Returns an iterator to the project with the given uuid. Throws an error if not found

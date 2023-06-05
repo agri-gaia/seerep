@@ -7,9 +7,19 @@ import "google/protobuf/empty.proto";
 import "project_info.proto";
 import "project_infos.proto";
 import "projectCreation.proto";
+import "uuid_datatype_pair.proto";
+import "time_interval.proto";
+import "boundingbox.proto";
+import "labels.proto";
+import "categories.proto";
+import "uuid_datatype_with_category.proto";
 
 service MetaOperations
 {
   rpc CreateProject(ProjectCreation) returns (ProjectInfo);
   rpc GetProjects(google.protobuf.Empty) returns (ProjectInfos);
+  rpc GetOverallTimeInterval(UuidDatatypePair) returns (TimeInterval);
+  rpc GetOverallBoundingBox(UuidDatatypePair) returns (Boundingbox);
+  rpc GetAllCategories(UuidDatatypePair) returns (Categories);
+  rpc GetAllLabels(UuidDatatypeWithCategory) returns (Labels);
 }

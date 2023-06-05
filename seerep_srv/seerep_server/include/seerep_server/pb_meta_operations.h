@@ -4,6 +4,7 @@
 // seerep
 #include <seerep_com/meta_operations.grpc.pb.h>
 #include <seerep_core/core.h>
+#include <seerep_core_pb/core_pb_conversion.h>
 
 #include "util.hpp"
 
@@ -22,6 +23,14 @@ public:
                              seerep::pb::ProjectInfo* response);
   grpc::Status GetProjects(grpc::ServerContext* context, const google::protobuf::Empty* request,
                            seerep::pb::ProjectInfos* response);
+  grpc::Status GetOverallTimeInterval(grpc::ServerContext* context, const seerep::pb::UuidDatatypePair* request,
+                                      seerep::pb::TimeInterval* response);
+  grpc::Status GetOverallBoundingBox(grpc::ServerContext* context, const seerep::pb::UuidDatatypePair* request,
+                                     seerep::pb::Boundingbox* response);
+  grpc::Status GetAllCategories(grpc::ServerContext* context, const seerep::pb::UuidDatatypePair* request,
+                                seerep::pb::Categories* response) override;
+  grpc::Status GetAllLabels(grpc::ServerContext* context, const seerep::pb::UuidDatatypeWithCategory* request,
+                            seerep::pb::Labels* response);
 
 private:
   std::shared_ptr<seerep_core::Core> seerepCore;

@@ -176,6 +176,39 @@ public:
    */
   std::shared_ptr<HighFive::File> getHdf5File();
 
+  /**
+   * @brief Get the the earliest and latest recorded time in a project
+   *
+   * @param datatypes datatypes across which this is determined
+   * @return seerep_core_msgs::AabbTime Time bound object
+   */
+  seerep_core_msgs::AabbTime getTimeBounds(std::vector<seerep_core_msgs::Datatype> datatypes);
+
+  /**
+   * @brief Get the Spatial Bounds of project
+   *
+   * @param datatypes datatypes across which this is determined
+   * @return seerep_core_msgs::AABB axis aligned bounding box of spatial information
+   */
+  seerep_core_msgs::AABB getSpatialBounds(std::vector<seerep_core_msgs::Datatype> datatypes);
+
+  /**
+   * @brief Get the All Categories saved in a project
+   *
+   * @param datatypes datatypes across which this is determined
+   * @return std::vector<std::string> a vector of all categories
+   */
+  std::unordered_set<std::string> getAllCategories(std::vector<seerep_core_msgs::Datatype> datatypes);
+
+  /**
+   * @brief Get the all labels saved in a project
+   *
+   * @param datatypes datatypes across which this is determined
+   * @param category the category across which all labels have to be aggregated
+   * @return std::vector<std::string> vector of labels
+   */
+  std::unordered_set<std::string> getAllLabels(std::vector<seerep_core_msgs::Datatype> datatypes, std::string category);
+
 private:
   /**
    * @brief Create the HDF5 file accessor and the mutex. Based on that create the

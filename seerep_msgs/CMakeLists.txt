@@ -25,6 +25,8 @@ set(MY_PROTO_FILES
     protos/boundingbox2d.proto
     protos/camera_intrinsics.proto
     protos/camera_intrinsics_query.proto
+    protos/categories.proto
+    protos/datatype.proto
     protos/frame_infos.proto
     protos/frame_query.proto
     protos/geodetic_coordinates.proto
@@ -32,6 +34,7 @@ set(MY_PROTO_FILES
     protos/image.proto
     protos/label_with_instance.proto
     protos/label.proto
+    protos/labels.proto
     protos/labels_with_category.proto
     protos/labels_with_instance_with_category.proto
     protos/point_cloud_2.proto
@@ -60,6 +63,8 @@ set(MY_PROTO_FILES
     protos/twist_with_covariance_stamped.proto
     protos/twist_with_covariance.proto
     protos/twist.proto
+    protos/uuid_datatype_with_category.proto
+    protos/uuid_datatype_pair.proto
     protos/vector3_stamped.proto
     protos/vector3.proto
 )
@@ -77,6 +82,7 @@ set(MY_FBS_FILES
     fbs/boundingboxes2d_labeled_stamped.fbs
     fbs/camera_intrinsics.fbs
     fbs/camera_intrinsics_query.fbs
+    fbs/categories.fbs
     fbs/datatype.fbs
     fbs/empty.fbs
     fbs/frame_infos.fbs
@@ -86,6 +92,7 @@ set(MY_FBS_FILES
     fbs/image.fbs
     fbs/label_with_instance.fbs
     fbs/label.fbs
+    fbs/labels.fbs
     fbs/labels_with_category.fbs
     fbs/labels_with_instance_with_category.fbs
     fbs/point_cloud_2.fbs
@@ -118,6 +125,8 @@ set(MY_FBS_FILES
     fbs/union_map_entry.fbs
     fbs/uuids_per_project.fbs
     fbs/uuids_project_pair.fbs
+    fbs/uuid_datatype_with_category.fbs
+    fbs/uuid_datatype_pair.fbs
     fbs/vector3_stamped.fbs
     fbs/vector3.fbs
 )

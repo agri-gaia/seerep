@@ -517,4 +517,130 @@ void CoreDataset::addLabels(const seerep_core_msgs::Datatype& datatype,
   datatypeSpecifics->datasetInstancesMap.emplace(msgUuid, instanceUuids);
 }
 
+seerep_core_msgs::AabbTime CoreDataset::getTimeBounds(std::vector<seerep_core_msgs::Datatype> datatypes)
+{
+  seerep_core_msgs::AabbTime overalltime;
+
+  overalltime.max_corner().set<0>(std::numeric_limits<int64_t>::min());
+  overalltime.min_corner().set<0>(std::numeric_limits<int64_t>::max());
+
+  for (seerep_core_msgs::Datatype dt : datatypes)
+  {
+    seerep_core_msgs::AabbTime timeinterval = m_datatypeDatatypeSpecificsMap.at(dt)->timetree.bounds();
+
+    // compare min and update if need be
+    if (timeinterval.min_corner().get<0>() < overalltime.min_corner().get<0>())
+    {
+      overalltime.min_corner().set<0>(timeinterval.min_corner().get<0>());
+    }
+
+    // compare min and update if need be
+    if (timeinterval.max_corner().get<0>() > overalltime.max_corner().get<0>())
+    {
+      overalltime.max_corner().set<0>(timeinterval.max_corner().get<0>());
+    }
+  }
+
+  return overalltime;
+}
+
+seerep_core_msgs::AABB CoreDataset::getSpatialBounds(std::vector<seerep_core_msgs::Datatype> datatypes)
+{
+  seerep_core_msgs::AABB overallbb;
+
+  // set the minimum to minimum possible for the datatype
+  overallbb.max_corner().set<0>(std::numeric_limits<float>::min());
+  overallbb.max_corner().set<1>(std::numeric_limits<float>::min());
+  overallbb.max_corner().set<2>(std::numeric_limits<float>::min());
+
+  // set the maximum for the maximum possible for the datatype
+  overallbb.min_corner().set<0>(std::numeric_limits<float>::max());
+  overallbb.min_corner().set<1>(std::numeric_limits<float>::max());
+  overallbb.min_corner().set<2>(std::numeric_limits<float>::max());
+
+  for (seerep_core_msgs::Datatype dt : datatypes)
+  {
+    seerep_core_msgs::AABB rtree_bounds = m_datatypeDatatypeSpecificsMap.at(dt)->rt.bounds();
+
+    // update the min if needed for dimension 0
+    if (rtree_bounds.min_corner().get<0>() < overallbb.min_corner().get<0>())
+    {
+      overallbb.min_corner().set<0>(rtree_bounds.min_corner().get<0>());
+    }
+
+    // update the min if needed for dimension 1
+    if (rtree_bounds.min_corner().get<1>() < overallbb.min_corner().get<1>())
+    {
+      overallbb.min_corner().set<1>(rtree_bounds.min_corner().get<1>());
+    }
+
+    // update the min if needed for dimension 2
+    if (rtree_bounds.min_corner().get<2>() < overallbb.min_corner().get<2>())
+    {
+      overallbb.min_corner().set<2>(rtree_bounds.min_corner().get<2>());
+    }
+
+    // update the max if needed for dimension 0
+    if (rtree_bounds.max_corner().get<0>() > overallbb.max_corner().get<0>())
+    {
+      overallbb.max_corner().set<0>(rtree_bounds.max_corner().get<0>());
+    }
+
+    // update the max if needed for dimension 1
+    if (rtree_bounds.max_corner().get<1>() > overallbb.max_corner().get<1>())
+    {
+      overallbb.max_corner().set<1>(rtree_bounds.max_corner().get<1>());
+    }
+
+    // update the max if needed for dimension 2
+    if (rtree_bounds.max_corner().get<2>() > overallbb.max_corner().get<2>())
+    {
+      overallbb.max_corner().set<2>(rtree_bounds.max_corner().get<2>());
+    }
+  }
+  return overallbb;
+}
+
+std::unordered_set<std::string> CoreDataset::getAllCategories(std::vector<seerep_core_msgs::Datatype> datatypes)
+{
+  std::unordered_set<std::string> categories;
+
+  // traverse all datatypes
+  for (seerep_core_msgs::Datatype dt : datatypes)
+  {
+    // obtain the map which holds the categories
+    auto categories_map = &(m_datatypeDatatypeSpecificsMap.at(dt)->categoryLabelDatasetsMap);
+
+    // traverse this map
+    for (auto& [category, value] : *categories_map)
+    {
+      categories.insert(category);
+    }
+  }
+  // return the prepared vector
+  return categories;
+}
+
+std::unordered_set<std::string> CoreDataset::getAllLabels(std::vector<seerep_core_msgs::Datatype> datatypes,
+                                                          std::string category)
+{
+  std::unordered_set<std::string> labels;
+
+  // traverse all datatypes
+  for (seerep_core_msgs::Datatype dt : datatypes)
+  {
+    // obtain the map pertaining to the provided category
+    std::unordered_map<std::string, std::vector<boost::uuids::uuid>>* label_to_uuid_map =
+        &(m_datatypeDatatypeSpecificsMap.at(dt)->categoryLabelDatasetsMap[category]);
+
+    // traverse this map
+    for (auto& [label, value] : *label_to_uuid_map)
+    {
+      labels.insert(label);
+    }
+  }
+  // return the prepared vector
+  return labels;
+}
+
 } /* namespace seerep_core */

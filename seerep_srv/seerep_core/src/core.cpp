@@ -308,4 +308,31 @@ void Core::addDatasetToResult(seerep_core_msgs::QueryResultProject& dataset, see
   }
 }
 
+seerep_core_msgs::AabbTime Core::getOverallTimeInterval(boost::uuids::uuid uuid,
+                                                        std::vector<seerep_core_msgs::Datatype> datatypes)
+{
+  auto project = findProject(uuid);
+  return project->second->getTimeBounds(datatypes);
+}
+
+seerep_core_msgs::AABB Core::getOverallBound(boost::uuids::uuid uuid, std::vector<seerep_core_msgs::Datatype> datatypes)
+{
+  auto project = findProject(uuid);
+  return project->second->getSpatialBounds(datatypes);
+}
+
+std::unordered_set<std::string> Core::getAllCategories(boost::uuids::uuid uuid,
+                                                       std::vector<seerep_core_msgs::Datatype> datatypes)
+{
+  auto project = findProject(uuid);
+  return project->second->getAllCategories(datatypes);
+}
+
+std::unordered_set<std::string>
+Core::getAllLabels(boost::uuids::uuid uuid, std::vector<seerep_core_msgs::Datatype> datatypes, std::string category)
+{
+  auto project = findProject(uuid);
+  return project->second->getAllLabels(datatypes, category);
+}
+
 } /* namespace seerep_core */

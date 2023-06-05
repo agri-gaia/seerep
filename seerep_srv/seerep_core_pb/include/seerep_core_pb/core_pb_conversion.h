@@ -7,6 +7,7 @@
 // seerep_msgs
 #include <seerep_msgs/camera_intrinsics.pb.h>
 #include <seerep_msgs/camera_intrinsics_query.pb.h>
+#include <seerep_msgs/datatype.pb.h>
 #include <seerep_msgs/image.pb.h>
 #include <seerep_msgs/point_cloud_2.pb.h>
 #include <seerep_msgs/query.pb.h>
@@ -75,6 +76,29 @@ public:
   static seerep::pb::CameraIntrinsics toPb(const seerep_core_msgs::camera_intrinsics& camintrinsics);
 
   static seerep_core_msgs::camera_intrinsics_query fromPb(const seerep::pb::CameraIntrinsicsQuery& camintrinsics_query);
+  /**
+   * @brief converts a seerep core msg AabbbTime to protobuf time inverval
+   *
+   * @param timeinterval core msg AabbTime
+   * @param ti_bb pointer to protobuf time interval
+   */
+  static void toPb(const seerep_core_msgs::AabbTime& timeinterval, seerep::pb::TimeInterval* ti_pb);
+
+  /**
+   * @brief converts a seerep core msg aabb to protobuf aabb
+   *
+   * @param aabb core msg aabb
+   * @param bb_bb pointer to protobuf aabb
+   */
+  static void toPb(const seerep_core_msgs::AABB& aabb, seerep::pb::Boundingbox* bb_pb);
+
+  /**
+   * @brief Convert Pb datatype to a vector containing core message datatypes
+   *
+   * @param datatype protobuf datatype
+   * @param dtCore std::vector<seerep_core_msgs::Datatype> vector of core msg datatype
+   */
+  static void fromPbDatatypeVector(const seerep::datatype& datatype, std::vector<seerep_core_msgs::Datatype>& dtCore);
 
 private:
   /**
