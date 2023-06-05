@@ -85,6 +85,7 @@ add_executable(${PROJECT_NAME}_hdf5dump src/hdf5dump.cpp)
 add_executable(${PROJECT_NAME}_querier src/querier.cpp)
 add_executable(${PROJECT_NAME}_querierFb src/querierFb.cpp)
 add_executable(${PROJECT_NAME}_rosbagDumper src/rosbagDumper.cpp)
+add_executable(${PROJECT_NAME}_jsonPointDumper src/jsonPointDumper.cpp)
 
 add_executable(
   ${PROJECT_NAME}_clientImagesWithDetection src/clientImagesWithDetection.cpp
@@ -108,6 +109,10 @@ add_dependencies(
 )
 add_dependencies(
   ${PROJECT_NAME}_rosbagDumper ${${PROJECT_NAME}_EXPORTED_TARGETS}
+  ${catkin_EXPORTED_TARGETS}
+)
+add_dependencies(
+  ${PROJECT_NAME}_jsonPointDumper ${${PROJECT_NAME}_EXPORTED_TARGETS}
   ${catkin_EXPORTED_TARGETS}
 )
 add_dependencies(
@@ -164,6 +169,17 @@ target_link_libraries(
   ${CURL_LIBRARIES}
 )
 target_link_libraries(
+  ${PROJECT_NAME}_jsonPointDumper
+  ${SeerepHdf5Core_LIBRARIES}
+  ${SeerepHdf5Fb_LIBRARIES}
+  ${catkin_LIBRARIES}
+  gRPC::grpc++_reflection
+  ${Boost_LIBRARIES}
+  ${Boost_LOG_LIBRARY}
+  ${Boost_LOG_SETUP_LIBRARY}
+  jsoncpp
+)
+target_link_libraries(
   ${PROJECT_NAME}_clientImagesWithDetection
   ${SeerepCom_LIBRARIES}
   ${seerep_ros_conversions_fb_LIBRARIES}
@@ -178,6 +194,7 @@ install(
           ${PROJECT_NAME}_querier
           ${PROJECT_NAME}_querierFb
           ${PROJECT_NAME}_rosbagDumper
+          ${PROJECT_NAME}_jsonPointDumper
           ${PROJECT_NAME}_clientImagesWithDetection
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
