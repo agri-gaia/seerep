@@ -7,8 +7,9 @@ import flatbuffers
 import numpy as np
 
 np.set_printoptions(precision=7)
-from seerep.fb import PointCloud2
+from seerep.fb import PointCloud2, Quaternion, Transform, TransformStamped, Vector3
 from seerep.fb import point_cloud_service_grpc_fb as pointCloudService
+from seerep.fb import tf_service_grpc_fb
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
     addToPointFieldVector,
@@ -41,8 +42,7 @@ def createPointCloud(builder, header, height=960, width=1280):
         [i * 10.0 for i in range(NUM_GENERAL_LABELS)],
         [str(uuid.uuid4()) for _ in range(NUM_GENERAL_LABELS)],
     )
-    labelsGeneralCat = createLabelWithCategory(builder, ["myCategory"], [[labelsGeneral]])
-    # labelsGeneralVector = addToGeneralLabelsVector(builder, labelsGeneralCat)
+    labelsGeneralCat = createLabelWithCategory(builder, ["myCategory"], [labelsGeneral])
 
     # create bounding box labels
     boundingBoxes = createBoundingBoxes(
@@ -76,30 +76,72 @@ def createPointCloud(builder, header, height=960, width=1280):
     PointCloud2.AddRowStep(builder, points.shape[1] * 16)
     PointCloud2.AddFields(builder, pointFieldsVector)
     PointCloud2.AddData(builder, pointsVector)
-    PointCloud2.AddLabelsGeneral(builder, labelsGeneralCat)
-    PointCloud2.AddLabelsBb(builder, labelsBBCat)
+    # PointCloud2.AddLabelsGeneral(builder, labelsGeneralCat)
+    # PointCloud2.AddLabelsBb(builder, labelsBBCat)
     return PointCloud2.End(builder)
 
 
-def createPointClouds(projectUuid, numOf):
+def createPointClouds(projectUuid, numOf, theTime):
     '''Creates numOf pointcloud2 messages as a generator function'''
-    theTime = int(time.time())
+
     for i in range(numOf):
         print(f"Send point cloud: {str(i+1)}")
         builder = flatbuffers.Builder(1024)
 
         timeStamp = createTimeStamp(builder, theTime + i)
-        header = createHeader(builder, timeStamp, "map", projectUuid)
+        header = createHeader(builder, timeStamp, "scanner", projectUuid)
 
-        pointCloudMsg = createPointCloud(builder, header)
+        pointCloudMsg = createPointCloud(builder, header, 10, 10)
         builder.Finish(pointCloudMsg)
         yield bytes(builder.Output())
 
 
-channel = get_gRPC_channel()
-stub = pointCloudService.PointCloudServiceStub(channel)
-builder = flatbuffers.Builder(1024)
+def createTF(channel, numOf, projectUuid, theTime):
 
+    for i in range(numOf):
+
+        builderTf = flatbuffers.Builder(1024)
+
+        timeStamp = createTimeStamp(builderTf, theTime + i)
+        header = createHeader(builderTf, timeStamp, "map", projectUuid)
+
+        Vector3.Start(builderTf)
+        Vector3.AddX(builderTf, 10 * i)
+        Vector3.AddY(builderTf, 10 * i)
+        Vector3.AddZ(builderTf, 10 * i)
+        trans = Vector3.End(builderTf)
+
+        # [ x: 45, y: 45, z: 45 ]
+        Quaternion.Start(builderTf)
+        Quaternion.AddX(builderTf, 0.4619398)
+        Quaternion.AddY(builderTf, 0.1913417)
+        Quaternion.AddZ(builderTf, 0.4619398)
+        Quaternion.AddW(builderTf, 0.7325378)
+        rot = Quaternion.End(builderTf)
+
+        Transform.Start(builderTf)
+        Transform.AddTranslation(builderTf, trans)
+        Transform.AddRotation(builderTf, rot)
+        tf = Transform.End(builderTf)
+
+        childFrame = builderTf.CreateString("scanner")
+
+        TransformStamped.Start(builderTf)
+        TransformStamped.AddHeader(builderTf, header)
+        TransformStamped.AddChildFrameId(builderTf, childFrame)
+        TransformStamped.AddTransform(builderTf, tf)
+        tfStamped = TransformStamped.End(builderTf)
+        builderTf.Finish(tfStamped)
+        yield bytes(builderTf.Output())
+
+
+channel = get_gRPC_channel()
+builder = flatbuffers.Builder(1024)
+theTime = 1686038855
 projectUuid = getOrCreateProject(builder, channel, "testproject")
 
-responseBuf = stub.TransferPointCloud2(createPointClouds(projectUuid, NUM_POINT_CLOUDS))
+tfStub = tf_service_grpc_fb.TfServiceStub(channel)
+tfStub.TransferTransformStamped(createTF(channel, NUM_POINT_CLOUDS, projectUuid, theTime))
+
+stub = pointCloudService.PointCloudServiceStub(channel)
+responseBuf = stub.TransferPointCloud2(createPointClouds(projectUuid, NUM_POINT_CLOUDS, theTime))

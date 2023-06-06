@@ -346,7 +346,7 @@ def createBoundingBoxLabeledWithCategory(builder, category, bbLabeled):
 
     BoundingBoxLabeledWithCategory.Start(builder)
     BoundingBoxLabeledWithCategory.AddCategory(builder, category)
-    BoundingBoxLabeledWithCategory.AddBoundingBox2dLabeled(builder, labelsBbVector)
+    BoundingBoxLabeledWithCategory.AddBoundingBoxLabeled(builder, labelsBbVector)
     return BoundingBoxLabeledWithCategory.End(builder)
 
 
