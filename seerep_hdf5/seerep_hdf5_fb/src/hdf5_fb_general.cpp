@@ -53,10 +53,13 @@ void Hdf5FbGeneral::writeBoundingBoxLabeled(
     const std::string& datatypeGroup, const std::string& uuid,
     const BoundingBoxesLabeledWithCategoryFb* boundingBoxLabeledWithCategoryVector)
 {
-  for (auto boundingBoxLabeledWithCategory : *boundingBoxLabeledWithCategoryVector)
+  if (boundingBoxLabeledWithCategoryVector && boundingBoxLabeledWithCategoryVector->size() > 0)
   {
-    writeBoundingBoxLabeled(datatypeGroup, uuid, boundingBoxLabeledWithCategory->boundingBoxLabeled(),
-                            boundingBoxLabeledWithCategory->category()->c_str());
+    for (auto boundingBoxLabeledWithCategory : *boundingBoxLabeledWithCategoryVector)
+    {
+      writeBoundingBoxLabeled(datatypeGroup, uuid, boundingBoxLabeledWithCategory->boundingBoxLabeled(),
+                              boundingBoxLabeledWithCategory->category()->c_str());
+    }
   }
 }
 

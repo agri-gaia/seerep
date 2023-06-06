@@ -91,45 +91,44 @@ grpc::Status FbPointCloudService::TransferPointCloud2(
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "received flatbuffers point cloud";
 
-    auto pointCloud = pointCloudMsg.GetRoot();
-
-    const std::string& uuidProject = pointCloud->header()->uuid_project()->str();
-
-    if (!uuidProject.empty())
+    try
     {
-      try
+      auto pointCloud = pointCloudMsg.GetRoot();
+
+      const std::string& uuidProject = pointCloud->header()->uuid_project()->str();
+      if (!uuidProject.empty())
       {
         pointCloudFb->addData(*pointCloud);
       }
-      catch (std::runtime_error const& e)
+      else
       {
-        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning) << e.what();
-
-        seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
-
-        return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
-      }
-      catch (const std::exception& e)
-      {
-        // specific handling for all exceptions extending std::exception, except
-        // std::runtime_error which is handled explicitly
-        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
-        seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
-        return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
-      }
-      catch (...)
-      {
-        // catch any other errors (that we have no information about)
-        std::string msg = "Unknown failure occurred. Possible memory corruption";
-        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
-        seerep_server_util::createResponseFb(msg, seerep::fb::TRANSMISSION_STATE_FAILURE, response);
-        return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
+        answer = "No project uuid in the header of the received flatbuffers point cloud message!";
+        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning) << answer;
       }
     }
-    else
+    catch (std::runtime_error const& e)
     {
-      answer = "No project uuid in the header of the received flatbuffers point cloud message!";
-      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning) << answer;
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning) << e.what();
+
+      seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+
+      return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+    }
+    catch (const std::exception& e)
+    {
+      // specific handling for all exceptions extending std::exception, except
+      // std::runtime_error which is handled explicitly
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+      seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+      return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+    }
+    catch (...)
+    {
+      // catch any other errors (that we have no information about)
+      std::string msg = "Unknown failure occurred. Possible memory corruption";
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+      seerep_server_util::createResponseFb(msg, seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+      return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
     }
   }
   seerep_server_util::createResponseFb(answer, seerep::fb::TRANSMISSION_STATE_SUCCESS, response);
