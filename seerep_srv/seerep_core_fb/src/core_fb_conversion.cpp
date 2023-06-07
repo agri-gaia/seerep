@@ -42,7 +42,7 @@ seerep_core_msgs::Query CoreFbConversion::fromFb(const seerep::fb::Query* query,
   fromFbQueryDataUuids(query, queryCore.dataUuids);
   queryCore.withoutData = fromFbQueryWithoutData(query);
   queryCore.maxNumData = fromFbQueryMaxNumData(query);
-  queryCore.rotation = fromFbQuaternion(query->boundingboxStamped()->boundingbox()->rotation());
+  queryCore.rotation = fromFbQuaternion(query);
   queryCore.encapsulated = fromFbQueryEncapsulated(query);
 
   return queryCore;
@@ -680,16 +680,22 @@ std::vector<seerep_core_msgs::Datatype> CoreFbConversion::fromFbDatatypeVector(c
   return dt_vector;
 }
 
-seerep_core_msgs::quaternion CoreFbConversion::fromFbQuaternion(const seerep::fb::Quaternion* quaternion)
+std::optional<seerep_core_msgs::quaternion> CoreFbConversion::fromFbQuaternion(const seerep::fb::Query* query)
 {
-  seerep_core_msgs::quaternion quaternionCore;
+  if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_BOUNDINGBOXSTAMPED))
+  {
+    if (flatbuffers::IsFieldPresent(query->boundingboxStamped()->boundingbox(), seerep::fb::Boundingbox::VT_ROTATION))
+    {
+      seerep_core_msgs::quaternion quaternionCore;
+      quaternionCore.x = query->boundingboxStamped()->boundingbox()->rotation()->x();
+      quaternionCore.y = query->boundingboxStamped()->boundingbox()->rotation()->y();
+      quaternionCore.z = query->boundingboxStamped()->boundingbox()->rotation()->z();
+      quaternionCore.w = query->boundingboxStamped()->boundingbox()->rotation()->w();
 
-  quaternionCore.x = quaternion->x();
-  quaternionCore.y = quaternion->y();
-  quaternionCore.z = quaternion->z();
-  quaternionCore.w = quaternion->w();
-
-  return quaternionCore;
+      return quaternionCore;
+    }
+  }
+  return std::nullopt;
 }
 
 }  // namespace seerep_core_fb

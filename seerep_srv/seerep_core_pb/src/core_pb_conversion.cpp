@@ -361,7 +361,10 @@ void CorePbConversion::fromPbBoundingBox(const seerep::pb::Query& query, seerep_
                                                       query.boundingboxstamped().boundingbox().spatial_extent().z() /
                                                           2.0);
 
-    fromPbQuaternion(query.boundingboxstamped().boundingbox().rotation(), queryCore.rotation);
+    if (query.boundingboxstamped().boundingbox().has_rotation())
+    {
+      fromPbQuaternion(query.boundingboxstamped().boundingbox().rotation(), queryCore.rotation);
+    }
   }
 }
 
@@ -470,12 +473,12 @@ void CorePbConversion::toPb(const seerep_core_msgs::AABB& aabb, seerep::pb::Boun
 }
 
 void CorePbConversion::fromPbQuaternion(const seerep::pb::Quaternion& quaternion,
-                                        seerep_core_msgs::quaternion& quaternionCore)
+                                        std::optional<seerep_core_msgs::quaternion>& quaternionCore)
 {
-  quaternionCore.x = quaternion.x();
-  quaternionCore.y = quaternion.y();
-  quaternionCore.z = quaternion.z();
-  quaternionCore.w = quaternion.w();
+  quaternionCore.value().x = quaternion.x();
+  quaternionCore.value().y = quaternion.y();
+  quaternionCore.value().z = quaternion.z();
+  quaternionCore.value().w = quaternion.w();
 }
 
 void CorePbConversion::fromPbQueryEncapsulated(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)

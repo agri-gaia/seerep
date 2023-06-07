@@ -281,7 +281,7 @@ private:
       const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeledWithCategory>>* labelsBB,
       std::unordered_map<std::string, std::vector<seerep_core_msgs::LabelWithInstance>>& labelsWithInstancesWithCategory);
 
-  static seerep_core_msgs::quaternion fromFbQuaternion(const seerep::fb::Quaternion* quaternion);
+  static std::optional<seerep_core_msgs::quaternion> fromFbQuaternion(const seerep::fb::Query* query);
 };
 
 }  // namespace seerep_core_fb

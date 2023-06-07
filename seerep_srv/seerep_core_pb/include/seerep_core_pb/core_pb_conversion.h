@@ -158,7 +158,8 @@ private:
    */
   static void fromFbQueryMaxNumData(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore);
 
-  static void fromPbQuaternion(const seerep::pb::Quaternion& quaternion, seerep_core_msgs::quaternion& quaternionCore);
+  static void fromPbQuaternion(const seerep::pb::Quaternion& quaternion,
+                               std::optional<seerep_core_msgs::quaternion>& quaternionCore);
 
   static void fromPbQueryEncapsulated(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore);
 };

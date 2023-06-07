@@ -137,10 +137,13 @@ public:
                  const boost::uuids::uuid& msgUuid);
 
 private:
-  orientedBoundingBox orientAABB(const seerep_core_msgs::AABB& aabb, const seerep_core_msgs::quaternion& quaternion);
+  orientedBoundingBox orientAABB(const seerep_core_msgs::AABB& aabb,
+                                 const std::optional<seerep_core_msgs::quaternion>& quaternion);
 
-  void intersectionDegree(const seerep_core_msgs::AABB& aabb, const orientedBoundingBox& obb, bool fullEncapsulation,
-                          bool partialEncapsulation);
+  Eigen::Vector3d rotateVector(const Eigen::Vector3d vec, const Eigen::Quaterniond quaternion);
+
+  void intersectionDegree(const seerep_core_msgs::AABB& aabb, const orientedBoundingBox& obb, bool& fullEncapsulation,
+                          bool& partialEncapsulation);
 
   /**
    * @brief fills the member variables based on the HDF5 file
