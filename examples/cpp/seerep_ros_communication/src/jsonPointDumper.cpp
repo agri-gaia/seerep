@@ -43,8 +43,10 @@ void JsonPointDumper::readAndDumpJson(const std::string& jsonFilePath)
 
   for (auto detection : completeJsonData["features"])
   {
-    float x = (detection["properties"]["minx"].asDouble() + detection["properties"]["maxx"].asDouble()) / 2.0;
-    float y = (detection["properties"]["miny"].asDouble() + detection["properties"]["maxy"].asDouble()) / 2.0;
+    double x = (detection["properties"]["maxx"].asDouble() - detection["properties"]["minx"].asDouble()) / 2.0 +
+               detection["properties"]["minx"].asDouble();
+    double y = (detection["properties"]["maxy"].asDouble() - detection["properties"]["miny"].asDouble()) / 2.0 +
+               detection["properties"]["miny"].asDouble();
     float z = 0.0;
 
     float diameter =
