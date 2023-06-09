@@ -5,6 +5,7 @@
 #include <highfive/H5File.hpp>
 
 // seerep_hdf5_core
+#include "hdf5_core_cameraintrinsics.h"
 #include "hdf5_core_datatype_interface.h"
 #include "hdf5_core_general.h"
 
@@ -123,6 +124,16 @@ public:
    */
   const std::string getHdf5DataSetPath(const std::string& id) const;
 
+private:
+  /**
+   * @brief fetch the camera intrinsics using the provided uuid, compute the frustrum of the camera and apply them to
+   * the provided bounding box
+   *
+   * @param camintrinsics_uuid uuid of camera intrinsics to be fetched
+   * @param bb boundingbox in which the computed frustrum has to be saved
+   */
+  void fetchCameraIntrinsics(const std::string& camintrinsics_uuid, seerep_core_msgs::AABB& bb);
+
 public:
   // image attribute keys
   inline static const std::string HEIGHT = "height";
@@ -137,6 +148,10 @@ public:
 
   // datatype group name in hdf5
   inline static const std::string HDF5_GROUP_IMAGE = "images";
+
+private:
+  /** @brief object handling the HDF5 file IO regarding CIs */
+  std::shared_ptr<seerep_hdf5_core::Hdf5CoreCameraIntrinsics> m_ioCI;
 };
 
 }  // namespace seerep_hdf5_core

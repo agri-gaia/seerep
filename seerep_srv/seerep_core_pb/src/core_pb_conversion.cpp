@@ -243,6 +243,8 @@ seerep_core_msgs::camera_intrinsics CorePbConversion::fromPb(const seerep::pb::C
 
   camintrinsics_core.region_of_interest = CorePbConversion::fromPb(camintrinsics.region_of_interest());
 
+  camintrinsics_core.maximum_viewing_distance = camintrinsics.maximum_viewing_distance();
+
   return camintrinsics_core;
 }
 
@@ -283,6 +285,8 @@ seerep::pb::CameraIntrinsics CorePbConversion::toPb(const seerep_core_msgs::came
 
   seerep::pb::RegionOfInterest roi_pb = CorePbConversion::toPb(camintrinsics.region_of_interest);
   *ci_pb.mutable_region_of_interest() = roi_pb;
+
+  ci_pb.set_maximum_viewing_distance(camintrinsics.maximum_viewing_distance);
 
   return ci_pb;
 }

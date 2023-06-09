@@ -245,8 +245,6 @@ private:
   std::shared_ptr<seerep_hdf5_core::Hdf5CoreGeneral> m_ioGeneral;
   /** @brief object handling the HDF5 file IO regarding TFs */
   std::shared_ptr<seerep_hdf5_core::Hdf5CoreTf> m_ioTf;
-  /** @brief object handling the HDF5 file IO regarding CIs */
-  std::shared_ptr<seerep_hdf5_core::Hdf5CoreCameraIntrinsics> m_ioCI;
   /** @brief object handling the HDF5 file IO regarding instances */
   std::shared_ptr<seerep_hdf5_core::Hdf5CoreInstance> m_ioInstance;
   /** @brief object handling the HDF5 file IO regarding point clouds */

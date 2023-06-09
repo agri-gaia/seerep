@@ -16,6 +16,17 @@ grpc::Status PbCameraIntrinsicsService::TransferCameraIntrinsics(grpc::ServerCon
 
   if (!camintrinsics->header().uuid_project().empty())
   {
+    std::string grpc_msg = "Added Camera Intrinsics.";
+
+    if (camintrinsics->maximum_viewing_distance() == 0)
+    {
+      std::string msg = "Max Viewing Distance is the distance to the farthest object in view and is used to compute a "
+                        "frustrum of the camera's view. This value is not set. Using default value of 0.";
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+
+      grpc_msg += msg;
+    }
+
     boost::uuids::uuid uuid;
     try
     {
@@ -24,7 +35,7 @@ grpc::Status PbCameraIntrinsicsService::TransferCameraIntrinsics(grpc::ServerCon
 
       camIntrinsicsPb->addData(*camintrinsics);
 
-      seerep_server_util::createResponsePb("added camera intrinsics", seerep::pb::ServerResponse::SUCCESS, response);
+      seerep_server_util::createResponsePb(grpc_msg, seerep::pb::ServerResponse::SUCCESS, response);
 
       return grpc::Status::OK;
     }

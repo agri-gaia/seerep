@@ -176,6 +176,8 @@ seerep_core_msgs::camera_intrinsics CoreFbConversion::fromFb(const seerep::fb::C
 
   ciCore.region_of_interest = CoreFbConversion::fromFb(*ci.region_of_interest());
 
+  ciCore.maximum_viewing_distance = ci.maximum_viewing_distance();
+
   return ciCore;
 }
 
@@ -267,6 +269,8 @@ flatbuffers::Offset<seerep::fb::CameraIntrinsics> CoreFbConversion::toFb(flatbuf
   cib.add_binning_y(ci.binning_y);
 
   cib.add_region_of_interest(roi);
+
+  cib.add_maximum_viewing_distance(ci.maximum_viewing_distance);
 
   return cib.Finish();
 }
