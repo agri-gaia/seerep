@@ -41,8 +41,8 @@ private:
   void readAndDumpJson(const std::string& jsonFilePath);
   flatbuffers::grpc::Message<seerep::fb::PointStamped>
   createPointForDetection(int32_t stampSecs, uint32_t stampNanos, const std::string& frameId, const std::string& label,
-                          const std::string& instanceUUID, const float x, const float y, const float z,
-                          const float diameter);
+                          const std::string& instanceUUID, const double x, const double y, const double z,
+                          const double diameter);
 
   std::shared_ptr<seerep_hdf5_core::Hdf5CoreGeneral> ioCoreGeneral;
   std::shared_ptr<seerep_hdf5_fb::Hdf5FbPoint> ioPoint;

@@ -47,9 +47,9 @@ void JsonPointDumper::readAndDumpJson(const std::string& jsonFilePath)
                detection["properties"]["minx"].asDouble();
     double y = (detection["properties"]["maxy"].asDouble() - detection["properties"]["miny"].asDouble()) / 2.0 +
                detection["properties"]["miny"].asDouble();
-    float z = 0.0;
+    double z = 0.0;
 
-    float diameter =
+    double diameter =
         std::max(std::abs(detection["properties"]["minx"].asDouble() - detection["properties"]["maxx"].asDouble()),
                  std::abs(detection["properties"]["miny"].asDouble() - detection["properties"]["maxy"].asDouble()));
 
@@ -73,8 +73,8 @@ void JsonPointDumper::readAndDumpJson(const std::string& jsonFilePath)
 
 flatbuffers::grpc::Message<seerep::fb::PointStamped>
 JsonPointDumper::createPointForDetection(int32_t stampSecs, uint32_t stampNanos, const std::string& frameId,
-                                         const std::string& label, const std::string& instanceUUID, const float x,
-                                         const float y, const float z, const float diameter)
+                                         const std::string& label, const std::string& instanceUUID, const double x,
+                                         const double y, const double z, const double diameter)
 {
   std::string projectuuiddummy = "";
   flatbuffers::grpc::MessageBuilder builder;
