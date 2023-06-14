@@ -5,10 +5,10 @@ namespace seerep_core_msgs
 {
 struct quaternion
 {
-  uint32_t x;
-  uint32_t y;
-  uint32_t z;
-  uint32_t w;
+  double x;
+  double y;
+  double z;
+  double w;
 };
 }  // namespace seerep_core_msgs
 

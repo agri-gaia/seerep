@@ -388,6 +388,7 @@ def createQuery(
     instanceUuids=None,
     dataUuids=None,
     withoutData=False,
+    encapsulated=False,
 ):
     '''Create a query, all parameters are optional'''
 
@@ -427,6 +428,8 @@ def createQuery(
         Query.QueryAddDatauuid(builder, dataUuidOffset)
     # no if; has default value
     Query.AddWithoutdata(builder, withoutData)
+
+    Query.AddEncapsulated(builder, encapsulated)
 
     return Query.End(builder)
 

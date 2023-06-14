@@ -15,6 +15,7 @@ from seerep.util.fb_helper import (
     createLabelWithCategory,
     createLabelWithConfidence,
     createPoint,
+    createQuaternion,
     createQuery,
     createTimeInterval,
     createTimeStamp,
@@ -39,8 +40,9 @@ builder = flatbuffers.Builder(1024)
 # Create all necessary objects for the query
 header = createHeader(builder, frame="map")
 pointMin = createPoint(builder, 0.0, 0.0, 0.0)
-pointMax = createPoint(builder, 100.0, 100.0, 100.0)
-boundingboxStamped = createBoundingBoxStamped(builder, header, pointMin, pointMax)
+pointMax = createPoint(builder, 100.0, 50.0, 100.0)
+quaternion = createQuaternion(builder, 0, 0, 1, 0)
+boundingboxStamped = createBoundingBoxStamped(builder, header, pointMin, pointMax, quaternion)
 
 timeMin = createTimeStamp(builder, 1610549273, 0)
 timeMax = createTimeStamp(builder, 1938549273, 0)
@@ -74,6 +76,7 @@ query = createQuery(
     # instanceUuids=instanceUuids,
     # dataUuids=dataUuids,
     withoutData=True,
+    encapsulated=True,
 )
 builder.Finish(query)
 buf = builder.Output()

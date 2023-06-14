@@ -159,7 +159,7 @@ CoreDataset::querySpatial(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics, 
       intersectionDegree(it->first, obb, fullyEncapsulated, completelyDistant);
 
       // if there is no intersection between the result and the user's request, remove it from the iterator
-      if (!completelyDistant)
+      if (completelyDistant)
       {
         it = rt_result.value().erase(it);
       }
@@ -556,76 +556,100 @@ void CoreDataset::addLabels(const seerep_core_msgs::Datatype& datatype,
 orientedBoundingBox CoreDataset::orientAABB(const seerep_core_msgs::AABB& aabb,
                                             const std::optional<seerep_core_msgs::quaternion>& quaternion)
 {
+  // https://gamedev.stackexchange.com/questions/28395/rotating-vector3-by-a-quaternion
+  Eigen::Quaterniond q;
+
   if (quaternion)
   {
-    // https://gamedev.stackexchange.com/questions/28395/rotating-vector3-by-a-quaternion
-
-    float height = bg::get<bg::max_corner, 2>(aabb) - bg::get<bg::min_corner, 2>(aabb);
-
-    // A quaternion is made using the min and max points of the BB, such that the x, y and z coordinates make up the
-    // vector and the scalar is set to 0
-    Eigen::Vector3d bottom_left(bg::get<bg::min_corner, 0>(aabb), bg::get<bg::min_corner, 1>(aabb), height);
-    Eigen::Vector3d top_left(bg::get<bg::min_corner, 0>(aabb), bg::get<bg::max_corner, 1>(aabb), height);
-    Eigen::Vector3d bottom_right(bg::get<bg::max_corner, 0>(aabb), bg::get<bg::min_corner, 1>(aabb), height);
-    Eigen::Vector3d top_right(bg::get<bg::max_corner, 0>(aabb), bg::get<bg::max_corner, 1>(aabb), height);
-    Eigen::Quaterniond q(quaternion.value().w, quaternion.value().x, quaternion.value().y, quaternion.value().z);
-
-    // rotate min point of AABB
-    Eigen::Vector3d rotated_bottom_left = rotateVector(bottom_left, q);
-    Eigen::Vector3d rotated_top_left = rotateVector(top_left, q);
-    Eigen::Vector3d rotated_bottom_right = rotateVector(bottom_right, q);
-    Eigen::Vector3d rotated_top_right = rotateVector(top_right, q);
-
-    orientedBoundingBox obb;
-    obb.bottom_left.set<0>(rotated_bottom_left.x());
-    obb.bottom_left.set<1>(rotated_bottom_left.y());
-    obb.top_left.set<0>(rotated_top_left.x());
-    obb.top_left.set<1>(rotated_top_left.y());
-    obb.top_right.set<0>(rotated_top_right.x());
-    obb.top_right.set<1>(rotated_top_right.y());
-    obb.bottom_right.set<0>(rotated_bottom_right.x());
-    obb.bottom_right.set<1>(rotated_bottom_right.y());
-
-    obb.height = height;  // height of the box is the same as the z-value of the box ground plane?
-
-    return obb;
+    q = Eigen::Quaterniond(quaternion.value().w, quaternion.value().x, quaternion.value().y, quaternion.value().z);
   }
   else
   {
-    // return AABB in OBB format!
+    // if a quaternion is not provided, we set a unit quaternion
+    q = Eigen::Quaterniond(1, 0, 0, 0);
   }
+
+  float height = bg::get<bg::max_corner, 2>(aabb) - bg::get<bg::min_corner, 2>(aabb);
+
+  // A quaternion is made using the min and max points of the BB, such that the x, y and z coordinates make up the
+  // vector and the scalar is set to 0
+  Eigen::Vector3d bottom_left(bg::get<bg::min_corner, 0>(aabb), bg::get<bg::min_corner, 1>(aabb), 1);
+  Eigen::Vector3d top_left(bg::get<bg::min_corner, 0>(aabb), bg::get<bg::max_corner, 1>(aabb), 1);
+  Eigen::Vector3d bottom_right(bg::get<bg::max_corner, 0>(aabb), bg::get<bg::min_corner, 1>(aabb), 1);
+  Eigen::Vector3d top_right(bg::get<bg::max_corner, 0>(aabb), bg::get<bg::max_corner, 1>(aabb), 1);
+
+  // rotate min point of AABB
+  Eigen::Vector3d rotated_bottom_left = rotateVector(bottom_left, q);
+  Eigen::Vector3d rotated_top_left = rotateVector(top_left, q);
+  Eigen::Vector3d rotated_bottom_right = rotateVector(bottom_right, q);
+  Eigen::Vector3d rotated_top_right = rotateVector(top_right, q);
+
+  orientedBoundingBox obb;
+  obb.bottom_left.set<0>(rotated_bottom_left.x());
+  obb.bottom_left.set<1>(rotated_bottom_left.y());
+  obb.top_left.set<0>(rotated_top_left.x());
+  obb.top_left.set<1>(rotated_top_left.y());
+  obb.top_right.set<0>(rotated_top_right.x());
+  obb.top_right.set<1>(rotated_top_right.y());
+  obb.bottom_right.set<0>(rotated_bottom_right.x());
+  obb.bottom_right.set<1>(rotated_bottom_right.y());
+
+  obb.height = height;  // height of the box is the same as the z-value of the box ground plane?
+
+  return obb;
 }
 
 Eigen::Vector3d CoreDataset::rotateVector(const Eigen::Vector3d vec, const Eigen::Quaterniond quaternion)
 {
-  return 2.0f * vec.dot(quaternion.vec()) * quaternion.vec() +
-         ((quaternion.w() * quaternion.w() - vec.dot(quaternion.vec())) * vec) +
-         2.0f * quaternion.w() * quaternion.vec().cross(vec);
+  // return 2.0f * vec.dot(quaternion.vec()) * quaternion.vec() +
+  //        ((quaternion.w() * quaternion.w() - vec.dot(quaternion.vec())) * vec) +
+  //        2.0f * quaternion.w() * quaternion.vec().cross(vec);
+  Eigen::Quaterniond vec_quaternion(0, vec.x(), vec.y(), vec.z());
+  Eigen::Quaterniond rotated_vec;
+  rotated_vec = quaternion * vec_quaternion * quaternion.inverse();
+  return rotated_vec.vec();
 }
 
 void CoreDataset::intersectionDegree(const seerep_core_msgs::AABB& aabb, const orientedBoundingBox& obb,
                                      bool& fullEncapsulation, bool& partialEncapsulation)
 {
   // convert seerep core aabb to cgal polygon
-  CGAL::Polygon_2<Kernel> aabb_cgal;
-  aabb_cgal.push_back(
-      Kernel::Point_2(bg::get<bg::min_corner, 0>(aabb), bg::get<bg::min_corner, 1>(aabb)));  // bottom left
-  aabb_cgal.push_back(Kernel::Point_2(bg::get<bg::min_corner, 0>(aabb), bg::get<bg::max_corner, 1>(aabb)));  // top left
-  aabb_cgal.push_back(
-      Kernel::Point_2(bg::get<bg::max_corner, 0>(aabb), bg::get<bg::max_corner, 1>(aabb)));  // top right
-  aabb_cgal.push_back(
-      Kernel::Point_2(bg::get<bg::max_corner, 0>(aabb), bg::get<bg::min_corner, 1>(aabb)));  // bottom right
+  Kernel::Point_2 points_aabb[] = {
+    Kernel::Point_2(bg::get<bg::min_corner, 0>(aabb), bg::get<bg::min_corner, 1>(aabb)),
+    Kernel::Point_2(bg::get<bg::max_corner, 0>(aabb), bg::get<bg::min_corner, 1>(aabb)),
+    Kernel::Point_2(bg::get<bg::max_corner, 0>(aabb), bg::get<bg::max_corner, 1>(aabb)),
+    Kernel::Point_2(bg::get<bg::min_corner, 0>(aabb), bg::get<bg::max_corner, 1>(aabb)),
+  };
+  CGAL::Polygon_2<Kernel> aabb_cgal(points_aabb, points_aabb + 4);
 
   // convert seerep core obb to cgal polygon
-  CGAL::Polygon_2<Kernel> obb_cgal;
-  obb_cgal.push_back(Kernel::Point_2(obb.bottom_left.get<0>(), obb.bottom_left.get<1>()));
-  obb_cgal.push_back(Kernel::Point_2(obb.top_left.get<0>(), obb.top_left.get<1>()));
-  obb_cgal.push_back(Kernel::Point_2(obb.top_right.get<0>(), obb.top_right.get<1>()));
-  obb_cgal.push_back(Kernel::Point_2(obb.bottom_right.get<0>(), obb.bottom_right.get<1>()));
+  Kernel::Point_2 points_obb[] = { Kernel::Point_2(obb.bottom_left.get<0>(), obb.bottom_left.get<1>()),
+                                   Kernel::Point_2(obb.bottom_right.get<0>(), obb.bottom_right.get<1>()),
+                                   Kernel::Point_2(obb.top_right.get<0>(), obb.top_right.get<1>()),
+                                   Kernel::Point_2(obb.top_left.get<0>(), obb.top_left.get<1>()) };
+  CGAL::Polygon_2<Kernel> obb_cgal(points_obb, points_obb + 4);
+
+  assert(obb_cgal.is_simple());
+  assert(aabb_cgal.is_simple());
+  assert(obb_cgal.is_convex());
+  assert(aabb_cgal.is_convex());
+
+  // cgal polygon must be counter clockwise oriented
+  if (obb_cgal.is_clockwise_oriented())
+  {
+    obb_cgal.reverse_orientation();
+  }
+  if (aabb_cgal.is_clockwise_oriented())
+  {
+    aabb_cgal.reverse_orientation();
+  }
+
+  assert(obb_cgal.is_counterclockwise_oriented());
+  assert(aabb_cgal.is_counterclockwise_oriented());
 
   // intersect
   std::list<CGAL::Polygon_with_holes_2<Kernel>> intersection;
-  CGAL::intersection(aabb_cgal, obb_cgal, std::back_inserter(intersection));
+  CGAL::intersection(obb_cgal, aabb_cgal, std::back_inserter(intersection));
 
   // if there is no intersection, the iterator will be empty
   if (intersection.size() == 0)
