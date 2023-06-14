@@ -30,6 +30,13 @@
             "console": "integratedTerminal"
         },
         {
+            "name": "ROS: rosbag dumper",
+            "type": "ros",
+            "request": "launch",
+            "target": "${workspaceFolder}/src/examples/cpp/seerep_ros_communication/launch/rosbagDumper.launch",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",

@@ -31,11 +31,13 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         python3-osrf-pycommon \
         libfile-pushd-perl \
         ros-noetic-vision-msgs \
+        ros-noetic-geographic-msgs \
         libgeographic-dev \
         libfile-pushd-perl \
         python3-pip \
         flex \
         bison \
+        libjsoncpp-dev \
         && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt /tmp/requirements.txt
