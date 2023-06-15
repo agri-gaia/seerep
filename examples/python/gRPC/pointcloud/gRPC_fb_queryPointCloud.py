@@ -82,7 +82,7 @@ builder.Finish(query)
 buf = builder.Output()
 
 for responseBuf in stubPointCloud.GetPointCloud2(bytes(buf)):
-    response = PointCloud2.GetRootAs(responseBuf)
+    response = PointCloud2.PointCloud2.GetRootAs(responseBuf)
 
     print("---Header---")
     print(f"Message UUID: {response.Header().UuidMsgs().decode('utf-8')}")

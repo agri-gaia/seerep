@@ -569,8 +569,6 @@ orientedBoundingBox CoreDataset::orientAABB(const seerep_core_msgs::AABB& aabb,
     q = Eigen::Quaterniond(1, 0, 0, 0);
   }
 
-  float height = bg::get<bg::max_corner, 2>(aabb) - bg::get<bg::min_corner, 2>(aabb);
-
   // A quaternion is made using the min and max points of the BB, such that the x, y and z coordinates make up the
   // vector and the scalar is set to 0
   Eigen::Vector3d bottom_left(bg::get<bg::min_corner, 0>(aabb), bg::get<bg::min_corner, 1>(aabb), 1);
@@ -594,16 +592,14 @@ orientedBoundingBox CoreDataset::orientAABB(const seerep_core_msgs::AABB& aabb,
   obb.bottom_right.set<0>(rotated_bottom_right.x());
   obb.bottom_right.set<1>(rotated_bottom_right.y());
 
-  obb.height = height;  // height of the box is the same as the z-value of the box ground plane?
+  obb.z_max = bg::get<bg::max_corner, 2>(aabb);
+  obb.z_min = bg::get<bg::min_corner, 2>(aabb);
 
   return obb;
 }
 
 Eigen::Vector3d CoreDataset::rotateVector(const Eigen::Vector3d vec, const Eigen::Quaterniond quaternion)
 {
-  // return 2.0f * vec.dot(quaternion.vec()) * quaternion.vec() +
-  //        ((quaternion.w() * quaternion.w() - vec.dot(quaternion.vec())) * vec) +
-  //        2.0f * quaternion.w() * quaternion.vec().cross(vec);
   Eigen::Quaterniond vec_quaternion(0, vec.x(), vec.y(), vec.z());
   Eigen::Quaterniond rotated_vec;
   rotated_vec = quaternion * vec_quaternion * quaternion.inverse();
@@ -629,10 +625,18 @@ void CoreDataset::intersectionDegree(const seerep_core_msgs::AABB& aabb, const o
                                    Kernel::Point_2(obb.top_left.get<0>(), obb.top_left.get<1>()) };
   CGAL::Polygon_2<Kernel> obb_cgal(points_obb, points_obb + 4);
 
-  assert(obb_cgal.is_simple());
-  assert(aabb_cgal.is_simple());
-  assert(obb_cgal.is_convex());
-  assert(aabb_cgal.is_convex());
+  try
+  {
+    // a cgal polyon needs to be simple, convex and the point should be added in a counter clockwise order
+    assert(obb_cgal.is_simple());
+    assert(aabb_cgal.is_simple());
+    assert(obb_cgal.is_convex());
+    assert(aabb_cgal.is_convex());
+  }
+  catch (const std::runtime_error& e)
+  {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+  }
 
   // cgal polygon must be counter clockwise oriented
   if (obb_cgal.is_clockwise_oriented())
@@ -643,9 +647,6 @@ void CoreDataset::intersectionDegree(const seerep_core_msgs::AABB& aabb, const o
   {
     aabb_cgal.reverse_orientation();
   }
-
-  assert(obb_cgal.is_counterclockwise_oriented());
-  assert(aabb_cgal.is_counterclockwise_oriented());
 
   // intersect
   std::list<CGAL::Polygon_with_holes_2<Kernel>> intersection;
@@ -671,6 +672,12 @@ void CoreDataset::intersectionDegree(const seerep_core_msgs::AABB& aabb, const o
   {
     // check if this point is inside the obb
     isInside = (obb_cgal.bounded_side(*vi) == CGAL::ON_BOUNDED_SIDE);
+
+    if ((obb.z_max < bg::get<bg::min_corner, 2>(aabb) || obb.z_min > bg::get<bg::min_corner, 2>(aabb)) ||
+        (obb.z_max < bg::get<bg::max_corner, 2>(aabb) || obb.z_min > bg::get<bg::max_corner, 2>(aabb)))
+    {
+      isInside = false;
+    }
 
     // if isInside is false even once then there is only partial encapsulation
     if (!isInside)

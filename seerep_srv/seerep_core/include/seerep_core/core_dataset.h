@@ -36,7 +36,8 @@ struct orientedBoundingBox
   seerep_core_msgs::Point2D top_right;
   seerep_core_msgs::Point2D bottom_left;
   seerep_core_msgs::Point2D top_left;
-  float height;
+  float z_min;
+  float z_max;
 };
 
 typedef CGAL::Exact_predicates_exact_constructions_kernel Kernel;
@@ -136,12 +137,65 @@ public:
                      labelWithInstancePerCategory,
                  const boost::uuids::uuid& msgUuid);
 
+  /**
+   * @brief Get the minimum and maximum time interval for a dataset
+   * @param datatypes A vector of datatypes for which the time bound has to be computed
+   * @return seerep_core_msgs::AabbTime
+   */
+  seerep_core_msgs::AabbTime getTimeBounds(std::vector<seerep_core_msgs::Datatype> datatypes);
+
+  /**
+   * @brief Get the minimum and maximum spatial bound for a dataset
+   * @param datatypes A vector of datatypes for which the spatial bound has to be computed
+   * @return seerep_core_msgs::AABB
+   */
+  seerep_core_msgs::AABB getSpatialBounds(std::vector<seerep_core_msgs::Datatype> datatypes);
+
+  /**
+   * @brief Get the all categories saved in a project
+   *
+   * @param datatypes A vector of datatypes for which the categories have to be fetched
+   * @return std::vector<std::string> vector of categories
+   */
+  std::unordered_set<std::string> getAllCategories(std::vector<seerep_core_msgs::Datatype> datatypes);
+
+  /**
+   * @brief Get the all labels saved in a project
+   *
+   * @param datatypes datatypes across which this is determined
+   * @param category the category across which all labels have to be aggregated
+   * @return std::vector<std::string> vector of labels
+   */
+  std::unordered_set<std::string> getAllLabels(std::vector<seerep_core_msgs::Datatype> datatypes, std::string category);
+
 private:
+  /**
+   * @brief orient an axis aligned bounding according to the quaternion
+   *
+   * @param aabb axis aligned bounding box
+   * @param quaternion quaternion for rotation
+   * @return orientedBoundingBox oriented bounding box
+   */
   orientedBoundingBox orientAABB(const seerep_core_msgs::AABB& aabb,
                                  const std::optional<seerep_core_msgs::quaternion>& quaternion);
 
+  /**
+   * @brief rotate a vector using the provided quaternion
+   *
+   * @param vec vector to rotate
+   * @param quaternion quaternion for rotation
+   * @return Eigen::Vector3d rotated vector
+   */
   Eigen::Vector3d rotateVector(const Eigen::Vector3d vec, const Eigen::Quaterniond quaternion);
 
+  /**
+   * @brief determine if the axis aligned bounding box is fully or paritally inside the oriented bounding box
+   *
+   * @param aabb axis aligned bounding box
+   * @param obb oriented bounding box
+   * @param fullEncapsulation boolean variable to denote if the aabb fully inside the obb
+   * @param partialEncapsulation boolean variable to denote if the aabb partially inside the obb
+   */
   void intersectionDegree(const seerep_core_msgs::AABB& aabb, const orientedBoundingBox& obb, bool& fullEncapsulation,
                           bool& partialEncapsulation);
 
