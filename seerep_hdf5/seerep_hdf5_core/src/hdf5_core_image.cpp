@@ -54,8 +54,8 @@ std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CoreImage::readDataset(con
                                                                   data.labelsWithInstancesWithCategory);
 
     // fetch cam intrinsics uuid from hdf5_core_cameraintrinsics
-    std::string camintrinsics_uuid = readAttributeFromHdf5<std::string>(
-        hdf5DataGroupPath, *dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::CAMERA_INTRINSICS_UUID);
+    camintrinsics_uuid = readAttributeFromHdf5<std::string>(hdf5DataGroupPath, *dataGroupPtr,
+                                                            seerep_hdf5_core::Hdf5CoreImage::CAMERA_INTRINSICS_UUID);
   }
   // lock released
 

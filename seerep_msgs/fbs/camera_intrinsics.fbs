@@ -17,5 +17,5 @@ table CameraIntrinsics
     binning_x:uint;
     binning_y:uint;
     region_of_interest:RegionOfInterest;
-    maximum_viewing_distance:uint;
+    maximum_viewing_distance:double;
 }
