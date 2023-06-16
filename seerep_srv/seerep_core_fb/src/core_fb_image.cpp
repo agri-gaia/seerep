@@ -43,10 +43,10 @@ boost::uuids::uuid CoreFbImage::addData(const seerep::fb::Image& img)
 {
   seerep_core_msgs::DatasetIndexable dataForIndices = CoreFbConversion::fromFb(img);
 
-  seerep_core_msgs::camera_intrinsics_query camintrinsics_query;
-  camintrinsics_query.uuidProject = boost::lexical_cast<boost::uuids::uuid>(img.header()->uuid_project());
-
   boost::uuids::string_generator gen;
+
+  seerep_core_msgs::camera_intrinsics_query camintrinsics_query;
+  camintrinsics_query.uuidProject = gen(img.header()->uuid_project()->str());
   camintrinsics_query.uuidCameraIntrinsics = gen(img.uuid_cameraintrinsics()->str());
 
   if (m_seerepCore->checkCameraIntrinsicsExists(camintrinsics_query))
