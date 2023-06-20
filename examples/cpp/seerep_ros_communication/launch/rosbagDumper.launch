@@ -13,7 +13,9 @@
     <arg name="topicTfStatic" default="/tf_static"/>
     <arg name="topicGeoAnchor" default="/anchor"/>
     <arg name="distanceCameraGround" default="0.5"/>
-    <arg name="storeImages" default="false"/>
+    <arg name="maxViewingDistance" default="15.0"/>
+    <arg name="storeImages" default="true"/>
+    <!-- <arg name="projectUuid" default=""/> -->
 
     <node name="seerep_ros_communication_rosbagDumper" pkg="seerep_ros_communication" type="seerep_ros_communication_rosbagDumper" output="screen">
         <rosparam param="bagPath" subst_value="True">$(arg bagPath)</rosparam>
@@ -29,6 +31,8 @@
         <rosparam param="topicTfStatic" subst_value="True">$(arg topicTfStatic)</rosparam>
         <rosparam param="topicGeoAnchor" subst_value="True">$(arg topicGeoAnchor)</rosparam>
         <rosparam param="distanceCameraGround" subst_value="True">$(arg distanceCameraGround)</rosparam>
+        <rosparam param="maxViewingDistance" subst_value="True">$(arg maxViewingDistance)</rosparam>
         <rosparam param="storeImages" subst_value="True">$(arg storeImages)</rosparam>
+        <!-- <rosparam param="projectUuid" subst_value="True">$(arg projectUuid)</rosparam> -->
     </node>
 </launch>

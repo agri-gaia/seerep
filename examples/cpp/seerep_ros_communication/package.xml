@@ -17,6 +17,7 @@
   <author email="spuetz@uos.de">Sebastian Pütz</author>
 
   <depend>seerep_com</depend>
+  <depend>seerep_core_fb</depend>
   <depend>seerep_hdf5_pb</depend>
   <depend>seerep_hdf5_fb</depend>
   <depend>seerep_hdf5_core</depend>
