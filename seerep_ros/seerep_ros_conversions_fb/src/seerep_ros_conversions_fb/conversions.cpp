@@ -139,19 +139,22 @@ sensor_msgs::PointCloud2 toROS(const seerep::fb::PointCloud2& cloud)
  * Image
  */
 flatbuffers::grpc::Message<seerep::fb::Image> toFlat(const sensor_msgs::Image& image, std::string projectuuid,
-                                                     std::string msguuid)
+                                                     std::string cameraInstrinsicUuid, std::string msguuid)
 {
   flatbuffers::grpc::MessageBuilder builder;
-  builder.Finish(toFlat(image, projectuuid, builder, msguuid));
+  builder.Finish(toFlat(image, projectuuid, builder, cameraInstrinsicUuid, msguuid));
   return builder.ReleaseMessage<seerep::fb::Image>();
 }
 flatbuffers::Offset<seerep::fb::Image> toFlat(const sensor_msgs::Image& image, std::string projectuuid,
-                                              flatbuffers::grpc::MessageBuilder& builder, std::string msguuid)
+                                              flatbuffers::grpc::MessageBuilder& builder,
+                                              std::string cameraInstrinsicUuid, std::string msguuid)
 {
   auto header = toFlat(image.header, projectuuid, builder, msguuid);
 
   auto encodingOffset = builder.CreateString(image.encoding);
   auto dataVector = builder.CreateVector(image.data);
+
+  auto cameraIntrinsicOffset = builder.CreateString(cameraInstrinsicUuid);
 
   seerep::fb::ImageBuilder imagebuilder(builder);
   imagebuilder.add_header(header);
@@ -161,6 +164,7 @@ flatbuffers::Offset<seerep::fb::Image> toFlat(const sensor_msgs::Image& image, s
   imagebuilder.add_is_bigendian(image.is_bigendian);
   imagebuilder.add_step(image.step);
   imagebuilder.add_data(dataVector);
+  imagebuilder.add_uuid_cameraintrinsics(cameraIntrinsicOffset);
 
   return imagebuilder.Finish();
 }
@@ -534,4 +538,81 @@ flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled> toFlat(const vision_msgs::
   return bblabeledbuilder.Finish();
 }
 
+/*
+ * camera instrinsic
+ */
+
+flatbuffers::grpc::Message<seerep::fb::CameraIntrinsics>
+toFlat(const sensor_msgs::CameraInfo& ci, std::string& projectuuid, std::string& msgUuid, double maxViewingDistance)
+{
+  flatbuffers::grpc::MessageBuilder builder;
+  builder.Finish(toFlat(ci, projectuuid, msgUuid, maxViewingDistance, builder));
+  return builder.ReleaseMessage<seerep::fb::CameraIntrinsics>();
+}
+flatbuffers::Offset<seerep::fb::CameraIntrinsics> toFlat(const sensor_msgs::CameraInfo& ci, std::string& projectuuid,
+                                                         std::string& msgUuid, double maxViewingDistance,
+                                                         flatbuffers::grpc::MessageBuilder& builder)
+{
+  auto header = toFlat(ci.header, projectuuid, builder, msgUuid);
+
+  auto distortionModel = builder.CreateString(ci.distortion_model);
+
+  std::vector<double> distortion;
+  for (double d : ci.D)
+  {
+    distortion.push_back(d);
+  }
+  auto distortionVector = builder.CreateVector(distortion);
+
+  std::vector<double> intrinsicMatrix;
+  for (double i : ci.K)
+  {
+    intrinsicMatrix.push_back(i);
+  }
+  auto intrinsicMatrixVector = builder.CreateVector(intrinsicMatrix);
+
+  std::vector<double> projectionMatrix;
+  for (double p : ci.P)
+  {
+    projectionMatrix.push_back(p);
+  }
+  auto projectionMatrixVector = builder.CreateVector(projectionMatrix);
+
+  std::vector<double> rectificationMatrix;
+  for (double r : ci.R)
+  {
+    rectificationMatrix.push_back(r);
+  }
+  auto rectificationMatrixVector = builder.CreateVector(rectificationMatrix);
+
+  std::vector<flatbuffers::Offset<seerep::fb::RegionOfInterest>> roiVector;
+  auto roi = toFlat(ci.roi, builder);
+
+  seerep::fb::CameraIntrinsicsBuilder cibuilder(builder);
+  cibuilder.add_binning_x(ci.binning_x);
+  cibuilder.add_binning_y(ci.binning_y);
+  cibuilder.add_distortion(distortionVector);
+  cibuilder.add_distortion_model(distortionModel);
+  cibuilder.add_header(header);
+  cibuilder.add_intrinsic_matrix(intrinsicMatrixVector);
+  cibuilder.add_maximum_viewing_distance(maxViewingDistance);
+  cibuilder.add_projection_matrix(projectionMatrixVector);
+  cibuilder.add_rectification_matrix(rectificationMatrixVector);
+  cibuilder.add_region_of_interest(roi);
+  cibuilder.add_width(ci.width);
+  cibuilder.add_height(ci.height);
+  return cibuilder.Finish();
+}
+flatbuffers::Offset<seerep::fb::RegionOfInterest> toFlat(const sensor_msgs::RegionOfInterest& roi,
+
+                                                         flatbuffers::grpc::MessageBuilder& builder)
+{
+  seerep::fb::RegionOfInterestBuilder roiBuilder(builder);
+  roiBuilder.add_do_rectify(roi.do_rectify);
+  roiBuilder.add_height(roi.height);
+  roiBuilder.add_width(roi.width);
+  roiBuilder.add_x_offset(roi.x_offset);
+  roiBuilder.add_y_offset(roi.y_offset);
+  return roiBuilder.Finish();
+}
 }  // namespace seerep_ros_conversions_fb

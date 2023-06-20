@@ -12,6 +12,8 @@ find_package(SeerepCom REQUIRED)
 find_package(SeerepHdf5Pb REQUIRED)
 find_package(SeerepHdf5Fb REQUIRED)
 find_package(SeerepHdf5Core REQUIRED)
+find_package(SeerepCoreFb REQUIRED)
+find_package(SeerepCore REQUIRED)
 find_package(seerep_ros_conversions_pb REQUIRED)
 find_package(seerep_ros_conversions_fb REQUIRED)
 find_package(Protobuf REQUIRED)
@@ -69,6 +71,7 @@ include_directories(
   ${SeerepHdf5Pb_INCLUDE_DIRS}
   ${SeerepHdf5Fb_INCLUDE_DIRS}
   ${SeerepHdf5Core_INCLUDE_DIRS}
+  ${SeerepCoreFb_INCLUDE_DIRS}
   ${seerep_ros_conversions_pb_INCLUDE_DIRS}
   ${seerep_ros_conversions_fb_INCLUDE_DIRS}
   ${catkin_INCLUDE_DIRS}
@@ -147,6 +150,8 @@ target_link_libraries(
   ${seerep_ros_conversions_fb_LIBRARIES}
   ${SeerepHdf5Fb_LIBRARIES}
   ${SeerepHdf5Core_LIBRARIES}
+  ${SeerepCoreFb_LIBRARIES}
+  ${SeerepCore_LIBRARIES}
   ${catkin_LIBRARIES}
   ${GeographicLib_LIBRARIES}
   gRPC::grpc++_reflection

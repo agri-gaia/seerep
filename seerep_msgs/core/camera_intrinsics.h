@@ -19,7 +19,7 @@ struct camera_intrinsics
   uint32_t binning_x;
   uint32_t binning_y;
   seerep_core_msgs::region_of_interest region_of_interest;
-  uint32_t maximum_viewing_distance;
+  double maximum_viewing_distance;
 };
 }  // namespace seerep_core_msgs
 

@@ -5,6 +5,7 @@
 #include <geometry_msgs/PoseStamped.h>
 #include <geometry_msgs/TransformStamped.h>
 #include <geometry_msgs/Vector3Stamped.h>
+#include <sensor_msgs/CameraInfo.h>
 #include <sensor_msgs/Image.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <sensor_msgs/PointField.h>
@@ -15,6 +16,7 @@
 #include <seerep_msgs/boundingbox2d_labeled_generated.h>
 #include <seerep_msgs/boundingbox2d_labeled_with_category_generated.h>
 #include <seerep_msgs/boundingboxes2d_labeled_stamped_generated.h>
+#include <seerep_msgs/camera_intrinsics_generated.h>
 #include <seerep_msgs/header_generated.h>
 #include <seerep_msgs/image_generated.h>
 #include <seerep_msgs/point_cloud_2_generated.h>
@@ -124,7 +126,7 @@ sensor_msgs::PointCloud2 toROS(const seerep::fb::PointCloud2& cloud);
  * @return gRPC Flatbuffer Image message
  */
 flatbuffers::grpc::Message<seerep::fb::Image> toFlat(const sensor_msgs::Image& image, std::string projectuuid,
-                                                     std::string msguuid = "");
+                                                     std::string cameraInstrinsicUuid, std::string msguuid = "");
 /**
  * @brief Converts a ROS sensor_msgs/Image message to the corresponding
  * Flatbuffer Image message
@@ -135,7 +137,8 @@ flatbuffers::grpc::Message<seerep::fb::Image> toFlat(const sensor_msgs::Image& i
  * @return Flatbuffer Image message
  */
 flatbuffers::Offset<seerep::fb::Image> toFlat(const sensor_msgs::Image& image, std::string projectuuid,
-                                              flatbuffers::grpc::MessageBuilder& builder, std::string msguuid = "");
+                                              flatbuffers::grpc::MessageBuilder& builder,
+                                              std::string cameraInstrinsicUuid, std::string msguuid = "");
 
 /**
  * @brief Converts a Flatbuffer Image message to the corresponding
@@ -416,6 +419,36 @@ flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled> toFlat(const vision_msgs::
  * @return ROS vision_msgs::Detection2D
  */
 vision_msgs::Detection2D toROS(const seerep::fb::BoundingBox2DLabeled& bb_labeled_stamped);
+
+/**
+ * @brief Converts a ROS sensor_msgs::CameraInfo message to the corresponding
+ * gRPC Flatbuffer CameraIntrinsics message
+ * @param ci sensor_msgs::CameraInfo
+ * @return gRPC Flatbuffer CameraIntrinsics message
+ */
+flatbuffers::grpc::Message<seerep::fb::CameraIntrinsics>
+toFlat(const sensor_msgs::CameraInfo& ci, std::string& projectuuid, std::string& msgUuid, double maxViewingDistance);
+/**
+ * @brief Converts a ROS sensor_msgs::CameraInfo message to the corresponding
+ * gRPC Flatbuffer CameraIntrinsics message
+ * @param ci sensor_msgs::CameraInfo
+ * @param builder the flatbuffer message builder to build the flatbuffer message
+ * @return Flatbuffer CameraIntrinsics message
+ */
+flatbuffers::Offset<seerep::fb::CameraIntrinsics> toFlat(const sensor_msgs::CameraInfo& ci, std::string& projectuuid,
+                                                         std::string& msgUuid, double maxViewingDistance,
+
+                                                         flatbuffers::grpc::MessageBuilder& builder);
+/**
+ * @brief Converts a ROS sensor_msgs::RegionOfInterest message to the corresponding
+ * gRPC Flatbuffer RegionOfInterest message
+ * @param roi sensor_msgs::RegionOfInterest
+ * @param builder the flatbuffer message builder to build the flatbuffer message
+ * @return Flatbuffer RegionOfInterest message
+ */
+flatbuffers::Offset<seerep::fb::RegionOfInterest> toFlat(const sensor_msgs::RegionOfInterest& roi,
+
+                                                         flatbuffers::grpc::MessageBuilder& builder);
 
 } /* namespace seerep_ros_conversions_fb */
 

@@ -4,14 +4,16 @@ namespace seerep_grpc_ros
 {
 RosbagDumper::RosbagDumper(const std::string& bagPath, const std::string& classesMappingPath,
                            const std::string& hdf5FilePath, const std::string& projectFrameId,
-                           const std::string& projectName, const std::string& topicImage,
-                           const std::string& topicCameraIntrinsics, const std::string& topicDetection,
-                           const std::string& detectionCategory, const std::string& topicTf,
-                           const std::string& topicTfStatic, const std::string& topicGeoAnchor,
-                           float distanceCameraGround, bool storeImages)
+                           const std::string& projectName, const std::string& projectUuid,
+                           const std::string& topicImage, const std::string& topicCameraIntrinsics,
+                           const std::string& topicDetection, const std::string& detectionCategory,
+                           const std::string& topicTf, const std::string& topicTfStatic,
+                           const std::string& topicGeoAnchor, float distanceCameraGround, double maxViewingDistance,
+                           bool storeImages)
   : hdf5FilePath(hdf5FilePath)
   , projectFrameId(projectFrameId)
   , projectName(projectName)
+  , projectUuid(projectUuid)
   , topicImage(topicImage)
   , topicCameraIntrinsics(topicCameraIntrinsics)
   , topicDetection(topicDetection)
@@ -20,6 +22,7 @@ RosbagDumper::RosbagDumper(const std::string& bagPath, const std::string& classe
   , topicTfStatic(topicTfStatic)
   , topicGeoAnchor(topicGeoAnchor)
   , distanceCameraGround(distanceCameraGround)
+  , maxViewingDistance(maxViewingDistance)
 {
   auto writeMtx = std::make_shared<std::mutex>();
   std::shared_ptr<HighFive::File> hdf5File =
@@ -29,6 +32,7 @@ RosbagDumper::RosbagDumper(const std::string& bagPath, const std::string& classe
   ioImage = std::make_shared<seerep_hdf5_fb::Hdf5FbImage>(hdf5File, writeMtx);
   ioImageCore = std::make_shared<seerep_hdf5_core::Hdf5CoreImage>(hdf5File, writeMtx);
   ioPoint = std::make_shared<seerep_hdf5_fb::Hdf5FbPoint>(hdf5File, writeMtx);
+  ioCameraIntrinsics = std::make_shared<seerep_hdf5_core::Hdf5CoreCameraIntrinsics>(hdf5File, writeMtx);
 
   ioCoreGeneral->writeProjectname(std::filesystem::path(bagPath).filename());
   ioCoreGeneral->writeProjectFrameId("map");
@@ -93,6 +97,13 @@ void RosbagDumper::getCameraIntrinsic()
     if (msg != nullptr)
     {
       cameraInfo = *msg;
+      boost::uuids::uuid ciUuid = boost::uuids::random_generator()();
+      cameraIntrinsicsUuid = boost::lexical_cast<std::string>(ciUuid);
+
+      auto ci = seerep_core_fb::CoreFbConversion::fromFb(
+          *seerep_ros_conversions_fb::toFlat(cameraInfo, projectUuid, cameraIntrinsicsUuid, maxViewingDistance)
+               .GetRoot());
+      ioCameraIntrinsics->writeCameraIntrinsics(ci);
       break;
     }
   }
@@ -113,8 +124,7 @@ void RosbagDumper::iterateAndDumpImages()
 
       timeUuidMap.emplace(time, uuidstring);
 
-      std::string projectuuiddummy = "";
-      auto imgMsg = seerep_ros_conversions_fb::toFlat(*msg, projectuuiddummy);
+      auto imgMsg = seerep_ros_conversions_fb::toFlat(*msg, projectUuid, cameraIntrinsicsUuid);
 
       ioImage->writeImage(uuidstring, *imgMsg.GetRoot());
     }
@@ -157,7 +167,6 @@ void RosbagDumper::iterateAndDumpDetections(bool storeImages)
       }
       else
       {
-        std::string projectuuiddummy = "";
         // extract labels
         std::vector<std::string> detections, instanceUUIDs;
         for (auto& detection : msg->detections)
@@ -177,7 +186,7 @@ void RosbagDumper::iterateAndDumpDetections(bool storeImages)
         if (storeImages)
         {
           ioImage->writeImageBoundingBox2DLabeled(
-              uuidstring, seerep_ros_conversions_fb::toFlat(*msg, projectuuiddummy, detectionCategory, std::string(""),
+              uuidstring, seerep_ros_conversions_fb::toFlat(*msg, projectUuid, detectionCategory, std::string(""),
                                                             detections, instanceUUIDs)
                               .GetRoot()
                               ->labels_bb());
@@ -211,8 +220,7 @@ void RosbagDumper::iterateAndDumpTf(const std::string& topic, const bool isStati
         ROS_INFO_STREAM("storing tf " << tf.header.frame_id << " / " << tf.child_frame_id
                                       << "time: " << tf.header.stamp.sec << " / " << tf.header.stamp.nsec);
 
-        std::string projectuuiddummy = "";
-        auto tfMsg = seerep_ros_conversions_fb::toFlat(tf, projectuuiddummy, isStatic);
+        auto tfMsg = seerep_ros_conversions_fb::toFlat(tf, projectUuid, isStatic);
         ioTf->writeTransformStamped(*tfMsg.GetRoot());
       }
     }
@@ -228,11 +236,10 @@ RosbagDumper::createPointForDetection(vision_msgs::Detection2D detection, int32_
                                       const std::string& frameId, const std::string& label,
                                       const std::string& instanceUUID)
 {
-  std::string projectuuiddummy = "";
   flatbuffers::grpc::MessageBuilder builder;
   auto header = seerep::fb::CreateHeader(
       builder, 0, seerep::fb::CreateTimestamp(builder, stampSecs, stampNanos), builder.CreateString(frameId),
-      builder.CreateString(projectuuiddummy),
+      builder.CreateString(projectUuid),
       builder.CreateString(boost::lexical_cast<std::string>(boost::uuids::random_generator()())));
 
   float x, y, z;  // project here
@@ -283,7 +290,7 @@ float RosbagDumper::calcDiameter(vision_msgs::Detection2D detection)
 
 }  // namespace seerep_grpc_ros
 
-std::string getHDF5FilePath(ros::NodeHandle privateNh)
+std::string getHDF5FilePath(ros::NodeHandle privateNh, std::string& projectUuid)
 {
   std::string hdf5FolderPath;
   if (!privateNh.getParam("hdf5FolderPath", hdf5FolderPath))
@@ -292,7 +299,6 @@ std::string getHDF5FilePath(ros::NodeHandle privateNh)
     return "";
   }
 
-  std::string projectUuid;
   if (privateNh.getParam("projectUuid", projectUuid))
   {
     try
@@ -328,17 +334,22 @@ int main(int argc, char** argv)
       topicDetection, detectionCategory, topicTf, topicTfStatic, topicGeoAnchor;
   float distanceCameraGround;
   bool storeImages;
+  double maxViewingDistance;
 
-  const std::string hdf5FilePath = getHDF5FilePath(privateNh);
+  std::string projectUuid;
+  const std::string hdf5FilePath = getHDF5FilePath(privateNh, projectUuid);
+
+  privateNh.getParam("classesMappingPath", classesMappingPath);
+  privateNh.getParam("detectionCategory", detectionCategory);
 
   if (privateNh.getParam("bagPath", bagPath) && privateNh.getParam("classesMappingPath", classesMappingPath) &&
       privateNh.getParam("projectFrameId", projectFrameId) && privateNh.getParam("projectName", projectName) &&
       privateNh.getParam("topicImage", topicImage) &&
       privateNh.getParam("topicCameraIntrinsics", topicCameraIntrinsics) &&
-      privateNh.getParam("topicDetection", topicDetection) &&
-      privateNh.getParam("detectionCategory", detectionCategory) && privateNh.getParam("topicTf", topicTf) &&
+      privateNh.getParam("topicDetection", topicDetection) && privateNh.getParam("topicTf", topicTf) &&
       privateNh.getParam("topicTfStatic", topicTfStatic) && privateNh.getParam("topicGeoAnchor", topicGeoAnchor) &&
       privateNh.param<float>("distanceCameraGround", distanceCameraGround, 0.0) &&
+      privateNh.param<double>("maxViewingDistance", maxViewingDistance, 0.0) &&
       privateNh.param<bool>("storeImages", storeImages, true))
   {
     ROS_INFO_STREAM("hdf5FilePath: " << hdf5FilePath);
@@ -354,12 +365,13 @@ int main(int argc, char** argv)
     ROS_INFO_STREAM("topicTfStatic: " << topicTfStatic);
     ROS_INFO_STREAM("topicGeoAnchor: " << topicGeoAnchor);
     ROS_INFO_STREAM("distanceCameraGround: " << distanceCameraGround);
+    ROS_INFO_STREAM("maxViewingDistance: " << maxViewingDistance);
     ROS_INFO_STREAM("storeImages: " << storeImages);
 
     seerep_grpc_ros::RosbagDumper rosbagDumper(bagPath, classesMappingPath, hdf5FilePath, projectFrameId, projectName,
-                                               topicImage, topicCameraIntrinsics, topicDetection, detectionCategory,
-                                               topicTf, topicTfStatic, topicGeoAnchor, distanceCameraGround,
-                                               storeImages);
+                                               projectUuid, topicImage, topicCameraIntrinsics, topicDetection,
+                                               detectionCategory, topicTf, topicTfStatic, topicGeoAnchor,
+                                               distanceCameraGround, maxViewingDistance, storeImages);
   }
   else
   {

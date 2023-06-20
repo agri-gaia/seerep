@@ -50,9 +50,11 @@ void Hdf5CoreCameraIntrinsics::writeCameraIntrinsics(const seerep_core_msgs::cam
                                    camIntrinsics.region_of_interest.height);
     writeAttributeToHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::REGION_OF_INTEREST_WIDTH,
                                    camIntrinsics.region_of_interest.width);
-    writeAttributeToHdf5<uint32_t>(*dataGroupPtr,
-                                   seerep_hdf5_core::Hdf5CoreCameraIntrinsics::REGION_OF_INTEREST_DO_RECTIFY,
-                                   camIntrinsics.region_of_interest.do_rectify);
+    writeAttributeToHdf5<bool>(*dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::REGION_OF_INTEREST_DO_RECTIFY,
+                               camIntrinsics.region_of_interest.do_rectify);
+
+    writeAttributeToHdf5<double>(*dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::MAX_VIEWING_DISTANCE,
+                                 camIntrinsics.maximum_viewing_distance);
   }
 
   m_file->flush();
@@ -109,8 +111,11 @@ Hdf5CoreCameraIntrinsics::readCameraIntrinsics(const boost::uuids::uuid& camerai
         id, *dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::REGION_OF_INTEREST_HEIGHT);
     ci.region_of_interest.width = readAttributeFromHdf5<uint32_t>(
         id, *dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::REGION_OF_INTEREST_WIDTH);
-    ci.region_of_interest.do_rectify = readAttributeFromHdf5<uint32_t>(
+    ci.region_of_interest.do_rectify = readAttributeFromHdf5<bool>(
         id, *dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::REGION_OF_INTEREST_DO_RECTIFY);
+
+    ci.maximum_viewing_distance = readAttributeFromHdf5<double>(
+        id, *dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::MAX_VIEWING_DISTANCE);
   }
 
   return ci;

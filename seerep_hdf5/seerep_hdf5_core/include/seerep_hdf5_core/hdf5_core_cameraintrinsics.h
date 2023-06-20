@@ -67,6 +67,8 @@ public:
   inline static const std::string REGION_OF_INTEREST_HEIGHT = "region_of_interest/height";
   inline static const std::string REGION_OF_INTEREST_WIDTH = "region_of_interest/width";
   inline static const std::string REGION_OF_INTEREST_DO_RECTIFY = "region_of_interest/do_rectify";
+
+  inline static const std::string MAX_VIEWING_DISTANCE = "max_viewing_distance";
 };
 
 }  // namespace seerep_hdf5_core

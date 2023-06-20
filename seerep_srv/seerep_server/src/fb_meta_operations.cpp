@@ -244,7 +244,6 @@ FbMetaOperations::GetOverallBoundingBox(grpc::ServerContext* context,
   // levels.
   std::vector<seerep_core_msgs::Datatype> dt_vector;
 
-  seerep::fb::Datatype casted_datatype = static_cast<seerep::fb::Datatype>(requestRoot->datatype());
   dt_vector = seerep_core_fb::CoreFbConversion::fromFbDatatypeVector(requestRoot->datatype());
 
   try

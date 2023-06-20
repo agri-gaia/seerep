@@ -15,6 +15,7 @@
   <author email="spuetz@uos.de">Sebastian Pütz</author>
 
   <depend>seerep_msgs</depend>
+  <depend>seerep_core</depend>
   <depend>std_msgs</depend>
   <depend>geometry_msgs</depend>
   <depend>sensor_msgs</depend>

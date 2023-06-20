@@ -10,6 +10,7 @@ find_package(
 )
 
 find_package(SeerepMsgs REQUIRED)
+find_package(SeerepCore REQUIRED)
 
 find_package(gRPC CONFIG REQUIRED)
 
@@ -40,6 +41,8 @@ add_dependencies(
   ${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS}
   ${catkin_EXPORTED_TARGETS}
 )
+
+target_link_libraries(${PROJECT_NAME} ${SeerepCore_LIBRARIES})
 
 if(CATKIN_ENABLE_TESTING)
   catkin_add_gtest(${PROJECT_NAME}-test test/ros_to_fb_conversion_test.cpp)
