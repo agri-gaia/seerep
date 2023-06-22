@@ -56,6 +56,7 @@ def getProject(builder, channel, name):
             return response.Projects(i).Uuid().decode("utf-8")
     return None
 
+
 def getProjectInfo(builder, channel, name):
     '''Retrieve project infos by name'''
     stubMeta = metaOperations.MetaOperationsStub(channel)
@@ -74,10 +75,11 @@ def getProjectInfo(builder, channel, name):
                 "name": response.Projects(i).Name().decode("utf-8"),
                 "uuid": response.Projects(i).Uuid().decode("utf-8"),
                 "frameid": response.Projects(i).Frameid().decode("utf-8"),
-                "geodetic_position": response.Projects(i).GeodeticPosition()
+                "geodetic_position": response.Projects(i).GeodeticPosition(),
             }
 
     return None
+
 
 def createProject(channel, builder, name, frameId, coordSys, ellipsoid, altitude, latitude, longitude):
     '''Create a project from the parameters'''
