@@ -25,7 +25,12 @@ void Hdf5PbTf::writeTransformStamped(const seerep::pb::TransformStamped& tf)
     hdf5_group_tf = seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF;
   }
 
-  std::string hdf5DatasetPath = hdf5_group_tf + "/" + tf.header().frame_id() + "_" + tf.child_frame_id();
+  std::string parentFrame = tf.header().frame_id();
+  std::string childFrame = tf.child_frame_id();
+  // replace the '/' of namespaces in the frameIds by '_' to avoid the creation of subgroups in HDF5
+  std::replace(parentFrame.begin(), parentFrame.end(), '/', '_');
+  std::replace(childFrame.begin(), childFrame.end(), '/', '_');
+  std::string hdf5DatasetPath = hdf5_group_tf + "/" + parentFrame + "_" + childFrame;
   std::string hdf5DatasetTimePath = hdf5DatasetPath + "/" + "time";
   std::string hdf5DatasetTransPath = hdf5DatasetPath + "/" + "translation";
   std::string hdf5DatasetRotPath = hdf5DatasetPath + "/" + "rotation";
