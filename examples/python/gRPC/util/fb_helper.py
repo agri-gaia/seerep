@@ -141,6 +141,14 @@ def getOrCreateProject(
     return projectUuid
 
 
+def createEmpty(builder):
+    '''Create an empty flatbuffer'''
+    Empty.Start(builder)
+    emptyMsg = Empty.End(builder)
+    builder.Finish(emptyMsg)
+    return builder.Output()
+
+
 def createTimeStamp(builder, seconds, nanoseconds=0):
     '''Create a time stamp in flatbuffers'''
     Timestamp.Start(builder)
