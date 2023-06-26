@@ -15,55 +15,58 @@ from seerep.util.fb_helper import (
     getProject,
 )
 
-builder = flatbuffers.Builder(1000)
-# Default server is localhost !
-channel = get_gRPC_channel()
 
-# 1. Get all projects from the server
-projectuuid = getProject(builder, channel, 'testproject')
+def get_ciuuid():
+    builder = flatbuffers.Builder(1000)
+    # Default server is localhost !
+    channel = get_gRPC_channel()
 
-ciuuid = str(uuid.uuid4())
-print("Camera Intrinsics will be saved against the uuid: ", ciuuid)
+    # 1. Get all projects from the server
+    projectuuid = getProject(builder, channel, "testproject")
 
-# 2. Check if the defined project exist; if not exit
-if not projectuuid:
-    print("project doesn't exist!")
-    exit()
+    ciuuid = str(uuid.uuid4())
+    print("Camera Intrinsics will be saved against the uuid: ", ciuuid)
 
-# 3. Get gRPC service object
-stub = ci_service.CameraIntrinsicsServiceStub(channel)
+    # 2. Check if the defined project exist; if not exit
+    if not projectuuid:
+        print("project doesn't exist!")
+        exit()
 
-# Create all necessary objects for the query
-ts = createTimeStamp(builder, 4, 3)
-header = createHeader(builder, ts, "map", projectuuid, ciuuid)
-roi = createRegionOfInterest(builder, 3, 5, 6, 7, True)
+    # 3. Get gRPC service object
+    stub = ci_service.CameraIntrinsicsServiceStub(channel)
+
+    # Create all necessary objects for the query
+    ts = createTimeStamp(builder, 4, 3)
+    header = createHeader(builder, ts, "map", projectuuid, ciuuid)
+    roi = createRegionOfInterest(builder, 3, 5, 6, 7, True)
 
 
-distortion_matrix = [4, 5, 6, 7, 8, 9, 10, 11, 12]
-rect_matrix = [4, 5, 6, 7, 8, 9, 10, 11, 12]
-intrins_matrix = [4, 5, 6, 7, 8, 9, 10, 11, 12]
-proj_matrix = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+    distortion_matrix = [4, 5, 6, 7, 8, 9, 10, 11, 12]
+    rect_matrix = [4, 5, 6, 7, 8, 9, 10, 11, 12]
+    intrins_matrix = [4, 5, 6, 7, 8, 9, 10, 11, 12]
+    proj_matrix = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
-ci = createCameraIntrinsics(
-    builder, header, 3, 4, "plumb_bob", distortion_matrix, intrins_matrix, rect_matrix, proj_matrix, 4, 5, roi, 5
-)
-builder.Finish(ci)
+    ci = createCameraIntrinsics(
+        builder, header, 3, 4, "plumb_bob", distortion_matrix, intrins_matrix, rect_matrix, proj_matrix, 4, 5, roi, 5
+    )
+    builder.Finish(ci)
 
-buf = builder.Output()
+    buf = builder.Output()
 
-stub.TransferCameraIntrinsics(bytes(buf))
+    stub.TransferCameraIntrinsics(bytes(buf))
 
-# Fetch the saved CI
-builder = flatbuffers.Builder(1000)
+    # Fetch the saved CI
+    builder = flatbuffers.Builder(1000)
 
-ci_query = createCameraIntrinsicsQuery(builder, ciuuid, projectuuid)
+    ci_query = createCameraIntrinsicsQuery(builder, ciuuid, projectuuid)
 
-builder.Finish(ci_query)
-buf = builder.Output()
+    builder.Finish(ci_query)
+    buf = builder.Output()
 
-ret = stub.GetCameraIntrinsics(bytes(buf))
+    ret = stub.GetCameraIntrinsics(bytes(buf))
 
-retrieved_ci = CameraIntrinsics.CameraIntrinsics.GetRootAs(ret)
+    retrieved_ci = CameraIntrinsics.CameraIntrinsics.GetRootAs(ret)
 
-# printing the uuid of the retrieved camera intrinsics
-print(retrieved_ci.Header().UuidMsgs().decode('utf-8'))
+    # printing the uuid of the retrieved camera intrinsics
+    print(retrieved_ci.Header().UuidMsgs().decode("utf-8"))
+    return ciuuid
