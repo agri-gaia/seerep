@@ -5,10 +5,11 @@ package seerep.pb;
 import "time_interval.proto";
 import "boundingbox_stamped.proto";
 import "labels_with_category.proto";
+import "polygon2d.proto";
 
 message Query
 {
-  BoundingboxStamped boundingboxStamped = 1;
+  Polygon2D polygon = 1;
   TimeInterval timeinterval = 2;
   repeated LabelsWithCategory labelsWithCategory = 3;
   bool mustHaveAllLabels = 4;

@@ -44,6 +44,7 @@ set(MY_PROTO_FILES
     protos/point2d.proto
     protos/polygon_stamped.proto
     protos/polygon.proto
+    protos/polygon2d.proto
     protos/pose_stamped.proto
     protos/pose.proto
     protos/project_info.proto
@@ -102,6 +103,7 @@ set(MY_FBS_FILES
     fbs/point2d.fbs
     fbs/polygon_stamped.fbs
     fbs/polygon.fbs
+    fbs/polygon2d.fbs
     fbs/pose_stamped.fbs
     fbs/pose.fbs
     fbs/project_info.fbs
@@ -140,6 +142,7 @@ set(MY_CORE_MSGS
     ${CMAKE_CURRENT_SOURCE_DIR}/core/datatype.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/label_with_instance.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/project_info.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/polygon2d.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/query_result_project.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/query_result.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/query_tf.h

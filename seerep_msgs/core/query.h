@@ -6,6 +6,7 @@
 
 #include "aabb.h"
 #include "header.h"
+#include "polygon2d.h"
 #include "timeinterval.h"
 
 namespace seerep_core_msgs
@@ -13,8 +14,8 @@ namespace seerep_core_msgs
 struct Query
 {
   Header header;
-  std::optional<std::vector<boost::uuids::uuid>> projects;                         ///< search all projects if not set
-  std::optional<AABB> boundingbox;                                                 ///< only do spatial query if set
+  std::optional<std::vector<boost::uuids::uuid>> projects;  ///< search all projects if not set
+  std::optional<Polygon2D> polygon;
   std::optional<Timeinterval> timeinterval;                                        ///< only do temporal query if set
   std::optional<std::unordered_map<std::string, std::vector<std::string>>> label;  ///< only do semantic query if set
   bool mustHaveAllLabels;  ///< a dataset only fulfills semantic query if all labels are present

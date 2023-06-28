@@ -2,11 +2,12 @@
 include "time_interval.fbs";
 include "boundingbox_stamped.fbs";
 include "labels_with_category.fbs";
+include "polygon2d.fbs";
 
 namespace seerep.fb;
 
 table Query {
-  boundingboxStamped:BoundingboxStamped;
+  polygon:Polygon2D;
   timeinterval:TimeInterval;
   label:[LabelsWithCategory];
   mustHaveAllLabels:bool;
