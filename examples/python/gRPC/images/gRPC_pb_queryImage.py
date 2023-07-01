@@ -14,30 +14,29 @@ from seerep.pb import query_pb2 as query
 from seerep.util.common import get_gRPC_channel
 
 
-def query_images() -> List[image.Image]:
-    # Default server is localhost !
-    channel = get_gRPC_channel()
-
+def query_images(
+    grpc_channel=get_gRPC_channel(), target_project_uuid=None
+) -> List[image.Image]:
     # 1. Get gRPC service objects
-    stub = imageService.ImageServiceStub(channel)
-    stubMeta = metaOperations.MetaOperationsStub(channel)
+    stub = imageService.ImageServiceStub(grpc_channel)
+    stubMeta = metaOperations.MetaOperationsStub(grpc_channel)
 
     # 2. Get all projects from the server
     response = stubMeta.GetProjects(empty_pb2.Empty())
 
     # 3. Check if we have an existing test project, if not, we stop here
-    projectuuid = ""
-    for project in response.projects:
-        print(project.name + " " + project.uuid + "\n")
-        if project.name == "testproject":
-            projectuuid = project.uuid
+    if not target_project_uuid:
+        for project in response.projects:
+            print(project.name + " " + project.uuid + "\n")
+            if project.name == "testproject":
+                target_project_uuid = project.uuid
 
-    if projectuuid == "":
-        sys.exit()
+        if not target_project_uuid:
+            sys.exit()
 
     # 4. Create a query with parameters
     theQuery = query.Query()
-    theQuery.projectuuid.append(projectuuid)
+    theQuery.projectuuid.append(target_project_uuid)
 
     theQuery.polygon.z = -1
     theQuery.polygon.height = 7

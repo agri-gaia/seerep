@@ -16,28 +16,29 @@ from seerep.util.fb_helper import (
 )
 
 
-def get_ciuuid():
-    builder = flatbuffers.Builder(1000)
-    # Default server is localhost !
-    channel = get_gRPC_channel()
+# Default server is localhost !
+def get_ciuuid(grpc_channel=get_gRPC_channel(), target_proj_uuid=None):
 
-    # 1. Get all projects from the server
-    projectuuid = getProject(builder, channel, "testproject")
+    builder = flatbuffers.Builder(1000)
+
+    # 1. Get all projects from the server when no target specified
+    if not target_proj_uuid:
+        target_proj_uuid = getProject(builder, grpc_channel, "testproject")
 
     ciuuid = str(uuid.uuid4())
-    print("Camera Intrinsics will be saved against the uuid: ", ciuuid)
+    print("Camera Intrinsics will be saved against the uuid:", ciuuid)
 
     # 2. Check if the defined project exist; if not exit
-    if not projectuuid:
+    if not target_proj_uuid:
         print("project doesn't exist!")
         exit()
 
     # 3. Get gRPC service object
-    stub = ci_service.CameraIntrinsicsServiceStub(channel)
+    stub = ci_service.CameraIntrinsicsServiceStub(grpc_channel)
 
     # Create all necessary objects for the query
     ts = createTimeStamp(builder, 4, 3)
-    header = createHeader(builder, ts, "map", projectuuid, ciuuid)
+    header = createHeader(builder, ts, "map", target_proj_uuid, ciuuid)
     roi = createRegionOfInterest(builder, 3, 5, 6, 7, True)
 
 
@@ -58,7 +59,7 @@ def get_ciuuid():
     # Fetch the saved CI
     builder = flatbuffers.Builder(1000)
 
-    ci_query = createCameraIntrinsicsQuery(builder, ciuuid, projectuuid)
+    ci_query = createCameraIntrinsicsQuery(builder, ciuuid, target_proj_uuid)
 
     builder.Finish(ci_query)
     buf = builder.Output()
