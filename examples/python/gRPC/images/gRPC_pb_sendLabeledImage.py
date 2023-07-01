@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-
-import os
-import sys
 import time
 import uuid
-from typing import List
+from typing import List, Tuple
 
+# todo: fix imports such that this script can be run seperately from pytest
+import gRPC.images.gRPC_fb_addCameraIntrinsics as camintrins_uuid
 import numpy as np
 from google.protobuf import empty_pb2
 from seerep.pb import boundingbox2d_labeled_pb2 as boundingbox2d_labeled
@@ -27,33 +26,33 @@ from seerep.pb import transform_stamped_pb2 as tf
 from seerep.util.common import get_gRPC_channel
 
 
-def send_labeled_images() -> List[image.Image]:
-    import gRPC_fb_addCameraIntrinsics as camintrins_uuid
-
-    # Default server is localhost !
-    channel = get_gRPC_channel(target="local")
+def send_labeled_images(
+    grpc_channel=get_gRPC_channel(), target_proj_uuid=None
+) -> List[image.Image]:
 
     # 1. Get gRPC service objects
-    stub = imageService.ImageServiceStub(channel)
-    stubTf = tfService.TfServiceStub(channel)
-    stubMeta = metaOperations.MetaOperationsStub(channel)
-    stubCI = camintrinsics_service.CameraIntrinsicsServiceStub(channel)
-
-    # 2. Get all projects from the server
-    response = stubMeta.GetProjects(empty_pb2.Empty())
+    stub = imageService.ImageServiceStub(grpc_channel)
+    stubTf = tfService.TfServiceStub(grpc_channel)
+    stubMeta = metaOperations.MetaOperationsStub(grpc_channel)
+    stubCI = camintrinsics_service.CameraIntrinsicsServiceStub(grpc_channel)
 
     # 3. Check if we have an existing test project, if not, one is created.
     found = False
-    for project in response.projects:
-        print(project.name + " " + project.uuid)
-        if project.name == "testproject":
-            projectuuid = project.uuid
-            found = True
+    if not target_proj_uuid:
+        # 2. Get all projects from the server
+        response = stubMeta.GetProjects(empty_pb2.Empty())
+        for project in response.projects:
+            print(project.name + " " + project.uuid)
+            if project.name == "testproject":
+                found = True
+                target_proj_uuid = project.uuid
 
-    if not found:
-        creation = projectCreation.ProjectCreation(name="testproject", mapFrameId="map")
-        projectCreated = stubMeta.CreateProject(creation)
-        projectuuid = projectCreated.uuid
+        if not found:
+            creation = projectCreation.ProjectCreation(
+                name="testproject", mapFrameId="map"
+            )
+            projectCreated = stubMeta.CreateProject(creation)
+            target_proj_uuid = projectCreated.uuid
 
     theTime = int(time.time())
 
@@ -61,7 +60,7 @@ def send_labeled_images() -> List[image.Image]:
     # A valid camera intrinsics UUID is needed here for succesful storage of Images
     # Add new Camera Intrinsics
 
-    ciuuid = camintrins_uuid.get_ciuuid()
+    ciuuid = camintrins_uuid.get_ciuuid(grpc_channel)
     print("Camera Intrinsics will be saved against the uuid: ", ciuuid)
 
     camin = cameraintrinsics.CameraIntrinsics()
@@ -71,7 +70,7 @@ def send_labeled_images() -> List[image.Image]:
 
     camin.header.frame_id = "camintrinsics"
 
-    camin.header.uuid_project = projectuuid
+    camin.header.uuid_project = target_proj_uuid
     camin.header.uuid_msgs = ciuuid
 
     camin.region_of_interest.x_offset = 2
@@ -120,7 +119,7 @@ def send_labeled_images() -> List[image.Image]:
         theImage.header.frame_id = "camera"
         theImage.header.stamp.seconds = theTime + n
         theImage.header.stamp.nanos = 0
-        theImage.header.uuid_project = projectuuid
+        theImage.header.uuid_project = target_proj_uuid
         theImage.height = lim
         theImage.width = lim
         theImage.encoding = "rgb8"
@@ -172,7 +171,7 @@ def send_labeled_images() -> List[image.Image]:
     theTf = tf.TransformStamped()
     theTf.header.frame_id = "map"
     theTf.header.stamp.seconds = theTime
-    theTf.header.uuid_project = projectuuid
+    theTf.header.uuid_project = target_proj_uuid
     theTf.child_frame_id = "camera"
     theTf.transform.translation.x = 1
     theTf.transform.translation.y = 2
@@ -194,4 +193,5 @@ def send_labeled_images() -> List[image.Image]:
 
 
 if __name__ == "__main__":
-    print(send_labeled_images())
+    sent_image_ls_data, _, _ = send_labeled_images()
+    print(sent_image_ls_data)
