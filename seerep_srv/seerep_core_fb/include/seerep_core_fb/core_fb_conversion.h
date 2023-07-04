@@ -248,12 +248,28 @@ private:
   static bool fromFbQueryMustHaveAllLabels(const seerep::fb::Query* query);
 
   /**
+   * @brief extracts the fullyEncapsulated flag of the flatbuffer query message
+   * @param query the flatbuffer message
+   * @return true results of the query must be entirely inside the query polygon
+   * @return false results of the query may not be entirely inside the query polygon
+   */
+  static bool fromFbQueryFullyEncapsulated(const seerep::fb::Query* query);
+
+  /**
    * @brief extracts the maxNumData of the flatbuffer query message
    *
    * @param query the flatbuffer query message
    * @return uint max number of datasets that should be returned
    */
   static uint fromFbQueryMaxNumData(const seerep::fb::Query* query);
+
+  /**
+   * @brief extracts and converts a polygon from a fb query
+   *
+   * @param query fb query message
+   * @return seerep_core_msgs::Polygon2D polygon2d as a core msg
+   */
+  static seerep_core_msgs::Polygon2D fromFbQueryPolygon(const seerep::fb::Query* query);
 
   /**
    * @brief converts the header of the flatbuffer data message to seerep core specific message

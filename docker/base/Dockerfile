@@ -22,6 +22,7 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         gdb \
         unzip \
         git \
+        libcgal-dev \
         sudo \
         ssh \
         vim \

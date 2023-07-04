@@ -78,7 +78,7 @@ std::vector<boost::uuids::uuid> CoreDataset::getData(const seerep_core_msgs::Que
     }
   }
 
-  if (!query.boundingbox && !query.timeinterval && !query.label && !query.instances && !query.dataUuids)
+  if (!query.polygon && !query.timeinterval && !query.label && !query.instances && !query.dataUuids)
   {
     return getAllDatasetUuids(datatypeSpecifics);
   }
@@ -130,18 +130,85 @@ void CoreDataset::getUuidsFromMap(std::unordered_map<boost::uuids::uuid, std::ve
 std::optional<std::vector<seerep_core_msgs::AabbIdPair>>
 CoreDataset::querySpatial(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics, const seerep_core_msgs::Query& query)
 {
-  if (query.boundingbox)
+  if (query.polygon)
   {
+    // generate rtree result container
     std::optional<std::vector<seerep_core_msgs::AabbIdPair>> rt_result = std::vector<seerep_core_msgs::AabbIdPair>();
-    // axis-aligned bounding box
-    seerep_core_msgs::AABB aabb(seerep_core_msgs::Point(bg::get<bg::min_corner, 0>(query.boundingbox.value()),
-                                                        bg::get<bg::min_corner, 1>(query.boundingbox.value()),
-                                                        bg::get<bg::min_corner, 2>(query.boundingbox.value())),
-                                seerep_core_msgs::Point(bg::get<bg::max_corner, 0>(query.boundingbox.value()),
-                                                        bg::get<bg::max_corner, 1>(query.boundingbox.value()),
-                                                        bg::get<bg::max_corner, 2>(query.boundingbox.value())));
 
+    seerep_core_msgs::Point min, max;
+
+    bg::set<0>(min, std::numeric_limits<float>::max());
+    bg::set<0>(max, std::numeric_limits<float>::min());
+
+    bg::set<1>(min, std::numeric_limits<float>::max());
+    bg::set<1>(max, std::numeric_limits<float>::min());
+
+    bg::set<2>(min, query.polygon.value().z);
+    bg::set<2>(max, query.polygon.value().height + query.polygon.value().z);
+
+    for (auto p : query.polygon.value().vertices)
+    {
+      // update x dimension of min
+      if (bg::get<0>(p) < bg::get<0>(min))
+      {
+        bg::set<0>(min, bg::get<0>(p));
+      }
+
+      // update y dimension of min
+      if (bg::get<1>(p) < bg::get<1>(min))
+      {
+        bg::set<1>(min, bg::get<1>(p));
+      }
+
+      // update x dimension of max
+      if (bg::get<0>(p) > bg::get<0>(max))
+      {
+        bg::set<0>(max, bg::get<0>(p));
+      }
+
+      // update y dimension of max
+      if (bg::get<1>(p) > bg::get<1>(max))
+      {
+        bg::set<1>(max, bg::get<1>(p));
+      }
+    }
+
+    // generate aabb from provided polygon
+    seerep_core_msgs::AABB aabb(min, max);
+
+    // perform the query on the r tree using the aabb
     datatypeSpecifics->rt.query(boost::geometry::index::intersects(aabb), std::back_inserter(rt_result.value()));
+
+    bool fullyEncapsulated;
+    bool partiallyEncapsulated;
+    std::vector<seerep_core_msgs::AabbIdPair>::iterator it;
+
+    // traverse query results and confirm if they are contained inside the polygon
+    for (it = rt_result.value().begin(); it != rt_result.value().end();)
+    {
+      // check if query result is not fully distant to the oriented bb box provided in the query
+      intersectionDegree(it->first, query.polygon.value(), fullyEncapsulated, partiallyEncapsulated);
+
+      // if there is no intersection between the result and the user's request, remove it from the iterator
+      if (!partiallyEncapsulated && !fullyEncapsulated)
+      {
+        it = rt_result.value().erase(it);
+      }
+
+      // does the user want only results fully encapsulated by the requested bb
+      // and is this query result not fully encapsulated
+      else if (query.fullyEncapsulated && !fullyEncapsulated)
+      {
+        // if yes, then delete partially encapsulated query results from the result set
+        it = rt_result.value().erase(it);
+      }
+      else
+      {
+        ++it;
+      }
+    }
+
+    // return the result after deletion of undesired elements has been performed
     return rt_result;
   }
   else
@@ -515,6 +582,76 @@ void CoreDataset::addLabels(const seerep_core_msgs::Datatype& datatype,
   }
   // add the vector of instance uuids to the datatypespecifics
   datatypeSpecifics->datasetInstancesMap.emplace(msgUuid, instanceUuids);
+}
+
+void CoreDataset::intersectionDegree(const seerep_core_msgs::AABB& aabb, const seerep_core_msgs::Polygon2D& polygon,
+                                     bool& fullEncapsulation, bool& partialEncapsulation)
+{
+  // convert seerep core aabb to cgal polygon
+  Kernel::Point_2 points_aabb[] = {
+    Kernel::Point_2(bg::get<bg::min_corner, 0>(aabb), bg::get<bg::min_corner, 1>(aabb)),
+    Kernel::Point_2(bg::get<bg::max_corner, 0>(aabb), bg::get<bg::min_corner, 1>(aabb)),
+    Kernel::Point_2(bg::get<bg::max_corner, 0>(aabb), bg::get<bg::max_corner, 1>(aabb)),
+    Kernel::Point_2(bg::get<bg::min_corner, 0>(aabb), bg::get<bg::max_corner, 1>(aabb)),
+  };
+  CGAL::Polygon_2<Kernel> aabb_cgal(points_aabb, points_aabb + 4);
+
+  // convert seerep core polygon to cgal polygon
+  CGAL::Polygon_2<Kernel> polygon_cgal;
+  for (auto point : polygon.vertices)
+  {
+    polygon_cgal.push_back(Kernel::Point_2(bg::get<0>(point), bg::get<1>(point)));
+  }
+
+  try
+  {
+    // a cgal polyon needs to be simple, convex and the points should be added in a counter clockwise order
+    assert(polygon_cgal.is_simple());
+    assert(aabb_cgal.is_simple());
+    assert(polygon_cgal.is_convex());
+    assert(aabb_cgal.is_convex());
+  }
+  catch (const std::runtime_error& e)
+  {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+  }
+
+  // cgal polygon must be counter clockwise oriented
+  if (polygon_cgal.is_clockwise_oriented())
+  {
+    polygon_cgal.reverse_orientation();
+  }
+  if (aabb_cgal.is_clockwise_oriented())
+  {
+    aabb_cgal.reverse_orientation();
+  }
+
+  fullEncapsulation = true;
+  partialEncapsulation = false;
+
+  bool xy_bounded, z_bounded;
+
+  // traverse the axis aligned bounding box
+  for (CGAL::Polygon_2<Kernel>::Vertex_iterator vi = aabb_cgal.vertices_begin(); vi != aabb_cgal.vertices_end(); ++vi)
+  {
+    // is the vertex of the aabb inside the polygon on the x and y axis
+    xy_bounded = !(polygon_cgal.bounded_side(*vi) == CGAL::ON_UNBOUNDED_SIDE);
+    // is the vertex of the aabb inside the polygon on the z axis
+    z_bounded = (polygon.z <= bg::get<bg::min_corner, 2>(aabb) &&
+                 polygon.z + polygon.height >= bg::get<bg::min_corner, 2>(aabb)) ||
+                (polygon.z <= bg::get<bg::max_corner, 2>(aabb) &&
+                 polygon.z + polygon.height >= bg::get<bg::max_corner, 2>(aabb));
+
+    // check if this point is inside the obb
+    if (!xy_bounded || !z_bounded)
+    {
+      fullEncapsulation = false;
+    }
+    else
+    {
+      partialEncapsulation = true;
+    }
+  }
 }
 
 seerep_core_msgs::AabbTime CoreDataset::getTimeBounds(std::vector<seerep_core_msgs::Datatype> datatypes)

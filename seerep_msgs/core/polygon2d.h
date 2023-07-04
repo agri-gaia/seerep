@@ -10,7 +10,7 @@ struct Polygon2D
   std::vector<Point2D> vertices;
   int z;
   int height;
-}
+};
 }  // namespace seerep_core_msgs
 
-#endif SEEREP_CORE_MSGS_POLYGON2D_H_
+#endif

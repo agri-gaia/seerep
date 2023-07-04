@@ -1,6 +1,9 @@
 #ifndef SEEREP_CORE_CORE_DATASET_H_
 #define SEEREP_CORE_CORE_DATASET_H_
 
+#include <CGAL/Boolean_set_operations_2.h>
+#include <CGAL/Exact_predicates_exact_constructions_kernel.h>
+
 #include <algorithm>
 #include <cstdint>
 #include <functional>
@@ -25,6 +28,8 @@
 #include <boost/uuid/uuid.hpp>             // uuid class
 #include <boost/uuid/uuid_generators.hpp>  // generators
 #include <boost/uuid/uuid_io.hpp>          // streaming operators etc.
+
+typedef CGAL::Exact_predicates_exact_constructions_kernel Kernel;
 
 namespace seerep_core
 {
@@ -175,6 +180,17 @@ private:
    * @param datatype the datatype to consider
    */
   void tryAddingDataWithMissingTF(const seerep_core_msgs::Datatype& datatype);
+
+  /**
+   * @brief determine if the axis aligned bounding box is fully or paritally inside the oriented bounding box
+   *
+   * @param aabb axis aligned bounding box
+   * @param polygon polygon
+   * @param fullEncapsulation boolean variable to denote if the aabb fully inside the obb
+   * @param partialEncapsulation boolean variable to denote if the aabb partially inside the obb
+   */
+  void intersectionDegree(const seerep_core_msgs::AABB& aabb, const seerep_core_msgs::Polygon2D& polygon,
+                          bool& fullEncapsulation, bool& partialEncapsulation);
 
   void getUuidsFromMap(std::unordered_map<boost::uuids::uuid, std::vector<boost::uuids::uuid>,
                                           boost::hash<boost::uuids::uuid>>& datasetInstancesMap,

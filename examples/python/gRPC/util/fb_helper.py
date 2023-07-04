@@ -21,6 +21,7 @@ from seerep.fb import (
     PointCloud2,
     PointField,
     PointStamped,
+    Polygon2D,
     ProjectCreation,
     ProjectInfo,
     ProjectInfos,
@@ -347,6 +348,22 @@ def createBoundingBox(builder, centerPoint, spatialExtent, rotation=None):
     return Boundingbox.End(builder)
 
 
+def createPolygon2D(builder, height, z, vertices):
+    '''Create a 2D Polygon in flatbuffers'''
+
+    Polygon2D.StartVerticesVector(builder, len(vertices))
+    for v in vertices:
+        builder.PrependUOffsetTRelative(v)
+    vertices_fb = builder.EndVector()
+
+    Polygon2D.Start(builder)
+    Polygon2D.AddHeight(builder, height)
+    Polygon2D.AddZ(builder, z)
+    Polygon2D.AddVertices(builder, vertices_fb)
+
+    return Polygon2D.End(builder)
+
+
 def createBoundingBoxStamped(builder, header, centerPoint, spatialExtent, rotation=None):
     '''Creates a stamped 3D bounding box in flatbuffers'''
     boundingBox = createBoundingBox(builder, centerPoint, spatialExtent, rotation)
@@ -434,6 +451,8 @@ def createQuery(
     instanceUuids=None,
     dataUuids=None,
     withoutData=False,
+    polygon2d=None,
+    fullyEncapsulated=False,
 ):
     '''Create a query, all parameters are optional'''
 
@@ -459,6 +478,8 @@ def createQuery(
     Query.Start(builder)
     if boundingBox:
         Query.AddBoundingboxStamped(builder, boundingBox)
+    if polygon2d:
+        Query.AddPolygon(builder, polygon2d)
     if timeInterval:
         Query.AddTimeinterval(builder, timeInterval)
     if labels:
@@ -473,6 +494,7 @@ def createQuery(
         Query.QueryAddDatauuid(builder, dataUuidOffset)
     # no if; has default value
     Query.AddWithoutdata(builder, withoutData)
+    Query.AddFullyEncapsulated(builder, fullyEncapsulated)
 
     return Query.End(builder)
 

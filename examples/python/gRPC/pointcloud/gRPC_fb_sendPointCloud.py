@@ -61,7 +61,13 @@ def createPointCloud(builder, header, height=960, width=1280):
     # labelsBbVector = addToBoundingBoxLabeledVector(builder, labelsBBCat)
 
     # Note: rgb field is float, for simplification
-    points = np.random.randn(height, width, 4).astype(np.float32)
+    pointsBox = [[]]
+    lim = 3
+    for a in range(-lim, lim + 1, 1):
+        for b in range(-lim, lim + 1, 1):
+            for c in range(-lim, lim + 1, 1):
+                pointsBox[0].append([a, b, c, 0])
+    points = np.array(pointsBox).astype(np.float32)
     print(f"Data: {points}")
 
     pointsVector = builder.CreateByteVector(points.tobytes())
@@ -144,4 +150,5 @@ tfStub = tf_service_grpc_fb.TfServiceStub(channel)
 tfStub.TransferTransformStamped(createTF(channel, NUM_POINT_CLOUDS, projectUuid, theTime))
 
 stub = pointCloudService.PointCloudServiceStub(channel)
-responseBuf = stub.TransferPointCloud2(createPointClouds(projectUuid, NUM_POINT_CLOUDS, theTime))
+pc = createPointClouds(projectUuid, NUM_POINT_CLOUDS, theTime)
+responseBuf = stub.TransferPointCloud2(pc)

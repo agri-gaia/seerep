@@ -17,6 +17,7 @@ seerep_core_msgs::Query CorePbConversion::fromPb(const seerep::pb::Query& query,
   fromPbDataUuids(query, queryCore);
   fromPbWithOutData(query, queryCore);
   fromFbQueryMaxNumData(query, queryCore);
+  fromPbFullyEncapsulated(query, queryCore);
 
   return queryCore;
 }
@@ -333,6 +334,29 @@ void CorePbConversion::fromPbTime(const seerep::pb::Query& query, seerep_core_ms
   }
 }
 
+seerep_core_msgs::Point2D CorePbConversion::fromPbPoint2D(const seerep::pb::Point2D& point)
+{
+  seerep_core_msgs::Point2D pointCore;
+
+  pointCore.set<0>(point.x());
+  pointCore.set<1>(point.y());
+
+  return pointCore;
+}
+
+void CorePbConversion::fromPbPolygon(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
+{
+  if (query.has_polygon())
+  {
+    for (auto vertex : query.polygon().vertices())
+    {
+      queryCore.polygon.value().vertices.push_back(fromPbPoint2D(vertex));
+    }
+    queryCore.polygon.value().height = query.polygon().height();
+    queryCore.polygon.value().z = query.polygon().z();
+  }
+}
+
 void CorePbConversion::fromPbBoundingBox(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
 {
   if (query.boundingboxstamped().has_header() && query.boundingboxstamped().has_boundingbox() &&
@@ -365,6 +389,11 @@ void CorePbConversion::fromPbBoundingBox(const seerep::pb::Query& query, seerep_
 void CorePbConversion::fromPbMustHaveAllLabels(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
 {
   queryCore.mustHaveAllLabels = query.musthavealllabels();
+}
+
+void CorePbConversion::fromPbFullyEncapsulated(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
+{
+  queryCore.fullyEncapsulated = query.fullyencapsulated();
 }
 
 void CorePbConversion::fromPbInstance(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)

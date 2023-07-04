@@ -29,6 +29,8 @@ find_package(
 
 find_package(catkin REQUIRED COMPONENTS tf2)
 
+find_package(CGAL REQUIRED)
+
 configure_file(include/SeerepCoreConfig.h.in SeerepCoreConfig.h)
 
 include_directories(
@@ -65,6 +67,7 @@ target_link_libraries(
   ${Boost_LOG_SETUP_LIBRARY}
   ${catkin_LIBRARIES}
   Eigen3::Eigen
+  CGAL::CGAL
 )
 
 set(INSTALL_HEADERS
