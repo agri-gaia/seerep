@@ -2,7 +2,7 @@ pre-commit==2.21.0
 flatbuffers==22.12.6
 protobuf== 4.21.12
 grpcio-tools==1.51.1
-grpcio==1.51.1
+grpcio==1.53.0
 imageio==2.20.0
 numpy==1.22.0
 numpy-quaternion==2022.4.2
