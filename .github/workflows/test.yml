@@ -14,10 +14,13 @@ jobs:
       uses: actions/checkout@v3
       with:
         path: src
+    - run: apt update
+    - name: ccache
+      uses: hendrikmuhs/ccache-action@v1.1
     - name: Build seerep_hdf5 packages
       run: |
         source /opt/ros/noetic/setup.bash
-        catkin build seerep_hdf5_* --workspace $GITHUB_WORKSPACE/
+        catkin build seerep_hdf5_* --workspace $GITHUB_WORKSPACE/ --cmake-args -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
         source $GITHUB_WORKSPACE/devel/setup.bash
       shell: bash
     - name: Run flatbuffer tests
