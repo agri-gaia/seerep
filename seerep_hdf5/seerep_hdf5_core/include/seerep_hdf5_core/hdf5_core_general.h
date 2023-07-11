@@ -96,25 +96,6 @@ public:
   template <class T>
   void readHeader(const std::string& id, HighFive::AnnotateTraits<T>& object, seerep_core_msgs::Header& header);
 
-  // ################
-  //  Time
-  // ################
-  void readTimeFromRaw(const std::string& datatypeGroup, const std::string& uuid, int64_t& secs, int64_t& nanos);
-  void readTime(const std::string& datatypeGroup, const std::string& uuid, int64_t& secs, int64_t& nanos);
-  template <class T>
-  void readTimeFromAnnotateTraits(const std::string& id, int64_t& value,
-                                  const HighFive::AnnotateTraits<T>& highFiveObject, const std::string& attribute);
-
-  void writeTimeToRaw(const std::string& datatypeGroup, const std::string& uuid, const int64_t& secs,
-                      const int64_t& nanos);
-  void writeTime(const std::string& datatypeGroup, const std::string& uuid, const int64_t& secs, const int64_t& nanos);
-  template <class T>
-  void writeTimeToAnnotateTraits(const int64_t& value, HighFive::AnnotateTraits<T>& highFiveObject,
-                                 const std::string& attribute);
-
-  bool hasTimeRaw(const std::string& datatypeGroup, const std::string& uuid);
-  bool hasTime(const std::string& datatypeGroup, const std::string& uuid);
-
   // BoundingBoxes
   /**
    * @brief read the labels and instances of a dataset of all categories and add them to the category-labels/instances map

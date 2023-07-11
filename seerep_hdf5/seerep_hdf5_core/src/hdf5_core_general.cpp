@@ -334,70 +334,6 @@ void Hdf5CoreGeneral::writeLabelsGeneral(
   m_file->flush();
 }
 
-bool Hdf5CoreGeneral::hasTimeRaw(const std::string& datatypeGroup, const std::string& uuid)
-{
-  return hasTime(datatypeGroup, uuid + "/" + RAWDATA);
-}
-
-bool Hdf5CoreGeneral::hasTime(const std::string& datatypeGroup, const std::string& uuid)
-{
-  std::string id = datatypeGroup + "/" + uuid;
-  checkExists(id);
-
-  switch (m_file->getObjectType(id))
-  {
-    case HighFive::ObjectType::Group:
-      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "get group " << id;
-      return m_file->getGroup(id).hasAttribute(HEADER_STAMP_SECONDS) &&
-             m_file->getGroup(id).hasAttribute(HEADER_STAMP_NANOS);
-
-    case HighFive::ObjectType::Dataset:
-      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "get dataset " << id;
-      return m_file->getDataSet(id).hasAttribute(HEADER_STAMP_SECONDS) &&
-             m_file->getDataSet(id).hasAttribute(HEADER_STAMP_NANOS);
-
-    default:
-      return false;
-  }
-}
-
-void Hdf5CoreGeneral::writeTimeToRaw(const std::string& datatypeGroup, const std::string& uuid, const int64_t& secs,
-                                     const int64_t& nanos)
-{
-  writeTime(datatypeGroup, uuid + "/" + RAWDATA, secs, nanos);
-}
-
-void Hdf5CoreGeneral::writeTime(const std::string& datatypeGroup, const std::string& uuid, const int64_t& secs,
-                                const int64_t& nanos)
-{
-  std::string id = datatypeGroup + "/" + uuid;
-  checkExists(id);
-
-  switch (m_file->getObjectType(id))
-  {
-    case HighFive::ObjectType::Group:
-    {
-      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "get group " << id;
-      HighFive::Group group = m_file->getGroup(id);
-      writeTimeToAnnotateTraits(secs, group, HEADER_STAMP_SECONDS);
-      writeTimeToAnnotateTraits(nanos, group, HEADER_STAMP_NANOS);
-    };
-    break;
-
-    case HighFive::ObjectType::Dataset:
-    {
-      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "get group " << id;
-      HighFive::DataSet dataset = m_file->getDataSet(id);
-      writeTimeToAnnotateTraits(secs, dataset, HEADER_STAMP_SECONDS);
-      writeTimeToAnnotateTraits(nanos, dataset, HEADER_STAMP_NANOS);
-    };
-    break;
-
-    default:
-      break;
-  }
-}
-
 void Hdf5CoreGeneral::writeAABB(
     const std::string& datatypeGroup, const std::string& uuid,
     const boost::geometry::model::box<boost::geometry::model::point<float, 3, boost::geometry::cs::cartesian>>& aabb)
@@ -455,43 +391,6 @@ bool Hdf5CoreGeneral::hasAABB(const std::string& datatypeGroup, const std::strin
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "get group " << id;
   HighFive::Group group = m_file->getGroup(id);
   return group.hasAttribute(AABB_FIELD);
-}
-
-void Hdf5CoreGeneral::readTimeFromRaw(const std::string& datatypeGroup, const std::string& uuid, int64_t& secs,
-                                      int64_t& nanos)
-{
-  readTime(datatypeGroup, uuid + "/" + RAWDATA, secs, nanos);
-}
-
-void Hdf5CoreGeneral::readTime(const std::string& datatypeGroup, const std::string& uuid, int64_t& secs, int64_t& nanos)
-{
-  std::string id = datatypeGroup + "/" + uuid;
-  checkExists(id);
-
-  switch (m_file->getObjectType(id))
-  {
-    case HighFive::ObjectType::Group:
-    {
-      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "get group " << id;
-      HighFive::Group group = m_file->getGroup(id);
-      readTimeFromAnnotateTraits(id, secs, group, HEADER_STAMP_SECONDS);
-      readTimeFromAnnotateTraits(id, nanos, group, HEADER_STAMP_NANOS);
-    };
-    break;
-
-    case HighFive::ObjectType::Dataset:
-    {
-      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "get group " << id;
-      HighFive::DataSet dataset = m_file->getDataSet(id);
-      readTimeFromAnnotateTraits(id, secs, dataset, HEADER_STAMP_SECONDS);
-      readTimeFromAnnotateTraits(id, nanos, dataset, HEADER_STAMP_NANOS);
-    };
-    break;
-
-    default:
-      secs = std::numeric_limits<uint64_t>::min();
-      nanos = std::numeric_limits<uint64_t>::min();
-  }
 }
 
 void Hdf5CoreGeneral::deleteAttribute(const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField)
