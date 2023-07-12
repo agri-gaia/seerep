@@ -29,9 +29,9 @@ class yoloAnnotatedImageLoader:
         self.IMAGE_ENCODING = "rgb8"
         self.PROJECT_NAME = "aitf-triton-data"
         self.labelCategory = "ground_truth"
-        self.builder = flatbuffers.Builder(1024)
+        builder = flatbuffers.Builder(1024)
         self.channel = get_gRPC_channel()
-        self.projectUuid = getOrCreateProject(self.builder, self.channel, self.PROJECT_NAME)
+        self.projectUuid = getOrCreateProject(builder, self.channel, self.PROJECT_NAME)
 
         self.time = 1680705904
         self.rootFolder = "/seerep/seerep-data/ai-tf-triton-paper-data"
@@ -48,12 +48,13 @@ class yoloAnnotatedImageLoader:
                         imagePath = os.path.join(root, file)
                         labelPath = os.path.join(root, file[:-4] + ".txt")
 
-                        imageMsg = self.__createImageMsg(imagePath, labelPath, labelGeneralPath)
+                        builder = flatbuffers.Builder(1024)
+                        imageMsg = self.__createImageMsg(builder, imagePath, labelPath, labelGeneralPath)
 
-                        self.builder.Finish(imageMsg)
-                        yield bytes(self.builder.Output())
+                        builder.Finish(imageMsg)
+                        yield bytes(builder.Output())
 
-    def __createImageMsg(self, imagePath, labelPath, labelGeneralPath):
+    def __createImageMsg(self, builder, imagePath, labelPath, labelGeneralPath):
 
         labelGeneral = self.__readLabelGeneral(labelGeneralPath)
         labelGeneral.append(imagePath)
@@ -61,7 +62,7 @@ class yoloAnnotatedImageLoader:
         labels = self.__readLabel(labelPath)
         print(labels)
         img = imageio.imread(imagePath)
-        imData = self.builder.CreateByteVector(img.tobytes())
+        imData = builder.CreateByteVector(img.tobytes())
 
         if len(labels) > 0:
             centerPoints = []
@@ -69,55 +70,57 @@ class yoloAnnotatedImageLoader:
             labelStrings = []
             for label in labels:
                 labelStrings.append('person')
-                centerPoints.append(createPoint2d(self.builder, float(label[1]), float(label[2])))
-                spatialExtents.append(createPoint2d(self.builder, float(label[3]), float(label[4])))
+                centerPoints.append(createPoint2d(builder, float(label[1]), float(label[2])))
+                spatialExtents.append(createPoint2d(builder, float(label[3]), float(label[4])))
 
-            boundingBoxes = createBoundingBoxes2d(self.builder, centerPoints, spatialExtents)
+            boundingBoxes = createBoundingBoxes2d(builder, centerPoints, spatialExtents)
             labelWithInstances = createLabelsWithInstance(
-                self.builder,
+                builder,
                 labelStrings,
                 [1.0 for _ in range(len(labelStrings))],
                 [str(uuid.uuid4()) for _ in range(len(labelStrings))],
             )
-            labelsBb = createBoundingBoxes2dLabeled(self.builder, labelWithInstances, boundingBoxes)
+            labelsBb = createBoundingBoxes2dLabeled(builder, labelWithInstances, boundingBoxes)
 
             boundingBox2DLabeledWithCategory = createBoundingBox2DLabeledWithCategory(
-                self.builder, self.builder.CreateString(self.labelCategory), labelsBb
+                builder, builder.CreateString(self.labelCategory), labelsBb
             )
 
-            Image.StartLabelsBbVector(self.builder, 1)
-            self.builder.PrependUOffsetTRelative(boundingBox2DLabeledWithCategory)
-            boundingBox2DLabeledWithCategoryVector = self.builder.EndVector()
+            Image.StartLabelsBbVector(builder, 1)
+            builder.PrependUOffsetTRelative(boundingBox2DLabeledWithCategory)
+            boundingBox2DLabeledWithCategoryVector = builder.EndVector()
 
         labelsGeneral = createLabelsWithInstance(
-            self.builder,
+            builder,
             labelGeneral,
             [1.0 for _ in range(len(labelGeneral))],
             [str(uuid.uuid4()) for _ in range(len(labelGeneral))],
         )
-        labelsGeneralCat = createLabelWithCategory(self.builder, [self.labelCategory], [labelsGeneral])
+        labelsGeneralCat = createLabelWithCategory(builder, [self.labelCategory], [labelsGeneral])
 
         header = createHeader(
-            self.builder,
-            timeStamp=createTimeStamp(self.builder, self.time, 0.0),
+            builder,
+            timeStamp=createTimeStamp(builder, self.time, 0.0),
             frame="map",
             projectUuid=self.projectUuid,
         )
 
-        encoding = self.builder.CreateString(self.IMAGE_ENCODING)
+        encoding = builder.CreateString(self.IMAGE_ENCODING)
+        ci = builder.CreateString("ba3679d0-2e85-40c4-b925-9c483fc4fba0")
 
-        Image.Start(self.builder)
-        Image.AddHeader(self.builder, header)
-        Image.AddData(self.builder, imData)
-        Image.AddEncoding(self.builder, encoding)
-        Image.AddHeight(self.builder, img.shape[0])
-        Image.AddWidth(self.builder, img.shape[1])
-        Image.AddIsBigendian(self.builder, False)
+        Image.Start(builder)
+        Image.AddHeader(builder, header)
+        Image.AddData(builder, imData)
+        Image.AddEncoding(builder, encoding)
+        Image.AddHeight(builder, img.shape[0])
+        Image.AddWidth(builder, img.shape[1])
+        Image.AddIsBigendian(builder, False)
         if len(labels) > 0:
-            Image.AddLabelsBb(self.builder, boundingBox2DLabeledWithCategoryVector)
-        Image.AddLabelsGeneral(self.builder, labelsGeneralCat)
-        Image.AddStep(self.builder, 3 * img.shape[1])
-        return Image.End(self.builder)
+            Image.AddLabelsBb(builder, boundingBox2DLabeledWithCategoryVector)
+        Image.AddLabelsGeneral(builder, labelsGeneralCat)
+        Image.AddStep(builder, 3 * img.shape[1])
+        Image.AddUuidCameraintrinsics(builder, ci)
+        return Image.End(builder)
 
     def __readLabelGeneral(self, labelGeneralPath):
         with open(labelGeneralPath, "r") as stream:
