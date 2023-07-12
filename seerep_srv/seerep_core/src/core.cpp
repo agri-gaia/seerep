@@ -62,31 +62,40 @@ seerep_core_msgs::QueryResult Core::getInstances(const seerep_core_msgs::Query& 
   return result;
 }
 
-void Core::loadProjectsInFolder()
+std::vector<seerep_core_msgs::ProjectInfo> Core::loadProjectsInFolder()
 {
+  std::vector<seerep_core_msgs::ProjectInfo> projectInfos;
+
   for (const auto& entry : std::filesystem::directory_iterator(m_dataFolder))
   {
-    if (entry.path().filename().extension() == ".h5")
+    if (entry.is_regular_file() && entry.path().filename().extension() == ".h5")
     {
-      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "found " << entry.path().string();
-
       try
       {
         boost::uuids::string_generator gen;
-        boost::uuids::uuid uuid = gen(entry.path().filename().stem().string());
+        boost::uuids::uuid projectUUID = gen(entry.path().stem().string());
 
-        if (m_projects.find(uuid) == m_projects.end())
+        if (m_projects.find(projectUUID) == m_projects.end())
         {
-          auto project = std::make_shared<CoreProject>(uuid, entry.path().string());
-          m_projects.insert(std::make_pair(uuid, project));
+          auto project = std::make_shared<CoreProject>(projectUUID, entry.path().string());
+          m_projects.insert(std::make_pair(projectUUID, project));
+
+          // add project to the list of newly indexed projects
+          seerep_core_msgs::ProjectInfo projectinfo{ project->getName(), projectUUID, project->getFrameId(),
+                                                     project->getGeodeticCoordinates(), project->getVersion() };
+
+          projectInfos.push_back(projectinfo);
         }
       }
       catch (const std::runtime_error& e)
       {
-        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+        // just log the error in the server, nothing we can do otherwise
+        BOOST_LOG_SEV(m_logger, boost::log::trivial::error)
+            << e.what() << "While trying to load new project into the index";
       }
     }
   }
+  return projectInfos;
 }
 
 void Core::deleteProject(boost::uuids::uuid uuid)

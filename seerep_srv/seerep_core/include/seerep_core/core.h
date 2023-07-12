@@ -149,9 +149,10 @@ public:
   std::shared_ptr<HighFive::File> getHdf5File(const boost::uuids::uuid& projectuuid);
 
   /**
-   * @brief create the project object for each HDF5 file in the data folder
+   * @brief Create the project object for unindexed projects in the data folder
+   * @return Vector of ProjectInfos of the newly indexed projects
    */
-  void loadProjectsInFolder();
+  std::vector<seerep_core_msgs::ProjectInfo> loadProjectsInFolder();
 
   /**
    * @brief removes the project from the seerep server and deletes the HDF5 file
