@@ -4,7 +4,6 @@
 #include <boost/uuid/uuid.hpp>
 #include <functional>
 
-#include "aabb.h"
 #include "header.h"
 #include "polygon2d.h"
 #include "timeinterval.h"
@@ -15,9 +14,8 @@ struct Query
 {
   Header header;
   std::optional<std::vector<boost::uuids::uuid>> projects;  ///< search all projects if not set
-  std::optional<AABB> boundingbox;
-  std::optional<Polygon2D> polygon;          // query point clouds in the region defined by this polygon
-  std::optional<Timeinterval> timeinterval;  ///< only do temporal query if set
+  std::optional<Polygon2D> polygon;                         // query point clouds in the region defined by this polygon
+  std::optional<Timeinterval> timeinterval;                 ///< only do temporal query if set
   std::optional<std::unordered_map<std::string, std::vector<std::string>>> label;  ///< only do semantic query if set
   bool mustHaveAllLabels;  ///< a dataset only fulfills semantic query if all labels are present
   std::optional<std::vector<boost::uuids::uuid>> instances;  ///< only query instances if set
