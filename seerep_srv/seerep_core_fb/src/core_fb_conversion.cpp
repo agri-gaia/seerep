@@ -380,6 +380,30 @@ flatbuffers::Offset<seerep::fb::TimeInterval> CoreFbConversion::toFb(flatbuffers
   return timeIntervalBuilder.Finish();
 }
 
+flatbuffers::Offset<seerep::fb::ProjectInfo> CoreFbConversion::toFb(flatbuffers::grpc::MessageBuilder& fbb,
+                                                                    const seerep_core_msgs::ProjectInfo& prjInfo)
+{
+  auto geoCordsOffset = seerep::fb::CreateGeodeticCoordinatesDirect(
+      fbb, prjInfo.geodetCoords.coordinateSystem.c_str(), prjInfo.geodetCoords.ellipsoid.c_str(),
+      prjInfo.geodetCoords.longitude, prjInfo.geodetCoords.latitude, prjInfo.geodetCoords.altitude);
+
+  return seerep::fb::CreateProjectInfoDirect(fbb, prjInfo.name.c_str(),
+                                             boost::lexical_cast<std::string>(prjInfo.uuid).c_str(),
+                                             prjInfo.frameId.c_str(), geoCordsOffset, prjInfo.version.c_str());
+}
+
+flatbuffers::Offset<seerep::fb::ProjectInfos>
+CoreFbConversion::toFb(flatbuffers::grpc::MessageBuilder& fbb,
+                       const std::vector<seerep_core_msgs::ProjectInfo>& prjInfos)
+{
+  std::vector<flatbuffers::Offset<seerep::fb::ProjectInfo>> prjInfosConv;
+  for (auto prjInfo : prjInfos)
+  {
+    prjInfosConv.push_back(toFb(fbb, prjInfo));
+  }
+  return seerep::fb::CreateProjectInfosDirect(fbb, &prjInfosConv);
+}
+
 void CoreFbConversion::fromFbQueryProject(const seerep::fb::Query* query,
                                           std::optional<std::vector<boost::uuids::uuid>>& queryCoreProjects)
 {

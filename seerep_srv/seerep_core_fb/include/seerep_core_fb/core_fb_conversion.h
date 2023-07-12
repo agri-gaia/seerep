@@ -17,6 +17,9 @@
 #include <seerep_msgs/image_generated.h>
 #include <seerep_msgs/point_cloud_2_generated.h>
 #include <seerep_msgs/point_stamped_generated.h>
+#include <seerep_msgs/project_info.h>
+#include <seerep_msgs/project_info_generated.h>
+#include <seerep_msgs/project_infos_generated.h>
 #include <seerep_msgs/query_generated.h>
 #include <seerep_msgs/query_instance_generated.h>
 #include <seerep_msgs/region_of_interest.h>
@@ -141,6 +144,19 @@ public:
    */
   static flatbuffers::Offset<seerep::fb::CameraIntrinsics> toFb(flatbuffers::grpc::MessageBuilder& mb,
                                                                 const seerep_core_msgs::camera_intrinsics ci);
+
+  /**
+   * @brief Converts a seerep core project info message into the corresponding flatbuffer message
+   *
+   * @param mb Flatbuffers message builder
+   * @param prjInfo seerep core project info message to convert
+   * @return flatbuffers::Offset<seerep::fb::ProjectInfo>
+   */
+  static flatbuffers::Offset<seerep::fb::ProjectInfo> toFb(flatbuffers::grpc::MessageBuilder& fbb,
+                                                           const seerep_core_msgs::ProjectInfo& prjInfo);
+
+  static flatbuffers::Offset<seerep::fb::ProjectInfos> toFb(flatbuffers::grpc::MessageBuilder& fbb,
+                                                            const std::vector<seerep_core_msgs::ProjectInfo>& prjInfos);
 
   /**
    * @brief converts the flatbuffer region of interest message to the specific seerep core message

@@ -15,7 +15,7 @@ namespace seerep.fb;
 rpc_service MetaOperations {
   CreateProject(seerep.fb.ProjectCreation):seerep.fb.ProjectInfo;
   GetProjects(seerep.fb.Empty):seerep.fb.ProjectInfos;
-  LoadProjects(seerep.fb.Empty):seerep.fb.Empty;
+  LoadProjects(seerep.fb.Empty):seerep.fb.ProjectInfos;
   DeleteProject(seerep.fb.ProjectInfo):seerep.fb.Empty;
   GetOverallTimeInterval(seerep.fb.UuidDatatypePair):seerep.fb.TimeInterval;
   GetOverallBoundingBox(seerep.fb.UuidDatatypePair):seerep.fb.Boundingbox;

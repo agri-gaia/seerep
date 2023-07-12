@@ -47,38 +47,19 @@ grpc::Status FbMetaOperations::GetProjects(grpc::ServerContext* context,
                                            const flatbuffers::grpc::Message<seerep::fb::Empty>* request,
                                            flatbuffers::grpc::Message<seerep::fb::ProjectInfos>* response)
 {
-  (void)context;  // ignore that variable without causing warnings
-  (void)request;  // ignore that variable without causing warnings
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "query the project infos... ";
-  auto projectInfos = seerepCore->getProjects();
+  (void)context;
+  (void)request;
 
-  flatbuffers::grpc::MessageBuilder builder;
-  std::vector<flatbuffers::Offset<seerep::fb::ProjectInfo>> projectInfosVector;
-  for (auto projectInfo : projectInfos)
-  {
-    auto nameOffset = builder.CreateString(projectInfo.name);
-    auto uuidOffset = builder.CreateString(boost::lexical_cast<std::string>(projectInfo.uuid));
-    auto frameIdOffset = builder.CreateString(projectInfo.frameId);
-    auto versionOffset = builder.CreateString(projectInfo.version);
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "[FB] querying projects ... ";
 
-    auto coordinateSystemOffset = builder.CreateString(projectInfo.geodetCoords.coordinateSystem);
-    auto ellipsoidOffset = builder.CreateString(projectInfo.geodetCoords.ellipsoid);
+  flatbuffers::grpc::MessageBuilder fbb;
 
-    seerep::fb::GeodeticCoordinatesBuilder gcbuilder(builder);
-    gcbuilder.add_coordinateSystem(coordinateSystemOffset);
-    gcbuilder.add_ellipsoid(ellipsoidOffset);
-    gcbuilder.add_altitude(projectInfo.geodetCoords.altitude);
-    gcbuilder.add_latitude(projectInfo.geodetCoords.latitude);
-    gcbuilder.add_longitude(projectInfo.geodetCoords.longitude);
-    auto geodeticCoordinatesOffset = gcbuilder.Finish();
+  const std::vector<seerep_core_msgs::ProjectInfo>& prjInfos = seerepCore->getProjects();
 
-    projectInfosVector.push_back(seerep::fb::CreateProjectInfo(builder, nameOffset, uuidOffset, frameIdOffset,
-                                                               geodeticCoordinatesOffset, versionOffset));
-  }
-  auto vectorOffset = builder.CreateVector(projectInfosVector);
-  auto projectInfosOffset = seerep::fb::CreateProjectInfos(builder, vectorOffset);
-  builder.Finish(projectInfosOffset);
-  *response = builder.ReleaseMessage<seerep::fb::ProjectInfos>();
+  auto prjInfosOffset = seerep_core_fb::CoreFbConversion::toFb(fbb, prjInfos);
+  fbb.Finish(prjInfosOffset);
+
+  *response = fbb.ReleaseMessage<seerep::fb::ProjectInfos>();
   assert(response->Verify());
 
   return grpc::Status::OK;
@@ -86,16 +67,22 @@ grpc::Status FbMetaOperations::GetProjects(grpc::ServerContext* context,
 
 grpc::Status FbMetaOperations::LoadProjects(grpc::ServerContext* context,
                                             const flatbuffers::grpc::Message<seerep::fb::Empty>* request,
-                                            flatbuffers::grpc::Message<seerep::fb::Empty>* response)
+                                            flatbuffers::grpc::Message<seerep::fb::ProjectInfos>* response)
 {
-  (void)context;  // ignore that variable without causing warnings
-  (void)request;  // ignore that variable without causing warnings
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
-      << "loading all projects in the working directory... ";
+  (void)context;
+  (void)request;
+
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
+      << "[FB] loading new projects in the working directory ... ";
+
+  flatbuffers::grpc::MessageBuilder fbb;
 
   try
   {
-    seerepCore->loadProjectsInFolder();
+    const std::vector<seerep_core_msgs::ProjectInfo>& projectInfos = seerepCore->loadProjectsInFolder();
+    auto prjInfosOffset = seerep_core_fb::CoreFbConversion::toFb(fbb, projectInfos);
+
+    fbb.Finish(prjInfosOffset);
   }
   catch (std::runtime_error const& e)
   {
@@ -119,9 +106,8 @@ grpc::Status FbMetaOperations::LoadProjects(grpc::ServerContext* context,
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
   }
 
-  flatbuffers::grpc::MessageBuilder builder;
-  seerep::fb::CreateEmpty(builder);
-  *response = builder.ReleaseMessage<seerep::fb::Empty>();
+  *response = fbb.ReleaseMessage<seerep::fb::ProjectInfos>();
+  assert(response->Verify());
 
   return grpc::Status::OK;
 }
