@@ -38,6 +38,7 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         flex \
         bison \
         libjsoncpp-dev \
+        libcurl4-openssl-dev \
         && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt /tmp/requirements.txt
