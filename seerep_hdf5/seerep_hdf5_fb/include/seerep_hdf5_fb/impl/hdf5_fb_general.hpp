@@ -30,6 +30,24 @@ flatbuffers::Offset<AttributeMapsFb> Hdf5FbGeneral::readAttributeMap(HighFive::A
 
       mapEntryVector.push_back(unionMapEntryBuilder.Finish());
     }
+    else if (attribute.getDataType().getClass() == HighFive::DataTypeClass::Float)
+    {
+      double attributeValue;
+      attribute.read(attributeValue);
+
+      auto keyOffset = builder.CreateString(attributeName);
+
+      seerep::fb::DoubleBuilder doubleBuilder(builder);
+      doubleBuilder.add_data(attributeValue);
+      auto doubleOffset = doubleBuilder.Finish();
+
+      seerep::fb::UnionMapEntryBuilder unionMapEntryBuilder(builder);
+      unionMapEntryBuilder.add_key(keyOffset);
+      unionMapEntryBuilder.add_value_type(seerep::fb::Datatypes_Double);
+      unionMapEntryBuilder.add_value(doubleOffset.Union());
+
+      mapEntryVector.push_back(unionMapEntryBuilder.Finish());
+    }
   }
   return builder.CreateVector(mapEntryVector);
 }
