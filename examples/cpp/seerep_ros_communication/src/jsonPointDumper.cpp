@@ -53,21 +53,23 @@ void JsonPointDumper::readAndDumpJson(const std::string& jsonFilePath)
         std::max(std::abs(detection["properties"]["minx"].asDouble() - detection["properties"]["maxx"].asDouble()),
                  std::abs(detection["properties"]["miny"].asDouble() - detection["properties"]["maxy"].asDouble()));
 
-    std::string label;
+    std::string trivialName;
     if (detection["properties"]["botanical"].asString() == "-")
     {
-      label = detection["properties"]["german"].asString();
+      trivialName = detection["properties"]["german"].asString();
     }
     else
     {
-      label = detection["properties"]["botanical"].asString();
+      trivialName = detection["properties"]["botanical"].asString();
     }
+    std::string concept = translateNameToAgrovocConcept(trivialName);
+
     std::vector<std::string> detections;
-    detections.push_back(label);
+    detections.push_back(concept);
     std::string instanceUUID = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
 
     ioPoint->writePoint(boost::lexical_cast<std::string>(boost::uuids::random_generator()()),
-                        createPointForDetection(0, 0, "world", label, instanceUUID, x, y, z, diameter).GetRoot());
+                        createPointForDetection(0, 0, "world", concept, instanceUUID, x, y, z, diameter).GetRoot());
   }
 }
 
@@ -105,6 +107,85 @@ JsonPointDumper::createPointForDetection(int32_t stampSecs, uint32_t stampNanos,
   builder.Finish(pointStamped);
 
   return builder.ReleaseMessage<seerep::fb::PointStamped>();
+}
+
+size_t writeCallback(void* contents, size_t size, size_t nmemb, std::string* output)
+{
+  size_t totalSize = size * nmemb;
+  output->append((char*)contents, totalSize);
+  return totalSize;
+}
+
+std::string JsonPointDumper::translateNameToAgrovocConcept(std::string name)
+{
+  std::string concept = name;
+
+  auto conceptCached = name2Concept.find(name);
+  if (conceptCached != name2Concept.end())
+  {
+    concept = conceptCached->second;
+  }
+  else
+  {
+    CURL* curl = curl_easy_init();
+
+    if (curl)
+    {
+      std::string sparqlQuery = std::string("PREFIX so: <http://schema.org/>\nPREFIX skos: "
+                                            "<http://www.w3.org/2004/02/skos/core#>\n\nSELECT ?c ?l\nWHERE "
+                                            "{\n  {\n    ?c skos:prefLabel \"") +
+                                name +
+                                std::string("\"@en.\n  }\n  UNION {\n    ?c skos:altLabel ?l FILTER (str(?l) = \"") +
+                                name + std::string("\").\n  }\n}");
+
+      // Set the Fuseki server URL and the dataset name
+      std::string fusekiURL = "http://agrigaia-ur.ni.dfki:3030/plants/query";
+
+      // Set the request parameters
+      std::string postData =
+          std::string("query=").append(curl_easy_escape(curl, sparqlQuery.c_str(), sparqlQuery.length()));
+
+      // Set the HTTP POST headers
+      struct curl_slist* headers = nullptr;
+      headers = curl_slist_append(headers, "Accept: application/sparql-results+json");
+
+      // Set the request options
+      curl_easy_setopt(curl, CURLOPT_URL, fusekiURL.c_str());
+      curl_easy_setopt(curl, CURLOPT_POSTFIELDS, postData.c_str());
+      curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+      curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeCallback);
+
+      // Response string to store the query result
+      std::string response;
+      curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
+
+      // Perform the request
+      CURLcode res = curl_easy_perform(curl);
+
+      // Check for errors
+      if (res != CURLE_OK)
+      {
+        std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
+      }
+      else
+      {
+        Json::Value root;
+        Json::Reader reader;
+        bool parsingSuccessful = reader.parse(response.c_str(), root);
+
+        if (parsingSuccessful)
+        {
+          concept = root.get("results", name).get("bindings", name)[0].get("c", name).get("value", name).asString();
+          name2Concept.emplace(name, concept);
+        }
+      }
+
+      // Clean up
+      curl_easy_cleanup(curl);
+      curl_slist_free_all(headers);
+    }
+  }
+  return concept;
 }
 
 }  // namespace seerep_grpc_ros

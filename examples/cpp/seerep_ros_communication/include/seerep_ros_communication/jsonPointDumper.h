@@ -1,6 +1,7 @@
 #ifndef SEEREP_GRPC_ROS_JSON_POINT_DUMPER
 #define SEEREP_GRPC_ROS_JSON_POINT_DUMPER
 
+#include <curl/curl.h>
 #include <jsoncpp/json/json.h>
 #include <ros/ros.h>
 #include <seerep_hdf5_core/hdf5_core_general.h>
@@ -43,6 +44,9 @@ private:
   createPointForDetection(int32_t stampSecs, uint32_t stampNanos, const std::string& frameId, const std::string& label,
                           const std::string& instanceUUID, const double x, const double y, const double z,
                           const double diameter);
+
+  std::string translateNameToAgrovocConcept(std::string name);
+  std::unordered_map<std::string, std::string> name2Concept;
 
   std::shared_ptr<seerep_hdf5_core::Hdf5CoreGeneral> ioCoreGeneral;
   std::shared_ptr<seerep_hdf5_fb::Hdf5FbPoint> ioPoint;
