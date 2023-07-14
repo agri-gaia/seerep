@@ -173,13 +173,18 @@ void RosbagDumper::iterateAndDumpDetections(bool storeImages)
         {
           std::string label = classesMapping.at(detection.results.at(0).id);
           ROS_INFO_STREAM("the label: " << label);
-          detections.push_back(label);
+
+          std::string concept = translateNameToAgrovocConcept(label);
+          ROS_INFO_STREAM("the concept: " << concept);
+
+          detections.push_back(concept);
+
           std::string instanceUUID = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
           instanceUUIDs.push_back(instanceUUID);
 
           ioPoint->writePoint(boost::lexical_cast<std::string>(boost::uuids::random_generator()()),
                               createPointForDetection(detection, msg->header.stamp.sec, msg->header.stamp.nsec,
-                                                      msg->header.frame_id, label, instanceUUID)
+                                                      msg->header.frame_id, concept, instanceUUID)
                                   .GetRoot());
         }
 
@@ -286,6 +291,85 @@ float RosbagDumper::calcDiameter(vision_msgs::Detection2D detection)
                distanceCameraGround, x2, y2, z2);
 
   return std::max(std::abs(x1 - x2), std::abs(y1 - y2));
+}
+
+size_t writeCallback(void* contents, size_t size, size_t nmemb, std::string* output)
+{
+  size_t totalSize = size * nmemb;
+  output->append((char*)contents, totalSize);
+  return totalSize;
+}
+
+std::string RosbagDumper::translateNameToAgrovocConcept(std::string name)
+{
+  std::string concept = name;
+
+  auto conceptCached = name2Concept.find(name);
+  if (conceptCached != name2Concept.end())
+  {
+    concept = conceptCached->second;
+  }
+  else
+  {
+    CURL* curl = curl_easy_init();
+
+    if (curl)
+    {
+      std::string sparqlQuery = std::string("PREFIX so: <http://schema.org/>\nPREFIX skos: "
+                                            "<http://www.w3.org/2004/02/skos/core#>\n\nSELECT ?c ?l\nWHERE "
+                                            "{\n  {\n    ?c skos:prefLabel \"") +
+                                name +
+                                std::string("\"@en.\n  }\n  UNION {\n    ?c skos:altLabel ?l FILTER (str(?l) = \"") +
+                                name + std::string("\").\n  }\n}");
+
+      // Set the Fuseki server URL and the dataset name
+      std::string fusekiURL = "http://agrigaia-ur.ni.dfki:3030/plants/query";
+
+      // Set the request parameters
+      std::string postData =
+          std::string("query=").append(curl_easy_escape(curl, sparqlQuery.c_str(), sparqlQuery.length()));
+
+      // Set the HTTP POST headers
+      struct curl_slist* headers = nullptr;
+      headers = curl_slist_append(headers, "Accept: application/sparql-results+json");
+
+      // Set the request options
+      curl_easy_setopt(curl, CURLOPT_URL, fusekiURL.c_str());
+      curl_easy_setopt(curl, CURLOPT_POSTFIELDS, postData.c_str());
+      curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+      curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeCallback);
+
+      // Response string to store the query result
+      std::string response;
+      curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
+
+      // Perform the request
+      CURLcode res = curl_easy_perform(curl);
+
+      // Check for errors
+      if (res != CURLE_OK)
+      {
+        std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
+      }
+      else
+      {
+        Json::Value root;
+        Json::Reader reader;
+        bool parsingSuccessful = reader.parse(response.c_str(), root);
+
+        if (parsingSuccessful)
+        {
+          concept = root.get("results", name).get("bindings", name)[0].get("c", name).get("value", name).asString();
+          name2Concept.emplace(name, concept);
+        }
+      }
+
+      // Clean up
+      curl_easy_cleanup(curl);
+      curl_slist_free_all(headers);
+    }
+  }
+  return concept;
 }
 
 }  // namespace seerep_grpc_ros

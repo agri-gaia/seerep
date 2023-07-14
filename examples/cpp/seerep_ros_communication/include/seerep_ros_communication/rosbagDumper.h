@@ -1,6 +1,7 @@
 #ifndef SEEREP_GRPC_ROS_ROSBAG_DUMPER
 #define SEEREP_GRPC_ROS_ROSBAG_DUMPER
 
+#include <curl/curl.h>
 #include <jsoncpp/json/json.h>
 #include <seerep_core_fb/core_fb_conversion.h>
 #include <seerep_hdf5_core/hdf5_core_cameraintrinsics.h>
@@ -63,6 +64,9 @@ private:
   void iterateAndDumpDetections(bool storeImages);
   void iterateAndDumpTf();
   void iterateAndDumpTf(const std::string& topicTf, const bool isStatic);
+
+  std::string translateNameToAgrovocConcept(std::string name);
+  std::unordered_map<std::string, std::string> name2Concept;
 
   flatbuffers::grpc::Message<seerep::fb::PointStamped>
   createPointForDetection(vision_msgs::Detection2D detection, int32_t stampSecs, uint32_t stampNanos,

@@ -19,6 +19,7 @@ find_package(seerep_ros_conversions_fb REQUIRED)
 find_package(Protobuf REQUIRED)
 find_package(gRPC CONFIG REQUIRED)
 find_package(jsoncpp REQUIRED)
+find_package(CURL REQUIRED)
 
 find_package(
   catkin REQUIRED
@@ -76,6 +77,7 @@ include_directories(
   ${seerep_ros_conversions_fb_INCLUDE_DIRS}
   ${catkin_INCLUDE_DIRS}
   ${jsoncpp_INCLUDE_DIRS}
+  ${CURL_INCLUDE_DIR}
 )
 
 add_executable(${PROJECT_NAME}_client src/client.cpp)
@@ -159,6 +161,7 @@ target_link_libraries(
   ${Boost_LOG_LIBRARY}
   ${Boost_LOG_SETUP_LIBRARY}
   jsoncpp
+  ${CURL_LIBRARIES}
 )
 target_link_libraries(
   ${PROJECT_NAME}_clientImagesWithDetection
