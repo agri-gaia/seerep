@@ -94,7 +94,7 @@ for k in range(9):
                 label.label.label = "testlabelgeneral" + str(i)
                 label.label.confidence = i / 10.0
                 # assuming that that the general labels are not instance related -> no instance uuid
-                # label.instanceUuid = str(uuid.uuid4())
+                label.instanceUuid = str(uuid.uuid4())
                 labelsCat.labelWithInstance.append(label)
             theImage.labels_general.append(labelsCat)
 

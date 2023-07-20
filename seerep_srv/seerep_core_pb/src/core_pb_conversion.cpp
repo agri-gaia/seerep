@@ -8,6 +8,7 @@ seerep_core_msgs::Query CorePbConversion::fromPb(const seerep::pb::Query& query,
   queryCore.header.datatype = datatype;
 
   fromPbBoundingBox(query, queryCore);
+  fromPbPolygon(query, queryCore);
   fromPbTime(query, queryCore);
   fromPbLabel(query, queryCore);
 
@@ -348,12 +349,15 @@ void CorePbConversion::fromPbPolygon(const seerep::pb::Query& query, seerep_core
 {
   if (query.has_polygon())
   {
+    queryCore.polygon = seerep_core_msgs::Polygon2D();
+
+    queryCore.polygon->height = query.polygon().height();
+    queryCore.polygon->z = query.polygon().z();
     for (auto vertex : query.polygon().vertices())
     {
-      queryCore.polygon.value().vertices.push_back(fromPbPoint2D(vertex));
+      seerep_core_msgs::Point2D p = fromPbPoint2D(vertex);
+      queryCore.polygon->vertices.push_back(p);
     }
-    queryCore.polygon.value().height = query.polygon().height();
-    queryCore.polygon.value().z = query.polygon().z();
   }
 }
 

@@ -35,12 +35,14 @@ if not projectuuid:
 # 3. Get gRPC service object
 stub = imageService.ImageServiceStub(channel)
 
-
 # Create all necessary objects for the query
-header = createHeader(builder, frame="map")
-pointMin = createPoint(builder, 2.8, -1.0, -1.0)
-pointMax = createPoint(builder, 3.0, 0.5, 1.0)
-boundingboxStamped = createBoundingBoxStamped(builder, header, pointMin, pointMax)
+l = 10
+polygon_vertices = []
+polygon_vertices.append(createPoint2d(builder, -1.0 * l, -1.0 * l))
+polygon_vertices.append(createPoint2d(builder, -1.0 * l, l))
+polygon_vertices.append(createPoint2d(builder, l, l))
+polygon_vertices.append(createPoint2d(builder, l, -1.0 * l))
+polygon2d = createPolygon2D(builder, 7, -1, polygon_vertices)
 
 if t1:
     timeMin = createTimeStamp(builder, 1661336503, 0)
@@ -79,6 +81,7 @@ query = createQuery(
     # instanceUuids=instanceUuids,
     # dataUuids=dataUuids,
     withoutData=False,
+    fullyEncapsulated=False,
 )
 builder.Finish(query)
 buf = builder.Output()

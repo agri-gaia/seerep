@@ -29,12 +29,29 @@ if projectuuid == "":
 
 theQuery = query.Query()
 theQuery.projectuuid.append(projectuuid)
-theQuery.boundingboxStamped.header.frame_id = "map"
 
-theQuery.boundingboxStamped.boundingbox.center_point.z = 0.0
-theQuery.boundingboxStamped.boundingbox.spatial_extent.z = 1.0
-theQuery.boundingboxStamped.boundingbox.spatial_extent.x = 1.0
-theQuery.boundingboxStamped.boundingbox.spatial_extent.y = 1.0
+bottom_left = point2d.Point2D()
+bottom_left.x = -150
+bottom_left.y = -150
+theQuery.polygon.vertices.append(bottom_left)
+
+top_left = point2d.Point2D()
+top_left.x = -150
+top_left.y = 150
+theQuery.polygon.vertices.append(top_left)
+
+top_right = point2d.Point2D()
+top_right.x = 150
+top_right.y = 150
+theQuery.polygon.vertices.append(top_right)
+
+bottom_right = point2d.Point2D()
+bottom_right.x = 150
+bottom_right.y = -150
+theQuery.polygon.vertices.append(bottom_right)
+
+theQuery.polygon.z = -1
+theQuery.polygon.height = 7
 
 # since epoche
 theQuery.timeinterval.time_min.seconds = 1638549273

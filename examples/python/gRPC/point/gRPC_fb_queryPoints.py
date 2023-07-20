@@ -5,11 +5,10 @@ from seerep.fb import PointStamped
 from seerep.fb import point_service_grpc_fb as pointService
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
-    createBoundingBoxStamped,
-    createHeader,
     createLabelWithCategory,
     createLabelWithConfidence,
-    createPoint,
+    createPoint2d,
+    createPolygon2D,
     createQuery,
     createTimeInterval,
     createTimeStamp,
@@ -21,16 +20,19 @@ builder = flatbuffers.Builder(1024)
 PROJECT_NAME = "simulatedDataWithInstances"
 channel = get_gRPC_channel()
 # 1. Get all projects from the server
-projectuuid = getProject(builder, channel, 'LabeledImagesInGrid')
+projectuuid = getProject(builder, channel, 'testproject')
 # 2. Check if the defined project exist; if not exit
 if not projectuuid:
     exit()
 
 # Create all necessary objects for the query
-header = createHeader(builder, frame="map")
-pointMin = createPoint(builder, 0.0, 0.0, 0.0)
-pointMax = createPoint(builder, 100.0, 100.0, 100.0)
-boundingboxStamped = createBoundingBoxStamped(builder, header, pointMin, pointMax)
+l = 10
+polygon_vertices = []
+polygon_vertices.append(createPoint2d(builder, -1.0 * l, -1.0 * l))
+polygon_vertices.append(createPoint2d(builder, -1.0 * l, l))
+polygon_vertices.append(createPoint2d(builder, l, l))
+polygon_vertices.append(createPoint2d(builder, l, -1.0 * l))
+polygon2d = createPolygon2D(builder, 7, -1, polygon_vertices)
 
 timeMin = createTimeStamp(builder, 1610549273, 0)
 timeMax = createTimeStamp(builder, 1938549273, 0)

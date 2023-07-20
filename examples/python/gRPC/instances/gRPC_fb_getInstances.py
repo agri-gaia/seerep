@@ -5,10 +5,9 @@ from seerep.fb import Datatype, UuidsPerProject
 from seerep.fb import instance_service_grpc_fb as instanceService
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
-    createBoundingBoxStamped,
-    createHeader,
     createLabelWithCategory,
-    createPoint,
+    createPoint2d,
+    createPolygon2D,
     createQuery,
     createQueryInstance,
     createTimeInterval,
@@ -33,10 +32,12 @@ stub = instanceService.InstanceServiceStub(channel)
 
 
 # Create all necessary objects for the query
-header = createHeader(builder, frame="map")
-pointMin = createPoint(builder, 0.0, 0.0, 0.0)
-pointMax = createPoint(builder, 100.0, 100.0, 100.0)
-boundingboxStamped = createBoundingBoxStamped(builder, header, pointMin, pointMax)
+polygon_vertices = []
+polygon_vertices.append(createPoint2d(builder, 0, 0))
+polygon_vertices.append(createPoint2d(builder, 0, 100))
+polygon_vertices.append(createPoint2d(builder, 100, 100))
+polygon_vertices.append(createPoint2d(builder, 0, 100))
+polygon2d = createPolygon2D(builder, 100, 0, polygon_vertices)
 
 timeMin = createTimeStamp(builder, 1610549273, 0)
 timeMax = createTimeStamp(builder, 1938549273, 0)
@@ -62,6 +63,7 @@ query = createQuery(
     # instanceUuids=instanceUuids,
     # dataUuids=dataUuids,
     withoutData=True,
+    fullyEncapsulated=False,
 )
 
 

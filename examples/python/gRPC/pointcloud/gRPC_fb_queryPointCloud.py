@@ -10,11 +10,8 @@ from seerep.fb import PointCloud2
 from seerep.fb import point_cloud_service_grpc_fb as pointCloudService
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
-    createBoundingBoxStamped,
-    createHeader,
     createLabelWithCategory,
     createLabelWithConfidence,
-    createPoint,
     createPoint2d,
     createPolygon2D,
     createQuery,
@@ -39,7 +36,6 @@ if projectuuid is None:
 builder = flatbuffers.Builder(1024)
 
 # Create all necessary objects for the query
-# header = createHeader(builder, frame="map")
 l = 10
 polygon_vertices = []
 polygon_vertices.append(createPoint2d(builder, -1.0 * l, -1.0 * l))
@@ -51,7 +47,6 @@ polygon2d = createPolygon2D(builder, 7, -1, polygon_vertices)
 timeMin = createTimeStamp(builder, 1610549273, 0)
 timeMax = createTimeStamp(builder, 1938549273, 0)
 timeInterval = createTimeInterval(builder, timeMin, timeMax)
-
 
 projectUuids = [builder.CreateString(projectuuid)]
 # list of categories

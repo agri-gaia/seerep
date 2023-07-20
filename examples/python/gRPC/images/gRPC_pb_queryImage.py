@@ -7,6 +7,7 @@ from seerep.pb import image_service_pb2_grpc as imageService
 from seerep.pb import label_pb2
 from seerep.pb import labels_with_category_pb2 as labels_with_category
 from seerep.pb import meta_operations_pb2_grpc as metaOperations
+from seerep.pb import point2d_pb2 as point2d
 from seerep.pb import query_pb2 as query
 from seerep.util.common import get_gRPC_channel
 
@@ -33,14 +34,30 @@ if projectuuid == "":
 # 4. Create a query with parameters
 theQuery = query.Query()
 theQuery.projectuuid.append(projectuuid)
-theQuery.boundingboxStamped.header.frame_id = "map"
 
-theQuery.boundingboxStamped.boundingbox.center_point.x = 50.0
-theQuery.boundingboxStamped.boundingbox.center_point.y = 50.0
-theQuery.boundingboxStamped.boundingbox.center_point.z = 50.0
-theQuery.boundingboxStamped.boundingbox.spatial_extent.x = 100.0
-theQuery.boundingboxStamped.boundingbox.spatial_extent.y = 100.0
-theQuery.boundingboxStamped.boundingbox.spatial_extent.z = 100.0
+theQuery.polygon.z = -1
+theQuery.polygon.height = 7
+
+l = 100
+bottom_left = point2d.Point2D()
+bottom_left.x = -l
+bottom_left.y = -l
+theQuery.polygon.vertices.append(bottom_left)
+
+top_left = point2d.Point2D()
+top_left.x = -l
+top_left.y = l
+theQuery.polygon.vertices.append(top_left)
+
+top_right = point2d.Point2D()
+top_right.x = l
+top_right.y = l
+theQuery.polygon.vertices.append(top_right)
+
+bottom_right = point2d.Point2D()
+bottom_right.x = l
+bottom_right.y = -l
+theQuery.polygon.vertices.append(bottom_right)
 
 # since epoche
 theQuery.timeinterval.time_min.seconds = 1638549273

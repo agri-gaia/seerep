@@ -603,17 +603,28 @@ void CoreDataset::intersectionDegree(const seerep_core_msgs::AABB& aabb, const s
     polygon_cgal.push_back(Kernel::Point_2(bg::get<0>(point), bg::get<1>(point)));
   }
 
-  try
+  // a cgal polyon needs to be simple, convex and the points should be added in a counter clockwise order
+  if (!polygon_cgal.is_simple())
   {
-    // a cgal polyon needs to be simple, convex and the points should be added in a counter clockwise order
-    assert(polygon_cgal.is_simple());
-    assert(aabb_cgal.is_simple());
-    assert(polygon_cgal.is_convex());
-    assert(aabb_cgal.is_convex());
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+        << "Two or more points in the query polygon are the same.";
+    return;
   }
-  catch (const std::runtime_error& e)
+  if (!aabb_cgal.is_simple())
   {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+        << "Two or more points in the query result polygon are the same.";
+    return;
+  }
+  if (!polygon_cgal.is_simple())
+  {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << "Query polygon is not convex.";
+    return;
+  }
+  if (!aabb_cgal.is_simple())
+  {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << "Query polygon is not convex.";
+    return;
   }
 
   // cgal polygon must be counter clockwise oriented
@@ -631,18 +642,19 @@ void CoreDataset::intersectionDegree(const seerep_core_msgs::AABB& aabb, const s
 
   bool xy_bounded, z_bounded;
 
+  // are the corners of the aabb inside the polygon on the z axis
+  z_bounded = polygon.z <= bg::get<bg::min_corner, 2>(aabb) &&
+              (polygon.z + polygon.height) >= bg::get<bg::min_corner, 2>(aabb) &&
+              polygon.z <= bg::get<bg::max_corner, 2>(aabb) &&
+              (polygon.z + polygon.height) >= bg::get<bg::max_corner, 2>(aabb);
+
   // traverse the axis aligned bounding box
   for (CGAL::Polygon_2<Kernel>::Vertex_iterator vi = aabb_cgal.vertices_begin(); vi != aabb_cgal.vertices_end(); ++vi)
   {
     // is the vertex of the aabb inside the polygon on the x and y axis
     xy_bounded = !(polygon_cgal.bounded_side(*vi) == CGAL::ON_UNBOUNDED_SIDE);
-    // is the vertex of the aabb inside the polygon on the z axis
-    z_bounded = (polygon.z <= bg::get<bg::min_corner, 2>(aabb) &&
-                 polygon.z + polygon.height >= bg::get<bg::min_corner, 2>(aabb)) ||
-                (polygon.z <= bg::get<bg::max_corner, 2>(aabb) &&
-                 polygon.z + polygon.height >= bg::get<bg::max_corner, 2>(aabb));
 
-    // check if this point is inside the obb
+    // check if this point is not inside the obb
     if (!xy_bounded || !z_bounded)
     {
       fullEncapsulation = false;
