@@ -115,6 +115,7 @@ set(MY_FBS_FILES
     fbs/query_instance.fbs
     fbs/region_of_interest.fbs
     fbs/server_response.fbs
+    fbs/sparql_query.fbs
     fbs/time_interval.fbs
     fbs/timestamp.fbs
     fbs/transform_stamped.fbs
@@ -148,6 +149,7 @@ set(MY_CORE_MSGS
     ${CMAKE_CURRENT_SOURCE_DIR}/core/query_tf.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/query.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/region_of_interest.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/sparql_query.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/timeinterval.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/timestamp.h
 )

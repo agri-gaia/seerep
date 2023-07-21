@@ -234,6 +234,20 @@ private:
   static bool fromFbQueryWithoutData(const seerep::fb::Query* query);
 
   /**
+   * @brief extracts the sparql query of the flatbuffer query message
+   * @param query the flatbuffer query message
+   * @return the sparql query object
+   */
+  static std::optional<seerep_core_msgs::SparqlQuery> fromFbSparqlQuery(const seerep::fb::Query* query);
+
+  /**
+   * @brief extracts the ontologyURI string of the flatbuffer query message
+   * @param query the flatbuffer query message
+   * @return string of the ontoly URI
+   */
+  static std::optional<std::string> fromFbOntologyURI(const seerep::fb::Query* query);
+
+  /**
    * @brief extracts the mustHaveAllLabels Flag of the flatbuffer query message
    * @param query the flatbuffer query message
    * @return flag if all labels must be present to fit semantic query

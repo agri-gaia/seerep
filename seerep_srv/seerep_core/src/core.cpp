@@ -16,6 +16,16 @@ Core::~Core()
 
 seerep_core_msgs::QueryResult Core::getDataset(seerep_core_msgs::Query& query)
 {
+  if (query.label && query.sparqlQuery)
+  {
+    throw std::invalid_argument("label and sparqlQuery are both set in the query. Only use one at a time!");
+  }
+
+  if (query.label && query.ontologyURI)
+  {
+    checkForOntologyConcepts(query);
+  }
+
   // search all projects
   if (!query.projects)
   {
@@ -342,6 +352,134 @@ Core::getAllLabels(boost::uuids::uuid uuid, std::vector<seerep_core_msgs::Dataty
 {
   auto project = findProject(uuid);
   return project->second->getAllLabels(datatypes, category);
+}
+
+void Core::checkForOntologyConcepts(seerep_core_msgs::Query& query)
+{
+  // if ontology is given, check if label can be replaced by corresponding concept
+  if (query.ontologyURI)
+  {
+    std::unordered_map<std::string, std::string> label2ConceptCache;
+    std::string concept;
+    for (auto& category : query.label.value())
+    {
+      for (auto& label : category.second)
+      {
+        // check if label is NOT URL (ontology concept)
+        if (!std::regex_match(label,
+                              std::regex("^(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([\\/\\w \\.-]*)*\\/?$")))
+        {
+          auto conceptCached = label2ConceptCache.find(label);
+          if (conceptCached != label2ConceptCache.end())
+          {
+            concept = conceptCached->second;
+          }
+          else
+          {
+            concept = translateLabelToOntologyConcept(label, query.ontologyURI.value());
+            label2ConceptCache.emplace(label, concept);
+          }
+          label = concept;
+        }
+      }
+    }
+  }
+}
+
+size_t Core::writeCallback(void* contents, size_t size, size_t nmemb, std::string* output)
+{
+  size_t totalSize = size * nmemb;
+  output->append((char*)contents, totalSize);
+  return totalSize;
+}
+
+std::string Core::translateLabelToOntologyConcept(const std::string& label, const std::string& ontologyURI)
+{
+  std::string concept = label;
+
+  std::string sparqlQuery = std::string("PREFIX so: <http://schema.org/>\nPREFIX skos: "
+                                        "<http://www.w3.org/2004/02/skos/core#>\n\nSELECT ?c ?l\nWHERE "
+                                        "{\n  {\n    ?c skos:prefLabel \"") +
+                            label +
+                            std::string("\"@en.\n  }\n  UNION {\n    ?c skos:altLabel ?l FILTER (str(?l) = \"") +
+                            label + std::string("\").\n  }\n}");
+
+  auto response = performCurl(sparqlQuery, ontologyURI);
+
+  if (response)
+  {
+    auto conceptExtracted = extractConceptFromJson(response.value(), "c");
+    if (conceptExtracted)
+    {
+      concept = conceptExtracted.value();
+    }
+  }
+
+  return concept;
+}
+
+std::optional<std::string> Core::performCurl(std::string query, std::string url)
+{
+  CURL* curl = curl_easy_init();
+
+  if (curl)
+  {
+    // Set the request parameters
+    std::string postData = std::string("query=").append(curl_easy_escape(curl, query.c_str(), query.length()));
+
+    // Set the HTTP POST headers
+    struct curl_slist* headers = nullptr;
+    headers = curl_slist_append(headers, "Accept: application/sparql-results+json");
+
+    // Set the request options
+    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, postData.c_str());
+    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeCallback);
+
+    // Response string to store the query result
+    std::string response;
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
+
+    // Perform the request
+    CURLcode res = curl_easy_perform(curl);
+
+    // Check for errors
+    if (res != CURLE_OK)
+    {
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::error)
+          << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
+      return std::nullopt;
+    }
+
+    // Clean up
+    curl_easy_cleanup(curl);
+    curl_slist_free_all(headers);
+
+    return response;
+  }
+
+  return std::nullopt;
+}
+
+std::optional<std::string> Core::extractConceptFromJson(std::string json, std::string conceptVariableName)
+{
+  Json::Value root;
+  Json::Reader reader;
+  bool parsingSuccessful = reader.parse(json.c_str(), root);
+
+  if (parsingSuccessful && root.get("results", "").get("bindings", "").size() > 0)
+  {
+    try
+    {
+      return root.get("results", "").get("bindings", "")[0].get(conceptVariableName, "").get("value", "").asString();
+    }
+    catch (...)
+    {
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::error) << "Couldn't extract concept from json.";
+    }
+  }
+  return std::nullopt;
 }
 
 } /* namespace seerep_core */

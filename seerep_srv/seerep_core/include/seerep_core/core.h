@@ -1,6 +1,9 @@
 #ifndef SEEREP_CORE_CORE_H_
 #define SEEREP_CORE_CORE_H_
 
+#include <curl/curl.h>
+#include <jsoncpp/json/json.h>
+
 #include <boost/functional/hash.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/uuid/uuid.hpp>             // uuid class
@@ -9,6 +12,7 @@
 #include <filesystem>
 #include <functional>
 #include <optional>
+#include <regex>
 
 // seerep-msgs
 #include <seerep_msgs/dataset_indexable.h>
@@ -236,6 +240,48 @@ private:
    * @return seerep_core_msgs::QueryResult the reduced result
    */
   seerep_core_msgs::QueryResult checkSize(const seerep_core_msgs::QueryResult& queryResult, uint maxNum);
+
+  /**
+   * @brief check if the labels are already concepts. If they aren't ask the ontology for the corresponding concepts
+   *
+   * @param query
+   */
+  void checkForOntologyConcepts(seerep_core_msgs::Query& query);
+
+  /**
+   * @brief write methode for curl
+   *
+   * @param contents
+   * @param size
+   * @param nmemb
+   * @param output
+   * @return size_t
+   */
+  static size_t writeCallback(void* contents, size_t size, size_t nmemb, std::string* output);
+
+  /**
+   * @brief get the corresponding concept to a given label from the ontology server
+   *
+   * @param label the label
+   * @param ontologyURI the uri to the ontology server
+   * @return std::string the concept
+   */
+  std::string translateLabelToOntologyConcept(const std::string& label, const std::string& ontologyURI);
+
+  /**
+   * @brief perform a curl using the given query at the given url
+   *
+   * @param query the curl statement to be used
+   * @param url the target server
+   * @return std::optional<std::string> the curl answer
+   */
+  std::optional<std::string> performCurl(std::string query, std::string url);
+
+  /// @brief extract the concept from the json string
+  /// @param json the json as a string
+  /// @param conceptVariableName the variable name of the concept
+  /// @return the concept if there is any
+  std::optional<std::string> extractConceptFromJson(std::string json, std::string conceptVariableName);
 
   /** @brief the path to the folder containing the HDF5 files */
   std::string m_dataFolder;
