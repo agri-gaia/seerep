@@ -127,6 +127,52 @@ void CoreDataset::getUuidsFromMap(std::unordered_map<boost::uuids::uuid, std::ve
   std::copy(instances.begin(), instances.end(), std::back_inserter(result));
 }
 
+seerep_core_msgs::AABB CoreDataset::polygonToAABB(const seerep_core_msgs::Polygon2D& polygon)
+{
+  seerep_core_msgs::Point min, max;
+
+  bg::set<0>(min, std::numeric_limits<float>::max());
+  bg::set<0>(max, std::numeric_limits<float>::min());
+
+  bg::set<1>(min, std::numeric_limits<float>::max());
+  bg::set<1>(max, std::numeric_limits<float>::min());
+
+  bg::set<2>(min, polygon.z);
+  bg::set<2>(max, polygon.height + polygon.z);
+
+  for (auto p : polygon.vertices)
+  {
+    // update x dimension of min
+    if (bg::get<0>(p) < bg::get<0>(min))
+    {
+      bg::set<0>(min, bg::get<0>(p));
+    }
+
+    // update y dimension of min
+    if (bg::get<1>(p) < bg::get<1>(min))
+    {
+      bg::set<1>(min, bg::get<1>(p));
+    }
+
+    // update x dimension of max
+    if (bg::get<0>(p) > bg::get<0>(max))
+    {
+      bg::set<0>(max, bg::get<0>(p));
+    }
+
+    // update y dimension of max
+    if (bg::get<1>(p) > bg::get<1>(max))
+    {
+      bg::set<1>(max, bg::get<1>(p));
+    }
+  }
+
+  // generate aabb from provided polygon
+  seerep_core_msgs::AABB aabb(min, max);
+
+  return aabb;
+}
+
 std::optional<std::vector<seerep_core_msgs::AabbIdPair>>
 CoreDataset::querySpatial(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics, const seerep_core_msgs::Query& query)
 {
@@ -135,52 +181,13 @@ CoreDataset::querySpatial(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics, 
     // generate rtree result container
     std::optional<std::vector<seerep_core_msgs::AabbIdPair>> rt_result = std::vector<seerep_core_msgs::AabbIdPair>();
 
-    seerep_core_msgs::Point min, max;
-
-    bg::set<0>(min, std::numeric_limits<float>::max());
-    bg::set<0>(max, std::numeric_limits<float>::min());
-
-    bg::set<1>(min, std::numeric_limits<float>::max());
-    bg::set<1>(max, std::numeric_limits<float>::min());
-
-    bg::set<2>(min, query.polygon.value().z);
-    bg::set<2>(max, query.polygon.value().height + query.polygon.value().z);
-
-    for (auto p : query.polygon.value().vertices)
-    {
-      // update x dimension of min
-      if (bg::get<0>(p) < bg::get<0>(min))
-      {
-        bg::set<0>(min, bg::get<0>(p));
-      }
-
-      // update y dimension of min
-      if (bg::get<1>(p) < bg::get<1>(min))
-      {
-        bg::set<1>(min, bg::get<1>(p));
-      }
-
-      // update x dimension of max
-      if (bg::get<0>(p) > bg::get<0>(max))
-      {
-        bg::set<0>(max, bg::get<0>(p));
-      }
-
-      // update y dimension of max
-      if (bg::get<1>(p) > bg::get<1>(max))
-      {
-        bg::set<1>(max, bg::get<1>(p));
-      }
-    }
-
-    // generate aabb from provided polygon
-    seerep_core_msgs::AABB aabb(min, max);
+    seerep_core_msgs::AABB aabb = polygonToAABB(query.polygon.value());
 
     // perform the query on the r tree using the aabb
     datatypeSpecifics->rt.query(boost::geometry::index::intersects(aabb), std::back_inserter(rt_result.value()));
 
-    bool fullyEncapsulated;
-    bool partiallyEncapsulated;
+    bool fullyEncapsulated = false;
+    bool partiallyEncapsulated = false;
     std::vector<seerep_core_msgs::AabbIdPair>::iterator it;
 
     // traverse query results and confirm if they are contained inside the polygon
@@ -584,10 +591,42 @@ void CoreDataset::addLabels(const seerep_core_msgs::Datatype& datatype,
   datatypeSpecifics->datasetInstancesMap.emplace(msgUuid, instanceUuids);
 }
 
-void CoreDataset::intersectionDegree(const seerep_core_msgs::AABB& aabb, const seerep_core_msgs::Polygon2D& polygon,
-                                     bool& fullEncapsulation, bool& partialEncapsulation)
+bool CoreDataset::verifyPolygonIntegrity(CGAL::Polygon_2<Kernel>& polygon_cgal)
 {
-  // convert seerep core aabb to cgal polygon
+  if (!polygon_cgal.is_simple())
+  {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+        << "Two or more points in the polygon are the same.";
+    return false;
+  }
+  if (!polygon_cgal.is_convex())
+  {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << "Polygon is not convex.";
+    return false;
+  }
+
+  // cgal polygon must be counter clockwise oriented
+  if (polygon_cgal.is_clockwise_oriented())
+  {
+    polygon_cgal.reverse_orientation();
+  }
+
+  return true;
+}
+
+CGAL::Polygon_2<Kernel> CoreDataset::toCGALPolygon(const seerep_core_msgs::Polygon2D& polygon)
+{
+  CGAL::Polygon_2<Kernel> polygon_cgal;
+  for (auto point : polygon.vertices)
+  {
+    polygon_cgal.push_back(Kernel::Point_2(bg::get<0>(point), bg::get<1>(point)));
+  }
+
+  return polygon_cgal;
+}
+
+CGAL::Polygon_2<Kernel> CoreDataset::toCGALPolygon(const seerep_core_msgs::AABB& aabb)
+{
   Kernel::Point_2 points_aabb[] = {
     Kernel::Point_2(bg::get<bg::min_corner, 0>(aabb), bg::get<bg::min_corner, 1>(aabb)),
     Kernel::Point_2(bg::get<bg::max_corner, 0>(aabb), bg::get<bg::min_corner, 1>(aabb)),
@@ -596,45 +635,22 @@ void CoreDataset::intersectionDegree(const seerep_core_msgs::AABB& aabb, const s
   };
   CGAL::Polygon_2<Kernel> aabb_cgal(points_aabb, points_aabb + 4);
 
+  return aabb_cgal;
+}
+
+void CoreDataset::intersectionDegree(const seerep_core_msgs::AABB& aabb, const seerep_core_msgs::Polygon2D& polygon,
+                                     bool& fullEncapsulation, bool& partialEncapsulation)
+{
+  // convert seerep core aabb to cgal polygon
+  CGAL::Polygon_2<Kernel> aabb_cgal = toCGALPolygon(aabb);
+
   // convert seerep core polygon to cgal polygon
-  CGAL::Polygon_2<Kernel> polygon_cgal;
-  for (auto point : polygon.vertices)
-  {
-    polygon_cgal.push_back(Kernel::Point_2(bg::get<0>(point), bg::get<1>(point)));
-  }
+  CGAL::Polygon_2<Kernel> polygon_cgal = toCGALPolygon(polygon);
 
   // a cgal polyon needs to be simple, convex and the points should be added in a counter clockwise order
-  if (!polygon_cgal.is_simple())
+  if (!verifyPolygonIntegrity(polygon_cgal) || !verifyPolygonIntegrity(aabb_cgal))
   {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
-        << "Two or more points in the query polygon are the same.";
     return;
-  }
-  if (!aabb_cgal.is_simple())
-  {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
-        << "Two or more points in the query result polygon are the same.";
-    return;
-  }
-  if (!polygon_cgal.is_simple())
-  {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << "Query polygon is not convex.";
-    return;
-  }
-  if (!aabb_cgal.is_simple())
-  {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << "Query polygon is not convex.";
-    return;
-  }
-
-  // cgal polygon must be counter clockwise oriented
-  if (polygon_cgal.is_clockwise_oriented())
-  {
-    polygon_cgal.reverse_orientation();
-  }
-  if (aabb_cgal.is_clockwise_oriented())
-  {
-    aabb_cgal.reverse_orientation();
   }
 
   fullEncapsulation = true;
