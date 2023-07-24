@@ -48,6 +48,30 @@ flatbuffers::Offset<AttributeMapsFb> Hdf5FbGeneral::readAttributeMap(HighFive::A
 
       mapEntryVector.push_back(unionMapEntryBuilder.Finish());
     }
+    else if (attribute.getDataType().getClass() == HighFive::DataTypeClass::String)
+    {
+      std::string attributeValue;
+      attribute.read(attributeValue);
+      auto valueOffset = builder.CreateString(attributeValue);
+
+      auto keyOffset = builder.CreateString(attributeName);
+
+      seerep::fb::StringBuilder stringBuilder(builder);
+      stringBuilder.add_data(valueOffset);
+      auto stringOffset = stringBuilder.Finish();
+
+      seerep::fb::UnionMapEntryBuilder unionMapEntryBuilder(builder);
+      unionMapEntryBuilder.add_key(keyOffset);
+      unionMapEntryBuilder.add_value_type(seerep::fb::Datatypes_String);
+      unionMapEntryBuilder.add_value(stringOffset.Union());
+
+      mapEntryVector.push_back(unionMapEntryBuilder.Finish());
+    }
+    else
+    {
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+          << "read of data type of attribute not implemented.";
+    }
   }
   return builder.CreateVector(mapEntryVector);
 }
