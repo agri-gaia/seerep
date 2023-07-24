@@ -126,11 +126,31 @@ private:
    */
   static void fromPbBoundingBox(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore);
   /**
+   * @brief converts seerep probotbuf point2d to core msg point2d
+   *
+   * @param point protobuf point2d msg
+   * @return seerep_core_msgs::Point2D core point2d msg
+   */
+  static seerep_core_msgs::Point2D fromPbPoint2D(const seerep::pb::Point2D& point);
+  /**
+   * @brief
+   *
+   * @param query
+   * @param queryCore
+   */
+  static void fromPbPolygon(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore);
+  /**
    * @brief converts the mustHaveAllLabels flag of the protobuf query message to seerep core specific message
    * @param query the protobuf query message
    * @param queryCore query message in seerep core format
    */
   static void fromPbMustHaveAllLabels(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore);
+  /**
+   * @brief converts the fullyEncapsulated flag of the protobuf query message to seerep core specific message
+   * @param query the protobuf query message
+   * @param queryCore query message in seerep core format
+   */
+  static void fromPbFullyEncapsulated(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore);
   /**
    * @brief converts the instance uuids of the protobuf query message to seerep core specific message
    * @param query the protobuf query message

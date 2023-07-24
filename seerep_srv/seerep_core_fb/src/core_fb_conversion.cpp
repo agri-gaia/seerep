@@ -42,6 +42,8 @@ seerep_core_msgs::Query CoreFbConversion::fromFb(const seerep::fb::Query* query,
   fromFbQueryDataUuids(query, queryCore.dataUuids);
   queryCore.withoutData = fromFbQueryWithoutData(query);
   queryCore.maxNumData = fromFbQueryMaxNumData(query);
+  fromFbQueryPolygon(query, queryCore.polygon.value());
+  queryCore.fullyEncapsulated = fromFbQueryFullyEncapsulated(query);
 
   return queryCore;
 }
@@ -527,6 +529,16 @@ bool CoreFbConversion::fromFbQueryMustHaveAllLabels(const seerep::fb::Query* que
   return false;
 }
 
+bool CoreFbConversion::fromFbQueryFullyEncapsulated(const seerep::fb::Query* query)
+{
+  if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_FULLYENCAPSULATED))
+  {
+    return query->fullyEncapsulated();
+  }
+
+  return false;
+}
+
 uint CoreFbConversion::fromFbQueryMaxNumData(const seerep::fb::Query* query)
 {
   if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_MAXNUMDATA))
@@ -638,6 +650,21 @@ void CoreFbConversion::fromFbDataLabelsBb2d(
       }
       labelsWithInstancesWithCategory.emplace(labelsCategories->category()->c_str(), labelWithInstanceVector);
     }
+  }
+}
+
+void CoreFbConversion::fromFbQueryPolygon(const seerep::fb::Query* query, seerep_core_msgs::Polygon2D& polygon)
+{
+  if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_POLYGON))
+  {
+    for (auto point : *query->polygon()->vertices())
+    {
+      seerep_core_msgs::Point2D temp(point->x(), point->y());
+      polygon.vertices.push_back(temp);
+    }
+
+    polygon.height = query->polygon()->height();
+    polygon.z = query->polygon()->z();
   }
 }
 

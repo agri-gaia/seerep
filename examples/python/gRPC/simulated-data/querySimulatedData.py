@@ -5,10 +5,9 @@ from seerep.fb import Image
 from seerep.fb import image_service_grpc_fb as imageService
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
-    createBoundingBoxStamped,
-    createHeader,
     createLabelWithCategory,
-    createPoint,
+    createPoint2d,
+    createPolygon2D,
     createQuery,
     createTimeInterval,
     createTimeStamp,
@@ -29,10 +28,13 @@ if not projectuuid:
 stub = imageService.ImageServiceStub(channel)
 
 # Create all necessary objects for the query
-header = createHeader(builder, frame="map")
-pointMin = createPoint(builder, -5.0, -5.0, -100.0)
-pointMax = createPoint(builder, 5.0, 5.0, 100.0)
-boundingboxStamped = createBoundingBoxStamped(builder, header, pointMin, pointMax)
+l = 5
+polygon_vertices = []
+polygon_vertices.append(createPoint2d(builder, -1.0 * l, -1.0 * l))
+polygon_vertices.append(createPoint2d(builder, -1.0 * l, l))
+polygon_vertices.append(createPoint2d(builder, l, l))
+polygon_vertices.append(createPoint2d(builder, l, -1.0 * l))
+polygon2d = createPolygon2D(builder, 200, -100, polygon_vertices)
 
 timeMin = createTimeStamp(builder, 1654688920, 0)
 timeMax = createTimeStamp(builder, 1654688940, 0)

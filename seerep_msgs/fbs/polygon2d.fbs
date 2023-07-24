@@ -1,0 +1,10 @@
+
+include "point2d.fbs";
+
+namespace seerep.fb;
+
+table Polygon2D {
+    vertices:[seerep.fb.Point2D];
+    z:double;
+    height:double;
+}

@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package seerep.pb;
+
+import "point2d.proto";
+
+message Polygon2D
+{
+  repeated Point2D vertices = 1;
+  double z = 2;
+  double height = 3;
+}

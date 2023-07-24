@@ -2,8 +2,13 @@
 
 ## Sending images
 
-In this example we want to send images with labeled bounding boxes as well as general labels to SEEREP. Additionally
-we add some coordinate transformations at the end.
+In this example we want to send images with labeled bounding boxes as well as general labels to SEEREP.
+
+In order to save images, we need to mandatorily provide the intrinsics of the camera used to capture them.
+After the sucessful save of camera intrinsics, we need to provide the uuid of it along with the images.
+SEEREP will ensure that the Camera Intinsics UUID provided with an image has a UUID stored against it.
+
+Additionally we add some coordinate transformations at the end.
 
 Source: `examples/python/gRPC/images/gRPC_pb_sendLabeledImage.py`
 
@@ -15,29 +20,34 @@ import sys
 import time
 import uuid
 
-import boundingbox2d_labeled_pb2 as bb
-import image_pb2 as image
-import image_service_pb2_grpc as imageService
-import label_with_instance_pb2 as labelWithInstance
-import meta_operations_pb2_grpc as metaOperations
 import numpy as np
-import projectCreation_pb2 as projectCreation
-import tf_service_pb2_grpc as tfService
-import transform_stamped_pb2 as tf
 from google.protobuf import empty_pb2
-
-script_dir = os.path.dirname(__file__)
-util_dir = os.path.join(script_dir, '..')
-sys.path.append(util_dir)
-import util
+from seerep.pb import boundingbox2d_labeled_pb2 as boundingbox2d_labeled
+from seerep.pb import (
+    boundingbox2d_labeled_with_category_pb2 as boundingbox2d_labeled_with_category,
+)
+from seerep.pb import camera_intrinsics_pb2 as cameraintrinsics
+from seerep.pb import camera_intrinsics_service_pb2_grpc as camintrinsics_service
+from seerep.pb import image_pb2 as image
+from seerep.pb import image_service_pb2_grpc as imageService
+from seerep.pb import label_with_instance_pb2 as labelWithInstance
+from seerep.pb import (
+    labels_with_instance_with_category_pb2 as labels_with_instance_with_category,
+)
+from seerep.pb import meta_operations_pb2_grpc as metaOperations
+from seerep.pb import projectCreation_pb2 as projectCreation
+from seerep.pb import tf_service_pb2_grpc as tfService
+from seerep.pb import transform_stamped_pb2 as tf
+from seerep.util.common import get_gRPC_channel
 
 # Default server is localhost !
-channel = util.get_gRPC_channel(target = "local")
+channel = get_gRPC_channel(target="local")
 
 # 1. Get gRPC service objects
 stub = imageService.ImageServiceStub(channel)
 stubTf = tfService.TfServiceStub(channel)
 stubMeta = metaOperations.MetaOperationsStub(channel)
+stubCI = camintrinsics_service.CameraIntrinsicsServiceStub(channel)
 
 # 2. Get all projects from the server
 response = stubMeta.GetProjects(empty_pb2.Empty())
@@ -55,15 +65,53 @@ if not found:
     projectCreated = stubMeta.CreateProject(creation)
     projectuuid = projectCreated.uuid
 
-
 theTime = int(time.time())
+
+#####
+# A valid camera intrinsics UUID is needed here for succesful storage of Images
+# Add new Camera Intrinsics
+
+ciuuid = str(uuid.uuid4())
+print("Camera Intrinsics will be saved against the uuid: ", ciuuid)
+
+camin = cameraintrinsics.CameraIntrinsics()
+
+camin.header.stamp.seconds = 4
+camin.header.stamp.nanos = 3
+
+camin.header.frame_id = "camintrinsics"
+
+camin.header.uuid_project = projectuuid
+camin.header.uuid_msgs = ciuuid
+
+camin.region_of_interest.x_offset = 2
+camin.region_of_interest.y_offset = 1
+camin.region_of_interest.height = 5
+camin.region_of_interest.width = 4
+camin.region_of_interest.do_rectify = 4
+
+camin.height = 5
+camin.width = 4
+
+camin.distortion_model = "plump_bob"
+
+camin.distortion.extend([3, 4, 5])
+
+camin.intrinsic_matrix.extend([3, 4, 5])
+camin.rectification_matrix.extend([3, 4, 5])
+camin.projection_matrix.extend([3, 4, 5])
+
+camin.binning_x = 6
+camin.binning_y = 7
+
+stubCI.TransferCameraIntrinsics(camin)
 
 # 4. Create ten images
 for n in range(10):
     theImage = image.Image()
 
     rgb = []
-    lim = 256 # 256 x 256 pixels
+    lim = 256  # 256 x 256 pixels
     for i in range(lim):
         for j in range(lim):
             x = float(i) / lim
@@ -85,27 +133,38 @@ for n in range(10):
     theImage.width = lim
     theImage.encoding = "rgb8"
     theImage.step = 3 * lim
+    theImage.uuid_camera_intrinsics = ciuuid
+
     # Add image data
     theImage.data = bytes(rgb)
 
-    # 5. Create bounding boxes with labels
-    bb1 = bb.BoundingBox2DLabeled()
-    for i in range(0, 2):
-        bb1.labelWithInstance.label = "testlabel" + str(i)
-        bb1.labelWithInstance.instanceUuid = str(uuid.uuid4())
-        bb1.boundingBox.point_min.x = 0.01 + i / 10
-        bb1.boundingBox.point_min.y = 0.02 + i / 10
-        bb1.boundingBox.point_max.x = 0.03 + i / 10
-        bb1.boundingBox.point_max.y = 0.04 + i / 10
-        theImage.labels_bb.append(bb1)
+    for iCategory in range(0, 2):
+        bbCat = boundingbox2d_labeled_with_category.BoundingBox2DLabeledWithCategory()
+        bbCat.category = str(iCategory)
+        # 5. Create bounding boxes with labels
+        bb = boundingbox2d_labeled.BoundingBox2DLabeled()
+        for i in range(0, 2):
+            bb.labelWithInstance.label.label = "testlabel" + str(i)
+            bb.labelWithInstance.label.confidence = i / 10.0
+            bb.labelWithInstance.instanceUuid = str(uuid.uuid4())
+            bb.boundingBox.center_point.x = 0.01 + i / 10
+            bb.boundingBox.center_point.y = 0.02 + i / 10
+            bb.boundingBox.spatial_extent.x = 0.03 + i / 10
+            bb.boundingBox.spatial_extent.y = 0.04 + i / 10
+            bbCat.boundingBox2DLabeled.append(bb)
+        theImage.labels_bb.append(bbCat)
 
-    # 6. Add general labels to the image
-    for i in range(0, 2):
-        label = labelWithInstance.LabelWithInstance()
-        label.label = "testlabelgeneral" + str(i)
-        # assuming that that the general labels are not instance related -> no instance uuid
-        # label.instanceUuid = str(uuid.uuid4())
-        theImage.labels_general.append(label)
+        # # 6. Add general labels to the image
+        labelsCat = labels_with_instance_with_category.LabelsWithInstanceWithCategory()
+        labelsCat.category = str(iCategory)
+        for i in range(0, 2):
+            label = labelWithInstance.LabelWithInstance()
+            label.label.label = "testlabelgeneral" + str(i)
+            label.label.confidence = i / 10.0
+            # assuming that that the general labels are not instance related -> no instance uuid
+            # label.instanceUuid = str(uuid.uuid4())
+            labelsCat.labelWithInstance.append(label)
+        theImage.labels_general.append(labelsCat)
 
     # 7. Send image to the server
     uuidImg = stub.TransferImage(theImage)
@@ -132,6 +191,7 @@ theTf.transform.translation.x = 100
 theTf.transform.translation.y = 200
 theTf.transform.translation.z = 300
 stubTf.TransferTransformStamped(theTf)
+
 ```
 
 Output:
@@ -153,8 +213,18 @@ uuid of transfered img: 797f2e1a-f9e8-4ed3-94b3-a5d101aa0697
 
 Now we want to query the previously send images with some criteria. Possible query parameters are:
 
-* Bounding Boxes (spatial query)
+* 2D Polygon (spatial query)
+
+Spatial queries in SEEREP are performed using a 2D polygon. This polygon should be simple (no more than 2
+vertices on the same edge) and convex (no edges curving inward). This 2D polygon has a location on the z axis,
+and a height. Queries are performed by forming an encompassing axis aligned bounding box out of the polygon.
+This can lead to an AABB larger than the polygon. This poses the potential problem of returning results to the
+user which are not fully inside the polygon from the query. But it is inside the AABB derived from it for the
+purpose of performing the query. This problem is resolved by providing a boolean variable called
+fullyEncapsulated`. If false, resultant polygons, which are partially inside the query polygon are also returned.
+
 * A time interval (temporal query)
+
 * Labels (semantic query)
 
 === "Protocol Buffers"
@@ -162,25 +232,21 @@ Now we want to query the previously send images with some criteria. Possible que
     Source: `examples/python/gRPC/images/gRPC_pb_queryImage.py`
 
     ```python
-    #!/usr/bin/env python3
+   #!/usr/bin/env python3
 
-    import os
     import sys
 
-    import image_service_pb2_grpc as imageService
-    import meta_operations_pb2_grpc as metaOperations
-    import query_pb2 as query
     from google.protobuf import empty_pb2
-
-    # importing util functions. Assuming that this file is in the parent dir
-    # examples/python/gRPC/util.py
-    script_dir = os.path.dirname(__file__)
-    util_dir = os.path.join(script_dir, '..')
-    sys.path.append(util_dir)
-    import util
+    from seerep.pb import image_service_pb2_grpc as imageService
+    from seerep.pb import label_pb2
+    from seerep.pb import labels_with_category_pb2 as labels_with_category
+    from seerep.pb import meta_operations_pb2_grpc as metaOperations
+    from seerep.pb import query_pb2 as query
+    from seerep.pb import point2d_pb2 as point2d
+    from seerep.util.common import get_gRPC_channel
 
     # Default server is localhost !
-    channel = util.get_gRPC_channel()
+    channel = get_gRPC_channel()
 
     # 1. Get gRPC service objects
     stub = imageService.ImageServiceStub(channel)
@@ -202,14 +268,30 @@ Now we want to query the previously send images with some criteria. Possible que
     # 4. Create a query with parameters
     theQuery = query.Query()
     theQuery.projectuuid.append(projectuuid)
-    theQuery.boundingboxstamped.header.frame_id = "map"
 
-    theQuery.boundingboxstamped.boundingbox.point_min.x = 0.0
-    theQuery.boundingboxstamped.boundingbox.point_min.y = 0.0
-    theQuery.boundingboxstamped.boundingbox.point_min.z = 0.0
-    theQuery.boundingboxstamped.boundingbox.point_max.x = 100.0
-    theQuery.boundingboxstamped.boundingbox.point_max.y = 100.0
-    theQuery.boundingboxstamped.boundingbox.point_max.z = 100.0
+    theQuery.polygon.z = -1
+    theQuery.polygon.height = 7
+
+    l = 100
+    bottom_left = point2d.Point2D()
+    bottom_left.x = -l
+    bottom_left.y = -l
+    theQuery.polygon.vertices.append(bottom_left)
+
+    top_left = point2d.Point2D()
+    top_left.x = -l
+    top_left.y = l
+    theQuery.polygon.vertices.append(top_left)
+
+    top_right = point2d.Point2D()
+    top_right.x = l
+    top_right.y = l
+    theQuery.polygon.vertices.append(top_right)
+
+    bottom_right = point2d.Point2D()
+    bottom_right.x = l
+    bottom_right.y = -l
+    theQuery.polygon.vertices.append(bottom_right)
 
     # since epoche
     theQuery.timeinterval.time_min.seconds = 1638549273
@@ -218,21 +300,31 @@ Now we want to query the previously send images with some criteria. Possible que
     theQuery.timeinterval.time_max.nanos = 0
 
     # labels
-    theQuery.label.extend(["testlabel0"])
+    label = labels_with_category.LabelsWithCategory()
+    label.category = "0"
+    labelWithConfidence = label_pb2.Label()
+    labelWithConfidence.label = "testlabel0"
+    label.labels.extend([labelWithConfidence])
+    theQuery.labelsWithCategory.append(label)
 
     # 5. Query the server for images matching the query and iterate over them
     for img in stub.GetImage(theQuery):
-        print(f"uuidmsg: {img.header.uuid_msgs}")
-        print(f"first label: {img.labels_bb[0].labelWithInstance.label}")
         print(
-            "First bounding box (Xmin, Ymin, Xmax, Ymax): "
-            + str(img.labels_bb[0].boundingBox.point_min.x)
+            f"uuidmsg: {img.header.uuid_msgs}"
+            + "\n"
+            + f"first label: {img.labels_bb[0].boundingBox2DLabeled[0].labelWithInstance.label.label}"
+            + "\n"
+            + f"first label confidence: {img.labels_bb[0].boundingBox2DLabeled[0].labelWithInstance.label.confidence}"
+            + "\n"
+            + "First bounding box (Xcenter,Ycenter,Xextent,Yextent):"
             + " "
-            + str(img.labels_bb[0].boundingBox.point_min.y)
+            + str(img.labels_bb[0].boundingBox2DLabeled[0].boundingBox.center_point.x)
             + " "
-            + str(img.labels_bb[0].boundingBox.point_max.x)
+            + str(img.labels_bb[0].boundingBox2DLabeled[0].boundingBox.center_point.y)
             + " "
-            + str(img.labels_bb[0].boundingBox.point_max.y)
+            + str(img.labels_bb[0].boundingBox2DLabeled[0].boundingBox.spatial_extent.x)
+            + " "
+            + str(img.labels_bb[0].boundingBox2DLabeled[0].boundingBox.spatial_extent.y)
             + "\n"
         )
     ```
@@ -262,31 +354,31 @@ Now we want to query the previously send images with some criteria. Possible que
     ```python
     #!/usr/bin/env python3
 
-    import os
-    import sys
-
     import flatbuffers
-    from fb import Image
-    from fb import image_service_grpc_fb as imageService
-
-    # importing util functions. Assuming that these files are in the parent dir
-    # examples/python/gRPC/util.py
-    # examples/python/gRPC/util_fb.py
-    script_dir = os.path.dirname(__file__)
-    util_dir = os.path.join(script_dir, '..')
-    sys.path.append(util_dir)
-    import util
-    import util_fb
+    from seerep.fb import Image
+    from seerep.fb import image_service_grpc_fb as imageService
+    from seerep.util.common import get_gRPC_channel
+    from seerep.util.fb_helper import (
+        createLabelWithCategory,
+        createLabelWithConfidence,
+        createPoint2d,
+        createPolygon2D,
+        createQuery,
+        createTimeInterval,
+        createTimeStamp,
+        getProject,
+    )
 
     builder = flatbuffers.Builder(1024)
     # Default server is localhost !
-    channel = util.get_gRPC_channel()
+    channel = get_gRPC_channel()
 
     # 1. Get all projects from the server
-    projectuuid = util_fb.getProject(builder, channel, 'testproject')
+    projectuuid = getProject(builder, channel, 'testproject')
 
     # 2. Check if the defined project exist; if not exit
     if not projectuuid:
+        print("project doesn't exist!")
         exit()
 
     # 3. Get gRPC service object
@@ -294,35 +386,46 @@ Now we want to query the previously send images with some criteria. Possible que
 
 
     # Create all necessary objects for the query
-    header = util_fb.createHeader(builder, frame="map")
-    pointMin = util_fb.createPoint(builder, 0.0, 0.0, 0.0)
-    pointMax = util_fb.createPoint(builder, 100.0, 100.0, 100.0)
-    boundingboxStamped = util_fb.createBoundingBoxStamped(builder, header, pointMin, pointMax)
+    l = 100
+    polygon_vertices = []
+    polygon_vertices.append(createPoint2d(builder, -1.0 * l, -1.0 * l))
+    polygon_vertices.append(createPoint2d(builder, -1.0 * l, l))
+    polygon_vertices.append(createPoint2d(builder, l, l))
+    polygon_vertices.append(createPoint2d(builder, l, -1.0 * l))
+    polygon2d = createPolygon2D(builder, 7, -1, polygon_vertices)
 
-    timeMin = util_fb.createTimeStamp(builder, 1610549273, 0)
-    timeMax = util_fb.createTimeStamp(builder, 1938549273, 0)
-    timeInterval = util_fb.createTimeInterval(builder, timeMin, timeMax)
-
+    timeMin = createTimeStamp(builder, 1610549273, 0)
+    timeMax = createTimeStamp(builder, 1938549273, 0)
+    timeInterval = createTimeInterval(builder, timeMin, timeMax)
 
     projectUuids = [builder.CreateString(projectuuid)]
-    labels = [builder.CreateString("testlabel0")]
+    # list of categories
+    category = ["0"]
+    # list of labels per category
+    labels = [
+        [
+            createLabelWithConfidence(builder, "testlabel0"),
+            createLabelWithConfidence(builder, "testlabelgeneral0"),
+        ]
+    ]
+    labelCategory = createLabelWithCategory(builder, category, labels)
     dataUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
     instanceUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 
     # 4. Create a query with parameters
     # all parameters are optional
-    # with all parameters set (especially with the data and instance uuids set) the result
-    # of the query will be empty. Set the query parameters to adequate values or remove
-    # them from the query creation
-    query = util_fb.createQuery(
+    # with all parameters set (especially with the data and instance uuids set) the result of the query will be empty. Set the query parameters to adequate values or remove them from the query creation
+    query = createQuery(
         builder,
         # boundingBox=boundingboxStamped,
         # timeInterval=timeInterval,
-        # labels=labels,
-        # projectUuids=projectUuids,
+        # labels=labelCategory,
+        # mustHaveAllLabels=True,
+        projectUuids=projectUuids,
         # instanceUuids=instanceUuids,
         # dataUuids=dataUuids,
         withoutData=True,
+        fullyEncapsulated=False
     )
     builder.Finish(query)
     buf = builder.Output()
@@ -332,21 +435,30 @@ Now we want to query the previously send images with some criteria. Possible que
         response = Image.Image.GetRootAs(responseBuf)
 
         print(f"uuidmsg: {response.Header().UuidMsgs().decode('utf-8')}")
-        print("first label: " + response.LabelsBb(0).LabelWithInstance().Label().decode("utf-8"))
-        print(
-            "first bounding box (Xmin,Ymin,Xmax,Ymax): "
-            + str(response.LabelsBb(0).BoundingBox().PointMin().X())
-            + " "
-            + str(response.LabelsBb(0).BoundingBox().PointMin().Y())
-            + " "
-            + str(response.LabelsBb(0).BoundingBox().PointMax().X())
-            + " "
-            + str(response.LabelsBb(0).BoundingBox().PointMax().Y())
-            + "\n"
-        )
+        print(response.LabelsBbLength())
+        if response.LabelsBbLength() > 0:
+            print(
+                "first label: "
+                + response.LabelsBb(0).BoundingBox2dLabeled(0).LabelWithInstance().Label().Label().decode("utf-8")
+                + " ; confidence: "
+                + str(response.LabelsBb(0).BoundingBox2dLabeled(0).LabelWithInstance().Label().Confidence())
+            )
+            print(
+                "first bounding box (Xcenter,Ycenter,Xextent,Yextent, rotation): "
+                + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().CenterPoint().X())
+                + " "
+                + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().CenterPoint().Y())
+                + " "
+                + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().SpatialExtent().X())
+                + " "
+                + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().SpatialExtent().Y())
+                + " "
+                + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().Rotation())
+                + "\n"
+            )
 
     print("done.")
-    ```
+```
 
     Output:
 

@@ -1,6 +1,9 @@
 #ifndef SEEREP_CORE_CORE_DATASET_H_
 #define SEEREP_CORE_CORE_DATASET_H_
 
+#include <CGAL/Boolean_set_operations_2.h>
+#include <CGAL/Exact_predicates_exact_constructions_kernel.h>
+
 #include <algorithm>
 #include <cstdint>
 #include <functional>
@@ -25,6 +28,8 @@
 #include <boost/uuid/uuid.hpp>             // uuid class
 #include <boost/uuid/uuid_generators.hpp>  // generators
 #include <boost/uuid/uuid_io.hpp>          // streaming operators etc.
+
+typedef CGAL::Exact_predicates_exact_constructions_kernel Kernel;
 
 namespace seerep_core
 {
@@ -176,9 +181,55 @@ private:
    */
   void tryAddingDataWithMissingTF(const seerep_core_msgs::Datatype& datatype);
 
+  /**
+   * @brief Check if the created CGAL polygon follows the requirements. It should be simple (no more than two vertices
+   * on an edge), convex (no inward egdes), the vertices should be in a counter clockwise order.
+   *
+   * @param polygon_cgal a polygon defined with CGAL
+   * @return true The polygon abides by CGAL requirements
+   * @return false The polygon does not abide by CGAL requirements
+   */
+  bool verifyPolygonIntegrity(CGAL::Polygon_2<Kernel>& polygon_cgal);
+
+  /**
+   * @brief convert core msg polygon to CGAL polygon
+   *
+   * @param polygon core msg polygon
+   * @return CGAL::Polygon_2<Kernel> cgal polygon
+   */
+  CGAL::Polygon_2<Kernel> toCGALPolygon(const seerep_core_msgs::Polygon2D& polygon);
+
+  /**
+   * @brief convert core msg aabb to CGAL aabb
+   *
+   * @param polygon core msg aabb
+   * @return CGAL::Polygon_2<Kernel> cgal aabb
+   */
+  CGAL::Polygon_2<Kernel> toCGALPolygon(const seerep_core_msgs::AABB& aabb);
+
+  /**
+   * @brief determine if the axis aligned bounding box is fully or paritally inside the oriented bounding box
+   *
+   * @param aabb axis aligned bounding box
+   * @param polygon polygon
+   * @param fullEncapsulation boolean variable to denote if the aabb fully inside the obb
+   * @param partialEncapsulation boolean variable to denote if the aabb partially inside the obb
+   */
+  void intersectionDegree(const seerep_core_msgs::AABB& aabb, const seerep_core_msgs::Polygon2D& polygon,
+                          bool& fullEncapsulation, bool& partialEncapsulation);
+
   void getUuidsFromMap(std::unordered_map<boost::uuids::uuid, std::vector<boost::uuids::uuid>,
                                           boost::hash<boost::uuids::uuid>>& datasetInstancesMap,
                        std::vector<boost::uuids::uuid>& datasets, std::vector<boost::uuids::uuid>& result);
+
+  /**
+   * @brief Convert polygon to a smallest possible encapsulating AABB
+   *
+   * @param polygon core msg polygon
+   * @return seerep_core_msg::AABB core msg aabb
+   */
+  seerep_core_msgs::AABB polygonToAABB(const seerep_core_msgs::Polygon2D& polygon);
+
   /**
    * @brief queries the spatial index and returns a vector of bounding box / UUID pairs matching the query
    * @param datatypeSpecifics the datatype specific information to be used in the query

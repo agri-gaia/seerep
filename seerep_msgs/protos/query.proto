@@ -5,6 +5,7 @@ package seerep.pb;
 import "time_interval.proto";
 import "boundingbox_stamped.proto";
 import "labels_with_category.proto";
+import "polygon2d.proto";
 
 message Query
 {
@@ -17,4 +18,6 @@ message Query
   repeated string datauuid = 7;
   bool withoutdata = 8;
   uint32 maxNumData = 9;
+  Polygon2D polygon = 10;
+  bool fullyEncapsulated = 11;
 }
