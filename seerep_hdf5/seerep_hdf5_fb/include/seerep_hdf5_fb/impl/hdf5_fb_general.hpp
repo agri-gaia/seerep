@@ -17,55 +17,27 @@ flatbuffers::Offset<AttributeMapsFb> Hdf5FbGeneral::readAttributeMap(HighFive::A
       int attributeValue;
       attribute.read(attributeValue);
 
-      auto keyOffset = builder.CreateString(attributeName);
-
-      seerep::fb::IntegerBuilder integerBuilder(builder);
-      integerBuilder.add_data(attributeValue);
-      auto integerOffset = integerBuilder.Finish();
-
-      seerep::fb::UnionMapEntryBuilder unionMapEntryBuilder(builder);
-      unionMapEntryBuilder.add_key(keyOffset);
-      unionMapEntryBuilder.add_value_type(seerep::fb::Datatypes_Integer);
-      unionMapEntryBuilder.add_value(integerOffset.Union());
-
-      mapEntryVector.push_back(unionMapEntryBuilder.Finish());
+      mapEntryVector.push_back(
+          seerep::fb::CreateUnionMapEntryDirect(builder, attributeName.c_str(), seerep::fb::Datatypes_Integer,
+                                                seerep::fb::CreateInteger(builder, attributeValue).Union()));
     }
     else if (attribute.getDataType().getClass() == HighFive::DataTypeClass::Float)
     {
       double attributeValue;
       attribute.read(attributeValue);
 
-      auto keyOffset = builder.CreateString(attributeName);
-
-      seerep::fb::DoubleBuilder doubleBuilder(builder);
-      doubleBuilder.add_data(attributeValue);
-      auto doubleOffset = doubleBuilder.Finish();
-
-      seerep::fb::UnionMapEntryBuilder unionMapEntryBuilder(builder);
-      unionMapEntryBuilder.add_key(keyOffset);
-      unionMapEntryBuilder.add_value_type(seerep::fb::Datatypes_Double);
-      unionMapEntryBuilder.add_value(doubleOffset.Union());
-
-      mapEntryVector.push_back(unionMapEntryBuilder.Finish());
+      mapEntryVector.push_back(
+          seerep::fb::CreateUnionMapEntryDirect(builder, attributeName.c_str(), seerep::fb::Datatypes_Double,
+                                                seerep::fb::CreateDouble(builder, attributeValue).Union()));
     }
     else if (attribute.getDataType().getClass() == HighFive::DataTypeClass::String)
     {
       std::string attributeValue;
       attribute.read(attributeValue);
-      auto valueOffset = builder.CreateString(attributeValue);
 
-      auto keyOffset = builder.CreateString(attributeName);
-
-      seerep::fb::StringBuilder stringBuilder(builder);
-      stringBuilder.add_data(valueOffset);
-      auto stringOffset = stringBuilder.Finish();
-
-      seerep::fb::UnionMapEntryBuilder unionMapEntryBuilder(builder);
-      unionMapEntryBuilder.add_key(keyOffset);
-      unionMapEntryBuilder.add_value_type(seerep::fb::Datatypes_String);
-      unionMapEntryBuilder.add_value(stringOffset.Union());
-
-      mapEntryVector.push_back(unionMapEntryBuilder.Finish());
+      mapEntryVector.push_back(seerep::fb::CreateUnionMapEntryDirect(
+          builder, attributeName.c_str(), seerep::fb::Datatypes_String,
+          seerep::fb::CreateString(builder, builder.CreateString(attributeValue)).Union()));
     }
     else
     {
