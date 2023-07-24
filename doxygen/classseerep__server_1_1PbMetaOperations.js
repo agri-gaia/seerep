@@ -1,8 +1,0 @@
-var classseerep__server_1_1PbMetaOperations =
-[
-    [ "PbMetaOperations", "classseerep__server_1_1PbMetaOperations.html#a1cdab4a45d4e8f55d77e39cb51310313", null ],
-    [ "CreateProject", "classseerep__server_1_1PbMetaOperations.html#a11f4a0bbcf59f6e469458457d9bd8887", null ],
-    [ "GetProjects", "classseerep__server_1_1PbMetaOperations.html#a486d5f76eb5cb3099f8115eea6c6a59e", null ],
-    [ "m_logger", "classseerep__server_1_1PbMetaOperations.html#aaa586c7b367cbf94905171a805435811", null ],
-    [ "seerepCore", "classseerep__server_1_1PbMetaOperations.html#a82fcdbd915c682b2b03204548935ae64", null ]
-];

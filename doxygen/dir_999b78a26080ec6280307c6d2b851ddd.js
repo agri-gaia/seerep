@@ -1,6 +1,0 @@
-var dir_999b78a26080ec6280307c6d2b851ddd =
-[
-    [ "core", "dir_17048b4ab101cb2341f257870400e4f6.html", "dir_17048b4ab101cb2341f257870400e4f6" ],
-    [ "fbs", "dir_9b2420bfceb63045482d1fa49023d131.html", "dir_9b2420bfceb63045482d1fa49023d131" ],
-    [ "protos", "dir_66ae93d504a9a7d0020313fd27d46447.html", "dir_66ae93d504a9a7d0020313fd27d46447" ]
-];
