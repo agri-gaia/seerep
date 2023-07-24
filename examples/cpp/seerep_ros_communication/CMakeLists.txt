@@ -84,7 +84,9 @@ add_executable(${PROJECT_NAME}_client src/client.cpp)
 add_executable(${PROJECT_NAME}_hdf5dump src/hdf5dump.cpp)
 add_executable(${PROJECT_NAME}_querier src/querier.cpp)
 add_executable(${PROJECT_NAME}_querierFb src/querierFb.cpp)
-add_executable(${PROJECT_NAME}_rosbagDumper src/rosbagDumper.cpp)
+add_executable(
+  ${PROJECT_NAME}_rosbagDumper src/cognitive_weeding_rosbag_dumper.cpp
+)
 add_executable(${PROJECT_NAME}_jsonPointDumper src/jsonPointDumper.cpp)
 
 add_executable(
