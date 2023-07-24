@@ -1,8 +1,8 @@
 #ifndef SEEREP_CORE_MSGS_CAMERA_INTRINSICS_H_
 #define SEEREP_CORE_MSGS_CAMERA_INTRINSICS_H_
 
-#include <header.h>
-#include <region_of_interest.h>
+#include "header.h"
+#include "region_of_interest.h"
 
 namespace seerep_core_msgs
 {
