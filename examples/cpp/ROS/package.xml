@@ -16,6 +16,12 @@
   <depend>std_msgs</depend>
   <depend>geometry_msgs</depend>
   <depend>roscpp</depend>
+  <depend>seerep_ros_conversions_fb</depend>
+  <depend>rosbag</depend>
+  <depend>seerep_hdf5_fb</depend>
+  <depend>seerep_core_fb</depend>
+  <depend>seerep_hdf5_core</depend>
+  <depend>tf</depend>
 
   <buildtool_depend>catkin</buildtool_depend>
 </package>

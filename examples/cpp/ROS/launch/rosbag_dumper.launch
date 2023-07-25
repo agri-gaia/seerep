@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<launch>
+    <arg name="bag_path" default="/seerep/seerep-data/Fleming_250mm_Maize_Greenland_Evening_2023-06-13-18-03-25.bag"/>
+    <arg name="hdf5_folder" default="/seerep/seerep-data"/>
+    <arg name="project_frame" default="map"/>
+    <arg name="project_name" default="testproject"/>
+    <node name="seerep_ros_examples_rosbag_dumper" pkg="seerep_ros_examples" type="seerep_ros_examples_rosbag_dumper" output="screen">
+        <rosparam param="bag_path" subst_value="True">$(arg bag_path)</rosparam>
+        <rosparam param="hdf5_path" subst_value="True">$(arg hdf5_folder)</rosparam>
+        <rosparam param="project_name" subst_value="True">$(arg project_name)</rosparam>
+        <rosparam param="project_frame" subst_value="True">$(arg project_frame)</rosparam>
+    </node>
+</launch>
