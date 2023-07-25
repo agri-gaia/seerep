@@ -593,10 +593,22 @@ void CoreFbConversion::fromFbDataLabelsGeneral(
   {
     for (auto labelsCategories : *labelsGeneral)
     {
-      std::vector<seerep_core_msgs::LabelWithInstance> labelWithInstanceVector;
+      std::vector<seerep_core_msgs::LabelWithInstance>* labelWithInstanceVector;
+
+      auto catMap = labelsWithInstancesWithCategory.find(labelsCategories->category()->c_str());
+      if (catMap != labelsWithInstancesWithCategory.end())
+      {
+        labelWithInstanceVector = &catMap->second;
+      }
+      else
+      {
+        std::vector<seerep_core_msgs::LabelWithInstance> labelVector;
+        auto entry = labelsWithInstancesWithCategory.emplace(labelsCategories->category()->c_str(), labelVector);
+        labelWithInstanceVector = &entry.first->second;
+      }
+
       if (labelsCategories->labelsWithInstance())
       {
-        labelWithInstanceVector.reserve(labelsCategories->labelsWithInstance()->size());
         for (auto label : *labelsCategories->labelsWithInstance())
         {
           boost::uuids::string_generator gen;
@@ -610,12 +622,11 @@ void CoreFbConversion::fromFbDataLabelsGeneral(
             uuidInstance = boost::uuids::nil_uuid();
           }
 
-          labelWithInstanceVector.push_back(
+          labelWithInstanceVector->push_back(
               seerep_core_msgs::LabelWithInstance{ .label = label->label()->label()->str(),
                                                    .labelConfidence = label->label()->confidence(),
                                                    .uuidInstance = uuidInstance });
         }
-        labelsWithInstancesWithCategory.emplace(labelsCategories->category()->c_str(), labelWithInstanceVector);
       }
     }
   }
@@ -629,7 +640,20 @@ void CoreFbConversion::fromFbDataLabelsBb2d(
   {
     for (auto labelsCategories : *labelsBB2d)
     {
-      std::vector<seerep_core_msgs::LabelWithInstance> labelWithInstanceVector;
+      std::vector<seerep_core_msgs::LabelWithInstance>* labelWithInstanceVector;
+
+      auto catMap = labelsWithInstancesWithCategory.find(labelsCategories->category()->c_str());
+      if (catMap != labelsWithInstancesWithCategory.end())
+      {
+        labelWithInstanceVector = &catMap->second;
+      }
+      else
+      {
+        std::vector<seerep_core_msgs::LabelWithInstance> labelVector;
+        auto entry = labelsWithInstancesWithCategory.emplace(labelsCategories->category()->c_str(), labelVector);
+        labelWithInstanceVector = &entry.first->second;
+      }
+
       for (auto label : *labelsCategories->boundingBox2dLabeled())
       {
         boost::uuids::string_generator gen;
@@ -643,12 +667,11 @@ void CoreFbConversion::fromFbDataLabelsBb2d(
           uuidInstance = boost::uuids::nil_uuid();
         }
 
-        labelWithInstanceVector.push_back(
+        labelWithInstanceVector->push_back(
             seerep_core_msgs::LabelWithInstance{ .label = label->labelWithInstance()->label()->label()->str(),
                                                  .labelConfidence = label->labelWithInstance()->label()->confidence(),
                                                  .uuidInstance = uuidInstance });
       }
-      labelsWithInstancesWithCategory.emplace(labelsCategories->category()->c_str(), labelWithInstanceVector);
     }
   }
 }
