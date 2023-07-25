@@ -16,14 +16,14 @@ grpc::Status FbImageService::GetImage(grpc::ServerContext* context,
 
   std::stringstream debuginfo;
   debuginfo << "sending images with this query parameters:";
-  if (requestRoot->boundingboxStamped() != NULL)
+  if (requestRoot->polygon() != NULL)
   {
-    debuginfo << "bounding box center_point(" << requestRoot->boundingboxStamped()->boundingbox()->center_point()->x()
-              << "/" << requestRoot->boundingboxStamped()->boundingbox()->center_point()->y() << "/"
-              << requestRoot->boundingboxStamped()->boundingbox()->center_point()->z() << "), spatial_extent("
-              << requestRoot->boundingboxStamped()->boundingbox()->spatial_extent()->x() << "/"
-              << requestRoot->boundingboxStamped()->boundingbox()->spatial_extent()->y() << "/"
-              << requestRoot->boundingboxStamped()->boundingbox()->spatial_extent()->z() << ")";
+    for (auto point : *requestRoot->polygon()->vertices())
+    {
+      debuginfo << "bounding box vertex (" << point->x() << ", " << point->y() << ") /";
+    }
+    debuginfo << "bounding box z " << requestRoot->polygon()->z() << " /";
+    debuginfo << "bounding box height " << requestRoot->polygon()->height() << " /";
   }
   if (requestRoot->timeinterval() != NULL)
   {
@@ -45,15 +45,14 @@ grpc::Status FbImageService::GetImage(grpc::ServerContext* context,
 
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << debuginfo.rdbuf();
 
-  if (requestRoot->boundingboxStamped() != NULL)
+  if (requestRoot->polygon() != NULL)
   {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
-        << "in bounding box center_point(" << requestRoot->boundingboxStamped()->boundingbox()->center_point()->x()
-        << "/" << requestRoot->boundingboxStamped()->boundingbox()->center_point()->y() << "/"
-        << requestRoot->boundingboxStamped()->boundingbox()->center_point()->z() << "), spatial_extent("
-        << requestRoot->boundingboxStamped()->boundingbox()->spatial_extent()->x() << "/"
-        << requestRoot->boundingboxStamped()->boundingbox()->spatial_extent()->y() << "/"
-        << requestRoot->boundingboxStamped()->boundingbox()->spatial_extent()->z() << ")";
+    for (auto point : *(requestRoot->polygon()->vertices()))
+    {
+      debuginfo << "bounding box vertex (" << point->x() << ", " << point->y() << ") /";
+    }
+    debuginfo << "bounding box z " << requestRoot->polygon()->z() << " /";
+    debuginfo << "bounding box height " << requestRoot->polygon()->height() << " /";
   }
   if (requestRoot->timeinterval() != NULL)
   {

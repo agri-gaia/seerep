@@ -104,21 +104,6 @@ bool CoreTf::canTransform(const std::string& sourceFrame, const std::string& tar
   return m_tfBuffer.canTransform(targetFrame, sourceFrame, ros::Time(timeSecs, timeNanos));
 }
 
-seerep_core_msgs::Query CoreTf::transformQuery(const seerep_core_msgs::Query& query, std::string targetFrame)
-{
-  if (query.boundingbox)
-  {
-    seerep_core_msgs::Query queryTransformed(query);
-
-    queryTransformed.boundingbox =
-        transformAABB(queryTransformed.boundingbox.value(), queryTransformed.header.frameId, targetFrame,
-                      queryTransformed.header.timestamp.seconds, queryTransformed.header.timestamp.nanos);
-    return queryTransformed;
-  }
-
-  return query;
-}
-
 std::vector<std::string> CoreTf::getFrames()
 {
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << m_tfBuffer.allFramesAsString();

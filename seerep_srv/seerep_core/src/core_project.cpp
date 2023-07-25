@@ -63,7 +63,7 @@ seerep_core_msgs::QueryResultProject CoreProject::getDataset(const seerep_core_m
 {
   seerep_core_msgs::QueryResultProject result;
   result.projectUuid = m_uuid;
-  result.dataOrInstanceUuids = m_coreDatasets->getData(m_coreTfs->transformQuery(query, m_frameId));
+  result.dataOrInstanceUuids = m_coreDatasets->getData(query);
   return result;
 }
 
@@ -71,7 +71,7 @@ seerep_core_msgs::QueryResultProject CoreProject::getInstances(const seerep_core
 {
   seerep_core_msgs::QueryResultProject result;
   result.projectUuid = m_uuid;
-  result.dataOrInstanceUuids = m_coreDatasets->getInstances(m_coreTfs->transformQuery(query, m_frameId));
+  result.dataOrInstanceUuids = m_coreDatasets->getInstances(query);
 
   return result;
 }

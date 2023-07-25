@@ -16,17 +16,14 @@ grpc::Status FbPointService::GetPoint(grpc::ServerContext* context,
 
   std::stringstream debuginfo;
   debuginfo << "sending images with this query parameters:";
-  if (requestRoot->boundingboxStamped() != NULL)
-  {
-    debuginfo << "bounding box center_point(" << requestRoot->boundingboxStamped()->boundingbox()->center_point()->x()
-              << "/" << requestRoot->boundingboxStamped()->boundingbox()->center_point()->y() << "/"
-              << requestRoot->boundingboxStamped()->boundingbox()->center_point()->z() << "), spatial_extent("
-              << requestRoot->boundingboxStamped()->boundingbox()->spatial_extent()->x() << "/"
-              << requestRoot->boundingboxStamped()->boundingbox()->spatial_extent()->y() << "/"
-              << requestRoot->boundingboxStamped()->boundingbox()->spatial_extent()->z() << ")";
-  }
   if (requestRoot->timeinterval() != NULL)
   {
+    for (auto point : *requestRoot->polygon()->vertices())
+    {
+      debuginfo << "bounding box vertex (" << point->x() << ", " << point->y() << ") \n";
+    }
+    debuginfo << "bounding box z " << requestRoot->polygon()->z() << " /";
+    debuginfo << "\n bounding box height " << requestRoot->polygon()->height() << " /";
     debuginfo << "\n time interval (" << requestRoot->timeinterval()->time_min()->seconds() << "/"
               << requestRoot->timeinterval()->time_max()->seconds() << ")";
   }
@@ -45,16 +42,12 @@ grpc::Status FbPointService::GetPoint(grpc::ServerContext* context,
 
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << debuginfo.rdbuf();
 
-  if (requestRoot->boundingboxStamped() != NULL)
+  for (auto point : *(requestRoot->polygon()->vertices()))
   {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
-        << "in bounding box center_point(" << requestRoot->boundingboxStamped()->boundingbox()->center_point()->x()
-        << "/" << requestRoot->boundingboxStamped()->boundingbox()->center_point()->y() << "/"
-        << requestRoot->boundingboxStamped()->boundingbox()->center_point()->z() << "), spatial_extent("
-        << requestRoot->boundingboxStamped()->boundingbox()->spatial_extent()->x() << "/"
-        << requestRoot->boundingboxStamped()->boundingbox()->spatial_extent()->y() << "/"
-        << requestRoot->boundingboxStamped()->boundingbox()->spatial_extent()->z() << ")";
+    debuginfo << "bounding box vertex (" << point->x() << ", " << point->y() << ") /";
   }
+  debuginfo << "bounding box z " << requestRoot->polygon()->z() << " /";
+  debuginfo << "bounding box height " << requestRoot->polygon()->height() << " /";
   if (requestRoot->timeinterval() != NULL)
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
