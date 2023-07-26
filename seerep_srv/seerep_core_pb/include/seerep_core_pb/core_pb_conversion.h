@@ -19,6 +19,7 @@
 #include <seerep_msgs/camera_intrinsics.h>
 #include <seerep_msgs/camera_intrinsics_query.h>
 #include <seerep_msgs/dataset_indexable.h>
+#include <seerep_msgs/label_with_instance.h>
 #include <seerep_msgs/query.h>
 #include <seerep_msgs/query_result.h>
 #include <seerep_msgs/query_tf.h>
@@ -36,6 +37,8 @@
 
 namespace seerep_core_pb
 {
+
+using LabelWithInstanceVec = std::vector<seerep_core_msgs::LabelWithInstance>;
 /**
  * @brief This class converts between protobuf messages and seerep core specific messages
  *

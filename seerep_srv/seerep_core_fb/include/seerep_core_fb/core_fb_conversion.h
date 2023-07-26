@@ -29,6 +29,7 @@
 
 // seerep_core_msgs
 #include <seerep_msgs/dataset_indexable.h>
+#include <seerep_msgs/label_with_instance.h>
 #include <seerep_msgs/query.h>
 #include <seerep_msgs/query_result.h>
 #include <seerep_msgs/query_tf.h>
@@ -45,6 +46,7 @@
 
 namespace seerep_core_fb
 {
+using LabelWithInstanceVec = std::vector<seerep_core_msgs::LabelWithInstance>;
 /**
  * @brief This class converts between flatbuffer messages and seerep core specific messages
  *

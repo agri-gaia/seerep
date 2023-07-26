@@ -593,18 +593,18 @@ void CoreFbConversion::fromFbDataLabelsGeneral(
   {
     for (auto labelsCategories : *labelsGeneral)
     {
-      std::vector<seerep_core_msgs::LabelWithInstance>* labelWithInstanceVector;
+      std::unique_ptr<LabelWithInstanceVec> labelWithInstanceVecPtr;
 
       auto catMap = labelsWithInstancesWithCategory.find(labelsCategories->category()->c_str());
       if (catMap != labelsWithInstancesWithCategory.end())
       {
-        labelWithInstanceVector = &catMap->second;
+        labelWithInstanceVecPtr = std::make_unique<LabelWithInstanceVec>(catMap->second);
       }
       else
       {
         std::vector<seerep_core_msgs::LabelWithInstance> labelVector;
         auto entry = labelsWithInstancesWithCategory.emplace(labelsCategories->category()->c_str(), labelVector);
-        labelWithInstanceVector = &entry.first->second;
+        labelWithInstanceVecPtr = std::make_unique<LabelWithInstanceVec>(entry.first->second);
       }
 
       if (labelsCategories->labelsWithInstance())
@@ -622,7 +622,7 @@ void CoreFbConversion::fromFbDataLabelsGeneral(
             uuidInstance = boost::uuids::nil_uuid();
           }
 
-          labelWithInstanceVector->push_back(
+          labelWithInstanceVecPtr->push_back(
               seerep_core_msgs::LabelWithInstance{ .label = label->label()->label()->str(),
                                                    .labelConfidence = label->label()->confidence(),
                                                    .uuidInstance = uuidInstance });
@@ -640,18 +640,18 @@ void CoreFbConversion::fromFbDataLabelsBb2d(
   {
     for (auto labelsCategories : *labelsBB2d)
     {
-      std::vector<seerep_core_msgs::LabelWithInstance>* labelWithInstanceVector;
+      std::unique_ptr<LabelWithInstanceVec> labelWithInstanceVecPtr;
 
       auto catMap = labelsWithInstancesWithCategory.find(labelsCategories->category()->c_str());
       if (catMap != labelsWithInstancesWithCategory.end())
       {
-        labelWithInstanceVector = &catMap->second;
+        labelWithInstanceVecPtr = std::make_unique<LabelWithInstanceVec>(catMap->second);
       }
       else
       {
         std::vector<seerep_core_msgs::LabelWithInstance> labelVector;
         auto entry = labelsWithInstancesWithCategory.emplace(labelsCategories->category()->c_str(), labelVector);
-        labelWithInstanceVector = &entry.first->second;
+        labelWithInstanceVecPtr = std::make_unique<LabelWithInstanceVec>(entry.first->second);
       }
 
       for (auto label : *labelsCategories->boundingBox2dLabeled())
@@ -667,7 +667,7 @@ void CoreFbConversion::fromFbDataLabelsBb2d(
           uuidInstance = boost::uuids::nil_uuid();
         }
 
-        labelWithInstanceVector->push_back(
+        labelWithInstanceVecPtr->push_back(
             seerep_core_msgs::LabelWithInstance{ .label = label->labelWithInstance()->label()->label()->str(),
                                                  .labelConfidence = label->labelWithInstance()->label()->confidence(),
                                                  .uuidInstance = uuidInstance });
