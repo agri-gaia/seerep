@@ -33,7 +33,15 @@ RosbagDumper::RosbagDumper(const std::filesystem::path& bag_path, const std::fil
 
   if (std::filesystem::exists(bag_path))
   {
-    bag_.open(bag_path.string(), rosbag::bagmode::Read);
+    try
+    {
+      bag_.open(bag_path.string(), rosbag::bagmode::Read);
+    }
+    catch (rosbag::BagIOException& e)
+    {
+      ROS_ERROR_STREAM("Error opening rosbag: " << e.what());
+      ros::shutdown();
+    }
   }
   else
   {
@@ -81,6 +89,7 @@ void RosbagDumper::iterateAndDumpTf(const std::string& tf_topic, const bool is_s
   }
 }
 
+// TODO: add support for uncompressed images
 void RosbagDumper::iterateAndDumpCompressedImage(const std::string& image_topic, const std::string& camera_info_topic)
 {
   for (const rosbag::MessageInstance& m : rosbag::View(bag_, rosbag::TopicQuery(image_topic)))
