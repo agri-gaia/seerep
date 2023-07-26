@@ -62,6 +62,7 @@ const std::string CoreProject::getVersion()
   return m_version;
 }
 
+// <<<<<<< HEAD
 seerep_core_msgs::Polygon2D
 CoreProject::transformToMapFrame(const seerep_core_msgs::Polygon2D polygon)
 {
@@ -113,10 +114,15 @@ CoreProject::getDataset(seerep_core_msgs::Query& query)
   // is the query not in map frame?
   if (query.polygon && !query.inMapFrame)
   {
+    if (query.coordinateSystem != "")
+    {
+      // TODO add transformation using the EPSG code
+    }
     query.polygon.value() = transformToMapFrame(query.polygon.value());
   }
 
   result.dataOrInstanceUuids = m_coreDatasets->getData(query);
+
   return result;
 }
 

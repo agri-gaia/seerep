@@ -176,6 +176,14 @@ private:
   static void fromPbInMapFrame(const seerep::pb::Query& query,
                                seerep_core_msgs::Query& queryCore);
   /**
+   * @brief converts the coordinate systen string of the protobuf query message
+   * to seerep core specific message
+   * @param query the protobuf query message
+   * @param queryCore query message in seerep core format
+   */
+  static void fromPbCoordinateSystem(const seerep::pb::Query& query,
+                                     seerep_core_msgs::Query& queryCore);
+  /**
    * @brief converts the fullyEncapsulated flag of the protobuf query message to
    * seerep core specific message
    * @param query the protobuf query message

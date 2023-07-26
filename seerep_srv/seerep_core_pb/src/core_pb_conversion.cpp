@@ -20,6 +20,7 @@ CorePbConversion::fromPb(const seerep::pb::Query& query,
   fromPbWithOutData(query, queryCore);
   fromFbQueryMaxNumData(query, queryCore);
   fromPbFullyEncapsulated(query, queryCore);
+  fromPbCoordinateSystem(query, queryCore);
   fromPbInMapFrame(query, queryCore);
   queryCore.sortByTime = query.sortbytime();
 
@@ -376,6 +377,12 @@ void CorePbConversion::fromPbInMapFrame(const seerep::pb::Query& query,
                                         seerep_core_msgs::Query& queryCore)
 {
   queryCore.inMapFrame = query.inmapframe();
+}
+
+void CorePbConversion::fromPbCoordinateSystem(const seerep::pb::Query& query,
+                                              seerep_core_msgs::Query& queryCore)
+{
+  queryCore.coordinateSystem = query.coordinatesystem();
 }
 
 void CorePbConversion::fromPbFullyEncapsulated(

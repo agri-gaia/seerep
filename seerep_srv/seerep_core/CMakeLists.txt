@@ -29,6 +29,9 @@ find_package(catkin REQUIRED COMPONENTS tf2)
 find_package(CGAL REQUIRED)
 set(CGAL_DO_NOT_WARN_ABOUT_CMAKE_BUILD_TYPE TRUE)
 
+# https://github.com/OSGeo/PROJ/issues/3682
+pkg_check_modules(PROJ REQUIRED IMPORTED_TARGET)
+
 configure_file(include/SeerepCoreConfig.h.in SeerepCoreConfig.h)
 
 include_directories(
@@ -66,9 +69,9 @@ target_link_libraries(
   ${Boost_LOG_LIBRARY}
   ${Boost_LOG_SETUP_LIBRARY}
   ${catkin_LIBRARIES}
+  ${CURL_LIBRARIES}
   CGAL::CGAL
   proj
-  ${CURL_LIBRARIES}
   jsoncpp
 )
 

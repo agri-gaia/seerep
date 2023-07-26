@@ -304,6 +304,8 @@ private:
    */
   static bool fromFbQueryInMapFrame(const seerep::fb::Query* query);
 
+  static std::string fromFbQueryCoordinateSystem(const seerep::fb::Query* query);
+
   /**
    * @brief extracts the fullyEncapsulated flag of the flatbuffer query message
    * @param query the flatbuffer message

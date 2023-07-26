@@ -25,6 +25,8 @@ struct Query
                            // polygon defined above
   bool inMapFrame;  // if false the query polygon is in geodetic coordinates,
                     // otherwise in map frame
+  std::string
+      coordinateSystem;  // the geodetic coordinate system in which the polygon is defined
   std::optional<Timeinterval> timeinterval;  ///< only do temporal query if set
   std::optional<std::unordered_map<std::string, std::vector<std::string>>>
       label;  ///< only do semantic query if set
