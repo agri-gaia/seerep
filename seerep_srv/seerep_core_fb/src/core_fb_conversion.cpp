@@ -385,9 +385,10 @@ flatbuffers::Offset<seerep::fb::TimeInterval> CoreFbConversion::toFb(flatbuffers
 flatbuffers::Offset<seerep::fb::ProjectInfo> CoreFbConversion::toFb(flatbuffers::grpc::MessageBuilder& fbb,
                                                                     const seerep_core_msgs::ProjectInfo& prjInfo)
 {
-  auto geoCordsOffset = seerep::fb::CreateGeodeticCoordinatesDirect(
-      fbb, prjInfo.geodetCoords.coordinateSystem.c_str(), prjInfo.geodetCoords.ellipsoid.c_str(),
-      prjInfo.geodetCoords.longitude, prjInfo.geodetCoords.latitude, prjInfo.geodetCoords.altitude);
+  auto geoCordsOffset =
+      seerep::fb::CreateGeodeticCoordinatesDirect(fbb, prjInfo.geodetCoords.coordinateSystem.c_str(),
+                                                  prjInfo.geodetCoords.longitude, prjInfo.geodetCoords.latitude,
+                                                  prjInfo.geodetCoords.altitude);
 
   return seerep::fb::CreateProjectInfoDirect(fbb, prjInfo.name.c_str(),
                                              boost::lexical_cast<std::string>(prjInfo.uuid).c_str(),

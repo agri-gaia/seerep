@@ -23,7 +23,6 @@ grpc::Status FbMetaOperations::CreateProject(grpc::ServerContext* context,
 
   // extracting geodetic coordinates attribute information from flatbuffer and saving in seerep core msg struct
   projectInfo.geodetCoords.coordinateSystem = requestMsg->geodetic_position()->coordinateSystem()->str();
-  projectInfo.geodetCoords.ellipsoid = requestMsg->geodetic_position()->ellipsoid()->str();
   projectInfo.geodetCoords.longitude = requestMsg->geodetic_position()->longitude();
   projectInfo.geodetCoords.latitude = requestMsg->geodetic_position()->latitude();
   projectInfo.geodetCoords.altitude = requestMsg->geodetic_position()->altitude();
