@@ -19,7 +19,6 @@ JsonPointDumper::JsonPointDumper(const std::string& filePath, const std::string&
   geoCoordinates.latitude = 0.0;
   geoCoordinates.longitude = 0.0;
   geoCoordinates.altitude = 0.0;
-  geoCoordinates.ellipsoid = "WGS84";
   geoCoordinates.coordinateSystem = "EPSG:32632";
   ioCoreGeneral->writeGeodeticLocation(geoCoordinates);
 

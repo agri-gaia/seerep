@@ -82,7 +82,6 @@ void RosbagDumper::getGeoAnchor()
       geoCoordinates.latitude = msg->position.latitude;
       geoCoordinates.longitude = msg->position.longitude;
       geoCoordinates.altitude = msg->position.altitude;
-      geoCoordinates.ellipsoid = "";
       geoCoordinates.coordinateSystem = "";
       ioCoreGeneral->writeGeodeticLocation(geoCoordinates);
     }

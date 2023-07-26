@@ -8,7 +8,6 @@ namespace seerep_core_msgs
 struct GeodeticCoordinates
 {
   std::string coordinateSystem;
-  std::string ellipsoid;
 
   double altitude;
   double latitude;

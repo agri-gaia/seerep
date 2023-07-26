@@ -24,7 +24,6 @@ grpc::Status PbMetaOperations::CreateProject(grpc::ServerContext* context, const
 
     // assigning geodetic coords attributes individually
     projectInfo.geodetCoords.coordinateSystem = request->geodeticcoordinates().coordinatesystem();
-    projectInfo.geodetCoords.ellipsoid = request->geodeticcoordinates().ellipsoid();
     projectInfo.geodetCoords.altitude = request->geodeticcoordinates().altitude();
     projectInfo.geodetCoords.latitude = request->geodeticcoordinates().latitude();
     projectInfo.geodetCoords.longitude = request->geodeticcoordinates().longitude();
@@ -74,7 +73,6 @@ grpc::Status PbMetaOperations::GetProjects(grpc::ServerContext* context, const g
       // assigning geodetic coords attributes individually
       responseProjectInfo->mutable_geodeticcoordinates()->set_coordinatesystem(
           projectInfo.geodetCoords.coordinateSystem);
-      responseProjectInfo->mutable_geodeticcoordinates()->set_ellipsoid(projectInfo.geodetCoords.ellipsoid);
       responseProjectInfo->mutable_geodeticcoordinates()->set_altitude(projectInfo.geodetCoords.altitude);
       responseProjectInfo->mutable_geodeticcoordinates()->set_latitude(projectInfo.geodetCoords.latitude);
       responseProjectInfo->mutable_geodeticcoordinates()->set_longitude(projectInfo.geodetCoords.longitude);
