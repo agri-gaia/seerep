@@ -21,6 +21,7 @@ find_package(
              sensor_msgs
              roscpp
              rosbag
+             cv_bridge
              tf
 )
 

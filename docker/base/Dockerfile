@@ -34,6 +34,8 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         libfile-pushd-perl \
         ros-noetic-vision-msgs \
         ros-noetic-geographic-msgs \
+        ros-noetic-cv-bridge \
+        ros-noetic-vision-opencv \
         libgeographic-dev \
         libfile-pushd-perl \
         python3-pip \

@@ -7,7 +7,13 @@
 #include <rosbag/bag.h>
 #include <rosbag/view.h>
 #include <sensor_msgs/CameraInfo.h>
+#include <sensor_msgs/CompressedImage.h>
 #include <tf2_msgs/TFMessage.h>
+
+/* opencv includes */
+#include <cv_bridge/cv_bridge.h>
+
+#include <opencv2/opencv.hpp>
 
 /* SEEREP storage interfaces */
 #include <seerep_hdf5_core/hdf5_core_general.h>
@@ -34,8 +40,11 @@ public:
   RosbagDumper(const std::filesystem::path& bag_path, const std::filesystem::path& hdf5_path,
                const std::string& project_name, const std::string& project_frame);
   void iterateAndDumpTf(const std::string& tf_topic, const bool is_static = false);
-  void iterateAndDumpImage(const std::string& image_topic, const std::string& camera_info_topic);
+  void iterateAndDumpCompressedImage(const std::string& image_topic, const std::string& camera_info_topic);
   void dumpCameraIntrinsics(const std::string& camera_info_topic);
+
+  /* get all topics which a specifc type from the rosbag */
+  const std::vector<std::string> getAllTopics(const std::string& topic_type);
   ~RosbagDumper();
 
 private:
