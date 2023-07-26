@@ -4,10 +4,14 @@
     <arg name="hdf5_folder" default="/seerep/seerep-data"/>
     <arg name="project_frame" default="map"/>
     <arg name="project_name" default="testproject"/>
+    <arg name="tf_topic" default="/tf"/>
+    <arg name="tf_static_topic" default="/tf_static"/>
     <node name="seerep_ros_examples_rosbag_dumper" pkg="seerep_ros_examples" type="seerep_ros_examples_rosbag_dumper" output="screen">
         <rosparam param="bag_path" subst_value="True">$(arg bag_path)</rosparam>
         <rosparam param="hdf5_path" subst_value="True">$(arg hdf5_folder)</rosparam>
         <rosparam param="project_name" subst_value="True">$(arg project_name)</rosparam>
         <rosparam param="project_frame" subst_value="True">$(arg project_frame)</rosparam>
+        <rosparam param="tf_topic" subst_value="True">$(arg tf_topic)</rosparam>
+        <rosparam param="tf_static_topic" subst_value="True">$(arg tf_static_topic)</rosparam>
     </node>
 </launch>

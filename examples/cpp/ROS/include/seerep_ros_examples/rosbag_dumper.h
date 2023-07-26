@@ -39,16 +39,21 @@ public:
   ~RosbagDumper();
 
 private:
-  /* rosbag object to iterate over*/
+  /* Rosbag object to iterate over*/
   rosbag::Bag bag_;
 
-  /* io interface to handle common cases such as writing attributes */
+  /* Unique identifier for the genertated SEEREP project.
+   * Is also used as the filename of the HDF5 file
+   */
+  std::string project_uuid_;
+
+  /* IO interface to handle common cases such as writing attributes */
   std::shared_ptr<seerep_hdf5_core::Hdf5CoreGeneral> general_io_;
-  /* seerep hdf5 io interface to store camera intrinsics*/
+  /* SEEREP HDF5 IO interface to store camera intrinsics*/
   std::shared_ptr<seerep_hdf5_core::Hdf5CoreCameraIntrinsics> camera_intrinsics_io_;
-  // TODO: change to seerep_hdf5_ros storage interface when available
+  // TODO: Change to seerep_hdf5_ros storage interface when available
   std::shared_ptr<seerep_hdf5_fb::Hdf5FbImage> image_io_;
-  // TODO: change to seerep_hdf5_ros storage interface when available
+  // TODO: Change to seerep_hdf5_ros storage interface when available
   std::shared_ptr<seerep_hdf5_fb::Hdf5FbTf> tf_io_;
 };
 }  // namespace seerep_ros_examples

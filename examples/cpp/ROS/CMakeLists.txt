@@ -79,6 +79,7 @@ target_link_libraries(
   ${PROJECT_NAME}_rosbag_dumper
   ${SeerepHdf5Core_LIBRARIES}
   ${SeerepHdf5Fb_LIBRARIES}
+  ${seerep_ros_conversions_fb_LIBRARIES}
   ${Boost_LIBRARIES}
   ${Boost_LOG_LIBRARY}
   ${Boost_LOG_SETUP_LIBRARY}
