@@ -20,4 +20,5 @@ message Query
   uint32 maxNumData = 9;
   Polygon2D polygon = 10;
   bool fullyEncapsulated = 11;
+  bool inMapFrame = 12;
 }

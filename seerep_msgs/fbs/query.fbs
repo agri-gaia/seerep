@@ -18,4 +18,5 @@ table Query {
   withoutdata:bool;
   maxNumData:uint;
   fullyEncapsulated:bool;
+  inMapFrame:bool;
 }

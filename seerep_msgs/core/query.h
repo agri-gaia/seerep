@@ -25,6 +25,7 @@ struct Query
   bool withoutData;                                          ///< do not return the data itself if set
   uint maxNumData;                                           ///< max number of datasets that should be returned
   bool fullyEncapsulated;  // if true, only return results fully inside the polygon defined above
+  bool inMapFrame;         // if false the query polygon is in geodetic coordinates, otherwise in map frame
 };
 
 } /* namespace seerep_core_msgs */

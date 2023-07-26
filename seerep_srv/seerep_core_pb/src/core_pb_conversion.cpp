@@ -19,6 +19,7 @@ seerep_core_msgs::Query CorePbConversion::fromPb(const seerep::pb::Query& query,
   fromPbWithOutData(query, queryCore);
   fromFbQueryMaxNumData(query, queryCore);
   fromPbFullyEncapsulated(query, queryCore);
+  fromPbInMapFrame(query, queryCore);
 
   return queryCore;
 }
@@ -393,6 +394,11 @@ void CorePbConversion::fromPbBoundingBox(const seerep::pb::Query& query, seerep_
 void CorePbConversion::fromPbMustHaveAllLabels(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
 {
   queryCore.mustHaveAllLabels = query.musthavealllabels();
+}
+
+void CorePbConversion::fromPbInMapFrame(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
+{
+  queryCore.inMapFrame = query.inmapframe();
 }
 
 void CorePbConversion::fromPbFullyEncapsulated(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
