@@ -43,6 +43,7 @@ seerep_core_msgs::Query CoreFbConversion::fromFb(const seerep::fb::Query* query,
   queryCore.maxNumData = fromFbQueryMaxNumData(query);
   fromFbQueryPolygon(query, queryCore.polygon.value());
   queryCore.fullyEncapsulated = fromFbQueryFullyEncapsulated(query);
+  queryCore.inMapFrame = fromFbQueryInMapFrame(query);
 
   return queryCore;
 }
@@ -494,6 +495,16 @@ bool CoreFbConversion::fromFbQueryMustHaveAllLabels(const seerep::fb::Query* que
   if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_MUSTHAVEALLLABELS))
   {
     return query->mustHaveAllLabels();
+  }
+
+  return false;
+}
+
+bool CoreFbConversion::fromFbQueryInMapFrame(const seerep::fb::Query* query)
+{
+  if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_INMAPFRAME))
+  {
+    return query->inMapFrame();
   }
 
   return false;

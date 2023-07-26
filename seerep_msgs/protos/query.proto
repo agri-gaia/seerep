@@ -10,12 +10,13 @@ message Query
 {
   Polygon2D polygon = 1;
   bool fullyEncapsulated = 2;
-  TimeInterval timeinterval = 3;
-  repeated LabelsWithCategory labelsWithCategory = 4;
-  bool mustHaveAllLabels = 5;
-  repeated string projectuuid = 6;
-  repeated string instanceuuid = 7;
-  repeated string datauuid = 8;
-  bool withoutdata = 9;
-  uint32 maxNumData = 10;
+  bool inMapFrame = 3;
+  TimeInterval timeinterval = 4;
+  repeated LabelsWithCategory labelsWithCategory = 5;
+  bool mustHaveAllLabels = 6;
+  repeated string projectuuid = 7;
+  repeated string instanceuuid = 8;
+  repeated string datauuid = 9;
+  bool withoutdata = 10;
+  uint32 maxNumData = 11;
 }
