@@ -10,7 +10,23 @@ from seerep.fb import image_service_grpc_fb as imageService
 from seerep.fb import point_service_grpc_fb as pointService
 from seerep.fb import tf_service_grpc_fb as tfService
 from seerep.util.common import get_gRPC_channel
-from seerep.util.fb_helper import getOrCreateProject
+from seerep.util.fb_helper import (
+    createBoundingBox2d,
+    createBoundingBox2dLabeled,
+    createBoundingBox2DLabeledWithCategory,
+    createHeader,
+    createImage,
+    createLabelWithCategory,
+    createLabelWithInstance,
+    createPoint,
+    createPoint2d,
+    createPointStamped,
+    createQuaternion,
+    createTimeStamp,
+    createTransformStamped,
+    createVector3,
+    getOrCreateProject,
+)
 
 
 class LoadSimulatedDataWithInstancePosition:
@@ -66,16 +82,16 @@ class LoadSimulatedDataWithInstancePosition:
         pixelX = int(img.shape[1] * imageX)
         pixelY = int(img.shape[0] * imageY)
         position = pointCloudData[pixelY][pixelX]
-        point = util_fb.createPoint(builder, position[0], position[1], position[2])
+        point = createPoint(builder, position[0], position[1], position[2])
 
         labelGeneral = []
-        labelGeneral.append(util_fb.createLabelWithInstance(builder, label, 1.0, instanceUuid))
-        labelGeneralCategory = util_fb.createLabelWithCategory(builder, [self.labelCategory], [labelGeneral])
+        labelGeneral.append(createLabelWithInstance(builder, label, 1.0, instanceUuid))
+        labelGeneralCategory = createLabelWithCategory(builder, [self.labelCategory], [labelGeneral])
 
-        timestamp = util_fb.createTimeStamp(builder, time)
-        header = util_fb.createHeader(builder, timestamp, frame, self.projectUuid)
+        timestamp = createTimeStamp(builder, time)
+        header = createHeader(builder, timestamp, frame, self.projectUuid)
 
-        pointStamped = util_fb.createPointStamped(builder, point, header, labelGeneralCategory)
+        pointStamped = createPointStamped(builder, point, header, labelGeneralCategory)
         builder.Finish(pointStamped)
 
         self.points.append(bytes(builder.Output()))
@@ -90,14 +106,12 @@ class LoadSimulatedDataWithInstancePosition:
             print("uuid: " + instanceUuid)
 
             label = self.labelSwitch.get(int(round(labelFloat)))
-            labelWithInstance = util_fb.createLabelWithInstance(builder, label, 1.0, instanceUuid)
-            centerPoint = util_fb.createPoint2d(builder, x, y)
-            spatialExtent = util_fb.createPoint2d(builder, xExtent, yExtent)
-            boundingBox2D = util_fb.createBoundingBox2d(builder, centerPoint, spatialExtent)
+            labelWithInstance = createLabelWithInstance(builder, label, 1.0, instanceUuid)
+            centerPoint = createPoint2d(builder, x, y)
+            spatialExtent = createPoint2d(builder, xExtent, yExtent)
+            boundingBox2D = createBoundingBox2d(builder, centerPoint, spatialExtent)
 
-            boundingBox2dLabeledVector.append(
-                util_fb.createBoundingBox2dLabeled(builder, labelWithInstance, boundingBox2D)
-            )
+            boundingBox2dLabeledVector.append(createBoundingBox2dLabeled(builder, labelWithInstance, boundingBox2D))
 
             if instanceUuid not in self.instanceUuidSet:
                 self.__createPointForInstance(pointCloudData, instanceUuid, label, x, y, time, frame, img)
@@ -105,7 +119,7 @@ class LoadSimulatedDataWithInstancePosition:
         categoryString = builder.CreateString(self.labelCategory)
         boundingBox2dCategoryVector = []
         boundingBox2dCategoryVector.append(
-            util_fb.createBoundingBox2DLabeledWithCategory(self.builder, categoryString, boundingBox2dLabeledVector)
+            createBoundingBox2DLabeledWithCategory(self.builder, categoryString, boundingBox2dLabeledVector)
         )
         return boundingBox2dCategoryVector
 
@@ -140,10 +154,10 @@ class LoadSimulatedDataWithInstancePosition:
                 bb2dWithCategory = self.__createBoundingBox2dCategory(
                     self.builder, baseAnnotationPath, basePointcloudPath, timeThisIteration, self.CAMERA_FRAME, img
                 )
-                timestamp = util_fb.createTimeStamp(self.builder, timeThisIteration)
-                header = util_fb.createHeader(self.builder, timestamp, self.CAMERA_FRAME, self.projectUuid)
+                timestamp = createTimeStamp(self.builder, timeThisIteration)
+                header = createHeader(self.builder, timestamp, self.CAMERA_FRAME, self.projectUuid)
 
-                imageMsg = util_fb.createImage(self.builder, img, header, self.IMAGE_ENCODING, bb2dWithCategory)
+                imageMsg = createImage(self.builder, img, header, self.IMAGE_ENCODING, bb2dWithCategory)
 
                 self.builder.Finish(imageMsg)
                 yield bytes(self.builder.Output())
@@ -155,10 +169,10 @@ class LoadSimulatedDataWithInstancePosition:
 
         r = calib_e[:3, :3]
         quat = quaternion.from_rotation_matrix(r)
-        rotation = util_fb.createQuaternion(builder, quat)
+        rotation = createQuaternion(builder, quat)
 
         t = calib_e[:3, -1]
-        translation = util_fb.createVector3(builder, t)
+        translation = createVector3(builder, t)
 
         Transform.Start(builder)
         Transform.AddTranslation(builder, translation)
@@ -177,9 +191,9 @@ class LoadSimulatedDataWithInstancePosition:
                 with open(baseFilePath + self.EXTRINSICS_FILE_EXTENSION, "r") as extrinsics:
                     try:
                         transform = self.__createTransformFromQuaternion(builder, extrinsics)
-                        timestamp = util_fb.createTimeStamp(builder, timeThisIteration)
-                        headerTf = util_fb.createHeader(builder, timestamp, self.MAP_FRAME, self.projectUuid)
-                        tf = util_fb.createTransformStamped(builder, self.CAMERA_FRAME, headerTf, transform)
+                        timestamp = createTimeStamp(builder, timeThisIteration)
+                        headerTf = createHeader(builder, timestamp, self.MAP_FRAME, self.projectUuid)
+                        tf = createTransformStamped(builder, self.CAMERA_FRAME, headerTf, transform)
 
                         builder.Finish(tf)
                         yield bytes(builder.Output())

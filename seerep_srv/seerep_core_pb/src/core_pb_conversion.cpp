@@ -87,7 +87,21 @@ seerep_core_msgs::DatasetIndexable CorePbConversion::fromPb(const seerep::pb::Im
   {
     for (auto labelsCategories : img.labels_bb())
     {
-      std::vector<seerep_core_msgs::LabelWithInstance> labelWithInstanceVector;
+      std::unique_ptr<LabelWithInstanceVec> labelWithInstanceVecPtr;
+
+      auto catMap = dataForIndices.labelsWithInstancesWithCategory.find(labelsCategories.category().c_str());
+      if (catMap != dataForIndices.labelsWithInstancesWithCategory.end())
+      {
+        labelWithInstanceVecPtr = std::make_unique<LabelWithInstanceVec>(catMap->second);
+      }
+      else
+      {
+        std::vector<seerep_core_msgs::LabelWithInstance> labelVector;
+        auto entry =
+            dataForIndices.labelsWithInstancesWithCategory.emplace(labelsCategories.category().c_str(), labelVector);
+        labelWithInstanceVecPtr = std::make_unique<LabelWithInstanceVec>(entry.first->second);
+      }
+
       if (!labelsCategories.boundingbox2dlabeled().empty())
       {
         for (auto label : labelsCategories.boundingbox2dlabeled())
@@ -103,14 +117,12 @@ seerep_core_msgs::DatasetIndexable CorePbConversion::fromPb(const seerep::pb::Im
             uuidInstance = boost::uuids::nil_uuid();
           }
 
-          labelWithInstanceVector.push_back(
+          labelWithInstanceVecPtr->push_back(
               seerep_core_msgs::LabelWithInstance{ .label = label.labelwithinstance().label().label(),
                                                    .labelConfidence = label.labelwithinstance().label().confidence(),
                                                    .uuidInstance = uuidInstance });
         }
       }
-      dataForIndices.labelsWithInstancesWithCategory.emplace(labelsCategories.category().c_str(),
-                                                             labelWithInstanceVector);
     }
   }
 
