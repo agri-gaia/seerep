@@ -59,10 +59,45 @@ const std::string CoreProject::getVersion()
   return m_version;
 }
 
-seerep_core_msgs::QueryResultProject CoreProject::getDataset(const seerep_core_msgs::Query& query)
+seerep_core_msgs::QueryResultProject CoreProject::getDataset(seerep_core_msgs::Query& query)
 {
   seerep_core_msgs::QueryResultProject result;
   result.projectUuid = m_uuid;
+
+  // has the user defined the query polygon in the same coordinate system as the coordinate sys of the project?
+  if (query.coordinateSystem != m_geodeticCoordinates.value().coordinateSystem)
+  {
+    // transform the polygon from its coordinate system to the coordinate system of the query
+    auto transformation = proj_create_crs_to_crs(0, m_geodeticCoordinates.value().coordinateSystem.c_str(),
+                                                 query.coordinateSystem.c_str(), 0);
+
+    // PJ_FWD: forward, PJ_IDENT: identity, PJ_INV: inverse
+    PJ_DIRECTION direction = PJ_FWD;
+
+    seerep_core_msgs::Polygon2D transformed_polygon;
+    transformed_polygon.height = query.polygon.value().height;
+    transformed_polygon.z = query.polygon.value().z;
+
+    for (seerep_core_msgs::Point2D p : query.polygon.value().vertices)
+    {
+      PJ_COORD c = proj_coord(p.get<0>(), p.get<1>(), NULL, NULL);
+      PJ_COORD t_coord = proj_trans(transformation, direction, c);
+
+      seerep_core_msgs::Point2D transformed_p;
+      p.set<0>(t_coord.xy.x);
+      p.set<1>(t_coord.xy.y);
+      transformed_polygon.vertices.push_back(transformed_p);
+    }
+
+    query.polygon.value() = transformed_polygon;
+  }
+
+  // is the query not in map frame?
+  if (!query.inMapFrame)
+  {
+    // perform an affine transform to transpose the query polygon to map frame
+  }
+
   result.dataOrInstanceUuids = m_coreDatasets->getData(m_coreTfs->transformQuery(query, m_frameId));
   return result;
 }

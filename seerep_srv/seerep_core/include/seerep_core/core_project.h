@@ -1,6 +1,8 @@
 #ifndef SEEREP_CORE_CORE_PROJECT_H_
 #define SEEREP_CORE_CORE_PROJECT_H_
 
+#include <proj.h>
+
 #include <boost/uuid/uuid.hpp>             // uuid class
 #include <boost/uuid/uuid_generators.hpp>  // generators
 #include <boost/uuid/uuid_io.hpp>          // streaming operators etc.
@@ -89,7 +91,7 @@ public:
    * @param query the spatio-temporal-semantic query
    * @return vector of UUIDs of images matching the query and the project UUID
    */
-  seerep_core_msgs::QueryResultProject getDataset(const seerep_core_msgs::Query& query);
+  seerep_core_msgs::QueryResultProject getDataset(seerep_core_msgs::Query& query);
 
   /**
    * @brief Returns a vector of UUIDs of instances that match the query and the project UUID

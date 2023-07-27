@@ -28,6 +28,7 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         vim \
         build-essential \
         pkg-config \
+        proj-bin \
         python3-catkin-tools \
         python3-osrf-pycommon \
         libfile-pushd-perl \
