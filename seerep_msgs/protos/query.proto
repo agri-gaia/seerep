@@ -21,4 +21,5 @@ message Query
   Polygon2D polygon = 10;
   bool fullyEncapsulated = 11;
   bool inMapFrame = 12;
+  string coordinateSystem = 13;
 }

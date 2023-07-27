@@ -24,8 +24,9 @@ struct Query
   std::optional<std::vector<boost::uuids::uuid>> dataUuids;  ///< only filter by data uuid if set
   bool withoutData;                                          ///< do not return the data itself if set
   uint maxNumData;                                           ///< max number of datasets that should be returned
-  bool fullyEncapsulated;  // if true, only return results fully inside the polygon defined above
-  bool inMapFrame;         // if false the query polygon is in geodetic coordinates, otherwise in map frame
+  bool fullyEncapsulated;        // if true, only return results fully inside the polygon defined above
+  bool inMapFrame;               // if false the query polygon is in geodetic coordinates, otherwise in map frame
+  std::string coordinateSystem;  // the geodetic coordinate system in which the polygon is defined
 };
 
 } /* namespace seerep_core_msgs */

@@ -44,6 +44,7 @@ seerep_core_msgs::Query CoreFbConversion::fromFb(const seerep::fb::Query* query,
   queryCore.maxNumData = fromFbQueryMaxNumData(query);
   fromFbQueryPolygon(query, queryCore.polygon.value());
   queryCore.fullyEncapsulated = fromFbQueryFullyEncapsulated(query);
+  queryCore.coordinateSystem = fromFbQueryCoordinateSystem(query);
   queryCore.inMapFrame = fromFbQueryInMapFrame(query);
 
   return queryCore;
@@ -519,6 +520,16 @@ bool CoreFbConversion::fromFbQueryWithoutData(const seerep::fb::Query* query)
   }
 
   return false;
+}
+
+std::string CoreFbConversion::fromFbQueryCoordinateSystem(const seerep::fb::Query* query)
+{
+  if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_COORDINATESYSTEM))
+  {
+    return query->coordinateSystem()->str();
+  }
+
+  return "";
 }
 
 bool CoreFbConversion::fromFbQueryMustHaveAllLabels(const seerep::fb::Query* query)

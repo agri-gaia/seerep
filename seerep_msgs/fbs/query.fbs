@@ -19,4 +19,5 @@ table Query {
   maxNumData:uint;
   fullyEncapsulated:bool;
   inMapFrame:bool;
+  coordinateSystem:string;
 }
