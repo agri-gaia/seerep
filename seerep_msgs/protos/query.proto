@@ -8,14 +8,14 @@ import "polygon2d.proto";
 
 message Query
 {
-  TimeInterval timeinterval = 2;
-  repeated LabelsWithCategory labelsWithCategory = 3;
-  bool mustHaveAllLabels = 4;
-  repeated string projectuuid = 5;
-  repeated string instanceuuid = 6;
-  repeated string datauuid = 7;
-  bool withoutdata = 8;
-  uint32 maxNumData = 9;
-  Polygon2D polygon = 10;
-  bool fullyEncapsulated = 11;
+  Polygon2D polygon = 1;
+  bool fullyEncapsulated = 2;
+  TimeInterval timeinterval = 3;
+  repeated LabelsWithCategory labelsWithCategory = 4;
+  bool mustHaveAllLabels = 5;
+  repeated string projectuuid = 6;
+  repeated string instanceuuid = 7;
+  repeated string datauuid = 8;
+  bool withoutdata = 9;
+  uint32 maxNumData = 10;
 }

@@ -7,6 +7,7 @@ namespace seerep.fb;
 
 table Query {
   polygon:Polygon2D;
+  fullyEncapsulated:bool;
   timeinterval:TimeInterval;
   label:[LabelsWithCategory];
   mustHaveAllLabels:bool;
@@ -15,5 +16,4 @@ table Query {
   datauuid:[string];
   withoutdata:bool;
   maxNumData:uint;
-  fullyEncapsulated:bool;
 }

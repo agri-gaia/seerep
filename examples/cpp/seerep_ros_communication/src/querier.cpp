@@ -100,7 +100,7 @@ int main(int argc, char** argv)
       private_nh.param<double>("point_max_y", maxy, 0.0) && private_nh.param<double>("point_max_z", maxz, 0.0))
   {
     query.mutable_polygon()->set_z(minz);
-    query.mutable_polygon()->set_z(maxz - minz);
+    query.mutable_polygon()->set_height(maxz - minz);
 
     seerep::pb::Point2D bottom_left, top_left, top_right, bottom_right;
 
@@ -116,11 +116,11 @@ int main(int argc, char** argv)
 
     top_right.set_x(minx);
     top_right.set_y(maxy);
-    query.mutable_polygon()->mutable_vertices()->AddAllocated(&top_left);
+    query.mutable_polygon()->mutable_vertices()->AddAllocated(&top_right);
 
     bottom_right.set_x(minx);
     bottom_right.set_y(maxy);
-    query.mutable_polygon()->mutable_vertices()->AddAllocated(&bottom_left);
+    query.mutable_polygon()->mutable_vertices()->AddAllocated(&bottom_right);
   }
   // temporal
   int mintime, maxtime;
