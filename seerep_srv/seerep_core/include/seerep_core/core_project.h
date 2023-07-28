@@ -86,6 +86,14 @@ public:
   const std::string getVersion();
 
   /**
+   * @brief transfrom provided polygon to map frame from geodetic coords
+   *
+   * @param p polygon
+   * @return seerep_core_msgs::Polygon2D polygon
+   */
+  seerep_core_msgs::Polygon2D transformToMapFrame(const seerep_core_msgs::Polygon2D polygon);
+
+  /**
    * @brief Returns a vector of UUIDs of datasets that match the query and the project UUID
    * @param query the spatio-temporal-semantic query
    * @return vector of UUIDs of images matching the query and the project UUID
