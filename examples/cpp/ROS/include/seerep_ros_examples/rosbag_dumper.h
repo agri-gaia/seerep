@@ -16,6 +16,7 @@
 #include <opencv2/opencv.hpp>
 
 /* SEEREP storage interfaces */
+#include <seerep_core_fb/core_fb_conversion.h>
 #include <seerep_hdf5_core/hdf5_core_general.h>
 #include <seerep_hdf5_fb/hdf5_fb_image.h>
 #include <seerep_hdf5_fb/hdf5_fb_tf.h>
@@ -25,8 +26,10 @@
 
 /* std */
 #include <filesystem>
+#include <optional>
 
 /* boost */
+#include <boost/algorithm/string/find.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>
@@ -34,20 +37,29 @@
 
 namespace seerep_ros_examples
 {
+
+using string_pair = std::pair<std::string, std::string>;
+
 class RosbagDumper
 {
 public:
   RosbagDumper(const std::filesystem::path& bag_path, const std::filesystem::path& hdf5_path,
                const std::string& project_name, const std::string& project_frame);
   void iterateAndDumpTf(const std::string& tf_topic, const bool is_static = false);
-  void iterateAndDumpCompressedImage(const std::string& image_topic, const std::string& camera_info_topic);
-  void dumpCameraIntrinsics(const std::string& camera_info_topic);
+  void iterateAndDumpCompressedImage(const std::string& image_topic, const std::string& camera_info_topic,
+                                     double viewing_distance);
+  std::optional<const std::string> matchingCameraInfoTopic(std::string image_topic,
+                                                           const std::vector<std::string> camera_info_topics);
 
   /* get all topics which a specifc type from the rosbag */
   const std::vector<std::string> getAllTopics(const std::string& topic_type);
   ~RosbagDumper();
 
 private:
+  /* match two topics */
+  const std::vector<string_pair> matchTopics(const std::vector<std::string>& first_topics,
+                                             const std::vector<std::string>& second_topics);
+
   /* Rosbag object to iterate over*/
   rosbag::Bag bag_;
 

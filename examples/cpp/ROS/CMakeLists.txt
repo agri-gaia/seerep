@@ -11,6 +11,7 @@ find_package(seerep_hdf5_ros REQUIRED)
 find_package(SeerepHdf5Fb REQUIRED)
 find_package(SeerepHdf5Core REQUIRED)
 find_package(SeerepCoreFb REQUIRED)
+find_package(SeerepCore REQUIRED)
 find_package(seerep_ros_conversions_fb REQUIRED)
 find_package(gRPC CONFIG REQUIRED)
 
@@ -80,6 +81,8 @@ target_link_libraries(
   ${PROJECT_NAME}_rosbag_dumper
   ${SeerepHdf5Core_LIBRARIES}
   ${SeerepHdf5Fb_LIBRARIES}
+  ${SeerepCoreFb_LIBRARIES}
+  ${SeerepCore_LIBRARIES}
   ${seerep_ros_conversions_fb_LIBRARIES}
   ${Boost_LIBRARIES}
   ${Boost_LOG_LIBRARY}

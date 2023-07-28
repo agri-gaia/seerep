@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <launch>
+    <!-- TODO iterate through dir of rosbags  -->
     <arg name="bag_path" default="/seerep/seerep-data/Fleming_250mm_Maize_Greenland_Evening_2023-06-13-18-03-25.bag"/>
     <arg name="hdf5_folder" default="/seerep/seerep-data"/>
     <arg name="project_frame" default="map"/>
@@ -8,6 +9,7 @@
     <arg name="tf_static_topic" default="/tf_static"/>
     <arg name="capture_all_image_topics" default="true"/>
     <arg name="capture_topics" default="['']"/>
+    <arg name="viewing_distance" default="10.0"/>
     <node name="seerep_ros_examples_rosbag_dumper" pkg="seerep_ros_examples" type="seerep_ros_examples_rosbag_dumper" output="screen">
         <rosparam param="bag_path" subst_value="True">$(arg bag_path)</rosparam>
         <rosparam param="hdf5_path" subst_value="True">$(arg hdf5_folder)</rosparam>
@@ -17,5 +19,6 @@
         <rosparam param="tf_static_topic" subst_value="True">$(arg tf_static_topic)</rosparam>
         <rosparam param="capture_all_image_topics" subst_value="True">$(arg capture_all_image_topics)</rosparam>
         <rosparam param="capture_topics" unless="$(arg capture_all_image_topics)" subst_value="True">$(arg capture_topics)</rosparam>
+        <rosparam param="viewing_distance" subst_value="True">$(arg viewing_distance)</rosparam>
     </node>
 </launch>
