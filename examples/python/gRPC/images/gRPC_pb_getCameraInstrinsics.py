@@ -3,7 +3,7 @@ from seerep.pb import camera_intrinsics_service_pb2_grpc as camintrinsics_servic
 from seerep.util.common import get_gRPC_channel
 
 
-def query_camintrinsics(projectuuid, ciuuid, grpc_channel=get_gRPC_channel()):
+def query_camintrins(projectuuid, ciuuid, grpc_channel=get_gRPC_channel()):
 
     stub = camintrinsics_service.CameraIntrinsicsServiceStub(grpc_channel)
 
@@ -16,3 +16,14 @@ def query_camintrinsics(projectuuid, ciuuid, grpc_channel=get_gRPC_channel()):
     fetched_camintrinsics = stub.GetCameraIntrinsics(ci_query)
     print(fetched_camintrinsics)
     return fetched_camintrinsics
+
+
+if __name__ == "__main__":
+    import sys
+
+    if len(sys.argv) > 2:
+        query_camintrins(sys.argv[1], sys.argv[2])
+    else:
+        print(
+            "Usage: python3 gRPC_pb_getCameraInstrinsics.py <project_uuid> <camera_intrinsics_uuid>"
+        )
