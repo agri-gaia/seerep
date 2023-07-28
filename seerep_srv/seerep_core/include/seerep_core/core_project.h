@@ -8,6 +8,7 @@
 #include <optional>
 
 // seerep-msgs
+#include <proj.h>
 #include <seerep_msgs/camera_intrinsics.h>
 #include <seerep_msgs/dataset_indexable.h>
 #include <seerep_msgs/geodetic_coordinates.h>
@@ -89,7 +90,7 @@ public:
    * @param query the spatio-temporal-semantic query
    * @return vector of UUIDs of images matching the query and the project UUID
    */
-  seerep_core_msgs::QueryResultProject getDataset(const seerep_core_msgs::Query& query);
+  seerep_core_msgs::QueryResultProject getDataset(seerep_core_msgs::Query& query);
 
   /**
    * @brief Returns a vector of UUIDs of instances that match the query and the project UUID
