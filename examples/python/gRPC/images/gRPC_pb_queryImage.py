@@ -38,6 +38,8 @@ theQuery.projectuuid.append(projectuuid)
 theQuery.polygon.z = -1
 theQuery.polygon.height = 7
 
+theQuery.inMapFrame = False
+
 l = 100
 bottom_left = point2d.Point2D()
 bottom_left.x = -l
