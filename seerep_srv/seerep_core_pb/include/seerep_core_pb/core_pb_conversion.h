@@ -123,12 +123,6 @@ private:
    */
   static void fromPbTime(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore);
   /**
-   * @brief converts the spatial part of the protobuf query message to seerep core specific message
-   * @param query the protobuf query message
-   * @param queryCore query message in seerep core format
-   */
-  static void fromPbBoundingBox(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore);
-  /**
    * @brief converts seerep probotbuf point2d to core msg point2d
    *
    * @param point protobuf point2d msg

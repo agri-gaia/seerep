@@ -11,16 +11,20 @@ grpc::Status PbImageService::GetImage(grpc::ServerContext* context, const seerep
                                       grpc::ServerWriter<seerep::pb::Image>* writer)
 {
   (void)context;  // ignore that variable without causing warnings
+  // print time bound to debug log
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
-      << "sending images in bounding box center_point("
-      << request->boundingboxstamped().boundingbox().center_point().x() << "/"
-      << request->boundingboxstamped().boundingbox().center_point().y() << "/"
-      << request->boundingboxstamped().boundingbox().center_point().z() << "), spatial_extent("
-      << request->boundingboxstamped().boundingbox().spatial_extent().x() << "/"
-      << request->boundingboxstamped().boundingbox().spatial_extent().y() << "/"
-      << request->boundingboxstamped().boundingbox().spatial_extent().z() << ")"
-      << " and time interval (" << request->timeinterval().time_min().seconds() << "/"
+      << "sending point cloud in time interval (" << request->timeinterval().time_min().seconds() << "/"
       << request->timeinterval().time_max().seconds() << ")";
+  // print polygon vertices to debug log
+  for (auto point : request->polygon().vertices())
+  {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
+        << "bounding box vertex (" << point.x() << ", " << point.y() << ") /";
+  }
+  // print polygon z value and height to debug log
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
+      << "bounding box z " << request->polygon().z() << " /"
+      << "bounding box height " << request->polygon().height() << " /";
 
   std::vector<seerep::pb::Image> images;
   try

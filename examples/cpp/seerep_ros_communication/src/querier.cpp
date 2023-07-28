@@ -99,12 +99,28 @@ int main(int argc, char** argv)
       private_nh.param<double>("point_min_z", minz, 0.0) && private_nh.param<double>("point_max_x", maxx, 0.0) &&
       private_nh.param<double>("point_max_y", maxy, 0.0) && private_nh.param<double>("point_max_z", maxz, 0.0))
   {
-    query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_center_point()->set_x(minx);
-    query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_center_point()->set_y(miny);
-    query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_center_point()->set_z(minz);
-    query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_spatial_extent()->set_x(maxx);
-    query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_spatial_extent()->set_y(maxy);
-    query.mutable_boundingboxstamped()->mutable_boundingbox()->mutable_spatial_extent()->set_z(maxz);
+    query.mutable_polygon()->set_z(minz);
+    query.mutable_polygon()->set_height(maxz - minz);
+
+    seerep::pb::Point2D bottom_left, top_left, top_right, bottom_right;
+
+    // the two min and max point need to be added separately to the polygon
+    // as 4 individial points, in a counter clockwise order
+    bottom_left.set_x(minx);
+    bottom_left.set_y(miny);
+    query.mutable_polygon()->mutable_vertices()->AddAllocated(&bottom_left);
+
+    top_left.set_x(minx);
+    top_left.set_y(maxy);
+    query.mutable_polygon()->mutable_vertices()->AddAllocated(&top_left);
+
+    top_right.set_x(minx);
+    top_right.set_y(maxy);
+    query.mutable_polygon()->mutable_vertices()->AddAllocated(&top_right);
+
+    bottom_right.set_x(minx);
+    bottom_right.set_y(maxy);
+    query.mutable_polygon()->mutable_vertices()->AddAllocated(&bottom_right);
   }
   // temporal
   int mintime, maxtime;

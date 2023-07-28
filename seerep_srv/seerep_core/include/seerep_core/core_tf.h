@@ -86,13 +86,6 @@ public:
                     const int64_t& timeNanos);
 
   /**
-   * @brief Transforms the spatial part of a query into the target frame
-   * @param query the query which spatial part should be transformed
-   * @param targetFrame the frame of the spatial part of the query after the transformation
-   * @return the query with the spatial part transformed in the target frame
-   */
-  seerep_core_msgs::Query transformQuery(const seerep_core_msgs::Query& query, std::string targetFrame);
-  /**
    * @brief Returns a vector of all frames stored in the TF tree by the TF buffer
    * @return vector of frame names
    */

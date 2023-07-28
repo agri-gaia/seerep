@@ -227,15 +227,6 @@ private:
   static void fromFbQueryTime(const seerep::fb::Query* query,
                               std::optional<seerep_core_msgs::Timeinterval>& queryCoreTime);
   /**
-   * @brief converts the spatial part of the flatbuffer query message to seerep core specific message
-   * @param query the flatbuffer query message
-   * @param queryCoreBoundingBox the bounding box in the query message in seerep core format
-   * @param queryCoreHeaderFrameId the frame id in the header of the query message in the seerep core format
-   */
-  static void fromFbQueryBoundingBox(const seerep::fb::Query* query,
-                                     std::optional<seerep_core_msgs::AABB>& queryCoreBoundingBox,
-                                     std::string& queryCoreHeaderFrameId);
-  /**
    * @brief extracts the WithoutData Flag of the flatbuffer query message
    * @param query the flatbuffer query message
    * @return flag if the data should NOT be loaded
