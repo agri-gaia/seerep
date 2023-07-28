@@ -14,7 +14,7 @@ Core::~Core()
 {
 }
 
-seerep_core_msgs::QueryResult Core::getDataset(const seerep_core_msgs::Query& query)
+seerep_core_msgs::QueryResult Core::getDataset(seerep_core_msgs::Query& query)
 {
   // search all projects
   if (!query.projects)
@@ -262,7 +262,7 @@ Core::findProject(const boost::uuids::uuid& projectuuid)
   }
 }
 
-seerep_core_msgs::QueryResult Core::getDatasetFromAllProjects(const seerep_core_msgs::Query& query)
+seerep_core_msgs::QueryResult Core::getDatasetFromAllProjects(seerep_core_msgs::Query& query)
 {
   seerep_core_msgs::QueryResult result;
   for (auto& it : m_projects)
@@ -272,7 +272,7 @@ seerep_core_msgs::QueryResult Core::getDatasetFromAllProjects(const seerep_core_
   }
   return checkSize(result, query.maxNumData);
 }
-seerep_core_msgs::QueryResult Core::getDatasetFromSpecificProjects(const seerep_core_msgs::Query& query)
+seerep_core_msgs::QueryResult Core::getDatasetFromSpecificProjects(seerep_core_msgs::Query& query)
 {
   seerep_core_msgs::QueryResult result;
   for (auto projectuuid : query.projects.value())
