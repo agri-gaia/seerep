@@ -51,7 +51,8 @@ def retrieve_server_params(request):
 # provide a instance of the grpc_channel to the tests
 @pytest.fixture(scope="session")
 def grpc_channel(retrieve_server_params):
-    yield get_gRPC_channel(f"localhost:{retrieve_server_params}")
+    channel = get_gRPC_channel(f"localhost:{retrieve_server_params}")
+    yield channel
 
 
 # this fixture depends on working project creation and deletion

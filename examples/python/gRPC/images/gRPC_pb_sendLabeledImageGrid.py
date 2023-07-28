@@ -5,9 +5,10 @@ import time
 import uuid
 from typing import List, Tuple
 
-# todo: fix imports such that this script can be run seperately from pytest
-import gRPC.images.gRPC_fb_addCameraIntrinsics as camintrins_uuid
+import flatbuffers
 import numpy as np
+from seerep.fb import CameraIntrinsics
+from seerep.fb import camera_intrinsics_service_grpc_fb as ci_service
 from seerep.pb import boundingbox2d_labeled_pb2 as boundingbox2d_labeled
 from seerep.pb import (
     boundingbox2d_labeled_with_category_pb2 as boundingbox2d_labeled_with_category,
@@ -25,8 +26,14 @@ from seerep.pb import projectCreation_pb2 as projectCreation
 from seerep.pb import tf_service_pb2_grpc as tfService
 from seerep.pb import transform_stamped_pb2 as tf
 from seerep.util.common import get_gRPC_channel
-
-# import gRPC_fb_addCameraIntrinsics as camintrins_uuid
+from seerep.util.fb_helper import (
+    createCameraIntrinsics,
+    createCameraIntrinsicsQuery,
+    createHeader,
+    createRegionOfInterest,
+    createTimeStamp,
+    getProject,
+)
 
 
 def send_labeled_image_grid(
@@ -50,7 +57,7 @@ def send_labeled_image_grid(
     # A valid camera intrinsics UUID is needed here for succesful storage of Images
     # Add new Camera Intrinsics
 
-    ciuuid = camintrins_uuid.get_ciuuid(grpc_channel, target_proj_uuid)
+    ciuuid = add_camintrins(grpc_channel, target_proj_uuid)
     print("Camera Intrinsics will be saved against the uuid: ", ciuuid)
 
     camin = cameraintrinsics.CameraIntrinsics()
@@ -197,6 +204,57 @@ def send_labeled_image_grid(
             # transfer tf
             stubTf.TransferTransformStamped(theTf)
     return grid_imgs
+
+
+def add_camintrins(grpc_channel=get_gRPC_channel(), target_proj_uuid=None):
+
+    builder = flatbuffers.Builder(1000)
+
+    # 1. Get all projects from the server when no target specified
+    if not target_proj_uuid:
+        target_proj_uuid = getProject(builder, grpc_channel, "testproject")
+
+    ciuuid = str(uuid.uuid4())
+    print("Camera Intrinsics will be saved against the uuid:", ciuuid)
+
+    # 2. Check if the defined project exist; if not exit
+    if not target_proj_uuid:
+        print("project doesn't exist!")
+        exit()
+
+    # 3. Get gRPC service object
+    stub = ci_service.CameraIntrinsicsServiceStub(grpc_channel)
+
+    # Create all necessary objects for the query
+    ts = createTimeStamp(builder, 4, 3)
+    header = createHeader(builder, ts, "map", target_proj_uuid, ciuuid)
+    roi = createRegionOfInterest(builder, 3, 5, 6, 7, True)
+
+    matrix = [4, 5, 6]
+    ci = createCameraIntrinsics(
+        builder, header, 3, 4, "plump_bob", matrix, matrix, matrix, matrix, 4, 5, roi, 5
+    )
+    builder.Finish(ci)
+
+    buf = builder.Output()
+
+    stub.TransferCameraIntrinsics(bytes(buf))
+
+    # Fetch the saved CI
+    builder = flatbuffers.Builder(1000)
+
+    ci_query = createCameraIntrinsicsQuery(builder, ciuuid, target_proj_uuid)
+
+    builder.Finish(ci_query)
+    buf = builder.Output()
+
+    ret = stub.GetCameraIntrinsics(bytes(buf))
+
+    retrieved_ci = CameraIntrinsics.CameraIntrinsics.GetRootAs(ret)
+
+    # printing the uuid of the retrieved camera intrinsics
+    print(retrieved_ci.Header().UuidMsgs().decode("utf-8"))
+    return ciuuid
 
 
 if __name__ == "__main__":

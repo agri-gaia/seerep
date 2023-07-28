@@ -17,7 +17,7 @@ from seerep.util.fb_helper import (
 
 
 # Default server is localhost !
-def get_ciuuid(grpc_channel=get_gRPC_channel(), target_proj_uuid=None):
+def add_camintrins(grpc_channel=get_gRPC_channel(), target_proj_uuid=None):
 
     builder = flatbuffers.Builder(1000)
 
