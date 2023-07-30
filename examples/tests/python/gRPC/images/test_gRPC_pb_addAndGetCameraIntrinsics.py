@@ -3,8 +3,24 @@
 #  gRPC_pb_getCameraIntrinsics.py
 import logging
 
-from gRPC.images import grpc_pb_addCameraIntrinsics as add_intrinsics
-from gRPC.images import grpc_pb_getCameraIntrinsics as get_intrinsics
+from gRPC.images import gRPC_pb_addCameraIntrinsics as add_intrinsics
+from gRPC.images import gRPC_pb_getCameraIntrinsics as get_intrinsics
+
+
+def protobuf_obj_to_dict(obj, d=None):
+    if d is None:
+        d = {}
+    for descriptor in obj.DESCRIPTOR.fields:
+        val = getattr(obj, descriptor.name)
+        if descriptor.type == descriptor.TYPE_MESSAGE:
+            inner_dict = {}
+            d[descriptor.name] = inner_dict
+            protobuf_obj_to_dict(val, inner_dict)
+        elif descriptor.type == descriptor.TYPE_ENUM:
+            d[descriptor.name] = descriptor.enum_type.values_by_number[val].name
+        else:
+            d[descriptor.name] = getattr(obj, descriptor.name)
+    return d
 
 
 def test_gRPC_pb_addAndGetCamins(grpc_channel, project_setup):
@@ -17,9 +33,6 @@ def test_gRPC_pb_addAndGetCamins(grpc_channel, project_setup):
         proj_uuid, sent_intrinsics.header.uuid_msgs, grpc_channel
     )
 
-    assert len(sent_intrinsics) == len(queried_intrinsics)
-    sent_intrinsics = sorted(sent_intrinsics, key=lambda i: i.header.uuid_msgs)
-    queried_intrinsics = sorted(queried_intrinsics, key=lambda i: i.header.uuid_msgs)
-    for idx, intrinsics in enumerate(queried_intrinsics):
-        assert sent_intrinsics[idx].header.uuid_msgs == intrinsics.header.uuid_msgs
-        assert sent_intrinsics[idx].cameraIntrinsics == intrinsics.cameraIntrinsics
+    assert protobuf_obj_to_dict(sent_intrinsics) == protobuf_obj_to_dict(
+        queried_intrinsics
+    )

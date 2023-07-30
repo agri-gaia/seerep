@@ -5,9 +5,9 @@
 #   gRPC.util.fb_helper.createProjectInfo
 
 import flatbuffers
+import seerep.util.fb_helper as fb_helper
 from gRPC.meta import gRPC_pb_createProject as project_creation
 from gRPC.meta import gRPC_pb_getProjects as projects_query
-from gRPC.util import fb_helper
 
 
 def test_gRPC_pb_createProjectAndGetProjects(grpc_channel):

@@ -7,9 +7,9 @@ from google.protobuf import empty_pb2
 from seerep.pb import image_pb2 as image
 from seerep.pb import image_service_pb2_grpc as imageService
 from seerep.pb import label_pb2
-from seerep.pb import point2d_pb2 as point2d
 from seerep.pb import labels_with_category_pb2 as labels_with_category
 from seerep.pb import meta_operations_pb2_grpc as metaOperations
+from seerep.pb import point2d_pb2 as point2d
 from seerep.pb import query_pb2 as query
 from seerep.util.common import get_gRPC_channel
 
@@ -30,7 +30,6 @@ def query_image_grid(
 
         if target_project_uuid == "":
             sys.exit()
-
 
     theQuery = query.Query()
     theQuery.projectuuid.append(target_project_uuid)

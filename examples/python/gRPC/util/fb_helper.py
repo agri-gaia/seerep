@@ -175,7 +175,7 @@ def getOrCreateProject(
 
 
 def createEmpty(builder):
-    '''Create an empty flatbuffer'''
+    """Create an empty flatbuffer"""
     Empty.Start(builder)
     emptyMsg = Empty.End(builder)
     builder.Finish(emptyMsg)
@@ -409,7 +409,7 @@ def createBoundingBox(builder, centerPoint, spatialExtent, rotation=None):
 
 
 def createPolygon2D(builder, height, z, vertices):
-    '''Create a 2D Polygon in flatbuffers'''
+    """Create a 2D Polygon in flatbuffers"""
 
     Polygon2D.StartVerticesVector(builder, len(vertices))
     for v in vertices:
@@ -425,7 +425,7 @@ def createPolygon2D(builder, height, z, vertices):
 
 
 def createPolygon2D(builder, height, z, vertices):
-    '''Create a 2D Polygon in flatbuffers'''
+    """Create a 2D Polygon in flatbuffers"""
 
     Polygon2D.StartVerticesVector(builder, len(vertices))
     for v in vertices:
@@ -440,8 +440,10 @@ def createPolygon2D(builder, height, z, vertices):
     return Polygon2D.End(builder)
 
 
-def createBoundingBoxStamped(builder, header, centerPoint, spatialExtent, rotation=None):
-    '''Creates a stamped 3D bounding box in flatbuffers'''
+def createBoundingBoxStamped(
+    builder, header, centerPoint, spatialExtent, rotation=None
+):
+    """Creates a stamped 3D bounding box in flatbuffers"""
     boundingBox = createBoundingBox(builder, centerPoint, spatialExtent, rotation)
     BoundingboxStamped.Start(builder)
     BoundingboxStamped.AddHeader(builder, header)

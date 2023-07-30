@@ -163,7 +163,9 @@ def send_labeled_image_grid(
                 theImage.labels_bb.append(bbCat)
 
             # # 6. Add general labels to the image
-            labelsCat = labels_with_instance_with_category.LabelsWithInstanceWithCategory()
+            labelsCat = (
+                labels_with_instance_with_category.LabelsWithInstanceWithCategory()
+            )
             labelsCat.category = str(iCategory)
             for i in range(0, 2):
                 label = labelWithInstance.LabelWithInstance()
