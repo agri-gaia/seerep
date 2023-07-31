@@ -59,10 +59,55 @@ const std::string CoreProject::getVersion()
   return m_version;
 }
 
-seerep_core_msgs::QueryResultProject CoreProject::getDataset(const seerep_core_msgs::Query& query)
+seerep_core_msgs::Polygon2D CoreProject::transformToMapFrame(const seerep_core_msgs::Polygon2D polygon)
+{
+  seerep_core_msgs::GeodeticCoordinates g = m_geodeticCoordinates.value();
+
+  // https://proj.org/en/9.2/operations/conversions/topocentric.html
+  // the proj pipeline has two steps, convert geodesic to cartesian coordinates
+  // then project to topocentric coordinates
+  std::string proj_pipeline = "step +proj=cartesian +ellps=" + g.coordinateSystem + " \nstep +proj=topocentric +ellps" +
+                              g.coordinateSystem + "+lon_0=" + std::to_string(g.longitude) +
+                              "lat_0=" + std::to_string(g.latitude) + "h_0=" + std::to_string(g.altitude);
+
+  // PJ_FWD: forward, PJ_IDENT: identity, PJ_INV: inverse
+  PJ_DIRECTION direction = PJ_FWD;
+
+  seerep_core_msgs::Polygon2D transformed_polygon;
+
+  // perform an affine transform to transpose the query polygon to map frame
+  // the first argument of 0 is the thread context, the second is the pipeline string created above
+  auto to_topographic = proj_create(0, proj_pipeline.c_str());
+
+  // we traverse the polygon and apply the transform
+  for (seerep_core_msgs::Point2D p : polygon.vertices)
+  {
+    PJ_COORD c = proj_coord(p.get<0>(), p.get<1>(), NULL, NULL);
+    PJ_COORD t_coord = proj_trans(to_topographic, direction, c);
+
+    seerep_core_msgs::Point2D transformed_p;
+    p.set<0>(t_coord.xy.x);
+    p.set<1>(t_coord.xy.y);
+    transformed_polygon.vertices.push_back(transformed_p);
+  }
+
+  transformed_polygon.z = polygon.z - g.altitude;
+  transformed_polygon.height = polygon.height;
+
+  return transformed_polygon;
+}
+
+seerep_core_msgs::QueryResultProject CoreProject::getDataset(seerep_core_msgs::Query& query)
 {
   seerep_core_msgs::QueryResultProject result;
   result.projectUuid = m_uuid;
+
+  // is the query not in map frame?
+  if (query.polygon && !query.inMapFrame)
+  {
+    query.polygon.value() = transformToMapFrame(query.polygon.value());
+  }
+
   result.dataOrInstanceUuids = m_coreDatasets->getData(query);
   return result;
 }

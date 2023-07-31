@@ -484,7 +484,6 @@ void Hdf5CoreGeneral::writeGeodeticLocation(const seerep_core_msgs::GeodeticCoor
       !m_file->hasAttribute(GEODETICLOCATION_LONGITUDE))
   {
     m_file->createAttribute<std::string>(GEODETICLOCATION_COORDINATESYSTEM, geocoords.coordinateSystem);
-    m_file->createAttribute<std::string>(GEODETICLOCATION_ELLIPSOID, geocoords.ellipsoid);
     m_file->createAttribute<double>(GEODETICLOCATION_ALTITUDE, geocoords.altitude);
     m_file->createAttribute<double>(GEODETICLOCATION_LATITUDE, geocoords.latitude);
     m_file->createAttribute<double>(GEODETICLOCATION_LONGITUDE, geocoords.longitude);
@@ -492,7 +491,6 @@ void Hdf5CoreGeneral::writeGeodeticLocation(const seerep_core_msgs::GeodeticCoor
   else
   {
     m_file->getAttribute(GEODETICLOCATION_COORDINATESYSTEM).write(geocoords.coordinateSystem);
-    m_file->getAttribute(GEODETICLOCATION_ELLIPSOID).write(geocoords.ellipsoid);
     m_file->getAttribute(GEODETICLOCATION_ALTITUDE).write(geocoords.altitude);
     m_file->getAttribute(GEODETICLOCATION_LATITUDE).write(geocoords.latitude);
     m_file->getAttribute(GEODETICLOCATION_LONGITUDE).write(geocoords.longitude);
@@ -508,7 +506,6 @@ std::optional<seerep_core_msgs::GeodeticCoordinates> Hdf5CoreGeneral::readGeodet
   try
   {
     m_file->getAttribute(GEODETICLOCATION_COORDINATESYSTEM).read(geocoords.coordinateSystem);
-    m_file->getAttribute(GEODETICLOCATION_ELLIPSOID).read(geocoords.ellipsoid);
     m_file->getAttribute(GEODETICLOCATION_ALTITUDE).read(geocoords.altitude);
     m_file->getAttribute(GEODETICLOCATION_LATITUDE).read(geocoords.latitude);
     m_file->getAttribute(GEODETICLOCATION_LONGITUDE).read(geocoords.longitude);

@@ -57,7 +57,7 @@ public:
    * @param query the spatio-temporal-semantic query
    * @return vector of UUIDs of datasets matching the query per project
    */
-  seerep_core_msgs::QueryResult getDataset(const seerep_core_msgs::Query& query);
+  seerep_core_msgs::QueryResult getDataset(seerep_core_msgs::Query& query);
 
   /**
    * @brief Returns a vector of UUIDs of instances that match the query and the project UUID
@@ -212,14 +212,14 @@ private:
    * @param query the query with the query parameters
    * @return the query result
    */
-  seerep_core_msgs::QueryResult getDatasetFromAllProjects(const seerep_core_msgs::Query& query);
+  seerep_core_msgs::QueryResult getDatasetFromAllProjects(seerep_core_msgs::Query& query);
 
   /**
    * @brief Applies the query on the specified projects
    * @param query the query with the query parameters
    * @return the query result
    */
-  seerep_core_msgs::QueryResult getDatasetFromSpecificProjects(const seerep_core_msgs::Query& query);
+  seerep_core_msgs::QueryResult getDatasetFromSpecificProjects(seerep_core_msgs::Query& query);
 
   /**
    * @brief Adds a dataset to the result set

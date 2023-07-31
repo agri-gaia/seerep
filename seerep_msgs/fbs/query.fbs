@@ -8,6 +8,7 @@ namespace seerep.fb;
 table Query {
   polygon:Polygon2D;
   fullyEncapsulated:bool;
+  inMapFrame:bool;
   timeinterval:TimeInterval;
   label:[LabelsWithCategory];
   mustHaveAllLabels:bool;

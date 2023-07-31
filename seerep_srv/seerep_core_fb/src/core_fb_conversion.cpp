@@ -43,6 +43,7 @@ seerep_core_msgs::Query CoreFbConversion::fromFb(const seerep::fb::Query* query,
   queryCore.maxNumData = fromFbQueryMaxNumData(query);
   fromFbQueryPolygon(query, queryCore.polygon.value());
   queryCore.fullyEncapsulated = fromFbQueryFullyEncapsulated(query);
+  queryCore.inMapFrame = fromFbQueryInMapFrame(query);
 
   return queryCore;
 }
@@ -384,9 +385,10 @@ flatbuffers::Offset<seerep::fb::TimeInterval> CoreFbConversion::toFb(flatbuffers
 flatbuffers::Offset<seerep::fb::ProjectInfo> CoreFbConversion::toFb(flatbuffers::grpc::MessageBuilder& fbb,
                                                                     const seerep_core_msgs::ProjectInfo& prjInfo)
 {
-  auto geoCordsOffset = seerep::fb::CreateGeodeticCoordinatesDirect(
-      fbb, prjInfo.geodetCoords.coordinateSystem.c_str(), prjInfo.geodetCoords.ellipsoid.c_str(),
-      prjInfo.geodetCoords.longitude, prjInfo.geodetCoords.latitude, prjInfo.geodetCoords.altitude);
+  auto geoCordsOffset =
+      seerep::fb::CreateGeodeticCoordinatesDirect(fbb, prjInfo.geodetCoords.coordinateSystem.c_str(),
+                                                  prjInfo.geodetCoords.longitude, prjInfo.geodetCoords.latitude,
+                                                  prjInfo.geodetCoords.altitude);
 
   return seerep::fb::CreateProjectInfoDirect(fbb, prjInfo.name.c_str(),
                                              boost::lexical_cast<std::string>(prjInfo.uuid).c_str(),
@@ -494,6 +496,16 @@ bool CoreFbConversion::fromFbQueryMustHaveAllLabels(const seerep::fb::Query* que
   if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_MUSTHAVEALLLABELS))
   {
     return query->mustHaveAllLabels();
+  }
+
+  return false;
+}
+
+bool CoreFbConversion::fromFbQueryInMapFrame(const seerep::fb::Query* query)
+{
+  if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_INMAPFRAME))
+  {
+    return query->inMapFrame();
   }
 
   return false;
