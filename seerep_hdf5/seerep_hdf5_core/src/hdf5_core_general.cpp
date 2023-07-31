@@ -334,6 +334,15 @@ void Hdf5CoreGeneral::writeLabelsGeneral(
   m_file->flush();
 }
 
+const std::string Hdf5CoreGeneral::tf2_frame_id(std::string frame_id)
+{
+  if (!frame_id.empty() && frame_id.at(0) == '/')
+  {
+    return frame_id.erase(0, 1);
+  }
+  return frame_id;
+}
+
 void Hdf5CoreGeneral::writeAABB(
     const std::string& datatypeGroup, const std::string& uuid,
     const boost::geometry::model::box<boost::geometry::model::point<float, 3, boost::geometry::cs::cartesian>>& aabb)

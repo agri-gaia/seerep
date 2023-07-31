@@ -85,6 +85,15 @@ public:
    */
   template <class T>
   void writeHeader(HighFive::AnnotateTraits<T>& object, seerep_core_msgs::Header header);
+
+  /*
+   * @brief Corrects a frame_id to be valid for tf2.
+   *
+   * @param [in] frame_id frame_id to check
+   * @param [out] frame_id which complies with tf2
+   */
+  const std::string tf2_frame_id(std::string frame_id);
+
   /**
    * @brief Read header from a group within an hd5f file
    *
