@@ -66,33 +66,13 @@ std::string Hdf5CoreGeneral::readProjectname()
 
 void Hdf5CoreGeneral::writeProjectFrameId(const std::string& frameId)
 {
-  const std::scoped_lock lock(*m_write_mtx);
-
-  if (!m_file->hasAttribute(PROJECTFRAMEID))
-  {
-    m_file->createAttribute<std::string>(PROJECTFRAMEID, frameId);
-  }
-  else
-  {
-    m_file->getAttribute(PROJECTFRAMEID).write(frameId);
-  }
+  writeFrameId(*m_file, PROJECTFRAMEID, frameId);
   m_file->flush();
 }
 
 std::string Hdf5CoreGeneral::readProjectFrameId()
 {
-  const std::scoped_lock lock(*m_write_mtx);
-
-  std::string frameId;
-  try
-  {
-    m_file->getAttribute(PROJECTFRAMEID).read(frameId);
-  }
-  catch (...)
-  {
-    throw std::runtime_error("Project " + m_file->getName() + "  has no project frame id!");
-  }
-  return frameId;
+  return readFrameId(std::filesystem::path(m_file->getName()).filename().stem(), *m_file, PROJECTFRAMEID);
 }
 
 void Hdf5CoreGeneral::writeVersion(const std::string& version)
