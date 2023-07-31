@@ -49,7 +49,6 @@ public:
    */
   bool exists(const std::string& id);
 
-  std::optional<std::string> readFrameId(const std::string& datatypeGroup, const std::string& uuid);
   // ################
   //  Attributes
   // ################
