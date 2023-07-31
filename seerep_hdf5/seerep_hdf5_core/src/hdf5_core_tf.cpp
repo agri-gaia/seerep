@@ -48,8 +48,8 @@ std::optional<std::vector<geometry_msgs::TransformStamped>> Hdf5CoreTf::readTran
   }
 
   // read frames
-  std::string parentframe = readFrame(PARENT_FRAME, group_ptr);
-  std::string childframe = readFrame(CHILD_FRAME, group_ptr);
+  std::string parentframe = readFrameId(id, *group_ptr, PARENT_FRAME);
+  std::string childframe = readFrameId(id, *group_ptr, CHILD_FRAME);
   std::vector<std::vector<int64_t>> time = readTime(hdf5DatasetTimePath);
   std::vector<std::vector<double>> trans = readTranslation(hdf5DatasetTransPath);
   std::vector<std::vector<double>> rot = readRotation(hdf5DatasetRotPath);
@@ -84,18 +84,10 @@ std::optional<std::vector<std::string>> Hdf5CoreTf::readTransformStampedFrames(c
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "loading parent frame of " << hdf5GroupPath;
 
   // read frames
-  std::string parentframe = readFrame(PARENT_FRAME, group_ptr);
-  std::string childframe = readFrame(CHILD_FRAME, group_ptr);
+  std::string parentframe = readFrameId(id, *group_ptr, PARENT_FRAME);
+  std::string childframe = readFrameId(id, *group_ptr, CHILD_FRAME);
 
   return std::vector<std::string>{ parentframe, childframe };
-}
-
-std::string Hdf5CoreTf::readFrame(const std::string& frameName,
-                                  const std::shared_ptr<const HighFive::Group>& group_ptr) const
-{
-  std::string frame;
-  group_ptr->getAttribute(frameName).read(frame);
-  return frame;
 }
 
 std::vector<std::vector<int64_t>> Hdf5CoreTf::readTime(const std::string& hdf5DatasetTimePath) const
