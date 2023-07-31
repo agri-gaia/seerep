@@ -60,6 +60,14 @@ public:
   void writeAttributeToHdf5(HighFive::AnnotateTraits<C>& object, std::string attributeField, T attributeValue);
 
   void deleteAttribute(const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField);
+
+  template <class C>
+  std::string readFrameId(const std::string& id, const HighFive::AnnotateTraits<C>& object,
+                          const std::string& frame_field);
+
+  template <class C>
+  void writeFrameId(HighFive::AnnotateTraits<C>& object, const std::string& frame_field, const std::string& frame_id);
+
   // ################
   //  AABB
   // ################

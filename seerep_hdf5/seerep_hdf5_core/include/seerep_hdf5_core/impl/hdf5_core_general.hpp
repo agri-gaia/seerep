@@ -32,6 +32,20 @@ void Hdf5CoreGeneral::writeAttributeToHdf5(HighFive::AnnotateTraits<C>& object, 
   }
 }
 
+template <class C>
+std::string Hdf5CoreGeneral::readFrameId(const std::string& uuid, const HighFive::AnnotateTraits<C>& object,
+                                         const std::string& frame_field)
+{
+  return tf2_frame_id(readAttributeFromHdf5<std::string>(uuid, object, frame_field));
+}
+
+template <class C>
+void Hdf5CoreGeneral::writeFrameId(HighFive::AnnotateTraits<C>& object, const std::string& frame_field,
+                                   const std::string& frame_id)
+{
+  writeAttributeToHdf5<std::string>(object, frame_field, tf2_frame_id(frame_id));
+}
+
 template <class T>
 std::shared_ptr<HighFive::DataSet> Hdf5CoreGeneral::getHdf5DataSet(const std::string& hdf5DataSetPath,
                                                                    HighFive::DataSpace& dataSpace)

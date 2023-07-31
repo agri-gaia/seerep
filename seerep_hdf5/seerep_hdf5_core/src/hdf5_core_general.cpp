@@ -128,29 +128,6 @@ const std::optional<std::string> Hdf5CoreGeneral::readVersion()
   return version;
 }
 
-std::optional<std::string> Hdf5CoreGeneral::readFrameId(const std::string& datatypeGroup, const std::string& uuid)
-{
-  std::string id = datatypeGroup + "/" + uuid;
-  std::string hdf5DatasetRawDataPath = id + "/" + RAWDATA;
-
-  checkExists(hdf5DatasetRawDataPath);
-
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "get dataset " << hdf5DatasetRawDataPath;
-  std::shared_ptr<HighFive::DataSet> data_set_ptr =
-      std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DatasetRawDataPath));
-
-  if (data_set_ptr->hasAttribute(HEADER_FRAME_ID))
-  {
-    std::string frameId;
-    data_set_ptr->getAttribute(HEADER_FRAME_ID).read(frameId);
-    return frameId;
-  }
-  else
-  {
-    return std::nullopt;
-  }
-}
-
 void Hdf5CoreGeneral::readBoundingBoxLabeledAndAddToLabelsWithInstancesWithCategory(
     const std::string& datatypeGroup, const std::string& uuid,
     std::unordered_map<std::string, std::vector<seerep_core_msgs::LabelWithInstance>>& labelsWithInstancesWithCategory)
