@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <launch>
     <!-- TODO iterate through dir of rosbags  -->
-    <arg name="bag_path" default="/seerep/seerep-data/Fleming_250mm_Maize_Greenland_Evening_2023-06-13-18-03-25.bag"/>
-    <arg name="hdf5_folder" default="/seerep/seerep-data"/>
-    <arg name="project_frame" default="map"/>
-    <arg name="project_name" default="testproject"/>
-    <arg name="tf_topic" default="/tf"/>
-    <arg name="tf_static_topic" default="/tf_static"/>
-    <arg name="capture_all_image_topics" default="true"/>
-    <arg name="capture_topics" default="['']"/>
-    <arg name="viewing_distance" default="10.0"/>
+    <arg name="bag_path" default="/seerep/seerep-data/Fleming_250mm_Maize_Greenland_Evening_2023-06-13-18-03-25.bag" doc="Path to a rosbag that should be converted"/>
+    <arg name="hdf5_folder" default="/seerep/seerep-data" doc="Storage path for the resulting HDF5 file(s)"/>
+    <arg name="project_frame" default="map" doc="Root frame of the project data"/>
+    <arg name="project_name" default="testproject" doc="Name of the resulting SEEREP project (human readable name for the data)"/>
+    <arg name="tf_topic" default="/tf" doc="Tf topic to convert"/>
+    <arg name="tf_static_topic" default="/tf_static" doc="Tf static topic to convert"/>
+    <arg name="capture_all_image_topics" default="true" doc="Convert all (compressed) image topics?"/>
+    <arg name="capture_topics" default="['']" doc="Selection of (compressed) image topics to convert. Set capture_all_image_topics to false!"/>
+    <arg name="viewing_distance" default="10.0" doc="How far can the camera(s) see? Needed for frustum calculation"/>
     <node name="seerep_ros_examples_rosbag_dumper" pkg="seerep_ros_examples" type="seerep_ros_examples_rosbag_dumper" output="screen">
         <rosparam param="bag_path" subst_value="True">$(arg bag_path)</rosparam>
         <rosparam param="hdf5_path" subst_value="True">$(arg hdf5_folder)</rosparam>
