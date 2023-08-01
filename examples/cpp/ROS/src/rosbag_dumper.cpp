@@ -151,10 +151,13 @@ void RosbagDumper::iterateAndDumpCompressedImage(const std::string& image_topic,
       sensor_msgs::Image uncompressed_image;
       try
       {
-        cv_bridge::CvImagePtr cv_ptr = cv_bridge::toCvCopy(image_msg, sensor_msgs::image_encodings::BGR8);
+        size_t semicolon_pos = image_msg->format.find(";");
+        std::string image_encoding = image_msg->format.substr(0, semicolon_pos);
+
+        cv_bridge::CvImagePtr cv_ptr = cv_bridge::toCvCopy(image_msg, image_encoding);
         cv_ptr->toImageMsg(uncompressed_image);
       }
-      catch (cv::Exception& e)
+      catch (cv_bridge::Exception& e)
       {
         ROS_ERROR_STREAM("Error while converting compressed image: " << e.what());
         /* Do not try to save the image */
