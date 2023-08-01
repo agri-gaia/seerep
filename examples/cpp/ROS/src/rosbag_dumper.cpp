@@ -69,6 +69,23 @@ const std::vector<std::string> RosbagDumper::getAllTopics(const std::string& top
   return topics;
 }
 
+const std::vector<string_pair> RosbagDumper::matchTopics(const std::vector<std::string>& first_topics,
+                                                         const std::vector<std::string>& second_topics)
+{
+  std::vector<string_pair> matched_topics;
+  for (const std::string& first_topic : first_topics)
+  {
+    for (const std::string& second_topic : second_topics)
+    {
+      if (matchingTopics(first_topic, second_topic))
+      {
+        matched_topics.push_back(std::make_pair(first_topic, second_topic));
+      }
+    }
+  }
+  return matched_topics;
+}
+
 void RosbagDumper::iterateAndDumpTf(const std::string& tf_topic, const bool is_static)
 {
   rosbag::View view(bag_, rosbag::TopicQuery(tf_topic));
@@ -88,23 +105,16 @@ void RosbagDumper::iterateAndDumpTf(const std::string& tf_topic, const bool is_s
   }
 }
 
-/* TODO: refactor for a more general case */
-std::optional<const std::string>
-RosbagDumper::matchingCameraInfoTopic(std::string image_topic, const std::vector<std::string> camera_info_topics)
+bool RosbagDumper::matchingTopics(std::string first_topic, std::string second_topic)
 {
-  /* Note: find_nth is zero index */
-  boost::iterator_range<std::string::iterator> it = boost::find_nth(image_topic, "/", 2);
-  const std::string cut_topic_string(image_topic.substr(0, std::distance(image_topic.begin(), it.begin())));
-  for (std::string camera_info_topic : camera_info_topics)
-  {
-    boost::iterator_range<std::string::iterator> it = boost::find_nth(camera_info_topic, "/", 2);
-    const std::string cut_info_string(camera_info_topic.substr(0, std::distance(camera_info_topic.begin(), it.begin())));
-    if (cut_topic_string == cut_info_string)
-    {
-      return std::optional<const std::string>(camera_info_topic);
-    }
-  }
-  return std::nullopt;
+  /* Note: find_nth is zero indexed */
+  boost::iterator_range<std::string::iterator> first_it = boost::find_nth(first_topic, "/", 2);
+  const std::string first_cut_str(first_topic.substr(0, std::distance(first_topic.begin(), first_it.begin())));
+
+  boost::iterator_range<std::string::iterator> second_it = boost::find_nth(second_topic, "/", 2);
+  const std::string second_cut_str(second_topic.substr(0, std::distance(second_topic.begin(), second_it.begin())));
+
+  return first_cut_str == second_cut_str;
 }
 
 /*  TODO: add support for uncompressed images */
@@ -194,23 +204,22 @@ int main(int argc, char** argv)
     {
       image_topics = dumper.getAllTopics("sensor_msgs/CompressedImage");
       camera_info_topics = dumper.getAllTopics("sensor_msgs/CameraInfo");
-
-      /* match image and camera info topics */
-      for (const std::string& image_topic : image_topics)
-      {
-        ROS_INFO_STREAM("---- Dumping image topic: " << image_topic << " ----");
-        std::optional<const std::string> matching_camera_info =
-            dumper.matchingCameraInfoTopic(image_topic, camera_info_topics);
-        if (matching_camera_info.has_value())
-        {
-          dumper.iterateAndDumpCompressedImage(image_topic, matching_camera_info.value(), viewing_distance);
-        }
-      }
     }
     else
     {
       nh.getParam("capture_topics", image_topics);
       nh.getParam("camera_info_topics", camera_info_topics);
+    }
+
+    ROS_INFO_STREAM("---- Dumping image messages ----");
+
+    const std::vector<seerep_ros_examples::string_pair> matched_topics =
+        dumper.matchTopics(image_topics, camera_info_topics);
+    for (const seerep_ros_examples::string_pair& matched_topic : matched_topics)
+    {
+      std::cout << "Dumping image topic: " << matched_topic.first << std::endl;
+      std::cout << "Dumping camera info topic: " << matched_topic.second << std::endl;
+      dumper.iterateAndDumpCompressedImage(matched_topic.first, matched_topic.second, viewing_distance);
     }
   }
   else

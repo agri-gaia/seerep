@@ -26,7 +26,6 @@
 
 /* std */
 #include <filesystem>
-#include <optional>
 
 /* boost */
 #include <boost/algorithm/string/find.hpp>
@@ -48,18 +47,16 @@ public:
   void iterateAndDumpTf(const std::string& tf_topic, const bool is_static = false);
   void iterateAndDumpCompressedImage(const std::string& image_topic, const std::string& camera_info_topic,
                                      double viewing_distance);
-  std::optional<const std::string> matchingCameraInfoTopic(std::string image_topic,
-                                                           const std::vector<std::string> camera_info_topics);
-
   /* get all topics which a specifc type from the rosbag */
   const std::vector<std::string> getAllTopics(const std::string& topic_type);
+  /* match two lists of topics */
+  const std::vector<string_pair> matchTopics(const std::vector<std::string>& first_topics,
+                                             const std::vector<std::string>& second_topics);
   ~RosbagDumper();
 
 private:
-  /* match two topics */
-  const std::vector<string_pair> matchTopics(const std::vector<std::string>& first_topics,
-                                             const std::vector<std::string>& second_topics);
-
+  /* check if the two topics match e.g image and camera_info messages*/
+  bool matchingTopics(std::string first_topic, std::string second_topic);
   /* Rosbag object to iterate over*/
   rosbag::Bag bag_;
 
