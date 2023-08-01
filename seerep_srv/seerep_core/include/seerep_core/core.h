@@ -249,13 +249,15 @@ private:
   void checkForOntologyConcepts(seerep_core_msgs::Query& query);
 
   /**
-   * @brief write methode for curl
+   * @brief Callback function for libcurl to write the received data.
    *
-   * @param contents
-   * @param size
-   * @param nmemb
-   * @param output
-   * @return size_t
+   * This callback can be called multiple times for saving each chunk.
+   *
+   * @param contents Pointer to the received data.
+   * @param size Size of each data element received. For text data, this is 1, for binary the size may be larger.
+   * @param nmemb The number of data elements received.
+   * @param output Pointer where the received data should be saved.
+   * @return size_t Total number of bytes saved
    */
   static size_t writeCallback(void* contents, size_t size, size_t nmemb, std::string* output);
 
@@ -277,11 +279,24 @@ private:
    */
   std::optional<std::string> performCurl(std::string query, std::string url);
 
-  /// @brief extract the concept from the json string
-  /// @param json the json as a string
-  /// @param conceptVariableName the variable name of the concept
-  /// @return the concept if there is any
-  std::optional<std::string> extractConceptFromJson(std::string json, std::string conceptVariableName);
+  /**
+   * @brief Extract concepts from a JSON string
+   *
+   * @param json JSON string
+   * @param conceptVariableName Variable name of the concept
+   * @return std::optional<std::string<std::string>> The resulting concepts, if any
+   */
+  std::optional<std::vector<std::string>> extractConceptsFromJson(std::string json, std::string conceptVariableName);
+
+  /**
+   * @brief Get the Concepts for the semantic part of the query via Sparql Query object
+   *
+   * @param sparqlQuery the sparql query to be used
+   * @param ontologyURI the URI of the ontology to be used for the query
+   * @param label the resulting labels based on the query
+   */
+  void getConceptsViaSparqlQuery(const seerep_core_msgs::SparqlQuery& sparqlQuery, const std::string& ontologyURI,
+                                 std::optional<std::unordered_map<std::string, std::vector<std::string>>> label);
 
   /** @brief the path to the folder containing the HDF5 files */
   std::string m_dataFolder;

@@ -16,9 +16,20 @@ Core::~Core()
 
 seerep_core_msgs::QueryResult Core::getDataset(seerep_core_msgs::Query& query)
 {
-  if (query.label && query.sparqlQuery)
+  if (query.sparqlQuery)
   {
-    throw std::invalid_argument("label and sparqlQuery are both set in the query. Only use one at a time!");
+    if (query.label)
+    {
+      throw std::invalid_argument("label and sparqlQuery are both set in the query. Only use one at a time!");
+    }
+    else if (!query.ontologyURI)
+    {
+      throw std::invalid_argument("The ontology URI is not set but it is needed to perform a sparqlQuery!");
+    }
+    else
+    {
+      getConceptsViaSparqlQuery(query.sparqlQuery.value(), query.ontologyURI.value(), query.label);
+    }
   }
 
   if (query.label && query.ontologyURI)
@@ -356,15 +367,17 @@ Core::getAllLabels(boost::uuids::uuid uuid, std::vector<seerep_core_msgs::Dataty
 
 void Core::checkForOntologyConcepts(seerep_core_msgs::Query& query)
 {
-  // if ontology is given, check if label can be replaced by corresponding concept
   if (query.ontologyURI)
   {
     std::unordered_map<std::string, std::string> label2ConceptCache;
     std::string concept;
     for (auto& category : query.label.value())
     {
-      for (auto& label : category.second)
+      // only iterate over the initial size of the vector
+      auto startSizeLabels = category.second.size();
+      for (int i = 0; i < startSizeLabels; i++)
       {
+        std::string& label = category.second.at(i);
         // check if label is NOT URL (ontology concept)
         if (!std::regex_match(label,
                               std::regex("^(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([\\/\\w \\.-]*)*\\/?$")))
@@ -379,7 +392,8 @@ void Core::checkForOntologyConcepts(seerep_core_msgs::Query& query)
             concept = translateLabelToOntologyConcept(label, query.ontologyURI.value());
             label2ConceptCache.emplace(label, concept);
           }
-          label = concept;
+          // add the concept to the vector so that the query will check for the initial label and also for the found concept
+          category.second.push_back(concept);
         }
       }
     }
@@ -408,10 +422,10 @@ std::string Core::translateLabelToOntologyConcept(const std::string& label, cons
 
   if (response)
   {
-    auto conceptExtracted = extractConceptFromJson(response.value(), "c");
+    auto conceptExtracted = extractConceptsFromJson(response.value(), "c");
     if (conceptExtracted)
     {
-      concept = conceptExtracted.value();
+      concept = conceptExtracted.value().at(0);
     }
   }
 
@@ -447,8 +461,7 @@ std::optional<std::string> Core::performCurl(std::string query, std::string url)
     // Check for errors
     if (res != CURLE_OK)
     {
-      BOOST_LOG_SEV(m_logger, boost::log::trivial::error)
-          << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::error) << "curl failed: " << curl_easy_strerror(res) << std::endl;
       return std::nullopt;
     }
 
@@ -462,24 +475,54 @@ std::optional<std::string> Core::performCurl(std::string query, std::string url)
   return std::nullopt;
 }
 
-std::optional<std::string> Core::extractConceptFromJson(std::string json, std::string conceptVariableName)
+std::optional<std::vector<std::string>> Core::extractConceptsFromJson(std::string json, std::string conceptVariableName)
 {
   Json::Value root;
   Json::Reader reader;
   bool parsingSuccessful = reader.parse(json.c_str(), root);
+  std::vector<std::string> concepts;
 
-  if (parsingSuccessful && root.get("results", "").get("bindings", "").size() > 0)
+  if (parsingSuccessful)
   {
     try
     {
-      return root.get("results", "").get("bindings", "")[0].get(conceptVariableName, "").get("value", "").asString();
+      for (auto binding : root.get("results", "").get("bindings", ""))
+      {
+        concepts.push_back(binding.get(conceptVariableName, "").get("value", "").asString());
+      }
     }
     catch (...)
     {
       BOOST_LOG_SEV(m_logger, boost::log::trivial::error) << "Couldn't extract concept from json.";
+      return std::nullopt;
     }
   }
-  return std::nullopt;
+  if (concepts.size() > 0)
+  {
+    return concepts;
+  }
+  else
+  {
+    return std::nullopt;
+  }
+}
+
+void Core::getConceptsViaSparqlQuery(const seerep_core_msgs::SparqlQuery& sparqlQuery, const std::string& ontologyURI,
+                                     std::optional<std::unordered_map<std::string, std::vector<std::string>>> label)
+{
+  std::optional<std::string> sparqlResult = performCurl(sparqlQuery.sparql, ontologyURI);
+
+  if (sparqlResult)
+  {
+    std::optional<std::vector<std::string>> concepts =
+        extractConceptsFromJson(sparqlResult.value(), sparqlQuery.variableNameOfConcept);
+
+    if (concepts)
+    {
+      label = std::unordered_map<std::string, std::vector<std::string>>();
+      label.value().emplace(sparqlQuery.category, concepts.value());
+    }
+  }
 }
 
 } /* namespace seerep_core */

@@ -7,7 +7,7 @@ struct SparqlQuery
 {
   std::string category;
   std::string sparql;
-  std::string variableNameOfCategory;
+  std::string variableNameOfConcept;
 };
 
 } /* namespace seerep_core_msgs */

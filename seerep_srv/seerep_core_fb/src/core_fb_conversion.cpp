@@ -507,7 +507,7 @@ std::optional<seerep_core_msgs::SparqlQuery> CoreFbConversion::fromFbSparqlQuery
     seerep_core_msgs::SparqlQuery sparql;
     sparql.category = query->sparqlQuery()->category()->str();
     sparql.sparql = query->sparqlQuery()->sparql()->str();
-    sparql.variableNameOfCategory = query->sparqlQuery()->variableNameOfCategory()->str();
+    sparql.variableNameOfConcept = query->sparqlQuery()->variableNameOfCategory()->str();
     return sparql;
   }
 
