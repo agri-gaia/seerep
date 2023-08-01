@@ -13,8 +13,12 @@ from seerep.util.fb_helper import (
 
 builder = flatbuffers.Builder(1024)
 channel = get_gRPC_channel("local")
-PROJECT_NAME = "plantmap01"
+PROJECT_NAME = "testproject"
 projectUuid = getProject(builder, channel, PROJECT_NAME)
+
+if not projectUuid:
+    print("project not found")
+    exit
 
 stubTf = tfService.TfServiceStub(channel)
 for time in range(1661336507, 1661336550, 10):  # range(1663003789, 1663003834, 10):
