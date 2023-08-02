@@ -120,7 +120,14 @@ seerep_core_msgs::QueryTf CoreFbConversion::fromFb(const seerep::fb::TransformSt
   seerep_core_msgs::QueryTf queryTf;
   queryTf.childFrameId = query.child_frame_id()->str();
   queryTf.parentFrameId = query.header()->frame_id()->str();
-  queryTf.project = gen(query.header()->uuid_project()->str());
+  if (flatbuffers::IsFieldPresent(query.header(), seerep::fb::Header::VT_UUID_PROJECT))
+  {
+    queryTf.project = gen(query.header()->uuid_project()->str());
+  }
+  else
+  {
+    queryTf.project = boost::uuids::nil_uuid();
+  }
   queryTf.timestamp.seconds = query.header()->stamp()->seconds();
   queryTf.timestamp.nanos = query.header()->stamp()->nanos();
 
