@@ -18,7 +18,7 @@ projectUuid = getProject(builder, channel, PROJECT_NAME)
 
 if not projectUuid:
     print("project not found")
-    exit
+    exit()
 
 stubTf = tfService.TfServiceStub(channel)
 for time in range(1661336507, 1661336550, 10):  # range(1663003789, 1663003834, 10):
