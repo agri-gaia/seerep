@@ -1,0 +1,563 @@
+<!--
+Doxygen Awesome
+https://github.com/jothepro/doxygen-awesome-css
+MIT License
+Copyright (c) 2022 jothepro
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.3"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>SEEREP </title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="/doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<a href="https://github.com/agri-gaia/seerep" class="github-corner" title="View source on GitHub" target="_blank">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+<!-- https://github.com/tholman/github-corners -->
+<style>.github-corner svg {fill: var(--primary-light-color); color: var(--page-background-color); width: 72px; height: 72px;}</style>
+<style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">SEEREP
+   </div>
+   <div id="projectbrief">Spatio-temporal-SEmantic Environment REPresentation for robots in an agricultural context</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.3 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search",'Search','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('classseerep__core_1_1CoreInstance.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="classseerep__core_1_1CoreInstance-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">seerep_core::CoreInstance Class Reference</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>This is the class for a single instance.  
+ <a href="classseerep__core_1_1CoreInstance.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="core__instance_8h_source.html">core_instance.h</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a9cd2afe71697bfadca8c0963de008d65"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreInstance.html#a9cd2afe71697bfadca8c0963de008d65">CoreInstance</a> (std::shared_ptr&lt; <a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreInstance.html">seerep_hdf5_core::Hdf5CoreInstance</a> &gt; hdf5_io, const boost::uuids::uuid &amp;uuidInstance)</td></tr>
+<tr class="memdesc:a9cd2afe71697bfadca8c0963de008d65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs the object based on the given UUID and the HDF5 IO object.  <a href="classseerep__core_1_1CoreInstance.html#a9cd2afe71697bfadca8c0963de008d65">More...</a><br /></td></tr>
+<tr class="separator:a9cd2afe71697bfadca8c0963de008d65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a695dec725b1762d4d1dbcc7fac0b61a2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreInstance.html#a695dec725b1762d4d1dbcc7fac0b61a2">~CoreInstance</a> ()</td></tr>
+<tr class="separator:a695dec725b1762d4d1dbcc7fac0b61a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a44c7d58aa28d5c0fd64665d3e8ac4a"><td class="memItemLeft" align="right" valign="top">boost::uuids::uuid&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreInstance.html#a2a44c7d58aa28d5c0fd64665d3e8ac4a">getUUID</a> ()</td></tr>
+<tr class="memdesc:a2a44c7d58aa28d5c0fd64665d3e8ac4a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the UUID of the instance.  <a href="classseerep__core_1_1CoreInstance.html#a2a44c7d58aa28d5c0fd64665d3e8ac4a">More...</a><br /></td></tr>
+<tr class="separator:a2a44c7d58aa28d5c0fd64665d3e8ac4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1fb3a6d5b3204d81629f1c8a64c38a86"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreInstance.html#a1fb3a6d5b3204d81629f1c8a64c38a86">getAttribute</a> (const std::string &amp;key) const</td></tr>
+<tr class="memdesc:a1fb3a6d5b3204d81629f1c8a64c38a86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the value of the attribute defined by the key.  <a href="classseerep__core_1_1CoreInstance.html#a1fb3a6d5b3204d81629f1c8a64c38a86">More...</a><br /></td></tr>
+<tr class="separator:a1fb3a6d5b3204d81629f1c8a64c38a86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef91316bad86bd658f462522ce32a592"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreInstance.html#aef91316bad86bd658f462522ce32a592">writeAttribute</a> (const std::string &amp;key, const std::string &amp;value)</td></tr>
+<tr class="memdesc:aef91316bad86bd658f462522ce32a592"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the value of the attribute defined by the key.  <a href="classseerep__core_1_1CoreInstance.html#aef91316bad86bd658f462522ce32a592">More...</a><br /></td></tr>
+<tr class="separator:aef91316bad86bd658f462522ce32a592"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9649141b30c73fd6981714f50f7b06d7"><td class="memItemLeft" align="right" valign="top">std::vector&lt; boost::uuids::uuid &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreInstance.html#a9649141b30c73fd6981714f50f7b06d7">getDatasets</a> (const <a class="el" href="namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0">seerep_core_msgs::Datatype</a> &amp;datatype) const</td></tr>
+<tr class="memdesc:a9649141b30c73fd6981714f50f7b06d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the UUIDs of the datasets of the specified type showing this instance.  <a href="classseerep__core_1_1CoreInstance.html#a9649141b30c73fd6981714f50f7b06d7">More...</a><br /></td></tr>
+<tr class="separator:a9649141b30c73fd6981714f50f7b06d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c538ed9b0a32019b65198ab41eae91b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreInstance.html#a0c538ed9b0a32019b65198ab41eae91b">addDataset</a> (const boost::uuids::uuid &amp;uuidDataset, const <a class="el" href="namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0">seerep_core_msgs::Datatype</a> &amp;datatype)</td></tr>
+<tr class="memdesc:a0c538ed9b0a32019b65198ab41eae91b"><td class="mdescLeft">&#160;</td><td class="mdescRight">adds a dataset to this instance  <a href="classseerep__core_1_1CoreInstance.html#a0c538ed9b0a32019b65198ab41eae91b">More...</a><br /></td></tr>
+<tr class="separator:a0c538ed9b0a32019b65198ab41eae91b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:abba80d29217ff2a7e225f070e6a27774"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreInstance.html#abba80d29217ff2a7e225f070e6a27774">recreateInstance</a> ()</td></tr>
+<tr class="memdesc:abba80d29217ff2a7e225f070e6a27774"><td class="mdescLeft">&#160;</td><td class="mdescRight">fills the member variables based on the HDF5 file  <a href="classseerep__core_1_1CoreInstance.html#abba80d29217ff2a7e225f070e6a27774">More...</a><br /></td></tr>
+<tr class="separator:abba80d29217ff2a7e225f070e6a27774"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a85cfc0957ab8c07597452ed05d785418"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreInstance.html">seerep_hdf5_core::Hdf5CoreInstance</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreInstance.html#a85cfc0957ab8c07597452ed05d785418">m_hdf5_io</a></td></tr>
+<tr class="memdesc:a85cfc0957ab8c07597452ed05d785418"><td class="mdescLeft">&#160;</td><td class="mdescRight">shared pointer to the object handling the HDF5 io for instances  <a href="classseerep__core_1_1CoreInstance.html#a85cfc0957ab8c07597452ed05d785418">More...</a><br /></td></tr>
+<tr class="separator:a85cfc0957ab8c07597452ed05d785418"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a9f535eaad0cdb22c43e88ecfee0f4b"><td class="memItemLeft" align="right" valign="top">boost::uuids::uuid&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreInstance.html#a7a9f535eaad0cdb22c43e88ecfee0f4b">m_uuid</a></td></tr>
+<tr class="memdesc:a7a9f535eaad0cdb22c43e88ecfee0f4b"><td class="mdescLeft">&#160;</td><td class="mdescRight">the UUID of this instance  <a href="classseerep__core_1_1CoreInstance.html#a7a9f535eaad0cdb22c43e88ecfee0f4b">More...</a><br /></td></tr>
+<tr class="separator:a7a9f535eaad0cdb22c43e88ecfee0f4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0756251f6cda4ef420afb0207b6c56a5"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreInstance.html#a0756251f6cda4ef420afb0207b6c56a5">m_attributes</a></td></tr>
+<tr class="memdesc:a0756251f6cda4ef420afb0207b6c56a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">the attributes of this instance  <a href="classseerep__core_1_1CoreInstance.html#a0756251f6cda4ef420afb0207b6c56a5">More...</a><br /></td></tr>
+<tr class="separator:a0756251f6cda4ef420afb0207b6c56a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca188963e0042dd4a9dd6b1e4652cfec"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; <a class="el" href="namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0">seerep_core_msgs::Datatype</a>, std::vector&lt; boost::uuids::uuid &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreInstance.html#aca188963e0042dd4a9dd6b1e4652cfec">m_typeUUIDMap</a></td></tr>
+<tr class="memdesc:aca188963e0042dd4a9dd6b1e4652cfec"><td class="mdescLeft">&#160;</td><td class="mdescRight">map from datatype to the vector of UUIDs of datasets showing this instance  <a href="classseerep__core_1_1CoreInstance.html#aca188963e0042dd4a9dd6b1e4652cfec">More...</a><br /></td></tr>
+<tr class="separator:aca188963e0042dd4a9dd6b1e4652cfec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f1c4e2015430ce69322bc331c624712"><td class="memItemLeft" align="right" valign="top">boost::log::sources::severity_logger&lt; boost::log::trivial::severity_level &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreInstance.html#a6f1c4e2015430ce69322bc331c624712">m_logger</a></td></tr>
+<tr class="memdesc:a6f1c4e2015430ce69322bc331c624712"><td class="mdescLeft">&#160;</td><td class="mdescRight">object handling the logging  <a href="classseerep__core_1_1CoreInstance.html#a6f1c4e2015430ce69322bc331c624712">More...</a><br /></td></tr>
+<tr class="separator:a6f1c4e2015430ce69322bc331c624712"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p >This is the class for a single instance. </p>
+<p >It handles all data regarding instances. The attributes of the instances are queryable. And the attributes can also be written. The changes are persisted in the HDF5 file via the corresponding IO class.</p>
+<p >The UUID of all data showing the instances are stored and can be easily queried.</p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a9cd2afe71697bfadca8c0963de008d65" name="a9cd2afe71697bfadca8c0963de008d65"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9cd2afe71697bfadca8c0963de008d65">&#9670;&nbsp;</a></span>CoreInstance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">seerep_core::CoreInstance::CoreInstance </td>
+          <td>(</td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreInstance.html">seerep_hdf5_core::Hdf5CoreInstance</a> &gt;&#160;</td>
+          <td class="paramname"><em>hdf5_io</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const boost::uuids::uuid &amp;&#160;</td>
+          <td class="paramname"><em>uuidInstance</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs the object based on the given UUID and the HDF5 IO object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">hdf5_io</td><td>a shared pointer to the object handling the HDF5 io for instances </td></tr>
+    <tr><td class="paramname">uuid</td><td>the UUID of this instance </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a695dec725b1762d4d1dbcc7fac0b61a2" name="a695dec725b1762d4d1dbcc7fac0b61a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a695dec725b1762d4d1dbcc7fac0b61a2">&#9670;&nbsp;</a></span>~CoreInstance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">seerep_core::CoreInstance::~CoreInstance </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a0c538ed9b0a32019b65198ab41eae91b" name="a0c538ed9b0a32019b65198ab41eae91b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c538ed9b0a32019b65198ab41eae91b">&#9670;&nbsp;</a></span>addDataset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_core::CoreInstance::addDataset </td>
+          <td>(</td>
+          <td class="paramtype">const boost::uuids::uuid &amp;&#160;</td>
+          <td class="paramname"><em>uuidDataset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0">seerep_core_msgs::Datatype</a> &amp;&#160;</td>
+          <td class="paramname"><em>datatype</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>adds a dataset to this instance </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">uuidDataset</td><td>the UUID of the dataset </td></tr>
+    <tr><td class="paramname">datatype</td><td>the type of the dataset </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a1fb3a6d5b3204d81629f1c8a64c38a86" name="a1fb3a6d5b3204d81629f1c8a64c38a86"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1fb3a6d5b3204d81629f1c8a64c38a86">&#9670;&nbsp;</a></span>getAttribute()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; std::string &gt; seerep_core::CoreInstance::getAttribute </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>key</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the value of the attribute defined by the key. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>the key of the attributes to get the value of it </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>optional string with the value of the attribute if it exists </dd></dl>
+
+</div>
+</div>
+<a id="a9649141b30c73fd6981714f50f7b06d7" name="a9649141b30c73fd6981714f50f7b06d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9649141b30c73fd6981714f50f7b06d7">&#9670;&nbsp;</a></span>getDatasets()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; boost::uuids::uuid &gt; seerep_core::CoreInstance::getDatasets </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0">seerep_core_msgs::Datatype</a> &amp;&#160;</td>
+          <td class="paramname"><em>datatype</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the UUIDs of the datasets of the specified type showing this instance. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">datatype</td><td>the datatype to be considered </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Vector of the UUIDs of the images showings this instance </dd></dl>
+
+</div>
+</div>
+<a id="a2a44c7d58aa28d5c0fd64665d3e8ac4a" name="a2a44c7d58aa28d5c0fd64665d3e8ac4a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a44c7d58aa28d5c0fd64665d3e8ac4a">&#9670;&nbsp;</a></span>getUUID()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::uuids::uuid seerep_core::CoreInstance::getUUID </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the UUID of the instance. </p>
+<dl class="section return"><dt>Returns</dt><dd>UUID of the instance </dd></dl>
+
+</div>
+</div>
+<a id="abba80d29217ff2a7e225f070e6a27774" name="abba80d29217ff2a7e225f070e6a27774"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abba80d29217ff2a7e225f070e6a27774">&#9670;&nbsp;</a></span>recreateInstance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_core::CoreInstance::recreateInstance </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>fills the member variables based on the HDF5 file </p>
+
+</div>
+</div>
+<a id="aef91316bad86bd658f462522ce32a592" name="aef91316bad86bd658f462522ce32a592"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef91316bad86bd658f462522ce32a592">&#9670;&nbsp;</a></span>writeAttribute()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_core::CoreInstance::writeAttribute </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Writes the value of the attribute defined by the key. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>the key of the attributes </td></tr>
+    <tr><td class="paramname">value</td><td>the value to be written </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a0756251f6cda4ef420afb0207b6c56a5" name="a0756251f6cda4ef420afb0207b6c56a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0756251f6cda4ef420afb0207b6c56a5">&#9670;&nbsp;</a></span>m_attributes</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_map&lt;std::string, std::string&gt; seerep_core::CoreInstance::m_attributes</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>the attributes of this instance </p>
+
+</div>
+</div>
+<a id="a85cfc0957ab8c07597452ed05d785418" name="a85cfc0957ab8c07597452ed05d785418"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85cfc0957ab8c07597452ed05d785418">&#9670;&nbsp;</a></span>m_hdf5_io</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreInstance.html">seerep_hdf5_core::Hdf5CoreInstance</a>&gt; seerep_core::CoreInstance::m_hdf5_io</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>shared pointer to the object handling the HDF5 io for instances </p>
+
+</div>
+</div>
+<a id="a6f1c4e2015430ce69322bc331c624712" name="a6f1c4e2015430ce69322bc331c624712"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f1c4e2015430ce69322bc331c624712">&#9670;&nbsp;</a></span>m_logger</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::log::sources::severity_logger&lt;boost::log::trivial::severity_level&gt; seerep_core::CoreInstance::m_logger</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>object handling the logging </p>
+
+</div>
+</div>
+<a id="aca188963e0042dd4a9dd6b1e4652cfec" name="aca188963e0042dd4a9dd6b1e4652cfec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca188963e0042dd4a9dd6b1e4652cfec">&#9670;&nbsp;</a></span>m_typeUUIDMap</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_map&lt;<a class="el" href="namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0">seerep_core_msgs::Datatype</a>, std::vector&lt;boost::uuids::uuid&gt; &gt; seerep_core::CoreInstance::m_typeUUIDMap</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>map from datatype to the vector of UUIDs of datasets showing this instance </p>
+
+</div>
+</div>
+<a id="a7a9f535eaad0cdb22c43e88ecfee0f4b" name="a7a9f535eaad0cdb22c43e88ecfee0f4b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a9f535eaad0cdb22c43e88ecfee0f4b">&#9670;&nbsp;</a></span>m_uuid</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::uuids::uuid seerep_core::CoreInstance::m_uuid</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>the UUID of this instance </p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>seerep_srv/seerep_core/include/seerep_core/<a class="el" href="core__instance_8h_source.html">core_instance.h</a></li>
+<li>seerep_srv/seerep_core/src/<a class="el" href="core__instance_8cpp.html">core_instance.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespaceseerep__core.html">seerep_core</a></li><li class="navelem"><a class="el" href="classseerep__core_1_1CoreInstance.html">CoreInstance</a></li>
+    <li class="footer">
+        <a href="../mkdocs/legal-notice/index.html">Legal Notice</a> -
+        <a href="../mkdocs/data-protection-notice/index.html">Data Protection Notice</a> -
+        Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+    </li>
+  </ul>
+</div>
+</body>
+</html>

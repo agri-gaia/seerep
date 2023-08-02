@@ -1,0 +1,1972 @@
+<!--
+Doxygen Awesome
+https://github.com/jothepro/doxygen-awesome-css
+MIT License
+Copyright (c) 2022 jothepro
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.3"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>SEEREP </title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="/doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<a href="https://github.com/agri-gaia/seerep" class="github-corner" title="View source on GitHub" target="_blank">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+<!-- https://github.com/tholman/github-corners -->
+<style>.github-corner svg {fill: var(--primary-light-color); color: var(--page-background-color); width: 72px; height: 72px;}</style>
+<style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">SEEREP
+   </div>
+   <div id="projectbrief">Spatio-temporal-SEmantic Environment REPresentation for robots in an agricultural context</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.3 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search",'Search','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('namespaceseerep__ros__conversions__fb.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#func-members">Functions</a>  </div>
+  <div class="headertitle"><div class="title">seerep_ros_conversions_fb Namespace Reference</div></div>
+</div><!--header-->
+<div class="contents">
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a6a079368a8b2d89e42d74d5bb563b832"><td class="memItemLeft" align="right" valign="top">flatbuffers::grpc::Message&lt; seerep::fb::Header &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a6a079368a8b2d89e42d74d5bb563b832">toFlat</a> (const std_msgs::Header &amp;header, std::string projectuuid, std::string msguuid)</td></tr>
+<tr class="memdesc:a6a079368a8b2d89e42d74d5bb563b832"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS std_msgs/Header message to the corresponding gRPC Flatbuffer Header message.  <a href="namespaceseerep__ros__conversions__fb.html#a6a079368a8b2d89e42d74d5bb563b832">More...</a><br /></td></tr>
+<tr class="separator:a6a079368a8b2d89e42d74d5bb563b832"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43b4b32db3efe8ead38b96a5c2be0cf8"><td class="memItemLeft" align="right" valign="top">flatbuffers::Offset&lt; seerep::fb::Header &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a43b4b32db3efe8ead38b96a5c2be0cf8">toFlat</a> (const std_msgs::Header &amp;header, std::string projectuuid, flatbuffers::grpc::MessageBuilder &amp;builder, std::string msguuid)</td></tr>
+<tr class="memdesc:a43b4b32db3efe8ead38b96a5c2be0cf8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS std_msgs/Header message to the corresponding Flatbuffer Header message.  <a href="namespaceseerep__ros__conversions__fb.html#a43b4b32db3efe8ead38b96a5c2be0cf8">More...</a><br /></td></tr>
+<tr class="separator:a43b4b32db3efe8ead38b96a5c2be0cf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a4b200412e1eaa30ca2b6fa83a6596f"><td class="memItemLeft" align="right" valign="top">std_msgs::Header&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a5a4b200412e1eaa30ca2b6fa83a6596f">toROS</a> (const seerep::fb::Header &amp;header)</td></tr>
+<tr class="memdesc:a5a4b200412e1eaa30ca2b6fa83a6596f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a Flatbuffer Header message to the corresponding ROS std_msgs/Header message.  <a href="namespaceseerep__ros__conversions__fb.html#a5a4b200412e1eaa30ca2b6fa83a6596f">More...</a><br /></td></tr>
+<tr class="separator:a5a4b200412e1eaa30ca2b6fa83a6596f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b2ccf6c570f110fb8510c231ff05c59"><td class="memItemLeft" align="right" valign="top">flatbuffers::grpc::Message&lt; seerep::fb::PointField &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a0b2ccf6c570f110fb8510c231ff05c59">toFlat</a> (const sensor_msgs::PointField &amp;point_field)</td></tr>
+<tr class="memdesc:a0b2ccf6c570f110fb8510c231ff05c59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS sensor_msgs/PointField message to the corresponding gRPC Flatbuffer PointField message.  <a href="namespaceseerep__ros__conversions__fb.html#a0b2ccf6c570f110fb8510c231ff05c59">More...</a><br /></td></tr>
+<tr class="separator:a0b2ccf6c570f110fb8510c231ff05c59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20d3c3286220365fe691b4535ba226e9"><td class="memItemLeft" align="right" valign="top">flatbuffers::Offset&lt; seerep::fb::PointField &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a20d3c3286220365fe691b4535ba226e9">toFlat</a> (const sensor_msgs::PointField &amp;point_field, flatbuffers::grpc::MessageBuilder &amp;builder)</td></tr>
+<tr class="memdesc:a20d3c3286220365fe691b4535ba226e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS sensor_msgs/PointField message to the corresponding Flatbuffer PointField message.  <a href="namespaceseerep__ros__conversions__fb.html#a20d3c3286220365fe691b4535ba226e9">More...</a><br /></td></tr>
+<tr class="separator:a20d3c3286220365fe691b4535ba226e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8ac4e2fca249431b03546806b03f328"><td class="memItemLeft" align="right" valign="top">sensor_msgs::PointField&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#ac8ac4e2fca249431b03546806b03f328">toROS</a> (const seerep::fb::PointField &amp;point_field)</td></tr>
+<tr class="memdesc:ac8ac4e2fca249431b03546806b03f328"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a Flatbuffer PointField message to the corresponding ROS sensor_msgs/PointField message.  <a href="namespaceseerep__ros__conversions__fb.html#ac8ac4e2fca249431b03546806b03f328">More...</a><br /></td></tr>
+<tr class="separator:ac8ac4e2fca249431b03546806b03f328"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73f56ba31dc748ef1b03d26b6ca3ed80"><td class="memItemLeft" align="right" valign="top">flatbuffers::grpc::Message&lt; seerep::fb::PointCloud2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a73f56ba31dc748ef1b03d26b6ca3ed80">toFlat</a> (const sensor_msgs::PointCloud2 &amp;cloud, std::string projectuuid, std::string msguuid)</td></tr>
+<tr class="memdesc:a73f56ba31dc748ef1b03d26b6ca3ed80"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS sensor_msgs/PointCloud2 message to the corresponding gRPC Flatbuffer PointCloud2 message.  <a href="namespaceseerep__ros__conversions__fb.html#a73f56ba31dc748ef1b03d26b6ca3ed80">More...</a><br /></td></tr>
+<tr class="separator:a73f56ba31dc748ef1b03d26b6ca3ed80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b8563c07d006493f2871218e295b533"><td class="memItemLeft" align="right" valign="top">flatbuffers::Offset&lt; seerep::fb::PointCloud2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a1b8563c07d006493f2871218e295b533">toFlat</a> (const sensor_msgs::PointCloud2 &amp;cloud, std::string projectuuid, flatbuffers::grpc::MessageBuilder &amp;builder, std::string msguuid)</td></tr>
+<tr class="memdesc:a1b8563c07d006493f2871218e295b533"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS sensor_msgs/PointCloud2 message to the corresponding Flatbuffer PointCloud2 message.  <a href="namespaceseerep__ros__conversions__fb.html#a1b8563c07d006493f2871218e295b533">More...</a><br /></td></tr>
+<tr class="separator:a1b8563c07d006493f2871218e295b533"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a794b8629ac23c38a7347a64cd9067052"><td class="memItemLeft" align="right" valign="top">sensor_msgs::PointCloud2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a794b8629ac23c38a7347a64cd9067052">toROS</a> (const seerep::fb::PointCloud2 &amp;cloud)</td></tr>
+<tr class="memdesc:a794b8629ac23c38a7347a64cd9067052"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a Flatbuffer PointCloud2 message to the corresponding ROS sensor_msgs/PointCloud2 message.  <a href="namespaceseerep__ros__conversions__fb.html#a794b8629ac23c38a7347a64cd9067052">More...</a><br /></td></tr>
+<tr class="separator:a794b8629ac23c38a7347a64cd9067052"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15849760ff8fab1d11723727bde8a1b7"><td class="memItemLeft" align="right" valign="top">flatbuffers::grpc::Message&lt; seerep::fb::Image &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a15849760ff8fab1d11723727bde8a1b7">toFlat</a> (const sensor_msgs::Image &amp;image, std::string projectuuid, std::string cameraInstrinsicUuid, std::string msguuid=&quot;&quot;)</td></tr>
+<tr class="memdesc:a15849760ff8fab1d11723727bde8a1b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS sensor_msgs/Image message to the corresponding gRPC Flatbuffer Image message.  <a href="namespaceseerep__ros__conversions__fb.html#a15849760ff8fab1d11723727bde8a1b7">More...</a><br /></td></tr>
+<tr class="separator:a15849760ff8fab1d11723727bde8a1b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a459f7647958c2c0a28f2ec50276fdcd1"><td class="memItemLeft" align="right" valign="top">flatbuffers::Offset&lt; seerep::fb::Image &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a459f7647958c2c0a28f2ec50276fdcd1">toFlat</a> (const sensor_msgs::Image &amp;image, std::string projectuuid, flatbuffers::grpc::MessageBuilder &amp;builder, std::string cameraInstrinsicUuid, std::string msguuid=&quot;&quot;)</td></tr>
+<tr class="memdesc:a459f7647958c2c0a28f2ec50276fdcd1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS sensor_msgs/Image message to the corresponding Flatbuffer Image message.  <a href="namespaceseerep__ros__conversions__fb.html#a459f7647958c2c0a28f2ec50276fdcd1">More...</a><br /></td></tr>
+<tr class="separator:a459f7647958c2c0a28f2ec50276fdcd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1fe4d0011713b78163811192ca5348a0"><td class="memItemLeft" align="right" valign="top">sensor_msgs::Image&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a1fe4d0011713b78163811192ca5348a0">toROS</a> (const seerep::fb::Image &amp;image)</td></tr>
+<tr class="memdesc:a1fe4d0011713b78163811192ca5348a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a Flatbuffer Image message to the corresponding ROS sensor_msgs/Image message.  <a href="namespaceseerep__ros__conversions__fb.html#a1fe4d0011713b78163811192ca5348a0">More...</a><br /></td></tr>
+<tr class="separator:a1fe4d0011713b78163811192ca5348a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1a04f0ec517824326f5cc08d92f692e"><td class="memItemLeft" align="right" valign="top">flatbuffers::grpc::Message&lt; seerep::fb::Point &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#ac1a04f0ec517824326f5cc08d92f692e">toFlat</a> (const geometry_msgs::Point &amp;point)</td></tr>
+<tr class="memdesc:ac1a04f0ec517824326f5cc08d92f692e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS geometry_msgs::Point message to the corresponding gRPC Flatbuffer Image message.  <a href="namespaceseerep__ros__conversions__fb.html#ac1a04f0ec517824326f5cc08d92f692e">More...</a><br /></td></tr>
+<tr class="separator:ac1a04f0ec517824326f5cc08d92f692e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4385d8dfd0da60fcdf9fec33692eb7ee"><td class="memItemLeft" align="right" valign="top">flatbuffers::Offset&lt; seerep::fb::Point &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a4385d8dfd0da60fcdf9fec33692eb7ee">toFlat</a> (const geometry_msgs::Point &amp;point, flatbuffers::grpc::MessageBuilder &amp;builder)</td></tr>
+<tr class="memdesc:a4385d8dfd0da60fcdf9fec33692eb7ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS geometry_msgs::Point message to the corresponding Flatbuffer Image message.  <a href="namespaceseerep__ros__conversions__fb.html#a4385d8dfd0da60fcdf9fec33692eb7ee">More...</a><br /></td></tr>
+<tr class="separator:a4385d8dfd0da60fcdf9fec33692eb7ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab92ad98186195d366cbd4417d957acc9"><td class="memItemLeft" align="right" valign="top">geometry_msgs::Point&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#ab92ad98186195d366cbd4417d957acc9">toROS</a> (const seerep::fb::Point &amp;point)</td></tr>
+<tr class="memdesc:ab92ad98186195d366cbd4417d957acc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a Flatbuffer Image message to the corresponding ROS geometry_msgs::Point message.  <a href="namespaceseerep__ros__conversions__fb.html#ab92ad98186195d366cbd4417d957acc9">More...</a><br /></td></tr>
+<tr class="separator:ab92ad98186195d366cbd4417d957acc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6b311dba7a834a145b4cd47b7cbfbb8"><td class="memItemLeft" align="right" valign="top">flatbuffers::grpc::Message&lt; seerep::fb::Quaternion &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#ad6b311dba7a834a145b4cd47b7cbfbb8">toFlat</a> (const geometry_msgs::Quaternion &amp;quaternion)</td></tr>
+<tr class="memdesc:ad6b311dba7a834a145b4cd47b7cbfbb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS geometry_msgs::Quaternion message to the corresponding gRPC Flatbuffer Quaternion message.  <a href="namespaceseerep__ros__conversions__fb.html#ad6b311dba7a834a145b4cd47b7cbfbb8">More...</a><br /></td></tr>
+<tr class="separator:ad6b311dba7a834a145b4cd47b7cbfbb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06d985ed68b04639b0a274fdb09a1720"><td class="memItemLeft" align="right" valign="top">flatbuffers::Offset&lt; seerep::fb::Quaternion &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a06d985ed68b04639b0a274fdb09a1720">toFlat</a> (const geometry_msgs::Quaternion &amp;quaternion, flatbuffers::grpc::MessageBuilder &amp;builder)</td></tr>
+<tr class="memdesc:a06d985ed68b04639b0a274fdb09a1720"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS geometry_msgs::Quaternion message to the corresponding Flatbuffer Quaternion message.  <a href="namespaceseerep__ros__conversions__fb.html#a06d985ed68b04639b0a274fdb09a1720">More...</a><br /></td></tr>
+<tr class="separator:a06d985ed68b04639b0a274fdb09a1720"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adfdc4e282324d5da33b1e7cf3d158724"><td class="memItemLeft" align="right" valign="top">geometry_msgs::Quaternion&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#adfdc4e282324d5da33b1e7cf3d158724">toROS</a> (const seerep::fb::Quaternion &amp;quaternion)</td></tr>
+<tr class="memdesc:adfdc4e282324d5da33b1e7cf3d158724"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a Flatbuffer Quaternion message to the corresponding ROS geometry_msgs::Quaternion message.  <a href="namespaceseerep__ros__conversions__fb.html#adfdc4e282324d5da33b1e7cf3d158724">More...</a><br /></td></tr>
+<tr class="separator:adfdc4e282324d5da33b1e7cf3d158724"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc9f40dda535955daea208fb36130c25"><td class="memItemLeft" align="right" valign="top">flatbuffers::grpc::Message&lt; seerep::fb::Pose &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#afc9f40dda535955daea208fb36130c25">toFlat</a> (const geometry_msgs::Pose &amp;pose)</td></tr>
+<tr class="memdesc:afc9f40dda535955daea208fb36130c25"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS geometry_msgs::Pose message to the corresponding gRPC Flatbuffer Pose message.  <a href="namespaceseerep__ros__conversions__fb.html#afc9f40dda535955daea208fb36130c25">More...</a><br /></td></tr>
+<tr class="separator:afc9f40dda535955daea208fb36130c25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae40e1bf8ae634bbdfc37322e71d31747"><td class="memItemLeft" align="right" valign="top">flatbuffers::Offset&lt; seerep::fb::Pose &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#ae40e1bf8ae634bbdfc37322e71d31747">toFlat</a> (const geometry_msgs::Pose &amp;pose, flatbuffers::grpc::MessageBuilder &amp;builder)</td></tr>
+<tr class="memdesc:ae40e1bf8ae634bbdfc37322e71d31747"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS geometry_msgs::Pose message to the corresponding Flatbuffer Pose message.  <a href="namespaceseerep__ros__conversions__fb.html#ae40e1bf8ae634bbdfc37322e71d31747">More...</a><br /></td></tr>
+<tr class="separator:ae40e1bf8ae634bbdfc37322e71d31747"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20d66c2cc982b597af698993891ca881"><td class="memItemLeft" align="right" valign="top">geometry_msgs::Pose&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a20d66c2cc982b597af698993891ca881">toROS</a> (const seerep::fb::Pose &amp;pose)</td></tr>
+<tr class="memdesc:a20d66c2cc982b597af698993891ca881"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a Flatbuffer Pose message to the corresponding ROS geometry_msgs::Pose message.  <a href="namespaceseerep__ros__conversions__fb.html#a20d66c2cc982b597af698993891ca881">More...</a><br /></td></tr>
+<tr class="separator:a20d66c2cc982b597af698993891ca881"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d7e2c1781d45b49c2c8e94ab9096c89"><td class="memItemLeft" align="right" valign="top">flatbuffers::grpc::Message&lt; seerep::fb::PoseStamped &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a9d7e2c1781d45b49c2c8e94ab9096c89">toFlat</a> (const geometry_msgs::PoseStamped &amp;pose, std::string projectuuid)</td></tr>
+<tr class="memdesc:a9d7e2c1781d45b49c2c8e94ab9096c89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS geometry_msgs::PoseStamped message to the corresponding gRPC Flatbuffer PoseStamped message.  <a href="namespaceseerep__ros__conversions__fb.html#a9d7e2c1781d45b49c2c8e94ab9096c89">More...</a><br /></td></tr>
+<tr class="separator:a9d7e2c1781d45b49c2c8e94ab9096c89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a819f3a98d6641e4e5ae4fc61de9d8607"><td class="memItemLeft" align="right" valign="top">flatbuffers::Offset&lt; seerep::fb::PoseStamped &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a819f3a98d6641e4e5ae4fc61de9d8607">toFlat</a> (const geometry_msgs::PoseStamped &amp;pose, std::string projectuuid, flatbuffers::grpc::MessageBuilder &amp;builder)</td></tr>
+<tr class="memdesc:a819f3a98d6641e4e5ae4fc61de9d8607"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS geometry_msgs::PoseStamped message to the corresponding Flatbuffer PoseStamped message.  <a href="namespaceseerep__ros__conversions__fb.html#a819f3a98d6641e4e5ae4fc61de9d8607">More...</a><br /></td></tr>
+<tr class="separator:a819f3a98d6641e4e5ae4fc61de9d8607"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a261a024516f2d81c0d86f5910cb25b70"><td class="memItemLeft" align="right" valign="top">geometry_msgs::PoseStamped&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a261a024516f2d81c0d86f5910cb25b70">toROS</a> (const seerep::fb::PoseStamped &amp;pose)</td></tr>
+<tr class="memdesc:a261a024516f2d81c0d86f5910cb25b70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a Flatbuffer PoseStamped message to the corresponding ROS geometry_msgs::PoseStamped message.  <a href="namespaceseerep__ros__conversions__fb.html#a261a024516f2d81c0d86f5910cb25b70">More...</a><br /></td></tr>
+<tr class="separator:a261a024516f2d81c0d86f5910cb25b70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23921df4adf4a23a12077c3eee94af94"><td class="memItemLeft" align="right" valign="top">flatbuffers::grpc::Message&lt; seerep::fb::Vector3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a23921df4adf4a23a12077c3eee94af94">toFlat</a> (const geometry_msgs::Vector3 &amp;vector)</td></tr>
+<tr class="memdesc:a23921df4adf4a23a12077c3eee94af94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS geometry_msgs::Vector3 message to the corresponding gRPC Flatbuffer Vector3 message.  <a href="namespaceseerep__ros__conversions__fb.html#a23921df4adf4a23a12077c3eee94af94">More...</a><br /></td></tr>
+<tr class="separator:a23921df4adf4a23a12077c3eee94af94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40f1b850342d601d0b72be78992cda66"><td class="memItemLeft" align="right" valign="top">flatbuffers::Offset&lt; seerep::fb::Vector3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a40f1b850342d601d0b72be78992cda66">toFlat</a> (const geometry_msgs::Vector3 &amp;vector, flatbuffers::grpc::MessageBuilder &amp;builder)</td></tr>
+<tr class="memdesc:a40f1b850342d601d0b72be78992cda66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS geometry_msgs::Vector3 message to the corresponding Flatbuffer Vector3 message.  <a href="namespaceseerep__ros__conversions__fb.html#a40f1b850342d601d0b72be78992cda66">More...</a><br /></td></tr>
+<tr class="separator:a40f1b850342d601d0b72be78992cda66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7504df6dc260e32f7dcf26a4d0cb842"><td class="memItemLeft" align="right" valign="top">geometry_msgs::Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#ad7504df6dc260e32f7dcf26a4d0cb842">toROS</a> (const seerep::fb::Vector3 &amp;vector)</td></tr>
+<tr class="memdesc:ad7504df6dc260e32f7dcf26a4d0cb842"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a Flatbuffer Vector3 message to the corresponding ROS geometry_msgs::Vector3 message.  <a href="namespaceseerep__ros__conversions__fb.html#ad7504df6dc260e32f7dcf26a4d0cb842">More...</a><br /></td></tr>
+<tr class="separator:ad7504df6dc260e32f7dcf26a4d0cb842"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abfeee8855b6c5731e79938f66dd893d6"><td class="memItemLeft" align="right" valign="top">flatbuffers::grpc::Message&lt; seerep::fb::Vector3Stamped &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#abfeee8855b6c5731e79938f66dd893d6">toFlat</a> (const geometry_msgs::Vector3Stamped &amp;vector, std::string projectuuid)</td></tr>
+<tr class="memdesc:abfeee8855b6c5731e79938f66dd893d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS geometry_msgs::Vector3Stamped message to the corresponding gRPC Flatbuffer Vector3Stamped message.  <a href="namespaceseerep__ros__conversions__fb.html#abfeee8855b6c5731e79938f66dd893d6">More...</a><br /></td></tr>
+<tr class="separator:abfeee8855b6c5731e79938f66dd893d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5a07a4eac998e3a13d99fb1ae9348e3"><td class="memItemLeft" align="right" valign="top">flatbuffers::Offset&lt; seerep::fb::Vector3Stamped &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#ac5a07a4eac998e3a13d99fb1ae9348e3">toFlat</a> (const geometry_msgs::Vector3Stamped &amp;vector, std::string projectuuid, flatbuffers::grpc::MessageBuilder &amp;builder)</td></tr>
+<tr class="memdesc:ac5a07a4eac998e3a13d99fb1ae9348e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS geometry_msgs::Vector3Stamped message to the corresponding Flatbuffer Vector3Stamped message.  <a href="namespaceseerep__ros__conversions__fb.html#ac5a07a4eac998e3a13d99fb1ae9348e3">More...</a><br /></td></tr>
+<tr class="separator:ac5a07a4eac998e3a13d99fb1ae9348e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4c1ea24d23b22f18185f36c8c1b1475"><td class="memItemLeft" align="right" valign="top">geometry_msgs::Vector3Stamped&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#ae4c1ea24d23b22f18185f36c8c1b1475">toROS</a> (const seerep::fb::Vector3Stamped &amp;vector)</td></tr>
+<tr class="memdesc:ae4c1ea24d23b22f18185f36c8c1b1475"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a Flatbuffer Vector3Stamped message to the corresponding ROS geometry_msgs::Vector3Stamped message.  <a href="namespaceseerep__ros__conversions__fb.html#ae4c1ea24d23b22f18185f36c8c1b1475">More...</a><br /></td></tr>
+<tr class="separator:ae4c1ea24d23b22f18185f36c8c1b1475"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93dc3b419613fe0513b51231edbe977d"><td class="memItemLeft" align="right" valign="top">flatbuffers::grpc::Message&lt; seerep::fb::Transform &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a93dc3b419613fe0513b51231edbe977d">toFlat</a> (const geometry_msgs::Transform &amp;transform)</td></tr>
+<tr class="memdesc:a93dc3b419613fe0513b51231edbe977d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS geometry_msgs::Transform message to the corresponding gRPC Flatbuffer Transform message.  <a href="namespaceseerep__ros__conversions__fb.html#a93dc3b419613fe0513b51231edbe977d">More...</a><br /></td></tr>
+<tr class="separator:a93dc3b419613fe0513b51231edbe977d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a600a4788b288607fe210aebee75180e0"><td class="memItemLeft" align="right" valign="top">flatbuffers::Offset&lt; seerep::fb::Transform &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a600a4788b288607fe210aebee75180e0">toFlat</a> (const geometry_msgs::Transform &amp;transform, flatbuffers::grpc::MessageBuilder &amp;builder)</td></tr>
+<tr class="memdesc:a600a4788b288607fe210aebee75180e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS geometry_msgs::Transform message to the corresponding Flatbuffer Transform message.  <a href="namespaceseerep__ros__conversions__fb.html#a600a4788b288607fe210aebee75180e0">More...</a><br /></td></tr>
+<tr class="separator:a600a4788b288607fe210aebee75180e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac01824ea6d5848e212b15f5345cba639"><td class="memItemLeft" align="right" valign="top">geometry_msgs::Transform&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#ac01824ea6d5848e212b15f5345cba639">toROS</a> (const seerep::fb::Transform &amp;transform)</td></tr>
+<tr class="memdesc:ac01824ea6d5848e212b15f5345cba639"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a Flatbuffer Transform message to the corresponding ROS geometry_msgs::Transform message.  <a href="namespaceseerep__ros__conversions__fb.html#ac01824ea6d5848e212b15f5345cba639">More...</a><br /></td></tr>
+<tr class="separator:ac01824ea6d5848e212b15f5345cba639"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a001994c5e6987f455d60b743fdaa877b"><td class="memItemLeft" align="right" valign="top">flatbuffers::grpc::Message&lt; seerep::fb::TransformStamped &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a001994c5e6987f455d60b743fdaa877b">toFlat</a> (const geometry_msgs::TransformStamped &amp;transform, std::string projectuuid, const bool isStatic)</td></tr>
+<tr class="memdesc:a001994c5e6987f455d60b743fdaa877b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS geometry_msgs::TransformStamped message to the corresponding gRPC Flatbuffer TransformStamped message.  <a href="namespaceseerep__ros__conversions__fb.html#a001994c5e6987f455d60b743fdaa877b">More...</a><br /></td></tr>
+<tr class="separator:a001994c5e6987f455d60b743fdaa877b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a708fea84d73b7995d75dc9aaf808c813"><td class="memItemLeft" align="right" valign="top">flatbuffers::Offset&lt; seerep::fb::TransformStamped &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a708fea84d73b7995d75dc9aaf808c813">toFlat</a> (const geometry_msgs::TransformStamped &amp;transform, std::string projectuuid, const bool isStatic, flatbuffers::grpc::MessageBuilder &amp;builder)</td></tr>
+<tr class="memdesc:a708fea84d73b7995d75dc9aaf808c813"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS geometry_msgs::TransformStamped message to the corresponding Flatbuffer TransformStamped message.  <a href="namespaceseerep__ros__conversions__fb.html#a708fea84d73b7995d75dc9aaf808c813">More...</a><br /></td></tr>
+<tr class="separator:a708fea84d73b7995d75dc9aaf808c813"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae21e4433a25ab7fbbb0a2a9df5d47af7"><td class="memItemLeft" align="right" valign="top">geometry_msgs::TransformStamped&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#ae21e4433a25ab7fbbb0a2a9df5d47af7">toROS</a> (const seerep::fb::TransformStamped &amp;transform)</td></tr>
+<tr class="memdesc:ae21e4433a25ab7fbbb0a2a9df5d47af7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a Flatbuffer TransformStamped message to the corresponding ROS geometry_msgs::TransformStamped message.  <a href="namespaceseerep__ros__conversions__fb.html#ae21e4433a25ab7fbbb0a2a9df5d47af7">More...</a><br /></td></tr>
+<tr class="separator:ae21e4433a25ab7fbbb0a2a9df5d47af7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab33d92a8c869a5c6c003b1038698cf95"><td class="memItemLeft" align="right" valign="top">flatbuffers::grpc::Message&lt; seerep::fb::BoundingBoxes2DLabeledStamped &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#ab33d92a8c869a5c6c003b1038698cf95">toFlat</a> (const vision_msgs::Detection2DArray &amp;detection2d, std::string projectuuid, std::string category, std::string msguuid=&quot;&quot;, std::vector&lt; std::string &gt; labels=std::vector&lt; std::string &gt;(), std::vector&lt; std::string &gt; instances=std::vector&lt; std::string &gt;())</td></tr>
+<tr class="memdesc:ab33d92a8c869a5c6c003b1038698cf95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS vision_msgs::Detection2DArray message to the corresponding gRPC Flatbuffer BoundingBoxes2D_labeled_stamped message.  <a href="namespaceseerep__ros__conversions__fb.html#ab33d92a8c869a5c6c003b1038698cf95">More...</a><br /></td></tr>
+<tr class="separator:ab33d92a8c869a5c6c003b1038698cf95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2d9be99f77efb1e390758f2b2153023"><td class="memItemLeft" align="right" valign="top">flatbuffers::Offset&lt; seerep::fb::BoundingBoxes2DLabeledStamped &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#ac2d9be99f77efb1e390758f2b2153023">toFlat</a> (const vision_msgs::Detection2DArray &amp;detection2d, std::string projectuuid, flatbuffers::grpc::MessageBuilder &amp;builder, std::string category, std::string msguuid=&quot;&quot;, std::vector&lt; std::string &gt; labels=std::vector&lt; std::string &gt;(), std::vector&lt; std::string &gt; instances=std::vector&lt; std::string &gt;())</td></tr>
+<tr class="memdesc:ac2d9be99f77efb1e390758f2b2153023"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS vision_msgs::Detection2DArray message to the corresponding Flatbuffer BoundingBoxes2D_labeled_stamped message.  <a href="namespaceseerep__ros__conversions__fb.html#ac2d9be99f77efb1e390758f2b2153023">More...</a><br /></td></tr>
+<tr class="separator:ac2d9be99f77efb1e390758f2b2153023"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae694b1f3f875ae063a9ebd279c498fcf"><td class="memItemLeft" align="right" valign="top">vision_msgs::Detection2DArray&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#ae694b1f3f875ae063a9ebd279c498fcf">toROS</a> (const seerep::fb::BoundingBoxes2DLabeledStamped &amp;bb_labeled_stamped)</td></tr>
+<tr class="memdesc:ae694b1f3f875ae063a9ebd279c498fcf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a Flatbuffer BoundingBoxes2D_labeled_stamped message to the corresponding ROS vision_msgs::Detection2DArray message.  <a href="namespaceseerep__ros__conversions__fb.html#ae694b1f3f875ae063a9ebd279c498fcf">More...</a><br /></td></tr>
+<tr class="separator:ae694b1f3f875ae063a9ebd279c498fcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8229fe2ecaf333ec9dea277037e5ea26"><td class="memItemLeft" align="right" valign="top">flatbuffers::grpc::Message&lt; seerep::fb::BoundingBox2DLabeled &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a8229fe2ecaf333ec9dea277037e5ea26">toFlat</a> (const vision_msgs::Detection2D &amp;detection2d)</td></tr>
+<tr class="memdesc:a8229fe2ecaf333ec9dea277037e5ea26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS vision_msgs::Detection2D message to the corresponding gRPC Flatbuffer BoundingBoxes2DLabeled message.  <a href="namespaceseerep__ros__conversions__fb.html#a8229fe2ecaf333ec9dea277037e5ea26">More...</a><br /></td></tr>
+<tr class="separator:a8229fe2ecaf333ec9dea277037e5ea26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a357d17a659548fb0eaec31b2727447ab"><td class="memItemLeft" align="right" valign="top">flatbuffers::Offset&lt; seerep::fb::BoundingBox2DLabeled &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a357d17a659548fb0eaec31b2727447ab">toFlat</a> (const vision_msgs::Detection2D &amp;detection2d, flatbuffers::grpc::MessageBuilder &amp;builder, std::string label=&quot;&quot;, std::string instanceUUID=&quot;&quot;)</td></tr>
+<tr class="memdesc:a357d17a659548fb0eaec31b2727447ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS vision_msgs::Detection2D message to the corresponding Flatbuffer BoundingBoxes2DLabeled message.  <a href="namespaceseerep__ros__conversions__fb.html#a357d17a659548fb0eaec31b2727447ab">More...</a><br /></td></tr>
+<tr class="separator:a357d17a659548fb0eaec31b2727447ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3482ac20b4bd233b889edf98c455885d"><td class="memItemLeft" align="right" valign="top">vision_msgs::Detection2D&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a3482ac20b4bd233b889edf98c455885d">toROS</a> (const seerep::fb::BoundingBox2DLabeled &amp;bb_labeled_stamped)</td></tr>
+<tr class="memdesc:a3482ac20b4bd233b889edf98c455885d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a Flatbuffer BoundingBoxes2DLabeled message to the corresponding ROS vision_msgs::Detection2D message.  <a href="namespaceseerep__ros__conversions__fb.html#a3482ac20b4bd233b889edf98c455885d">More...</a><br /></td></tr>
+<tr class="separator:a3482ac20b4bd233b889edf98c455885d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1cfba36cfdb06e9b3334d2862ee7e15d"><td class="memItemLeft" align="right" valign="top">flatbuffers::grpc::Message&lt; seerep::fb::CameraIntrinsics &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a1cfba36cfdb06e9b3334d2862ee7e15d">toFlat</a> (const sensor_msgs::CameraInfo &amp;ci, std::string &amp;projectuuid, std::string &amp;msgUuid, double maxViewingDistance)</td></tr>
+<tr class="memdesc:a1cfba36cfdb06e9b3334d2862ee7e15d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS sensor_msgs::CameraInfo message to the corresponding gRPC Flatbuffer CameraIntrinsics message.  <a href="namespaceseerep__ros__conversions__fb.html#a1cfba36cfdb06e9b3334d2862ee7e15d">More...</a><br /></td></tr>
+<tr class="separator:a1cfba36cfdb06e9b3334d2862ee7e15d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3c51e99b6e5b20a58a2cdf8bf755db1"><td class="memItemLeft" align="right" valign="top">flatbuffers::Offset&lt; seerep::fb::CameraIntrinsics &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#ae3c51e99b6e5b20a58a2cdf8bf755db1">toFlat</a> (const sensor_msgs::CameraInfo &amp;ci, std::string &amp;projectuuid, std::string &amp;msgUuid, double maxViewingDistance, flatbuffers::grpc::MessageBuilder &amp;builder)</td></tr>
+<tr class="memdesc:ae3c51e99b6e5b20a58a2cdf8bf755db1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS sensor_msgs::CameraInfo message to the corresponding gRPC Flatbuffer CameraIntrinsics message.  <a href="namespaceseerep__ros__conversions__fb.html#ae3c51e99b6e5b20a58a2cdf8bf755db1">More...</a><br /></td></tr>
+<tr class="separator:ae3c51e99b6e5b20a58a2cdf8bf755db1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14d3c2ca5c47c1210648397ae6129e8c"><td class="memItemLeft" align="right" valign="top">flatbuffers::Offset&lt; seerep::fb::RegionOfInterest &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a14d3c2ca5c47c1210648397ae6129e8c">toFlat</a> (const sensor_msgs::RegionOfInterest &amp;roi, flatbuffers::grpc::MessageBuilder &amp;builder)</td></tr>
+<tr class="memdesc:a14d3c2ca5c47c1210648397ae6129e8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS sensor_msgs::RegionOfInterest message to the corresponding gRPC Flatbuffer RegionOfInterest message.  <a href="namespaceseerep__ros__conversions__fb.html#a14d3c2ca5c47c1210648397ae6129e8c">More...</a><br /></td></tr>
+<tr class="separator:a14d3c2ca5c47c1210648397ae6129e8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="ac1a04f0ec517824326f5cc08d92f692e" name="ac1a04f0ec517824326f5cc08d92f692e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac1a04f0ec517824326f5cc08d92f692e">&#9670;&nbsp;</a></span>toFlat() <span class="overload">[1/31]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::grpc::Message&lt; seerep::fb::Point &gt; seerep_ros_conversions_fb::toFlat </td>
+          <td>(</td>
+          <td class="paramtype">const geometry_msgs::Point &amp;&#160;</td>
+          <td class="paramname"><em>point</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS geometry_msgs::Point message to the corresponding gRPC Flatbuffer Image message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">point</td><td>geometry_msgs::Point </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>gRPC Flatbuffer Point message </dd></dl>
+
+</div>
+</div>
+<a id="a4385d8dfd0da60fcdf9fec33692eb7ee" name="a4385d8dfd0da60fcdf9fec33692eb7ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4385d8dfd0da60fcdf9fec33692eb7ee">&#9670;&nbsp;</a></span>toFlat() <span class="overload">[2/31]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::Offset&lt; seerep::fb::Point &gt; seerep_ros_conversions_fb::toFlat </td>
+          <td>(</td>
+          <td class="paramtype">const geometry_msgs::Point &amp;&#160;</td>
+          <td class="paramname"><em>point</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">flatbuffers::grpc::MessageBuilder &amp;&#160;</td>
+          <td class="paramname"><em>builder</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS geometry_msgs::Point message to the corresponding Flatbuffer Image message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">point</td><td>geometry_msgs::Point </td></tr>
+    <tr><td class="paramname">builder</td><td>the flatbuffer message builder to build the flatbuffer message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Flatbuffer Point message </dd></dl>
+
+</div>
+</div>
+<a id="afc9f40dda535955daea208fb36130c25" name="afc9f40dda535955daea208fb36130c25"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc9f40dda535955daea208fb36130c25">&#9670;&nbsp;</a></span>toFlat() <span class="overload">[3/31]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::grpc::Message&lt; seerep::fb::Pose &gt; seerep_ros_conversions_fb::toFlat </td>
+          <td>(</td>
+          <td class="paramtype">const geometry_msgs::Pose &amp;&#160;</td>
+          <td class="paramname"><em>pose</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS geometry_msgs::Pose message to the corresponding gRPC Flatbuffer Pose message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pose</td><td>geometry_msgs::Pose </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>gRPC Flatbuffer Pose message </dd></dl>
+
+</div>
+</div>
+<a id="ae40e1bf8ae634bbdfc37322e71d31747" name="ae40e1bf8ae634bbdfc37322e71d31747"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae40e1bf8ae634bbdfc37322e71d31747">&#9670;&nbsp;</a></span>toFlat() <span class="overload">[4/31]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::Offset&lt; seerep::fb::Pose &gt; seerep_ros_conversions_fb::toFlat </td>
+          <td>(</td>
+          <td class="paramtype">const geometry_msgs::Pose &amp;&#160;</td>
+          <td class="paramname"><em>pose</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">flatbuffers::grpc::MessageBuilder &amp;&#160;</td>
+          <td class="paramname"><em>builder</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS geometry_msgs::Pose message to the corresponding Flatbuffer Pose message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pose</td><td>geometry_msgs::Pose </td></tr>
+    <tr><td class="paramname">builder</td><td>the flatbuffer message builder to build the flatbuffer message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Flatbuffer Pose message </dd></dl>
+
+</div>
+</div>
+<a id="a9d7e2c1781d45b49c2c8e94ab9096c89" name="a9d7e2c1781d45b49c2c8e94ab9096c89"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d7e2c1781d45b49c2c8e94ab9096c89">&#9670;&nbsp;</a></span>toFlat() <span class="overload">[5/31]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::grpc::Message&lt; seerep::fb::PoseStamped &gt; seerep_ros_conversions_fb::toFlat </td>
+          <td>(</td>
+          <td class="paramtype">const geometry_msgs::PoseStamped &amp;&#160;</td>
+          <td class="paramname"><em>pose</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>projectuuid</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS geometry_msgs::PoseStamped message to the corresponding gRPC Flatbuffer PoseStamped message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pose</td><td>geometry_msgs::PoseStamped </td></tr>
+    <tr><td class="paramname">projectuuid</td><td>UUID of the target project. Used to set the corresponding field in the Flatbuffer message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>gRPC Flatbuffer PoseStamped message </dd></dl>
+
+</div>
+</div>
+<a id="a819f3a98d6641e4e5ae4fc61de9d8607" name="a819f3a98d6641e4e5ae4fc61de9d8607"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a819f3a98d6641e4e5ae4fc61de9d8607">&#9670;&nbsp;</a></span>toFlat() <span class="overload">[6/31]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::Offset&lt; seerep::fb::PoseStamped &gt; seerep_ros_conversions_fb::toFlat </td>
+          <td>(</td>
+          <td class="paramtype">const geometry_msgs::PoseStamped &amp;&#160;</td>
+          <td class="paramname"><em>pose</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>projectuuid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">flatbuffers::grpc::MessageBuilder &amp;&#160;</td>
+          <td class="paramname"><em>builder</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS geometry_msgs::PoseStamped message to the corresponding Flatbuffer PoseStamped message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pose</td><td>geometry_msgs::PoseStamped </td></tr>
+    <tr><td class="paramname">projectuuid</td><td>UUID of the target project. Used to set the corresponding field in the Flatbuffer message </td></tr>
+    <tr><td class="paramname">builder</td><td>the flatbuffer message builder to build the flatbuffer message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Flatbuffer PoseStamped message </dd></dl>
+
+</div>
+</div>
+<a id="ad6b311dba7a834a145b4cd47b7cbfbb8" name="ad6b311dba7a834a145b4cd47b7cbfbb8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6b311dba7a834a145b4cd47b7cbfbb8">&#9670;&nbsp;</a></span>toFlat() <span class="overload">[7/31]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::grpc::Message&lt; seerep::fb::Quaternion &gt; seerep_ros_conversions_fb::toFlat </td>
+          <td>(</td>
+          <td class="paramtype">const geometry_msgs::Quaternion &amp;&#160;</td>
+          <td class="paramname"><em>quaternion</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS geometry_msgs::Quaternion message to the corresponding gRPC Flatbuffer Quaternion message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">quaternion</td><td>geometry_msgs::Quaternion </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>gRPC Flatbuffer Quaternion message </dd></dl>
+
+</div>
+</div>
+<a id="a06d985ed68b04639b0a274fdb09a1720" name="a06d985ed68b04639b0a274fdb09a1720"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06d985ed68b04639b0a274fdb09a1720">&#9670;&nbsp;</a></span>toFlat() <span class="overload">[8/31]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::Offset&lt; seerep::fb::Quaternion &gt; seerep_ros_conversions_fb::toFlat </td>
+          <td>(</td>
+          <td class="paramtype">const geometry_msgs::Quaternion &amp;&#160;</td>
+          <td class="paramname"><em>quaternion</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">flatbuffers::grpc::MessageBuilder &amp;&#160;</td>
+          <td class="paramname"><em>builder</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS geometry_msgs::Quaternion message to the corresponding Flatbuffer Quaternion message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">quaternion</td><td>geometry_msgs::Quaternion </td></tr>
+    <tr><td class="paramname">builder</td><td>the flatbuffer message builder to build the flatbuffer message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Flatbuffer Quaternion message </dd></dl>
+
+</div>
+</div>
+<a id="a93dc3b419613fe0513b51231edbe977d" name="a93dc3b419613fe0513b51231edbe977d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a93dc3b419613fe0513b51231edbe977d">&#9670;&nbsp;</a></span>toFlat() <span class="overload">[9/31]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::grpc::Message&lt; seerep::fb::Transform &gt; seerep_ros_conversions_fb::toFlat </td>
+          <td>(</td>
+          <td class="paramtype">const geometry_msgs::Transform &amp;&#160;</td>
+          <td class="paramname"><em>transform</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS geometry_msgs::Transform message to the corresponding gRPC Flatbuffer Transform message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">transform</td><td>geometry_msgs::Transform </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>gRPC Flatbuffer Transform message </dd></dl>
+
+</div>
+</div>
+<a id="a600a4788b288607fe210aebee75180e0" name="a600a4788b288607fe210aebee75180e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a600a4788b288607fe210aebee75180e0">&#9670;&nbsp;</a></span>toFlat() <span class="overload">[10/31]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::Offset&lt; seerep::fb::Transform &gt; seerep_ros_conversions_fb::toFlat </td>
+          <td>(</td>
+          <td class="paramtype">const geometry_msgs::Transform &amp;&#160;</td>
+          <td class="paramname"><em>transform</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">flatbuffers::grpc::MessageBuilder &amp;&#160;</td>
+          <td class="paramname"><em>builder</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS geometry_msgs::Transform message to the corresponding Flatbuffer Transform message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">transform</td><td>geometry_msgs::Transform </td></tr>
+    <tr><td class="paramname">builder</td><td>the flatbuffer message builder to build the flatbuffer message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Flatbuffer Transform message </dd></dl>
+
+</div>
+</div>
+<a id="a001994c5e6987f455d60b743fdaa877b" name="a001994c5e6987f455d60b743fdaa877b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a001994c5e6987f455d60b743fdaa877b">&#9670;&nbsp;</a></span>toFlat() <span class="overload">[11/31]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::grpc::Message&lt; seerep::fb::TransformStamped &gt; seerep_ros_conversions_fb::toFlat </td>
+          <td>(</td>
+          <td class="paramtype">const geometry_msgs::TransformStamped &amp;&#160;</td>
+          <td class="paramname"><em>transform</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>projectuuid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>isStatic</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS geometry_msgs::TransformStamped message to the corresponding gRPC Flatbuffer TransformStamped message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">transform</td><td>geometry_msgs::TransformStamped </td></tr>
+    <tr><td class="paramname">projectuuid</td><td>std::string </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>gRPC Flatbuffer TransformStamped message </dd></dl>
+
+</div>
+</div>
+<a id="a708fea84d73b7995d75dc9aaf808c813" name="a708fea84d73b7995d75dc9aaf808c813"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a708fea84d73b7995d75dc9aaf808c813">&#9670;&nbsp;</a></span>toFlat() <span class="overload">[12/31]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::Offset&lt; seerep::fb::TransformStamped &gt; seerep_ros_conversions_fb::toFlat </td>
+          <td>(</td>
+          <td class="paramtype">const geometry_msgs::TransformStamped &amp;&#160;</td>
+          <td class="paramname"><em>transform</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>projectuuid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>isStatic</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">flatbuffers::grpc::MessageBuilder &amp;&#160;</td>
+          <td class="paramname"><em>builder</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS geometry_msgs::TransformStamped message to the corresponding Flatbuffer TransformStamped message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">transform</td><td>geometry_msgs::TransformStamped </td></tr>
+    <tr><td class="paramname">projectuuid</td><td>std::string </td></tr>
+    <tr><td class="paramname">builder</td><td>the flatbuffer message builder to build the flatbuffer message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Flatbuffer TransformStamped message </dd></dl>
+
+</div>
+</div>
+<a id="a23921df4adf4a23a12077c3eee94af94" name="a23921df4adf4a23a12077c3eee94af94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23921df4adf4a23a12077c3eee94af94">&#9670;&nbsp;</a></span>toFlat() <span class="overload">[13/31]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::grpc::Message&lt; seerep::fb::Vector3 &gt; seerep_ros_conversions_fb::toFlat </td>
+          <td>(</td>
+          <td class="paramtype">const geometry_msgs::Vector3 &amp;&#160;</td>
+          <td class="paramname"><em>vector</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS geometry_msgs::Vector3 message to the corresponding gRPC Flatbuffer Vector3 message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">vector</td><td>geometry_msgs::Vector3 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>gRPC Flatbuffer Vector3 message </dd></dl>
+
+</div>
+</div>
+<a id="a40f1b850342d601d0b72be78992cda66" name="a40f1b850342d601d0b72be78992cda66"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40f1b850342d601d0b72be78992cda66">&#9670;&nbsp;</a></span>toFlat() <span class="overload">[14/31]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::Offset&lt; seerep::fb::Vector3 &gt; seerep_ros_conversions_fb::toFlat </td>
+          <td>(</td>
+          <td class="paramtype">const geometry_msgs::Vector3 &amp;&#160;</td>
+          <td class="paramname"><em>vector</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">flatbuffers::grpc::MessageBuilder &amp;&#160;</td>
+          <td class="paramname"><em>builder</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS geometry_msgs::Vector3 message to the corresponding Flatbuffer Vector3 message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">vector</td><td>geometry_msgs::Vector3 </td></tr>
+    <tr><td class="paramname">builder</td><td>the flatbuffer message builder to build the flatbuffer message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Flatbuffer Vector3 message </dd></dl>
+
+</div>
+</div>
+<a id="abfeee8855b6c5731e79938f66dd893d6" name="abfeee8855b6c5731e79938f66dd893d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abfeee8855b6c5731e79938f66dd893d6">&#9670;&nbsp;</a></span>toFlat() <span class="overload">[15/31]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::grpc::Message&lt; seerep::fb::Vector3Stamped &gt; seerep_ros_conversions_fb::toFlat </td>
+          <td>(</td>
+          <td class="paramtype">const geometry_msgs::Vector3Stamped &amp;&#160;</td>
+          <td class="paramname"><em>vector</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>projectuuid</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS geometry_msgs::Vector3Stamped message to the corresponding gRPC Flatbuffer Vector3Stamped message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">vector</td><td>geometry_msgs::Vector3Stamped </td></tr>
+    <tr><td class="paramname">projectuuid</td><td>UUID of the target project. Used to set the corresponding field in the Flatbuffer message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>gRPC Flatbuffer Vector3Stamped message </dd></dl>
+
+</div>
+</div>
+<a id="ac5a07a4eac998e3a13d99fb1ae9348e3" name="ac5a07a4eac998e3a13d99fb1ae9348e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5a07a4eac998e3a13d99fb1ae9348e3">&#9670;&nbsp;</a></span>toFlat() <span class="overload">[16/31]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::Offset&lt; seerep::fb::Vector3Stamped &gt; seerep_ros_conversions_fb::toFlat </td>
+          <td>(</td>
+          <td class="paramtype">const geometry_msgs::Vector3Stamped &amp;&#160;</td>
+          <td class="paramname"><em>vector</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>projectuuid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">flatbuffers::grpc::MessageBuilder &amp;&#160;</td>
+          <td class="paramname"><em>builder</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS geometry_msgs::Vector3Stamped message to the corresponding Flatbuffer Vector3Stamped message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">vector</td><td>geometry_msgs::Vector3Stamped </td></tr>
+    <tr><td class="paramname">projectuuid</td><td>UUID of the target project. Used to set the corresponding field in the Flatbuffer message </td></tr>
+    <tr><td class="paramname">builder</td><td>the flatbuffer message builder to build the flatbuffer message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Flatbuffer Vector3Stamped message </dd></dl>
+
+</div>
+</div>
+<a id="a1cfba36cfdb06e9b3334d2862ee7e15d" name="a1cfba36cfdb06e9b3334d2862ee7e15d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1cfba36cfdb06e9b3334d2862ee7e15d">&#9670;&nbsp;</a></span>toFlat() <span class="overload">[17/31]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::grpc::Message&lt; seerep::fb::CameraIntrinsics &gt; seerep_ros_conversions_fb::toFlat </td>
+          <td>(</td>
+          <td class="paramtype">const sensor_msgs::CameraInfo &amp;&#160;</td>
+          <td class="paramname"><em>ci</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>projectuuid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>msgUuid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>maxViewingDistance</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS sensor_msgs::CameraInfo message to the corresponding gRPC Flatbuffer CameraIntrinsics message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ci</td><td>sensor_msgs::CameraInfo </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>gRPC Flatbuffer CameraIntrinsics message </dd></dl>
+
+</div>
+</div>
+<a id="ae3c51e99b6e5b20a58a2cdf8bf755db1" name="ae3c51e99b6e5b20a58a2cdf8bf755db1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3c51e99b6e5b20a58a2cdf8bf755db1">&#9670;&nbsp;</a></span>toFlat() <span class="overload">[18/31]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::Offset&lt; seerep::fb::CameraIntrinsics &gt; seerep_ros_conversions_fb::toFlat </td>
+          <td>(</td>
+          <td class="paramtype">const sensor_msgs::CameraInfo &amp;&#160;</td>
+          <td class="paramname"><em>ci</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>projectuuid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>msgUuid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>maxViewingDistance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">flatbuffers::grpc::MessageBuilder &amp;&#160;</td>
+          <td class="paramname"><em>builder</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS sensor_msgs::CameraInfo message to the corresponding gRPC Flatbuffer CameraIntrinsics message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ci</td><td>sensor_msgs::CameraInfo </td></tr>
+    <tr><td class="paramname">builder</td><td>the flatbuffer message builder to build the flatbuffer message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Flatbuffer CameraIntrinsics message </dd></dl>
+
+</div>
+</div>
+<a id="a459f7647958c2c0a28f2ec50276fdcd1" name="a459f7647958c2c0a28f2ec50276fdcd1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a459f7647958c2c0a28f2ec50276fdcd1">&#9670;&nbsp;</a></span>toFlat() <span class="overload">[19/31]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::Offset&lt; seerep::fb::Image &gt; seerep_ros_conversions_fb::toFlat </td>
+          <td>(</td>
+          <td class="paramtype">const sensor_msgs::Image &amp;&#160;</td>
+          <td class="paramname"><em>image</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>projectuuid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">flatbuffers::grpc::MessageBuilder &amp;&#160;</td>
+          <td class="paramname"><em>builder</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>cameraInstrinsicUuid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>msguuid</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS sensor_msgs/Image message to the corresponding Flatbuffer Image message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">image</td><td>sensor_msgs/Image </td></tr>
+    <tr><td class="paramname">projectuuid</td><td>UUID of the target project. Used to set the corresponding field in the Flatbuffer message </td></tr>
+    <tr><td class="paramname">builder</td><td>the flatbuffer message builder to build the flatbuffer message </td></tr>
+    <tr><td class="paramname">msguuid</td><td>UUID of the message. Used to set the corresponding field in the Flatbuffer message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Flatbuffer Image message </dd></dl>
+
+</div>
+</div>
+<a id="a15849760ff8fab1d11723727bde8a1b7" name="a15849760ff8fab1d11723727bde8a1b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15849760ff8fab1d11723727bde8a1b7">&#9670;&nbsp;</a></span>toFlat() <span class="overload">[20/31]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::grpc::Message&lt; seerep::fb::Image &gt; seerep_ros_conversions_fb::toFlat </td>
+          <td>(</td>
+          <td class="paramtype">const sensor_msgs::Image &amp;&#160;</td>
+          <td class="paramname"><em>image</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>projectuuid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>cameraInstrinsicUuid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>msguuid</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS sensor_msgs/Image message to the corresponding gRPC Flatbuffer Image message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">image</td><td>sensor_msgs/Image </td></tr>
+    <tr><td class="paramname">projectuuid</td><td>UUID of the target project. Used to set the corresponding field in the Flatbuffer message </td></tr>
+    <tr><td class="paramname">msguuid</td><td>UUID of the message. Used to set the corresponding field in the Flatbuffer message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>gRPC Flatbuffer Image message </dd></dl>
+
+</div>
+</div>
+<a id="a1b8563c07d006493f2871218e295b533" name="a1b8563c07d006493f2871218e295b533"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b8563c07d006493f2871218e295b533">&#9670;&nbsp;</a></span>toFlat() <span class="overload">[21/31]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::Offset&lt; seerep::fb::PointCloud2 &gt; seerep_ros_conversions_fb::toFlat </td>
+          <td>(</td>
+          <td class="paramtype">const sensor_msgs::PointCloud2 &amp;&#160;</td>
+          <td class="paramname"><em>cloud</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>projectuuid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">flatbuffers::grpc::MessageBuilder &amp;&#160;</td>
+          <td class="paramname"><em>builder</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>msguuid</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS sensor_msgs/PointCloud2 message to the corresponding Flatbuffer PointCloud2 message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cloud</td><td>sensor_msgs/PointCloud2 </td></tr>
+    <tr><td class="paramname">projectuuid</td><td>UUID of the target project. Used to set the corresponding field in the Flatbuffer message </td></tr>
+    <tr><td class="paramname">builder</td><td>the flatbuffer message builder to build the flatbuffer message </td></tr>
+    <tr><td class="paramname">msguuid</td><td>UUID of the message. Used to set the corresponding field in the Flatbuffer message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Flatbuffer PointCloud2 message </dd></dl>
+
+</div>
+</div>
+<a id="a73f56ba31dc748ef1b03d26b6ca3ed80" name="a73f56ba31dc748ef1b03d26b6ca3ed80"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73f56ba31dc748ef1b03d26b6ca3ed80">&#9670;&nbsp;</a></span>toFlat() <span class="overload">[22/31]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::grpc::Message&lt; seerep::fb::PointCloud2 &gt; seerep_ros_conversions_fb::toFlat </td>
+          <td>(</td>
+          <td class="paramtype">const sensor_msgs::PointCloud2 &amp;&#160;</td>
+          <td class="paramname"><em>cloud</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>projectuuid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>msguuid</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS sensor_msgs/PointCloud2 message to the corresponding gRPC Flatbuffer PointCloud2 message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cloud</td><td>sensor_msgs/PointCloud2 </td></tr>
+    <tr><td class="paramname">projectuuid</td><td>UUID of the target project. Used to set the corresponding field in the Flatbuffer message </td></tr>
+    <tr><td class="paramname">msguuid</td><td>UUID of the message. Used to set the corresponding field in the Flatbuffer message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>gRPC Flatbuffer PointCloud2 message </dd></dl>
+
+</div>
+</div>
+<a id="a0b2ccf6c570f110fb8510c231ff05c59" name="a0b2ccf6c570f110fb8510c231ff05c59"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b2ccf6c570f110fb8510c231ff05c59">&#9670;&nbsp;</a></span>toFlat() <span class="overload">[23/31]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::grpc::Message&lt; seerep::fb::PointField &gt; seerep_ros_conversions_fb::toFlat </td>
+          <td>(</td>
+          <td class="paramtype">const sensor_msgs::PointField &amp;&#160;</td>
+          <td class="paramname"><em>point_field</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS sensor_msgs/PointField message to the corresponding gRPC Flatbuffer PointField message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">point_field</td><td>sensor_msgs/PointField </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>gRPC Flatbuffer PointField message </dd></dl>
+
+</div>
+</div>
+<a id="a20d3c3286220365fe691b4535ba226e9" name="a20d3c3286220365fe691b4535ba226e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20d3c3286220365fe691b4535ba226e9">&#9670;&nbsp;</a></span>toFlat() <span class="overload">[24/31]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::Offset&lt; seerep::fb::PointField &gt; seerep_ros_conversions_fb::toFlat </td>
+          <td>(</td>
+          <td class="paramtype">const sensor_msgs::PointField &amp;&#160;</td>
+          <td class="paramname"><em>point_field</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">flatbuffers::grpc::MessageBuilder &amp;&#160;</td>
+          <td class="paramname"><em>builder</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS sensor_msgs/PointField message to the corresponding Flatbuffer PointField message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">point_field</td><td>sensor_msgs/PointField </td></tr>
+    <tr><td class="paramname">builder</td><td>the flatbuffer message builder to build the flatbuffer message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Flatbuffer PointField message </dd></dl>
+
+</div>
+</div>
+<a id="a14d3c2ca5c47c1210648397ae6129e8c" name="a14d3c2ca5c47c1210648397ae6129e8c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14d3c2ca5c47c1210648397ae6129e8c">&#9670;&nbsp;</a></span>toFlat() <span class="overload">[25/31]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::Offset&lt; seerep::fb::RegionOfInterest &gt; seerep_ros_conversions_fb::toFlat </td>
+          <td>(</td>
+          <td class="paramtype">const sensor_msgs::RegionOfInterest &amp;&#160;</td>
+          <td class="paramname"><em>roi</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">flatbuffers::grpc::MessageBuilder &amp;&#160;</td>
+          <td class="paramname"><em>builder</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS sensor_msgs::RegionOfInterest message to the corresponding gRPC Flatbuffer RegionOfInterest message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">roi</td><td>sensor_msgs::RegionOfInterest </td></tr>
+    <tr><td class="paramname">builder</td><td>the flatbuffer message builder to build the flatbuffer message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Flatbuffer RegionOfInterest message </dd></dl>
+
+</div>
+</div>
+<a id="a43b4b32db3efe8ead38b96a5c2be0cf8" name="a43b4b32db3efe8ead38b96a5c2be0cf8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a43b4b32db3efe8ead38b96a5c2be0cf8">&#9670;&nbsp;</a></span>toFlat() <span class="overload">[26/31]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::Offset&lt; seerep::fb::Header &gt; seerep_ros_conversions_fb::toFlat </td>
+          <td>(</td>
+          <td class="paramtype">const std_msgs::Header &amp;&#160;</td>
+          <td class="paramname"><em>header</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>projectuuid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">flatbuffers::grpc::MessageBuilder &amp;&#160;</td>
+          <td class="paramname"><em>builder</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>msguuid</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS std_msgs/Header message to the corresponding Flatbuffer Header message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">header</td><td>std_msgs/Header </td></tr>
+    <tr><td class="paramname">projectuuid</td><td>UUID of the target project. Used to set the corresponding field in the Flatbuffer message </td></tr>
+    <tr><td class="paramname">builder</td><td>the flatbuffer message builder to build the flatbuffer message </td></tr>
+    <tr><td class="paramname">msguuid</td><td>UUID of the message. Used to set the corresponding field in the Flatbuffer message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Flatbuffer Header message </dd></dl>
+
+</div>
+</div>
+<a id="a6a079368a8b2d89e42d74d5bb563b832" name="a6a079368a8b2d89e42d74d5bb563b832"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a079368a8b2d89e42d74d5bb563b832">&#9670;&nbsp;</a></span>toFlat() <span class="overload">[27/31]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::grpc::Message&lt; seerep::fb::Header &gt; seerep_ros_conversions_fb::toFlat </td>
+          <td>(</td>
+          <td class="paramtype">const std_msgs::Header &amp;&#160;</td>
+          <td class="paramname"><em>header</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>projectuuid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>msguuid</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS std_msgs/Header message to the corresponding gRPC Flatbuffer Header message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">header</td><td>std_msgs/Header </td></tr>
+    <tr><td class="paramname">projectuuid</td><td>UUID of the target project. Used to set the corresponding field in the Flatbuffer message </td></tr>
+    <tr><td class="paramname">msguuid</td><td>UUID of the message. Used to set the corresponding field in the Flatbuffer message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>gRPC Flatbuffer Header message </dd></dl>
+
+</div>
+</div>
+<a id="a8229fe2ecaf333ec9dea277037e5ea26" name="a8229fe2ecaf333ec9dea277037e5ea26"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8229fe2ecaf333ec9dea277037e5ea26">&#9670;&nbsp;</a></span>toFlat() <span class="overload">[28/31]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::grpc::Message&lt; seerep::fb::BoundingBox2DLabeled &gt; seerep_ros_conversions_fb::toFlat </td>
+          <td>(</td>
+          <td class="paramtype">const vision_msgs::Detection2D &amp;&#160;</td>
+          <td class="paramname"><em>detection2d</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS vision_msgs::Detection2D message to the corresponding gRPC Flatbuffer BoundingBoxes2DLabeled message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">detection2d</td><td>geometry_vision_msgs::Detection2D </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>gRPC Flatbuffer BoundingBoxes2DLabeled message </dd></dl>
+
+</div>
+</div>
+<a id="a357d17a659548fb0eaec31b2727447ab" name="a357d17a659548fb0eaec31b2727447ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a357d17a659548fb0eaec31b2727447ab">&#9670;&nbsp;</a></span>toFlat() <span class="overload">[29/31]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::Offset&lt; seerep::fb::BoundingBox2DLabeled &gt; seerep_ros_conversions_fb::toFlat </td>
+          <td>(</td>
+          <td class="paramtype">const vision_msgs::Detection2D &amp;&#160;</td>
+          <td class="paramname"><em>detection2d</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">flatbuffers::grpc::MessageBuilder &amp;&#160;</td>
+          <td class="paramname"><em>builder</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>label</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>instanceUUID</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS vision_msgs::Detection2D message to the corresponding Flatbuffer BoundingBoxes2DLabeled message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">detection2d</td><td>geometry_vision_msgs::Detection2D </td></tr>
+    <tr><td class="paramname">builder</td><td>the flatbuffer message builder to build the flatbuffer message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Flatbuffer BoundingBoxes2DLabeled message </dd></dl>
+
+</div>
+</div>
+<a id="ac2d9be99f77efb1e390758f2b2153023" name="ac2d9be99f77efb1e390758f2b2153023"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac2d9be99f77efb1e390758f2b2153023">&#9670;&nbsp;</a></span>toFlat() <span class="overload">[30/31]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::Offset&lt; seerep::fb::BoundingBoxes2DLabeledStamped &gt; seerep_ros_conversions_fb::toFlat </td>
+          <td>(</td>
+          <td class="paramtype">const vision_msgs::Detection2DArray &amp;&#160;</td>
+          <td class="paramname"><em>detection2d</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>projectuuid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">flatbuffers::grpc::MessageBuilder &amp;&#160;</td>
+          <td class="paramname"><em>builder</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>category</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>msguuid</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::string &gt;&#160;</td>
+          <td class="paramname"><em>labels</em> = <code>std::vector&lt;std::string&gt;()</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::string &gt;&#160;</td>
+          <td class="paramname"><em>instances</em> = <code>std::vector&lt;std::string&gt;()</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS vision_msgs::Detection2DArray message to the corresponding Flatbuffer BoundingBoxes2D_labeled_stamped message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">detection2d</td><td>geometry_vision_msgs::Detection2DArray </td></tr>
+    <tr><td class="paramname">projectuuid</td><td>UUID of the target project. Used to set the corresponding field in the Flatbuffer message </td></tr>
+    <tr><td class="paramname">builder</td><td>the flatbuffer message builder to build the flatbuffer message </td></tr>
+    <tr><td class="paramname">msguuid</td><td>UUID of the message. Used to set the corresponding field in the Flatbuffer message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Flatbuffer BoundingBoxes2D_labeled_stamped message </dd></dl>
+
+</div>
+</div>
+<a id="ab33d92a8c869a5c6c003b1038698cf95" name="ab33d92a8c869a5c6c003b1038698cf95"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab33d92a8c869a5c6c003b1038698cf95">&#9670;&nbsp;</a></span>toFlat() <span class="overload">[31/31]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">flatbuffers::grpc::Message&lt; seerep::fb::BoundingBoxes2DLabeledStamped &gt; seerep_ros_conversions_fb::toFlat </td>
+          <td>(</td>
+          <td class="paramtype">const vision_msgs::Detection2DArray &amp;&#160;</td>
+          <td class="paramname"><em>detection2d</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>projectuuid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>category</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>msguuid</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::string &gt;&#160;</td>
+          <td class="paramname"><em>labels</em> = <code>std::vector&lt;std::string&gt;()</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::string &gt;&#160;</td>
+          <td class="paramname"><em>instances</em> = <code>std::vector&lt;std::string&gt;()</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a ROS vision_msgs::Detection2DArray message to the corresponding gRPC Flatbuffer BoundingBoxes2D_labeled_stamped message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">detection2d</td><td>geometry_vision_msgs::Detection2DArray </td></tr>
+    <tr><td class="paramname">projectuuid</td><td>UUID of the target project. Used to set the corresponding field in the Flatbuffer message </td></tr>
+    <tr><td class="paramname">msguuid</td><td>UUID of the message. Used to set the corresponding field in the Flatbuffer message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>gRPC Flatbuffer BoundingBoxes2D_labeled_stamped message </dd></dl>
+
+</div>
+</div>
+<a id="a3482ac20b4bd233b889edf98c455885d" name="a3482ac20b4bd233b889edf98c455885d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3482ac20b4bd233b889edf98c455885d">&#9670;&nbsp;</a></span>toROS() <span class="overload">[1/14]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vision_msgs::Detection2D seerep_ros_conversions_fb::toROS </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::fb::BoundingBox2DLabeled &amp;&#160;</td>
+          <td class="paramname"><em>bb_labeled_stamped</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a Flatbuffer BoundingBoxes2DLabeled message to the corresponding ROS vision_msgs::Detection2D message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bb_labeled_stamped</td><td>Flatbuffer BoundingBoxes2DLabeled </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ROS vision_msgs::Detection2D </dd></dl>
+
+</div>
+</div>
+<a id="ae694b1f3f875ae063a9ebd279c498fcf" name="ae694b1f3f875ae063a9ebd279c498fcf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae694b1f3f875ae063a9ebd279c498fcf">&#9670;&nbsp;</a></span>toROS() <span class="overload">[2/14]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vision_msgs::Detection2DArray seerep_ros_conversions_fb::toROS </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::fb::BoundingBoxes2DLabeledStamped &amp;&#160;</td>
+          <td class="paramname"><em>bb_labeled_stamped</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a Flatbuffer BoundingBoxes2D_labeled_stamped message to the corresponding ROS vision_msgs::Detection2DArray message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bb_labeled_stamped</td><td>Flatbuffer BoundingBoxes2D_labeled_stamped </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ROS vision_msgs::Detection2DArray </dd></dl>
+
+</div>
+</div>
+<a id="a5a4b200412e1eaa30ca2b6fa83a6596f" name="a5a4b200412e1eaa30ca2b6fa83a6596f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a4b200412e1eaa30ca2b6fa83a6596f">&#9670;&nbsp;</a></span>toROS() <span class="overload">[3/14]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std_msgs::Header seerep_ros_conversions_fb::toROS </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::fb::Header &amp;&#160;</td>
+          <td class="paramname"><em>header</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a Flatbuffer Header message to the corresponding ROS std_msgs/Header message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">header</td><td>Flatbuffer Header </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ROS std_msgs/Header </dd></dl>
+
+</div>
+</div>
+<a id="a1fe4d0011713b78163811192ca5348a0" name="a1fe4d0011713b78163811192ca5348a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1fe4d0011713b78163811192ca5348a0">&#9670;&nbsp;</a></span>toROS() <span class="overload">[4/14]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sensor_msgs::Image seerep_ros_conversions_fb::toROS </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::fb::Image &amp;&#160;</td>
+          <td class="paramname"><em>image</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a Flatbuffer Image message to the corresponding ROS sensor_msgs/Image message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">image</td><td>Flatbuffer Image </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ROS std_sensor_msgs/Image </dd></dl>
+
+</div>
+</div>
+<a id="ab92ad98186195d366cbd4417d957acc9" name="ab92ad98186195d366cbd4417d957acc9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab92ad98186195d366cbd4417d957acc9">&#9670;&nbsp;</a></span>toROS() <span class="overload">[5/14]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">geometry_msgs::Point seerep_ros_conversions_fb::toROS </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::fb::Point &amp;&#160;</td>
+          <td class="paramname"><em>point</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a Flatbuffer Image message to the corresponding ROS geometry_msgs::Point message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">point</td><td>Flatbuffer Point </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ROS geometry_msgs::Point </dd></dl>
+
+</div>
+</div>
+<a id="a794b8629ac23c38a7347a64cd9067052" name="a794b8629ac23c38a7347a64cd9067052"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a794b8629ac23c38a7347a64cd9067052">&#9670;&nbsp;</a></span>toROS() <span class="overload">[6/14]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sensor_msgs::PointCloud2 seerep_ros_conversions_fb::toROS </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::fb::PointCloud2 &amp;&#160;</td>
+          <td class="paramname"><em>cloud</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a Flatbuffer PointCloud2 message to the corresponding ROS sensor_msgs/PointCloud2 message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cloud</td><td>Flatbuffer PointCloud2 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ROS std_sensor_msgs/PointCloud2 </dd></dl>
+
+</div>
+</div>
+<a id="ac8ac4e2fca249431b03546806b03f328" name="ac8ac4e2fca249431b03546806b03f328"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8ac4e2fca249431b03546806b03f328">&#9670;&nbsp;</a></span>toROS() <span class="overload">[7/14]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sensor_msgs::PointField seerep_ros_conversions_fb::toROS </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::fb::PointField &amp;&#160;</td>
+          <td class="paramname"><em>point_field</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a Flatbuffer PointField message to the corresponding ROS sensor_msgs/PointField message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">point_field</td><td>Flatbuffer PointField </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ROS std_sensor_msgs/PointField </dd></dl>
+
+</div>
+</div>
+<a id="a20d66c2cc982b597af698993891ca881" name="a20d66c2cc982b597af698993891ca881"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20d66c2cc982b597af698993891ca881">&#9670;&nbsp;</a></span>toROS() <span class="overload">[8/14]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">geometry_msgs::Pose seerep_ros_conversions_fb::toROS </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::fb::Pose &amp;&#160;</td>
+          <td class="paramname"><em>pose</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a Flatbuffer Pose message to the corresponding ROS geometry_msgs::Pose message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pose</td><td>Flatbuffer Pose </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ROS geometry_msgs::Pose </dd></dl>
+
+</div>
+</div>
+<a id="a261a024516f2d81c0d86f5910cb25b70" name="a261a024516f2d81c0d86f5910cb25b70"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a261a024516f2d81c0d86f5910cb25b70">&#9670;&nbsp;</a></span>toROS() <span class="overload">[9/14]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">geometry_msgs::PoseStamped seerep_ros_conversions_fb::toROS </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::fb::PoseStamped &amp;&#160;</td>
+          <td class="paramname"><em>pose</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a Flatbuffer PoseStamped message to the corresponding ROS geometry_msgs::PoseStamped message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pose</td><td>Flatbuffer PoseStamped </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ROS geometry_msgs::PoseStamped </dd></dl>
+
+</div>
+</div>
+<a id="adfdc4e282324d5da33b1e7cf3d158724" name="adfdc4e282324d5da33b1e7cf3d158724"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adfdc4e282324d5da33b1e7cf3d158724">&#9670;&nbsp;</a></span>toROS() <span class="overload">[10/14]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">geometry_msgs::Quaternion seerep_ros_conversions_fb::toROS </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::fb::Quaternion &amp;&#160;</td>
+          <td class="paramname"><em>quaternion</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a Flatbuffer Quaternion message to the corresponding ROS geometry_msgs::Quaternion message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">quaternion</td><td>Flatbuffer Quaternion </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ROS geometry_msgs::Quaternion </dd></dl>
+
+</div>
+</div>
+<a id="ac01824ea6d5848e212b15f5345cba639" name="ac01824ea6d5848e212b15f5345cba639"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac01824ea6d5848e212b15f5345cba639">&#9670;&nbsp;</a></span>toROS() <span class="overload">[11/14]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">geometry_msgs::Transform seerep_ros_conversions_fb::toROS </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::fb::Transform &amp;&#160;</td>
+          <td class="paramname"><em>transform</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a Flatbuffer Transform message to the corresponding ROS geometry_msgs::Transform message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">transform</td><td>Flatbuffer Transform </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ROS geometry_msgs::Transform </dd></dl>
+
+</div>
+</div>
+<a id="ae21e4433a25ab7fbbb0a2a9df5d47af7" name="ae21e4433a25ab7fbbb0a2a9df5d47af7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae21e4433a25ab7fbbb0a2a9df5d47af7">&#9670;&nbsp;</a></span>toROS() <span class="overload">[12/14]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">geometry_msgs::TransformStamped seerep_ros_conversions_fb::toROS </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::fb::TransformStamped &amp;&#160;</td>
+          <td class="paramname"><em>transform</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a Flatbuffer TransformStamped message to the corresponding ROS geometry_msgs::TransformStamped message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">transform</td><td>Flatbuffer TransformStamped </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ROS geometry_msgs::TransformStamped </dd></dl>
+
+</div>
+</div>
+<a id="ad7504df6dc260e32f7dcf26a4d0cb842" name="ad7504df6dc260e32f7dcf26a4d0cb842"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7504df6dc260e32f7dcf26a4d0cb842">&#9670;&nbsp;</a></span>toROS() <span class="overload">[13/14]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">geometry_msgs::Vector3 seerep_ros_conversions_fb::toROS </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::fb::Vector3 &amp;&#160;</td>
+          <td class="paramname"><em>vector</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a Flatbuffer Vector3 message to the corresponding ROS geometry_msgs::Vector3 message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">vector</td><td>Flatbuffer Vector3 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ROS geometry_msgs::Vector3 </dd></dl>
+
+</div>
+</div>
+<a id="ae4c1ea24d23b22f18185f36c8c1b1475" name="ae4c1ea24d23b22f18185f36c8c1b1475"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4c1ea24d23b22f18185f36c8c1b1475">&#9670;&nbsp;</a></span>toROS() <span class="overload">[14/14]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">geometry_msgs::Vector3Stamped seerep_ros_conversions_fb::toROS </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::fb::Vector3Stamped &amp;&#160;</td>
+          <td class="paramname"><em>vector</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a Flatbuffer Vector3Stamped message to the corresponding ROS geometry_msgs::Vector3Stamped message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pose</td><td>Flatbuffer Vector3Stamped </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ROS geometry_msgs::Vector3Stamped </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespaceseerep__ros__conversions__fb.html">seerep_ros_conversions_fb</a></li>
+    <li class="footer">
+        <a href="../mkdocs/legal-notice/index.html">Legal Notice</a> -
+        <a href="../mkdocs/data-protection-notice/index.html">Data Protection Notice</a> -
+        Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+    </li>
+  </ul>
+</div>
+</body>
+</html>
