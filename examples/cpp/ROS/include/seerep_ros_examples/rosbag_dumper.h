@@ -45,7 +45,7 @@ class RosbagDumper
 {
 public:
   RosbagDumper(const std::filesystem::path& bag_path, const std::filesystem::path& hdf5_path,
-               const std::string& project_name, const std::string& project_frame);
+               const std::string& project_name, const std::string& project_frame, const std::string& project_uuid);
   /* Dump tf topic to HDF5*/
   void dumpTf(const std::string& tf_topic, const bool is_static = false);
   /* Dump compressed image topic to HDF5. Note: Currently the images are decompressed */

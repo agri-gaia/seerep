@@ -3,7 +3,9 @@
 namespace seerep_ros_examples
 {
 RosbagDumper::RosbagDumper(const std::filesystem::path& bag_path, const std::filesystem::path& hdf5_path,
-                           const std::string& project_name, const std::string& project_frame)
+                           const std::string& project_name, const std::string& project_frame,
+                           const std::string& project_uuid)
+  : project_uuid_(project_uuid)
 {
   auto write_mutex = std::make_shared<std::mutex>();
 
@@ -13,7 +15,6 @@ RosbagDumper::RosbagDumper(const std::filesystem::path& bag_path, const std::fil
   /* handle hdf5 file */
   if (std::filesystem::exists(hdf5_path))
   {
-    project_uuid_ = boost::uuids::to_string(boost::uuids::random_generator()());
     std::shared_ptr<HighFive::File> file = std::make_shared<HighFive::File>(
         hdf5_path.string() + "/" + project_uuid_ + ".h5", HighFive::File::OpenOrCreate);
 
@@ -198,6 +199,7 @@ std::set<std::filesystem::path> getAllBags(const std::string& path_str)
 
 }  // namespace seerep_ros_examples
 
+/* TODO: refactor main method it's way to long */
 int main(int argc, char** argv)
 {
   /* ANSI escape codes for changing the color */
@@ -221,34 +223,33 @@ int main(int argc, char** argv)
       nh.getParam("capture_all_image_topics", capture_all_image_topics) &&
       nh.getParam("viewing_distance", viewing_distance))
   {
-    seerep_ros_examples::RosbagDumper dumper(bag_path, hdf5_path, project_name, project_frame);
-
-    ROS_INFO_STREAM("---- Dumping TF messages ----");
-    dumper.dumpTf(tf_topic);
-
-    ROS_INFO_STREAM("---- Dumping TF static messages ----");
-    dumper.dumpTf(tf_static_topic, true);
-
-    if (capture_all_image_topics)
+    const std::string project_uuid = boost::uuids::to_string(boost::uuids::random_generator()());
+    for (const std::filesystem::path& bag : seerep_ros_examples::getAllBags(bag_path))
     {
-      image_topics = dumper.getAllTopics("sensor_msgs/CompressedImage");
-      camera_info_topics = dumper.getAllTopics("sensor_msgs/CameraInfo");
-    }
-    else
-    {
-      nh.getParam("capture_topics", image_topics);
-      nh.getParam("camera_info_topics", camera_info_topics);
-    }
+      ROS_INFO_STREAM("Processing bag: " << bag.stem().string());
+      seerep_ros_examples::RosbagDumper dumper(bag, hdf5_path, project_name, project_frame, project_uuid);
 
-    ROS_INFO_STREAM("---- Dumping image messages ----");
+      dumper.dumpTf(tf_topic);
 
-    const std::vector<seerep_ros_examples::string_pair> matched_topics =
-        dumper.matchTopics(image_topics, camera_info_topics);
-    for (const seerep_ros_examples::string_pair& matched_topic : matched_topics)
-    {
-      std::cout << "Dumping image topic: " << matched_topic.first << std::endl;
-      std::cout << "Dumping camera info topic: " << matched_topic.second << std::endl;
-      dumper.dumpCompressedImage(matched_topic.first, matched_topic.second, viewing_distance);
+      dumper.dumpTf(tf_static_topic, true);
+
+      if (capture_all_image_topics)
+      {
+        image_topics = dumper.getAllTopics("sensor_msgs/CompressedImage");
+        camera_info_topics = dumper.getAllTopics("sensor_msgs/CameraInfo");
+      }
+      else
+      {
+        nh.getParam("capture_topics", image_topics);
+        nh.getParam("camera_info_topics", camera_info_topics);
+      }
+
+      const std::vector<seerep_ros_examples::string_pair> matched_topics =
+          dumper.matchTopics(image_topics, camera_info_topics);
+      for (const seerep_ros_examples::string_pair& matched_topic : matched_topics)
+      {
+        dumper.dumpCompressedImage(matched_topic.first, matched_topic.second, viewing_distance);
+      }
     }
   }
   else
