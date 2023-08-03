@@ -86,7 +86,7 @@ const std::vector<string_pair> RosbagDumper::matchTopics(const std::vector<std::
   return matched_topics;
 }
 
-void RosbagDumper::iterateAndDumpTf(const std::string& tf_topic, const bool is_static)
+void RosbagDumper::dumpTf(const std::string& tf_topic, const bool is_static)
 {
   rosbag::View view(bag_, rosbag::TopicQuery(tf_topic));
 
@@ -118,8 +118,8 @@ bool RosbagDumper::matchingTopics(std::string first_topic, std::string second_to
 }
 
 /*  TODO: add support for uncompressed images */
-void RosbagDumper::iterateAndDumpCompressedImage(const std::string& image_topic, const std::string& camera_info_topic,
-                                                 double viewing_distance)
+void RosbagDumper::dumpCompressedImage(const std::string& image_topic, const std::string& camera_info_topic,
+                                       double viewing_distance)
 {
   sensor_msgs::CameraInfo::ConstPtr last_camera_info_msg;
   std::string camera_instrinsic_uuid;
@@ -175,8 +175,8 @@ void RosbagDumper::iterateAndDumpCompressedImage(const std::string& image_topic,
 int main(int argc, char** argv)
 {
   /* ANSI escape codes for changing the color */
-  const std::string GREEN_COLOR = "\033[32m";
-  const std::string RESET_COLOR = "\033[0m";
+  std::string_view GREEN_COLOR = "\033[32m";
+  std::string_view RESET_COLOR = "\033[0m";
 
   ros::init(argc, argv, "rosbag_dumper");
   ros::NodeHandle nh("~");
@@ -198,10 +198,10 @@ int main(int argc, char** argv)
     seerep_ros_examples::RosbagDumper dumper(bag_path, hdf5_path, project_name, project_frame);
 
     ROS_INFO_STREAM("---- Dumping TF messages ----");
-    dumper.iterateAndDumpTf(tf_topic);
+    dumper.dumpTf(tf_topic);
 
     ROS_INFO_STREAM("---- Dumping TF static messages ----");
-    dumper.iterateAndDumpTf(tf_static_topic, true);
+    dumper.dumpTf(tf_static_topic, true);
 
     if (capture_all_image_topics)
     {
@@ -222,7 +222,7 @@ int main(int argc, char** argv)
     {
       std::cout << "Dumping image topic: " << matched_topic.first << std::endl;
       std::cout << "Dumping camera info topic: " << matched_topic.second << std::endl;
-      dumper.iterateAndDumpCompressedImage(matched_topic.first, matched_topic.second, viewing_distance);
+      dumper.dumpCompressedImage(matched_topic.first, matched_topic.second, viewing_distance);
     }
   }
   else
