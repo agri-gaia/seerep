@@ -202,10 +202,6 @@ std::set<std::filesystem::path> getAllBags(const std::string& path_str)
 /* TODO: refactor main method it's way to long */
 int main(int argc, char** argv)
 {
-  /* ANSI escape codes for changing the color */
-  std::string_view GREEN_COLOR = "\033[32m";
-  std::string_view RESET_COLOR = "\033[0m";
-
   ros::init(argc, argv, "rosbag_dumper");
   ros::NodeHandle nh("~");
 
@@ -258,6 +254,5 @@ int main(int argc, char** argv)
     ros::shutdown();
   }
 
-  ROS_INFO_STREAM(GREEN_COLOR << "Finished" << RESET_COLOR);
   ros::shutdown();
 }
