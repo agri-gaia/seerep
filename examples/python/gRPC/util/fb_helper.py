@@ -82,7 +82,7 @@ def getProjectInfo(builder, channel, name):
     return None
 
 
-def createProject(channel, builder, name, frameId, coordSys, ellipsoid, altitude, latitude, longitude):
+def createProject(channel, builder, name, frameId, coordSys, altitude, latitude, longitude):
     '''Create a project from the parameters'''
     stubMeta = metaOperations.MetaOperationsStub(channel)
 
@@ -91,11 +91,9 @@ def createProject(channel, builder, name, frameId, coordSys, ellipsoid, altitude
 
     # create a geodetic coordinates object
     coordSysBuf = builder.CreateString(coordSys)
-    ellipsoidBuf = builder.CreateString(ellipsoid)
 
     GeodeticCoordinates.Start(builder)
     GeodeticCoordinates.AddCoordinateSystem(builder, coordSysBuf)
-    GeodeticCoordinates.AddEllipsoid(builder, ellipsoidBuf)
     GeodeticCoordinates.AddAltitude(builder, altitude)
     GeodeticCoordinates.AddLatitude(builder, latitude)
     GeodeticCoordinates.AddLongitude(builder, longitude)
@@ -123,7 +121,6 @@ def getOrCreateProject(
     create=True,
     mapFrameId="map",
     coordSys="",
-    ellipsoid="",
     altitude=0.0,
     latitude=0.0,
     longitude=0.0,
@@ -133,9 +130,7 @@ def getOrCreateProject(
 
     if projectUuid is None:
         if create:
-            projectUuid = createProject(
-                channel, builder, name, mapFrameId, coordSys, ellipsoid, altitude, latitude, longitude
-            )
+            projectUuid = createProject(channel, builder, name, mapFrameId, coordSys, altitude, latitude, longitude)
         else:
             sys.exit()
 
