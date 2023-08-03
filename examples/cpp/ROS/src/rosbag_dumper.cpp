@@ -7,6 +7,9 @@ RosbagDumper::RosbagDumper(const std::filesystem::path& bag_path, const std::fil
 {
   auto write_mutex = std::make_shared<std::mutex>();
 
+  /* disable boost log output for the dumper */
+  boost::log::core::get()->set_logging_enabled(false);
+
   /* handle hdf5 file */
   if (std::filesystem::exists(hdf5_path))
   {

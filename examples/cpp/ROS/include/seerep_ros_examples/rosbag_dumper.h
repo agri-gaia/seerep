@@ -31,6 +31,7 @@
 /* boost */
 #include <boost/algorithm/string/find.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/log/core.hpp>
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/uuid/uuid_io.hpp>
