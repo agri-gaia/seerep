@@ -170,6 +170,29 @@ void RosbagDumper::dumpCompressedImage(const std::string& image_topic, const std
   }
 }
 
+/* iterate over file or directory path and get all bag files */
+std::set<std::filesystem::path> getAllBags(const std::string& path_str)
+{
+  std::filesystem::path path(path_str);
+  std::set<std::filesystem::path> bags_paths;
+
+  if (std::filesystem::is_directory(std::filesystem::path(path)))
+  {
+    for (const auto& entry : std::filesystem::directory_iterator(path))
+    {
+      if (entry.is_regular_file() && entry.path().extension() == ".bag")
+      {
+        bags_paths.insert(entry.path());
+      }
+    }
+  }
+  else
+  {
+    bags_paths.insert(path);
+  }
+  return bags_paths;
+}
+
 }  // namespace seerep_ros_examples
 
 int main(int argc, char** argv)
