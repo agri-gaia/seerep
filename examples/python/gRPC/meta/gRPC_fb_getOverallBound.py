@@ -13,16 +13,16 @@ from seerep.fb import meta_operations_grpc_fb as metaOperations
 script_dir = os.path.dirname(__file__)
 util_dir = os.path.join(script_dir, '..')
 sys.path.append(util_dir)
-import util
-import util_fb
+import util.common
+import util.fb_helper
 
 builder = flatbuffers.Builder(1024)
 # Default server is localhost !
-channel = util.get_gRPC_channel()
+channel = util.common.get_gRPC_channel()
 
 
 # 1. Get all projects from the server
-projectuuid = util_fb.getProject(builder, channel, 'LabeledImagesInGrid')
+projectuuid = util.fb_helper.getProject(builder, channel, 'testproject')
 
 # 2. Check if the defined project exist; if not exit
 if not projectuuid:
@@ -32,7 +32,7 @@ if not projectuuid:
 # 3. Get gRPC service object
 stub = metaOperations.MetaOperationsStub(channel)
 
-UuidDatatypePair = util_fb.createUuidDatatypePair(builder, projectuuid, Datatype.Datatype().All)
+UuidDatatypePair = util.fb_helper.createUuidDatatypePair(builder, projectuuid, Datatype.Datatype().All)
 
 builder.Finish(UuidDatatypePair)
 buf = builder.Output()
@@ -95,7 +95,9 @@ for idx in range(response.CategoriesLength()):
 
 builder = flatbuffers.Builder(1024)
 
-UuidDatatypeWithCategory = util_fb.createUuidDatatypeWithCategory(builder, projectuuid, Datatype.Datatype().Image, "1")
+UuidDatatypeWithCategory = util.fb_helper.createUuidDatatypeWithCategory(
+    builder, projectuuid, Datatype.Datatype().Image, "1"
+)
 
 builder.Finish(UuidDatatypeWithCategory)
 buf = builder.Output()

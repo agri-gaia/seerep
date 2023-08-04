@@ -737,6 +737,9 @@ seerep_core_msgs::AABB CoreDataset::getSpatialBounds(std::vector<seerep_core_msg
 
   for (seerep_core_msgs::Datatype dt : datatypes)
   {
+    // check if the data has now some tf for adding it to spatial rtree
+    tryAddingDataWithMissingTF(dt);
+
     seerep_core_msgs::AABB rtree_bounds = m_datatypeDatatypeSpecificsMap.at(dt)->rt.bounds();
 
     // update the min if needed for dimension 0
