@@ -582,18 +582,18 @@ void CoreFbConversion::fromFbDataLabelsGeneral(
   {
     for (auto labelsCategories : *labelsGeneral)
     {
-      std::unique_ptr<LabelWithInstanceVec> labelWithInstanceVecPtr;
+      LabelWithInstanceVec* labelWithInstanceVecPtr;
 
       auto catMap = labelsWithInstancesWithCategory.find(labelsCategories->category()->c_str());
       if (catMap != labelsWithInstancesWithCategory.end())
       {
-        labelWithInstanceVecPtr = std::make_unique<LabelWithInstanceVec>(catMap->second);
+        labelWithInstanceVecPtr = &(catMap->second);
       }
       else
       {
         std::vector<seerep_core_msgs::LabelWithInstance> labelVector;
         auto entry = labelsWithInstancesWithCategory.emplace(labelsCategories->category()->c_str(), labelVector);
-        labelWithInstanceVecPtr = std::make_unique<LabelWithInstanceVec>(entry.first->second);
+        labelWithInstanceVecPtr = &(entry.first->second);
       }
 
       if (labelsCategories->labelsWithInstance())
