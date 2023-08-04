@@ -627,15 +627,27 @@ CGAL::Polygon_2<Kernel> CoreDataset::toCGALPolygon(const seerep_core_msgs::Polyg
 
 CGAL::Polygon_2<Kernel> CoreDataset::toCGALPolygon(const seerep_core_msgs::AABB& aabb)
 {
-  Kernel::Point_2 points_aabb[] = {
-    Kernel::Point_2(bg::get<bg::min_corner, 0>(aabb), bg::get<bg::min_corner, 1>(aabb)),
-    Kernel::Point_2(bg::get<bg::max_corner, 0>(aabb), bg::get<bg::min_corner, 1>(aabb)),
-    Kernel::Point_2(bg::get<bg::max_corner, 0>(aabb), bg::get<bg::max_corner, 1>(aabb)),
-    Kernel::Point_2(bg::get<bg::min_corner, 0>(aabb), bg::get<bg::max_corner, 1>(aabb)),
-  };
-  CGAL::Polygon_2<Kernel> aabb_cgal(points_aabb, points_aabb + 4);
+  /* Check if the bounding box has no spatial extent -> Only add one point to the polygon */
+  if (bg::get<bg::min_corner, 0>(aabb) == bg::get<bg::max_corner, 0>(aabb) &&
+      bg::get<bg::min_corner, 1>(aabb) == bg::get<bg::max_corner, 1>(aabb))
+  {
+    Kernel::Point_2 points_aabb[] = { Kernel::Point_2(bg::get<bg::min_corner, 0>(aabb),
+                                                      bg::get<bg::min_corner, 1>(aabb)) };
+    CGAL::Polygon_2<Kernel> aabb_cgal(points_aabb, points_aabb + 1);
+    return aabb_cgal;
+  }
+  else
+  {
+    Kernel::Point_2 points_aabb[] = {
+      Kernel::Point_2(bg::get<bg::min_corner, 0>(aabb), bg::get<bg::min_corner, 1>(aabb)),
+      Kernel::Point_2(bg::get<bg::max_corner, 0>(aabb), bg::get<bg::min_corner, 1>(aabb)),
+      Kernel::Point_2(bg::get<bg::max_corner, 0>(aabb), bg::get<bg::max_corner, 1>(aabb)),
+      Kernel::Point_2(bg::get<bg::min_corner, 0>(aabb), bg::get<bg::max_corner, 1>(aabb)),
+    };
+    CGAL::Polygon_2<Kernel> aabb_cgal(points_aabb, points_aabb + 4);
 
-  return aabb_cgal;
+    return aabb_cgal;
+  }
 }
 
 void CoreDataset::intersectionDegree(const seerep_core_msgs::AABB& aabb, const seerep_core_msgs::Polygon2D& polygon,
