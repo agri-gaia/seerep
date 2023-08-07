@@ -38,7 +38,7 @@ polygon_vertices.append(createPoint2d(builder, -1.0 * l, -1.0 * l))
 polygon_vertices.append(createPoint2d(builder, -1.0 * l, l))
 polygon_vertices.append(createPoint2d(builder, l, l))
 polygon_vertices.append(createPoint2d(builder, l, -1.0 * l))
-polygon2d = createPolygon2D(builder, 7, -1, polygon_vertices)
+polygon2d = createPolygon2D(builder, 700, -100, polygon_vertices)
 
 timeMin = createTimeStamp(builder, 1610549273, 0)
 timeMax = createTimeStamp(builder, 1938549273, 0)
@@ -63,7 +63,7 @@ instanceUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 # with all parameters set (especially with the data and instance uuids set) the result of the query will be empty. Set the query parameters to adequate values or remove them from the query creation
 query = createQuery(
     builder,
-    # boundingBox=boundingboxStamped,
+    polygon2d=polygon2d,
     # timeInterval=timeInterval,
     # labels=labelCategory,
     # mustHaveAllLabels=True,
@@ -72,6 +72,7 @@ query = createQuery(
     # dataUuids=dataUuids,
     withoutData=True,
     fullyEncapsulated=False,
+    inMapFrame=True,
 )
 builder.Finish(query)
 buf = builder.Output()

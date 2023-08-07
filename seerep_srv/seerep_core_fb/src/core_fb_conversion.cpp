@@ -41,7 +41,7 @@ seerep_core_msgs::Query CoreFbConversion::fromFb(const seerep::fb::Query* query,
   fromFbQueryDataUuids(query, queryCore.dataUuids);
   queryCore.withoutData = fromFbQueryWithoutData(query);
   queryCore.maxNumData = fromFbQueryMaxNumData(query);
-  fromFbQueryPolygon(query, queryCore.polygon.value());
+  queryCore.polygon = fromFbQueryPolygon(query);
   queryCore.fullyEncapsulated = fromFbQueryFullyEncapsulated(query);
   queryCore.inMapFrame = fromFbQueryInMapFrame(query);
 
@@ -665,10 +665,11 @@ void CoreFbConversion::fromFbDataLabelsBb2d(
   }
 }
 
-void CoreFbConversion::fromFbQueryPolygon(const seerep::fb::Query* query, seerep_core_msgs::Polygon2D& polygon)
+std::optional<seerep_core_msgs::Polygon2D> CoreFbConversion::fromFbQueryPolygon(const seerep::fb::Query* query)
 {
   if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_POLYGON))
   {
+    seerep_core_msgs::Polygon2D polygon;
     for (auto point : *query->polygon()->vertices())
     {
       seerep_core_msgs::Point2D temp(point->x(), point->y());
@@ -677,6 +678,12 @@ void CoreFbConversion::fromFbQueryPolygon(const seerep::fb::Query* query, seerep
 
     polygon.height = query->polygon()->height();
     polygon.z = query->polygon()->z();
+
+    return polygon;
+  }
+  else
+  {
+    return std::nullopt;
   }
 }
 
