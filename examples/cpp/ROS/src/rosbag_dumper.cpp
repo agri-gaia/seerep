@@ -48,7 +48,7 @@ RosbagDumper::RosbagDumper(const std::filesystem::path& bag_path, const std::fil
   }
   else
   {
-    ROS_ERROR_STREAM("Specified rosbag does not exist: " << bag_path);
+    ROS_ERROR_STREAM("Path to rosbag or directory of rosbags does not exist: " << bag_path);
     ros::shutdown();
   }
 }
@@ -101,11 +101,18 @@ std::string RosbagDumper::getTopicBase(std::string topic) const
 
 void RosbagDumper::dumpCameraInfo(const std::string& camera_info_topic, double viewing_distance)
 {
+  bool first_run = true;
   sensor_msgs::CameraInfo last_camera_info_msg;
 
   for (const rosbag::MessageInstance& m : rosbag::View(bag_, rosbag::TopicQuery(camera_info_topic)))
   {
     sensor_msgs::CameraInfo::ConstPtr camera_info_msg = m.instantiate<sensor_msgs::CameraInfo>();
+
+    if (first_run)
+    {
+      last_camera_info_msg = *camera_info_msg;
+      first_run = false;
+    }
 
     if (camera_info_msg != nullptr)
     {
@@ -183,7 +190,7 @@ std::set<std::filesystem::path> getAllBags(const std::string& path_str)
       }
     }
   }
-  else
+  else if (path.extension() == ".bag")
   {
     bags_paths.insert(path);
   }
@@ -215,7 +222,7 @@ int main(int argc, char** argv)
     const std::string project_uuid = boost::uuids::to_string(boost::uuids::random_generator()());
     for (const std::filesystem::path& bag : seerep_ros_examples::getAllBags(bag_path))
     {
-      ROS_INFO_STREAM("Processing bag: " << bag.stem().string());
+      ROS_INFO_STREAM("Processing bag: " << bag.filename().string());
       seerep_ros_examples::RosbagDumper dumper(bag, hdf5_path, project_name, project_frame, project_uuid);
 
       dumper.dumpTf(tf_topic);
