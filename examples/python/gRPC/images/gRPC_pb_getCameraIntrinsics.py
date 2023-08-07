@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from seerep.pb import camera_intrinsics_query_pb2 as cameraintrinsicsquery
 from seerep.pb import camera_intrinsics_service_pb2_grpc as camintrinsics_service
 from seerep.util.common import get_gRPC_channel

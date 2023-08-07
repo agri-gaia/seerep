@@ -17,6 +17,57 @@ DATA_FOLDER_CONFIG_KEY = "data-folder"
 LOG_FOLDER_CONFIG_KEY = "log-path"
 PORT_CONFIG_KEY = "port"
 
+FB_GROUP_LIST_ENDS_WITH = ["IsNone", "Length"]
+FB_FILTEROUT_STARTS_WITH = ["__"]
+FB_FILTEROUT_ENDS_WITH = ["AsNumpy"]
+FB_FILTEROUT_IS = [
+    "_tab",
+    "Init",
+    "GetRootAs",
+    "GetRootAsCameraIntrinsics",
+    "GetRootAsCameraIntrinsicsQuery",
+    "capitalize",
+    "center",
+    "count",
+    "decode",
+    "endswith",
+    "expandtabs",
+    "find",
+    "fromhex",
+    "hex",
+    "index",
+    "isalnum",
+    "isalpha",
+    "isascii",
+    "isdigit",
+    "islower",
+    "isspace",
+    "istitle",
+    "isupper",
+    "join",
+    "ljust",
+    "lower",
+    "lstrip",
+    "maketrans",
+    "partition",
+    "replace",
+    "rfind",
+    "rindex",
+    "rjust",
+    "rpartition",
+    "rsplit",
+    "rstrip",
+    "split",
+    "splitlines",
+    "startswith",
+    "strip",
+    "swapcase",
+    "title",
+    "translate",
+    "upper",
+    "zfill",
+]
+
 # start the server once
 @pytest.fixture(scope="session")
 def retrieve_server_params(request):
