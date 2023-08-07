@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 import uuid
 
 import flatbuffers
@@ -8,7 +7,6 @@ from seerep.fb import camera_intrinsics_service_grpc_fb as ci_service
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
     createCameraIntrinsics,
-    createCameraIntrinsicsQuery,
     createHeader,
     createRegionOfInterest,
     createTimeStamp,
@@ -54,20 +52,9 @@ def add_camintrins(grpc_channel=get_gRPC_channel(), target_proj_uuid=None):
 
     buf = builder.Output()
 
-    stub.TransferCameraIntrinsics(bytes(buf))
+    ret = stub.TransferCameraIntrinsics(bytes(buf))
+    return CameraIntrinsics.CameraIntrinsics.GetRootAs(buf)
 
-    # Fetch the saved CI
-    builder = flatbuffers.Builder(1000)
 
-    ci_query = createCameraIntrinsicsQuery(builder, ciuuid, target_proj_uuid)
-
-    builder.Finish(ci_query)
-    buf = builder.Output()
-
-    ret = stub.GetCameraIntrinsics(bytes(buf))
-
-    retrieved_ci = CameraIntrinsics.CameraIntrinsics.GetRootAs(ret)
-
-    # printing the uuid of the retrieved camera intrinsics
-    print(retrieved_ci.Header().UuidMsgs().decode("utf-8"))
-    return ciuuid
+if __name__ == "__main__":
+    print(dir(add_camintrins()))

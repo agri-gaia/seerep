@@ -103,6 +103,8 @@ def send_labeled_images(
     camin.binning_x = 6
     camin.binning_y = 7
 
+    camin.maximum_viewing_distance = 5
+
     stubCI.TransferCameraIntrinsics(camin)
 
     # 4. Create ten images

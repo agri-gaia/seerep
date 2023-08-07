@@ -65,18 +65,21 @@ def query_images(
     theQuery.polygon.vertices.append(bottom_right)
 
     # since epoche
-    theQuery.timeinterval.time_min.seconds = 1638549273
-    theQuery.timeinterval.time_min.nanos = 0
-    theQuery.timeinterval.time_max.seconds = 1938549273
-    theQuery.timeinterval.time_max.nanos = 0
+    # theQuery.timeinterval.time_min.seconds = 1638549273
+    # theQuery.timeinterval.time_min.nanos = 0
+    # theQuery.timeinterval.time_max.seconds = 1938549273
+    # theQuery.timeinterval.time_max.nanos = 0
 
     # labels
-    label = labels_with_category.LabelsWithCategory()
-    label.category = "0"
-    labelWithConfidence = label_pb2.Label()
-    labelWithConfidence.label = "testlabel0"
-    label.labels.extend([labelWithConfidence])
-    theQuery.labelsWithCategory.append(label)
+    # label = labels_with_category.LabelsWithCategory()
+    # label.category = "0"
+    # labelWithConfidence = label_pb2.Label()
+    # labelWithConfidence.label = "testlabel0"
+    # label.labels.extend([labelWithConfidence])
+    # theQuery.labelsWithCategory.append(label)
+
+    # theQuery.inmapframe = True
+    theQuery.fullyEncapsulated = False
 
     queried_img_list: List[image.Image] = []
 
