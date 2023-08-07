@@ -73,7 +73,8 @@ seerep_core_msgs::AABB CoreTf::transformAABB(seerep_core_msgs::AABB aabb, const 
 {
   if (targetFrame != sourceFrame)
   {
-    auto tf = m_tfBuffer.lookupTransform(targetFrame, sourceFrame, ros::Time(timeSecs, timeNanos));
+    auto tf = m_tfBuffer.lookupTransform(m_hdf5_io->tf2_frame_id(targetFrame), m_hdf5_io->tf2_frame_id(sourceFrame),
+                                         ros::Time(timeSecs, timeNanos));
     tf2::Transform transform;
     transform.setOrigin(
         tf2::Vector3(tf.transform.translation.x, tf.transform.translation.y, tf.transform.translation.z));
@@ -101,7 +102,8 @@ seerep_core_msgs::AABB CoreTf::transformAABB(seerep_core_msgs::AABB aabb, const 
 bool CoreTf::canTransform(const std::string& sourceFrame, const std::string& targetFrame, const int64_t& timeSecs,
                           const int64_t& timeNanos)
 {
-  return m_tfBuffer.canTransform(targetFrame, sourceFrame, ros::Time(timeSecs, timeNanos));
+  return m_tfBuffer.canTransform(m_hdf5_io->tf2_frame_id(targetFrame), m_hdf5_io->tf2_frame_id(sourceFrame),
+                                 ros::Time(timeSecs, timeNanos));
 }
 
 std::vector<std::string> CoreTf::getFrames()
@@ -113,7 +115,14 @@ std::vector<std::string> CoreTf::getFrames()
 
 void CoreTf::addToTfBuffer(geometry_msgs::TransformStamped transform, const bool isStatic)
 {
-  m_tfBuffer.setTransform(transform, "fromHDF5", isStatic);
+  /* Make sure frame_ids are tf2 compatible */
+  transform.header.frame_id = m_hdf5_io->tf2_frame_id(transform.header.frame_id);
+  transform.child_frame_id = m_hdf5_io->tf2_frame_id(transform.child_frame_id);
+
+  if (!m_tfBuffer.setTransform(transform, "fromHDF5", isStatic))
+  {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << "Could not add transform to tfBuffer";
+  }
 }
 
 void CoreTf::getAABBinNewFrame(const tf2::Transform& transform, const std::vector<float>& x,
