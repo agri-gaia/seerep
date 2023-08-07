@@ -294,7 +294,7 @@ seerep::pb::CameraIntrinsics CorePbConversion::toPb(const seerep_core_msgs::came
 
   for (auto rm : camintrinsics.rectification_matrix)
   {
-    ci_pb.add_projection_matrix(rm);
+    ci_pb.add_rectification_matrix(rm);
   }
 
   seerep::pb::RegionOfInterest roi_pb = CorePbConversion::toPb(camintrinsics.region_of_interest);
