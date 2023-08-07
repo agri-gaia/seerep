@@ -73,23 +73,6 @@ const std::vector<std::string> RosbagDumper::getAllTopics(const std::string& top
   return topics;
 }
 
-const std::vector<string_pair> RosbagDumper::matchTopics(const std::vector<std::string>& first_topics,
-                                                         const std::vector<std::string>& second_topics)
-{
-  std::vector<string_pair> matched_topics;
-  for (const std::string& first_topic : first_topics)
-  {
-    for (const std::string& second_topic : second_topics)
-    {
-      if (matchingTopics(first_topic, second_topic))
-      {
-        matched_topics.push_back(std::make_pair(first_topic, second_topic));
-      }
-    }
-  }
-  return matched_topics;
-}
-
 void RosbagDumper::dumpTf(const std::string& tf_topic, const bool is_static)
 {
   rosbag::View view(bag_, rosbag::TopicQuery(tf_topic));
@@ -109,46 +92,49 @@ void RosbagDumper::dumpTf(const std::string& tf_topic, const bool is_static)
   }
 }
 
-bool RosbagDumper::matchingTopics(std::string first_topic, std::string second_topic)
+std::string RosbagDumper::getTopicBase(std::string topic) const
 {
   /* Note: find_nth is zero indexed */
-  boost::iterator_range<std::string::iterator> first_it = boost::find_nth(first_topic, "/", 2);
-  const std::string first_cut_str(first_topic.substr(0, std::distance(first_topic.begin(), first_it.begin())));
-
-  boost::iterator_range<std::string::iterator> second_it = boost::find_nth(second_topic, "/", 2);
-  const std::string second_cut_str(second_topic.substr(0, std::distance(second_topic.begin(), second_it.begin())));
-
-  return first_cut_str == second_cut_str;
+  boost::iterator_range<std::string::iterator> first_it = boost::find_nth(topic, "/", 2);
+  return topic.substr(0, std::distance(topic.begin(), first_it.begin()));
 }
 
-/*  TODO: add support for uncompressed images */
-void RosbagDumper::dumpCompressedImage(const std::string& image_topic, const std::string& camera_info_topic,
-                                       double viewing_distance)
+void RosbagDumper::dumpCameraInfo(const std::string& camera_info_topic, double viewing_distance)
 {
-  sensor_msgs::CameraInfo::ConstPtr last_camera_info_msg;
-  std::string camera_instrinsic_uuid;
+  sensor_msgs::CameraInfo last_camera_info_msg;
 
-  for (const rosbag::MessageInstance& m :
-       rosbag::View(bag_, rosbag::TopicQuery(std::vector<std::string>{ image_topic, camera_info_topic })))
+  for (const rosbag::MessageInstance& m : rosbag::View(bag_, rosbag::TopicQuery(camera_info_topic)))
   {
     sensor_msgs::CameraInfo::ConstPtr camera_info_msg = m.instantiate<sensor_msgs::CameraInfo>();
 
     if (camera_info_msg != nullptr)
     {
-      /* check if we need to add another camera_intrinsic */
-      if (last_camera_info_msg != camera_info_msg)
+      if (*camera_info_msg != last_camera_info_msg)
       {
-        camera_instrinsic_uuid = boost::uuids::to_string(boost::uuids::random_generator()());
-        /* TODO: replace with seerep_hdf5_ros interface */
-        auto ci = seerep_core_fb::CoreFbConversion::fromFb(
-            *seerep_ros_conversions_fb::toFlat(*camera_info_msg, project_uuid_, camera_instrinsic_uuid, viewing_distance)
-                 .GetRoot());
-        camera_intrinsics_io_->writeCameraIntrinsics(ci);
+        ROS_ERROR_STREAM("Changeing the CameraInfo during a mission is not supported");
+        ros::shutdown();
       }
-      last_camera_info_msg = camera_info_msg;
-    }
 
-    sensor_msgs ::CompressedImage::ConstPtr image_msg = m.instantiate<sensor_msgs::CompressedImage>();
+      std::string camera_instrinsic_uuid = boost::uuids::to_string(boost::uuids::random_generator()());
+      /* TODO: replace with seerep_hdf5_ros interface */
+      auto ci = seerep_core_fb::CoreFbConversion::fromFb(
+          *seerep_ros_conversions_fb::toFlat(*camera_info_msg, project_uuid_, camera_instrinsic_uuid, viewing_distance)
+               .GetRoot());
+      camera_intrinsics_io_->writeCameraIntrinsics(ci);
+
+      /* Cache the UUIDs of CameraInfo datasets. Used when saving the related image topics */
+      camera_info_map_.emplace(getTopicBase(camera_info_topic), camera_instrinsic_uuid);
+    }
+    last_camera_info_msg = *camera_info_msg;
+  }
+}
+
+/*  TODO: add support for uncompressed images */
+void RosbagDumper::dumpCompressedImage(const std::string& image_topic)
+{
+  for (const rosbag::MessageInstance& m : rosbag::View(bag_, rosbag::TopicQuery(image_topic)))
+  {
+    sensor_msgs::CompressedImage::ConstPtr image_msg = m.instantiate<sensor_msgs::CompressedImage>();
     if (image_msg != nullptr)
     {
       /* try to convert compressed image to image message */
@@ -164,12 +150,19 @@ void RosbagDumper::dumpCompressedImage(const std::string& image_topic, const std
       catch (cv_bridge::Exception& e)
       {
         ROS_ERROR_STREAM("Error while converting compressed image: " << e.what());
-        /* Do not try to save the image */
         return;
       }
-      /* TODO: replace with seerep_hdf5_ros interface*/
-      auto image_msg = seerep_ros_conversions_fb::toFlat(uncompressed_image, project_uuid_, camera_instrinsic_uuid);
-      image_io_->writeImage(boost::uuids::to_string(boost::uuids::random_generator()()), *image_msg.GetRoot());
+
+      if (auto search = camera_info_map_.find(getTopicBase(image_topic)); search != camera_info_map_.end())
+      {
+        /* TODO: replace with seerep_hdf5_ros interface*/
+        auto image_msg = seerep_ros_conversions_fb::toFlat(uncompressed_image, project_uuid_, search->second);
+        image_io_->writeImage(boost::uuids::to_string(boost::uuids::random_generator()()), *image_msg.GetRoot());
+      }
+      else
+      {
+        ROS_ERROR_STREAM("No CameraInfo found for image topic: " << image_topic);
+      }
     }
   }
 }
@@ -240,11 +233,14 @@ int main(int argc, char** argv)
         nh.getParam("camera_info_topics", camera_info_topics);
       }
 
-      const std::vector<seerep_ros_examples::string_pair> matched_topics =
-          dumper.matchTopics(image_topics, camera_info_topics);
-      for (const seerep_ros_examples::string_pair& matched_topic : matched_topics)
+      for (const std::string& image_topic : camera_info_topics)
       {
-        dumper.dumpCompressedImage(matched_topic.first, matched_topic.second, viewing_distance);
+        dumper.dumpCameraInfo(image_topic, viewing_distance);
+      }
+
+      for (const std::string& image_topic : image_topics)
+      {
+        dumper.dumpCompressedImage(image_topic);
       }
     }
   }

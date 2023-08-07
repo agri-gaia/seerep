@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <launch>
     <!-- TODO iterate through dir of rosbags  -->
-    <arg name="bag_path" default="/seerep/seerep-data/2023-06-14_10-08-02/" doc="Path to a rosbags or diretory of rosbags that should be converted"/>
+    <arg name="bag_path" default="/seerep/seerep-data/Fleming_250mm_Maize_Greenland_Morning_2023-06-14-09-16-43.bag" doc="Path to a rosbags or diretory of rosbags that should be converted"/>
     <arg name="hdf5_folder" default="/seerep/seerep-data/" doc="Storage path for the resulting HDF5 file(s)"/>
     <arg name="project_frame" default="map" doc="Root frame of the project data"/>
     <arg name="project_name" default="testproject" doc="Name of the resulting SEEREP project (human readable name for the data)"/>

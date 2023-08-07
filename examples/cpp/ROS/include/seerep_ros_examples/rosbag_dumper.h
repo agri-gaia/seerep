@@ -26,7 +26,7 @@
 
 /* std */
 #include <filesystem>
-#include <string_view>
+#include <unordered_map>
 
 /* boost */
 #include <boost/algorithm/string/find.hpp>
@@ -46,23 +46,30 @@ class RosbagDumper
 public:
   RosbagDumper(const std::filesystem::path& bag_path, const std::filesystem::path& hdf5_path,
                const std::string& project_name, const std::string& project_frame, const std::string& project_uuid);
+
   /* Dump tf topic to HDF5*/
   void dumpTf(const std::string& tf_topic, const bool is_static = false);
+
+  /* Dump camera info messages to HDF5. Assumption: CameraInfo does not change */
+  void dumpCameraInfo(const std::string& camera_info_topic, double viewing_distance);
+
   /* Dump compressed image topic to HDF5. Note: Currently the images are decompressed */
-  void dumpCompressedImage(const std::string& image_topic, const std::string& camera_info_topic,
-                           double viewing_distance);
+  void dumpCompressedImage(const std::string& image_topic);
+
   /* Get all topics which a specifc type from the rosbag */
   const std::vector<std::string> getAllTopics(const std::string& topic_type);
-  /* Match two lists of topics */
-  const std::vector<string_pair> matchTopics(const std::vector<std::string>& first_topics,
-                                             const std::vector<std::string>& second_topics);
+
   ~RosbagDumper();
 
 private:
-  /* Check if the two topics match e.g image and camera_info messages*/
-  bool matchingTopics(std::string first_topic, std::string second_topic);
+  /* Get the base path of the topic */
+  std::string getTopicBase(std::string topic) const;
+
   /* Rosbag object to iterate over*/
   rosbag::Bag bag_;
+
+  /* Store the uuid of the camera_info for each topic */
+  std::unordered_map<std::string, std::string> camera_info_map_;
 
   /* Unique identifier for the genertated SEEREP project.
    * Is also used as the filename of the HDF5 file
