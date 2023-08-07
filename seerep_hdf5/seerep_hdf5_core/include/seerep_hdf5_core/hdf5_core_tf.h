@@ -26,8 +26,6 @@ public:
   std::optional<std::vector<std::string>> readTransformStampedFrames(const std::string& id, const bool isStatic);
 
 private:
-  std::string readFrame(const std::string& frameName, const std::shared_ptr<const HighFive::Group>& group_ptr) const;
-
   std::vector<std::vector<int64_t>> readTime(const std::string& hdf5DatasetTimePath) const;
   std::vector<std::vector<double>> readTranslation(const std::string& hdf5DatasetTransPath) const;
   std::vector<std::vector<double>> readRotation(const std::string& hdf5DatasetRotPath) const;

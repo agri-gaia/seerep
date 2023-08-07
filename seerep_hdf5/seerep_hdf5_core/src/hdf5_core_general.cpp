@@ -66,33 +66,13 @@ std::string Hdf5CoreGeneral::readProjectname()
 
 void Hdf5CoreGeneral::writeProjectFrameId(const std::string& frameId)
 {
-  const std::scoped_lock lock(*m_write_mtx);
-
-  if (!m_file->hasAttribute(PROJECTFRAMEID))
-  {
-    m_file->createAttribute<std::string>(PROJECTFRAMEID, frameId);
-  }
-  else
-  {
-    m_file->getAttribute(PROJECTFRAMEID).write(frameId);
-  }
+  writeFrameId(*m_file, PROJECTFRAMEID, frameId);
   m_file->flush();
 }
 
 std::string Hdf5CoreGeneral::readProjectFrameId()
 {
-  const std::scoped_lock lock(*m_write_mtx);
-
-  std::string frameId;
-  try
-  {
-    m_file->getAttribute(PROJECTFRAMEID).read(frameId);
-  }
-  catch (...)
-  {
-    throw std::runtime_error("Project " + m_file->getName() + "  has no project frame id!");
-  }
-  return frameId;
+  return readFrameId(std::filesystem::path(m_file->getName()).filename().stem(), *m_file, PROJECTFRAMEID);
 }
 
 void Hdf5CoreGeneral::writeVersion(const std::string& version)
@@ -126,29 +106,6 @@ const std::optional<std::string> Hdf5CoreGeneral::readVersion()
   }
 
   return version;
-}
-
-std::optional<std::string> Hdf5CoreGeneral::readFrameId(const std::string& datatypeGroup, const std::string& uuid)
-{
-  std::string id = datatypeGroup + "/" + uuid;
-  std::string hdf5DatasetRawDataPath = id + "/" + RAWDATA;
-
-  checkExists(hdf5DatasetRawDataPath);
-
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "get dataset " << hdf5DatasetRawDataPath;
-  std::shared_ptr<HighFive::DataSet> data_set_ptr =
-      std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DatasetRawDataPath));
-
-  if (data_set_ptr->hasAttribute(HEADER_FRAME_ID))
-  {
-    std::string frameId;
-    data_set_ptr->getAttribute(HEADER_FRAME_ID).read(frameId);
-    return frameId;
-  }
-  else
-  {
-    return std::nullopt;
-  }
 }
 
 void Hdf5CoreGeneral::readBoundingBoxLabeledAndAddToLabelsWithInstancesWithCategory(
@@ -332,6 +289,15 @@ void Hdf5CoreGeneral::writeLabelsGeneral(
     datasetInstances.write(labels.instances);
   }
   m_file->flush();
+}
+
+const std::string Hdf5CoreGeneral::tf2_frame_id(std::string frame_id)
+{
+  if (!frame_id.empty() && frame_id.at(0) == '/')
+  {
+    return frame_id.erase(0, 1);
+  }
+  return frame_id;
 }
 
 void Hdf5CoreGeneral::writeAABB(

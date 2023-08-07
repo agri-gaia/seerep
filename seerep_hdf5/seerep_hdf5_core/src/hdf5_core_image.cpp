@@ -36,12 +36,7 @@ std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CoreImage::readDataset(con
 
     data.header.datatype = seerep_core_msgs::Datatype::Image;
 
-    data.header.frameId = readAttributeFromHdf5<std::string>(hdf5DataGroupPath, *dataGroupPtr,
-                                                             seerep_hdf5_core::Hdf5CoreImage::HEADER_FRAME_ID);
-    data.header.timestamp.seconds = readAttributeFromHdf5<int64_t>(
-        hdf5DataGroupPath, *dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::HEADER_STAMP_SECONDS);
-    data.header.timestamp.nanos = readAttributeFromHdf5<int64_t>(hdf5DataGroupPath, *dataGroupPtr,
-                                                                 seerep_hdf5_core::Hdf5CoreImage::HEADER_STAMP_NANOS);
+    readHeader(uuid, *dataGroupPtr, data.header);
 
     boost::uuids::string_generator gen;
     boost::uuids::uuid uuid_generated = gen(uuid);

@@ -57,8 +57,7 @@ void Hdf5FbGeneral::writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, c
                                   header->stamp()->seconds());
     writeAttributeToHdf5<int32_t>(object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS,
                                   header->stamp()->nanos());
-    writeAttributeToHdf5<std::string>(object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID,
-                                      header->frame_id()->str());
+    writeFrameId(object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID, header->frame_id()->str());
     writeAttributeToHdf5<int32_t>(object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ, header->seq());
   }
 }
@@ -74,8 +73,8 @@ flatbuffers::Offset<seerep::fb::Header> Hdf5FbGeneral::readHeaderAttributes(flat
       readAttributeFromHdf5<int64_t>(uuidMsg, object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS);
   int32_t nanos =
       readAttributeFromHdf5<int32_t>(uuidMsg, object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS);
-  std::string frameId =
-      readAttributeFromHdf5<std::string>(uuidMsg, object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID);
+  std::string frameId = readFrameId(uuidMsg, object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID);
+
   uint32_t seq = readAttributeFromHdf5<uint32_t>(uuidMsg, object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ);
 
   auto timestamp = seerep::fb::CreateTimestamp(builder, seconds, nanos);

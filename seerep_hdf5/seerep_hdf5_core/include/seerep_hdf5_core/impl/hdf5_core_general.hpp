@@ -32,6 +32,20 @@ void Hdf5CoreGeneral::writeAttributeToHdf5(HighFive::AnnotateTraits<C>& object, 
   }
 }
 
+template <class C>
+std::string Hdf5CoreGeneral::readFrameId(const std::string& uuid, const HighFive::AnnotateTraits<C>& object,
+                                         const std::string& frame_field)
+{
+  return tf2_frame_id(readAttributeFromHdf5<std::string>(uuid, object, frame_field));
+}
+
+template <class C>
+void Hdf5CoreGeneral::writeFrameId(HighFive::AnnotateTraits<C>& object, const std::string& frame_field,
+                                   const std::string& frame_id)
+{
+  writeAttributeToHdf5<std::string>(object, frame_field, tf2_frame_id(frame_id));
+}
+
 template <class T>
 std::shared_ptr<HighFive::DataSet> Hdf5CoreGeneral::getHdf5DataSet(const std::string& hdf5DataSetPath,
                                                                    HighFive::DataSpace& dataSpace)
@@ -63,11 +77,9 @@ std::shared_ptr<HighFive::DataSet> Hdf5CoreGeneral::getHdf5DataSet(const std::st
 template <class T>
 void Hdf5CoreGeneral::writeHeader(HighFive::AnnotateTraits<T>& object, seerep_core_msgs::Header header)
 {
-  // among all header attributes, enum datatype was not saved because all datatypes are saved separately and the
-  // explicit saving of this offers no value
   Hdf5CoreGeneral::writeAttributeToHdf5<int32_t>(object, HEADER_STAMP_SECONDS, header.timestamp.seconds);
   Hdf5CoreGeneral::writeAttributeToHdf5<int32_t>(object, HEADER_STAMP_NANOS, header.timestamp.nanos);
-  Hdf5CoreGeneral::writeAttributeToHdf5<std::string>(object, HEADER_FRAME_ID, header.frameId);
+  Hdf5CoreGeneral::writeFrameId(object, HEADER_FRAME_ID, header.frameId);
   Hdf5CoreGeneral::writeAttributeToHdf5<uint32_t>(object, HEADER_SEQ, header.sequence);
 }
 
@@ -82,7 +94,7 @@ void Hdf5CoreGeneral::readHeader(const std::string& id, HighFive::AnnotateTraits
 
   header.timestamp.seconds = Hdf5CoreGeneral::readAttributeFromHdf5<int32_t>(id, object, HEADER_STAMP_SECONDS);
   header.timestamp.nanos = Hdf5CoreGeneral::readAttributeFromHdf5<int32_t>(id, object, HEADER_STAMP_NANOS);
-  header.frameId = Hdf5CoreGeneral::readAttributeFromHdf5<std::string>(id, object, HEADER_FRAME_ID);
+  header.frameId = Hdf5CoreGeneral::readFrameId(id, object, HEADER_FRAME_ID);
   header.sequence = Hdf5CoreGeneral::readAttributeFromHdf5<int32_t>(id, object, HEADER_SEQ);
 }
 }  // namespace seerep_hdf5_core
