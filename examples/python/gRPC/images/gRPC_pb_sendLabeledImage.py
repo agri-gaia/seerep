@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 import time
 import uuid
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 
 import flatbuffers
 import numpy as np
 from google.protobuf import empty_pb2
+from grpc import Channel
 from seerep.fb import CameraIntrinsics
 from seerep.fb import camera_intrinsics_service_grpc_fb as ci_service
 from seerep.pb import boundingbox2d_labeled_pb2 as boundingbox2d_labeled
@@ -36,7 +37,7 @@ from seerep.util.fb_helper import (
 
 
 def send_labeled_images(
-    grpc_channel=get_gRPC_channel(), target_proj_uuid=None
+    target_proj_uuid: Optional[str] = None, grpc_channel: Channel = get_gRPC_channel()
 ) -> List[Tuple[str, image.Image]]:
     """sends test images via the given grpc_channel to the specified target project uuid"""
 
@@ -47,17 +48,15 @@ def send_labeled_images(
     stubCI = camintrinsics_service.CameraIntrinsicsServiceStub(grpc_channel)
 
     # 3. Check if we have an existing test project, if not, one is created.
-    found = False
-    if not target_proj_uuid:
+    if target_proj_uuid is None:
         # 2. Get all projects from the server
         response = stubMeta.GetProjects(empty_pb2.Empty())
         for project in response.projects:
             print(project.name + " " + project.uuid)
             if project.name == "testproject":
-                found = True
                 target_proj_uuid = project.uuid
 
-        if not found:
+        if target_proj_uuid is None:
             creation = projectCreation.ProjectCreation(
                 name="testproject", mapFrameId="map"
             )
@@ -70,8 +69,7 @@ def send_labeled_images(
     # A valid camera intrinsics UUID is needed here for succesful storage of Images
     # Add new Camera Intrinsics
 
-    ciuuid = add_camintrins(grpc_channel)
-    print("Camera Intrinsics will be saved against the uuid: ", ciuuid)
+    ciuuid = add_camintrins(target_proj_uuid, grpc_channel)
 
     camin = cameraintrinsics.CameraIntrinsics()
 
@@ -177,7 +175,6 @@ def send_labeled_images(
         uuidImg = stub.TransferImage(theImage)
 
         sent_images_list.append((uuidImg.message, theImage))
-        print("uuid of transfered img: " + uuidImg.message)
 
     # 8. Add coordinate transformations and send them to the server
     theTf = tf.TransformStamped()
@@ -204,21 +201,15 @@ def send_labeled_images(
     return sent_images_list
 
 
-def add_camintrins(grpc_channel=get_gRPC_channel(), target_proj_uuid=None):
+def add_camintrins(target_proj_uuid: str, grpc_channel: Channel) -> str:
 
     builder = flatbuffers.Builder(1000)
 
     # 1. Get all projects from the server when no target specified
-    if not target_proj_uuid:
+    if target_proj_uuid is None:
         target_proj_uuid = getProject(builder, grpc_channel, "testproject")
 
     ciuuid = str(uuid.uuid4())
-    print("Camera Intrinsics will be saved against the uuid:", ciuuid)
-
-    # 2. Check if the defined project exist; if not exit
-    if not target_proj_uuid:
-        print("project doesn't exist!")
-        exit()
 
     # 3. Get gRPC service object
     stub = ci_service.CameraIntrinsicsServiceStub(grpc_channel)
@@ -250,12 +241,20 @@ def add_camintrins(grpc_channel=get_gRPC_channel(), target_proj_uuid=None):
 
     retrieved_ci = CameraIntrinsics.CameraIntrinsics.GetRootAs(ret)
 
-    # printing the uuid of the retrieved camera intrinsics
-    print(retrieved_ci.Header().UuidMsgs().decode("utf-8"))
     return ciuuid
 
 
 if __name__ == "__main__":
     sent_image_ls_data = send_labeled_images()
-    img_headers = [img[1].header for img in sent_image_ls_data]
-    print(img_headers)
+    camera_intrinsics_allimgs = set(
+        [intrins_uuid[1].uuid_camera_intrinsics for intrins_uuid in sent_image_ls_data]
+    )
+
+    # print statement to seperate the messages of the function
+    print()
+    print(
+        f"camera intrinsics will be saved against the uuid(s): {camera_intrinsics_allimgs}"
+    )
+    img_uuids = [img[0] for img in sent_image_ls_data]
+    for i, uuid in enumerate(img_uuids):
+        print(f"the uuid of the sent image number {i} is: {uuid}")

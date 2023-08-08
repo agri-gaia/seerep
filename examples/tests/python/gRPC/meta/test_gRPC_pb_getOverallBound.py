@@ -14,7 +14,7 @@ def test_gRPC_pb_getOverallBound(grpc_channel, project_setup) -> None:
 
     logging.info(f"Testing project: {proj_name}; {proj_uuid}")
 
-    sent_grid = send_grid.send_labeled_image_grid(grpc_channel, proj_uuid)
+    sent_grid = send_grid.send_labeled_image_grid(proj_uuid, grpc_channel)
 
     # get information such as timestamp, boundingbox, category, all labels of images in a specified project
     timestamps: Set[int] = set()
@@ -64,7 +64,7 @@ def test_gRPC_pb_getOverallBound(grpc_channel, project_setup) -> None:
         resp_overall_bb,
         resp_all_categories,
         resp_all_labels,
-    ) = gRPC_pb_getOverallBound.get_metadata(grpc_channel, proj_uuid)
+    ) = gRPC_pb_getOverallBound.get_metadata(proj_uuid, grpc_channel)
 
     assert resp_overall_time_intervall.time_min.seconds == min_time
     assert resp_overall_time_intervall.time_max.seconds == max_time

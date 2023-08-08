@@ -17,21 +17,22 @@ from seerep.pb import image_pb2 as image
 
 # test sending and querying the images
 def test_gRPC_pb_sendAndQueryImages(grpc_channel, project_setup):
-    send_images = (
-        [img[1] for img in send_img.send_labeled_images(grpc_channel)],
-        project_setup,
-    )
-    proj_name, proj_uuid = send_images[1]
+    proj_name, proj_uuid = project_setup
+
+    send_images = [
+        img[1] for img in send_img.send_labeled_images(proj_uuid, grpc_channel)
+    ]
+
     logging.info(f"Sending images to project: {proj_name}; {proj_uuid}")
 
     queried_image_list: List[image.Image] = query_img.query_images(
-        grpc_channel, proj_uuid
+        proj_uuid, grpc_channel
     )
 
     # 10 images are sent
     # the query is constraint to request 4 based on their attributes
-    assert len(send_images[0]) == 10
+    assert len(send_images) == 10
     assert len(queried_image_list) == 4
 
     for img in queried_image_list:
-        assert img in send_images[0]
+        assert img in send_images

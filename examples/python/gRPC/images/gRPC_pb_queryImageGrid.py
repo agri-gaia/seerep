@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
 import sys
-from typing import List
+from typing import List, Optional
 
 from google.protobuf import empty_pb2
+from grpc import Channel
 from seerep.pb import image_pb2 as image
 from seerep.pb import image_service_pb2_grpc as imageService
 from seerep.pb import label_pb2
@@ -15,20 +16,24 @@ from seerep.util.common import get_gRPC_channel
 
 
 def query_image_grid(
-    grpc_channel=get_gRPC_channel(), target_project_uuid=None
+    target_project_uuid: Optional[str] = None,
+    grpc_channel: Channel = get_gRPC_channel(),
 ) -> List[List[image.Image]]:
     stub = imageService.ImageServiceStub(grpc_channel)
     stubMeta = metaOperations.MetaOperationsStub(grpc_channel)
 
     response = stubMeta.GetProjects(empty_pb2.Empty())
 
-    if not target_project_uuid:
+    if target_project_uuid is None:
         for project in response.projects:
             print(project.name + " " + project.uuid)
             if project.name == "LabeledImagesInGrid":
                 target_project_uuid = project.uuid
 
-        if target_project_uuid == "":
+        if target_project_uuid is None:
+            print(
+                "No project with name 'LabeledImagesInGrid' found! Execute gRPC_pb_sendLabeledImageGrid.py beforehand!"
+            )
             sys.exit()
 
     theQuery = query.Query()
@@ -76,23 +81,26 @@ def query_image_grid(
         grid_imgs.append([])
         for y in range(3):
             grid_imgs[x].append([])
-            theQuery.boundingboxStamped.boundingbox.center_point.x = x
-            theQuery.boundingboxStamped.boundingbox.center_point.y = y
-            print("center point query (x/y): ( " + str(x) + " / " + str(y) + " )")
+            # theQuery.boundingboxStamped.boundingbox.center_point.x = x
+            # theQuery.boundingboxStamped.boundingbox.center_point.y = y
             for img in stub.GetImage(theQuery):
-                print(f"Image uuid: {img.header.uuid_msgs}")
-                print(
-                    "General label of transferred img: "
-                    + img.labels_general[0].labelWithInstance[1].label.label
-                )
-                print(
-                    "General label confidence: "
-                    + str(img.labels_general[0].labelWithInstance[1].label.confidence)
-                )
                 grid_imgs[x][y].append(img)
 
     return grid_imgs
 
 
 if __name__ == "__main__":
-    query_image_grid()
+    grid_img_list = query_image_grid()
+
+    # print the results
+    for x in range(len(grid_img_list)):
+        for y in range(len(grid_img_list[x])):
+            print(f"center point query (x/y): ( {x} / {y} )")
+            for img in grid_img_list[x][y]:
+                print(f"Image uuid: {img.header.uuid_msgs}")
+                print(
+                    f"General label of transferred img: {img.labels_general[0].labelWithInstance[1].label.label}"
+                )
+                print(
+                    f"General label confidence: {img.labels_general[0].labelWithInstance[1].label.confidence}"
+                )

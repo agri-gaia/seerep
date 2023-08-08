@@ -1,24 +1,22 @@
 #!/usr/bin/env python3
-
-import os
-import sys
+import uuid
+from typing import Optional
 
 from google.protobuf import empty_pb2
+from grpc import Channel
 from seerep.pb import camera_intrinsics_pb2 as cameraintrinsics
 from seerep.pb import camera_intrinsics_service_pb2_grpc as camintrinsics_service
 from seerep.pb import meta_operations_pb2_grpc as metaOperations
+from seerep.pb import projectCreation_pb2
 from seerep.util.common import get_gRPC_channel
 
 
-# importing util functions. Assuming that this file is in the parent dir
-# https://github.com/agri-gaia/seerep/blob/6c4da5736d4a893228e97b01a9ada18620b1a83f/examples/python/gRPC/util.py
 # default grpc_channel is localhost:9090
-def add_camintrins(grpc_channel=get_gRPC_channel(), target_proj_uuid=None):
-    script_dir = os.path.dirname(__file__)
-    util_dir = os.path.join(script_dir, "..")
-    sys.path.append(util_dir)
-    import uuid
-
+def add_camintrins(
+    ciuuid: Optional[str] = "fa2f27e3-7484-48b0-9f21-ec362075baca",
+    target_proj_uuid: Optional[str] = None,
+    grpc_channel: Channel = get_gRPC_channel(),
+):
     # 1. Get gRPC service objects
     stub = camintrinsics_service.CameraIntrinsicsServiceStub(grpc_channel)
     stubMeta = metaOperations.MetaOperationsStub(grpc_channel)
@@ -26,21 +24,26 @@ def add_camintrins(grpc_channel=get_gRPC_channel(), target_proj_uuid=None):
     # 2. Get all projects from the server
     response = stubMeta.GetProjects(empty_pb2.Empty())
 
-    if not target_proj_uuid:
-        # 3. Check if we have an existing test project, if not, we stop here
-        projectuuid = ""
+    stubMeta = metaOperations.MetaOperationsStub(grpc_channel)
+
+    if target_proj_uuid is None:
+        # 2. Get all projects from the server
+        response = stubMeta.GetProjects(empty_pb2.Empty())
         for project in response.projects:
-            print(project.name + " " + project.uuid + "\n")
+            print(project.name + " " + project.uuid)
             if project.name == "testproject":
-                projectuuid = project.uuid
+                target_proj_uuid = project.uuid
 
-        if projectuuid == "":
-            sys.exit()
-    else:  # if target_proj_uuid is given, we use it
-        projectuuid = target_proj_uuid
+        if target_proj_uuid is None:
+            response = stubMeta.CreateProject(
+                projectCreation_pb2.ProjectCreation(
+                    name="testproject", mapFrameId="map"
+                )
+            )
+            target_proj_uuid = response.uuid
 
-    ciuuid = str(uuid.uuid4())
-    print("Camera Intrinsics will be saved against the uuid: ", ciuuid)
+    if ciuuid is None:
+        ciuuid = str(uuid.uuid4())
 
     camin = cameraintrinsics.CameraIntrinsics()
 
@@ -49,7 +52,7 @@ def add_camintrins(grpc_channel=get_gRPC_channel(), target_proj_uuid=None):
 
     camin.header.frame_id = "camintrinsics"
 
-    camin.header.uuid_project = projectuuid
+    camin.header.uuid_project = target_proj_uuid
     camin.header.uuid_msgs = ciuuid
 
     camin.region_of_interest.x_offset = 2
@@ -80,4 +83,11 @@ def add_camintrins(grpc_channel=get_gRPC_channel(), target_proj_uuid=None):
 
 
 if __name__ == "__main__":
-    print(add_camintrins())
+    sent_intrins = add_camintrins()
+    # print the uuids of the project and the camera instrinsics
+    print(
+        f"camera instrinsics were saved with the uuid {sent_intrins.header.uuid_msgs} on the project with the uuid {sent_intrins.header.uuid_project}"
+    )
+
+    # do the same for the distortion array
+    print(f"camera instrinsics distortion array: {sent_intrins.distortion}")
