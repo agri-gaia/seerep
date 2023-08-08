@@ -14,7 +14,7 @@ def test_gRPC_pb_sendAndQueryImageGrid(grpc_channel, project_setup):
     logging.info(f"Testing project: {proj_name}; {proj_uuid}")
 
     # test for image uuid, general label and the general label confidence of corresponding entry in 2d array
-    sent_grid = send_grid.send_labeled_image_grid(grpc_channel, proj_uuid)
+    sent_grid = send_grid.send_labeled_image_grid(proj_uuid, grpc_channel)
     sent_test_info = [
         [
             [
@@ -31,7 +31,7 @@ def test_gRPC_pb_sendAndQueryImageGrid(grpc_channel, project_setup):
     ]
 
     # querying the images should yield the same images in the same array x, y index
-    queried_grid = query_grid.query_image_grid(grpc_channel, proj_uuid)
+    queried_grid = query_grid.query_image_grid(proj_uuid, grpc_channel)
 
     for x in range(len(sent_test_info)):
         for y in range(len(sent_test_info[0])):

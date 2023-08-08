@@ -117,6 +117,8 @@ def fb_obj_to_dict(obj) -> Dict:
 def test_addAndGetCameraIntrinsics(grpc_channel, project_setup):
     proj_name, proj_uuid = project_setup
 
-    sent_ci = add_ci.add_camintrins(grpc_channel, proj_uuid)
+    sent_ci = add_ci.add_camintrins(
+        target_proj_uuid=proj_uuid, grpc_channel=grpc_channel
+    )
 
     fb_obj_to_dict(sent_ci)

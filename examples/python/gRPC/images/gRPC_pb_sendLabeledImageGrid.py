@@ -3,10 +3,12 @@
 import math
 import time
 import uuid
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 
 import flatbuffers
 import numpy as np
+from google.protobuf import empty_pb2
+from grpc import Channel
 from seerep.fb import CameraIntrinsics
 from seerep.fb import camera_intrinsics_service_grpc_fb as ci_service
 from seerep.pb import boundingbox2d_labeled_pb2 as boundingbox2d_labeled
@@ -37,7 +39,7 @@ from seerep.util.fb_helper import (
 
 
 def send_labeled_image_grid(
-    grpc_channel=get_gRPC_channel(), target_proj_uuid=None
+    target_proj_uuid: str = None, grpc_channel: Channel = get_gRPC_channel()
 ) -> List[List[Tuple[str, image.Image]]]:
 
     stub = imageService.ImageServiceStub(grpc_channel)
@@ -45,20 +47,26 @@ def send_labeled_image_grid(
     stubMeta = metaOperations.MetaOperationsStub(grpc_channel)
     stubCI = camintrinsics_service.CameraIntrinsicsServiceStub(grpc_channel)
 
-    if not target_proj_uuid:
-        # create new project
-        creation = projectCreation.ProjectCreation(
-            name="LabeledImagesInGrid", mapFrameId="map"
-        )
-        projectCreated = stubMeta.CreateProject(creation)
-        target_proj_uuid = projectCreated.uuid
+    if target_proj_uuid is None:
+        # 2. Get all projects from the server
+        response = stubMeta.GetProjects(empty_pb2.Empty())
+        for project in response.projects:
+            print(project.name + " " + project.uuid)
+            if project.name == "testproject":
+                target_proj_uuid = project.uuid
+
+        if target_proj_uuid is None:
+            creation = projectCreation.ProjectCreation(
+                name="testproject", mapFrameId="map"
+            )
+            projectCreated = stubMeta.CreateProject(creation)
+            target_proj_uuid = projectCreated.uuid
 
     #####
     # A valid camera intrinsics UUID is needed here for succesful storage of Images
     # Add new Camera Intrinsics
 
-    ciuuid = add_camintrins(grpc_channel, target_proj_uuid)
-    print("Camera Intrinsics will be saved against the uuid: ", ciuuid)
+    ciuuid = add_camintrins(target_proj_uuid, grpc_channel)
 
     camin = cameraintrinsics.CameraIntrinsics()
 
@@ -181,7 +189,6 @@ def send_labeled_image_grid(
 
             # put the images uuid and the images in the grid list
             grid_imgs[idx_y][idx_x].append((uuidImg.message, theImage))
-            print("uuid of transfered img: " + uuidImg.message)
 
     # create tf with data valid for all following tfs
     theTf = tf.TransformStamped()
@@ -208,7 +215,7 @@ def send_labeled_image_grid(
     return grid_imgs
 
 
-def add_camintrins(grpc_channel=get_gRPC_channel(), target_proj_uuid=None):
+def add_camintrins(target_proj_uuid: str, grpc_channel: Channel) -> str:
 
     builder = flatbuffers.Builder(1000)
 
@@ -217,12 +224,6 @@ def add_camintrins(grpc_channel=get_gRPC_channel(), target_proj_uuid=None):
         target_proj_uuid = getProject(builder, grpc_channel, "testproject")
 
     ciuuid = str(uuid.uuid4())
-    print("Camera Intrinsics will be saved against the uuid:", ciuuid)
-
-    # 2. Check if the defined project exist; if not exit
-    if not target_proj_uuid:
-        print("project doesn't exist!")
-        exit()
 
     # 3. Get gRPC service object
     stub = ci_service.CameraIntrinsicsServiceStub(grpc_channel)
@@ -254,15 +255,34 @@ def add_camintrins(grpc_channel=get_gRPC_channel(), target_proj_uuid=None):
 
     retrieved_ci = CameraIntrinsics.CameraIntrinsics.GetRootAs(ret)
 
-    # printing the uuid of the retrieved camera intrinsics
-    print(retrieved_ci.Header().UuidMsgs().decode("utf-8"))
     return ciuuid
 
 
 if __name__ == "__main__":
     grid_list = send_labeled_image_grid()
-    grid_uuids = [
-        [[uuid for uuid, _ in uuid_lst] for uuid_lst in inner_lst]
-        for inner_lst in grid_list
-    ]
-    print(grid_uuids)
+    # seperate the functions print statements from the result
+    print()
+
+    for x in range(len(grid_list)):
+        for y in range(len(grid_list[x])):
+            print("#############################################################")
+            print(f"Grid cell {x}, {y} has {len(grid_list[x][y])} images.")
+            for img in grid_list[x][y]:
+                print("-------------------------------------------------------------")
+                print(
+                    f"Image {img[0]} has {len(img[1].labels_general)} general labels."
+                )
+                for label in img[1].labels_general:
+                    print(f"General label category: {label.category}")
+                    for label2d in label.labelWithInstance:
+                        print(f"General label label: {label2d.label.label}")
+                        print(f"General label instance uuid: {label2d.instanceUuid}")
+                # print("-------------------------------------------------------------")
+                # print(f"Image {img[0]} has {len(img[1].labels_bb)} bounding boxes.")
+                # for bb in img[1].labels_bb:
+                #     print(f"Bounding box category: {bb.category}")
+                #     for bb2d in bb.boundingBox2DLabeled:
+                #         print(f"Bounding box label: {bb2d.labelWithInstance.label.label}")
+                #         print(f"Bounding box instance uuid: {bb2d.labelWithInstance.instanceUuid}")
+                #         print(f"Bounding box center point: {bb2d.boundingBox.center_point.x}, {bb2d.boundingBox.center_point.y}")
+                #         print(f"Bounding box spatial extent: {bb2d.boundingBox.spatial_extent.x}, {bb2d.boundingBox.spatial_extent.y}")

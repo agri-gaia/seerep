@@ -9,10 +9,7 @@ from seerep.fb import Image
 from seerep.fb import image_service_grpc_fb as imageService
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
-    createBoundingBoxStamped,
-    createHeader,
     createLabelWithCategory,
-    createPoint,
     createQuery,
     createTimeInterval,
     createTimeStamp,
@@ -25,7 +22,7 @@ builder = flatbuffers.Builder(1024)
 channel = get_gRPC_channel()
 
 # 1. Get all projects from the server
-projectuuid = getProject(builder, channel, 'plantmap01')
+projectuuid = getProject(builder, channel, "plantmap01")
 
 # 2. Check if the defined project exist; if not exit
 if not projectuuid:
@@ -96,7 +93,9 @@ for responseBuf in stub.GetImage(bytes(buf)):
     for i in range(response.LabelsGeneralLength()):
         print(f"\tcategory: {response.LabelsGeneral(i).Category().decode('utf-8')}")
         for j in range(response.LabelsGeneral(i).LabelsWithInstanceLength()):
-            print(f"\t\t#{j} label: {response.LabelsGeneral(i).LabelsWithInstance(j).Label().decode('utf-8')}")
+            print(
+                f"\t\t#{j} label: {response.LabelsGeneral(i).LabelsWithInstance(j).Label().decode('utf-8')}"
+            )
 
     for i in range(response.LabelsBbLength()):
         print(f"\tcategory: {response.LabelsBb(i).Category().decode('utf-8')}")
@@ -104,22 +103,46 @@ for responseBuf in stub.GetImage(bytes(buf)):
             print(
                 f"\t\t#{j} label: {response.LabelsBb(i).BoundingBox2dLabeled(j).LabelWithInstance().Label().decode('utf-8'):30}"
                 + f"bounding box (Xmin,Ymin,Xmax,Ymax): "
-                + str(response.LabelsBb(i).BoundingBox2dLabeled(j).BoundingBox().PointMin().X())
+                + str(
+                    response.LabelsBb(i)
+                    .BoundingBox2dLabeled(j)
+                    .BoundingBox()
+                    .PointMin()
+                    .X()
+                )
                 + " "
-                + str(response.LabelsBb(i).BoundingBox2dLabeled(j).BoundingBox().PointMin().Y())
+                + str(
+                    response.LabelsBb(i)
+                    .BoundingBox2dLabeled(j)
+                    .BoundingBox()
+                    .PointMin()
+                    .Y()
+                )
                 + " "
-                + str(response.LabelsBb(i).BoundingBox2dLabeled(j).BoundingBox().PointMax().X())
+                + str(
+                    response.LabelsBb(i)
+                    .BoundingBox2dLabeled(j)
+                    .BoundingBox()
+                    .PointMax()
+                    .X()
+                )
                 + " "
-                + str(response.LabelsBb(i).BoundingBox2dLabeled(j).BoundingBox().PointMax().Y())
+                + str(
+                    response.LabelsBb(i)
+                    .BoundingBox2dLabeled(j)
+                    .BoundingBox()
+                    .PointMax()
+                    .Y()
+                )
             )
     if not response.DataIsNone():
         image = response.DataAsNumpy()
         offset = 0  # image.min()
         scale = 1.0  # 255.0/image.max()
-        if response.Encoding().decode('utf-8') == "mono8":
+        if response.Encoding().decode("utf-8") == "mono8":
             image.resize(response.Height(), response.Width(), 1)
             image = (image - offset) * scale
-        elif response.Encoding().decode('utf-8') == "rgb8":
+        elif response.Encoding().decode("utf-8") == "rgb8":
             image.resize(response.Height(), response.Width(), 3)
 
         bb = []
@@ -133,24 +156,52 @@ for responseBuf in stub.GetImage(bytes(buf)):
             for i in range(response.LabelsBb(0).BoundingBox2dLabeledLength()):
                 bb.append(
                     [
-                        response.LabelsBb(0).BoundingBox2dLabeled(i).BoundingBox().PointMin().Y(),
-                        response.LabelsBb(0).BoundingBox2dLabeled(i).BoundingBox().PointMin().X(),
-                        response.LabelsBb(0).BoundingBox2dLabeled(i).BoundingBox().PointMax().Y(),
-                        response.LabelsBb(0).BoundingBox2dLabeled(i).BoundingBox().PointMax().X(),
+                        response.LabelsBb(0)
+                        .BoundingBox2dLabeled(i)
+                        .BoundingBox()
+                        .PointMin()
+                        .Y(),
+                        response.LabelsBb(0)
+                        .BoundingBox2dLabeled(i)
+                        .BoundingBox()
+                        .PointMin()
+                        .X(),
+                        response.LabelsBb(0)
+                        .BoundingBox2dLabeled(i)
+                        .BoundingBox()
+                        .PointMax()
+                        .Y(),
+                        response.LabelsBb(0)
+                        .BoundingBox2dLabeled(i)
+                        .BoundingBox()
+                        .PointMax()
+                        .X(),
                     ]
                 )
                 if (
-                    response.LabelsBb(0).BoundingBox2dLabeled(i).LabelWithInstance().Label().decode('utf-8')
+                    response.LabelsBb(0)
+                    .BoundingBox2dLabeled(i)
+                    .LabelWithInstance()
+                    .Label()
+                    .decode("utf-8")
                     == "white_cabbage_young"
                 ):
                     class_ids.append(0)
                 elif (
-                    response.LabelsBb(0).BoundingBox2dLabeled(i).LabelWithInstance().Label().decode('utf-8')
+                    response.LabelsBb(0)
+                    .BoundingBox2dLabeled(i)
+                    .LabelWithInstance()
+                    .Label()
+                    .decode("utf-8")
                     == "white_cabbage"
                 ):
                     class_ids.append(1)
                 elif (
-                    response.LabelsBb(0).BoundingBox2dLabeled(i).LabelWithInstance().Label().decode('utf-8')
+                    response.LabelsBb(0)
+                    .BoundingBox2dLabeled(i)
+                    .LabelWithInstance()
+                    .Label()
+                    .decode("utf-8")
                     == "white_cabbage_harvested"
                 ):
                     class_ids.append(2)
@@ -162,7 +213,7 @@ for responseBuf in stub.GetImage(bytes(buf)):
             np.array(bb),
             np.array(class_ids),
             classnames,
-            image_name=response.Header().UuidMsgs().decode('utf-8') + ".png",
+            image_name=response.Header().UuidMsgs().decode("utf-8") + ".png",
             gli_image=gli_image,
             rotate=t1,
             offset=offset,

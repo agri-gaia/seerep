@@ -28,9 +28,11 @@ def test_gRPC_pb_addAndGetCamins(grpc_channel, project_setup):
     logging.info(f"Testing project: {proj_name}; {proj_uuid}")
 
     # test for image uuid, general label and the general label confidence of corresponding entry in 2d array
-    sent_intrinsics = add_intrinsics.add_camintrins(grpc_channel, proj_uuid)
+    sent_intrinsics = add_intrinsics.add_camintrins(
+        target_proj_uuid=proj_uuid, grpc_channel=grpc_channel
+    )
     queried_intrinsics = get_intrinsics.query_camintrins(
-        proj_uuid, sent_intrinsics.header.uuid_msgs, grpc_channel
+        sent_intrinsics.header.uuid_msgs, proj_uuid, grpc_channel
     )
 
     assert protobuf_obj_to_dict(sent_intrinsics) == protobuf_obj_to_dict(
