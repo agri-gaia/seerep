@@ -59,8 +59,11 @@ def query_image_grid(
     bottom_right.y = -150
     theQuery.polygon.vertices.append(bottom_right)
 
-    theQuery.polygon.z = -1
-    theQuery.polygon.height = 7
+    theQuery.polygon.z = -100
+    theQuery.polygon.height = 700
+
+    theQuery.inMapFrame = True
+    theQuery.fullyEncapsulated = False
 
     # since epoche
     theQuery.timeinterval.time_min.seconds = 1638549273

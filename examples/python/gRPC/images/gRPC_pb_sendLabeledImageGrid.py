@@ -52,12 +52,12 @@ def send_labeled_image_grid(
         response = stubMeta.GetProjects(empty_pb2.Empty())
         for project in response.projects:
             print(project.name + " " + project.uuid)
-            if project.name == "testproject":
+            if project.name == "LabeledImagesInGrid":
                 target_proj_uuid = project.uuid
 
         if target_proj_uuid is None:
             creation = projectCreation.ProjectCreation(
-                name="testproject", mapFrameId="map"
+                name="LabeledImagesInGrid", mapFrameId="map"
             )
             projectCreated = stubMeta.CreateProject(creation)
             target_proj_uuid = projectCreated.uuid
@@ -97,6 +97,8 @@ def send_labeled_image_grid(
 
     camin.binning_x = 6
     camin.binning_y = 7
+
+    camin.maximum_viewing_distance = 5
 
     stubCI.TransferCameraIntrinsics(camin)
 
@@ -220,8 +222,8 @@ def add_camintrins(target_proj_uuid: str, grpc_channel: Channel) -> str:
     builder = flatbuffers.Builder(1000)
 
     # 1. Get all projects from the server when no target specified
-    if not target_proj_uuid:
-        target_proj_uuid = getProject(builder, grpc_channel, "testproject")
+    if target_proj_uuid is None:
+        target_proj_uuid = getProject(builder, grpc_channel, "LabeledImagesInGrid")
 
     ciuuid = str(uuid.uuid4())
 

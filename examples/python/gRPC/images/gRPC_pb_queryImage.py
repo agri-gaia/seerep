@@ -42,12 +42,12 @@ def query_images(
     theQuery = query.Query()
     theQuery.projectuuid.append(target_project_uuid)
 
-    theQuery.polygon.z = -1
-    theQuery.polygon.height = 7
+    theQuery.polygon.z = -100
+    theQuery.polygon.height = 700
 
-    theQuery.inMapFrame = False
+    theQuery.inMapFrame = True
 
-    l = 100
+    l = 150
     bottom_left = point2d.Point2D()
     bottom_left.x = -l
     bottom_left.y = -l
@@ -91,6 +91,7 @@ def query_images(
 
 if __name__ == "__main__":
     queried_imgs = query_images()
+    print(f"count of images {len(queried_imgs)}")
     for img in queried_imgs:
         print(
             f"uuidmsg: {img.header.uuid_msgs}"
