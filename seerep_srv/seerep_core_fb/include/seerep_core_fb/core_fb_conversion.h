@@ -271,7 +271,7 @@ private:
    * @param query fb query message
    * @return seerep_core_msgs::Polygon2D polygon2d as a core msg
    */
-  static void fromFbQueryPolygon(const seerep::fb::Query* query, seerep_core_msgs::Polygon2D& polygon);
+  static std::optional<seerep_core_msgs::Polygon2D> fromFbQueryPolygon(const seerep::fb::Query* query);
 
   /**
    * @brief converts the header of the flatbuffer data message to seerep core specific message

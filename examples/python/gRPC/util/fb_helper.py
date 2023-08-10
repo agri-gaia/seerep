@@ -438,7 +438,6 @@ def addToPointFieldVector(builder, pointFieldList):
 
 def createQuery(
     builder,
-    boundingBox=None,
     timeInterval=None,
     labels=None,
     mustHaveAllLabels=False,
@@ -448,6 +447,7 @@ def createQuery(
     withoutData=False,
     polygon2d=None,
     fullyEncapsulated=False,
+    inMapFrame=True,
 ):
     '''Create a query, all parameters are optional'''
 
@@ -471,8 +471,6 @@ def createQuery(
         dataUuidOffset = builder.EndVector()
 
     Query.Start(builder)
-    if boundingBox:
-        Query.AddBoundingboxStamped(builder, boundingBox)
     if polygon2d:
         Query.AddPolygon(builder, polygon2d)
     if timeInterval:
@@ -490,6 +488,7 @@ def createQuery(
     # no if; has default value
     Query.AddWithoutdata(builder, withoutData)
     Query.AddFullyEncapsulated(builder, fullyEncapsulated)
+    Query.AddInMapFrame(builder, inMapFrame)
 
     return Query.End(builder)
 
