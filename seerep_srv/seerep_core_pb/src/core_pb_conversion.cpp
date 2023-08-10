@@ -87,19 +87,19 @@ seerep_core_msgs::DatasetIndexable CorePbConversion::fromPb(const seerep::pb::Im
   {
     for (auto labelsCategories : img.labels_bb())
     {
-      std::unique_ptr<LabelWithInstanceVec> labelWithInstanceVecPtr;
+      LabelWithInstanceVec* labelWithInstanceVecPtr;
 
       auto catMap = dataForIndices.labelsWithInstancesWithCategory.find(labelsCategories.category().c_str());
       if (catMap != dataForIndices.labelsWithInstancesWithCategory.end())
       {
-        labelWithInstanceVecPtr = std::make_unique<LabelWithInstanceVec>(catMap->second);
+        labelWithInstanceVecPtr = &(catMap->second);
       }
       else
       {
         std::vector<seerep_core_msgs::LabelWithInstance> labelVector;
         auto entry =
             dataForIndices.labelsWithInstancesWithCategory.emplace(labelsCategories.category().c_str(), labelVector);
-        labelWithInstanceVecPtr = std::make_unique<LabelWithInstanceVec>(entry.first->second);
+        labelWithInstanceVecPtr = &(entry.first->second);
       }
 
       if (!labelsCategories.boundingbox2dlabeled().empty())
