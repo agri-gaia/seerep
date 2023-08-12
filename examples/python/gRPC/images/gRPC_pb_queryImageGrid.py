@@ -39,24 +39,26 @@ def query_image_grid(
     theQuery = query.Query()
     theQuery.projectuuid.append(target_project_uuid)
 
+    l = 1
+    t = 4
     bottom_left = point2d.Point2D()
-    bottom_left.x = -150
-    bottom_left.y = -150
+    bottom_left.x = -l + t
+    bottom_left.y = -l + t
     theQuery.polygon.vertices.append(bottom_left)
 
     top_left = point2d.Point2D()
-    top_left.x = -150
-    top_left.y = 150
+    top_left.x = -l + t
+    top_left.y = l + t
     theQuery.polygon.vertices.append(top_left)
 
     top_right = point2d.Point2D()
-    top_right.x = 150
-    top_right.y = 150
+    top_right.x = l + t
+    top_right.y = l + t
     theQuery.polygon.vertices.append(top_right)
 
     bottom_right = point2d.Point2D()
-    bottom_right.x = 150
-    bottom_right.y = -150
+    bottom_right.x = l + t
+    bottom_right.y = -l + t
     theQuery.polygon.vertices.append(bottom_right)
 
     theQuery.polygon.z = -100
@@ -82,10 +84,16 @@ def query_image_grid(
     grid_imgs: List[List[image.Image]] = []
     for x in range(3):
         grid_imgs.append([])
+        theQuery.polygon.vertices[0].x = -l + t + x
+        theQuery.polygon.vertices[1].x = -l + t + x
+        theQuery.polygon.vertices[2].x = l + t + x
+        theQuery.polygon.vertices[3].x = l + t + x
         for y in range(3):
+            theQuery.polygon.vertices[0].y = -l + t + y
+            theQuery.polygon.vertices[1].y = l + t + y
+            theQuery.polygon.vertices[2].y = l + t + y
+            theQuery.polygon.vertices[3].y = -l + t + y
             grid_imgs[x].append([])
-            # theQuery.boundingboxStamped.boundingbox.center_point.x = x
-            # theQuery.boundingboxStamped.boundingbox.center_point.y = y
             for img in stub.GetImage(theQuery):
                 grid_imgs[x][y].append(img)
 
@@ -99,11 +107,9 @@ if __name__ == "__main__":
     for x in range(len(grid_img_list)):
         for y in range(len(grid_img_list[x])):
             print(f"center point query (x/y): ( {x} / {y} )")
+            print(f"Number of images: {len(grid_img_list[x][y])}")
             for img in grid_img_list[x][y]:
                 print(f"Image uuid: {img.header.uuid_msgs}")
-                print(
-                    f"General label of transferred img: {img.labels_general[0].labelWithInstance[1].label.label}"
-                )
-                print(
-                    f"General label confidence: {img.labels_general[0].labelWithInstance[1].label.confidence}"
-                )
+                # print( f"General label of transferred img: {img.labels_general[0].labelWithInstance[1].label.label}")
+                # print( f"General label confidence: {img.labels_general[0].labelWithInstance[1].label.confidence}")
+            print("--------------------")
