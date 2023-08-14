@@ -16,7 +16,7 @@ void Hdf5PbImage::writeImage(const std::string& id, const seerep::pb::Image& ima
   std::string hdf5GroupPath = getHdf5GroupPath(id);
   std::string hdf5DataSetPath = getHdf5DataSetPath(id);
 
-  HighFive::DataSpace dataSpace({ image.height() * image.width() * 3 });
+  HighFive::DataSpace dataSpace({ image.height() * image.step() });
   auto dataGroupPtr = getHdf5Group(hdf5GroupPath);
   auto dataSetPtr = getHdf5DataSet<uint8_t>(hdf5DataSetPath, dataSpace);
 
