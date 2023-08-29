@@ -16,9 +16,10 @@ def get_camintrins(
     grpc_channel: Channel = get_gRPC_channel(),
 ) -> Optional[CameraIntrinsics.CameraIntrinsics]:
 
+    builder = flatbuffers.Builder(1000)
+
     # 1. Get all projects from the server when no target specified
     if target_proj_uuid is None:
-        builder = flatbuffers.Builder(1000)
         # this finishes the builder and returns the decoded uuid
         target_proj_uuid = getProject(builder, grpc_channel, "testproject")
         if target_proj_uuid is None:
@@ -26,8 +27,6 @@ def get_camintrins(
                 "valid project doesn't exist! Please execute gRPC_fb_addCameraIntrinsics.py beforehand."
             )
             return None
-
-    builder = flatbuffers.Builder(1000)
     camintrins_query = createCameraIntrinsicsQuery(builder, ciuuid, target_proj_uuid)
     builder.Finish(camintrins_query)
 
