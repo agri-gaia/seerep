@@ -68,9 +68,7 @@ include_directories(
   ${zstd_INCLUDE_DIRS}
 )
 
-add_executable(
-  ${PROJECT_NAME} src/analysis.cpp src/message-generation.cpp src/timer.cpp
-)
+add_executable(${PROJECT_NAME} src/analysis.cpp src/message-generation.cpp)
 
 target_link_libraries(
   ${PROJECT_NAME}

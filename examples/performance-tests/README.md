@@ -5,6 +5,12 @@ This package contains the benchmark for the comparison between [HDF5](https://ww
 
 ## Usage
 
+Install `conan` version $<2.0$ and pandas in the docker container:
+
+```shell
+sudo pip install conan==1.60.2 && pip install pandas
+```
+
 Build the code with optimization (-O3 -DNDEBUG):
 
 ```shell
@@ -20,7 +26,7 @@ source ~/catkin_ws/devel/setup.bash
 ### Run the benchmark with
 
 ```shell
-rosrun seerep_performance_tests run.py
+rosrun seerep_performance_tests run.py (--only-plot)
 ```
 
 ## Settings

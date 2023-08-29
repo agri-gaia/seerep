@@ -1,67 +1,82 @@
 #!/usr/bin/env python3
 
-import glob
 import math
 import os
 import re
 import subprocess
-from collections import OrderedDict
+from argparse import ArgumentParser
+from datetime import datetime
 from pathlib import Path
+from typing import Tuple, Union
 
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 
-# NOTE: add your paths here !!
-
 # a file with bytes to use as a message payload
-OUTPUT_DIR = Path("/mnt/ram-disk/")
-MESSAGE_PAYLOAD = Path("/home/pbrstudent/Documents/rosbags/iros/2022-08-24-12-21-43_0.mcap")
+OUTPUT_DIR = Path("/dev/shm/")
+MESSAGE_PAYLOAD = Path("/home/julian/Documents/Rosbags/IROS-Paper/mcap/2022-08-24-12-21-43_0.mcap")
 
+MAIN_CONFIG = {
+    "num_runs": 10,
+    "message_sizes": [
+        500,
+        1024 * 100,
+        1024 * 250,
+        1024 * 600,
+        1024**2 * 1,
+        1024**2 * 4,
+        1024**2 * 6,
+        1024**2 * 17,
+        1024**2 * 27,
+    ],
+    "total_sizes": [1024**3],
+}
+
+# TODO: provide more configuration options, like compression, chunking, etc.
 CONFIG = {
     # all sizes must be in bytes !
-    "num_runs": 50,
+    "num_runs": 10,
     "message_sizes": [
-        1024 * 50,
+        100,
         1024 * 100,
+        1024 * 250,
+        1024 * 500,
         1024**2 * 1,
+        1024**2 * 5,
         1024**2 * 10,
+        1024**2 * 25,
     ],
-    "total_sizes": [1024**2 * 250],
+    "total_sizes": [1024**3 * 1],
 }
 
 
-def string_to_bytes(bytes_str: str) -> int:
+def bytes_to_string(num_bytes: int) -> str:
+    """Convert a number of bytes to a human readable string."""
+    if num_bytes == 0:
+        return "0B"
+    units = ("B", "KiB", "MiB", "GiB", "TiB")
+    unit_index = int(math.floor(math.log(num_bytes, 1024)))
+    bytes_in_unit = int(round(num_bytes / math.pow(1024, unit_index)))
+    return f"{bytes_in_unit}{units[unit_index]}"
+
+
+def string_to_bytes(byte_str: str) -> int:
     UNIT_MAP = {
+        "B": 1,
         "KiB": 1024,
         "MiB": 1024**2,
         "GiB": 1024**3,
         "TiB": 1024**4,
-        "PiB": 1024**5,
-        "EiB": 1024**6,
-        "ZiB": 1024**7,
-        "YiB": 1024**8,
     }
-    messages_size = bytes_str.split("-")[0]
-    unit = messages_size[-3:]
-    size = int(messages_size[:-3])
-    return size * UNIT_MAP[unit]
+    split_result = re.split(r'(\d+\.\d+|\d+)', byte_str)
+    return int(split_result[1]) * UNIT_MAP[split_result[2]]
 
 
-def bytes_to_string(num_bytes: int) -> str:
-    if num_bytes == 0:
-        return "0B"
-    size_name = ("B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB")
-    index = int(math.floor(math.log(num_bytes, 1024)))
-    power = math.pow(1024, index)
-    size = int(round(num_bytes / power, 2))
-    return f"{size}{size_name[index]}"
-
-
-def build_config() -> dict:
+def build_config(config: dict) -> dict:
+    """Build all combinations for the given configuration."""
     configs = {}
-    for message_size in CONFIG["message_sizes"]:
-        for total_size in CONFIG["total_sizes"]:
+    for message_size in config["message_sizes"]:
+        for total_size in config["total_sizes"]:
             label = f"{bytes_to_string(message_size)}-{bytes_to_string(total_size)}"
             configs[label] = {
                 "message_size": message_size,
@@ -70,129 +85,174 @@ def build_config() -> dict:
     return configs
 
 
-def executable_path() -> str:
-    output = subprocess.run(
-        ["catkin_find", "seerep_performance_tests", "seerep_performance_tests"], check=True, stdout=subprocess.PIPE
-    )
-    return output.stdout.decode("utf-8").strip()
+def benchmark_exc_path() -> Path:
+    """Get the path to the benchmark executable"""
+    try:
+        subprocess_output = subprocess.run(
+            ["catkin_find", "seerep_performance_tests", "seerep_performance_tests"], check=True, stdout=subprocess.PIPE
+        )
+    except subprocess.CalledProcessError as e:
+        print(f"Subprocess error while searching for benchmark executable: {e}")
+        exit(1)
+    return Path(subprocess_output.stdout.decode("utf-8").strip())
 
 
-def run_once(config: dict, label: str) -> None:
-    output = subprocess.run(
-        [
-            executable_path(),
-            str(MESSAGE_PAYLOAD),
-            label,
-            OUTPUT_DIR,
-            str(config["message_size"]),
-            str(config["total_size"]),
-        ],
-        check=True,
-        stdout=subprocess.PIPE,
-    )
-    # print(output.stdout.decode("utf-8").strip())
+def remove_files(dir: Path, extension: str) -> None:
+    """Remove all files with a given extension in the directory."""
+    for file in Path.glob(dir, "*" + extension):
+        try:
+            os.remove(file)
+        except OSError as e:
+            print(f"Error while deleting {file} because: {e.strerror}")
 
 
-def cleanup_cvs() -> None:
-    for file in glob.glob(f"{OUTPUT_DIR}/*.csv"):
-        os.remove(file)
-
-
-def cleanup_data() -> None:
-    for dir in ["hdf5", "mcap"]:
-        path = Path(OUTPUT_DIR / dir)
+def setup(output_dir: Path, dirs: list = ["mcap", "hdf5"], clean_csv: bool = True) -> None:
+    """Cleanup before running the benchmark."""
+    for dir in dirs:
+        path = Path(f"{output_dir}/{dir}")
         if not path.exists():
             path.mkdir()
         else:
-            for file in glob.glob(f"{path}/*.{dir}"):
-                os.remove(file)
+            remove_files(path, f".{dir}")
+    if clean_csv:
+        remove_files(output_dir, ".csv")
 
 
-def plot() -> None:
-    dfs = []
-    for file in glob.glob(f"{OUTPUT_DIR}/*.csv"):
-        dfs.append((Path(file).name.split('.')[0], pd.read_csv(file, names=["start", "end", "duration"])))
+def run_config(config: dict, label: str, payload_path: Path, output_dir: Path) -> None:
+    """Run the configuration of the performance test once."""
 
-    # still messy but now it's sorted!
-    runtimes = OrderedDict()
-    for label, df in dfs:
-        filetype = label.split('-')[0]
-        size = label.split('-')[1]
-        if not size in runtimes:
-            runtimes[size] = {}
-        if filetype == "mcap":
-            runtimes[size]["mcap"] = {
-                "mean": df.loc[:, "duration"].mean() / 10**9,
-                "std_dev": df.loc[:, "duration"].std() / 10**9,
-            }
-        elif filetype == "hdf5":
-            runtimes[size]["hdf5"] = {
-                "mean": df.loc[:, "duration"].mean() / 10**9,
-                "std_dev": df.loc[:, "duration"].std() / 10**9,
-            }
+    benchmark_path = benchmark_exc_path()
+    if not benchmark_path != Path("."):
+        print("Could not find benchmark executable, run catkin build and source the workspace!")
+        exit(1)
 
-    sorted_keys = sorted(runtimes.keys(), key=lambda x: string_to_bytes(x))
+    try:
+        output = subprocess.run(
+            [
+                benchmark_path,
+                str(payload_path),
+                label,
+                str(output_dir),
+                str(config["message_size"]),
+                str(config["total_size"]),
+            ],
+            check=True,
+            stdout=subprocess.PIPE,
+        )
+    except subprocess.CalledProcessError as e:
+        print(f"Subprocess error while running benchmark: {e}")
+        exit(1)
+    # print(f"Subprocess output: {output.stdout.decode('utf-8')}")
 
-    mcap_times, hdf5_times, = (
-        [],
-        [],
+
+def read_and_concat_csvs(csv_path: Path) -> Union[pd.DataFrame, None]:
+    """Read all csv files in a given directory and return a united dataframe."""
+    dfs = [pd.read_csv(csv_file).assign(label=csv_file.stem) for csv_file in Path.glob(csv_path, "*.csv")]
+    return pd.concat(dfs, ignore_index=True) if dfs else None
+
+
+def process_data(df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    """Process the read csv data for visualization."""
+
+    # convert to seconds
+    df["write_ns"] = df["write_ns"].apply(lambda x: x / 1e9)
+    df.rename(columns={"write_ns": "write_s"}, inplace=True)
+
+    # convert to GB
+    df["written_bytes"] = df["written_bytes"].apply(lambda x: x / 1e9)
+    df.rename(columns={"written_bytes": "written_gb"}, inplace=True)
+
+    # add extra columns for the msg size and file_format
+    df["msg_size"] = df["label"].apply(lambda x: x.split("-")[1])
+    df["file_format"] = df["label"].apply(lambda x: x.split("-")[0])
+
+    df["gb/s"] = df[["written_gb", "write_s"]].apply(lambda x: x.written_gb / x.write_s, axis=1)
+
+    # get the mean and std for each configuration
+    df = df.groupby(["label", "msg_size", "file_format"], as_index=False)["gb/s"].agg(mean="mean", std="std")
+
+    # don't need this column anymore
+    df.drop(columns=["label"], inplace=True)
+
+    # change to the required shape for bar plots
+    mean_df = df.pivot(index="msg_size", columns="file_format", values="mean")
+    std_df = df.pivot(index="msg_size", columns="file_format", values="std")
+
+    # sort by ascending msg sie
+    mean_df.sort_values(by="msg_size", inplace=True, key=lambda x: x.apply(string_to_bytes))
+    std_df.sort_values(by="msg_size", inplace=True, key=lambda x: x.apply(string_to_bytes))
+
+    return (mean_df, std_df)
+
+
+def plot_data(
+    mean_df: pd.DataFrame, std_df: pd.DataFrame, bar_width: float = 0.4, font_size: int = 12, save_img: bool = True
+) -> None:
+    """Plot or save the processed data in a bar chart."""
+    # TODO: automatically generate the title
+    title = f"1 GB Total Data For Each Message Size \
+        \n MCAP: No Compression - Chunking Size 1KiB- \
+        \n HDF5: No Compression - No Chunking"
+
+    ax = mean_df.plot(
+        kind="bar",
+        width=bar_width,
+        yerr=std_df,
+        color=["#a6a6a6", "#548235"],
+        rot=45,
+        capsize=2,
+        edgecolor='white',
+        linewidth=1,
     )
-    macp_std_devs, hdf5_std_devs = [], []
-    for keys in sorted_keys:
-        mcap_times.append((runtimes[keys]["mcap"]["mean"]))
-        hdf5_times.append((runtimes[keys]["hdf5"]["mean"]))
-        macp_std_devs.append((runtimes[keys]["mcap"]["std_dev"]))
-        hdf5_std_devs.append((runtimes[keys]["hdf5"]["std_dev"]))
 
-    assert len(mcap_times) == len(hdf5_times)
-
-    BAR_WIDTH = 0.25
-    FONT_SIZE = 12
-
-    # create bar positions
-    r1 = np.arange(len(mcap_times))
-    r2 = [x + BAR_WIDTH for x in r1]
-
-    fig = plt.figure()
-    plt.style.use("seaborn-paper")
-
-    plt.bar(r1, mcap_times, width=BAR_WIDTH, edgecolor="white", label="MCAP", color="#a6a6a6")
-    plt.bar(r2, hdf5_times, width=BAR_WIDTH, edgecolor="white", label="HDF5", color="#548235")
-
-    plt.errorbar(r1, mcap_times, yerr=macp_std_devs, fmt="none", capsize=5, capthick=1, ecolor="black")
-    plt.errorbar(r2, hdf5_times, yerr=hdf5_std_devs, fmt="none", capsize=5, capthick=1, ecolor="black")
-
-    plt.xticks([r + (BAR_WIDTH / 2) for r in range(len(mcap_times))], sorted_keys, fontsize=FONT_SIZE)
-    plt.yticks(fontsize=FONT_SIZE)
-    plt.xlabel("Message Size", labelpad=10, fontsize=FONT_SIZE)
-    plt.ylabel("Execution time in seconds", fontsize=FONT_SIZE)
-    plt.title(
-        "250 MiB Toal Data For Eeach Message Size \n MCAP: No Compression - Chunk-Size: 768 KiB - RAM Disk \n HDF5: No Compression - No Chunking - RAM Disk",
-        fontsize=FONT_SIZE,
-        pad=15,
-    )
+    plt.title(title, fontsize=font_size, pad=15)
+    plt.xlabel("Message Size", labelpad=10, fontsize=font_size)
+    plt.ylabel("Troughput in GB/s", fontsize=font_size)
+    plt.xticks(fontsize=font_size)
+    plt.yticks(fontsize=font_size)
 
     ax = plt.gca()
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
-
     plt.tight_layout()
-    plt.legend(prop={"size": FONT_SIZE})
-    plt.show()
-    # plt.savefig(Path(OUTPUT_DIR / "results.png"), dpi=600)
+
+    if save_img:
+        plt.savefig(
+            Path(f"{OUTPUT_DIR}/benchmark_run_{datetime.now().strftime('%Y_%m_%d_%H_%M_%S')}.png"),
+            file_format="png",
+            dpi=300,
+        )
+    else:
+        plt.show()
 
 
 def main():
-    # cleanup_cvs()
-    # configs = build_config()
-    # for label, config in configs.items():
-    #     print(f"Running {label} ...")
-    #     for run in range(CONFIG["num_runs"]):
-    #         print(f"Run {run + 1} ...")
-    #         cleanup_data()
-    #         run_once(config, label)
-    # print("Generating plot ...")
-    plot()
+
+    parser = ArgumentParser()
+    parser.add_argument("--only-plot", action="store_true", help="Only plot the data from the csv files.")
+    parser.add_argument("--save-img", action="store_true", help="Save the plot as an image.")
+    args = parser.parse_args()
+
+    if not args.only_plot:
+        config_combinations = build_config(CONFIG)
+        setup(OUTPUT_DIR)
+        for label, config in config_combinations.items():
+            print(f"Running {label} ...")
+            for run in range(CONFIG["num_runs"]):
+                print(f"Run {run + 1} ...")
+                run_config(config, label, MESSAGE_PAYLOAD, OUTPUT_DIR)
+                # remove hdf5 and mcap files after each run
+                setup(OUTPUT_DIR, clean_csv=False)
+
+    print("Reading csv files ...")
+    csv_df = read_and_concat_csvs(OUTPUT_DIR)
+    if csv_df is None:
+        print("No csv files found, exiting ...")
+        exit(1)
+    print("Processing data ...")
+    mean_df, std_df = process_data(csv_df)
+    print("Generating plot ...")
+    plot_data(mean_df, std_df, save_img=True)
 
 
 if __name__ == "__main__":
