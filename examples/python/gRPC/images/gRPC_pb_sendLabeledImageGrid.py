@@ -8,6 +8,8 @@ from seerep.pb import boundingbox2d_labeled_pb2 as boundingbox2d_labeled
 from seerep.pb import (
     boundingbox2d_labeled_with_category_pb2 as boundingbox2d_labeled_with_category,
 )
+from seerep.pb import camera_intrinsics_pb2 as cameraintrinsics
+from seerep.pb import camera_intrinsics_service_pb2_grpc as camintrinsics_service
 from seerep.pb import image_pb2 as image
 from seerep.pb import image_service_pb2_grpc as imageService
 from seerep.pb import label_with_instance_pb2 as labelWithInstance
@@ -25,6 +27,7 @@ channel = get_gRPC_channel("local")
 stub = imageService.ImageServiceStub(channel)
 stubTf = tfService.TfServiceStub(channel)
 stubMeta = metaOperations.MetaOperationsStub(channel)
+stubCI = camintrinsics_service.CameraIntrinsicsServiceStub(channel)
 
 # create new project
 creation = projectCreation.ProjectCreation(name="LabeledImagesInGrid", mapFrameId="map")
@@ -33,6 +36,41 @@ projectname = projectCreated.uuid
 
 # get and save the time
 theTime = int(time.time())
+
+ciuuid = str(uuid.uuid4())
+print("Camera Intrinsics will be saved against the uuid: ", ciuuid)
+
+camin = cameraintrinsics.CameraIntrinsics()
+
+camin.header.stamp.seconds = 4
+camin.header.stamp.nanos = 3
+
+camin.header.frame_id = "camintrinsics"
+
+camin.header.uuid_project = projectname
+camin.header.uuid_msgs = ciuuid
+
+camin.region_of_interest.x_offset = 2
+camin.region_of_interest.y_offset = 1
+camin.region_of_interest.height = 5
+camin.region_of_interest.width = 4
+camin.region_of_interest.do_rectify = 4
+
+camin.height = 5
+camin.width = 4
+
+camin.distortion_model = "plump_bob"
+
+camin.distortion.extend([3, 4, 5])
+
+camin.intrinsic_matrix.extend([3, 4, 5])
+camin.rectification_matrix.extend([3, 4, 5])
+camin.projection_matrix.extend([3, 4, 5])
+
+camin.binning_x = 6
+camin.binning_y = 7
+
+stubCI.TransferCameraIntrinsics(camin)
 
 # create 9 grid cells
 for k in range(9):
@@ -69,6 +107,7 @@ for k in range(9):
         theImage.encoding = "rgb8"
         theImage.step = 3 * lim
         theImage.data = bytes(rgb)
+        theImage.uuid_camera_intrinsics = ciuuid
 
         for iCategory in range(0, 2):
             bbCat = boundingbox2d_labeled_with_category.BoundingBox2DLabeledWithCategory()

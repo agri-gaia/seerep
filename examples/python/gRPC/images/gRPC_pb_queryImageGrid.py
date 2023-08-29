@@ -7,6 +7,7 @@ from seerep.pb import image_service_pb2_grpc as imageService
 from seerep.pb import label_pb2
 from seerep.pb import labels_with_category_pb2 as labels_with_category
 from seerep.pb import meta_operations_pb2_grpc as metaOperations
+from seerep.pb import point2d_pb2 as point2d
 from seerep.pb import query_pb2 as query
 from seerep.util.common import get_gRPC_channel
 
@@ -53,6 +54,9 @@ theQuery.polygon.vertices.append(bottom_right)
 theQuery.polygon.z = -1
 theQuery.polygon.height = 7
 
+theQuery.inMapFrame = True
+theQuery.fullyEncapsulated = False
+
 # since epoche
 theQuery.timeinterval.time_min.seconds = 1638549273
 theQuery.timeinterval.time_min.nanos = 0
@@ -67,11 +71,15 @@ labelWithConfidence.label = "testlabel1"
 label.labels.extend([labelWithConfidence])
 theQuery.labelsWithCategory.append(label)
 
-for x in range(3):
-    for y in range(3):
-        theQuery.boundingboxStamped.boundingbox.center_point.x = x
-        theQuery.boundingboxStamped.boundingbox.center_point.y = y
-        print("center point query (x/y): ( " + str(x) + " / " + str(y) + " )")
-        for img in stub.GetImage(theQuery):
-            print("General label of transferred img: " + img.labels_general[0].labelWithInstance[1].label.label)
-            print("General label confidence: " + str(img.labels_general[0].labelWithInstance[1].label.confidence))
+for img in stub.GetImage(theQuery):
+    print("General label of transferred img: " + img.labels_general[0].labelWithInstance[1].label.label)
+    print("General label confidence: " + str(img.labels_general[0].labelWithInstance[1].label.confidence))
+
+# for x in range(3):
+#     for y in range(3):
+#         theQuery.boundingboxStamped.boundingbox.center_point.x = x
+#         theQuery.boundingboxStamped.boundingbox.center_point.y = y
+#         print("center point query (x/y): ( " + str(x) + " / " + str(y) + " )")
+#         for img in stub.GetImage(theQuery):
+#             print("General label of transferred img: " + img.labels_general[0].labelWithInstance[1].label.label)
+#             print("General label confidence: " + str(img.labels_general[0].labelWithInstance[1].label.confidence))
