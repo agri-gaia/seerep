@@ -39,8 +39,8 @@ def query_image_grid(
     theQuery = query.Query()
     theQuery.projectuuid.append(target_project_uuid)
 
-    l = 1
-    t = 4
+    l = 150
+    t = 0
     bottom_left = point2d.Point2D()
     bottom_left.x = -l + t
     bottom_left.y = -l + t
