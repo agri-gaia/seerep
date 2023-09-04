@@ -3,14 +3,13 @@
 
 from typing import List, cast
 
-import conftest
+import fb_to_dict
 import flatbuffers
 from grpc import Channel
 from gRPC.images import gRPC_fb_addBoundingBox as add_bb
 from gRPC.images import gRPC_pb_sendLabeledImage as add_img
 from seerep.fb import Image
 from seerep.fb import image_service_grpc_fb as imageService
-from seerep.pb import meta_operations_pb2_grpc as metaOperations
 from seerep.util.fb_helper import createQuery
 
 
@@ -46,6 +45,7 @@ def test_addBoundingBox(grpc_channel, project_setup):
             for img in all_imgs
             if img.Header().UuidMsgs().decode("utf-8") == bb_img_uuid
         ][0]
+
         # iterate through all categories of the image
         filtered_bbs = [
             img_bb.LabelsBb(idx)
@@ -56,6 +56,6 @@ def test_addBoundingBox(grpc_channel, project_setup):
 
         assert len(filtered_bbs) == len(sent_bbs)
         for bb_cat in filtered_bbs:
-            assert conftest.fb_obj_to_dict(bb_cat) in [
-                conftest.fb_obj_to_dict(bb) for bb in sent_bbs
+            assert fb_to_dict.fb_obj_to_dict(bb_cat) in [
+                fb_to_dict.fb_obj_to_dict(bb) for bb in sent_bbs
             ]

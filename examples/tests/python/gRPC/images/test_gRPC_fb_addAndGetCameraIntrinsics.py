@@ -1,7 +1,7 @@
 from collections.abc import Iterable
 from typing import Dict, List, Tuple
 
-import conftest
+import fb_to_dict
 import flatbuffers
 from gRPC.images import gRPC_fb_addCameraIntrinsics as add_ci
 from gRPC.images import gRPC_fb_getCameraIntrinsics as get_ci
@@ -15,4 +15,4 @@ def test_addAndGetCameraIntrinsics(grpc_channel, project_setup):
         target_proj_uuid=proj_uuid, grpc_channel=grpc_channel
     )
 
-    conftest.fb_obj_to_dict(sent_ci)
+    fb_to_dict.fb_obj_to_dict(sent_ci)
