@@ -17,16 +17,13 @@
   <author email="spuetz@uos.de">Sebastian Pütz</author>
 
   <depend>seerep-com</depend>
-  <depend>seerep-hdf5-pb</depend>
-  <depend>seerep-hdf5-fb</depend>
-  <depend>seerep-hdf5-core</depend>
+  <depend>seerep_hdf5_ros</depend>
+  <depend>rosbag</depend>
   <depend>roscpp</depend>
   <depend>std_msgs</depend>
   <depend>geometry_msgs</depend>
   <depend>sensor_msgs</depend>
   <depend>topic_tools</depend>
-  <depend>seerep_ros_conversions_pb</depend>
-  <depend>seerep_ros_conversions_fb</depend>
   <depend>tf</depend>
   <buildtool_depend>catkin</buildtool_depend>
 </package>
