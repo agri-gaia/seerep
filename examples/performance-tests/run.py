@@ -16,37 +16,25 @@ import pandas as pd
 OUTPUT_DIR = Path("/dev/shm/")
 MESSAGE_PAYLOAD = Path("/home/julian/Documents/Rosbags/IROS-Paper/mcap/2022-08-24-12-21-43_0.mcap")
 
-MAIN_CONFIG = {
-    "num_runs": 10,
-    "message_sizes": [
-        500,
-        1024 * 100,
-        1024 * 250,
-        1024 * 600,
-        1024**2 * 1,
-        1024**2 * 4,
-        1024**2 * 6,
-        1024**2 * 17,
-        1024**2 * 27,
-    ],
-    "total_sizes": [1024**3],
-}
-
-# TODO: provide more configuration options, like compression, chunking, etc.
 CONFIG = {
-    # all sizes must be in bytes !
     "num_runs": 10,
     "message_sizes": [
         100,
+        500,
         1024 * 100,
+        1024 * 200,  # Somewhere here they should be the same
         1024 * 250,
-        1024 * 500,
+        1024 * 300,
+        1024 * 600,  # Lero Depth Map
         1024**2 * 1,
-        1024**2 * 5,
-        1024**2 * 10,
-        1024**2 * 25,
+        1024**2 * 4,  # Full HD 1 Channel
+        1024**2 * 6,  # Full HD 3 Channels
+        1024**2 * 17,  # 4k 1 Channel
+        1024**2 * 27,  # 4k 3 Channels
+        1024**2 * 50,
+        1024**2 * 100,
     ],
-    "total_sizes": [1024**3 * 1],
+    "total_sizes": [1024**2 * 250],
 }
 
 
@@ -118,7 +106,7 @@ def setup(output_dir: Path, dirs: list = ["mcap", "hdf5"], clean_csv: bool = Tru
         remove_files(output_dir, ".csv")
 
 
-def run_config(config: dict, label: str, payload_path: Path, output_dir: Path) -> None:
+def run_config(config: dict, label: str, payload_path: Path, output_dir: Path, subprocess_output: bool = False) -> None:
     """Run the configuration of the performance test once."""
 
     benchmark_path = benchmark_exc_path()
@@ -142,7 +130,8 @@ def run_config(config: dict, label: str, payload_path: Path, output_dir: Path) -
     except subprocess.CalledProcessError as e:
         print(f"Subprocess error while running benchmark: {e}")
         exit(1)
-    # print(f"Subprocess output: {output.stdout.decode('utf-8')}")
+    if subprocess_output:
+        print(f"{output.stdout.decode('utf-8')}")
 
 
 def read_and_concat_csvs(csv_path: Path) -> Union[pd.DataFrame, None]:
@@ -159,7 +148,7 @@ def process_data(df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
     df.rename(columns={"write_ns": "write_s"}, inplace=True)
 
     # convert to GB
-    df["written_bytes"] = df["written_bytes"].apply(lambda x: x / 1e9)
+    df["written_bytes"] = df["written_bytes"].apply(lambda x: x / 1024**3)
     df.rename(columns={"written_bytes": "written_gb"}, inplace=True)
 
     # add extra columns for the msg size and file_format
@@ -190,8 +179,8 @@ def plot_data(
 ) -> None:
     """Plot or save the processed data in a bar chart."""
     # TODO: automatically generate the title
-    title = f"1 GB Total Data For Each Message Size \
-        \n MCAP: No Compression - Chunking Size 1KiB- \
+    title = f"250 MiB Total Data For Each Message Size \
+        \n MCAP: No Compression - Default Chunking - \
         \n HDF5: No Compression - No Chunking"
 
     ax = mean_df.plot(
@@ -200,14 +189,15 @@ def plot_data(
         yerr=std_df,
         color=["#a6a6a6", "#548235"],
         rot=45,
-        capsize=2,
+        capsize=3,
         edgecolor='white',
         linewidth=1,
+        figsize=(9, 6),
     )
 
     plt.title(title, fontsize=font_size, pad=15)
     plt.xlabel("Message Size", labelpad=10, fontsize=font_size)
-    plt.ylabel("Troughput in GB/s", fontsize=font_size)
+    plt.ylabel("Troughput in GiB/s", fontsize=font_size)
     plt.xticks(fontsize=font_size)
     plt.yticks(fontsize=font_size)
 
