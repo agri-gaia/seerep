@@ -53,6 +53,7 @@ std::pair<std::vector<unsigned char>, size_t> getMessageData(size_t start, size_
   return std::make_pair(output, start);
 }
 
+// TODO: this could be replaced with a cutom message that only contains a data field
 sensor_msgs::CompressedImage generateMessage(const std::vector<unsigned char>& data)
 {
   sensor_msgs::CompressedImage message;
@@ -60,24 +61,28 @@ sensor_msgs::CompressedImage generateMessage(const std::vector<unsigned char>& d
   message.header.frame_id = "map";
   message.header.stamp = ros::Time::now();
   message.format = "jpeg";
-  message.data.assign(data.begin(), data.end());
+  message.data = std::move(data);
 
   return message;
 }
 
 std::vector<sensor_msgs::CompressedImage> generateMessages(const Config& config, const std::vector<unsigned char>& data)
 {
-  size_t numMessages = std::ceil(config.totalSize / (config.messageSize * 1.0));
+  size_t written_bytes = 0, write_size = 0, offset = 0;
 
   std::vector<sensor_msgs::CompressedImage> messages;
-  messages.reserve(numMessages);
+  messages.reserve(std::ceil(config.totalSize / config.messageSize));
 
-  size_t offset = 0;
-  for (size_t i = 0; i < numMessages; i++)
+  while (written_bytes < config.totalSize)
   {
-    auto [messageData, newOffset] = getMessageData(offset, config.messageSize, data);
-    messages.insert(messages.end(), generateMessage(messageData));
-    offset = newOffset;
+    write_size =
+        written_bytes + config.messageSize > config.totalSize ? config.totalSize - written_bytes : config.messageSize;
+
+    auto [message_data, new_offset] = getMessageData(offset, write_size, data);
+    messages.insert(messages.end(), generateMessage(message_data));
+
+    offset = new_offset;
+    written_bytes += write_size;
   }
 
   auto rng = std::default_random_engine{};
