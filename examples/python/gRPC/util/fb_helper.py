@@ -107,10 +107,9 @@ def getProjectInfo(builder, channel, name):
     return None
 
 
-def createProject(
+def createProjectRaw(
     channel, builder, name, frameId, coordSys, ellipsoid, altitude, latitude, longitude
-):
-    """Create a project from the parameters"""
+) -> ProjectInfo.ProjectInfo:
     stubMeta = metaOperations.MetaOperationsStub(channel)
 
     frameIdBuf = builder.CreateString(frameId)
@@ -137,8 +136,28 @@ def createProject(
 
     responseBuf = stubMeta.CreateProject(bytes(buf))
     response = ProjectInfo.ProjectInfo.GetRootAs(responseBuf)
+    return response
 
-    return response.Uuid().decode("utf-8")
+
+def createProject(
+    channel, builder, name, frameId, coordSys, ellipsoid, altitude, latitude, longitude
+) -> str:
+    """Create a project from the parameters"""
+    return (
+        createProjectRaw(
+            channel,
+            builder,
+            name,
+            frameId,
+            coordSys,
+            ellipsoid,
+            altitude,
+            latitude,
+            longitude,
+        )
+        .Uuid()
+        .decode("utf-8")
+    )
 
 
 def getOrCreateProject(
