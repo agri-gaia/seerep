@@ -5,10 +5,13 @@ This package contains the benchmark for the comparison between [HDF5](https://ww
 
 ## Usage
 
-Install `conan` version $<2.0$ and pandas in the docker container:
+Run the following commands for the setup:
 
 ```shell
-sudo pip install conan==1.60.2 && pip install pandas
+pip install conan==1.60.2 pandas
+PATH=$PATH:/home/docker/.local/bin
+sudo apt update
+sudo apt install texlive-latex-extra texlive-fonts-recommended cm-super dvipng  -y
 ```
 
 Build the code with optimization (-O3 -DNDEBUG):
@@ -17,16 +20,31 @@ Build the code with optimization (-O3 -DNDEBUG):
 catkin build seerep_performance_tests --cmake-args -DCMAKE_BUILD_TYPE=Release
 ```
 
-Just to be sure, source the catkin workspace (assuming it's located under `~/catkin_ws/`):
+Source the catkin workspace (assuming it's located under `~/catkin_ws/`):
 
 ```shell
 source ~/catkin_ws/devel/setup.bash
 ```
 
-### Run the benchmark with
+If nedded, change the I/O paths at the top of `run.py`:
+
+```python
+...
+OUTPUT_DIR = Path("/seerep/seerep-data/benchmarks")
+MESSAGE_PAYLOAD = Path("/seerep/seerep-data/lero/...")
+...
+```
+
+Run the benchmark with:
 
 ```shell
-rosrun seerep_performance_tests run.py (--only-plot)
+rosrun seerep_performance_tests run.py
+```
+
+If you only want to plot existing `.csv` data use:
+
+```shell
+rosrun seerep_performance_tests run.py --only-plot
 ```
 
 ## Settings
@@ -38,12 +56,7 @@ The benchmark currently support the following parameters:
 | Output Dir | Dir to write the `.mcap` and `.hdf5` files to |
 | Message Payload | File to use as bytes for the messages data field |
 | Message Sizes | Array of messages sizes (in bytes) to be tested |
-| Total Sizes | Array of which total bytes should be tested |
+| Total Sizes | Array of total data to write in bytes|
 | Num Runs | Number of times each config should be run |
 
-Each of these paramters are located at the top of the [run.py](./run.py) file.
-
-## Results
-
-The resulting executation times are stored in `.csv` files with a label describing the config. Further a plot will be
-generated to visualize the results. Both are saved in the `Output Dir`.
+Each of these paramters are located at the top of the [run.py](./run.py) file in the `config` dictonary
