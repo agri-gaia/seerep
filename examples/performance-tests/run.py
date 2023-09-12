@@ -12,6 +12,20 @@ from typing import Tuple, Union
 import matplotlib.pyplot as plt
 import pandas as pd
 
+plt.rcParams.update(
+    {
+        "text.usetex": True,
+        "font.family": "serif",
+        "axes.labelsize": 10,
+        "axes.titlesize": 9,
+        "font.size": 10,
+        "legend.fontsize": 8,
+        "legend.title_fontsize": 9,
+        "xtick.labelsize": 8,
+        "ytick.labelsize": 8,
+    }
+)
+
 # a file with bytes to use as a message payload
 OUTPUT_DIR = Path("/dev/shm/")
 MESSAGE_PAYLOAD = Path("/home/julian/Documents/Rosbags/IROS-Paper/mcap/2022-08-24-12-21-43_0.mcap")
@@ -19,8 +33,6 @@ MESSAGE_PAYLOAD = Path("/home/julian/Documents/Rosbags/IROS-Paper/mcap/2022-08-2
 CONFIG = {
     "num_runs": 10,
     "message_sizes": [
-        100,
-        500,
         1024 * 100,
         1024 * 200,  # Somewhere here they should be the same
         1024 * 250,
@@ -153,7 +165,7 @@ def process_data(df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
 
     # add extra columns for the msg size and file_format
     df["msg_size"] = df["label"].apply(lambda x: x.split("-")[1])
-    df["file_format"] = df["label"].apply(lambda x: x.split("-")[0])
+    df["file_format"] = df["label"].apply(lambda x: x.split("-")[0].upper())
 
     df["gb/s"] = df[["written_gb", "write_s"]].apply(lambda x: x.written_gb / x.write_s, axis=1)
 
@@ -174,43 +186,70 @@ def process_data(df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
     return (mean_df, std_df)
 
 
-def plot_data(
-    mean_df: pd.DataFrame, std_df: pd.DataFrame, bar_width: float = 0.4, font_size: int = 12, save_img: bool = True
-) -> None:
+def set_size(width: float, fraction: float = 1) -> Tuple[float, float]:
+    """Set figure dimensions to avoid scaling in LaTeX."""
+
+    # Width of figure (in pts)
+    fig_width_pt = width * fraction
+
+    # Convert from pt to inches
+    inches_per_pt = 1 / 72.27
+
+    # Golden ratio to set aesthetic figure height
+    # https://disq.us/p/2940ij3
+    golden_ratio = (5**0.5 - 1) / 2
+
+    # Figure width in inches
+    fig_width_in = fig_width_pt * inches_per_pt
+    # Figure height in inches
+    fig_height_in = fig_width_in * golden_ratio
+
+    fig_dim = (fig_width_in, fig_height_in)
+
+    return fig_dim
+
+
+def plot_data(mean_df: pd.DataFrame, std_df: pd.DataFrame, save_img: bool = True) -> None:
     """Plot or save the processed data in a bar chart."""
     # TODO: automatically generate the title
     title = f"250 MiB Total Data For Each Message Size \
-        \n MCAP: No Compression - Default Chunking - \
+        \n MCAP: No Compression - Default Chunking  \
         \n HDF5: No Compression - No Chunking"
 
     ax = mean_df.plot(
         kind="bar",
-        width=bar_width,
+        width=0.4,
         yerr=std_df,
         color=["#a6a6a6", "#548235"],
         rot=45,
-        capsize=3,
+        capsize=2,
         edgecolor='white',
         linewidth=1,
-        figsize=(9, 6),
+        figsize=set_size(505.89, 0.8),
     )
 
-    plt.title(title, fontsize=font_size, pad=15)
-    plt.xlabel("Message Size", labelpad=10, fontsize=font_size)
-    plt.ylabel("Troughput in GiB/s", fontsize=font_size)
-    plt.xticks(fontsize=font_size)
-    plt.yticks(fontsize=font_size)
+    plt.title(title, pad=15)
+    plt.xlabel(
+        "Message Size",
+        labelpad=10,
+    )
+    plt.ylabel(
+        "Troughput in GiB/s",
+    )
+    plt.xticks()
+    plt.yticks()
 
     ax = plt.gca()
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
+    ax.legend(title="File Format")
     plt.tight_layout()
 
     if save_img:
         plt.savefig(
-            Path(f"{OUTPUT_DIR}/benchmark_run_{datetime.now().strftime('%Y_%m_%d_%H_%M_%S')}.png"),
-            file_format="png",
-            dpi=300,
+            Path(f"{OUTPUT_DIR}/benchmark_run_{datetime.now().strftime('%Y_%m_%d_%H_%M_%S')}.pdf"),
+            format="pdf",
+            bbox_inches="tight",
         )
     else:
         plt.show()
