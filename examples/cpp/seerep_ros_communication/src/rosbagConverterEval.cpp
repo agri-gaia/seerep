@@ -29,7 +29,7 @@ RosbagConverterEval::RosbagConverterEval(const std::string& bagPath, const std::
   std::vector<double> diff(v.size());
   std::transform(v.begin(), v.end(), diff.begin(), std::bind2nd(std::minus<double>(), mean));
   double sq_sum = std::inner_product(diff.begin(), diff.end(), diff.begin(), 0.0);
-  double stdev = std::sqrt(sq_sum / v.size());
+  double stdev = std::sqrt(sq_sum / (v.size() - 1));
 
   std::cout << "mean: " << mean << std::endl;
   std::cout << "stddev: " << stdev << std::endl;
