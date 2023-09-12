@@ -24,8 +24,8 @@ def create_geo_proj(
         "EPSG::4326",
         "EPSG::7030",
         4,
-        4,
-        4,
+        6,
+        7,
     )
 
     return response

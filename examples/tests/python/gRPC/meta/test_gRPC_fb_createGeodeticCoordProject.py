@@ -45,12 +45,11 @@ def test_gRPC_fb_createGeoProjectAndGetProjects(grpc_channel):
         )
         # missing
         # assert proj_info.Datum().decode("utf-8") == "EPSG::7030"
-        assert proj_info.GeodeticPosition().Longitude() == 4
-        assert proj_info.GeodeticPosition().Latitude() == 4
-        assert proj_info.GeodeticPosition().Altitude() == 4
+        assert proj_info.GeodeticPosition().Altitude() == 4.0
+        assert proj_info.GeodeticPosition().Latitude() == 6.0
+        assert proj_info.GeodeticPosition().Longitude() == 7.0
         assert proj_info.Version() is not None
 
-    print(created_projects_dicts)
     for proj_info in created_projects_dicts:
         assert proj_info in queried_projects_dicts
 
