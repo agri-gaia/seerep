@@ -33,6 +33,12 @@ grpc::Status PbMetaOperations::CreateProject(grpc::ServerContext* context, const
     response->set_name(projectInfo.name);
     response->set_uuid(boost::lexical_cast<std::string>(projectInfo.uuid));
     response->set_frameid(projectInfo.frameId);
+
+    response->set_version(projectInfo.version);
+    response->mutable_geodeticcoordinates()->set_coordinatesystem(projectInfo.geodetCoords.coordinateSystem);
+    response->mutable_geodeticcoordinates()->set_altitude(projectInfo.geodetCoords.altitude);
+    response->mutable_geodeticcoordinates()->set_latitude(projectInfo.geodetCoords.latitude);
+    response->mutable_geodeticcoordinates()->set_longitude(projectInfo.geodetCoords.longitude);
   }
   catch (const std::exception& e)
   {
