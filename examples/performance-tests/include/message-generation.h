@@ -13,9 +13,9 @@
 struct Config
 {
   // size of one message in bytes
-  size_t messageSize = 1024;
+  size_t messageSize = 0;
   // totoal size to write in bytes
-  size_t totalSize = 1024 * 1024;
+  size_t totalSize = 0;
 };
 
 std::vector<unsigned char> loadData(const char* filePath);
