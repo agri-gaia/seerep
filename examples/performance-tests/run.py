@@ -16,35 +16,30 @@ plt.rcParams.update(
     {
         "text.usetex": True,
         "font.family": "serif",
-        "axes.labelsize": 10,
-        "axes.titlesize": 9,
-        "font.size": 10,
-        "legend.fontsize": 8,
-        "legend.title_fontsize": 9,
-        "xtick.labelsize": 8,
-        "ytick.labelsize": 8,
+        "axes.labelsize": 11,
+        "axes.titlesize": 10,
+        "font.size": 11,
+        "legend.fontsize": 6,
+        "legend.title_fontsize": 7,
+        "xtick.labelsize": 9,
+        "ytick.labelsize": 9,
     }
 )
 
 # a file with bytes to use as a message payload
-OUTPUT_DIR = Path("/dev/shm/")
-MESSAGE_PAYLOAD = Path("/home/julian/Documents/Rosbags/IROS-Paper/mcap/2022-08-24-12-21-43_0.mcap")
+OUTPUT_DIR = Path("/seerep/seerep-data/benchmarks")
+MESSAGE_PAYLOAD = Path("/seerep/seerep-data/lero/2022-08-24-12-21-43_0.mcap")
 
 CONFIG = {
-    "num_runs": 10,
+    "num_runs": 50,
     "message_sizes": [
+        1024 * 10,
         1024 * 100,
         1024 * 200,  # Somewhere here they should be the same
-        1024 * 250,
-        1024 * 300,
         1024 * 600,  # Lero Depth Map
         1024**2 * 1,
         1024**2 * 4,  # Full HD 1 Channel
         1024**2 * 6,  # Full HD 3 Channels
-        1024**2 * 17,  # 4k 1 Channel
-        1024**2 * 27,  # 4k 3 Channels
-        1024**2 * 50,
-        1024**2 * 100,
     ],
     "total_sizes": [1024**2 * 250],
 }
@@ -225,10 +220,10 @@ def plot_data(mean_df: pd.DataFrame, std_df: pd.DataFrame, save_img: bool = True
         capsize=2,
         edgecolor='white',
         linewidth=1,
-        figsize=set_size(505.89, 0.8),
+        figsize=set_size(245.72, 1.3),
     )
 
-    plt.title(title, pad=15)
+    # plt.title(title, pad=15)
     plt.xlabel(
         "Message Size",
         labelpad=10,
@@ -242,7 +237,9 @@ def plot_data(mean_df: pd.DataFrame, std_df: pd.DataFrame, save_img: bool = True
     ax = plt.gca()
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
-    ax.legend(title="File Format")
+    ax.grid(axis="y", linestyle="dashed", linewidth=0.5, alpha=0.65)
+    ax.set_axisbelow(True)
+    ax.legend(title="File Format", loc="upper left")
     plt.tight_layout()
 
     if save_img:
