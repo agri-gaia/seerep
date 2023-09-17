@@ -44,29 +44,16 @@ def test_gRPC_pb_sendAndQueryImageGrid(grpc_channel, project_setup):
         assert img in sent_images_flattened
 
     # check if the grid layout is correct
-    # (0 / 0)
-    # Number of images: 1
+    for x in range(len(sent_images)):
+        for y in range(len(sent_images[x])):
+            sent_imgs_gridpos = sent_images[x][y]
+            query_imgs_gridpos = queried_grid[x][y]
 
-    # currently the values of the queried images per grid are fixed
-    # for x in range(len(sent_images)):
-    #     for y in range(len(sent_images[x])):
-    #         sent_imgs_gridpos = sent_test_info[x][y]
-    #         query_imgs_gridpos = queried_grid[x][y]
-    #         print(query_imgs_gridpos)
-    #         assert len(sent_imgs_gridpos) == len(query_imgs_gridpos)
-    #         # sort both lists by their uuid
-    #         sent_imgs_gridpos = sorted(sent_imgs_gridpos, key=lambda i: i[0])
-    #         query_imgs_gridpos = sorted(
-    #             query_imgs_gridpos, key=lambda i: i.header.uuid_msgs
-    #        )
-    # compare their relevant contents
-    # for idx, img in enumerate(query_imgs_gridpos):
-    #     assert sent_imgs_gridpos[idx][0] == img.header.uuid_msgs
-    #     assert (
-    #         sent_imgs_gridpos[idx][1]
-    #         == img.labels_general[0].labelWithInstance[1].label.label
-    #     )
-    #     assert (
-    #         sent_imgs_gridpos[idx][2]
-    #         == img.labels_general[0].labelWithInstance[1].label.confidence
-    #     )
+            # sort both lists by their uuid
+            sent_imgs_gridpos = sorted(
+                sent_imgs_gridpos, key=lambda i: i.header.uuid_msgs
+            )
+            query_imgs_gridpos = sorted(
+                query_imgs_gridpos, key=lambda i: i.header.uuid_msgs
+            )
+            assert sent_imgs_gridpos == query_imgs_gridpos
