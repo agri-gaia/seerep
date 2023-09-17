@@ -58,7 +58,7 @@ def add_camintrins(
     stub = ci_service.CameraIntrinsicsServiceStub(grpc_channel)
 
     # Create all necessary objects for the query
-    ts = createTimeStamp(builder, 4, 3)
+    ts = createTimeStamp(builder, 1, 2)
     header = createHeader(builder, ts, "map", target_proj_uuid, ciuuid)
     roi = createRegionOfInterest(builder, 3, 5, 6, 7, True)
 
