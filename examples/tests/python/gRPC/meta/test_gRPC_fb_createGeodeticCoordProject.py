@@ -55,4 +55,6 @@ def test_gRPC_fb_createGeoProjectAndGetProjects(grpc_channel):
 
         # teardown
         builder = flatbuffers.Builder(1024)
-        fb_helper.deleteProject(grpc_channel, builder, proj_name, proj_uuid)
+        fb_helper.deleteProject(
+            grpc_channel, builder, proj_info["Name"], proj_info["Uuid"]
+        )
