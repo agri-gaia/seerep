@@ -39,8 +39,10 @@ from seerep.util.fb_helper import (
 
 
 def send_labeled_image_grid(
-    target_proj_uuid: str = None, grpc_channel: Channel = get_gRPC_channel()
-) -> List[List[Tuple[str, image.Image]]]:
+    target_proj_uuid: str = None,
+    grpc_channel: Channel = get_gRPC_channel(),
+    return_tf_times: bool = False,
+):
 
     stub = imageService.ImageServiceStub(grpc_channel)
     stubTf = tfService.TfServiceStub(grpc_channel)
@@ -203,17 +205,26 @@ def send_labeled_image_grid(
     theTf.transform.rotation.z = 0
     theTf.transform.rotation.w = 1
 
+    tf_times = []
+
     # create tf for a 3x3 grid
     # x,y -> [0,2]
     for x in range(3):
         for y in range(3):
+            timestamp = theTime + (x * 3 + y)
             # increment time per cell
-            theTf.header.stamp.seconds = theTime + (x * 3 + y)
+            theTf.header.stamp.seconds = timestamp
+
             # write x and y coordinates
             theTf.transform.translation.x = x
             theTf.transform.translation.y = y
             # transfer tf
             stubTf.TransferTransformStamped(theTf)
+            tf_times.append(timestamp)
+
+    if return_tf_times:
+        return grid_imgs, tf_times
+
     return grid_imgs
 
 
