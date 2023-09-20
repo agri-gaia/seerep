@@ -1,0 +1,10 @@
+
+include "header.fbs";
+include "boundingbox_labeled_with_category.fbs";
+
+namespace seerep.fb;
+
+table BoundingBoxesLabeledStamped {
+  header:seerep.fb.Header;
+  labels_bb:[seerep.fb.BoundingBoxLabeledWithCategory];
+}

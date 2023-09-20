@@ -62,9 +62,14 @@ public:
    * @brief Add a point cloud to the indices and write the data to hdf5
    *
    * @param pc the point cloud message to index and save
-   * @return boost::uuids::uuid the uuid of the stored image
+   * @return boost::uuids::uuid the uuid of the stored pointcloud
    */
   boost::uuids::uuid addData(const seerep::fb::PointCloud2& pc);
+  /**
+   * @brief Adds bounding box based labels to an existing pointcloud
+   * @param bbslabeled the flatbuffer message containing bounding box based labels
+   */
+  void addBoundingBoxesLabeled(const seerep::fb::BoundingBoxesLabeledStamped& boundingBoxeslabeled);
 
 private:
   /** @brief a shared pointer to the general core */
