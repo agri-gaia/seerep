@@ -1,5 +1,7 @@
 # test file for
 #  gRPC_fb_addBoundingBox.py
+# requires:
+#  gRPC_pb_sendLabeledImage.py
 
 from typing import List, cast
 

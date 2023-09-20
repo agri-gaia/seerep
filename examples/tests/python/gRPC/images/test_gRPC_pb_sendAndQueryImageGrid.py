@@ -1,6 +1,6 @@
 # test file for
-#   gRPC_pb_queryImage.py
-#   gRPC_pb_sendLabeledImage.py
+#   gRPC_pb_queryImageGrid.py
+#   gRPC_pb_sendLabeledImageGrid.py
 import logging
 
 from gRPC.images import gRPC_pb_queryImageGrid as query_grid

@@ -1,5 +1,6 @@
 # test file for
 #   gRPC_fb_queryImage.py
+#   gRPC_pb_sendLabeledImage.py
 from typing import List
 
 import fb_to_dict

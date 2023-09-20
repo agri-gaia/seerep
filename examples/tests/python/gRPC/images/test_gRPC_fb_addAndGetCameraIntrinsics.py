@@ -1,11 +1,10 @@
-from collections.abc import Iterable
-from typing import Dict, List, Tuple
+# test file for
+#  gRPC_fb_addCameraIntrinsics.py
+#  gRPC_fb_getCameraIntrinsics.py
 
 import fb_to_dict
-import flatbuffers
 from gRPC.images import gRPC_fb_addCameraIntrinsics as add_ci
 from gRPC.images import gRPC_fb_getCameraIntrinsics as get_ci
-from seerep.fb import CameraIntrinsics
 
 
 def test_addAndGetCameraIntrinsics(grpc_channel, project_setup):
