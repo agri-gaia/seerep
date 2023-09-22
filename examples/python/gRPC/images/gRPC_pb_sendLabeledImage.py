@@ -249,7 +249,7 @@ def add_camintrins(target_proj_uuid: str, grpc_channel: Channel) -> str:
 
 
 if __name__ == "__main__":
-    sent_image_ls_data = send_labeled_images()
+    sent_image_ls_data, _, _ = send_labeled_images()
     camera_intrinsics_allimgs = set(
         [intrins_uuid[1].uuid_camera_intrinsics for intrins_uuid in sent_image_ls_data]
     )

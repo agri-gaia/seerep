@@ -21,7 +21,7 @@ channel = get_gRPC_channel()
 
 
 # 1. Get all projects from the server
-projectuuid = getProject(builder, channel, 'testproject')
+projectuuid = getProject(builder, channel, "testproject")
 
 # 2. Check if the defined project exist; if not exit
 if not projectuuid:
@@ -46,7 +46,9 @@ timeInterval = createTimeInterval(builder, timeMin, timeMax)
 
 projectUuids = [builder.CreateString(projectuuid)]
 category = "0"
-labels = [[builder.CreateString("testlabel0"), builder.CreateString("testlabelgeneral0")]]
+labels = [
+    [builder.CreateString("testlabel0"), builder.CreateString("testlabelgeneral0")]
+]
 labelCategory = createLabelWithCategory(builder, category, labels)
 dataUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 instanceUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
@@ -67,13 +69,18 @@ query = createQuery(
 )
 
 
-queryInstanceMsg = createQueryInstance(builder, query, Datatype.Datatype().Image)
+queryInstanceMsg = createQueryInstance(builder, query, Datatype.Datatype().PointCloud)
 
 builder.Finish(queryInstanceMsg)
 buf = builder.Output()
+
+# catch error
 
 responseBuf = stub.GetInstances(bytes(buf))
 
 response = UuidsPerProject.UuidsPerProject.GetRootAs(responseBuf)
 
-print(response.UuidsPerProject(0).ProjectUuid().decode('utf-8'))
+if response.UuidsPerProjectLength() > 0:
+    print(response.UuidsPerProject(0).ProjectUuid().decode("utf-8"))
+else:
+    print("no project with that instance type found!")

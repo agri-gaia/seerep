@@ -174,6 +174,9 @@ def getOrCreateProject(
     """Get the project,, or if not present, create one"""
     projectUuid = getProject(builder, channel, name)
 
+    # tmp
+    ellipsoid = None
+
     if projectUuid is None:
         if create:
             projectUuid = createProject(
