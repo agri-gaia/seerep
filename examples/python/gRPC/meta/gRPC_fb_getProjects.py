@@ -24,18 +24,17 @@ def get_projects(
 
     projects_list: List[ProjectInfo.ProjectInfo] = []
 
-    print("The server has the following projects (name/uuid):")
     for i in range(response.ProjectsLength()):
-        print(
-            "\t"
-            + response.Projects(i).Name().decode("utf-8")
-            + " "
-            + response.Projects(i).Uuid().decode("utf-8")
-        )
         projects_list.append(response.Projects(i))
 
     return projects_list
 
 
 if __name__ == "__main__":
-    get_projects()
+    projects = get_projects()
+
+    print("The server has the following projects (name/uuid):")
+    for project in projects:
+        print(
+            "\t" + project.Name().decode("utf-8") + " " + project.Uuid().decode("utf-8")
+        )

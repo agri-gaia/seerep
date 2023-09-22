@@ -35,6 +35,8 @@ def test_gRPC_pb_addAndGetCamins(grpc_channel, project_setup):
         sent_intrinsics.header.uuid_msgs, proj_uuid, grpc_channel
     )
 
+    print(sent_intrinsics.intrinsic_matrix)
+
     assert protobuf_obj_to_dict(sent_intrinsics) == protobuf_obj_to_dict(
         queried_intrinsics
     )

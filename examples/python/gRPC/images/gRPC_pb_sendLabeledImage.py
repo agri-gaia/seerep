@@ -38,7 +38,7 @@ from seerep.util.fb_helper import (
 
 def send_labeled_images(
     target_proj_uuid: Optional[str] = None, grpc_channel: Channel = get_gRPC_channel()
-) -> List[Tuple[str, image.Image]]:
+) -> Tuple[List[List[image.Image]], List[int], cameraintrinsics.CameraIntrinsics]:
     """sends test images via the given grpc_channel to the specified target project uuid"""
 
     # 1. Get gRPC service objects
@@ -94,7 +94,7 @@ def send_labeled_images(
 
     camin.distortion.extend([3, 4, 5])
 
-    camin.intrinsic_matrix.extend([3, 4, 5, 6, 7, 8, 9, 10, 11])
+    camin.intrinsic_matrix.extend([3, 4, 5, 10, 7, 8, 9, 10, 11])
     camin.rectification_matrix.extend([3, 4, 5, 6, 7, 8, 9, 10, 11])
     camin.projection_matrix.extend([3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14])
 
@@ -176,6 +176,8 @@ def send_labeled_images(
 
         sent_images_list.append((uuidImg.message, theImage))
 
+    tf_times: List[int] = []
+
     # 8. Add coordinate transformations and send them to the server
     theTf = tf.TransformStamped()
     theTf.header.frame_id = "map"
@@ -190,15 +192,17 @@ def send_labeled_images(
     theTf.transform.rotation.z = 0
     theTf.transform.rotation.w = 1
     stubTf.TransferTransformStamped(theTf)
+    tf_times.append(theTf.header.stamp.seconds)
 
     theTf.header.stamp.seconds = theTime + 10
     theTf.transform.translation.x = 100
     theTf.transform.translation.y = 200
     theTf.transform.translation.z = 300
     stubTf.TransferTransformStamped(theTf)
+    tf_times.append(theTf.header.stamp.seconds)
 
     # return sent data
-    return sent_images_list
+    return sent_images_list, tf_times, camin
 
 
 def add_camintrins(target_proj_uuid: str, grpc_channel: Channel) -> str:

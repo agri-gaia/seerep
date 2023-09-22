@@ -39,10 +39,8 @@ from seerep.util.fb_helper import (
 
 
 def send_labeled_image_grid(
-    target_proj_uuid: str = None,
-    grpc_channel: Channel = get_gRPC_channel(),
-    return_tf_times: bool = False,
-):
+    target_proj_uuid: str = None, grpc_channel: Channel = get_gRPC_channel()
+) -> Tuple[List[List[image.Image]], List[int], cameraintrinsics.CameraIntrinsics]:
 
     stub = imageService.ImageServiceStub(grpc_channel)
     stubTf = tfService.TfServiceStub(grpc_channel)
@@ -222,10 +220,7 @@ def send_labeled_image_grid(
             stubTf.TransferTransformStamped(theTf)
             tf_times.append(timestamp)
 
-    if return_tf_times:
-        return grid_imgs, tf_times
-
-    return grid_imgs
+    return grid_imgs, tf_times, camin
 
 
 def add_camintrins(target_proj_uuid: str, grpc_channel: Channel) -> str:

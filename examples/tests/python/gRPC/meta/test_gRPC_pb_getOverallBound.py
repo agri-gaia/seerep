@@ -17,8 +17,8 @@ def test_gRPC_pb_getOverallBound(grpc_channel, project_setup) -> None:
 
     print(f"Testing project: {proj_name}; {proj_uuid}")
 
-    sent_grid, tf_times = send_grid.send_labeled_image_grid(
-        proj_uuid, grpc_channel, return_tf_times=True
+    sent_grid, tf_times, camin = send_grid.send_labeled_image_grid(
+        proj_uuid, grpc_channel
     )
 
     # get send tfs

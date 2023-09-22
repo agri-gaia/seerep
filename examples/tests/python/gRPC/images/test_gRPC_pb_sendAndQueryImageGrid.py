@@ -16,7 +16,7 @@ def test_gRPC_pb_sendAndQueryImageGrid(grpc_channel, project_setup):
     # test for image uuid, general label and the general label confidence of corresponding entry in 2d array
     sent_images = []
     # this adds the servers image uuid to the images and a instance uuid which is given by the server aswell
-    sent_images_grid = send_grid.send_labeled_image_grid(proj_uuid, grpc_channel)
+    sent_images_grid, _, _ = send_grid.send_labeled_image_grid(proj_uuid, grpc_channel)
 
     for x in range(len(sent_images_grid)):
         sent_images.append([])
