@@ -20,12 +20,15 @@ FbPointCloudService::GetPointCloud2(grpc::ServerContext* context,
   std::stringstream debuginfo;
 
   debuginfo << "sending point clouds with this query parameters: ";
-  for (auto point : *requestRoot->polygon()->vertices())
+  if (requestRoot->polygon() != NULL)
   {
-    debuginfo << "bounding box vertex (" << point->x() << ", " << point->y() << ") /";
+    for (auto point : *requestRoot->polygon()->vertices())
+    {
+      debuginfo << "bounding box vertex (" << point->x() << ", " << point->y() << ") /";
+    }
+    debuginfo << "bounding box z " << requestRoot->polygon()->z() << " /";
+    debuginfo << "bounding box height " << requestRoot->polygon()->height() << " /";
   }
-  debuginfo << "bounding box z " << requestRoot->polygon()->z() << " /";
-  debuginfo << "bounding box height " << requestRoot->polygon()->height() << " /";
   if (requestRoot->timeinterval() != NULL)
   {
     debuginfo << "\n time interval (seconds since epoch: " << requestRoot->timeinterval()->time_min()->seconds()
