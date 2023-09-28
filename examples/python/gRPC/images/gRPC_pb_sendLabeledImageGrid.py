@@ -3,7 +3,7 @@
 import math
 import time
 import uuid
-from typing import List, Optional, Tuple
+from typing import List, Tuple
 
 import flatbuffers
 import numpy as np
@@ -267,7 +267,7 @@ def add_camintrins(target_proj_uuid: str, grpc_channel: Channel) -> str:
 
 
 if __name__ == "__main__":
-    grid_list = send_labeled_image_grid()
+    grid_list, _, _ = send_labeled_image_grid()
     # seperate the functions print statements from the result
     print()
 
