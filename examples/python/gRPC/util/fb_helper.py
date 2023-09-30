@@ -108,7 +108,7 @@ def getProjectInfo(builder, channel, name):
 
 
 def createProjectRaw(
-    channel, builder, name, frameId, coordSys, ellipsoid, altitude, latitude, longitude
+    channel, builder, name, frameId, coordSys, altitude, latitude, longitude
 ) -> ProjectInfo.ProjectInfo:
     stubMeta = metaOperations.MetaOperationsStub(channel)
 
@@ -140,7 +140,7 @@ def createProjectRaw(
 
 
 def createProject(
-    channel, builder, name, frameId, coordSys, ellipsoid, altitude, latitude, longitude
+    channel, builder, name, frameId, coordSys, altitude, latitude, longitude
 ) -> str:
     """Create a project from the parameters"""
     return (
@@ -150,7 +150,6 @@ def createProject(
             name,
             frameId,
             coordSys,
-            ellipsoid,
             altitude,
             latitude,
             longitude,
@@ -174,9 +173,6 @@ def getOrCreateProject(
     """Get the project,, or if not present, create one"""
     projectUuid = getProject(builder, channel, name)
 
-    # tmp
-    ellipsoid = None
-
     if projectUuid is None:
         if create:
             projectUuid = createProject(
@@ -185,7 +181,6 @@ def getOrCreateProject(
                 name,
                 mapFrameId,
                 coordSys,
-                ellipsoid,
                 altitude,
                 latitude,
                 longitude,
