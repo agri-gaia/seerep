@@ -16,7 +16,7 @@ grpc::Status FbPointService::GetPoint(grpc::ServerContext* context,
 
   std::stringstream debuginfo;
   debuginfo << "sending images with this query parameters:";
-  if (requestRoot->timeinterval() != NULL)
+  if (requestRoot->polygon() != NULL)
   {
     for (auto point : *requestRoot->polygon()->vertices())
     {
@@ -24,6 +24,9 @@ grpc::Status FbPointService::GetPoint(grpc::ServerContext* context,
     }
     debuginfo << "bounding box z " << requestRoot->polygon()->z() << " /";
     debuginfo << "\n bounding box height " << requestRoot->polygon()->height() << " /";
+  }
+  if (requestRoot->timeinterval() != NULL)
+  {
     debuginfo << "\n time interval (" << requestRoot->timeinterval()->time_min()->seconds() << "/"
               << requestRoot->timeinterval()->time_max()->seconds() << ")";
   }
@@ -42,12 +45,15 @@ grpc::Status FbPointService::GetPoint(grpc::ServerContext* context,
 
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << debuginfo.rdbuf();
 
-  for (auto point : *(requestRoot->polygon()->vertices()))
+  if (requestRoot->polygon() != NULL)
   {
-    debuginfo << "bounding box vertex (" << point->x() << ", " << point->y() << ") /";
+    for (auto point : *(requestRoot->polygon()->vertices()))
+    {
+      debuginfo << "bounding box vertex (" << point->x() << ", " << point->y() << ") /";
+    }
+    debuginfo << "bounding box z " << requestRoot->polygon()->z() << " /";
+    debuginfo << "bounding box height " << requestRoot->polygon()->height() << " /";
   }
-  debuginfo << "bounding box z " << requestRoot->polygon()->z() << " /";
-  debuginfo << "bounding box height " << requestRoot->polygon()->height() << " /";
   if (requestRoot->timeinterval() != NULL)
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
