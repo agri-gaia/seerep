@@ -22,13 +22,13 @@ def test_sendAndQueryPoints(grpc_channel, project_setup):
         sent_point_cnt += len(val)
 
     # extract the sent points to a list
-    sent_plist: List[PointStamped.PointStamped, Tuple[float, float, float]] = sorted(
+    sent_plist: List[Tuple[str, PointStamped.PointStamped]] = sorted(
         [
-            (label_p[1], label_p[2])
+            (label_p[0], label_p[1])
             for label_p in val
             for val in sent_points_dict.values()
         ],
-        key=lambda p: p[0].Header().UuidMsgs().decode(),
+        key=lambda p: p[1].Header().UuidMsgs().decode(),
     )
 
     # query points from the project
@@ -39,16 +39,8 @@ def test_sendAndQueryPoints(grpc_channel, project_setup):
 
     assert len(sent_plist) == len(queried_points)
 
-    # print(f"Sent coords: {sent_plist[0][1][1]}")
-
-    print(fb_to_dict.fb_obj_to_dict(queried_points[0].Header()))
-    print(fb_to_dict.fb_obj_to_dict(queried_points[0].Point()))
-    for idx in range(queried_points[0].LabelsGeneralLength()):
-        print(fb_to_dict.fb_obj_to_dict(queried_points[0].LabelsGeneral(idx)))
-
-    print(queried_points[0].Attribute(0).ValueType())
-    print(sent_plist[0][0].Attribute(0).Value().String(0))
-
     # check if the queried points are the same as the sent points
-    # for idx in range(len(queried_points)):
-    #     assert fb_to_dict.fb_obj_to_dict(sent_plist[idx]) == fb_to_dict.fb_obj_to_dict(queried_points[idx])
+    for idx in range(len(queried_points)):
+        assert fb_to_dict.fb_obj_to_dict(
+            sent_plist[idx][1]
+        ) == fb_to_dict.fb_obj_to_dict(queried_points[idx])

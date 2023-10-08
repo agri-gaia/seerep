@@ -2,7 +2,7 @@
 from typing import List
 
 import flatbuffers
-from seerep.fb import PointStamped
+from seerep.fb import Datatypes, PointStamped, String
 from seerep.fb import point_service_grpc_fb as pointService
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
@@ -31,13 +31,14 @@ def get_points(
             exit()
 
     # Create all necessary objects for the query
-    l = 10000
+    l = 200
+    h = 2000
     polygon_vertices = []
     polygon_vertices.append(createPoint2d(builder, -1.0 * l, -1.0 * l))
     polygon_vertices.append(createPoint2d(builder, -1.0 * l, l))
     polygon_vertices.append(createPoint2d(builder, l, l))
     polygon_vertices.append(createPoint2d(builder, l, -1.0 * l))
-    polygon2d = createPolygon2D(builder, 20, -10, polygon_vertices)
+    polygon2d = createPolygon2D(builder, h, -h / 2, polygon_vertices)
 
     timeMin = createTimeStamp(builder, 1610549273, 0)
     timeMax = createTimeStamp(builder, 1938549273, 0)
@@ -61,14 +62,15 @@ def get_points(
     # with all parameters set (especially with the data and instance uuids set) the result of the query will be empty. Set the query parameters to adequate values or remove them from the query creation
     query = createQuery(
         builder,
-        # boundingBox=boundingboxStamped,
         # timeInterval=timeInterval,
         # labels=labelCategory,
         projectUuids=projectUuids,
         # instanceUuids=instanceUuids,
         # dataUuids=dataUuids,
         polygon2d=polygon2d,
-        withoutData=False,
+        # withoutData=True,
+        fullyEncapsulated=False,
+        inMapFrame=True,
     )
 
     builder.Finish(query)
@@ -103,5 +105,15 @@ if __name__ == "__main__":
                 print(
                     f"    Label confidence: {point.LabelsGeneral(i).LabelsWithInstance(j).Label().Confidence()}"
                 )
+        # access the attributes
+        # check for attribute 0
+        if point.Attribute(0).ValueType() == Datatypes.Datatypes().String:
+            union_str = String.String()
+            union_str.Init(
+                point.Attribute(0).Value().Bytes, point.Attribute(0).Value().Pos
+            )
+
+        print(f"Attribute 0 Key: {point.Attribute(0).Key().decode()}")
+        print(f"Attribute 0 Value: {union_str.Data().decode()}\n")
 
     print(f"queried {len(p_list)} points in total")

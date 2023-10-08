@@ -131,14 +131,14 @@ def send_points(
                         .LabelWithInstance()
                         .InstanceUuid()
                         .decode("utf-8"),
-                        PointStamped.PointStamped.GetRootAs(responseBuf),
-                        coordinates,
+                        PointStamped.PointStamped.GetRootAs(buf),
                     )
                 )
 
                 bufBytes.append(bytes(buf))
 
     stubPoint.TransferPoint(iter(bufBytes))
+
     return img_uuid2point_map
 
 
