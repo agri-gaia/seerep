@@ -1,6 +1,9 @@
 #ifndef SEEREP_CORE_CORE_H_
 #define SEEREP_CORE_CORE_H_
 
+#include <curl/curl.h>
+#include <jsoncpp/json/json.h>
+
 #include <boost/functional/hash.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/uuid/uuid.hpp>             // uuid class
@@ -9,6 +12,7 @@
 #include <filesystem>
 #include <functional>
 #include <optional>
+#include <regex>
 
 // seerep-msgs
 #include <seerep_msgs/dataset_indexable.h>
@@ -236,6 +240,63 @@ private:
    * @return seerep_core_msgs::QueryResult the reduced result
    */
   seerep_core_msgs::QueryResult checkSize(const seerep_core_msgs::QueryResult& queryResult, uint maxNum);
+
+  /**
+   * @brief check if the labels are already concepts. If they aren't ask the ontology for the corresponding concepts
+   *
+   * @param query
+   */
+  void checkForOntologyConcepts(seerep_core_msgs::Query& query);
+
+  /**
+   * @brief Callback function for libcurl to write the received data.
+   *
+   * This callback can be called multiple times for saving each chunk.
+   *
+   * @param contents Pointer to the received data.
+   * @param size Size of each data element received. For text data, this is 1, for binary the size may be larger.
+   * @param nmemb The number of data elements received.
+   * @param output Pointer where the received data should be saved.
+   * @return size_t Total number of bytes saved
+   */
+  static size_t writeCallback(void* contents, size_t size, size_t nmemb, std::string* output);
+
+  /**
+   * @brief get the corresponding concept to a given label from the ontology server
+   *
+   * @param label the label
+   * @param ontologyURI the uri to the ontology server
+   * @return std::string the concept
+   */
+  std::string translateLabelToOntologyConcept(const std::string& label, const std::string& ontologyURI);
+
+  /**
+   * @brief perform a curl using the given query at the given url
+   *
+   * @param query the curl statement to be used
+   * @param url the target server
+   * @return std::optional<std::string> the curl answer
+   */
+  std::optional<std::string> performCurl(std::string query, std::string url);
+
+  /**
+   * @brief Extract concepts from a JSON string
+   *
+   * @param json JSON string
+   * @param conceptVariableName Variable name of the concept
+   * @return std::optional<std::string<std::string>> The resulting concepts, if any
+   */
+  std::optional<std::vector<std::string>> extractConceptsFromJson(std::string json, std::string conceptVariableName);
+
+  /**
+   * @brief Get the Concepts for the semantic part of the query via Sparql Query object
+   *
+   * @param sparqlQuery the sparql query to be used
+   * @param ontologyURI the URI of the ontology to be used for the query
+   * @param label the resulting labels based on the query
+   */
+  void getConceptsViaSparqlQuery(const seerep_core_msgs::SparqlQuery& sparqlQuery, const std::string& ontologyURI,
+                                 std::optional<std::unordered_map<std::string, std::vector<std::string>>> label);
 
   /** @brief the path to the folder containing the HDF5 files */
   std::string m_dataFolder;

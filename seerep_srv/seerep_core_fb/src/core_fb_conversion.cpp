@@ -35,6 +35,8 @@ seerep_core_msgs::Query CoreFbConversion::fromFb(const seerep::fb::Query* query,
 
   fromFbQueryTime(query, queryCore.timeinterval);
   fromFbQueryLabel(query, queryCore.label);
+  queryCore.sparqlQuery = fromFbSparqlQuery(query);
+  queryCore.ontologyURI = fromFbOntologyURI(query);
   queryCore.mustHaveAllLabels = fromFbQueryMustHaveAllLabels(query);
   fromFbQueryProject(query, queryCore.projects);
   fromFbQueryInstance(query, queryCore.instances);
@@ -496,6 +498,30 @@ bool CoreFbConversion::fromFbQueryWithoutData(const seerep::fb::Query* query)
   }
 
   return false;
+}
+
+std::optional<seerep_core_msgs::SparqlQuery> CoreFbConversion::fromFbSparqlQuery(const seerep::fb::Query* query)
+{
+  if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_SPARQLQUERY))
+  {
+    seerep_core_msgs::SparqlQuery sparql;
+    sparql.category = query->sparqlQuery()->category()->str();
+    sparql.sparql = query->sparqlQuery()->sparql()->str();
+    sparql.variableNameOfConcept = query->sparqlQuery()->variableNameOfCategory()->str();
+    return sparql;
+  }
+
+  return std::nullopt;
+}
+
+std::optional<std::string> CoreFbConversion::fromFbOntologyURI(const seerep::fb::Query* query)
+{
+  if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_ONTOLOGYURI))
+  {
+    return query->ontologyURI()->str();
+  }
+
+  return std::nullopt;
 }
 
 bool CoreFbConversion::fromFbQueryMustHaveAllLabels(const seerep::fb::Query* query)

@@ -1,0 +1,8 @@
+
+namespace seerep.fb;
+
+table SparqlQuery {
+  category:string;
+  sparql:string;
+  variableNameOfCategory:string;
+}

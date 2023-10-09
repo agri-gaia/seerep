@@ -2,6 +2,7 @@
 include "time_interval.fbs";
 include "labels_with_category.fbs";
 include "polygon2d.fbs";
+include "sparql_query.fbs";
 
 namespace seerep.fb;
 
@@ -11,6 +12,8 @@ table Query {
   inMapFrame:bool;
   timeinterval:TimeInterval;
   label:[LabelsWithCategory];
+  sparqlQuery:SparqlQuery;
+  ontologyURI:string;
   mustHaveAllLabels:bool;
   projectuuid:[string];
   instanceuuid:[string];

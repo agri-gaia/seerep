@@ -17,6 +17,8 @@ find_package(
   REQUIRED
   NO_MODULE
 )
+find_package(jsoncpp REQUIRED)
+find_package(CURL REQUIRED)
 
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
@@ -45,6 +47,8 @@ include_directories(
   ${HighFive_INCLUDE_DIRS}
   ${Boost_INCLUDE_DIRS}
   ${catkin_INCLUDE_DIRS}
+  ${jsoncpp_INCLUDE_DIRS}
+  ${CURL_INCLUDE_DIR}
 )
 
 add_library(
@@ -72,6 +76,8 @@ target_link_libraries(
   Eigen3::Eigen
   CGAL::CGAL
   proj
+  ${CURL_LIBRARIES}
+  jsoncpp
 )
 
 set(INSTALL_HEADERS
