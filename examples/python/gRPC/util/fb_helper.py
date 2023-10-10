@@ -5,6 +5,7 @@ from seerep.fb import (
     BoundingBox2DLabeled,
     BoundingBox2DLabeledWithCategory,
     BoundingBoxes2DLabeledStamped,
+    BoundingBoxesLabeledStamped,
     BoundingBoxLabeled,
     BoundingBoxLabeledWithCategory,
     BoundingboxStamped,
@@ -300,6 +301,19 @@ def createBoundingBox2dLabeledStamped(builder, header, labelsBb):
     BoundingBoxes2DLabeledStamped.AddHeader(builder, header)
     BoundingBoxes2DLabeledStamped.AddLabelsBb(builder, labelsBbVector)
     return BoundingBoxes2DLabeledStamped.End(builder)
+
+
+def createBoundingBoxLabeledStamped(builder, header, labelsBb):
+    '''Creates a labeled bounding box in flatbuffers'''
+    BoundingBoxesLabeledStamped.StartLabelsBbVector(builder, len(labelsBb))
+    for labelBb in reversed(labelsBb):
+        builder.PrependUOffsetTRelative(labelBb)
+    labelsBbVector = builder.EndVector()
+
+    BoundingBoxesLabeledStamped.Start(builder)
+    BoundingBoxesLabeledStamped.AddHeader(builder, header)
+    BoundingBoxesLabeledStamped.AddLabelsBb(builder, labelsBbVector)
+    return BoundingBoxesLabeledStamped.End(builder)
 
 
 def createBoundingBox2DLabeledWithCategory(builder, category, bb2dLabeled):

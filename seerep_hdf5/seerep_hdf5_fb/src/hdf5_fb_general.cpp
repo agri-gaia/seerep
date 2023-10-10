@@ -79,13 +79,26 @@ void Hdf5FbGeneral::writeBoundingBoxLabeled(const std::string& datatypeGroup, co
     {
       labels.push_back(label->labelWithInstance()->label()->label()->str());
       labelConfidence.push_back(label->labelWithInstance()->label()->confidence());
-      std::vector<double> boxWithRotation{
-        label->bounding_box()->center_point()->x(),   label->bounding_box()->center_point()->y(),
-        label->bounding_box()->center_point()->z(),   label->bounding_box()->spatial_extent()->x(),
-        label->bounding_box()->spatial_extent()->y(), label->bounding_box()->spatial_extent()->z(),
-        label->bounding_box()->rotation()->x(),       label->bounding_box()->rotation()->y(),
-        label->bounding_box()->rotation()->z(),       label->bounding_box()->rotation()->w()
-      };
+
+      double rotX = 0.0, rotY = 0.0, rotZ = 0.0, rotW = 1.0;
+      if (label->bounding_box()->rotation() != NULL)
+      {
+        rotX = label->bounding_box()->rotation()->x();
+        rotY = label->bounding_box()->rotation()->y();
+        rotZ = label->bounding_box()->rotation()->z();
+        rotW = label->bounding_box()->rotation()->w();
+      }
+
+      std::vector<double> boxWithRotation{ label->bounding_box()->center_point()->x(),
+                                           label->bounding_box()->center_point()->y(),
+                                           label->bounding_box()->center_point()->z(),
+                                           label->bounding_box()->spatial_extent()->x(),
+                                           label->bounding_box()->spatial_extent()->y(),
+                                           label->bounding_box()->spatial_extent()->z(),
+                                           rotX,
+                                           rotY,
+                                           rotZ,
+                                           rotW };
       boundingBoxesWithRotation.push_back(boxWithRotation);
 
       instances.push_back(label->labelWithInstance()->instanceUuid()->str());

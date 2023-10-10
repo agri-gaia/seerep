@@ -80,6 +80,7 @@ set(MY_FBS_FILES
     fbs/boundingbox2d_labeled_with_category.fbs
     fbs/boundingbox2d_stamped.fbs
     fbs/boundingbox2d.fbs
+    fbs/boundingboxes_labeled_stamped.fbs
     fbs/boundingboxes2d_labeled_stamped.fbs
     fbs/camera_intrinsics.fbs
     fbs/camera_intrinsics_query.fbs
