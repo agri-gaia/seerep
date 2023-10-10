@@ -90,8 +90,8 @@ void CoreFbPointCloud::addBoundingBoxesLabeled(const seerep::fb::BoundingBoxesLa
       }
       labelWithInstancePerCategory.emplace(bbWithCategory->category()->c_str(), labelsWithInstances);
     }
-    // this only adds labels to the image in the core
-    // if there are already bounding box labels for this image
+    // this only adds labels to the pointcloud in the core
+    // if there are already bounding box labels for this pointcloud
     // those labels must be removed separately. The hdfio currently overrides
     // existing labels. The data is only correct if labels are added and there
     // weren't any bounding box labels before
