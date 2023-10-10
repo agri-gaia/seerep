@@ -10,5 +10,5 @@ namespace seerep.fb;
 rpc_service PointCloudService {
     GetPointCloud2(seerep.fb.Query):seerep.fb.PointCloud2 (streaming: "server");
     TransferPointCloud2(seerep.fb.PointCloud2):seerep.fb.ServerResponse (streaming: "client");
-    AddBoundingBoxesLabeled(seerep.fb.BoundingBoxesLabeledStamped):seerep.fb.ServerResponse   (streaming: "client");
+    AddBoundingBoxesLabeled(seerep.fb.BoundingBoxesLabeledStamped):seerep.fb.ServerResponse (streaming: "client");
 }
