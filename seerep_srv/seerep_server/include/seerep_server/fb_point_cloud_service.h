@@ -51,7 +51,7 @@ public:
                                    grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::PointCloud2>>* reader,
                                    flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response) override;
   /**
-   * @brief
+   * @brief Adds a stream of labeled bounding boxes to already stored point clouds
    *
    * @param context custom inital and trailing metadata (currently not used)
    * @param reader incoming message stream of bounding boxes from the client
