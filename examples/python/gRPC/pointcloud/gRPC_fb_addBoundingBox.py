@@ -26,6 +26,7 @@ channel = get_gRPC_channel()
 projectuuid = getProject(builder, channel, 'testproject')
 
 if not projectuuid:
+    print("Requested project does not exist")
     exit()
 
 stub = pointcloudService.PointCloudServiceStub(channel)
