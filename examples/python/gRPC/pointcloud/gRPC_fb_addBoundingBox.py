@@ -47,8 +47,8 @@ for responseBuf in stub.GetPointCloud2(bytes(buf)):
     )
 
     # create bounding box labels
-    x1, y1, z1 = np.random.rand(), np.random.rand(), np.random.rand()
-    x2, y2, z2 = np.random.rand(), np.random.rand(), np.random.rand()
+    x1, y1, z1 = np.random.rand(3)
+    x2, y2, z2 = np.random.rand(3)
 
     print("SENDING x1, y1, z1: ", x1, " , ", y1, " , ", z1)
     print("SENDING x2, y2, z2: ", x2, " , ", y2, " , ", z2)
