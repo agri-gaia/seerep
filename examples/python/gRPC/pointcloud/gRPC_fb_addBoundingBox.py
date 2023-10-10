@@ -21,7 +21,7 @@ from seerep.util.fb_helper import (
 )
 
 builder = flatbuffers.Builder(1024)
-channel = get_gRPC_channel("local")
+channel = get_gRPC_channel()
 
 projectuuid = getProject(builder, channel, 'testproject')
 
