@@ -45,7 +45,8 @@ private:
   template <typename T>
   void read(const std::string cloud_uuid, const std::string& field_name, seerep::pb::PointCloud2& cloud, size_t size)
   {
-    const std::string id = seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX + "/" + cloud_uuid + "/" + field_name;
+    const std::string id =
+        seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + cloud_uuid + "/" + field_name;
     PointCloud2Iterator<T> iter(cloud, field_name);
     HighFive::DataSet dataset = m_file->getDataSet(id);
     std::vector<T> data;
@@ -63,7 +64,8 @@ private:
   void write(const std::string cloud_uuid, const std::string& field_name, const seerep::pb::PointCloud2& cloud,
              size_t size)
   {
-    const std::string id = seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX + "/" + cloud_uuid + "/" + field_name;
+    const std::string id =
+        seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + cloud_uuid + "/" + field_name;
     HighFive::DataSpace data_space(size);
 
     std::shared_ptr<HighFive::DataSet> dataset_ptr;
