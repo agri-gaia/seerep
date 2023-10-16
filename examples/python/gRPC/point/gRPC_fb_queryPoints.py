@@ -32,13 +32,13 @@ def get_points(
 
     # Create all necessary objects for the query
     l = 200
-    h = 2000
+    h = 71
     polygon_vertices = []
     polygon_vertices.append(createPoint2d(builder, -1.0 * l, -1.0 * l))
     polygon_vertices.append(createPoint2d(builder, -1.0 * l, l))
     polygon_vertices.append(createPoint2d(builder, l, l))
     polygon_vertices.append(createPoint2d(builder, l, -1.0 * l))
-    polygon2d = createPolygon2D(builder, h, -h / 2, polygon_vertices)
+    polygon2d = createPolygon2D(builder, 36, 0, polygon_vertices)
 
     timeMin = createTimeStamp(builder, 1610549273, 0)
     timeMax = createTimeStamp(builder, 1938549273, 0)
@@ -105,15 +105,13 @@ if __name__ == "__main__":
                 print(
                     f"    Label confidence: {point.LabelsGeneral(i).LabelsWithInstance(j).Label().Confidence()}"
                 )
-        # access the attributes
+                print(f"   AttributeLen: {point.AttributeLength()}")
         # check for attribute 0
         if point.Attribute(0).ValueType() == Datatypes.Datatypes().String:
             union_str = String.String()
             union_str.Init(
                 point.Attribute(0).Value().Bytes, point.Attribute(0).Value().Pos
             )
-
         print(f"Attribute 0 Key: {point.Attribute(0).Key().decode()}")
         print(f"Attribute 0 Value: {union_str.Data().decode()}\n")
-
-    print(f"queried {len(p_list)} points in total")
+    print(f"count of queried pictures: {len(p_list)}")

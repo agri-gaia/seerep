@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-from typing import Dict, List, Tuple
+import uuid
+from typing import Dict, List
 
 import flatbuffers
 from grpc import Channel
@@ -21,7 +22,7 @@ from seerep.util.fb_helper import (
 
 def send_points(
     target_proj_uuid: str = None, grpc_channel: Channel = get_gRPC_channel()
-) -> List[PointStamped.PointStamped]:
+) -> Dict[str, PointStamped.PointStamped]:
     builder = flatbuffers.Builder(1024)
 
     if target_proj_uuid is None:
@@ -36,14 +37,14 @@ def send_points(
 
     bufBytes = []
 
-    img_uuid2point_map: Dict[List[Tuple[str, PointStamped.PointStamped]]] = {}
+    img_uuid2point_map: Dict[str, List[PointStamped.PointStamped]] = {}
 
     for responseBuf in stubImage.GetImage(bytes(buf)):
         response = Image.Image.GetRootAs(responseBuf)
 
-        uuid = response.Header().UuidMsgs().decode()
+        uuid_img = response.Header().UuidMsgs().decode()
 
-        img_uuid2point_map.setdefault(uuid, [])
+        img_uuid2point_map.setdefault(uuid_img, [])
 
         if not response.LabelsBbIsNone():
             for i in range(response.LabelsBb(0).BoundingBox2dLabeledLength()):
@@ -54,7 +55,9 @@ def send_points(
                     response.Header().Stamp().Seconds(),
                     response.Header().Stamp().Nanos(),
                 )
-                header = createHeader(builder, timestampMsg, frameId, uuidProject)
+                header = createHeader(
+                    builder, timestampMsg, frameId, uuidProject, str(uuid.uuid4())
+                )
 
                 coordinates = (1, 2, 3)
                 point = createPoint(builder, *coordinates)
@@ -116,7 +119,7 @@ def send_points(
                 PointStamped.Start(builder)
                 PointStamped.AddHeader(builder, header)
                 PointStamped.AddPoint(builder, point)
-                # PointStamped.AddAttribute(builder, attributes)
+                PointStamped.AddAttribute(builder, attributes)
                 PointStamped.AddLabelsGeneral(builder, labelWithCat)
                 pointStampedMsg = PointStamped.End(builder)
 
@@ -124,15 +127,8 @@ def send_points(
 
                 buf = builder.Output()
 
-                img_uuid2point_map[uuid].append(
-                    (
-                        response.LabelsBb(0)
-                        .BoundingBox2dLabeled(i)
-                        .LabelWithInstance()
-                        .InstanceUuid()
-                        .decode("utf-8"),
-                        PointStamped.PointStamped.GetRootAs(buf),
-                    )
+                img_uuid2point_map[uuid_img].append(
+                    PointStamped.PointStamped.GetRootAs(buf)
                 )
 
                 bufBytes.append(bytes(buf))
@@ -150,7 +146,19 @@ if __name__ == "__main__":
     for k in p_dict:
         print(f"uuidmsg: {k}")
         for val in p_dict[k]:
-            print(f"    uuidlabel: {val[0]}")
-            print(f"    point_uuidmsg: {val[1].Header().UuidMsgs().decode('utf-8')}")
+            print(
+                f"    uuidlabel: {val.LabelsGeneral(0).LabelsWithInstance(0).Label().Label().decode('utf-8')}"
+            )
+            print(f"    point_uuidmsg: {val.Header().UuidMsgs().decode('utf-8')}")
+            print(
+                f"    point_uuidproject: {val.Header().UuidProject().decode('utf-8')}"
+            )
+            # check for attribute 0
+            if val.Attribute(0).ValueType() == Datatypes.Datatypes().String:
+                union_str = String.String()
+                union_str.Init(
+                    val.Attribute(0).Value().Bytes, val.Attribute(0).Value().Pos
+                )
+                print(f"    Attribute 0 Value: {union_str.Data().decode()}\n")
             count_points += 1
     print(f"sent {count_points} points in total")
