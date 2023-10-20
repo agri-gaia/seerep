@@ -123,12 +123,13 @@ public:
    * @return const std::string path to the image dataset
    */
   const std::string getHdf5DataSetPath(const std::string& id) const;
+
   /**
-   * @brief fetch the camera intrinsics using the provided uuid, compute the frustrum of the camera and apply them to
-   * the provided bounding box
+   * @brief Computes the frustum for given camera intrinsic parameters and stores the result in an axis
+   * aligned bounding box
    *
-   * @param camintrinsics_uuid uuid of camera intrinsics to be fetched
-   * @param bb boundingbox in which the computed frustrum has to be saved
+   * @param camintrinsics_uuid The UUID of the camera intrinsic parameters to use.
+   * @param bb Axis aligned bounding box to store the result in.
    */
   void computeFrusturmBB(const std::string& camintrinsics_uuid, seerep_core_msgs::AABB& bb);
 
