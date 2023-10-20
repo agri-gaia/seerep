@@ -132,7 +132,7 @@ private:
    * @param camintrinsics_uuid uuid of camera intrinsics to be fetched
    * @param bb boundingbox in which the computed frustrum has to be saved
    */
-  void fetchCameraIntrinsics(const std::string& camintrinsics_uuid, seerep_core_msgs::AABB& bb);
+  void computeFrusturmBB(const std::string& camintrinsics_uuid, seerep_core_msgs::AABB& bb);
 
 public:
   // image attribute keys
