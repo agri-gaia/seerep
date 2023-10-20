@@ -54,6 +54,8 @@ boost::uuids::uuid CorePbImage::addData(const seerep::pb::Image& img)
     auto hdf5io = getHdf5(dataForIndices.header.uuidProject);
     hdf5io->writeImage(boost::lexical_cast<std::string>(dataForIndices.header.uuidData), img);
 
+    hdf5io->computeFrusturmBB(img.uuid_camera_intrinsics(), dataForIndices.boundingbox);
+
     m_seerepCore->addDataset(dataForIndices);
 
     return dataForIndices.header.uuidData;
