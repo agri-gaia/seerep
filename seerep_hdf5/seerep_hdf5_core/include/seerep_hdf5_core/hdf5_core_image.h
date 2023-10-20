@@ -123,8 +123,6 @@ public:
    * @return const std::string path to the image dataset
    */
   const std::string getHdf5DataSetPath(const std::string& id) const;
-
-private:
   /**
    * @brief fetch the camera intrinsics using the provided uuid, compute the frustrum of the camera and apply them to
    * the provided bounding box
