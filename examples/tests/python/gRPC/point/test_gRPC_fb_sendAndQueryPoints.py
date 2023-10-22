@@ -51,10 +51,40 @@ def test_sendAndQueryPoints(grpc_channel, project_setup):
         )
     }
 
+    # fix current discrepancy between the sent and queried points in the attributes, because the queried points contain the header additionally
+    # convert fb objects to dicts
+    sent_pdicts_list = [
+        fb_to_dict.fb_obj_to_dict(p, union_type_mapping=union_type_mapping)
+        for p in sent_plist
+    ]
+    queried_pdicts_list = [
+        fb_to_dict.fb_obj_to_dict(p, union_type_mapping=union_type_mapping)
+        for p in queried_points
+    ]
+
+    # remove the header entries of the queried points from the attributes
+    for p in queried_pdicts_list:
+        # sort attribute lists
+        p["Attribute"] = sorted(p["Attribute"], key=lambda a: a["Key"])
+
+        p_l = p["Attribute"]
+        idx = 0
+        while idx < len(p_l):
+            if p_l[idx]["Key"] in [
+                "frame_id",
+                "header_seq",
+                "stamp_nanos",
+                "stamp_seconds",
+            ]:
+                p_l.pop(idx)
+            else:
+                idx += 1
+
+    # sort attribute lists
+    for p in sent_pdicts_list:
+        p["Attribute"] = sorted(p["Attribute"], key=lambda a: a["Key"])
+
     # check if the queried points are the same as the sent points
-    for idx in range(len(queried_points)):
-        assert fb_to_dict.fb_obj_to_dict(
-            sent_plist[idx], union_type_mapping=union_type_mapping
-        ) == fb_to_dict.fb_obj_to_dict(
-            queried_points[idx], union_type_mapping=union_type_mapping
-        )
+    assert queried_pdicts_list == sent_pdicts_list
+    for idx in range(len(queried_pdicts_list)):
+        assert queried_pdicts_list[idx] == sent_pdicts_list[idx]
