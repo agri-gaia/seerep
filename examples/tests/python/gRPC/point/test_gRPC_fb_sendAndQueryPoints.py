@@ -86,5 +86,3 @@ def test_sendAndQueryPoints(grpc_channel, project_setup):
 
     # check if the queried points are the same as the sent points
     assert queried_pdicts_list == sent_pdicts_list
-    for idx in range(len(queried_pdicts_list)):
-        assert queried_pdicts_list[idx] == sent_pdicts_list[idx]
