@@ -2,9 +2,7 @@
 
 namespace seerep_grpc_ros
 {
-JsonPointDumper::JsonPointDumper(const std::string& filePath, const std::string& hdf5FilePath,
-                                 const std::string& detectionCategory)
-  : detectionCategory(detectionCategory)
+JsonPointDumper::JsonPointDumper(const std::string& filePath, const std::string& hdf5FilePath)
 {
   auto writeMtx = std::make_shared<std::mutex>();
   std::shared_ptr<HighFive::File> hdf5File =
@@ -63,19 +61,19 @@ void JsonPointDumper::readAndDumpJson(const std::string& jsonFilePath)
     }
     std::string concept = translateNameToAgrovocConcept(trivialName);
 
-    std::vector<std::string> detections;
-    detections.push_back(concept);
     std::string instanceUUID = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
 
-    ioPoint->writePoint(boost::lexical_cast<std::string>(boost::uuids::random_generator()()),
-                        createPointForDetection(0, 0, "world", concept, instanceUUID, x, y, z, diameter).GetRoot());
+    ioPoint->writePoint(
+        boost::lexical_cast<std::string>(boost::uuids::random_generator()()),
+        createPointForDetection(0, 0, "world", concept, trivialName, instanceUUID, x, y, z, diameter).GetRoot());
   }
 }
 
 flatbuffers::grpc::Message<seerep::fb::PointStamped>
 JsonPointDumper::createPointForDetection(int32_t stampSecs, uint32_t stampNanos, const std::string& frameId,
-                                         const std::string& label, const std::string& instanceUUID, const double x,
-                                         const double y, const double z, const double diameter)
+                                         const std::string& labelAgrovoc, const std::string& labelTrivial,
+                                         const std::string& instanceUUID, const double x, const double y,
+                                         const double z, const double diameter)
 {
   std::string projectuuiddummy = "";
   flatbuffers::grpc::MessageBuilder builder;
@@ -86,13 +84,21 @@ JsonPointDumper::createPointForDetection(int32_t stampSecs, uint32_t stampNanos,
 
   auto point = seerep::fb::CreatePoint(builder, x, y, z);
 
-  std::vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>> labelVector;
-  labelVector.push_back(seerep::fb::CreateLabelWithInstance(
-      builder, seerep::fb::CreateLabel(builder, builder.CreateString(label), 1.0), builder.CreateString(instanceUUID)));
+  std::vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>> labelAgrovocVector;
+  labelAgrovocVector.push_back(seerep::fb::CreateLabelWithInstance(
+      builder, seerep::fb::CreateLabel(builder, builder.CreateString(labelAgrovoc), 1.0),
+      builder.CreateString(instanceUUID)));
+
+  std::vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>> labelTrivialVector;
+  labelTrivialVector.push_back(seerep::fb::CreateLabelWithInstance(
+      builder, seerep::fb::CreateLabel(builder, builder.CreateString(labelTrivial), 1.0),
+      builder.CreateString(instanceUUID)));
 
   std::vector<flatbuffers::Offset<seerep::fb::LabelsWithInstanceWithCategory>> labelsWithInstanceWithCategoryVector;
   labelsWithInstanceWithCategoryVector.push_back(seerep::fb::CreateLabelsWithInstanceWithCategory(
-      builder, builder.CreateString(detectionCategory), builder.CreateVector(labelVector)));
+      builder, builder.CreateString("agrovoc"), builder.CreateVector(labelAgrovocVector)));
+  labelsWithInstanceWithCategoryVector.push_back(seerep::fb::CreateLabelsWithInstanceWithCategory(
+      builder, builder.CreateString("trivial"), builder.CreateVector(labelTrivialVector)));
 
   std::vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>> attributes;
   attributes.push_back(seerep::fb::CreateUnionMapEntry(builder, builder.CreateString("plant_diameter"),
@@ -230,18 +236,17 @@ int main(int argc, char** argv)
   ros::init(argc, argv, "seerep_ros_communication_JsonPointDumper");
   ros::NodeHandle privateNh("~");
 
-  std::string jsonFilePath, detectionCategory;
+  std::string jsonFilePath;
 
   const std::string hdf5FilePath = getHDF5FilePath(privateNh);
 
-  if (privateNh.getParam("jsonFilePath", jsonFilePath) && privateNh.getParam("detectionCategory", detectionCategory))
+  if (privateNh.getParam("jsonFilePath", jsonFilePath))
   {
     {
       ROS_INFO_STREAM("hdf5FilePath: " << hdf5FilePath);
       ROS_INFO_STREAM("jsonFilePath: " << jsonFilePath);
-      ROS_INFO_STREAM("detectionCategory: " << detectionCategory);
 
-      seerep_grpc_ros::JsonPointDumper JsonPointDumper(jsonFilePath, hdf5FilePath, detectionCategory);
+      seerep_grpc_ros::JsonPointDumper JsonPointDumper(jsonFilePath, hdf5FilePath);
     }
   }
   else

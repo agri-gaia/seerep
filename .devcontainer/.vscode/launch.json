@@ -37,6 +37,13 @@
             "console": "integratedTerminal"
         },
         {
+            "name": "ROS: json point dumper",
+            "type": "ros",
+            "request": "launch",
+            "target": "${workspaceFolder}/src/examples/cpp/seerep_ros_communication/launch/jsonPointDumper.launch",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",
