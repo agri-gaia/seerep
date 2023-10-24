@@ -15,6 +15,7 @@ from seerep.fb import (
 )
 
 
+# todo: test query dependant on tf
 def test_sendAndQueryPoints(grpc_channel, project_setup):
     proj_name, proj_uuid = project_setup
 
@@ -85,4 +86,5 @@ def test_sendAndQueryPoints(grpc_channel, project_setup):
         p["Attribute"] = sorted(p["Attribute"], key=lambda a: a["Key"])
 
     # check if the queried points are the same as the sent points
+    assert len(queried_pdicts_list) == len(sent_pdicts_list)
     assert queried_pdicts_list == sent_pdicts_list

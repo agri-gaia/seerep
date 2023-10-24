@@ -1,12 +1,12 @@
 #!/user/bin/env python3
 
-import time
+import struct
 import uuid
+from typing import List
 
 import flatbuffers
 import numpy as np
-
-np.set_printoptions(precision=7)
+from grpc import Channel
 from seerep.fb import PointCloud2, Quaternion, Transform, TransformStamped, Vector3
 from seerep.fb import point_cloud_service_grpc_fb as pointCloudService
 from seerep.fb import tf_service_grpc_fb
@@ -27,12 +27,12 @@ from seerep.util.fb_helper import (
 
 NUM_GENERAL_LABELS = 1
 NUM_BB_LABELS = 1
-NUM_POINT_CLOUDS = 1
+NUM_POINT_CLOUDS = 1000
 
 
 def createPointCloud(builder, header, height=960, width=1280):
-    '''Creates a flatbuffers point cloud message'''
-    pointFields = createPointFields(builder, ['x', 'y', 'z', 'rgba'], 7, 4, 1)
+    """Creates a flatbuffers point cloud message"""
+    pointFields = createPointFields(builder, ["x", "y", "z", "rgba"], 7, 4, 1)
     pointFieldsVector = addToPointFieldVector(builder, pointFields)
 
     # create general labels
@@ -47,8 +47,14 @@ def createPointCloud(builder, header, height=960, width=1280):
     # create bounding box labels
     boundingBoxes = createBoundingBoxes(
         builder,
-        [createPoint(builder, np.random.rand(), np.random.rand(), np.random.rand()) for _ in range(NUM_BB_LABELS)],
-        [createPoint(builder, np.random.rand(), np.random.rand(), np.random.rand()) for _ in range(NUM_BB_LABELS)],
+        [
+            createPoint(builder, np.random.rand(), np.random.rand(), np.random.rand())
+            for _ in range(NUM_BB_LABELS)
+        ],
+        [
+            createPoint(builder, np.random.rand(), np.random.rand(), np.random.rand())
+            for _ in range(NUM_BB_LABELS)
+        ],
     )
     labelWithInstances = createLabelsWithInstance(
         builder,
@@ -57,7 +63,9 @@ def createPointCloud(builder, header, height=960, width=1280):
         [str(uuid.uuid4()) for _ in range(NUM_BB_LABELS)],
     )
     labelsBb = createBoundingBoxesLabeled(builder, labelWithInstances, boundingBoxes)
-    labelsBBCat = createBoundingBoxLabeledWithCategory(builder, builder.CreateString("myCategory"), labelsBb)
+    labelsBBCat = createBoundingBoxLabeledWithCategory(
+        builder, builder.CreateString("myCategory"), labelsBb
+    )
     # labelsBbVector = addToBoundingBoxLabeledVector(builder, labelsBBCat)
 
     # Note: rgb field is float, for simplification
@@ -68,7 +76,6 @@ def createPointCloud(builder, header, height=960, width=1280):
             for c in range(-lim, lim + 1, 1):
                 pointsBox[0].append([a, b, c, 0])
     points = np.array(pointsBox).astype(np.float32)
-    print(f"Data: {points}")
 
     pointsVector = builder.CreateByteVector(points.tobytes())
 
@@ -88,10 +95,9 @@ def createPointCloud(builder, header, height=960, width=1280):
 
 
 def createPointClouds(projectUuid, numOf, theTime):
-    '''Creates numOf pointcloud2 messages as a generator function'''
+    """Creates numOf pointcloud2 messages as a generator function"""
 
     for i in range(numOf):
-        print(f"Send point cloud: {str(i+1)}")
         builder = flatbuffers.Builder(1024)
 
         timeStamp = createTimeStamp(builder, theTime + i)
@@ -102,14 +108,16 @@ def createPointClouds(projectUuid, numOf, theTime):
         yield bytes(builder.Output())
 
 
-def createTF(channel, numOf, projectUuid, theTime):
+def createTF(numOf, projectUuid, theTime):
 
     for i in range(numOf):
 
         builderTf = flatbuffers.Builder(1024)
 
         timeStamp = createTimeStamp(builderTf, theTime + i)
-        header = createHeader(builderTf, timeStamp, "map", projectUuid)
+        header = createHeader(
+            builderTf, timeStamp, "map", projectUuid, str(uuid.uuid4())
+        )
 
         Vector3.Start(builderTf)
         Vector3.AddX(builderTf, 10 * i)
@@ -141,14 +149,43 @@ def createTF(channel, numOf, projectUuid, theTime):
         yield bytes(builderTf.Output())
 
 
-channel = get_gRPC_channel()
-builder = flatbuffers.Builder(1024)
-theTime = 1686038855
-projectUuid = getOrCreateProject(builder, channel, "testproject")
+def send_pointcloud(
+    target_proj_uuid: str = None, grpc_channel: Channel = get_gRPC_channel()
+) -> List[PointCloud2.PointCloud2]:
+    builder = flatbuffers.Builder(1024)
+    theTime = 1686038855
 
-tfStub = tf_service_grpc_fb.TfServiceStub(channel)
-tfStub.TransferTransformStamped(createTF(channel, NUM_POINT_CLOUDS, projectUuid, theTime))
+    if target_proj_uuid == None:
+        projectUuid = getOrCreateProject(builder, grpc_channel, "testproject")
 
-stub = pointCloudService.PointCloudServiceStub(channel)
-pc = createPointClouds(projectUuid, NUM_POINT_CLOUDS, theTime)
-responseBuf = stub.TransferPointCloud2(pc)
+    tfStub = tf_service_grpc_fb.TfServiceStub(grpc_channel)
+    tfStub.TransferTransformStamped(createTF(NUM_POINT_CLOUDS, projectUuid, theTime))
+
+    stub = pointCloudService.PointCloudServiceStub(grpc_channel)
+    pc = createPointClouds(projectUuid, NUM_POINT_CLOUDS, theTime)
+
+    pc_list: List[PointCloud2.PointCloud2] = []
+
+    # in this specific case return the pcs as a list and ignore the generator, this may create problems when many pointclouds are created
+    for p in pc:
+        pc_list.append(PointCloud2.PointCloud2.GetRootAs(p))
+
+    responseBuf = stub.TransferPointCloud2(pc)
+    return pc_list
+
+
+if __name__ == "__main__":
+    np.set_printoptions(precision=7)
+    pc_list = send_pointcloud()
+    for idx, pc in enumerate(pc_list):
+        print("Num of pc: ", idx)
+        raw_data = pc.DataAsNumpy()
+        data_flattened = [
+            struct.unpack("f", pc.DataAsNumpy()[i : i + pc.FieldsLength()])
+            for i in range(0, raw_data.shape[0], pc.FieldsLength())
+        ]
+        # reshape the array according to its dimensions
+        data = np.array(data_flattened).reshape(
+            pc.Height(), pc.Width(), pc.FieldsLength()
+        )
+        print(f"Data: {data}")

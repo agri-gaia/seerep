@@ -1,6 +1,13 @@
 import flatbuffers
 import numpy as np
 import open3d as o3d
+import struct
+import sys
+from typing import List
+
+import flatbuffers
+import numpy as np
+from grpc import Channel
 from seerep.fb import PointCloud2
 from seerep.fb import point_cloud_service_grpc_fb as pointCloudService
 from seerep.util.common import get_gRPC_channel
@@ -65,72 +72,105 @@ def draw_pcl(points: np.ndarray, point_colors: np.ndarray = None, draw_origin=Tr
     vis.run()
     vis.destroy_window()
 
+def query_pcs(target_proj_uuid: str = None, grpc_channel: Channel = get_gRPC_channel()
+) -> List[PointCloud2.PointCloud2]:
+    fb_builder = flatbuffers.Builder(1024)
 
-fb_builder = flatbuffers.Builder(1024)
+    pcl_stub = pointCloudService.PointCloudServiceStub(grpc_channel)
 
-channel = get_gRPC_channel()
-pcl_stub = pointCloudService.PointCloudServiceStub(channel)
+    if target_proj_uuid is None:
+        target_proj_uuid = getProject(fb_builder, grpc_channel, PROJECTNAME)
 
-if not (projectuuid := getProject(fb_builder, channel, PROJECTNAME)):
-    print(f"Project: {PROJECTNAME} does not exist, quitting ...")
-    raise SystemExit
+        if target_proj_uuid is None:
+            print(f"Project: {PROJECTNAME} does not exist")
+            sys.exit()
 
-# create a polygon for a spatial query
-polygon_vertices = [createPoint2d(fb_builder, x, y) for x in [-10, 10] for y in [-10, 10]]
-query_polygon = createPolygon2D(fb_builder, 7, -1, polygon_vertices)
+    # create a polygon for a spatial query
+    polygon_vertices = [createPoint2d(fb_builder, x, y) for x in [-10, 10] for y in [-10, 10]]
+    query_polygon = createPolygon2D(fb_builder, 7, -1, polygon_vertices)
 
-# create a time interval for a temporal query
-time_min, time_max = [createTimeStamp(fb_builder, time) for time in [1610549273, 1938549273]]
-time_interval = createTimeInterval(fb_builder, time_min, time_max)
+    # create a time interval for a temporal query
+    time_min, time_max = [createTimeStamp(fb_builder, time) for time in [1610549273, 1938549273]]
+    time_interval = createTimeInterval(fb_builder, time_min, time_max)
 
-# create labels for a semantic query
-labels = [createLabelWithConfidence(fb_builder, f"testlabel_{i}", 1.0) for i in range(3)]
-labels_with_category = createLabelWithCategory(fb_builder, ["default_category"], [labels])
+    # create labels for a semantic query
+    labels = [createLabelWithConfidence(fb_builder, f"testlabel_{i}", 1.0) for i in range(3)]
+    labels_with_category = createLabelWithCategory(fb_builder, ["default_category"], [labels])
 
-# filter for specific data
-data_uuids = [fb_builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
-instance_uuids = [fb_builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
+    # filter for specific data
+    data_uuids = [fb_builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
+    instance_uuids = [fb_builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 
-project_uuids = [fb_builder.CreateString(projectuuid)]
+    project_uuids = [fb_builder.CreateString(target_proj_uuid)]
 
-# set the query parameters according to your needs
-query = createQuery(
-    fb_builder,
-    # timeInterval=time_interval,
-    # labels=labels_with_category,
-    # mustHaveAllLabels=True,
-    projectUuids=project_uuids,
-    # instanceUuids=instance_uuids,
-    # dataUuids=data_uuids,
-    withoutData=False,
-    # polygon2d=query_polygon,
-    # fullyEncapsulated=True
-)
+    # set the query parameters according to your needs
+    query = createQuery(
+        fb_builder,
+        # timeInterval=time_interval,
+        # labels=labels_with_category,
+        # mustHaveAllLabels=True,
+        projectUuids=project_uuids,
+        # instanceUuids=instance_uuids,
+        # dataUuids=data_uuids,
+        withoutData=False,
+        # polygon2d=query_polygon,
+        # fullyEncapsulated=True
+    )
 
-fb_builder.Finish(query)
+    resp_list = [PointCloud2.PointCloud2.GetRootAs(resp) for
+                  resp in pcl_stub.GetPointCloud2(bytes(fb_builder.Output())) if resp]
 
-for responseBuf in pcl_stub.GetPointCloud2(bytes(fb_builder.Output())):
-    if response := PointCloud2.PointCloud2.GetRootAs(responseBuf):
-        print(f"---Header--- \n {unpack_header(response)}")
+    return resp_list
 
-        point_fields = unpack_point_fields(response)
+if __name__ == "__main__":
+    query_pcl = query_pcs()
+    for resp in query_pcl:
+        print(f"---Header--- \n {unpack_header(resp)}")
+
+        point_fields = unpack_point_fields(resp)
         print(f"---Point Fields--- \n {point_fields}")
 
-        # TODO: add printing of general and bounding box labels
+        print("---Bounding Box Labels---")
+        for i in range(resp.LabelsBbLength()):
+            print(
+                f"Label {i}: {resp.LabelsBb(i).LabelWithInstance().Label().decode('utf-8')}"
+            )
+            print(
+                f"Instance {i}: {resp.LabelsBb(i).LabelWithInstance().InstanceUuid().decode('utf-8')}"
+            )
+            print(
+                f"Bounding Box Min {i}: "
+                f"{resp.LabelsBb(i).BoundingBoxLabeled(0).BoundingBox().PointMin().X()},"
+                f"{resp.LabelsBb(i).BoundingBoxLabeled(0).BoundingBox().PointMin().Y()},"
+                f"{resp.LabelsBb(i).BoundingBoxLabeled(0).BoundingBox().PointMin().Z()} "
+                f"(x,y,z)"
+            )
+            print(
+                f"Bounding Box Max {i}: "
+                f"{resp.LabelsBb(i).BoundingBoxLabeled(0).BoundingBox().PointMax().X()},"
+                f"{resp.LabelsBb(i).BoundingBoxLabeled(0).BoundingBox().PointMax().Y()},"
+                f"{resp.LabelsBb(i).BoundingBoxLabeled(0).BoundingBox().PointMax().Z()} "
+                f"(x,y,z)"
+            )
 
-        if not response.DataIsNone():
+        print("---General Labels----")
+        for i in range(resp.LabelsGeneralLength()):
+            print(f"Label {i}: {resp.LabelsGeneral(i).Label().decode('utf-8')}")
+            print(f"Instance {i}: {resp.LabelsGeneral(i).InstanceUuid().decode('utf-8')}")
+
+        if not resp.DataIsNone():
             dtypes = np.dtype(
                 {
                     "names": point_fields["name"],
                     "formats": [rosToNumpyDtype(datatype) for datatype in point_fields["datatype"]],
                     "offsets": point_fields["offset"],
-                    "itemsize": response.PointStep(),
+                    "itemsize": resp.PointStep(),
                 }
             )
 
-            decoded_payload = np.frombuffer(response.DataAsNumpy(), dtype=dtypes)
+            decoded_payload = np.frombuffer(resp.DataAsNumpy(), dtype=dtypes)
 
-            print(f"---Is dense--- \n {response.IsDense()}")
+            print(f"---Is dense--- \n {resp.IsDense()}")
             print(f"---Payload--- \n {decoded_payload}")
             points = np.array([decoded_payload["x"], decoded_payload["y"], decoded_payload["z"]]).T.astype(np.float64)
 
