@@ -8,7 +8,6 @@
     <arg name="topicImage" default="/cama/classifier_gpu_node/cw_debug_images"/>
     <arg name="topicCameraIntrinsics" default="/cama/classifier_gpu_node/camera_info"/>
     <arg name="topicDetection" default="/cama/classifier_gpu_node/cw_detection_array"/>
-    <arg name="detectionCategory" default=""/>
     <arg name="topicTf" default="/tf"/>
     <arg name="topicTfStatic" default="/tf_static"/>
     <arg name="topicGeoAnchor" default="/anchor"/>
