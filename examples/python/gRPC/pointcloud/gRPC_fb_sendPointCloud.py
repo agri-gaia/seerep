@@ -27,7 +27,7 @@ from seerep.util.fb_helper import (
 
 NUM_GENERAL_LABELS = 1
 NUM_BB_LABELS = 1
-NUM_POINT_CLOUDS = 1
+NUM_POINT_CLOUDS = 10
 
 
 def createPointCloud(builder, header, height=960, width=1280):
@@ -168,13 +168,14 @@ def send_pointcloud(
     stub = pointCloudService.PointCloudServiceStub(grpc_channel)
     pc = createPointClouds(target_proj_uuid, NUM_POINT_CLOUDS, theTime)
 
-    pc_list: List[PointCloud2.PointCloud2] = []
+    pc_list: List = [p for p in pc]
 
-    # in this specific case return the pcs as a list and ignore the generator, this may create problems when many pointclouds are created
-    for p in pc:
-        pc_list.append(PointCloud2.PointCloud2.GetRootAs(p))
+    # one could directly pass the generator, e.g.
+    # responseBuf = stub.TransferPointCloud2(pc)
+    # but this would consume the generator and then the pc list cannot be returned, therefore use a iterator
+    responseBuf = stub.TransferPointCloud2(iter(pc_list))
 
-    responseBuf = stub.TransferPointCloud2(pc)
+    pc_list = [PointCloud2.PointCloud2.GetRootAs(p) for p in pc_list]
 
     return pc_list
 
