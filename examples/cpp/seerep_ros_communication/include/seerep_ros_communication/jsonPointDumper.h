@@ -35,13 +35,14 @@ namespace seerep_grpc_ros
 class JsonPointDumper
 {
 public:
-  JsonPointDumper(const std::string& filePath, const std::string& hdf5FilePath, const std::string& detectionCategory);
+  JsonPointDumper(const std::string& filePath, const std::string& hdf5FilePath);
   ~JsonPointDumper();
 
 private:
   void readAndDumpJson(const std::string& jsonFilePath);
   flatbuffers::grpc::Message<seerep::fb::PointStamped>
-  createPointForDetection(int32_t stampSecs, uint32_t stampNanos, const std::string& frameId, const std::string& label,
+  createPointForDetection(int32_t stampSecs, uint32_t stampNanos, const std::string& frameId,
+                          const std::string& labelAgrovoc, const std::string& labelTrivial,
                           const std::string& instanceUUID, const double x, const double y, const double z,
                           const double diameter);
 

@@ -6,10 +6,9 @@ RosbagDumper::RosbagDumper(const std::string& bagPath, const std::string& classe
                            const std::string& hdf5FilePath, const std::string& projectFrameId,
                            const std::string& projectName, const std::string& projectUuid,
                            const std::string& topicImage, const std::string& topicCameraIntrinsics,
-                           const std::string& topicDetection, const std::string& detectionCategory,
-                           const std::string& topicTf, const std::string& topicTfStatic,
-                           const std::string& topicGeoAnchor, float distanceCameraGround, double maxViewingDistance,
-                           bool storeImages)
+                           const std::string& topicDetection, const std::string& topicTf,
+                           const std::string& topicTfStatic, const std::string& topicGeoAnchor,
+                           float distanceCameraGround, double maxViewingDistance, bool storeImages)
   : hdf5FilePath(hdf5FilePath)
   , projectFrameId(projectFrameId)
   , projectName(projectName)
@@ -17,7 +16,6 @@ RosbagDumper::RosbagDumper(const std::string& bagPath, const std::string& classe
   , topicImage(topicImage)
   , topicCameraIntrinsics(topicCameraIntrinsics)
   , topicDetection(topicDetection)
-  , detectionCategory(detectionCategory)
   , topicTf(topicTf)
   , topicTfStatic(topicTfStatic)
   , topicGeoAnchor(topicGeoAnchor)
@@ -82,7 +80,7 @@ void RosbagDumper::getGeoAnchor()
       geoCoordinates.latitude = msg->position.latitude;
       geoCoordinates.longitude = msg->position.longitude;
       geoCoordinates.altitude = msg->position.altitude;
-      geoCoordinates.coordinateSystem = "";
+      geoCoordinates.coordinateSystem = "EPSG:4326";
       ioCoreGeneral->writeGeodeticLocation(geoCoordinates);
     }
   }
@@ -183,15 +181,15 @@ void RosbagDumper::iterateAndDumpDetections(bool storeImages)
 
           ioPoint->writePoint(boost::lexical_cast<std::string>(boost::uuids::random_generator()()),
                               createPointForDetection(detection, msg->header.stamp.sec, msg->header.stamp.nsec,
-                                                      msg->header.frame_id, concept, instanceUUID)
+                                                      msg->header.frame_id, concept, label, instanceUUID)
                                   .GetRoot());
         }
 
         if (storeImages)
         {
           ioImage->writeImageBoundingBox2DLabeled(
-              uuidstring, seerep_ros_conversions_fb::toFlat(*msg, projectUuid, detectionCategory, std::string(""),
-                                                            detections, instanceUUIDs)
+              uuidstring, seerep_ros_conversions_fb::toFlat(*msg, projectUuid, "agrovoc", std::string(""), detections,
+                                                            instanceUUIDs)
                               .GetRoot()
                               ->labels_bb());
         }
@@ -237,8 +235,8 @@ void RosbagDumper::iterateAndDumpTf(const std::string& topic, const bool isStati
 
 flatbuffers::grpc::Message<seerep::fb::PointStamped>
 RosbagDumper::createPointForDetection(vision_msgs::Detection2D detection, int32_t stampSecs, uint32_t stampNanos,
-                                      const std::string& frameId, const std::string& label,
-                                      const std::string& instanceUUID)
+                                      const std::string& frameId, const std::string& labelAgrovoc,
+                                      const std::string& labelTrivial, const std::string& instanceUUID)
 {
   flatbuffers::grpc::MessageBuilder builder;
   auto header = seerep::fb::CreateHeader(
@@ -251,13 +249,21 @@ RosbagDumper::createPointForDetection(vision_msgs::Detection2D detection, int32_
 
   auto point = seerep::fb::CreatePoint(builder, x, y, z);
 
-  std::vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>> labelVector;
-  labelVector.push_back(seerep::fb::CreateLabelWithInstance(
-      builder, seerep::fb::CreateLabel(builder, builder.CreateString(label), 1.0), builder.CreateString(instanceUUID)));
+  std::vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>> labelAgrovocVector;
+  labelAgrovocVector.push_back(seerep::fb::CreateLabelWithInstance(
+      builder, seerep::fb::CreateLabel(builder, builder.CreateString(labelAgrovoc), 1.0),
+      builder.CreateString(instanceUUID)));
+
+  std::vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>> labelTrivialVector;
+  labelTrivialVector.push_back(seerep::fb::CreateLabelWithInstance(
+      builder, seerep::fb::CreateLabel(builder, builder.CreateString(labelTrivial), 1.0),
+      builder.CreateString(instanceUUID)));
 
   std::vector<flatbuffers::Offset<seerep::fb::LabelsWithInstanceWithCategory>> labelsWithInstanceWithCategoryVector;
   labelsWithInstanceWithCategoryVector.push_back(seerep::fb::CreateLabelsWithInstanceWithCategory(
-      builder, builder.CreateString(detectionCategory), builder.CreateVector(labelVector)));
+      builder, builder.CreateString("agrovoc"), builder.CreateVector(labelAgrovocVector)));
+  labelsWithInstanceWithCategoryVector.push_back(seerep::fb::CreateLabelsWithInstanceWithCategory(
+      builder, builder.CreateString("trivial"), builder.CreateVector(labelTrivialVector)));
 
   std::vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>> attributes;
   attributes.push_back(
@@ -414,7 +420,7 @@ int main(int argc, char** argv)
   ros::NodeHandle privateNh("~");
 
   std::string bagPath, classesMappingPath, projectFrameId, projectName, topicImage, topicCameraIntrinsics,
-      topicDetection, detectionCategory, topicTf, topicTfStatic, topicGeoAnchor;
+      topicDetection, topicTf, topicTfStatic, topicGeoAnchor;
   float distanceCameraGround;
   bool storeImages;
   double maxViewingDistance;
@@ -423,7 +429,6 @@ int main(int argc, char** argv)
   const std::string hdf5FilePath = getHDF5FilePath(privateNh, projectUuid);
 
   privateNh.getParam("classesMappingPath", classesMappingPath);
-  privateNh.getParam("detectionCategory", detectionCategory);
 
   if (privateNh.getParam("bagPath", bagPath) && privateNh.getParam("classesMappingPath", classesMappingPath) &&
       privateNh.getParam("projectFrameId", projectFrameId) && privateNh.getParam("projectName", projectName) &&
@@ -443,7 +448,6 @@ int main(int argc, char** argv)
     ROS_INFO_STREAM("topicImage: " << topicImage);
     ROS_INFO_STREAM("topicCameraIntrinsics: " << topicCameraIntrinsics);
     ROS_INFO_STREAM("topicDetection: " << topicDetection);
-    ROS_INFO_STREAM("detectionCategory: " << detectionCategory);
     ROS_INFO_STREAM("topicTf: " << topicTf);
     ROS_INFO_STREAM("topicTfStatic: " << topicTfStatic);
     ROS_INFO_STREAM("topicGeoAnchor: " << topicGeoAnchor);
@@ -452,9 +456,9 @@ int main(int argc, char** argv)
     ROS_INFO_STREAM("storeImages: " << storeImages);
 
     seerep_grpc_ros::RosbagDumper rosbagDumper(bagPath, classesMappingPath, hdf5FilePath, projectFrameId, projectName,
-                                               projectUuid, topicImage, topicCameraIntrinsics, topicDetection,
-                                               detectionCategory, topicTf, topicTfStatic, topicGeoAnchor,
-                                               distanceCameraGround, maxViewingDistance, storeImages);
+                                               projectUuid, topicImage, topicCameraIntrinsics, topicDetection, topicTf,
+                                               topicTfStatic, topicGeoAnchor, distanceCameraGround, maxViewingDistance,
+                                               storeImages);
   }
   else
   {
