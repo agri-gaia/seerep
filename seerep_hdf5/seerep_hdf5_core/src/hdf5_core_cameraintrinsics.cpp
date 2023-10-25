@@ -12,7 +12,7 @@ void Hdf5CoreCameraIntrinsics::writeCameraIntrinsics(const seerep_core_msgs::cam
 {
   // the storage path has to be determined using the uuid of the cam intriniscs, which is available inside the header
   std::string id = boost::lexical_cast<std::string>(camIntrinsics.header.uuidData);
-  std::string hdf5GroupPath = getHdf5GroupPath(id);
+  std::string hdf5GroupPath = cameraIntrinsicPath(id);
 
   std::shared_ptr<HighFive::Group> dataGroupPtr = getHdf5Group(hdf5GroupPath, true);
 
@@ -67,7 +67,7 @@ Hdf5CoreCameraIntrinsics::readCameraIntrinsics(const boost::uuids::uuid& camerai
 
   std::string id = boost::lexical_cast<std::string>(cameraintrinsics_uuid);
 
-  std::string hdf5GroupPath = getHdf5GroupPath(id);
+  std::string hdf5GroupPath = cameraIntrinsicPath(id);
 
   auto dataGroupPtr = getHdf5Group(hdf5GroupPath, false);
 
@@ -130,7 +130,7 @@ bool Hdf5CoreCameraIntrinsics::checkCameraIntrinsicsExists(const boost::uuids::u
     // call check exists for the provided camera intrinsics id
     std::string id = boost::lexical_cast<std::string>(cameraintrinsics_uuid);
 
-    std::string cameraIntrinsicsGroupPath = getHdf5GroupPath(id);
+    std::string cameraIntrinsicsGroupPath = cameraIntrinsicPath(id);
 
     checkExists(cameraIntrinsicsGroupPath);
   }
@@ -143,9 +143,9 @@ bool Hdf5CoreCameraIntrinsics::checkCameraIntrinsicsExists(const boost::uuids::u
   return true;
 }
 
-const std::string Hdf5CoreCameraIntrinsics::getHdf5GroupPath(const std::string& id) const
+const std::string Hdf5CoreCameraIntrinsics::cameraIntrinsicPath(const std::string& camera_instrinsic_uuid) const
 {
-  return HDF5_GROUP_CAMINTRINSICS + "/" + id;
+  return HDF5_GROUP_CAMINTRINSICS + "/" + camera_instrinsic_uuid;
 }
 
 }  // namespace seerep_hdf5_core

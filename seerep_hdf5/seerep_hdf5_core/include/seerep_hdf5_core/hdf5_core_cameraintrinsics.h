@@ -43,7 +43,7 @@ public:
   bool checkCameraIntrinsicsExists(const boost::uuids::uuid& cameraintrinsics_uuid);
 
 private:
-  const std::string getHdf5GroupPath(const std::string& id) const;
+  const std::string cameraIntrinsicPath(const std::string& camera_intrinsic_uuid) const;
 
 public:
   // datatype group names in hdf5
