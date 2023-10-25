@@ -150,8 +150,14 @@ if __name__ == "__main__":
                 f"{resp.LabelsBb(i).BoundingBoxLabeled(0).BoundingBox().PointMax().X()},"
                 f"{resp.LabelsBb(i).BoundingBoxLabeled(0).BoundingBox().PointMax().Y()},"
                 f"{resp.LabelsBb(i).BoundingBoxLabeled(0).BoundingBox().PointMax().Z()} "
-                f"(x,y,z)"
-            )
+                f"(x,y,z)")
+            print(
+                f"Bounding Box Rotation {i}: "
+                f"({resp.LabelsBb(i).BoundingBoxLabeled(0).BoundingBox().Rotation().X()}, "
+                f"{resp.LabelsBb(i).BoundingBoxLabeled(0).BoundingBox().Rotation().Y()}, "
+                f"{resp.LabelsBb(i).BoundingBoxLabeled(0).BoundingBox().Rotation().Z()}, "
+                f"{resp.LabelsBb(i).BoundingBoxLabeled(0).BoundingBox().Rotation().W()}) "
+                f"(x,y,z,w)")
 
         print("---General Labels----")
         for i in range(resp.LabelsGeneralLength()):

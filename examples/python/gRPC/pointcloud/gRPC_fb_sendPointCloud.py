@@ -27,7 +27,7 @@ from seerep.util.fb_helper import (
 
 NUM_GENERAL_LABELS = 1
 NUM_BB_LABELS = 1
-NUM_POINT_CLOUDS = 1000
+NUM_POINT_CLOUDS = 1
 
 
 def createPointCloud(builder, header, height=960, width=1280):
@@ -101,7 +101,9 @@ def createPointClouds(projectUuid, numOf, theTime):
         builder = flatbuffers.Builder(1024)
 
         timeStamp = createTimeStamp(builder, theTime + i)
-        header = createHeader(builder, timeStamp, "scanner", projectUuid)
+        header = createHeader(
+            builder, timeStamp, "scanner", projectUuid, str(uuid.uuid4())
+        )
 
         pointCloudMsg = createPointCloud(builder, header, 10, 10)
         builder.Finish(pointCloudMsg)
@@ -156,13 +158,15 @@ def send_pointcloud(
     theTime = 1686038855
 
     if target_proj_uuid == None:
-        projectUuid = getOrCreateProject(builder, grpc_channel, "testproject")
+        target_proj_uuid = getOrCreateProject(builder, grpc_channel, "testproject")
 
     tfStub = tf_service_grpc_fb.TfServiceStub(grpc_channel)
-    tfStub.TransferTransformStamped(createTF(NUM_POINT_CLOUDS, projectUuid, theTime))
+    tfStub.TransferTransformStamped(
+        createTF(NUM_POINT_CLOUDS, target_proj_uuid, theTime)
+    )
 
     stub = pointCloudService.PointCloudServiceStub(grpc_channel)
-    pc = createPointClouds(projectUuid, NUM_POINT_CLOUDS, theTime)
+    pc = createPointClouds(target_proj_uuid, NUM_POINT_CLOUDS, theTime)
 
     pc_list: List[PointCloud2.PointCloud2] = []
 
@@ -171,6 +175,7 @@ def send_pointcloud(
         pc_list.append(PointCloud2.PointCloud2.GetRootAs(p))
 
     responseBuf = stub.TransferPointCloud2(pc)
+
     return pc_list
 
 
@@ -178,7 +183,7 @@ if __name__ == "__main__":
     np.set_printoptions(precision=7)
     pc_list = send_pointcloud()
     for idx, pc in enumerate(pc_list):
-        print("Num of pc: ", idx)
+        print("Num of pc: ", idx + 1)
         raw_data = pc.DataAsNumpy()
         data_flattened = [
             struct.unpack("f", pc.DataAsNumpy()[i : i + pc.FieldsLength()])
