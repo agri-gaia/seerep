@@ -148,8 +148,4 @@ const std::string Hdf5CoreCameraIntrinsics::getHdf5GroupPath(const std::string& 
   return HDF5_GROUP_CAMINTRINSICS + "/" + id;
 }
 
-const std::string Hdf5CoreCameraIntrinsics::getHdf5DataSetPath(const std::string& id) const
-{
-  return getHdf5GroupPath(id) + "/" + RAWDATA;
-}
 }  // namespace seerep_hdf5_core

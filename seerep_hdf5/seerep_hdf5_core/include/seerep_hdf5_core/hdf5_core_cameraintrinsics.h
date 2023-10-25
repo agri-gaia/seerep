@@ -45,7 +45,6 @@ public:
 private:
   const std::shared_ptr<HighFive::DataSet> generateDatasetPointer(const std::string& attribute);
   const std::string getHdf5GroupPath(const std::string& id) const;
-  const std::string getHdf5DataSetPath(const std::string& id) const;
 
 public:
   // datatype group names in hdf5
