@@ -48,7 +48,6 @@ private:
 public:
   // datatype group names in hdf5
   inline static const std::string HDF5_GROUP_CAMINTRINSICS = "cameraintrinsics";
-  inline static const std::string SIZE = "size";
 
   inline static const std::string HEIGHT = "height";
   inline static const std::string WIDTH = "width";
