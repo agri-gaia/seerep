@@ -268,7 +268,9 @@ public:
 protected:
   std::shared_ptr<HighFive::File> m_file;
   std::shared_ptr<std::mutex> m_write_mtx;
-  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
+
+  /* The logger does not change the state of the object, thus we can make it mutable, to use it in const functions */
+  mutable boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
 };
 
 }  // namespace seerep_hdf5_core
