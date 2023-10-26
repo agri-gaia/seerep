@@ -378,12 +378,12 @@ void Hdf5CoreGeneral::checkExists(const std::string& id)
   }
 }
 
-bool Hdf5CoreGeneral::exists(const std::string& id)
+bool Hdf5CoreGeneral::exists(const std::string& path) const
 {
-  if (!m_file->exist(id))
+  if (!m_file->exist(path))
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning)
-        << "id " << id << " does not exist in file " << m_file->getName();
+        << "HDF5 path: " << path << " does not exist in file: " << m_file->getName();
     return false;
   }
   return true;

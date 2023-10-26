@@ -43,11 +43,14 @@ public:
   void checkExists(const std::string& id);
 
   /**
-   * @brief Checks if a DataSet or DataGroup exists in the file
-   * @param id The id of the DataSet or DataGroup
-   * @return true if the DataSet or DataGroup exists
+   * @brief Checks if a HDF5 path exists in the file.
+   *
+   * Wrapper around HighFive::File::exist() for logging purposes.
+   *
+   * @param path The HDF5 path to check
+   * @return True if the dataset exists, false otherwise.
    */
-  bool exists(const std::string& id);
+  bool exists(const std::string& path) const;
 
   std::optional<std::string> readFrameId(const std::string& datatypeGroup, const std::string& uuid);
   // ################
