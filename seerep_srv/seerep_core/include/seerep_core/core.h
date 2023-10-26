@@ -126,7 +126,7 @@ public:
    * @return true Camera Intrinsics exist
    * @return false Camera Intrinsics do not exist
    */
-  bool checkCameraIntrinsicsExists(const seerep_core_msgs::camera_intrinsics_query& ci_query);
+  bool cameraIntrinsicExists(const seerep_core_msgs::camera_intrinsics_query& ci_query);
 
   /**
    * @brief creates a new project / HDF5 file with the given project information

@@ -49,7 +49,7 @@ boost::uuids::uuid CoreFbImage::addData(const seerep::fb::Image& img)
   camintrinsics_query.uuidProject = gen(img.header()->uuid_project()->str());
   camintrinsics_query.uuidCameraIntrinsics = gen(img.uuid_cameraintrinsics()->str());
 
-  if (m_seerepCore->checkCameraIntrinsicsExists(camintrinsics_query))
+  if (m_seerepCore->cameraIntrinsicExists(camintrinsics_query))
   {
     auto hdf5io = CoreFbGeneral::getHdf5(dataForIndices.header.uuidProject, m_seerepCore, m_hdf5IoMap);
     hdf5io->writeImage(boost::lexical_cast<std::string>(dataForIndices.header.uuidData), img);

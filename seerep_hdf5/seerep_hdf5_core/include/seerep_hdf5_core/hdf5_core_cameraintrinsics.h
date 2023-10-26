@@ -40,15 +40,21 @@ public:
    * @return true If camera intrinsics exist
    * @return false If camera intrinsics do not exist
    */
-  bool checkCameraIntrinsicsExists(const boost::uuids::uuid& cameraintrinsics_uuid);
+  bool cameraIntrinsicExists(const boost::uuids::uuid& camera_intrinsic_uuid) const;
 
-private:
+  /**
+   * @brief Returns the HDF5 group path for a given camera intrinsics UUID.
+
+    *@param uuid The UUID string of a camera intrinsic.
+    *@return The HDF5 group path.
+   */
   const std::string cameraIntrinsicPath(const std::string& camera_intrinsic_uuid) const;
 
 public:
-  // datatype group names in hdf5
+  /* HDF5 group name to store the camera instrinsics */
   inline static const std::string HDF5_GROUP_CAMINTRINSICS = "cameraintrinsics";
 
+  /* HDF5 attribute names to store the camera instrinsics information */
   inline static const std::string HEIGHT = "height";
   inline static const std::string WIDTH = "width";
   inline static const std::string DISTORTION_MODEL = "distortion_model";

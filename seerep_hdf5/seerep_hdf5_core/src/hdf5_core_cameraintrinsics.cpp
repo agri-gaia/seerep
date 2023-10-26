@@ -121,26 +121,9 @@ Hdf5CoreCameraIntrinsics::readCameraIntrinsics(const boost::uuids::uuid& camerai
   return ci;
 }
 
-bool Hdf5CoreCameraIntrinsics::checkCameraIntrinsicsExists(const boost::uuids::uuid& cameraintrinsics_uuid)
+bool Hdf5CoreCameraIntrinsics::cameraIntrinsicExists(const boost::uuids::uuid& camera_intrinsic_uuid) const
 {
-  std::string id = boost::lexical_cast<std::string>(cameraintrinsics_uuid);
-
-  try
-  {
-    // call check exists for the provided camera intrinsics id
-    std::string id = boost::lexical_cast<std::string>(cameraintrinsics_uuid);
-
-    std::string cameraIntrinsicsGroupPath = cameraIntrinsicPath(id);
-
-    checkExists(cameraIntrinsicsGroupPath);
-  }
-  catch (std::invalid_argument const& e)
-  {
-    // if an invalid arg exception is raised it does not exist, therefore return false
-    return false;
-  }
-  // otherwise return true
-  return true;
+  return exists(cameraIntrinsicPath(boost::lexical_cast<std::string>(camera_intrinsic_uuid)));
 }
 
 const std::string Hdf5CoreCameraIntrinsics::cameraIntrinsicPath(const std::string& camera_instrinsic_uuid) const
