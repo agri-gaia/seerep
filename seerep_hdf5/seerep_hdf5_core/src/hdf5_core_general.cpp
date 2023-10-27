@@ -359,15 +359,6 @@ bool Hdf5CoreGeneral::hasAABB(const std::string& datatypeGroup, const std::strin
   return group.hasAttribute(AABB_FIELD);
 }
 
-void Hdf5CoreGeneral::deleteAttribute(const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField)
-{
-  if (dataSetPtr->hasAttribute(attributeField))
-  {
-    dataSetPtr->deleteAttribute(attributeField);
-    m_file->flush();
-  }
-}
-
 void Hdf5CoreGeneral::checkExists(const std::string& id)
 {
   if (!m_file->exist(id))
