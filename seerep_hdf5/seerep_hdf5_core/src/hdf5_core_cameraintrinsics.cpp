@@ -77,10 +77,10 @@ Hdf5CoreCameraIntrinsics::readCameraIntrinsics(const boost::uuids::uuid& camerai
   {
     readHeader(id, *dataGroupPtr, ci.header);
 
-    ci.height = readAttributeFromHdf5<uint32_t>(id, *dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::HEIGHT);
-    ci.width = readAttributeFromHdf5<uint32_t>(id, *dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::WIDTH);
+    ci.height = readAttributeFromHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::HEIGHT, id);
+    ci.width = readAttributeFromHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::WIDTH, id);
     ci.distortion_model = readAttributeFromHdf5<std::string>(
-        id, *dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::DISTORTION_MODEL);
+        *dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::DISTORTION_MODEL, id);
 
     // read distortion
     dataGroupPtr->getAttribute(seerep_hdf5_core::Hdf5CoreCameraIntrinsics::DISTORTION)
@@ -99,23 +99,23 @@ Hdf5CoreCameraIntrinsics::readCameraIntrinsics(const boost::uuids::uuid& camerai
         .read<std::vector<double>>(ci.projection_matrix);
 
     ci.binning_x =
-        readAttributeFromHdf5<uint32_t>(id, *dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::BINNING_X);
+        readAttributeFromHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::BINNING_X, id);
     ci.binning_y =
-        readAttributeFromHdf5<uint32_t>(id, *dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::BINNING_Y);
+        readAttributeFromHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::BINNING_Y, id);
 
     ci.region_of_interest.x_offset = readAttributeFromHdf5<uint32_t>(
-        id, *dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::REGION_OF_INTEREST_X_OFFSET);
+        *dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::REGION_OF_INTEREST_X_OFFSET, id);
     ci.region_of_interest.y_offset = readAttributeFromHdf5<uint32_t>(
-        id, *dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::REGION_OF_INTEREST_Y_OFFSET);
+        *dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::REGION_OF_INTEREST_Y_OFFSET, id);
     ci.region_of_interest.height = readAttributeFromHdf5<uint32_t>(
-        id, *dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::REGION_OF_INTEREST_HEIGHT);
+        *dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::REGION_OF_INTEREST_HEIGHT, id);
     ci.region_of_interest.width = readAttributeFromHdf5<uint32_t>(
-        id, *dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::REGION_OF_INTEREST_WIDTH);
+        *dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::REGION_OF_INTEREST_WIDTH, id);
     ci.region_of_interest.do_rectify = readAttributeFromHdf5<bool>(
-        id, *dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::REGION_OF_INTEREST_DO_RECTIFY);
+        *dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::REGION_OF_INTEREST_DO_RECTIFY, id);
 
     ci.maximum_viewing_distance = readAttributeFromHdf5<double>(
-        id, *dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::MAX_VIEWING_DISTANCE);
+        *dataGroupPtr, seerep_hdf5_core::Hdf5CoreCameraIntrinsics::MAX_VIEWING_DISTANCE, id);
   }
 
   return ci;

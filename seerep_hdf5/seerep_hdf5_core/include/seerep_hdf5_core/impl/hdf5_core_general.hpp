@@ -3,32 +3,32 @@
 namespace seerep_hdf5_core
 {
 template <typename T, class C>
-T Hdf5CoreGeneral::readAttributeFromHdf5(const std::string& id, const HighFive::AnnotateTraits<C>& object,
-                                         std::string attributeField)
+T Hdf5CoreGeneral::readAttributeFromHdf5(const HighFive::AnnotateTraits<C>& object, const std::string& attribute_name,
+                                         const std::string& path)
 {
-  T attributeValue;
-  if (object.hasAttribute(attributeField))
+  T attribute_value;
+  if (object.hasAttribute(attribute_name))
   {
-    object.getAttribute(attributeField).read(attributeValue);
+    object.getAttribute(attribute_name).read(attribute_value);
   }
   else
   {
-    throw std::invalid_argument("id " + id + " has no attribute " + attributeField);
+    throw std::invalid_argument("Path: " + path + " has no attribute:" + attribute_name);
   }
-  return attributeValue;
+  return attribute_value;
 }
 
 template <typename T, class C>
-void Hdf5CoreGeneral::writeAttributeToHdf5(HighFive::AnnotateTraits<C>& object, std::string attributeField,
-                                           T attributeValue)
+void Hdf5CoreGeneral::writeAttributeToHdf5(HighFive::AnnotateTraits<C>& object, const std::string& attribute_name,
+                                           T attribute_val)
 {
-  if (object.hasAttribute(attributeField))
+  if (object.hasAttribute(attribute_name))
   {
-    object.getAttribute(attributeField).write(attributeValue);
+    object.getAttribute(attribute_name).write(attribute_val);
   }
   else
   {
-    object.createAttribute(attributeField, attributeValue);
+    object.createAttribute(attribute_name, attribute_val);
   }
 }
 
@@ -36,7 +36,7 @@ template <class C>
 std::string Hdf5CoreGeneral::readFrameId(const std::string& uuid, const HighFive::AnnotateTraits<C>& object,
                                          const std::string& frame_field)
 {
-  return tf2_frame_id(readAttributeFromHdf5<std::string>(uuid, object, frame_field));
+  return tf2_frame_id(readAttributeFromHdf5<std::string>(object, frame_field, uuid));
 }
 
 template <class C>
@@ -92,9 +92,9 @@ void Hdf5CoreGeneral::readHeader(const std::string& id, HighFive::AnnotateTraits
   std::string uuidproject_str = std::filesystem::path(m_file->getName()).filename().stem();
   header.uuidProject = boost::lexical_cast<boost::uuids::uuid>(uuidproject_str);
 
-  header.timestamp.seconds = Hdf5CoreGeneral::readAttributeFromHdf5<int32_t>(id, object, HEADER_STAMP_SECONDS);
-  header.timestamp.nanos = Hdf5CoreGeneral::readAttributeFromHdf5<int32_t>(id, object, HEADER_STAMP_NANOS);
+  header.timestamp.seconds = Hdf5CoreGeneral::readAttributeFromHdf5<int32_t>(object, HEADER_STAMP_SECONDS, id);
+  header.timestamp.nanos = Hdf5CoreGeneral::readAttributeFromHdf5<int32_t>(object, HEADER_STAMP_NANOS, id);
   header.frameId = Hdf5CoreGeneral::readFrameId(id, object, HEADER_FRAME_ID);
-  header.sequence = Hdf5CoreGeneral::readAttributeFromHdf5<int32_t>(id, object, HEADER_SEQ);
+  header.sequence = Hdf5CoreGeneral::readAttributeFromHdf5<int32_t>(object, HEADER_SEQ, id);
 }
 }  // namespace seerep_hdf5_core

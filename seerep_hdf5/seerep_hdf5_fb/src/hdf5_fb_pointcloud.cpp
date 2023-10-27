@@ -194,26 +194,26 @@ void Hdf5FbPointCloud::readGeneralAttributes(const std::string& id, std::shared_
                                              uint32_t& height, uint32_t& width, uint32_t& pointStep, uint32_t& rowStep,
                                              bool& isBigendian, bool& isDense)
 {
-  height = readAttributeFromHdf5<uint32_t>(id, *dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::HEIGHT);
-  width = readAttributeFromHdf5<uint32_t>(id, *dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::WIDTH);
-  pointStep = readAttributeFromHdf5<uint32_t>(id, *dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::POINT_STEP);
-  rowStep = readAttributeFromHdf5<uint32_t>(id, *dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::ROW_STEP);
-  isBigendian = readAttributeFromHdf5<bool>(id, *dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::IS_BIGENDIAN);
-  isDense = readAttributeFromHdf5<bool>(id, *dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::IS_DENSE);
+  height = readAttributeFromHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::HEIGHT, id);
+  width = readAttributeFromHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::WIDTH, id);
+  pointStep = readAttributeFromHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::POINT_STEP, id);
+  rowStep = readAttributeFromHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::ROW_STEP, id);
+  isBigendian = readAttributeFromHdf5<bool>(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::IS_BIGENDIAN, id);
+  isDense = readAttributeFromHdf5<bool>(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::IS_DENSE, id);
 }
 
 void Hdf5FbPointCloud::readPointFields(const std::string& id, std::shared_ptr<HighFive::Group> dataGroupPtr,
                                        std::vector<std::string>& names, std::vector<uint32_t>& offsets,
                                        std::vector<uint32_t>& counts, std::vector<uint8_t>& datatypes)
 {
-  names = readAttributeFromHdf5<std::vector<std::string>>(id, *dataGroupPtr,
-                                                          seerep_hdf5_core::Hdf5CorePointCloud::FIELD_NAME);
-  offsets = readAttributeFromHdf5<std::vector<uint32_t>>(id, *dataGroupPtr,
-                                                         seerep_hdf5_core::Hdf5CorePointCloud::FIELD_OFFSET);
-  counts = readAttributeFromHdf5<std::vector<uint32_t>>(id, *dataGroupPtr,
-                                                        seerep_hdf5_core::Hdf5CorePointCloud::FIELD_COUNT);
-  datatypes = readAttributeFromHdf5<std::vector<uint8_t>>(id, *dataGroupPtr,
-                                                          seerep_hdf5_core::Hdf5CorePointCloud::FIELD_DATATYPE);
+  names = readAttributeFromHdf5<std::vector<std::string>>(*dataGroupPtr,
+                                                          seerep_hdf5_core::Hdf5CorePointCloud::FIELD_NAME, id);
+  offsets = readAttributeFromHdf5<std::vector<uint32_t>>(*dataGroupPtr,
+                                                         seerep_hdf5_core::Hdf5CorePointCloud::FIELD_OFFSET, id);
+  counts = readAttributeFromHdf5<std::vector<uint32_t>>(*dataGroupPtr,
+                                                        seerep_hdf5_core::Hdf5CorePointCloud::FIELD_COUNT, id);
+  datatypes = readAttributeFromHdf5<std::vector<uint8_t>>(*dataGroupPtr,
+                                                          seerep_hdf5_core::Hdf5CorePointCloud::FIELD_DATATYPE, id);
 }
 
 flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::PointField>>>

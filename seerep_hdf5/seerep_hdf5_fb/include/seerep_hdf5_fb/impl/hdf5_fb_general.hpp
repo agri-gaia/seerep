@@ -70,12 +70,12 @@ flatbuffers::Offset<seerep::fb::Header> Hdf5FbGeneral::readHeaderAttributes(flat
   std::string uuidProject = std::filesystem::path(m_file->getName()).filename().stem();
 
   int64_t seconds =
-      readAttributeFromHdf5<int64_t>(uuidMsg, object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS);
+      readAttributeFromHdf5<int64_t>(object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS, uuidMsg);
   int32_t nanos =
-      readAttributeFromHdf5<int32_t>(uuidMsg, object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS);
+      readAttributeFromHdf5<int32_t>(object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS, uuidMsg);
   std::string frameId = readFrameId(uuidMsg, object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID);
 
-  uint32_t seq = readAttributeFromHdf5<uint32_t>(uuidMsg, object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ);
+  uint32_t seq = readAttributeFromHdf5<uint32_t>(object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ, uuidMsg);
 
   auto timestamp = seerep::fb::CreateTimestamp(builder, seconds, nanos);
 

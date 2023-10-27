@@ -31,7 +31,7 @@ std::optional<std::unordered_map<std::string, std::string>> Hdf5CoreInstance::re
   std::unordered_map<std::string, std::string> attributesMap;
   for (auto attributeKey : allAttributesKeys)
   {
-    std::string attributeValue = readAttributeFromHdf5<std::string>(uuid, *groupPtr, attributeKey);
+    std::string attributeValue = readAttributeFromHdf5<std::string>(*groupPtr, attributeKey, uuid);
     attributesMap.emplace(attributeKey, attributeValue);
   }
   return attributesMap;

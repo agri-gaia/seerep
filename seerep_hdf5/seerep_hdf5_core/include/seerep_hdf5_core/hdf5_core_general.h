@@ -57,10 +57,11 @@ public:
   //  Attributes
   // ################
   template <typename T, class C>
-  T readAttributeFromHdf5(const std::string& id, const HighFive::AnnotateTraits<C>& object, std::string attributeField);
+  T readAttributeFromHdf5(const HighFive::AnnotateTraits<C>& object, const std::string& attribute_name,
+                          const std::string& path);
 
   template <typename T, class C>
-  void writeAttributeToHdf5(HighFive::AnnotateTraits<C>& object, std::string attributeField, T attributeValue);
+  void writeAttributeToHdf5(HighFive::AnnotateTraits<C>& object, const std::string& attribute_name, T attribute_val);
 
   template <class C>
   std::string readFrameId(const std::string& id, const HighFive::AnnotateTraits<C>& object,

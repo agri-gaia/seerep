@@ -41,7 +41,7 @@ void Hdf5CoreGeneral::writeProjectname(const std::string& projectname)
 
 std::string Hdf5CoreGeneral::readProjectname()
 {
-  return readAttributeFromHdf5<std::string>(m_file->getName(), *m_file, PROJECTNAME);
+  return readAttributeFromHdf5<std::string>(*m_file, PROJECTNAME, m_file->getName());
 }
 
 void Hdf5CoreGeneral::writeProjectFrameId(const std::string& frameId)
@@ -68,7 +68,7 @@ const std::optional<std::string> Hdf5CoreGeneral::readVersion()
   std::string version;
   try
   {
-    version = readAttributeFromHdf5<std::string>(m_file->getName(), *m_file, VERSION);
+    version = readAttributeFromHdf5<std::string>(*m_file, VERSION, m_file->getName());
   }
   catch (const std::exception& e)
   {
