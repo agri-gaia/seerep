@@ -35,33 +35,13 @@ std::vector<std::string> Hdf5CoreGeneral::getGroupDatasets(const std::string& id
 
 void Hdf5CoreGeneral::writeProjectname(const std::string& projectname)
 {
-  const std::scoped_lock lock(*m_write_mtx);
-
-  if (!m_file->hasAttribute(PROJECTNAME))
-  {
-    m_file->createAttribute<std::string>(PROJECTNAME, projectname);
-  }
-  else
-  {
-    m_file->getAttribute(PROJECTNAME).write(projectname);
-  }
+  writeAttributeToHdf5<std::string>(*m_file, PROJECTNAME, projectname);
   m_file->flush();
 }
 
 std::string Hdf5CoreGeneral::readProjectname()
 {
-  const std::scoped_lock lock(*m_write_mtx);
-
-  std::string projectname;
-  try
-  {
-    m_file->getAttribute(PROJECTNAME).read(projectname);
-  }
-  catch (...)
-  {
-    throw std::runtime_error("Project " + m_file->getName() + "  has no project name!");
-  }
-  return projectname;
+  return readAttributeFromHdf5<std::string>(m_file->getName(), *m_file, PROJECTNAME);
 }
 
 void Hdf5CoreGeneral::writeProjectFrameId(const std::string& frameId)
@@ -77,16 +57,7 @@ std::string Hdf5CoreGeneral::readProjectFrameId()
 
 void Hdf5CoreGeneral::writeVersion(const std::string& version)
 {
-  const std::scoped_lock lock(*m_write_mtx);
-
-  if (!m_file->hasAttribute(VERSION))
-  {
-    m_file->createAttribute<std::string>(VERSION, version);
-  }
-  else
-  {
-    m_file->getAttribute(VERSION).write(version);
-  }
+  writeAttributeToHdf5<std::string>(*m_file, VERSION, version);
   m_file->flush();
 }
 
