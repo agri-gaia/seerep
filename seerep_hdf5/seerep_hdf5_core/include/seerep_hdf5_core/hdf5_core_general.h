@@ -52,8 +52,6 @@ public:
    */
   bool exists(const std::string& path) const;
 
-  std::optional<std::string> readFrameId(const std::string& datatypeGroup, const std::string& uuid);
-
   /**
    * @brief Reads an attribute from an HDF5 object.
    *
