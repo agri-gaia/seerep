@@ -211,17 +211,15 @@ public:
    */
   std::optional<seerep_core_msgs::GeodeticCoordinates> readGeodeticLocation();
 
-  // ################
-  //  Hdf5
-  // ################
   /**
-   * @brief Get a shared pointer to a hdf5 group
+   * @brief Returns a shared pointer to an HDF5 group object.
    *
-   * @param hdf5GroupPath path to the data group
-   * @param create create a new group if the group path can't be found?
-   * @return std::shared_ptr<HighFive::Group> shared pointer to the group
+   * @param group_path The path to the HDF5 group.
+   * @param create If true, the group will be created if it does not already exist.
+   * @return std::shared_ptr<HighFive::Group> A shared pointer to the HDF5 group object. Nullptr if the group does not
+   * exist and create is false.
    */
-  std::shared_ptr<HighFive::Group> getHdf5Group(const std::string& hdf5GroupPath, bool create = true);
+  std::shared_ptr<HighFive::Group> getHdf5Group(const std::string& group_path, bool create = true);
 
   /**
    * @brief Get a shared pointer to a hdf5 data set specified by the hdf5DataSetPath
