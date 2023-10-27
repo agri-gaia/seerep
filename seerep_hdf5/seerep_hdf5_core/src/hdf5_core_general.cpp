@@ -52,7 +52,7 @@ void Hdf5CoreGeneral::writeProjectFrameId(const std::string& frameId)
 
 std::string Hdf5CoreGeneral::readProjectFrameId()
 {
-  return readFrameId(std::filesystem::path(m_file->getName()).filename().stem(), *m_file, PROJECTFRAMEID);
+  return readFrameId(*m_file, PROJECTFRAMEID, std::filesystem::path(m_file->getName()).filename().stem());
 }
 
 void Hdf5CoreGeneral::writeVersion(const std::string& version)
@@ -262,11 +262,12 @@ void Hdf5CoreGeneral::writeLabelsGeneral(
   m_file->flush();
 }
 
-const std::string Hdf5CoreGeneral::tf2_frame_id(std::string frame_id)
+const std::string Hdf5CoreGeneral::tf2_frame_id(const std::string& frame_id) const
 {
+  /* leading slahes are not allowed with tf2 */
   if (!frame_id.empty() && frame_id.at(0) == '/')
   {
-    return frame_id.erase(0, 1);
+    return frame_id.substr(1);
   }
   return frame_id;
 }

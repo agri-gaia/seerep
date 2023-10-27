@@ -33,10 +33,10 @@ void Hdf5CoreGeneral::writeAttributeToHdf5(HighFive::AnnotateTraits<C>& object, 
 }
 
 template <class C>
-std::string Hdf5CoreGeneral::readFrameId(const std::string& uuid, const HighFive::AnnotateTraits<C>& object,
-                                         const std::string& frame_field)
+std::string Hdf5CoreGeneral::readFrameId(const HighFive::AnnotateTraits<C>& object, const std::string& frame_field,
+                                         const std::string& path)
 {
-  return tf2_frame_id(readAttributeFromHdf5<std::string>(object, frame_field, uuid));
+  return tf2_frame_id(readAttributeFromHdf5<std::string>(object, frame_field, path));
 }
 
 template <class C>
@@ -94,7 +94,7 @@ void Hdf5CoreGeneral::readHeader(const std::string& id, HighFive::AnnotateTraits
 
   header.timestamp.seconds = Hdf5CoreGeneral::readAttributeFromHdf5<int32_t>(object, HEADER_STAMP_SECONDS, id);
   header.timestamp.nanos = Hdf5CoreGeneral::readAttributeFromHdf5<int32_t>(object, HEADER_STAMP_NANOS, id);
-  header.frameId = Hdf5CoreGeneral::readFrameId(id, object, HEADER_FRAME_ID);
+  header.frameId = Hdf5CoreGeneral::readFrameId(object, HEADER_FRAME_ID, id);
   header.sequence = Hdf5CoreGeneral::readAttributeFromHdf5<int32_t>(object, HEADER_SEQ, id);
 }
 }  // namespace seerep_hdf5_core

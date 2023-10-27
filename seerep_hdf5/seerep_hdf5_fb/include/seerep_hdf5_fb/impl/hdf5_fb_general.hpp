@@ -73,7 +73,7 @@ flatbuffers::Offset<seerep::fb::Header> Hdf5FbGeneral::readHeaderAttributes(flat
       readAttributeFromHdf5<int64_t>(object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS, uuidMsg);
   int32_t nanos =
       readAttributeFromHdf5<int32_t>(object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS, uuidMsg);
-  std::string frameId = readFrameId(uuidMsg, object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID);
+  std::string frameId = readFrameId(object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID, uuidMsg);
 
   uint32_t seq = readAttributeFromHdf5<uint32_t>(object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ, uuidMsg);
 

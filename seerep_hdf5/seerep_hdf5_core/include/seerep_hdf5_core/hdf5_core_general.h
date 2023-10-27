@@ -78,10 +78,35 @@ public:
   template <typename T, class C>
   void writeAttributeToHdf5(HighFive::AnnotateTraits<C>& object, const std::string& attribute_name, T attribute_val);
 
-  template <class C>
-  std::string readFrameId(const std::string& id, const HighFive::AnnotateTraits<C>& object,
-                          const std::string& frame_field);
+  /**
+   * @brief Returns a tf2 compliant frame ID.
+   *
+   * @param frame_id The frame ID to check.
+   * @return The corresponding tf2 frame ID.
+   */
+  const std::string tf2_frame_id(const std::string& frame_id) const;
 
+  /**
+   * @brief Reads a tf2 compliant frame ID from an HDF5 object.
+   *
+   * @tparam C The type of the HDF5 object to read from.
+   * @param object The HDF5 object to read from.
+   * @param frame_field The name of HDF5 attribute to read the frame ID from.
+   * @param id The path to the HDF5 object, only used for logging.
+   * @return The frame ID as a string.
+   */
+  template <class C>
+  std::string readFrameId(const HighFive::AnnotateTraits<C>& object, const std::string& frame_field,
+                          const std::string& path);
+
+  /**
+   * @brief Writes a tf2 compliant frame ID to an HDF5 object.
+   *
+   * @tparam C The type of the HDF5 object to write to.
+   * @param object The HDF5 object to write to.
+   * @param frame_field The name of the HDF5 attribute to write the frame ID to.
+   * @param frame_id The frame ID to write.
+   */
   template <class C>
   void writeFrameId(HighFive::AnnotateTraits<C>& object, const std::string& frame_field, const std::string& frame_id);
 
@@ -110,14 +135,6 @@ public:
    */
   template <class T>
   void writeHeader(HighFive::AnnotateTraits<T>& object, seerep_core_msgs::Header header);
-
-  /*
-   * @brief Corrects a frame_id to be valid for tf2.
-   *
-   * @param [in] frame_id frame_id to check
-   * @param [out] frame_id which complies with tf2
-   */
-  const std::string tf2_frame_id(std::string frame_id);
 
   /**
    * @brief Read header from a group within an hd5f file
