@@ -53,13 +53,30 @@ public:
   bool exists(const std::string& path) const;
 
   std::optional<std::string> readFrameId(const std::string& datatypeGroup, const std::string& uuid);
-  // ################
-  //  Attributes
-  // ################
+
+  /**
+   * @brief Reads an attribute from an HDF5 object.
+   *
+   * @tparam T The type of the attribute to read.
+   * @tparam C The type of the HDF5 object to read from.
+   * @param object The HDF5 object to read from.
+   * @param attribute_name The name of the attribute to read.
+   * @param path The path to the HDF5 object, only used for logging.
+   * @return T The value of the attribute.
+   */
   template <typename T, class C>
   T readAttributeFromHdf5(const HighFive::AnnotateTraits<C>& object, const std::string& attribute_name,
                           const std::string& path);
 
+  /**
+   * @brief Writes an attribute to an HDF5 object.
+   *
+   * @tparam T The type of the attribute to write.
+   * @tparam C The type of the HDF5 object.
+   * @param object The HDF5 object to write the attribute to.
+   * @param attribute_name The name of the attribute.
+   * @param attribute_val The value of the attribute.
+   */
   template <typename T, class C>
   void writeAttributeToHdf5(HighFive::AnnotateTraits<C>& object, const std::string& attribute_name, T attribute_val);
 
