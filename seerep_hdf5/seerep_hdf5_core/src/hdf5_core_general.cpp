@@ -393,45 +393,30 @@ std::shared_ptr<HighFive::Group> Hdf5CoreGeneral::getHdf5Group(const std::string
   return nullptr;
 }
 
-void Hdf5CoreGeneral::writeGeodeticLocation(const seerep_core_msgs::GeodeticCoordinates geocoords)
+void Hdf5CoreGeneral::writeGeodeticLocation(const seerep_core_msgs::GeodeticCoordinates& geo_coordinates)
 {
-  const std::scoped_lock lock(*m_write_mtx);
-
-  if (!m_file->hasAttribute(GEODETICLOCATION_COORDINATESYSTEM) || !m_file->hasAttribute(GEODETICLOCATION_ELLIPSOID) ||
-      !m_file->hasAttribute(GEODETICLOCATION_ALTITUDE) || !m_file->hasAttribute(GEODETICLOCATION_LATITUDE) ||
-      !m_file->hasAttribute(GEODETICLOCATION_LONGITUDE))
-  {
-    m_file->createAttribute<std::string>(GEODETICLOCATION_COORDINATESYSTEM, geocoords.coordinateSystem);
-    m_file->createAttribute<double>(GEODETICLOCATION_ALTITUDE, geocoords.altitude);
-    m_file->createAttribute<double>(GEODETICLOCATION_LATITUDE, geocoords.latitude);
-    m_file->createAttribute<double>(GEODETICLOCATION_LONGITUDE, geocoords.longitude);
-  }
-  else
-  {
-    m_file->getAttribute(GEODETICLOCATION_COORDINATESYSTEM).write(geocoords.coordinateSystem);
-    m_file->getAttribute(GEODETICLOCATION_ALTITUDE).write(geocoords.altitude);
-    m_file->getAttribute(GEODETICLOCATION_LATITUDE).write(geocoords.latitude);
-    m_file->getAttribute(GEODETICLOCATION_LONGITUDE).write(geocoords.longitude);
-  }
+  writeAttributeToHdf5<std::string>(*m_file, GEODETICLOCATION_COORDINATESYSTEM, geo_coordinates.coordinateSystem);
+  writeAttributeToHdf5<double>(*m_file, GEODETICLOCATION_ALTITUDE, geo_coordinates.altitude);
+  writeAttributeToHdf5<double>(*m_file, GEODETICLOCATION_LATITUDE, geo_coordinates.latitude);
+  writeAttributeToHdf5<double>(*m_file, GEODETICLOCATION_LONGITUDE, geo_coordinates.longitude);
   m_file->flush();
 }
 
 std::optional<seerep_core_msgs::GeodeticCoordinates> Hdf5CoreGeneral::readGeodeticLocation()
 {
-  const std::scoped_lock lock(*m_write_mtx);
-
   seerep_core_msgs::GeodeticCoordinates geocoords;
   try
   {
-    m_file->getAttribute(GEODETICLOCATION_COORDINATESYSTEM).read(geocoords.coordinateSystem);
-    m_file->getAttribute(GEODETICLOCATION_ALTITUDE).read(geocoords.altitude);
-    m_file->getAttribute(GEODETICLOCATION_LATITUDE).read(geocoords.latitude);
-    m_file->getAttribute(GEODETICLOCATION_LONGITUDE).read(geocoords.longitude);
+    geocoords.coordinateSystem =
+        readAttributeFromHdf5<std::string>(*m_file, GEODETICLOCATION_COORDINATESYSTEM, m_file->getName());
+    geocoords.altitude = readAttributeFromHdf5<double>(*m_file, GEODETICLOCATION_ALTITUDE, m_file->getName());
+    geocoords.latitude = readAttributeFromHdf5<double>(*m_file, GEODETICLOCATION_LATITUDE, m_file->getName());
+    geocoords.longitude = readAttributeFromHdf5<double>(*m_file, GEODETICLOCATION_LONGITUDE, m_file->getName());
   }
-  catch (...)
+  catch (const std::invalid_argument& e)
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning)
-        << "geographic coordinates of the project " << m_file->getName() << " could not be read!";
+        << "Geographic coordinates of the project " << m_file->getName() << " could not be read!";
     return std::nullopt;
   }
   return geocoords;

@@ -195,19 +195,21 @@ public:
   void writeVersion(const std::string& version);
   const std::optional<std::string> readVersion();
 
-  // ################
-  //  Geodetic Coordinates
-  // ################
   /**
-   * @brief Writes Geodetic location of the project to its HDF5 file.
+   * @brief Writes a geodetic coordinate to an HDF5 file.
    *
-   * @param geocoords seerep_core_msgs Geodetic Coordinates object.
+   * Note: The data is written to the root group of the HDF5 file, since the geo-reference applies to complete project.
+   *
+   * @param geo_coordinates The geodetic coordinate to write to the file.
    */
-  void writeGeodeticLocation(const seerep_core_msgs::GeodeticCoordinates geocoords);
+  void writeGeodeticLocation(const seerep_core_msgs::GeodeticCoordinates& geo_coordinates);
+
   /**
-   * @brief Read Geodetic location of the project from its HDF5 file.
+   * @brief Reads a geodetic coodrinate from HDF5 file.
    *
-   * @return std::optional<seerep_core_msgs::GeodeticCoordinates> Optional return of Geodetic Coordinates
+   * Note: The data is expected to be stored in the root group of the HDF5 file.
+   *
+   * @return std::optional<seerep_core_msgs::GeodeticCoordinates> Geodetic coordinate if available, empty optional otherwise.
    */
   std::optional<seerep_core_msgs::GeodeticCoordinates> readGeodeticLocation();
 
