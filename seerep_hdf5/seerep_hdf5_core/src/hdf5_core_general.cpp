@@ -443,10 +443,7 @@ std::shared_ptr<HighFive::DataSet> Hdf5CoreGeneral::getHdf5DataSet(const std::st
   {
     return std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DataSetPath));
   }
-  else
-  {
-    return nullptr;
-  }
+  return nullptr;
 }
 
 void Hdf5CoreGeneral::getLabelCategories(std::string id, std::string labelType,

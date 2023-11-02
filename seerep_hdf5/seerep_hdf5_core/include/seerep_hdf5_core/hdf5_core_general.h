@@ -222,30 +222,43 @@ public:
   std::shared_ptr<HighFive::Group> getHdf5Group(const std::string& group_path, bool create = true);
 
   /**
-   * @brief Get a shared pointer to a hdf5 data set specified by the hdf5DataSetPath
+   * @brief Returns a shared pointer to a HighFive::DataSet object for the given dataset path.
    *
-   * @tparam T type of the dataset
-   * @param hdf5DataSetPath path to the dataset
-   * @param dataSpace the data space to specify the dimensions of the dataset
-   * @return std::shared_ptr<HighFive::DataSet> shared pointer to the data set
+   * @param dataset_path The path to the dataset.
+   * @return std::shared_ptr<HighFive::DataSet> A shared pointer to the dataset object. Nullptr if the dataset does not exist.
    */
-  template <class T>
-  std::shared_ptr<HighFive::DataSet> getHdf5DataSet(const std::string& hdf5DataSetPath, HighFive::DataSpace& dataSpace);
+  std::shared_ptr<HighFive::DataSet> getHdf5DataSet(const std::string& dataset_path);
 
   /**
-   * @brief Get a shared pointer to a hdf5 data set specified by the hdf5DataSetPath
+   * @brief Returns a shared pointer to a HighFive::DataSet object for the given dataset path and data space.
    *
-   * @tparam T type of the dataset
-   * @param hdf5DataSetPath path to the dataset
-   * @param dataSpace the data space to specify the dimensions of the dataset
-   * @param createProps properties for creation of the dataset
-   * @return std::shared_ptr<HighFive::DataSet> shared pointer to the data set
+   * A new dataset will be created if it does not already exist.
+   *
+   * @tparam T The data type of the dataset.
+   * @param dataset_path The path to the dataset.
+   * @param dataspace The data space of the dataset.
+   * @return std::shared_ptr<HighFive::DataSet> A shared pointer to the HighFive dataset object.
    */
   template <class T>
-  std::shared_ptr<HighFive::DataSet> getHdf5DataSet(const std::string& hdf5DataSetPath, HighFive::DataSpace& dataSpace,
-                                                    HighFive::DataSetCreateProps& createProps);
+  std::shared_ptr<HighFive::DataSet> getHdf5DataSet(const std::string& dataset_path,
+                                                    const HighFive::DataSpace& dataspace);
 
-  std::shared_ptr<HighFive::DataSet> getHdf5DataSet(const std::string& hdf5DataSetPath);
+  /**
+   * @brief Get a shared pointer to a HighFive::Dataset object for the given path, dataspace, and properties.
+   *
+   * A new dataset will be created if it does not already exist.
+   *
+   * @tparam T The datatype of the dataset.
+   * @param dataset_path The path to the dataset.
+   * @param dataspace The dataspace of the dataset.
+   * @param properties The properties of the dataset.
+   * @return std::shared_ptr<HighFive::DataSet> A shared pointer to the HDF5 dataset.
+   */
+  template <class T>
+  std::shared_ptr<HighFive::DataSet> getHdf5DataSet(const std::string& dataset_path,
+                                                    const HighFive::DataSpace& dataspace,
+                                                    const HighFive::DataSetCreateProps& properties);
+
   /**
    * @brief get the labels of a group/dataset matching the general prefix (label type) and return the labels matching
    * the specified type. Also extract the category from the postfix
