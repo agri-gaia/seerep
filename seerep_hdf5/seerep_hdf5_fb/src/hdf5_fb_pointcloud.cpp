@@ -141,7 +141,7 @@ void Hdf5FbPointCloud::writeColorsRGB(const std::string& id, const std::vector<u
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "writing dataset to: " << hdf5ColorsPath;
 
   HighFive::DataSpace dataSpace({ height, width, 3 });
-  std::shared_ptr<HighFive::DataSet> colorsDatasetPtr = getHdf5DataSet<float>(hdf5ColorsPath, dataSpace);
+  std::shared_ptr<HighFive::DataSet> colorsDatasetPtr = getHdf5DataSet<uint8_t>(hdf5ColorsPath, dataSpace);
 
   std::vector<std::vector<std::vector<uint8_t>>> colorsData;
   colorsData.resize(height);
@@ -171,7 +171,7 @@ void Hdf5FbPointCloud::writeColorsRGBA(const std::string& id, const std::vector<
 
   HighFive::DataSpace dataSpace({ height, width, 4 });
 
-  std::shared_ptr<HighFive::DataSet> colorsDatasetPtr = getHdf5DataSet<float>(hdf5ColorsPath, dataSpace);
+  std::shared_ptr<HighFive::DataSet> colorsDatasetPtr = getHdf5DataSet<uint8_t>(hdf5ColorsPath, dataSpace);
 
   std::vector<std::vector<std::vector<uint8_t>>> colorsData;
   colorsData.resize(height);
