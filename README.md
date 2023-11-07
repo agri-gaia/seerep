@@ -20,7 +20,7 @@
 
 ## Maintainer
 
-[Mark Niemeyer](https://github.com/mhoellmann) <br>
+[Mark Niemeyer](https://github.com/Mark-Niemeyer) <br>
 [mark.niemeyer@dfki.de](mailto:mark.niemeyer@dfki.de)
 
 [German Research Center for Artificial Intelligence](https://www.dfki.de/en/web) <br>
