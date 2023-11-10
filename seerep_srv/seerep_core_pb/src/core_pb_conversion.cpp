@@ -19,6 +19,7 @@ seerep_core_msgs::Query CorePbConversion::fromPb(const seerep::pb::Query& query,
   fromFbQueryMaxNumData(query, queryCore);
   fromPbFullyEncapsulated(query, queryCore);
   fromPbInMapFrame(query, queryCore);
+  queryCore.sortByTime = query.sortbytime();
 
   return queryCore;
 }

@@ -486,6 +486,7 @@ def createQuery(
     polygon2d=None,
     fullyEncapsulated=False,
     inMapFrame=True,
+    sortByTime=False,
 ):
     '''Create a query, all parameters are optional'''
 
@@ -527,6 +528,7 @@ def createQuery(
     Query.AddWithoutdata(builder, withoutData)
     Query.AddFullyEncapsulated(builder, fullyEncapsulated)
     Query.AddInMapFrame(builder, inMapFrame)
+    Query.AddSortByTime(builder, sortByTime)
 
     return Query.End(builder)
 
