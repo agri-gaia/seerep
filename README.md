@@ -106,4 +106,12 @@ The [Doxygen](https://doxygen.nl/) based code documentation can be found [here](
   month = {9},
   publisher = {IEEE}
 }
+
+@inproceedings{Niemeyer2023Anchoring,
+  author = {Niemeyer, Mark and Renz, Marian and Hertzberg, Joachim},
+  title = {Object Anchoring for Autonomous Robots using the Spatio-Temporal-Semantic Environment Representation SEEREP},
+  booktitle = {KI 2023. German Conference on Artificial Intelligence (KI-2023), 46th, September 27-29, Berlin, Germany},
+  year = {2023},
+  publisher = {Springer}
+}
 ```
