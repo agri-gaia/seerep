@@ -562,6 +562,10 @@ flatbuffers::Offset<seerep::fb::CameraIntrinsics> toFlat(const sensor_msgs::Came
   {
     distortion.push_back(d);
   }
+  if (distortion.size() == 0)
+  {
+    distortion.push_back(0.0);
+  }
   auto distortionVector = builder.CreateVector(distortion);
 
   std::vector<double> intrinsicMatrix;
