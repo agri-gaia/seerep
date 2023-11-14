@@ -2,7 +2,8 @@
 
 namespace seerep_grpc_ros
 {
-JsonPointDumper::JsonPointDumper(const std::string& filePath, const std::string& hdf5FilePath)
+JsonPointDumper::JsonPointDumper(const std::string& filePath, const std::string& hdf5FilePath,
+                                 const std::string& dataSource, const std::string& classesMappingPath)
 {
   auto writeMtx = std::make_shared<std::mutex>();
   std::shared_ptr<HighFive::File> hdf5File =
@@ -13,6 +14,27 @@ JsonPointDumper::JsonPointDumper(const std::string& filePath, const std::string&
   ioCoreGeneral->writeProjectname(std::filesystem::path(filePath).filename());
   ioCoreGeneral->writeProjectFrameId("world");
 
+  if (dataSource == "uos")
+  {
+    readAndDumpJsonUos(filePath);
+  }
+  else if (dataSource == "fr")
+  {
+    readAndDumpJsonFr(filePath, classesMappingPath);
+  }
+  else
+  {
+    ROS_ERROR_STREAM("no valid data source. Set to \"uos\" or \"fr\"");
+  }
+}
+
+JsonPointDumper::~JsonPointDumper()
+{
+}
+
+void JsonPointDumper::readAndDumpJsonUos(const std::string& jsonFilePath)
+{
+  // uos data is in world coordinates; set to 0
   seerep_core_msgs::GeodeticCoordinates geoCoordinates;
   geoCoordinates.latitude = 0.0;
   geoCoordinates.longitude = 0.0;
@@ -20,23 +42,12 @@ JsonPointDumper::JsonPointDumper(const std::string& filePath, const std::string&
   geoCoordinates.coordinateSystem = "EPSG:32632";
   ioCoreGeneral->writeGeodeticLocation(geoCoordinates);
 
-  readAndDumpJson(filePath);
-}
-
-JsonPointDumper::~JsonPointDumper()
-{
-}
-
-void JsonPointDumper::readAndDumpJson(const std::string& jsonFilePath)
-{
   std::ifstream file(jsonFilePath, std::ifstream::binary);
   Json::Reader reader;
   // this will contain complete JSON data
   Json::Value completeJsonData;
   // reader reads the data and stores it in completeJsonData
   reader.parse(file, completeJsonData);
-  auto features = completeJsonData["features"];
-  std::cout << features[0] << std::endl;
 
   for (auto detection : completeJsonData["features"])
   {
@@ -69,11 +80,72 @@ void JsonPointDumper::readAndDumpJson(const std::string& jsonFilePath)
   }
 }
 
+void JsonPointDumper::readAndDumpJsonFr(const std::string& jsonFilePath, const std::string& classesMappingPath)
+{
+  std::ifstream file(jsonFilePath, std::ifstream::binary);
+  Json::Reader reader;
+  // this will contain complete JSON data
+  Json::Value completeJsonData;
+  // reader reads the data and stores it in completeJsonData
+  reader.parse(file, completeJsonData);
+
+  seerep_core_msgs::GeodeticCoordinates geoCoordinates;
+  geoCoordinates.latitude = completeJsonData["anchor_lla"]["latitude"].asDouble();
+  geoCoordinates.longitude = completeJsonData["anchor_lla"]["longitude"].asDouble();
+  geoCoordinates.altitude = 0.0;
+  geoCoordinates.coordinateSystem = "EPSG:4326";
+  ioCoreGeneral->writeGeodeticLocation(geoCoordinates);
+
+  std::unordered_map<int64_t, std::string> classesMapping = readClassesMapping(classesMappingPath);
+
+  for (auto detection : completeJsonData["plants"])
+  {
+    double x = detection["center_x"].asDouble();
+    double y = detection["center_y"].asDouble();
+    double z = 0.0;
+
+    double diameter = detection["areas"][0].asDouble();
+
+    std::string trivialName = classesMapping.at(detection["class_ids"][0].asInt());
+    std::string concept = translateNameToAgrovocConcept(trivialName);
+    double confidence = detection["confidences"][0].asDouble();
+
+    std::string instanceUUID = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+
+    ioPoint->writePoint(boost::lexical_cast<std::string>(boost::uuids::random_generator()()),
+                        createPointForDetection(0, 0, "map", concept, trivialName, instanceUUID, x, y, z, diameter,
+                                                confidence)
+                            .GetRoot());
+  }
+}
+
+std::unordered_map<int64_t, std::string> JsonPointDumper::readClassesMapping(const std::string& classesMappingPath)
+{
+  if (classesMappingPath == "")
+  {
+    throw(std::invalid_argument("classesMappingPath must be set when using fr data source"));
+  }
+  std::unordered_map<int64_t, std::string> classesMapping;
+
+  Json::Value classes;
+  std::ifstream classesFile(classesMappingPath, std::ifstream::binary);
+  classesFile >> classes;
+  for (auto& root : classes)
+  {
+    for (Json::Value::const_iterator itr = root.begin(); itr != root.end(); itr++)
+    {
+      ROS_INFO_STREAM(std::stoi(itr.key().asCString()) << " ; " << itr->asCString());
+      classesMapping.emplace(std::stoi(itr.key().asCString()), itr->asCString());
+    }
+  }
+  return classesMapping;
+}
+
 flatbuffers::grpc::Message<seerep::fb::PointStamped>
 JsonPointDumper::createPointForDetection(int32_t stampSecs, uint32_t stampNanos, const std::string& frameId,
                                          const std::string& labelAgrovoc, const std::string& labelTrivial,
                                          const std::string& instanceUUID, const double x, const double y,
-                                         const double z, const double diameter)
+                                         const double z, const double diameter, const double confidence)
 {
   std::string projectuuiddummy = "";
   flatbuffers::grpc::MessageBuilder builder;
@@ -86,12 +158,12 @@ JsonPointDumper::createPointForDetection(int32_t stampSecs, uint32_t stampNanos,
 
   std::vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>> labelAgrovocVector;
   labelAgrovocVector.push_back(seerep::fb::CreateLabelWithInstance(
-      builder, seerep::fb::CreateLabel(builder, builder.CreateString(labelAgrovoc), 1.0),
+      builder, seerep::fb::CreateLabel(builder, builder.CreateString(labelAgrovoc), confidence),
       builder.CreateString(instanceUUID)));
 
   std::vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>> labelTrivialVector;
   labelTrivialVector.push_back(seerep::fb::CreateLabelWithInstance(
-      builder, seerep::fb::CreateLabel(builder, builder.CreateString(labelTrivial), 1.0),
+      builder, seerep::fb::CreateLabel(builder, builder.CreateString(labelTrivial), confidence),
       builder.CreateString(instanceUUID)));
 
   std::vector<flatbuffers::Offset<seerep::fb::LabelsWithInstanceWithCategory>> labelsWithInstanceWithCategoryVector;
@@ -170,7 +242,7 @@ std::string JsonPointDumper::translateNameToAgrovocConcept(std::string name)
       // Check for errors
       if (res != CURLE_OK)
       {
-        std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
+        throw std::runtime_error("curl_easy_perform() failed: " + std::string(curl_easy_strerror(res)));
       }
       else
       {
@@ -236,17 +308,20 @@ int main(int argc, char** argv)
   ros::init(argc, argv, "seerep_ros_communication_JsonPointDumper");
   ros::NodeHandle privateNh("~");
 
-  std::string jsonFilePath;
+  std::string jsonFilePath, dataSource, classesMappingPath;
 
   const std::string hdf5FilePath = getHDF5FilePath(privateNh);
 
-  if (privateNh.getParam("jsonFilePath", jsonFilePath))
+  if (privateNh.getParam("jsonFilePath", jsonFilePath), privateNh.getParam("dataSource", dataSource),
+      privateNh.getParam("classesMappingPath", classesMappingPath))
   {
     {
       ROS_INFO_STREAM("hdf5FilePath: " << hdf5FilePath);
       ROS_INFO_STREAM("jsonFilePath: " << jsonFilePath);
+      ROS_INFO_STREAM("dataSource: " << dataSource);
+      ROS_INFO_STREAM("classesMappingPath: " << classesMappingPath);
 
-      seerep_grpc_ros::JsonPointDumper JsonPointDumper(jsonFilePath, hdf5FilePath);
+      seerep_grpc_ros::JsonPointDumper JsonPointDumper(jsonFilePath, hdf5FilePath, dataSource, classesMappingPath);
     }
   }
   else
