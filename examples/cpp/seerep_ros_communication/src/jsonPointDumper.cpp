@@ -5,6 +5,15 @@ namespace seerep_grpc_ros
 JsonPointDumper::JsonPointDumper(const std::string& filePath, const std::string& hdf5FilePath,
                                  const std::string& dataSource, const std::string& classesMappingPath)
 {
+  if (!std::filesystem::exists(filePath))
+  {
+    throw std::invalid_argument(filePath + " does not exist.");
+  }
+  if (!std::filesystem::exists(classesMappingPath))
+  {
+    throw std::invalid_argument(classesMappingPath + " does not exist.");
+  }
+
   auto writeMtx = std::make_shared<std::mutex>();
   std::shared_ptr<HighFive::File> hdf5File =
       std::make_shared<HighFive::File>(hdf5FilePath, HighFive::File::OpenOrCreate);
@@ -12,7 +21,6 @@ JsonPointDumper::JsonPointDumper(const std::string& filePath, const std::string&
   ioPoint = std::make_shared<seerep_hdf5_fb::Hdf5FbPoint>(hdf5File, writeMtx);
 
   ioCoreGeneral->writeProjectname(std::filesystem::path(filePath).filename());
-  ioCoreGeneral->writeProjectFrameId("world");
 
   if (dataSource == "uos")
   {
@@ -34,6 +42,9 @@ JsonPointDumper::~JsonPointDumper()
 
 void JsonPointDumper::readAndDumpJsonUos(const std::string& jsonFilePath)
 {
+  const std::string frame = "world";
+  ioCoreGeneral->writeProjectFrameId(frame);
+
   // uos data is in world coordinates; set to 0
   seerep_core_msgs::GeodeticCoordinates geoCoordinates;
   geoCoordinates.latitude = 0.0;
@@ -76,12 +87,15 @@ void JsonPointDumper::readAndDumpJsonUos(const std::string& jsonFilePath)
 
     ioPoint->writePoint(
         boost::lexical_cast<std::string>(boost::uuids::random_generator()()),
-        createPointForDetection(0, 0, "world", concept, trivialName, instanceUUID, x, y, z, diameter).GetRoot());
+        createPointForDetection(0, 0, frame, concept, trivialName, instanceUUID, x, y, z, diameter).GetRoot());
   }
 }
 
 void JsonPointDumper::readAndDumpJsonFr(const std::string& jsonFilePath, const std::string& classesMappingPath)
 {
+  const std::string frame = "map";
+  ioCoreGeneral->writeProjectFrameId(frame);
+
   std::ifstream file(jsonFilePath, std::ifstream::binary);
   Json::Reader reader;
   // this will contain complete JSON data
@@ -113,7 +127,7 @@ void JsonPointDumper::readAndDumpJsonFr(const std::string& jsonFilePath, const s
     std::string instanceUUID = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
 
     ioPoint->writePoint(boost::lexical_cast<std::string>(boost::uuids::random_generator()()),
-                        createPointForDetection(0, 0, "map", concept, trivialName, instanceUUID, x, y, z, diameter,
+                        createPointForDetection(0, 0, frame, concept, trivialName, instanceUUID, x, y, z, diameter,
                                                 confidence)
                             .GetRoot());
   }
