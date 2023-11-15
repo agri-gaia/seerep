@@ -11,6 +11,8 @@ from gRPC.meta import gRPC_pb_getOverallBound
 from gRPC.tf import gRPC_fb_getTf as get_tf
 from seerep.fb import TransformStamped, Vector3
 
+NANOS_FACTOR = 1e-9
+
 
 def test_gRPC_pb_getOverallBound(grpc_channel, project_setup) -> None:
     proj_name, proj_uuid = project_setup
@@ -26,10 +28,14 @@ def test_gRPC_pb_getOverallBound(grpc_channel, project_setup) -> None:
         tf_times, proj_uuid, grpc_channel
     )
 
-    sorted_tfs = sorted(tfs, key=lambda tf: tf.Header().Stamp().Seconds())
+    sorted_tfs = sorted(
+        tfs,
+        key=lambda tf: tf.Header().Stamp().Seconds()
+        + tf.Header().Stamp().Nanos() * NANOS_FACTOR,
+    )
 
     # get information such as timestamp, boundingbox, category, all labels of images in a specified project
-    timestamps: Set[int] = set()
+    timestamps: Set[Tuple[int, int]] = set()
     center_points: Set[Tuple[float, float]] = set()
     spatial_extents: Set[Tuple[float, float]] = set()
     categories: Set[str] = set()
@@ -38,7 +44,7 @@ def test_gRPC_pb_getOverallBound(grpc_channel, project_setup) -> None:
     for inner_lst in sent_grid:
         for img_lst in inner_lst:
             for _, img in img_lst:
-                timestamps.add(img.header.stamp.seconds)
+                timestamps.add((img.header.stamp.seconds, img.header.stamp.nanos))
                 for label_general in img.labels_general:
                     for label_with_instance in label_general.labelWithInstance:
                         labels.add(label_with_instance.label.label)
@@ -64,7 +70,11 @@ def test_gRPC_pb_getOverallBound(grpc_channel, project_setup) -> None:
     imgs_flattened = [
         img for inner_lst in sent_grid for img_lst in inner_lst for _, img in img_lst
     ]
-    imgs_sorted = sorted(imgs_flattened, key=lambda img: img.header.stamp.seconds)
+    imgs_sorted = sorted(
+        imgs_flattened,
+        key=lambda img: img.header.stamp.seconds
+        + img.header.stamp.nanos * NANOS_FACTOR,
+    )
 
     img_coords: List[Tuple] = []
     # find nearest tf for each image according to timestamp
@@ -72,24 +82,27 @@ def test_gRPC_pb_getOverallBound(grpc_channel, project_setup) -> None:
     for img in imgs_sorted:
         start = 0
         end = len(sorted_tfs) - 1
-        prev_ts = sorted_tfs[0].Header().Stamp().Seconds()
-        curr_ts = sorted_tfs[1].Header().Stamp().Seconds()
+        prev_ts = (
+            sorted_tfs[0].Header().Stamp().Seconds()
+            + sorted_tfs[0].Header().Stamp().Nanos() * NANOS_FACTOR
+        )
+        curr_ts = (
+            sorted_tfs[1].Header().Stamp().Seconds()
+            + sorted_tfs[1].Header().Stamp().Nanos() * NANOS_FACTOR
+        )
         curr_idx = 1
         while True:
-            if img.header.stamp.seconds == curr_ts:
+            img_time = img.header.stamp.seconds + img.header.stamp.nanos * NANOS_FACTOR
+            if img_time == curr_ts:
                 coordinate_trans = sorted_tfs[curr_idx].Transform().Translation()
                 img_coords.append((img, coordinate_trans))
                 break
 
-            if (
-                img.header.stamp.seconds < curr_ts
-                and curr_idx - 1 >= 0
-                and img.header.stamp.seconds > prev_ts
-            ):
+            if img_time < curr_ts and curr_idx - 1 >= 0 and img_time > prev_ts:
                 # interpolate coordinates
                 time_diff = curr_ts - prev_ts
-                weighted_diff_prev = (img.header.stamp.seconds - prev_ts) / time_diff
-                weighted_diff_curr = (curr_ts - img.header.stamp.seconds) / time_diff
+                weighted_diff_prev = (img_time - prev_ts) / time_diff
+                weighted_diff_curr = (curr_ts - img_time) / time_diff
                 w_x = (
                     weighted_diff_curr
                     * sorted_tfs[curr_idx].Transform().Translation().X()
@@ -125,20 +138,33 @@ def test_gRPC_pb_getOverallBound(grpc_channel, project_setup) -> None:
                 break
 
             # else search next tf stamp via binary search
-            elif img.header.stamp.seconds < curr_ts:
+            elif img_time < curr_ts:
                 end = curr_idx - 1
                 curr_idx = (start + end) // 2
-                curr_ts = sorted_tfs[curr_idx].Header().Stamp().Seconds()
+                curr_ts = (
+                    sorted_tfs[curr_idx].Header().Stamp().Seconds()
+                    + sorted_tfs[curr_idx].Header().Stamp().Nanos() * NANOS_FACTOR
+                )
                 if curr_idx - 1 >= 0:
-                    prev_ts = sorted_tfs[curr_idx - 1].Header().Stamp().Seconds()
+                    prev_ts = (
+                        sorted_tfs[curr_idx - 1].Header().Stamp().Seconds()
+                        + sorted_tfs[curr_idx - 1].Header().Stamp().Nanos()
+                        * NANOS_FACTOR
+                    )
                 else:
                     prev_ts = None
 
-            elif img.header.stamp.seconds > curr_ts:
+            elif img_time > curr_ts:
                 start = curr_idx + 1
                 curr_idx = (start + end) // 2
-                curr_ts = sorted_tfs[curr_idx].Header().Stamp().Seconds()
-                prev_ts = sorted_tfs[curr_idx - 1].Header().Stamp().Seconds()
+                curr_ts = (
+                    sorted_tfs[curr_idx].Header().Stamp().Seconds()
+                    + sorted_tfs[curr_idx].Header().Stamp().Nanos() * NANOS_FACTOR
+                )
+                prev_ts = (
+                    sorted_tfs[curr_idx - 1].Header().Stamp().Seconds()
+                    + sorted_tfs[curr_idx - 1].Header().Stamp().Nanos() * NANOS_FACTOR
+                )
 
     coords = [coord for _, coord in img_coords]
 
@@ -155,9 +181,16 @@ def test_gRPC_pb_getOverallBound(grpc_channel, project_setup) -> None:
     spatial_extent_y = max(y_coords) - min(y_coords)
     spatial_extent_z = max(z_coords) - min(z_coords)
 
+    timestamps_secs = [timestamp[0] for timestamp in timestamps]
+    timestamps_nanos = [timestamp[1] for timestamp in timestamps]
+
     # find min time in sets
-    min_time = min(timestamps)
-    max_time = max(timestamps)
+    min_time_s = min(timestamps_secs)
+    max_time_s = max(timestamps_secs)
+
+    # find min time in sets
+    min_time_nanos = min(timestamps_nanos)
+    max_time_nanos = max(timestamps_nanos)
 
     # retrieve the values received by the example
     (
@@ -198,8 +231,11 @@ def test_gRPC_pb_getOverallBound(grpc_channel, project_setup) -> None:
     assert resp_overall_bb.spatial_extent.y == spatial_extent_y
     assert resp_overall_bb.spatial_extent.z == spatial_extent_z
 
-    assert resp_overall_time_intervall.time_min.seconds == min_time
-    assert resp_overall_time_intervall.time_max.seconds == max_time
+    assert resp_overall_time_intervall.time_min.seconds == min_time_s
+    assert resp_overall_time_intervall.time_max.seconds == max_time_s
+
+    assert resp_overall_time_intervall.time_min.nanos == min_time_nanos
+    assert resp_overall_time_intervall.time_max.nanos == max_time_nanos
 
     assert set(resp_all_categories.categories) == categories
     assert set(resp_all_labels.labels) == labels
