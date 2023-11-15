@@ -33,6 +33,7 @@ from seerep.fb import (
     RegionOfInterest,
     TimeInterval,
     Timestamp,
+    Transform,
     TransformStamped,
     TransformStampedQuery,
     UuidDatatypePair,
@@ -370,7 +371,7 @@ def createBoundingBox2dLabeledStamped(builder, header, labelsBb):
 
 
 def createBoundingBoxLabeledStamped(builder, header, labelsBb):
-    '''Creates a labeled bounding box in flatbuffers'''
+    """Creates a labeled bounding box in flatbuffers"""
     BoundingBoxesLabeledStamped.StartLabelsBbVector(builder, len(labelsBb))
     for labelBb in reversed(labelsBb):
         builder.PrependUOffsetTRelative(labelBb)
@@ -741,6 +742,13 @@ def createQuaternion(builder, quat):
     Quaternion.AddZ(builder, quat.z)
     Quaternion.AddW(builder, quat.w)
     return Quaternion.End(builder)
+
+
+def createTransform(builder, t, quat):
+    Transform.Start(builder)
+    Transform.AddTranslation(builder, t)
+    Transform.AddRotation(builder, quat)
+    return Transform.End(builder)
 
 
 def createTransformStamped(builder, childFrame, headerTf, transform):

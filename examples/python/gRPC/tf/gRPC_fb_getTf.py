@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from typing import List
+from typing import List, Tuple
 
 import flatbuffers
 from google.protobuf import empty_pb2
@@ -17,8 +17,9 @@ from seerep.util.fb_helper import (
 )
 
 
+# where tf_times_list is a list which contains elements of the form Tuple[SECONDS, NANOSECONDS]
 def get_tfs(
-    tf_times_list: List[int],
+    tf_times_list: List[Tuple[int, int]],
     target_proj_uuid: str = None,
     grpc_channel: Channel = get_gRPC_channel(),
 ) -> List[TransformStamped.TransformStamped]:
@@ -46,8 +47,8 @@ def get_tfs(
     tf_per_time: List[TransformStamped.TransformStamped] = []
 
     for time in tf_times_list:
-        time_sec = time
-        time_nano = 0
+        time_sec = time[0]
+        time_nano = time[1]
 
         frame = "map"
 
