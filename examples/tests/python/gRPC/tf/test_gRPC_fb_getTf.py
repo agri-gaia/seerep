@@ -114,31 +114,30 @@ def test_gRPC_fb_getTf(grpc_channel, project_setup):
     interp_tfs = []
     for idx in range(len(sent_tfs_base) - 1):
         tf = deepcopy(sent_tfs_base[0])
+        sent_idx_stamp = sent_tfs_base[idx]["Header"]["Stamp"]
+        sent_idxpp_stamp = sent_tfs_base[idx + 1]["Header"]["Stamp"]
         # recalculate time factor, due to numeric errors in float and int calculations
         time_factor = (
-            (interp_times[idx][0] - sent_tfs_base[idx]["Header"]["Stamp"]["Seconds"])
-            + (interp_times[idx][1] - sent_tfs_base[idx]["Header"]["Stamp"]["Nanos"])
-            * NANOS_FACTOR
+            (interp_times[idx][0] - sent_idx_stamp["Seconds"])
+            + (interp_times[idx][1] - sent_idx_stamp["Nanos"]) * NANOS_FACTOR
         ) / (
-            sent_tfs_base[idx + 1]["Header"]["Stamp"]["Seconds"]
-            - sent_tfs_base[idx]["Header"]["Stamp"]["Seconds"]
-            + (
-                sent_tfs_base[idx]["Header"]["Stamp"]["Nanos"]
-                - sent_tfs_base[idx]["Header"]["Stamp"]["Nanos"]
-            )
-            * NANOS_FACTOR
+            sent_idxpp_stamp["Seconds"]
+            - sent_idx_stamp["Seconds"]
+            + (sent_idxpp_stamp["Nanos"] - sent_idx_stamp["Nanos"]) * NANOS_FACTOR
         )
+        sent_idx_tf_translation = sent_tfs_base[idx]["Transform"]["Translation"]
+        sent_idxpp_tf_translation = sent_tfs_base[idx + 1]["Transform"]["Translation"]
         tf["Transform"]["Translation"]["X"] = (
-            sent_tfs_base[idx]["Transform"]["Translation"]["X"] * (1 - time_factor)
-            + time_factor * sent_tfs_base[idx + 1]["Transform"]["Translation"]["X"]
+            sent_idx_tf_translation["X"] * (1 - time_factor)
+            + time_factor * sent_idxpp_tf_translation["X"]
         )
         tf["Transform"]["Translation"]["Y"] = (
-            sent_tfs_base[idx]["Transform"]["Translation"]["Y"] * (1 - time_factor)
-            + time_factor * sent_tfs_base[idx + 1]["Transform"]["Translation"]["Y"]
+            sent_idx_tf_translation["Y"] * (1 - time_factor)
+            + time_factor * sent_idxpp_tf_translation["Y"]
         )
         tf["Transform"]["Translation"]["Z"] = (
-            sent_tfs_base[idx]["Transform"]["Translation"]["Z"] * (1 - time_factor)
-            + time_factor * sent_tfs_base[idx + 1]["Transform"]["Translation"]["Z"]
+            sent_idx_tf_translation["Z"] * (1 - time_factor)
+            + time_factor * sent_idxpp_tf_translation["Z"]
         )
         tf["Header"]["Stamp"]["Seconds"] = interp_times[idx][0]
         tf["Header"]["Stamp"]["Nanos"] = interp_times[idx][1]
