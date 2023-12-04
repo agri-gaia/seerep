@@ -34,35 +34,39 @@ void Hdf5FbPointCloud::writePointCloud2(const std::string& id, const seerep::fb:
   m_file->flush();
 }
 
-void Hdf5FbPointCloud::computeBoundingBox(std::array<float, 3>& min, std::array<float, 3>& max, const float& x,
-                                          const float& y, const float& z)
+std::pair<seerep_core_msgs::Point, seerep_core_msgs::Point>
+Hdf5FbPointCloud::computeBoundingBox(const seerep::fb::PointCloud2& pcl)
 {
-  if (x < min[0])
-  {
-    min[0] = x;
-  }
-  if (x > max[0])
-  {
-    max[0] = x;
-  }
+  seerep_core_msgs::Point min_corner = { std::numeric_limits<float>::max(), std::numeric_limits<float>::max(),
+                                         std::numeric_limits<float>::max() };
+  seerep_core_msgs::Point max_corner = { std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest(),
+                                         std::numeric_limits<float>::lowest() };
 
-  if (y < min[1])
-  {
-    min[1] = y;
-  }
-  if (y > max[1])
-  {
-    max[1] = y;
-  }
+  // TODO: Do we really need to PCL iterator in this case?
+  seerep_hdf5_fb::PointCloud2ConstIterator<float> x_ptr(pcl.data()->data(), getOffset(pcl, "x"), pcl.point_step(),
+                                                        pcl.height(), pcl.width());
+  seerep_hdf5_fb::PointCloud2ConstIterator<float> y_ptr(pcl.data()->data(), getOffset(pcl, "y"), pcl.point_step(),
+                                                        pcl.height(), pcl.width());
+  seerep_hdf5_fb::PointCloud2ConstIterator<float> z_ptr(pcl.data()->data(), getOffset(pcl, "z"), pcl.point_step(),
+                                                        pcl.height(), pcl.width());
 
-  if (z < min[2])
+  for (size_t i = 0; i < pcl.data()->size(); i += pcl.point_step())
   {
-    min[2] = z;
+    const float& x = *x_ptr;
+    const float& y = *y_ptr;
+    const float& z = *z_ptr;
+
+    ++x_ptr, ++y_ptr, ++z_ptr;
+
+    min_corner.set<0>(std::min(min_corner.get<0>(), x));
+    min_corner.set<1>(std::min(min_corner.get<1>(), y));
+    min_corner.set<2>(std::min(min_corner.get<2>(), z));
+
+    max_corner.set<0>(std::max(max_corner.get<0>(), x));
+    max_corner.set<1>(std::max(max_corner.get<1>(), y));
+    max_corner.set<2>(std::max(max_corner.get<2>(), z));
   }
-  if (z > max[2])
-  {
-    max[2] = z;
-  }
+  return std::make_pair(min_corner, max_corner);
 }
 
 void Hdf5FbPointCloud::writeGeneralAttributes(std::shared_ptr<HighFive::Group>& dataGroupPtr,

@@ -22,6 +22,7 @@
 
 namespace seerep_hdf5_fb
 {
+
 class Hdf5FbPointCloud : public Hdf5FbGeneral
 {
 public:
@@ -40,6 +41,17 @@ public:
    * @param pcl The PCL message to write.
    */
   void writePointCloud2(const std::string& uuid, const seerep::fb::PointCloud2& pcl);
+
+  /**
+   * Computes the axis-aligned bounding box (AABB) of a PCL.
+   *
+   * @param pcl The PCL to compute the bounding box for.
+   * @return std::pair<Point, Point> The minimum and maximum corner of the AABB.
+   *
+   * @note We assume that the x,y and z channel are in float32.
+   */
+  std::pair<seerep_core_msgs::Point, seerep_core_msgs::Point> computeBoundingBox(const seerep::fb::PointCloud2& pcl);
+
   /**
    * @brief Write a BoundingBoxes flatbuffers message to hdf5
    *
@@ -105,18 +117,6 @@ private:
       writeAttributeToHdf5<std::vector<uint32_t>>(object, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_COUNT, counts);
     }
   }
-
-  /**
-   * @brief Computes the bounding box while iterating over the point cloud
-   *
-   * @param min reference to an array to store the min x, y, z
-   * @param max reference to an array to store the max x, y, z
-   * @param x current x
-   * @param y current y
-   * @param z current z
-   */
-  void computeBoundingBox(std::array<float, 3>& min, std::array<float, 3>& max, const float& x, const float& y,
-                          const float& z);
 
   /**
    * @brief Write general attributes of the point cloud to the hdf5 group
