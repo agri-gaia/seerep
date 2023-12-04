@@ -53,29 +53,22 @@ Hdf5FbPointCloud::computeBoundingBox(const seerep::fb::PointCloud2& pcl)
   seerep_core_msgs::Point max_corner = { std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest(),
                                          std::numeric_limits<float>::lowest() };
 
-  // TODO: Do we really need to PCL iterator in this case?
-  seerep_hdf5_fb::PointCloud2ConstIterator<float> x_ptr(pcl.data()->data(), getOffset(pcl, "x"), pcl.point_step(),
-                                                        pcl.height(), pcl.width());
-  seerep_hdf5_fb::PointCloud2ConstIterator<float> y_ptr(pcl.data()->data(), getOffset(pcl, "y"), pcl.point_step(),
-                                                        pcl.height(), pcl.width());
-  seerep_hdf5_fb::PointCloud2ConstIterator<float> z_ptr(pcl.data()->data(), getOffset(pcl, "z"), pcl.point_step(),
-                                                        pcl.height(), pcl.width());
+  const float* x = reinterpret_cast<const float*>(pcl.data()->data() + getOffset(pcl, "x"));
+  const float* y = reinterpret_cast<const float*>(pcl.data()->data() + getOffset(pcl, "y"));
+  const float* z = reinterpret_cast<const float*>(pcl.data()->data() + getOffset(pcl, "z"));
 
+  size_t inc = pcl.point_step() / sizeof(float);
   for (size_t i = 0; i < pcl.data()->size(); i += pcl.point_step())
   {
-    const float& x = *x_ptr;
-    const float& y = *y_ptr;
-    const float& z = *z_ptr;
+    min_corner.set<0>(std::min(min_corner.get<0>(), *x));
+    min_corner.set<1>(std::min(min_corner.get<1>(), *y));
+    min_corner.set<2>(std::min(min_corner.get<2>(), *z));
 
-    ++x_ptr, ++y_ptr, ++z_ptr;
+    max_corner.set<0>(std::max(max_corner.get<0>(), *x));
+    max_corner.set<1>(std::max(max_corner.get<1>(), *y));
+    max_corner.set<2>(std::max(max_corner.get<2>(), *z));
 
-    min_corner.set<0>(std::min(min_corner.get<0>(), x));
-    min_corner.set<1>(std::min(min_corner.get<1>(), y));
-    min_corner.set<2>(std::min(min_corner.get<2>(), z));
-
-    max_corner.set<0>(std::max(max_corner.get<0>(), x));
-    max_corner.set<1>(std::max(max_corner.get<1>(), y));
-    max_corner.set<2>(std::max(max_corner.get<2>(), z));
+    x += inc, y += inc, z += inc;
   }
   return std::make_pair(min_corner, max_corner);
 }
