@@ -34,6 +34,17 @@ void Hdf5FbPointCloud::writePointCloud2(const std::string& id, const seerep::fb:
   m_file->flush();
 }
 
+void Hdf5FbPointCloud::writeBoundingBox(const std::string& uuid, const seerep_core_msgs::Point& min_corner,
+                                        const seerep_core_msgs::Point& max_corner)
+{
+  std::shared_ptr<HighFive::Group> dataGroupPtr =
+      getHdf5Group(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + uuid);
+  std::vector<float> bb{ min_corner.get<0>(), min_corner.get<1>(), min_corner.get<2>(),
+                         max_corner.get<0>(), max_corner.get<1>(), max_corner.get<2>() };
+  writeAttributeToHdf5<std::vector<float>>(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX, bb);
+  m_file->flush();
+}
+
 std::pair<seerep_core_msgs::Point, seerep_core_msgs::Point>
 Hdf5FbPointCloud::computeBoundingBox(const seerep::fb::PointCloud2& pcl)
 {

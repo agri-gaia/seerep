@@ -34,22 +34,17 @@ void CoreFbPointCloud::getData(const seerep::fb::Query* query,
   }
 }
 
-// TODO refactor only a temporary solution
-boost::uuids::uuid CoreFbPointCloud::addData(const seerep::fb::PointCloud2& pc)
+boost::uuids::uuid CoreFbPointCloud::addData(const seerep::fb::PointCloud2& pcl)
 {
-  std::vector<float> boundingBox;
-
-  seerep_core_msgs::DatasetIndexable dataForIndices = CoreFbConversion::fromFb(pc);
+  seerep_core_msgs::DatasetIndexable dataForIndices = CoreFbConversion::fromFb(pcl);
 
   auto hdf5io = CoreFbGeneral::getHdf5(dataForIndices.header.uuidProject, m_seerepCore, m_hdf5IoMap);
-  hdf5io->writePointCloud2(boost::lexical_cast<std::string>(dataForIndices.header.uuidData), pc, boundingBox);
+  auto [min_corner, max_corner] = hdf5io->computeBoundingBox(pcl);
+  hdf5io->writePointCloud2(boost::lexical_cast<std::string>(dataForIndices.header.uuidData), pcl);
+  hdf5io->writeBoundingBox(boost::lexical_cast<std::string>(dataForIndices.header.uuidData), min_corner, max_corner);
 
-  dataForIndices.boundingbox.min_corner().set<0>(boundingBox[0]);
-  dataForIndices.boundingbox.min_corner().set<1>(boundingBox[1]);
-  dataForIndices.boundingbox.min_corner().set<2>(boundingBox[2]);
-  dataForIndices.boundingbox.max_corner().set<0>(boundingBox[3]);
-  dataForIndices.boundingbox.max_corner().set<1>(boundingBox[4]);
-  dataForIndices.boundingbox.max_corner().set<2>(boundingBox[5]);
+  dataForIndices.boundingbox.min_corner() = min_corner;
+  dataForIndices.boundingbox.max_corner() = max_corner;
 
   m_seerepCore->addDataset(dataForIndices);
 

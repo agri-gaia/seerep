@@ -53,6 +53,16 @@ public:
   std::pair<seerep_core_msgs::Point, seerep_core_msgs::Point> computeBoundingBox(const seerep::fb::PointCloud2& pcl);
 
   /**
+   * @brief Writes the axis aliged bounding box (AABB) to the PCL group.
+   *
+   * @param uuid The UUID of the PCL.
+   * @param min_corner The minimum corner of the AABB
+   * @param max_corner The maximum corner of the AABB.
+   */
+  void writeBoundingBox(const std::string& uuid, const seerep_core_msgs::Point& min_corner,
+                        const seerep_core_msgs::Point& max_corner);
+
+  /**
    * @brief Write a BoundingBoxes flatbuffers message to hdf5
    *
    * @param id the uuid of the image data group
