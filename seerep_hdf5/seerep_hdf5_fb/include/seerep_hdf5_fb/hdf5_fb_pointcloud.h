@@ -144,6 +144,16 @@ private:
                         std::vector<uint32_t>& offsets, std::vector<uint32_t>& counts, std::vector<uint8_t>& datatypes);
 
   /**
+   * @brief Returns the offset of a channel relative to the start of a point.
+   *
+   * @param pcl The pcl message.
+   * @param channel_name The name of the channel.
+   * @return The offset of the channel.
+   * @throws runtime_error when the requested channel is not present in the pcl.
+   */
+  uint32_t getChannelOffset(const seerep::fb::PointCloud2& pcl, const std::string& channel_name) const;
+
+  /**
    * @brief Returns the offset for a rgb(a) channel.
    *
    * The rgb(a) color information of a point is packed into a single uint32.

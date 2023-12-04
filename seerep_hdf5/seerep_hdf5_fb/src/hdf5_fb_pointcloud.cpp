@@ -53,9 +53,9 @@ Hdf5FbPointCloud::computeBoundingBox(const seerep::fb::PointCloud2& pcl)
   seerep_core_msgs::Point max_corner = { std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest(),
                                          std::numeric_limits<float>::lowest() };
 
-  const float* x = reinterpret_cast<const float*>(pcl.data()->data() + getOffset(pcl, "x"));
-  const float* y = reinterpret_cast<const float*>(pcl.data()->data() + getOffset(pcl, "y"));
-  const float* z = reinterpret_cast<const float*>(pcl.data()->data() + getOffset(pcl, "z"));
+  const float* x = reinterpret_cast<const float*>(pcl.data()->data() + getChannelOffset(pcl, "x"));
+  const float* y = reinterpret_cast<const float*>(pcl.data()->data() + getChannelOffset(pcl, "y"));
+  const float* z = reinterpret_cast<const float*>(pcl.data()->data() + getChannelOffset(pcl, "z"));
 
   size_t inc = pcl.point_step() / sizeof(float);
   for (size_t i = 0; i < pcl.data()->size(); i += pcl.point_step())
@@ -233,6 +233,23 @@ Hdf5FbPointCloud::readPointFieldsOffset(flatbuffers::grpc::MessageBuilder& build
     pointFields.push_back(pointField.Finish());
   }
   return builder.CreateVector(pointFields);
+}
+
+uint32_t Hdf5FbPointCloud::getChannelOffset(const seerep::fb::PointCloud2& pcl, const std::string& channel_name) const
+{
+  for (size_t i = 0; i < pcl.fields()->size(); i++)
+  {
+    const seerep::fb::PointField* field = pcl.fields()->Get(i);
+    if (field->name()->str() == channel_name)
+    {
+      return field->offset();
+    }
+    else if (field->name()->str() == "rgb" || field->name()->str() == "rgba")
+    {
+      return getRgbaOffset(channel_name, field->offset(), pcl.is_bigendian());
+    }
+  }
+  throw std::runtime_error("Requested field: " + channel_name + " does not exist!");
 }
 
 uint32_t Hdf5FbPointCloud::getRgbaOffset(const std::string& channel_name, uint32_t base_offset, bool is_big_endian) const
