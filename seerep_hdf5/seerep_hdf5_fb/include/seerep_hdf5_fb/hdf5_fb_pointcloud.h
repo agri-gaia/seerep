@@ -95,38 +95,15 @@ private:
   };
 
   /**
-   * @brief Writes information about point fields as attributes to hdf5
+   * @brief Writes the channel description and the layout of the binary payload to HDF5.
    *
-   * @param object HighFive object to write to (representing a data set or data group)
-   * @param pointFields flatbuffers vector of the point fields to write
+   * @tparam T HDF5 object type (group or dataset).
+   * @param object The object to annotate.
+   * @param pointFields The vector of point fields to write.
    */
   template <typename T>
   void writePointFieldAttributes(HighFive::AnnotateTraits<T>& object,
-                                 const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::PointField>>* pointFields)
-  {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "writing point field attributes to hdf5";
-
-    if (pointFields)
-    {
-      std::vector<std::string> names;
-      std::vector<uint32_t> offsets, counts;
-      std::vector<uint8_t> datatypes;
-
-      for (auto pointField : *pointFields)
-      {
-        names.push_back(pointField->name()->str());
-        offsets.push_back(pointField->offset());
-        datatypes.push_back(static_cast<uint8_t>(pointField->datatype()));
-        counts.push_back(pointField->count());
-      }
-
-      writeAttributeToHdf5<std::vector<std::string>>(object, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_NAME, names);
-      writeAttributeToHdf5<std::vector<uint32_t>>(object, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_OFFSET, offsets);
-      writeAttributeToHdf5<std::vector<uint8_t>>(object, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_DATATYPE,
-                                                 datatypes);
-      writeAttributeToHdf5<std::vector<uint32_t>>(object, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_COUNT, counts);
-    }
-  }
+                                 const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::PointField>>* pointFields);
 
   /**
    * @brief Write general attributes of the point cloud to the hdf5 group
@@ -235,6 +212,9 @@ private:
    */
   uint32_t rgbaOffset(const std::string& fieldName, uint32_t offset, bool isBigendian);
 };
+
 }  // namespace seerep_hdf5_fb
+
+#include "impl/hdf5_fb_pointcloud.hpp"
 
 #endif /* SEEREP_HDF5_FB_HDF5_FB_POINT_CLOUD_H_ */
