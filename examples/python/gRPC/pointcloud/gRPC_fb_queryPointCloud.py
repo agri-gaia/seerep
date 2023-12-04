@@ -81,13 +81,20 @@ query = createQuery(
 builder.Finish(query)
 buf = builder.Output()
 
+
+def unpack_header(point_cloud: PointCloud2.PointCloud2) -> dict:
+    """Extract the header from a Flatbuffer pcl message"""
+    return {
+        "uuid_msgs": point_cloud.Header().UuidMsgs().decode("utf-8"),
+        "uuid_project": point_cloud.Header().UuidProject().decode("utf-8"),
+        "frame_id": point_cloud.Header().FrameId().decode("utf-8"),
+    }
+
+
 for responseBuf in stubPointCloud.GetPointCloud2(bytes(buf)):
     response = PointCloud2.PointCloud2.GetRootAs(responseBuf)
 
-    print("---Header---")
-    print(f"Message UUID: {response.Header().UuidMsgs().decode('utf-8')}")
-    print(f"Project UUID: {response.Header().UuidProject().decode('utf-8')}")
-    print(f"Frame ID: {response.Header().FrameId().decode('utf-8')}")
+    print(f"---Header--- \n {unpack_header(response)}")
 
     print("---Point Fields---")
     for i in range(response.FieldsLength()):
