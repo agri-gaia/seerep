@@ -9,7 +9,7 @@ Hdf5FbPointCloud::Hdf5FbPointCloud(std::shared_ptr<HighFive::File>& file, std::s
 {
 }
 
-void Hdf5FbPointCloud::writePointCloud2(const std::string& id, const seerep::fb::PointCloud2& cloud)
+void Hdf5FbPointCloud::writePointCloud2(const std::string& id, const seerep::fb::PointCloud2& pcl)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
@@ -19,18 +19,18 @@ void Hdf5FbPointCloud::writePointCloud2(const std::string& id, const seerep::fb:
 
   std::shared_ptr<HighFive::Group> dataGroupPtr = getHdf5Group(hdf5GroupPath);
 
-  writeGeneralAttributes(dataGroupPtr, cloud);
+  writeGeneralAttributes(dataGroupPtr, pcl);
 
-  writeHeaderAttributes(*dataGroupPtr, cloud.header());
+  writeHeaderAttributes(*dataGroupPtr, pcl.header());
 
-  writePointFieldAttributes(*dataGroupPtr, cloud.fields());
+  writePointFieldAttributes(*dataGroupPtr, pcl.fields());
 
-  writeBoundingBoxLabeled(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, id, cloud.labels_bb());
-  writeLabelsGeneral(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, id, cloud.labels_general());
+  writeBoundingBoxLabeled(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, id, pcl.labels_bb());
+  writeLabelsGeneral(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, id, pcl.labels_general());
 
-  HighFive::DataSpace dataSpace{ cloud.data()->size() };
+  HighFive::DataSpace dataSpace{ pcl.data()->size() };
   std::shared_ptr<HighFive::DataSet> payloadPtr = getHdf5DataSet<uint8_t>(hdf5GroupPath + "/points", dataSpace);
-  payloadPtr->write(std::move(cloud.data()->data()));
+  payloadPtr->write(std::move(pcl.data()->data()));
   m_file->flush();
 }
 
