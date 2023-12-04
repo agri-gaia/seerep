@@ -163,27 +163,6 @@ private:
   void readPointFields(const std::string& id, std::shared_ptr<HighFive::Group> dataGroupPtr,
                        std::vector<std::string>& names, std::vector<uint32_t>& offsets, std::vector<uint32_t>& counts,
                        std::vector<uint8_t>& datatypes);
-  /**
-   * @brief Helper method to construct a flatbuffers vector of LabelWithInstance
-   *
-   * @param builder reference to the used flatbuffers builder
-   * @param id the uuid of the point cloud
-   * @return flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>>
-   *         flatbuffers vector of LabelWithInstance
-   */
-  // flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>>
-  // readLabelsGeneralOffset(flatbuffers::grpc::MessageBuilder& builder, const std::string& id);
-
-  /**
-   * @brief Helper method to construct a flatbuffers vector of BoundingBoxLabeled
-   *
-   * @param builder reference to the used flatbuffers builder
-   * @param id the uuid of the point cloud
-   * @return flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>>>
-   *         flatbuffers vector of BoundingBoxLabeled
-   */
-  // flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>>>
-  // readLabelsBoundingBoxOffset(flatbuffers::grpc::MessageBuilder& builder, const std::string& id);
 
   /**
    * @brief Helper method to construct a flatbuffers vector of pointFields
