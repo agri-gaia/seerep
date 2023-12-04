@@ -34,11 +34,10 @@ public:
   Hdf5FbPointCloud(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
 
   /**
-   * @brief Method for writing a flatbuffers PointCloud2 message to hdf5
+   * @brief Writes a Flatbuffers PointCloud2 message to HDF5.
    *
-   * @param uuid the uuid of the point cloud
-   * @param pointcloud2 the received PointCloud2 message
-   * @param boundingBox reference to an vector which get's the computed boundingBox during write of x,y,z
+   * @param uuid The UUID of the PCL.
+   * @param pcl The PCL message to write.
    */
   void writePointCloud2(const std::string& uuid, const seerep::fb::PointCloud2& pcl);
   /**
