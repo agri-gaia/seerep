@@ -82,18 +82,6 @@ public:
 
 private:
   /**
-   * @brief struct to store information about the PointCloud2
-   *
-   */
-  struct CloudInfo
-  {
-    bool has_points = false;
-    bool has_rgb = false;
-    bool has_rgba = false;
-    bool has_normals = false;
-  };
-
-  /**
    * @brief Writes the channel description and the layout of the binary payload to HDF5.
    *
    * @tparam T HDF5 object type (group or dataset).
@@ -154,22 +142,6 @@ private:
   flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::PointField>>>
   readPointFieldsOffset(flatbuffers::grpc::MessageBuilder& builder, std::vector<std::string>& names,
                         std::vector<uint32_t>& offsets, std::vector<uint32_t>& counts, std::vector<uint8_t>& datatypes);
-
-  /**
-   * @brief Get information about the fields of a point cloud from a flatbuffers PointCloud2 message
-   *
-   * @param cloud the point cloud to get the information about
-   * @return CloudInfo extracted information in form of a CloudInfo struct
-   */
-  CloudInfo getCloudInfo(const seerep::fb::PointCloud2& cloud);
-
-  /**
-   * @brief Get information about the fields of a point cloud from a vector of fields
-   *
-   * @param fields vector of field names of a point cloud
-   * @return CloudInfo extracted information in form of a CloudInfo struct
-   */
-  CloudInfo getCloudInfo(const std::vector<std::string>& fields);
 
   /**
    * @brief Get the offset of a field from a flatbuffers PointCloud2 message
