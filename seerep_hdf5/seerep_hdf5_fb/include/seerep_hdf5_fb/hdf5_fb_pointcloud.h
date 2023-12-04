@@ -144,32 +144,6 @@ private:
                         std::vector<uint32_t>& offsets, std::vector<uint32_t>& counts, std::vector<uint8_t>& datatypes);
 
   /**
-   * @brief Get the offset of a field from a flatbuffers PointCloud2 message
-   *
-   * @param cloud the point cloud to get the information from
-   * @param fieldName the name of the field to get the offset for
-   * @return uint32_t offset of the fieldName
-   */
-  uint32_t getOffset(const seerep::fb::PointCloud2& cloud, const std::string& fieldName);
-
-  std::vector<uint32_t> getOffsets(const seerep::fb::PointCloud2& cloud, const std::vector<std::string>& fields);
-
-  /**
-   * @brief Get the offset of a field from hdf5
-   *
-   * @param names the names of the pointFields
-   * @param offsets the offsets of the pointFields
-   * @param fieldName the fieldName to get the offset for
-   * @param isBigendian endianness of the point cloud
-   * @return uint32_t the offset of the fieldName
-   */
-  uint32_t getOffset(const std::vector<std::string>& names, const std::vector<uint32_t>& offsets,
-                     const std::string& fieldName, bool isBigendian);
-
-  std::vector<uint32_t> getOffsets(const std::vector<std::string>& names, const std::vector<uint32_t>& offsets,
-                                   bool isBigendian, const std::vector<std::string>& fields);
-
-  /**
    * @brief Returns the offset for a rgb(a) channel.
    *
    * The rgb(a) color information of a point is packed into a single uint32.
