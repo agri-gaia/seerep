@@ -9,8 +9,7 @@ Hdf5FbPointCloud::Hdf5FbPointCloud(std::shared_ptr<HighFive::File>& file, std::s
 {
 }
 
-void Hdf5FbPointCloud::writePointCloud2(const std::string& id, const seerep::fb::PointCloud2& cloud,
-                                        std::vector<float>& boundingBox)
+void Hdf5FbPointCloud::writePointCloud2(const std::string& id, const seerep::fb::PointCloud2& cloud)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
@@ -29,30 +28,9 @@ void Hdf5FbPointCloud::writePointCloud2(const std::string& id, const seerep::fb:
   writeBoundingBoxLabeled(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, id, cloud.labels_bb());
   writeLabelsGeneral(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, id, cloud.labels_general());
 
-  CloudInfo info = getCloudInfo(cloud);
-
-  if (info.has_points)
-  {
-    writePoints(id, getOffsets(cloud, std::vector<std::string>{ "x", "y", "z" }), cloud.data()->data(),
-                cloud.point_step(), cloud.height(), cloud.width(), dataGroupPtr, boundingBox);
-  }
-
-  if (info.has_rgb)
-  {
-    writeColorsRGB(id, getOffsets(cloud, std::vector<std::string>{ "r", "g", "b" }), cloud.data()->data(),
-                   cloud.point_step(), cloud.height(), cloud.width());
-  }
-
-  if (info.has_rgba)
-  {
-    writeColorsRGBA(id, getOffsets(cloud, std::vector<std::string>{ "r", "g", "b", "a" }), cloud.data()->data(),
-                    cloud.point_step(), cloud.height(), cloud.width());
-  }
-
-  // TODO normals
-
-  // TODO other fields
-
+  HighFive::DataSpace dataSpace{ cloud.data()->size() };
+  std::shared_ptr<HighFive::DataSet> payloadPtr = getHdf5DataSet<uint8_t>(hdf5GroupPath + "/points", dataSpace);
+  payloadPtr->write(std::move(cloud.data()->data()));
   m_file->flush();
 }
 
@@ -85,116 +63,6 @@ void Hdf5FbPointCloud::computeBoundingBox(std::array<float, 3>& min, std::array<
   {
     max[2] = z;
   }
-}
-
-void Hdf5FbPointCloud::writePoints(const std::string& id, const std::vector<uint32_t>& offsets, const uint8_t* data,
-                                   uint32_t pointStep, uint32_t height, uint32_t width,
-                                   const std::shared_ptr<HighFive::Group>& groupPtr, std::vector<float>& boundingBox)
-{
-  const std::string hdf5PointsPath = seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + id + "/points";
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "writing dataset to: " << hdf5PointsPath;
-
-  HighFive::DataSpace dataSpace({ height, width, 3 });
-  std::shared_ptr<HighFive::DataSet> pointsDatasetPtr = getHdf5DataSet<float>(hdf5PointsPath, dataSpace);
-
-  std::vector<std::vector<std::vector<float>>> pointData;
-  pointData.resize(height);
-
-  std::array<float, 3> min, max;
-  min[0] = min[1] = min[2] = std::numeric_limits<float>::max();
-  max[0] = max[1] = max[2] = std::numeric_limits<float>::min();
-
-  seerep_hdf5_fb::PointCloud2ConstIterator<float> xIter(data, offsets[0], pointStep, height, width);
-  seerep_hdf5_fb::PointCloud2ConstIterator<float> yIter(data, offsets[1], pointStep, height, width);
-  seerep_hdf5_fb::PointCloud2ConstIterator<float> zIter(data, offsets[2], pointStep, height, width);
-
-  for (size_t row = 0; row < height; row++)
-  {
-    pointData[row].reserve(width);
-    for (size_t col = 0; col < width; col++)
-    {
-      const float& x = *xIter;
-      const float& y = *yIter;
-      const float& z = *zIter;
-
-      computeBoundingBox(min, max, x, y, z);
-
-      pointData[row].push_back(std::vector{ x, y, z });
-
-      ++xIter, ++yIter, ++zIter;
-    }
-  }
-
-  // min (x, y, z), max (x,y,z)
-  boundingBox.insert(boundingBox.end(), { min[0], min[1], min[2], max[0], max[1], max[2] });
-
-  // write bounding box as data group attribute
-  writeAttributeToHdf5(*groupPtr, seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX, boundingBox);
-
-  pointsDatasetPtr->write(pointData);
-}
-
-void Hdf5FbPointCloud::writeColorsRGB(const std::string& id, const std::vector<uint32_t>& offsets, const uint8_t* data,
-                                      uint32_t pointStep, uint32_t height, uint32_t width)
-{
-  const std::string hdf5ColorsPath = seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + id + "/colors";
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "writing dataset to: " << hdf5ColorsPath;
-
-  HighFive::DataSpace dataSpace({ height, width, 3 });
-  std::shared_ptr<HighFive::DataSet> colorsDatasetPtr = getHdf5DataSet<float>(hdf5ColorsPath, dataSpace);
-
-  std::vector<std::vector<std::vector<uint8_t>>> colorsData;
-  colorsData.resize(height);
-
-  seerep_hdf5_fb::PointCloud2ConstIterator<uint8_t> rIter(data, offsets[0], pointStep, height, width);
-  seerep_hdf5_fb::PointCloud2ConstIterator<uint8_t> gIter(data, offsets[1], pointStep, height, width);
-  seerep_hdf5_fb::PointCloud2ConstIterator<uint8_t> bIter(data, offsets[2], pointStep, height, width);
-
-  for (size_t row = 0; row < height; row++)
-  {
-    colorsData[row].reserve(width);
-    for (size_t col = 0; col < width; col++)
-    {
-      colorsData[row].push_back(std::vector{ *rIter, *gIter, *bIter });
-      ++rIter, ++gIter, ++bIter;
-    }
-  }
-
-  colorsDatasetPtr->write(colorsData);
-}
-
-void Hdf5FbPointCloud::writeColorsRGBA(const std::string& id, const std::vector<uint32_t>& offsets, const uint8_t* data,
-                                       uint32_t pointStep, uint32_t height, uint32_t width)
-{
-  const std::string hdf5ColorsPath = seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + id + "/colors";
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "writing dataset to: " << hdf5ColorsPath;
-
-  HighFive::DataSpace dataSpace({ height, width, 4 });
-
-  std::shared_ptr<HighFive::DataSet> colorsDatasetPtr = getHdf5DataSet<float>(hdf5ColorsPath, dataSpace);
-
-  std::vector<std::vector<std::vector<uint8_t>>> colorsData;
-  colorsData.resize(height);
-
-  seerep_hdf5_fb::PointCloud2ConstIterator<uint8_t> rIter(data, offsets[0], pointStep, height, width);
-  seerep_hdf5_fb::PointCloud2ConstIterator<uint8_t> gIter(data, offsets[1], pointStep, height, width);
-  seerep_hdf5_fb::PointCloud2ConstIterator<uint8_t> bIter(data, offsets[2], pointStep, height, width);
-  seerep_hdf5_fb::PointCloud2ConstIterator<uint8_t> aIter(data, offsets[3], pointStep, height, width);
-
-  for (size_t row = 0; row < height; row++)
-  {
-    colorsData[row].reserve(width);
-    for (size_t col = 0; col < width; col++)
-    {
-      colorsData[row].push_back(std::vector{ *rIter, *gIter, *bIter, *aIter });
-      ++rIter;
-      ++gIter;
-      ++bIter;
-      ++aIter;
-    }
-  }
-
-  colorsDatasetPtr->write(colorsData);
 }
 
 void Hdf5FbPointCloud::writeGeneralAttributes(std::shared_ptr<HighFive::Group>& dataGroupPtr,
@@ -277,41 +145,14 @@ Hdf5FbPointCloud::readPointCloud2(const std::string& id, const bool withoutData)
   auto pointFieldsVectorOffset = readPointFieldsOffset(builder, names, offsets, counts, datatypes);
 
   flatbuffers::uoffset_t dataOffset;
+  uint8_t* data;
   if (!withoutData)
   {
-    // get info about the point cloud
-    CloudInfo info = getCloudInfo(names);
-
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
-        << "reading point cloud data of: " << hdf5GroupPath;
-
-    // pointer to the pre-allocated array
-    uint8_t* data;
-    // allocate height * width * pointSetp bytes
     dataOffset = builder.CreateUninitializedVector(height * width * pointStep, sizeof(uint8_t), &data);
-
-    if (info.has_points)
-    {
-      readPoints(id, getOffsets(names, offsets, isBigendian, std::vector<std::string>{ "x", "y", "z" }), data,
-                 pointStep, height, width);
-    }
-
-    if (info.has_rgb)
-    {
-      readColorsRGB(id, getOffsets(names, offsets, isBigendian, std::vector<std::string>{ "r", "g", "b" }), data,
-                    pointStep, height, width);
-    }
-
-    if (info.has_rgba)
-    {
-      readColorsRGBA(id, getOffsets(names, offsets, isBigendian, std::vector<std::string>{ "r", "g", "b", "a" }), data,
-                     pointStep, height, width);
-    }
+    HighFive::DataSet payloadDataset = m_file->getDataSet(hdf5GroupPath + "/points");
+    payloadDataset.read(data);
   }
 
-  // TODO add normals
-
-  // TODO add other fields
   auto labelsGeneralOffset =
       readGeneralLabels(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, id, builder);
 
@@ -365,96 +206,6 @@ void Hdf5FbPointCloud::readPointFields(const std::string& id, std::shared_ptr<Hi
                                                         seerep_hdf5_core::Hdf5CorePointCloud::FIELD_COUNT);
   datatypes = readAttributeFromHdf5<std::vector<uint8_t>>(id, *dataGroupPtr,
                                                           seerep_hdf5_core::Hdf5CorePointCloud::FIELD_DATATYPE);
-}
-
-void Hdf5FbPointCloud::readPoints(const std::string& id, const std::vector<uint32_t>& offsets, uint8_t* data,
-                                  uint32_t pointStep, uint32_t height, uint32_t width)
-{
-  const std::string hdf5DatasetPointsPath =
-      seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + id + "/points";
-
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
-      << "reading points from: " << hdf5DatasetPointsPath;
-
-  HighFive::DataSet pointsDataset = m_file->getDataSet(hdf5DatasetPointsPath);
-
-  std::vector<std::vector<std::vector<float>>> pointData;
-  pointsDataset.read(pointData);
-
-  seerep_hdf5_fb::PointCloud2Iterator<float> xIter(data, offsets[0], pointStep, height, width);
-  seerep_hdf5_fb::PointCloud2Iterator<float> yIter(data, offsets[1], pointStep, height, width);
-  seerep_hdf5_fb::PointCloud2Iterator<float> zIter(data, offsets[2], pointStep, height, width);
-
-  for (auto col : pointData)
-  {
-    for (auto row : col)
-    {
-      *xIter = row[0];
-      *yIter = row[1];
-      *zIter = row[2];
-      ++xIter, ++yIter, ++zIter;
-    }
-  }
-}
-
-void Hdf5FbPointCloud::readColorsRGB(const std::string& id, const std::vector<uint32_t>& offsets, uint8_t* data,
-                                     uint32_t pointStep, uint32_t height, uint32_t width)
-{
-  const std::string hdf5DatasetPointsPath =
-      seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + id + "/colors";
-
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "reading rgb from: " << hdf5DatasetPointsPath;
-
-  HighFive::DataSet colorsDataset = m_file->getDataSet(hdf5DatasetPointsPath);
-
-  std::vector<std::vector<std::vector<float>>> colorData;
-  colorsDataset.read(colorData);
-
-  seerep_hdf5_fb::PointCloud2Iterator<uint8_t> rIter(data, offsets[0], pointStep, height, width);
-  seerep_hdf5_fb::PointCloud2Iterator<uint8_t> gIter(data, offsets[1], pointStep, height, width);
-  seerep_hdf5_fb::PointCloud2Iterator<uint8_t> bIter(data, offsets[2], pointStep, height, width);
-
-  for (auto col : colorData)
-  {
-    for (auto row : col)
-    {
-      *rIter = row[0];
-      *gIter = row[1];
-      *bIter = row[2];
-      ++rIter, ++gIter, ++bIter;
-    }
-  }
-}
-
-void Hdf5FbPointCloud::readColorsRGBA(const std::string& id, const std::vector<uint32_t>& offsets, uint8_t* data,
-                                      uint32_t pointStep, uint32_t height, uint32_t width)
-{
-  const std::string hdf5DatasetPointsPath =
-      seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + id + "/colors";
-
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "reading rgba from: " << hdf5DatasetPointsPath;
-
-  HighFive::DataSet colorsDataset = m_file->getDataSet(hdf5DatasetPointsPath);
-
-  std::vector<std::vector<std::vector<float>>> colorData;
-  colorsDataset.read(colorData);
-
-  seerep_hdf5_fb::PointCloud2Iterator<uint8_t> rIter(data, offsets[0], pointStep, height, width);
-  seerep_hdf5_fb::PointCloud2Iterator<uint8_t> gIter(data, offsets[1], pointStep, height, width);
-  seerep_hdf5_fb::PointCloud2Iterator<uint8_t> bIter(data, offsets[2], pointStep, height, width);
-  seerep_hdf5_fb::PointCloud2Iterator<uint8_t> aIter(data, offsets[3], pointStep, height, width);
-
-  for (auto col : colorData)
-  {
-    for (auto row : col)
-    {
-      *rIter = row[0];
-      *gIter = row[1];
-      *bIter = row[2];
-      *aIter = row[3];
-      ++rIter, ++gIter, ++bIter, ++aIter;
-    }
-  }
 }
 
 flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::PointField>>>

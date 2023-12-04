@@ -40,8 +40,7 @@ public:
    * @param pointcloud2 the received PointCloud2 message
    * @param boundingBox reference to an vector which get's the computed boundingBox during write of x,y,z
    */
-  void writePointCloud2(const std::string& uuid, const seerep::fb::PointCloud2& pointcloud2,
-                        std::vector<float>& boundingBox);
+  void writePointCloud2(const std::string& uuid, const seerep::fb::PointCloud2& pcl);
   /**
    * @brief Write a BoundingBoxes flatbuffers message to hdf5
    *
@@ -121,49 +120,6 @@ private:
                           const float& z);
 
   /**
-   * @brief Write x,y,z of a point cloud to a /points dataset
-   *
-   * @param id the uuid of the point cloud
-   * @param offsets the offsets of the x,y,z fields
-   * @param data pointer to a const uint8_t array to read the elements from
-   * @param pointStep the point step of the point cloud
-   * @param height the height of the point cloud (1 of unorganized point clouds)
-   * @param width the width of the point cloud
-   * @param groupPtr shared pointer to the data group of the point cloud.
-   *        (Used to add a bounding box of x,y,z as an attribute of the point cloud)
-   * @param boundingBox reference to vector to write the computed boundingBox
-   */
-  void writePoints(const std::string& id, const std::vector<uint32_t>& offsets, const uint8_t* data, uint32_t pointStep,
-                   uint32_t height, uint32_t width, const std::shared_ptr<HighFive::Group>& groupPtr,
-                   std::vector<float>& boundingBox);
-
-  /**
-   * @brief Write r,g,b of a point cloud to a /colors dataset
-   *
-   * @param id the uuid of the point cloud
-   * @param offsets the offsets of the r,g,b fields
-   * @param data pointer to a const uint8_t array to read the elements from
-   * @param pointStep the point step of the point cloud
-   * @param height the height of the point cloud (1 of unorganized point clouds)
-   * @param width the width of the point cloud
-   */
-  void writeColorsRGB(const std::string& id, const std::vector<uint32_t>& offsets, const uint8_t* data,
-                      uint32_t pointStep, uint32_t height, uint32_t width);
-
-  /**
-   * @brief Write r,g,b,a of a point cloud to a /colors dataset
-   *
-   * @param id the uuid of the point cloud
-   * @param offsets the offsets of the r,g,b,a fields
-   * @param data pointer to a const uint8_t array to read the elements from
-   * @param pointStep the point step of the point cloud
-   * @param height the height of the point cloud (1 of unorganized point clouds)
-   * @param width the width of the point cloud
-   */
-  void writeColorsRGBA(const std::string& id, const std::vector<uint32_t>& offsets, const uint8_t* data,
-                       uint32_t pointStep, uint32_t height, uint32_t width);
-
-  /**
    * @brief Write general attributes of the point cloud to the hdf5 group
    *
    * @param dataGroupPtr shared point to the data group
@@ -198,43 +154,6 @@ private:
   void readPointFields(const std::string& id, std::shared_ptr<HighFive::Group> dataGroupPtr,
                        std::vector<std::string>& names, std::vector<uint32_t>& offsets, std::vector<uint32_t>& counts,
                        std::vector<uint8_t>& datatypes);
-  /**
-   * @brief Read x,y,z from hdf5
-   *
-   * @param id the uuid of the point cloud
-   * @param offsets the offsets of the x,y,z fields
-   * @param data pointer to a uint8_t array to store the data in
-   * @param pointStep the pointStep of the point cloud
-   * @param height the height of the point cloud (1 for unorganized point clouds)
-   * @param width the width the width of the point cloud
-   */
-  void readPoints(const std::string& id, const std::vector<uint32_t>& offsets, uint8_t* data, uint32_t pointStep,
-                  uint32_t height, uint32_t width);
-  /**
-   * @brief Read r,g,b from hdf5
-   *
-   * @param id the uuid of the point cloud
-   * @param offsets the offsets of the r,g,b fields
-   * @param data pointer to a uint8_t array to store the data in
-   * @param pointStep the pointStep of the point cloud
-   * @param height the height of the point cloud (1 for unorganized point clouds)
-   * @param width the width the width of the point cloud
-   */
-  void readColorsRGB(const std::string& id, const std::vector<uint32_t>& offsets, uint8_t* data, uint32_t pointStep,
-                     uint32_t height, uint32_t width);
-  /**
-   * @brief Read r,g,b,a from hdf5
-   *
-   * @param id the uuid of the point cloud
-   * @param offsets the offsets of the r,g,b,a fields
-   * @param data pointer to a uint8_t array to store the data in
-   * @param pointStep the pointStep of the point cloud
-   * @param height the height of the point cloud (1 for unorganized point clouds)
-   * @param width the width the width of the point cloud
-   */
-  void readColorsRGBA(const std::string& id, const std::vector<uint32_t>& offsets, uint8_t* data, uint32_t pointStep,
-                      uint32_t height, uint32_t width);
-
   /**
    * @brief Helper method to construct a flatbuffers vector of LabelWithInstance
    *
