@@ -82,6 +82,16 @@ builder.Finish(query)
 buf = builder.Output()
 
 
+def unpack_point_fields(point_cloud: PointCloud2.PointCloud2) -> dict:
+    """Extract the point fields from a Flatbuffer pcl message"""
+    return {
+        "name": [point_cloud.Fields(i).Name().decode("utf-8") for i in range(point_cloud.FieldsLength())],
+        "datatype": [point_cloud.Fields(i).Datatype() for i in range(point_cloud.FieldsLength())],
+        "offset": [point_cloud.Fields(i).Offset() for i in range(point_cloud.FieldsLength())],
+        "count": [point_cloud.Fields(i).Count() for i in range(point_cloud.FieldsLength())],
+    }
+
+
 def unpack_header(point_cloud: PointCloud2.PointCloud2) -> dict:
     """Extract the header from a Flatbuffer pcl message"""
     return {
@@ -96,12 +106,7 @@ for responseBuf in stubPointCloud.GetPointCloud2(bytes(buf)):
 
     print(f"---Header--- \n {unpack_header(response)}")
 
-    print("---Point Fields---")
-    for i in range(response.FieldsLength()):
-        print(f"Field Name: {response.Fields(i).Name().decode('utf-8')}")
-        print(f"Datatype: {response.Fields(i).Datatype()}")
-        print(f"Offset: {response.Fields(i).Offset()}")
-        print(f"Count: {response.Fields(i).Count()}")
+    print(f"---Point Fields--- \n {unpack_point_fields(response)}")
 
     print("---Bounding Box Labels---")
     for i in range(response.LabelsBbLength()):
