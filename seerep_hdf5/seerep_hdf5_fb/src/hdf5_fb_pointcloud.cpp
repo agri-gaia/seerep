@@ -339,7 +339,7 @@ uint32_t Hdf5FbPointCloud::getOffset(const std::vector<std::string>& names, cons
     {
       if (names[i] == "rgb" || names[i] == "rgba")
       {
-        return rgbaOffset(fieldName, offsets[i], isBigendian);
+        return getRgbaOffset(fieldName, offsets[i], isBigendian);
       }
     }
   }
@@ -379,7 +379,7 @@ uint32_t Hdf5FbPointCloud::getOffset(const seerep::fb::PointCloud2& cloud, const
 
       if (field.name()->str() == "rgb" || field.name()->str() == "rgba")
       {
-        return rgbaOffset(fieldName, field.offset(), cloud.is_bigendian());
+        return getRgbaOffset(fieldName, field.offset(), cloud.is_bigendian());
       }
     }
   }
@@ -397,53 +397,25 @@ std::vector<uint32_t> Hdf5FbPointCloud::getOffsets(const seerep::fb::PointCloud2
   return calcOffsets;
 }
 
-uint32_t Hdf5FbPointCloud::rgbaOffset(const std::string& fieldName, uint32_t offset, bool isBigendian)
+uint32_t Hdf5FbPointCloud::getRgbaOffset(const std::string& channel_name, uint32_t base_offset, bool is_big_endian) const
 {
-  if (fieldName == "r")
+  if (channel_name == "r")
   {
-    if (isBigendian)
-    {
-      return offset + 1;
-    }
-    else
-    {
-      return offset + 2;
-    }
+    return is_big_endian ? base_offset + 1 : base_offset + 2;
   }
-  if (fieldName == "g")
+  if (channel_name == "g")
   {
-    if (isBigendian)
-    {
-      return offset + 2;
-    }
-    else
-    {
-      return offset + 1;
-    }
+    return is_big_endian ? base_offset + 2 : base_offset + 1;
   }
-  if (fieldName == "b")
+  if (channel_name == "b")
   {
-    if (isBigendian)
-    {
-      return offset + 3;
-    }
-    else
-    {
-      return offset + 0;
-    }
+    return is_big_endian ? base_offset + 3 : base_offset + 0;
   }
-  if (fieldName == "a")
+  if (channel_name == "a")
   {
-    if (isBigendian)
-    {
-      return offset + 0;
-    }
-    else
-    {
-      return offset + 3;
-    }
+    return is_big_endian ? base_offset + 0 : base_offset + 3;
   }
-  throw std::runtime_error("Field " + fieldName + " does not exist!");
+  throw std::runtime_error("Requested field: " + channel_name + " does not exist!");
 }
 
 }  // namespace seerep_hdf5_fb
