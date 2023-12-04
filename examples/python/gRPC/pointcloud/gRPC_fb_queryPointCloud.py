@@ -18,6 +18,7 @@ from seerep.util.fb_helper import (
     createTimeInterval,
     createTimeStamp,
     getProject,
+    rosToNumpyDtype,
 )
 
 channel = get_gRPC_channel()
@@ -74,9 +75,9 @@ query = createQuery(
     projectUuids=projectUuids,
     # instanceUuids=instanceUuids,
     # dataUuids=dataUuids,
-    withoutData=True,
-    polygon2d=polygon2d,
-    fullyEncapsulated=True,
+    withoutData=False,
+    # polygon2d=polygon2d,
+    # fullyEncapsulated=True,
 )
 builder.Finish(query)
 buf = builder.Output()
@@ -106,7 +107,8 @@ for responseBuf in stubPointCloud.GetPointCloud2(bytes(buf)):
 
     print(f"---Header--- \n {unpack_header(response)}")
 
-    print(f"---Point Fields--- \n {unpack_point_fields(response)}")
+    point_fields = unpack_point_fields(response)
+    print(f"---Point Fields--- \n {point_fields}")
 
     print("---Bounding Box Labels---")
     for i in range(response.LabelsBbLength()):
@@ -132,9 +134,15 @@ for responseBuf in stubPointCloud.GetPointCloud2(bytes(buf)):
         print(f"Label {i}: {response.LabelsGeneral(i).Label().decode('utf-8')}")
         print(f"Instance {i}: {response.LabelsGeneral(i).InstanceUuid().decode('utf-8')}")
 
-    print("---Data--")
     if not response.DataIsNone():
-        rawData = response.DataAsNumpy()
-        data = [struct.unpack('f', rawData[i : i + 4]) for i in range(0, rawData.shape[0], 4)]
-        reshapedData = np.array(data).reshape(960, 1280, 4)
-        print(f"Data: {reshapedData}")
+        dtypes = np.dtype(
+            {
+                "names": point_fields["name"],
+                "formats": [rosToNumpyDtype(datatype) for datatype in point_fields["datatype"]],
+                "offsets": point_fields["offset"],
+                "itemsize": response.PointStep(),
+            }
+        )
+
+        decoded_payload = np.frombuffer(response.DataAsNumpy(), dtype=dtypes)
+        print(f"---Data--- \n {decoded_payload}")
