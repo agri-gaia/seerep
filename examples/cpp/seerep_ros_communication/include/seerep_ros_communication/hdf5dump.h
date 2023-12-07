@@ -7,9 +7,10 @@
 // seerep
 #include <seerep_hdf5_core/hdf5_core_general.h>
 #include <seerep_hdf5_core/hdf5_core_image.h>
+#include <seerep_hdf5_fb/hdf5_fb_pointcloud.h>
 #include <seerep_hdf5_pb/hdf5_pb_image.h>
-#include <seerep_hdf5_pb/hdf5_pb_pointcloud.h>
 #include <seerep_hdf5_pb/hdf5_pb_tf.h>
+#include <seerep_ros_conversions_fb/conversions.h>
 #include <seerep_ros_conversions_pb/conversions.h>
 
 // uuid
@@ -56,7 +57,7 @@ private:
   std::vector<seerep_core_msgs::LabelsWithInstanceWithCategory> m_labelsWithInstanceWithCategory;
 
   std::shared_ptr<seerep_hdf5_pb::Hdf5PbTf> m_ioTf;
-  std::shared_ptr<seerep_hdf5_pb::Hdf5PbPointCloud> m_ioPointCloud;
+  std::shared_ptr<seerep_hdf5_fb::Hdf5FbPointCloud> m_ioPointCloud;
   std::shared_ptr<seerep_hdf5_pb::Hdf5PbImage> m_ioImage;
   std::shared_ptr<seerep_hdf5_core::Hdf5CoreImage> m_ioImageCore;
   ros::NodeHandle nh;

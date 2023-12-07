@@ -131,12 +131,15 @@ target_link_libraries(
   ${PROJECT_NAME}_hdf5dump
   ${SeerepCom_LIBRARIES}
   ${seerep_ros_conversions_pb_LIBRARIES}
+  ${seerep_ros_conversions_fb_LIBRARIES}
   ${SeerepHdf5Pb_LIBRARIES}
+  ${SeerepHdf5Fb_LIBRARIES}
   ${SeerepHdf5Core_LIBRARIES}
   ${catkin_LIBRARIES}
   ${Boost_LIBRARIES}
   ${Boost_LOG_LIBRARY}
   ${Boost_LOG_SETUP_LIBRARY}
+  gRPC::grpc++_reflection
 )
 target_link_libraries(
   ${PROJECT_NAME}_querier

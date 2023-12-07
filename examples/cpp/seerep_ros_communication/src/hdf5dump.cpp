@@ -29,7 +29,7 @@ DumpSensorMsgs::DumpSensorMsgs(std::string hdf5FilePath, std::string project_fra
   ioGeneral.writeProjectname(project_name);
 
   m_ioTf = std::make_shared<seerep_hdf5_pb::Hdf5PbTf>(hdf5_file, write_mtx);
-  m_ioPointCloud = std::make_shared<seerep_hdf5_pb::Hdf5PbPointCloud>(hdf5_file, write_mtx);
+  m_ioPointCloud = std::make_shared<seerep_hdf5_fb::Hdf5FbPointCloud>(hdf5_file, write_mtx);
   m_ioImage = std::make_shared<seerep_hdf5_pb::Hdf5PbImage>(hdf5_file, write_mtx);
   m_ioImageCore = std::make_shared<seerep_hdf5_core::Hdf5CoreImage>(hdf5_file, write_mtx);
 }
@@ -46,7 +46,13 @@ void DumpSensorMsgs::dump(const sensor_msgs::PointCloud2::ConstPtr& msg) const
   ROS_INFO_STREAM("Dump point cloud 2 with uuid: " << uuid);
   try
   {
-    m_ioPointCloud->writePointCloud2(uuid, seerep_ros_conversions_pb::toProto(*msg));
+    std::string uuid = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+    /*
+   TODO: Temporary workaround because the Protobuf HDF5 PCL storage produces the wrong '\points' dataset layout,
+   due to the changes introduced in PR #354. It uses an NxM dimensional float dataset instead of an 1x(N*M) byte
+   dataset. This workaround should be removed as soon as the Protobuf PCL storage is ported to the new layout.
+    */
+    m_ioPointCloud->writePointCloud2(uuid, *seerep_ros_conversions_fb::toFlat(*msg, uuid, std::string("")).GetRoot());
   }
   catch (const std::exception& e)
   {
