@@ -42,11 +42,10 @@ void DumpSensorMsgs::dump(const std_msgs::Header::ConstPtr& msg) const
 
 void DumpSensorMsgs::dump(const sensor_msgs::PointCloud2::ConstPtr& msg) const
 {
-  std::string uuid = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
-  ROS_INFO_STREAM("Dump point cloud 2 with uuid: " << uuid);
   try
   {
     std::string uuid = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+    ROS_INFO_STREAM("Dump point cloud 2 with uuid: " << uuid);
     /*
    TODO: Temporary workaround because the Protobuf HDF5 PCL storage produces the wrong '\points' dataset layout,
    due to the changes introduced in PR #354. It uses an NxM dimensional float dataset instead of an 1x(N*M) byte
