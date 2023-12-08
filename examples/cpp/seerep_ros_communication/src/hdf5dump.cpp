@@ -52,7 +52,11 @@ void DumpSensorMsgs::dump(const sensor_msgs::PointCloud2::ConstPtr& msg) const
    due to the changes introduced in PR #354. It uses an NxM dimensional float dataset instead of an 1x(N*M) byte
    dataset. This workaround should be removed as soon as the Protobuf PCL storage is ported to the new layout.
     */
-    m_ioPointCloud->writePointCloud2(uuid, *seerep_ros_conversions_fb::toFlat(*msg, uuid, std::string("")).GetRoot());
+    auto pcl = seerep_ros_conversions_fb::toFlat(*msg, uuid);
+    // TODO: ... ::toFlat(*msg, uuid).GetRoot() causes a segfault when accessing the data field of the pcl?!?
+    auto [min_corner, max_corner] = m_ioPointCloud->computeBoundingBox(*pcl.GetRoot());
+    m_ioPointCloud->writeBoundingBox(uuid, min_corner, max_corner);
+    m_ioPointCloud->writePointCloud2(uuid, *pcl.GetRoot());
   }
   catch (const std::exception& e)
   {
