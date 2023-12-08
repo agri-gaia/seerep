@@ -96,7 +96,7 @@ sensor_msgs::PointField toROS(const seerep::fb::PointField& point_field);
  * @return gRPC Flatbuffer PointCloud2 message
  */
 flatbuffers::grpc::Message<seerep::fb::PointCloud2> toFlat(const sensor_msgs::PointCloud2& cloud,
-                                                           std::string projectuuid, std::string msguuid);
+                                                           std::string projectuuid, const std::string& msguuid = "");
 /**
  * @brief Converts a ROS sensor_msgs/PointCloud2 message to the corresponding
  * Flatbuffer PointCloud2 message
@@ -107,7 +107,8 @@ flatbuffers::grpc::Message<seerep::fb::PointCloud2> toFlat(const sensor_msgs::Po
  * @return Flatbuffer PointCloud2 message
  */
 flatbuffers::Offset<seerep::fb::PointCloud2> toFlat(const sensor_msgs::PointCloud2& cloud, std::string projectuuid,
-                                                    flatbuffers::grpc::MessageBuilder& builder, std::string msguuid);
+                                                    flatbuffers::grpc::MessageBuilder& builder,
+                                                    const std::string& msguuid = "");
 
 /**
  * @brief Converts a Flatbuffer PointCloud2 message to the corresponding

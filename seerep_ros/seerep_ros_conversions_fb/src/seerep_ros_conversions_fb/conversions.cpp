@@ -81,7 +81,7 @@ sensor_msgs::PointField toROS(const seerep::fb::PointField& point_field)
  * PointCloud2
  */
 flatbuffers::grpc::Message<seerep::fb::PointCloud2> toFlat(const sensor_msgs::PointCloud2& cloud,
-                                                           std::string projectuuid, std::string msguuid = "")
+                                                           std::string projectuuid, const std::string& msguuid)
 {
   flatbuffers::grpc::MessageBuilder builder;
   builder.Finish(toFlat(cloud, projectuuid, builder, msguuid));
@@ -89,7 +89,7 @@ flatbuffers::grpc::Message<seerep::fb::PointCloud2> toFlat(const sensor_msgs::Po
 }
 flatbuffers::Offset<seerep::fb::PointCloud2> toFlat(const sensor_msgs::PointCloud2& cloud, std::string projectuuid,
                                                     flatbuffers::grpc::MessageBuilder& builder,
-                                                    std::string msguuid = "")
+                                                    const std::string& msguuid)
 {
   auto header = toFlat(cloud.header, projectuuid, builder, msguuid);
 
