@@ -1,5 +1,6 @@
 import flatbuffers
 import numpy as np
+import open3d as o3d
 from seerep.fb import PointCloud2
 from seerep.fb import point_cloud_service_grpc_fb as pointCloudService
 from seerep.util.common import get_gRPC_channel
@@ -35,6 +36,34 @@ def unpack_header(point_cloud: PointCloud2.PointCloud2) -> dict:
         "uuid_project": point_cloud.Header().UuidProject().decode("utf-8"),
         "frame_id": point_cloud.Header().FrameId().decode("utf-8"),
     }
+
+
+# TODO: move into visaualization module
+def draw_pcl(points: np.ndarray, point_colors: np.ndarray = None, draw_origin=True) -> None:
+    """Visualize a point cloud using Open3D
+
+    Based on https://github.com/open-mmlab/OpenPCDet/blob/255db8f02a8bd07211d2c91f54602d63c4c93356/tools/visual_utils/open3d_vis_utils.py#L38
+    """
+    vis = o3d.visualization.Visualizer()
+    vis.create_window()
+
+    vis.get_render_option().point_size = 1.0
+    vis.get_render_option().background_color = np.zeros(3)
+
+    if draw_origin:
+        vis.add_geometry(o3d.geometry.TriangleMesh.create_coordinate_frame(size=1.0, origin=np.zeros(3)))
+
+    pts = o3d.geometry.PointCloud()
+    pts.points = o3d.utility.Vector3dVector(points)
+
+    vis.add_geometry(pts)
+    if point_colors:
+        pts.colors = o3d.utility.Vector3dVector(point_colors)
+    else:
+        pts.colors = o3d.utility.Vector3dVector(np.ones((points.shape[0], 3)))
+
+    vis.run()
+    vis.destroy_window()
 
 
 fb_builder = flatbuffers.Builder(1024)
