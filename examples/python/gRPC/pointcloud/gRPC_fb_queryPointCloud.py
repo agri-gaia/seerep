@@ -132,5 +132,17 @@ for responseBuf in pcl_stub.GetPointCloud2(bytes(fb_builder.Output())):
 
             print(f"---Is dense--- \n {response.IsDense()}")
             print(f"---Payload--- \n {decoded_payload}")
+            points = np.array([decoded_payload["x"], decoded_payload["y"], decoded_payload["z"]]).T.astype(np.float64)
+
+            print("-" * 13)
+            # Not using the keyboard lib because it requires root privileges in linux to access the raw device files.
+            while True:
+                print("Visualize the point cloud? (Y/N)", end=" ")
+                user_input = input().lower()
+                if user_input == "y" or not user_input:
+                    draw_pcl(points)
+                    break
+                else:
+                    break
     else:
         print("No response received")
