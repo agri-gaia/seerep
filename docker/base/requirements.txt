@@ -12,3 +12,4 @@ twine==4.0.2
 build==0.10.0
 setuptools==65.7.0
 matplotlib==3.6.3
+open3d==0.17.0
