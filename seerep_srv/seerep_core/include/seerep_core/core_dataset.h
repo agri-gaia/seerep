@@ -300,15 +300,8 @@ private:
    */
   std::vector<boost::uuids::uuid>
   sortResultByTime(std::optional<std::vector<seerep_core_msgs::AabbTimeIdPair>>& timetree_result,
-                   std::set<boost::uuids::uuid> intersectionResult);
-  /**
-   * @brief does the actual sorting for the sortResultByTime method
-   *
-   * @param sortingVector the data to be sorted
-   * @return std::vector<boost::uuids::uuid> sorted vector of result uuids
-   */
-  std::vector<boost::uuids::uuid>
-  sortResultByTimeActualSorting(std::vector<std::pair<int64_t, boost::uuids::uuid>>& sortingVector);
+                   std::optional<std::set<boost::uuids::uuid>> intersectionResult = std::nullopt);
+
   /**
    * @brief intersects a vector of sets pairwise recursively until one intersection set remains
    * @param vectorOfSets the vector of sets to be intersected
