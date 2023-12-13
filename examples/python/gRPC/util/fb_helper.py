@@ -1,5 +1,6 @@
 import sys
 
+import numpy as np
 from seerep.fb import (
     Boundingbox,
     BoundingBox2DLabeled,
@@ -39,6 +40,29 @@ from seerep.fb import (
     Vector3,
 )
 from seerep.fb import meta_operations_grpc_fb as metaOperations
+
+
+# TODO: should be moved into a separate module
+def rosToNumpyDtype(ros_dtype: int) -> np.dtype:
+    """Converts the numeric represenations of dtypes in ROS to numpy dtype objects."""
+    if ros_dtype == 1:
+        return np.dtype(np.int8)
+    elif ros_dtype == 2:
+        return np.dtype(np.uint8)
+    elif ros_dtype == 3:
+        return np.dtype(np.int16)
+    elif ros_dtype == 4:
+        return np.dtype(np.uint16)
+    elif ros_dtype == 5:
+        return np.dtype(np.int32)
+    elif ros_dtype == 6:
+        return np.dtype(np.uint32)
+    elif ros_dtype == 7:
+        return np.dtype(np.float32)
+    elif ros_dtype == 8:
+        return np.dtype(np.float64)
+    else:
+        raise ValueError("Unknown dtype")
 
 
 def getProject(builder, channel, name):
