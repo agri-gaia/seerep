@@ -8,7 +8,6 @@
 #include <seerep_hdf5_core/hdf5_core_point_cloud.h>
 
 #include "hdf5_fb_general.h"
-#include "hdf5_fb_point_cloud2_iterator.h"
 
 // seerep_msgs
 #include <seerep_msgs/point_cloud_2_generated.h>
@@ -22,6 +21,7 @@
 
 namespace seerep_hdf5_fb
 {
+
 class Hdf5FbPointCloud : public Hdf5FbGeneral
 {
 public:
@@ -34,14 +34,33 @@ public:
   Hdf5FbPointCloud(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
 
   /**
-   * @brief Method for writing a flatbuffers PointCloud2 message to hdf5
+   * @brief Writes a Flatbuffers PointCloud2 message to HDF5.
    *
-   * @param uuid the uuid of the point cloud
-   * @param pointcloud2 the received PointCloud2 message
-   * @param boundingBox reference to an vector which get's the computed boundingBox during write of x,y,z
+   * @param uuid The UUID of the PCL.
+   * @param pcl The PCL message to write.
    */
-  void writePointCloud2(const std::string& uuid, const seerep::fb::PointCloud2& pointcloud2,
-                        std::vector<float>& boundingBox);
+  void writePointCloud2(const std::string& uuid, const seerep::fb::PointCloud2& pcl);
+
+  /**
+   * Computes the axis-aligned bounding box (AABB) of a PCL.
+   *
+   * @param pcl The PCL to compute the bounding box for.
+   * @return std::pair<Point, Point> The minimum and maximum corner of the AABB.
+   *
+   * @note We assume that the x,y and z channel are in float32.
+   */
+  std::pair<seerep_core_msgs::Point, seerep_core_msgs::Point> computeBoundingBox(const seerep::fb::PointCloud2& pcl);
+
+  /**
+   * @brief Writes the axis aliged bounding box (AABB) to the PCL group.
+   *
+   * @param uuid The UUID of the PCL.
+   * @param min_corner The minimum corner of the AABB
+   * @param max_corner The maximum corner of the AABB.
+   */
+  void writeBoundingBox(const std::string& uuid, const seerep_core_msgs::Point& min_corner,
+                        const seerep_core_msgs::Point& max_corner);
+
   /**
    * @brief Write a BoundingBoxes flatbuffers message to hdf5
    *
@@ -63,105 +82,15 @@ public:
 
 private:
   /**
-   * @brief struct to store information about the PointCloud2
+   * @brief Writes the channel description and the layout of the binary payload to HDF5.
    *
-   */
-  struct CloudInfo
-  {
-    bool has_points = false;
-    bool has_rgb = false;
-    bool has_rgba = false;
-    bool has_normals = false;
-  };
-
-  /**
-   * @brief Writes information about point fields as attributes to hdf5
-   *
-   * @param object HighFive object to write to (representing a data set or data group)
-   * @param pointFields flatbuffers vector of the point fields to write
+   * @tparam T HDF5 object type (group or dataset).
+   * @param object The object to annotate.
+   * @param pointFields The vector of point fields to write.
    */
   template <typename T>
   void writePointFieldAttributes(HighFive::AnnotateTraits<T>& object,
-                                 const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::PointField>>* pointFields)
-  {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "writing point field attributes to hdf5";
-
-    if (pointFields)
-    {
-      std::vector<std::string> names;
-      std::vector<uint32_t> offsets, counts;
-      std::vector<uint8_t> datatypes;
-
-      for (auto pointField : *pointFields)
-      {
-        names.push_back(pointField->name()->str());
-        offsets.push_back(pointField->offset());
-        datatypes.push_back(static_cast<uint8_t>(pointField->datatype()));
-        counts.push_back(pointField->count());
-      }
-
-      writeAttributeToHdf5<std::vector<std::string>>(object, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_NAME, names);
-      writeAttributeToHdf5<std::vector<uint32_t>>(object, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_OFFSET, offsets);
-      writeAttributeToHdf5<std::vector<uint8_t>>(object, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_DATATYPE,
-                                                 datatypes);
-      writeAttributeToHdf5<std::vector<uint32_t>>(object, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_COUNT, counts);
-    }
-  }
-
-  /**
-   * @brief Computes the bounding box while iterating over the point cloud
-   *
-   * @param min reference to an array to store the min x, y, z
-   * @param max reference to an array to store the max x, y, z
-   * @param x current x
-   * @param y current y
-   * @param z current z
-   */
-  void computeBoundingBox(std::array<float, 3>& min, std::array<float, 3>& max, const float& x, const float& y,
-                          const float& z);
-
-  /**
-   * @brief Write x,y,z of a point cloud to a /points dataset
-   *
-   * @param id the uuid of the point cloud
-   * @param offsets the offsets of the x,y,z fields
-   * @param data pointer to a const uint8_t array to read the elements from
-   * @param pointStep the point step of the point cloud
-   * @param height the height of the point cloud (1 of unorganized point clouds)
-   * @param width the width of the point cloud
-   * @param groupPtr shared pointer to the data group of the point cloud.
-   *        (Used to add a bounding box of x,y,z as an attribute of the point cloud)
-   * @param boundingBox reference to vector to write the computed boundingBox
-   */
-  void writePoints(const std::string& id, const std::vector<uint32_t>& offsets, const uint8_t* data, uint32_t pointStep,
-                   uint32_t height, uint32_t width, const std::shared_ptr<HighFive::Group>& groupPtr,
-                   std::vector<float>& boundingBox);
-
-  /**
-   * @brief Write r,g,b of a point cloud to a /colors dataset
-   *
-   * @param id the uuid of the point cloud
-   * @param offsets the offsets of the r,g,b fields
-   * @param data pointer to a const uint8_t array to read the elements from
-   * @param pointStep the point step of the point cloud
-   * @param height the height of the point cloud (1 of unorganized point clouds)
-   * @param width the width of the point cloud
-   */
-  void writeColorsRGB(const std::string& id, const std::vector<uint32_t>& offsets, const uint8_t* data,
-                      uint32_t pointStep, uint32_t height, uint32_t width);
-
-  /**
-   * @brief Write r,g,b,a of a point cloud to a /colors dataset
-   *
-   * @param id the uuid of the point cloud
-   * @param offsets the offsets of the r,g,b,a fields
-   * @param data pointer to a const uint8_t array to read the elements from
-   * @param pointStep the point step of the point cloud
-   * @param height the height of the point cloud (1 of unorganized point clouds)
-   * @param width the width of the point cloud
-   */
-  void writeColorsRGBA(const std::string& id, const std::vector<uint32_t>& offsets, const uint8_t* data,
-                       uint32_t pointStep, uint32_t height, uint32_t width);
+                                 const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::PointField>>* pointFields);
 
   /**
    * @brief Write general attributes of the point cloud to the hdf5 group
@@ -198,64 +127,6 @@ private:
   void readPointFields(const std::string& id, std::shared_ptr<HighFive::Group> dataGroupPtr,
                        std::vector<std::string>& names, std::vector<uint32_t>& offsets, std::vector<uint32_t>& counts,
                        std::vector<uint8_t>& datatypes);
-  /**
-   * @brief Read x,y,z from hdf5
-   *
-   * @param id the uuid of the point cloud
-   * @param offsets the offsets of the x,y,z fields
-   * @param data pointer to a uint8_t array to store the data in
-   * @param pointStep the pointStep of the point cloud
-   * @param height the height of the point cloud (1 for unorganized point clouds)
-   * @param width the width the width of the point cloud
-   */
-  void readPoints(const std::string& id, const std::vector<uint32_t>& offsets, uint8_t* data, uint32_t pointStep,
-                  uint32_t height, uint32_t width);
-  /**
-   * @brief Read r,g,b from hdf5
-   *
-   * @param id the uuid of the point cloud
-   * @param offsets the offsets of the r,g,b fields
-   * @param data pointer to a uint8_t array to store the data in
-   * @param pointStep the pointStep of the point cloud
-   * @param height the height of the point cloud (1 for unorganized point clouds)
-   * @param width the width the width of the point cloud
-   */
-  void readColorsRGB(const std::string& id, const std::vector<uint32_t>& offsets, uint8_t* data, uint32_t pointStep,
-                     uint32_t height, uint32_t width);
-  /**
-   * @brief Read r,g,b,a from hdf5
-   *
-   * @param id the uuid of the point cloud
-   * @param offsets the offsets of the r,g,b,a fields
-   * @param data pointer to a uint8_t array to store the data in
-   * @param pointStep the pointStep of the point cloud
-   * @param height the height of the point cloud (1 for unorganized point clouds)
-   * @param width the width the width of the point cloud
-   */
-  void readColorsRGBA(const std::string& id, const std::vector<uint32_t>& offsets, uint8_t* data, uint32_t pointStep,
-                      uint32_t height, uint32_t width);
-
-  /**
-   * @brief Helper method to construct a flatbuffers vector of LabelWithInstance
-   *
-   * @param builder reference to the used flatbuffers builder
-   * @param id the uuid of the point cloud
-   * @return flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>>
-   *         flatbuffers vector of LabelWithInstance
-   */
-  // flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>>
-  // readLabelsGeneralOffset(flatbuffers::grpc::MessageBuilder& builder, const std::string& id);
-
-  /**
-   * @brief Helper method to construct a flatbuffers vector of BoundingBoxLabeled
-   *
-   * @param builder reference to the used flatbuffers builder
-   * @param id the uuid of the point cloud
-   * @return flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>>>
-   *         flatbuffers vector of BoundingBoxLabeled
-   */
-  // flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>>>
-  // readLabelsBoundingBoxOffset(flatbuffers::grpc::MessageBuilder& builder, const std::string& id);
 
   /**
    * @brief Helper method to construct a flatbuffers vector of pointFields
@@ -273,61 +144,32 @@ private:
                         std::vector<uint32_t>& offsets, std::vector<uint32_t>& counts, std::vector<uint8_t>& datatypes);
 
   /**
-   * @brief Get information about the fields of a point cloud from a flatbuffers PointCloud2 message
+   * @brief Returns the offset of a channel relative to the start of a point.
    *
-   * @param cloud the point cloud to get the information about
-   * @return CloudInfo extracted information in form of a CloudInfo struct
+   * @param pcl The pcl message.
+   * @param channel_name The name of the channel.
+   * @return The offset of the channel.
+   * @throws runtime_error when the requested channel is not present in the pcl.
    */
-  CloudInfo getCloudInfo(const seerep::fb::PointCloud2& cloud);
+  uint32_t getChannelOffset(const seerep::fb::PointCloud2& pcl, const std::string& channel_name) const;
 
   /**
-   * @brief Get information about the fields of a point cloud from a vector of fields
+   * @brief Returns the offset for a rgb(a) channel.
    *
-   * @param fields vector of field names of a point cloud
-   * @return CloudInfo extracted information in form of a CloudInfo struct
+   * The rgb(a) color information of a point is packed into a single uint32.
+   * We therefore need to add an addtion offset to the start of the rgb(a) channel.
+   *
+   * @param channel_name Name of the color channel to retrieve the offset for.
+   * @param base_offset The offset to the start of the rgb(a) channel.
+   * @param is_big_endian The endianness of the point cloud.
+   * @return The offset of the specified channel.
+   * @throws runtime_error when the channel_name is not "r", "g", "b" or "a".
    */
-  CloudInfo getCloudInfo(const std::vector<std::string>& fields);
-
-  /**
-   * @brief Get the offset of a field from a flatbuffers PointCloud2 message
-   *
-   * @param cloud the point cloud to get the information from
-   * @param fieldName the name of the field to get the offset for
-   * @return uint32_t offset of the fieldName
-   */
-  uint32_t getOffset(const seerep::fb::PointCloud2& cloud, const std::string& fieldName);
-
-  std::vector<uint32_t> getOffsets(const seerep::fb::PointCloud2& cloud, const std::vector<std::string>& fields);
-
-  /**
-   * @brief Get the offset of a field from hdf5
-   *
-   * @param names the names of the pointFields
-   * @param offsets the offsets of the pointFields
-   * @param fieldName the fieldName to get the offset for
-   * @param isBigendian endianness of the point cloud
-   * @return uint32_t the offset of the fieldName
-   */
-  uint32_t getOffset(const std::vector<std::string>& names, const std::vector<uint32_t>& offsets,
-                     const std::string& fieldName, bool isBigendian);
-
-  std::vector<uint32_t> getOffsets(const std::vector<std::string>& names, const std::vector<uint32_t>& offsets,
-                                   bool isBigendian, const std::vector<std::string>& fields);
-
-  /**
-   * @brief Get the offset for the special case of rgba(a)
-   *
-   * The rgb(a) channel is encoded in a single 32 bit integer.
-   * To address an individual channel (r, g, b or a ),
-   * we need to get it's offset from the start of the rgb(a) field.
-   *
-   * @param fieldName name of the field to get the offset for i.e "r", "g", "b" or "a"
-   * @param offset the offset for the start of the rgb(a) channel
-   * @param isBigendian endianness of the point cloud
-   * @return uint32_t the offset for the fieldName
-   */
-  uint32_t rgbaOffset(const std::string& fieldName, uint32_t offset, bool isBigendian);
+  uint32_t getRgbaOffset(const std::string& channel_name, uint32_t base_offset, bool is_big_endian) const;
 };
+
 }  // namespace seerep_hdf5_fb
+
+#include "impl/hdf5_fb_pointcloud.hpp"
 
 #endif /* SEEREP_HDF5_FB_HDF5_FB_POINT_CLOUD_H_ */

@@ -51,45 +51,6 @@ std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CorePointCloud::readDatase
   readBoundingBoxLabeledAndAddToLabelsWithInstancesWithCategory(HDF5_GROUP_POINTCLOUD, uuid,
                                                                 data.labelsWithInstancesWithCategory);
 
-  // std::vector<std::string> labelCategoriesBB;
-  // std::vector<std::vector<std::string>> labelsBBPerCategory;
-  // std::vector<std::vector<std::vector<double>>> boundingBoxesPerCategory;
-  // std::vector<std::vector<std::string>> instancesPerCategory;
-  // readBoundingBoxLabeled(HDF5_GROUP_POINTCLOUD, uuid, labelCategoriesBB, labelsBBPerCategory, boundingBoxesPerCategory,
-  //                        instancesPerCategory, false);
-
-  // // loop the label categories
-  // for (std::size_t i = 0; i < labelCategoriesBB.size(); i++)
-  // {
-  //   auto& labelsBB = labelsBBPerCategory.at(i);
-  //   auto& instances = instancesPerCategory.at(i);
-
-  //   // check if category already exists in data
-  //   // create new one if it doesn't exist
-  //   auto labelsWithInstanceOfCategory = data.labelsWithInstancesWithCategory.find(labelCategoriesBB.at(i));
-  //   if (labelsWithInstanceOfCategory == data.labelsWithInstancesWithCategory.end())
-  //   {
-  //     auto emplaceResult = data.labelsWithInstancesWithCategory.emplace(
-  //         labelCategoriesBB.at(i), std::vector<seerep_core_msgs::LabelWithInstance>());
-  //     labelsWithInstanceOfCategory = emplaceResult.first;
-  //   }
-
-  //   // add labels with instance to this label category
-  //   for (std::size_t i = 0; i < labelsBB.size(); i++)
-  //   {
-  //     boost::uuids::uuid instanceUuid;
-  //     try
-  //     {
-  //       instanceUuid = gen(instances.at(i));
-  //     }
-  //     catch (std::runtime_error&)
-  //     {
-  //       instanceUuid = boost::uuids::nil_uuid();
-  //     }
-  //     labelsWithInstanceOfCategory->second.push_back(
-  //         seerep_core_msgs::LabelWithInstance{ .label = labelsBB.at(i), .uuidInstance = instanceUuid });
-  //   }
-  // }
   return data;
 }
 
