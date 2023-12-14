@@ -43,8 +43,16 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         libcurl4-openssl-dev \
         && rm -rf /var/lib/apt/lists/*
 
+
 COPY requirements.txt /tmp/requirements.txt
+
+# Not sure why the path must be updated directly after upgrading pip.
+# Setting it before via the Dockerfile ENV command does not work.
+
+# Without updating the path, pip cannot find open3d versions > 0.13.0
+# (likely due to the upgraded pip not getting found).
 RUN pip3 install --upgrade pip \
+        && PATH=/home/docker/.local/bin:${PATH} \
         && pip3 install -r /tmp/requirements.txt \
         && rm /tmp/requirements.txt
 
