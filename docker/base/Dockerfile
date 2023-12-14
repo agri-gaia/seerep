@@ -57,7 +57,7 @@ COPY requirements.txt /tmp/requirements.txt
 # With --ignore-installed, the uninstall is skipped and the new version is installd on top of the old one.
 RUN pip3 install --upgrade pip \
         && PATH=/home/docker/.local/bin:${PATH} \
-        && pip3 install -r /tmp/requirements.txt --ignore-installed PyYAML \
+        && pip3 install -r /tmp/requirements.txt --ignore-installed PyYAML --no-cache-dir \
         && rm /tmp/requirements.txt
 
         #Install seerep dependencies from apt
