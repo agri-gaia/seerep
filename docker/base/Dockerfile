@@ -51,9 +51,13 @@ COPY requirements.txt /tmp/requirements.txt
 
 # Without updating the path, pip cannot find open3d versions > 0.13.0
 # (likely due to the upgraded pip not getting found).
+
+# Ignoring PyYAML is necessary because an upgrade of a package requires an uninstall of the old version.
+# However, PyYAML is a distutil package, for which uninstall was deprecated with pip 10.0.0.
+# With --ignore-installed, the uninstall is skipped and the new version is installd on top of the old one.
 RUN pip3 install --upgrade pip \
         && PATH=/home/docker/.local/bin:${PATH} \
-        && pip3 install -r /tmp/requirements.txt \
+        && pip3 install -r /tmp/requirements.txt --ignore-installed PyYAML \
         && rm /tmp/requirements.txt
 
         #Install seerep dependencies from apt
