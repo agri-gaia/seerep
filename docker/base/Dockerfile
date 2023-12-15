@@ -43,9 +43,21 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         libcurl4-openssl-dev \
         && rm -rf /var/lib/apt/lists/*
 
+
 COPY requirements.txt /tmp/requirements.txt
+
+# Not sure why the path must be updated directly after upgrading pip.
+# Setting it before via the Dockerfile ENV command does not work.
+
+# Without updating the path, pip cannot find open3d versions > 0.13.0
+# (likely due to the upgraded pip not getting found).
+
+# Ignoring PyYAML is necessary because an upgrade of a package requires an uninstall of the old version.
+# However, PyYAML is a distutil package, for which uninstall was deprecated with pip 10.0.0.
+# With --ignore-installed, the uninstall is skipped and the new version is installd on top of the old one.
 RUN pip3 install --upgrade pip \
-        && pip3 install -r /tmp/requirements.txt \
+        && PATH=/home/docker/.local/bin:${PATH} \
+        && pip3 install -r /tmp/requirements.txt --ignore-installed PyYAML --no-cache-dir \
         && rm /tmp/requirements.txt
 
         #Install seerep dependencies from apt
