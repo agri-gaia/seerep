@@ -48,6 +48,9 @@ select = [
     "E", # pycodestyle
     "F", # pyflakes
     "I", # isort
+    "C4", # flake8-comprehensions
+    "B", # flake8-bugbear
+    "A", # flake8-builtins
     "PL" # pylint
 ]
 ignore = [
