@@ -47,8 +47,11 @@ exclude = ["docs/", "cmake-format.py"]
 select = [
     "E", # pycodestyle
     "F", # pyflakes
-    "I" # isort
+    "I", # isort
+    "PL" # pylint
 ]
 ignore = [
     "E402", # module level import not at top of cell
+    "PLR0913", # to many arguments in function definition
+    "PLR2004" # magic value used in comparison
 ]
