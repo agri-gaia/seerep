@@ -80,10 +80,10 @@ std::vector<boost::uuids::uuid> CoreDataset::getData(const seerep_core_msgs::Que
 
   if (!query.polygon && !query.timeinterval && !query.label && !query.instances && !query.dataUuids)
   {
-    return getAllDatasetUuids(datatypeSpecifics);
+    return getAllDatasetUuids(datatypeSpecifics, query.sortByTime);
   }
 
-  return intersectQueryResults(resultRt, resultTime, resultSemantic, instanceResult, query.dataUuids);
+  return intersectQueryResults(resultRt, resultTime, resultSemantic, instanceResult, query.dataUuids, query.sortByTime);
 }
 
 std::vector<boost::uuids::uuid> CoreDataset::getInstances(const seerep_core_msgs::Query& query)
@@ -356,7 +356,7 @@ CoreDataset::intersectQueryResults(std::optional<std::vector<seerep_core_msgs::A
                                    std::optional<std::vector<seerep_core_msgs::AabbTimeIdPair>>& timetree_result,
                                    std::optional<std::set<boost::uuids::uuid>>& semanticResult,
                                    std::optional<std::vector<boost::uuids::uuid>>& instanceResult,
-                                   const std::optional<std::vector<boost::uuids::uuid>>& dataUuids)
+                                   const std::optional<std::vector<boost::uuids::uuid>>& dataUuids, bool sortByTime)
 {
   std::vector<std::set<boost::uuids::uuid>> idsPerSingleModality;
 
@@ -379,7 +379,7 @@ CoreDataset::intersectQueryResults(std::optional<std::vector<seerep_core_msgs::A
               end = std::make_move_iterator(timetree_result.value().end());
          it != end; ++it)
     {
-      idsTemporal.insert(std::move(it->second));
+      idsTemporal.insert(it->second);
     }
     idsPerSingleModality.push_back(std::move(idsTemporal));
   }
@@ -401,11 +401,53 @@ CoreDataset::intersectQueryResults(std::optional<std::vector<seerep_core_msgs::A
         std::move(std::set<boost::uuids::uuid>(dataUuids.value().begin(), dataUuids.value().end())));
   }
 
-  return intersectVectorOfSets(idsPerSingleModality);
+  auto intersectionResult = intersectVectorOfSets(idsPerSingleModality);
+
+  // sort by timestamp
+  if (sortByTime)
+  {
+    if (timetree_result.has_value())
+    {
+      return sortResultByTime(timetree_result, intersectionResult);
+    }
+    else
+    {
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning)
+          << "Results will not be sorted by time (even though it was requested), because there is no temporal part in "
+             "the query";
+    }
+  }
+
+  return std::vector(intersectionResult.begin(), intersectionResult.end());
 }
 
 std::vector<boost::uuids::uuid>
-CoreDataset::intersectVectorOfSets(std::vector<std::set<boost::uuids::uuid>>& vectorOfSets)
+CoreDataset::sortResultByTime(std::optional<std::vector<seerep_core_msgs::AabbTimeIdPair>>& timetree_result,
+                              std::optional<std::set<boost::uuids::uuid>> intersectionResult)
+{
+  std::vector<std::pair<int64_t, boost::uuids::uuid>> sortingVector;
+  for (auto it = std::make_move_iterator(timetree_result.value().begin()),
+            end = std::make_move_iterator(timetree_result.value().end());
+       it != end; ++it)
+  {
+    if (!intersectionResult.has_value() ||
+        intersectionResult.value().find(it->second) != intersectionResult.value().end())
+    {
+      sortingVector.push_back(std::make_pair(boost::geometry::get<0>(it->first.min_corner()), it->second));
+    }
+  }
+
+  std::sort(sortingVector.begin(), sortingVector.end());
+  std::vector<boost::uuids::uuid> sortedResults;
+  sortedResults.reserve(sortingVector.size());
+  for (auto x : sortingVector)
+  {
+    sortedResults.push_back(x.second);
+  }
+  return sortedResults;
+}
+
+std::set<boost::uuids::uuid> CoreDataset::intersectVectorOfSets(std::vector<std::set<boost::uuids::uuid>>& vectorOfSets)
 {
   if (vectorOfSets.size() > 1)
   {
@@ -430,32 +472,42 @@ CoreDataset::intersectVectorOfSets(std::vector<std::set<boost::uuids::uuid>>& ve
   else if (vectorOfSets.size() == 1)
   {
     // return the result as soon as all sets are intersected
-    return std::vector(vectorOfSets.at(0).begin(), vectorOfSets.at(0).end());
+    return vectorOfSets.at(0);
   }
 
   // return empty vector if input vector is empty
-  return std::vector<boost::uuids::uuid>();
+  return std::set<boost::uuids::uuid>();
 }
 
 std::vector<boost::uuids::uuid>
-CoreDataset::getAllDatasetUuids(std::shared_ptr<seerep_core::CoreDataset::DatatypeSpecifics> datatypeSpecifics)
+CoreDataset::getAllDatasetUuids(std::shared_ptr<seerep_core::CoreDataset::DatatypeSpecifics> datatypeSpecifics,
+                                bool sortByTime)
 {
-  std::vector<seerep_core_msgs::AabbTimeIdPair> allIdsFromTimeTree = std::vector<seerep_core_msgs::AabbTimeIdPair>();
+  std::optional<std::vector<seerep_core_msgs::AabbTimeIdPair>> allIdsFromTimeTree =
+      std::vector<seerep_core_msgs::AabbTimeIdPair>();
   seerep_core_msgs::AabbTime aabbtime(seerep_core_msgs::TimePoint(((int64_t)std::numeric_limits<uint32_t>::min() << 32 |
                                                                    ((uint64_t)std::numeric_limits<uint32_t>::min()))),
                                       seerep_core_msgs::TimePoint(((int64_t)std::numeric_limits<int32_t>::max()) << 32 |
                                                                   ((uint64_t)std::numeric_limits<uint32_t>::max())));
 
   datatypeSpecifics->timetree.query(boost::geometry::index::intersects(aabbtime),
-                                    std::back_inserter(allIdsFromTimeTree));
-  std::vector<boost::uuids::uuid> allIds;
-  for (auto it = std::make_move_iterator(allIdsFromTimeTree.begin()),
-            end = std::make_move_iterator(allIdsFromTimeTree.end());
-       it != end; ++it)
+                                    std::back_inserter(allIdsFromTimeTree.value()));
+
+  if (sortByTime)
   {
-    allIds.push_back(std::move(it->second));
+    return sortResultByTime(allIdsFromTimeTree);
   }
-  return allIds;
+  else
+  {
+    std::vector<boost::uuids::uuid> allIds;
+    for (auto it = std::make_move_iterator(allIdsFromTimeTree.value().begin()),
+              end = std::make_move_iterator(allIdsFromTimeTree.value().end());
+         it != end; ++it)
+    {
+      allIds.push_back(std::move(it->second));
+    }
+    return allIds;
+  }
 }
 
 void CoreDataset::addDataset(const seerep_core_msgs::DatasetIndexable& dataset)

@@ -28,6 +28,7 @@ struct Query
   std::optional<std::vector<boost::uuids::uuid>> dataUuids;  ///< only filter by data uuid if set
   bool withoutData;                                          ///< do not return the data itself if set
   uint maxNumData;                                           ///< max number of datasets that should be returned
+  bool sortByTime;  ///< sort the resulting uuids by the timestamp of the corresponding data
 };
 
 } /* namespace seerep_core_msgs */

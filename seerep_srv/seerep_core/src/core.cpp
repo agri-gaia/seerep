@@ -375,7 +375,7 @@ void Core::checkForOntologyConcepts(seerep_core_msgs::Query& query)
     {
       // only iterate over the initial size of the vector
       auto startSizeLabels = category.second.size();
-      for (int i = 0; i < startSizeLabels; i++)
+      for (std::size_t i = 0; i < startSizeLabels; i++)
       {
         std::string& label = category.second.at(i);
         // check if label is NOT URL (ontology concept)

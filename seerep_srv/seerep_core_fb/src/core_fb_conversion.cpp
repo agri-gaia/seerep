@@ -46,6 +46,7 @@ seerep_core_msgs::Query CoreFbConversion::fromFb(const seerep::fb::Query* query,
   queryCore.polygon = fromFbQueryPolygon(query);
   queryCore.fullyEncapsulated = fromFbQueryFullyEncapsulated(query);
   queryCore.inMapFrame = fromFbQueryInMapFrame(query);
+  queryCore.sortByTime = query->sortByTime();
 
   return queryCore;
 }

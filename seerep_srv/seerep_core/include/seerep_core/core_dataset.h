@@ -290,22 +290,33 @@ private:
                         std::optional<std::vector<seerep_core_msgs::AabbTimeIdPair>>& timetree_result,
                         std::optional<std::set<boost::uuids::uuid>>& semanticResult,
                         std::optional<std::vector<boost::uuids::uuid>>& instanceResult,
-                        const std::optional<std::vector<boost::uuids::uuid>>& dataUuids);
+                        const std::optional<std::vector<boost::uuids::uuid>>& dataUuids, bool sortByTime = false);
+  /**
+   * @brief sorts the uuids of the result set based on their timestamp
+   *
+   * @param timetree_result the result from the timetree query. Contains uuids and the corresponding timestamp
+   * @param intersectedResult the intersected uuids of all parts of the query
+   * @return std::vector<boost::uuids::uuid> uuids of the result set sorted by timestamp
+   */
+  std::vector<boost::uuids::uuid>
+  sortResultByTime(std::optional<std::vector<seerep_core_msgs::AabbTimeIdPair>>& timetree_result,
+                   std::optional<std::set<boost::uuids::uuid>> intersectionResult = std::nullopt);
 
   /**
    * @brief intersects a vector of sets pairwise recursively until one intersection set remains
    * @param vectorOfSets the vector of sets to be intersected
-   * @return vector of UUIDs of the intersection result
+   * @return set of UUIDs of the intersection result
    */
-  std::vector<boost::uuids::uuid> intersectVectorOfSets(std::vector<std::set<boost::uuids::uuid>>& vectorOfSets);
+  std::set<boost::uuids::uuid> intersectVectorOfSets(std::vector<std::set<boost::uuids::uuid>>& vectorOfSets);
 
   /**
    * @brief return the UUIDs of all stored datasets. Uses the timeTree, because all datasets are in there
    * @param datatypeSpecifics the datatype specifics of the targeted data type
+   * @param sortByTime flag if the result set should be sorted by the timestamp of the data
    * @return vector of UUIDs of all data sets
    */
   std::vector<boost::uuids::uuid>
-  getAllDatasetUuids(std::shared_ptr<seerep_core::CoreDataset::DatatypeSpecifics> datatypeSpecifics);
+  getAllDatasetUuids(std::shared_ptr<seerep_core::CoreDataset::DatatypeSpecifics> datatypeSpecifics, bool sortByTime);
 
   /** @brief the frame id of the spatial index*/
   std::string m_frameId;
