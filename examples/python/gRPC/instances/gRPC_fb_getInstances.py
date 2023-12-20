@@ -5,6 +5,7 @@ from seerep.fb import Datatype, QueryInstance, UuidsPerProject
 from seerep.fb import instance_service_grpc_fb as instanceService
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
+    createLabelsWithCategories,
     createLabelWithCategory,
     createPoint2d,
     createPolygon2D,
@@ -46,11 +47,15 @@ timeInterval = createTimeInterval(builder, timeMin, timeMax)
 
 
 projectUuids = [builder.CreateString(projectuuid)]
-category = "0"
-labels = [
-    [builder.CreateString("testlabel0"), builder.CreateString("testlabelgeneral0")]
-]
-labelCategory = createLabelWithCategory(builder, category, labels)
+category = ["0"]
+labels = {
+    "0": [
+        (builder.CreateString("testlabel0"), 0.8),
+        (builder.CreateString("testlabelgeneral0"), 0.9),
+    ]
+}
+
+labelCategory = createLabelsWithCategories(builder, category, labels)
 dataUuids = [builder.CreateString("5a0438b8-37cf-412e-8331-a95ef95c1016")]
 instanceUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 

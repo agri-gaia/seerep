@@ -22,17 +22,6 @@ from seerep.util.common import get_gRPC_channel
 
 
 class ServiceManager:
-    def gen_stub_fb(stub):
-        def func_passer(func):
-            def wrapper(self, builder, *args, **kwargs):
-                if not getattr(self, f"_stub_{type(stub).__name__}", False):
-                    setattr(self, f"_stub_{type(stub).__name__}", stub(self._channel))
-                return func(self, builder, *args, **kwargs)
-
-            return wrapper
-
-        return func_passer
-
     def __init__(self, grpc_channel: Channel = get_gRPC_channel()) -> None:
         self._channel = grpc_channel
 
@@ -45,9 +34,10 @@ class ServiceManager:
         self._channel = channel
 
     def get_stub(self, stub_type):
-        return getattr(self, f"_stub_{type(stub_type).__name__}", None)
+        if not getattr(self, f"_stub_{stub_type.__name__}", False):
+            setattr(self, f"_stub_{stub_type.__name__}", stub_type(self._channel))
+        return getattr(self, f"_stub_{stub_type.__name__}", None)
 
-    @gen_stub_fb(instance_srv_fb.InstanceServiceStub)
     def call_get_instances_fb(
         self, builder: Builder, query_instance: QueryInstance.QueryInstance
     ) -> UuidsPerProject.UuidsPerProject:
@@ -58,7 +48,6 @@ class ServiceManager:
         )
         return UuidsPerProject.UuidsPerProject.GetRootAs(response_buf)
 
-    @gen_stub_fb(meta_ops_srv_fb.MetaOperationsStub)
     def call_get_project_fb(self, builder: Builder) -> ProjectInfos.ProjectInfos:
         Empty.Start(builder)
         empty_msg = Empty.End(builder)
@@ -68,7 +57,6 @@ class ServiceManager:
         response_buf = stub.GetProjects(bytes(buf))
         return ProjectInfos.ProjectInfos.GetRootAs(response_buf)
 
-    @gen_stub_fb(pcl2_srv_fb.PointCloudServiceStub)
     def call_get_pointcloud2_fb(
         self, builder: Builder, query: Query.Query
     ) -> List[PointCloud2.PointCloud2]:
@@ -81,7 +69,6 @@ class ServiceManager:
             pcl_list.append(PointCloud2.PointCloud2.GetRootAs(pcl))
         return pcl_list
 
-    @gen_stub_fb(point_srv_fb.PointServiceStub)
     def call_get_points_fb(
         self, builder: Builder, query: Query.Query
     ) -> List[PointStamped.PointStamped]:
@@ -94,7 +81,6 @@ class ServiceManager:
             point_lst.append(PointStamped.PointStamped.GetRootAs(response))
         return point_lst
 
-    @gen_stub_fb(image_srv_fb.ImageServiceStub)
     def call_get_images_fb(
         self, builder: Builder, query: Query.Query
     ) -> List[Image.Image]:

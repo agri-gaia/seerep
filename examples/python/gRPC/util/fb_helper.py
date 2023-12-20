@@ -1,6 +1,9 @@
 import sys
+from typing import List
 
 import numpy as np
+from flatbuffers import Builder
+
 from seerep.fb import (
     Boundingbox,
     BoundingBox2DLabeled,
@@ -261,6 +264,13 @@ def createPointFields(builder, channels, datatype, dataTypeOffset, count):
     return pointFieldsList
 
 
+def createLabel(builder, label):
+    Label.Start(builder)
+    Label.AddLabel(builder, label[0])
+    Label.AddConfidence(builder, label[1])
+    return Label.End(builder)
+
+
 def createLabelWithConfidence(builder, label, confidence=None):
     labelStr = builder.CreateString(label)
     Label.Start(builder)
@@ -302,6 +312,27 @@ def createLabelWithCategory(builder, category, labels):
     for LabelCategory in reversed(LabelsCategories):
         builder.PrependUOffsetTRelative(LabelCategory)
     return builder.EndVector()
+
+
+def createLabelsWithCategories(builder: Builder, category: List[str], labels):
+    """Creates the message representing the labels of a category"""
+    label_categories = []
+
+    for cat in category:
+        cat_str = builder.CreateString(str(cat))
+        labels_processed = [createLabel(builder, label) for label in labels[cat]]
+
+        LabelsWithCategory.StartLabelsVector(builder, len(labels_processed))
+        for label in reversed(labels_processed):
+            builder.PrependUOffsetTRelative(label)
+        labels_offset = builder.EndVector()
+
+        LabelsWithCategory.Start(builder)
+        LabelsWithCategory.AddCategory(builder, cat_str)
+        LabelsWithCategory.AddLabels(builder, labels_offset)
+        label_categories.append(LabelsWithCategory.End(builder))
+
+    return label_categories
 
 
 def createLabelsWithInstance(builder, labels, confidences, instanceUuids):
@@ -576,13 +607,19 @@ def createQuery(
             builder.PrependUOffsetTRelative(dataUuid)
         dataUuidOffset = builder.EndVector()
 
+    if labels:
+        Query.QueryStartLabelVector(builder, len(labels))
+        for label in reversed(labels):
+            builder.PrependUOffsetTRelative(label)
+        labelOffset = builder.EndVector()
+
     Query.Start(builder)
     if polygon2d:
         Query.AddPolygon(builder, polygon2d)
     if timeInterval:
         Query.AddTimeinterval(builder, timeInterval)
     if labels:
-        Query.AddLabel(builder, labels)
+        Query.AddLabel(builder, labelOffset)
     # no if; has default value
     Query.AddMustHaveAllLabels(builder, mustHaveAllLabels)
     if projectUuids:

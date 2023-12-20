@@ -70,7 +70,7 @@ class FbQuery(MsgsFb[Query.Query]):
                 lambda: None, lambda: self.instanceuuid()
             ),
             EnumFbQuery.DATAUUID: MsgsFunctions(
-                lambda: None, lambda: Dtypes.Fb.datauuid()
+                lambda: None, lambda: Dtypes.Fb.datauuid(self.builder, self.channel)
             ),
             EnumFbQuery.WITHOUTDATA: MsgsFunctions(lambda: False, lambda: True),
             EnumFbQuery.MAX_NUM_DATA: MsgsFunctions(
@@ -105,72 +105,26 @@ class FbQuery(MsgsFb[Query.Query]):
         withoutdata = self.get_component(EnumFbQuery.WITHOUTDATA)
         max_num_data = self.get_component(EnumFbQuery.MAX_NUM_DATA)
 
-        # Note: reverse because we prepend
-        if projectuuid != None:
-            Query.StartProjectuuidVector(self.builder, len(projectuuid))
-            for elem in reversed(projectuuid):
-                self.builder.PrependUOffsetTRelative(elem)
-            projectuuid_offset = self.builder.EndVector()
-
-        if instanceuuid != None:
-            Query.StartInstanceuuidVector(self.builder, len(instanceuuid))
-            for elem in reversed(instanceuuid):
-                self.builder.PrependUOffsetTRelative(elem)
-            instanceuuid_offset = self.builder.EndVector()
-
-        if datauuid != None:
-            Query.StartInstanceuuidVector(self.builder, len(datauuid))
-            for elem in reversed(datauuid):
-                self.builder.PrependUOffsetTRelative(elem)
-            datauuid_offset = self.builder.EndVector()
-        Query.Start(self.builder)
-        if polygon != None:
-            Query.AddPolygon(self.builder, polygon)
-
-        if fully_encapsulated != None:
-            Query.AddFullyEncapsulated(self.builder, fully_encapsulated)
-
-        if in_map_frame != None:
-            Query.AddInMapFrame(self.builder, in_map_frame)
-
-        if timeinterval != None:
-            Query.AddTimeinterval(self.builder, timeinterval)
-
-        if label != None:
-            Query.AddLabel(self.builder, label)
-
-        if sparql_query != None:
-            Query.AddSparqlQuery(self.builder, sparql_query)
-
-        if ontology_uri != None:
-            Query.AddOntologyURI(self.builder, ontology_uri)
-
-        Query.AddMustHaveAllLabels(self.builder, must_have_all_labels)
-
-        if projectuuid != None:
-            Query.AddProjectuuid(self.builder, projectuuid_offset)
-
-        if instanceuuid != None:
-            Query.AddInstanceuuid(self.builder, instanceuuid_offset)
-
-        if datauuid != None:
-            Query.AddDatauuid(self.builder, datauuid_offset)
-
-        Query.AddWithoutdata(self.builder, withoutdata)
-        Query.AddFullyEncapsulated(self.builder, fully_encapsulated)
-        Query.AddInMapFrame(self.builder, in_map_frame)
-
-        if max_num_data != None:
-            Query.AddMaxNumData(self.builder, max_num_data)
-
-        return Query.End(self.builder)
+        return fbh.createQuery(
+            self.builder,
+            timeinterval,
+            label,
+            must_have_all_labels,
+            projectuuid,
+            instanceuuid,
+            datauuid,
+            withoutdata,
+            polygon,
+            fully_encapsulated,
+            in_map_frame,
+        )
 
 
 class FbQueryInstance(MsgsFb[QueryInstance.QueryInstance]):
     def _set_enum_func_mapping(self) -> Dict[FrozenEnum, MsgsFunctions]:
         return {
             EnumFbQueryInstance.DATATYPE: MsgsFunctions(
-                lambda: Datatype.Datatype().All, lambda: Datatype.Datatype().Pointcloud
+                lambda: Datatype.Datatype().All, lambda: Datatype.Datatype().PointCloud
             ),
             EnumFbQueryInstance.QUERY: MsgsFunctions(
                 lambda: Dtypes.FbDefaults.query(self.channel), lambda: self.query()
@@ -214,14 +168,14 @@ class DatatypeImplementations:
         def label_with_category(
             cls, builder: Builder
         ) -> LabelsWithCategory.LabelsWithCategory:
-            category = "0"
-            labels = [
-                [
-                    builder.CreateString("testlabel0"),
-                    builder.CreateString("testlabelgeneral0"),
+            category = ["0"]
+            labels = {
+                "0": [
+                    (builder.CreateString("testlabel0"), 0.3),
+                    (builder.CreateString("testlabelgeneral0"), 0.7),
                 ]
-            ]
-            return fbh.createLabelWithCategory(builder, category, labels)
+            }
+            return fbh.createLabelsWithCategories(builder, category, labels)
 
         @classmethod
         def sparql_query(cls, builder: Builder):
@@ -268,9 +222,14 @@ class DatatypeImplementations:
             points = serv_man.call_get_points_fb(builder, query_fb)
             pcl2s = serv_man.call_get_pointcloud2_fb(builder, query_fb)
 
-            image_uuids = set(image.Header().UuidMsgs().decode() for image in images)
-            point_uuids = set(point.Header().UuidMsgs().decode() for point in points)
-            pcl2_uuids = set(pcl.Header().UuidMsgs().decode() for pcl in pcl2s)
+            image_uuids = [image.Header().UuidMsgs().decode() for image in images]
+            point_uuids = [point.Header().UuidMsgs().decode() for point in points]
+            pcl2_uuids = [pcl.Header().UuidMsgs().decode() for pcl in pcl2s]
+
+            # debugging
+            print("images: " + str(image_uuids))
+            print("points: " + str(point_uuids))
+            print("pcls: " + str(pcl2_uuids))
 
             # fill up return list with every second uuid
             ret_lst = [

@@ -141,7 +141,7 @@ class MsgsBase(ABC, Generic[T]):
             To the enum_type mapped functions or None if enum_type
             was not mapped to functions.
         """
-        return self._enum_func_mapping.get(enum_type, default=None)
+        return self._enum_func_mapping.get(enum_type, None)
 
     def set_mapped_functions(self, enum_type: FrozenEnum, function: MsgsFunctions):
         """
@@ -152,6 +152,20 @@ class MsgsBase(ABC, Generic[T]):
             function: A object of type MsgsFunctions holding 2 callable functions.
         """
         self._enum_func_mapping[enum_type] = function
+        self._validate_enum_func_mappings()
+
+    def set_active_function(self, enum_type: FrozenEnum, function: Callable):
+        """
+        Set `enum_type` mapped active function.
+
+        Args:
+            enum_type: The enum type to map the function to.
+            function: A callable function.
+        """
+        msg_funcs = MsgsFunctions(
+            self.get_mapped_functions(enum_type).default_function, function
+        )
+        self._enum_func_mapping[enum_type] = msg_funcs
         self._validate_enum_func_mappings()
 
     @classmethod
@@ -222,12 +236,12 @@ class MsgsBase(ABC, Generic[T]):
         """
         Function to assemble the targeted datatype message.
         """
-        # debug
-        all_enum_types = type(next(iter(self._enum_func_mapping)))
         self._assemble_components()
 
-        for enum in all_enum_types:
-            print(self.get_component(enum))
+        # debug
+        # all_enum_types = type(next(iter(self._enum_func_mapping)))
+        # for enum in all_enum_types:
+        #     print(self.get_component(enum))
 
         self._assembled_datatype_instance = self._assemble_datatype_instance()
 
@@ -245,6 +259,20 @@ class MsgsFb(MsgsBase[T]):
     ):
         self._builder = builder
         super().__init__(channel, enum_types)
+
+    # this should only be used for debugging purposes and not for permanent implementation
+    def _get_finished_instance(self):
+        """
+        Returns the assembled flatbuffers object corresponding to the datatype.
+        """
+        self.builder.Finish(self.datatype_instance)
+        # note: this accesses the class behind T,
+        # though this is rather hacky and is discouraged by PEP 560
+        return (
+            self.__class__.__orig_bases__[0]
+            .__args__[0]
+            .GetRootAs(bytes(self.builder.Output()))
+        )
 
     @abstractmethod
     def _set_enum_func_mapping(self) -> Dict[Enum, MsgsFunctions]:
