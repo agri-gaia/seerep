@@ -29,7 +29,16 @@ theme:
   name: material
   language: en
   logo: imgs/DFKI_logo_outline_w.png
-
+  # dark mode toggle
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
   # navigation features
   features:
     - navigation.tracking
