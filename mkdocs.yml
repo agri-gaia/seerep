@@ -58,6 +58,8 @@ theme:
 # dfki color theme
 extra_css:
   - stylesheets/extra.css
+plugins:
+  - search
 markdown_extensions:
   # aka call-outs, way to include side content
   - admonition
