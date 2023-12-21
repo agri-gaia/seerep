@@ -5,3 +5,13 @@
   --md-footer-fg-color:         #ffffff;
   --md-footer-bg-color:         #58585a;
 }
+
+.md-header__button.md-logo {
+    margin: 0;
+    padding: 0;
+}
+
+.md-header__button.md-logo img, .md-header__button.md-logo svg {
+    height: 2.4rem;
+    width: 2.4rem;
+}
