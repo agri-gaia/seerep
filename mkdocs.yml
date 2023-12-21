@@ -25,6 +25,8 @@ theme:
   # use mkdocs material https://squidfunk.github.io/mkdocs-material/
   name: material
   language: en
+  icon:
+    repo: fontawesome/brands/github
   logo: imgs/DFKI-Logo_ohne_RGB_weiss.svg
   # dark mode toggle
   palette:
