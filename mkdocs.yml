@@ -54,12 +54,12 @@ theme:
     - navigation.sections
   # disable google fonts due to GDPR
   font: false
-
 # dfki color theme
 extra_css:
   - stylesheets/extra.css
 plugins:
   - search
+  - privacy
 markdown_extensions:
   # aka call-outs, way to include side content
   - admonition
