@@ -1,4 +1,4 @@
-site_name: SEEREP Documentation
+site_name: SEEREP
 repo_url: https://github.com/agri-gaia/seerep
 docs_dir: docs/mkdocs
 # define navigation structure
