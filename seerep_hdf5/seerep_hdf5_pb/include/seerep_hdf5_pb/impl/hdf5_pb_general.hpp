@@ -17,11 +17,11 @@ seerep::pb::Header Hdf5PbGeneral::readHeaderAttributes(HighFive::AnnotateTraits<
   seerep::pb::Header header;
 
   header.mutable_stamp()->set_seconds(
-      readAttributeFromHdf5<int64_t>(id, object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS));
+      readAttributeFromHdf5<int64_t>(object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_SECONDS, id));
   header.mutable_stamp()->set_nanos(
-      readAttributeFromHdf5<int32_t>(id, object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS));
-  header.set_frame_id(readFrameId(id, object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID));
-  header.set_seq(readAttributeFromHdf5<uint32_t>(id, object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ));
+      readAttributeFromHdf5<int32_t>(object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_STAMP_NANOS, id));
+  header.set_frame_id(readFrameId(object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_FRAME_ID, id));
+  header.set_seq(readAttributeFromHdf5<uint32_t>(object, seerep_hdf5_core::Hdf5CoreGeneral::HEADER_SEQ, id));
   header.set_uuid_project(std::filesystem::path(m_file->getName()).filename().stem());
   header.set_uuid_msgs(id);
 

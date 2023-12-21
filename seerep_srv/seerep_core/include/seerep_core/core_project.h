@@ -170,7 +170,7 @@ public:
    * @return true If Camera Intrinsics Exists
    * @return false If Camera Intrinsics Exists
    */
-  bool checkCameraIntrinsicsExists(boost::uuids::uuid camIntrinsicsUuid);
+  bool cameraIntrinsicExists(boost::uuids::uuid camIntrinsicsUuid);
 
   std::vector<std::string> getFrames();
 

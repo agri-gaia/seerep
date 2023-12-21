@@ -35,33 +35,13 @@ std::vector<std::string> Hdf5CoreGeneral::getGroupDatasets(const std::string& id
 
 void Hdf5CoreGeneral::writeProjectname(const std::string& projectname)
 {
-  const std::scoped_lock lock(*m_write_mtx);
-
-  if (!m_file->hasAttribute(PROJECTNAME))
-  {
-    m_file->createAttribute<std::string>(PROJECTNAME, projectname);
-  }
-  else
-  {
-    m_file->getAttribute(PROJECTNAME).write(projectname);
-  }
+  writeAttributeToHdf5<std::string>(*m_file, PROJECTNAME, projectname);
   m_file->flush();
 }
 
 std::string Hdf5CoreGeneral::readProjectname()
 {
-  const std::scoped_lock lock(*m_write_mtx);
-
-  std::string projectname;
-  try
-  {
-    m_file->getAttribute(PROJECTNAME).read(projectname);
-  }
-  catch (...)
-  {
-    throw std::runtime_error("Project " + m_file->getName() + "  has no project name!");
-  }
-  return projectname;
+  return readAttributeFromHdf5<std::string>(*m_file, PROJECTNAME, m_file->getName());
 }
 
 void Hdf5CoreGeneral::writeProjectFrameId(const std::string& frameId)
@@ -72,21 +52,12 @@ void Hdf5CoreGeneral::writeProjectFrameId(const std::string& frameId)
 
 std::string Hdf5CoreGeneral::readProjectFrameId()
 {
-  return readFrameId(std::filesystem::path(m_file->getName()).filename().stem(), *m_file, PROJECTFRAMEID);
+  return readFrameId(*m_file, PROJECTFRAMEID, std::filesystem::path(m_file->getName()).filename().stem());
 }
 
 void Hdf5CoreGeneral::writeVersion(const std::string& version)
 {
-  const std::scoped_lock lock(*m_write_mtx);
-
-  if (!m_file->hasAttribute(VERSION))
-  {
-    m_file->createAttribute<std::string>(VERSION, version);
-  }
-  else
-  {
-    m_file->getAttribute(VERSION).write(version);
-  }
+  writeAttributeToHdf5<std::string>(*m_file, VERSION, version);
   m_file->flush();
 }
 
@@ -97,7 +68,7 @@ const std::optional<std::string> Hdf5CoreGeneral::readVersion()
   std::string version;
   try
   {
-    version = readAttributeFromHdf5<std::string>(m_file->getName(), *m_file, VERSION);
+    version = readAttributeFromHdf5<std::string>(*m_file, VERSION, m_file->getName());
   }
   catch (const std::exception& e)
   {
@@ -291,11 +262,12 @@ void Hdf5CoreGeneral::writeLabelsGeneral(
   m_file->flush();
 }
 
-const std::string Hdf5CoreGeneral::tf2_frame_id(std::string frame_id)
+const std::string Hdf5CoreGeneral::tf2_frame_id(const std::string& frame_id) const
 {
+  /* leading slahes are not allowed with tf2 */
   if (!frame_id.empty() && frame_id.at(0) == '/')
   {
-    return frame_id.erase(0, 1);
+    return frame_id.substr(1);
   }
   return frame_id;
 }
@@ -359,15 +331,6 @@ bool Hdf5CoreGeneral::hasAABB(const std::string& datatypeGroup, const std::strin
   return group.hasAttribute(AABB_FIELD);
 }
 
-void Hdf5CoreGeneral::deleteAttribute(const std::shared_ptr<HighFive::DataSet> dataSetPtr, std::string attributeField)
-{
-  if (dataSetPtr->hasAttribute(attributeField))
-  {
-    dataSetPtr->deleteAttribute(attributeField);
-    m_file->flush();
-  }
-}
-
 void Hdf5CoreGeneral::checkExists(const std::string& id)
 {
   if (!m_file->exist(id))
@@ -378,12 +341,12 @@ void Hdf5CoreGeneral::checkExists(const std::string& id)
   }
 }
 
-bool Hdf5CoreGeneral::exists(const std::string& id)
+bool Hdf5CoreGeneral::exists(const std::string& path) const
 {
-  if (!m_file->exist(id))
+  if (!m_file->exist(path))
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning)
-        << "id " << id << " does not exist in file " << m_file->getName();
+        << "HDF5 path: " << path << " does not exist in file: " << m_file->getName();
     return false;
   }
   return true;
@@ -417,69 +380,43 @@ void Hdf5CoreGeneral::readInstances(const std::string& id, const std::string ins
   datasetInstances.read(instances);
 }
 
-std::shared_ptr<HighFive::Group> Hdf5CoreGeneral::getHdf5Group(const std::string& hdf5GroupPath, bool create)
+std::shared_ptr<HighFive::Group> Hdf5CoreGeneral::getHdf5Group(const std::string& group_path, bool create)
 {
-  try
+  if (exists(group_path))
   {
-    checkExists(hdf5GroupPath);
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
-        << "hdf5 group" << hdf5GroupPath << " already exists!";
-    return std::make_shared<HighFive::Group>(m_file->getGroup(hdf5GroupPath));
+    return std::make_shared<HighFive::Group>(m_file->getGroup(group_path));
   }
-  catch (std::invalid_argument const& e)
+  else if (create)
   {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
-        << "hdf5 group " << hdf5GroupPath << " does not exist! Creating a new group";
-    if (create)
-    {
-      return std::make_shared<HighFive::Group>(m_file->createGroup(hdf5GroupPath));
-    }
-    else
-    {
-      return nullptr;
-    }
+    return std::make_shared<HighFive::Group>(m_file->createGroup(group_path));
   }
+  return nullptr;
 }
 
-void Hdf5CoreGeneral::writeGeodeticLocation(const seerep_core_msgs::GeodeticCoordinates geocoords)
+void Hdf5CoreGeneral::writeGeodeticLocation(const seerep_core_msgs::GeodeticCoordinates& geo_coordinates)
 {
-  const std::scoped_lock lock(*m_write_mtx);
-
-  if (!m_file->hasAttribute(GEODETICLOCATION_COORDINATESYSTEM) || !m_file->hasAttribute(GEODETICLOCATION_ELLIPSOID) ||
-      !m_file->hasAttribute(GEODETICLOCATION_ALTITUDE) || !m_file->hasAttribute(GEODETICLOCATION_LATITUDE) ||
-      !m_file->hasAttribute(GEODETICLOCATION_LONGITUDE))
-  {
-    m_file->createAttribute<std::string>(GEODETICLOCATION_COORDINATESYSTEM, geocoords.coordinateSystem);
-    m_file->createAttribute<double>(GEODETICLOCATION_ALTITUDE, geocoords.altitude);
-    m_file->createAttribute<double>(GEODETICLOCATION_LATITUDE, geocoords.latitude);
-    m_file->createAttribute<double>(GEODETICLOCATION_LONGITUDE, geocoords.longitude);
-  }
-  else
-  {
-    m_file->getAttribute(GEODETICLOCATION_COORDINATESYSTEM).write(geocoords.coordinateSystem);
-    m_file->getAttribute(GEODETICLOCATION_ALTITUDE).write(geocoords.altitude);
-    m_file->getAttribute(GEODETICLOCATION_LATITUDE).write(geocoords.latitude);
-    m_file->getAttribute(GEODETICLOCATION_LONGITUDE).write(geocoords.longitude);
-  }
+  writeAttributeToHdf5<std::string>(*m_file, GEODETICLOCATION_COORDINATESYSTEM, geo_coordinates.coordinateSystem);
+  writeAttributeToHdf5<double>(*m_file, GEODETICLOCATION_ALTITUDE, geo_coordinates.altitude);
+  writeAttributeToHdf5<double>(*m_file, GEODETICLOCATION_LATITUDE, geo_coordinates.latitude);
+  writeAttributeToHdf5<double>(*m_file, GEODETICLOCATION_LONGITUDE, geo_coordinates.longitude);
   m_file->flush();
 }
 
 std::optional<seerep_core_msgs::GeodeticCoordinates> Hdf5CoreGeneral::readGeodeticLocation()
 {
-  const std::scoped_lock lock(*m_write_mtx);
-
   seerep_core_msgs::GeodeticCoordinates geocoords;
   try
   {
-    m_file->getAttribute(GEODETICLOCATION_COORDINATESYSTEM).read(geocoords.coordinateSystem);
-    m_file->getAttribute(GEODETICLOCATION_ALTITUDE).read(geocoords.altitude);
-    m_file->getAttribute(GEODETICLOCATION_LATITUDE).read(geocoords.latitude);
-    m_file->getAttribute(GEODETICLOCATION_LONGITUDE).read(geocoords.longitude);
+    geocoords.coordinateSystem =
+        readAttributeFromHdf5<std::string>(*m_file, GEODETICLOCATION_COORDINATESYSTEM, m_file->getName());
+    geocoords.altitude = readAttributeFromHdf5<double>(*m_file, GEODETICLOCATION_ALTITUDE, m_file->getName());
+    geocoords.latitude = readAttributeFromHdf5<double>(*m_file, GEODETICLOCATION_LATITUDE, m_file->getName());
+    geocoords.longitude = readAttributeFromHdf5<double>(*m_file, GEODETICLOCATION_LONGITUDE, m_file->getName());
   }
-  catch (...)
+  catch (const std::invalid_argument& e)
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning)
-        << "geographic coordinates of the project " << m_file->getName() << " could not be read!";
+        << "Geographic coordinates of the project " << m_file->getName() << " could not be read!";
     return std::nullopt;
   }
   return geocoords;
@@ -491,10 +428,7 @@ std::shared_ptr<HighFive::DataSet> Hdf5CoreGeneral::getHdf5DataSet(const std::st
   {
     return std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DataSetPath));
   }
-  else
-  {
-    return nullptr;
-  }
+  return nullptr;
 }
 
 void Hdf5CoreGeneral::getLabelCategories(std::string id, std::string labelType,

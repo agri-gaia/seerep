@@ -49,8 +49,8 @@ std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CoreImage::readDataset(con
                                                                   data.labelsWithInstancesWithCategory);
 
     // fetch cam intrinsics uuid from hdf5_core_cameraintrinsics
-    camintrinsics_uuid = readAttributeFromHdf5<std::string>(hdf5DataGroupPath, *dataGroupPtr,
-                                                            seerep_hdf5_core::Hdf5CoreImage::CAMERA_INTRINSICS_UUID);
+    camintrinsics_uuid = readAttributeFromHdf5<std::string>(
+        *dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::CAMERA_INTRINSICS_UUID, hdf5DataGroupPath);
   }
   // lock released
 
@@ -104,15 +104,15 @@ ImageAttributes Hdf5CoreImage::readImageAttributes(const std::string& id)
 
   if (dataGroupPtr && dataSetPtr)
   {
-    attributes.height = readAttributeFromHdf5<uint32_t>(id, *dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::HEIGHT);
-    attributes.width = readAttributeFromHdf5<uint32_t>(id, *dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::WIDTH);
+    attributes.height = readAttributeFromHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::HEIGHT, id);
+    attributes.width = readAttributeFromHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::WIDTH, id);
     attributes.encoding =
-        readAttributeFromHdf5<std::string>(id, *dataSetPtr, seerep_hdf5_core::Hdf5CoreImage::ENCODING);
+        readAttributeFromHdf5<std::string>(*dataSetPtr, seerep_hdf5_core::Hdf5CoreImage::ENCODING, id);
     attributes.isBigendian =
-        readAttributeFromHdf5<bool>(id, *dataSetPtr, seerep_hdf5_core::Hdf5CoreImage::IS_BIGENDIAN);
-    attributes.step = readAttributeFromHdf5<uint32_t>(id, *dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::STEP);
+        readAttributeFromHdf5<bool>(*dataSetPtr, seerep_hdf5_core::Hdf5CoreImage::IS_BIGENDIAN, id);
+    attributes.step = readAttributeFromHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::STEP, id);
     attributes.cameraIntrinsicsUuid =
-        readAttributeFromHdf5<std::string>(id, *dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::CAMERA_INTRINSICS_UUID);
+        readAttributeFromHdf5<std::string>(*dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::CAMERA_INTRINSICS_UUID, id);
   }
   return attributes;
 }

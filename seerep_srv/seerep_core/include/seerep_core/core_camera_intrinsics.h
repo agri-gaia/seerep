@@ -38,7 +38,7 @@ public:
    * @return true If Camera Intrinsics Exists
    * @return false If Camera Intrinsics Exists
    */
-  bool checkCameraIntrinsicsExists(boost::uuids::uuid camIntrinsicsUuid);
+  bool cameraIntrinsicExists(boost::uuids::uuid camIntrinsicsUuid);
 
 private:
   /** @brief shared pointer to the object handling the HDF5 io for Camera Intrinsics */
