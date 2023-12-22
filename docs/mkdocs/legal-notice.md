@@ -25,8 +25,8 @@ The person responsible for the editorial content of the domain *[agri-gaia.githu
 of the German Research Center for Artificial Intelligence GmbH within the meaning of § 18 para. 2 MStV is:
 
 Mark Niemeyer<br>
-Berghoffstraße 11<br>
-49090 Osnabrück<br>
+Hamburger Straße 24<br>
+49084 Osnabrück<br>
 Germany<br>
 
 Phone: [+49 541 386050 2254](tel:+495413860502254)<br>
