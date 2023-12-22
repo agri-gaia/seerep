@@ -265,6 +265,16 @@ def createPointFields(builder, channels, datatype, dataTypeOffset, count):
 
 
 def createLabel(builder, label):
+    """
+    Creates a label.
+
+    Args:
+        builder: A flatbuffers Builder.
+        label: A Tuple consisting of a flatbuffers String as the first entry and a float as the second.
+
+    Returns:
+        The created label represented as a flatbuffers internal object.
+    """
     Label.Start(builder)
     Label.AddLabel(builder, label[0])
     Label.AddConfidence(builder, label[1])
