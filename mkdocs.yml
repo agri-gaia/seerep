@@ -53,8 +53,9 @@ theme:
     - navigation.tabs
     - navigation.expand
     - navigation.sections
-  # disable google fonts due to GDPR
-  font: false
+  font:
+    text: IBM Plex Sans
+    code: IBM Plex Mono
 # dfki color theme
 extra_css:
   - stylesheets/extra.css
