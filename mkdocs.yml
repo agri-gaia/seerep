@@ -50,7 +50,7 @@ theme:
     - navigation.tracking
     - navigation.tabs
     - navigation.expand
-    - navigation.sections
+    - navigation.indexes
     - content.code.copy
   font:
     text: IBM Plex Sans
