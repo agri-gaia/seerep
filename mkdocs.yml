@@ -1,5 +1,6 @@
 site_name: SEEREP Documentation
 repo_url: https://github.com/agri-gaia/seerep
+repo_name: agri-gaia/seerep
 docs_dir: docs/mkdocs
 # define navigation structure
 nav:
