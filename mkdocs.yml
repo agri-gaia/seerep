@@ -29,6 +29,7 @@ theme:
   icon:
     repo: fontawesome/brands/github
   logo: imgs/DFKI-Logo_ohne_RGB_weiss.svg
+  favicon: imgs/DFKI-Logo_ohne_RGB_weiss.svg
   # dark mode toggle
   palette:
     - media: "(prefers-color-scheme: light)"
