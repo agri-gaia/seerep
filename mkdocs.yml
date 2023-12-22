@@ -41,24 +41,25 @@ plugins:
   - privacy
   - glightbox
 nav:
-  - Home: 'home/index.md'
-  - Getting started:
-    - Client:
-      - gRPC python: 'getting-started/client/pypi.md'
-    - Server:
-      - Configuration: 'getting-started/server/configuration.md'
-      - Dev Environment: 'getting-started/server/installationDev.md'
-      - Kubernetes Deployment: 'getting-started/server/kubernetes-deployment.md'
-      - Local Deployment: 'getting-started/server/local-deployment.md'
-      - Docs: 'getting-started/server/docs.md'
-      - Tests: 'getting-started/server/tests.md'
+  - SEEREP: 'index.md'
+  - Getting Started:
+    - Docker Deployment: 'getting_started/docker_deployment.md'
+    - Python Clients: 'getting_started/python_clients.md'
+    - Development Environment: 'getting_started/development_environment.md'
+  - Examples:
+    - Projects: 'examples/projects.md'
+    - Images: 'examples/images.md'
+    - Point Clouds: 'examples/point_clouds.md'
   - Reference:
-    - Package Overview: 'reference/packages.md'
-  - Tutorials:
-    - Overview: 'tutorials/overview.md'
-    - gRPC Python: 'tutorials/overview.md'
-    - Creating & retrieving projects: 'tutorials/projects.md'
-    - Sending & Querying Images: 'tutorials/images.md'
+    - Server Configuration: 'reference/server_configuration.md'
+    - Sever Package Structure: 'reference/server_package_structure.md'
+    - Python Package Structure: 'reference/python_package_structure.md'
+    - Documentation Setup: 'reference/documentation_setup.md'
+    - Testing Setup: 'reference/testing_setup.md'
+  - About:
+    - About: 'about/about.md'
+    - Legal Notice: 'about/legal_notice.md'
+    - Data Protection Notice: 'about/data_protection_notice.md'
 markdown_extensions:
   - admonition
   - pymdownx.highlight:
