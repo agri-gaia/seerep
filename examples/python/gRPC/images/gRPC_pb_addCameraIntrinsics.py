@@ -60,13 +60,13 @@ camin.region_of_interest.do_rectify = 4
 camin.height = 5
 camin.width = 4
 
-camin.distortion_model = "plump_bob"
+camin.distortion_model = "plumb_bob"
 
 camin.distortion.extend([3, 4, 5])
 
-camin.intrinsic_matrix.extend([3, 4, 5])
-camin.rectification_matrix.extend([3, 4, 5])
-camin.projection_matrix.extend([3, 4, 5])
+camin.intrinsic_matrix.extend([3, 4, 5, 6, 7, 8, 9, 10, 11])
+camin.rectification_matrix.extend([3, 4, 5, 6, 7, 8, 9, 10, 11])
+camin.projection_matrix.extend([3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14])
 
 camin.binning_x = 6
 camin.binning_y = 7

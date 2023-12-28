@@ -131,7 +131,7 @@ public:
    * @param camintrinsics_uuid The UUID of the camera intrinsic parameters to use.
    * @param bb Axis aligned bounding box to store the result in.
    */
-  void computeFrusturmBB(const std::string& camintrinsics_uuid, seerep_core_msgs::AABB& bb);
+  void computeFrustumBB(const std::string& camintrinsics_uuid, seerep_core_msgs::AABB& bb);
 
 public:
   // image attribute keys

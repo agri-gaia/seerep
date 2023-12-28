@@ -14,6 +14,47 @@ grpc::Status PbCameraIntrinsicsService::TransferCameraIntrinsics(grpc::ServerCon
   (void)context;  // ignore that variable without causing warnings
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "received camera intrinsics... ";
 
+  std::string response_message;
+
+  // check if the distortion model is found in DISTORTION_MODELS
+  bool distortion_model_err = std::find(std::begin(seerep_server_constants::kCameraDistortionModels),
+                                        std::end(seerep_server_constants::kCameraDistortionModels),
+                                        camintrinsics->distortion_model().c_str()) ==
+                              std::end(seerep_server_constants::kCameraDistortionModels);
+  bool distortion_mat_err = camintrinsics->distortion_size() < 1;
+  bool intrinsics_mat_err = camintrinsics->intrinsic_matrix_size() != 9;
+  bool rectification_mat_err = camintrinsics->rectification_matrix_size() != 9;
+  bool projection_mat_err = camintrinsics->projection_matrix_size() != 12;
+
+  if (distortion_model_err || distortion_mat_err || intrinsics_mat_err || rectification_mat_err || projection_mat_err)
+  {
+    if (distortion_model_err)
+    {
+      response_message = "The distortion model is not set or invalid.";
+    }
+    else if (distortion_mat_err)
+    {
+      response_message = "The distortion matrix has to be set correctly in relation to the distortion model.";
+    }
+    else if (intrinsics_mat_err)
+    {
+      response_message =
+          "Instrinsics matrix dimensions are incorrect, ensure the correct layout of all input matrices.";
+    }
+    else if (rectification_mat_err)
+    {
+      response_message =
+          "Rectification matrix dimensions are incorrect, ensure the correct layout of all input matrices.";
+    }
+    else if (projection_mat_err)
+    {
+      response_message = "Projection matrix dimensions are incorrect, ensure the correct layout of all input matrices.";
+    }
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << response_message;
+    seerep_server_util::createResponsePb(response_message, seerep::pb::ServerResponse::FAILURE, response);
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, response_message);
+  }
+
   if (!camintrinsics->header().uuid_project().empty())
   {
     std::string grpc_msg = "Added Camera Intrinsics.";

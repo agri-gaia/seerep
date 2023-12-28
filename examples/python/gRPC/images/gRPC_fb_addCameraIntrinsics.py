@@ -38,8 +38,15 @@ ts = createTimeStamp(builder, 4, 3)
 header = createHeader(builder, ts, "map", projectuuid, ciuuid)
 roi = createRegionOfInterest(builder, 3, 5, 6, 7, True)
 
-matrix = [4, 5, 6]
-ci = createCameraIntrinsics(builder, header, 3, 4, "plump_bob", matrix, matrix, matrix, matrix, 4, 5, roi, 5)
+
+distortion_matrix = [4, 5, 6, 7, 8, 9, 10, 11, 12]
+rect_matrix = [4, 5, 6, 7, 8, 9, 10, 11, 12]
+intrins_matrix = [4, 5, 6, 7, 8, 9, 10, 11, 12]
+proj_matrix = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+
+ci = createCameraIntrinsics(
+    builder, header, 3, 4, "plumb_bob", distortion_matrix, intrins_matrix, rect_matrix, proj_matrix, 4, 5, roi, 5
+)
 builder.Finish(ci)
 
 buf = builder.Output()
