@@ -12,6 +12,7 @@ from seerep.fb import point_cloud_service_grpc_fb as pointCloudService
 from seerep.fb import tf_service_grpc_fb
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
+    addToBoundingBoxLabeledVector,
     addToPointFieldVector,
     createBoundingBoxes,
     createBoundingBoxesLabeled,
@@ -24,8 +25,9 @@ from seerep.util.fb_helper import (
     createTimeStamp,
     getOrCreateProject,
 )
+from seerep.util.fb_to_dict import fb_obj_to_dict
 
-NUM_GENERAL_LABELS = 1
+NUM_GENERAL_LABELS = 10
 NUM_BB_LABELS = 1
 NUM_POINT_CLOUDS = 10
 
@@ -66,7 +68,7 @@ def createPointCloud(builder, header, height=960, width=1280):
     labelsBBCat = createBoundingBoxLabeledWithCategory(
         builder, builder.CreateString("myCategory"), labelsBb
     )
-    # labelsBbVector = addToBoundingBoxLabeledVector(builder, labelsBBCat)
+    labelsBbVector = addToBoundingBoxLabeledVector(builder, [labelsBBCat])
 
     # Note: rgb field is float, for simplification
     pointsBox = [[]]
@@ -89,8 +91,8 @@ def createPointCloud(builder, header, height=960, width=1280):
     PointCloud2.AddRowStep(builder, points.shape[1] * 16)
     PointCloud2.AddFields(builder, pointFieldsVector)
     PointCloud2.AddData(builder, pointsVector)
-    # PointCloud2.AddLabelsGeneral(builder, labelsGeneralCat)
-    # PointCloud2.AddLabelsBb(builder, labelsBBCat)
+    PointCloud2.AddLabelsGeneral(builder, labelsGeneralCat)
+    PointCloud2.AddLabelsBb(builder, labelsBbVector)
     return PointCloud2.End(builder)
 
 
@@ -194,4 +196,5 @@ if __name__ == "__main__":
         data = np.array(data_flattened).reshape(
             pc.Height(), pc.Width(), pc.FieldsLength()
         )
+
         print(f"Data: {data}")
