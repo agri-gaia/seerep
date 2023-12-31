@@ -64,9 +64,9 @@ def draw_pcl(
     Based on https://github.com/open-mmlab/OpenPCDet/blob/255db8f02a8bd07211d2c91f54602d63c4c93356/tools/visual_utils/open3d_vis_utils.py#L38
     """
     vis = o3d.visualization.Visualizer()
-    print("before stuck")
+    # print("before stuck")
     vis.create_window()
-    print("after stuck")
+    # print("after stuck")
 
     vis.get_render_option().point_size = 1.0
     vis.get_render_option().background_color = np.zeros(3)
@@ -138,7 +138,7 @@ def query_pcs(
     query = createQuery(
         fb_builder,
         # timeInterval=time_interval,
-        # labels=label_wcategories,
+        labels=label_wcategories,
         # mustHaveAllLabels=False,
         # projectUuids=project_uuids,
         # instanceUuids=instance_uuids,
@@ -165,7 +165,6 @@ if __name__ == "__main__":
         print("no response received")
     for resp in query_pcl:
         print(fb_obj_to_dict(resp))
-        sys.exit()
         print(f"---Header--- \n {unpack_header(resp)}")
 
         point_fields = unpack_point_fields(resp)
@@ -173,41 +172,46 @@ if __name__ == "__main__":
 
         print("---Bounding Box Labels---")
         for i in range(resp.LabelsBbLength()):
-            print(
-                f"Label {i}: {resp.LabelsBb(i).LabelWithInstance().Label().decode('utf-8')}"
-            )
-            print(
-                f"Instance {i}: {resp.LabelsBb(i).LabelWithInstance().InstanceUuid().decode('utf-8')}"
-            )
-            print(
-                f"Bounding Box Min {i}: "
-                f"{resp.LabelsBb(i).BoundingBoxLabeled(0).BoundingBox().PointMin().X()},"
-                f"{resp.LabelsBb(i).BoundingBoxLabeled(0).BoundingBox().PointMin().Y()},"
-                f"{resp.LabelsBb(i).BoundingBoxLabeled(0).BoundingBox().PointMin().Z()} "
-                f"(x,y,z)"
-            )
-            print(
-                f"Bounding Box Max {i}: "
-                f"{resp.LabelsBb(i).BoundingBoxLabeled(0).BoundingBox().PointMax().X()},"
-                f"{resp.LabelsBb(i).BoundingBoxLabeled(0).BoundingBox().PointMax().Y()},"
-                f"{resp.LabelsBb(i).BoundingBoxLabeled(0).BoundingBox().PointMax().Z()} "
-                f"(x,y,z)"
-            )
-            print(
-                f"Bounding Box Rotation {i}: "
-                f"({resp.LabelsBb(i).BoundingBoxLabeled(0).BoundingBox().Rotation().X()}, "
-                f"{resp.LabelsBb(i).BoundingBoxLabeled(0).BoundingBox().Rotation().Y()}, "
-                f"{resp.LabelsBb(i).BoundingBoxLabeled(0).BoundingBox().Rotation().Z()}, "
-                f"{resp.LabelsBb(i).BoundingBoxLabeled(0).BoundingBox().Rotation().W()}) "
-                f"(x,y,z,w)"
-            )
+            for j in range(resp.LabelsBb(i).BoundingBoxLabeledLength()):
+                print(
+                    f"Label Label_BbLabeled {i}_{j}: {resp.LabelsBb(i).BoundingBoxLabeled(j).LabelWithInstance().Label().Label().decode('utf-8')}"
+                )
+                print(
+                    f"Instance Label_BbLabeled {i}_{j}: {resp.LabelsBb(i).BoundingBoxLabeled(j).LabelWithInstance().InstanceUuid().decode('utf-8')}"
+                )
+                print(
+                    f"Bounding Box Spatial Extent Label_BbLabeled {i}_{j}: "
+                    f"{resp.LabelsBb(i).BoundingBoxLabeled(j).BoundingBox().SpatialExtent().X()},"
+                    f"{resp.LabelsBb(i).BoundingBoxLabeled(j).BoundingBox().SpatialExtent().Y()},"
+                    f"{resp.LabelsBb(i).BoundingBoxLabeled(j).BoundingBox().SpatialExtent().Z()} "
+                    f"(x,y,z)"
+                )
+                print(
+                    f"Bounding Box Center Point Label_BbLabeled {i}_{j}: "
+                    f"{resp.LabelsBb(i).BoundingBoxLabeled(j).BoundingBox().CenterPoint().X()},"
+                    f"{resp.LabelsBb(i).BoundingBoxLabeled(j).BoundingBox().CenterPoint().Y()},"
+                    f"{resp.LabelsBb(i).BoundingBoxLabeled(j).BoundingBox().CenterPoint().Z()} "
+                    f"(x,y,z)"
+                )
+                print(
+                    f"Bounding Box Rotation Label_BbLabeled {i}_{j}: "
+                    f"({resp.LabelsBb(i).BoundingBoxLabeled(j).BoundingBox().Rotation().X()}, "
+                    f"{resp.LabelsBb(i).BoundingBoxLabeled(j).BoundingBox().Rotation().Y()}, "
+                    f"{resp.LabelsBb(i).BoundingBoxLabeled(j).BoundingBox().Rotation().Z()}, "
+                    f"{resp.LabelsBb(i).BoundingBoxLabeled(j).BoundingBox().Rotation().W()}) "
+                    f"(x,y,z,w)"
+                )
 
         print("---General Labels----")
         for i in range(resp.LabelsGeneralLength()):
-            print(f"Label {i}: {resp.LabelsGeneral(i).Label().decode('utf-8')}")
-            print(
-                f"Instance {i}: {resp.LabelsGeneral(i).InstanceUuid().decode('utf-8')}"
-            )
+
+            for j in range(resp.LabelsGeneral(i).LabelsWithInstanceLength()):
+                print(
+                    f"Label {i}, {j}: {resp.LabelsGeneral(i).LabelsWithInstance(j).Label().Label().decode('utf-8')}"
+                )
+                print(
+                    f"Instance {i}, {j}: {resp.LabelsGeneral(i).LabelsWithInstance(j).InstanceUuid().decode('utf-8')}"
+                )
 
         if not resp.DataIsNone():
             dtypes = np.dtype(

@@ -26,14 +26,6 @@ from seerep.pb import projectCreation_pb2 as projectCreation
 from seerep.pb import tf_service_pb2_grpc as tfService
 from seerep.pb import transform_stamped_pb2 as tf
 from seerep.util.common import get_gRPC_channel
-from seerep.util.fb_helper import (
-    createCameraIntrinsics,
-    createCameraIntrinsicsQuery,
-    createHeader,
-    createRegionOfInterest,
-    createTimeStamp,
-    getProject,
-)
 
 
 def send_labeled_images(
@@ -69,7 +61,7 @@ def send_labeled_images(
     # A valid camera intrinsics UUID is needed here for succesful storage of Images
     # Add new Camera Intrinsics
 
-    ciuuid = add_camintrins(target_proj_uuid, grpc_channel)
+    ciuuid = str(uuid.uuid4())
 
     camin = cameraintrinsics.CameraIntrinsics()
 
@@ -92,7 +84,7 @@ def send_labeled_images(
 
     camin.distortion_model = "plumb_bob"
 
-    camin.distortion.extend([3, 4, 5])
+    camin.distortion.extend([i for i in range(0, 3)])
 
     camin.intrinsic_matrix.extend([3, 4, 5, 10, 7, 8, 9, 10, 11])
     camin.rectification_matrix.extend([3, 4, 5, 6, 7, 8, 9, 10, 11])
@@ -203,49 +195,6 @@ def send_labeled_images(
 
     # return sent data
     return sent_images_list, tf_times, camin
-
-
-def add_camintrins(target_proj_uuid: str, grpc_channel: Channel) -> str:
-
-    builder = flatbuffers.Builder(1000)
-
-    # 1. Get all projects from the server when no target specified
-    if target_proj_uuid is None:
-        target_proj_uuid = getProject(builder, grpc_channel, "testproject")
-
-    ciuuid = str(uuid.uuid4())
-
-    # 3. Get gRPC service object
-    stub = ci_service.CameraIntrinsicsServiceStub(grpc_channel)
-
-    # Create all necessary objects for the query
-    ts = createTimeStamp(builder, 4, 3)
-    header = createHeader(builder, ts, "map", target_proj_uuid, ciuuid)
-    roi = createRegionOfInterest(builder, 3, 5, 6, 7, True)
-
-    matrix = [4, 5, 6]
-    ci = createCameraIntrinsics(
-        builder, header, 3, 4, "plump_bob", matrix, matrix, matrix, matrix, 4, 5, roi, 5
-    )
-    builder.Finish(ci)
-
-    buf = builder.Output()
-
-    stub.TransferCameraIntrinsics(bytes(buf))
-
-    # Fetch the saved CI
-    builder = flatbuffers.Builder(1000)
-
-    ci_query = createCameraIntrinsicsQuery(builder, ciuuid, target_proj_uuid)
-
-    builder.Finish(ci_query)
-    buf = builder.Output()
-
-    ret = stub.GetCameraIntrinsics(bytes(buf))
-
-    retrieved_ci = CameraIntrinsics.CameraIntrinsics.GetRootAs(ret)
-
-    return ciuuid
 
 
 if __name__ == "__main__":

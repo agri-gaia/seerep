@@ -40,4 +40,9 @@ def test_gRPC_getInstances(grpc_channel, project_setup):
         queryinst_builder.builder, queryinst_builder.datatype_instance
     )
 
-    assert len(instance_uuids) == len(bbs_instances)
+    assert len(
+        [
+            instance_uuids.UuidsPerProject(0).Uuids(i)
+            for i in range(instance_uuids.UuidsPerProject(0).UuidsLength())
+        ]
+    ) == len(bbs_instances)

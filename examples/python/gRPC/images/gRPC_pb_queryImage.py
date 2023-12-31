@@ -42,8 +42,8 @@ def query_images(
     theQuery = query.Query()
     theQuery.projectuuid.append(target_project_uuid)
 
-    theQuery.polygon.z = -100
-    theQuery.polygon.height = 700
+    theQuery.polygon.z = -200
+    theQuery.polygon.height = 800
 
     theQuery.inMapFrame = True
 

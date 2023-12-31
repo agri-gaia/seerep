@@ -68,7 +68,7 @@ def send_labeled_image_grid(
     # A valid camera intrinsics UUID is needed here for succesful storage of Images
     # Add new Camera Intrinsics
 
-    ciuuid = add_camintrins(target_proj_uuid, grpc_channel)
+    ciuuid = str(uuid.uuid4())
 
     camin = cameraintrinsics.CameraIntrinsics()
 
@@ -91,16 +91,20 @@ def send_labeled_image_grid(
 
     camin.distortion_model = "plump_bob"
 
-    camin.distortion.extend([3, 4, 5])
+    camin.distortion.extend([i for i in range(0, 3)])
 
-    camin.intrinsic_matrix.extend([3, 4, 5])
-    camin.rectification_matrix.extend([3, 4, 5])
-    camin.projection_matrix.extend([3, 4, 5])
+    camin.intrinsic_matrix.extend([1, 0, 0, 0, 2, 0, 0, 0, 1])
+    camin.rectification_matrix.extend([i for i in range(12, 12 + 9)])
+    camin.projection_matrix.extend([i for i in range(21, 21 + 12)])
 
     camin.binning_x = 6
     camin.binning_y = 7
 
-    camin.maximum_viewing_distance = 5
+    # this deactivates the influence of the frustum matrix on the coordinates of the images, for easier testing
+    camin.maximum_viewing_distance = 0
+
+    # old value:
+    # camin.maximum_viewing_distance = 5
 
     stubCI.TransferCameraIntrinsics(camin)
 
@@ -246,7 +250,7 @@ def add_camintrins(target_proj_uuid: str, grpc_channel: Channel) -> str:
     header = createHeader(builder, ts, "map", target_proj_uuid, ciuuid)
     roi = createRegionOfInterest(builder, 3, 5, 6, 7, True)
 
-    matrix = [4, 5, 6]
+    matrix = [4, 5, 6, 7, 0.1]
     ci = createCameraIntrinsics(
         builder, header, 3, 4, "plump_bob", matrix, matrix, matrix, matrix, 4, 5, roi, 5
     )

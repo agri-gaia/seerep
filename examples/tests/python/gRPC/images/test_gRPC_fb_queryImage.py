@@ -48,7 +48,7 @@ def test_gRPC_fb_queryImages(grpc_channel, project_setup):
     for img in sent_image_dicts:
         img["data"] = []
 
-    # filter sent_images to only contain the 5 images which are queried with uuid_msgs
+    # filter sent_images to only contain the 6 images which are queried with uuid_msgs
     filtered_sent_images = []
     for img in sent_image_dicts:
         if img["header"]["uuid_msgs"] in [
@@ -56,7 +56,7 @@ def test_gRPC_fb_queryImages(grpc_channel, project_setup):
         ]:
             filtered_sent_images.append(img)
 
-    assert len(queried_image_dicts) == len(filtered_sent_images) == 5
+    assert len(queried_image_dicts) == len(filtered_sent_images) == 6
 
     ordered_sent_imgs = sorted(
         filtered_sent_images, key=lambda x: x["header"]["uuid_msgs"]

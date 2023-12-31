@@ -1,5 +1,4 @@
 #!/user/bin/env python3
-
 import struct
 import uuid
 from typing import List
@@ -7,6 +6,7 @@ from typing import List
 import flatbuffers
 import numpy as np
 from grpc import Channel
+from quaternion import quaternion
 from seerep.fb import PointCloud2, Quaternion, Transform, TransformStamped, Vector3
 from seerep.fb import point_cloud_service_grpc_fb as pointCloudService
 from seerep.fb import tf_service_grpc_fb
@@ -22,6 +22,7 @@ from seerep.util.fb_helper import (
     createLabelWithCategory,
     createPoint,
     createPointFields,
+    createQuaternion,
     createTimeStamp,
     getOrCreateProject,
 )
@@ -55,6 +56,10 @@ def createPointCloud(builder, header, height=960, width=1280):
         ],
         [
             createPoint(builder, np.random.rand(), np.random.rand(), np.random.rand())
+            for _ in range(NUM_BB_LABELS)
+        ],
+        [
+            createQuaternion(builder, quaternion(1.0, 0.0, 0.0, 0.0))
             for _ in range(NUM_BB_LABELS)
         ],
     )
