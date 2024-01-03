@@ -8,6 +8,7 @@ numpy==1.22.0
 numpy-quaternion==2022.4.2
 mkdocs==1.5.3
 mkdocs-material==9.5.2
+mkdocs-glightbox==0.3.6
 twine==4.0.2
 build==0.10.0
 setuptools==65.7.0
