@@ -83,5 +83,7 @@ markdown_extensions:
   - footnotes
   - attr_list
   - md_in_html
+  - toc:
+      permalink: true
 copyright: Copyright &copy; 2021 - 2024 Deutsches Forschungszentrum für Künstliche Intelligenz GmbH (DFKI) <br>
   <a href="/seerep/mkdocs/legal-notice/index.html">Legal Notice</a> - <a href="/seerep/mkdocs/data-protection-notice/index.html">Data Protection Notice</a>
