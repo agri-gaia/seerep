@@ -26,9 +26,9 @@ def expect_component(*args: FrozenEnum):
                 self._validate_enum(arg)
                 if self.get_component(arg) == None:
                     raise ValueError(
-                        f"The component mapped to the enum {arg} is expected to be non None"
+                        f"The component mapped to the enum {arg} is expected to be not None"
                     )
-            return func(*fnargs, **fnkwargs)
+            return func(self, *fnargs, **fnkwargs)
 
         return wrapper
 
@@ -56,10 +56,10 @@ class MsgsBase(ABC, Generic[T]):
         return self._active_enums
 
     @active_enums.setter
-    def set_active_enums(self, enum_types: Set[FrozenEnum]):
+    def active_enums(self, enum_types: List[FrozenEnum]):
         for enum in enum_types:
             self._validate_enum(enum)
-        self._active_enums = enum_types
+        self._active_enums = set(enum_types)
 
     def _validate_enum_func_mappings(self):
         # check that every entry is a subclass of enum and that every entry is of same type

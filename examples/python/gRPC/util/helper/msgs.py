@@ -194,23 +194,43 @@ class DatatypeImplementations:
         @classmethod
         # returns list of flatbuffered string, those are registered as ints
         def intanceuuid(
-            cls, builder: Builder, channel: Channel, proj_uuid: str
+            cls, builder: Builder, channel: Channel, proj_uuid: int
         ) -> List[int]:
-            query_instance = FbQueryInstance(channel).datatype_instance
+            query_builder = FbQuery(channel, enum_types=set([EnumFbQuery.PROJECTUUID]))
+            query_builder.set_active_function(
+                EnumFbQuery.PROJECTUUID, lambda: proj_uuid
+            )
+            query_builder.assemble_datatype_instance()
+            query_inst_builder = FbQueryInstance(
+                channel, enum_types=set([EnumFbQueryInstance.QUERY])
+            )
+            query_inst_builder.set_active_function(
+                EnumFbQueryInstance.QUERY, lambda: query_builder.datatype_instance
+            )
+            query_inst_builder.assemble_datatype_instance()
+            query_instance = query_inst_builder.datatype_instance
+
             serv_man = ServiceManager(channel)
             uuids_pp = serv_man.call_get_instances_fb(builder, query_instance)
 
             uuids_by_proj = [
                 uuids_pp.UuidsPerProject(i)
                 for i in range(uuids_pp.UuidsPerProjectLength())
-                if uuids_pp.UuidsPerProject(i).ProjectUuid == proj_uuid
             ]
 
-            # return every second uuid
-            uuids = [
-                builder.CreateString(uuids_by_proj[0].Uuids(i).decode())
-                for i in range(0, uuids_by_proj[0].UuidsLength(), 2)
-            ]
+            uuids = []
+            if len(uuids_by_proj) > 0:
+                # return every second uuid
+                uuids = sorted(
+                    [
+                        uuids_by_proj[0].Uuids(i).decode()
+                        for i in range(0, uuids_by_proj[0].UuidsLength())
+                    ]
+                )
+                # serialize the uuid strings
+                uuids = [
+                    builder.CreateString(uuids[i]) for i in range(0, len(uuids), 2)
+                ]
 
             return uuids
 
@@ -222,9 +242,13 @@ class DatatypeImplementations:
             points = serv_man.call_get_points_fb(builder, query_fb)
             pcl2s = serv_man.call_get_pointcloud2_fb(builder, query_fb)
 
-            image_uuids = [image.Header().UuidMsgs().decode() for image in images]
-            point_uuids = [point.Header().UuidMsgs().decode() for point in points]
-            pcl2_uuids = [pcl.Header().UuidMsgs().decode() for pcl in pcl2s]
+            image_uuids = sorted(
+                [image.Header().UuidMsgs().decode() for image in images]
+            )
+            point_uuids = sorted(
+                [point.Header().UuidMsgs().decode() for point in points]
+            )
+            pcl2_uuids = sorted([pcl.Header().UuidMsgs().decode() for pcl in pcl2s])
 
             # debugging
             print("images: " + str(image_uuids))

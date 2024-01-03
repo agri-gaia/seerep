@@ -89,7 +89,7 @@ responseBuf = stub.GetInstances(bytes(buf))
 response = UuidsPerProject.UuidsPerProject.GetRootAs(responseBuf)
 
 if response.UuidsPerProjectLength() > 0:
-    print(response.UuidsPerProjectLength())
+    print(response.UuidsPerProject(0).UuidsLength())
     print(response.UuidsPerProject(0).ProjectUuid().decode("utf-8"))
 else:
     print("no project with that instance type found!")
