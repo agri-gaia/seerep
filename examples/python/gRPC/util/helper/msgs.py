@@ -251,9 +251,9 @@ class DatatypeImplementations:
             pcl2_uuids = sorted([pcl.Header().UuidMsgs().decode() for pcl in pcl2s])
 
             # debugging
-            print("images: " + str(image_uuids))
-            print("points: " + str(point_uuids))
-            print("pcls: " + str(pcl2_uuids))
+            # print("images: " + str(image_uuids))
+            # print("points: " + str(point_uuids))
+            # print("pcls: " + str(pcl2_uuids))
 
             # fill up return list with every second uuid
             ret_lst = [

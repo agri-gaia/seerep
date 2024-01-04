@@ -91,5 +91,7 @@ response = UuidsPerProject.UuidsPerProject.GetRootAs(responseBuf)
 if response.UuidsPerProjectLength() > 0:
     print(response.UuidsPerProject(0).UuidsLength())
     print(response.UuidsPerProject(0).ProjectUuid().decode("utf-8"))
+    # debugging
+    # print(fb_obj_to_dict(response))
 else:
     print("no project with that instance type found!")
