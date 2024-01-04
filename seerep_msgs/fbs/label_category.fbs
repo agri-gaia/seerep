@@ -2,9 +2,10 @@ include "label.fbs";
 
 namespace seerep.fb;
 
-table LabelsWithCategory {
+table LabelCategory {
   category:string;
   labels:[Label];
+  datumaroJson:string;
 }
 
-root_type LabelsWithCategory;
+root_type LabelCategory;

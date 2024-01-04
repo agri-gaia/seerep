@@ -11,6 +11,7 @@
 #include <seerep_msgs/camera_intrinsics_query_generated.h>
 // seerep-msgs
 #include <seerep_msgs/aabb.h>
+#include <seerep_msgs/boundingbox_generated.h>
 #include <seerep_msgs/camera_intrinsics.h>
 #include <seerep_msgs/camera_intrinsics_query.h>
 #include <seerep_msgs/datatype_generated.h>
@@ -29,7 +30,7 @@
 
 // seerep_core_msgs
 #include <seerep_msgs/dataset_indexable.h>
-#include <seerep_msgs/label_with_instance.h>
+#include <seerep_msgs/label.h>
 #include <seerep_msgs/query.h>
 #include <seerep_msgs/query_result.h>
 #include <seerep_msgs/query_tf.h>
@@ -46,7 +47,7 @@
 
 namespace seerep_core_fb
 {
-using LabelWithInstanceVec = std::vector<seerep_core_msgs::LabelWithInstance>;
+using LabelVec = std::vector<seerep_core_msgs::Label>;
 /**
  * @brief This class converts between flatbuffer messages and seerep core specific messages
  *
@@ -307,25 +308,14 @@ private:
    * @param labelsWithInstancesWithCategory the labels_general with instances (per category) in the data message in
    * seerep core format
    */
-  static void fromFbDataLabelsGeneral(
-      const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelsWithInstanceWithCategory>>* labelsGeneral,
-      std::unordered_map<std::string, std::vector<seerep_core_msgs::LabelWithInstance>>& labelsWithInstancesWithCategory);
+  static void fromFbDataLabels(
+      const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelCategory>>* labelsGeneral,
+      std::unordered_map<std::string, std::vector<seerep_core_msgs::Label>>& labelsWithInstancesWithCategory);
   /**
    * @brief converts the BoundingBox2DLabeled with instances of the flatbuffer data message to seerep core specific message
    * @param labelsGeneral the BoundingBox2DLabeled with instances in the flatbuffer data message
    * @param labelWithInstance the BoundingBox2DLabeled with instances in the data message in seerep core format
    */
-  static void fromFbDataLabelsBb2d(
-      const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeledWithCategory>>* labelsBB2d,
-      std::unordered_map<std::string, std::vector<seerep_core_msgs::LabelWithInstance>>& labelsWithInstancesWithCategory);
-  /**
-   * @brief converts the BoundingBoxLabeled with instances of the flatbuffer data message to seerep core specific message
-   * @param labelsBB the BoundingBoxLabeled with instances in the flatbuffer data message
-   * @param labelWithInstance the BoundingBoxLabeled with instances in the data message in seerep core format
-   */
-  static void fromFbDataLabelsBb(
-      const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeledWithCategory>>* labelsBB,
-      std::unordered_map<std::string, std::vector<seerep_core_msgs::LabelWithInstance>>& labelsWithInstancesWithCategory);
 };
 
 }  // namespace seerep_core_fb

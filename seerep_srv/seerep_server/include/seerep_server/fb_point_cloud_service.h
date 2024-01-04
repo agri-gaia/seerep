@@ -58,10 +58,11 @@ public:
    * @param response gRPC message to describe the transmission state of the bounding boxes
    * @return grpc::Status status of the request. Did it work?
    */
-  grpc::Status AddBoundingBoxesLabeled(
-      grpc::ServerContext* context,
-      grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::BoundingBoxesLabeledStamped>>* reader,
-      flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response) override;
+  // TODO
+  // grpc::Status AddBoundingBoxesLabeled(
+  //     grpc::ServerContext* context,
+  //     grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::BoundingBoxesLabeledStamped>>* reader,
+  //     flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response) override;
 
 private:
   /** @brief a shared pointer to the general core */

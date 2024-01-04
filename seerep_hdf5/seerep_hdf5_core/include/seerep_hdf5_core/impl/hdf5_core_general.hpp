@@ -88,4 +88,14 @@ void Hdf5CoreGeneral::readHeader(const std::string& id, HighFive::AnnotateTraits
   header.frameId = Hdf5CoreGeneral::readFrameId(object, HEADER_FRAME_ID, id);
   header.sequence = Hdf5CoreGeneral::readAttributeFromHdf5<int32_t>(object, HEADER_SEQ, id);
 }
+
+template <class T>
+T Hdf5CoreGeneral::readDataset(const std::string& path)
+{
+  checkExists(path);
+  HighFive::DataSet datasetInstances = m_file->getDataSet(path);
+  T data;
+  datasetInstances.read(data);
+  return data;
+}
 }  // namespace seerep_hdf5_core

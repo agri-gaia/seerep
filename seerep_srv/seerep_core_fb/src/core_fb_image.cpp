@@ -83,48 +83,48 @@ void CoreFbImage::buildIndices(const std::vector<std::pair<std::string, boost::u
   }
 }
 
-void CoreFbImage::addBoundingBoxesLabeled(const seerep::fb::BoundingBoxes2DLabeledStamped& boundingBoxes2dlabeled)
-{
-  boost::uuids::string_generator gen;
-  boost::uuids::uuid uuidMsg = gen(boundingBoxes2dlabeled.header()->uuid_msgs()->str());
-  boost::uuids::uuid uuidProject = gen(boundingBoxes2dlabeled.header()->uuid_project()->str());
+// void CoreFbImage::addBoundingBoxesLabeled(const seerep::fb::BoundingBoxes2DLabeledStamped& boundingBoxes2dlabeled)
+// {
+//   boost::uuids::string_generator gen;
+//   boost::uuids::uuid uuidMsg = gen(boundingBoxes2dlabeled.header()->uuid_msgs()->str());
+//   boost::uuids::uuid uuidProject = gen(boundingBoxes2dlabeled.header()->uuid_project()->str());
 
-  auto hdf5io = CoreFbGeneral::getHdf5(uuidProject, m_seerepCore, m_hdf5IoMap);
+//   auto hdf5io = CoreFbGeneral::getHdf5(uuidProject, m_seerepCore, m_hdf5IoMap);
 
-  hdf5io->writeImageBoundingBox2DLabeled(boost::lexical_cast<std::string>(uuidMsg), boundingBoxes2dlabeled.labels_bb());
+//   hdf5io->writeImageBoundingBox2DLabeled(boost::lexical_cast<std::string>(uuidMsg), boundingBoxes2dlabeled.labels_bb());
 
-  std::unordered_map<std::string, std::vector<seerep_core_msgs::LabelWithInstance>> labelWithInstancePerCategory;
-  for (auto bbWithCategory : *boundingBoxes2dlabeled.labels_bb())
-  {
-    if (bbWithCategory->boundingBox2dLabeled())
-    {
-      std::vector<seerep_core_msgs::LabelWithInstance> labelsWithInstances;
-      for (auto bb : *bbWithCategory->boundingBox2dLabeled())
-      {
-        seerep_core_msgs::LabelWithInstance labelWithInstance;
-        labelWithInstance.label = bb->labelWithInstance()->label()->label()->str();
-        labelWithInstance.labelConfidence = bb->labelWithInstance()->label()->confidence();
+//   std::unordered_map<std::string, std::vector<seerep_core_msgs::LabelWithInstance>> labelWithInstancePerCategory;
+//   for (auto bbWithCategory : *boundingBoxes2dlabeled.labels_bb())
+//   {
+//     if (bbWithCategory->boundingBox2dLabeled())
+//     {
+//       std::vector<seerep_core_msgs::LabelWithInstance> labelsWithInstances;
+//       for (auto bb : *bbWithCategory->boundingBox2dLabeled())
+//       {
+//         seerep_core_msgs::LabelWithInstance labelWithInstance;
+//         labelWithInstance.label = bb->labelWithInstance()->label()->label()->str();
+//         labelWithInstance.labelConfidence = bb->labelWithInstance()->label()->confidence();
 
-        try
-        {
-          labelWithInstance.uuidInstance = gen(bb->labelWithInstance()->instanceUuid()->str());
-        }
-        catch (std::runtime_error const& e)
-        {
-          labelWithInstance.uuidInstance = boost::uuids::nil_uuid();
-        }
-        labelsWithInstances.push_back(labelWithInstance);
-      }
-      labelWithInstancePerCategory.emplace(bbWithCategory->category()->c_str(), labelsWithInstances);
-    }
-    // this only adds labels to the image in the core
-    // if there are already bounding box labels for this image
-    // those labels must be removed separately. The hdfio currently overrides
-    // existing labels. The data is only correct if labels are added and there
-    // weren't any bounding box labels before
+//         try
+//         {
+//           labelWithInstance.uuidInstance = gen(bb->labelWithInstance()->instanceUuid()->str());
+//         }
+//         catch (std::runtime_error const& e)
+//         {
+//           labelWithInstance.uuidInstance = boost::uuids::nil_uuid();
+//         }
+//         labelsWithInstances.push_back(labelWithInstance);
+//       }
+//       labelWithInstancePerCategory.emplace(bbWithCategory->category()->c_str(), labelsWithInstances);
+//     }
+//     // this only adds labels to the image in the core
+//     // if there are already bounding box labels for this image
+//     // those labels must be removed separately. The hdfio currently overrides
+//     // existing labels. The data is only correct if labels are added and there
+//     // weren't any bounding box labels before
 
-    m_seerepCore->addLabels(seerep_core_msgs::Datatype::Image, labelWithInstancePerCategory, uuidMsg, uuidProject);
-  }
-}
+//     m_seerepCore->addLabels(seerep_core_msgs::Datatype::Image, labelWithInstancePerCategory, uuidMsg, uuidProject);
+//   }
+// }
 
 }  // namespace seerep_core_fb

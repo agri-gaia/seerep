@@ -58,8 +58,7 @@ std::shared_ptr<HighFive::Group> Hdf5PbPointCloud::writePointCloud2(const std::s
   writePointFieldAttributes(*data_group_ptr, pointcloud2.fields());
   writeHeaderAttributes(*data_group_ptr, pointcloud2.header());
 
-  writeLabelsGeneral(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, uuid, pointcloud2.labels_general());
-  writeBoundingBoxLabeled(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, uuid, pointcloud2.labels_bb());
+  writeLabels(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, uuid, pointcloud2.labels());
 
   CloudInfo info = getCloudInfo(pointcloud2);
 

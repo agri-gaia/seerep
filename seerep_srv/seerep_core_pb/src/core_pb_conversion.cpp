@@ -53,14 +53,14 @@ seerep_core_msgs::DatasetIndexable CorePbConversion::fromPb(const seerep::pb::Im
   dataForIndices.boundingbox.max_corner().set<2>(0);
 
   // semantic
-  if (!img.labels_general().empty())
+  if (!img.labels().empty())
   {
-    for (auto labelsCategories : img.labels_general())
+    for (auto labelsCategories : img.labels())
     {
-      std::vector<seerep_core_msgs::LabelWithInstance> labelWithInstanceVector;
-      if (!labelsCategories.labelwithinstance().empty())
+      std::vector<seerep_core_msgs::Label> labelVector;
+      if (!labelsCategories.labels().empty())
       {
-        for (auto label : labelsCategories.labelwithinstance())
+        for (auto label : labelsCategories.labels())
         {
           boost::uuids::string_generator gen;
           boost::uuids::uuid uuidInstance;
@@ -73,56 +73,12 @@ seerep_core_msgs::DatasetIndexable CorePbConversion::fromPb(const seerep::pb::Im
             uuidInstance = boost::uuids::nil_uuid();
           }
 
-          labelWithInstanceVector.push_back(
-              seerep_core_msgs::LabelWithInstance{ .label = label.label().label(),
-                                                   .labelConfidence = label.label().confidence(),
-                                                   .uuidInstance = uuidInstance });
+          labelVector.push_back(seerep_core_msgs::Label{ .label = label.label(),
+                                                         .labelIdDatumaro = label.labeliddatumaro(),
+                                                         .uuidInstance = uuidInstance,
+                                                         .instanceIdDatumaro = label.instanceiddatumaro() });
         }
-        dataForIndices.labelsWithInstancesWithCategory.emplace(labelsCategories.category().c_str(),
-                                                               labelWithInstanceVector);
-      }
-    }
-  }
-
-  if (!img.labels_bb().empty())
-  {
-    for (auto labelsCategories : img.labels_bb())
-    {
-      LabelWithInstanceVec* labelWithInstanceVecPtr;
-
-      auto catMap = dataForIndices.labelsWithInstancesWithCategory.find(labelsCategories.category().c_str());
-      if (catMap != dataForIndices.labelsWithInstancesWithCategory.end())
-      {
-        labelWithInstanceVecPtr = &(catMap->second);
-      }
-      else
-      {
-        std::vector<seerep_core_msgs::LabelWithInstance> labelVector;
-        auto entry =
-            dataForIndices.labelsWithInstancesWithCategory.emplace(labelsCategories.category().c_str(), labelVector);
-        labelWithInstanceVecPtr = &(entry.first->second);
-      }
-
-      if (!labelsCategories.boundingbox2dlabeled().empty())
-      {
-        for (auto label : labelsCategories.boundingbox2dlabeled())
-        {
-          boost::uuids::string_generator gen;
-          boost::uuids::uuid uuidInstance;
-          try
-          {
-            uuidInstance = gen(label.labelwithinstance().instanceuuid());
-          }
-          catch (std::runtime_error const& e)
-          {
-            uuidInstance = boost::uuids::nil_uuid();
-          }
-
-          labelWithInstanceVecPtr->push_back(
-              seerep_core_msgs::LabelWithInstance{ .label = label.labelwithinstance().label().label(),
-                                                   .labelConfidence = label.labelwithinstance().label().confidence(),
-                                                   .uuidInstance = uuidInstance });
-        }
+        dataForIndices.labelsCategory.emplace(labelsCategories.category().c_str(), labelVector);
       }
     }
   }
@@ -321,10 +277,10 @@ void CorePbConversion::fromPbProject(const seerep::pb::Query& query, seerep_core
 
 void CorePbConversion::fromPbLabel(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
 {
-  if (!query.labelswithcategory().empty())
+  if (!query.labelcategory().empty())
   {
     queryCore.label = std::unordered_map<std::string, std::vector<std::string>>();
-    for (auto labelWithCategory : query.labelswithcategory())
+    for (auto labelWithCategory : query.labelcategory())
     {
       std::vector<std::string> labels;
       for (auto label : labelWithCategory.labels())

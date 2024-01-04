@@ -8,10 +8,8 @@
 #include <seerep_hdf5_core/hdf5_core_general.h>
 
 // seerep-msgs
-#include <seerep_msgs/boundingbox2d_labeled_with_category.pb.h>
-#include <seerep_msgs/boundingbox_labeled_with_category.pb.h>
 #include <seerep_msgs/header.pb.h>
-#include <seerep_msgs/labels_with_instance_with_category.pb.h>
+#include <seerep_msgs/label_category.pb.h>
 
 // std
 #include <boost/geometry.hpp>
@@ -39,28 +37,13 @@ protected:
   seerep::pb::Header readHeaderAttributes(HighFive::AnnotateTraits<T>& object, const std::string& id);
 
   // ################
-  //  BoundingBoxes
+  //  Labels
   // ################
-  void writeBoundingBoxLabeled(
-      const std::string& datatypeGroup, const std::string& uuid,
-      const google::protobuf::RepeatedPtrField<::seerep::pb::BoundingBoxLabeledWithCategory>& boundingboxLabeled);
+  void writeLabels(const std::string& datatypeGroup, const std::string& uuid,
+                   const google::protobuf::RepeatedPtrField<seerep::pb::LabelCategory>& labels);
 
-  void writeBoundingBox2DLabeled(
-      const std::string& datatypeGroup, const std::string& uuid,
-      const google::protobuf::RepeatedPtrField<seerep::pb::BoundingBox2DLabeledWithCategory>& boundingbox2DLabeled);
-
-  std::optional<google::protobuf::RepeatedPtrField<::seerep::pb::BoundingBox2DLabeledWithCategory>>
-  readBoundingBox2DLabeled(const std::string& datatypeGroup, const std::string& uuid);
-
-  // ################
-  //  Labels General
-  // ################
-  void writeLabelsGeneral(
-      const std::string& datatypeGroup, const std::string& uuid,
-      const google::protobuf::RepeatedPtrField<seerep::pb::LabelsWithInstanceWithCategory>& labelsGeneralWithInstances);
-
-  std::optional<google::protobuf::RepeatedPtrField<seerep::pb::LabelsWithInstanceWithCategory>>
-  readLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid);
+  std::optional<google::protobuf::RepeatedPtrField<seerep::pb::LabelCategory>>
+  readLabels(const std::string& datatypeGroup, const std::string& uuid);
 };
 
 }  // namespace seerep_hdf5_pb

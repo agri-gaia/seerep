@@ -22,7 +22,7 @@ public:
   grpc::Status TransferTransformStamped(grpc::ServerContext* context, const seerep::pb::TransformStamped* transform,
                                         seerep::pb::ServerResponse* response);
   grpc::Status GetFrames(grpc::ServerContext* context, const seerep::pb::FrameQuery* frameQuery,
-                         seerep::pb::FrameInfos* response);
+                         seerep::pb::StringVector* response);
   grpc::Status GetTransformStamped(grpc::ServerContext* context,
                                    const seerep::pb::TransformStampedQuery* transformQuery,
                                    seerep::pb::TransformStamped* response);

@@ -45,11 +45,7 @@ std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CorePointCloud::readDatase
   data.boundingbox.max_corner().set<1>(bb.at(4));
   data.boundingbox.max_corner().set<2>(bb.at(5));
 
-  readLabelsGeneralAndAddToLabelsWithInstancesWithCategory(HDF5_GROUP_POINTCLOUD, uuid,
-                                                           data.labelsWithInstancesWithCategory);
-
-  readBoundingBoxLabeledAndAddToLabelsWithInstancesWithCategory(HDF5_GROUP_POINTCLOUD, uuid,
-                                                                data.labelsWithInstancesWithCategory);
+  readLabelsAndAddToLabelsPerCategory(HDF5_GROUP_POINTCLOUD, uuid, data.labelsCategory);
 
   return data;
 }

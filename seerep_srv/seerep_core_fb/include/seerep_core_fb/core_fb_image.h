@@ -87,11 +87,12 @@ public:
    */
   void buildIndices(const std::vector<std::pair<std::string, boost::uuids::uuid>>& projectImgUuids);
 
-  /**
-   * @brief Adds bounding box based labels to an existing image
-   * @param bbs2dlabeled the flatbuffer message containing bounding box based labels
-   */
-  void addBoundingBoxesLabeled(const seerep::fb::BoundingBoxes2DLabeledStamped& boundingBoxes2dlabeled);
+  // TODO reimplement with datumaro
+  // /**
+  //  * @brief Adds bounding box based labels to an existing image
+  //  * @param bbs2dlabeled the flatbuffer message containing bounding box based labels
+  //  */
+  // void addBoundingBoxesLabeled(const seerep::fb::BoundingBoxes2DLabeledStamped& boundingBoxes2dlabeled);
 
 private:
   /** @brief a shared pointer to the general core */

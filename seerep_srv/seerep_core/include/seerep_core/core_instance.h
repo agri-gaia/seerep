@@ -6,7 +6,6 @@
 
 // seerep-msgs
 #include <seerep_msgs/datatype.h>
-#include <seerep_msgs/label_with_instance.h>
 
 // seerep_hdf5-core
 #include <seerep_hdf5_core/hdf5_core_instance.h>

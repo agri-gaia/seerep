@@ -1,5 +1,5 @@
 include "time_interval.fbs";
-include "labels_with_category.fbs";
+include "label_category.fbs";
 include "polygon2d.fbs";
 include "sparql_query.fbs";
 
@@ -10,7 +10,7 @@ table Query {
   fullyEncapsulated:bool;
   inMapFrame:bool;
   timeinterval:TimeInterval;
-  label:[LabelsWithCategory];
+  label:[LabelCategory];
   sparqlQuery:SparqlQuery;
   ontologyURI:string;
   mustHaveAllLabels:bool;

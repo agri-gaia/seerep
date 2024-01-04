@@ -1,6 +1,5 @@
 include "header.fbs";
-include "boundingbox2d_labeled_with_category.fbs";
-include "labels_with_instance_with_category.fbs";
+include "label_category.fbs";
 
 namespace seerep.fb;
 
@@ -12,8 +11,7 @@ table Image {
   is_bigendian:bool;
   step:uint;
   data:[ubyte];
-  labels_general:[LabelsWithInstanceWithCategory];
-  labels_bb:[BoundingBox2DLabeledWithCategory];
+  labels:[LabelCategory];
   uuid_cameraintrinsics:string;
 }
 

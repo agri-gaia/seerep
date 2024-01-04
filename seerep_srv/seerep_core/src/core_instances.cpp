@@ -12,17 +12,15 @@ CoreInstances::~CoreInstances()
 
 std::shared_ptr<seerep_core::CoreInstance> CoreInstances::createNewInstance(const std::string& label)
 {
-  return createNewInstance(seerep_core_msgs::LabelWithInstance{
-      .label = label, .labelConfidence = NAN, .uuidInstance = boost::uuids::random_generator()() });
+  return createNewInstance(
+      seerep_core_msgs::Label{ .label = label, .uuidInstance = boost::uuids::random_generator()() });
 }
-std::shared_ptr<seerep_core::CoreInstance>
-CoreInstances::createNewInstance(const seerep_core_msgs::LabelWithInstance& labelWithInstance)
+std::shared_ptr<seerep_core::CoreInstance> CoreInstances::createNewInstance(const seerep_core_msgs::Label& label)
 {
-  auto instance =
-      std::make_shared<seerep_core::CoreInstance>(seerep_core::CoreInstance(m_hdf5_io, labelWithInstance.uuidInstance));
+  auto instance = std::make_shared<seerep_core::CoreInstance>(seerep_core::CoreInstance(m_hdf5_io, label.uuidInstance));
 
-  instance->writeAttribute(CoreInstances::ATTRIBUTELABEL, labelWithInstance.label);
-  m_instances.emplace(labelWithInstance.uuidInstance, instance);
+  instance->writeAttribute(CoreInstances::ATTRIBUTELABEL, label.label);
+  m_instances.emplace(label.uuidInstance, instance);
   return instance;
 }
 
@@ -73,21 +71,21 @@ std::vector<boost::uuids::uuid> CoreInstances::getDatasets(const std::vector<boo
 
   return imagesAll;
 }
-void CoreInstances::addDataset(const seerep_core_msgs::LabelWithInstance& labelWithInstance,
-                               const boost::uuids::uuid& uuidDataset, const seerep_core_msgs::Datatype& datatype)
+void CoreInstances::addDataset(const seerep_core_msgs::Label& label, const boost::uuids::uuid& uuidDataset,
+                               const seerep_core_msgs::Datatype& datatype)
 {
-  auto instanceMapEntry = m_instances.find(labelWithInstance.uuidInstance);
+  auto instanceMapEntry = m_instances.find(label.uuidInstance);
   std::shared_ptr<seerep_core::CoreInstance> instance;
   if (instanceMapEntry == m_instances.end())
   {
-    instance = createNewInstance(labelWithInstance);
+    instance = createNewInstance(label);
   }
   else
   {
-    instance = m_instances.at(labelWithInstance.uuidInstance);
+    instance = m_instances.at(label.uuidInstance);
   }
   /// only add the dataset to an existing instance if the labels match otherwise throw an error
-  if (instance->getAttribute(CoreInstances::ATTRIBUTELABEL) == labelWithInstance.label)
+  if (instance->getAttribute(CoreInstances::ATTRIBUTELABEL) == label.label)
   {
     /// TODO: add categories to instances!
     instance->addDataset(uuidDataset, datatype);
