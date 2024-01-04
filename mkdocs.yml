@@ -54,6 +54,7 @@ theme:
     - navigation.expand
     - navigation.sections
     - content.code.copy
+    - content.tabs
   font:
     text: IBM Plex Sans
     code: IBM Plex Mono
@@ -75,8 +76,11 @@ markdown_extensions:
       url_download: true
   - pymdownx.superfences
   # add tabs to navigate on the top
+  - pymdownx.keys
   - pymdownx.tabbed:
       alternate_style: true
+  - pymdownx.snippets
+  - footnotes
   - attr_list
   - md_in_html
 copyright: Copyright &copy; 2021 - 2024 Deutsches Forschungszentrum für Künstliche Intelligenz GmbH (DFKI) <br>
