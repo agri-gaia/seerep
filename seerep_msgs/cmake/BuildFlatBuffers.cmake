@@ -110,7 +110,7 @@ function(
       add_custom_command(
         OUTPUT ${generated_include}
         COMMAND ${FLATC} ${FLATC_SCHEMA_ARGS} -o ${generated_includes_dir}
-                ${include_params} -c -p -T ${schema}
+                ${include_params} -c -p ${schema}
         # --filename-suffix ".fb"
         DEPENDS ${FLATC_TARGET} ${schema} ${additional_dependencies}
         WORKING_DIRECTORY "${working_dir}"
