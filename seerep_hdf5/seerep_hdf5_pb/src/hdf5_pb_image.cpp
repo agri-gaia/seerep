@@ -31,9 +31,7 @@ void Hdf5PbImage::writeImage(const std::string& id, const seerep::pb::Image& ima
   const uint8_t* arrayStartPtr = reinterpret_cast<const uint8_t*>(image.data().c_str());
   dataSetPtr->write(std::vector<uint8_t>(arrayStartPtr, arrayStartPtr + image.data().size()));
 
-  writeBoundingBox2DLabeled(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id, image.labels_bb());
-  seerep_hdf5_pb::Hdf5PbGeneral::writeLabelsGeneral(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id,
-                                                    image.labels_general());
+  seerep_hdf5_pb::Hdf5PbGeneral::writeLabels(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id, image.labels());
 
   m_file->flush();
 }
@@ -63,8 +61,7 @@ std::optional<seerep::pb::Image> Hdf5PbImage::readImage(const std::string& id)
 
   auto ImageAttributes = readImageAttributes(id);
 
-  auto labelsBB = readBoundingBox2DLabeled(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id);
-  auto labelsGeneral = readLabelsGeneral(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id);
+  auto labels = readLabels(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id);
 
   std::vector<uint8_t> data;
   dataSetPtr->read(data);
@@ -83,13 +80,9 @@ std::optional<seerep::pb::Image> Hdf5PbImage::readImage(const std::string& id)
 
   *image.mutable_data() = { data.begin(), data.end() };
 
-  if (labelsBB)
+  if (labels)
   {
-    *image.mutable_labels_bb() = labelsBB.value();
-  }
-  if (labelsGeneral)
-  {
-    *image.mutable_labels_general() = labelsGeneral.value();
+    *image.mutable_labels() = labels.value();
   }
   return image;
 }

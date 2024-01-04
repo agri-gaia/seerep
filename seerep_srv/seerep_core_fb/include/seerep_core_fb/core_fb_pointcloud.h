@@ -65,11 +65,13 @@ public:
    * @return boost::uuids::uuid the uuid of the stored pointcloud
    */
   boost::uuids::uuid addData(const seerep::fb::PointCloud2& pc);
-  /**
-   * @brief Adds bounding box based labels to an existing pointcloud
-   * @param bbslabeled the flatbuffer message containing bounding box based labels
-   */
-  void addBoundingBoxesLabeled(const seerep::fb::BoundingBoxesLabeledStamped& boundingBoxeslabeled);
+
+  // TODO reimplement with datumaro
+  // /**
+  //  * @brief Adds bounding box based labels to an existing pointcloud
+  //  * @param bbslabeled the flatbuffer message containing bounding box based labels
+  //  */
+  // void addBoundingBoxesLabeled(const seerep::fb::BoundingBoxesLabeledStamped& boundingBoxeslabeled);
 
 private:
   /** @brief a shared pointer to the general core */

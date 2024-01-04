@@ -2,7 +2,7 @@
 #define SEEREP_ROS_CONVERSIONS_PB
 
 // ROS messages
-#include <geometry_msgs/PoseStamped.h>
+#include <geometry_msgs/Point.h>
 #include <geometry_msgs/TransformStamped.h>
 #include <geometry_msgs/Vector3Stamped.h>
 #include <sensor_msgs/Image.h>
@@ -13,13 +13,12 @@
 // Seerep proto messages
 #include <seerep_msgs/header.pb.h>
 #include <seerep_msgs/image.pb.h>
+#include <seerep_msgs/point.pb.h>
 #include <seerep_msgs/point_cloud_2.pb.h>
 #include <seerep_msgs/point_field.pb.h>
-#include <seerep_msgs/pose_stamped.pb.h>
 #include <seerep_msgs/transform.pb.h>
 #include <seerep_msgs/transform_stamped.pb.h>
 #include <seerep_msgs/vector3.pb.h>
-#include <seerep_msgs/vector3_stamped.pb.h>
 
 namespace seerep_ros_conversions_pb
 {
@@ -122,38 +121,6 @@ seerep::pb::Quaternion toProto(const geometry_msgs::Quaternion& quaternion);
 geometry_msgs::Quaternion toROS(const seerep::pb::Quaternion& quaternion);
 
 /**
- * @brief Converts a ROS geometry_msgs::Pose message to the corresponding
- * Protobuf Pose message
- * @param pose geometry_msgs::Pose
- * @return Protobuf Pose message
- */
-seerep::pb::Pose toProto(const geometry_msgs::Pose& pose);
-
-/**
- * @brief Converts a Protobuf Pose message to the corresponding
- * ROS geometry_msgs::Pose message
- * @param pose Protobuf Pose
- * @return ROS geometry_msgs::Pose
- */
-geometry_msgs::Pose toROS(const seerep::pb::Pose& pose);
-
-/**
- * @brief Converts a ROS geometry_msgs::PoseStamped message to the corresponding
- * Protobuf PoseStamped message
- * @param pose geometry_msgs::PoseStamped
- * @return Protobuf PoseStamped message
- */
-seerep::pb::PoseStamped toProto(const geometry_msgs::PoseStamped& pose);
-
-/**
- * @brief Converts a Protobuf PoseStamped message to the corresponding
- * ROS geometry_msgs::PoseStamped message
- * @param pose Protobuf PoseStamped
- * @return ROS geometry_msgs::PoseStamped
- */
-geometry_msgs::PoseStamped toROS(const seerep::pb::PoseStamped& pose);
-
-/**
  * @brief Converts a ROS geometry_msgs::Vector3 message to the corresponding
  * Protobuf Vector3 message
  * @param vector geometry_msgs::Vector3
@@ -168,22 +135,6 @@ seerep::pb::Vector3 toProto(const geometry_msgs::Vector3& vector);
  * @return ROS geometry_msgs::Vector3
  */
 geometry_msgs::Vector3 toROS(const seerep::pb::Vector3& vector);
-
-/**
- * @brief Converts a ROS geometry_msgs::Vector3Stamped message to the corresponding
- * Protobuf Vector3Stamped message
- * @param vector geometry_msgs::Vector3Stamped
- * @return Protobuf Vector3Stamped message
- */
-seerep::pb::Vector3Stamped toProto(const geometry_msgs::Vector3Stamped& vector);
-
-/**
- * @brief Converts a Protobuf Vector3Stamped message to the corresponding
- * ROS geometry_msgs::Vector3Stamped message
- * @param vector Protobuf Vector3Stamped
- * @return ROS geometry_msgs::Vector3Stamped
- */
-geometry_msgs::Vector3Stamped toROS(const seerep::pb::Vector3Stamped& vector);
 
 /**
  * @brief Converts a ROS geometry_msgs::Transform message to the corresponding

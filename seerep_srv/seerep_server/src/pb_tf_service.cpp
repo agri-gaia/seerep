@@ -64,7 +64,7 @@ grpc::Status PbTfService::TransferTransformStamped(grpc::ServerContext* context,
 }
 
 grpc::Status PbTfService::GetFrames(grpc::ServerContext* context, const seerep::pb::FrameQuery* frameQuery,
-                                    seerep::pb::FrameInfos* response)
+                                    seerep::pb::StringVector* response)
 {
   (void)context;  // ignore that variable without causing warnings
   boost::uuids::uuid uuid;
@@ -75,7 +75,7 @@ grpc::Status PbTfService::GetFrames(grpc::ServerContext* context, const seerep::
 
     for (auto framename : tfPb->getFrames(uuid))
     {
-      response->add_frames(framename);
+      response->add_stringvector(framename);
     }
   }
   catch (std::runtime_error const& e)

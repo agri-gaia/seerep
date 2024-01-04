@@ -25,7 +25,7 @@ public:
                            flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response);
   grpc::Status GetFrames(grpc::ServerContext* context,
                          const flatbuffers::grpc::Message<seerep::fb::FrameQuery>* request,
-                         flatbuffers::grpc::Message<seerep::fb::FrameInfos>* response);
+                         flatbuffers::grpc::Message<seerep::fb::StringVector>* response);
   grpc::Status GetTransformStamped(grpc::ServerContext* context,
                                    const flatbuffers::grpc::Message<seerep::fb::TransformStampedQuery>* request,
                                    flatbuffers::grpc::Message<seerep::fb::TransformStamped>* response);

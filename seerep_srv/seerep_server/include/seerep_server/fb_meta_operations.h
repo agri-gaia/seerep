@@ -34,10 +34,10 @@ public:
                                      flatbuffers::grpc::Message<seerep::fb::Boundingbox>* response) override;
   grpc::Status GetAllCategories(grpc::ServerContext* context,
                                 const flatbuffers::grpc::Message<seerep::fb::UuidDatatypePair>* request,
-                                flatbuffers::grpc::Message<seerep::fb::Categories>* response) override;
+                                flatbuffers::grpc::Message<seerep::fb::StringVector>* response) override;
   grpc::Status GetAllLabels(grpc::ServerContext* context,
                             const flatbuffers::grpc::Message<seerep::fb::UuidDatatypeWithCategory>* request,
-                            flatbuffers::grpc::Message<seerep::fb::Labels>* response) override;
+                            flatbuffers::grpc::Message<seerep::fb::StringVector>* response) override;
 
 private:
   std::shared_ptr<seerep_core::Core> seerepCore;

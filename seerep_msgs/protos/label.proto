@@ -5,5 +5,7 @@ package seerep.pb;
 message Label
 {
   string label = 1;
-  float confidence = 2;
+  int32 labelIdDatumaro = 2;
+  string instanceUuid = 3;
+  int32 instanceIdDatumaro = 4;
 }

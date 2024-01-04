@@ -8,7 +8,8 @@
 #include <seerep_msgs/aabb.h>
 #include <seerep_msgs/dataset_indexable.h>
 #include <seerep_msgs/geodetic_coordinates.h>
-#include <seerep_msgs/labels_with_instance_with_category.h>
+#include <seerep_msgs/label.h>
+#include <seerep_msgs/label_category.h>
 
 // std
 #include <boost/geometry.hpp>
@@ -147,23 +148,23 @@ public:
   template <class T>
   void readHeader(const std::string& id, HighFive::AnnotateTraits<T>& object, seerep_core_msgs::Header& header);
 
-  // BoundingBoxes
-  /**
-   * @brief read the labels and instances of a dataset of all categories and add them to the category-labels/instances map
-   *
-   * @param [in] datatypeGroup the data type
-   * @param [in] uuid the uuid of the dataset
-   * @param [in,out] labelsWithInstancesWithCategory the map from category to the instances of the category
-   */
-  void readBoundingBoxLabeledAndAddToLabelsWithInstancesWithCategory(
-      const std::string& datatypeGroup, const std::string& uuid,
-      std::unordered_map<std::string, std::vector<seerep_core_msgs::LabelWithInstance>>& labelsWithInstancesWithCategory);
-  void readBoundingBoxLabeled(const std::string& datatypeGroup, const std::string& uuid,
-                              std::vector<std::string>& labelCategories,
-                              std::vector<std::vector<std::string>>& labelsPerCategory,
-                              std::vector<std::vector<float>>& labelConfidencesPerCategory,
-                              std::vector<std::vector<std::vector<double>>>& boundingBoxesPerCategory,
-                              std::vector<std::vector<std::string>>& instancesPerCategory, bool loadBoxes = true);
+  // // BoundingBoxes
+  // /**
+  //  * @brief read the labels and instances of a dataset of all categories and add them to the category-labels/instances map
+  //  *
+  //  * @param [in] datatypeGroup the data type
+  //  * @param [in] uuid the uuid of the dataset
+  //  * @param [in,out] labelsWithInstancesWithCategory the map from category to the instances of the category
+  //  */
+  // void readBoundingBoxLabeledAndAddToLabelsWithInstancesWithCategory(
+  //     const std::string& datatypeGroup, const std::string& uuid,
+  //     std::unordered_map<std::string, std::vector<seerep_core_msgs::LabelWithInstance>>& labelsWithInstancesWithCategory);
+  // void readBoundingBoxLabeled(const std::string& datatypeGroup, const std::string& uuid,
+  //                             std::vector<std::string>& labelCategories,
+  //                             std::vector<std::vector<std::string>>& labelsPerCategory,
+  //                             std::vector<std::vector<float>>& labelConfidencesPerCategory,
+  //                             std::vector<std::vector<std::vector<double>>>& boundingBoxesPerCategory,
+  //                             std::vector<std::vector<std::string>>& instancesPerCategory, bool loadBoxes = true);
 
   // Labels General
   /**
@@ -174,15 +175,14 @@ public:
    * @param [in] uuid the uuid of the dataset
    * @param [in,out] labelsWithInstancesWithCategory the map from category to the instances of the category
    */
-  void readLabelsGeneralAndAddToLabelsWithInstancesWithCategory(
+  void readLabelsAndAddToLabelsPerCategory(
       const std::string& datatypeGroup, const std::string& uuid,
-      std::unordered_map<std::string, std::vector<seerep_core_msgs::LabelWithInstance>>& labelsWithInstancesWithCategory);
-  void readLabelsGeneral(
-      const std::string& datatypeGroup, const std::string& uuid, std::vector<std::string>& labelCategories,
-      std::vector<std::vector<seerep_core_msgs::LabelWithInstance>>& labelsWithInstancesGeneralPerCategory);
-  void writeLabelsGeneral(
-      const std::string& datatypeGroup, const std::string& uuid,
-      const std::vector<seerep_core_msgs::LabelsWithInstanceWithCategory>& labelsWithInstanceWithCategory);
+      std::unordered_map<std::string, std::vector<seerep_core_msgs::Label>>& labelsCategoryMap);
+  void readLabels(const std::string& datatypeGroup, const std::string& uuid, std::vector<std::string>& labelCategories,
+                  std::vector<std::vector<seerep_core_msgs::Label>>& labelsPerCategory,
+                  std::vector<std::string>& datumaroJsonPerCategory);
+  void writeLabels(const std::string& datatypeGroup, const std::string& uuid,
+                   const std::vector<seerep_core_msgs::LabelCategory>& LabelsCategory);
   // ################
   //  Project
   // ################
@@ -273,11 +273,8 @@ public:
   void getLabelCategories(std::string id, std::string labelType, std::vector<std::string>& matchingLabelCategory);
 
 private:
-  void readLabel(const std::string& id, const std::string labelType, std::vector<std::string>& labels);
-  void readlabelConfidences(const std::string& id, const std::string labelType, std::vector<float>& labelConfidences);
-  void readBoundingBoxes(const std::string& id, const std::string boundingBoxType,
-                         std::vector<std::vector<double>>& boundingBoxes);
-  void readInstances(const std::string& id, const std::string InstanceType, std::vector<std::string>& instances);
+  template <class T>
+  T readDataset(const std::string& path);
 
 public:
   // header attribute keys
@@ -303,13 +300,11 @@ public:
 
   // dataset names
   inline static const std::string RAWDATA = "rawdata";
-  inline static const std::string LABELGENERAL = "labelGeneral";
-  inline static const std::string LABELGENERALCONFIDENCES = "labelGeneralConfidences";
-  inline static const std::string LABELGENERALINSTANCES = "labelGeneralInstances";
-  inline static const std::string LABELBB = "labelBB";
-  inline static const std::string LABELBBCONFIDENCES = "labelBBConfidences";
-  inline static const std::string LABELBBBOXESWITHROTATION = "labelBBBoxesWithRotation";
-  inline static const std::string LABELBBINSTANCES = "labelBBInstances";
+  inline static const std::string LABEL = "label";
+  inline static const std::string LABEL_ID_DATUMARO = "labelIdDatumaro";
+  inline static const std::string LABELINSTANCES = "labelInstances";
+  inline static const std::string LABELINSTANCES_ID_DATUMARO = "labelInstancesIdDatumaro";
+  inline static const std::string DATUMARO_JSON = "datumaroJson";
   inline static const std::string POINTS = "points";
 
 protected:

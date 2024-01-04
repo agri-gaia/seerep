@@ -3,7 +3,7 @@ syntax = "proto3";
 package seerep.pb;
 
 import "time_interval.proto";
-import "labels_with_category.proto";
+import "label_category.proto";
 import "polygon2d.proto";
 
 message Query
@@ -12,7 +12,7 @@ message Query
   bool fullyEncapsulated = 2;
   bool inMapFrame = 3;
   TimeInterval timeinterval = 4;
-  repeated LabelsWithCategory labelsWithCategory = 5;
+  repeated LabelCategory labelCategory = 5;
   bool mustHaveAllLabels = 6;
   repeated string projectuuid = 7;
   repeated string instanceuuid = 8;
