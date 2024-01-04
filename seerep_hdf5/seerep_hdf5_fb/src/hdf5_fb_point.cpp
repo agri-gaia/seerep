@@ -43,7 +43,7 @@ void Hdf5FbPoint::writePoint(const std::string& id, const seerep::fb::PointStamp
 
   writeAttributeMap(data_set_ptr, point->attribute());
 
-  writeLabelsGeneral(seerep_hdf5_core::Hdf5CorePoint::HDF5_GROUP_POINT, id, point->labels_general());
+  writeLabels(seerep_hdf5_core::Hdf5CorePoint::HDF5_GROUP_POINT, id, point->labels());
 
   m_file->flush();
 }
@@ -99,13 +99,13 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::PointStamped>> Hdf5FbPoint:
 
   auto headerOffset = readHeaderAttributes(builder, *data_set_ptr, id);
 
-  auto labelsGeneralOffset = readGeneralLabels(seerep_hdf5_core::Hdf5CorePoint::HDF5_GROUP_POINT, id, builder);
+  auto labelsOffset = readLabels(seerep_hdf5_core::Hdf5CorePoint::HDF5_GROUP_POINT, id, builder);
 
   seerep::fb::PointStampedBuilder pointStampedBuilder(builder);
 
   pointStampedBuilder.add_attribute(attributeMapOffset);
   pointStampedBuilder.add_header(headerOffset);
-  pointStampedBuilder.add_labels_general(labelsGeneralOffset);
+  pointStampedBuilder.add_labels(labelsOffset);
   pointStampedBuilder.add_point(pointOffset);
 
   auto pointStampedOffset = pointStampedBuilder.Finish();

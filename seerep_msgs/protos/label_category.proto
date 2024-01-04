@@ -4,8 +4,9 @@ package seerep.pb;
 
 import "label.proto";
 
-message LabelsWithCategory
+message LabelCategory
 {
   string category = 1;
   repeated Label labels = 2;
+  string datumaroJson = 3;
 }

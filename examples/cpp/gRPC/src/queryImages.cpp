@@ -81,7 +81,7 @@ flatbuffers::Offset<seerep::fb::Point> createPoint(flatbuffers::grpc::MessageBui
   return pointBuilder.Finish();
 }
 
-flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelsWithInstanceWithCategory>>>
+flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelCategory>>>
 createLabelWithInstance(flatbuffers::grpc::MessageBuilder& mb, const seerep::fb::BoundingBox2DLabeled* bb,
                         const flatbuffers::String* category)
 {

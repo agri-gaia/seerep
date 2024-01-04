@@ -1,8 +1,0 @@
-namespace seerep.fb;
-
-table FrameInfos
-{
-  frames:[string];
-}
-
-root_type FrameInfos;

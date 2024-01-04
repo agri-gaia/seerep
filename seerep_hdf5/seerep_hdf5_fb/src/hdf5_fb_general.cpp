@@ -49,380 +49,85 @@ void Hdf5FbGeneral::writeAttributeMap(
   }
 }
 
-void Hdf5FbGeneral::writeBoundingBoxLabeled(
-    const std::string& datatypeGroup, const std::string& uuid,
-    const BoundingBoxesLabeledWithCategoryFb* boundingBoxLabeledWithCategoryVector)
+void Hdf5FbGeneral::writeLabels(const std::string& datatypeGroup, const std::string& uuid,
+                                const LabelsCategoryFb* labelCategoryVectorFb)
 {
-  if (boundingBoxLabeledWithCategoryVector && boundingBoxLabeledWithCategoryVector->size() > 0)
+  if (labelCategoryVectorFb && labelCategoryVectorFb->size() != 0)
   {
-    for (auto boundingBoxLabeledWithCategory : *boundingBoxLabeledWithCategoryVector)
+    std::vector<seerep_core_msgs::LabelCategory> labelCategoryVector;
+    for (auto labelsCategory : *labelCategoryVectorFb)
     {
-      writeBoundingBoxLabeled(datatypeGroup, uuid, boundingBoxLabeledWithCategory->boundingBoxLabeled(),
-                              boundingBoxLabeledWithCategory->category()->c_str());
-    }
-  }
-}
-
-void Hdf5FbGeneral::writeBoundingBoxLabeled(const std::string& datatypeGroup, const std::string& uuid,
-                                            const BoundingBoxesLabeledFb* boundingboxLabeled,
-                                            const std::string& category)
-{
-  if (boundingboxLabeled && boundingboxLabeled->size() != 0)
-  {
-    std::string id = datatypeGroup + "/" + uuid;
-
-    std::vector<std::string> labels;
-    std::vector<float> labelConfidence;
-    std::vector<std::vector<double>> boundingBoxesWithRotation;
-    std::vector<std::string> instances;
-    for (auto label : *boundingboxLabeled)
-    {
-      labels.push_back(label->labelWithInstance()->label()->label()->str());
-      labelConfidence.push_back(label->labelWithInstance()->label()->confidence());
-
-      double rotX = 0.0, rotY = 0.0, rotZ = 0.0, rotW = 1.0;
-      if (label->bounding_box()->rotation() != NULL)
+      std::vector<std::string> labels, instances;
+      std::vector<int> labelsIdDatumaro, instancesIdDatumaro;
+      for (auto label : *labelsCategory->labels())
       {
-        rotX = label->bounding_box()->rotation()->x();
-        rotY = label->bounding_box()->rotation()->y();
-        rotZ = label->bounding_box()->rotation()->z();
-        rotW = label->bounding_box()->rotation()->w();
-      }
-
-      std::vector<double> boxWithRotation{ label->bounding_box()->center_point()->x(),
-                                           label->bounding_box()->center_point()->y(),
-                                           label->bounding_box()->center_point()->z(),
-                                           label->bounding_box()->spatial_extent()->x(),
-                                           label->bounding_box()->spatial_extent()->y(),
-                                           label->bounding_box()->spatial_extent()->z(),
-                                           rotX,
-                                           rotY,
-                                           rotZ,
-                                           rotW };
-      boundingBoxesWithRotation.push_back(boxWithRotation);
-
-      instances.push_back(label->labelWithInstance()->instanceUuid()->str());
-    }
-
-    HighFive::DataSet datasetLabels = m_file->createDataSet<std::string>(
-        id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBB + "_" + category, HighFive::DataSpace::From(labels));
-    datasetLabels.write(labels);
-
-    HighFive::DataSet datasetLabelConfidences =
-        m_file->createDataSet<float>(id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBBCONFIDENCES + "_" + category,
-                                     HighFive::DataSpace::From(labelConfidence));
-    datasetLabelConfidences.write(labelConfidence);
-
-    HighFive::DataSet datasetBoxes = m_file->createDataSet<double>(
-        id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBBBOXESWITHROTATION + "_" + category,
-        HighFive::DataSpace::From(boundingBoxesWithRotation));
-    datasetBoxes.write(boundingBoxesWithRotation);
-
-    HighFive::DataSet datasetInstances = m_file->createDataSet<std::string>(
-        id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBBINSTANCES + "_" + category,
-        HighFive::DataSpace::From(instances));
-    datasetInstances.write(instances);
-
-    m_file->flush();
-  }
-}
-
-void Hdf5FbGeneral::writeBoundingBox2DLabeled(
-    const std::string& datatypeGroup, const std::string& uuid,
-    const BoundingBoxes2dLabeledWithCategoryFb* boundingbox2DLabeledWithCategoryVector)
-{
-  if (boundingbox2DLabeledWithCategoryVector && boundingbox2DLabeledWithCategoryVector->size() > 0)
-  {
-    for (auto boundingBox2DLabeledWithCategory : *boundingbox2DLabeledWithCategoryVector)
-    {
-      writeBoundingBox2DLabeled(datatypeGroup, uuid, boundingBox2DLabeledWithCategory->boundingBox2dLabeled(),
-                                boundingBox2DLabeledWithCategory->category()->c_str());
-    }
-  }
-}
-
-void Hdf5FbGeneral::writeBoundingBox2DLabeled(const std::string& datatypeGroup, const std::string& uuid,
-                                              const BoundingBoxes2dLabeledFb* boundingbox2DLabeled,
-                                              const std::string& category)
-{
-  std::string id = datatypeGroup + "/" + uuid;
-
-  if (boundingbox2DLabeled && boundingbox2DLabeled->size() != 0)
-  {
-    std::vector<std::string> labels;
-    std::vector<float> labelConfidences;
-    std::vector<std::vector<double>> boundingBoxesWithRotation;
-    std::vector<std::string> instances;
-    for (auto label : *boundingbox2DLabeled)
-    {
-      labels.push_back(label->labelWithInstance()->label()->label()->str());
-      labelConfidences.push_back(label->labelWithInstance()->label()->confidence());
-      std::vector<double> boxWithRotation{ label->bounding_box()->center_point()->x(),
-                                           label->bounding_box()->center_point()->y(),
-                                           label->bounding_box()->spatial_extent()->x(),
-                                           label->bounding_box()->spatial_extent()->y(),
-                                           label->bounding_box()->rotation() };
-      boundingBoxesWithRotation.push_back(boxWithRotation);
-
-      instances.push_back(label->labelWithInstance()->instanceUuid()->str());
-    }
-
-    if (m_file->exist(id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBB + "_" + category) ||
-        m_file->exist(id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBBCONFIDENCES + "_" + category) ||
-        m_file->exist(id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBBBOXESWITHROTATION + "_" + category) ||
-        m_file->exist(id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBBINSTANCES + "_" + category))
-    {
-      throw std::invalid_argument(datatypeGroup + " " + uuid + " already has bounding box based labels");
-    }
-    else
-    {
-      HighFive::DataSet datasetLabels = m_file->createDataSet<std::string>(
-          id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBB + "_" + category, HighFive::DataSpace::From(labels));
-      datasetLabels.write(labels);
-
-      HighFive::DataSet datasetLabelConfidences = m_file->createDataSet<float>(
-          id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBBCONFIDENCES + "_" + category,
-          HighFive::DataSpace::From(labelConfidences));
-      datasetLabelConfidences.write(labelConfidences);
-
-      HighFive::DataSet datasetBoxes = m_file->createDataSet<double>(
-          id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBBBOXESWITHROTATION + "_" + category,
-          HighFive::DataSpace::From(boundingBoxesWithRotation));
-      datasetBoxes.write(boundingBoxesWithRotation);
-
-      HighFive::DataSet datasetInstances = m_file->createDataSet<std::string>(
-          id + "/" + seerep_hdf5_core::Hdf5CoreGeneral::LABELBBINSTANCES + "_" + category,
-          HighFive::DataSpace::From(instances));
-      datasetInstances.write(instances);
-    }
-
-    m_file->flush();
-  }
-}
-
-void Hdf5FbGeneral::writeLabelsGeneral(const std::string& datatypeGroup, const std::string& uuid,
-                                       const GeneralLabelsWithCategoryFb* labelsWithInstanceWithCategoryGeneralVector)
-{
-  if (labelsWithInstanceWithCategoryGeneralVector && labelsWithInstanceWithCategoryGeneralVector->size() != 0)
-  {
-    std::vector<seerep_core_msgs::LabelsWithInstanceWithCategory> labelsWithCategoryVector;
-    for (auto labelsWithInstanceWithCategoryGeneral : *labelsWithInstanceWithCategoryGeneralVector)
-    {
-      std::vector<std::string> labels;
-      std::vector<float> labelConfidences;
-      std::vector<std::string> instances;
-      for (auto label : *labelsWithInstanceWithCategoryGeneral->labelsWithInstance())
-      {
-        labels.push_back(label->label()->label()->str());
-        labelConfidences.push_back(label->label()->confidence());
-
+        labels.push_back(label->label()->str());
+        labelsIdDatumaro.push_back(label->labelIdDatumaro());
         instances.push_back(label->instanceUuid()->str());
+        instancesIdDatumaro.push_back(label->instanceIdDatumaro());
       }
-      seerep_core_msgs::LabelsWithInstanceWithCategory labelsWithCategory;
-      labelsWithCategory.category = labelsWithInstanceWithCategoryGeneral->category()->c_str();
-      labelsWithCategory.labels = labels;
-      labelsWithCategory.labelConfidences = labelConfidences;
-      labelsWithCategory.instances = instances;
-      labelsWithCategoryVector.push_back(labelsWithCategory);
+      seerep_core_msgs::LabelCategory labelCategory;
+      labelCategory.category = labelsCategory->category()->c_str();
+      labelCategory.labels = labels;
+      labelCategory.labelsIdDatumaro = labelsIdDatumaro;
+      labelCategory.instances = instances;
+      labelCategory.instancesIdDatumaro = instancesIdDatumaro;
+      labelCategory.datumaroJson = labelsCategory->datumaroJson()->c_str();
+      labelCategoryVector.push_back(labelCategory);
     }
-    Hdf5CoreGeneral::writeLabelsGeneral(datatypeGroup, uuid, labelsWithCategoryVector);
+    Hdf5CoreGeneral::writeLabels(datatypeGroup, uuid, labelCategoryVector);
   }
 }
 
-flatbuffers::Offset<GeneralLabelsWithCategoryFb>
-Hdf5FbGeneral::readGeneralLabels(const std::string& datatypeGroup, const std::string& uuid,
-                                 flatbuffers::grpc::MessageBuilder& builder)
+flatbuffers::Offset<LabelsCategoryFb> Hdf5FbGeneral::readLabels(const std::string& datatypeGroup,
+                                                                const std::string& uuid,
+                                                                flatbuffers::grpc::MessageBuilder& builder)
 {
-  std::vector<std::string> labelCategories;
-  std::vector<std::vector<seerep_core_msgs::LabelWithInstance>> labelsWithInstancesGeneralPerCategory;
+  std::vector<std::string> labelCategories, datumaroJsonPerCategory;
+  std::vector<std::vector<seerep_core_msgs::Label>> labelsCategory;
 
-  seerep_hdf5_core::Hdf5CoreGeneral::readLabelsGeneral(datatypeGroup, uuid, labelCategories,
-                                                       labelsWithInstancesGeneralPerCategory);
+  seerep_hdf5_core::Hdf5CoreGeneral::readLabels(datatypeGroup, uuid, labelCategories, labelsCategory,
+                                                datumaroJsonPerCategory);
 
-  std::vector<flatbuffers::Offset<seerep::fb::LabelsWithInstanceWithCategory>> labelsWithInstanceWithCategoryVector;
-  labelsWithInstanceWithCategoryVector.reserve(labelCategories.size());
+  std::vector<flatbuffers::Offset<seerep::fb::LabelCategory>> labelCategory;
+  labelCategory.reserve(labelCategories.size());
 
   // loop categories
   for (size_t icat = 0; icat < labelCategories.size(); icat++)
   {
-    std::vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>> labelGeneralVector;
-    labelGeneralVector.reserve(labelsWithInstancesGeneralPerCategory.at(icat).size());
+    std::vector<flatbuffers::Offset<seerep::fb::Label>> labelVector;
+    labelVector.reserve(labelsCategory.at(icat).size());
 
     // loop labels
-    for (size_t i = 0; i < labelsWithInstancesGeneralPerCategory.at(icat).size(); i++)
+    for (size_t i = 0; i < labelsCategory.at(icat).size(); i++)
     {
-      auto labelStr = builder.CreateString(labelsWithInstancesGeneralPerCategory.at(icat).at(i).label);
-      auto instanceOffset = builder.CreateString(
-          boost::lexical_cast<std::string>(labelsWithInstancesGeneralPerCategory.at(icat).at(i).uuidInstance));
+      auto labelStr = builder.CreateString(labelsCategory.at(icat).at(i).label);
+      auto instanceOffset =
+          builder.CreateString(boost::lexical_cast<std::string>(labelsCategory.at(icat).at(i).uuidInstance));
 
       seerep::fb::LabelBuilder labelBuilder(builder);
       labelBuilder.add_label(labelStr);
-      labelBuilder.add_confidence(labelsWithInstancesGeneralPerCategory.at(icat).at(i).labelConfidence);
-      auto labelMsg = labelBuilder.Finish();
-
-      seerep::fb::LabelWithInstanceBuilder labelInstanceBuilder(builder);
-      labelInstanceBuilder.add_label(labelMsg);
-      labelInstanceBuilder.add_instanceUuid(instanceOffset);
-      labelGeneralVector.push_back(labelInstanceBuilder.Finish());
+      labelBuilder.add_labelIdDatumaro(labelsCategory.at(icat).at(i).labelIdDatumaro);
+      labelBuilder.add_instanceUuid(instanceOffset);
+      labelBuilder.add_instanceIdDatumaro(labelsCategory.at(icat).at(i).instanceIdDatumaro);
+      labelVector.push_back(labelBuilder.Finish());
     }
 
-    auto labelsGeneralOfCategoryOffset =
-        builder.CreateVector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>(labelGeneralVector);
+    auto labelOffset = builder.CreateVector<flatbuffers::Offset<seerep::fb::Label>>(labelVector);
 
     auto categoryOffset = builder.CreateString(labelCategories.at(icat));
 
-    seerep::fb::LabelsWithInstanceWithCategoryBuilder labelsWithInstanceWithCategoryBuilder(builder);
-    labelsWithInstanceWithCategoryBuilder.add_category(categoryOffset);
-    labelsWithInstanceWithCategoryBuilder.add_labelsWithInstance(labelsGeneralOfCategoryOffset);
-    auto labelsOfCategory = labelsWithInstanceWithCategoryBuilder.Finish();
-    labelsWithInstanceWithCategoryVector.push_back(labelsOfCategory);
+    auto datumaroJsonOffset = builder.CreateString(datumaroJsonPerCategory.at(icat));
+
+    seerep::fb::LabelCategoryBuilder labelsCategoryBuilder(builder);
+    labelsCategoryBuilder.add_category(categoryOffset);
+    labelsCategoryBuilder.add_labels(labelOffset);
+    labelsCategoryBuilder.add_datumaroJson(datumaroJsonOffset);
+
+    auto labelsOfCategory = labelsCategoryBuilder.Finish();
+    labelCategory.push_back(labelsOfCategory);
   }
 
-  return builder.CreateVector<flatbuffers::Offset<seerep::fb::LabelsWithInstanceWithCategory>>(
-      labelsWithInstanceWithCategoryVector);
-}
-
-flatbuffers::Offset<BoundingBoxes2dLabeledWithCategoryFb>
-Hdf5FbGeneral::readBoundingBoxes2DLabeled(const std::string& datatypeGroup, const std::string& uuid,
-                                          flatbuffers::grpc::MessageBuilder& builder)
-{
-  std::vector<std::string> labelCategories;
-  std::vector<std::vector<std::string>> labelsPerCategory;
-  std::vector<std::vector<float>> labelConfidencesPerCategory;
-  std::vector<std::vector<std::vector<double>>> boundingBoxesPerCategory;
-  std::vector<std::vector<std::string>> instancesPerCategory;
-  readBoundingBoxLabeled(datatypeGroup, uuid, labelCategories, labelsPerCategory, labelConfidencesPerCategory,
-                         boundingBoxesPerCategory, instancesPerCategory);
-
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
-      << "creating the bounding boxes 2d with label fb msgs";
-
-  std::vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeledWithCategory>> boundingBox2DLabeledVector;
-  boundingBox2DLabeledVector.reserve(labelCategories.size());
-
-  // loop categories
-  for (size_t icat = 0; icat < labelCategories.size(); icat++)
-  {
-    std::vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>> bblabeledVector;
-    bblabeledVector.reserve(labelsPerCategory.at(icat).size());
-    // loop labels
-    for (size_t i = 0; i < labelsPerCategory.at(icat).size(); i++)
-    {
-      auto InstanceOffset = builder.CreateString(instancesPerCategory.at(icat).at(i));
-      auto labelStr = builder.CreateString(labelsPerCategory.at(icat).at(i));
-
-      seerep::fb::LabelBuilder labelBuilder(builder);
-      labelBuilder.add_label(labelStr);
-      labelBuilder.add_confidence(labelConfidencesPerCategory.at(icat).at(i));
-      auto labelMsg = labelBuilder.Finish();
-
-      seerep::fb::LabelWithInstanceBuilder labelInstanceBuilder(builder);
-      labelInstanceBuilder.add_instanceUuid(InstanceOffset);
-      labelInstanceBuilder.add_label(labelMsg);
-      auto labelWithInstanceOffset = labelInstanceBuilder.Finish();
-
-      auto centerPoint = seerep::fb::CreatePoint2D(builder, boundingBoxesPerCategory.at(icat).at(i).at(0),
-                                                   boundingBoxesPerCategory.at(icat).at(i).at(1));
-      auto spatialExtent = seerep::fb::CreatePoint2D(builder, boundingBoxesPerCategory.at(icat).at(i).at(2),
-                                                     boundingBoxesPerCategory.at(icat).at(i).at(3));
-
-      seerep::fb::Boundingbox2DBuilder bbBuilder(builder);
-      bbBuilder.add_center_point(centerPoint);
-      bbBuilder.add_spatial_extent(spatialExtent);
-      bbBuilder.add_rotation(boundingBoxesPerCategory.at(icat).at(i).at(4));
-      auto bb = bbBuilder.Finish();
-
-      seerep::fb::BoundingBox2DLabeledBuilder bblabeledBuilder(builder);
-      bblabeledBuilder.add_bounding_box(bb);
-      bblabeledBuilder.add_labelWithInstance(labelWithInstanceOffset);
-
-      bblabeledVector.push_back(bblabeledBuilder.Finish());
-    }
-    auto bblabeledVectorOffset = builder.CreateVector(bblabeledVector);
-    auto categoryOffset = builder.CreateString(labelCategories.at(icat));
-
-    seerep::fb::BoundingBox2DLabeledWithCategoryBuilder boundingBox2DLabeledWithCategoryBuilder(builder);
-    boundingBox2DLabeledWithCategoryBuilder.add_category(categoryOffset);
-    boundingBox2DLabeledWithCategoryBuilder.add_boundingBox2dLabeled(bblabeledVectorOffset);
-    auto boundingBox2DLabeledWithCategory = boundingBox2DLabeledWithCategoryBuilder.Finish();
-    boundingBox2DLabeledVector.push_back(boundingBox2DLabeledWithCategory);
-  }
-  return builder.CreateVector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeledWithCategory>>(
-      boundingBox2DLabeledVector);
-}
-
-flatbuffers::Offset<BoundingBoxesLabeledWithCategoryFb>
-Hdf5FbGeneral::readBoundingBoxesLabeled(const std::string& datatypeGroup, const std::string& uuid,
-                                        flatbuffers::grpc::MessageBuilder& builder)
-{
-  std::vector<std::string> labelCategories;
-  std::vector<std::vector<std::string>> labelsPerCategory;
-  std::vector<std::vector<float>> labelConfidencesPerCategory;
-  std::vector<std::vector<std::vector<double>>> boundingBoxesPerCategory;
-  std::vector<std::vector<std::string>> instancesPerCategory;
-  readBoundingBoxLabeled(datatypeGroup, uuid, labelCategories, labelsPerCategory, labelConfidencesPerCategory,
-                         boundingBoxesPerCategory, instancesPerCategory);
-
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
-      << "creating the bounding boxes 3d with label fb msgs";
-
-  std::vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeledWithCategory>> boundingBoxLabeledVector;
-  boundingBoxLabeledVector.reserve(labelCategories.size());
-
-  // loop categories
-  for (size_t icat = 0; icat < labelCategories.size(); icat++)
-  {
-    std::vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>> bblabeledVector;
-    bblabeledVector.reserve(labelsPerCategory.at(icat).size());
-    // loop labels
-    for (size_t i = 0; i < labelsPerCategory.at(icat).size(); i++)
-    {
-      auto InstanceOffset = builder.CreateString(instancesPerCategory.at(icat).at(i));
-      auto labelStr = builder.CreateString(labelsPerCategory.at(icat).at(i));
-
-      seerep::fb::LabelBuilder labelBuilder(builder);
-      labelBuilder.add_label(labelStr);
-      labelBuilder.add_confidence(labelConfidencesPerCategory.at(icat).at(i));
-      auto labelMsg = labelBuilder.Finish();
-
-      seerep::fb::LabelWithInstanceBuilder labelInstanceBuilder(builder);
-      labelInstanceBuilder.add_instanceUuid(InstanceOffset);
-      labelInstanceBuilder.add_label(labelMsg);
-      auto labelWithInstanceOffset = labelInstanceBuilder.Finish();
-
-      auto centerPoint = seerep::fb::CreatePoint(builder, boundingBoxesPerCategory.at(icat).at(i).at(0),
-                                                 boundingBoxesPerCategory.at(icat).at(i).at(1),
-                                                 boundingBoxesPerCategory.at(icat).at(i).at(2));
-      auto spatialExtent = seerep::fb::CreatePoint(builder, boundingBoxesPerCategory.at(icat).at(i).at(3),
-                                                   boundingBoxesPerCategory.at(icat).at(i).at(4),
-                                                   boundingBoxesPerCategory.at(icat).at(i).at(5));
-
-      auto rotation = seerep::fb::CreateQuaternion(builder, boundingBoxesPerCategory.at(icat).at(i).at(6),
-                                                   boundingBoxesPerCategory.at(icat).at(i).at(7),
-                                                   boundingBoxesPerCategory.at(icat).at(i).at(8),
-                                                   boundingBoxesPerCategory.at(icat).at(i).at(9));
-
-      seerep::fb::BoundingboxBuilder bbBuilder(builder);
-      bbBuilder.add_center_point(centerPoint);
-      bbBuilder.add_spatial_extent(spatialExtent);
-      bbBuilder.add_rotation(rotation);
-      auto bb = bbBuilder.Finish();
-
-      seerep::fb::BoundingBoxLabeledBuilder bblabeledBuilder(builder);
-      bblabeledBuilder.add_bounding_box(bb);
-      bblabeledBuilder.add_labelWithInstance(labelWithInstanceOffset);
-
-      bblabeledVector.push_back(bblabeledBuilder.Finish());
-    }
-    auto bblabeledVectorOffset = builder.CreateVector(bblabeledVector);
-    auto categoryOffset = builder.CreateString(labelCategories.at(icat));
-
-    seerep::fb::BoundingBoxLabeledWithCategoryBuilder boundingBoxLabeledWithCategoryBuilder(builder);
-    boundingBoxLabeledWithCategoryBuilder.add_category(categoryOffset);
-    boundingBoxLabeledWithCategoryBuilder.add_boundingBoxLabeled(bblabeledVectorOffset);
-    auto boundingBoxLabeledWithCategory = boundingBoxLabeledWithCategoryBuilder.Finish();
-    boundingBoxLabeledVector.push_back(boundingBoxLabeledWithCategory);
-  }
-  return builder.CreateVector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeledWithCategory>>(boundingBoxLabeledVector);
+  return builder.CreateVector<flatbuffers::Offset<seerep::fb::LabelCategory>>(labelCategory);
 }
 }  // namespace seerep_hdf5_fb

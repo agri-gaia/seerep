@@ -279,7 +279,7 @@ FbMetaOperations::GetOverallBoundingBox(grpc::ServerContext* context,
 
 grpc::Status FbMetaOperations::GetAllCategories(grpc::ServerContext* context,
                                                 const flatbuffers::grpc::Message<seerep::fb::UuidDatatypePair>* request,
-                                                flatbuffers::grpc::Message<seerep::fb::Categories>* response)
+                                                flatbuffers::grpc::Message<seerep::fb::StringVector>* response)
 {
   (void)context;  // ignore that variable without causing warnings
   auto requestRoot = request->GetRoot();
@@ -315,11 +315,11 @@ grpc::Status FbMetaOperations::GetAllCategories(grpc::ServerContext* context,
 
     auto fb_categories_vector = builder.CreateVector(fb_categories);
 
-    seerep::fb::CategoriesBuilder cb(builder);
-    cb.add_categories(fb_categories_vector);
+    seerep::fb::StringVectorBuilder cb(builder);
+    cb.add_stringVector(fb_categories_vector);
     builder.Finish(cb.Finish());
 
-    *response = builder.ReleaseMessage<seerep::fb::Categories>();
+    *response = builder.ReleaseMessage<seerep::fb::StringVector>();
   }
   catch (std::runtime_error const& e)
   {
@@ -349,7 +349,7 @@ grpc::Status FbMetaOperations::GetAllCategories(grpc::ServerContext* context,
 grpc::Status
 FbMetaOperations::GetAllLabels(grpc::ServerContext* context,
                                const flatbuffers::grpc::Message<seerep::fb::UuidDatatypeWithCategory>* request,
-                               flatbuffers::grpc::Message<seerep::fb::Labels>* response)
+                               flatbuffers::grpc::Message<seerep::fb::StringVector>* response)
 {
   (void)context;  // ignore that variable without causing warnings
   auto requestRoot = request->GetRoot();
@@ -387,11 +387,11 @@ FbMetaOperations::GetAllLabels(grpc::ServerContext* context,
 
     auto fb_labels_vector = builder.CreateVector(fb_labels);
 
-    seerep::fb::LabelsBuilder lb(builder);
-    lb.add_labels(fb_labels_vector);
+    seerep::fb::StringVectorBuilder lb(builder);
+    lb.add_stringVector(fb_labels_vector);
     builder.Finish(lb.Finish());
 
-    *response = builder.ReleaseMessage<seerep::fb::Labels>();
+    *response = builder.ReleaseMessage<seerep::fb::StringVector>();
   }
   catch (std::runtime_error const& e)
   {

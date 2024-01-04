@@ -25,8 +25,7 @@ void Hdf5FbPointCloud::writePointCloud2(const std::string& id, const seerep::fb:
 
   writePointFieldAttributes(*dataGroupPtr, pcl.fields());
 
-  writeBoundingBoxLabeled(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, id, pcl.labels_bb());
-  writeLabelsGeneral(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, id, pcl.labels_general());
+  writeLabels(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, id, pcl.labels());
 
   HighFive::DataSpace dataSpace{ pcl.data()->size() };
   std::shared_ptr<HighFive::DataSet> payloadPtr = getHdf5DataSet<uint8_t>(hdf5GroupPath + "/points", dataSpace);
@@ -84,16 +83,6 @@ void Hdf5FbPointCloud::writeGeneralAttributes(std::shared_ptr<HighFive::Group>& 
   writeAttributeToHdf5<bool>(*dataGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::IS_DENSE, cloud.is_dense());
 }
 
-void Hdf5FbPointCloud::writePointCloudBoundingBoxLabeled(
-    const std::string& id,
-    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeledWithCategory>>* bbLabeledWithCategory)
-{
-  const std::scoped_lock lock(*m_write_mtx);
-
-  writeBoundingBoxLabeled(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, id, bbLabeledWithCategory);
-}
-
-// TODO partial point cloud read
 std::optional<flatbuffers::grpc::Message<seerep::fb::PointCloud2>>
 Hdf5FbPointCloud::readPointCloud2(const std::string& id, const bool withoutData)
 {
@@ -161,11 +150,7 @@ Hdf5FbPointCloud::readPointCloud2(const std::string& id, const bool withoutData)
     payloadDataset.read(data);
   }
 
-  auto labelsGeneralOffset =
-      readGeneralLabels(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, id, builder);
-
-  auto boundingBoxLabeledOffset =
-      readBoundingBoxesLabeled(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, id, builder);
+  auto labelsOffset = readLabels(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, id, builder);
 
   // build the point cloud message
   seerep::fb::PointCloud2Builder pointCloudBuilder(builder);
@@ -181,8 +166,7 @@ Hdf5FbPointCloud::readPointCloud2(const std::string& id, const bool withoutData)
     pointCloudBuilder.add_data(dataOffset);
   }
   pointCloudBuilder.add_is_dense(isDense);
-  pointCloudBuilder.add_labels_general(labelsGeneralOffset);
-  pointCloudBuilder.add_labels_bb(boundingBoxLabeledOffset);
+  pointCloudBuilder.add_labels(labelsOffset);
   auto pointCloudOffset = pointCloudBuilder.Finish();
   builder.Finish(pointCloudOffset);
 

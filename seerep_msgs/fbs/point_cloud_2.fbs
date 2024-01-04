@@ -1,6 +1,5 @@
 include "header.fbs";
-include "boundingbox_labeled_with_category.fbs";
-include "labels_with_instance_with_category.fbs";
+include "label_category.fbs";
 include "point_field.fbs";
 
 namespace seerep.fb;
@@ -15,8 +14,7 @@ table PointCloud2 {
   row_step:uint;
   data:[ubyte];
   is_dense:bool;
-  labels_general:[LabelsWithInstanceWithCategory];
-  labels_bb:[BoundingBoxLabeledWithCategory];
+  labels:[LabelCategory];
 }
 
 root_type PointCloud2;

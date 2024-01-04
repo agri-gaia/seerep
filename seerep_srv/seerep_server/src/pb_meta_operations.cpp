@@ -179,7 +179,7 @@ grpc::Status PbMetaOperations::GetOverallBoundingBox(grpc::ServerContext* contex
 
 grpc::Status PbMetaOperations::GetAllCategories(grpc::ServerContext* context,
                                                 const seerep::pb::UuidDatatypePair* request,
-                                                seerep::pb::Categories* response)
+                                                seerep::pb::StringVector* response)
 {
   (void)context;  // ignore that variable without causing warnings
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "fetching all categories";
@@ -197,7 +197,7 @@ grpc::Status PbMetaOperations::GetAllCategories(grpc::ServerContext* context,
 
     for (std::string category : categories)
     {
-      response->add_categories(category);
+      response->add_stringvector(category);
     }
   }
   catch (const std::exception& e)
@@ -220,7 +220,7 @@ grpc::Status PbMetaOperations::GetAllCategories(grpc::ServerContext* context,
 
 grpc::Status PbMetaOperations::GetAllLabels(grpc::ServerContext* context,
                                             const seerep::pb::UuidDatatypeWithCategory* request,
-                                            seerep::pb::Labels* response)
+                                            seerep::pb::StringVector* response)
 {
   (void)context;  // ignore that variable without causing warnings
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "fetching overall bounding box";
@@ -240,7 +240,7 @@ grpc::Status PbMetaOperations::GetAllLabels(grpc::ServerContext* context,
 
     for (std::string label : allLabels)
     {
-      response->add_labels(label);
+      response->add_stringvector(label);
     }
   }
   catch (const std::exception& e)
