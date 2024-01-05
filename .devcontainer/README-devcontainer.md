@@ -11,13 +11,13 @@ This folder contains all files needed for the development container:
 If you want to use a devcontainer on a remote host add the following to the settings.json of your VS Code config in your
 local workspace and replace the placeholder with your values:
 
-```
+```json
 "docker.host": "ssh://your-remote-user@your-remote-machine-fqdn-or-ip-here",
 ```
 
 Also update the workspace mount to a volume in the [devcontainer.json](devcontainer.json) file:
 
-```
+```json
 "workspaceMount": "source=seerep-ws,target=/home/docker/workspace/src,type=volume",
 ```
 
@@ -29,7 +29,7 @@ instructions copied from [here](https://code.visualstudio.com/docs/remote/contai
 3. First, start the SSH Agent in the background by running the following in a terminal: `eval "$(ssh-agent -s)"`
 4. Then add these lines to your `~/.bash_profile` or `~/.zprofile` (for Zsh) so it starts on login:
 
-```
+```bash
 if [ -z "$SSH_AUTH_SOCK" ]; then
   # Check for a currently running instance of the agent
   RUNNING_AGENT="`ps -ax | grep 'ssh-agent -s' | grep -v grep | wc -l | tr -d '[:space:]'`"

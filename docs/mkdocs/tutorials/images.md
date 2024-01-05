@@ -227,12 +227,14 @@ fullyEncapsulated`. If false, resultant polygons, which are partially inside the
 
 * Labels (semantic query)
 
+<!-- markdownlint-disable -->
+
 === "Protocol Buffers"
 
     Source: `examples/python/gRPC/images/gRPC_pb_queryImage.py`
 
     ```python
-   #!/usr/bin/env python3
+    #!/usr/bin/env python3
 
     import sys
 
@@ -458,11 +460,11 @@ fullyEncapsulated`. If false, resultant polygons, which are partially inside the
             )
 
     print("done.")
-```
+    ```
 
     Output:
 
-    ```
+    ```shell
     testproject 3af70ba8-1e81-4f60-86d2-a4257d88f01e
 
     uuidmsg: 00ced216-40b1-4d54-817f-11c413b228c6
