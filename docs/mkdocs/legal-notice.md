@@ -14,7 +14,7 @@ Trippstadter Str. 122<br>
 Germany
 
 Phone: [+49 631 20575 0](tel:+49631205750)<br>
-Email: [info@dfki.de](mailto:info@dfki.de)
+Email: [info@dfki.de](mailto:info@dfki.de>)
 
 Register Court: Amtsgericht Kaiserslautern<br>
 Register Number: HRB 2313
@@ -31,7 +31,7 @@ Germany<br>
 
 Phone: [+49 541 386050 2254](tel:+495413860502254)<br>
 E-mail: [mark.niemeyer@dfki.de](mailto:mark.niemeyer@dfki.de)<br>
-Website URL: www.dfki.de
+Website URL: <www.dfki.de>
 
 ## Liability for content
 
@@ -64,7 +64,7 @@ checked by DFKI when the links were first set up to determine whether any legal 
 the check, no legal infringements were apparent. However, it cannot be ruled out that the content is subsequently
 changed by the respective providers. A permanent control of the content of the linked pages is not reasonable without
 evidence of a legal infringement. Should you believe that the linked external pages infringe applicable law or otherwise
-contain inappropriate content, please notify us directly at: info@dfki.de.
+contain inappropriate content, please notify us directly at: <info@dfki.de>.
 
 In case DFKI should notice or receive any indication that an external offer to which it has linked might cause civil or
 criminal liability, DFKI will immediately delete this link.

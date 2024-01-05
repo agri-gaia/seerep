@@ -44,6 +44,8 @@ The new project on the server is (name/uuid):
 
 After we created two projects, we can query them. Currently the name doesn't have to be unique.
 
+<!-- markdownlint-disable -->
+
 === "Protocol Buffers"
 
     Source: `examples/gRPC/meta/gRPC_pb_getProjects.py`
