@@ -9,6 +9,7 @@
 #include "core_fb_general.h"
 
 // seerep_msgs
+#include <seerep_msgs/dataset_uuid_label_generated.h>
 #include <seerep_msgs/image_generated.h>
 #include <seerep_msgs/query_generated.h>
 
@@ -73,12 +74,11 @@ public:
    */
   boost::uuids::uuid addData(const seerep::fb::Image& img);
 
-  // TODO reimplement with datumaro
-  // /**
-  //  * @brief Adds bounding box based labels to an existing image
-  //  * @param bbs2dlabeled the flatbuffer message containing bounding box based labels
-  //  */
-  // void addBoundingBoxesLabeled(const seerep::fb::BoundingBoxes2DLabeledStamped& boundingBoxes2dlabeled);
+  /**
+   * @brief Adds labels to an existing image
+   * @param datasetUuidLabel the flatbuffer message containing  labels
+   */
+  void addLabel(const seerep::fb::DatasetUuidLabel& datasetUuidLabel);
 
 private:
   /** @brief a shared pointer to the general core */

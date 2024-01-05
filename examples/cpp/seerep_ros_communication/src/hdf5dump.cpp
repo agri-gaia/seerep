@@ -7,19 +7,26 @@ DumpSensorMsgs::DumpSensorMsgs(std::string hdf5FilePath, std::string project_fra
   ROS_INFO_STREAM("creating a new project with name: \"" << project_name << "\" and frame id: \"" << project_frame_id
                                                          << "\" in  file: \"" << hdf5FilePath << "\"");
   std::vector<std::string> labelsAsStdVector, instancesAsStdVector;
+  std::vector<int> labelIdDaturmaro, instanceIdDatumaro;
   labelsAsStdVector.push_back("testlabel_0");
+  labelIdDaturmaro.push_back(42);
   labelsAsStdVector.push_back("testlabel_1");
+  labelIdDaturmaro.push_back(43);
 
   // no instances, just labels -> no uuids
   instancesAsStdVector.push_back("");
+  instanceIdDatumaro.push_back(-1);
   instancesAsStdVector.push_back("");
+  instanceIdDatumaro.push_back(-1);
 
-  seerep_core_msgs::LabelsWithInstanceWithCategory labelsWithInstanceWithCategory;
-  labelsWithInstanceWithCategory.category = "testcategory";
-  labelsWithInstanceWithCategory.instances = instancesAsStdVector;
-  labelsWithInstanceWithCategory.labels = labelsAsStdVector;
+  seerep_core_msgs::LabelCategory labelCategory;
+  labelCategory.category = "testcategory";
+  labelCategory.instances = instancesAsStdVector;
+  labelCategory.instancesIdDatumaro = instanceIdDatumaro;
+  labelCategory.labels = labelsAsStdVector;
+  labelCategory.labelsIdDatumaro = labelIdDaturmaro;
 
-  m_labelsWithInstanceWithCategory.push_back(labelsWithInstanceWithCategory);
+  m_labelsCategory.push_back(labelCategory);
 
   auto write_mtx = std::make_shared<std::mutex>();
   std::shared_ptr<HighFive::File> hdf5_file =
@@ -62,8 +69,8 @@ void DumpSensorMsgs::dump(const sensor_msgs::Image::ConstPtr& msg) const
   {
     m_ioImage->writeImage(uuidString, seerep_ros_conversions_pb::toProto(*msg));
 
-    // also write the labels general; filled with dummy data right now
-    m_ioImageCore->writeLabelsGeneral(uuidString, m_labelsWithInstanceWithCategory);
+    // also write the labels; filled with dummy data right now
+    m_ioImageCore->writeLabels(uuidString, m_labelsCategory);
   }
   catch (const std::exception& e)
   {
@@ -78,18 +85,6 @@ void DumpSensorMsgs::dump(const geometry_msgs::Point::ConstPtr& msg) const
 }
 
 void DumpSensorMsgs::dump(const geometry_msgs::Quaternion::ConstPtr& msg) const
-{
-  (void)msg;  // ignore that variable without causing warnings
-  ROS_INFO_STREAM("Datatype not implemented.");
-}
-
-void DumpSensorMsgs::dump(const geometry_msgs::Pose::ConstPtr& msg) const
-{
-  (void)msg;  // ignore that variable without causing warnings
-  ROS_INFO_STREAM("Datatype not implemented.");
-}
-
-void DumpSensorMsgs::dump(const geometry_msgs::PoseStamped::ConstPtr& msg) const
 {
   (void)msg;  // ignore that variable without causing warnings
   ROS_INFO_STREAM("Datatype not implemented.");
@@ -124,10 +119,6 @@ std::optional<ros::Subscriber> DumpSensorMsgs::getSubscriber(const std::string& 
       return nh.subscribe<geometry_msgs::Point>(topic, 0, &DumpSensorMsgs::dump, this);
     case geometry_msgs_Quaternion:
       return nh.subscribe<geometry_msgs::Quaternion>(topic, 0, &DumpSensorMsgs::dump, this);
-    case geometry_msgs_Pose:
-      return nh.subscribe<geometry_msgs::Pose>(topic, 0, &DumpSensorMsgs::dump, this);
-    case geometry_msgs_PoseStamped:
-      return nh.subscribe<geometry_msgs::PoseStamped>(topic, 0, &DumpSensorMsgs::dump, this);
     case tf2_msgs_TFMessage:
       return nh.subscribe<tf2_msgs::TFMessage>(topic, 0, &DumpSensorMsgs::dump, this);
     default:

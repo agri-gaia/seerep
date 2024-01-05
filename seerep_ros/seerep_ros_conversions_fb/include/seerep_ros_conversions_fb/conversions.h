@@ -2,9 +2,7 @@
 #define SEEREP_ROS_CONVERSIONS_FB
 
 // ROS messages
-#include <geometry_msgs/PoseStamped.h>
 #include <geometry_msgs/TransformStamped.h>
-#include <geometry_msgs/Vector3Stamped.h>
 #include <sensor_msgs/CameraInfo.h>
 #include <sensor_msgs/Image.h>
 #include <sensor_msgs/PointCloud2.h>
@@ -272,67 +270,6 @@ flatbuffers::Offset<seerep::fb::TransformStamped> toFlat(const geometry_msgs::Tr
  * @return ROS geometry_msgs::TransformStamped
  */
 geometry_msgs::TransformStamped toROS(const seerep::fb::TransformStamped& transform);
-
-// /**
-//  * @brief Converts a ROS vision_msgs::Detection2DArray message to the corresponding
-//  * gRPC Flatbuffer BoundingBoxes2D_labeled_stamped message
-//  * @param detection2d geometry_vision_msgs::Detection2DArray
-//  * @param projectuuid UUID of the target project. Used to set the corresponding field in the Flatbuffer message
-//  * @param msguuid UUID of the message. Used to set the corresponding field in the Flatbuffer message
-//  * @return gRPC Flatbuffer BoundingBoxes2D_labeled_stamped message
-//  */
-// flatbuffers::grpc::Message<seerep::fb::BoundingBoxes2DLabeledStamped>
-// toFlat(const vision_msgs::Detection2DArray& detection2d, std::string projectuuid, std::string category,
-//        std::string msguuid = "", std::vector<std::string> labels = std::vector<std::string>(),
-//        std::vector<std::string> instances = std::vector<std::string>());
-// /**
-//  * @brief Converts a ROS vision_msgs::Detection2DArray message to the corresponding
-//  * Flatbuffer BoundingBoxes2D_labeled_stamped message
-//  * @param detection2d geometry_vision_msgs::Detection2DArray
-//  * @param projectuuid UUID of the target project. Used to set the corresponding field in the Flatbuffer message
-//  * @param builder the flatbuffer message builder to build the flatbuffer message
-//  * @param msguuid UUID of the message. Used to set the corresponding field in the Flatbuffer message
-//  * @return Flatbuffer BoundingBoxes2D_labeled_stamped message
-//  */
-// flatbuffers::Offset<seerep::fb::BoundingBoxes2DLabeledStamped>
-// toFlat(const vision_msgs::Detection2DArray& detection2d, std::string projectuuid,
-//        flatbuffers::grpc::MessageBuilder& builder, std::string category, std::string msguuid = "",
-//        std::vector<std::string> labels = std::vector<std::string>(),
-//        std::vector<std::string> instances = std::vector<std::string>());
-
-// /**
-//  * @brief Converts a Flatbuffer BoundingBoxes2D_labeled_stamped message to the corresponding
-//  * ROS vision_msgs::Detection2DArray message
-//  * @param bb_labeled_stamped Flatbuffer BoundingBoxes2D_labeled_stamped
-//  * @return ROS vision_msgs::Detection2DArray
-//  */
-// vision_msgs::Detection2DArray toROS(const seerep::fb::BoundingBoxes2DLabeledStamped& bb_labeled_stamped);
-
-// /**
-//  * @brief Converts a ROS vision_msgs::Detection2D message to the corresponding
-//  * gRPC Flatbuffer BoundingBoxes2DLabeled message
-//  * @param detection2d geometry_vision_msgs::Detection2D
-//  * @return gRPC Flatbuffer BoundingBoxes2DLabeled message
-//  */
-// flatbuffers::grpc::Message<seerep::fb::BoundingBox2DLabeled> toFlat(const vision_msgs::Detection2D& detection2d);
-// /**
-//  * @brief Converts a ROS vision_msgs::Detection2D message to the corresponding
-//  * Flatbuffer BoundingBoxes2DLabeled message
-//  * @param detection2d geometry_vision_msgs::Detection2D
-//  * @param builder the flatbuffer message builder to build the flatbuffer message
-//  * @return Flatbuffer BoundingBoxes2DLabeled message
-//  */
-// flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled> toFlat(const vision_msgs::Detection2D& detection2d,
-//                                                              flatbuffers::grpc::MessageBuilder& builder,
-//                                                              std::string label = "", std::string instanceUUID = "");
-
-// /**
-//  * @brief Converts a Flatbuffer BoundingBoxes2DLabeled message to the corresponding
-//  * ROS vision_msgs::Detection2D message
-//  * @param bb_labeled_stamped Flatbuffer BoundingBoxes2DLabeled
-//  * @return ROS vision_msgs::Detection2D
-//  */
-// vision_msgs::Detection2D toROS(const seerep::fb::BoundingBox2DLabeled& bb_labeled_stamped);
 
 /**
  * @brief Converts a ROS sensor_msgs::CameraInfo message to the corresponding

@@ -25,7 +25,7 @@ void Hdf5FbPointCloud::writePointCloud2(const std::string& id, const seerep::fb:
 
   writePointFieldAttributes(*dataGroupPtr, pcl.fields());
 
-  writeLabels(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, id, pcl.labels());
+  writeLabelsFb(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, id, pcl.labels());
 
   HighFive::DataSpace dataSpace{ pcl.data()->size() };
   std::shared_ptr<HighFive::DataSet> payloadPtr = getHdf5DataSet<uint8_t>(hdf5GroupPath + "/points", dataSpace);

@@ -43,7 +43,7 @@ void Hdf5FbPoint::writePoint(const std::string& id, const seerep::fb::PointStamp
 
   writeAttributeMap(data_set_ptr, point->attribute());
 
-  writeLabels(seerep_hdf5_core::Hdf5CorePoint::HDF5_GROUP_POINT, id, point->labels());
+  writeLabelsFb(seerep_hdf5_core::Hdf5CorePoint::HDF5_GROUP_POINT, id, point->labels());
 
   m_file->flush();
 }
