@@ -2,9 +2,7 @@
 #define SEEREP_ROS_CONVERSIONS_FB
 
 // ROS messages
-#include <geometry_msgs/PoseStamped.h>
 #include <geometry_msgs/TransformStamped.h>
-#include <geometry_msgs/Vector3Stamped.h>
 #include <sensor_msgs/CameraInfo.h>
 #include <sensor_msgs/Image.h>
 #include <sensor_msgs/PointCloud2.h>
