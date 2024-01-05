@@ -188,9 +188,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5b8f06bc8f709e0c8d5bd1fcdb6c7e6a"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="structseerep__core__msgs_1_1camera__intrinsics.html">seerep_core_msgs::camera_intrinsics</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#a5b8f06bc8f709e0c8d5bd1fcdb6c7e6a">getCameraIntrinsics</a> (boost::uuids::uuid camIntrinsicsUuid)</td></tr>
 <tr class="memdesc:a5b8f06bc8f709e0c8d5bd1fcdb6c7e6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the Camera Intrinsics object.  <a href="classseerep__core_1_1CoreProject.html#a5b8f06bc8f709e0c8d5bd1fcdb6c7e6a">More...</a><br /></td></tr>
 <tr class="separator:a5b8f06bc8f709e0c8d5bd1fcdb6c7e6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac59f37d6de143ec55fa6f5b666eeb3a6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#ac59f37d6de143ec55fa6f5b666eeb3a6">checkCameraIntrinsicsExists</a> (boost::uuids::uuid camIntrinsicsUuid)</td></tr>
-<tr class="memdesc:ac59f37d6de143ec55fa6f5b666eeb3a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if there exists a camera intrinsics against the provided uuid.  <a href="classseerep__core_1_1CoreProject.html#ac59f37d6de143ec55fa6f5b666eeb3a6">More...</a><br /></td></tr>
-<tr class="separator:ac59f37d6de143ec55fa6f5b666eeb3a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ae7af68df3506ffd583511e16d52842"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#a0ae7af68df3506ffd583511e16d52842">cameraIntrinsicExists</a> (boost::uuids::uuid camIntrinsicsUuid)</td></tr>
+<tr class="memdesc:a0ae7af68df3506ffd583511e16d52842"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if there exists a camera intrinsics against the provided uuid.  <a href="classseerep__core_1_1CoreProject.html#a0ae7af68df3506ffd583511e16d52842">More...</a><br /></td></tr>
+<tr class="separator:a0ae7af68df3506ffd583511e16d52842"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a46225f00ecf2c33e4a1c1f196cf54f4a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#a46225f00ecf2c33e4a1c1f196cf54f4a">getFrames</a> ()</td></tr>
 <tr class="separator:a46225f00ecf2c33e4a1c1f196cf54f4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afff09d948d662bd3dde5166e0eaf018a"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; std::mutex &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#afff09d948d662bd3dde5166e0eaf018a">getHdf5FileMutex</a> ()</td></tr>
@@ -529,14 +529,14 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ac59f37d6de143ec55fa6f5b666eeb3a6" name="ac59f37d6de143ec55fa6f5b666eeb3a6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac59f37d6de143ec55fa6f5b666eeb3a6">&#9670;&nbsp;</a></span>checkCameraIntrinsicsExists()</h2>
+<a id="a0ae7af68df3506ffd583511e16d52842" name="a0ae7af68df3506ffd583511e16d52842"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ae7af68df3506ffd583511e16d52842">&#9670;&nbsp;</a></span>cameraIntrinsicExists()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool seerep_core::CoreProject::checkCameraIntrinsicsExists </td>
+          <td class="memname">bool seerep_core::CoreProject::cameraIntrinsicExists </td>
           <td>(</td>
           <td class="paramtype">boost::uuids::uuid&#160;</td>
           <td class="paramname"><em>camIntrinsicsUuid</em></td><td>)</td>

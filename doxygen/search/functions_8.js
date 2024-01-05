@@ -5,6 +5,6 @@ var searchData=
   ['initlogging_2',['initLogging',['../classseerep__server_1_1server.html#a576314842395debc250c6373bac06e5e',1,'seerep_server::server']]],
   ['instancelabel_3',['InstanceLabel',['../structseerep__hdf5__py_1_1InstanceLabel.html#a55f0eb63af1d5fcab45ef88783c9370b',1,'seerep_hdf5_py::InstanceLabel']]],
   ['intersectiondegree_4',['intersectionDegree',['../classseerep__core_1_1CoreDataset.html#a546b4dd020f8162baa895eca48a804ef',1,'seerep_core::CoreDataset']]],
-  ['intersectqueryresults_5',['intersectQueryResults',['../classseerep__core_1_1CoreDataset.html#a73877adc228ac0ee9b1081483c0e4aab',1,'seerep_core::CoreDataset']]],
-  ['intersectvectorofsets_6',['intersectVectorOfSets',['../classseerep__core_1_1CoreDataset.html#af257b7d545468ca4b52a9cbf7815c01a',1,'seerep_core::CoreDataset']]]
+  ['intersectqueryresults_5',['intersectQueryResults',['../classseerep__core_1_1CoreDataset.html#a8c0f8a06e8f69afbfa8d6f8bf7b02927',1,'seerep_core::CoreDataset']]],
+  ['intersectvectorofsets_6',['intersectVectorOfSets',['../classseerep__core_1_1CoreDataset.html#a349b2a60b0ed40ee9239c007fdffd5c1',1,'seerep_core::CoreDataset']]]
 ];

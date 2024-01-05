@@ -34,6 +34,7 @@ var annotated_dup =
       [ "QueryResultProject", "structseerep__core__msgs_1_1QueryResultProject.html", "structseerep__core__msgs_1_1QueryResultProject" ],
       [ "QueryTf", "structseerep__core__msgs_1_1QueryTf.html", "structseerep__core__msgs_1_1QueryTf" ],
       [ "region_of_interest", "structseerep__core__msgs_1_1region__of__interest.html", "structseerep__core__msgs_1_1region__of__interest" ],
+      [ "SparqlQuery", "structseerep__core__msgs_1_1SparqlQuery.html", "structseerep__core__msgs_1_1SparqlQuery" ],
       [ "Timeinterval", "structseerep__core__msgs_1_1Timeinterval.html", "structseerep__core__msgs_1_1Timeinterval" ],
       [ "Timestamp", "structseerep__core__msgs_1_1Timestamp.html", "structseerep__core__msgs_1_1Timestamp" ]
     ] ],
@@ -59,9 +60,6 @@ var annotated_dup =
       [ "ImageAttributes", "structseerep__hdf5__core_1_1ImageAttributes.html", "structseerep__hdf5__core_1_1ImageAttributes" ]
     ] ],
     [ "seerep_hdf5_fb", "namespaceseerep__hdf5__fb.html", [
-      [ "impl", "namespaceseerep__hdf5__fb_1_1impl.html", [
-        [ "PointCloud2IteratorBase", "classseerep__hdf5__fb_1_1impl_1_1PointCloud2IteratorBase.html", "classseerep__hdf5__fb_1_1impl_1_1PointCloud2IteratorBase" ]
-      ] ],
       [ "tests", "namespaceseerep__hdf5__fb_1_1tests.html", [
         [ "fbWriteLoadTest", "classseerep__hdf5__fb_1_1tests_1_1fbWriteLoadTest.html", null ]
       ] ],
@@ -69,9 +67,7 @@ var annotated_dup =
       [ "Hdf5FbImage", "classseerep__hdf5__fb_1_1Hdf5FbImage.html", "classseerep__hdf5__fb_1_1Hdf5FbImage" ],
       [ "Hdf5FbPoint", "classseerep__hdf5__fb_1_1Hdf5FbPoint.html", "classseerep__hdf5__fb_1_1Hdf5FbPoint" ],
       [ "Hdf5FbPointCloud", "classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html", "classseerep__hdf5__fb_1_1Hdf5FbPointCloud" ],
-      [ "Hdf5FbTf", "classseerep__hdf5__fb_1_1Hdf5FbTf.html", "classseerep__hdf5__fb_1_1Hdf5FbTf" ],
-      [ "PointCloud2ConstIterator", "classseerep__hdf5__fb_1_1PointCloud2ConstIterator.html", "classseerep__hdf5__fb_1_1PointCloud2ConstIterator" ],
-      [ "PointCloud2Iterator", "classseerep__hdf5__fb_1_1PointCloud2Iterator.html", "classseerep__hdf5__fb_1_1PointCloud2Iterator" ]
+      [ "Hdf5FbTf", "classseerep__hdf5__fb_1_1Hdf5FbTf.html", "classseerep__hdf5__fb_1_1Hdf5FbTf" ]
     ] ],
     [ "seerep_hdf5_pb", "namespaceseerep__hdf5__pb.html", [
       [ "impl", "namespaceseerep__hdf5__pb_1_1impl.html", [

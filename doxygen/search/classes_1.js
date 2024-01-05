@@ -3,7 +3,7 @@ var searchData=
   ['camera_5fintrinsics_0',['camera_intrinsics',['../structseerep__core__msgs_1_1camera__intrinsics.html',1,'seerep_core_msgs']]],
   ['camera_5fintrinsics_5fquery_1',['camera_intrinsics_query',['../structseerep__core__msgs_1_1camera__intrinsics__query.html',1,'seerep_core_msgs']]],
   ['categorizedboundingboxlabel_2',['CategorizedBoundingBoxLabel',['../structseerep__hdf5__py_1_1CategorizedBoundingBoxLabel.html',1,'seerep_hdf5_py']]],
-  ['cloudinfo_3',['CloudInfo',['../structseerep__hdf5__fb_1_1Hdf5FbPointCloud_1_1CloudInfo.html',1,'seerep_hdf5_fb::Hdf5FbPointCloud::CloudInfo'],['../structseerep__hdf5__pb_1_1Hdf5PbPointCloud_1_1CloudInfo.html',1,'seerep_hdf5_pb::Hdf5PbPointCloud::CloudInfo']]],
+  ['cloudinfo_3',['CloudInfo',['../structseerep__hdf5__pb_1_1Hdf5PbPointCloud_1_1CloudInfo.html',1,'seerep_hdf5_pb::Hdf5PbPointCloud']]],
   ['core_4',['Core',['../classseerep__core_1_1Core.html',1,'seerep_core']]],
   ['corecameraintrinsics_5',['CoreCameraIntrinsics',['../classseerep__core_1_1CoreCameraIntrinsics.html',1,'seerep_core']]],
   ['coredataset_6',['CoreDataset',['../classseerep__core_1_1CoreDataset.html',1,'seerep_core']]],

@@ -16,5 +16,6 @@ var searchData=
   ['boundingbox_5flabeled_5fwith_5fcategory_2eproto_13',['boundingbox_labeled_with_category.proto',['../boundingbox__labeled__with__category_8proto.html',1,'']]],
   ['boundingbox_5fstamped_2efbs_14',['boundingbox_stamped.fbs',['../boundingbox__stamped_8fbs.html',1,'']]],
   ['boundingbox_5fstamped_2eproto_15',['boundingbox_stamped.proto',['../boundingbox__stamped_8proto.html',1,'']]],
-  ['boundingboxes2d_5flabeled_5fstamped_2efbs_16',['boundingboxes2d_labeled_stamped.fbs',['../boundingboxes2d__labeled__stamped_8fbs.html',1,'']]]
+  ['boundingboxes2d_5flabeled_5fstamped_2efbs_16',['boundingboxes2d_labeled_stamped.fbs',['../boundingboxes2d__labeled__stamped_8fbs.html',1,'']]],
+  ['boundingboxes_5flabeled_5fstamped_2efbs_17',['boundingboxes_labeled_stamped.fbs',['../boundingboxes__labeled__stamped_8fbs.html',1,'']]]
 ];

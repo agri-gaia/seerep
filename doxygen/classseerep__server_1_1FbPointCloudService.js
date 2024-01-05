@@ -1,6 +1,7 @@
 var classseerep__server_1_1FbPointCloudService =
 [
     [ "FbPointCloudService", "classseerep__server_1_1FbPointCloudService.html#a5f13bbb70dc860d30b8f18962c992032", null ],
+    [ "AddBoundingBoxesLabeled", "classseerep__server_1_1FbPointCloudService.html#af87fdd87b7c45a67c33d663cec677f4c", null ],
     [ "GetPointCloud2", "classseerep__server_1_1FbPointCloudService.html#af91212b27d848ad5683e18682b7b7a8f", null ],
     [ "TransferPointCloud2", "classseerep__server_1_1FbPointCloudService.html#a30aa1e66917f8699ae08db2b1e79fd7e", null ],
     [ "m_logger", "classseerep__server_1_1FbPointCloudService.html#a21ba763f3a005ddfb47cf6316911cb01", null ],

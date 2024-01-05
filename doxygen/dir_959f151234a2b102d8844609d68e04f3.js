@@ -44,6 +44,9 @@ var dir_959f151234a2b102d8844609d68e04f3 =
     [ "region_of_interest.h", "region__of__interest_8h.html", [
       [ "seerep_core_msgs::region_of_interest", "structseerep__core__msgs_1_1region__of__interest.html", "structseerep__core__msgs_1_1region__of__interest" ]
     ] ],
+    [ "sparql_query.h", "sparql__query_8h.html", [
+      [ "seerep_core_msgs::SparqlQuery", "structseerep__core__msgs_1_1SparqlQuery.html", "structseerep__core__msgs_1_1SparqlQuery" ]
+    ] ],
     [ "timeinterval.h", "timeinterval_8h.html", [
       [ "seerep_core_msgs::Timeinterval", "structseerep__core__msgs_1_1Timeinterval.html", "structseerep__core__msgs_1_1Timeinterval" ]
     ] ],

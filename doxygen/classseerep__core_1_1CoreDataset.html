@@ -227,15 +227,18 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:ac0cc1aa2e309151feb0af864fd4be9c9"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::set&lt; boost::uuids::uuid &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#ac0cc1aa2e309151feb0af864fd4be9c9">querySemanticWithAllTheLabels</a> (std::shared_ptr&lt; <a class="el" href="structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html">DatatypeSpecifics</a> &gt; datatypeSpecifics, const <a class="el" href="structseerep__core__msgs_1_1Query.html">seerep_core_msgs::Query</a> &amp;query)</td></tr>
 <tr class="memdesc:ac0cc1aa2e309151feb0af864fd4be9c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">queries the semantic index where the dataset contains all of the labels  <a href="classseerep__core_1_1CoreDataset.html#ac0cc1aa2e309151feb0af864fd4be9c9">More...</a><br /></td></tr>
 <tr class="separator:ac0cc1aa2e309151feb0af864fd4be9c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a73877adc228ac0ee9b1081483c0e4aab"><td class="memItemLeft" align="right" valign="top">std::vector&lt; boost::uuids::uuid &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#a73877adc228ac0ee9b1081483c0e4aab">intersectQueryResults</a> (std::optional&lt; std::vector&lt; <a class="el" href="namespaceseerep__core__msgs.html#a640f042e3954e22bedec9e6ad857c28e">seerep_core_msgs::AabbIdPair</a> &gt; &gt; &amp;rt_result, std::optional&lt; std::vector&lt; <a class="el" href="namespaceseerep__core__msgs.html#a0792652716be4144a5e6acb95087b451">seerep_core_msgs::AabbTimeIdPair</a> &gt; &gt; &amp;timetree_result, std::optional&lt; std::set&lt; boost::uuids::uuid &gt; &gt; &amp;semanticResult, std::optional&lt; std::vector&lt; boost::uuids::uuid &gt; &gt; &amp;instanceResult, const std::optional&lt; std::vector&lt; boost::uuids::uuid &gt; &gt; &amp;dataUuids)</td></tr>
-<tr class="memdesc:a73877adc228ac0ee9b1081483c0e4aab"><td class="mdescLeft">&#160;</td><td class="mdescRight">intersects the results of the spatial, temporal and semantic query and returns the UUIDs of the images matching the query in all three modalities  <a href="classseerep__core_1_1CoreDataset.html#a73877adc228ac0ee9b1081483c0e4aab">More...</a><br /></td></tr>
-<tr class="separator:a73877adc228ac0ee9b1081483c0e4aab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af257b7d545468ca4b52a9cbf7815c01a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; boost::uuids::uuid &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#af257b7d545468ca4b52a9cbf7815c01a">intersectVectorOfSets</a> (std::vector&lt; std::set&lt; boost::uuids::uuid &gt; &gt; &amp;vectorOfSets)</td></tr>
-<tr class="memdesc:af257b7d545468ca4b52a9cbf7815c01a"><td class="mdescLeft">&#160;</td><td class="mdescRight">intersects a vector of sets pairwise recursively until one intersection set remains  <a href="classseerep__core_1_1CoreDataset.html#af257b7d545468ca4b52a9cbf7815c01a">More...</a><br /></td></tr>
-<tr class="separator:af257b7d545468ca4b52a9cbf7815c01a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a61f5aa3d5b24d05d90f240779895470a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; boost::uuids::uuid &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#a61f5aa3d5b24d05d90f240779895470a">getAllDatasetUuids</a> (std::shared_ptr&lt; <a class="el" href="structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html">seerep_core::CoreDataset::DatatypeSpecifics</a> &gt; datatypeSpecifics)</td></tr>
-<tr class="memdesc:a61f5aa3d5b24d05d90f240779895470a"><td class="mdescLeft">&#160;</td><td class="mdescRight">return the UUIDs of all stored datasets. Uses the timeTree, because all datasets are in there  <a href="classseerep__core_1_1CoreDataset.html#a61f5aa3d5b24d05d90f240779895470a">More...</a><br /></td></tr>
-<tr class="separator:a61f5aa3d5b24d05d90f240779895470a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c0f8a06e8f69afbfa8d6f8bf7b02927"><td class="memItemLeft" align="right" valign="top">std::vector&lt; boost::uuids::uuid &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#a8c0f8a06e8f69afbfa8d6f8bf7b02927">intersectQueryResults</a> (std::optional&lt; std::vector&lt; <a class="el" href="namespaceseerep__core__msgs.html#a640f042e3954e22bedec9e6ad857c28e">seerep_core_msgs::AabbIdPair</a> &gt; &gt; &amp;rt_result, std::optional&lt; std::vector&lt; <a class="el" href="namespaceseerep__core__msgs.html#a0792652716be4144a5e6acb95087b451">seerep_core_msgs::AabbTimeIdPair</a> &gt; &gt; &amp;timetree_result, std::optional&lt; std::set&lt; boost::uuids::uuid &gt; &gt; &amp;semanticResult, std::optional&lt; std::vector&lt; boost::uuids::uuid &gt; &gt; &amp;instanceResult, const std::optional&lt; std::vector&lt; boost::uuids::uuid &gt; &gt; &amp;dataUuids, bool sortByTime=false)</td></tr>
+<tr class="memdesc:a8c0f8a06e8f69afbfa8d6f8bf7b02927"><td class="mdescLeft">&#160;</td><td class="mdescRight">intersects the results of the spatial, temporal and semantic query and returns the UUIDs of the images matching the query in all three modalities  <a href="classseerep__core_1_1CoreDataset.html#a8c0f8a06e8f69afbfa8d6f8bf7b02927">More...</a><br /></td></tr>
+<tr class="separator:a8c0f8a06e8f69afbfa8d6f8bf7b02927"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6317b5494947f1e7a34920d50fa84a5a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; boost::uuids::uuid &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#a6317b5494947f1e7a34920d50fa84a5a">sortResultByTime</a> (std::optional&lt; std::vector&lt; <a class="el" href="namespaceseerep__core__msgs.html#a0792652716be4144a5e6acb95087b451">seerep_core_msgs::AabbTimeIdPair</a> &gt; &gt; &amp;timetree_result, std::optional&lt; std::set&lt; boost::uuids::uuid &gt; &gt; intersectionResult=std::nullopt)</td></tr>
+<tr class="memdesc:a6317b5494947f1e7a34920d50fa84a5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">sorts the uuids of the result set based on their timestamp  <a href="classseerep__core_1_1CoreDataset.html#a6317b5494947f1e7a34920d50fa84a5a">More...</a><br /></td></tr>
+<tr class="separator:a6317b5494947f1e7a34920d50fa84a5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a349b2a60b0ed40ee9239c007fdffd5c1"><td class="memItemLeft" align="right" valign="top">std::set&lt; boost::uuids::uuid &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#a349b2a60b0ed40ee9239c007fdffd5c1">intersectVectorOfSets</a> (std::vector&lt; std::set&lt; boost::uuids::uuid &gt; &gt; &amp;vectorOfSets)</td></tr>
+<tr class="memdesc:a349b2a60b0ed40ee9239c007fdffd5c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">intersects a vector of sets pairwise recursively until one intersection set remains  <a href="classseerep__core_1_1CoreDataset.html#a349b2a60b0ed40ee9239c007fdffd5c1">More...</a><br /></td></tr>
+<tr class="separator:a349b2a60b0ed40ee9239c007fdffd5c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1164ad56fae7d15e3e12ae1ea31cebc2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; boost::uuids::uuid &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#a1164ad56fae7d15e3e12ae1ea31cebc2">getAllDatasetUuids</a> (std::shared_ptr&lt; <a class="el" href="structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html">seerep_core::CoreDataset::DatatypeSpecifics</a> &gt; datatypeSpecifics, bool sortByTime)</td></tr>
+<tr class="memdesc:a1164ad56fae7d15e3e12ae1ea31cebc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">return the UUIDs of all stored datasets. Uses the timeTree, because all datasets are in there  <a href="classseerep__core_1_1CoreDataset.html#a1164ad56fae7d15e3e12ae1ea31cebc2">More...</a><br /></td></tr>
+<tr class="separator:a1164ad56fae7d15e3e12ae1ea31cebc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -551,8 +554,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a61f5aa3d5b24d05d90f240779895470a" name="a61f5aa3d5b24d05d90f240779895470a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a61f5aa3d5b24d05d90f240779895470a">&#9670;&nbsp;</a></span>getAllDatasetUuids()</h2>
+<a id="a1164ad56fae7d15e3e12ae1ea31cebc2" name="a1164ad56fae7d15e3e12ae1ea31cebc2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1164ad56fae7d15e3e12ae1ea31cebc2">&#9670;&nbsp;</a></span>getAllDatasetUuids()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -564,8 +567,18 @@ Private Attributes</h2></td></tr>
           <td class="memname">std::vector&lt; boost::uuids::uuid &gt; seerep_core::CoreDataset::getAllDatasetUuids </td>
           <td>(</td>
           <td class="paramtype">std::shared_ptr&lt; <a class="el" href="structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html">seerep_core::CoreDataset::DatatypeSpecifics</a> &gt;&#160;</td>
-          <td class="paramname"><em>datatypeSpecifics</em></td><td>)</td>
+          <td class="paramname"><em>datatypeSpecifics</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>sortByTime</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -579,6 +592,7 @@ Private Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">datatypeSpecifics</td><td>the datatype specifics of the targeted data type </td></tr>
+    <tr><td class="paramname">sortByTime</td><td>flag if the result set should be sorted by the timestamp of the data </td></tr>
   </table>
   </dd>
 </dl>
@@ -833,8 +847,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a73877adc228ac0ee9b1081483c0e4aab" name="a73877adc228ac0ee9b1081483c0e4aab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a73877adc228ac0ee9b1081483c0e4aab">&#9670;&nbsp;</a></span>intersectQueryResults()</h2>
+<a id="a8c0f8a06e8f69afbfa8d6f8bf7b02927" name="a8c0f8a06e8f69afbfa8d6f8bf7b02927"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c0f8a06e8f69afbfa8d6f8bf7b02927">&#9670;&nbsp;</a></span>intersectQueryResults()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -870,7 +884,13 @@ Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::optional&lt; std::vector&lt; boost::uuids::uuid &gt; &gt; &amp;&#160;</td>
-          <td class="paramname"><em>dataUuids</em>&#160;</td>
+          <td class="paramname"><em>dataUuids</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>sortByTime</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -900,8 +920,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="af257b7d545468ca4b52a9cbf7815c01a" name="af257b7d545468ca4b52a9cbf7815c01a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af257b7d545468ca4b52a9cbf7815c01a">&#9670;&nbsp;</a></span>intersectVectorOfSets()</h2>
+<a id="a349b2a60b0ed40ee9239c007fdffd5c1" name="a349b2a60b0ed40ee9239c007fdffd5c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a349b2a60b0ed40ee9239c007fdffd5c1">&#9670;&nbsp;</a></span>intersectVectorOfSets()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -910,7 +930,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt; boost::uuids::uuid &gt; seerep_core::CoreDataset::intersectVectorOfSets </td>
+          <td class="memname">std::set&lt; boost::uuids::uuid &gt; seerep_core::CoreDataset::intersectVectorOfSets </td>
           <td>(</td>
           <td class="paramtype">std::vector&lt; std::set&lt; boost::uuids::uuid &gt; &gt; &amp;&#160;</td>
           <td class="paramname"><em>vectorOfSets</em></td><td>)</td>
@@ -931,7 +951,7 @@ Private Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>vector of UUIDs of the intersection result </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>set of UUIDs of the intersection result </dd></dl>
 
 </div>
 </div>
@@ -1242,6 +1262,52 @@ Private Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a6317b5494947f1e7a34920d50fa84a5a" name="a6317b5494947f1e7a34920d50fa84a5a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6317b5494947f1e7a34920d50fa84a5a">&#9670;&nbsp;</a></span>sortResultByTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; boost::uuids::uuid &gt; seerep_core::CoreDataset::sortResultByTime </td>
+          <td>(</td>
+          <td class="paramtype">std::optional&lt; std::vector&lt; <a class="el" href="namespaceseerep__core__msgs.html#a0792652716be4144a5e6acb95087b451">seerep_core_msgs::AabbTimeIdPair</a> &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>timetree_result</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::optional&lt; std::set&lt; boost::uuids::uuid &gt; &gt;&#160;</td>
+          <td class="paramname"><em>intersectionResult</em> = <code>std::nullopt</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>sorts the uuids of the result set based on their timestamp </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">timetree_result</td><td>the result from the timetree query. Contains uuids and the corresponding timestamp </td></tr>
+    <tr><td class="paramname">intersectedResult</td><td>the intersected uuids of all parts of the query </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;boost::uuids::uuid&gt; uuids of the result set sorted by timestamp </dd></dl>
 
 </div>
 </div>

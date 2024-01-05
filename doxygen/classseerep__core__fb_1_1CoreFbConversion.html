@@ -217,6 +217,12 @@ Static Private Member Functions</h2></td></tr>
 <tr class="memitem:a5cc418fbc9786f5c3729ca65ca986b60"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbConversion.html#a5cc418fbc9786f5c3729ca65ca986b60">fromFbQueryWithoutData</a> (const seerep::fb::Query *query)</td></tr>
 <tr class="memdesc:a5cc418fbc9786f5c3729ca65ca986b60"><td class="mdescLeft">&#160;</td><td class="mdescRight">extracts the WithoutData Flag of the flatbuffer query message  <a href="classseerep__core__fb_1_1CoreFbConversion.html#a5cc418fbc9786f5c3729ca65ca986b60">More...</a><br /></td></tr>
 <tr class="separator:a5cc418fbc9786f5c3729ca65ca986b60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9b37ae5537e9b2811e6d43eee55449e"><td class="memItemLeft" align="right" valign="top">static std::optional&lt; <a class="el" href="structseerep__core__msgs_1_1SparqlQuery.html">seerep_core_msgs::SparqlQuery</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbConversion.html#ab9b37ae5537e9b2811e6d43eee55449e">fromFbSparqlQuery</a> (const seerep::fb::Query *query)</td></tr>
+<tr class="memdesc:ab9b37ae5537e9b2811e6d43eee55449e"><td class="mdescLeft">&#160;</td><td class="mdescRight">extracts the sparql query of the flatbuffer query message  <a href="classseerep__core__fb_1_1CoreFbConversion.html#ab9b37ae5537e9b2811e6d43eee55449e">More...</a><br /></td></tr>
+<tr class="separator:ab9b37ae5537e9b2811e6d43eee55449e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa00b9501ea1d02f39121078d455f37ad"><td class="memItemLeft" align="right" valign="top">static std::optional&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbConversion.html#aa00b9501ea1d02f39121078d455f37ad">fromFbOntologyURI</a> (const seerep::fb::Query *query)</td></tr>
+<tr class="memdesc:aa00b9501ea1d02f39121078d455f37ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">extracts the ontologyURI string of the flatbuffer query message  <a href="classseerep__core__fb_1_1CoreFbConversion.html#aa00b9501ea1d02f39121078d455f37ad">More...</a><br /></td></tr>
+<tr class="separator:aa00b9501ea1d02f39121078d455f37ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7be6319277d17ecf4e71b0a4a17af1de"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbConversion.html#a7be6319277d17ecf4e71b0a4a17af1de">fromFbQueryMustHaveAllLabels</a> (const seerep::fb::Query *query)</td></tr>
 <tr class="memdesc:a7be6319277d17ecf4e71b0a4a17af1de"><td class="mdescLeft">&#160;</td><td class="mdescRight">extracts the mustHaveAllLabels Flag of the flatbuffer query message  <a href="classseerep__core__fb_1_1CoreFbConversion.html#a7be6319277d17ecf4e71b0a4a17af1de">More...</a><br /></td></tr>
 <tr class="separator:a7be6319277d17ecf4e71b0a4a17af1de"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -228,9 +234,9 @@ Static Private Member Functions</h2></td></tr>
 <tr class="memitem:a0ae10adca53734c97a7c27960d217dac"><td class="memItemLeft" align="right" valign="top">static uint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbConversion.html#a0ae10adca53734c97a7c27960d217dac">fromFbQueryMaxNumData</a> (const seerep::fb::Query *query)</td></tr>
 <tr class="memdesc:a0ae10adca53734c97a7c27960d217dac"><td class="mdescLeft">&#160;</td><td class="mdescRight">extracts the maxNumData of the flatbuffer query message  <a href="classseerep__core__fb_1_1CoreFbConversion.html#a0ae10adca53734c97a7c27960d217dac">More...</a><br /></td></tr>
 <tr class="separator:a0ae10adca53734c97a7c27960d217dac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae4d79955cac960c9ff9bf2388f27b107"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbConversion.html#ae4d79955cac960c9ff9bf2388f27b107">fromFbQueryPolygon</a> (const seerep::fb::Query *query, <a class="el" href="structseerep__core__msgs_1_1Polygon2D.html">seerep_core_msgs::Polygon2D</a> &amp;polygon)</td></tr>
-<tr class="memdesc:ae4d79955cac960c9ff9bf2388f27b107"><td class="mdescLeft">&#160;</td><td class="mdescRight">extracts and converts a polygon from a fb query  <a href="classseerep__core__fb_1_1CoreFbConversion.html#ae4d79955cac960c9ff9bf2388f27b107">More...</a><br /></td></tr>
-<tr class="separator:ae4d79955cac960c9ff9bf2388f27b107"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0165955ce0dfd5ed4ed4ed42347df23"><td class="memItemLeft" align="right" valign="top">static std::optional&lt; <a class="el" href="structseerep__core__msgs_1_1Polygon2D.html">seerep_core_msgs::Polygon2D</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbConversion.html#ae0165955ce0dfd5ed4ed4ed42347df23">fromFbQueryPolygon</a> (const seerep::fb::Query *query)</td></tr>
+<tr class="memdesc:ae0165955ce0dfd5ed4ed4ed42347df23"><td class="mdescLeft">&#160;</td><td class="mdescRight">extracts and converts a polygon from a fb query  <a href="classseerep__core__fb_1_1CoreFbConversion.html#ae0165955ce0dfd5ed4ed4ed42347df23">More...</a><br /></td></tr>
+<tr class="separator:ae0165955ce0dfd5ed4ed4ed42347df23"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a14d3bde4f1bdcfe822c6051f7455e9f8"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbConversion.html#a14d3bde4f1bdcfe822c6051f7455e9f8">fromFbDataHeader</a> (const seerep::fb::Header *header, <a class="el" href="structseerep__core__msgs_1_1Header.html">seerep_core_msgs::Header</a> &amp;coreHeader, <a class="el" href="namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0">seerep_core_msgs::Datatype</a> &amp;&amp;datatype)</td></tr>
 <tr class="memdesc:a14d3bde4f1bdcfe822c6051f7455e9f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">converts the header of the flatbuffer data message to seerep core specific message  <a href="classseerep__core__fb_1_1CoreFbConversion.html#a14d3bde4f1bdcfe822c6051f7455e9f8">More...</a><br /></td></tr>
 <tr class="separator:a14d3bde4f1bdcfe822c6051f7455e9f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -858,6 +864,41 @@ Static Private Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="aa00b9501ea1d02f39121078d455f37ad" name="aa00b9501ea1d02f39121078d455f37ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa00b9501ea1d02f39121078d455f37ad">&#9670;&nbsp;</a></span>fromFbOntologyURI()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; std::string &gt; seerep_core_fb::CoreFbConversion::fromFbOntologyURI </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::fb::Query *&#160;</td>
+          <td class="paramname"><em>query</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>extracts the ontologyURI string of the flatbuffer query message </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">query</td><td>the flatbuffer query message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>string of the ontoly URI </dd></dl>
+
+</div>
+</div>
 <a id="a4b29676ea98a0ebc35bb592ba6947b8b" name="a4b29676ea98a0ebc35bb592ba6947b8b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4b29676ea98a0ebc35bb592ba6947b8b">&#9670;&nbsp;</a></span>fromFbQueryDataUuids()</h2>
 
@@ -1135,8 +1176,8 @@ false the polygon in the query is in geodetic coordinates </dd></dl>
 
 </div>
 </div>
-<a id="ae4d79955cac960c9ff9bf2388f27b107" name="ae4d79955cac960c9ff9bf2388f27b107"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae4d79955cac960c9ff9bf2388f27b107">&#9670;&nbsp;</a></span>fromFbQueryPolygon()</h2>
+<a id="ae0165955ce0dfd5ed4ed4ed42347df23" name="ae0165955ce0dfd5ed4ed4ed42347df23"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0165955ce0dfd5ed4ed4ed42347df23">&#9670;&nbsp;</a></span>fromFbQueryPolygon()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1145,21 +1186,11 @@ false the polygon in the query is in geodetic coordinates </dd></dl>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void seerep_core_fb::CoreFbConversion::fromFbQueryPolygon </td>
+          <td class="memname">std::optional&lt; <a class="el" href="structseerep__core__msgs_1_1Polygon2D.html">seerep_core_msgs::Polygon2D</a> &gt; seerep_core_fb::CoreFbConversion::fromFbQueryPolygon </td>
           <td>(</td>
           <td class="paramtype">const seerep::fb::Query *&#160;</td>
-          <td class="paramname"><em>query</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>query</em></td><td>)</td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structseerep__core__msgs_1_1Polygon2D.html">seerep_core_msgs::Polygon2D</a> &amp;&#160;</td>
-          <td class="paramname"><em>polygon</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -1302,6 +1333,41 @@ false the polygon in the query is in geodetic coordinates </dd></dl>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>flag if the data should NOT be loaded </dd></dl>
+
+</div>
+</div>
+<a id="ab9b37ae5537e9b2811e6d43eee55449e" name="ab9b37ae5537e9b2811e6d43eee55449e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab9b37ae5537e9b2811e6d43eee55449e">&#9670;&nbsp;</a></span>fromFbSparqlQuery()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; <a class="el" href="structseerep__core__msgs_1_1SparqlQuery.html">seerep_core_msgs::SparqlQuery</a> &gt; seerep_core_fb::CoreFbConversion::fromFbSparqlQuery </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::fb::Query *&#160;</td>
+          <td class="paramname"><em>query</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>extracts the sparql query of the flatbuffer query message </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">query</td><td>the flatbuffer query message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the sparql query object </dd></dl>
 
 </div>
 </div>

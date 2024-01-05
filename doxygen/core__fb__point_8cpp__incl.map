@@ -1,26 +1,26 @@
 <map id="seerep_srv/seerep_core_fb/src/core_fb_point.cpp" name="seerep_srv/seerep_core_fb/src/core_fb_point.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="5589,5,5773,47"/>
-<area shape="rect" id="node2" href="$core__fb__point_8h.html" title=" " alt="" coords="5604,95,5757,136"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5661,5,5845,47"/>
+<area shape="rect" id="node2" href="$core__fb__point_8h.html" title=" " alt="" coords="5676,95,5829,136"/>
 <area shape="rect" id="node3" title=" " alt="" coords="5056,370,5143,397"/>
-<area shape="rect" id="node4" title=" " alt="" coords="6378,370,6453,397"/>
+<area shape="rect" id="node4" title=" " alt="" coords="6489,370,6563,397"/>
 <area shape="rect" id="node5" href="$core__fb__conversion_8h.html" title=" " alt="" coords="3575,281,3735,307"/>
 <area shape="rect" id="node16" title=" " alt="" coords="5,363,215,404"/>
 <area shape="rect" id="node20" title=" " alt="" coords="239,370,474,397"/>
 <area shape="rect" id="node28" title=" " alt="" coords="3968,370,4127,397"/>
 <area shape="rect" id="node29" title=" " alt="" coords="4151,370,4357,397"/>
-<area shape="rect" id="node32" title=" " alt="" coords="5604,370,5795,397"/>
-<area shape="rect" id="node33" title=" " alt="" coords="5819,370,5985,397"/>
-<area shape="rect" id="node34" title=" " alt="" coords="6009,370,6160,397"/>
-<area shape="rect" id="node35" title=" " alt="" coords="5167,370,5394,397"/>
-<area shape="rect" id="node36" title=" " alt="" coords="6184,370,6353,397"/>
-<area shape="rect" id="node37" href="$core__fb__general_8h.html" title=" " alt="" coords="5702,191,5841,218"/>
-<area shape="rect" id="node38" href="$core_8h.html" title=" " alt="" coords="5407,281,5552,307"/>
-<area shape="rect" id="node40" title=" " alt="" coords="6653,363,6847,404"/>
-<area shape="rect" id="node41" title=" " alt="" coords="6477,370,6629,397"/>
-<area shape="rect" id="node43" title=" " alt="" coords="6692,184,6867,225"/>
-<area shape="rect" id="node44" href="$hdf5__fb__point_8h.html" title=" " alt="" coords="6946,184,7101,225"/>
+<area shape="rect" id="node32" title=" " alt="" coords="5908,370,6099,397"/>
+<area shape="rect" id="node33" title=" " alt="" coords="6123,370,6289,397"/>
+<area shape="rect" id="node34" title=" " alt="" coords="6313,370,6464,397"/>
+<area shape="rect" id="node35" title=" " alt="" coords="5657,370,5883,397"/>
+<area shape="rect" id="node36" title=" " alt="" coords="5167,370,5336,397"/>
+<area shape="rect" id="node37" href="$core__fb__general_8h.html" title=" " alt="" coords="5774,191,5913,218"/>
+<area shape="rect" id="node38" href="$core_8h.html" title=" " alt="" coords="5479,281,5624,307"/>
+<area shape="rect" id="node40" title=" " alt="" coords="6764,363,6957,404"/>
+<area shape="rect" id="node41" title=" " alt="" coords="6587,370,6739,397"/>
+<area shape="rect" id="node43" title=" " alt="" coords="6764,184,6939,225"/>
+<area shape="rect" id="node44" href="$hdf5__fb__point_8h.html" title=" " alt="" coords="6966,184,7121,225"/>
 <area shape="rect" id="node6" title=" " alt="" coords="3154,370,3325,397"/>
-<area shape="rect" id="node7" title=" " alt="" coords="6987,370,7119,397"/>
+<area shape="rect" id="node7" title=" " alt="" coords="6981,370,7113,397"/>
 <area shape="rect" id="node8" title=" " alt="" coords="3349,363,3522,404"/>
 <area shape="rect" id="node9" title=" " alt="" coords="3547,363,3764,404"/>
 <area shape="rect" id="node10" title=" " alt="" coords="3788,370,3944,397"/>
@@ -29,7 +29,7 @@
 <area shape="rect" id="node13" title=" " alt="" coords="869,363,1039,404"/>
 <area shape="rect" id="node14" title=" " alt="" coords="1064,370,1303,397"/>
 <area shape="rect" id="node15" title=" " alt="" coords="1327,363,1514,404"/>
-<area shape="rect" id="node17" title=" " alt="" coords="4381,363,4538,404"/>
+<area shape="rect" id="node17" title=" " alt="" coords="4874,363,5031,404"/>
 <area shape="rect" id="node18" title=" " alt="" coords="1538,363,1695,404"/>
 <area shape="rect" id="node19" title=" " alt="" coords="1719,363,1877,404"/>
 <area shape="rect" id="node21" title=" " alt="" coords="1901,363,2111,404"/>
@@ -37,16 +37,16 @@
 <area shape="rect" id="node23" title=" " alt="" coords="2313,363,2489,404"/>
 <area shape="rect" id="node24" title=" " alt="" coords="2513,363,2728,404"/>
 <area shape="rect" id="node25" title=" " alt="" coords="2752,363,2927,404"/>
-<area shape="rect" id="node26" title=" " alt="" coords="5419,363,5580,404"/>
+<area shape="rect" id="node26" title=" " alt="" coords="5471,363,5632,404"/>
 <area shape="rect" id="node27" title=" " alt="" coords="2951,363,3130,404"/>
-<area shape="rect" id="node30" title=" " alt="" coords="4563,370,4740,397"/>
-<area shape="rect" id="node31" title=" " alt="" coords="4765,370,5031,397"/>
-<area shape="rect" id="node42" title=" " alt="" coords="5678,281,5865,307"/>
-<area shape="rect" id="node39" title=" " alt="" coords="6871,370,6962,397"/>
-<area shape="rect" id="node45" title=" " alt="" coords="7143,370,7290,397"/>
-<area shape="rect" id="node46" href="$hdf5__core__point_8h.html" title=" " alt="" coords="6091,273,6262,315"/>
-<area shape="rect" id="node47" title=" " alt="" coords="7315,370,7465,397"/>
-<area shape="rect" id="node48" href="$hdf5__fb__general_8h.html" title=" " alt="" coords="6847,281,6986,307"/>
-<area shape="rect" id="node49" title=" " alt="" coords="7489,370,7616,397"/>
-<area shape="rect" id="node50" title=" " alt="" coords="7111,281,7365,307"/>
+<area shape="rect" id="node30" title=" " alt="" coords="4381,370,4559,397"/>
+<area shape="rect" id="node31" title=" " alt="" coords="4583,370,4850,397"/>
+<area shape="rect" id="node42" title=" " alt="" coords="5750,281,5937,307"/>
+<area shape="rect" id="node39" title=" " alt="" coords="5360,370,5447,397"/>
+<area shape="rect" id="node45" title=" " alt="" coords="7138,370,7285,397"/>
+<area shape="rect" id="node46" href="$hdf5__core__point_8h.html" title=" " alt="" coords="6163,273,6334,315"/>
+<area shape="rect" id="node47" title=" " alt="" coords="7309,370,7460,397"/>
+<area shape="rect" id="node48" href="$hdf5__fb__general_8h.html" title=" " alt="" coords="6974,281,7113,307"/>
+<area shape="rect" id="node49" title=" " alt="" coords="7484,370,7611,397"/>
+<area shape="rect" id="node50" title=" " alt="" coords="7187,281,7441,307"/>
 </map>

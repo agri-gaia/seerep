@@ -161,6 +161,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a30aa1e66917f8699ae08db2b1e79fd7e"><td class="memItemLeft" align="right" valign="top">grpc::Status&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__server_1_1FbPointCloudService.html#a30aa1e66917f8699ae08db2b1e79fd7e">TransferPointCloud2</a> (grpc::ServerContext *context, grpc::ServerReader&lt; flatbuffers::grpc::Message&lt; seerep::fb::PointCloud2 &gt; &gt; *reader, flatbuffers::grpc::Message&lt; seerep::fb::ServerResponse &gt; *response) override</td></tr>
 <tr class="memdesc:a30aa1e66917f8699ae08db2b1e79fd7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Save point clouds from the incoming gRPC stream on the server.  <a href="classseerep__server_1_1FbPointCloudService.html#a30aa1e66917f8699ae08db2b1e79fd7e">More...</a><br /></td></tr>
 <tr class="separator:a30aa1e66917f8699ae08db2b1e79fd7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af87fdd87b7c45a67c33d663cec677f4c"><td class="memItemLeft" align="right" valign="top">grpc::Status&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__server_1_1FbPointCloudService.html#af87fdd87b7c45a67c33d663cec677f4c">AddBoundingBoxesLabeled</a> (grpc::ServerContext *context, grpc::ServerReader&lt; flatbuffers::grpc::Message&lt; seerep::fb::BoundingBoxesLabeledStamped &gt; &gt; *reader, flatbuffers::grpc::Message&lt; seerep::fb::ServerResponse &gt; *response) override</td></tr>
+<tr class="memdesc:af87fdd87b7c45a67c33d663cec677f4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a stream of labeled bounding boxes to already stored point clouds.  <a href="classseerep__server_1_1FbPointCloudService.html#af87fdd87b7c45a67c33d663cec677f4c">More...</a><br /></td></tr>
+<tr class="separator:af87fdd87b7c45a67c33d663cec677f4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -201,6 +204,59 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="af87fdd87b7c45a67c33d663cec677f4c" name="af87fdd87b7c45a67c33d663cec677f4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af87fdd87b7c45a67c33d663cec677f4c">&#9670;&nbsp;</a></span>AddBoundingBoxesLabeled()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">grpc::Status seerep_server::FbPointCloudService::AddBoundingBoxesLabeled </td>
+          <td>(</td>
+          <td class="paramtype">grpc::ServerContext *&#160;</td>
+          <td class="paramname"><em>context</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">grpc::ServerReader&lt; flatbuffers::grpc::Message&lt; seerep::fb::BoundingBoxesLabeledStamped &gt; &gt; *&#160;</td>
+          <td class="paramname"><em>reader</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">flatbuffers::grpc::Message&lt; seerep::fb::ServerResponse &gt; *&#160;</td>
+          <td class="paramname"><em>response</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds a stream of labeled bounding boxes to already stored point clouds. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">context</td><td>custom inital and trailing metadata (currently not used) </td></tr>
+    <tr><td class="paramname">reader</td><td>incoming message stream of bounding boxes from the client </td></tr>
+    <tr><td class="paramname">response</td><td>gRPC message to describe the transmission state of the bounding boxes </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>grpc::Status status of the request. Did it work? </dd></dl>
+
+</div>
+</div>
 <a id="af91212b27d848ad5683e18682b7b7a8f" name="af91212b27d848ad5683e18682b7b7a8f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af91212b27d848ad5683e18682b7b7a8f">&#9670;&nbsp;</a></span>GetPointCloud2()</h2>
 

@@ -159,6 +159,12 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a471853abd5af820081ba91fa0c5ffbed"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::unordered_map&lt; std::string, std::vector&lt; std::string &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structseerep__core__msgs_1_1Query.html#a471853abd5af820081ba91fa0c5ffbed">label</a></td></tr>
 <tr class="memdesc:a471853abd5af820081ba91fa0c5ffbed"><td class="mdescLeft">&#160;</td><td class="mdescRight">only do semantic query if set  <a href="structseerep__core__msgs_1_1Query.html#a471853abd5af820081ba91fa0c5ffbed">More...</a><br /></td></tr>
 <tr class="separator:a471853abd5af820081ba91fa0c5ffbed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2b815ed82001ac55ec98f20a50fea7a"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="structseerep__core__msgs_1_1SparqlQuery.html">SparqlQuery</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structseerep__core__msgs_1_1Query.html#ab2b815ed82001ac55ec98f20a50fea7a">sparqlQuery</a></td></tr>
+<tr class="memdesc:ab2b815ed82001ac55ec98f20a50fea7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">sparql query to get semantic concepts from an ontology instead of providing explicit labels  <a href="structseerep__core__msgs_1_1Query.html#ab2b815ed82001ac55ec98f20a50fea7a">More...</a><br /></td></tr>
+<tr class="separator:ab2b815ed82001ac55ec98f20a50fea7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d0ec208e1655113db286822bb8f6da8"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structseerep__core__msgs_1_1Query.html#a6d0ec208e1655113db286822bb8f6da8">ontologyURI</a></td></tr>
+<tr class="memdesc:a6d0ec208e1655113db286822bb8f6da8"><td class="mdescLeft">&#160;</td><td class="mdescRight">URI to an ontology to be used for queries to get concepts.  <a href="structseerep__core__msgs_1_1Query.html#a6d0ec208e1655113db286822bb8f6da8">More...</a><br /></td></tr>
+<tr class="separator:a6d0ec208e1655113db286822bb8f6da8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c62cd55e1de65f16916febb6ab6972c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structseerep__core__msgs_1_1Query.html#a4c62cd55e1de65f16916febb6ab6972c">mustHaveAllLabels</a></td></tr>
 <tr class="memdesc:a4c62cd55e1de65f16916febb6ab6972c"><td class="mdescLeft">&#160;</td><td class="mdescRight">a dataset only fulfills semantic query if all labels are present  <a href="structseerep__core__msgs_1_1Query.html#a4c62cd55e1de65f16916febb6ab6972c">More...</a><br /></td></tr>
 <tr class="separator:a4c62cd55e1de65f16916febb6ab6972c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -174,6 +180,9 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a0063e14ab767a07a2b226b09454bb485"><td class="memItemLeft" align="right" valign="top">uint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structseerep__core__msgs_1_1Query.html#a0063e14ab767a07a2b226b09454bb485">maxNumData</a></td></tr>
 <tr class="memdesc:a0063e14ab767a07a2b226b09454bb485"><td class="mdescLeft">&#160;</td><td class="mdescRight">max number of datasets that should be returned  <a href="structseerep__core__msgs_1_1Query.html#a0063e14ab767a07a2b226b09454bb485">More...</a><br /></td></tr>
 <tr class="separator:a0063e14ab767a07a2b226b09454bb485"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82c2bba2f609aeb1b5c08788a9b8ae98"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structseerep__core__msgs_1_1Query.html#a82c2bba2f609aeb1b5c08788a9b8ae98">sortByTime</a></td></tr>
+<tr class="memdesc:a82c2bba2f609aeb1b5c08788a9b8ae98"><td class="mdescLeft">&#160;</td><td class="mdescRight">sort the resulting uuids by the timestamp of the corresponding data  <a href="structseerep__core__msgs_1_1Query.html#a82c2bba2f609aeb1b5c08788a9b8ae98">More...</a><br /></td></tr>
+<tr class="separator:a82c2bba2f609aeb1b5c08788a9b8ae98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a1060d42b3418103ce396fc2963e37a66" name="a1060d42b3418103ce396fc2963e37a66"></a>
@@ -298,6 +307,22 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a6d0ec208e1655113db286822bb8f6da8" name="a6d0ec208e1655113db286822bb8f6da8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d0ec208e1655113db286822bb8f6da8">&#9670;&nbsp;</a></span>ontologyURI</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt;std::string&gt; seerep_core_msgs::Query::ontologyURI</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>URI to an ontology to be used for queries to get concepts. </p>
+
+</div>
+</div>
 <a id="a1744153b850c20031f9d17c277523f17" name="a1744153b850c20031f9d17c277523f17"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1744153b850c20031f9d17c277523f17">&#9670;&nbsp;</a></span>polygon</h2>
 
@@ -325,6 +350,38 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>search all projects if not set </p>
+
+</div>
+</div>
+<a id="a82c2bba2f609aeb1b5c08788a9b8ae98" name="a82c2bba2f609aeb1b5c08788a9b8ae98"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a82c2bba2f609aeb1b5c08788a9b8ae98">&#9670;&nbsp;</a></span>sortByTime</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool seerep_core_msgs::Query::sortByTime</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>sort the resulting uuids by the timestamp of the corresponding data </p>
+
+</div>
+</div>
+<a id="ab2b815ed82001ac55ec98f20a50fea7a" name="ab2b815ed82001ac55ec98f20a50fea7a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2b815ed82001ac55ec98f20a50fea7a">&#9670;&nbsp;</a></span>sparqlQuery</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt;<a class="el" href="structseerep__core__msgs_1_1SparqlQuery.html">SparqlQuery</a>&gt; seerep_core_msgs::Query::sparqlQuery</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>sparql query to get semantic concepts from an ontology instead of providing explicit labels </p>
 
 </div>
 </div>

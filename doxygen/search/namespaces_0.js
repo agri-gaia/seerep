@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['impl_0',['impl',['../namespaceseerep__hdf5__fb_1_1impl.html',1,'seerep_hdf5_fb::impl'],['../namespaceseerep__hdf5__pb_1_1impl.html',1,'seerep_hdf5_pb::impl']]],
+  ['impl_0',['impl',['../namespaceseerep__hdf5__pb_1_1impl.html',1,'seerep_hdf5_pb']]],
   ['seerep_5fcore_1',['seerep_core',['../namespaceseerep__core.html',1,'']]],
   ['seerep_5fcore_5ffb_2',['seerep_core_fb',['../namespaceseerep__core__fb.html',1,'']]],
   ['seerep_5fcore_5fmsgs_3',['seerep_core_msgs',['../namespaceseerep__core__msgs.html',1,'']]],

@@ -126,7 +126,6 @@ $(document).ready(function(){initNavTree('classseerep__hdf5__fb_1_1Hdf5FbPointCl
 
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud-members.html">List of all members</a>  </div>
@@ -148,20 +147,22 @@ Collaboration diagram for seerep_hdf5_fb::Hdf5FbPointCloud:</div>
 </div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structseerep__hdf5__fb_1_1Hdf5FbPointCloud_1_1CloudInfo.html">CloudInfo</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">struct to store information about the PointCloud2  <a href="structseerep__hdf5__fb_1_1Hdf5FbPointCloud_1_1CloudInfo.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a0d86d7057b1d4e0f4780f2f4c455db00"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a0d86d7057b1d4e0f4780f2f4c455db00">Hdf5FbPointCloud</a> (std::shared_ptr&lt; HighFive::File &gt; &amp;file, std::shared_ptr&lt; std::mutex &gt; &amp;write_mtx)</td></tr>
 <tr class="memdesc:a0d86d7057b1d4e0f4780f2f4c455db00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html">Hdf5FbPointCloud</a> object.  <a href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a0d86d7057b1d4e0f4780f2f4c455db00">More...</a><br /></td></tr>
 <tr class="separator:a0d86d7057b1d4e0f4780f2f4c455db00"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a08dbae37de130ded724026af5016378d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a08dbae37de130ded724026af5016378d">writePointCloud2</a> (const std::string &amp;uuid, const seerep::fb::PointCloud2 &amp;pointcloud2, std::vector&lt; float &gt; &amp;boundingBox)</td></tr>
-<tr class="memdesc:a08dbae37de130ded724026af5016378d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method for writing a flatbuffers PointCloud2 message to hdf5.  <a href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a08dbae37de130ded724026af5016378d">More...</a><br /></td></tr>
-<tr class="separator:a08dbae37de130ded724026af5016378d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72cabef0bcdcab221417564eff4d7b62"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a72cabef0bcdcab221417564eff4d7b62">writePointCloud2</a> (const std::string &amp;uuid, const seerep::fb::PointCloud2 &amp;pcl)</td></tr>
+<tr class="memdesc:a72cabef0bcdcab221417564eff4d7b62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a Flatbuffers PointCloud2 message to HDF5.  <a href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a72cabef0bcdcab221417564eff4d7b62">More...</a><br /></td></tr>
+<tr class="separator:a72cabef0bcdcab221417564eff4d7b62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ccc536d9a74494d4d2aab490fbeddca"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="namespaceseerep__core__msgs.html#a36db670001fd669b64b2e0ae61e43e12">seerep_core_msgs::Point</a>, <a class="el" href="namespaceseerep__core__msgs.html#a36db670001fd669b64b2e0ae61e43e12">seerep_core_msgs::Point</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a9ccc536d9a74494d4d2aab490fbeddca">computeBoundingBox</a> (const seerep::fb::PointCloud2 &amp;pcl)</td></tr>
+<tr class="separator:a9ccc536d9a74494d4d2aab490fbeddca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d0bea7c1dcb54dfea576b926962b141"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a0d0bea7c1dcb54dfea576b926962b141">writeBoundingBox</a> (const std::string &amp;uuid, const <a class="el" href="namespaceseerep__core__msgs.html#a36db670001fd669b64b2e0ae61e43e12">seerep_core_msgs::Point</a> &amp;min_corner, const <a class="el" href="namespaceseerep__core__msgs.html#a36db670001fd669b64b2e0ae61e43e12">seerep_core_msgs::Point</a> &amp;max_corner)</td></tr>
+<tr class="memdesc:a0d0bea7c1dcb54dfea576b926962b141"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the axis aliged bounding box (AABB) to the PCL group.  <a href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a0d0bea7c1dcb54dfea576b926962b141">More...</a><br /></td></tr>
+<tr class="separator:a0d0bea7c1dcb54dfea576b926962b141"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f740f99b08314e9dd0969b43fe2a1a6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a7f740f99b08314e9dd0969b43fe2a1a6">writePointCloudBoundingBoxLabeled</a> (const std::string &amp;id, const flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::BoundingBoxLabeledWithCategory &gt; &gt; *bbLabeledWithCategory)</td></tr>
+<tr class="memdesc:a7f740f99b08314e9dd0969b43fe2a1a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write a BoundingBoxes flatbuffers message to hdf5.  <a href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a7f740f99b08314e9dd0969b43fe2a1a6">More...</a><br /></td></tr>
+<tr class="separator:a7f740f99b08314e9dd0969b43fe2a1a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb3eaef947f444b313e83d345a576489"><td class="memItemLeft" align="right" valign="top">std::optional&lt; flatbuffers::grpc::Message&lt; seerep::fb::PointCloud2 &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#abb3eaef947f444b313e83d345a576489">readPointCloud2</a> (const std::string &amp;uuid, const bool withoutData=false)</td></tr>
 <tr class="memdesc:abb3eaef947f444b313e83d345a576489"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method for reading a flatbuffers PointCloud2 message from hdf5.  <a href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#abb3eaef947f444b313e83d345a576489">More...</a><br /></td></tr>
 <tr class="separator:abb3eaef947f444b313e83d345a576489"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -173,19 +174,28 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad5f8af237fb6503d872b1fa6400d5596 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ad5f8af237fb6503d872b1fa6400d5596">checkExists</a> (const std::string &amp;id)</td></tr>
 <tr class="memdesc:ad5f8af237fb6503d872b1fa6400d5596 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a DataSet or DataGroup exists in the file.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ad5f8af237fb6503d872b1fa6400d5596">More...</a><br /></td></tr>
 <tr class="separator:ad5f8af237fb6503d872b1fa6400d5596 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ecb220e45ab2dddf4540f952fa586ae inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a6ecb220e45ab2dddf4540f952fa586ae">exists</a> (const std::string &amp;id)</td></tr>
-<tr class="memdesc:a6ecb220e45ab2dddf4540f952fa586ae inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a DataSet or DataGroup exists in the file.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a6ecb220e45ab2dddf4540f952fa586ae">More...</a><br /></td></tr>
-<tr class="separator:a6ecb220e45ab2dddf4540f952fa586ae inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad225da986fa50a2f8623af6210580337 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ad225da986fa50a2f8623af6210580337">readFrameId</a> (const std::string &amp;datatypeGroup, const std::string &amp;uuid)</td></tr>
-<tr class="separator:ad225da986fa50a2f8623af6210580337 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa601e5706c24be57a0fb5a4bd4d4b0d4 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplParams" colspan="2">template&lt;typename T , class C &gt; </td></tr>
-<tr class="memitem:aa601e5706c24be57a0fb5a4bd4d4b0d4 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#aa601e5706c24be57a0fb5a4bd4d4b0d4">readAttributeFromHdf5</a> (const std::string &amp;id, const HighFive::AnnotateTraits&lt; C &gt; &amp;object, std::string attributeField)</td></tr>
-<tr class="separator:aa601e5706c24be57a0fb5a4bd4d4b0d4 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa8d464d51d117baaa44595baed649265 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplParams" colspan="2">template&lt;typename T , class C &gt; </td></tr>
-<tr class="memitem:aa8d464d51d117baaa44595baed649265 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#aa8d464d51d117baaa44595baed649265">writeAttributeToHdf5</a> (HighFive::AnnotateTraits&lt; C &gt; &amp;object, std::string attributeField, T attributeValue)</td></tr>
-<tr class="separator:aa8d464d51d117baaa44595baed649265 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f819558f71f25dd29ed3d962be6224c inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a1f819558f71f25dd29ed3d962be6224c">deleteAttribute</a> (const std::shared_ptr&lt; HighFive::DataSet &gt; dataSetPtr, std::string attributeField)</td></tr>
-<tr class="separator:a1f819558f71f25dd29ed3d962be6224c inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a056fb60322168490a950d706c6d8929a inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a056fb60322168490a950d706c6d8929a">exists</a> (const std::string &amp;path) const</td></tr>
+<tr class="memdesc:a056fb60322168490a950d706c6d8929a inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a HDF5 path exists in the file.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a056fb60322168490a950d706c6d8929a">More...</a><br /></td></tr>
+<tr class="separator:a056fb60322168490a950d706c6d8929a inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e9720ccbcf71fb814fa02a9022d57a9 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplParams" colspan="2">template&lt;typename T , class C &gt; </td></tr>
+<tr class="memitem:a5e9720ccbcf71fb814fa02a9022d57a9 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a5e9720ccbcf71fb814fa02a9022d57a9">readAttributeFromHdf5</a> (const HighFive::AnnotateTraits&lt; C &gt; &amp;object, const std::string &amp;attribute_name, const std::string &amp;path)</td></tr>
+<tr class="memdesc:a5e9720ccbcf71fb814fa02a9022d57a9 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads an attribute from an HDF5 object.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a5e9720ccbcf71fb814fa02a9022d57a9">More...</a><br /></td></tr>
+<tr class="separator:a5e9720ccbcf71fb814fa02a9022d57a9 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd4899ad7f437d91a88bf153902b6c8c inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplParams" colspan="2">template&lt;typename T , class C &gt; </td></tr>
+<tr class="memitem:abd4899ad7f437d91a88bf153902b6c8c inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#abd4899ad7f437d91a88bf153902b6c8c">writeAttributeToHdf5</a> (HighFive::AnnotateTraits&lt; C &gt; &amp;object, const std::string &amp;attribute_name, T attribute_val)</td></tr>
+<tr class="memdesc:abd4899ad7f437d91a88bf153902b6c8c inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes an attribute to an HDF5 object.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#abd4899ad7f437d91a88bf153902b6c8c">More...</a><br /></td></tr>
+<tr class="separator:abd4899ad7f437d91a88bf153902b6c8c inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ac30236bca2bd3a267a740523b2d58f inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a0ac30236bca2bd3a267a740523b2d58f">tf2_frame_id</a> (const std::string &amp;frame_id) const</td></tr>
+<tr class="memdesc:a0ac30236bca2bd3a267a740523b2d58f inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a tf2 compliant frame ID.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a0ac30236bca2bd3a267a740523b2d58f">More...</a><br /></td></tr>
+<tr class="separator:a0ac30236bca2bd3a267a740523b2d58f inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21312ad346cb75848bb34bacf4618514 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplParams" colspan="2">template&lt;class C &gt; </td></tr>
+<tr class="memitem:a21312ad346cb75848bb34bacf4618514 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a21312ad346cb75848bb34bacf4618514">readFrameId</a> (const HighFive::AnnotateTraits&lt; C &gt; &amp;object, const std::string &amp;frame_field, const std::string &amp;path)</td></tr>
+<tr class="memdesc:a21312ad346cb75848bb34bacf4618514 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads a tf2 compliant frame ID from an HDF5 object.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a21312ad346cb75848bb34bacf4618514">More...</a><br /></td></tr>
+<tr class="separator:a21312ad346cb75848bb34bacf4618514 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad00b74ac1bd5e201fabdd04e4af6c774 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplParams" colspan="2">template&lt;class C &gt; </td></tr>
+<tr class="memitem:ad00b74ac1bd5e201fabdd04e4af6c774 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ad00b74ac1bd5e201fabdd04e4af6c774">writeFrameId</a> (HighFive::AnnotateTraits&lt; C &gt; &amp;object, const std::string &amp;frame_field, const std::string &amp;frame_id)</td></tr>
+<tr class="memdesc:ad00b74ac1bd5e201fabdd04e4af6c774 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a tf2 compliant frame ID to an HDF5 object.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ad00b74ac1bd5e201fabdd04e4af6c774">More...</a><br /></td></tr>
+<tr class="separator:ad00b74ac1bd5e201fabdd04e4af6c774 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6769c4141bd58c1e6be1b3630505cbc1 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a6769c4141bd58c1e6be1b3630505cbc1">writeAABB</a> (const std::string &amp;datatypeGroup, const std::string &amp;uuid, const boost::geometry::model::box&lt; boost::geometry::model::point&lt; float, 3, boost::geometry::cs::cartesian &gt; &gt; &amp;aabb)</td></tr>
 <tr class="separator:a6769c4141bd58c1e6be1b3630505cbc1 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae0946dec4040af5f37c7268087c9ba98 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ae0946dec4040af5f37c7268087c9ba98">readAABB</a> (const std::string &amp;datatypeGroup, const std::string &amp;uuid, boost::geometry::model::box&lt; boost::geometry::model::point&lt; float, 3, boost::geometry::cs::cartesian &gt; &gt; &amp;aabb)</td></tr>
@@ -224,25 +234,26 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a4f732761cdfd2ee56d10f17bc98ae816 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe6c14fa18cec374f7c3b03a25157408 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">const std::optional&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#afe6c14fa18cec374f7c3b03a25157408">readVersion</a> ()</td></tr>
 <tr class="separator:afe6c14fa18cec374f7c3b03a25157408 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0f2396463dae495454465aa807e81fb4 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a0f2396463dae495454465aa807e81fb4">writeGeodeticLocation</a> (const <a class="el" href="structseerep__core__msgs_1_1GeodeticCoordinates.html">seerep_core_msgs::GeodeticCoordinates</a> geocoords)</td></tr>
-<tr class="memdesc:a0f2396463dae495454465aa807e81fb4 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes Geodetic location of the project to its HDF5 file.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a0f2396463dae495454465aa807e81fb4">More...</a><br /></td></tr>
-<tr class="separator:a0f2396463dae495454465aa807e81fb4 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a764d64b6efaa310897b0ed6c1cf1c166 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a764d64b6efaa310897b0ed6c1cf1c166">writeGeodeticLocation</a> (const <a class="el" href="structseerep__core__msgs_1_1GeodeticCoordinates.html">seerep_core_msgs::GeodeticCoordinates</a> &amp;geo_coordinates)</td></tr>
+<tr class="memdesc:a764d64b6efaa310897b0ed6c1cf1c166 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a geodetic coordinate to an HDF5 file.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a764d64b6efaa310897b0ed6c1cf1c166">More...</a><br /></td></tr>
+<tr class="separator:a764d64b6efaa310897b0ed6c1cf1c166 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ea09f7fe01d7f8a43965d5892a45cf1 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="structseerep__core__msgs_1_1GeodeticCoordinates.html">seerep_core_msgs::GeodeticCoordinates</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a7ea09f7fe01d7f8a43965d5892a45cf1">readGeodeticLocation</a> ()</td></tr>
-<tr class="memdesc:a7ea09f7fe01d7f8a43965d5892a45cf1 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read Geodetic location of the project from its HDF5 file.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a7ea09f7fe01d7f8a43965d5892a45cf1">More...</a><br /></td></tr>
+<tr class="memdesc:a7ea09f7fe01d7f8a43965d5892a45cf1 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads a geodetic coodrinate from HDF5 file.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a7ea09f7fe01d7f8a43965d5892a45cf1">More...</a><br /></td></tr>
 <tr class="separator:a7ea09f7fe01d7f8a43965d5892a45cf1 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1fdca1935287c8ebeeeeb49b6b15e36a inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; HighFive::Group &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a1fdca1935287c8ebeeeeb49b6b15e36a">getHdf5Group</a> (const std::string &amp;hdf5GroupPath, bool create=true)</td></tr>
-<tr class="memdesc:a1fdca1935287c8ebeeeeb49b6b15e36a inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a shared pointer to a hdf5 group.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a1fdca1935287c8ebeeeeb49b6b15e36a">More...</a><br /></td></tr>
-<tr class="separator:a1fdca1935287c8ebeeeeb49b6b15e36a inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3740ad93ae05cacb1474d6f690fe3234 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:a3740ad93ae05cacb1474d6f690fe3234 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; HighFive::DataSet &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a3740ad93ae05cacb1474d6f690fe3234">getHdf5DataSet</a> (const std::string &amp;hdf5DataSetPath, HighFive::DataSpace &amp;dataSpace)</td></tr>
-<tr class="memdesc:a3740ad93ae05cacb1474d6f690fe3234 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a shared pointer to a hdf5 data set specified by the hdf5DataSetPath.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a3740ad93ae05cacb1474d6f690fe3234">More...</a><br /></td></tr>
-<tr class="separator:a3740ad93ae05cacb1474d6f690fe3234 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a76c4b7763e39e7f16ccb0b5ed4cbe61f inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:a76c4b7763e39e7f16ccb0b5ed4cbe61f inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; HighFive::DataSet &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a76c4b7763e39e7f16ccb0b5ed4cbe61f">getHdf5DataSet</a> (const std::string &amp;hdf5DataSetPath, HighFive::DataSpace &amp;dataSpace, HighFive::DataSetCreateProps &amp;createProps)</td></tr>
-<tr class="memdesc:a76c4b7763e39e7f16ccb0b5ed4cbe61f inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a shared pointer to a hdf5 data set specified by the hdf5DataSetPath.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a76c4b7763e39e7f16ccb0b5ed4cbe61f">More...</a><br /></td></tr>
-<tr class="separator:a76c4b7763e39e7f16ccb0b5ed4cbe61f inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4071999cc97b4db0c7d23036391ad8c4 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; HighFive::DataSet &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a4071999cc97b4db0c7d23036391ad8c4">getHdf5DataSet</a> (const std::string &amp;hdf5DataSetPath)</td></tr>
-<tr class="separator:a4071999cc97b4db0c7d23036391ad8c4 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c28f39990f1c6ff1539d0120b4e09f8 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; HighFive::Group &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a2c28f39990f1c6ff1539d0120b4e09f8">getHdf5Group</a> (const std::string &amp;group_path, bool create=true)</td></tr>
+<tr class="memdesc:a2c28f39990f1c6ff1539d0120b4e09f8 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a shared pointer to an HDF5 group object.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a2c28f39990f1c6ff1539d0120b4e09f8">More...</a><br /></td></tr>
+<tr class="separator:a2c28f39990f1c6ff1539d0120b4e09f8 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad7f16010d2a7be5bca4b8c5536b6f91 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; HighFive::DataSet &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#aad7f16010d2a7be5bca4b8c5536b6f91">getHdf5DataSet</a> (const std::string &amp;dataset_path)</td></tr>
+<tr class="memdesc:aad7f16010d2a7be5bca4b8c5536b6f91 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a shared pointer to a HighFive::DataSet object for the given dataset path.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#aad7f16010d2a7be5bca4b8c5536b6f91">More...</a><br /></td></tr>
+<tr class="separator:aad7f16010d2a7be5bca4b8c5536b6f91 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d4d3349e03a04b14d3a757ea6dccc69 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:a1d4d3349e03a04b14d3a757ea6dccc69 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; HighFive::DataSet &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a1d4d3349e03a04b14d3a757ea6dccc69">getHdf5DataSet</a> (const std::string &amp;dataset_path, const HighFive::DataSpace &amp;dataspace)</td></tr>
+<tr class="memdesc:a1d4d3349e03a04b14d3a757ea6dccc69 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a shared pointer to a HighFive::DataSet object for the given dataset path and data space.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a1d4d3349e03a04b14d3a757ea6dccc69">More...</a><br /></td></tr>
+<tr class="separator:a1d4d3349e03a04b14d3a757ea6dccc69 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8cc1f182e59b6db5c367835d2eb26cb0 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:a8cc1f182e59b6db5c367835d2eb26cb0 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; HighFive::DataSet &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a8cc1f182e59b6db5c367835d2eb26cb0">getHdf5DataSet</a> (const std::string &amp;dataset_path, const HighFive::DataSpace &amp;dataspace, const HighFive::DataSetCreateProps &amp;properties)</td></tr>
+<tr class="memdesc:a8cc1f182e59b6db5c367835d2eb26cb0 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a shared pointer to a HighFive::Dataset object for the given path, dataspace, and properties.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a8cc1f182e59b6db5c367835d2eb26cb0">More...</a><br /></td></tr>
+<tr class="separator:a8cc1f182e59b6db5c367835d2eb26cb0 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a42693904c30f04f744e095ab21e1b07b inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a42693904c30f04f744e095ab21e1b07b">getLabelCategories</a> (std::string id, std::string labelType, std::vector&lt; std::string &gt; &amp;matchingLabelCategory)</td></tr>
 <tr class="memdesc:a42693904c30f04f744e095ab21e1b07b inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">get the labels of a group/dataset matching the general prefix (label type) and return the labels matching the specified type. Also extract the category from the postfix  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a42693904c30f04f744e095ab21e1b07b">More...</a><br /></td></tr>
 <tr class="separator:a42693904c30f04f744e095ab21e1b07b inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -251,20 +262,8 @@ Public Member Functions</h2></td></tr>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:aa6d6d1b918d634b1e896878cff586eca"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:aa6d6d1b918d634b1e896878cff586eca"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#aa6d6d1b918d634b1e896878cff586eca">writePointFieldAttributes</a> (HighFive::AnnotateTraits&lt; T &gt; &amp;object, const flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::PointField &gt; &gt; *pointFields)</td></tr>
-<tr class="memdesc:aa6d6d1b918d634b1e896878cff586eca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes information about point fields as attributes to hdf5.  <a href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#aa6d6d1b918d634b1e896878cff586eca">More...</a><br /></td></tr>
+<tr class="memdesc:aa6d6d1b918d634b1e896878cff586eca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the channel description and the layout of the binary payload to HDF5.  <a href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#aa6d6d1b918d634b1e896878cff586eca">More...</a><br /></td></tr>
 <tr class="separator:aa6d6d1b918d634b1e896878cff586eca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a11956657d6fdcacf797066e78dbd6370"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a11956657d6fdcacf797066e78dbd6370">computeBoundingBox</a> (std::array&lt; float, 3 &gt; &amp;min, std::array&lt; float, 3 &gt; &amp;max, const float &amp;x, const float &amp;y, const float &amp;z)</td></tr>
-<tr class="memdesc:a11956657d6fdcacf797066e78dbd6370"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the bounding box while iterating over the point cloud.  <a href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a11956657d6fdcacf797066e78dbd6370">More...</a><br /></td></tr>
-<tr class="separator:a11956657d6fdcacf797066e78dbd6370"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0d56a3ca6e6216d04b89ddde19737de"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#ab0d56a3ca6e6216d04b89ddde19737de">writePoints</a> (const std::string &amp;id, const std::vector&lt; uint32_t &gt; &amp;offsets, const uint8_t *data, uint32_t pointStep, uint32_t height, uint32_t width, const std::shared_ptr&lt; HighFive::Group &gt; &amp;groupPtr, std::vector&lt; float &gt; &amp;boundingBox)</td></tr>
-<tr class="memdesc:ab0d56a3ca6e6216d04b89ddde19737de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write x,y,z of a point cloud to a /points dataset.  <a href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#ab0d56a3ca6e6216d04b89ddde19737de">More...</a><br /></td></tr>
-<tr class="separator:ab0d56a3ca6e6216d04b89ddde19737de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e6904bfb85cbf4086af86e3a87b78c2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a6e6904bfb85cbf4086af86e3a87b78c2">writeColorsRGB</a> (const std::string &amp;id, const std::vector&lt; uint32_t &gt; &amp;offsets, const uint8_t *data, uint32_t pointStep, uint32_t height, uint32_t width)</td></tr>
-<tr class="memdesc:a6e6904bfb85cbf4086af86e3a87b78c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write r,g,b of a point cloud to a /colors dataset.  <a href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a6e6904bfb85cbf4086af86e3a87b78c2">More...</a><br /></td></tr>
-<tr class="separator:a6e6904bfb85cbf4086af86e3a87b78c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b1ece83fe9784a1682e168beaf3b42f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a1b1ece83fe9784a1682e168beaf3b42f">writeColorsRGBA</a> (const std::string &amp;id, const std::vector&lt; uint32_t &gt; &amp;offsets, const uint8_t *data, uint32_t pointStep, uint32_t height, uint32_t width)</td></tr>
-<tr class="memdesc:a1b1ece83fe9784a1682e168beaf3b42f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write r,g,b,a of a point cloud to a /colors dataset.  <a href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a1b1ece83fe9784a1682e168beaf3b42f">More...</a><br /></td></tr>
-<tr class="separator:a1b1ece83fe9784a1682e168beaf3b42f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5cd20e102f1d9707490ba29f03173e4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#af5cd20e102f1d9707490ba29f03173e4">writeGeneralAttributes</a> (std::shared_ptr&lt; HighFive::Group &gt; &amp;dataGroupPtr, const seerep::fb::PointCloud2 &amp;cloud)</td></tr>
 <tr class="memdesc:af5cd20e102f1d9707490ba29f03173e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write general attributes of the point cloud to the hdf5 group.  <a href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#af5cd20e102f1d9707490ba29f03173e4">More...</a><br /></td></tr>
 <tr class="separator:af5cd20e102f1d9707490ba29f03173e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -274,37 +273,15 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:aa29d104bee62d6193db9207cbeabe803"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#aa29d104bee62d6193db9207cbeabe803">readPointFields</a> (const std::string &amp;id, std::shared_ptr&lt; HighFive::Group &gt; dataGroupPtr, std::vector&lt; std::string &gt; &amp;names, std::vector&lt; uint32_t &gt; &amp;offsets, std::vector&lt; uint32_t &gt; &amp;counts, std::vector&lt; uint8_t &gt; &amp;datatypes)</td></tr>
 <tr class="memdesc:aa29d104bee62d6193db9207cbeabe803"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads point field information from hdf5.  <a href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#aa29d104bee62d6193db9207cbeabe803">More...</a><br /></td></tr>
 <tr class="separator:aa29d104bee62d6193db9207cbeabe803"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a287956268e5423c9883b47d88b1f157d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a287956268e5423c9883b47d88b1f157d">readPoints</a> (const std::string &amp;id, const std::vector&lt; uint32_t &gt; &amp;offsets, uint8_t *data, uint32_t pointStep, uint32_t height, uint32_t width)</td></tr>
-<tr class="memdesc:a287956268e5423c9883b47d88b1f157d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read x,y,z from hdf5.  <a href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a287956268e5423c9883b47d88b1f157d">More...</a><br /></td></tr>
-<tr class="separator:a287956268e5423c9883b47d88b1f157d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a076dd5e7312b272e5a6792f878eb48a4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a076dd5e7312b272e5a6792f878eb48a4">readColorsRGB</a> (const std::string &amp;id, const std::vector&lt; uint32_t &gt; &amp;offsets, uint8_t *data, uint32_t pointStep, uint32_t height, uint32_t width)</td></tr>
-<tr class="memdesc:a076dd5e7312b272e5a6792f878eb48a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read r,g,b from hdf5.  <a href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a076dd5e7312b272e5a6792f878eb48a4">More...</a><br /></td></tr>
-<tr class="separator:a076dd5e7312b272e5a6792f878eb48a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad9d57059ed253651144a983dc070c330"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#ad9d57059ed253651144a983dc070c330">readColorsRGBA</a> (const std::string &amp;id, const std::vector&lt; uint32_t &gt; &amp;offsets, uint8_t *data, uint32_t pointStep, uint32_t height, uint32_t width)</td></tr>
-<tr class="memdesc:ad9d57059ed253651144a983dc070c330"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read r,g,b,a from hdf5.  <a href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#ad9d57059ed253651144a983dc070c330">More...</a><br /></td></tr>
-<tr class="separator:ad9d57059ed253651144a983dc070c330"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a420aa490e50366ec3adc61810136f193"><td class="memItemLeft" align="right" valign="top">flatbuffers::Offset&lt; flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::PointField &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a420aa490e50366ec3adc61810136f193">readPointFieldsOffset</a> (flatbuffers::grpc::MessageBuilder &amp;builder, std::vector&lt; std::string &gt; &amp;names, std::vector&lt; uint32_t &gt; &amp;offsets, std::vector&lt; uint32_t &gt; &amp;counts, std::vector&lt; uint8_t &gt; &amp;datatypes)</td></tr>
-<tr class="memdesc:a420aa490e50366ec3adc61810136f193"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper method to construct a flatbuffers vector of LabelWithInstance.  <a href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a420aa490e50366ec3adc61810136f193">More...</a><br /></td></tr>
+<tr class="memdesc:a420aa490e50366ec3adc61810136f193"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper method to construct a flatbuffers vector of pointFields.  <a href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a420aa490e50366ec3adc61810136f193">More...</a><br /></td></tr>
 <tr class="separator:a420aa490e50366ec3adc61810136f193"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab39f29f5ca2fa557659feefbb61dd9bc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structseerep__hdf5__fb_1_1Hdf5FbPointCloud_1_1CloudInfo.html">CloudInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#ab39f29f5ca2fa557659feefbb61dd9bc">getCloudInfo</a> (const seerep::fb::PointCloud2 &amp;cloud)</td></tr>
-<tr class="memdesc:ab39f29f5ca2fa557659feefbb61dd9bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get information about the fields of a point cloud from a flatbuffers PointCloud2 message.  <a href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#ab39f29f5ca2fa557659feefbb61dd9bc">More...</a><br /></td></tr>
-<tr class="separator:ab39f29f5ca2fa557659feefbb61dd9bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa181e606f68b4442996e9ca87aa4c03b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structseerep__hdf5__fb_1_1Hdf5FbPointCloud_1_1CloudInfo.html">CloudInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#aa181e606f68b4442996e9ca87aa4c03b">getCloudInfo</a> (const std::vector&lt; std::string &gt; &amp;fields)</td></tr>
-<tr class="memdesc:aa181e606f68b4442996e9ca87aa4c03b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get information about the fields of a point cloud from a vector of fields.  <a href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#aa181e606f68b4442996e9ca87aa4c03b">More...</a><br /></td></tr>
-<tr class="separator:aa181e606f68b4442996e9ca87aa4c03b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a17b6b750946837de8cb3a53840852aed"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a17b6b750946837de8cb3a53840852aed">getOffset</a> (const seerep::fb::PointCloud2 &amp;cloud, const std::string &amp;fieldName)</td></tr>
-<tr class="memdesc:a17b6b750946837de8cb3a53840852aed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the offset of a field from a flatbuffers PointCloud2 message.  <a href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a17b6b750946837de8cb3a53840852aed">More...</a><br /></td></tr>
-<tr class="separator:a17b6b750946837de8cb3a53840852aed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a75b2c10bd7469c8509be82e4862ac9b5"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a75b2c10bd7469c8509be82e4862ac9b5">getOffsets</a> (const seerep::fb::PointCloud2 &amp;cloud, const std::vector&lt; std::string &gt; &amp;fields)</td></tr>
-<tr class="separator:a75b2c10bd7469c8509be82e4862ac9b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae9b74362ff0742871cbc36b4b25c3949"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#ae9b74362ff0742871cbc36b4b25c3949">getOffset</a> (const std::vector&lt; std::string &gt; &amp;names, const std::vector&lt; uint32_t &gt; &amp;offsets, const std::string &amp;fieldName, bool isBigendian)</td></tr>
-<tr class="memdesc:ae9b74362ff0742871cbc36b4b25c3949"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the offset of a field from hdf5.  <a href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#ae9b74362ff0742871cbc36b4b25c3949">More...</a><br /></td></tr>
-<tr class="separator:ae9b74362ff0742871cbc36b4b25c3949"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a45db8500051bd61fa6d5071705af370a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a45db8500051bd61fa6d5071705af370a">getOffsets</a> (const std::vector&lt; std::string &gt; &amp;names, const std::vector&lt; uint32_t &gt; &amp;offsets, bool isBigendian, const std::vector&lt; std::string &gt; &amp;fields)</td></tr>
-<tr class="separator:a45db8500051bd61fa6d5071705af370a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed363edde64b4280bd06668dcf70d64a"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#aed363edde64b4280bd06668dcf70d64a">rgbaOffset</a> (const std::string &amp;fieldName, uint32_t offset, bool isBigendian)</td></tr>
-<tr class="memdesc:aed363edde64b4280bd06668dcf70d64a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the offset for the special case of rgba(a)  <a href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#aed363edde64b4280bd06668dcf70d64a">More...</a><br /></td></tr>
-<tr class="separator:aed363edde64b4280bd06668dcf70d64a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d0a274ab9dc41ce8f6ef785e44ad3bf"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a0d0a274ab9dc41ce8f6ef785e44ad3bf">getChannelOffset</a> (const seerep::fb::PointCloud2 &amp;pcl, const std::string &amp;channel_name) const</td></tr>
+<tr class="memdesc:a0d0a274ab9dc41ce8f6ef785e44ad3bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the offset of a channel relative to the start of a point.  <a href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a0d0a274ab9dc41ce8f6ef785e44ad3bf">More...</a><br /></td></tr>
+<tr class="separator:a0d0a274ab9dc41ce8f6ef785e44ad3bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a190065330bde1f457d5db8cc1c154763"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a190065330bde1f457d5db8cc1c154763">getRgbaOffset</a> (const std::string &amp;channel_name, uint32_t base_offset, bool is_big_endian) const</td></tr>
+<tr class="memdesc:a190065330bde1f457d5db8cc1c154763"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the offset for a rgb(a) channel.  <a href="classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a190065330bde1f457d5db8cc1c154763">More...</a><br /></td></tr>
+<tr class="separator:a190065330bde1f457d5db8cc1c154763"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -449,109 +426,35 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a11956657d6fdcacf797066e78dbd6370" name="a11956657d6fdcacf797066e78dbd6370"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a11956657d6fdcacf797066e78dbd6370">&#9670;&nbsp;</a></span>computeBoundingBox()</h2>
+<a id="a9ccc536d9a74494d4d2aab490fbeddca" name="a9ccc536d9a74494d4d2aab490fbeddca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ccc536d9a74494d4d2aab490fbeddca">&#9670;&nbsp;</a></span>computeBoundingBox()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void seerep_hdf5_fb::Hdf5FbPointCloud::computeBoundingBox </td>
-          <td>(</td>
-          <td class="paramtype">std::array&lt; float, 3 &gt; &amp;&#160;</td>
-          <td class="paramname"><em>min</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::array&lt; float, 3 &gt; &amp;&#160;</td>
-          <td class="paramname"><em>max</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const float &amp;&#160;</td>
-          <td class="paramname"><em>x</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const float &amp;&#160;</td>
-          <td class="paramname"><em>y</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const float &amp;&#160;</td>
-          <td class="paramname"><em>z</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Computes the bounding box while iterating over the point cloud. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">min</td><td>reference to an array to store the min x, y, z </td></tr>
-    <tr><td class="paramname">max</td><td>reference to an array to store the max x, y, z </td></tr>
-    <tr><td class="paramname">x</td><td>current x </td></tr>
-    <tr><td class="paramname">y</td><td>current y </td></tr>
-    <tr><td class="paramname">z</td><td>current z </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="ab39f29f5ca2fa557659feefbb61dd9bc" name="ab39f29f5ca2fa557659feefbb61dd9bc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab39f29f5ca2fa557659feefbb61dd9bc">&#9670;&nbsp;</a></span>getCloudInfo() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structseerep__hdf5__fb_1_1Hdf5FbPointCloud_1_1CloudInfo.html">Hdf5FbPointCloud::CloudInfo</a> seerep_hdf5_fb::Hdf5FbPointCloud::getCloudInfo </td>
+          <td class="memname">std::pair&lt; <a class="el" href="namespaceseerep__core__msgs.html#a36db670001fd669b64b2e0ae61e43e12">seerep_core_msgs::Point</a>, <a class="el" href="namespaceseerep__core__msgs.html#a36db670001fd669b64b2e0ae61e43e12">seerep_core_msgs::Point</a> &gt; seerep_hdf5_fb::Hdf5FbPointCloud::computeBoundingBox </td>
           <td>(</td>
           <td class="paramtype">const seerep::fb::PointCloud2 &amp;&#160;</td>
-          <td class="paramname"><em>cloud</em></td><td>)</td>
+          <td class="paramname"><em>pcl</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
-
-<p>Get information about the fields of a point cloud from a flatbuffers PointCloud2 message. </p>
+<p >Computes the axis-aligned bounding box (AABB) of a PCL.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">cloud</td><td>the point cloud to get the information about </td></tr>
+    <tr><td class="paramname">pcl</td><td>The PCL to compute the bounding box for. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><a class="el" href="structseerep__hdf5__fb_1_1Hdf5FbPointCloud_1_1CloudInfo.html" title="struct to store information about the PointCloud2">CloudInfo</a> extracted information in form of a <a class="el" href="structseerep__hdf5__fb_1_1Hdf5FbPointCloud_1_1CloudInfo.html" title="struct to store information about the PointCloud2">CloudInfo</a> struct </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>std::pair&lt;Point, Point&gt; The minimum and maximum corner of the AABB.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>We assume that the x,y and z channel are in float32. </dd></dl>
 
 </div>
 </div>
-<a id="aa181e606f68b4442996e9ca87aa4c03b" name="aa181e606f68b4442996e9ca87aa4c03b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa181e606f68b4442996e9ca87aa4c03b">&#9670;&nbsp;</a></span>getCloudInfo() <span class="overload">[2/2]</span></h2>
+<a id="a0d0a274ab9dc41ce8f6ef785e44ad3bf" name="a0d0a274ab9dc41ce8f6ef785e44ad3bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d0a274ab9dc41ce8f6ef785e44ad3bf">&#9670;&nbsp;</a></span>getChannelOffset()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -560,56 +463,21 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structseerep__hdf5__fb_1_1Hdf5FbPointCloud_1_1CloudInfo.html">Hdf5FbPointCloud::CloudInfo</a> seerep_hdf5_fb::Hdf5FbPointCloud::getCloudInfo </td>
-          <td>(</td>
-          <td class="paramtype">const std::vector&lt; std::string &gt; &amp;&#160;</td>
-          <td class="paramname"><em>fields</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Get information about the fields of a point cloud from a vector of fields. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">fields</td><td>vector of field names of a point cloud </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd><a class="el" href="structseerep__hdf5__fb_1_1Hdf5FbPointCloud_1_1CloudInfo.html" title="struct to store information about the PointCloud2">CloudInfo</a> extracted information in form of a <a class="el" href="structseerep__hdf5__fb_1_1Hdf5FbPointCloud_1_1CloudInfo.html" title="struct to store information about the PointCloud2">CloudInfo</a> struct </dd></dl>
-
-</div>
-</div>
-<a id="a17b6b750946837de8cb3a53840852aed" name="a17b6b750946837de8cb3a53840852aed"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a17b6b750946837de8cb3a53840852aed">&#9670;&nbsp;</a></span>getOffset() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint32_t seerep_hdf5_fb::Hdf5FbPointCloud::getOffset </td>
+          <td class="memname">uint32_t seerep_hdf5_fb::Hdf5FbPointCloud::getChannelOffset </td>
           <td>(</td>
           <td class="paramtype">const seerep::fb::PointCloud2 &amp;&#160;</td>
-          <td class="paramname"><em>cloud</em>, </td>
+          <td class="paramname"><em>pcl</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>fieldName</em>&#160;</td>
+          <td class="paramname"><em>channel_name</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td>
+          <td></td><td> const</td>
         </tr>
       </table>
   </td>
@@ -619,20 +487,26 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Get the offset of a field from a flatbuffers PointCloud2 message. </p>
+<p>Returns the offset of a channel relative to the start of a point. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">cloud</td><td>the point cloud to get the information from </td></tr>
-    <tr><td class="paramname">fieldName</td><td>the name of the field to get the offset for </td></tr>
+    <tr><td class="paramname">pcl</td><td>The pcl message. </td></tr>
+    <tr><td class="paramname">channel_name</td><td>The name of the channel. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>uint32_t offset of the fieldName </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The offset of the channel. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">runtime_error</td><td>when the requested channel is not present in the pcl. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
-<a id="ae9b74362ff0742871cbc36b4b25c3949" name="ae9b74362ff0742871cbc36b4b25c3949"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae9b74362ff0742871cbc36b4b25c3949">&#9670;&nbsp;</a></span>getOffset() <span class="overload">[2/2]</span></h2>
+<a id="a190065330bde1f457d5db8cc1c154763" name="a190065330bde1f457d5db8cc1c154763"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a190065330bde1f457d5db8cc1c154763">&#9670;&nbsp;</a></span>getRgbaOffset()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -641,33 +515,27 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">uint32_t seerep_hdf5_fb::Hdf5FbPointCloud::getOffset </td>
+          <td class="memname">uint32_t seerep_hdf5_fb::Hdf5FbPointCloud::getRgbaOffset </td>
           <td>(</td>
-          <td class="paramtype">const std::vector&lt; std::string &gt; &amp;&#160;</td>
-          <td class="paramname"><em>names</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::vector&lt; uint32_t &gt; &amp;&#160;</td>
-          <td class="paramname"><em>offsets</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>fieldName</em>, </td>
+          <td class="paramname"><em>channel_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>base_offset</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>isBigendian</em>&#160;</td>
+          <td class="paramname"><em>is_big_endian</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td>
+          <td></td><td> const</td>
         </tr>
       </table>
   </td>
@@ -677,244 +545,20 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Get the offset of a field from hdf5. </p>
+<p>Returns the offset for a rgb(a) channel. </p>
+<p >The rgb(a) color information of a point is packed into a single uint32. We therefore need to add an addtion offset to the start of the rgb(a) channel.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">names</td><td>the names of the pointFields </td></tr>
-    <tr><td class="paramname">offsets</td><td>the offsets of the pointFields </td></tr>
-    <tr><td class="paramname">fieldName</td><td>the fieldName to get the offset for </td></tr>
-    <tr><td class="paramname">isBigendian</td><td>endianness of the point cloud </td></tr>
+    <tr><td class="paramname">channel_name</td><td>Name of the color channel to retrieve the offset for. </td></tr>
+    <tr><td class="paramname">base_offset</td><td>The offset to the start of the rgb(a) channel. </td></tr>
+    <tr><td class="paramname">is_big_endian</td><td>The endianness of the point cloud. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>uint32_t the offset of the fieldName </dd></dl>
-
-</div>
-</div>
-<a id="a75b2c10bd7469c8509be82e4862ac9b5" name="a75b2c10bd7469c8509be82e4862ac9b5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a75b2c10bd7469c8509be82e4862ac9b5">&#9670;&nbsp;</a></span>getOffsets() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt; uint32_t &gt; seerep_hdf5_fb::Hdf5FbPointCloud::getOffsets </td>
-          <td>(</td>
-          <td class="paramtype">const seerep::fb::PointCloud2 &amp;&#160;</td>
-          <td class="paramname"><em>cloud</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::vector&lt; std::string &gt; &amp;&#160;</td>
-          <td class="paramname"><em>fields</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a45db8500051bd61fa6d5071705af370a" name="a45db8500051bd61fa6d5071705af370a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a45db8500051bd61fa6d5071705af370a">&#9670;&nbsp;</a></span>getOffsets() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt; uint32_t &gt; seerep_hdf5_fb::Hdf5FbPointCloud::getOffsets </td>
-          <td>(</td>
-          <td class="paramtype">const std::vector&lt; std::string &gt; &amp;&#160;</td>
-          <td class="paramname"><em>names</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::vector&lt; uint32_t &gt; &amp;&#160;</td>
-          <td class="paramname"><em>offsets</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>isBigendian</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::vector&lt; std::string &gt; &amp;&#160;</td>
-          <td class="paramname"><em>fields</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a076dd5e7312b272e5a6792f878eb48a4" name="a076dd5e7312b272e5a6792f878eb48a4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a076dd5e7312b272e5a6792f878eb48a4">&#9670;&nbsp;</a></span>readColorsRGB()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void seerep_hdf5_fb::Hdf5FbPointCloud::readColorsRGB </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>id</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::vector&lt; uint32_t &gt; &amp;&#160;</td>
-          <td class="paramname"><em>offsets</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t *&#160;</td>
-          <td class="paramname"><em>data</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>pointStep</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>height</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>width</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Read r,g,b from hdf5. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">id</td><td>the uuid of the point cloud </td></tr>
-    <tr><td class="paramname">offsets</td><td>the offsets of the r,g,b fields </td></tr>
-    <tr><td class="paramname">data</td><td>pointer to a uint8_t array to store the data in </td></tr>
-    <tr><td class="paramname">pointStep</td><td>the pointStep of the point cloud </td></tr>
-    <tr><td class="paramname">height</td><td>the height of the point cloud (1 for unorganized point clouds) </td></tr>
-    <tr><td class="paramname">width</td><td>the width the width of the point cloud </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="ad9d57059ed253651144a983dc070c330" name="ad9d57059ed253651144a983dc070c330"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad9d57059ed253651144a983dc070c330">&#9670;&nbsp;</a></span>readColorsRGBA()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void seerep_hdf5_fb::Hdf5FbPointCloud::readColorsRGBA </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>id</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::vector&lt; uint32_t &gt; &amp;&#160;</td>
-          <td class="paramname"><em>offsets</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t *&#160;</td>
-          <td class="paramname"><em>data</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>pointStep</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>height</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>width</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Read r,g,b,a from hdf5. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">id</td><td>the uuid of the point cloud </td></tr>
-    <tr><td class="paramname">offsets</td><td>the offsets of the r,g,b,a fields </td></tr>
-    <tr><td class="paramname">data</td><td>pointer to a uint8_t array to store the data in </td></tr>
-    <tr><td class="paramname">pointStep</td><td>the pointStep of the point cloud </td></tr>
-    <tr><td class="paramname">height</td><td>the height of the point cloud (1 for unorganized point clouds) </td></tr>
-    <tr><td class="paramname">width</td><td>the width the width of the point cloud </td></tr>
+<dl class="section return"><dt>Returns</dt><dd>The offset of the specified channel. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">runtime_error</td><td>when the channel_name is not "r", "g", "b" or "a". </td></tr>
   </table>
   </dd>
 </dl>
@@ -1171,25 +815,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Helper method to construct a flatbuffers vector of LabelWithInstance. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">builder</td><td>reference to the used flatbuffers builder </td></tr>
-    <tr><td class="paramname">id</td><td>the uuid of the point cloud </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>flatbuffers::Offset&lt;flatbuffers::Vector&lt;flatbuffers::Offset&lt;seerep::fb::LabelWithInstance&gt;&gt;&gt; flatbuffers vector of LabelWithInstance</dd></dl>
-<p>Helper method to construct a flatbuffers vector of BoundingBoxLabeled</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">builder</td><td>reference to the used flatbuffers builder </td></tr>
-    <tr><td class="paramname">id</td><td>the uuid of the point cloud </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>flatbuffers::Offset&lt;flatbuffers::Vector&lt;flatbuffers::Offset&lt;seerep::fb::BoundingBoxLabeled&gt;&gt;&gt; flatbuffers vector of BoundingBoxLabeled</dd></dl>
-<p>Helper method to construct a flatbuffers vector of pointFields</p>
+<p>Helper method to construct a flatbuffers vector of pointFields. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">builder</td><td>builder reference to the used flatbuffers builder </td></tr>
@@ -1204,50 +830,29 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a287956268e5423c9883b47d88b1f157d" name="a287956268e5423c9883b47d88b1f157d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a287956268e5423c9883b47d88b1f157d">&#9670;&nbsp;</a></span>readPoints()</h2>
+<a id="a0d0bea7c1dcb54dfea576b926962b141" name="a0d0bea7c1dcb54dfea576b926962b141"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d0bea7c1dcb54dfea576b926962b141">&#9670;&nbsp;</a></span>writeBoundingBox()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void seerep_hdf5_fb::Hdf5FbPointCloud::readPoints </td>
+          <td class="memname">void seerep_hdf5_fb::Hdf5FbPointCloud::writeBoundingBox </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>id</em>, </td>
+          <td class="paramname"><em>uuid</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; uint32_t &gt; &amp;&#160;</td>
-          <td class="paramname"><em>offsets</em>, </td>
+          <td class="paramtype">const <a class="el" href="namespaceseerep__core__msgs.html#a36db670001fd669b64b2e0ae61e43e12">seerep_core_msgs::Point</a> &amp;&#160;</td>
+          <td class="paramname"><em>min_corner</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint8_t *&#160;</td>
-          <td class="paramname"><em>data</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>pointStep</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>height</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>width</em>&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceseerep__core__msgs.html#a36db670001fd669b64b2e0ae61e43e12">seerep_core_msgs::Point</a> &amp;&#160;</td>
+          <td class="paramname"><em>max_corner</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1255,222 +860,14 @@ Additional Inherited Members</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p>Read x,y,z from hdf5. </p>
+<p>Writes the axis aliged bounding box (AABB) to the PCL group. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">id</td><td>the uuid of the point cloud </td></tr>
-    <tr><td class="paramname">offsets</td><td>the offsets of the x,y,z fields </td></tr>
-    <tr><td class="paramname">data</td><td>pointer to a uint8_t array to store the data in </td></tr>
-    <tr><td class="paramname">pointStep</td><td>the pointStep of the point cloud </td></tr>
-    <tr><td class="paramname">height</td><td>the height of the point cloud (1 for unorganized point clouds) </td></tr>
-    <tr><td class="paramname">width</td><td>the width the width of the point cloud </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="aed363edde64b4280bd06668dcf70d64a" name="aed363edde64b4280bd06668dcf70d64a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aed363edde64b4280bd06668dcf70d64a">&#9670;&nbsp;</a></span>rgbaOffset()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint32_t seerep_hdf5_fb::Hdf5FbPointCloud::rgbaOffset </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>fieldName</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>offset</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>isBigendian</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Get the offset for the special case of rgba(a) </p>
-<p >The rgb(a) channel is encoded in a single 32 bit integer. To address an individual channel (r, g, b or a ), we need to get it's offset from the start of the rgb(a) field.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">fieldName</td><td>name of the field to get the offset for i.e "r", "g", "b" or "a" </td></tr>
-    <tr><td class="paramname">offset</td><td>the offset for the start of the rgb(a) channel </td></tr>
-    <tr><td class="paramname">isBigendian</td><td>endianness of the point cloud </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>uint32_t the offset for the fieldName </dd></dl>
-
-</div>
-</div>
-<a id="a6e6904bfb85cbf4086af86e3a87b78c2" name="a6e6904bfb85cbf4086af86e3a87b78c2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6e6904bfb85cbf4086af86e3a87b78c2">&#9670;&nbsp;</a></span>writeColorsRGB()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void seerep_hdf5_fb::Hdf5FbPointCloud::writeColorsRGB </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>id</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::vector&lt; uint32_t &gt; &amp;&#160;</td>
-          <td class="paramname"><em>offsets</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const uint8_t *&#160;</td>
-          <td class="paramname"><em>data</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>pointStep</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>height</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>width</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Write r,g,b of a point cloud to a /colors dataset. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">id</td><td>the uuid of the point cloud </td></tr>
-    <tr><td class="paramname">offsets</td><td>the offsets of the r,g,b fields </td></tr>
-    <tr><td class="paramname">data</td><td>pointer to a const uint8_t array to read the elements from </td></tr>
-    <tr><td class="paramname">pointStep</td><td>the point step of the point cloud </td></tr>
-    <tr><td class="paramname">height</td><td>the height of the point cloud (1 of unorganized point clouds) </td></tr>
-    <tr><td class="paramname">width</td><td>the width of the point cloud </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a1b1ece83fe9784a1682e168beaf3b42f" name="a1b1ece83fe9784a1682e168beaf3b42f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1b1ece83fe9784a1682e168beaf3b42f">&#9670;&nbsp;</a></span>writeColorsRGBA()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void seerep_hdf5_fb::Hdf5FbPointCloud::writeColorsRGBA </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>id</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::vector&lt; uint32_t &gt; &amp;&#160;</td>
-          <td class="paramname"><em>offsets</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const uint8_t *&#160;</td>
-          <td class="paramname"><em>data</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>pointStep</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>height</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>width</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Write r,g,b,a of a point cloud to a /colors dataset. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">id</td><td>the uuid of the point cloud </td></tr>
-    <tr><td class="paramname">offsets</td><td>the offsets of the r,g,b,a fields </td></tr>
-    <tr><td class="paramname">data</td><td>pointer to a const uint8_t array to read the elements from </td></tr>
-    <tr><td class="paramname">pointStep</td><td>the point step of the point cloud </td></tr>
-    <tr><td class="paramname">height</td><td>the height of the point cloud (1 of unorganized point clouds) </td></tr>
-    <tr><td class="paramname">width</td><td>the width of the point cloud </td></tr>
+    <tr><td class="paramname">uuid</td><td>The UUID of the PCL. </td></tr>
+    <tr><td class="paramname">min_corner</td><td>The minimum corner of the AABB </td></tr>
+    <tr><td class="paramname">max_corner</td><td>The maximum corner of the AABB. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1522,8 +919,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a08dbae37de130ded724026af5016378d" name="a08dbae37de130ded724026af5016378d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a08dbae37de130ded724026af5016378d">&#9670;&nbsp;</a></span>writePointCloud2()</h2>
+<a id="a72cabef0bcdcab221417564eff4d7b62" name="a72cabef0bcdcab221417564eff4d7b62"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a72cabef0bcdcab221417564eff4d7b62">&#9670;&nbsp;</a></span>writePointCloud2()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1538,13 +935,7 @@ Additional Inherited Members</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const seerep::fb::PointCloud2 &amp;&#160;</td>
-          <td class="paramname"><em>pointcloud2</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; float &gt; &amp;&#160;</td>
-          <td class="paramname"><em>boundingBox</em>&#160;</td>
+          <td class="paramname"><em>pcl</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1554,12 +945,48 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Method for writing a flatbuffers PointCloud2 message to hdf5. </p>
+<p>Writes a Flatbuffers PointCloud2 message to HDF5. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">uuid</td><td>the uuid of the point cloud </td></tr>
-    <tr><td class="paramname">pointcloud2</td><td>the received PointCloud2 message </td></tr>
-    <tr><td class="paramname">boundingBox</td><td>reference to an vector which get's the computed boundingBox during write of x,y,z </td></tr>
+    <tr><td class="paramname">uuid</td><td>The UUID of the PCL. </td></tr>
+    <tr><td class="paramname">pcl</td><td>The PCL message to write. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a7f740f99b08314e9dd0969b43fe2a1a6" name="a7f740f99b08314e9dd0969b43fe2a1a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f740f99b08314e9dd0969b43fe2a1a6">&#9670;&nbsp;</a></span>writePointCloudBoundingBoxLabeled()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_hdf5_fb::Hdf5FbPointCloud::writePointCloudBoundingBoxLabeled </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::BoundingBoxLabeledWithCategory &gt; &gt; *&#160;</td>
+          <td class="paramname"><em>bbLabeledWithCategory</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Write a BoundingBoxes flatbuffers message to hdf5. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id</td><td>the uuid of the image data group </td></tr>
+    <tr><td class="paramname">bbLabeledWithCategory</td><td>the flatbuffers BoundingBoxes with category message </td></tr>
   </table>
   </dd>
 </dl>
@@ -1597,103 +1024,22 @@ template&lt;typename T &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Writes information about point fields as attributes to hdf5. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">object</td><td>HighFive object to write to (representing a data set or data group) </td></tr>
-    <tr><td class="paramname">pointFields</td><td>flatbuffers vector of the point fields to write </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="ab0d56a3ca6e6216d04b89ddde19737de" name="ab0d56a3ca6e6216d04b89ddde19737de"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab0d56a3ca6e6216d04b89ddde19737de">&#9670;&nbsp;</a></span>writePoints()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void seerep_hdf5_fb::Hdf5FbPointCloud::writePoints </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>id</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::vector&lt; uint32_t &gt; &amp;&#160;</td>
-          <td class="paramname"><em>offsets</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const uint8_t *&#160;</td>
-          <td class="paramname"><em>data</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>pointStep</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>height</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>width</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::shared_ptr&lt; HighFive::Group &gt; &amp;&#160;</td>
-          <td class="paramname"><em>groupPtr</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; float &gt; &amp;&#160;</td>
-          <td class="paramname"><em>boundingBox</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Write x,y,z of a point cloud to a /points dataset. </p>
+<p>Writes the channel description and the layout of the binary payload to HDF5. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>HDF5 object type (group or dataset). </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">id</td><td>the uuid of the point cloud </td></tr>
-    <tr><td class="paramname">offsets</td><td>the offsets of the x,y,z fields </td></tr>
-    <tr><td class="paramname">data</td><td>pointer to a const uint8_t array to read the elements from </td></tr>
-    <tr><td class="paramname">pointStep</td><td>the point step of the point cloud </td></tr>
-    <tr><td class="paramname">height</td><td>the height of the point cloud (1 of unorganized point clouds) </td></tr>
-    <tr><td class="paramname">width</td><td>the width of the point cloud </td></tr>
-    <tr><td class="paramname">groupPtr</td><td>shared pointer to the data group of the point cloud. (Used to add a bounding box of x,y,z as an attribute of the point cloud) </td></tr>
-    <tr><td class="paramname">boundingBox</td><td>reference to vector to write the computed boundingBox </td></tr>
+    <tr><td class="paramname">object</td><td>The object to annotate. </td></tr>
+    <tr><td class="paramname">pointFields</td><td>The vector of point fields to write. </td></tr>
   </table>
   </dd>
 </dl>

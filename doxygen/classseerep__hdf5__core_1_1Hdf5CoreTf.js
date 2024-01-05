@@ -2,7 +2,6 @@ var classseerep__hdf5__core_1_1Hdf5CoreTf =
 [
     [ "Hdf5CoreTf", "classseerep__hdf5__core_1_1Hdf5CoreTf.html#a6df5740b5178ce9bc97560c78b097320", null ],
     [ "convertToTfs", "classseerep__hdf5__core_1_1Hdf5CoreTf.html#af994cccecef6b0bfd28453b829fcab47", null ],
-    [ "readFrame", "classseerep__hdf5__core_1_1Hdf5CoreTf.html#a36715a8af72bf91f650f3ff059cd8edf", null ],
     [ "readRotation", "classseerep__hdf5__core_1_1Hdf5CoreTf.html#a23bd1c7bca359dd95c133f23d80cbfd3", null ],
     [ "readTime", "classseerep__hdf5__core_1_1Hdf5CoreTf.html#a40948575c3f8708bb787e8220a1ad013", null ],
     [ "readTransformStamped", "classseerep__hdf5__core_1_1Hdf5CoreTf.html#aa385b9d6fd304cff1264a525a724e325", null ],

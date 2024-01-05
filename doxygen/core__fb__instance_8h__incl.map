@@ -1,52 +1,52 @@
 <map id="seerep_srv/seerep_core_fb/include/seerep_core_fb/core_fb_instance.h" name="seerep_srv/seerep_core_fb/include/seerep_core_fb/core_fb_instance.h">
-<area shape="rect" id="node1" title=" " alt="" coords="4889,5,5065,61"/>
-<area shape="rect" id="node2" title=" " alt="" coords="4309,355,4395,382"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5636,355,5711,382"/>
-<area shape="rect" id="node4" href="$core__fb__conversion_8h.html" title=" " alt="" coords="2864,266,3024,293"/>
-<area shape="rect" id="node20" title=" " alt="" coords="5735,348,5945,389"/>
-<area shape="rect" id="node24" title=" " alt="" coords="6581,348,6755,389"/>
-<area shape="rect" id="node27" title=" " alt="" coords="4126,355,4285,382"/>
-<area shape="rect" id="node28" title=" " alt="" coords="5,355,211,382"/>
-<area shape="rect" id="node31" title=" " alt="" coords="4785,355,4975,382"/>
-<area shape="rect" id="node32" title=" " alt="" coords="4999,355,5166,382"/>
-<area shape="rect" id="node33" title=" " alt="" coords="5970,355,6121,382"/>
-<area shape="rect" id="node34" title=" " alt="" coords="5191,355,5417,382"/>
-<area shape="rect" id="node35" title=" " alt="" coords="5442,355,5611,382"/>
-<area shape="rect" id="node36" href="$core_8h.html" title=" " alt="" coords="3963,109,4109,136"/>
-<area shape="rect" id="node5" title=" " alt="" coords="2823,355,2993,382"/>
-<area shape="rect" id="node6" title=" " alt="" coords="3018,355,3150,382"/>
-<area shape="rect" id="node7" title=" " alt="" coords="3175,348,3348,389"/>
-<area shape="rect" id="node8" title=" " alt="" coords="235,348,453,389"/>
-<area shape="rect" id="node9" title=" " alt="" coords="4419,355,4575,382"/>
-<area shape="rect" id="node10" title=" " alt="" coords="3941,348,4102,389"/>
-<area shape="rect" id="node11" title=" " alt="" coords="3755,348,3917,389"/>
-<area shape="rect" id="node12" title=" " alt="" coords="477,348,648,389"/>
-<area shape="rect" id="node13" title=" " alt="" coords="673,355,911,382"/>
-<area shape="rect" id="node14" title=" " alt="" coords="936,348,1123,389"/>
-<area shape="rect" id="node15" title=" " alt="" coords="1147,348,1357,389"/>
-<area shape="rect" id="node16" title=" " alt="" coords="3372,348,3529,389"/>
-<area shape="rect" id="node17" title=" " alt="" coords="1381,348,1539,389"/>
-<area shape="rect" id="node18" title=" " alt="" coords="1563,348,1720,389"/>
-<area shape="rect" id="node19" title=" " alt="" coords="1744,355,1979,382"/>
-<area shape="rect" id="node21" title=" " alt="" coords="2002,348,2155,389"/>
-<area shape="rect" id="node22" title=" " alt="" coords="2180,348,2356,389"/>
-<area shape="rect" id="node23" title=" " alt="" coords="2381,348,2595,389"/>
-<area shape="rect" id="node25" title=" " alt="" coords="4599,348,4761,389"/>
-<area shape="rect" id="node26" title=" " alt="" coords="2620,348,2799,389"/>
-<area shape="rect" id="node29" title=" " alt="" coords="3554,355,3731,382"/>
-<area shape="rect" id="node30" title=" " alt="" coords="6164,355,6431,382"/>
-<area shape="rect" id="node37" title=" " alt="" coords="4032,184,4123,211"/>
-<area shape="rect" id="node38" href="$core__project_8h.html" title=" " alt="" coords="4732,184,4847,211"/>
-<area shape="rect" id="node49" title=" " alt="" coords="3713,259,3906,300"/>
-<area shape="rect" id="node50" title=" " alt="" coords="4032,266,4184,293"/>
-<area shape="rect" id="node39" title=" " alt="" coords="5599,266,5657,293"/>
-<area shape="rect" id="node40" title=" " alt="" coords="4411,259,4579,300"/>
-<area shape="rect" id="node41" title=" " alt="" coords="4603,259,4797,300"/>
-<area shape="rect" id="node42" href="$hdf5__core__image_8h.html" title=" " alt="" coords="5015,259,5185,300"/>
-<area shape="rect" id="node43" href="$hdf5__core__instance_8h.html" title=" " alt="" coords="5833,259,6004,300"/>
-<area shape="rect" id="node44" href="$hdf5__core__point_8h.html" title=" " alt="" coords="5209,259,5380,300"/>
-<area shape="rect" id="node45" href="$hdf5__core__point__cloud_8h.html" title=" " alt="" coords="5404,259,5575,300"/>
-<area shape="rect" id="node46" href="$hdf5__core__tf_8h.html" title=" " alt="" coords="6231,259,6401,300"/>
-<area shape="rect" id="node47" href="$core__camera__intrinsics_8h.html" title=" " alt="" coords="3200,266,3384,293"/>
-<area shape="rect" id="node48" href="$core__dataset_8h.html" title=" " alt="" coords="4821,266,4939,293"/>
+<area shape="rect" id="node1" title=" " alt="" coords="2427,5,2603,61"/>
+<area shape="rect" id="node2" title=" " alt="" coords="2337,266,2424,293"/>
+<area shape="rect" id="node3" title=" " alt="" coords="1195,355,1270,382"/>
+<area shape="rect" id="node4" href="$core__fb__conversion_8h.html" title=" " alt="" coords="4386,184,4546,211"/>
+<area shape="rect" id="node20" title=" " alt="" coords="7255,259,7466,300"/>
+<area shape="rect" id="node24" title=" " alt="" coords="7490,259,7665,300"/>
+<area shape="rect" id="node27" title=" " alt="" coords="476,266,634,293"/>
+<area shape="rect" id="node28" title=" " alt="" coords="3168,266,3374,293"/>
+<area shape="rect" id="node31" title=" " alt="" coords="2098,355,2289,382"/>
+<area shape="rect" id="node32" title=" " alt="" coords="2313,355,2480,382"/>
+<area shape="rect" id="node33" title=" " alt="" coords="1738,355,1889,382"/>
+<area shape="rect" id="node34" title=" " alt="" coords="1294,355,1520,382"/>
+<area shape="rect" id="node35" title=" " alt="" coords="1545,355,1714,382"/>
+<area shape="rect" id="node36" href="$core_8h.html" title=" " alt="" coords="2442,109,2588,136"/>
+<area shape="rect" id="node5" title=" " alt="" coords="5538,266,5708,293"/>
+<area shape="rect" id="node6" title=" " alt="" coords="5733,266,5865,293"/>
+<area shape="rect" id="node7" title=" " alt="" coords="5890,259,6063,300"/>
+<area shape="rect" id="node8" title=" " alt="" coords="6138,259,6356,300"/>
+<area shape="rect" id="node9" title=" " alt="" coords="6380,266,6536,293"/>
+<area shape="rect" id="node10" title=" " alt="" coords="2649,259,2810,300"/>
+<area shape="rect" id="node11" title=" " alt="" coords="6560,259,6721,300"/>
+<area shape="rect" id="node12" title=" " alt="" coords="6746,259,6916,300"/>
+<area shape="rect" id="node13" title=" " alt="" coords="6941,266,7180,293"/>
+<area shape="rect" id="node14" title=" " alt="" coords="3651,259,3838,300"/>
+<area shape="rect" id="node15" title=" " alt="" coords="3862,259,4072,300"/>
+<area shape="rect" id="node16" title=" " alt="" coords="2936,259,3094,300"/>
+<area shape="rect" id="node17" title=" " alt="" coords="4096,259,4254,300"/>
+<area shape="rect" id="node18" title=" " alt="" coords="4278,259,4435,300"/>
+<area shape="rect" id="node19" title=" " alt="" coords="4459,266,4694,293"/>
+<area shape="rect" id="node21" title=" " alt="" coords="4717,259,4870,300"/>
+<area shape="rect" id="node22" title=" " alt="" coords="4895,259,5071,300"/>
+<area shape="rect" id="node23" title=" " alt="" coords="5096,259,5310,300"/>
+<area shape="rect" id="node25" title=" " alt="" coords="1913,348,2074,389"/>
+<area shape="rect" id="node26" title=" " alt="" coords="5335,259,5514,300"/>
+<area shape="rect" id="node29" title=" " alt="" coords="2448,266,2625,293"/>
+<area shape="rect" id="node30" title=" " alt="" coords="7084,355,7351,382"/>
+<area shape="rect" id="node37" title=" " alt="" coords="2578,184,2665,211"/>
+<area shape="rect" id="node38" title=" " alt="" coords="2690,184,2836,211"/>
+<area shape="rect" id="node39" title=" " alt="" coords="2860,184,2951,211"/>
+<area shape="rect" id="node40" title=" " alt="" coords="2975,184,3034,211"/>
+<area shape="rect" id="node41" href="$core__project_8h.html" title=" " alt="" coords="1260,184,1375,211"/>
+<area shape="rect" id="node49" title=" " alt="" coords="81,259,274,300"/>
+<area shape="rect" id="node50" title=" " alt="" coords="299,266,451,293"/>
+<area shape="rect" id="node42" title=" " alt="" coords="1222,266,1280,293"/>
+<area shape="rect" id="node43" title=" " alt="" coords="760,259,928,300"/>
+<area shape="rect" id="node44" title=" " alt="" coords="953,259,1146,300"/>
+<area shape="rect" id="node45" href="$hdf5__core__image_8h.html" title=" " alt="" coords="1896,259,2067,300"/>
+<area shape="rect" id="node46" href="$hdf5__core__instance_8h.html" title=" " alt="" coords="2091,259,2262,300"/>
+<area shape="rect" id="node47" href="$hdf5__core__point_8h.html" title=" " alt="" coords="1702,259,1872,300"/>
+<area shape="rect" id="node48" href="$hdf5__core__point__cloud_8h.html" title=" " alt="" coords="1507,259,1678,300"/>
 </map>

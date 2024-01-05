@@ -152,19 +152,28 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad5f8af237fb6503d872b1fa6400d5596"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ad5f8af237fb6503d872b1fa6400d5596">checkExists</a> (const std::string &amp;id)</td></tr>
 <tr class="memdesc:ad5f8af237fb6503d872b1fa6400d5596"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a DataSet or DataGroup exists in the file.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ad5f8af237fb6503d872b1fa6400d5596">More...</a><br /></td></tr>
 <tr class="separator:ad5f8af237fb6503d872b1fa6400d5596"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ecb220e45ab2dddf4540f952fa586ae"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a6ecb220e45ab2dddf4540f952fa586ae">exists</a> (const std::string &amp;id)</td></tr>
-<tr class="memdesc:a6ecb220e45ab2dddf4540f952fa586ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a DataSet or DataGroup exists in the file.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a6ecb220e45ab2dddf4540f952fa586ae">More...</a><br /></td></tr>
-<tr class="separator:a6ecb220e45ab2dddf4540f952fa586ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad225da986fa50a2f8623af6210580337"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ad225da986fa50a2f8623af6210580337">readFrameId</a> (const std::string &amp;datatypeGroup, const std::string &amp;uuid)</td></tr>
-<tr class="separator:ad225da986fa50a2f8623af6210580337"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa601e5706c24be57a0fb5a4bd4d4b0d4"><td class="memTemplParams" colspan="2">template&lt;typename T , class C &gt; </td></tr>
-<tr class="memitem:aa601e5706c24be57a0fb5a4bd4d4b0d4"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#aa601e5706c24be57a0fb5a4bd4d4b0d4">readAttributeFromHdf5</a> (const std::string &amp;id, const HighFive::AnnotateTraits&lt; C &gt; &amp;object, std::string attributeField)</td></tr>
-<tr class="separator:aa601e5706c24be57a0fb5a4bd4d4b0d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa8d464d51d117baaa44595baed649265"><td class="memTemplParams" colspan="2">template&lt;typename T , class C &gt; </td></tr>
-<tr class="memitem:aa8d464d51d117baaa44595baed649265"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#aa8d464d51d117baaa44595baed649265">writeAttributeToHdf5</a> (HighFive::AnnotateTraits&lt; C &gt; &amp;object, std::string attributeField, T attributeValue)</td></tr>
-<tr class="separator:aa8d464d51d117baaa44595baed649265"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f819558f71f25dd29ed3d962be6224c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a1f819558f71f25dd29ed3d962be6224c">deleteAttribute</a> (const std::shared_ptr&lt; HighFive::DataSet &gt; dataSetPtr, std::string attributeField)</td></tr>
-<tr class="separator:a1f819558f71f25dd29ed3d962be6224c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a056fb60322168490a950d706c6d8929a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a056fb60322168490a950d706c6d8929a">exists</a> (const std::string &amp;path) const</td></tr>
+<tr class="memdesc:a056fb60322168490a950d706c6d8929a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a HDF5 path exists in the file.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a056fb60322168490a950d706c6d8929a">More...</a><br /></td></tr>
+<tr class="separator:a056fb60322168490a950d706c6d8929a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e9720ccbcf71fb814fa02a9022d57a9"><td class="memTemplParams" colspan="2">template&lt;typename T , class C &gt; </td></tr>
+<tr class="memitem:a5e9720ccbcf71fb814fa02a9022d57a9"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a5e9720ccbcf71fb814fa02a9022d57a9">readAttributeFromHdf5</a> (const HighFive::AnnotateTraits&lt; C &gt; &amp;object, const std::string &amp;attribute_name, const std::string &amp;path)</td></tr>
+<tr class="memdesc:a5e9720ccbcf71fb814fa02a9022d57a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads an attribute from an HDF5 object.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a5e9720ccbcf71fb814fa02a9022d57a9">More...</a><br /></td></tr>
+<tr class="separator:a5e9720ccbcf71fb814fa02a9022d57a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd4899ad7f437d91a88bf153902b6c8c"><td class="memTemplParams" colspan="2">template&lt;typename T , class C &gt; </td></tr>
+<tr class="memitem:abd4899ad7f437d91a88bf153902b6c8c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#abd4899ad7f437d91a88bf153902b6c8c">writeAttributeToHdf5</a> (HighFive::AnnotateTraits&lt; C &gt; &amp;object, const std::string &amp;attribute_name, T attribute_val)</td></tr>
+<tr class="memdesc:abd4899ad7f437d91a88bf153902b6c8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes an attribute to an HDF5 object.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#abd4899ad7f437d91a88bf153902b6c8c">More...</a><br /></td></tr>
+<tr class="separator:abd4899ad7f437d91a88bf153902b6c8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ac30236bca2bd3a267a740523b2d58f"><td class="memItemLeft" align="right" valign="top">const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a0ac30236bca2bd3a267a740523b2d58f">tf2_frame_id</a> (const std::string &amp;frame_id) const</td></tr>
+<tr class="memdesc:a0ac30236bca2bd3a267a740523b2d58f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a tf2 compliant frame ID.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a0ac30236bca2bd3a267a740523b2d58f">More...</a><br /></td></tr>
+<tr class="separator:a0ac30236bca2bd3a267a740523b2d58f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21312ad346cb75848bb34bacf4618514"><td class="memTemplParams" colspan="2">template&lt;class C &gt; </td></tr>
+<tr class="memitem:a21312ad346cb75848bb34bacf4618514"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a21312ad346cb75848bb34bacf4618514">readFrameId</a> (const HighFive::AnnotateTraits&lt; C &gt; &amp;object, const std::string &amp;frame_field, const std::string &amp;path)</td></tr>
+<tr class="memdesc:a21312ad346cb75848bb34bacf4618514"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads a tf2 compliant frame ID from an HDF5 object.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a21312ad346cb75848bb34bacf4618514">More...</a><br /></td></tr>
+<tr class="separator:a21312ad346cb75848bb34bacf4618514"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad00b74ac1bd5e201fabdd04e4af6c774"><td class="memTemplParams" colspan="2">template&lt;class C &gt; </td></tr>
+<tr class="memitem:ad00b74ac1bd5e201fabdd04e4af6c774"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ad00b74ac1bd5e201fabdd04e4af6c774">writeFrameId</a> (HighFive::AnnotateTraits&lt; C &gt; &amp;object, const std::string &amp;frame_field, const std::string &amp;frame_id)</td></tr>
+<tr class="memdesc:ad00b74ac1bd5e201fabdd04e4af6c774"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a tf2 compliant frame ID to an HDF5 object.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ad00b74ac1bd5e201fabdd04e4af6c774">More...</a><br /></td></tr>
+<tr class="separator:ad00b74ac1bd5e201fabdd04e4af6c774"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6769c4141bd58c1e6be1b3630505cbc1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a6769c4141bd58c1e6be1b3630505cbc1">writeAABB</a> (const std::string &amp;datatypeGroup, const std::string &amp;uuid, const boost::geometry::model::box&lt; boost::geometry::model::point&lt; float, 3, boost::geometry::cs::cartesian &gt; &gt; &amp;aabb)</td></tr>
 <tr class="separator:a6769c4141bd58c1e6be1b3630505cbc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae0946dec4040af5f37c7268087c9ba98"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ae0946dec4040af5f37c7268087c9ba98">readAABB</a> (const std::string &amp;datatypeGroup, const std::string &amp;uuid, boost::geometry::model::box&lt; boost::geometry::model::point&lt; float, 3, boost::geometry::cs::cartesian &gt; &gt; &amp;aabb)</td></tr>
@@ -203,25 +212,26 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a4f732761cdfd2ee56d10f17bc98ae816"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe6c14fa18cec374f7c3b03a25157408"><td class="memItemLeft" align="right" valign="top">const std::optional&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#afe6c14fa18cec374f7c3b03a25157408">readVersion</a> ()</td></tr>
 <tr class="separator:afe6c14fa18cec374f7c3b03a25157408"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0f2396463dae495454465aa807e81fb4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a0f2396463dae495454465aa807e81fb4">writeGeodeticLocation</a> (const <a class="el" href="structseerep__core__msgs_1_1GeodeticCoordinates.html">seerep_core_msgs::GeodeticCoordinates</a> geocoords)</td></tr>
-<tr class="memdesc:a0f2396463dae495454465aa807e81fb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes Geodetic location of the project to its HDF5 file.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a0f2396463dae495454465aa807e81fb4">More...</a><br /></td></tr>
-<tr class="separator:a0f2396463dae495454465aa807e81fb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a764d64b6efaa310897b0ed6c1cf1c166"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a764d64b6efaa310897b0ed6c1cf1c166">writeGeodeticLocation</a> (const <a class="el" href="structseerep__core__msgs_1_1GeodeticCoordinates.html">seerep_core_msgs::GeodeticCoordinates</a> &amp;geo_coordinates)</td></tr>
+<tr class="memdesc:a764d64b6efaa310897b0ed6c1cf1c166"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a geodetic coordinate to an HDF5 file.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a764d64b6efaa310897b0ed6c1cf1c166">More...</a><br /></td></tr>
+<tr class="separator:a764d64b6efaa310897b0ed6c1cf1c166"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ea09f7fe01d7f8a43965d5892a45cf1"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="structseerep__core__msgs_1_1GeodeticCoordinates.html">seerep_core_msgs::GeodeticCoordinates</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a7ea09f7fe01d7f8a43965d5892a45cf1">readGeodeticLocation</a> ()</td></tr>
-<tr class="memdesc:a7ea09f7fe01d7f8a43965d5892a45cf1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read Geodetic location of the project from its HDF5 file.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a7ea09f7fe01d7f8a43965d5892a45cf1">More...</a><br /></td></tr>
+<tr class="memdesc:a7ea09f7fe01d7f8a43965d5892a45cf1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads a geodetic coodrinate from HDF5 file.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a7ea09f7fe01d7f8a43965d5892a45cf1">More...</a><br /></td></tr>
 <tr class="separator:a7ea09f7fe01d7f8a43965d5892a45cf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1fdca1935287c8ebeeeeb49b6b15e36a"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; HighFive::Group &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a1fdca1935287c8ebeeeeb49b6b15e36a">getHdf5Group</a> (const std::string &amp;hdf5GroupPath, bool create=true)</td></tr>
-<tr class="memdesc:a1fdca1935287c8ebeeeeb49b6b15e36a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a shared pointer to a hdf5 group.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a1fdca1935287c8ebeeeeb49b6b15e36a">More...</a><br /></td></tr>
-<tr class="separator:a1fdca1935287c8ebeeeeb49b6b15e36a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3740ad93ae05cacb1474d6f690fe3234"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:a3740ad93ae05cacb1474d6f690fe3234"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; HighFive::DataSet &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a3740ad93ae05cacb1474d6f690fe3234">getHdf5DataSet</a> (const std::string &amp;hdf5DataSetPath, HighFive::DataSpace &amp;dataSpace)</td></tr>
-<tr class="memdesc:a3740ad93ae05cacb1474d6f690fe3234"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a shared pointer to a hdf5 data set specified by the hdf5DataSetPath.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a3740ad93ae05cacb1474d6f690fe3234">More...</a><br /></td></tr>
-<tr class="separator:a3740ad93ae05cacb1474d6f690fe3234"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a76c4b7763e39e7f16ccb0b5ed4cbe61f"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:a76c4b7763e39e7f16ccb0b5ed4cbe61f"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; HighFive::DataSet &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a76c4b7763e39e7f16ccb0b5ed4cbe61f">getHdf5DataSet</a> (const std::string &amp;hdf5DataSetPath, HighFive::DataSpace &amp;dataSpace, HighFive::DataSetCreateProps &amp;createProps)</td></tr>
-<tr class="memdesc:a76c4b7763e39e7f16ccb0b5ed4cbe61f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a shared pointer to a hdf5 data set specified by the hdf5DataSetPath.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a76c4b7763e39e7f16ccb0b5ed4cbe61f">More...</a><br /></td></tr>
-<tr class="separator:a76c4b7763e39e7f16ccb0b5ed4cbe61f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4071999cc97b4db0c7d23036391ad8c4"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; HighFive::DataSet &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a4071999cc97b4db0c7d23036391ad8c4">getHdf5DataSet</a> (const std::string &amp;hdf5DataSetPath)</td></tr>
-<tr class="separator:a4071999cc97b4db0c7d23036391ad8c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c28f39990f1c6ff1539d0120b4e09f8"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; HighFive::Group &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a2c28f39990f1c6ff1539d0120b4e09f8">getHdf5Group</a> (const std::string &amp;group_path, bool create=true)</td></tr>
+<tr class="memdesc:a2c28f39990f1c6ff1539d0120b4e09f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a shared pointer to an HDF5 group object.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a2c28f39990f1c6ff1539d0120b4e09f8">More...</a><br /></td></tr>
+<tr class="separator:a2c28f39990f1c6ff1539d0120b4e09f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad7f16010d2a7be5bca4b8c5536b6f91"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; HighFive::DataSet &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#aad7f16010d2a7be5bca4b8c5536b6f91">getHdf5DataSet</a> (const std::string &amp;dataset_path)</td></tr>
+<tr class="memdesc:aad7f16010d2a7be5bca4b8c5536b6f91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a shared pointer to a HighFive::DataSet object for the given dataset path.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#aad7f16010d2a7be5bca4b8c5536b6f91">More...</a><br /></td></tr>
+<tr class="separator:aad7f16010d2a7be5bca4b8c5536b6f91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d4d3349e03a04b14d3a757ea6dccc69"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:a1d4d3349e03a04b14d3a757ea6dccc69"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; HighFive::DataSet &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a1d4d3349e03a04b14d3a757ea6dccc69">getHdf5DataSet</a> (const std::string &amp;dataset_path, const HighFive::DataSpace &amp;dataspace)</td></tr>
+<tr class="memdesc:a1d4d3349e03a04b14d3a757ea6dccc69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a shared pointer to a HighFive::DataSet object for the given dataset path and data space.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a1d4d3349e03a04b14d3a757ea6dccc69">More...</a><br /></td></tr>
+<tr class="separator:a1d4d3349e03a04b14d3a757ea6dccc69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8cc1f182e59b6db5c367835d2eb26cb0"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:a8cc1f182e59b6db5c367835d2eb26cb0"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; HighFive::DataSet &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a8cc1f182e59b6db5c367835d2eb26cb0">getHdf5DataSet</a> (const std::string &amp;dataset_path, const HighFive::DataSpace &amp;dataspace, const HighFive::DataSetCreateProps &amp;properties)</td></tr>
+<tr class="memdesc:a8cc1f182e59b6db5c367835d2eb26cb0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a shared pointer to a HighFive::Dataset object for the given path, dataspace, and properties.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a8cc1f182e59b6db5c367835d2eb26cb0">More...</a><br /></td></tr>
+<tr class="separator:a8cc1f182e59b6db5c367835d2eb26cb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a42693904c30f04f744e095ab21e1b07b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a42693904c30f04f744e095ab21e1b07b">getLabelCategories</a> (std::string id, std::string labelType, std::vector&lt; std::string &gt; &amp;matchingLabelCategory)</td></tr>
 <tr class="memdesc:a42693904c30f04f744e095ab21e1b07b"><td class="mdescLeft">&#160;</td><td class="mdescRight">get the labels of a group/dataset matching the general prefix (label type) and return the labels matching the specified type. Also extract the category from the postfix  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a42693904c30f04f744e095ab21e1b07b">More...</a><br /></td></tr>
 <tr class="separator:a42693904c30f04f744e095ab21e1b07b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -346,7 +356,7 @@ Private Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Checks if a DataSet or DataGroup exists in the file. </p>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000001">Deprecated:</a></b></dt><dd>see <a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a6ecb220e45ab2dddf4540f952fa586ae" title="Checks if a DataSet or DataGroup exists in the file.">exists()</a> </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000001">Deprecated:</a></b></dt><dd>see <a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a056fb60322168490a950d706c6d8929a" title="Checks if a HDF5 path exists in the file.">exists()</a> </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">id</td><td>The id of the DataSet or DataGroup </td></tr>
@@ -356,36 +366,8 @@ Private Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a1f819558f71f25dd29ed3d962be6224c" name="a1f819558f71f25dd29ed3d962be6224c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1f819558f71f25dd29ed3d962be6224c">&#9670;&nbsp;</a></span>deleteAttribute()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void seerep_hdf5_core::Hdf5CoreGeneral::deleteAttribute </td>
-          <td>(</td>
-          <td class="paramtype">const std::shared_ptr&lt; HighFive::DataSet &gt;&#160;</td>
-          <td class="paramname"><em>dataSetPtr</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>attributeField</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a6ecb220e45ab2dddf4540f952fa586ae" name="a6ecb220e45ab2dddf4540f952fa586ae"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6ecb220e45ab2dddf4540f952fa586ae">&#9670;&nbsp;</a></span>exists()</h2>
+<a id="a056fb60322168490a950d706c6d8929a" name="a056fb60322168490a950d706c6d8929a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a056fb60322168490a950d706c6d8929a">&#9670;&nbsp;</a></span>exists()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -394,20 +376,21 @@ Private Member Functions</h2></td></tr>
           <td class="memname">bool seerep_hdf5_core::Hdf5CoreGeneral::exists </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>id</em></td><td>)</td>
-          <td></td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Checks if a DataSet or DataGroup exists in the file. </p>
+<p>Checks if a HDF5 path exists in the file. </p>
+<p >Wrapper around HighFive::File::exist() for logging purposes.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">id</td><td>The id of the DataSet or DataGroup </td></tr>
+    <tr><td class="paramname">path</td><td>The HDF5 path to check </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>true if the DataSet or DataGroup exists </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the dataset exists, false otherwise. </dd></dl>
 
 </div>
 </div>
@@ -429,8 +412,8 @@ Private Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a4071999cc97b4db0c7d23036391ad8c4" name="a4071999cc97b4db0c7d23036391ad8c4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4071999cc97b4db0c7d23036391ad8c4">&#9670;&nbsp;</a></span>getHdf5DataSet() <span class="overload">[1/3]</span></h2>
+<a id="aad7f16010d2a7be5bca4b8c5536b6f91" name="aad7f16010d2a7be5bca4b8c5536b6f91"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad7f16010d2a7be5bca4b8c5536b6f91">&#9670;&nbsp;</a></span>getHdf5DataSet() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -439,16 +422,25 @@ Private Member Functions</h2></td></tr>
           <td class="memname">std::shared_ptr&lt; HighFive::DataSet &gt; seerep_hdf5_core::Hdf5CoreGeneral::getHdf5DataSet </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>hdf5DataSetPath</em></td><td>)</td>
+          <td class="paramname"><em>dataset_path</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
+<p>Returns a shared pointer to a HighFive::DataSet object for the given dataset path. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dataset_path</td><td>The path to the dataset. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::shared_ptr&lt;HighFive::DataSet&gt; A shared pointer to the dataset object. Nullptr if the dataset does not exist. </dd></dl>
+
 </div>
 </div>
-<a id="a3740ad93ae05cacb1474d6f690fe3234" name="a3740ad93ae05cacb1474d6f690fe3234"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3740ad93ae05cacb1474d6f690fe3234">&#9670;&nbsp;</a></span>getHdf5DataSet() <span class="overload">[2/3]</span></h2>
+<a id="a1d4d3349e03a04b14d3a757ea6dccc69" name="a1d4d3349e03a04b14d3a757ea6dccc69"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d4d3349e03a04b14d3a757ea6dccc69">&#9670;&nbsp;</a></span>getHdf5DataSet() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -459,13 +451,13 @@ template&lt;class T &gt; </div>
           <td class="memname">std::shared_ptr&lt; HighFive::DataSet &gt; seerep_hdf5_core::Hdf5CoreGeneral::getHdf5DataSet </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>hdf5DataSetPath</em>, </td>
+          <td class="paramname"><em>dataset_path</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">HighFive::DataSpace &amp;&#160;</td>
-          <td class="paramname"><em>dataSpace</em>&#160;</td>
+          <td class="paramtype">const HighFive::DataSpace &amp;&#160;</td>
+          <td class="paramname"><em>dataspace</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -475,26 +467,27 @@ template&lt;class T &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Get a shared pointer to a hdf5 data set specified by the hdf5DataSetPath. </p>
+<p>Returns a shared pointer to a HighFive::DataSet object for the given dataset path and data space. </p>
+<p >A new dataset will be created if it does not already exist.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">T</td><td>type of the dataset </td></tr>
+    <tr><td class="paramname">T</td><td>The data type of the dataset. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">hdf5DataSetPath</td><td>path to the dataset </td></tr>
-    <tr><td class="paramname">dataSpace</td><td>the data space to specify the dimensions of the dataset </td></tr>
+    <tr><td class="paramname">dataset_path</td><td>The path to the dataset. </td></tr>
+    <tr><td class="paramname">dataspace</td><td>The data space of the dataset. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>std::shared_ptr&lt;HighFive::DataSet&gt; shared pointer to the data set </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>std::shared_ptr&lt;HighFive::DataSet&gt; A shared pointer to the HighFive dataset object. </dd></dl>
 
 </div>
 </div>
-<a id="a76c4b7763e39e7f16ccb0b5ed4cbe61f" name="a76c4b7763e39e7f16ccb0b5ed4cbe61f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a76c4b7763e39e7f16ccb0b5ed4cbe61f">&#9670;&nbsp;</a></span>getHdf5DataSet() <span class="overload">[3/3]</span></h2>
+<a id="a8cc1f182e59b6db5c367835d2eb26cb0" name="a8cc1f182e59b6db5c367835d2eb26cb0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8cc1f182e59b6db5c367835d2eb26cb0">&#9670;&nbsp;</a></span>getHdf5DataSet() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -505,19 +498,19 @@ template&lt;class T &gt; </div>
           <td class="memname">std::shared_ptr&lt; HighFive::DataSet &gt; seerep_hdf5_core::Hdf5CoreGeneral::getHdf5DataSet </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>hdf5DataSetPath</em>, </td>
+          <td class="paramname"><em>dataset_path</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">HighFive::DataSpace &amp;&#160;</td>
-          <td class="paramname"><em>dataSpace</em>, </td>
+          <td class="paramtype">const HighFive::DataSpace &amp;&#160;</td>
+          <td class="paramname"><em>dataspace</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">HighFive::DataSetCreateProps &amp;&#160;</td>
-          <td class="paramname"><em>createProps</em>&#160;</td>
+          <td class="paramtype">const HighFive::DataSetCreateProps &amp;&#160;</td>
+          <td class="paramname"><em>properties</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -527,27 +520,28 @@ template&lt;class T &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Get a shared pointer to a hdf5 data set specified by the hdf5DataSetPath. </p>
+<p>Get a shared pointer to a HighFive::Dataset object for the given path, dataspace, and properties. </p>
+<p >A new dataset will be created if it does not already exist.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">T</td><td>type of the dataset </td></tr>
+    <tr><td class="paramname">T</td><td>The datatype of the dataset. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">hdf5DataSetPath</td><td>path to the dataset </td></tr>
-    <tr><td class="paramname">dataSpace</td><td>the data space to specify the dimensions of the dataset </td></tr>
-    <tr><td class="paramname">createProps</td><td>properties for creation of the dataset </td></tr>
+    <tr><td class="paramname">dataset_path</td><td>The path to the dataset. </td></tr>
+    <tr><td class="paramname">dataspace</td><td>The dataspace of the dataset. </td></tr>
+    <tr><td class="paramname">properties</td><td>The properties of the dataset. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>std::shared_ptr&lt;HighFive::DataSet&gt; shared pointer to the data set </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>std::shared_ptr&lt;HighFive::DataSet&gt; A shared pointer to the HDF5 dataset. </dd></dl>
 
 </div>
 </div>
-<a id="a1fdca1935287c8ebeeeeb49b6b15e36a" name="a1fdca1935287c8ebeeeeb49b6b15e36a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1fdca1935287c8ebeeeeb49b6b15e36a">&#9670;&nbsp;</a></span>getHdf5Group()</h2>
+<a id="a2c28f39990f1c6ff1539d0120b4e09f8" name="a2c28f39990f1c6ff1539d0120b4e09f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c28f39990f1c6ff1539d0120b4e09f8">&#9670;&nbsp;</a></span>getHdf5Group()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -556,7 +550,7 @@ template&lt;class T &gt; </div>
           <td class="memname">std::shared_ptr&lt; HighFive::Group &gt; seerep_hdf5_core::Hdf5CoreGeneral::getHdf5Group </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>hdf5GroupPath</em>, </td>
+          <td class="paramname"><em>group_path</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -572,15 +566,15 @@ template&lt;class T &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Get a shared pointer to a hdf5 group. </p>
+<p>Returns a shared pointer to an HDF5 group object. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">hdf5GroupPath</td><td>path to the data group </td></tr>
-    <tr><td class="paramname">create</td><td>create a new group if the group path can't be found? </td></tr>
+    <tr><td class="paramname">group_path</td><td>The path to the HDF5 group. </td></tr>
+    <tr><td class="paramname">create</td><td>If true, the group will be created if it does not already exist. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>std::shared_ptr&lt;HighFive::Group&gt; shared pointer to the group </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>std::shared_ptr&lt;HighFive::Group&gt; A shared pointer to the HDF5 group object. Nullptr if the group does not exist and create is false. </dd></dl>
 
 </div>
 </div>
@@ -691,8 +685,8 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a id="aa601e5706c24be57a0fb5a4bd4d4b0d4" name="aa601e5706c24be57a0fb5a4bd4d4b0d4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa601e5706c24be57a0fb5a4bd4d4b0d4">&#9670;&nbsp;</a></span>readAttributeFromHdf5()</h2>
+<a id="a5e9720ccbcf71fb814fa02a9022d57a9" name="a5e9720ccbcf71fb814fa02a9022d57a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e9720ccbcf71fb814fa02a9022d57a9">&#9670;&nbsp;</a></span>readAttributeFromHdf5()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -702,20 +696,20 @@ template&lt;typename T , class C &gt; </div>
         <tr>
           <td class="memname">T seerep_hdf5_core::Hdf5CoreGeneral::readAttributeFromHdf5 </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>id</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">const HighFive::AnnotateTraits&lt; C &gt; &amp;&#160;</td>
           <td class="paramname"><em>object</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>attributeField</em>&#160;</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>attribute_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>path</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -724,6 +718,24 @@ template&lt;typename T , class C &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Reads an attribute from an HDF5 object. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>The type of the attribute to read. </td></tr>
+    <tr><td class="paramname">C</td><td>The type of the HDF5 object to read from. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">object</td><td>The HDF5 object to read from. </td></tr>
+    <tr><td class="paramname">attribute_name</td><td>The name of the attribute to read. </td></tr>
+    <tr><td class="paramname">path</td><td>The path to the HDF5 object, only used for logging. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>T The value of the attribute. </dd></dl>
 
 </div>
 </div>
@@ -877,23 +889,31 @@ template&lt;typename T , class C &gt; </div>
 
 </div>
 </div>
-<a id="ad225da986fa50a2f8623af6210580337" name="ad225da986fa50a2f8623af6210580337"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad225da986fa50a2f8623af6210580337">&#9670;&nbsp;</a></span>readFrameId()</h2>
+<a id="a21312ad346cb75848bb34bacf4618514" name="a21312ad346cb75848bb34bacf4618514"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21312ad346cb75848bb34bacf4618514">&#9670;&nbsp;</a></span>readFrameId()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;class C &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">std::optional&lt; std::string &gt; seerep_hdf5_core::Hdf5CoreGeneral::readFrameId </td>
+          <td class="memname">std::string seerep_hdf5_core::Hdf5CoreGeneral::readFrameId </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>datatypeGroup</em>, </td>
+          <td class="paramtype">const HighFive::AnnotateTraits&lt; C &gt; &amp;&#160;</td>
+          <td class="paramname"><em>object</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>uuid</em>&#160;</td>
+          <td class="paramname"><em>frame_field</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>path</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -902,6 +922,23 @@ template&lt;typename T , class C &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Reads a tf2 compliant frame ID from an HDF5 object. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">C</td><td>The type of the HDF5 object to read from. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">object</td><td>The HDF5 object to read from. </td></tr>
+    <tr><td class="paramname">frame_field</td><td>The name of HDF5 attribute to read the frame ID from. </td></tr>
+    <tr><td class="paramname">id</td><td>The path to the HDF5 object, only used for logging. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The frame ID as a string. </dd></dl>
 
 </div>
 </div>
@@ -920,8 +957,9 @@ template&lt;typename T , class C &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Read Geodetic location of the project from its HDF5 file. </p>
-<dl class="section return"><dt>Returns</dt><dd>std::optional&lt;seerep_core_msgs::GeodeticCoordinates&gt; Optional return of Geodetic Coordinates </dd></dl>
+<p>Reads a geodetic coodrinate from HDF5 file. </p>
+<p >Note: The data is expected to be stored in the root group of the HDF5 file.</p>
+<dl class="section return"><dt>Returns</dt><dd>std::optional&lt;seerep_core_msgs::GeodeticCoordinates&gt; Geodetic coordinate if available, empty optional otherwise. </dd></dl>
 
 </div>
 </div>
@@ -1238,6 +1276,33 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
+<a id="a0ac30236bca2bd3a267a740523b2d58f" name="a0ac30236bca2bd3a267a740523b2d58f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ac30236bca2bd3a267a740523b2d58f">&#9670;&nbsp;</a></span>tf2_frame_id()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::string seerep_hdf5_core::Hdf5CoreGeneral::tf2_frame_id </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>frame_id</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a tf2 compliant frame ID. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">frame_id</td><td>The frame ID to check. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The corresponding tf2 frame ID. </dd></dl>
+
+</div>
+</div>
 <a id="a6769c4141bd58c1e6be1b3630505cbc1" name="a6769c4141bd58c1e6be1b3630505cbc1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6769c4141bd58c1e6be1b3630505cbc1">&#9670;&nbsp;</a></span>writeAABB()</h2>
 
@@ -1272,8 +1337,8 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a id="aa8d464d51d117baaa44595baed649265" name="aa8d464d51d117baaa44595baed649265"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa8d464d51d117baaa44595baed649265">&#9670;&nbsp;</a></span>writeAttributeToHdf5()</h2>
+<a id="abd4899ad7f437d91a88bf153902b6c8c" name="abd4899ad7f437d91a88bf153902b6c8c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd4899ad7f437d91a88bf153902b6c8c">&#9670;&nbsp;</a></span>writeAttributeToHdf5()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1289,14 +1354,14 @@ template&lt;typename T , class C &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>attributeField</em>, </td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>attribute_name</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">T&#160;</td>
-          <td class="paramname"><em>attributeValue</em>&#160;</td>
+          <td class="paramname"><em>attribute_val</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1306,10 +1371,79 @@ template&lt;typename T , class C &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Writes an attribute to an HDF5 object. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>The type of the attribute to write. </td></tr>
+    <tr><td class="paramname">C</td><td>The type of the HDF5 object. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">object</td><td>The HDF5 object to write the attribute to. </td></tr>
+    <tr><td class="paramname">attribute_name</td><td>The name of the attribute. </td></tr>
+    <tr><td class="paramname">attribute_val</td><td>The value of the attribute. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
-<a id="a0f2396463dae495454465aa807e81fb4" name="a0f2396463dae495454465aa807e81fb4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0f2396463dae495454465aa807e81fb4">&#9670;&nbsp;</a></span>writeGeodeticLocation()</h2>
+<a id="ad00b74ac1bd5e201fabdd04e4af6c774" name="ad00b74ac1bd5e201fabdd04e4af6c774"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad00b74ac1bd5e201fabdd04e4af6c774">&#9670;&nbsp;</a></span>writeFrameId()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class C &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_hdf5_core::Hdf5CoreGeneral::writeFrameId </td>
+          <td>(</td>
+          <td class="paramtype">HighFive::AnnotateTraits&lt; C &gt; &amp;&#160;</td>
+          <td class="paramname"><em>object</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>frame_field</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>frame_id</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Writes a tf2 compliant frame ID to an HDF5 object. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">C</td><td>The type of the HDF5 object to write to. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">object</td><td>The HDF5 object to write to. </td></tr>
+    <tr><td class="paramname">frame_field</td><td>The name of the HDF5 attribute to write the frame ID to. </td></tr>
+    <tr><td class="paramname">frame_id</td><td>The frame ID to write. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a764d64b6efaa310897b0ed6c1cf1c166" name="a764d64b6efaa310897b0ed6c1cf1c166"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a764d64b6efaa310897b0ed6c1cf1c166">&#9670;&nbsp;</a></span>writeGeodeticLocation()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1317,17 +1451,18 @@ template&lt;typename T , class C &gt; </div>
         <tr>
           <td class="memname">void seerep_hdf5_core::Hdf5CoreGeneral::writeGeodeticLocation </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="structseerep__core__msgs_1_1GeodeticCoordinates.html">seerep_core_msgs::GeodeticCoordinates</a>&#160;</td>
-          <td class="paramname"><em>geocoords</em></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="structseerep__core__msgs_1_1GeodeticCoordinates.html">seerep_core_msgs::GeodeticCoordinates</a> &amp;&#160;</td>
+          <td class="paramname"><em>geo_coordinates</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Writes Geodetic location of the project to its HDF5 file. </p>
+<p>Writes a geodetic coordinate to an HDF5 file. </p>
+<p >Note: The data is written to the root group of the HDF5 file, since the geo-reference applies to complete project.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">geocoords</td><td><a class="el" href="namespaceseerep__core__msgs.html">seerep_core_msgs</a> Geodetic Coordinates object. </td></tr>
+    <tr><td class="paramname">geo_coordinates</td><td>The geodetic coordinate to write to the file. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1945,7 +2080,7 @@ template&lt;class T &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

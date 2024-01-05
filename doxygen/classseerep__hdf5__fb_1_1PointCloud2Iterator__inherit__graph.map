@@ -1,4 +1,0 @@
-<map id="seerep_hdf5_fb::PointCloud2Iterator&lt; T &gt;" name="seerep_hdf5_fb::PointCloud2Iterator&lt; T &gt;">
-<area shape="rect" id="node1" title="Class that can iterate over a flatbuffers PointCloud2 (used for writing into the data field)" alt="" coords="332,20,540,61"/>
-<area shape="rect" id="node2" href="$classseerep__hdf5__fb_1_1impl_1_1PointCloud2IteratorBase.html" title=" " alt="" coords="5,5,284,76"/>
-</map>

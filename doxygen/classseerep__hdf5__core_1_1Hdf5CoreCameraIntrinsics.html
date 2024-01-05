@@ -128,7 +128,6 @@ $(document).ready(function(){initNavTree('classseerep__hdf5__core_1_1Hdf5CoreCam
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
-<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="classseerep__hdf5__core_1_1Hdf5CoreCameraIntrinsics-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">seerep_hdf5_core::Hdf5CoreCameraIntrinsics Class Reference</div></div>
 </div><!--header-->
@@ -158,9 +157,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a579b3f505fe5e53683b87f4f51cef5d6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreCameraIntrinsics.html#a579b3f505fe5e53683b87f4f51cef5d6">writeCameraIntrinsics</a> (const <a class="el" href="structseerep__core__msgs_1_1camera__intrinsics.html">seerep_core_msgs::camera_intrinsics</a> &amp;camIntrinsics)</td></tr>
 <tr class="memdesc:a579b3f505fe5e53683b87f4f51cef5d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write camera intrinics.  <a href="classseerep__hdf5__core_1_1Hdf5CoreCameraIntrinsics.html#a579b3f505fe5e53683b87f4f51cef5d6">More...</a><br /></td></tr>
 <tr class="separator:a579b3f505fe5e53683b87f4f51cef5d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad6fa52bd662a50b5b0a7856915fbfca6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreCameraIntrinsics.html#ad6fa52bd662a50b5b0a7856915fbfca6">checkCameraIntrinsicsExists</a> (const boost::uuids::uuid &amp;cameraintrinsics_uuid)</td></tr>
-<tr class="memdesc:ad6fa52bd662a50b5b0a7856915fbfca6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if there is an existing Camera Intrinsics against the provided UUID.  <a href="classseerep__hdf5__core_1_1Hdf5CoreCameraIntrinsics.html#ad6fa52bd662a50b5b0a7856915fbfca6">More...</a><br /></td></tr>
-<tr class="separator:ad6fa52bd662a50b5b0a7856915fbfca6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a951f0b330a6cb2979191cbe55d468da0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreCameraIntrinsics.html#a951f0b330a6cb2979191cbe55d468da0">cameraIntrinsicExists</a> (const boost::uuids::uuid &amp;camera_intrinsic_uuid) const</td></tr>
+<tr class="memdesc:a951f0b330a6cb2979191cbe55d468da0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if there is an existing Camera Intrinsics against the provided UUID.  <a href="classseerep__hdf5__core_1_1Hdf5CoreCameraIntrinsics.html#a951f0b330a6cb2979191cbe55d468da0">More...</a><br /></td></tr>
+<tr class="separator:a951f0b330a6cb2979191cbe55d468da0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae885fae39769cd31ad09c0e5e5863c8e"><td class="memItemLeft" align="right" valign="top">const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreCameraIntrinsics.html#ae885fae39769cd31ad09c0e5e5863c8e">cameraIntrinsicPath</a> (const std::string &amp;camera_intrinsic_uuid) const</td></tr>
+<tr class="memdesc:ae885fae39769cd31ad09c0e5e5863c8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the HDF5 group path for a given camera intrinsics UUID.  <a href="classseerep__hdf5__core_1_1Hdf5CoreCameraIntrinsics.html#ae885fae39769cd31ad09c0e5e5863c8e">More...</a><br /></td></tr>
+<tr class="separator:ae885fae39769cd31ad09c0e5e5863c8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html">seerep_hdf5_core::Hdf5CoreGeneral</a></td></tr>
 <tr class="memitem:a8742137ed1324de30bb6e106a9efafd5 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a8742137ed1324de30bb6e106a9efafd5">Hdf5CoreGeneral</a> (std::shared_ptr&lt; HighFive::File &gt; &amp;file, std::shared_ptr&lt; std::mutex &gt; &amp;write_mtx)</td></tr>
 <tr class="separator:a8742137ed1324de30bb6e106a9efafd5 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -169,19 +171,28 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad5f8af237fb6503d872b1fa6400d5596 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ad5f8af237fb6503d872b1fa6400d5596">checkExists</a> (const std::string &amp;id)</td></tr>
 <tr class="memdesc:ad5f8af237fb6503d872b1fa6400d5596 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a DataSet or DataGroup exists in the file.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ad5f8af237fb6503d872b1fa6400d5596">More...</a><br /></td></tr>
 <tr class="separator:ad5f8af237fb6503d872b1fa6400d5596 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ecb220e45ab2dddf4540f952fa586ae inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a6ecb220e45ab2dddf4540f952fa586ae">exists</a> (const std::string &amp;id)</td></tr>
-<tr class="memdesc:a6ecb220e45ab2dddf4540f952fa586ae inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a DataSet or DataGroup exists in the file.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a6ecb220e45ab2dddf4540f952fa586ae">More...</a><br /></td></tr>
-<tr class="separator:a6ecb220e45ab2dddf4540f952fa586ae inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad225da986fa50a2f8623af6210580337 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ad225da986fa50a2f8623af6210580337">readFrameId</a> (const std::string &amp;datatypeGroup, const std::string &amp;uuid)</td></tr>
-<tr class="separator:ad225da986fa50a2f8623af6210580337 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa601e5706c24be57a0fb5a4bd4d4b0d4 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplParams" colspan="2">template&lt;typename T , class C &gt; </td></tr>
-<tr class="memitem:aa601e5706c24be57a0fb5a4bd4d4b0d4 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#aa601e5706c24be57a0fb5a4bd4d4b0d4">readAttributeFromHdf5</a> (const std::string &amp;id, const HighFive::AnnotateTraits&lt; C &gt; &amp;object, std::string attributeField)</td></tr>
-<tr class="separator:aa601e5706c24be57a0fb5a4bd4d4b0d4 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa8d464d51d117baaa44595baed649265 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplParams" colspan="2">template&lt;typename T , class C &gt; </td></tr>
-<tr class="memitem:aa8d464d51d117baaa44595baed649265 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#aa8d464d51d117baaa44595baed649265">writeAttributeToHdf5</a> (HighFive::AnnotateTraits&lt; C &gt; &amp;object, std::string attributeField, T attributeValue)</td></tr>
-<tr class="separator:aa8d464d51d117baaa44595baed649265 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f819558f71f25dd29ed3d962be6224c inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a1f819558f71f25dd29ed3d962be6224c">deleteAttribute</a> (const std::shared_ptr&lt; HighFive::DataSet &gt; dataSetPtr, std::string attributeField)</td></tr>
-<tr class="separator:a1f819558f71f25dd29ed3d962be6224c inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a056fb60322168490a950d706c6d8929a inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a056fb60322168490a950d706c6d8929a">exists</a> (const std::string &amp;path) const</td></tr>
+<tr class="memdesc:a056fb60322168490a950d706c6d8929a inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a HDF5 path exists in the file.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a056fb60322168490a950d706c6d8929a">More...</a><br /></td></tr>
+<tr class="separator:a056fb60322168490a950d706c6d8929a inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e9720ccbcf71fb814fa02a9022d57a9 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplParams" colspan="2">template&lt;typename T , class C &gt; </td></tr>
+<tr class="memitem:a5e9720ccbcf71fb814fa02a9022d57a9 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a5e9720ccbcf71fb814fa02a9022d57a9">readAttributeFromHdf5</a> (const HighFive::AnnotateTraits&lt; C &gt; &amp;object, const std::string &amp;attribute_name, const std::string &amp;path)</td></tr>
+<tr class="memdesc:a5e9720ccbcf71fb814fa02a9022d57a9 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads an attribute from an HDF5 object.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a5e9720ccbcf71fb814fa02a9022d57a9">More...</a><br /></td></tr>
+<tr class="separator:a5e9720ccbcf71fb814fa02a9022d57a9 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd4899ad7f437d91a88bf153902b6c8c inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplParams" colspan="2">template&lt;typename T , class C &gt; </td></tr>
+<tr class="memitem:abd4899ad7f437d91a88bf153902b6c8c inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#abd4899ad7f437d91a88bf153902b6c8c">writeAttributeToHdf5</a> (HighFive::AnnotateTraits&lt; C &gt; &amp;object, const std::string &amp;attribute_name, T attribute_val)</td></tr>
+<tr class="memdesc:abd4899ad7f437d91a88bf153902b6c8c inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes an attribute to an HDF5 object.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#abd4899ad7f437d91a88bf153902b6c8c">More...</a><br /></td></tr>
+<tr class="separator:abd4899ad7f437d91a88bf153902b6c8c inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ac30236bca2bd3a267a740523b2d58f inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a0ac30236bca2bd3a267a740523b2d58f">tf2_frame_id</a> (const std::string &amp;frame_id) const</td></tr>
+<tr class="memdesc:a0ac30236bca2bd3a267a740523b2d58f inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a tf2 compliant frame ID.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a0ac30236bca2bd3a267a740523b2d58f">More...</a><br /></td></tr>
+<tr class="separator:a0ac30236bca2bd3a267a740523b2d58f inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21312ad346cb75848bb34bacf4618514 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplParams" colspan="2">template&lt;class C &gt; </td></tr>
+<tr class="memitem:a21312ad346cb75848bb34bacf4618514 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a21312ad346cb75848bb34bacf4618514">readFrameId</a> (const HighFive::AnnotateTraits&lt; C &gt; &amp;object, const std::string &amp;frame_field, const std::string &amp;path)</td></tr>
+<tr class="memdesc:a21312ad346cb75848bb34bacf4618514 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads a tf2 compliant frame ID from an HDF5 object.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a21312ad346cb75848bb34bacf4618514">More...</a><br /></td></tr>
+<tr class="separator:a21312ad346cb75848bb34bacf4618514 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad00b74ac1bd5e201fabdd04e4af6c774 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplParams" colspan="2">template&lt;class C &gt; </td></tr>
+<tr class="memitem:ad00b74ac1bd5e201fabdd04e4af6c774 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ad00b74ac1bd5e201fabdd04e4af6c774">writeFrameId</a> (HighFive::AnnotateTraits&lt; C &gt; &amp;object, const std::string &amp;frame_field, const std::string &amp;frame_id)</td></tr>
+<tr class="memdesc:ad00b74ac1bd5e201fabdd04e4af6c774 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a tf2 compliant frame ID to an HDF5 object.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ad00b74ac1bd5e201fabdd04e4af6c774">More...</a><br /></td></tr>
+<tr class="separator:ad00b74ac1bd5e201fabdd04e4af6c774 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6769c4141bd58c1e6be1b3630505cbc1 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a6769c4141bd58c1e6be1b3630505cbc1">writeAABB</a> (const std::string &amp;datatypeGroup, const std::string &amp;uuid, const boost::geometry::model::box&lt; boost::geometry::model::point&lt; float, 3, boost::geometry::cs::cartesian &gt; &gt; &amp;aabb)</td></tr>
 <tr class="separator:a6769c4141bd58c1e6be1b3630505cbc1 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae0946dec4040af5f37c7268087c9ba98 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ae0946dec4040af5f37c7268087c9ba98">readAABB</a> (const std::string &amp;datatypeGroup, const std::string &amp;uuid, boost::geometry::model::box&lt; boost::geometry::model::point&lt; float, 3, boost::geometry::cs::cartesian &gt; &gt; &amp;aabb)</td></tr>
@@ -220,25 +231,26 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a4f732761cdfd2ee56d10f17bc98ae816 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe6c14fa18cec374f7c3b03a25157408 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">const std::optional&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#afe6c14fa18cec374f7c3b03a25157408">readVersion</a> ()</td></tr>
 <tr class="separator:afe6c14fa18cec374f7c3b03a25157408 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0f2396463dae495454465aa807e81fb4 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a0f2396463dae495454465aa807e81fb4">writeGeodeticLocation</a> (const <a class="el" href="structseerep__core__msgs_1_1GeodeticCoordinates.html">seerep_core_msgs::GeodeticCoordinates</a> geocoords)</td></tr>
-<tr class="memdesc:a0f2396463dae495454465aa807e81fb4 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes Geodetic location of the project to its HDF5 file.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a0f2396463dae495454465aa807e81fb4">More...</a><br /></td></tr>
-<tr class="separator:a0f2396463dae495454465aa807e81fb4 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a764d64b6efaa310897b0ed6c1cf1c166 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a764d64b6efaa310897b0ed6c1cf1c166">writeGeodeticLocation</a> (const <a class="el" href="structseerep__core__msgs_1_1GeodeticCoordinates.html">seerep_core_msgs::GeodeticCoordinates</a> &amp;geo_coordinates)</td></tr>
+<tr class="memdesc:a764d64b6efaa310897b0ed6c1cf1c166 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a geodetic coordinate to an HDF5 file.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a764d64b6efaa310897b0ed6c1cf1c166">More...</a><br /></td></tr>
+<tr class="separator:a764d64b6efaa310897b0ed6c1cf1c166 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ea09f7fe01d7f8a43965d5892a45cf1 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="structseerep__core__msgs_1_1GeodeticCoordinates.html">seerep_core_msgs::GeodeticCoordinates</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a7ea09f7fe01d7f8a43965d5892a45cf1">readGeodeticLocation</a> ()</td></tr>
-<tr class="memdesc:a7ea09f7fe01d7f8a43965d5892a45cf1 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read Geodetic location of the project from its HDF5 file.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a7ea09f7fe01d7f8a43965d5892a45cf1">More...</a><br /></td></tr>
+<tr class="memdesc:a7ea09f7fe01d7f8a43965d5892a45cf1 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads a geodetic coodrinate from HDF5 file.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a7ea09f7fe01d7f8a43965d5892a45cf1">More...</a><br /></td></tr>
 <tr class="separator:a7ea09f7fe01d7f8a43965d5892a45cf1 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1fdca1935287c8ebeeeeb49b6b15e36a inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; HighFive::Group &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a1fdca1935287c8ebeeeeb49b6b15e36a">getHdf5Group</a> (const std::string &amp;hdf5GroupPath, bool create=true)</td></tr>
-<tr class="memdesc:a1fdca1935287c8ebeeeeb49b6b15e36a inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a shared pointer to a hdf5 group.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a1fdca1935287c8ebeeeeb49b6b15e36a">More...</a><br /></td></tr>
-<tr class="separator:a1fdca1935287c8ebeeeeb49b6b15e36a inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3740ad93ae05cacb1474d6f690fe3234 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:a3740ad93ae05cacb1474d6f690fe3234 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; HighFive::DataSet &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a3740ad93ae05cacb1474d6f690fe3234">getHdf5DataSet</a> (const std::string &amp;hdf5DataSetPath, HighFive::DataSpace &amp;dataSpace)</td></tr>
-<tr class="memdesc:a3740ad93ae05cacb1474d6f690fe3234 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a shared pointer to a hdf5 data set specified by the hdf5DataSetPath.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a3740ad93ae05cacb1474d6f690fe3234">More...</a><br /></td></tr>
-<tr class="separator:a3740ad93ae05cacb1474d6f690fe3234 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a76c4b7763e39e7f16ccb0b5ed4cbe61f inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:a76c4b7763e39e7f16ccb0b5ed4cbe61f inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; HighFive::DataSet &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a76c4b7763e39e7f16ccb0b5ed4cbe61f">getHdf5DataSet</a> (const std::string &amp;hdf5DataSetPath, HighFive::DataSpace &amp;dataSpace, HighFive::DataSetCreateProps &amp;createProps)</td></tr>
-<tr class="memdesc:a76c4b7763e39e7f16ccb0b5ed4cbe61f inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a shared pointer to a hdf5 data set specified by the hdf5DataSetPath.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a76c4b7763e39e7f16ccb0b5ed4cbe61f">More...</a><br /></td></tr>
-<tr class="separator:a76c4b7763e39e7f16ccb0b5ed4cbe61f inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4071999cc97b4db0c7d23036391ad8c4 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; HighFive::DataSet &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a4071999cc97b4db0c7d23036391ad8c4">getHdf5DataSet</a> (const std::string &amp;hdf5DataSetPath)</td></tr>
-<tr class="separator:a4071999cc97b4db0c7d23036391ad8c4 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c28f39990f1c6ff1539d0120b4e09f8 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; HighFive::Group &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a2c28f39990f1c6ff1539d0120b4e09f8">getHdf5Group</a> (const std::string &amp;group_path, bool create=true)</td></tr>
+<tr class="memdesc:a2c28f39990f1c6ff1539d0120b4e09f8 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a shared pointer to an HDF5 group object.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a2c28f39990f1c6ff1539d0120b4e09f8">More...</a><br /></td></tr>
+<tr class="separator:a2c28f39990f1c6ff1539d0120b4e09f8 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad7f16010d2a7be5bca4b8c5536b6f91 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; HighFive::DataSet &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#aad7f16010d2a7be5bca4b8c5536b6f91">getHdf5DataSet</a> (const std::string &amp;dataset_path)</td></tr>
+<tr class="memdesc:aad7f16010d2a7be5bca4b8c5536b6f91 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a shared pointer to a HighFive::DataSet object for the given dataset path.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#aad7f16010d2a7be5bca4b8c5536b6f91">More...</a><br /></td></tr>
+<tr class="separator:aad7f16010d2a7be5bca4b8c5536b6f91 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d4d3349e03a04b14d3a757ea6dccc69 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:a1d4d3349e03a04b14d3a757ea6dccc69 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; HighFive::DataSet &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a1d4d3349e03a04b14d3a757ea6dccc69">getHdf5DataSet</a> (const std::string &amp;dataset_path, const HighFive::DataSpace &amp;dataspace)</td></tr>
+<tr class="memdesc:a1d4d3349e03a04b14d3a757ea6dccc69 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a shared pointer to a HighFive::DataSet object for the given dataset path and data space.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a1d4d3349e03a04b14d3a757ea6dccc69">More...</a><br /></td></tr>
+<tr class="separator:a1d4d3349e03a04b14d3a757ea6dccc69 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8cc1f182e59b6db5c367835d2eb26cb0 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:a8cc1f182e59b6db5c367835d2eb26cb0 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; HighFive::DataSet &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a8cc1f182e59b6db5c367835d2eb26cb0">getHdf5DataSet</a> (const std::string &amp;dataset_path, const HighFive::DataSpace &amp;dataspace, const HighFive::DataSetCreateProps &amp;properties)</td></tr>
+<tr class="memdesc:a8cc1f182e59b6db5c367835d2eb26cb0 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a shared pointer to a HighFive::Dataset object for the given path, dataspace, and properties.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a8cc1f182e59b6db5c367835d2eb26cb0">More...</a><br /></td></tr>
+<tr class="separator:a8cc1f182e59b6db5c367835d2eb26cb0 inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a42693904c30f04f744e095ab21e1b07b inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a42693904c30f04f744e095ab21e1b07b">getLabelCategories</a> (std::string id, std::string labelType, std::vector&lt; std::string &gt; &amp;matchingLabelCategory)</td></tr>
 <tr class="memdesc:a42693904c30f04f744e095ab21e1b07b inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="mdescLeft">&#160;</td><td class="mdescRight">get the labels of a group/dataset matching the general prefix (label type) and return the labels matching the specified type. Also extract the category from the postfix  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a42693904c30f04f744e095ab21e1b07b">More...</a><br /></td></tr>
 <tr class="separator:a42693904c30f04f744e095ab21e1b07b inherit pub_methods_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -247,8 +259,6 @@ Public Member Functions</h2></td></tr>
 Static Public Attributes</h2></td></tr>
 <tr class="memitem:ac7f5674e82676e6e24074ffab22c2aa2"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreCameraIntrinsics.html#ac7f5674e82676e6e24074ffab22c2aa2">HDF5_GROUP_CAMINTRINSICS</a> = &quot;cameraintrinsics&quot;</td></tr>
 <tr class="separator:ac7f5674e82676e6e24074ffab22c2aa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6251e73a22cf6810af263ba99ae711a8"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreCameraIntrinsics.html#a6251e73a22cf6810af263ba99ae711a8">SIZE</a> = &quot;size&quot;</td></tr>
-<tr class="separator:a6251e73a22cf6810af263ba99ae711a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4030f9ea56d5493a3394536336a0b6a4"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreCameraIntrinsics.html#a4030f9ea56d5493a3394536336a0b6a4">HEIGHT</a> = &quot;height&quot;</td></tr>
 <tr class="separator:a4030f9ea56d5493a3394536336a0b6a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ea43ad7b5c24a93e58b4c33090786b9"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreCameraIntrinsics.html#a3ea43ad7b5c24a93e58b4c33090786b9">WIDTH</a> = &quot;width&quot;</td></tr>
@@ -331,15 +341,6 @@ Static Public Attributes</h2></td></tr>
 <tr class="memitem:ae7dea947feb1b7d8b330d9689fb04e51 inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ae7dea947feb1b7d8b330d9689fb04e51">POINTS</a> = &quot;points&quot;</td></tr>
 <tr class="separator:ae7dea947feb1b7d8b330d9689fb04e51 inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
-Private Member Functions</h2></td></tr>
-<tr class="memitem:a98a81be2b1c082168727a13bd07bb4b8"><td class="memItemLeft" align="right" valign="top">const std::shared_ptr&lt; HighFive::DataSet &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreCameraIntrinsics.html#a98a81be2b1c082168727a13bd07bb4b8">generateDatasetPointer</a> (const std::string &amp;attribute)</td></tr>
-<tr class="separator:a98a81be2b1c082168727a13bd07bb4b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aede3178cff991fa85b0a87ba9babb3cf"><td class="memItemLeft" align="right" valign="top">const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreCameraIntrinsics.html#aede3178cff991fa85b0a87ba9babb3cf">getHdf5GroupPath</a> (const std::string &amp;id) const</td></tr>
-<tr class="separator:aede3178cff991fa85b0a87ba9babb3cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0f1695059e9309ed6da7dbad2e9c3390"><td class="memItemLeft" align="right" valign="top">const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreCameraIntrinsics.html#a0f1695059e9309ed6da7dbad2e9c3390">getHdf5DataSetPath</a> (const std::string &amp;id) const</td></tr>
-<tr class="separator:a0f1695059e9309ed6da7dbad2e9c3390"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pro_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html">seerep_hdf5_core::Hdf5CoreGeneral</a></td></tr>
@@ -380,18 +381,18 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ad6fa52bd662a50b5b0a7856915fbfca6" name="ad6fa52bd662a50b5b0a7856915fbfca6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad6fa52bd662a50b5b0a7856915fbfca6">&#9670;&nbsp;</a></span>checkCameraIntrinsicsExists()</h2>
+<a id="a951f0b330a6cb2979191cbe55d468da0" name="a951f0b330a6cb2979191cbe55d468da0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a951f0b330a6cb2979191cbe55d468da0">&#9670;&nbsp;</a></span>cameraIntrinsicExists()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool seerep_hdf5_core::Hdf5CoreCameraIntrinsics::checkCameraIntrinsicsExists </td>
+          <td class="memname">bool seerep_hdf5_core::Hdf5CoreCameraIntrinsics::cameraIntrinsicExists </td>
           <td>(</td>
           <td class="paramtype">const boost::uuids::uuid &amp;&#160;</td>
-          <td class="paramname"><em>cameraintrinsics_uuid</em></td><td>)</td>
-          <td></td>
+          <td class="paramname"><em>camera_intrinsic_uuid</em></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -409,81 +410,30 @@ false If camera intrinsics do not exist </dd></dl>
 
 </div>
 </div>
-<a id="a98a81be2b1c082168727a13bd07bb4b8" name="a98a81be2b1c082168727a13bd07bb4b8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a98a81be2b1c082168727a13bd07bb4b8">&#9670;&nbsp;</a></span>generateDatasetPointer()</h2>
+<a id="ae885fae39769cd31ad09c0e5e5863c8e" name="ae885fae39769cd31ad09c0e5e5863c8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae885fae39769cd31ad09c0e5e5863c8e">&#9670;&nbsp;</a></span>cameraIntrinsicPath()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const std::shared_ptr&lt; HighFive::DataSet &gt; seerep_hdf5_core::Hdf5CoreCameraIntrinsics::generateDatasetPointer </td>
+          <td class="memname">const std::string seerep_hdf5_core::Hdf5CoreCameraIntrinsics::cameraIntrinsicPath </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>attribute</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a0f1695059e9309ed6da7dbad2e9c3390" name="a0f1695059e9309ed6da7dbad2e9c3390"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0f1695059e9309ed6da7dbad2e9c3390">&#9670;&nbsp;</a></span>getHdf5DataSetPath()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const std::string seerep_hdf5_core::Hdf5CoreCameraIntrinsics::getHdf5DataSetPath </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>id</em></td><td>)</td>
+          <td class="paramname"><em>camera_intrinsic_uuid</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-</div>
-</div>
-<a id="aede3178cff991fa85b0a87ba9babb3cf" name="aede3178cff991fa85b0a87ba9babb3cf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aede3178cff991fa85b0a87ba9babb3cf">&#9670;&nbsp;</a></span>getHdf5GroupPath()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const std::string seerep_hdf5_core::Hdf5CoreCameraIntrinsics::getHdf5GroupPath </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>id</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
+<p>Returns the HDF5 group path for a given camera intrinsics UUID. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">uuid</td><td>The UUID string of a camera intrinsic. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The HDF5 group path. </dd></dl>
 
 </div>
 </div>
@@ -860,28 +810,6 @@ false If camera intrinsics do not exist </dd></dl>
       <table class="memname">
         <tr>
           <td class="memname">const std::string seerep_hdf5_core::Hdf5CoreCameraIntrinsics::REGION_OF_INTEREST_Y_OFFSET = &quot;region_of_interest/y_offset&quot;</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a6251e73a22cf6810af263ba99ae711a8" name="a6251e73a22cf6810af263ba99ae711a8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6251e73a22cf6810af263ba99ae711a8">&#9670;&nbsp;</a></span>SIZE</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const std::string seerep_hdf5_core::Hdf5CoreCameraIntrinsics::SIZE = &quot;size&quot;</td>
         </tr>
       </table>
   </td>

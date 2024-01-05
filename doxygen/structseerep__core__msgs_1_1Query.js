@@ -8,8 +8,11 @@ var structseerep__core__msgs_1_1Query =
     [ "label", "structseerep__core__msgs_1_1Query.html#a471853abd5af820081ba91fa0c5ffbed", null ],
     [ "maxNumData", "structseerep__core__msgs_1_1Query.html#a0063e14ab767a07a2b226b09454bb485", null ],
     [ "mustHaveAllLabels", "structseerep__core__msgs_1_1Query.html#a4c62cd55e1de65f16916febb6ab6972c", null ],
+    [ "ontologyURI", "structseerep__core__msgs_1_1Query.html#a6d0ec208e1655113db286822bb8f6da8", null ],
     [ "polygon", "structseerep__core__msgs_1_1Query.html#a1744153b850c20031f9d17c277523f17", null ],
     [ "projects", "structseerep__core__msgs_1_1Query.html#a073b640df62a295d6c1ac75d456ab75b", null ],
+    [ "sortByTime", "structseerep__core__msgs_1_1Query.html#a82c2bba2f609aeb1b5c08788a9b8ae98", null ],
+    [ "sparqlQuery", "structseerep__core__msgs_1_1Query.html#ab2b815ed82001ac55ec98f20a50fea7a", null ],
     [ "timeinterval", "structseerep__core__msgs_1_1Query.html#a907cc1417881bbbcc31414888137f73d", null ],
     [ "withoutData", "structseerep__core__msgs_1_1Query.html#abede7918c18453c663ba69e461250410", null ]
 ];

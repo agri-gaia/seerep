@@ -14,6 +14,7 @@ var namespaceseerep__core__msgs =
     [ "QueryResultProject", "structseerep__core__msgs_1_1QueryResultProject.html", "structseerep__core__msgs_1_1QueryResultProject" ],
     [ "QueryTf", "structseerep__core__msgs_1_1QueryTf.html", "structseerep__core__msgs_1_1QueryTf" ],
     [ "region_of_interest", "structseerep__core__msgs_1_1region__of__interest.html", "structseerep__core__msgs_1_1region__of__interest" ],
+    [ "SparqlQuery", "structseerep__core__msgs_1_1SparqlQuery.html", "structseerep__core__msgs_1_1SparqlQuery" ],
     [ "Timeinterval", "structseerep__core__msgs_1_1Timeinterval.html", "structseerep__core__msgs_1_1Timeinterval" ],
     [ "Timestamp", "structseerep__core__msgs_1_1Timestamp.html", "structseerep__core__msgs_1_1Timestamp" ],
     [ "AABB", "namespaceseerep__core__msgs.html#a51f23338981d650d0d2ffb8cb403adc0", null ],
