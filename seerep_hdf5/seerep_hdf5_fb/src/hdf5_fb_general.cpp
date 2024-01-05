@@ -49,8 +49,8 @@ void Hdf5FbGeneral::writeAttributeMap(
   }
 }
 
-void Hdf5FbGeneral::writeLabels(const std::string& datatypeGroup, const std::string& uuid,
-                                const LabelsCategoryFb* labelCategoryVectorFb)
+void Hdf5FbGeneral::writeLabelsFb(const std::string& datatypeGroup, const std::string& uuid,
+                                  const LabelsCategoryFb* labelCategoryVectorFb)
 {
   if (labelCategoryVectorFb && labelCategoryVectorFb->size() != 0)
   {

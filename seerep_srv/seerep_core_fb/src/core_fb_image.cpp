@@ -83,48 +83,50 @@ void CoreFbImage::buildIndices(const std::vector<std::pair<std::string, boost::u
   }
 }
 
-// void CoreFbImage::addBoundingBoxesLabeled(const seerep::fb::BoundingBoxes2DLabeledStamped& boundingBoxes2dlabeled)
-// {
-//   boost::uuids::string_generator gen;
-//   boost::uuids::uuid uuidMsg = gen(boundingBoxes2dlabeled.header()->uuid_msgs()->str());
-//   boost::uuids::uuid uuidProject = gen(boundingBoxes2dlabeled.header()->uuid_project()->str());
+void CoreFbImage::addLabel(const seerep::fb::DatasetUuidLabel& datasetUuidLabel)
+{
+  boost::uuids::string_generator gen;
+  boost::uuids::uuid uuidMsg = gen(datasetUuidLabel.datasetUuid()->str());
+  boost::uuids::uuid uuidProject = gen(datasetUuidLabel.projectUuid()->str());
 
-//   auto hdf5io = CoreFbGeneral::getHdf5(uuidProject, m_seerepCore, m_hdf5IoMap);
+  auto hdf5io = CoreFbGeneral::getHdf5(uuidProject, m_seerepCore, m_hdf5IoMap);
 
-//   hdf5io->writeImageBoundingBox2DLabeled(boost::lexical_cast<std::string>(uuidMsg), boundingBoxes2dlabeled.labels_bb());
+  hdf5io->writeLabelsFb(boost::lexical_cast<std::string>(uuidMsg), datasetUuidLabel.datasetUuid()->str(),
+                        datasetUuidLabel.labels());
 
-//   std::unordered_map<std::string, std::vector<seerep_core_msgs::LabelWithInstance>> labelWithInstancePerCategory;
-//   for (auto bbWithCategory : *boundingBoxes2dlabeled.labels_bb())
-//   {
-//     if (bbWithCategory->boundingBox2dLabeled())
-//     {
-//       std::vector<seerep_core_msgs::LabelWithInstance> labelsWithInstances;
-//       for (auto bb : *bbWithCategory->boundingBox2dLabeled())
-//       {
-//         seerep_core_msgs::LabelWithInstance labelWithInstance;
-//         labelWithInstance.label = bb->labelWithInstance()->label()->label()->str();
-//         labelWithInstance.labelConfidence = bb->labelWithInstance()->label()->confidence();
+  std::unordered_map<std::string, std::vector<seerep_core_msgs::Label>> labelPerCategory;
+  for (auto labelCategory : *datasetUuidLabel.labels())
+  {
+    if (labelCategory->labels())
+    {
+      std::vector<seerep_core_msgs::Label> labelVector;
+      for (auto labelFb : *labelCategory->labels())
+      {
+        seerep_core_msgs::Label label;
+        label.label = labelFb->label()->str();
+        label.labelIdDatumaro = labelFb->labelIdDatumaro();
+        label.instanceIdDatumaro = labelFb->instanceIdDatumaro();
 
-//         try
-//         {
-//           labelWithInstance.uuidInstance = gen(bb->labelWithInstance()->instanceUuid()->str());
-//         }
-//         catch (std::runtime_error const& e)
-//         {
-//           labelWithInstance.uuidInstance = boost::uuids::nil_uuid();
-//         }
-//         labelsWithInstances.push_back(labelWithInstance);
-//       }
-//       labelWithInstancePerCategory.emplace(bbWithCategory->category()->c_str(), labelsWithInstances);
-//     }
-//     // this only adds labels to the image in the core
-//     // if there are already bounding box labels for this image
-//     // those labels must be removed separately. The hdfio currently overrides
-//     // existing labels. The data is only correct if labels are added and there
-//     // weren't any bounding box labels before
+        try
+        {
+          label.uuidInstance = gen(labelFb->instanceUuid()->str());
+        }
+        catch (std::runtime_error const& e)
+        {
+          label.uuidInstance = boost::uuids::nil_uuid();
+        }
+        labelVector.push_back(label);
+      }
+      labelPerCategory.emplace(labelCategory->category()->c_str(), labelVector);
+    }
+    // this only adds labels to the image in the core
+    // if there are already bounding box labels for this image
+    // those labels must be removed separately. The hdfio currently overrides
+    // existing labels. The data is only correct if labels are added and there
+    // weren't any bounding box labels before
 
-//     m_seerepCore->addLabels(seerep_core_msgs::Datatype::Image, labelWithInstancePerCategory, uuidMsg, uuidProject);
-//   }
-// }
+    m_seerepCore->addLabels(seerep_core_msgs::Datatype::Image, labelPerCategory, uuidMsg, uuidProject);
+  }
+}
 
 }  // namespace seerep_core_fb

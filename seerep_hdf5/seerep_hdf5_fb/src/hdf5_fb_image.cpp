@@ -32,7 +32,7 @@ void Hdf5FbImage::writeImage(const std::string& id, const seerep::fb::Image& ima
   dataSetPtr->write(std::vector<uint8_t>(arrayStartPtr, arrayStartPtr + image.data()->size()));
 
   // name is currently ambiguous, use fully qualified name
-  seerep_hdf5_fb::Hdf5FbGeneral::writeLabels(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id, image.labels());
+  seerep_hdf5_fb::Hdf5FbGeneral::writeLabelsFb(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id, image.labels());
 
   m_file->flush();
 }

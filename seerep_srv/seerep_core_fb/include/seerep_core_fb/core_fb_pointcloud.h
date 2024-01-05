@@ -80,13 +80,11 @@ public:
    */
   void buildIndices(std::vector<std::pair<std::string, boost::uuids::uuid>>& projectPclUuids);
 
-  // TODO reimplement with datumaro
-  // /**
-  //  * @brief Adds bounding box based labels to an existing pointcloud
-  //  * @param bbslabeled the flatbuffer message containing bounding box based labels
-  //  */
-  // void addBoundingBoxesLabeled(const seerep::fb::BoundingBoxesLabeledStamped& boundingBoxeslabeled);
-  // boost::uuids::uuid addData(const seerep::fb::PointCloud2& pc);
+  /**
+   * @brief Adds labels to an existing pointcloud
+   * @param datasetUuidLabel the flatbuffer message containing  labels
+   */
+  void addLabel(const seerep::fb::DatasetUuidLabel& datasetUuidLabel);
 
 private:
   /** @brief a shared pointer to the general core */

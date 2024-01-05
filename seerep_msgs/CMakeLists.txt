@@ -54,6 +54,7 @@ set(MY_FBS_FILES
     fbs/boundingbox.fbs
     fbs/camera_intrinsics.fbs
     fbs/camera_intrinsics_query.fbs
+    fbs/dataset_uuid_label.fbs
     fbs/datatype.fbs
     fbs/empty.fbs
     fbs/frame_query.fbs

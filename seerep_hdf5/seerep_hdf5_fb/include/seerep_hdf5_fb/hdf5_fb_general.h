@@ -38,6 +38,16 @@ typedef flatbuffers::Vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>> Attr
  */
 class Hdf5FbGeneral : public virtual seerep_hdf5_core::Hdf5CoreGeneral
 {
+public:
+  /**
+   * @brief Write a flatbuffers general labels message to hdf5
+   *
+   * @param datatypeGroup the data type the general labels should be written to e.g point cloud, image
+   * @param uuid the uuid of the data group, the general labels should be written to
+   * @param labels the flatbuffers general labels message
+   */
+  void writeLabelsFb(const std::string& datatypeGroup, const std::string& uuid, const LabelsCategoryFb* labels);
+
 protected:
   /**
    * @brief Construct a new general hdf5-fb-io object
@@ -87,14 +97,6 @@ protected:
                                                                HighFive::AnnotateTraits<T>& object,
                                                                std::string uuidMsg);
 
-  /**
-   * @brief Write a flatbuffers general labels message to hdf5
-   *
-   * @param datatypeGroup the data type the general labels should be written to e.g point cloud, image
-   * @param uuid the uuid of the data group, the general labels should be written to
-   * @param labels the flatbuffers general labels message
-   */
-  void writeLabels(const std::string& datatypeGroup, const std::string& uuid, const LabelsCategoryFb* labels);
   /**
    * @brief Read general labels (with instances and of all categories) from hdf5 and receive it as a flatbuffers message
    *
