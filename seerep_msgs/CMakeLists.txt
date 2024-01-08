@@ -251,14 +251,6 @@ install(
   PATTERN "*.py"
 )
 
-# install the generated typescript sources
-install(
-  DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/
-  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
-  FILES_MATCHING
-  PATTERN "*.ts"
-)
-
 set(SEEREP_COM_DIR_FB ${CMAKE_CURRENT_BINARY_DIR}/../seerep_com/fbs)
 
 install(
