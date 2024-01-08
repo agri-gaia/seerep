@@ -61,7 +61,8 @@ repos:
   - repo: https://github.com/igorshubovych/markdownlint-cli
     rev: v0.38.0
     hooks:
-    - id: markdownlint
+      - id: markdownlint
+        language_version: 20.10.0
 
   - repo: https://github.com/pryorda/dockerfilelint-precommit-hooks
     rev: v0.1.0
