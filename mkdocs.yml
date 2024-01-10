@@ -43,7 +43,7 @@ plugins:
 nav:
   - SEEREP: 'index.md'
   - Getting Started:
-    - Docker Deployment: 'getting_started/docker_deployment.md'
+    - Sever Deployment: 'getting_started/server_deployment.md'
     - Python Clients: 'getting_started/python_clients.md'
     - Development Setup: 'getting_started/development_setup.md'
     - Kown Errors: 'getting_started/known_errors.md'
