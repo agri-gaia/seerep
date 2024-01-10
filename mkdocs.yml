@@ -45,7 +45,7 @@ nav:
   - Getting Started:
     - Docker Deployment: 'getting_started/docker_deployment.md'
     - Python Clients: 'getting_started/python_clients.md'
-    - Development Environment: 'getting_started/development_environment.md'
+    - Development Setup: 'getting_started/development_setup.md'
     - Kown Errors: 'getting_started/known_errors.md'
   - Examples:
     - Projects: 'examples/projects.md'
