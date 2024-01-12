@@ -33,6 +33,7 @@ class EnumFbQuery(FrozenEnum):
     DATAUUID = auto()  # def: None
     WITHOUTDATA = auto()  # def: False
     MAX_NUM_DATA = auto()  # def: None
+    SORT_BY_TIME = auto()  # def: False
 
 
 class EnumFbQueryInstance(FrozenEnum):
@@ -76,6 +77,7 @@ class FbQuery(MsgsFb[Query.Query]):
             EnumFbQuery.MAX_NUM_DATA: MsgsFunctions(
                 lambda: None, lambda: Dtypes.Fb.max_num_data()
             ),
+            EnumFbQuery.SORT_BY_TIME: MsgsFunctions(lambda: False, lambda: True),
         }
 
     @expect_component(EnumFbQuery.PROJECTUUID)
@@ -104,6 +106,7 @@ class FbQuery(MsgsFb[Query.Query]):
         datauuid = self.get_component(EnumFbQuery.DATAUUID)
         withoutdata = self.get_component(EnumFbQuery.WITHOUTDATA)
         max_num_data = self.get_component(EnumFbQuery.MAX_NUM_DATA)
+        sort_by_time = self.get_component(EnumFbQuery.SORT_BY_TIME)
 
         return fbh.createQuery(
             self.builder,
@@ -117,6 +120,7 @@ class FbQuery(MsgsFb[Query.Query]):
             polygon,
             fully_encapsulated,
             in_map_frame,
+            sort_by_time,
         )
 
 

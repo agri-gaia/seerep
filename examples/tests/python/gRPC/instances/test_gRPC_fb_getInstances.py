@@ -586,7 +586,51 @@ def test_gRPC_getInstanceQueryFullyEncapsulated(grpc_channel, project_setup):
     assert instance_uuids_polygon == sorted(bbs_instances)
 
 
-# this does not do the calculation of the coordinate transformation, but rather tests which images are in polygon
+# sortByTime currently does not sort the instances accordingly
+def _test_gRPC_getInstanceQuerySortByTime(grpc_channel, project_setup):
+    _, proj_uuid = project_setup
+
+    serv_man = ServiceManager(grpc_channel)
+
+    # only send pictures to ease the testing process
+    images_uuids, _, _ = send_imgs.send_labeled_images(proj_uuid, grpc_channel)
+
+    # extract images ignore image uuids
+    images = [img[1] for img in images_uuids]
+
+    timestamp_sorted_imgs = sorted(images, key=lambda img: combine_stamps_nanos(img))
+
+    query_builder = FbQuery(grpc_channel, enum_types=set([EnumFbQuery.SORT_BY_TIME]))
+
+    queryinst_builder = FbQueryInstance(
+        grpc_channel, enum_types=set([EnumFbQueryInstance.QUERY])
+    )
+
+    queryinst_builder.set_active_function(
+        EnumFbQueryInstance.QUERY, lambda: query_builder.datatype_instance
+    )
+
+    query_builder.assemble_datatype_instance()
+
+    queryinst_builder.assemble_datatype_instance()
+
+    uuidspp = serv_man.call_get_instances_fb(
+        queryinst_builder.builder, queryinst_builder.datatype_instance
+    )
+
+    uuids_by_time = []
+    if uuidspp.UuidsPerProjectLength() > 0:
+        uuids_by_time = [
+            uuidspp.UuidsPerProject(0).Uuids(i).decode()
+            for i in range(uuidspp.UuidsPerProject(0).UuidsLength())
+        ]
+
+    bbs_instances = get_instances_from_imgs(timestamp_sorted_imgs)
+
+    assert uuids_by_time == bbs_instances
+
+
+# this does not work currently
 def _test_gRPC_getInstanceQueryInMapFrame(grpc_channel, project_setup):
     _, proj_uuid = project_setup
 
