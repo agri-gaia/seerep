@@ -258,6 +258,20 @@ private:
   template <class T>
   T readDataset(const std::string& path);
 
+  /**
+   * @brief Checks if multiple vectors have equal size.
+   *
+   * TODO: Allow for every container type, not just vectors.
+   *
+   * @tparam T0 The type of the first vector.
+   * @tparam TN The types of the remaining vectors.
+   * @param first The first vector.
+   * @param rest The remaining vectors.
+   * @return True if all vectors have equal size, false otherwise.
+   */
+  template <typename T0, typename... TN>
+  bool hasEqualSize(const std::vector<T0>& first, const std::vector<TN>&... rest) const;
+
 public:
   // header attribute keys
   inline static const std::string HEADER_DATATYPE = "header_datatype";

@@ -115,8 +115,7 @@ void Hdf5CoreGeneral::readLabels(const std::string& datatypeGroup, const std::st
         readDataset<std::vector<int>>(id + "/" + LABELINSTANCES_ID_DATUMARO + "_" + category);
     datumaroJsonPerCategory.push_back(readDataset<std::string>(id + "/" + DATUMARO_JSON + "_" + category));
 
-    if (labels.size() != labelsIdDatumaro.size() || labels.size() != instances.size() ||
-        labels.size() != instancesIdDatumaro.size())
+    if (!hasEqualSize(labels, labelsIdDatumaro, instances, instancesIdDatumaro))
     {
       std::string errorMsg = "size of labels (" + std::to_string(labels.size()) + ") and size of label datumaro ids (" +
                              std::to_string(labelsIdDatumaro.size()) + ") and size of instances (" +
