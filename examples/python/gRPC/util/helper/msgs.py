@@ -172,6 +172,7 @@ class DatatypeImplementations:
             labels = {
                 "0": [
                     (builder.CreateString("testlabel0"), 0.3),
+                    (builder.CreateString("testlabel1"), 0.3),
                     (builder.CreateString("testlabelgeneral0"), 0.7),
                 ]
             }

@@ -1,5 +1,5 @@
 import time
-from typing import Dict, List
+from typing import Dict, List, Set
 
 from gRPC.images import gRPC_pb_sendLabeledImage as send_imgs
 from gRPC.point import gRPC_fb_sendPointsBasedOnImageInstances as send_points
@@ -39,11 +39,52 @@ def get_instances_from_imgs(img_lst: List):
     return bbs_instances
 
 
+def filter_imgs_by_label(
+    images,
+    bb_label: List[str],
+    general_label: List[str],
+    must_have_all_labels: bool = False,
+) -> Set[str]:
+    bbs_instances = set()
+    for image in images:
+        sliced_uuids = set()
+        found_label_list = [False for _ in range(len(bb_label))]
+        found_glabel_list = [False for _ in range(len(general_label))]
+
+        for glabel_inst_cat in image.labels_general:
+            for glabel_inst in glabel_inst_cat.labelWithInstance:
+                for idx, filter_label in enumerate(general_label):
+                    if filter_label == glabel_inst.label.label:
+                        found_glabel_list[idx] = True
+
+        for bb_cat in image.labels_bb:
+            for instance in bb_cat.boundingBox2DLabeled:
+                sliced_uuids.add(instance.labelWithInstance.instanceUuid)
+                for idx, filter_label in enumerate(bb_label):
+                    if filter_label == instance.labelWithInstance.label.label:
+                        found_label_list[idx] = True
+
+        if must_have_all_labels == True:
+            if all(found_label_list) and all(found_glabel_list):
+                bbs_instances = bbs_instances.union(sliced_uuids)
+        else:
+            if any(found_label_list) or any(found_glabel_list):
+                bbs_instances = bbs_instances.union(sliced_uuids)
+
+    return bbs_instances
+
+
 def test_gRPC_getInstanceTypes(grpc_channel, project_setup):
     _, proj_uuid = project_setup
 
     ### check for instances on images
     images_uuids, _, _ = send_imgs.send_labeled_images(proj_uuid, grpc_channel)
+    pcl_lst: List[PointCloud2.PointCloud2] = send_pcl.send_pointcloud(
+        proj_uuid, grpc_channel
+    )
+    img_uuid2point_map: Dict[str, PointStamped.PointStamped] = send_points.send_points(
+        proj_uuid, grpc_channel
+    )
 
     # extract images ignore image uuids
     images = [img[1] for img in images_uuids]
@@ -76,9 +117,6 @@ def test_gRPC_getInstanceTypes(grpc_channel, project_setup):
     assert instance_uuids == bbs_instances
 
     ### check for instances on poinclouds
-    pcl_lst: List[PointCloud2.PointCloud2] = send_pcl.send_pointcloud(
-        proj_uuid, grpc_channel
-    )
     pcl_instance_uuids = []
 
     # extract general labels, which count in this case as instances
@@ -104,9 +142,6 @@ def test_gRPC_getInstanceTypes(grpc_channel, project_setup):
     assert pcl_instance_uuids == instance_uuids
 
     ### check for instances on points
-    img_uuid2point_map: Dict[str, PointStamped.PointStamped] = send_points.send_points(
-        proj_uuid, grpc_channel
-    )
     point_lst = [p for pl in img_uuid2point_map.values() for p in pl]
 
     points_imguuids = set()
@@ -268,10 +303,9 @@ def test_gRPC_getInstanceQueryTimeinterval(grpc_channel, project_setup):
     assert sorted(bbs_instances) == sorted(instance_uuids_intimeinterval)
 
 
-# this test retrieves all instances with the label testlabel0/testlabelgeneral0
-# in the current state this fails
-def _test_gRPC_getInstanceQueryLabel(grpc_channel, project_setup):
-    filter_label = "testlabel0"
+def test_gRPC_getInstanceQueryLabel(grpc_channel, project_setup):
+    filter_labels = ["testlabel0"]
+    filter_labels_general = ["testlabelgeneral0"]
     _, proj_uuid = project_setup
 
     serv_man = ServiceManager(grpc_channel)
@@ -304,20 +338,63 @@ def _test_gRPC_getInstanceQueryLabel(grpc_channel, project_setup):
         )
     )
 
-    bbs_instances = []
-    for image in images:
-        for bb_cat in image.labels_bb:
-            for instance in bb_cat.boundingBox2DLabeled:
-                if instance.labelWithInstance.label.label == filter_label:
-                    bbs_instances.append(instance.labelWithInstance.instanceUuid)
+    bbs_instances = filter_imgs_by_label(
+        images, filter_labels, filter_labels_general, False
+    )
 
-    bbs_instances = sorted(bbs_instances)
+    bbs_instances = sorted(list(bbs_instances))
 
     assert instance_uuids == bbs_instances
 
 
-# set breakpoint in seerep_srv/seerep_core_fb/src/core_fb_instance.cpp line 22
-def _test_gRPC_getInstanceQueryInstanceUuid(grpc_channel, project_setup):
+def test_gRPC_getInstanceQueryMustHaveAllLabels(grpc_channel, project_setup):
+    filter_labels = ["testlabel0", "testlabel1"]
+    filter_labels_general = ["testlabelgeneral0"]
+    _, proj_uuid = project_setup
+
+    serv_man = ServiceManager(grpc_channel)
+
+    # only send pictures to ease the testing process
+    images_uuids, _, _ = send_imgs.send_labeled_images(proj_uuid, grpc_channel)
+
+    # extract images ignore image uuids
+    images = [img[1] for img in images_uuids]
+
+    # this is not a and with all labels attached to a bb
+    # query_builder = FbQuery(grpc_channel, enum_types=set([EnumFbQuery.LABEL, EnumFbQuery.MUST_HAVE_ALL_LABELS]))
+
+    query_builder = FbQuery(
+        grpc_channel,
+        enum_types=set([EnumFbQuery.LABEL, EnumFbQuery.MUST_HAVE_ALL_LABELS]),
+    )
+
+    queryinst_builder = FbQueryInstance(
+        grpc_channel, enum_types=set([EnumFbQueryInstance.QUERY])
+    )
+
+    queryinst_builder.set_active_function(
+        EnumFbQueryInstance.QUERY, lambda: query_builder.datatype_instance
+    )
+
+    query_builder.assemble_datatype_instance()
+    queryinst_builder.assemble_datatype_instance()
+
+    instance_uuids = get_sorted_uuids_per_proj(
+        serv_man.call_get_instances_fb(
+            queryinst_builder.builder, queryinst_builder.datatype_instance
+        )
+    )
+
+    bbs_instances = filter_imgs_by_label(
+        images, filter_labels, filter_labels_general, True
+    )
+
+    bbs_instances = sorted(list(bbs_instances))
+
+    assert instance_uuids == bbs_instances
+
+
+def test_gRPC_getInstanceQueryInstanceUuid(grpc_channel, project_setup):
     _, proj_uuid = project_setup
 
     serv_man = ServiceManager(grpc_channel)
@@ -329,7 +406,7 @@ def _test_gRPC_getInstanceQueryInstanceUuid(grpc_channel, project_setup):
     images = [img[1] for img in images_uuids]
 
     # retrieve the labelinstances of the bounding boxes
-    bbs_instances = sorted(get_instances_from_imgs(images))
+    all_bbs_instances = sorted(get_instances_from_imgs(images))
 
     query_builder = FbQuery(
         grpc_channel,
@@ -349,18 +426,80 @@ def _test_gRPC_getInstanceQueryInstanceUuid(grpc_channel, project_setup):
 
     queryinst_builder.assemble_datatype_instance()
 
-    print(len(query_builder.get_component(EnumFbQuery.INSTANCEUUID)))
+    instance_uuids = get_sorted_uuids_per_proj(
+        serv_man.call_get_instances_fb(
+            queryinst_builder.builder, queryinst_builder.datatype_instance
+        )
+    )
+    bbs_uuids_halved = all_bbs_instances[::2]
+
+    bbs_instances = set()
+    for image in images:
+        sliced_uuids = set()
+        found_uuid = False
+        for bb_cat in image.labels_bb:
+            for instance in bb_cat.boundingBox2DLabeled:
+                sliced_uuids.add(instance.labelWithInstance.instanceUuid)
+                if instance.labelWithInstance.instanceUuid in bbs_uuids_halved:
+                    found_uuid = True
+        if found_uuid:
+            bbs_instances = bbs_instances.union(sliced_uuids)
+
+    assert instance_uuids == sorted(list(bbs_instances))
+
+
+def test_gRPC_getInstanceQueryInstanceUuid(grpc_channel, project_setup):
+    _, proj_uuid = project_setup
+
+    serv_man = ServiceManager(grpc_channel)
+
+    # only send pictures to ease the testing process
+    images_uuids, _, _ = send_imgs.send_labeled_images(proj_uuid, grpc_channel)
+
+    # extract images ignore image uuids
+    images = [img[1] for img in images_uuids]
+
+    # retrieve the labelinstances of the bounding boxes
+    all_bbs_instances = sorted(get_instances_from_imgs(images))
+
+    query_builder = FbQuery(
+        grpc_channel,
+        enum_types=set([EnumFbQuery.PROJECTUUID, EnumFbQuery.INSTANCEUUID]),
+    )
+    query_builder.set_active_function(
+        EnumFbQuery.PROJECTUUID, lambda: [query_builder.builder.CreateString(proj_uuid)]
+    )
+    query_builder.assemble_datatype_instance()
+
+    queryinst_builder = FbQueryInstance(
+        grpc_channel, enum_types=set([EnumFbQueryInstance.QUERY])
+    )
+    queryinst_builder.set_active_function(
+        EnumFbQueryInstance.QUERY, lambda: query_builder.datatype_instance
+    )
+
+    queryinst_builder.assemble_datatype_instance()
 
     instance_uuids = get_sorted_uuids_per_proj(
         serv_man.call_get_instances_fb(
             queryinst_builder.builder, queryinst_builder.datatype_instance
         )
     )
-    print(len(instance_uuids))
+    bbs_uuids_halved = all_bbs_instances[::2]
 
-    bbs_uuids_halved = [bbs_instances[i] for i in range(0, len(bbs_instances), 2)]
+    bbs_instances = set()
+    for image in images:
+        sliced_uuids = set()
+        found_uuid = False
+        for bb_cat in image.labels_bb:
+            for instance in bb_cat.boundingBox2DLabeled:
+                sliced_uuids.add(instance.labelWithInstance.instanceUuid)
+                if instance.labelWithInstance.instanceUuid in bbs_uuids_halved:
+                    found_uuid = True
+        if found_uuid:
+            bbs_instances = bbs_instances.union(sliced_uuids)
 
-    assert instance_uuids == sorted(bbs_uuids_halved)
+    assert instance_uuids == sorted(list(bbs_instances))
 
 
 def test_gRPC_getInstanceQueryDatauuid(grpc_channel, project_setup):
@@ -428,6 +567,52 @@ def test_gRPC_getInstanceQueryFullyEncapsulated(grpc_channel, project_setup):
     query_builder = FbQuery(
         grpc_channel,
         enum_types=set([EnumFbQuery.POLYGON, EnumFbQuery.FULLY_ENCAPSULATED]),
+    )
+    queryinst_builder = FbQueryInstance(
+        grpc_channel, enum_types=set([EnumFbQueryInstance.QUERY])
+    )
+    queryinst_builder.set_active_function(
+        EnumFbQueryInstance.QUERY, lambda: query_builder.datatype_instance
+    )
+
+    queryinst_builder.assemble_datatype_instance()
+
+    instance_uuids_polygon = get_sorted_uuids_per_proj(
+        serv_man.call_get_instances_fb(
+            queryinst_builder.builder, queryinst_builder.datatype_instance
+        )
+    )
+
+    assert instance_uuids_polygon == sorted(bbs_instances)
+
+
+# this does not do the calculation of the coordinate transformation, but rather tests which images are in polygon
+def _test_gRPC_getInstanceQueryInMapFrame(grpc_channel, project_setup):
+    _, proj_uuid = project_setup
+
+    serv_man = ServiceManager(grpc_channel)
+
+    # only send pictures to ease the testing process
+    images_uuids, _, _ = send_imgs.send_labeled_images(proj_uuid, grpc_channel)
+
+    # extract images ignore image uuids
+    images = [img[1] for img in images_uuids]
+
+    timestamp_sorted_imgs = sorted(images, key=lambda img: combine_stamps_nanos(img))
+    timestamp_thresh_imgs = timestamp_sorted_imgs[1:4]
+
+    # retrieve the labelinstances of the bounding boxes
+    bbs_instances = get_instances_from_imgs(timestamp_thresh_imgs)
+
+    query_builder = FbQuery(
+        grpc_channel,
+        enum_types=set(
+            [
+                EnumFbQuery.POLYGON,
+                EnumFbQuery.IN_MAP_FRAME,
+                EnumFbQuery.FULLY_ENCAPSULATED,
+            ]
+        ),
     )
     queryinst_builder = FbQueryInstance(
         grpc_channel, enum_types=set([EnumFbQueryInstance.QUERY])

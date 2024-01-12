@@ -77,9 +77,11 @@ def query_images(
     # labels
     label = labels_with_category.LabelsWithCategory()
     label.category = "0"
-    labelWithConfidence = label_pb2.Label()
-    labelWithConfidence.label = "testlabel0"
-    label.labels.extend([labelWithConfidence])
+    labelWithConfidence0 = label_pb2.Label()
+    labelWithConfidence0.label = "testlabel0"
+    labelWithConfidence1 = label_pb2.Label()
+    labelWithConfidence1.label = "testlabel0_"
+    label.labels.extend([labelWithConfidence0, labelWithConfidence1])
     theQuery.labelsWithCategory.append(label)
 
     # theQuery.inMapFrame = True

@@ -3,11 +3,9 @@ import time
 import uuid
 from typing import List, Optional, Tuple
 
-import flatbuffers
 import numpy as np
 from google.protobuf import empty_pb2
 from grpc import Channel
-from seerep.fb import CameraIntrinsics
 from seerep.fb import camera_intrinsics_service_grpc_fb as ci_service
 from seerep.pb import boundingbox2d_labeled_pb2 as boundingbox2d_labeled
 from seerep.pb import (
@@ -140,6 +138,11 @@ def send_labeled_images(
             bb = boundingbox2d_labeled.BoundingBox2DLabeled()
             for i in range(0, 2):
                 bb.labelWithInstance.label.label = "testlabel" + str(i)
+                if n % 2 == 0:
+                    bb.labelWithInstance.label.label = f"testlabel{i}_"
+                if n % 4 == 0:
+                    bb.labelWithInstance.label.label = "testlabel0"
+
                 bb.labelWithInstance.label.confidence = i / 10.0
                 bb.labelWithInstance.instanceUuid = str(uuid.uuid4())
                 bb.boundingBox.center_point.x = 0.01 + i / 10
@@ -157,6 +160,11 @@ def send_labeled_images(
             for i in range(0, 2):
                 label = labelWithInstance.LabelWithInstance()
                 label.label.label = "testlabelgeneral" + str(i)
+                if n == 2:
+                    label.label.label = f"testlabelgeneral{i}_"
+                if n == 3:
+                    label.label.label = f"testlabelgeneral{i}_"
+
                 label.label.confidence = i / 10.0
                 # assuming that that the general labels are not instance related -> no instance uuid
                 # label.instanceUuid = str(uuid.uuid4())
