@@ -98,4 +98,11 @@ T Hdf5CoreGeneral::readDataset(const std::string& path)
   datasetInstances.read(data);
   return data;
 }
+
+template <typename T0, typename... TN>
+bool Hdf5CoreGeneral::hasEqualSize(const std::vector<T0>& first, const std::vector<TN>&... rest) const
+{
+  return ((first.size() == rest.size()) && ...);
+}
+
 }  // namespace seerep_hdf5_core
