@@ -148,24 +148,6 @@ public:
   template <class T>
   void readHeader(const std::string& id, HighFive::AnnotateTraits<T>& object, seerep_core_msgs::Header& header);
 
-  // // BoundingBoxes
-  // /**
-  //  * @brief read the labels and instances of a dataset of all categories and add them to the category-labels/instances map
-  //  *
-  //  * @param [in] datatypeGroup the data type
-  //  * @param [in] uuid the uuid of the dataset
-  //  * @param [in,out] labelsWithInstancesWithCategory the map from category to the instances of the category
-  //  */
-  // void readBoundingBoxLabeledAndAddToLabelsWithInstancesWithCategory(
-  //     const std::string& datatypeGroup, const std::string& uuid,
-  //     std::unordered_map<std::string, std::vector<seerep_core_msgs::LabelWithInstance>>& labelsWithInstancesWithCategory);
-  // void readBoundingBoxLabeled(const std::string& datatypeGroup, const std::string& uuid,
-  //                             std::vector<std::string>& labelCategories,
-  //                             std::vector<std::vector<std::string>>& labelsPerCategory,
-  //                             std::vector<std::vector<float>>& labelConfidencesPerCategory,
-  //                             std::vector<std::vector<std::vector<double>>>& boundingBoxesPerCategory,
-  //                             std::vector<std::vector<std::string>>& instancesPerCategory, bool loadBoxes = true);
-
   // Labels General
   /**
    * @brief read the labels general and instances of a dataset of all categories and add them to the
