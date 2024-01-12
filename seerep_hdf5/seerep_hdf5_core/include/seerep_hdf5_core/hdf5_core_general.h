@@ -255,8 +255,16 @@ public:
   void getLabelCategories(std::string id, std::string labelType, std::vector<std::string>& matchingLabelCategory);
 
 private:
+  /**
+   * @brief Reads a dataset from the specified HDF5 path.
+   *
+   * @tparam T The type of data to read.
+   * @param path The path of the dataset to read.
+   * @return The read dataset of type T.
+   * @throws HighFive::DataSetException if there is an error opening or reading the dataset.
+   */
   template <class T>
-  T readDataset(const std::string& path);
+  T readDataset(const std::string& path) const;
 
   /**
    * @brief Checks if multiple vectors have equal size.

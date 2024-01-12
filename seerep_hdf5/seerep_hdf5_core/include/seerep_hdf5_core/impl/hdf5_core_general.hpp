@@ -90,12 +90,10 @@ void Hdf5CoreGeneral::readHeader(const std::string& id, HighFive::AnnotateTraits
 }
 
 template <class T>
-T Hdf5CoreGeneral::readDataset(const std::string& path)
+T Hdf5CoreGeneral::readDataset(const std::string& path) const
 {
-  checkExists(path);
-  HighFive::DataSet datasetInstances = m_file->getDataSet(path);
   T data;
-  datasetInstances.read(data);
+  m_file->getDataSet(path).read<T>(data);
   return data;
 }
 
