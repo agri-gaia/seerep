@@ -107,11 +107,7 @@ createLabels(flatbuffers::FlatBufferBuilder& fbb)
 
     auto datumaroJsonOffset = fbb.CreateString("random string to test datumaro field");
 
-    seerep::fb::LabelCategoryBuilder labelsCategoriesBuilder(fbb);
-    labelsCategoriesBuilder.add_category(categoryOffset);
-    labelsCategoriesBuilder.add_labels(labelOffset);
-    labelsCategoriesBuilder.add_datumaroJson(datumaroJsonOffset);
-    labelsCategories.push_back(labelsCategoriesBuilder.Finish());
+    labelsCategories.push_back(seerep::fb::CreateLabelCategory(fbb, categoryOffset, labelOffset, datumaroJsonOffset));
   }
   auto labelsCategoriesOffset = fbb.CreateVector(labelsCategories);
   fbb.Finish(labelsCategoriesOffset);
