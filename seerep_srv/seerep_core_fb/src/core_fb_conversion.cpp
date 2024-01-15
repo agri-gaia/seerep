@@ -682,33 +682,4 @@ std::vector<seerep_core_msgs::Datatype> CoreFbConversion::fromFbDatatypeVector(c
   return dt_vector;
 }
 
-// std::vector<seerep_core_msgs::LabelCategory>
-// CoreFbConversion::fromLabelsCategoryFb(const seerep::fb::LabelsCategoryFb& labelCategoryVectorFb)
-// {
-//   std::vector<seerep_core_msgs::LabelCategory> labelCategoryVector;
-//   if (labelCategoryVectorFb && labelCategoryVectorFb->size() != 0)
-//   {
-//     for (auto labelsCategory : *labelCategoryVectorFb)
-//     {
-//       std::vector<std::string> labels, instances;
-//       std::vector<int> labelsIdDatumaro, instancesIdDatumaro;
-//       for (auto label : *labelsCategory->labels())
-//       {
-//         labels.push_back(label->label()->str());
-//         labelsIdDatumaro.push_back(label->labelIdDatumaro());
-//         instances.push_back(label->instanceUuid()->str());
-//         instancesIdDatumaro.push_back(label->instanceIdDatumaro());
-//       }
-//       seerep_core_msgs::LabelCategory labelCategory;
-//       labelCategory.category = labelsCategory->category()->c_str();
-//       labelCategory.labels = labels;
-//       labelCategory.labelsIdDatumaro = labelsIdDatumaro;
-//       labelCategory.instances = instances;
-//       labelCategory.instancesIdDatumaro = instancesIdDatumaro;
-//       labelCategory.datumaroJson = labelsCategory->datumaroJson()->c_str();
-//       labelCategoryVector.push_back(labelCategory);
-//     }
-//   }
-//   return labelCategoryVector;
-// }
 }  // namespace seerep_core_fb
