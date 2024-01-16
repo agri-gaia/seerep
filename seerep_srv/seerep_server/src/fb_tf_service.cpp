@@ -69,27 +69,24 @@ grpc::Status FbTfService::GetFrames(grpc::ServerContext* context,
                                     flatbuffers::grpc::Message<seerep::fb::StringVector>* response)
 {
   (void)context;  // ignore that variable without causing warnings
-  boost::uuids::uuid uuid;
   try
   {
-    boost::uuids::string_generator gen;
-    uuid = gen(request->GetRoot()->projectuuid()->str());
+    flatbuffers::grpc::MessageBuilder fbb;
+    boost::uuids::uuid projectUuid = boost::uuids::string_generator()(request->GetRoot()->projectuuid()->str());
 
-    auto frames = tfFb->getFrames(uuid);
+    std::vector<flatbuffers::Offset<flatbuffers::String>> frameVec;
+    const std::vector<std::string> frameNames = tfFb->getFrames(projectUuid);
+    frameVec.reserve(frameNames.size());
 
-    flatbuffers::grpc::MessageBuilder builder;
-
-    std::vector<flatbuffers::Offset<flatbuffers::String>> framesOffset;
-    for (auto framename : tfFb->getFrames(uuid))
+    for (const std::string& frameName : frameNames)
     {
-      framesOffset.push_back(builder.CreateString(framename));
+      frameVec.push_back(fbb.CreateString(frameName));
     }
 
-    seerep::fb::StringVectorBuilder frameinfosbuilder(builder);
-    frameinfosbuilder.add_stringVector(builder.CreateVector(framesOffset));
-    auto frameinfosOffset = frameinfosbuilder.Finish();
-    builder.Finish(frameinfosOffset);
-    *response = builder.ReleaseMessage<seerep::fb::StringVector>();
+    auto frameVecOffset = seerep::fb::CreateStringVector(fbb, fbb.CreateVector(frameVec));
+    fbb.Finish(frameVecOffset);
+
+    *response = fbb.ReleaseMessage<seerep::fb::StringVector>();
     assert(response->Verify());
   }
   catch (std::runtime_error const& e)
