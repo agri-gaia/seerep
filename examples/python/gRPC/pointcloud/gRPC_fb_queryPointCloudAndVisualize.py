@@ -3,6 +3,7 @@ from typing import List
 
 import flatbuffers
 import numpy as np
+import open3d as o3d
 from grpc import Channel
 from seerep.fb import PointCloud2
 from seerep.fb import point_cloud_service_grpc_fb as pointCloudService
@@ -50,6 +51,42 @@ def unpack_header(point_cloud: PointCloud2.PointCloud2) -> dict:
         "uuid_project": point_cloud.Header().UuidProject().decode("utf-8"),
         "frame_id": point_cloud.Header().FrameId().decode("utf-8"),
     }
+
+
+# TODO: move into visaualization module
+def draw_pcl(
+    points: np.ndarray, point_colors: np.ndarray = None, draw_origin=True
+) -> None:
+    """Visualize a point cloud using Open3D
+
+    Based on https://github.com/open-mmlab/OpenPCDet/blob/255db8f02a8bd07211d2c91f54602d63c4c93356/tools/visual_utils/open3d_vis_utils.py#L38
+    """
+    vis = o3d.visualization.Visualizer()
+    # print("before stuck")
+    vis.create_window()
+    # print("after stuck")
+
+    vis.get_render_option().point_size = 1.0
+    vis.get_render_option().background_color = np.zeros(3)
+
+    if draw_origin:
+        vis.add_geometry(
+            o3d.geometry.TriangleMesh.create_coordinate_frame(
+                size=1.0, origin=np.zeros(3)
+            )
+        )
+
+    pts = o3d.geometry.PointCloud()
+    pts.points = o3d.utility.Vector3dVector(points)
+
+    vis.add_geometry(pts)
+    if point_colors:
+        pts.colors = o3d.utility.Vector3dVector(point_colors)
+    else:
+        pts.colors = o3d.utility.Vector3dVector(np.ones((points.shape[0], 3)))
+
+    vis.run()
+    vis.destroy_window()
 
 
 def query_pcs(
@@ -194,3 +231,14 @@ if __name__ == "__main__":
             points = np.array(
                 [decoded_payload["x"], decoded_payload["y"], decoded_payload["z"]]
             ).T.astype(np.float64)
+
+            print("-" * 13)
+            # Not using the keyboard lib because it requires root privileges in linux to access the raw device files.
+            while True:
+                print("Visualize the point cloud? (Y/N)", end=" ")
+                user_input = input().lower()
+                if user_input and user_input == "y":
+                    draw_pcl(points)
+                    break
+                else:
+                    break
