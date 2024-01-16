@@ -10,8 +10,6 @@ from seerep.fb import point_cloud_service_grpc_fb as pointCloudService
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
     createLabelsWithCategories,
-    createLabelWithCategory,
-    createLabelWithConfidence,
     createPoint2d,
     createPolygon2D,
     createQuery,

@@ -4,7 +4,6 @@ from typing import Dict, Final, List, Tuple
 import flatbuffers
 import numpy as np
 import yaml
-from fb_to_dict import fb_obj_to_dict
 from gRPC.tf import gRPC_pb_queryFrames as query_frames
 from quaternion import quaternion
 from seerep.fb import TransformStamped
@@ -17,6 +16,7 @@ from seerep.util.fb_helper import (
     createTransformStamped,
     createVector3,
 )
+from seerep.util.fb_to_dict import fb_obj_to_dict
 
 TIMESTAMP_NANOS = 1245
 TIMESTAMPS = [(t, TIMESTAMP_NANOS) for t in range(1661336507, 1661336538, 10)]
@@ -26,7 +26,7 @@ TF_BROADCASTER: Final[str] = "fromHDF5"
 
 
 def test_gRPC_pb_queryFrames(project_setup, grpc_channel):
-    project_name, project_uuid = project_setup
+    _, project_uuid = project_setup
 
     # first send tfs with artifical timestamps
     stub_tf = tf_serv.TfServiceStub(grpc_channel)

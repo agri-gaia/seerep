@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 
 import flatbuffers
-from seerep.fb import Datatype, QueryInstance, UuidsPerProject
+from seerep.fb import Datatype, UuidsPerProject
 from seerep.fb import instance_service_grpc_fb as instanceService
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
     createLabelsWithCategories,
-    createLabelWithCategory,
     createPoint2d,
     createPolygon2D,
     createQuery,

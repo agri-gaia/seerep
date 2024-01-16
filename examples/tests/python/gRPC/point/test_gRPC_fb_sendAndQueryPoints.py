@@ -1,6 +1,5 @@
 from typing import Dict, List, Tuple, Type
 
-import fb_to_dict
 from gRPC.images import gRPC_pb_sendLabeledImageGrid as send_grid
 from gRPC.point import gRPC_fb_queryPoints as query_points
 from gRPC.point import gRPC_fb_sendPointsBasedOnImageInstances as send_points
@@ -13,6 +12,7 @@ from seerep.fb import (
     String,
     UnionMapEntry,
 )
+from seerep.util import fb_to_dict
 
 
 # todo: test query dependant on tf

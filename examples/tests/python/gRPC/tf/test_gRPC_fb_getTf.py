@@ -1,13 +1,11 @@
 # test file for
 #   gRPC_fb_getTf.py
-import math
 import uuid
 from copy import deepcopy
 from typing import Dict, List, Tuple
 
 import flatbuffers
 import numpy as np
-from fb_to_dict import fb_obj_to_dict
 from gRPC.tf import gRPC_fb_getTf as get_tfs
 from quaternion import quaternion
 from seerep.fb import TransformStamped
@@ -20,6 +18,7 @@ from seerep.util.fb_helper import (
     createTransformStamped,
     createVector3,
 )
+from seerep.util.fb_to_dict import fb_obj_to_dict
 
 TIMESTAMP_NANOS = 1245
 TIMESTAMPS = [(t, TIMESTAMP_NANOS) for t in range(1661336507, 1661336528, 10)]
@@ -27,7 +26,7 @@ NANOS_FACTOR = 1e-9
 
 # test sending and querying tfs
 def test_gRPC_fb_getTf(grpc_channel, project_setup):
-    project_name, project_uuid = project_setup
+    _, project_uuid = project_setup
 
     # first send tfs with artifical timestamps
     stub_tf = tf_serv.TfServiceStub(grpc_channel)

@@ -3,11 +3,10 @@
 #   gRPC_pb_sendLabeledImage.py
 from typing import List
 
-import fb_to_dict
-import pb_to_dict
 from gRPC.images import gRPC_fb_queryImage as query_img
 from gRPC.images import gRPC_pb_sendLabeledImage as send_img
 from seerep.fb import Image
+from seerep.util import fb_to_dict, pb_to_dict
 
 
 # test sending and querying the images

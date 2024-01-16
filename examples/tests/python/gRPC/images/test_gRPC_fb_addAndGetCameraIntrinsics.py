@@ -2,9 +2,9 @@
 #  gRPC_fb_addCameraIntrinsics.py
 #  gRPC_fb_getCameraIntrinsics.py
 
-import fb_to_dict
 from gRPC.images import gRPC_fb_addCameraIntrinsics as add_ci
 from gRPC.images import gRPC_fb_getCameraIntrinsics as get_ci
+from seerep.util import fb_to_dict
 
 
 def test_addAndGetCameraIntrinsics(grpc_channel, project_setup):

@@ -5,13 +5,13 @@
 
 from typing import List, cast
 
-import fb_to_dict
 import flatbuffers
 from grpc import Channel
 from gRPC.images import gRPC_fb_addBoundingBox as add_bb
 from gRPC.images import gRPC_pb_sendLabeledImage as add_img
 from seerep.fb import Image
 from seerep.fb import image_service_grpc_fb as imageService
+from seerep.util import fb_to_dict
 from seerep.util.fb_helper import createQuery
 
 

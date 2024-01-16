@@ -1,11 +1,11 @@
-import fb_to_dict
 from gRPC.pointcloud import gRPC_fb_addBoundingBox as add_bb
 from gRPC.pointcloud import gRPC_fb_queryPointCloud as query_pc
 from gRPC.pointcloud import gRPC_fb_sendPointCloud as send_pc
+from seerep.util import fb_to_dict
 
 
 def test_addBoundingBoxToPCs(grpc_channel, project_setup):
-    proj_name, proj_uuid = project_setup
+    _, proj_uuid = project_setup
 
     # send pointclouds to the project
     send_pc.send_pointcloud(proj_uuid, grpc_channel)

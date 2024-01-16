@@ -13,3 +13,5 @@ build==0.10.0
 setuptools==65.7.0
 matplotlib==3.6.3
 open3d==0.17.0
+pytest==7.4.2
+pytest-sugar==0.9.7

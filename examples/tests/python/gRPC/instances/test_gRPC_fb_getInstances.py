@@ -6,13 +6,13 @@ from gRPC.point import gRPC_fb_sendPointsBasedOnImageInstances as send_points
 from gRPC.pointcloud import gRPC_fb_sendPointCloud as send_pcl
 from seerep.fb import Datatype, PointCloud2, PointStamped, UuidsPerProject
 from seerep.util import fb_helper as fbh
-from seerep.util.helper.msgs import (
+from seerep.util.msg_abs.msgs import (
     EnumFbQuery,
     EnumFbQueryInstance,
     FbQuery,
     FbQueryInstance,
 )
-from seerep.util.helper.service_manager import ServiceManager
+from seerep.util.service_manager import ServiceManager
 
 
 def get_sorted_uuids_per_proj(uuidspp: UuidsPerProject.UuidsPerProject) -> List[str]:

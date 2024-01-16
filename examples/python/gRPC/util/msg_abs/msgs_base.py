@@ -5,12 +5,12 @@ from typing import Callable, Dict, Final, Generic, List, NamedTuple, Set, TypeVa
 
 from flatbuffers import Builder
 from grpc import Channel
-from seerep.util import fb_helper as fbh
 from seerep.util.datastructures import FrozenEnum
-from seerep.util.helper.service_manager import ServiceManager
+from seerep.util.service_manager import ServiceManager
 
 
 class MsgsFunctions(NamedTuple):
+
     default_function: Callable
     active_function: Callable
 

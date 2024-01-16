@@ -26,7 +26,6 @@ from seerep.util.fb_helper import (
     createTimeStamp,
     getOrCreateProject,
 )
-from seerep.util.fb_to_dict import fb_obj_to_dict
 
 NUM_GENERAL_LABELS = 10
 NUM_BB_LABELS = 1

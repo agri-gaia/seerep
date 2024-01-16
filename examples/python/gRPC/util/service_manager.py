@@ -1,4 +1,3 @@
-import functools
 from typing import List
 
 from flatbuffers import Builder

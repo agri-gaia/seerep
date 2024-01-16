@@ -3,7 +3,6 @@
 import flatbuffers
 from grpc import Channel
 from seerep.fb import ProjectInfo
-from seerep.fb import image_service_grpc_fb as imageService
 from seerep.fb import meta_operations_grpc_fb as metaOperations
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import createProjectRaw
