@@ -1,4 +1,4 @@
-pre-commit==2.21.0
+pre-commit==3.5.0
 flatbuffers==22.12.6
 protobuf== 4.21.12
 grpcio-tools==1.51.1
