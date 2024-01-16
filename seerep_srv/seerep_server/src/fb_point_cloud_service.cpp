@@ -182,8 +182,7 @@ FbPointCloudService::AddLabels(grpc::ServerContext* context,
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "received label... ";
     auto label = labelMsg.GetRoot();
 
-    std::string uuidProject = label->projectUuid()->str();
-    if (uuidProject.empty())
+    if (label->projectUuid()->str().empty())
     {
       answer = "a msg had no project uuid!";
     }
@@ -191,7 +190,7 @@ FbPointCloudService::AddLabels(grpc::ServerContext* context,
     {
       if (!label->labels())
       {
-        answer = "a msg had no bounding boxes!";
+        answer = "a msg had no labels!";
       }
       else
       {
