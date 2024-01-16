@@ -69,6 +69,7 @@ void DumpSensorMsgs::dump(const sensor_msgs::Image::ConstPtr& msg) const
   {
     m_ioImage->writeImage(uuidString, seerep_ros_conversions_pb::toProto(*msg));
 
+    /* TODO: remove the dummy data */
     // also write the labels; filled with dummy data right now
     m_ioImageCore->writeLabels(uuidString, m_labelsCategory);
   }

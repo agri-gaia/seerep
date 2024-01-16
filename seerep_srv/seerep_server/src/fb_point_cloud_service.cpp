@@ -17,6 +17,7 @@ FbPointCloudService::GetPointCloud2(grpc::ServerContext* context,
 
   auto requestRoot = request->GetRoot();
 
+  /* TODO: only add this code if we compile in debug mode? */
   std::stringstream debuginfo;
 
   debuginfo << "sending point clouds with this query parameters: ";
@@ -49,6 +50,7 @@ FbPointCloudService::GetPointCloud2(grpc::ServerContext* context,
 
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << debuginfo.rdbuf();
 
+  /* TODO: add a execption handler or something else ? The catch statements are always repeated */
   try
   {
     pointCloudFb->getData(requestRoot, writer);
