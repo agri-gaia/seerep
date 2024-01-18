@@ -17,30 +17,27 @@ grpc::Status PbCameraIntrinsicsService::TransferCameraIntrinsics(grpc::ServerCon
   std::string response_message;
 
   // check if the distortion model is found in kCameraDistortionModels
-  bool distortion_model_err = std::find(std::begin(seerep_server_constants::kCameraDistortionModels),
+  bool distortion_model_err = camintrinsics->distortion_model().size() > 0 &&
+                              std::find(std::begin(seerep_server_constants::kCameraDistortionModels),
                                         std::end(seerep_server_constants::kCameraDistortionModels),
                                         camintrinsics->distortion_model().c_str()) ==
-                              std::end(seerep_server_constants::kCameraDistortionModels);
-
-  bool distortion_mat_err = camintrinsics->distortion_size() < 1;
+                                  std::end(seerep_server_constants::kCameraDistortionModels);
 
   bool intrinsics_mat_err = camintrinsics->intrinsic_matrix_size() != 9 || camintrinsics->intrinsic_matrix()[0] == 0 ||
                             camintrinsics->intrinsic_matrix()[4] == 0;
 
-  bool rectification_mat_err = camintrinsics->rectification_matrix_size() != 9;
+  bool rectification_mat_err =
+      camintrinsics->rectification_matrix_size() > 0 && camintrinsics->rectification_matrix_size() != 9;
 
-  bool projection_mat_err = camintrinsics->projection_matrix_size() != 12;
+  bool projection_mat_err =
+      camintrinsics->projection_matrix_size() > 0 && camintrinsics->projection_matrix_size() != 12;
 
-  if (distortion_mat_err || distortion_model_err || intrinsics_mat_err || rectification_mat_err || projection_mat_err)
+  if (distortion_model_err || intrinsics_mat_err || rectification_mat_err || projection_mat_err)
   {
     response_message = "";
-    if (distortion_mat_err)
-    {
-      response_message += "The distortion matrix is not set. ";
-    }
     if (distortion_model_err)
     {
-      response_message += "The distortion model is not set or invalid. ";
+      response_message += "The distortion model is set but invalid. ";
     }
     if (intrinsics_mat_err)
     {

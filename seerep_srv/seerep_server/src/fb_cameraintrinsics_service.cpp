@@ -70,32 +70,27 @@ grpc::Status FbCameraIntrinsicsService::TransferCameraIntrinsics(
 
   // check if the distortion model is found in kCameraDistortionModels
   bool distortion_model_err =
-      !requestRoot->distortion_model() ||
+      requestRoot->distortion_model()->size() > 0 &&
       std::find(std::begin(seerep_server_constants::kCameraDistortionModels),
                 std::end(seerep_server_constants::kCameraDistortionModels),
                 requestRoot->distortion_model()->c_str()) == std::end(seerep_server_constants::kCameraDistortionModels);
 
-  bool distortion_mat_err = !requestRoot->distortion();
   bool intrinsics_mat_err = !requestRoot->intrinsic_matrix() || requestRoot->intrinsic_matrix()->size() != 9 ||
                             (*requestRoot->intrinsic_matrix())[0] == 0 || (*requestRoot->intrinsic_matrix())[4] == 0;
 
   bool rectification_mat_err =
-      !requestRoot->rectification_matrix() ||
+      requestRoot->rectification_matrix() &&
       (requestRoot->rectification_matrix()->size() > 0 && requestRoot->rectification_matrix()->size() != 9);
 
-  bool projection_mat_err = !requestRoot->projection_matrix() || (requestRoot->projection_matrix()->size() > 0 &&
-                                                                  requestRoot->projection_matrix()->size() != 12);
+  bool projection_mat_err = requestRoot->projection_matrix() && (requestRoot->projection_matrix()->size() > 0 &&
+                                                                 requestRoot->projection_matrix()->size() != 12);
 
-  if (distortion_model_err || distortion_mat_err || intrinsics_mat_err || rectification_mat_err || projection_mat_err)
+  if (distortion_model_err || intrinsics_mat_err || rectification_mat_err || projection_mat_err)
   {
     response_message = "";
     if (distortion_model_err)
     {
-      response_message += "The distortion model is not set or invalid. ";
-    }
-    if (distortion_mat_err)
-    {
-      response_message += "The distortion matrix is not set. ";
+      response_message += "The distortion model is set but invalid. ";
     }
     if (intrinsics_mat_err)
     {
@@ -104,11 +99,11 @@ grpc::Status FbCameraIntrinsicsService::TransferCameraIntrinsics(
     }
     if (rectification_mat_err)
     {
-      response_message += "Rectification matrix is not set or dimensions are incorrect. ";
+      response_message += "Rectification matrix dimensions are incorrect. ";
     }
     if (projection_mat_err)
     {
-      response_message += "Projection matrix is not set or dimensions are incorrect.";
+      response_message += "Projection matrix dimensions are incorrect.";
     }
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << response_message;
     seerep_server_util::createResponseFb(response_message, seerep::fb::TRANSMISSION_STATE_FAILURE, response);
