@@ -1,3 +1,8 @@
+# test file for
+#   gRPC_fb_addBoundingBox.py (Pointcloud)
+# requires:
+#   gRPC_fb_sendPointCloud.py
+#   gRPC_fb_queryPointCloud.py
 from gRPC.pointcloud import gRPC_fb_addBoundingBox as add_bb
 from gRPC.pointcloud import gRPC_fb_queryPointCloud as query_pc
 from gRPC.pointcloud import gRPC_fb_sendPointCloud as send_pc

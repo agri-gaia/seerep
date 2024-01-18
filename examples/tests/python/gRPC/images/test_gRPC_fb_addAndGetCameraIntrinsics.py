@@ -1,6 +1,6 @@
 # test file for
-#  gRPC_fb_addCameraIntrinsics.py
-#  gRPC_fb_getCameraIntrinsics.py
+#   gRPC_fb_addCameraIntrinsics.py
+#   gRPC_fb_getCameraIntrinsics.py
 
 from gRPC.images import gRPC_fb_addCameraIntrinsics as add_ci
 from gRPC.images import gRPC_fb_getCameraIntrinsics as get_ci

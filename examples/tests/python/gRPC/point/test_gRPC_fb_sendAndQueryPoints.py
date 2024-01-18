@@ -1,3 +1,8 @@
+# test file for
+#   gRPC_fb_queryPoints.py
+#   gRPC_fb_sendPointsBasedOnImageInstances.py
+# requires:
+#   gRPC_pb_sendLabeledImageGrid.py
 from typing import Dict, List, Tuple, Type
 
 from gRPC.images import gRPC_pb_sendLabeledImageGrid as send_grid

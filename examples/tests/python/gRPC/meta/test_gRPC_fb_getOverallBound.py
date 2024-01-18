@@ -1,5 +1,8 @@
-# test file
-#  gRPC_fb_getOverallBound.py
+# test file for
+#   gRPC_fb_getOverallBound.py
+# requires:
+#   gRPC_pb_sendLabeledImageGrid.py
+#   gRPC_fb_getTf.py
 from typing import List, Set, Tuple
 
 import flatbuffers

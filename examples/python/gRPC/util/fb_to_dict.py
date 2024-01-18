@@ -120,13 +120,7 @@ def unpack_union_type(
         )
 
 
-# union_type_mapping{ t: (field, [(num_type1, t_type1), (num_type2, t_type2), ...]) }
-# where t is the table enclosing the union
-# field is the name of the field containing the union
-# t_type1, t_type2, ... are the possible types of the union
-# todo: rework remappings field and functionality
-
-
+# todo: improve interface and rework functionality for more robustness
 def fb_obj_to_dict(
     obj,
     to_snake_case=False,
@@ -134,7 +128,32 @@ def fb_obj_to_dict(
     union_type_mapping: Dict[Type, Tuple[str, List[Tuple[int, Type]]]] = dict(),
 ) -> Dict:
     """
-    Converts a flatbuffer object to a dictionary.
+    Converts a flatbuffer object to a dictionary. This works recursively for nested flatbuffer objects.
+    Warning: this implementation is not perfectly robust and might break due to changes in python or flatbuffers.
+
+    Args:
+        obj: The flatbuffer object to convert.
+        to_snake_case: If the resulting dictionary keys (flatbuffer field names) should be converted to snake case.
+        remappings: A dictionary of remappings for the resulting flatbuffer field names.
+        union_type_mapping:
+            union_type_mapping{ t: (field: str, [(num_type1, t_type1), (num_type2, t_type2), ...]) }
+            where t is the parent table of the union (the table in which the union is a field of).
+            The field is the name of the field containing the union.
+            num_type1, num_type2, ... are the possible numbers identifying the type of the union.
+            t_type1, t_type2, ... are the possible types of the union,
+              which have to correpondend to num_type1, num_type2, ...
+            For example:
+                union_type_mapping: Dict[Type, Tuple[str, List[Tuple[int, Type]]]] = {
+                    UnionMapEntry.UnionMapEntry: (
+                        "Value",
+                        [
+                            (Datatypes.Datatypes().Boolean, Boolean.Boolean),
+                            (Datatypes.Datatypes().Integer, Integer.Integer),
+                            (Datatypes.Datatypes().Double, Double.Double),
+                            (Datatypes.Datatypes().String, String.String),
+                        ],
+                    )
+                }
     """
     # get all non dunder functions of the object
     funcs = [

@@ -1,3 +1,6 @@
+# test file for
+#   gRPC_fb_queryPointCloud.py
+#   gRPC_fb_sendPointCloud.py
 from gRPC.pointcloud import gRPC_fb_queryPointCloud as query_pc
 from gRPC.pointcloud import gRPC_fb_sendPointCloud as send_pc
 from seerep.util import fb_to_dict

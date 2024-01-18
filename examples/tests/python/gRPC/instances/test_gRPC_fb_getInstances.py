@@ -1,3 +1,9 @@
+# test file for
+#   gRPC_fb_getInstances.py
+# requires:
+#   gRPC_pb_sendLabeledImage.py
+#   gRPC_fb_sendPointsBasedOnImageInstances.py
+#   gRPC_fb_sendPointCloud.py
 import time
 from typing import Dict, List, Set
 
