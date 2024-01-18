@@ -55,36 +55,19 @@ def send_points(
                     response.Header().Stamp().Seconds(),
                     response.Header().Stamp().Nanos(),
                 )
-                header = createHeader(
-                    builder, timestampMsg, frameId, uuidProject, str(uuid.uuid4())
-                )
+                header = createHeader(builder, timestampMsg, frameId, uuidProject, str(uuid.uuid4()))
 
                 coordinates = (1, 2, 3)
                 point = createPoint(builder, *coordinates)
 
                 labelWithInstanceMsg = createLabelWithInstance(
                     builder,
-                    response.LabelsBb(0)
-                    .BoundingBox2dLabeled(i)
-                    .LabelWithInstance()
-                    .Label()
-                    .Label()
-                    .decode("utf-8"),
-                    response.LabelsBb(0)
-                    .BoundingBox2dLabeled(i)
-                    .LabelWithInstance()
-                    .Label()
-                    .Confidence(),
-                    response.LabelsBb(0)
-                    .BoundingBox2dLabeled(i)
-                    .LabelWithInstance()
-                    .InstanceUuid()
-                    .decode("utf-8"),
+                    response.LabelsBb(0).BoundingBox2dLabeled(i).LabelWithInstance().Label().Label().decode("utf-8"),
+                    response.LabelsBb(0).BoundingBox2dLabeled(i).LabelWithInstance().Label().Confidence(),
+                    response.LabelsBb(0).BoundingBox2dLabeled(i).LabelWithInstance().InstanceUuid().decode("utf-8"),
                 )
 
-                labelWithCat = createLabelWithCategory(
-                    builder, ["myCategory"], [[labelWithInstanceMsg]]
-                )
+                labelWithCat = createLabelWithCategory(builder, ["myCategory"], [[labelWithInstanceMsg]])
 
                 unionMapEntryKey1 = builder.CreateString("exampleKey1")
                 value1String = builder.CreateString("exampleValue1")
@@ -98,16 +81,12 @@ def send_points(
 
                 UnionMapEntry.Start(builder)
                 UnionMapEntry.AddKey(builder, unionMapEntryKey1)
-                UnionMapEntry.UnionMapEntryAddValueType(
-                    builder, Datatypes.Datatypes.String
-                )
+                UnionMapEntry.UnionMapEntryAddValueType(builder, Datatypes.Datatypes.String)
                 UnionMapEntry.AddValue(builder, unionMapEntryValue1)
                 unionMapEntry1 = UnionMapEntry.End(builder)
                 UnionMapEntry.Start(builder)
                 UnionMapEntry.AddKey(builder, unionMapEntryKey2)
-                UnionMapEntry.UnionMapEntryAddValueType(
-                    builder, Datatypes.Datatypes.Integer
-                )
+                UnionMapEntry.UnionMapEntryAddValueType(builder, Datatypes.Datatypes.Integer)
                 UnionMapEntry.AddValue(builder, unionMapEntryValue2)
                 unionMapEntry2 = UnionMapEntry.End(builder)
 
@@ -127,9 +106,7 @@ def send_points(
 
                 buf = builder.Output()
 
-                img_uuid2point_map[uuid_img].append(
-                    PointStamped.PointStamped.GetRootAs(buf)
-                )
+                img_uuid2point_map[uuid_img].append(PointStamped.PointStamped.GetRootAs(buf))
 
                 bufBytes.append(bytes(buf))
 
@@ -146,19 +123,13 @@ if __name__ == "__main__":
     for k in p_dict:
         print(f"uuidmsg: {k}")
         for val in p_dict[k]:
-            print(
-                f"    uuidlabel: {val.LabelsGeneral(0).LabelsWithInstance(0).Label().Label().decode('utf-8')}"
-            )
+            print(f"    uuidlabel: {val.LabelsGeneral(0).LabelsWithInstance(0).Label().Label().decode('utf-8')}")
             print(f"    point_uuidmsg: {val.Header().UuidMsgs().decode('utf-8')}")
-            print(
-                f"    point_uuidproject: {val.Header().UuidProject().decode('utf-8')}"
-            )
+            print(f"    point_uuidproject: {val.Header().UuidProject().decode('utf-8')}")
             # check for attribute 0
             if val.Attribute(0).ValueType() == Datatypes.Datatypes().String:
                 union_str = String.String()
-                union_str.Init(
-                    val.Attribute(0).Value().Bytes, val.Attribute(0).Value().Pos
-                )
+                union_str.Init(val.Attribute(0).Value().Bytes, val.Attribute(0).Value().Pos)
                 print(f"    Attribute 0 Value: {union_str.Data().decode()}\n")
             count_points += 1
     print(f"sent {count_points} points in total")

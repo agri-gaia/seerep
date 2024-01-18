@@ -143,9 +143,7 @@ def createProjectRaw(
     return response
 
 
-def createProject(
-    channel, builder, name, frameId, coordSys, altitude, latitude, longitude
-) -> str:
+def createProject(channel, builder, name, frameId, coordSys, altitude, latitude, longitude) -> str:
     """Create a project from the parameters"""
     return (
         createProjectRaw(
@@ -257,9 +255,7 @@ def createPointFields(builder, channels, datatype, dataTypeOffset, count):
     pointFieldsList = []
     offset = 0
     for channel in channels:
-        pointFieldsList.append(
-            createPointField(builder, channel, offset, datatype, count)
-        )
+        pointFieldsList.append(createPointField(builder, channel, offset, datatype, count))
         offset += dataTypeOffset
     return pointFieldsList
 
@@ -392,9 +388,7 @@ def createBoundingBoxes2dLabeled(builder, instances, boundingBoxes):
     assert len(instances) == len(boundingBoxes)
     boundingBoxes2dLabeled = []
     for instance, boundingBox in zip(instances, boundingBoxes):
-        boundingBoxes2dLabeled.append(
-            createBoundingBox2dLabeled(builder, instance, boundingBox)
-        )
+        boundingBoxes2dLabeled.append(createBoundingBox2dLabeled(builder, instance, boundingBox))
     return boundingBoxes2dLabeled
 
 
@@ -425,9 +419,7 @@ def createBoundingBoxLabeledStamped(builder, header, labelsBb):
 
 
 def createBoundingBox2DLabeledWithCategory(builder, category, bb2dLabeled):
-    BoundingBox2DLabeledWithCategory.StartBoundingBox2dLabeledVector(
-        builder, len(bb2dLabeled)
-    )
+    BoundingBox2DLabeledWithCategory.StartBoundingBox2dLabeledVector(builder, len(bb2dLabeled))
     for labelBb in reversed(bb2dLabeled):
         builder.PrependUOffsetTRelative(labelBb)
     labelsBbVector = builder.EndVector()
@@ -499,9 +491,7 @@ def createPolygon2D(builder, height, z, vertices):
     return Polygon2D.End(builder)
 
 
-def createBoundingBoxStamped(
-    builder, header, centerPoint, spatialExtent, rotation=None
-):
+def createBoundingBoxStamped(builder, header, centerPoint, spatialExtent, rotation=None):
     """Creates a stamped 3D bounding box in flatbuffers"""
     boundingBox = createBoundingBox(builder, centerPoint, spatialExtent, rotation)
     BoundingboxStamped.Start(builder)
@@ -535,16 +525,12 @@ def createBoundingBoxesLabeled(builder, instances, boundingBoxes):
     assert len(instances) == len(boundingBoxes)
     boundingBoxesLabeled = []
     for instance, boundingBox in zip(instances, boundingBoxes):
-        boundingBoxesLabeled.append(
-            createBoundingBoxLabeled(builder, instance, boundingBox)
-        )
+        boundingBoxesLabeled.append(createBoundingBoxLabeled(builder, instance, boundingBox))
     return boundingBoxesLabeled
 
 
 def createBoundingBoxLabeledWithCategory(builder, category, bbLabeled):
-    BoundingBoxLabeledWithCategory.StartBoundingBoxLabeledVector(
-        builder, len(bbLabeled)
-    )
+    BoundingBoxLabeledWithCategory.StartBoundingBoxLabeledVector(builder, len(bbLabeled))
     for labelBb in reversed(bbLabeled):
         builder.PrependUOffsetTRelative(labelBb)
     labelsBbVector = builder.EndVector()

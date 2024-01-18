@@ -25,9 +25,7 @@ def expect_component(*args: FrozenEnum):
             for arg in args:
                 self._validate_enum(arg)
                 if self.get_component(arg) == None:
-                    raise ValueError(
-                        f"The component mapped to the enum {arg} is expected to be not None"
-                    )
+                    raise ValueError(f"The component mapped to the enum {arg} is expected to be not None")
             return func(self, *fnargs, **fnkwargs)
 
         return wrapper
@@ -94,23 +92,17 @@ class MsgsBase(ABC, Generic[T]):
     def _validate_enum(self, enum):
         enum_type = type(next(iter(self._enum_func_mapping)))
         if not type(enum) == enum_type:
-            raise KeyError(
-                f"the used enum of {self.__class__} is of type {enum_type} not of type {type(enum)}"
-            )
+            raise KeyError(f"the used enum of {self.__class__} is of type {enum_type} not of type {type(enum)}")
 
     def __init__(self, channel: Channel, enum_types: Set[FrozenEnum] = set()):
         self._channel = channel
         self._active_enums = enum_types
         self._assembled_datatype_instance = None
 
-        self._enum_func_mapping: Dict[
-            FrozenEnum, MsgsFunctions
-        ] = self._set_enum_func_mapping()
+        self._enum_func_mapping: Dict[FrozenEnum, MsgsFunctions] = self._set_enum_func_mapping()
 
         if len(self._enum_func_mapping) < 1:
-            raise KeyError(
-                f"dict returned by implemented _set_enum_func_mapping() cannot be empty!"
-            )
+            raise KeyError(f"dict returned by implemented _set_enum_func_mapping() cannot be empty!")
 
         self._validate_enum_func_mappings()
 
@@ -162,9 +154,7 @@ class MsgsBase(ABC, Generic[T]):
             enum_type: The enum type to map the function to.
             function: A callable function.
         """
-        msg_funcs = MsgsFunctions(
-            self.get_mapped_functions(enum_type).default_function, function
-        )
+        msg_funcs = MsgsFunctions(self.get_mapped_functions(enum_type).default_function, function)
         self._enum_func_mapping[enum_type] = msg_funcs
         self._validate_enum_func_mappings()
 
@@ -210,13 +200,9 @@ class MsgsBase(ABC, Generic[T]):
 
         for enum_type in all_enum_types:
             if enum_type in self.active_enums:
-                self._set_component(
-                    enum_type, self._enum_func_mapping[enum_type].active_function()
-                )
+                self._set_component(enum_type, self._enum_func_mapping[enum_type].active_function())
             else:
-                self._set_component(
-                    enum_type, self._enum_func_mapping[enum_type].default_function()
-                )
+                self._set_component(enum_type, self._enum_func_mapping[enum_type].default_function())
 
     @property
     def datatype_instance(self) -> T:
@@ -268,11 +254,7 @@ class MsgsFb(MsgsBase[T]):
         self.builder.Finish(self.datatype_instance)
         # note: this accesses the class behind T,
         # though this is rather hacky and is discouraged by PEP 560
-        return (
-            self.__class__.__orig_bases__[0]
-            .__args__[0]
-            .GetRootAs(bytes(self.builder.Output()))
-        )
+        return self.__class__.__orig_bases__[0].__args__[0].GetRootAs(bytes(self.builder.Output()))
 
     @abstractmethod
     def _set_enum_func_mapping(self) -> Dict[Enum, MsgsFunctions]:

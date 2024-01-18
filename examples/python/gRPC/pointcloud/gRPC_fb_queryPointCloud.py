@@ -27,19 +27,10 @@ NUM_GENERAL_LABELS = 10
 def unpack_point_fields(point_cloud: PointCloud2.PointCloud2) -> dict:
     """Extract the point fields from a Flatbuffer pcl message"""
     return {
-        "name": [
-            point_cloud.Fields(i).Name().decode("utf-8")
-            for i in range(point_cloud.FieldsLength())
-        ],
-        "datatype": [
-            point_cloud.Fields(i).Datatype() for i in range(point_cloud.FieldsLength())
-        ],
-        "offset": [
-            point_cloud.Fields(i).Offset() for i in range(point_cloud.FieldsLength())
-        ],
-        "count": [
-            point_cloud.Fields(i).Count() for i in range(point_cloud.FieldsLength())
-        ],
+        "name": [point_cloud.Fields(i).Name().decode("utf-8") for i in range(point_cloud.FieldsLength())],
+        "datatype": [point_cloud.Fields(i).Datatype() for i in range(point_cloud.FieldsLength())],
+        "offset": [point_cloud.Fields(i).Offset() for i in range(point_cloud.FieldsLength())],
+        "count": [point_cloud.Fields(i).Count() for i in range(point_cloud.FieldsLength())],
     }
 
 
@@ -67,24 +58,17 @@ def query_pcs(
             sys.exit()
 
     # create a polygon for a spatial query
-    polygon_vertices = [
-        createPoint2d(fb_builder, x, y) for x in [-10, 10] for y in [-10, 10]
-    ]
+    polygon_vertices = [createPoint2d(fb_builder, x, y) for x in [-10, 10] for y in [-10, 10]]
     query_polygon = createPolygon2D(fb_builder, 7, -1, polygon_vertices)
 
     # create a time interval for a temporal query
-    time_min, time_max = [
-        createTimeStamp(fb_builder, time) for time in [1610549273, 1938549273]
-    ]
+    time_min, time_max = [createTimeStamp(fb_builder, time) for time in [1610549273, 1938549273]]
     time_interval = createTimeInterval(fb_builder, time_min, time_max)
 
     # create labels for a semantic query
     category = ["myCategory"]
     labels = {
-        "myCategory": [
-            (fb_builder.CreateString(f"GeneralLabel{i}"), i * 10.0)
-            for i in range(NUM_GENERAL_LABELS)
-        ]
+        "myCategory": [(fb_builder.CreateString(f"GeneralLabel{i}"), i * 10.0) for i in range(NUM_GENERAL_LABELS)]
     }
 
     label_wcategories = createLabelsWithCategories(fb_builder, category, labels)
@@ -113,8 +97,7 @@ def query_pcs(
     fb_builder.Finish(query)
 
     resp_list = [
-        PointCloud2.PointCloud2.GetRootAs(resp)
-        for resp in pcl_stub.GetPointCloud2(bytes(fb_builder.Output()))
+        PointCloud2.PointCloud2.GetRootAs(resp) for resp in pcl_stub.GetPointCloud2(bytes(fb_builder.Output()))
     ]
 
     return resp_list
@@ -167,9 +150,7 @@ if __name__ == "__main__":
         for i in range(resp.LabelsGeneralLength()):
 
             for j in range(resp.LabelsGeneral(i).LabelsWithInstanceLength()):
-                print(
-                    f"Label {i}, {j}: {resp.LabelsGeneral(i).LabelsWithInstance(j).Label().Label().decode('utf-8')}"
-                )
+                print(f"Label {i}, {j}: {resp.LabelsGeneral(i).LabelsWithInstance(j).Label().Label().decode('utf-8')}")
                 print(
                     f"Instance {i}, {j}: {resp.LabelsGeneral(i).LabelsWithInstance(j).InstanceUuid().decode('utf-8')}"
                 )
@@ -178,10 +159,7 @@ if __name__ == "__main__":
             dtypes = np.dtype(
                 {
                     "names": point_fields["name"],
-                    "formats": [
-                        rosToNumpyDtype(datatype)
-                        for datatype in point_fields["datatype"]
-                    ],
+                    "formats": [rosToNumpyDtype(datatype) for datatype in point_fields["datatype"]],
                     "offsets": point_fields["offset"],
                     "itemsize": resp.PointStep(),
                 }
@@ -191,6 +169,4 @@ if __name__ == "__main__":
 
             print(f"---Is dense--- \n {resp.IsDense()}")
             print(f"---Payload--- \n {decoded_payload}")
-            points = np.array(
-                [decoded_payload["x"], decoded_payload["y"], decoded_payload["z"]]
-            ).T.astype(np.float64)
+            points = np.array([decoded_payload["x"], decoded_payload["y"], decoded_payload["z"]]).T.astype(np.float64)

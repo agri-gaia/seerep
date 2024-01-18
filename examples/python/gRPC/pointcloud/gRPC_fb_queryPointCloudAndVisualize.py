@@ -28,19 +28,10 @@ NUM_GENERAL_LABELS = 10
 def unpack_point_fields(point_cloud: PointCloud2.PointCloud2) -> dict:
     """Extract the point fields from a Flatbuffer pcl message"""
     return {
-        "name": [
-            point_cloud.Fields(i).Name().decode("utf-8")
-            for i in range(point_cloud.FieldsLength())
-        ],
-        "datatype": [
-            point_cloud.Fields(i).Datatype() for i in range(point_cloud.FieldsLength())
-        ],
-        "offset": [
-            point_cloud.Fields(i).Offset() for i in range(point_cloud.FieldsLength())
-        ],
-        "count": [
-            point_cloud.Fields(i).Count() for i in range(point_cloud.FieldsLength())
-        ],
+        "name": [point_cloud.Fields(i).Name().decode("utf-8") for i in range(point_cloud.FieldsLength())],
+        "datatype": [point_cloud.Fields(i).Datatype() for i in range(point_cloud.FieldsLength())],
+        "offset": [point_cloud.Fields(i).Offset() for i in range(point_cloud.FieldsLength())],
+        "count": [point_cloud.Fields(i).Count() for i in range(point_cloud.FieldsLength())],
     }
 
 
@@ -54,9 +45,7 @@ def unpack_header(point_cloud: PointCloud2.PointCloud2) -> dict:
 
 
 # TODO: move into visaualization module
-def draw_pcl(
-    points: np.ndarray, point_colors: np.ndarray = None, draw_origin=True
-) -> None:
+def draw_pcl(points: np.ndarray, point_colors: np.ndarray = None, draw_origin=True) -> None:
     """Visualize a point cloud using Open3D
 
     Based on https://github.com/open-mmlab/OpenPCDet/blob/255db8f02a8bd07211d2c91f54602d63c4c93356/tools/visual_utils/open3d_vis_utils.py#L38
@@ -70,11 +59,7 @@ def draw_pcl(
     vis.get_render_option().background_color = np.zeros(3)
 
     if draw_origin:
-        vis.add_geometry(
-            o3d.geometry.TriangleMesh.create_coordinate_frame(
-                size=1.0, origin=np.zeros(3)
-            )
-        )
+        vis.add_geometry(o3d.geometry.TriangleMesh.create_coordinate_frame(size=1.0, origin=np.zeros(3)))
 
     pts = o3d.geometry.PointCloud()
     pts.points = o3d.utility.Vector3dVector(points)
@@ -104,24 +89,17 @@ def query_pcs(
             sys.exit()
 
     # create a polygon for a spatial query
-    polygon_vertices = [
-        createPoint2d(fb_builder, x, y) for x in [-10, 10] for y in [-10, 10]
-    ]
+    polygon_vertices = [createPoint2d(fb_builder, x, y) for x in [-10, 10] for y in [-10, 10]]
     query_polygon = createPolygon2D(fb_builder, 7, -1, polygon_vertices)
 
     # create a time interval for a temporal query
-    time_min, time_max = [
-        createTimeStamp(fb_builder, time) for time in [1610549273, 1938549273]
-    ]
+    time_min, time_max = [createTimeStamp(fb_builder, time) for time in [1610549273, 1938549273]]
     time_interval = createTimeInterval(fb_builder, time_min, time_max)
 
     # create labels for a semantic query
     category = ["myCategory"]
     labels = {
-        "myCategory": [
-            (fb_builder.CreateString(f"GeneralLabel{i}"), i * 10.0)
-            for i in range(NUM_GENERAL_LABELS)
-        ]
+        "myCategory": [(fb_builder.CreateString(f"GeneralLabel{i}"), i * 10.0) for i in range(NUM_GENERAL_LABELS)]
     }
 
     label_wcategories = createLabelsWithCategories(fb_builder, category, labels)
@@ -150,8 +128,7 @@ def query_pcs(
     fb_builder.Finish(query)
 
     resp_list = [
-        PointCloud2.PointCloud2.GetRootAs(resp)
-        for resp in pcl_stub.GetPointCloud2(bytes(fb_builder.Output()))
+        PointCloud2.PointCloud2.GetRootAs(resp) for resp in pcl_stub.GetPointCloud2(bytes(fb_builder.Output()))
     ]
 
     return resp_list
@@ -204,9 +181,7 @@ if __name__ == "__main__":
         for i in range(resp.LabelsGeneralLength()):
 
             for j in range(resp.LabelsGeneral(i).LabelsWithInstanceLength()):
-                print(
-                    f"Label {i}, {j}: {resp.LabelsGeneral(i).LabelsWithInstance(j).Label().Label().decode('utf-8')}"
-                )
+                print(f"Label {i}, {j}: {resp.LabelsGeneral(i).LabelsWithInstance(j).Label().Label().decode('utf-8')}")
                 print(
                     f"Instance {i}, {j}: {resp.LabelsGeneral(i).LabelsWithInstance(j).InstanceUuid().decode('utf-8')}"
                 )
@@ -215,10 +190,7 @@ if __name__ == "__main__":
             dtypes = np.dtype(
                 {
                     "names": point_fields["name"],
-                    "formats": [
-                        rosToNumpyDtype(datatype)
-                        for datatype in point_fields["datatype"]
-                    ],
+                    "formats": [rosToNumpyDtype(datatype) for datatype in point_fields["datatype"]],
                     "offsets": point_fields["offset"],
                     "itemsize": resp.PointStep(),
                 }
@@ -228,9 +200,7 @@ if __name__ == "__main__":
 
             print(f"---Is dense--- \n {resp.IsDense()}")
             print(f"---Payload--- \n {decoded_payload}")
-            points = np.array(
-                [decoded_payload["x"], decoded_payload["y"], decoded_payload["z"]]
-            ).T.astype(np.float64)
+            points = np.array([decoded_payload["x"], decoded_payload["y"], decoded_payload["z"]]).T.astype(np.float64)
 
             print("-" * 13)
             # Not using the keyboard lib because it requires root privileges in linux to access the raw device files.

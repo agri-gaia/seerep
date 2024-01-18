@@ -25,9 +25,7 @@ def query_camintrins(
                 target_proj_uuid = project.uuid
 
         if target_proj_uuid is None:
-            print(
-                "valid project doesn't exist! Please execute gRPC_pb_addCameraIntrinsics.py beforehand."
-            )
+            print("valid project doesn't exist! Please execute gRPC_pb_addCameraIntrinsics.py beforehand.")
 
     stub = camintrinsics_service.CameraIntrinsicsServiceStub(grpc_channel)
 

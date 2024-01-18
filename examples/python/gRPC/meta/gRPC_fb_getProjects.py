@@ -35,6 +35,4 @@ if __name__ == "__main__":
 
     print("The server has the following projects (name/uuid):")
     for project in projects:
-        print(
-            "\t" + project.Name().decode("utf-8") + " " + project.Uuid().decode("utf-8")
-        )
+        print("\t" + project.Name().decode("utf-8") + " " + project.Uuid().decode("utf-8"))

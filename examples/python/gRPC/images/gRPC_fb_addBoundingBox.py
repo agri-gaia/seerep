@@ -46,30 +46,22 @@ def add_bb(
                 target_proj_uuid = project.uuid
 
         if target_proj_uuid is None:
-            print(
-                "Please create a project with labeled images using gRPC_pb_sendLabeledImage.py first."
-            )
+            print("Please create a project with labeled images using gRPC_pb_sendLabeledImage.py first.")
             sys.exit()
 
     stub = imageService.ImageServiceStub(grpc_channel)
 
-    query = createQuery(
-        builder, projectUuids=[builder.CreateString(target_proj_uuid)], withoutData=True
-    )
+    query = createQuery(builder, projectUuids=[builder.CreateString(target_proj_uuid)], withoutData=True)
     builder.Finish(query)
     buf = builder.Output()
 
     response_ls: List = list(stub.GetImage(bytes(buf)))
     if not response_ls:
-        print(
-            "No images found. Please create a project with labeled images using gRPC_pb_sendLabeledImage.py first."
-        )
+        print("No images found. Please create a project with labeled images using gRPC_pb_sendLabeledImage.py first.")
         sys.exit()
 
     msgToSend = []
-    bb_list: List[
-        Tuple[str, BoundingBoxes2DLabeledStamped.BoundingBoxes2DLabeledStamped]
-    ] = []
+    bb_list: List[Tuple[str, BoundingBoxes2DLabeledStamped.BoundingBoxes2DLabeledStamped]] = []
 
     for responseBuf in response_ls:
         response = Image.Image.GetRootAs(responseBuf)
@@ -96,26 +88,20 @@ def add_bb(
             [1.0 / (i + 0.1) for i in range(NUM_BB_LABELS)],
             [str(uuid.uuid4()) for _ in range(NUM_BB_LABELS)],
         )
-        labelsBb = createBoundingBoxes2dLabeled(
-            builder, labelWithInstances, boundingBoxes
-        )
+        labelsBb = createBoundingBoxes2dLabeled(builder, labelWithInstances, boundingBoxes)
 
         boundingBox2DLabeledWithCategory = createBoundingBox2DLabeledWithCategory(
             builder, builder.CreateString("laterAddedBB"), labelsBb
         )
 
-        labelsBbVector = createBoundingBox2dLabeledStamped(
-            builder, header, [boundingBox2DLabeledWithCategory]
-        )
+        labelsBbVector = createBoundingBox2dLabeledStamped(builder, header, [boundingBox2DLabeledWithCategory])
         builder.Finish(labelsBbVector)
         buf = builder.Output()
 
         bb_list.append(
             (
                 img_uuid,
-                BoundingBoxes2DLabeledStamped.BoundingBoxes2DLabeledStamped.GetRootAs(
-                    buf
-                ),
+                BoundingBoxes2DLabeledStamped.BoundingBoxes2DLabeledStamped.GetRootAs(buf),
             )
         )
 
@@ -132,12 +118,9 @@ if __name__ == "__main__":
             f"Added bounding boxes to image with uuid {img_uuid}, with the following center points and spatial extents:"
         )
         print(f"[center_point(x, y) | spatial_extent(x, y)]")
-        for bbs_wcat in [
-            bbs_img.LabelsBb(idx) for idx in range(bbs_img.LabelsBbLength())
-        ]:
+        for bbs_wcat in [bbs_img.LabelsBb(idx) for idx in range(bbs_img.LabelsBbLength())]:
             for bb in [
-                bbs_wcat.BoundingBox2dLabeled(idx).BoundingBox()
-                for idx in range(bbs_wcat.BoundingBox2dLabeledLength())
+                bbs_wcat.BoundingBox2dLabeled(idx).BoundingBox() for idx in range(bbs_wcat.BoundingBox2dLabeledLength())
             ]:
                 print(
                     f"[({bb.CenterPoint().X()}, {bb.CenterPoint().Y()}) | ({bb.SpatialExtent().X()}, {bb.SpatialExtent().Y()})]"

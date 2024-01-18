@@ -23,9 +23,7 @@ from seerep.util.fb_helper import (
 )
 
 
-def add_pc_bounding_boxes(
-    target_proj_uuid: str = None, grpc_channel: Channel = get_gRPC_channel()
-):
+def add_pc_bounding_boxes(target_proj_uuid: str = None, grpc_channel: Channel = get_gRPC_channel()):
 
     builder = flatbuffers.Builder(1024)
 
@@ -38,9 +36,7 @@ def add_pc_bounding_boxes(
 
     stub = pointcloudService.PointCloudServiceStub(grpc_channel)
 
-    query = createQuery(
-        builder, projectUuids=[builder.CreateString(target_proj_uuid)], withoutData=True
-    )
+    query = createQuery(builder, projectUuids=[builder.CreateString(target_proj_uuid)], withoutData=True)
     builder.Finish(query)
     buf = builder.Output()
 
@@ -71,23 +67,17 @@ def add_pc_bounding_boxes(
             [1.0 / (i + 0.1) for i in range(NUM_BB_LABELS)],
             [str(uuid.uuid4()) for _ in range(NUM_BB_LABELS)],
         )
-        labelsBb = createBoundingBoxesLabeled(
-            builder, labelWithInstances, boundingBoxes
-        )
+        labelsBb = createBoundingBoxesLabeled(builder, labelWithInstances, boundingBoxes)
 
         boundingBoxLabeledWithCategory = createBoundingBoxLabeledWithCategory(
             builder, builder.CreateString("laterAddedBB"), labelsBb
         )
 
-        labelsBbVector = createBoundingBoxLabeledStamped(
-            builder, header, [boundingBoxLabeledWithCategory]
-        )
+        labelsBbVector = createBoundingBoxLabeledStamped(builder, header, [boundingBoxLabeledWithCategory])
         builder.Finish(labelsBbVector)
         buf = builder.Output()
 
-        bbs_list.append(
-            BoundingBoxesLabeledStamped.BoundingBoxesLabeledStamped.GetRootAs(buf)
-        )
+        bbs_list.append(BoundingBoxesLabeledStamped.BoundingBoxesLabeledStamped.GetRootAs(buf))
         msgToSend.append(bytes(buf))
 
     response = stub.AddBoundingBoxesLabeled(iter(msgToSend))
@@ -95,31 +85,15 @@ def add_pc_bounding_boxes(
 
 
 if __name__ == "__main__":
-    bbs_lst: List[
-        BoundingBoxesLabeledStamped.BoundingBoxesLabeledStamped
-    ] = add_pc_bounding_boxes()
+    bbs_lst: List[BoundingBoxesLabeledStamped.BoundingBoxesLabeledStamped] = add_pc_bounding_boxes()
 
     for bbs in bbs_lst:
         for label_idx in range(bbs.LabelsBbLength()):
             for bb_idx in range(bbs.LabelsBb(label_idx).BoundingBoxLabeledLength()):
                 uuid = bbs.Header().UuidMsgs().decode()
                 print(f"uuid: {uuid}")
-                cp = (
-                    bbs.LabelsBb(label_idx)
-                    .BoundingBoxLabeled(bb_idx)
-                    .BoundingBox()
-                    .CenterPoint()
-                )
-                se = (
-                    bbs.LabelsBb(label_idx)
-                    .BoundingBoxLabeled(bb_idx)
-                    .BoundingBox()
-                    .SpatialExtent()
-                )
+                cp = bbs.LabelsBb(label_idx).BoundingBoxLabeled(bb_idx).BoundingBox().CenterPoint()
+                se = bbs.LabelsBb(label_idx).BoundingBoxLabeled(bb_idx).BoundingBox().SpatialExtent()
 
-                print(
-                    f"    SENT CENTER POINT (x1, y1, z1): ({cp.X()}, {cp.Y()}, {cp.Z()})"
-                )
-                print(
-                    f"    SENT SPATIAL EXTENT (x1, y1, z1): ({se.X()}, {se.Y()}, {se.Z()})"
-                )
+                print(f"    SENT CENTER POINT (x1, y1, z1): ({cp.X()}, {cp.Y()}, {cp.Z()})")
+                print(f"    SENT SPATIAL EXTENT (x1, y1, z1): ({se.X()}, {se.Y()}, {se.Z()})")

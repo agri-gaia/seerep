@@ -49,18 +49,9 @@ def createPointCloud(builder, header, height=960, width=1280):
     # create bounding box labels
     boundingBoxes = createBoundingBoxes(
         builder,
-        [
-            createPoint(builder, np.random.rand(), np.random.rand(), np.random.rand())
-            for _ in range(NUM_BB_LABELS)
-        ],
-        [
-            createPoint(builder, np.random.rand(), np.random.rand(), np.random.rand())
-            for _ in range(NUM_BB_LABELS)
-        ],
-        [
-            createQuaternion(builder, quaternion(1.0, 0.0, 0.0, 0.0))
-            for _ in range(NUM_BB_LABELS)
-        ],
+        [createPoint(builder, np.random.rand(), np.random.rand(), np.random.rand()) for _ in range(NUM_BB_LABELS)],
+        [createPoint(builder, np.random.rand(), np.random.rand(), np.random.rand()) for _ in range(NUM_BB_LABELS)],
+        [createQuaternion(builder, quaternion(1.0, 0.0, 0.0, 0.0)) for _ in range(NUM_BB_LABELS)],
     )
     labelWithInstances = createLabelsWithInstance(
         builder,
@@ -69,9 +60,7 @@ def createPointCloud(builder, header, height=960, width=1280):
         [str(uuid.uuid4()) for _ in range(NUM_BB_LABELS)],
     )
     labelsBb = createBoundingBoxesLabeled(builder, labelWithInstances, boundingBoxes)
-    labelsBBCat = createBoundingBoxLabeledWithCategory(
-        builder, builder.CreateString("myCategory"), labelsBb
-    )
+    labelsBBCat = createBoundingBoxLabeledWithCategory(builder, builder.CreateString("myCategory"), labelsBb)
     labelsBbVector = addToBoundingBoxLabeledVector(builder, [labelsBBCat])
 
     # Note: rgb field is float, for simplification
@@ -107,9 +96,7 @@ def createPointClouds(projectUuid, numOf, theTime):
         builder = flatbuffers.Builder(1024)
 
         timeStamp = createTimeStamp(builder, theTime + i)
-        header = createHeader(
-            builder, timeStamp, "scanner", projectUuid, str(uuid.uuid4())
-        )
+        header = createHeader(builder, timeStamp, "scanner", projectUuid, str(uuid.uuid4()))
 
         pointCloudMsg = createPointCloud(builder, header, 10, 10)
         builder.Finish(pointCloudMsg)
@@ -123,9 +110,7 @@ def createTF(numOf, projectUuid, theTime):
         builderTf = flatbuffers.Builder(1024)
 
         timeStamp = createTimeStamp(builderTf, theTime + i)
-        header = createHeader(
-            builderTf, timeStamp, "map", projectUuid, str(uuid.uuid4())
-        )
+        header = createHeader(builderTf, timeStamp, "map", projectUuid, str(uuid.uuid4()))
 
         Vector3.Start(builderTf)
         Vector3.AddX(builderTf, 10 * i)
@@ -167,9 +152,7 @@ def send_pointcloud(
         target_proj_uuid = getOrCreateProject(builder, grpc_channel, "testproject")
 
     tfStub = tf_service_grpc_fb.TfServiceStub(grpc_channel)
-    tfStub.TransferTransformStamped(
-        createTF(NUM_POINT_CLOUDS, target_proj_uuid, theTime)
-    )
+    tfStub.TransferTransformStamped(createTF(NUM_POINT_CLOUDS, target_proj_uuid, theTime))
 
     stub = pointCloudService.PointCloudServiceStub(grpc_channel)
     pc = createPointClouds(target_proj_uuid, NUM_POINT_CLOUDS, theTime)
@@ -197,8 +180,6 @@ if __name__ == "__main__":
             for i in range(0, raw_data.shape[0], pc.FieldsLength())
         ]
         # reshape the array according to its dimensions
-        data = np.array(data_flattened).reshape(
-            pc.Height(), pc.Width(), pc.FieldsLength()
-        )
+        data = np.array(data_flattened).reshape(pc.Height(), pc.Width(), pc.FieldsLength())
 
         print(f"Data: {data}")

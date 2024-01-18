@@ -33,9 +33,7 @@ def query_images(
                 target_project_uuid = project.uuid
 
         if target_project_uuid is None:
-            print(
-                "No project with name 'testproject' found! Execute gRPC_pb_sendLabeledImage.py beforehand!"
-            )
+            print("No project with name 'testproject' found! Execute gRPC_pb_sendLabeledImage.py beforehand!")
             sys.exit()
 
     # 4. Create a query with parameters

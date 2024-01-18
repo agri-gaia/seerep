@@ -25,12 +25,8 @@ def test_gRPC_fb_createGeoProjectAndGetProjects(grpc_channel):
     # get a list of all created projects
     projects_list: List[PI.ProjectInfo] = projects_query.get_projects(grpc_channel)
 
-    created_projects_dicts = [
-        fb_to_dict.fb_obj_to_dict(p_dict) for p_dict in created_projects
-    ]
-    queried_projects_dicts = [
-        fb_to_dict.fb_obj_to_dict(p_dict) for p_dict in projects_list
-    ]
+    created_projects_dicts = [fb_to_dict.fb_obj_to_dict(p_dict) for p_dict in created_projects]
+    queried_projects_dicts = [fb_to_dict.fb_obj_to_dict(p_dict) for p_dict in projects_list]
 
     # check if count of created projects matches the count of the newly queried projects,
     # returned by the gRPC_pb_getProjects example
@@ -43,10 +39,7 @@ def test_gRPC_fb_createGeoProjectAndGetProjects(grpc_channel):
         assert proj_name == "geodeticProject"
         assert proj_uuid != ""
         assert proj_info.Frameid().decode("utf-8") == "2"
-        assert (
-            proj_info.GeodeticPosition().CoordinateSystem().decode("utf-8")
-            == "EPSG::4326"
-        )
+        assert proj_info.GeodeticPosition().CoordinateSystem().decode("utf-8") == "EPSG::4326"
         # missing
         # assert proj_info.Datum().decode("utf-8") == "EPSG::7030"
         assert proj_info.GeodeticPosition().Altitude() == 4.0
@@ -59,6 +52,4 @@ def test_gRPC_fb_createGeoProjectAndGetProjects(grpc_channel):
 
         # teardown
         builder = flatbuffers.Builder(1024)
-        fb_helper.deleteProject(
-            grpc_channel, builder, proj_info["Name"], proj_info["Uuid"]
-        )
+        fb_helper.deleteProject(grpc_channel, builder, proj_info["Name"], proj_info["Uuid"])

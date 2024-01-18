@@ -28,16 +28,12 @@ def test_gRPC_pb_sendAndQueryImageGrid(grpc_channel, project_setup):
                 sent_images[x][y].append(completed_img)
 
     # flatten sent list
-    sent_images_flattened = [
-        img for lst in sent_images for inner_lst in lst for img in inner_lst
-    ]
+    sent_images_flattened = [img for lst in sent_images for inner_lst in lst for img in inner_lst]
 
     # querying the images should yield the same images in the same array x, y index
     queried_grid = query_grid.query_image_grid(proj_uuid, grpc_channel)
 
-    queried_imgs_flattened = [
-        img for lst in queried_grid for inner_lst in lst for img in inner_lst
-    ]
+    queried_imgs_flattened = [img for lst in queried_grid for inner_lst in lst for img in inner_lst]
 
     # check if all images that have been queried are in the sent images
     for img in queried_imgs_flattened:
@@ -50,10 +46,6 @@ def test_gRPC_pb_sendAndQueryImageGrid(grpc_channel, project_setup):
             query_imgs_gridpos = queried_grid[x][y]
 
             # sort both lists by their uuid
-            sent_imgs_gridpos = sorted(
-                sent_imgs_gridpos, key=lambda i: i.header.uuid_msgs
-            )
-            query_imgs_gridpos = sorted(
-                query_imgs_gridpos, key=lambda i: i.header.uuid_msgs
-            )
+            sent_imgs_gridpos = sorted(sent_imgs_gridpos, key=lambda i: i.header.uuid_msgs)
+            query_imgs_gridpos = sorted(query_imgs_gridpos, key=lambda i: i.header.uuid_msgs)
             assert sent_imgs_gridpos == query_imgs_gridpos

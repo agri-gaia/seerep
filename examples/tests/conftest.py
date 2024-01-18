@@ -42,9 +42,7 @@ def retrieve_server_params(request):
             kv_dict[kv_tuple[0].strip()] = kv_tuple[1]
 
     if PORT_CONFIG_KEY not in kv_dict or not isinstance(kv_dict[PORT_CONFIG_KEY], int):
-        raise ValueError(
-            'wrong formatting of tests/seerep.cfg. Port option "port" is missing. (default: port = 9095)'
-        )
+        raise ValueError('wrong formatting of tests/seerep.cfg. Port option "port" is missing. (default: port = 9095)')
 
     yield kv_dict[PORT_CONFIG_KEY]
 

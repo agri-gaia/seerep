@@ -46,23 +46,17 @@ def test_gRPC_pb_queryFrames(project_setup, grpc_channel):
         timestmp = createTimeStamp(builder, time[0], time[1])
 
         # when not giving a uuid the corresponding retrieved tf from server has no uuid msg
-        header = createHeader(
-            builder, timestmp, frame_id, project_uuid, str(uuid.uuid4())
-        )
+        header = createHeader(builder, timestmp, frame_id, project_uuid, str(uuid.uuid4()))
         time_lst.append(time)
 
-        translation = createVector3(
-            builder, np.array([300 * idx, 300 * idx, 300 * idx], dtype=np.float64)
-        )
+        translation = createVector3(builder, np.array([300 * idx, 300 * idx, 300 * idx], dtype=np.float64))
 
         tf = createTransform(builder, translation, quat)
         tf_s = createTransformStamped(builder, child_frame_id, header, tf)
 
         builder.Finish(tf_s)
         buf = builder.Output()
-        sent_tfs_base.append(
-            fb_obj_to_dict(TransformStamped.TransformStamped.GetRootAs(buf))
-        )
+        sent_tfs_base.append(fb_obj_to_dict(TransformStamped.TransformStamped.GetRootAs(buf)))
         tf_list.append(bytes(buf))
 
     stub_tf.TransferTransformStamped(iter(tf_list))
@@ -73,15 +67,13 @@ def test_gRPC_pb_queryFrames(project_setup, grpc_channel):
         frame_dict = yaml.safe_load(frame)
         assert child_frame_id in frame_dict
         assert frame_dict[child_frame_id]["parent"] == frame_id
-        max_time_tf = max(
-            sent_tfs_base, key=lambda obj: obj["Header"]["Stamp"]["Seconds"]
-        )["Header"]["Stamp"]["Seconds"]
-        min_time_tf = min(
-            sent_tfs_base, key=lambda obj: obj["Header"]["Stamp"]["Seconds"]
-        )["Header"]["Stamp"]["Seconds"]
+        max_time_tf = max(sent_tfs_base, key=lambda obj: obj["Header"]["Stamp"]["Seconds"])["Header"]["Stamp"][
+            "Seconds"
+        ]
+        min_time_tf = min(sent_tfs_base, key=lambda obj: obj["Header"]["Stamp"]["Seconds"])["Header"]["Stamp"][
+            "Seconds"
+        ]
         assert frame_dict[child_frame_id]["most_recent_transform"] == float(max_time_tf)
         assert frame_dict[child_frame_id]["oldest_transform"] == float(min_time_tf)
-        assert frame_dict[child_frame_id]["buffer_length"] == float(
-            max_time_tf - min_time_tf
-        )
+        assert frame_dict[child_frame_id]["buffer_length"] == float(max_time_tf - min_time_tf)
         assert frame_dict[child_frame_id]["broadcaster"] == TF_BROADCASTER

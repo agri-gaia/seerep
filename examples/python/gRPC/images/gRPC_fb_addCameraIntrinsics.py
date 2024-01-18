@@ -42,11 +42,7 @@ def add_camintrins(
                 target_proj_uuid = project.uuid
 
         if target_proj_uuid is None:
-            response = stubMeta.CreateProject(
-                projectCreation_pb2.ProjectCreation(
-                    name="testproject", mapFrameId="map"
-                )
-            )
+            response = stubMeta.CreateProject(projectCreation_pb2.ProjectCreation(name="testproject", mapFrameId="map"))
             target_proj_uuid = response.uuid
 
     # 2. Check if the defined project exist; if not return None
@@ -86,6 +82,4 @@ if __name__ == "__main__":
         f"camera instrinsics were saved with the uuid {caminstrins_obj.Header().UuidMsgs().decode('utf-8')} on the project with the uuid {caminstrins_obj.Header().UuidProject().decode('utf-8')}"
     )
     # and the contents of the distortion array
-    print(
-        f"camera instrinsics distortion matrix: {caminstrins_obj.DistortionAsNumpy()}"
-    )
+    print(f"camera instrinsics distortion matrix: {caminstrins_obj.DistortionAsNumpy()}")

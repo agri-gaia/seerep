@@ -17,9 +17,7 @@ from seerep.util.fb_helper import (
 )
 
 
-def get_points(
-    target_proj_uuid: str = None, grpc_channel=get_gRPC_channel()
-) -> List[PointStamped.PointStamped]:
+def get_points(target_proj_uuid: str = None, grpc_channel=get_gRPC_channel()) -> List[PointStamped.PointStamped]:
     builder = flatbuffers.Builder(1024)
 
     # 1. Get all projects from the server
@@ -82,9 +80,7 @@ def get_points(
     point_lst: List[PointStamped.PointStamped] = []
 
     for responseBuf in pointsBuf:
-        response: PointStamped.PointStamped = PointStamped.PointStamped.GetRootAs(
-            responseBuf
-        )
+        response: PointStamped.PointStamped = PointStamped.PointStamped.GetRootAs(responseBuf)
         point_lst.append(response)
 
     return point_lst
@@ -99,19 +95,13 @@ if __name__ == "__main__":
                 print(
                     f"    instance uuid: {point.LabelsGeneral(i).LabelsWithInstance(j).InstanceUuid().decode('utf-8')}"
                 )
-                print(
-                    f"    Label: {point.LabelsGeneral(i).LabelsWithInstance(j).Label().Label().decode('utf-8')}"
-                )
-                print(
-                    f"    Label confidence: {point.LabelsGeneral(i).LabelsWithInstance(j).Label().Confidence()}"
-                )
+                print(f"    Label: {point.LabelsGeneral(i).LabelsWithInstance(j).Label().Label().decode('utf-8')}")
+                print(f"    Label confidence: {point.LabelsGeneral(i).LabelsWithInstance(j).Label().Confidence()}")
                 print(f"   AttributeLen: {point.AttributeLength()}")
         # check for attribute 0
         if point.Attribute(0).ValueType() == Datatypes.Datatypes().String:
             union_str = String.String()
-            union_str.Init(
-                point.Attribute(0).Value().Bytes, point.Attribute(0).Value().Pos
-            )
+            union_str.Init(point.Attribute(0).Value().Bytes, point.Attribute(0).Value().Pos)
         print(f"Attribute 0 Key: {point.Attribute(0).Key().decode()}")
         print(f"Attribute 0 Value: {union_str.Data().decode()}\n")
     print(f"count of queried pictures: {len(p_list)}")

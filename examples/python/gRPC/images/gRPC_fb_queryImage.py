@@ -29,9 +29,7 @@ def query_images(
         target_proj_uuid = getProject(builder, grpc_channel, "testproject")
         # 2. Check if the defined project exist, else return None
         if target_proj_uuid is None:
-            print(
-                "valid project doesn't exist! Please execute gRPC_fb_addCameraIntrinsics.py beforehand."
-            )
+            print("valid project doesn't exist! Please execute gRPC_fb_addCameraIntrinsics.py beforehand.")
             return None
 
     # 3. Get gRPC service object
@@ -103,65 +101,26 @@ if __name__ == "__main__":
     print(f"count of images: {len(queried_images)}")
 
     for img in queried_images:
-        print(
-            "--------------------------------------------------------------------------------------------"
-        )
+        print("--------------------------------------------------------------------------------------------")
         print(f"uuidmsg: {img.Header().UuidMsgs().decode('utf-8')}")
         print(f"count of bounding box labels: {img.LabelsBbLength()}")
         if img.LabelsBbLength() > 0:
             print(
                 "first label: "
-                + img.LabelsBb(0)
-                .BoundingBox2dLabeled(0)
-                .LabelWithInstance()
-                .Label()
-                .Label()
-                .decode("utf-8")
+                + img.LabelsBb(0).BoundingBox2dLabeled(0).LabelWithInstance().Label().Label().decode("utf-8")
                 + " ; confidence: "
-                + str(
-                    img.LabelsBb(0)
-                    .BoundingBox2dLabeled(0)
-                    .LabelWithInstance()
-                    .Label()
-                    .Confidence()
-                )
+                + str(img.LabelsBb(0).BoundingBox2dLabeled(0).LabelWithInstance().Label().Confidence())
             )
             print(
                 "first bounding box (Xcenter,Ycenter,Xextent,Yextent, rotation): "
-                + str(
-                    img.LabelsBb(0)
-                    .BoundingBox2dLabeled(0)
-                    .BoundingBox()
-                    .CenterPoint()
-                    .X()
-                )
+                + str(img.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().CenterPoint().X())
                 + " "
-                + str(
-                    img.LabelsBb(0)
-                    .BoundingBox2dLabeled(0)
-                    .BoundingBox()
-                    .CenterPoint()
-                    .Y()
-                )
+                + str(img.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().CenterPoint().Y())
                 + " "
-                + str(
-                    img.LabelsBb(0)
-                    .BoundingBox2dLabeled(0)
-                    .BoundingBox()
-                    .SpatialExtent()
-                    .X()
-                )
+                + str(img.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().SpatialExtent().X())
                 + " "
-                + str(
-                    img.LabelsBb(0)
-                    .BoundingBox2dLabeled(0)
-                    .BoundingBox()
-                    .SpatialExtent()
-                    .Y()
-                )
+                + str(img.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().SpatialExtent().Y())
                 + " "
                 + str(img.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().Rotation())
             )
-    print(
-        "--------------------------------------------------------------------------------------------"
-    )
+    print("--------------------------------------------------------------------------------------------")

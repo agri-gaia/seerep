@@ -53,10 +53,7 @@ def pb_to_dict(pb_object, to_snake_case=False):
 
         f_name = field.name
         if to_snake_case:
-            f_name = (
-                f_name[0]
-                + re.sub(UPPER_CASE_LETTERS, RPLC_UPPER_CASE_LETTERS, f_name[1:])
-            ).lower()
+            f_name = (f_name[0] + re.sub(UPPER_CASE_LETTERS, RPLC_UPPER_CASE_LETTERS, f_name[1:])).lower()
 
         result_dict[f_name] = type_callable(value)
 
@@ -76,7 +73,4 @@ def _get_field_value_adaptor(pb, field, to_snake_case=False):
     if field.type in TYPE_CALLABLE_MAP:
         return TYPE_CALLABLE_MAP[field.type]
 
-    raise TypeError(
-        "Field %s.%s has unrecognised type id %d"
-        % (pb.__class__.__name__, field.name, field.type)
-    )
+    raise TypeError("Field %s.%s has unrecognised type id %d" % (pb.__class__.__name__, field.name, field.type))

@@ -36,9 +36,7 @@ def get_tfs(
                 target_proj_uuid = project.uuid
 
         if target_proj_uuid is None:
-            creation = projectCreation.ProjectCreation(
-                name="LabeledImagesInGrid", mapFrameId="map"
-            )
+            creation = projectCreation.ProjectCreation(name="LabeledImagesInGrid", mapFrameId="map")
             projectCreated = stubMeta.CreateProject(creation)
             target_proj_uuid = projectCreated.uuid
 
@@ -76,9 +74,7 @@ def get_tfs(
 if __name__ == "__main__":
     tfs = get_tfs((time, 0) for time in range(1661336507, 1661336550, 10))
     for tf in tfs:
-        print(
-            f"\n\ntime: {tf.Header().Stamp().Sec()} Sec. {tf.Header().Stamp().NanoSec()} NanoSec"
-        )
+        print(f"\n\ntime: {tf.Header().Stamp().Sec()} Sec. {tf.Header().Stamp().NanoSec()} NanoSec")
         print("parent frame: " + tf.Header().FrameId().decode("utf-8"))
         print("child frame: " + tf.ChildFrameId().decode("utf-8"))
         print(

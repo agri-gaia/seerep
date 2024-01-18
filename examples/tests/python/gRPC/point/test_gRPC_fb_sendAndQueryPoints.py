@@ -59,14 +59,8 @@ def test_sendAndQueryPoints(grpc_channel, project_setup):
 
     # fix current discrepancy between the sent and queried points in the attributes, because the queried points contain the header additionally
     # convert fb objects to dicts
-    sent_pdicts_list = [
-        fb_to_dict.fb_obj_to_dict(p, union_type_mapping=union_type_mapping)
-        for p in sent_plist
-    ]
-    queried_pdicts_list = [
-        fb_to_dict.fb_obj_to_dict(p, union_type_mapping=union_type_mapping)
-        for p in queried_points
-    ]
+    sent_pdicts_list = [fb_to_dict.fb_obj_to_dict(p, union_type_mapping=union_type_mapping) for p in sent_plist]
+    queried_pdicts_list = [fb_to_dict.fb_obj_to_dict(p, union_type_mapping=union_type_mapping) for p in queried_points]
 
     # remove the header entries of the queried points from the attributes
     for p in queried_pdicts_list:

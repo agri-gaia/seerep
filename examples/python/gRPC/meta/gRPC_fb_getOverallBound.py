@@ -43,14 +43,10 @@ def get_metadata(
             if response.Projects(p_idx).Name().decode() == "LabeledImagesInGrid":
                 target_project_uuid = response.Projects(p_idx).Uuid().decode()
         if target_project_uuid is None:
-            print(
-                "No test project found, create a project with 'gRPC_pb_sendLabeledImageGrid.py' beforehand!"
-            )
+            print("No test project found, create a project with 'gRPC_pb_sendLabeledImageGrid.py' beforehand!")
             exit()
 
-    uuid_datatype_pair = fb_helper.createUuidDatatypePair(
-        builder, target_project_uuid, Datatype.Datatype().All
-    )
+    uuid_datatype_pair = fb_helper.createUuidDatatypePair(builder, target_project_uuid, Datatype.Datatype().All)
 
     builder.Finish(uuid_datatype_pair)
     buf = builder.Output()

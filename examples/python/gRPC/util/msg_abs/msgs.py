@@ -44,53 +44,31 @@ class EnumFbQueryInstance(FrozenEnum):
 class FbQuery(MsgsFb[Query.Query]):
     def _set_enum_func_mapping(self) -> Dict[EnumFbQuery, MsgsFunctions]:
         return {
-            EnumFbQuery.POLYGON: MsgsFunctions(
-                lambda: None, lambda: Dtypes.Fb.polygon2D(self.builder)
-            ),
+            EnumFbQuery.POLYGON: MsgsFunctions(lambda: None, lambda: Dtypes.Fb.polygon2D(self.builder)),
             EnumFbQuery.FULLY_ENCAPSULATED: MsgsFunctions(lambda: False, lambda: True),
             EnumFbQuery.IN_MAP_FRAME: MsgsFunctions(lambda: True, lambda: False),
-            EnumFbQuery.TIMEINTERVAL: MsgsFunctions(
-                lambda: None, lambda: Dtypes.Fb.time_interval(self.builder)
-            ),
-            EnumFbQuery.LABEL: MsgsFunctions(
-                lambda: None, lambda: Dtypes.Fb.label_with_category(self.builder)
-            ),
-            EnumFbQuery.SPARQL_QUERY: MsgsFunctions(
-                lambda: None, lambda: Dtypes.Fb.sparql_query(self.builder)
-            ),
-            EnumFbQuery.ONTOLOGY_URI: MsgsFunctions(
-                lambda: None, lambda: Dtypes.Fb.ontology_uri(self.builder)
-            ),
-            EnumFbQuery.MUST_HAVE_ALL_LABELS: MsgsFunctions(
-                lambda: False, lambda: True
-            ),
+            EnumFbQuery.TIMEINTERVAL: MsgsFunctions(lambda: None, lambda: Dtypes.Fb.time_interval(self.builder)),
+            EnumFbQuery.LABEL: MsgsFunctions(lambda: None, lambda: Dtypes.Fb.label_with_category(self.builder)),
+            EnumFbQuery.SPARQL_QUERY: MsgsFunctions(lambda: None, lambda: Dtypes.Fb.sparql_query(self.builder)),
+            EnumFbQuery.ONTOLOGY_URI: MsgsFunctions(lambda: None, lambda: Dtypes.Fb.ontology_uri(self.builder)),
+            EnumFbQuery.MUST_HAVE_ALL_LABELS: MsgsFunctions(lambda: False, lambda: True),
             EnumFbQuery.PROJECTUUID: MsgsFunctions(
                 lambda: None, lambda: Dtypes.Fb.projectuuid(self.builder, self.channel)
             ),
-            EnumFbQuery.INSTANCEUUID: MsgsFunctions(
-                lambda: None, lambda: self.instanceuuid()
-            ),
-            EnumFbQuery.DATAUUID: MsgsFunctions(
-                lambda: None, lambda: Dtypes.Fb.datauuid(self.builder, self.channel)
-            ),
+            EnumFbQuery.INSTANCEUUID: MsgsFunctions(lambda: None, lambda: self.instanceuuid()),
+            EnumFbQuery.DATAUUID: MsgsFunctions(lambda: None, lambda: Dtypes.Fb.datauuid(self.builder, self.channel)),
             EnumFbQuery.WITHOUTDATA: MsgsFunctions(lambda: False, lambda: True),
-            EnumFbQuery.MAX_NUM_DATA: MsgsFunctions(
-                lambda: None, lambda: Dtypes.Fb.max_num_data()
-            ),
+            EnumFbQuery.MAX_NUM_DATA: MsgsFunctions(lambda: None, lambda: Dtypes.Fb.max_num_data()),
             EnumFbQuery.SORT_BY_TIME: MsgsFunctions(lambda: False, lambda: True),
         }
 
     @expect_component(EnumFbQuery.PROJECTUUID)
     def instanceuuid(self) -> List[int]:
-        return Dtypes.Fb.intanceuuid(
-            self.builder, self.channel, self.get_component(EnumFbQuery.PROJECTUUID)
-        )
+        return Dtypes.Fb.intanceuuid(self.builder, self.channel, self.get_component(EnumFbQuery.PROJECTUUID))
 
     @expect_component(EnumFbQuery.PROJECTUUID)
     def datauuid(self) -> List[int]:
-        return Dtypes.Fb.datauuid(
-            self.builder, self.channel, self.get_component(EnumFbQuery.DATAUUID)
-        )
+        return Dtypes.Fb.datauuid(self.builder, self.channel, self.get_component(EnumFbQuery.DATAUUID))
 
     def _assemble_datatype_instance(self):
         polygon = self.get_component(EnumFbQuery.POLYGON)
@@ -136,9 +114,7 @@ class FbQueryInstance(MsgsFb[QueryInstance.QueryInstance]):
         }
 
     def query(self):
-        features = set(
-            [EnumFbQuery.WITHOUTDATA, EnumFbQuery.IN_MAP_FRAME, EnumFbQuery.PROJECTUUID]
-        )
+        features = set([EnumFbQuery.WITHOUTDATA, EnumFbQuery.IN_MAP_FRAME, EnumFbQuery.PROJECTUUID])
         return FbQuery(self.channel, self.builder, features).datatype_instance
 
     def _assemble_datatype_instance(self):
@@ -169,9 +145,7 @@ class DatatypeImplementations:
             return fbh.createTimeInterval(builder, timeMin, timeMax)
 
         @classmethod
-        def label_with_category(
-            cls, builder: Builder
-        ) -> LabelsWithCategory.LabelsWithCategory:
+        def label_with_category(cls, builder: Builder) -> LabelsWithCategory.LabelsWithCategory:
             category = ["0"]
             labels = {
                 "0": [
@@ -192,50 +166,30 @@ class DatatypeImplementations:
 
         @classmethod
         def projectuuid(cls, builder: Builder, channel: Channel) -> List[int]:
-            return [
-                builder.CreateString(fbh.getProject(builder, channel, "testproject"))
-            ]
+            return [builder.CreateString(fbh.getProject(builder, channel, "testproject"))]
 
         @classmethod
         # returns list of flatbuffered string, those are registered as ints
-        def intanceuuid(
-            cls, builder: Builder, channel: Channel, proj_uuid: int
-        ) -> List[int]:
+        def intanceuuid(cls, builder: Builder, channel: Channel, proj_uuid: int) -> List[int]:
             query_builder = FbQuery(channel, enum_types=set([EnumFbQuery.PROJECTUUID]))
-            query_builder.set_active_function(
-                EnumFbQuery.PROJECTUUID, lambda: proj_uuid
-            )
+            query_builder.set_active_function(EnumFbQuery.PROJECTUUID, lambda: proj_uuid)
             query_builder.assemble_datatype_instance()
-            query_inst_builder = FbQueryInstance(
-                channel, enum_types=set([EnumFbQueryInstance.QUERY])
-            )
-            query_inst_builder.set_active_function(
-                EnumFbQueryInstance.QUERY, lambda: query_builder.datatype_instance
-            )
+            query_inst_builder = FbQueryInstance(channel, enum_types=set([EnumFbQueryInstance.QUERY]))
+            query_inst_builder.set_active_function(EnumFbQueryInstance.QUERY, lambda: query_builder.datatype_instance)
             query_inst_builder.assemble_datatype_instance()
             query_instance = query_inst_builder.datatype_instance
 
             serv_man = ServiceManager(channel)
             uuids_pp = serv_man.call_get_instances_fb(builder, query_instance)
 
-            uuids_by_proj = [
-                uuids_pp.UuidsPerProject(i)
-                for i in range(uuids_pp.UuidsPerProjectLength())
-            ]
+            uuids_by_proj = [uuids_pp.UuidsPerProject(i) for i in range(uuids_pp.UuidsPerProjectLength())]
 
             uuids = []
             if len(uuids_by_proj) > 0:
                 # return every second uuid
-                uuids = sorted(
-                    [
-                        uuids_by_proj[0].Uuids(i).decode()
-                        for i in range(0, uuids_by_proj[0].UuidsLength())
-                    ]
-                )
+                uuids = sorted([uuids_by_proj[0].Uuids(i).decode() for i in range(0, uuids_by_proj[0].UuidsLength())])
                 # serialize the uuid strings
-                uuids = [
-                    builder.CreateString(uuids[i]) for i in range(0, len(uuids), 2)
-                ]
+                uuids = [builder.CreateString(uuids[i]) for i in range(0, len(uuids), 2)]
 
             return uuids
 
@@ -247,12 +201,8 @@ class DatatypeImplementations:
             points = serv_man.call_get_points_fb(builder, query_fb)
             pcl2s = serv_man.call_get_pointcloud2_fb(builder, query_fb)
 
-            image_uuids = sorted(
-                [image.Header().UuidMsgs().decode() for image in images]
-            )
-            point_uuids = sorted(
-                [point.Header().UuidMsgs().decode() for point in points]
-            )
+            image_uuids = sorted([image.Header().UuidMsgs().decode() for image in images])
+            point_uuids = sorted([point.Header().UuidMsgs().decode() for point in points])
             pcl2_uuids = sorted([pcl.Header().UuidMsgs().decode() for pcl in pcl2s])
 
             # debugging
@@ -261,18 +211,9 @@ class DatatypeImplementations:
             # print("pcls: " + str(pcl2_uuids))
 
             # fill up return list with every second uuid
-            ret_lst = [
-                builder.CreateString(image_uuids[i])
-                for i in range(0, len(image_uuids), 2)
-            ]
-            ret_lst += [
-                builder.CreateString(point_uuids[i])
-                for i in range(0, len(point_uuids), 2)
-            ]
-            ret_lst += [
-                builder.CreateString(pcl2_uuids[i])
-                for i in range(0, len(pcl2_uuids), 2)
-            ]
+            ret_lst = [builder.CreateString(image_uuids[i]) for i in range(0, len(image_uuids), 2)]
+            ret_lst += [builder.CreateString(point_uuids[i]) for i in range(0, len(point_uuids), 2)]
+            ret_lst += [builder.CreateString(pcl2_uuids[i]) for i in range(0, len(pcl2_uuids), 2)]
 
             return ret_lst
 

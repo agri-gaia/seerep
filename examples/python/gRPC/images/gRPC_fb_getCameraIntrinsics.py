@@ -23,9 +23,7 @@ def get_camintrins(
         # this finishes the builder and returns the decoded uuid
         target_proj_uuid = getProject(builder, grpc_channel, "testproject")
         if target_proj_uuid is None:
-            print(
-                "valid project doesn't exist! Please execute gRPC_fb_addCameraIntrinsics.py beforehand."
-            )
+            print("valid project doesn't exist! Please execute gRPC_fb_addCameraIntrinsics.py beforehand.")
             return None
     camintrins_query = createCameraIntrinsicsQuery(builder, ciuuid, target_proj_uuid)
     builder.Finish(camintrins_query)

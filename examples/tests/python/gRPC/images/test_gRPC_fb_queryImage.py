@@ -33,14 +33,9 @@ def test_gRPC_fb_queryImages(grpc_channel, project_setup):
         "labels_with_instance": "label_with_instance",
     }
 
-    queried_image_list: List[Image.Image] = query_img.query_images(
-        proj_uuid, grpc_channel
-    )
+    queried_image_list: List[Image.Image] = query_img.query_images(proj_uuid, grpc_channel)
 
-    queried_image_dicts = [
-        fb_to_dict.fb_obj_to_dict(img, True, fb_to_pb_keys)
-        for img in queried_image_list
-    ]
+    queried_image_dicts = [fb_to_dict.fb_obj_to_dict(img, True, fb_to_pb_keys) for img in queried_image_list]
     sent_image_dicts = [pb_to_dict.pb_to_dict(img, True) for img in sent_images]
 
     # replace data field with because in the query withoutData is set to true
@@ -50,18 +45,12 @@ def test_gRPC_fb_queryImages(grpc_channel, project_setup):
     # filter sent_images to only contain the 6 images which are queried with uuid_msgs
     filtered_sent_images = []
     for img in sent_image_dicts:
-        if img["header"]["uuid_msgs"] in [
-            img["header"]["uuid_msgs"] for img in queried_image_dicts
-        ]:
+        if img["header"]["uuid_msgs"] in [img["header"]["uuid_msgs"] for img in queried_image_dicts]:
             filtered_sent_images.append(img)
 
     assert len(queried_image_dicts) == len(filtered_sent_images) == 6
 
-    ordered_sent_imgs = sorted(
-        filtered_sent_images, key=lambda x: x["header"]["uuid_msgs"]
-    )
-    ordered_queried_imgs = sorted(
-        queried_image_dicts, key=lambda x: x["header"]["uuid_msgs"]
-    )
+    ordered_sent_imgs = sorted(filtered_sent_images, key=lambda x: x["header"]["uuid_msgs"])
+    ordered_queried_imgs = sorted(queried_image_dicts, key=lambda x: x["header"]["uuid_msgs"])
 
     assert ordered_queried_imgs == ordered_sent_imgs

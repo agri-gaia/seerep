@@ -40,9 +40,7 @@ from seerep.util.fb_helper import (
 
 def send_labeled_image_grid(
     target_proj_uuid: str = None, grpc_channel: Channel = get_gRPC_channel()
-) -> Tuple[
-    List[List[image.Image]], List[Tuple[int, int]], cameraintrinsics.CameraIntrinsics
-]:
+) -> Tuple[List[List[image.Image]], List[Tuple[int, int]], cameraintrinsics.CameraIntrinsics]:
 
     stub = imageService.ImageServiceStub(grpc_channel)
     stubTf = tfService.TfServiceStub(grpc_channel)
@@ -58,9 +56,7 @@ def send_labeled_image_grid(
                 target_proj_uuid = project.uuid
 
         if target_proj_uuid is None:
-            creation = projectCreation.ProjectCreation(
-                name="LabeledImagesInGrid", mapFrameId="map"
-            )
+            creation = projectCreation.ProjectCreation(name="LabeledImagesInGrid", mapFrameId="map")
             projectCreated = stubMeta.CreateProject(creation)
             target_proj_uuid = projectCreated.uuid
 
@@ -161,9 +157,7 @@ def send_labeled_image_grid(
             theImage.data = bytes(rgb)
 
             for iCategory in range(0, 2):
-                bbCat = (
-                    boundingbox2d_labeled_with_category.BoundingBox2DLabeledWithCategory()
-                )
+                bbCat = boundingbox2d_labeled_with_category.BoundingBox2DLabeledWithCategory()
                 bbCat.category = str(iCategory)
                 # 5. Create bounding boxes with labels
                 bb = boundingbox2d_labeled.BoundingBox2DLabeled()
@@ -179,9 +173,7 @@ def send_labeled_image_grid(
                 theImage.labels_bb.append(bbCat)
 
             # # 6. Add general labels to the image
-            labelsCat = (
-                labels_with_instance_with_category.LabelsWithInstanceWithCategory()
-            )
+            labelsCat = labels_with_instance_with_category.LabelsWithInstanceWithCategory()
             labelsCat.category = str(iCategory)
             for i in range(0, 2):
                 label = labelWithInstance.LabelWithInstance()
@@ -251,9 +243,7 @@ def add_camintrins(target_proj_uuid: str, grpc_channel: Channel) -> str:
     roi = createRegionOfInterest(builder, 3, 5, 6, 7, True)
 
     matrix = [4, 5, 6, 7, 0.1]
-    ci = createCameraIntrinsics(
-        builder, header, 3, 4, "plump_bob", matrix, matrix, matrix, matrix, 4, 5, roi, 5
-    )
+    ci = createCameraIntrinsics(builder, header, 3, 4, "plump_bob", matrix, matrix, matrix, matrix, 4, 5, roi, 5)
     builder.Finish(ci)
 
     buf = builder.Output()
@@ -286,9 +276,7 @@ if __name__ == "__main__":
             print(f"Grid cell {x}, {y} has {len(grid_list[x][y])} images.")
             for img in grid_list[x][y]:
                 print("-------------------------------------------------------------")
-                print(
-                    f"Image {img[0]} has {len(img[1].labels_general)} general labels."
-                )
+                print(f"Image {img[0]} has {len(img[1].labels_general)} general labels.")
                 for label in img[1].labels_general:
                     print(f"General label category: {label.category}")
                     for label2d in label.labelWithInstance:

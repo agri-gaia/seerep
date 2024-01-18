@@ -38,24 +38,18 @@ def test_addBoundingBoxToPCs(grpc_channel, project_setup):
     # sort inner bb list and add rotation to the values as this is set with default values by the server
     for bbs in bbs_ls:
         for label in bbs["LabelsBb"]:
-            label["BoundingBoxLabeled"].sort(
-                key=lambda bb: bb["LabelWithInstance"]["InstanceUuid"]
-            )
+            label["BoundingBoxLabeled"].sort(key=lambda bb: bb["LabelWithInstance"]["InstanceUuid"])
             for bb in label["BoundingBoxLabeled"]:
                 bb["BoundingBox"]["Rotation"] = default_rot
 
     for bbs in queried_pcs:
         for label in bbs["LabelsBb"]:
-            label["BoundingBoxLabeled"].sort(
-                key=lambda bb: bb["LabelWithInstance"]["InstanceUuid"]
-            )
+            label["BoundingBoxLabeled"].sort(key=lambda bb: bb["LabelWithInstance"]["InstanceUuid"])
 
     assert len(queried_pcs) == len(bbs_ls)
 
     for idx, pc in enumerate(queried_pcs):
         # filter for labels in category laterAddedBB
-        pc_labeled_bb_with_category = [
-            elem for elem in pc["LabelsBb"] if elem["Category"] == "laterAddedBB"
-        ]
+        pc_labeled_bb_with_category = [elem for elem in pc["LabelsBb"] if elem["Category"] == "laterAddedBB"]
         assert pc["Header"]["UuidMsgs"] == bbs_ls[idx]["Header"]["UuidMsgs"]
         assert pc_labeled_bb_with_category == bbs_ls[idx]["LabelsBb"]

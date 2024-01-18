@@ -47,9 +47,7 @@ def send_labeled_images(
                 target_proj_uuid = project.uuid
 
         if target_proj_uuid is None:
-            creation = projectCreation.ProjectCreation(
-                name="testproject", mapFrameId="map"
-            )
+            creation = projectCreation.ProjectCreation(name="testproject", mapFrameId="map")
             projectCreated = stubMeta.CreateProject(creation)
             target_proj_uuid = projectCreated.uuid
 
@@ -130,9 +128,7 @@ def send_labeled_images(
         theImage.data = bytes(rgb)
 
         for iCategory in range(0, 2):
-            bbCat = (
-                boundingbox2d_labeled_with_category.BoundingBox2DLabeledWithCategory()
-            )
+            bbCat = boundingbox2d_labeled_with_category.BoundingBox2DLabeledWithCategory()
             bbCat.category = str(iCategory)
             # 5. Create bounding boxes with labels
             bb = boundingbox2d_labeled.BoundingBox2DLabeled()
@@ -153,9 +149,7 @@ def send_labeled_images(
             theImage.labels_bb.append(bbCat)
 
             # # 6. Add general labels to the image
-            labelsCat = (
-                labels_with_instance_with_category.LabelsWithInstanceWithCategory()
-            )
+            labelsCat = labels_with_instance_with_category.LabelsWithInstanceWithCategory()
             labelsCat.category = str(iCategory)
             for i in range(0, 2):
                 label = labelWithInstance.LabelWithInstance()
@@ -207,15 +201,11 @@ def send_labeled_images(
 
 if __name__ == "__main__":
     sent_image_ls_data, _, _ = send_labeled_images()
-    camera_intrinsics_allimgs = set(
-        [intrins_uuid[1].uuid_camera_intrinsics for intrins_uuid in sent_image_ls_data]
-    )
+    camera_intrinsics_allimgs = set([intrins_uuid[1].uuid_camera_intrinsics for intrins_uuid in sent_image_ls_data])
 
     # print statement to seperate the messages of the function
     print()
-    print(
-        f"camera intrinsics will be saved against the uuid(s): {camera_intrinsics_allimgs}"
-    )
+    print(f"camera intrinsics will be saved against the uuid(s): {camera_intrinsics_allimgs}")
     img_uuids = [img[0] for img in sent_image_ls_data]
     for i, uuid in enumerate(img_uuids):
         print(f"the uuid of the sent image number {i} is: {uuid}")

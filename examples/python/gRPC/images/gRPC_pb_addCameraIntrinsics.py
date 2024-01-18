@@ -35,11 +35,7 @@ def add_camintrins(
                 target_proj_uuid = project.uuid
 
         if target_proj_uuid is None:
-            response = stubMeta.CreateProject(
-                projectCreation_pb2.ProjectCreation(
-                    name="testproject", mapFrameId="map"
-                )
-            )
+            response = stubMeta.CreateProject(projectCreation_pb2.ProjectCreation(name="testproject", mapFrameId="map"))
             target_proj_uuid = response.uuid
 
     if ciuuid is None:

@@ -19,9 +19,7 @@ def get_imgs(target_proj_uuid: str, grpc_channel: Channel) -> List:
 
     builder = flatbuffers.Builder(1024)
     stub = imageService.ImageServiceStub(grpc_channel)
-    query = createQuery(
-        builder, projectUuids=[builder.CreateString(target_proj_uuid)], withoutData=True
-    )
+    query = createQuery(builder, projectUuids=[builder.CreateString(target_proj_uuid)], withoutData=True)
     builder.Finish(query)
     buf = builder.Output()
     response_ls: List = list(stub.GetImage(bytes(buf)))
@@ -42,11 +40,7 @@ def test_addBoundingBox(grpc_channel, project_setup):
     all_imgs = get_imgs(proj_uuid, grpc_channel)
 
     for bb_img_uuid, bbs_img in sent_bb:
-        img_bb = [
-            img
-            for img in all_imgs
-            if img.Header().UuidMsgs().decode("utf-8") == bb_img_uuid
-        ][0]
+        img_bb = [img for img in all_imgs if img.Header().UuidMsgs().decode("utf-8") == bb_img_uuid][0]
 
         # iterate through all categories of the image
         filtered_bbs = [
@@ -58,6 +52,4 @@ def test_addBoundingBox(grpc_channel, project_setup):
 
         assert len(filtered_bbs) == len(sent_bbs)
         for bb_cat in filtered_bbs:
-            assert fb_to_dict.fb_obj_to_dict(bb_cat) in [
-                fb_to_dict.fb_obj_to_dict(bb) for bb in sent_bbs
-            ]
+            assert fb_to_dict.fb_obj_to_dict(bb_cat) in [fb_to_dict.fb_obj_to_dict(bb) for bb in sent_bbs]

@@ -111,13 +111,9 @@ def unpack_union_type(
             if isinstance(union_val, (int, float, str, bool)):
                 return union_val
 
-            return fb_obj_to_dict(
-                union_val, to_snake_case, remappings, union_type_mapping
-            )
+            return fb_obj_to_dict(union_val, to_snake_case, remappings, union_type_mapping)
     else:
-        raise ValueError(
-            f"union type {union_type} not in {field_nums_types} of table {type(enclosing_table_obj)}"
-        )
+        raise ValueError(f"union type {union_type} not in {field_nums_types} of table {type(enclosing_table_obj)}")
 
 
 # todo: improve interface and rework functionality for more robustness
@@ -156,46 +152,23 @@ def fb_obj_to_dict(
                 }
     """
     # get all non dunder functions of the object
-    funcs = [
-        func
-        for func in dir(obj)
-        if callable(getattr(obj, func)) and not func.startswith("__")
-    ]
+    funcs = [func for func in dir(obj) if callable(getattr(obj, func)) and not func.startswith("__")]
 
     # filter out the functions that are not needed
-    funcs = [
-        func
-        for func in funcs
-        if not any([func.startswith(x) for x in FB_FILTEROUT_STARTS_WITH])
-    ]
-    funcs = [
-        func
-        for func in funcs
-        if not any([func.endswith(x) for x in FB_FILTEROUT_ENDS_WITH])
-    ]
+    funcs = [func for func in funcs if not any([func.startswith(x) for x in FB_FILTEROUT_STARTS_WITH])]
+    funcs = [func for func in funcs if not any([func.endswith(x) for x in FB_FILTEROUT_ENDS_WITH])]
     funcs = [func for func in funcs if not any([func == x for x in FB_FILTEROUT_IS])]
-    funcs = [
-        func
-        for func in funcs
-        if not (func == "GetRootAs" or func == f"GetRootAs{type(obj).__name__}")
-    ]
+    funcs = [func for func in funcs if not (func == "GetRootAs" or func == f"GetRootAs{type(obj).__name__}")]
 
     # group arrays and array functions together, so that arrays can be handled separately
     # e.g. (Distortion, DistortionIsNone, DistortionLength)
-    farr_dict: Dict[str, Tuple] = get_func_lists_wparams(
-        funcs, *FB_GROUP_LIST_ENDS_WITH
-    )
+    farr_dict: Dict[str, Tuple] = get_func_lists_wparams(funcs, *FB_GROUP_LIST_ENDS_WITH)
 
     # filter funcs with endings out which are already in f_list
     funcs = [
         func
         for func in funcs
-        if not any(
-            [
-                func.endswith(x) if func.split(x)[0] in farr_dict else False
-                for x in FB_GROUP_LIST_ENDS_WITH
-            ]
-        )
+        if not any([func.endswith(x) if func.split(x)[0] in farr_dict else False for x in FB_GROUP_LIST_ENDS_WITH])
     ]
     funcs = [func for func in funcs if not func in farr_dict]
 
@@ -203,9 +176,7 @@ def fb_obj_to_dict(
     # get function results, if the result is a complex flatbuffer object, recursively call this function
     for func in funcs:
         if type(obj) in union_type_mapping and func == union_type_mapping[type(obj)][0]:
-            res_dict[func] = unpack_union_type(
-                obj, union_type_mapping, to_snake_case, remappings
-            )
+            res_dict[func] = unpack_union_type(obj, union_type_mapping, to_snake_case, remappings)
             continue
 
         res = getattr(obj, func)()
@@ -217,9 +188,7 @@ def fb_obj_to_dict(
             if res == 0:
                 continue
 
-            func = (
-                func[0] + re.sub(UPPER_CASE_LETTERS, RPLC_UPPER_CASE_LETTERS, func[1:])
-            ).lower()
+            func = (func[0] + re.sub(UPPER_CASE_LETTERS, RPLC_UPPER_CASE_LETTERS, func[1:])).lower()
 
             if func in remappings:
                 func = remappings[func]
@@ -228,18 +197,13 @@ def fb_obj_to_dict(
         if isinstance(res, (int, float, str, bool)):
             res_dict[func] = res
         else:
-            res_dict[func] = fb_obj_to_dict(
-                res, to_snake_case, remappings, union_type_mapping
-            )
+            res_dict[func] = fb_obj_to_dict(res, to_snake_case, remappings, union_type_mapping)
 
     # do the same for arrays
     for f_key in farr_dict:
         if getattr(obj, farr_dict[f_key][0])():
             if to_snake_case:
-                f_key = (
-                    f_key[0]
-                    + re.sub(UPPER_CASE_LETTERS, RPLC_UPPER_CASE_LETTERS, f_key[1:])
-                ).lower()
+                f_key = (f_key[0] + re.sub(UPPER_CASE_LETTERS, RPLC_UPPER_CASE_LETTERS, f_key[1:])).lower()
                 if f_key in remappings:
                     f_key = remappings[f_key]
 
@@ -259,16 +223,11 @@ def fb_obj_to_dict(
             if isinstance(res, (int, float, str, bool)):
                 res_lst.append(res)
             else:
-                res_lst.append(
-                    fb_obj_to_dict(res, to_snake_case, remappings, union_type_mapping)
-                )
+                res_lst.append(fb_obj_to_dict(res, to_snake_case, remappings, union_type_mapping))
 
         # find first occurence of upper case letter replace it with underscore and lower case letter
         if to_snake_case:
-            f_key = (
-                f_key[0]
-                + re.sub(UPPER_CASE_LETTERS, RPLC_UPPER_CASE_LETTERS, f_key[1:])
-            ).lower()
+            f_key = (f_key[0] + re.sub(UPPER_CASE_LETTERS, RPLC_UPPER_CASE_LETTERS, f_key[1:])).lower()
             if f_key in remappings:
                 f_key = remappings[f_key]
 
