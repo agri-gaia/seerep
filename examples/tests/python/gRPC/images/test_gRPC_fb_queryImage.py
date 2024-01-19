@@ -3,10 +3,12 @@
 #   gRPC_pb_sendLabeledImage.py
 from typing import List
 
+from google.protobuf import json_format
 from gRPC.images import gRPC_fb_queryImage as query_img
 from gRPC.images import gRPC_pb_sendLabeledImage as send_img
 from seerep.fb import Image
-from seerep.util import fb_to_dict, pb_to_dict
+from seerep.util import fb_to_dict
+from seerep.util.common import dict_snake_case_keys
 
 
 # test sending and querying the images
@@ -36,7 +38,7 @@ def test_gRPC_fb_queryImages(grpc_channel, project_setup):
     queried_image_list: List[Image.Image] = query_img.query_images(proj_uuid, grpc_channel)
 
     queried_image_dicts = [fb_to_dict.fb_obj_to_dict(img, True, fb_to_pb_keys) for img in queried_image_list]
-    sent_image_dicts = [pb_to_dict.pb_to_dict(img, True) for img in sent_images]
+    sent_image_dicts = dict_snake_case_keys([json_format.MessageToDict(img, float_precision=17) for img in sent_images])
 
     # replace data field with because in the query withoutData is set to true
     for img in sent_image_dicts:

@@ -1,7 +1,8 @@
 # this module needs a revamp and tests for all possible flatbuffer type scenarios
 # the current implementation is dependent on hardcoded assumptions
-import re
 from typing import Dict, Iterable, List, Tuple, Type
+
+from seerep.util.common import to_snake_case
 
 FB_GROUP_LIST_ENDS_WITH = ["IsNone", "Length"]
 FB_FILTEROUT_STARTS_WITH = ["__", "GetRootAs"]
@@ -52,10 +53,6 @@ FB_FILTEROUT_IS = [
 ]
 
 
-UPPER_CASE_LETTERS = r"([A-Z])"
-RPLC_UPPER_CASE_LETTERS = r"_\1"
-
-
 def get_func_lists_wparams(func_list, *endings) -> Dict[str, Tuple[bool, int]]:
     """
     Returns a list of tuples of functions that have versions of them with certain endings.
@@ -86,7 +83,7 @@ def get_func_lists_wparams(func_list, *endings) -> Dict[str, Tuple[bool, int]]:
 def unpack_union_type(
     enclosing_table_obj,
     union_type_mapping: Dict[Type, Tuple[str, List[Tuple[int, Type]]]],
-    to_snake_case=False,
+    snake_case=False,
     remappings: Dict[str, str] = dict(),
 ) -> Dict:
     union_field, field_nums_types = union_type_mapping[type(enclosing_table_obj)]
@@ -111,7 +108,7 @@ def unpack_union_type(
             if isinstance(union_val, (int, float, str, bool)):
                 return union_val
 
-            return fb_obj_to_dict(union_val, to_snake_case, remappings, union_type_mapping)
+            return fb_obj_to_dict(union_val, snake_case, remappings, union_type_mapping)
     else:
         raise ValueError(f"union type {union_type} not in {field_nums_types} of table {type(enclosing_table_obj)}")
 
@@ -119,7 +116,7 @@ def unpack_union_type(
 # todo: improve interface and rework functionality for more robustness
 def fb_obj_to_dict(
     obj,
-    to_snake_case=False,
+    snake_case=False,
     remappings: Dict[str, str] = dict(),
     union_type_mapping: Dict[Type, Tuple[str, List[Tuple[int, Type]]]] = dict(),
 ) -> Dict:
@@ -129,7 +126,7 @@ def fb_obj_to_dict(
 
     Args:
         obj: The flatbuffer object to convert.
-        to_snake_case: If the resulting dictionary keys (flatbuffer field names) should be converted to snake case.
+        snake_case: If the resulting dictionary keys (flatbuffer field names) should be converted to snake case.
         remappings: A dictionary of remappings for the resulting flatbuffer field names.
         union_type_mapping:
             union_type_mapping{ t: (field: str, [(num_type1, t_type1), (num_type2, t_type2), ...]) }
@@ -176,7 +173,7 @@ def fb_obj_to_dict(
     # get function results, if the result is a complex flatbuffer object, recursively call this function
     for func in funcs:
         if type(obj) in union_type_mapping and func == union_type_mapping[type(obj)][0]:
-            res_dict[func] = unpack_union_type(obj, union_type_mapping, to_snake_case, remappings)
+            res_dict[func] = unpack_union_type(obj, union_type_mapping, snake_case, remappings)
             continue
 
         res = getattr(obj, func)()
@@ -184,11 +181,11 @@ def fb_obj_to_dict(
         if isinstance(res, bytes):
             res = res.decode()
 
-        if to_snake_case:
+        if snake_case:
             if res == 0:
                 continue
 
-            func = (func[0] + re.sub(UPPER_CASE_LETTERS, RPLC_UPPER_CASE_LETTERS, func[1:])).lower()
+            func = to_snake_case(func)
 
             if func in remappings:
                 func = remappings[func]
@@ -197,13 +194,13 @@ def fb_obj_to_dict(
         if isinstance(res, (int, float, str, bool)):
             res_dict[func] = res
         else:
-            res_dict[func] = fb_obj_to_dict(res, to_snake_case, remappings, union_type_mapping)
+            res_dict[func] = fb_obj_to_dict(res, snake_case, remappings, union_type_mapping)
 
     # do the same for arrays
     for f_key in farr_dict:
         if getattr(obj, farr_dict[f_key][0])():
-            if to_snake_case:
-                f_key = (f_key[0] + re.sub(UPPER_CASE_LETTERS, RPLC_UPPER_CASE_LETTERS, f_key[1:])).lower()
+            if snake_case:
+                f_key = to_snake_case(f_key)
                 if f_key in remappings:
                     f_key = remappings[f_key]
 
@@ -217,17 +214,17 @@ def fb_obj_to_dict(
             if isinstance(res, bytes):
                 res = res.decode()
 
-            if to_snake_case and res == 0:
+            if snake_case and res == 0:
                 continue
 
             if isinstance(res, (int, float, str, bool)):
                 res_lst.append(res)
             else:
-                res_lst.append(fb_obj_to_dict(res, to_snake_case, remappings, union_type_mapping))
+                res_lst.append(fb_obj_to_dict(res, snake_case, remappings, union_type_mapping))
 
         # find first occurence of upper case letter replace it with underscore and lower case letter
-        if to_snake_case:
-            f_key = (f_key[0] + re.sub(UPPER_CASE_LETTERS, RPLC_UPPER_CASE_LETTERS, f_key[1:])).lower()
+        if snake_case:
+            f_key = to_snake_case(f_key)
             if f_key in remappings:
                 f_key = remappings[f_key]
 

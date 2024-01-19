@@ -3,7 +3,6 @@ from typing import List
 
 import numpy as np
 from flatbuffers import Builder
-
 from seerep.fb import (
     Boundingbox,
     BoundingBox2DLabeled,
