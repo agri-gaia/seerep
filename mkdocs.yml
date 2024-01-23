@@ -48,6 +48,7 @@ nav:
     - Development Setup: 'getting_started/development_setup.md'
     - Kown Errors: 'getting_started/known_errors.md'
   - Examples:
+    - examples/index.md
     - Projects: 'examples/projects.md'
     - Images: 'examples/images.md'
     - Point Clouds: 'examples/point_clouds.md'
