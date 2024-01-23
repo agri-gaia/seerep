@@ -2,7 +2,44 @@ site_name: SEEREP
 repo_url: https://github.com/agri-gaia/seerep
 repo_name: agri-gaia/seerep
 docs_dir: docs/mkdocs
-# define navigation structure
+theme:
+  name: material
+  language: en
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/lightbulb
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/lightbulb-outline
+        name: Switch to light mode
+  features:
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.expand
+    - navigation.indexes
+    - content.code.copy
+    - content.tabs
+  icon:
+    repo: fontawesome/brands/github
+  logo: imgs/DFKI-Logo_ohne_RGB_weiss.svg
+  favicon: imgs/DFKI-Logo_ohne_RGB_weiss.svg
+  font:
+    text: IBM Plex Sans
+    code: IBM Plex Mono
+extra_css:
+  - stylesheets/extra.css
+plugins:
+  - search
+  - privacy
+  - glightbox
 nav:
   - Home: 'home/index.md'
   - Getting started:
@@ -22,56 +59,11 @@ nav:
     - gRPC Python: 'tutorials/overview.md'
     - Creating & retrieving projects: 'tutorials/projects.md'
     - Sending & Querying Images: 'tutorials/images.md'
-theme:
-  # use mkdocs material https://squidfunk.github.io/mkdocs-material/
-  name: material
-  language: en
-  icon:
-    repo: fontawesome/brands/github
-  logo: imgs/DFKI-Logo_ohne_RGB_weiss.svg
-  favicon: imgs/DFKI-Logo_ohne_RGB_weiss.svg
-  # dark mode toggle
-  palette:
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
-      primary: custom
-      accent: custom
-      toggle:
-        icon: material/lightbulb
-        name: Switch to dark mode
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
-      primary: custom
-      accent: custom
-      toggle:
-        icon: material/lightbulb-outline
-        name: Switch to light mode
-  # navigation features
-  features:
-    - navigation.tracking
-    - navigation.tabs
-    - navigation.expand
-    - navigation.indexes
-    - content.code.copy
-    - content.tabs
-  font:
-    text: IBM Plex Sans
-    code: IBM Plex Mono
-# dfki color theme
-extra_css:
-  - stylesheets/extra.css
-plugins:
-  - search
-  - privacy
-  - glightbox
 markdown_extensions:
-  # aka call-outs, way to include side content
   - admonition
-  # syntax highlighting in code blocks
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.superfences
-  # add tabs to navigate on the top
   - pymdownx.keys
   - pymdownx.tabbed:
       alternate_style: true
