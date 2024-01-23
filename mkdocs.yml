@@ -1,37 +1,26 @@
 site_name: SEEREP Documentation
+site_description: Documentation for the SEemantic Environment REpresentation (SEEREP)
+site_author: Mark Niemeyer, Julian Arkenau, Marc Meijer
+
 repo_url: https://github.com/agri-gaia/seerep
 repo_name: agri-gaia/seerep
+edit_uri: edit/main/docs/mkdocs
+
 docs_dir: docs/mkdocs
-# define navigation structure
-nav:
-  - Home: 'home/index.md'
-  - Getting started:
-    - Client:
-      - gRPC python: 'getting-started/client/pypi.md'
-    - Server:
-      - Configuration: 'getting-started/server/configuration.md'
-      - Dev Environment: 'getting-started/server/installationDev.md'
-      - Kubernetes Deployment: 'getting-started/server/kubernetes-deployment.md'
-      - Local Deployment: 'getting-started/server/local-deployment.md'
-      - Docs: 'getting-started/server/docs.md'
-      - Tests: 'getting-started/server/tests.md'
-  - Reference:
-    - Package Overview: 'reference/packages.md'
-    - Python helper functionality: 'reference/python-helpers.md'
-    - Python tests message abstractions: 'reference/pytests-message-abstractions.md'
-  - Tutorials:
-    - Overview: 'tutorials/overview.md'
-    - Creating & retrieving projects: 'tutorials/projects.md'
-    - Sending & querying images: 'tutorials/images.md'
-    - Writing python examples: 'tutorials/writing-python-examples.md'
-    - Writing python integration tests: 'tutorials/writing-python-tests.md'
 theme:
-  # use mkdocs material https://squidfunk.github.io/mkdocs-material/
   name: material
+  features:
+    - navigation.tracking
+    - navigation.instant
+    - navigation.top
+    - navigation.tabs
+    - navigation.expand
+    - navigation.indexes
+    - content.code.copy
+    - content.tabs
+    - content.action.edit
+    - search.suggest
   language: en
-  icon:
-    repo: fontawesome/brands/github
-  # dark mode toggle
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
@@ -47,43 +36,56 @@ theme:
       toggle:
         icon: material/lightbulb-outline
         name: Switch to light mode
-  # navigation features
-  features:
-    - navigation.tracking
-    - navigation.tabs
-    - navigation.expand
-    - navigation.sections
-    - content.code.copy
-    - content.tabs
+  icon:
+    repo: fontawesome/brands/github
+    edit: material/pencil
+  logo: imgs/DFKI-Logo_ohne_RGB_weiss.svg
+  favicon: imgs/DFKI-Logo_ohne_RGB_weiss.svg
   font:
     text: IBM Plex Sans
     code: IBM Plex Mono
-# dfki color theme
-extra_css:
-  - stylesheets/extra.css
-plugins:
-  - search
-  - privacy
-  - glightbox
+
 markdown_extensions:
-  # aka call-outs, way to include side content
   - admonition
-  # syntax highlighting in code blocks
   - pymdownx.highlight:
       anchor_linenums: true
   # allow references to code blocks for more direct examples
   - pymdownx.snippets:
       url_download: true
   - pymdownx.superfences
-  # add tabs to navigate on the top
   - pymdownx.keys
   - pymdownx.tabbed:
       alternate_style: true
-  - pymdownx.snippets
-  - footnotes
   - attr_list
   - md_in_html
-  - toc:
-      permalink: true
+
+nav:
+  - Home: 'home/index.md'
+  - Getting started:
+    - Client:
+      - gRPC python: 'getting-started/client/pypi.md'
+    - Server:
+      - Configuration: 'getting-started/server/configuration.md'
+      - Dev Environment: 'getting-started/server/installationDev.md'
+      - Kubernetes Deployment: 'getting-started/server/kubernetes-deployment.md'
+      - Local Deployment: 'getting-started/server/local-deployment.md'
+      - Docs: 'getting-started/server/docs.md'
+      - Tests: 'getting-started/server/tests.md'
+  - Reference:
+    - Package Overview: 'reference/packages.md'
+  - Tutorials:
+    - Overview: 'tutorials/overview.md'
+    - gRPC Python: 'tutorials/overview.md'
+    - Creating & retrieving projects: 'tutorials/projects.md'
+    - Sending & Querying Images: 'tutorials/images.md'
+
 copyright: Copyright &copy; 2021 - 2024 Deutsches Forschungszentrum für Künstliche Intelligenz GmbH (DFKI) <br>
   <a href="/seerep/mkdocs/legal-notice/index.html">Legal Notice</a> - <a href="/seerep/mkdocs/data-protection-notice/index.html">Data Protection Notice</a>
+
+extra_css:
+  - stylesheets/extra.css
+
+plugins:
+  - search
+  - privacy
+  - glightbox
