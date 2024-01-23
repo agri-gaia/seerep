@@ -44,7 +44,7 @@ nav:
   - SEEREP: 'index.md'
   - Getting Started:
     - Sever Deployment: 'getting_started/server_deployment.md'
-    - Python Clients: 'getting_started/python_clients.md'
+    - gRPC Interface: 'getting_started/grpc_interface.md'
     - Development Setup: 'getting_started/development_setup.md'
     - Kown Errors: 'getting_started/known_errors.md'
   - Examples:
