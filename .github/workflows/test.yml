@@ -72,8 +72,8 @@ jobs:
     - name: Install python test dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install tox tox-gh-actions
+        pip install tox-gh-actions
       shell: bash
     - name: Test using tox
-      run: tox -c $GITHUB_WORKSPACE/src/tox.ini -e integration-examples-gh
+      run: tox -c $GITHUB_WORKSPACE/src/tox.ini -e integration-examples
       shell: bash
