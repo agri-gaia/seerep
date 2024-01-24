@@ -1,0 +1,18 @@
+compilation_database_dir: /seerep/build/seerep_server/compile_commands.json
+output_directory: /seerep/seerep-data/diagrams
+diagrams:
+  SEEREP_Class_Diagramm:
+    type: class
+    generate_packages: true
+    include:
+      namespaces:
+      - seerep_core
+      - seerep_core_fb
+      - seerep_core_pb
+      - seerep_core_msgs
+      - seerep_hdf5_core
+      - seerep_hdf5_fb
+      - seerep_hdf5_pb
+      - seerep_hdf5_py
+      - seerep_hdf5_ros
+      - seerep_server
