@@ -16,6 +16,7 @@ grpc::Status PbCameraIntrinsicsService::TransferCameraIntrinsics(grpc::ServerCon
 
   std::string response_message;
 
+  /* TODO: Add common implementation between Protocol Buffers and Flatbuffers for checking the correct matrix dimensions */
   // check if the distortion model is found in kCameraDistortionModels
   bool distortion_model_err = camintrinsics->distortion_model().size() > 0 &&
                               std::find(std::begin(seerep_server_constants::kCameraDistortionModels),
