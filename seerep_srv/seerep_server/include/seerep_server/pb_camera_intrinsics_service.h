@@ -6,6 +6,7 @@
 #include <seerep_core/core.h>
 #include <seerep_core_pb/core_pb_camera_intrinsics.h>
 
+#include "service_constants.h"
 #include "util.hpp"
 
 // logging

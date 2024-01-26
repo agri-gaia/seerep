@@ -54,7 +54,7 @@ std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CoreImage::readDataset(con
   }
   // lock released
 
-  computeFrusturmBB(camintrinsics_uuid, data.boundingbox);
+  computeFrustumBB(camintrinsics_uuid, data.boundingbox);
 
   return data;
 }
@@ -127,7 +127,7 @@ const std::string Hdf5CoreImage::getHdf5DataSetPath(const std::string& id) const
   return getHdf5GroupPath(id) + "/" + RAWDATA;
 }
 
-void Hdf5CoreImage::computeFrusturmBB(const std::string& camintrinsics_uuid, seerep_core_msgs::AABB& bb)
+void Hdf5CoreImage::computeFrustumBB(const std::string& camintrinsics_uuid, seerep_core_msgs::AABB& bb)
 {
   seerep_core_msgs::camera_intrinsics ci =
       m_ioCI->readCameraIntrinsics(boost::lexical_cast<boost::uuids::uuid>(camintrinsics_uuid));

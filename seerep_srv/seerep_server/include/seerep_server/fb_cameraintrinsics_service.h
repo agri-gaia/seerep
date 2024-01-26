@@ -7,6 +7,7 @@
 #include <seerep_core_fb/core_fb_camera_intrinsics.h>
 #include <seerep_core_fb/core_fb_conversion.h>
 
+#include "service_constants.h"
 #include "util.hpp"
 
 // logging

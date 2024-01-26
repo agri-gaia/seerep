@@ -14,6 +14,50 @@ grpc::Status PbCameraIntrinsicsService::TransferCameraIntrinsics(grpc::ServerCon
   (void)context;  // ignore that variable without causing warnings
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "received camera intrinsics... ";
 
+  std::string response_message;
+
+  /* TODO: Add common implementation between Protocol Buffers and Flatbuffers for checking the correct matrix dimensions */
+  // check if the distortion model is found in kCameraDistortionModels
+  bool distortion_model_err = camintrinsics->distortion_model().size() > 0 &&
+                              std::find(std::begin(seerep_server_constants::kCameraDistortionModels),
+                                        std::end(seerep_server_constants::kCameraDistortionModels),
+                                        camintrinsics->distortion_model().c_str()) ==
+                                  std::end(seerep_server_constants::kCameraDistortionModels);
+
+  bool intrinsics_mat_err = camintrinsics->intrinsic_matrix_size() != 9 || camintrinsics->intrinsic_matrix()[0] == 0 ||
+                            camintrinsics->intrinsic_matrix()[4] == 0;
+
+  bool rectification_mat_err =
+      camintrinsics->rectification_matrix_size() > 0 && camintrinsics->rectification_matrix_size() != 9;
+
+  bool projection_mat_err =
+      camintrinsics->projection_matrix_size() > 0 && camintrinsics->projection_matrix_size() != 12;
+
+  if (distortion_model_err || intrinsics_mat_err || rectification_mat_err || projection_mat_err)
+  {
+    response_message = "";
+    if (distortion_model_err)
+    {
+      response_message += "The distortion model is set but invalid. ";
+    }
+    if (intrinsics_mat_err)
+    {
+      response_message += "Instrinsics matrix dimensions are incorrect or the focal length values are "
+                          "invalid. ";
+    }
+    if (rectification_mat_err)
+    {
+      response_message += "Rectification matrix dimensions are incorrect. ";
+    }
+    if (projection_mat_err)
+    {
+      response_message += "Projection matrix dimensions are incorrect.";
+    }
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << response_message;
+    seerep_server_util::createResponsePb(response_message, seerep::pb::ServerResponse::FAILURE, response);
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, response_message);
+  }
+
   if (!camintrinsics->header().uuid_project().empty())
   {
     std::string grpc_msg = "Added Camera Intrinsics.";
