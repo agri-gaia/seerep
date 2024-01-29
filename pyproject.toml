@@ -39,5 +39,6 @@ testpaths = [
     "tests/integration-examples"
 ]
 pythonpath = [
-  "examples/python"
+  "examples/python",
+  "tests/integration-examples/python"
 ]

@@ -10,14 +10,14 @@ from typing import Dict, List, Set
 from gRPC.images import gRPC_pb_sendLabeledImage as send_imgs
 from gRPC.point import gRPC_fb_sendPointsBasedOnImageInstances as send_points
 from gRPC.pointcloud import gRPC_fb_sendPointCloud as send_pcl
-from seerep.fb import Datatype, PointCloud2, PointStamped, UuidsPerProject
-from seerep.util import fb_helper as fbh
-from seerep.util.msg_abs.msgs import (
+from gRPC.util.msg_abs.msgs import (
     EnumFbQuery,
     EnumFbQueryInstance,
     FbQuery,
     FbQueryInstance,
 )
+from seerep.fb import Datatype, PointCloud2, PointStamped, UuidsPerProject
+from seerep.util import fb_helper as fbh
 from seerep.util.service_manager import ServiceManager
 
 

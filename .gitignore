@@ -43,9 +43,10 @@
 doxygen-output
 site
 
-# pycache
+# pycache and pytest
 **/__pycache__/**
-
+**/.pytest_cache/**
+**/.tox/**
 
 # Python Distribution / packaging
 **/seerep/**

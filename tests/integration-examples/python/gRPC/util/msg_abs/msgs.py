@@ -3,6 +3,8 @@ from typing import Dict, List
 
 from flatbuffers import Builder
 from grpc import Channel
+from gRPC.util.datastructures import FrozenEnum
+from gRPC.util.msg_abs.msgs_base import MsgsFb, MsgsFunctions, expect_component
 from seerep.fb import (
     Datatype,
     LabelsWithCategory,
@@ -12,8 +14,6 @@ from seerep.fb import (
     TimeInterval,
 )
 from seerep.util import fb_helper as fbh
-from seerep.util.datastructures import FrozenEnum
-from seerep.util.msg_abs.msgs_base import MsgsFb, MsgsFunctions, expect_component
 from seerep.util.service_manager import ServiceManager
 
 C_MAX_INTEGER: int = 2147483647
