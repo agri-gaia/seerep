@@ -12,7 +12,7 @@ from seerep.util.common import get_gRPC_channel
 # pytest starts relative to where it finds the first pyproject.toml
 # in this case it is in the examples folder
 
-SEEREP_CFG_PATH = "tests/seerep.cfg"
+SEEREP_CFG_PATH = "tests/integration-examples/seerep.cfg"
 DATA_FOLDER_CONFIG_KEY = "data-folder"
 LOG_FOLDER_CONFIG_KEY = "log-path"
 PORT_CONFIG_KEY = "port"
