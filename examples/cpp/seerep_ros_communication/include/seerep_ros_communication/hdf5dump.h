@@ -24,6 +24,7 @@
 #include <ros/master.h>
 #include <ros/ros.h>
 #include <tf2_msgs/TFMessage.h>
+#include <vision_msgs/Detection3D.h>
 
 // pkg
 #include "types.h"
@@ -40,6 +41,8 @@ public:
   void dump(const std_msgs::Header::ConstPtr& msg) const;
 
   void dump(const sensor_msgs::PointCloud2::ConstPtr& msg) const;
+
+  void dump(const vision_msgs::Detection3D::ConstPtr& msg) const;
 
   void dump(const sensor_msgs::Image::ConstPtr& msg) const;
 
