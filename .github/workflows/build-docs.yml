@@ -21,7 +21,7 @@ jobs:
       contents: write
     steps:
       - name: Checkout SEEREP
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Download MkDocs
         shell: bash
         run: |
