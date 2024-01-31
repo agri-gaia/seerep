@@ -80,49 +80,51 @@ void DumpSensorMsgs::dump(const sensor_msgs::Image::ConstPtr& msg) const
   }
 }
 
-void DumpSensorMsgs::dump(const vision_msgs::Detection3D::ConstPtr &msg) const
+void DumpSensorMsgs::dump(const vision_msgs::Detection3D::ConstPtr& msg) const
+{
+  try
   {
-    // try
-    // {
-    //   std::string uuid = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
-    //   ROS_INFO_STREAM("Dump Detection3D with uuid: " << uuid);
-    //   /*
-    //  TODO: Temporary workaround because the Protobuf HDF5 PCL storage produces the wrong '\points' dataset layout,
-    //  due to the changes introduced in PR #354. It uses an NxM dimensional float dataset instead of an 1x(N*M) byte
-    //  dataset. This workaround should be removed as soon as the Protobuf PCL storage is ported to the new layout.
-    //   */
+    const std::string uuid = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+    ROS_INFO_STREAM("Dump Detection3D with uuid: " << uuid);
 
-    //   std::string instanceUUID = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+    /* store pcl and it's bounding box */
+    auto pcl = seerep_ros_conversions_fb::toFlat(msg->source_cloud, uuid);
+    m_ioPointCloud->writePointCloud2(uuid, *pcl.GetRoot());
+    auto [min_corner, max_corner] = m_ioPointCloud->computeBoundingBox(*pcl.GetRoot());
+    m_ioPointCloud->writeBoundingBox(uuid, min_corner, max_corner);
 
-    //   auto pcl = seerep_ros_conversions_fb::toFlat(msg->source_cloud, uuid);
-    //   flatbuffers::grpc::MessageBuilder fbb;
+    flatbuffers::grpc::MessageBuilder fbb;
 
-    //   // ToDo: Build bounding boxes from detections, examplewith Person1 at 0,0,0
-    //   auto label = seerep::fb::CreateLabel(fbb, fbb.CreateString("Person1"), 1.0);
-    //   auto instance = fbb.CreateString(instanceUUID);
-    //   auto LabelWithInstance = seerep::fb::CreateLabelWithInstance(fbb, label, instance);
-    //   auto BoundingBox = seerep::fb::CreateBoundingbox(fbb, seerep::fb::CreatePoint(fbb, 0, 0, 0), seerep::fb::CreatePoint(fbb, 0, 0, 0), seerep::fb::CreateQuaternion(fbb, 0, 0, 0, 0));
-    //   auto BoundingBoxLabeled = seerep::fb::CreateBoundingBoxLabeled(fbb, LabelWithInstance, BoundingBox);
-    //   std::vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>> BoundingBoxesLabeled;
-    //   BoundingBoxesLabeled.push_back(BoundingBoxLabeled);
-    //   auto BoundingBoxLabeledWithCategory = seerep::fb::CreateBoundingBoxLabeledWithCategory(fbb, fbb.CreateString("GroundTruth"), fbb.CreateVector(BoundingBoxesLabeled));
-    //   std::vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeledWithCategory>> boxes;
-    //   boxes.push_back(BoundingBoxLabeledWithCategory);
-    //   auto boxesVector=fbb.CreateVector(boxes);
+    const std::string instanceUUID = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
 
-    //   // TODO: ... ::toFlat(*msg, uuid).GetRoot() causes a segfault when accessing the data field of the pcl?!?
-    //   auto [min_corner, max_corner] = m_ioPointCloud->computeBoundingBox(*pcl.GetRoot());
+    auto labelWithInstance = seerep::fb::CreateLabelWithInstance(
+        fbb, seerep::fb::CreateLabel(fbb, fbb.CreateString("Person1"), 1.0), fbb.CreateString(instanceUUID));
 
-    //   m_ioPointCloud->writeBoundingBox(uuid, min_corner, max_corner);
-    //   m_ioPointCloud->writePointCloud2(uuid, *pcl.GetRoot());
-    //   m_ioPointCloud->writePointCloudBoundingBoxLabeled(uuid, boxesVector);
-    //   m_ioImageCore->writeLabelsGeneral(uuid, m_labelsWithInstanceWithCategory);
-    // }
-    // catch (const std::exception &e)
-    // {
-    //   ROS_ERROR_STREAM("Exception while saving point cloud with detection: " << e.what());
-    // }
+    auto boundingBox =
+        seerep::fb::CreateBoundingbox(fbb, seerep::fb::CreatePoint(fbb, 0, 0, 0), seerep::fb::CreatePoint(fbb, 0, 0, 0),
+                                      seerep::fb::CreateQuaternion(fbb, 0, 0, 0, 0));
+
+    auto boundingBoxLabeled = seerep::fb::CreateBoundingBoxLabeled(fbb, labelWithInstance, boundingBox);
+    std::vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>> BoundingBoxesLabeled = { boundingBoxLabeled };
+
+    auto boundingBoxLabeledWithCategory = seerep::fb::CreateBoundingBoxLabeledWithCategory(
+        fbb, fbb.CreateString("GroundTruth"), fbb.CreateVector(BoundingBoxesLabeled));
+    std::vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeledWithCategory>> boxes = {
+      boundingBoxLabeledWithCategory
+    };
+
+    auto header = seerep_ros_conversions_fb::toFlat(msg->header, std::string(""), fbb, std::string(""));
+    seerep::fb::CreateBoundingBoxesLabeledStamped(fbb, header, fbb.CreateVector(boxes));
+    auto releasedMessage = fbb.ReleaseMessage<seerep::fb::BoundingBoxesLabeledStamped>();
+
+    m_ioPointCloud->writePointCloudBoundingBoxLabeled(uuid, releasedMessage.GetRoot()->labels_bb());
+    m_ioImageCore->writeLabelsGeneral(uuid, m_labelsWithInstanceWithCategory);
   }
+  catch (const std::exception& e)
+  {
+    ROS_ERROR_STREAM("Exception while saving point cloud with detection: " << e.what());
+  }
+}
 
 void DumpSensorMsgs::dump(const geometry_msgs::Point::ConstPtr& msg) const
 {
@@ -173,7 +175,7 @@ std::optional<ros::Subscriber> DumpSensorMsgs::getSubscriber(const std::string& 
       return nh.subscribe<sensor_msgs::Image>(topic, 0, &DumpSensorMsgs::dump, this);
     case sensor_msgs_PointCloud2:
       return nh.subscribe<sensor_msgs::PointCloud2>(topic, 0, &DumpSensorMsgs::dump, this);
-    case sensor_msgs_Detection3D:
+    case vision_msgs_Detection3D:
       return nh.subscribe<vision_msgs::Detection3D>(topic, 0, &DumpSensorMsgs::dump, this);
     case geometry_msgs_Point:
       return nh.subscribe<geometry_msgs::Point>(topic, 0, &DumpSensorMsgs::dump, this);
