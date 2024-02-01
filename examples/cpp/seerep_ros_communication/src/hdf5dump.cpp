@@ -114,11 +114,11 @@ void DumpSensorMsgs::dump(const vision_msgs::Detection3D::ConstPtr& msg) const
     };
 
     auto header = seerep_ros_conversions_fb::toFlat(msg->header, std::string(""), fbb, std::string(""));
-    seerep::fb::CreateBoundingBoxesLabeledStamped(fbb, header, fbb.CreateVector(boxes));
-    auto releasedMessage = fbb.ReleaseMessage<seerep::fb::BoundingBoxesLabeledStamped>();
+    auto bbsStamped = seerep::fb::CreateBoundingBoxesLabeledStamped(fbb, header, fbb.CreateVector(boxes));
+    fbb.Finish(bbsStamped);
+    auto msg = fbb.ReleaseMessage<seerep::fb::BoundingBoxesLabeledStamped>();
 
-    m_ioPointCloud->writePointCloudBoundingBoxLabeled(uuid, releasedMessage.GetRoot()->labels_bb());
-    m_ioImageCore->writeLabelsGeneral(uuid, m_labelsWithInstanceWithCategory);
+    m_ioPointCloud->writePointCloudBoundingBoxLabeled(uuid, msg.GetRoot()->labels_bb());
   }
   catch (const std::exception& e)
   {
