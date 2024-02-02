@@ -7,11 +7,15 @@
 // seerep
 #include <seerep_hdf5_core/hdf5_core_general.h>
 #include <seerep_hdf5_core/hdf5_core_image.h>
+#include <seerep_hdf5_core/hdf5_core_cameraintrinsics.h>
+#include <seerep_core_fb/core_fb_conversion.h>
 #include <seerep_hdf5_fb/hdf5_fb_pointcloud.h>
-#include <seerep_hdf5_pb/hdf5_pb_image.h>
+#include <seerep_hdf5_fb/hdf5_fb_image.h>
 #include <seerep_hdf5_pb/hdf5_pb_tf.h>
 #include <seerep_ros_conversions_fb/conversions.h>
 #include <seerep_ros_conversions_pb/conversions.h>
+#include <vision_msgs/Detection3D.h>
+#include <vision_msgs/Detection2DArray.h>
 
 // uuid
 #include <boost/functional/hash.hpp>
@@ -24,7 +28,6 @@
 #include <ros/master.h>
 #include <ros/ros.h>
 #include <tf2_msgs/TFMessage.h>
-#include <vision_msgs/Detection3D.h>
 
 // pkg
 #include "types.h"
@@ -34,7 +37,7 @@ namespace seerep_grpc_ros
 class DumpSensorMsgs
 {
 public:
-  DumpSensorMsgs(std::string hdf5FilePath, std::string project_frame_id, std::string project_name);
+  DumpSensorMsgs(std::string hdf5FilePath, std::string project_frame_id, std::string project_name, std::string projectUuid);
 
   std::optional<ros::Subscriber> getSubscriber(const std::string& message_type, const std::string& topic);
 
@@ -45,6 +48,10 @@ public:
   void dump(const vision_msgs::Detection3D::ConstPtr& msg) const;
 
   void dump(const sensor_msgs::Image::ConstPtr& msg) const;
+
+  void dump(const sensor_msgs::CameraInfo::ConstPtr& msg) const;
+
+  void dump(const vision_msgs::Detection2DArray::ConstPtr& msg) const;
 
   void dump(const geometry_msgs::Point::ConstPtr& msg) const;
 
@@ -58,11 +65,17 @@ public:
 
 private:
   std::vector<seerep_core_msgs::LabelsWithInstanceWithCategory> m_labelsWithInstanceWithCategory;
-
+  std::string m_projectUuid;
+  std::string m_cameraIntrinsicsUuid;
+  double m_maxViewingDistance;
+  // seerep_hdf5_fb::BoundingBoxesLabeledWithCategoryFb m_pcLabelsWithInstanceWithCategory;
   std::shared_ptr<seerep_hdf5_pb::Hdf5PbTf> m_ioTf;
   std::shared_ptr<seerep_hdf5_fb::Hdf5FbPointCloud> m_ioPointCloud;
-  std::shared_ptr<seerep_hdf5_pb::Hdf5PbImage> m_ioImage;
+  std::shared_ptr<seerep_hdf5_fb::Hdf5FbImage> m_ioImage;
   std::shared_ptr<seerep_hdf5_core::Hdf5CoreImage> m_ioImageCore;
+  std::shared_ptr<seerep_hdf5_core::Hdf5CoreCameraIntrinsics> m_ioCameraIntrinsic;
+  // std::shared_ptr<std::vector<seerep_core_msgs::LabelsWithInstanceWithCategory> m_ioLabels;
+
   ros::NodeHandle nh;
 };
 

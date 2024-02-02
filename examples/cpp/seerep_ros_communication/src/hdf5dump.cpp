@@ -2,178 +2,269 @@
 
 namespace seerep_grpc_ros
 {
-DumpSensorMsgs::DumpSensorMsgs(std::string hdf5FilePath, std::string project_frame_id, std::string project_name)
-{
-  ROS_INFO_STREAM("creating a new project with name: \"" << project_name << "\" and frame id: \"" << project_frame_id
-                                                         << "\" in  file: \"" << hdf5FilePath << "\"");
-  std::vector<std::string> labelsAsStdVector, instancesAsStdVector;
-  labelsAsStdVector.push_back("testlabel_0");
-  labelsAsStdVector.push_back("testlabel_1");
-
-  // no instances, just labels -> no uuids
-  instancesAsStdVector.push_back("");
-  instancesAsStdVector.push_back("");
-
-  seerep_core_msgs::LabelsWithInstanceWithCategory labelsWithInstanceWithCategory;
-  labelsWithInstanceWithCategory.category = "testcategory";
-  labelsWithInstanceWithCategory.instances = instancesAsStdVector;
-  labelsWithInstanceWithCategory.labels = labelsAsStdVector;
-
-  m_labelsWithInstanceWithCategory.push_back(labelsWithInstanceWithCategory);
-
-  auto write_mtx = std::make_shared<std::mutex>();
-  std::shared_ptr<HighFive::File> hdf5_file =
-      std::make_shared<HighFive::File>(hdf5FilePath, HighFive::File::OpenOrCreate);
-  auto ioGeneral = seerep_hdf5_core::Hdf5CoreGeneral(hdf5_file, write_mtx);
-  ioGeneral.writeProjectFrameId(project_frame_id);
-  ioGeneral.writeProjectname(project_name);
-
-  m_ioTf = std::make_shared<seerep_hdf5_pb::Hdf5PbTf>(hdf5_file, write_mtx);
-  m_ioPointCloud = std::make_shared<seerep_hdf5_fb::Hdf5FbPointCloud>(hdf5_file, write_mtx);
-  m_ioImage = std::make_shared<seerep_hdf5_pb::Hdf5PbImage>(hdf5_file, write_mtx);
-  m_ioImageCore = std::make_shared<seerep_hdf5_core::Hdf5CoreImage>(hdf5_file, write_mtx);
-}
-
-void DumpSensorMsgs::dump(const std_msgs::Header::ConstPtr& msg) const
-{
-  (void)msg;  // ignore that variable without causing warnings
-  ROS_INFO_STREAM("Datatype not implemented.");
-}
-
-void DumpSensorMsgs::dump(const sensor_msgs::PointCloud2::ConstPtr& msg) const
-{
-  try
+  DumpSensorMsgs::DumpSensorMsgs(std::string hdf5FilePath, std::string project_frame_id, std::string project_name, std::string projectUuid)
   {
-    std::string uuid = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
-    ROS_INFO_STREAM("Dump point cloud 2 with uuid: " << uuid);
-    /*
-   TODO: Temporary workaround because the Protobuf HDF5 PCL storage produces the wrong '\points' dataset layout,
-   due to the changes introduced in PR #354. It uses an NxM dimensional float dataset instead of an 1x(N*M) byte
-   dataset. This workaround should be removed as soon as the Protobuf PCL storage is ported to the new layout.
-    */
-    auto pcl = seerep_ros_conversions_fb::toFlat(*msg, uuid);
-    // TODO: ... ::toFlat(*msg, uuid).GetRoot() causes a segfault when accessing the data field of the pcl?!?
-    auto [min_corner, max_corner] = m_ioPointCloud->computeBoundingBox(*pcl.GetRoot());
-    m_ioPointCloud->writeBoundingBox(uuid, min_corner, max_corner);
-    m_ioPointCloud->writePointCloud2(uuid, *pcl.GetRoot());
-  }
-  catch (const std::exception& e)
-  {
-    ROS_ERROR_STREAM("Exception while saving point cloud: " << e.what());
-  }
-}
+    ROS_INFO_STREAM("creating a new project with name: \"" << project_name << "\" and frame id: \"" << project_frame_id
+                                                           << "\" in  file: \"" << hdf5FilePath << "\"");
+    std::vector<std::string> labelsAsStdVector, instancesAsStdVector;
+    std::vector<float> confidenceAsStdVector;
+    labelsAsStdVector.push_back("sun");
+    confidenceAsStdVector.push_back(1.0);
+    // no instances, just labels -> no uuids
+    instancesAsStdVector.push_back("");
 
-void DumpSensorMsgs::dump(const sensor_msgs::Image::ConstPtr& msg) const
-{
-  boost::uuids::uuid uuid = boost::uuids::random_generator()();
-  std::string uuidString = boost::lexical_cast<std::string>(uuid);
-  try
-  {
-    m_ioImage->writeImage(uuidString, seerep_ros_conversions_pb::toProto(*msg));
+    seerep_core_msgs::LabelsWithInstanceWithCategory labelsWithInstanceWithCategory;
+    labelsWithInstanceWithCategory.category = "weather";
+    labelsWithInstanceWithCategory.instances = instancesAsStdVector;
+    labelsWithInstanceWithCategory.labels = labelsAsStdVector;
+    labelsWithInstanceWithCategory.labelConfidences = confidenceAsStdVector;
 
-    // also write the labels general; filled with dummy data right now
-    m_ioImageCore->writeLabelsGeneral(uuidString, m_labelsWithInstanceWithCategory);
-  }
-  catch (const std::exception& e)
-  {
-    ROS_ERROR_STREAM("Exception while saving image: " << e.what());
-  }
-}
+    m_labelsWithInstanceWithCategory.push_back(labelsWithInstanceWithCategory);
 
-void DumpSensorMsgs::dump(const vision_msgs::Detection3D::ConstPtr &msg) const
-  {
-    // try
-    // {
-    //   std::string uuid = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
-    //   ROS_INFO_STREAM("Dump Detection3D with uuid: " << uuid);
-    //   /*
-    //  TODO: Temporary workaround because the Protobuf HDF5 PCL storage produces the wrong '\points' dataset layout,
-    //  due to the changes introduced in PR #354. It uses an NxM dimensional float dataset instead of an 1x(N*M) byte
-    //  dataset. This workaround should be removed as soon as the Protobuf PCL storage is ported to the new layout.
-    //   */
 
-    //   std::string instanceUUID = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+    // camera instrinsic uuid
+    boost::uuids::uuid ciUuid = boost::uuids::random_generator()();
+    m_cameraIntrinsicsUuid = boost::lexical_cast<std::string>(ciUuid);
+    // max viewing distance for uuid
+    m_maxViewingDistance = 15.0;
+    //project uuid
+    m_projectUuid = projectUuid;
 
-    //   auto pcl = seerep_ros_conversions_fb::toFlat(msg->source_cloud, uuid);
-    //   flatbuffers::grpc::MessageBuilder fbb;
+    auto write_mtx = std::make_shared<std::mutex>();
+    std::shared_ptr<HighFive::File> hdf5_file =
+        std::make_shared<HighFive::File>(hdf5FilePath, HighFive::File::OpenOrCreate);
+    auto ioGeneral = seerep_hdf5_core::Hdf5CoreGeneral(hdf5_file, write_mtx);
+    ioGeneral.writeProjectFrameId(project_frame_id);
+    ioGeneral.writeProjectname(project_name);
 
-    //   // ToDo: Build bounding boxes from detections, examplewith Person1 at 0,0,0
-    //   auto label = seerep::fb::CreateLabel(fbb, fbb.CreateString("Person1"), 1.0);
-    //   auto instance = fbb.CreateString(instanceUUID);
-    //   auto LabelWithInstance = seerep::fb::CreateLabelWithInstance(fbb, label, instance);
-    //   auto BoundingBox = seerep::fb::CreateBoundingbox(fbb, seerep::fb::CreatePoint(fbb, 0, 0, 0), seerep::fb::CreatePoint(fbb, 0, 0, 0), seerep::fb::CreateQuaternion(fbb, 0, 0, 0, 0));
-    //   auto BoundingBoxLabeled = seerep::fb::CreateBoundingBoxLabeled(fbb, LabelWithInstance, BoundingBox);
-    //   std::vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>> BoundingBoxesLabeled;
-    //   BoundingBoxesLabeled.push_back(BoundingBoxLabeled);
-    //   auto BoundingBoxLabeledWithCategory = seerep::fb::CreateBoundingBoxLabeledWithCategory(fbb, fbb.CreateString("GroundTruth"), fbb.CreateVector(BoundingBoxesLabeled));
-    //   std::vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeledWithCategory>> boxes;
-    //   boxes.push_back(BoundingBoxLabeledWithCategory);
-    //   auto boxesVector=fbb.CreateVector(boxes);
+    m_ioTf = std::make_shared<seerep_hdf5_pb::Hdf5PbTf>(hdf5_file, write_mtx);
+    m_ioPointCloud = std::make_shared<seerep_hdf5_fb::Hdf5FbPointCloud>(hdf5_file, write_mtx);
+    m_ioImage = std::make_shared<seerep_hdf5_fb::Hdf5FbImage>(hdf5_file, write_mtx);
+    m_ioImageCore = std::make_shared<seerep_hdf5_core::Hdf5CoreImage>(hdf5_file, write_mtx);
+    m_ioCameraIntrinsic = std::make_shared<seerep_hdf5_core::Hdf5CoreCameraIntrinsics>(hdf5_file, write_mtx);
 
-    //   // TODO: ... ::toFlat(*msg, uuid).GetRoot() causes a segfault when accessing the data field of the pcl?!?
-    //   auto [min_corner, max_corner] = m_ioPointCloud->computeBoundingBox(*pcl.GetRoot());
-
-    //   m_ioPointCloud->writeBoundingBox(uuid, min_corner, max_corner);
-    //   m_ioPointCloud->writePointCloud2(uuid, *pcl.GetRoot());
-    //   m_ioPointCloud->writePointCloudBoundingBoxLabeled(uuid, boxesVector);
-    //   m_ioImageCore->writeLabelsGeneral(uuid, m_labelsWithInstanceWithCategory);
-    // }
-    // catch (const std::exception &e)
-    // {
-    //   ROS_ERROR_STREAM("Exception while saving point cloud with detection: " << e.what());
-    // }
   }
 
-void DumpSensorMsgs::dump(const geometry_msgs::Point::ConstPtr& msg) const
-{
-  (void)msg;  // ignore that variable without causing warnings
-  ROS_INFO_STREAM("Datatype not implemented.");
-}
+  void DumpSensorMsgs::dump(const std_msgs::Header::ConstPtr &msg) const
+  {
+    (void)msg; // ignore that variable without causing warnings
+    ROS_INFO_STREAM("Datatype not implemented.");
+  }
 
-void DumpSensorMsgs::dump(const geometry_msgs::Quaternion::ConstPtr& msg) const
-{
-  (void)msg;  // ignore that variable without causing warnings
-  ROS_INFO_STREAM("Datatype not implemented.");
-}
-
-void DumpSensorMsgs::dump(const geometry_msgs::Pose::ConstPtr& msg) const
-{
-  (void)msg;  // ignore that variable without causing warnings
-  ROS_INFO_STREAM("Datatype not implemented.");
-}
-
-void DumpSensorMsgs::dump(const geometry_msgs::PoseStamped::ConstPtr& msg) const
-{
-  (void)msg;  // ignore that variable without causing warnings
-  ROS_INFO_STREAM("Datatype not implemented.");
-}
-
-void DumpSensorMsgs::dump(const tf2_msgs::TFMessage::ConstPtr& msg) const
-{
-  for (geometry_msgs::TransformStamped transform : msg->transforms)
+  void DumpSensorMsgs::dump(const sensor_msgs::PointCloud2::ConstPtr &msg) const
   {
     try
     {
-      m_ioTf->writeTransformStamped(seerep_ros_conversions_pb::toProto(transform, false));
+      std::string uuid = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+      ROS_INFO_STREAM("Dump point cloud 2 with uuid: " << uuid);
+      /*
+     TODO: Temporary workaround because the Protobuf HDF5 PCL storage produces the wrong '\points' dataset layout,
+     due to the changes introduced in PR #354. It uses an NxM dimensional float dataset instead of an 1x(N*M) byte
+     dataset. This workaround should be removed as soon as the Protobuf PCL storage is ported to the new layout.
+      */
+      auto pcl = seerep_ros_conversions_fb::toFlat(*msg, uuid);
+      // TODO: ... ::toFlat(*msg, uuid).GetRoot() causes a segfault when accessing the data field of the pcl?!?
+      auto [min_corner, max_corner] = m_ioPointCloud->computeBoundingBox(*pcl.GetRoot());
+      m_ioPointCloud->writeBoundingBox(uuid, min_corner, max_corner);
+      m_ioPointCloud->writePointCloud2(uuid, *pcl.GetRoot());
+      m_ioImageCore->writeLabelsGeneral(uuid, m_labelsWithInstanceWithCategory);
     }
-    catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      ROS_ERROR_STREAM("Exception while saving transformation: " << e.what());
+      ROS_ERROR_STREAM("Exception while saving point cloud: " << e.what());
     }
   }
-}
 
-std::optional<ros::Subscriber> DumpSensorMsgs::getSubscriber(const std::string& message_type, const std::string& topic)
-{
-  switch (type(message_type))
+  void DumpSensorMsgs::dump(const vision_msgs::Detection3D::ConstPtr &msg) const
   {
+    try
+    {
+      const std::string uuid = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+      ROS_INFO_STREAM("Dump Detection3D with uuid: " << uuid);
+
+      /* store pcl and it's bounding box */
+      auto pcl = seerep_ros_conversions_fb::toFlat(msg->source_cloud, uuid);
+      m_ioPointCloud->writePointCloud2(uuid, *pcl.GetRoot());
+      auto [min_corner, max_corner] = m_ioPointCloud->computeBoundingBox(*pcl.GetRoot());
+      m_ioPointCloud->writeBoundingBox(uuid, min_corner, max_corner);
+
+      flatbuffers::grpc::MessageBuilder fbb;
+
+      const std::string instanceUUID = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+
+      auto labelWithInstance = seerep::fb::CreateLabelWithInstance(
+          fbb, seerep::fb::CreateLabel(fbb, fbb.CreateString("Person1"), 1.0), fbb.CreateString(instanceUUID));
+
+      auto boundingBox =
+          seerep::fb::CreateBoundingbox(fbb, seerep::fb::CreatePoint(fbb, 1, 1, 1), seerep::fb::CreatePoint(fbb, 10, 10, 10),
+                                        seerep::fb::CreateQuaternion(fbb, 0, 0, 0, 1));
+
+      auto boundingBoxLabeled = seerep::fb::CreateBoundingBoxLabeled(fbb, labelWithInstance, boundingBox);
+      std::vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeled>> BoundingBoxesLabeled = {boundingBoxLabeled};
+
+      auto boundingBoxLabeledWithCategory = seerep::fb::CreateBoundingBoxLabeledWithCategory(
+          fbb, fbb.CreateString("AutoGeneratedGroundTruth"), fbb.CreateVector(BoundingBoxesLabeled));
+      std::vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeledWithCategory>> boxes = {
+          boundingBoxLabeledWithCategory};
+
+      auto header = seerep_ros_conversions_fb::toFlat(msg->header, std::string(""), fbb, std::string(""));
+      auto bbStamped = seerep::fb::CreateBoundingBoxesLabeledStamped(fbb, header, fbb.CreateVector(boxes));
+      fbb.Finish(bbStamped);
+      auto releasedMessage = fbb.ReleaseMessage<seerep::fb::BoundingBoxesLabeledStamped>();
+
+      m_ioPointCloud->writePointCloudBoundingBoxLabeled(uuid, releasedMessage.GetRoot()->labels_bb());
+      m_ioImageCore->writeLabelsGeneral(uuid, m_labelsWithInstanceWithCategory);
+    }
+    catch (const std::exception &e)
+    {
+      ROS_ERROR_STREAM("Exception while saving point cloud with detection: " << e.what());
+    }
+  }
+
+  void DumpSensorMsgs::dump(const sensor_msgs::Image::ConstPtr &msg) const
+  {
+    boost::uuids::uuid uuid = boost::uuids::random_generator()();
+    std::string uuidString = boost::lexical_cast<std::string>(uuid);
+    boost::uuids::uuid ciUuid = boost::uuids::random_generator()();
+    std::string cameraIntrinsicsUuid = boost::lexical_cast<std::string>(ciUuid);
+    try
+    {
+      auto imgMsg = seerep_ros_conversions_fb::toFlat(*msg, m_projectUuid, cameraIntrinsicsUuid);
+      m_ioImage->writeImage(uuidString, *imgMsg.GetRoot());
+      m_ioImageCore->writeLabelsGeneral(uuidString, m_labelsWithInstanceWithCategory);
+    }
+    catch (const std::exception &e)
+    {
+      ROS_ERROR_STREAM("Exception while saving image: " << e.what());
+    }
+  }
+
+  void DumpSensorMsgs::dump(const sensor_msgs::CameraInfo::ConstPtr &msg) const
+  {
+    try
+    {
+      auto ci = seerep_core_fb::CoreFbConversion::fromFb(
+           *seerep_ros_conversions_fb::toFlat(*msg, const_cast<std::string&>(m_projectUuid), const_cast<std::string&>(m_cameraIntrinsicsUuid), m_maxViewingDistance)
+                .GetRoot());
+      m_ioCameraIntrinsic->writeCameraIntrinsics(ci);
+    }
+    catch (const std::exception &e)
+    {
+      ROS_ERROR_STREAM("Exception while saving camera info: " << e.what());
+    }
+  }
+
+  void DumpSensorMsgs::dump(const vision_msgs::Detection2DArray::ConstPtr &msg) const
+  {
+    // extract labels
+    ROS_INFO_STREAM("Num of Detecitons " << msg->detections.size() - 1);
+    bool image_sent = false;
+    std::vector<std::string> detections, instanceUUIDs;
+    boost::uuids::uuid uuid = boost::uuids::random_generator()();
+    std::string uuidString = boost::lexical_cast<std::string>(uuid);
+
+    flatbuffers::grpc::MessageBuilder fbb;
+    std::vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>> BoundingBoxes2DLabeled;
+    for (auto &detection : msg->detections)
+    {
+      if (!image_sent)
+      {
+        try
+        {
+          auto imgMsg = seerep_ros_conversions_fb::toFlat(detection.source_img, m_projectUuid, m_cameraIntrinsicsUuid);
+          m_ioImage->writeImage(uuidString, *imgMsg.GetRoot());
+          // also write the labels general; filled with dummy data right now
+          m_ioImageCore->writeLabelsGeneral(uuidString, m_labelsWithInstanceWithCategory);
+          ROS_INFO_STREAM("Image sent: " << uuidString);
+          image_sent = true;
+        }
+        catch (const std::exception &e)
+        {
+          ROS_ERROR_STREAM("Exception while saving image of detection: " << e.what());
+        }
+      }
+
+      std::string label = "person"; // ToDo IDtoString(detection.results.at(0).id);
+
+      detections.push_back(label);
+
+      std::string instanceUUID = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+      instanceUUIDs.push_back(instanceUUID);
+      ROS_INFO_STREAM("Added label: " << label);
+
+      auto boundingBox2DLabeled = seerep_ros_conversions_fb::toFlat(detection, fbb, label, instanceUUID);
+
+      BoundingBoxes2DLabeled.push_back(boundingBox2DLabeled);
+
+      ROS_INFO_STREAM("Added Bounding Box");
+    }
+
+    // write Bounding Boxes
+    auto BoundingBox2DLabeledWithCategory = seerep::fb::CreateBoundingBox2DLabeledWithCategory(fbb, fbb.CreateString("AutoGeneratedGroundTruth"), fbb.CreateVector(BoundingBoxes2DLabeled));
+    std::vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeledWithCategory>> BoundingBoxes2DLabeledWithCategory = {BoundingBox2DLabeledWithCategory};
+    auto header = seerep_ros_conversions_fb::toFlat(msg->header, std::string(""), fbb, std::string(""));
+    auto bbStamped = seerep::fb::CreateBoundingBoxes2DLabeledStamped(fbb, header, fbb.CreateVector(BoundingBoxes2DLabeledWithCategory));
+    fbb.Finish(bbStamped);
+    auto releasedMessage = fbb.ReleaseMessage<seerep::fb::BoundingBoxes2DLabeledStamped>();
+
+    m_ioImage->writeImageBoundingBox2DLabeled(uuidString, releasedMessage.GetRoot()->labels_bb());
+    ROS_INFO_STREAM("Bounding Boxes added to " << uuidString);
+  }
+
+  void DumpSensorMsgs::dump(const geometry_msgs::Point::ConstPtr &msg) const
+  {
+    (void)msg; // ignore that variable without causing warnings
+    ROS_INFO_STREAM("Datatype not implemented.");
+  }
+
+  void DumpSensorMsgs::dump(const geometry_msgs::Quaternion::ConstPtr &msg) const
+  {
+    (void)msg; // ignore that variable without causing warnings
+    ROS_INFO_STREAM("Datatype not implemented.");
+  }
+
+  void DumpSensorMsgs::dump(const geometry_msgs::Pose::ConstPtr &msg) const
+  {
+    (void)msg; // ignore that variable without causing warnings
+    ROS_INFO_STREAM("Datatype not implemented.");
+  }
+
+  void DumpSensorMsgs::dump(const geometry_msgs::PoseStamped::ConstPtr &msg) const
+  {
+    (void)msg; // ignore that variable without causing warnings
+    ROS_INFO_STREAM("Datatype not implemented.");
+  }
+
+  void DumpSensorMsgs::dump(const tf2_msgs::TFMessage::ConstPtr &msg) const
+  {
+    for (geometry_msgs::TransformStamped transform : msg->transforms)
+    {
+      try
+      {
+        m_ioTf->writeTransformStamped(seerep_ros_conversions_pb::toProto(transform, false));
+      }
+      catch (const std::exception &e)
+      {
+        ROS_ERROR_STREAM("Exception while saving transformation: " << e.what());
+      }
+    }
+  }
+
+  std::optional<ros::Subscriber> DumpSensorMsgs::getSubscriber(const std::string &message_type, const std::string &topic)
+  {
+    switch (type(message_type))
+    {
     case std_msgs_Header:
       return nh.subscribe<std_msgs::Header>(topic, 0, &DumpSensorMsgs::dump, this);
     case sensor_msgs_Image:
       return nh.subscribe<sensor_msgs::Image>(topic, 0, &DumpSensorMsgs::dump, this);
+    case sensor_msgs_CameraInfo:
+      return nh.subscribe<sensor_msgs::CameraInfo>(topic, 0, &DumpSensorMsgs::dump, this);
+    case vision_msgs_Detection2DArray:
+      return nh.subscribe<vision_msgs::Detection2DArray>(topic, 0, &DumpSensorMsgs::dump, this);
     case sensor_msgs_PointCloud2:
       return nh.subscribe<sensor_msgs::PointCloud2>(topic, 0, &DumpSensorMsgs::dump, this);
-    case sensor_msgs_Detection3D:
+    case vision_msgs_Detection3D:
       return nh.subscribe<vision_msgs::Detection3D>(topic, 0, &DumpSensorMsgs::dump, this);
     case geometry_msgs_Point:
       return nh.subscribe<geometry_msgs::Point>(topic, 0, &DumpSensorMsgs::dump, this);
@@ -188,11 +279,11 @@ std::optional<ros::Subscriber> DumpSensorMsgs::getSubscriber(const std::string& 
     default:
       ROS_ERROR_STREAM("Type \"" << message_type << "\" not supported");
       return std::nullopt;
+    }
   }
-}
-}  // namespace seerep_grpc_ros
+} // namespace seerep_grpc_ros
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
   ros::init(argc, argv, "seerep_ros_communication_hdf5_dump");
   ros::NodeHandle nh;
@@ -217,7 +308,7 @@ int main(int argc, char** argv)
       // if this throws no exception, the UUID is valid
       gen(projectUuid);
     }
-    catch (std::runtime_error const& e)
+    catch (std::runtime_error const &e)
     {
       // mainly catching "invalid uuid string"
       std::cout << e.what() << std::endl;
@@ -247,7 +338,7 @@ int main(int argc, char** argv)
   }
 
   seerep_grpc_ros::DumpSensorMsgs dumpSensorMsgs =
-      seerep_grpc_ros::DumpSensorMsgs(hdf5FilePath, project_frame_id, project_name);
+      seerep_grpc_ros::DumpSensorMsgs(hdf5FilePath, project_frame_id, project_name, projectUuid);
 
   ros::master::V_TopicInfo topic_info;
   ros::master::getTopics(topic_info);

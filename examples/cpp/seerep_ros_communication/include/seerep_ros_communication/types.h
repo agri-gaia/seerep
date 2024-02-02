@@ -24,7 +24,8 @@
 #define SEEREP_MESSAGE_TYPES(M)                                                                                        \
   SEEREP_M(std_msgs, Header), SEEREP_M(sensor_msgs, PointCloud2), SEEREP_M(sensor_msgs, Image),                        \
       SEEREP_M(geometry_msgs, Point), SEEREP_M(geometry_msgs, Quaternion), SEEREP_M(geometry_msgs, Pose),              \
-      SEEREP_M(geometry_msgs, PoseStamped), SEEREP_M(tf2_msgs, TFMessage), SEEREP_M(vision_msgs, Detection3D)
+      SEEREP_M(geometry_msgs, PoseStamped), SEEREP_M(tf2_msgs, TFMessage),  SEEREP_M(vision_msgs, Detection3D),        \
+      SEEREP_M(vision_msgs, Detection2DArray), SEEREP_M(sensor_msgs, CameraInfo)
 
 namespace seerep_grpc_ros
 {
