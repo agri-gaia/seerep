@@ -58,7 +58,6 @@ def add_camintrins(
     header = createHeader(builder, ts, "map", target_proj_uuid, ciuuid)
     roi = createRegionOfInterest(builder, 3, 5, 6, 7, True)
 
-
     distortion_matrix = [4, 5, 6, 7, 8, 9, 10, 11, 12]
     rect_matrix = [4, 5, 6, 7, 8, 9, 10, 11, 12]
     intrins_matrix = [4, 5, 6, 7, 8, 9, 10, 11, 12]

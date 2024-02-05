@@ -85,7 +85,7 @@ def send_labeled_image_grid(
     camin.height = 5
     camin.width = 4
 
-    camin.distortion_model = "plump_bob"
+    camin.distortion_model = "plumb_bob"
 
     camin.distortion.extend([i for i in range(0, 3)])
 
