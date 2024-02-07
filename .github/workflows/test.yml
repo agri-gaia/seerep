@@ -11,7 +11,7 @@ jobs:
       image: ghcr.io/agri-gaia/seerep_base:latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         path: src
     - name: Build seerep_hdf5 packages
@@ -34,7 +34,7 @@ jobs:
       image: ghcr.io/agri-gaia/seerep_base:latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         path: src
     - name: Build seerep_ros packages
