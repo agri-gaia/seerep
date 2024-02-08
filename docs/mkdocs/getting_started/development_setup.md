@@ -1,9 +1,9 @@
 # Development Setup
 
-For the development of SEEREP, we employ a [Visual Studio Code Dev Container](https://code.visualstudio.com/docs
+For the development of SEEREP, we use a [Visual Studio Code Dev Container](https://code.visualstudio.com/docs
 /devcontainers/containers), enabling us to utilize a container as our development environment. This approach abstracts
-operating systems, automatically managing dependencies in a unified manner. To review system requirements, kindly refer
-to the [system requirements section](https://code.visualstudio.com/docs/devcontainers/containers#_system-requirements).
+the operating system and automatically manages dependencies in a unified manner. For the system requirements, kindly refer
+to [this section](https://code.visualstudio.com/docs/devcontainers/containers#_system-requirements).
 
 ## Setup
 
@@ -21,25 +21,23 @@ Initially, clone the repository with:
     git clone https://github.com/agri-gaia/seerep
     ```
 
-For the development, it is presumed that the directory designated for SEEREP's data storage is a sibling folder named
-`seerep-data`, positioned adjacent to the repository. **Ensure its existence!**
+For the development, it is assumed that the directory designated for SEEREP's data storage is a sibling folder named
+`seerep-data`, positioned adjacent to the repository. **Ensure it exists!**
 
 !!! warning
 
-    As a docker bind mount is employed, providing an incorrect or non-existent path for the host directory will lead
+    As a docker bind mount is used, providing an incorrect or non-existent path for the host directory will lead
     to an obscure error message upon initiating the container.
 
-Subsequently, install the [Remote Containers](https://marketplace.visualstudio.com/
-items?itemName=ms-vscode-remote.remote-containers) and [Docker](https://marketplace.visualstudio.com/
-items?itemName=ms-azuretools.vscode-docker) Visual Studio Code extensions:
+Subsequently, install the
+[Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension:
 
 <!-- markdownlint-disable-next-line MD046 -->
 ```bash
-code --install-extension ms-vscode-remote.remote-containers ; \
-code --install-extension ms-azuretools.vscode-docker
+code --install-extension ms-vscode-remote.remote-containers
 ```
 
-Launch Visual Studio Code within the repository by executing the following command:
+Launch VS Code the repository:
 
 <!-- markdownlint-disable-next-line MD046 -->
 ```bash
@@ -63,7 +61,7 @@ initializing it. Additionally, the setup includes VS Code extensions, Intellisen
 
 ## Credentials
 
-The default credentials consist of the username and password being set as `docker`.
+The default username and password are: `docker`.
 
 ## Pre Commit Checks
 

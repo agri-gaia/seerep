@@ -7,11 +7,18 @@ docker pull ghcr.io/agri-gaia/seerep_server:[tag/latest]
 ```
 
 A list of stable tags is accessible [here](https://github.com/agri-gaia/seerep/releases). The latest tag can be
-employed to acquire the most recent updates, but it may result in potential instabilities.
+used to get the most recent updates, but it may result in potential instabilities.
+
+<!-- markdownlint-disable -->
+!!! Info
+
+    The GitHub Container Registry **requires authentication through a personal acces token** before downloading
+    any public image. Use the help provided [here](./known_errors.md/#downloading-the-docker-images).
+<!-- markdownlint-enable-->
 
 ## Storage
 
-SEEREP is recommended to be utilized with a `named volume mount` for persisting/reading data to/from HDF5.
+It is recommended to use SEEREP with a `named volume mount` for persisting/reading data to/from HDF5.
 When a volume is mounted into a container, the storage path of the volume is incorporated into the container.
 This enables the usage of existing data from the host system or the transfer of new HDF5 files to SERREP with tools
 such as [rsync](https://linux.die.net/man/1/rsync).
@@ -25,7 +32,7 @@ such as [rsync](https://linux.die.net/man/1/rsync).
 ## Configuration
 
 SEEREP offers configuration options through CLI arguments, a configuration file, or environment variables.
-The table below provides an overview of the parameters and their respective purposes.
+The table below provides an overview of the parameters and their respective purpose.
 Additional details are available on the [reference page](../reference/server_configuration.md).
 
 | Parameter     | Description                                  |
@@ -37,7 +44,7 @@ Additional details are available on the [reference page](../reference/server_con
 
 ## Docker Run
 
-For a quick start of the server using `docker run`, use:
+For a quick start of the server use:
 
 ```bash
 docker run \

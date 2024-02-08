@@ -1,12 +1,12 @@
 # Known Errors
 
 This page functions as a list of frequently encountered errors during the project development.
-Consult it whenever you encounter issues; there's a chance your problem is documented here. If not, consider adding it
+Consult it whenever you encounter issues. There's a chance your problem is documented here. If not, consider adding it
 once you figure out how to fix it.
 
 ## Downloading the Docker Images
 
-SEEREP's Docker Images are hosted on the [GitHub Container Registry](https://github.com/orgs/agri-gaia/
+SEEREP's Docker images are hosted on the [GitHub Container Registry](https://github.com/orgs/agri-gaia/
 packages?repo_name=seerep). To install or modify any public or private package using GitHub Packages, **authentication**
 through a personal access token (classic) **is necessary**. Detailed setup instructions can be found in the
 [GitHub Docs](https://docs.github.com/en/packages/working-with-a-github-packages-registry/
@@ -19,7 +19,7 @@ working-with-the-container-registry).
 
 ## Unable to Start the Dev-Container
 
-If the setup or the `Remote-Containers: Reopen Folder in Container` operation encounters issues, consider trying the
+If the setup or the `Remote-Containers: Reopen Folder in Container` operation encounters issues, consider one of the
 following steps to resolve the problem:
 
 1. Ensure that the container is not running in the background:
@@ -40,7 +40,7 @@ with the Dev-Container:
 ## Running out of RAM when compiling
 
 Building the main executable, especially with WSL[^1], may demand a significant amount of system memory. If your system
-freezes during the build, it may be necessary to restrict the memory usage in catkin. Utilize the commands below to
+freezes during the build, it may be necessary to restrict the memory usage of catkin. Utilize the commands below to
 prevent `catkin` from initiating new jobs once the memory limit is reached. Further details can be found in the
 documentation [here](https://catkin-tools.readthedocs.io/en/latest/verbs/catkin_build.html#configuring-memory-use).
 
