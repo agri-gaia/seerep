@@ -5,13 +5,6 @@ import numpy as np
 from flatbuffers import Builder
 from seerep.fb import (
     Boundingbox,
-    BoundingBox2DLabeled,
-    BoundingBox2DLabeledWithCategory,
-    BoundingBoxes2DLabeledStamped,
-    BoundingBoxesLabeledStamped,
-    BoundingBoxLabeled,
-    BoundingBoxLabeledWithCategory,
-    BoundingboxStamped,
     CameraIntrinsics,
     CameraIntrinsicsQuery,
     Empty,
@@ -356,78 +349,6 @@ def createPoint2d(builder, x, y):
     return Point.End(builder)
 
 
-def createBoundingBox2d(builder, centerPoint, spatialExtent, rotation=0):
-    """Creates a 3D bounding box in flatbuffers"""
-    Boundingbox.Start(builder)
-    Boundingbox.AddCenterPoint(builder, centerPoint)
-    Boundingbox.AddSpatialExtent(builder, spatialExtent)
-    Boundingbox.AddRotation(builder, rotation)
-    return Boundingbox.End(builder)
-
-
-def createBoundingBox2dLabeled(builder, instance, boundingBox):
-    """Creates a labeled bounding box 2d in flatbuffers"""
-    BoundingBox2DLabeled.Start(builder)
-    BoundingBox2DLabeled.AddLabelWithInstance(builder, instance)
-    BoundingBox2DLabeled.AddBoundingBox(builder, boundingBox)
-    return BoundingBox2DLabeled.End(builder)
-
-
-def createBoundingBoxes2d(builder, centerPoints, spatialExtents):
-    assert len(centerPoints) == len(spatialExtents)
-    boundingBoxes = []
-    for centerPoint, spatialExtent in zip(centerPoints, spatialExtents):
-        boundingBoxes.append(createBoundingBox2d(builder, centerPoint, spatialExtent))
-    return boundingBoxes
-
-
-def createBoundingBoxes2dLabeled(builder, instances, boundingBoxes):
-    """Creates multiple labeled bounding boxes"""
-    assert len(instances) == len(boundingBoxes)
-    boundingBoxes2dLabeled = []
-    for instance, boundingBox in zip(instances, boundingBoxes):
-        boundingBoxes2dLabeled.append(createBoundingBox2dLabeled(builder, instance, boundingBox))
-    return boundingBoxes2dLabeled
-
-
-def createBoundingBox2dLabeledStamped(builder, header, labelsBb):
-    """Creates a labeled bounding box 2d in flatbuffers"""
-    BoundingBoxes2DLabeledStamped.StartLabelsBbVector(builder, len(labelsBb))
-    for labelBb in reversed(labelsBb):
-        builder.PrependUOffsetTRelative(labelBb)
-    labelsBbVector = builder.EndVector()
-
-    BoundingBoxes2DLabeledStamped.Start(builder)
-    BoundingBoxes2DLabeledStamped.AddHeader(builder, header)
-    BoundingBoxes2DLabeledStamped.AddLabelsBb(builder, labelsBbVector)
-    return BoundingBoxes2DLabeledStamped.End(builder)
-
-
-def createBoundingBoxLabeledStamped(builder, header, labelsBb):
-    """Creates a labeled bounding box in flatbuffers"""
-    BoundingBoxesLabeledStamped.StartLabelsBbVector(builder, len(labelsBb))
-    for labelBb in reversed(labelsBb):
-        builder.PrependUOffsetTRelative(labelBb)
-    labelsBbVector = builder.EndVector()
-
-    BoundingBoxesLabeledStamped.Start(builder)
-    BoundingBoxesLabeledStamped.AddHeader(builder, header)
-    BoundingBoxesLabeledStamped.AddLabelsBb(builder, labelsBbVector)
-    return BoundingBoxesLabeledStamped.End(builder)
-
-
-def createBoundingBox2DLabeledWithCategory(builder, category, bb2dLabeled):
-    BoundingBox2DLabeledWithCategory.StartBoundingBox2dLabeledVector(builder, len(bb2dLabeled))
-    for labelBb in reversed(bb2dLabeled):
-        builder.PrependUOffsetTRelative(labelBb)
-    labelsBbVector = builder.EndVector()
-
-    BoundingBox2DLabeledWithCategory.Start(builder)
-    BoundingBox2DLabeledWithCategory.AddCategory(builder, category)
-    BoundingBox2DLabeledWithCategory.AddBoundingBox2dLabeled(builder, labelsBbVector)
-    return BoundingBox2DLabeledWithCategory.End(builder)
-
-
 def createPoint(builder, x, y, z):
     """Creates a 3D point in flatbuffers"""
     Point.Start(builder)
@@ -473,78 +394,17 @@ def createPolygon2D(builder, height, z, vertices):
     return Polygon2D.End(builder)
 
 
-def createBoundingBoxStamped(builder, header, centerPoint, spatialExtent, rotation=None):
-    """Creates a stamped 3D bounding box in flatbuffers"""
-    boundingBox = createBoundingBox(builder, centerPoint, spatialExtent, rotation)
-    BoundingboxStamped.Start(builder)
-    BoundingboxStamped.AddHeader(builder, header)
-    BoundingboxStamped.AddBoundingbox(builder, boundingBox)
-    return BoundingboxStamped.End(builder)
-
-
-def createBoundingBoxes(builder, centerPoint, spatialExtent, rotation=None):
-    assert len(centerPoint) == len(spatialExtent)
-    boundingBoxes = []
-    if rotation:
-        for center, extent, rot in zip(centerPoint, spatialExtent, rotation):
-            boundingBoxes.append(createBoundingBox(builder, center, extent, rot))
-    else:
-        for center, extent in zip(centerPoint, spatialExtent):
-            boundingBoxes.append(createBoundingBox(builder, center, extent))
-    return boundingBoxes
-
-
-def createBoundingBoxLabeled(builder, instance, boundingBox):
-    """Creates a labeled bounding box in flatbuffers"""
-    BoundingBoxLabeled.Start(builder)
-    BoundingBoxLabeled.AddLabelWithInstance(builder, instance)
-    BoundingBoxLabeled.AddBoundingBox(builder, boundingBox)
-    return BoundingBoxLabeled.End(builder)
-
-
-def createBoundingBoxesLabeled(builder, instances, boundingBoxes):
-    """Creates multiple labeled bounding boxes"""
-    assert len(instances) == len(boundingBoxes)
-    boundingBoxesLabeled = []
-    for instance, boundingBox in zip(instances, boundingBoxes):
-        boundingBoxesLabeled.append(createBoundingBoxLabeled(builder, instance, boundingBox))
-    return boundingBoxesLabeled
-
-
-def createBoundingBoxLabeledWithCategory(builder, category, bbLabeled):
-    BoundingBoxLabeledWithCategory.StartBoundingBoxLabeledVector(builder, len(bbLabeled))
-    for labelBb in reversed(bbLabeled):
-        builder.PrependUOffsetTRelative(labelBb)
-    labelsBbVector = builder.EndVector()
-
-    BoundingBoxLabeledWithCategory.Start(builder)
-    BoundingBoxLabeledWithCategory.AddCategory(builder, category)
-    BoundingBoxLabeledWithCategory.AddBoundingBoxLabeled(builder, labelsBbVector)
-    return BoundingBoxLabeledWithCategory.End(builder)
-
-
 def addToBoundingBoxLabeledVector(builder, boundingBoxLabeledList):
     """Adds list of boudingBoxLabeled into the labelsBbVector of a flatbuffers pointcloud2"""
     PointCloud2.StartLabelsBbVector(builder, len(boundingBoxLabeledList))
-    # Note: reverse because we prepend
     for bb in reversed(boundingBoxLabeledList):
         builder.PrependUOffsetTRelative(bb)
-    return builder.EndVector()
-
-
-def addToGeneralLabelsVector(builder, generalLabelList):
-    """Adds list of generalLabels into the labelsGeneralVector of a flatbuffers pointcloud2"""
-    PointCloud2.StartLabelsGeneralVector(builder, len(generalLabelList))
-    # Note: reverse because we prepend
-    for label in reversed(generalLabelList):
-        builder.PrependUOffsetTRelative(label)
     return builder.EndVector()
 
 
 def addToPointFieldVector(builder, pointFieldList):
     """Adds a list of pointFields into the fieldsVector of a flatbuffers pointcloud2"""
     PointCloud2.StartFieldsVector(builder, len(pointFieldList))
-    # Note: reverse because we prepend
     for pointField in reversed(pointFieldList):
         builder.PrependUOffsetTRelative(pointField)
     return builder.EndVector()
