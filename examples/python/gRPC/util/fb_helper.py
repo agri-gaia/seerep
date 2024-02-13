@@ -1,4 +1,5 @@
 import sys
+from typing import List
 
 import numpy as np
 from seerep.fb import (
@@ -10,8 +11,7 @@ from seerep.fb import (
     Header,
     Image,
     Label,
-    LabelsWithCategory,
-    LabelWithInstance,
+    LabelCategory,
     Point,
     PointCloud2,
     PointField,
@@ -213,58 +213,6 @@ def createPointFields(builder, channels, datatype, dataTypeOffset, count):
     return pointFieldsList
 
 
-def createLabelWithConfidence(builder, label, confidence=None):
-    labelStr = builder.CreateString(label)
-    Label.Start(builder)
-    Label.AddLabel(builder, labelStr)
-    if confidence:
-        Label.AddConfidence(builder, confidence)
-    return Label.End(builder)
-
-
-def createLabelWithInstance(builder, label, confidence, instanceUuid):
-    '''Creates a label with an associated instance uuid in flatbuffers'''
-    labelConfidence = createLabelWithConfidence(builder, label, confidence)
-    instanceUuidStr = builder.CreateString(instanceUuid)
-    LabelWithInstance.Start(builder)
-    LabelWithInstance.AddLabel(builder, labelConfidence)
-    LabelWithInstance.AddInstanceUuid(builder, instanceUuidStr)
-    return LabelWithInstance.End(builder)
-
-
-# category: list of categories
-# labels: list of list of labels (as fb-String msg) per category
-def createLabelWithCategory(builder, category, labels):
-    '''Creates the message representing the labels of a catogory'''
-    LabelsCategories = []
-    for iCategory in range(len(category)):
-        categoryStr = builder.CreateString(category[iCategory])
-
-        LabelsWithCategory.StartLabelsVector(builder, len(labels[iCategory]))
-        for label in reversed(labels[iCategory]):
-            builder.PrependUOffsetTRelative(label)
-        labelsOffset = builder.EndVector()
-
-        LabelsWithCategory.Start(builder)
-        LabelsWithCategory.AddCategory(builder, categoryStr)
-        LabelsWithCategory.AddLabels(builder, labelsOffset)
-        LabelsCategories.append(LabelsWithCategory.End(builder))
-
-    Query.StartLabelVector(builder, len(LabelsCategories))
-    for LabelCategory in reversed(LabelsCategories):
-        builder.PrependUOffsetTRelative(LabelCategory)
-    return builder.EndVector()
-
-
-def createLabelsWithInstance(builder, labels, confidences, instanceUuids):
-    '''Creates multiple general labels'''
-    assert len(labels) == len(instanceUuids)
-    labelsGeneral = []
-    for label, confidence, uuid in zip(labels, confidences, instanceUuids):
-        labelsGeneral.append(createLabelWithInstance(builder, label, confidence, uuid))
-    return labelsGeneral
-
-
 def createPoint2d(builder, x, y):
     '''Creates a 2D point in flatbuffers'''
     Point.Start(builder)
@@ -350,7 +298,6 @@ def createQuery(
 ):
     '''Create a query, all parameters are optional'''
 
-    # Note: reverse because we prepend
     if projectUuids:
         Query.StartProjectuuidVector(builder, len(projectUuids))
         for projectUuid in reversed(projectUuids):
@@ -574,3 +521,31 @@ def createImage(builder, image, header, encoding, boundingBox2dLabeledVector=Non
     if labelsGeneral:
         Image.AddLabelsGeneral(builder, labelsGeneralVector)
     return Image.End(builder)
+
+
+def createLabel(builder, label: str, label_id: int, instance_uuid: str, instance_id: int):
+    label_offset = builder.CreateString(label)
+    instance_uuid_offset = builder.CreateString(instance_uuid)
+    Label.Start(builder)
+    Label.AddLabel(builder, label_offset)
+    Label.AddLabelId(builder, label_id)
+    Label.AddInstanceUuid(builder, instance_uuid_offset)
+    Label.AddInstanceId(builder, instance_id)
+    return Label.End(builder)
+
+
+def createLabelCategory(
+    builder,
+    category: str,
+    labels: List[Label.Label],
+    datumaro_json: str,
+):
+    category_offset = builder.CreateString(category)
+    labels_vector = LabelCategory.LabelCategory.CreateLabelsVector(builder, labels)
+    datumaro_json_offset = builder.CreateString(datumaro_json)
+
+    LabelCategory.Start(builder)
+    LabelCategory.AddCategory(builder, category_offset)
+    LabelCategory.AddLabels(builder, labels_vector)
+    LabelCategory.AddDatumaroJson(builder, datumaro_json_offset)
+    return LabelCategory.End(builder)
