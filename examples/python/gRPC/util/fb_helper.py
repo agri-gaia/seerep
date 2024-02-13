@@ -6,14 +6,6 @@ from flatbuffers import Builder
 from grpc import Channel
 from seerep.fb import (
     Boundingbox,
-    Boundingbox2D,
-    BoundingBox2DLabeled,
-    BoundingBox2DLabeledWithCategory,
-    BoundingBoxes2DLabeledStamped,
-    BoundingBoxesLabeledStamped,
-    BoundingBoxLabeled,
-    BoundingBoxLabeledWithCategory,
-    BoundingboxStamped,
     CameraIntrinsics,
     CameraIntrinsicsQuery,
     Empty,
@@ -718,176 +710,6 @@ def createPoint2d(builder: Builder, x: float, y: float) -> int:
     return Point.End(builder)
 
 
-def createBoundingBox2d(builder: Builder, centerPoint: int, spatialExtent: int, rotation: float = 0) -> int:
-    """
-    Creates a [Boundingbox2D](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d.fbs)
-    in flatbuffers.
-
-    Args:
-        builder: A flatbuffers Builder
-        centerPoint: The pointer to the Point2D object of the center point of the bounding box
-        spatialExtent: The pointer to the Point2D object representing the spatial extent in x and y direction
-        rotation: The rotation of the bounding box
-
-    Returns:
-        A pointer to the constructed bounding box object
-    """
-    Boundingbox2D.Start(builder)
-    Boundingbox2D.AddCenterPoint(builder, centerPoint)
-    Boundingbox2D.AddSpatialExtent(builder, spatialExtent)
-    Boundingbox2D.AddRotation(builder, rotation)
-    return Boundingbox2D.End(builder)
-
-
-def createBoundingBox2dLabeled(builder: Builder, instance: int, boundingBox: int) -> int:
-    """
-    Creates a\
-    [BoundingBox2DLabeled](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d_labeled.fbs)\
-    in flatbuffers.
-
-    Args:
-        builder: A flatbuffers Builder
-        instance: A pointer to the\
-            [LabelWithInstance](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label_with_instance.fbs)\
-            object of the bounding box
-        boundingBox: The pointer to a\
-            [Boundingbox2D](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d.fbs) object
-
-    Returns:
-        A pointer to the constructed bounding box object
-    """
-
-    BoundingBox2DLabeled.Start(builder)
-    BoundingBox2DLabeled.AddLabelWithInstance(builder, instance)
-    BoundingBox2DLabeled.AddBoundingBox(builder, boundingBox)
-    return BoundingBox2DLabeled.End(builder)
-
-
-def createBoundingBoxes2d(builder: Builder, centerPoints: List[int], spatialExtents: List[int]) -> List[int]:
-    """
-    Creates multiple 2D bounding boxes in flatbuffers.
-
-    Args:
-        builder: A flatbuffers Builder
-        centerPoints: A list of pointers to the Point2D objects of the center points of the bounding boxes
-        spatialExtents: A list of pointers to the Point2D objects representing the spatial extents in x and y direction
-
-    Returns:
-        A list of pointers to the constructed\
-            [Boundingbox2D](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d.fbs)\
-            objects
-    """
-    assert len(centerPoints) == len(spatialExtents)
-    boundingBoxes = []
-    for centerPoint, spatialExtent in zip(centerPoints, spatialExtents):
-        boundingBoxes.append(createBoundingBox2d(builder, centerPoint, spatialExtent))
-    return boundingBoxes
-
-
-def createBoundingBoxes2dLabeled(builder: Builder, instances: List[int], boundingBoxes: List[int]) -> List[int]:
-    """
-    Creates a list of pointers to\
-    [BoundingBox2DLabeled](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d_labeled.fbs)\
-    object to flatbuffers.
-
-    Args:
-        builder: A flatbuffers Builder
-        instances: A list of pointers to the\
-            [LabelWithInstance](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label_with_instance.fbs)\
-            objects of the bounding boxes corresponding to the bounding boxes by the same index
-        boundingBoxes: A list of pointers to\
-            [Boundingbox2D](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d.fbs) objects
-
-    Returns:
-        A list of pointers to the constructed bounding box objects
-    """
-    assert len(instances) == len(boundingBoxes)
-    boundingBoxes2dLabeled = []
-    for instance, boundingBox in zip(instances, boundingBoxes):
-        boundingBoxes2dLabeled.append(createBoundingBox2dLabeled(builder, instance, boundingBox))
-    return boundingBoxes2dLabeled
-
-
-def createBoundingBox2dLabeledStamped(builder: Builder, header: int, labelsBb: List[int]) -> int:
-    """
-    Creates a\
-    [BoundingBoxes2DLabeledStamped](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingboxes2d_labeled_stamped.fbs)\
-    object in flatbuffers and returns it's pointer.
-
-    Args:
-        builder: A flatbuffers Builder
-        header: The pointer to the header object of the bounding boxes
-        labelsBb: A list of pointers to\
-            [BoundingBox2DLabeledWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d_labeled_with_category.fbs)\
-            objects
-
-    Returns:
-        A pointer to the constructed bounding boxes object
-    """
-    BoundingBoxes2DLabeledStamped.StartLabelsBbVector(builder, len(labelsBb))
-    for labelBb in reversed(labelsBb):
-        builder.PrependUOffsetTRelative(labelBb)
-    labelsBbVector = builder.EndVector()
-
-    BoundingBoxes2DLabeledStamped.Start(builder)
-    BoundingBoxes2DLabeledStamped.AddHeader(builder, header)
-    BoundingBoxes2DLabeledStamped.AddLabelsBb(builder, labelsBbVector)
-    return BoundingBoxes2DLabeledStamped.End(builder)
-
-
-def createBoundingBoxLabeledStamped(builder: Builder, header: int, labelsBb: List[int]) -> int:
-    """
-    Constructs a [BoundingBoxesLabeledStamped](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingboxes_labeled_stamped.fbs)\
-    object in flatbuffers and returns it's pointer.
-
-    Args:
-        builder: A flatbuffers Builder
-        header: The pointer to the header object for the bounding boxes
-        labelsBb: A list of pointers to\
-            [BoundingBoxLabeledWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox_labeled_with_category.fbs)\
-            objects
-
-    Returns:
-        A pointer to the constructed bounding boxes object
-    """
-    BoundingBoxesLabeledStamped.StartLabelsBbVector(builder, len(labelsBb))
-    for labelBb in reversed(labelsBb):
-        builder.PrependUOffsetTRelative(labelBb)
-    labelsBbVector = builder.EndVector()
-
-    BoundingBoxesLabeledStamped.Start(builder)
-    BoundingBoxesLabeledStamped.AddHeader(builder, header)
-    BoundingBoxesLabeledStamped.AddLabelsBb(builder, labelsBbVector)
-    return BoundingBoxesLabeledStamped.End(builder)
-
-
-def createBoundingBox2DLabeledWithCategory(builder: Builder, category: str, bb2dLabeled: List[int]) -> int:
-    """
-    Creates a flatbuffers\
-    [BoundingBox2DLabeledWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d_labeled_with_category.fbs)\
-    object.
-
-    Args:
-        builder: A flatbuffers Builder
-        category: The category of the bounding boxes
-        bb2dLabeled: A list of pointers to\
-            [BoundingBox2DLabeled](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d_labeled.fbs)\
-            objects
-
-    Returns:
-        A pointer to the constructed bounding box object
-    """
-    BoundingBox2DLabeledWithCategory.StartBoundingBox2dLabeledVector(builder, len(bb2dLabeled))
-    for labelBb in reversed(bb2dLabeled):
-        builder.PrependUOffsetTRelative(labelBb)
-    labelsBbVector = builder.EndVector()
-
-    BoundingBox2DLabeledWithCategory.Start(builder)
-    BoundingBox2DLabeledWithCategory.AddCategory(builder, category)
-    BoundingBox2DLabeledWithCategory.AddBoundingBox2dLabeled(builder, labelsBbVector)
-    return BoundingBox2DLabeledWithCategory.End(builder)
-
-
 def createPoint(builder: Builder, x: float, y: float, z: float) -> int:
     """
     Creates a 3D point in flatbuffers.
@@ -983,132 +805,6 @@ def createPolygon2D(builder: Builder, height: float, z: float, vertices: List[in
     return Polygon2D.End(builder)
 
 
-def createBoundingBoxStamped(
-    builder: Builder, header: int, centerPoint: int, spatialExtent: int, rotation: int = None
-) -> int:
-    """
-    Creates a\
-    [BoundingboxStamped](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox_stamped.fbs)\
-    object in flatbuffers.
-
-    Args:
-        builder: A flatbuffers Builder
-        header: The pointer to the header object of the bounding box
-        centerPoint: The pointer to the 3D Point object of the center point of the bounding box
-        spatialExtent: The pointer to the 3D Point object representing the spatial extent in x and y direction
-        rotation: The rotation of the bounding box as a flatbuffers Quaternion
-
-    Returns:
-        A pointer to the constructed bounding box object
-    """
-    boundingBox = createBoundingBox(builder, centerPoint, spatialExtent, rotation)
-    BoundingboxStamped.Start(builder)
-    BoundingboxStamped.AddHeader(builder, header)
-    BoundingboxStamped.AddBoundingbox(builder, boundingBox)
-    return BoundingboxStamped.End(builder)
-
-
-def createBoundingBoxes(
-    builder: Builder, centerPoint: List[int], spatialExtent: List[int], rotation: Union[int, None] = None
-) -> List[int]:
-    """
-    Creates multiple [Boundingbox](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox.fbs)\
-    objects in flatbuffers.
-
-    Args:
-        builder: A flatbuffers Builder
-        centerPoint: A list of pointers to Point3D objects representing the center points of the bounding boxes
-        spatialExtent: A list of pointers to Point3D objects representing the spatial extents in x, y and z direction
-        rotation: A list of rotations for the rounding boxes as flatbuffers Quaternion pointers
-
-    Returns:
-        A list of pointers to the constructed bounding box objects
-    """
-    assert len(centerPoint) == len(spatialExtent)
-    boundingBoxes = []
-    if rotation:
-        for center, extent, rot in zip(centerPoint, spatialExtent, rotation):
-            boundingBoxes.append(createBoundingBox(builder, center, extent, rot))
-    else:
-        for center, extent in zip(centerPoint, spatialExtent):
-            boundingBoxes.append(createBoundingBox(builder, center, extent))
-    return boundingBoxes
-
-
-def createBoundingBoxLabeled(builder: Builder, instance: int, boundingBox: int) -> int:
-    """
-    Creates a\
-    [BoundingBoxLabeled](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox_labeled.fbs)\
-    object in flatbuffers.
-
-    Args:
-        builder: A flatbuffers Builder
-        instance: The pointer to the\
-            [LabelWithInstance](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label_with_instance.fbs)\
-            object of the bounding box
-        boundingBox: The pointer to the\
-            [Boundingbox](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox.fbs)\
-            object of the labeled bounding box
-
-    Returns:
-        A pointer to the constructed bounding box object
-    """
-    BoundingBoxLabeled.Start(builder)
-    BoundingBoxLabeled.AddLabelWithInstance(builder, instance)
-    BoundingBoxLabeled.AddBoundingBox(builder, boundingBox)
-    return BoundingBoxLabeled.End(builder)
-
-
-def createBoundingBoxesLabeled(builder: Builder, instances: List[int], boundingBoxes: List[int]) -> List[int]:
-    """
-    Creates multiple labeled bounding boxes.
-
-    Args:
-        builder: A flatbuffers Builder
-        instances: A list of pointers to\
-            [LabelWithInstance](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label_with_instance.fbs)\
-            objects
-        boundingBoxes: A list of pointers to\
-            [Boundingbox](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox.fbs)
-
-    Returns:
-        A list of pointers to the constructed\
-        [BoundingBoxLabeled](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox_labeled.fbs)\
-        objects
-    """
-    assert len(instances) == len(boundingBoxes)
-    boundingBoxesLabeled = []
-    for instance, boundingBox in zip(instances, boundingBoxes):
-        boundingBoxesLabeled.append(createBoundingBoxLabeled(builder, instance, boundingBox))
-    return boundingBoxesLabeled
-
-
-def createBoundingBoxLabeledWithCategory(builder: Builder, category: str, bbLabeled: List[int]) -> int:
-    """
-    Creates a [BoundingBoxLabeledWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox_labeled_with_category.fbs)\
-    object in flatbuffers.
-
-    Args:
-        builder: A flatbuffers Builder
-        category: The category of the bounding boxes
-        bbLabeled: A list of pointers to\
-            [BoundingBoxLabeled](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox_labeled.fbs)\
-            objects
-
-    Returns:
-        A pointer to the constructed labeled with category bounding box object
-    """
-    BoundingBoxLabeledWithCategory.StartBoundingBoxLabeledVector(builder, len(bbLabeled))
-    for labelBb in reversed(bbLabeled):
-        builder.PrependUOffsetTRelative(labelBb)
-    labelsBbVector = builder.EndVector()
-
-    BoundingBoxLabeledWithCategory.Start(builder)
-    BoundingBoxLabeledWithCategory.AddCategory(builder, category)
-    BoundingBoxLabeledWithCategory.AddBoundingBoxLabeled(builder, labelsBbVector)
-    return BoundingBoxLabeledWithCategory.End(builder)
-
-
 def addToBoundingBoxLabeledVector(builder: Builder, boundingBoxLabeledList: List[int]) -> int:
     """
     Adds list of boudingBoxLabeled into the labelsBbVector of a flatbuffers pointcloud2.
@@ -1122,28 +818,8 @@ def addToBoundingBoxLabeledVector(builder: Builder, boundingBoxLabeledList: List
         A pointer to the constructed vector of bounding box labeled with category objects
     """
     PointCloud2.StartLabelsBbVector(builder, len(boundingBoxLabeledList))
-    # Note: reverse because we prepend
     for bb in reversed(boundingBoxLabeledList):
         builder.PrependUOffsetTRelative(bb)
-    return builder.EndVector()
-
-
-def addToGeneralLabelsVector(builder: Builder, generalLabelList: List[int]) -> int:
-    """
-    Adds list of generalLabels into the labelsGeneralVector of a flatbuffers pointcloud2.
-
-    Args:
-        builder: A flatbuffers Builder
-        generalLabelList: A list of pointers to\
-            [LabelsWithInstanceWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/labels_with_instance_with_category.fbs)
-
-    Returns:
-        A pointer to the constructed vector of general labels objects
-    """
-    PointCloud2.StartLabelsGeneralVector(builder, len(generalLabelList))
-    # Note: reverse because we prepend
-    for label in reversed(generalLabelList):
-        builder.PrependUOffsetTRelative(label)
     return builder.EndVector()
 
 
@@ -1160,7 +836,6 @@ def addToPointFieldVector(builder: Builder, pointFieldList: List[int]) -> int:
         A pointer to the constructed vector of point fields objects
     """
     PointCloud2.StartFieldsVector(builder, len(pointFieldList))
-    # Note: reverse because we prepend
     for pointField in reversed(pointFieldList):
         builder.PrependUOffsetTRelative(pointField)
     return builder.EndVector()
