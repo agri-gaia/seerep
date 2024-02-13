@@ -989,8 +989,9 @@ def createImage(
     image: np.ndarray,
     header: int,
     encoding: str,
-    boundingBox2dLabeledVector: Union[List[int], None] = None,
-    labelsGeneral: Union[List[int], None] = None,
+    is_bigendian: bool,
+    labels: Union[List[int], None] = None,
+    camera_intrinsics_uuid: str,
 ) -> int:
     """
     Create an image in flatbuffers.
@@ -1000,41 +1001,39 @@ def createImage(
         image: The image to be created (can be read from a file using imageio.imread())
         header: The pointer to the header object of the image
         encoding: The encoding of the image, e.g. rgb8
-        boundingBox2dLabeledVector: A list of pointers to\
-            [BoundingBox2DLabeledWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d_labeled_with_category.fbs)\
+        is_bigendian: Bool if the data is big endian
+        labelCategory: A list of pointers to\
+            [LabelCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label_category.fbs)\
             objects to attach to the image
-        labelsGeneral: A list to pointers to objects of type\
-            [LabelsWithInstanceWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/labels_with_instance_with_category.fbs)
+        camera_intrinsics_uuid: The uuid of the corresponding camera intrinsic
 
     Returns:
         A pointer to the constructed image object
     """
     encoding = builder.CreateString(encoding)
 
-    if boundingBox2dLabeledVector:
-        Image.StartLabelsBbVector(builder, len(boundingBox2dLabeledVector))
-        for bb in reversed(boundingBox2dLabeledVector):
-            builder.PrependUOffsetTRelative(bb)
-        bbs = builder.EndVector()
-
-    if labelsGeneral:
-        Image.StartLabelsGeneralVector(builder, len(labelsGeneral))
-        for label in reversed(labelsGeneral):
+    if labels:
+        Image.ImageStartLabelsVector(builder, len(labels))
+        for label in reversed(labels):
             builder.PrependUOffsetTRelative(label)
-        labelsGeneralVector = builder.EndVector()
+        label_offset = builder.EndVector()
 
-    imData = builder.CreateByteVector(image.tobytes())
+
+
+    camera_intrinsics_uuid_offset = builder.CreateString(camera_intrinsics_uuid)
+    data_offset = builder.CreateByteVector(image.tobytes())
+    
     Image.Start(builder)
     Image.AddHeader(builder, header)
     Image.AddHeight(builder, image.shape[0])
     Image.AddWidth(builder, image.shape[1])
     Image.AddEncoding(builder, encoding)
-    Image.AddStep(builder, 3 * image.shape[1])
-    Image.AddData(builder, imData)
-    if boundingBox2dLabeledVector:
-        Image.AddLabelsBb(builder, bbs)
-    if labelsGeneral:
-        Image.AddLabelsGeneral(builder, labelsGeneralVector)
+    Image.AddIsBigendian(builder, is_bigendian)
+    Image.AddStep(builder, step)
+    Image.AddData(builder, data_offset)
+    if labels:
+        Image.AddLabelCategory(builder, label_offset)
+    Image.AddUuidCameraintrinsics(builder, camera_intrinsics_uuid_offset)
     return Image.End(builder)
 
 
