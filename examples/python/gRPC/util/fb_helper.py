@@ -493,33 +493,31 @@ def createTransformStamped(builder, childFrame, headerTf, transform):
     return TransformStamped.End(builder)
 
 
-def createImage(builder, image, header, encoding, boundingBox2dLabeledVector=None, labelsGeneral=None):
-    encoding = builder.CreateString(encoding)
+def createImage(
+    builder,
+    header: Header.Header,
+    encoding: str,
+    is_bigendian: bool,
+    step: int,
+    image: np.ndarray,
+    camera_intrinsics_uuid: str,
+    labels: LabelCategory.LabelCategory = None,
+):
+    encoding_offset = builder.CreateString(encoding)
+    camera_intrinsics_uuid_offset = builder.CreateString(camera_intrinsics_uuid)
+    data_offset = builder.CreateByteVector(image.tobytes())
 
-    if boundingBox2dLabeledVector:
-        Image.StartLabelsBbVector(builder, len(boundingBox2dLabeledVector))
-        for bb in reversed(boundingBox2dLabeledVector):
-            builder.PrependUOffsetTRelative(bb)
-        bbs = builder.EndVector()
-
-    if labelsGeneral:
-        Image.StartLabelsGeneralVector(builder, len(labelsGeneral))
-        for label in reversed(labelsGeneral):
-            builder.PrependUOffsetTRelative(label)
-        labelsGeneralVector = builder.EndVector()
-
-    imData = builder.CreateByteVector(image.tobytes())
     Image.Start(builder)
     Image.AddHeader(builder, header)
     Image.AddHeight(builder, image.shape[0])
     Image.AddWidth(builder, image.shape[1])
-    Image.AddEncoding(builder, encoding)
-    Image.AddStep(builder, 3 * image.shape[1])
-    Image.AddData(builder, imData)
-    if boundingBox2dLabeledVector:
-        Image.AddLabelsBb(builder, bbs)
-    if labelsGeneral:
-        Image.AddLabelsGeneral(builder, labelsGeneralVector)
+    Image.AddEncoding(builder, encoding_offset)
+    Image.AddIsBigendian(builder, is_bigendian)
+    Image.AddStep(builder, step)
+    Image.AddData(builder, data_offset)
+    if labels:
+        Image.AddLabelsGeneral(builder, labels)
+    Image.AddUuidCameraintrinsics(builder, camera_intrinsics_uuid_offset)
     return Image.End(builder)
 
 
