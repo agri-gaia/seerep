@@ -13,9 +13,7 @@ from seerep.fb import (
     Header,
     Image,
     Label,
-    LabelsWithCategory,
-    LabelsWithInstanceWithCategory,
-    LabelWithInstance,
+    LabelCategory,
     Point,
     Point2D,
     PointCloud2,
@@ -430,268 +428,6 @@ def createPointFields(
     return pointFieldsList
 
 
-def createLabelWithConfidence(builder: Builder, label: str, confidence: Union[float, None] = None) -> int:
-    """
-    Creates a label with an associated confidence value of type\
-    [Label](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label.fbs).
-
-    Args:
-        builder: A flatbuffers Builder
-        label: The label string
-        confidence: The confidence value of the label
-
-    Returns:
-        A pointer to the constructed label object
-    """
-
-    labelStr = builder.CreateString(label)
-    Label.Start(builder)
-    Label.AddLabel(builder, labelStr)
-    if confidence:
-        Label.AddConfidence(builder, confidence)
-    return Label.End(builder)
-
-
-def createLabelsWithConfidences(
-    builder: Builder, labels: List[str], confidences: Union[List[float], None] = None
-) -> List[int]:
-    """
-    Creates multiple labels with associated confidence values of type\
-    [Label](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label.fbs).
-
-    Args:
-        builder: A flatbuffers Builder
-        labels: A list of label strings
-        confidences: A list of confidence values corresponding to the label on the same index
-
-    Returns:
-        A list of pointers to the constructed label objects
-    """
-
-    labels_with_confidences = []
-    if confidences:
-        for label, confidence in zip(labels, confidences):
-            labels_with_confidences.append(createLabelWithConfidence(builder, label, confidence))
-    else:
-        for label in labels:
-            labels_with_confidences.append(createLabelWithConfidence(builder, label))
-
-    return labels_with_confidences
-
-
-def createLabelWithInstance(builder: str, label: str, instanceUuid: str, confidence: Union[float, None] = None) -> int:
-    """
-    Creates a label with an associated instance uuid of type\
-    [LabelWithInstance](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label_with_instance.fbs).
-
-    Args:
-        builder: A flatbuffers Builder
-        label: The label string
-        confidence: The confidence value of the label
-        instanceUuid: The UUID of the instance which the label belongs to
-
-    Returns:
-        A pointer to the constructed label object
-    """
-
-    labelConfidence = createLabelWithConfidence(builder, label, confidence)
-    instanceUuidStr = builder.CreateString(instanceUuid)
-    LabelWithInstance.Start(builder)
-    LabelWithInstance.AddLabel(builder, labelConfidence)
-    LabelWithInstance.AddInstanceUuid(builder, instanceUuidStr)
-    return LabelWithInstance.End(builder)
-
-
-# category: list of categories
-# labels: list of list of labels (as fb-String msg) per category
-def createLabelsWithCategoryVector(
-    builder: Builder,
-    categories: List[int],
-    cat_labels: List[List[str]],
-    cat_confidences: Union[List[List[float]], None] = None,
-) -> int:
-    """
-    Adds the same list of labels to each category of a list of categories.
-
-    Args:
-        builder: A flatbuffers Builder
-        categories: A list with categories
-        labels: A inner list of labels for each category the outer list corresponding to the categories
-        confidences: A inner list of confidence values for each category with the outer\
-            list corresponding to the categories
-
-    Returns:
-        A pointer to the vector of category to labels mappings
-    """
-
-    LabelsCategories = createLabelsWithCategories(builder, categories, cat_labels, cat_confidences)
-
-    Query.StartLabelVector(builder, len(LabelsCategories))
-    for LabelCategory in reversed(LabelsCategories):
-        builder.PrependUOffsetTRelative(LabelCategory)
-    return builder.EndVector()
-
-
-def createLabelsWithCategories(
-    builder: Builder,
-    categories: List[int],
-    cat_labels: List[List[str]],
-    cat_confidences: Union[List[List[float]], None] = None,
-) -> List[int]:
-    """
-    Adds the same list of labels to each category of a list of categories.
-
-    Args:
-        builder: A flatbuffers Builder
-        categories: A list with categories
-        labels: A inner list of labels for each category the outer list corresponding to the categories
-        confidences: A inner list of confidence values for each category with the outer\
-            list corresponding to the categories
-
-    Returns:
-        A list to pointers to\
-        [LabelsWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/labels_with_category.fbs)\
-        objects
-    """
-    label_categories = []
-
-    assert len(cat_labels) == len(categories)
-
-    for triple in zip(categories, cat_labels, cat_confidences) if cat_confidences else zip(categories, cat_labels):
-        cat_str = builder.CreateString(str(triple[0]))
-
-        if len(triple) > 2:
-            labels_processed = createLabelsWithConfidences(builder, triple[1], triple[2])
-        else:
-            labels_processed = createLabelsWithConfidences(builder, triple[1])
-
-        LabelsWithCategory.StartLabelsVector(builder, len(labels_processed))
-        for label in reversed(labels_processed):
-            builder.PrependUOffsetTRelative(label)
-        labels_offset = builder.EndVector()
-
-        LabelsWithCategory.Start(builder)
-        LabelsWithCategory.AddCategory(builder, cat_str)
-        LabelsWithCategory.AddLabels(builder, labels_offset)
-        label_categories.append(LabelsWithCategory.End(builder))
-
-    return label_categories
-
-
-def createLabelWithInstanceWithCategory(
-    builder: Builder,
-    category: str,
-    labels: List[str],
-    instance_uuids=List[str],
-    confidences: Union[List[float], None] = None,
-) -> int:
-    """
-    Adds generates a list of labels with instances and adds it to a category.
-
-    Args:
-        builder: A flatbuffers Builder
-        category: A category
-        labels: A list of labels
-        instance_uuids: A list of instance UUIDs
-        confidences: A list of confidence values corresponding to the labels on the same index
-
-    Returns:
-        A pointer to the constructed\
-        [LabelWithCategoryWithInstance](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/labels_with_instance_with_category.fbs)\
-        object
-    """
-    cat_string = builder.CreateString(category)
-    list_labels_w_instance = createLabelsWithInstance(builder, labels, instance_uuids, confidences)
-
-    LabelsWithInstanceWithCategory.StartLabelsWithInstanceVector(builder, len(list_labels_w_instance))
-    for label_with_instance in reversed(list_labels_w_instance):
-        builder.PrependUOffsetTRelative(label_with_instance)
-    labels_offset = builder.EndVector()
-
-    LabelsWithInstanceWithCategory.Start(builder)
-    LabelsWithInstanceWithCategory.AddCategory(builder, cat_string)
-    LabelsWithInstanceWithCategory.AddLabelsWithInstance(builder, labels_offset)
-
-    return LabelsWithInstanceWithCategory.End(builder)
-
-
-def createLabelsWithInstanceWithCategory(
-    builder: Builder,
-    categories: List[str],
-    cat_labels: List[List[str]],
-    cat_instance_uuids: List[List[str]],
-    cat_confidences: Union[List[List[float]], None] = None,
-) -> List[int]:
-    """
-    Adds the same list of labels to each category of a list of categories.
-
-    Args:
-        builder: A flatbuffers Builder
-        categories: A list with categories
-        cat_labels: A inner list of labels for each category the outer list corresponding to the categories
-        cat_instance_uuids: A inner list of instance UUIDs for each category with the outer\
-            list corresponding to the categories
-        cat_confidences: A inner list of confidence values for each category with the outer\
-            list corresponding to the categories
-
-    Returns:
-        A list containing pointers to\
-        [LabelWithCategoryWithInstance](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/labels_with_instance_with_category.fbs)\
-        objects
-    """
-
-    assert len(categories) == len(cat_labels) == len(cat_instance_uuids)
-
-    labels = []
-
-    for quad in (
-        zip(categories, cat_labels, cat_instance_uuids, cat_confidences)
-        if cat_confidences
-        else zip(categories, cat_labels, cat_instance_uuids)
-    ):
-        if len(quad) > 3:
-            labels_w_instance_categories = createLabelWithInstanceWithCategory(
-                builder, quad[0], quad[1], quad[2], quad[3]
-            )
-        else:
-            labels_w_instance_categories = createLabelWithInstanceWithCategory(builder, quad[0], quad[1], quad[2])
-
-        labels.append(labels_w_instance_categories)
-
-    return labels
-
-
-def createLabelsWithInstance(
-    builder: Builder,
-    labels: List[str],
-    instanceUuids: List[str],
-    confidences: Union[List[float], None] = None,
-) -> List[int]:
-    """
-    Creates multiple general labels mapped to instances.
-
-    Args:
-        builder: A flatbuffers Builder
-        labels: A list of label strings
-        confidences: A list of confidence values corresponding to the label on the same index
-        instanceUuids: A list of instance UUIDs corresponding to the label on the same index
-
-    Returns:
-        A list of pointers to the constructed\
-        [LabelWithInstance](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label_with_instance.fbs)\
-        objects
-    """
-    assert len(labels) == len(instanceUuids)
-    labelsGeneral = []
-    if confidences:
-        for label, confidence, uuid in zip(labels, confidences, instanceUuids):
-            labelsGeneral.append(createLabelWithInstance(builder, label, uuid, confidence))
-    else:
-        for label, uuid in zip(labels, confidences, instanceUuids):
-            labelsGeneral.append(createLabelWithInstance(builder, label, uuid))
-    return labelsGeneral
-
-
 def createPoint2d(builder: Builder, x: float, y: float) -> int:
     """
     Creates a 2D point in flatbuffers.
@@ -704,9 +440,9 @@ def createPoint2d(builder: Builder, x: float, y: float) -> int:
     Returns:
         A pointer to the constructed point object
     """
-    Point2D.Start(builder)
-    Point2D.AddX(builder, x)
-    Point2D.AddY(builder, y)
+    Point.Start(builder)
+    Point.AddX(builder, x)
+    Point.AddY(builder, y)
     return Point.End(builder)
 
 
@@ -878,7 +614,6 @@ def createQuery(
         A pointer to the constructed query object
     """
 
-    # Note: reverse because we prepend
     if projectUuids:
         Query.StartProjectuuidVector(builder, len(projectUuids))
         for projectUuid in reversed(projectUuids):
@@ -1301,3 +1036,31 @@ def createImage(
     if labelsGeneral:
         Image.AddLabelsGeneral(builder, labelsGeneralVector)
     return Image.End(builder)
+
+
+def createLabel(builder, label: str, label_id: int, instance_uuid: str, instance_id: int):
+    label_offset = builder.CreateString(label)
+    instance_uuid_offset = builder.CreateString(instance_uuid)
+    Label.Start(builder)
+    Label.AddLabel(builder, label_offset)
+    Label.AddLabelId(builder, label_id)
+    Label.AddInstanceUuid(builder, instance_uuid_offset)
+    Label.AddInstanceId(builder, instance_id)
+    return Label.End(builder)
+
+
+def createLabelCategory(
+    builder,
+    category: str,
+    labels: List[Label.Label],
+    datumaro_json: str,
+):
+    category_offset = builder.CreateString(category)
+    labels_vector = LabelCategory.LabelCategory.CreateLabelsVector(builder, labels)
+    datumaro_json_offset = builder.CreateString(datumaro_json)
+
+    LabelCategory.Start(builder)
+    LabelCategory.AddCategory(builder, category_offset)
+    LabelCategory.AddLabels(builder, labels_vector)
+    LabelCategory.AddDatumaroJson(builder, datumaro_json_offset)
+    return LabelCategory.End(builder)
