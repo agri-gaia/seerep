@@ -75,5 +75,5 @@ jobs:
         pip install tox-gh-actions
       shell: bash
     - name: Test using tox
-      run: tox -c $GITHUB_WORKSPACE/src/tox.ini -e integration-examples
+      run: tox -c $GITHUB_WORKSPACE/src/tox.ini -e integration-examples-gh
       shell: bash
