@@ -493,12 +493,11 @@ def createTransformStamped(builder, childFrame, headerTf, transform):
     return TransformStamped.End(builder)
 
 
-def createImage(
+def create_image(
     builder,
     header: Header.Header,
     encoding: str,
     is_bigendian: bool,
-    step: int,
     image: np.ndarray,
     camera_intrinsics_uuid: str,
     labels: LabelCategory.LabelCategory = None,
@@ -513,37 +512,42 @@ def createImage(
     Image.AddWidth(builder, image.shape[1])
     Image.AddEncoding(builder, encoding_offset)
     Image.AddIsBigendian(builder, is_bigendian)
-    Image.AddStep(builder, step)
+    Image.AddStep(builder, image.nbytes // image.shape[0])
     Image.AddData(builder, data_offset)
     if labels:
-        Image.AddLabelsGeneral(builder, labels)
+        Image.AddLabels(builder, labels)
     Image.AddUuidCameraintrinsics(builder, camera_intrinsics_uuid_offset)
     return Image.End(builder)
 
 
-def createLabel(builder, label: str, label_id: int, instance_uuid: str, instance_id: int):
+# TODO: find a way to not use to ifs for the optional parameters
+def create_label(builder, label: str, label_id: int, instance_uuid: str = None, instance_id: int = None):
     label_offset = builder.CreateString(label)
-    instance_uuid_offset = builder.CreateString(instance_uuid)
+    if instance_uuid:
+        instance_uuid_offset = builder.CreateString(instance_uuid)
     Label.Start(builder)
     Label.AddLabel(builder, label_offset)
-    Label.AddLabelId(builder, label_id)
-    Label.AddInstanceUuid(builder, instance_uuid_offset)
-    Label.AddInstanceId(builder, instance_id)
+    Label.LabelAddLabelIdDatumaro(builder, label_id)
+    if instance_uuid:
+        Label.AddInstanceUuid(builder, instance_uuid_offset)
+    if instance_id:
+        Label.AddInstanceId(builder, instance_id)
     return Label.End(builder)
 
 
-def createLabelCategory(
-    builder,
-    category: str,
-    labels: List[Label.Label],
-    datumaro_json: str,
-):
-    category_offset = builder.CreateString(category)
-    labels_vector = LabelCategory.LabelCategory.CreateLabelsVector(builder, labels)
+def create_label_category(builder, labels: List[Label.Label], datumaro_json: str, category: str = None):
+    if category:
+        category_offset = builder.CreateString(category)
     datumaro_json_offset = builder.CreateString(datumaro_json)
 
+    LabelCategory.StartLabelsVector(builder, len(labels))
+    for label in labels:
+        builder.PrependUOffsetTRelative(label)
+    vec_offset = builder.EndVector()
+
     LabelCategory.Start(builder)
-    LabelCategory.AddCategory(builder, category_offset)
-    LabelCategory.AddLabels(builder, labels_vector)
+    if category:
+        LabelCategory.AddCategory(builder, category_offset)
+    LabelCategory.AddLabels(builder, vec_offset)
     LabelCategory.AddDatumaroJson(builder, datumaro_json_offset)
     return LabelCategory.End(builder)

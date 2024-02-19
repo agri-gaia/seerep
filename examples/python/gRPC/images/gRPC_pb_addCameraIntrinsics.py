@@ -33,7 +33,7 @@ projectuuid = ""
 for project in response.projects:
     print(project.name + " " + project.uuid + "\n")
     if project.name == "testproject":
-        projectuuid = project.uuid
+        projectuuid = "67b3fa5c-298b-4cff-8af6-f0444ebc2f89"
 
 if projectuuid == "":
     sys.exit()
