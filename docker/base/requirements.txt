@@ -13,3 +13,4 @@ build==0.10.0
 setuptools==65.7.0
 matplotlib==3.6.3
 open3d==0.17.0
+opencv-python==4.9.0.80
