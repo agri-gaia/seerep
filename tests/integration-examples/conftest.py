@@ -57,31 +57,3 @@ def project_setup(grpc_channel) -> Generator[Tuple[str, str], None, None]:
     # teardown
     builder = flatbuffers.Builder()
     fb_helper.deleteProject(grpc_channel, builder, proj_name, proj_uuid)
-
-
-# creates a project with geodetic coordinates
-@pytest.fixture
-def geo_project_setup(grpc_channel) -> Generator[Tuple[str, str], None, None]:
-    # setup
-    builder = flatbuffers.Builder()
-
-    # should correspondend to topocentric coordinates:
-    # X: 3876524.5192
-    # Y: 548466.2095
-    # Z: 5018349.9785
-    proj_info = fb_helper.createProjectRaw(
-        grpc_channel,
-        builder,
-        "testproject",
-        "2",
-        "EPSG::4326",
-        93,
-        52.2264,
-        8.0530,
-    )
-
-    proj_name, proj_uuid = proj_creation.create_project(grpc_channel)
-    yield proj_name, proj_uuid
-
-    # teardown
-    fb_helper.deleteProject(grpc_channel, builder, proj_name, proj_uuid)
