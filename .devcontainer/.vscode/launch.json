@@ -75,7 +75,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/devel/bin/seerep_server_server",
-            "args": ["-c/seerep/src/examples/tests/seerep.cfg"],
+            "args": ["-c/seerep/src/tests/integration-examples/seerep.cfg"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/seerep-data",
             "environment": [],
