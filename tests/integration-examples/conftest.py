@@ -28,16 +28,11 @@ def setup_test_struct():
 # makes sure that all projects and log files in the test folder are deleted
 # otherwise if the server failed to terminate correctly, leftover projects could lead to problems
 @pytest.fixture(scope="session", autouse=True)
-def cleanup_remnants(request) -> None:
+def cleanup_remnants(request, setup_test_struct) -> None:
     if request.config.getoption("--ignore-leftovers") == True:
         return
-    # a workaround to enable stdin while using pytest
-    capture_man = request.config.pluginmanager.getplugin("capturemanager")
-    capture_man.suspend_global_capture(in_=True)
-
-    th.cleanup_test_remnants()
-
-    capture_man.resume_global_capture()
+    th.remove_hdf5_files(setup_test_struct[1])
+    th.remove_log_files(setup_test_struct[2])
 
 
 # provide a instance of the grpc_channel to the tests
