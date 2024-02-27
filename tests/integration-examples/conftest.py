@@ -1,54 +1,60 @@
+import shutil
+import subprocess
+import time
 from typing import Generator, Tuple
 
-import cleanup_util as th
 import flatbuffers
 import pytest
+import setup_util
+from grpc import Channel
 from gRPC.meta import gRPC_pb_createProject as proj_creation
 from seerep.util import fb_helper
 from seerep.util.common import get_gRPC_channel
 
-# tests are only working with a seerep server listening on the port specified in ./seerep.cfg
+# TODO: find a better way to get the path to the server config
+SERVER_TEST_CONFIG_PATH = "/seerep/src/tests/integration-examples/seerep.cfg"
+SEVER_EXECUTABLE_NAME = "seerep_server_server"
 
-# pytest starts relative to where it finds the first pyproject.toml
-# in this case it is in the examples folder
-def pytest_addoption(parser):
-    parser.addoption(
-        '--ignore-leftovers',
-        action='store_true',
-        default=False,
-        help='whether pytest should ignore leftovers in the test directory, else the user will be prompted for removal',
+
+@pytest.fixture(scope="session")
+def server_config() -> Generator[dict, None, None]:
+    yield setup_util.get_server_config(SERVER_TEST_CONFIG_PATH)
+
+
+# TODO: Compile server executable if not present? Make sure it has been build in Release mode?
+@pytest.fixture(scope="session")
+def grpc_channel(server_config: dict) -> Generator[Channel, None, None]:
+    # find the server executable
+    server_exe_path = shutil.which(SEVER_EXECUTABLE_NAME)
+    if not server_exe_path:
+        raise FileNotFoundError(f"Server executable '{SEVER_EXECUTABLE_NAME}' not found")
+
+    # remove any leftover files from previous tests
+    setup_util.remove_hdf5_files(server_config["data-folder"])
+    setup_util.remove_log_files(server_config["log-path"])
+
+    # start server in the background
+    server_process = subprocess.Popen(
+        [server_exe_path, f"-c{SERVER_TEST_CONFIG_PATH}"],
     )
 
+    if not server_process:
+        raise RuntimeError("Failed to start SEEREP")
 
-@pytest.fixture(scope="session")
-def setup_test_struct():
-    yield th.setup_test_struct()
+    # wait for the gRPC interface to be available
+    while not setup_util.is_port_open(server_config["port"]):
+        time.sleep(0.1)
 
+    yield get_gRPC_channel(f"localhost:{server_config['port']}")
 
-# makes sure that all projects and log files in the test folder are deleted
-# otherwise if the server failed to terminate correctly, leftover projects could lead to problems
-@pytest.fixture(scope="session", autouse=True)
-def cleanup_remnants(request, setup_test_struct) -> None:
-    if request.config.getoption("--ignore-leftovers") == True:
-        return
-    th.remove_hdf5_files(setup_test_struct[1])
-    th.remove_log_files(setup_test_struct[2])
+    server_process.terminate()
 
 
-# provide a instance of the grpc_channel to the tests
-@pytest.fixture(scope="session")
-def grpc_channel(setup_test_struct):
-    channel = get_gRPC_channel(f"localhost:{setup_test_struct[0]}")
-    yield channel
-
-
-# this fixture depends on working project creation and deletion
+# NOTE: This fixture depends on working project creation and deletion
 @pytest.fixture
 def project_setup(grpc_channel) -> Generator[Tuple[str, str], None, None]:
-    # setup
-    proj_name, proj_uuid = proj_creation.create_project(grpc_channel)
-    yield proj_name, proj_uuid
+    project_name, project_uuid = proj_creation.create_project(grpc_channel)
 
-    # teardown
-    builder = flatbuffers.Builder()
-    fb_helper.deleteProject(grpc_channel, builder, proj_name, proj_uuid)
+    yield project_name, project_uuid
+
+    fb_helper.deleteProject(grpc_channel, flatbuffers.Builder(), project_name, project_uuid)
