@@ -1,6 +1,8 @@
+import os
 import shutil
 import subprocess
 import time
+from pathlib import Path
 from typing import Generator, Tuple
 
 import flatbuffers
@@ -11,9 +13,8 @@ from gRPC.meta import gRPC_pb_createProject as proj_creation
 from seerep.util import fb_helper
 from seerep.util.common import get_gRPC_channel
 
-# TODO: find a better way to get the path to the server config
-SERVER_TEST_CONFIG_PATH = "/seerep/src/tests/integration-examples/seerep.cfg"
-SEVER_EXECUTABLE_NAME = "seerep_server_server"
+SERVER_TEST_CONFIG_PATH = Path(__file__).resolve().parent / "seerep.cfg"
+SERVER_EXECUTABLE_NAME = "seerep_server_server"
 
 
 @pytest.fixture(scope="session")
@@ -25,9 +26,9 @@ def server_config() -> Generator[dict, None, None]:
 @pytest.fixture(scope="session")
 def grpc_channel(server_config: dict) -> Generator[Channel, None, None]:
     # find the server executable
-    server_exe_path = shutil.which(SEVER_EXECUTABLE_NAME)
+    server_exe_path = shutil.which(SERVER_EXECUTABLE_NAME)
     if not server_exe_path:
-        raise FileNotFoundError(f"Server executable '{SEVER_EXECUTABLE_NAME}' not found")
+        raise FileNotFoundError(f"Server executable '{SERVER_EXECUTABLE_NAME}' not found")
 
     # remove any leftover files from previous tests
     setup_util.remove_hdf5_files(server_config["data-folder"])

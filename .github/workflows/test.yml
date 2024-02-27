@@ -67,13 +67,9 @@ jobs:
       run: |
         source /opt/ros/noetic/setup.bash
         catkin build --workspace $GITHUB_WORKSPACE
-        source $GITHUB_WORKSPACE/devel/setup.bash
       shell: bash
-    - name: Install python test dependencies
+    - name: Execute pytest
       run: |
-        python -m pip install --upgrade pip
-        pip install tox-gh-actions
-      shell: bash
-    - name: Test using tox
-      run: tox -c $GITHUB_WORKSPACE/src/tox.ini -e integration-examples-gh
+        source $GITHUB_WORKSPACE/devel/setup.bash
+        PYTHONPATH=$GITHUB_WORKSPACE/devel/include/seerep_com/fbs:$PYTHONPATH pytest --force-sugar $GITHUB_WORKSPACE/src
       shell: bash
