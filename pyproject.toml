@@ -31,3 +31,14 @@ Documentation = "https://agri-gaia.github.io/seerep/mkdocs/home/index.html"
 line-length = 120
 target-version = ['py38']
 skip-string-normalization = true
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests/"
+]
+pythonpath = [
+  "examples/python",
+  "tests/python"
+]

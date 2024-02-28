@@ -1,18 +1,33 @@
 #!/usr/bin/env python3
 
 import flatbuffers
-from seerep.fb import image_service_grpc_fb as imageService
+from grpc import Channel
+from seerep.fb import ProjectInfo
 from seerep.fb import meta_operations_grpc_fb as metaOperations
 from seerep.util.common import get_gRPC_channel
-from seerep.util.fb_helper import createProject
+from seerep.util.fb_helper import createProjectRaw
 
-channel = get_gRPC_channel()
 
-stub = imageService.ImageServiceStub(channel)
-stubMeta = metaOperations.MetaOperationsStub(channel)
+def create_geo_proj(
+    grpc_channel: Channel = get_gRPC_channel(),
+) -> ProjectInfo.ProjectInfo:
+    stubMeta = metaOperations.MetaOperationsStub(grpc_channel)
 
-builder = flatbuffers.Builder(1024)
+    builder = flatbuffers.Builder(1024)
 
-createProject(channel, builder, "geodeticProject", "2", "EPSG::4326", "EPSG::7030", 4, 4, 4)
+    response = createProjectRaw(
+        grpc_channel,
+        builder,
+        "geodeticProject",
+        "2",
+        "EPSG::4326",
+        4,
+        6,
+        7,
+    )
 
-buf = builder.Output()
+    return response
+
+
+if __name__ == "__main__":
+    create_geo_proj()

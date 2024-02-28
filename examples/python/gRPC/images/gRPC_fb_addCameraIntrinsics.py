@@ -1,69 +1,84 @@
 #!/usr/bin/env python3
-
 import uuid
+from typing import Optional
 
 import flatbuffers
+from google.protobuf import empty_pb2
+from grpc import Channel
 from seerep.fb import CameraIntrinsics
 from seerep.fb import camera_intrinsics_service_grpc_fb as ci_service
+from seerep.pb import meta_operations_pb2_grpc as metaOperations
+from seerep.pb import projectCreation_pb2
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
     createCameraIntrinsics,
-    createCameraIntrinsicsQuery,
     createHeader,
     createRegionOfInterest,
     createTimeStamp,
-    getProject,
 )
 
-builder = flatbuffers.Builder(1000)
+
 # Default server is localhost !
-channel = get_gRPC_channel()
+def add_camintrins(
+    ciuuid: Optional[str] = "fa2f27e3-7484-48b0-9f21-ec362075baca",
+    target_proj_uuid: Optional[str] = None,
+    grpc_channel: Channel = get_gRPC_channel(),
+) -> Optional[CameraIntrinsics.CameraIntrinsics]:
+    if ciuuid is None:
+        ciuuid = str(uuid.uuid4())
 
-# 1. Get all projects from the server
-projectuuid = getProject(builder, channel, 'testproject')
+    builder = flatbuffers.Builder(1000)
 
-ciuuid = str(uuid.uuid4())
-print("Camera Intrinsics will be saved against the uuid: ", ciuuid)
+    stubMeta = metaOperations.MetaOperationsStub(grpc_channel)
 
-# 2. Check if the defined project exist; if not exit
-if not projectuuid:
-    print("project doesn't exist!")
-    exit()
+    # 3. Check if we have an existing test project, if not, one is created.
+    if target_proj_uuid is None:
+        # 2. Get all projects from the server
+        response = stubMeta.GetProjects(empty_pb2.Empty())
+        for project in response.projects:
+            print(project.name + " " + project.uuid)
+            if project.name == "testproject":
+                found = True
+                target_proj_uuid = project.uuid
 
-# 3. Get gRPC service object
-stub = ci_service.CameraIntrinsicsServiceStub(channel)
+        if target_proj_uuid is None:
+            response = stubMeta.CreateProject(projectCreation_pb2.ProjectCreation(name="testproject", mapFrameId="map"))
+            target_proj_uuid = response.uuid
 
-# Create all necessary objects for the query
-ts = createTimeStamp(builder, 4, 3)
-header = createHeader(builder, ts, "map", projectuuid, ciuuid)
-roi = createRegionOfInterest(builder, 3, 5, 6, 7, True)
+    # 2. Check if the defined project exist; if not return None
+    if target_proj_uuid is None:
+        print("could not create project and add camera intrinsics to it!")
+        return None
+
+    # 3. Get gRPC service object
+    stub = ci_service.CameraIntrinsicsServiceStub(grpc_channel)
+
+    # Create all necessary objects for the query
+    ts = createTimeStamp(builder, 1, 2)
+    header = createHeader(builder, ts, "map", target_proj_uuid, ciuuid)
+    roi = createRegionOfInterest(builder, 3, 5, 6, 7, True)
+
+    distortion_matrix = [4, 5, 6, 7, 8, 9, 10, 11, 12]
+    rect_matrix = [4, 5, 6, 7, 8, 9, 10, 11, 12]
+    intrins_matrix = [4, 5, 6, 7, 8, 9, 10, 11, 12]
+    proj_matrix = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+
+    ci = createCameraIntrinsics(
+        builder, header, 3, 4, "plumb_bob", distortion_matrix, intrins_matrix, rect_matrix, proj_matrix, 4, 5, roi, 5
+    )
+    builder.Finish(ci)
+
+    buf = builder.Output()
+
+    ret = stub.TransferCameraIntrinsics(bytes(buf))
+    return CameraIntrinsics.CameraIntrinsics.GetRootAs(buf)
 
 
-distortion_matrix = [4, 5, 6, 7, 8, 9, 10, 11, 12]
-rect_matrix = [4, 5, 6, 7, 8, 9, 10, 11, 12]
-intrins_matrix = [4, 5, 6, 7, 8, 9, 10, 11, 12]
-proj_matrix = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-
-ci = createCameraIntrinsics(
-    builder, header, 3, 4, "plumb_bob", distortion_matrix, intrins_matrix, rect_matrix, proj_matrix, 4, 5, roi, 5
-)
-builder.Finish(ci)
-
-buf = builder.Output()
-
-stub.TransferCameraIntrinsics(bytes(buf))
-
-# Fetch the saved CI
-builder = flatbuffers.Builder(1000)
-
-ci_query = createCameraIntrinsicsQuery(builder, ciuuid, projectuuid)
-
-builder.Finish(ci_query)
-buf = builder.Output()
-
-ret = stub.GetCameraIntrinsics(bytes(buf))
-
-retrieved_ci = CameraIntrinsics.CameraIntrinsics.GetRootAs(ret)
-
-# printing the uuid of the retrieved camera intrinsics
-print(retrieved_ci.Header().UuidMsgs().decode('utf-8'))
+if __name__ == "__main__":
+    caminstrins_obj = add_camintrins()
+    # for verification print the uuid of the added camera intrinsics
+    print(
+        f"camera instrinsics were saved with the uuid {caminstrins_obj.Header().UuidMsgs().decode('utf-8')} on the project with the uuid {caminstrins_obj.Header().UuidProject().decode('utf-8')}"
+    )
+    # and the contents of the distortion array
+    print(f"camera instrinsics distortion matrix: {caminstrins_obj.DistortionAsNumpy()}")

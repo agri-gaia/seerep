@@ -46,3 +46,30 @@ jobs:
     - name: Test flatbuffer conversions
       run: catkin test seerep_ros_conversions_fb
       shell: bash
+
+  integration-examples:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/agri-gaia/seerep_base:latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        path: src
+    - name: Set up python 3.8
+      run: |
+        apt update
+        apt install -y python3.8
+        ln -s `which python3.8` /usr/local/bin/python
+      shell: bash
+    - name: Build seerep
+      run: |
+        source /opt/ros/noetic/setup.bash
+        catkin build --workspace $GITHUB_WORKSPACE
+      shell: bash
+    - name: Execute pytest
+      run: |
+        source $GITHUB_WORKSPACE/devel/setup.bash
+        PYTHONPATH=$GITHUB_WORKSPACE/devel/include/seerep_com/fbs:$PYTHONPATH pytest --force-sugar $GITHUB_WORKSPACE/src
+      shell: bash
