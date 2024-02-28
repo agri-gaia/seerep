@@ -174,13 +174,6 @@ RUN wget ${DOX_REL}/${DOX_VER}.tar.gz \
         && cd ../.. \
         && rm -rf doxygen-${DOX_VER} ${DOX_VER}.tar.gz
 
-RUN echo "source /opt/ros/noetic/setup.bash" >> /root/.bashrc \
-        && echo "source /opt/ros/noetic/setup.zsh" >> /root/.zshrc \
-        && echo "[[ -e /seerep/devel/setup.bash ]] && source /seerep/devel/setup.bash" >> /root/.bashrc \
-        && echo "[[ -e /seerep/devel/setup.zsh ]] && source /seerep/devel/setup.zsh" >> /root/.zshrc
-
-RUN echo 'export PYTHONPATH="${PYTHONPATH}:/seerep/build/seerep_msgs:/seerep/build/seerep_com"' >> /root/.bashrc
-
 # add non root user
 RUN useradd -u 1000 --create-home --shell /bin/bash docker && echo "docker:docker" | chpasswd && adduser docker sudo
 
