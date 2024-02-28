@@ -36,9 +36,9 @@ skip-string-normalization = true
 minversion = "6.0"
 addopts = "-ra -q"
 testpaths = [
-    "tests/integration-examples"
+    "tests/"
 ]
 pythonpath = [
   "examples/python",
-  "tests/integration-examples/python"
+  "tests/python"
 ]
