@@ -95,12 +95,11 @@ RUN apt-get -qq update && apt-get -qq install --no-install-recommends -y -o=Dpkg
         libhdf5-dev \
         libhdf5-mpi-dev \
         libboost-all-dev \
-        libeigen3-dev \
         && rm -rf /var/lib/apt/lists/*
 
 RUN git clone --depth 1 -b v2.4.0 $HDF5_REL.git \
         && mkdir HighFive/build \
-        && cmake -DHIGHFIVE_EXAMPLES=OFF -DHIGHFIVE_USE_EIGEN=ON -B /HighFive/build -S /HighFive \
+        && cmake -DHIGHFIVE_EXAMPLES=OFF -B /HighFive/build -S /HighFive \
         && make -j"$(nproc)" -C /HighFive/build \
         && make install -C /HighFive/build \
         && rm -rf HighFive

@@ -24,12 +24,6 @@ find_package(SeerepCore REQUIRED)
 find_package(SeerepCorePb REQUIRED)
 find_package(SeerepCoreFb REQUIRED)
 find_package(HighFive REQUIRED)
-find_package(
-  Eigen3
-  3.3
-  REQUIRED
-  NO_MODULE
-)
 
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
@@ -90,7 +84,6 @@ target_link_libraries(
   ${Boost_LOG_LIBRARY}
   ${Boost_LOG_SETUP_LIBRARY}
   gRPC::grpc++_reflection
-  Eigen3::Eigen
 )
 
 install(
