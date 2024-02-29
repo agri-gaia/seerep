@@ -1,6 +1,11 @@
 # this module needs a revamp and tests for all possible flatbuffer type scenarios
 # the current implementation is dependent on hardcoded assumptions
-from typing import Dict, Iterable, List, Tuple, Type
+import json
+import os
+import subprocess as sp
+import tempfile as tf
+from pathlib import Path
+from typing import Dict, Iterable, List, Tuple, Type, Union
 
 from seerep.util.common import to_snake_case
 
@@ -234,3 +239,30 @@ def fb_obj_to_dict(
         res_dict[f_key] = res_lst
 
     return res_dict
+
+
+def fb_flatc_dict(fb_obj: bytearray, schema_file_path: Union[int, str]) -> Dict:
+    schema_path = Path(schema_file_path).absolute()
+
+    with tf.NamedTemporaryFile(delete=False) as tmp_f:
+        tmp_f.write(fb_obj)
+        flatc_proc = sp.Popen(
+            ["flatc", "--json", "--raw-binary", "--strict-json", schema_path, "--", tmp_f.name], cwd="/tmp"
+        )
+        temp_fname = tmp_f.name
+
+    flatc_proc.wait()
+
+    temp_json = temp_fname + ".json"
+    with open(temp_json, "r") as tmp_f:
+        json_dict = json.loads(tmp_f.read())
+
+    print(json_dict)
+
+    try:
+        os.remove(temp_json)
+        os.remove(temp_fname)
+    except FileNotFoundError:
+        pass
+
+    return json_dict

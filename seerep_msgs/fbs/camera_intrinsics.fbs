@@ -19,3 +19,5 @@ table CameraIntrinsics
     region_of_interest:RegionOfInterest;
     maximum_viewing_distance:double;
 }
+
+root_type CameraIntrinsics;
