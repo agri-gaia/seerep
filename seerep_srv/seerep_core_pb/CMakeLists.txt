@@ -12,12 +12,6 @@ find_package(seerep_ros_conversions_pb REQUIRED)
 find_package(Protobuf REQUIRED)
 find_package(SeerepMsgs REQUIRED)
 find_package(HighFive REQUIRED)
-find_package(
-  Eigen3
-  3.3
-  REQUIRED
-  NO_MODULE
-)
 
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
@@ -57,7 +51,6 @@ target_link_libraries(
   ${HighFive_LIBRARIES}
   ${Boost_LIBRARIES}
   ${catkin_LIBRARIES}
-  Eigen3::Eigen
 )
 
 set(INSTALL_HEADERS

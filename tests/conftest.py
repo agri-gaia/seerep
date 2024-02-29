@@ -14,7 +14,7 @@ from seerep.util import fb_helper
 from seerep.util.common import get_gRPC_channel
 
 SERVER_TEST_CONFIG_PATH = Path(__file__).resolve().parent / "seerep.cfg"
-SERVER_EXECUTABLE_NAME = "seerep_server_server"
+SERVER_EXECUTABLE_NAME = "seerep_server"
 
 
 @pytest.fixture(scope="session")

@@ -24,12 +24,6 @@ find_package(SeerepCore REQUIRED)
 find_package(SeerepCorePb REQUIRED)
 find_package(SeerepCoreFb REQUIRED)
 find_package(HighFive REQUIRED)
-find_package(
-  Eigen3
-  3.3
-  REQUIRED
-  NO_MODULE
-)
 
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
@@ -60,7 +54,7 @@ include_directories(
 )
 
 add_executable(
-  ${PROJECT_NAME}_server
+  ${PROJECT_NAME}
   src/server.cpp
   src/pb_meta_operations.cpp
   src/pb_tf_service.cpp
@@ -78,7 +72,7 @@ add_executable(
 )
 
 target_link_libraries(
-  ${PROJECT_NAME}_server
+  ${PROJECT_NAME}
   ${SeerepHdf5Pb_LIBRARIES}
   ${SeerepHdf5Fb_LIBRARIES}
   ${SeerepHdf5Core_LIBRARIES}
@@ -90,11 +84,10 @@ target_link_libraries(
   ${Boost_LOG_LIBRARY}
   ${Boost_LOG_SETUP_LIBRARY}
   gRPC::grpc++_reflection
-  Eigen3::Eigen
 )
 
 install(
-  TARGETS ${PROJECT_NAME}_server
+  TARGETS ${PROJECT_NAME}
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}

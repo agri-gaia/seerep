@@ -93,14 +93,12 @@ RUN curl -s https://apt.kitware.com/kitware-archive.sh -o kitware-archive.sh \
 ####################################################
 RUN apt-get -qq update && apt-get -qq install --no-install-recommends -y -o=Dpkg::Use-Pty=0 \
         libhdf5-dev \
-        libhdf5-mpi-dev \
         libboost-all-dev \
-        libeigen3-dev \
         && rm -rf /var/lib/apt/lists/*
 
 RUN git clone --depth 1 -b v2.4.0 $HDF5_REL.git \
         && mkdir HighFive/build \
-        && cmake -DHIGHFIVE_EXAMPLES=OFF -DHIGHFIVE_USE_EIGEN=ON -B /HighFive/build -S /HighFive \
+        && cmake -DHIGHFIVE_EXAMPLES=OFF -B /HighFive/build -S /HighFive \
         && make -j"$(nproc)" -C /HighFive/build \
         && make install -C /HighFive/build \
         && rm -rf HighFive
@@ -175,13 +173,6 @@ RUN wget ${DOX_REL}/${DOX_VER}.tar.gz \
         && make install \
         && cd ../.. \
         && rm -rf doxygen-${DOX_VER} ${DOX_VER}.tar.gz
-
-RUN echo "source /opt/ros/noetic/setup.bash" >> /root/.bashrc \
-        && echo "source /opt/ros/noetic/setup.zsh" >> /root/.zshrc \
-        && echo "[[ -e /seerep/devel/setup.bash ]] && source /seerep/devel/setup.bash" >> /root/.bashrc \
-        && echo "[[ -e /seerep/devel/setup.zsh ]] && source /seerep/devel/setup.zsh" >> /root/.zshrc
-
-RUN echo 'export PYTHONPATH="${PYTHONPATH}:/seerep/build/seerep_msgs:/seerep/build/seerep_com"' >> /root/.bashrc
 
 # add non root user
 RUN useradd -u 1000 --create-home --shell /bin/bash docker && echo "docker:docker" | chpasswd && adduser docker sudo

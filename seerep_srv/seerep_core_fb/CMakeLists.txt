@@ -14,12 +14,6 @@ find_package(seerep_ros_conversions_fb REQUIRED)
 find_package(Flatbuffers REQUIRED)
 find_package(SeerepMsgs REQUIRED)
 find_package(HighFive REQUIRED)
-find_package(
-  Eigen3
-  3.3
-  REQUIRED
-  NO_MODULE
-)
 
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
@@ -67,7 +61,6 @@ target_link_libraries(
   ${Boost_LOG_LIBRARY}
   ${Boost_LOG_SETUP_LIBRARY}
   ${catkin_LIBRARIES}
-  Eigen3::Eigen
 )
 
 set(CMAKE_INSTALL_INCLUDEDIR include)

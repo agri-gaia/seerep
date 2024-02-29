@@ -1,5 +1,5 @@
-#ifndef SEEREP_SERVER_SERVER_H_
-#define SEEREP_SERVER_SERVER_H_
+#ifndef SEEREP_SERVER_H_
+#define SEEREP_SERVER_H_
 
 #include <signal.h>
 
@@ -187,4 +187,4 @@ private:
   boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
 };
 } /* namespace seerep_server */
-#endif  // SEEREP_SERVER_SERVER_H_
+#endif  // SEEREP_SERVER_H_

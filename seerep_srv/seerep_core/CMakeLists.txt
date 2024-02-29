@@ -11,12 +11,7 @@ find_package(SeerepHdf5Core REQUIRED)
 find_package(Protobuf REQUIRED)
 find_package(SeerepMsgs REQUIRED)
 find_package(HighFive REQUIRED)
-find_package(
-  Eigen3
-  3.3
-  REQUIRED
-  NO_MODULE
-)
+
 find_package(jsoncpp REQUIRED)
 find_package(CURL REQUIRED)
 
@@ -73,7 +68,6 @@ target_link_libraries(
   ${Boost_LOG_LIBRARY}
   ${Boost_LOG_SETUP_LIBRARY}
   ${catkin_LIBRARIES}
-  Eigen3::Eigen
   CGAL::CGAL
   proj
   ${CURL_LIBRARIES}
