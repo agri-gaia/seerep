@@ -16,6 +16,7 @@ from seerep.util.fb_helper import (
     createRegionOfInterest,
     createTimeStamp,
 )
+from seerep.util.fb_to_dict import fb_flatc_dict
 
 
 # Default server is localhost !
