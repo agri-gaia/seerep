@@ -163,44 +163,6 @@ geometry_msgs::Quaternion toROS(const seerep::pb::Quaternion& quaternion)
 }
 
 /*
- * Pose
- */
-seerep::pb::Pose toProto(const geometry_msgs::Pose& pose)
-{
-  seerep::pb::Pose ret;
-  *ret.mutable_position() = toProto(pose.position);
-  *ret.mutable_orientation() = toProto(pose.orientation);
-  return ret;
-}
-
-geometry_msgs::Pose toROS(const seerep::pb::Pose& pose)
-{
-  geometry_msgs::Pose ret;
-  ret.position = toROS(pose.position());
-  ret.orientation = toROS(pose.orientation());
-  return ret;
-}
-
-/*
- * PoseStamped
- */
-seerep::pb::PoseStamped toProto(const geometry_msgs::PoseStamped& pose)
-{
-  seerep::pb::PoseStamped ret;
-  *ret.mutable_header() = toProto(pose.header);
-  *ret.mutable_pose() = toProto(pose.pose);
-  return ret;
-}
-
-geometry_msgs::PoseStamped toROS(const seerep::pb::PoseStamped& pose)
-{
-  geometry_msgs::PoseStamped ret;
-  ret.header = toROS(pose.header());
-  ret.pose = toROS(pose.pose());
-  return ret;
-}
-
-/*
  * Vector3
  */
 seerep::pb::Vector3 toProto(const geometry_msgs::Vector3& vector)
@@ -218,25 +180,6 @@ geometry_msgs::Vector3 toROS(const seerep::pb::Vector3& vector)
   ret.x = vector.x();
   ret.y = vector.y();
   ret.z = vector.z();
-  return ret;
-}
-
-/*
- * Vector3Stamped
- */
-seerep::pb::Vector3Stamped toProto(const geometry_msgs::Vector3Stamped& vector)
-{
-  seerep::pb::Vector3Stamped ret;
-  *ret.mutable_header() = toProto(vector.header);
-  *ret.mutable_vector() = toProto(vector.vector);
-  return ret;
-}
-
-geometry_msgs::Vector3Stamped toROS(const seerep::pb::Vector3Stamped& vector)
-{
-  geometry_msgs::Vector3Stamped ret;
-  ret.header = toROS(vector.header());
-  ret.vector = toROS(vector.vector());
   return ret;
 }
 

@@ -39,26 +39,16 @@ void QueryData::queryImage(const seerep::pb::Query& query, ros::Publisher& img_p
     sensor_msgs::Image img = seerep_ros_conversions_pb::toROS(response);
     img.header.frame_id = "map";
 
-    for (auto bbCat : response.labels_bb())
+    for (auto labelCat : response.labels())
     {
-      std::cout << "category: " << bbCat.category() << std::endl;
-      for (auto bb : bbCat.boundingbox2dlabeled())
+      std::cout << "category: " << labelCat.category() << std::endl;
+      for (auto label : labelCat.labels())
       {
-        std::cout << "label: " << bb.labelwithinstance().label().label()
-                  << "with confidence: " << bb.labelwithinstance().label().confidence()
-                  << " box: " << bb.boundingbox().center_point().x() << " / " << bb.boundingbox().center_point().y()
-                  << " / " << bb.boundingbox().spatial_extent().x() << " / " << bb.boundingbox().spatial_extent().y()
+        std::cout << "label: " << label.label() << "label id datumaro: " << label.labeliddatumaro()
+                  << "instance: " << label.instanceuuid() << "instance id datumaro: " << label.instanceiddatumaro()
                   << std::endl;
       }
-    }
-
-    for (auto labelsCat : response.labels_general())
-    {
-      std::cout << "category: " << labelsCat.category() << std::endl;
-      for (auto label : labelsCat.labelwithinstance())
-      {
-        std::cout << "label_general: " << label.label().label() << std::endl;
-      }
+      std::cout << "datumaro json: " << labelCat.datumarojson() << std::endl;
     }
 
     img_pub.publish(img);
@@ -135,7 +125,7 @@ int main(int argc, char** argv)
   if (private_nh.param<std::vector<std::string>>("labels", labels, std::vector<std::string>()) &&
       private_nh.param<std::string>("category", category, std::string()))
   {
-    auto labelWithCategory = query.add_labelswithcategory();
+    auto labelWithCategory = query.add_labelcategory();
     labelWithCategory->set_category(category);
     for (auto label : labels)
     {

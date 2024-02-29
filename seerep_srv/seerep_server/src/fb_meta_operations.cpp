@@ -15,13 +15,14 @@ grpc::Status FbMetaOperations::CreateProject(grpc::ServerContext* context,
   (void)context;  // ignore that variable without causing warnings
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "create new project... ";
   const seerep::fb::ProjectCreation* requestMsg = request->GetRoot();
+
+  /* TODO: think about adding constructors for the core_msgs structs to shorten this */
   seerep_core_msgs::ProjectInfo projectInfo;
   projectInfo.frameId = requestMsg->map_frame_id()->str();
   projectInfo.name = requestMsg->name()->str();
   projectInfo.version = GIT_TAG;
   projectInfo.uuid = boost::uuids::random_generator()();
 
-  // extracting geodetic coordinates attribute information from flatbuffer and saving in seerep core msg struct
   projectInfo.geodetCoords.coordinateSystem = requestMsg->geodetic_position()->coordinateSystem()->str();
   projectInfo.geodetCoords.longitude = requestMsg->geodetic_position()->longitude();
   projectInfo.geodetCoords.latitude = requestMsg->geodetic_position()->latitude();
@@ -29,6 +30,7 @@ grpc::Status FbMetaOperations::CreateProject(grpc::ServerContext* context,
 
   seerepCore->createProject(projectInfo);
 
+  /* TODO: is it necessary to send back all of the data or is a status message sufficient ? */
   flatbuffers::grpc::MessageBuilder builder;
   auto nameOffset = builder.CreateString(projectInfo.name);
   auto uuidOffset = builder.CreateString(boost::lexical_cast<std::string>(projectInfo.uuid));
@@ -78,7 +80,7 @@ grpc::Status FbMetaOperations::LoadProjects(grpc::ServerContext* context,
   (void)request;
 
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
-      << "[FB] loading new projects in the working directory ... ";
+      << "Loading new projects in the working directory";
 
   flatbuffers::grpc::MessageBuilder fbb;
 
@@ -123,14 +125,12 @@ grpc::Status FbMetaOperations::DeleteProject(grpc::ServerContext* context,
 {
   (void)context;  // ignore that variable without causing warnings
   (void)request;  // ignore that variable without causing warnings
-  std::string uuid = request->GetRoot()->uuid()->str();
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "deleting project... with uuid: " << uuid;
 
   try
   {
-    boost::uuids::string_generator gen;
-    auto uuidFromString = gen(uuid);
-    seerepCore->deleteProject(uuidFromString);
+    const std::string projectUuid = request->GetRoot()->uuid()->str();
+    seerepCore->deleteProject(boost::uuids::string_generator()(projectUuid));
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "Deleted project with uuid: " << projectUuid;
   }
   catch (std::runtime_error const& e)
   {
@@ -175,23 +175,19 @@ FbMetaOperations::GetOverallTimeInterval(grpc::ServerContext* context,
   // is a vector. We intend to make them consistent in the future
   // by implementing a vector of enums on the flatbuffer (and protobuf)
   // levels.
-  std::vector<seerep_core_msgs::Datatype> dt_vector;
-
-  dt_vector = seerep_core_fb::CoreFbConversion::fromFbDatatypeVector(requestRoot->datatype());
+  std::vector<seerep_core_msgs::Datatype> dtype_vec =
+      seerep_core_fb::CoreFbConversion::fromFbDatatypeVector(requestRoot->datatype());
 
   try
   {
-    std::string uuid = request->GetRoot()->projectuuid()->str();
-    boost::uuids::string_generator gen;
-    auto uuidFromString = gen(uuid);
+    flatbuffers::grpc::MessageBuilder fbb;
+    boost::uuids::uuid projectUuid = boost::uuids::string_generator()(requestRoot->projectuuid()->str());
 
-    seerep_core_msgs::AabbTime timeinterval = seerepCore->getOverallTimeInterval(uuidFromString, dt_vector);
+    seerep_core_msgs::AabbTime timeinterval = seerepCore->getOverallTimeInterval(projectUuid, dtype_vec);
+    flatbuffers::Offset<seerep::fb::TimeInterval> bb = seerep_core_fb::CoreFbConversion::toFb(fbb, timeinterval);
 
-    flatbuffers::grpc::MessageBuilder builder;
-    flatbuffers::Offset<seerep::fb::TimeInterval> bb = seerep_core_fb::CoreFbConversion::toFb(builder, timeinterval);
-
-    builder.Finish(bb);
-    *response = builder.ReleaseMessage<seerep::fb::TimeInterval>();
+    fbb.Finish(bb);
+    *response = fbb.ReleaseMessage<seerep::fb::TimeInterval>();
   }
   catch (std::runtime_error const& e)
   {
@@ -233,24 +229,19 @@ FbMetaOperations::GetOverallBoundingBox(grpc::ServerContext* context,
   // is a vector. We intend to make them consistent in the future
   // by implementing a vector of enums on the flatbuffer (and protobuf)
   // levels.
-  std::vector<seerep_core_msgs::Datatype> dt_vector;
-
-  dt_vector = seerep_core_fb::CoreFbConversion::fromFbDatatypeVector(requestRoot->datatype());
+  std::vector<seerep_core_msgs::Datatype> dtype_vec =
+      seerep_core_fb::CoreFbConversion::fromFbDatatypeVector(requestRoot->datatype());
 
   try
   {
-    std::string uuid = requestRoot->projectuuid()->str();
-    boost::uuids::string_generator gen;
-    auto uuidFromString = gen(uuid);
+    flatbuffers::grpc::MessageBuilder fbb;
+    boost::uuids::uuid projectUuid = boost::uuids::string_generator()(requestRoot->projectuuid()->str());
 
-    seerep_core_msgs::AABB overallBB = seerepCore->getOverallBound(uuidFromString, dt_vector);
+    seerep_core_msgs::AABB overallBB = seerepCore->getOverallBound(projectUuid, dtype_vec);
+    flatbuffers::Offset<seerep::fb::Boundingbox> bb = seerep_core_fb::CoreFbConversion::toFb(fbb, overallBB);
 
-    flatbuffers::grpc::MessageBuilder builder;
-
-    flatbuffers::Offset<seerep::fb::Boundingbox> bb = seerep_core_fb::CoreFbConversion::toFb(builder, overallBB);
-
-    builder.Finish(bb);
-    *response = builder.ReleaseMessage<seerep::fb::Boundingbox>();
+    fbb.Finish(bb);
+    *response = fbb.ReleaseMessage<seerep::fb::Boundingbox>();
   }
   catch (std::runtime_error const& e)
   {
@@ -279,7 +270,7 @@ FbMetaOperations::GetOverallBoundingBox(grpc::ServerContext* context,
 
 grpc::Status FbMetaOperations::GetAllCategories(grpc::ServerContext* context,
                                                 const flatbuffers::grpc::Message<seerep::fb::UuidDatatypePair>* request,
-                                                flatbuffers::grpc::Message<seerep::fb::Categories>* response)
+                                                flatbuffers::grpc::Message<seerep::fb::StringVector>* response)
 {
   (void)context;  // ignore that variable without causing warnings
   auto requestRoot = request->GetRoot();
@@ -291,35 +282,26 @@ grpc::Status FbMetaOperations::GetAllCategories(grpc::ServerContext* context,
   // is a vector. We intend to make them consistent in the future
   // by implementing a vector of enums on the flatbuffer (and protobuf)
   // levels.
-  std::vector<seerep_core_msgs::Datatype> dt_vector;
-
-  dt_vector = seerep_core_fb::CoreFbConversion::fromFbDatatypeVector(requestRoot->datatype());
+  std::vector<seerep_core_msgs::Datatype> datatype_vec =
+      seerep_core_fb::CoreFbConversion::fromFbDatatypeVector(requestRoot->datatype());
 
   try
   {
-    std::string uuid = requestRoot->projectuuid()->str();
-    boost::uuids::string_generator gen;
-    auto uuidFromString = gen(uuid);
+    flatbuffers::grpc::MessageBuilder fbb;
+    boost::uuids::uuid projectUuid = boost::uuids::string_generator()(requestRoot->projectuuid()->str());
 
-    std::unordered_set<std::string> categories = seerepCore->getAllCategories(uuidFromString, dt_vector);
-
-    flatbuffers::grpc::MessageBuilder builder;
-
+    std::unordered_set<std::string> categories = seerepCore->getAllCategories(projectUuid, datatype_vec);
     std::vector<flatbuffers::Offset<flatbuffers::String>> fb_categories;
+    fb_categories.reserve(categories.size());
 
-    for (std::string cat : categories)
+    for (const std::string& category : categories)
     {
-      flatbuffers::Offset<flatbuffers::String> fb_category = builder.CreateString(cat);
-      fb_categories.push_back(fb_category);
+      fb_categories.push_back(fbb.CreateString(category));
     }
 
-    auto fb_categories_vector = builder.CreateVector(fb_categories);
+    fbb.Finish(seerep::fb::CreateStringVector(fbb, fbb.CreateVector(fb_categories)));
 
-    seerep::fb::CategoriesBuilder cb(builder);
-    cb.add_categories(fb_categories_vector);
-    builder.Finish(cb.Finish());
-
-    *response = builder.ReleaseMessage<seerep::fb::Categories>();
+    *response = fbb.ReleaseMessage<seerep::fb::StringVector>();
   }
   catch (std::runtime_error const& e)
   {
@@ -349,7 +331,7 @@ grpc::Status FbMetaOperations::GetAllCategories(grpc::ServerContext* context,
 grpc::Status
 FbMetaOperations::GetAllLabels(grpc::ServerContext* context,
                                const flatbuffers::grpc::Message<seerep::fb::UuidDatatypeWithCategory>* request,
-                               flatbuffers::grpc::Message<seerep::fb::Labels>* response)
+                               flatbuffers::grpc::Message<seerep::fb::StringVector>* response)
 {
   (void)context;  // ignore that variable without causing warnings
   auto requestRoot = request->GetRoot();
@@ -361,37 +343,28 @@ FbMetaOperations::GetAllLabels(grpc::ServerContext* context,
   // is a vector. We intend to make them consistent in the future
   // by implementing a vector of enums on the flatbuffer (and protobuf)
   // levels.
-  std::vector<seerep_core_msgs::Datatype> dt_vector;
-
-  dt_vector = seerep_core_fb::CoreFbConversion::fromFbDatatypeVector(requestRoot->UuidAndDatatype()->datatype());
+  std::vector<seerep_core_msgs::Datatype> dtype_vec =
+      seerep_core_fb::CoreFbConversion::fromFbDatatypeVector(requestRoot->UuidAndDatatype()->datatype());
 
   try
   {
-    std::string category = requestRoot->category()->str();
+    flatbuffers::grpc::MessageBuilder fbb;
+    boost::uuids::uuid projectUuid =
+        boost::uuids::string_generator()(requestRoot->UuidAndDatatype()->projectuuid()->str());
 
-    std::string uuid = requestRoot->UuidAndDatatype()->projectuuid()->str();
-    boost::uuids::string_generator gen;
-    auto uuidFromString = gen(uuid);
-
-    std::unordered_set<std::string> allLabels = seerepCore->getAllLabels(uuidFromString, dt_vector, category);
-
-    flatbuffers::grpc::MessageBuilder builder;
-
+    std::unordered_set<std::string> labels =
+        seerepCore->getAllLabels(projectUuid, dtype_vec, requestRoot->category()->str());
     std::vector<flatbuffers::Offset<flatbuffers::String>> fb_labels;
+    fb_labels.reserve(labels.size());
 
-    for (std::string lbl : allLabels)
+    for (const std::string& label : labels)
     {
-      flatbuffers::Offset<flatbuffers::String> fb_label = builder.CreateString(lbl);
-      fb_labels.push_back(fb_label);
+      fb_labels.push_back(fbb.CreateString(label));
     }
 
-    auto fb_labels_vector = builder.CreateVector(fb_labels);
+    fbb.Finish(seerep::fb::CreateStringVector(fbb, fbb.CreateVector(fb_labels)));
 
-    seerep::fb::LabelsBuilder lb(builder);
-    lb.add_labels(fb_labels_vector);
-    builder.Finish(lb.Finish());
-
-    *response = builder.ReleaseMessage<seerep::fb::Labels>();
+    *response = fbb.ReleaseMessage<seerep::fb::StringVector>();
   }
   catch (std::runtime_error const& e)
   {

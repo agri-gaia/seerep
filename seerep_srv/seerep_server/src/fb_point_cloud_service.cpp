@@ -17,6 +17,7 @@ FbPointCloudService::GetPointCloud2(grpc::ServerContext* context,
 
   auto requestRoot = request->GetRoot();
 
+  /* TODO: only add this code if we compile in debug mode? */
   std::stringstream debuginfo;
 
   debuginfo << "sending point clouds with this query parameters: ";
@@ -49,6 +50,7 @@ FbPointCloudService::GetPointCloud2(grpc::ServerContext* context,
 
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << debuginfo.rdbuf();
 
+  /* TODO: add a execption handler or something else ? The catch statements are always repeated */
   try
   {
     pointCloudFb->getData(requestRoot, writer);
@@ -135,36 +137,35 @@ grpc::Status FbPointCloudService::TransferPointCloud2(
   return grpc::Status::OK;
 }
 
-grpc::Status FbPointCloudService::AddBoundingBoxesLabeled(
-    grpc::ServerContext* context,
-    grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::BoundingBoxesLabeledStamped>>* reader,
-    flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response)
+grpc::Status
+FbPointCloudService::AddLabels(grpc::ServerContext* context,
+                               grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::DatasetUuidLabel>>* reader,
+                               flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response)
 {
   (void)context;  // ignore that variable without causing warnings
   std::string answer = "everything stored!";
 
-  flatbuffers::grpc::Message<seerep::fb::BoundingBoxesLabeledStamped> bbsMsg;
-  while (reader->Read(&bbsMsg))
+  flatbuffers::grpc::Message<seerep::fb::DatasetUuidLabel> labelMsg;
+  while (reader->Read(&labelMsg))
   {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "received BoundingBoxesLabeledStamped... ";
-    auto bbslabeled = bbsMsg.GetRoot();
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "received label... ";
+    auto label = labelMsg.GetRoot();
 
-    std::string uuidProject = bbslabeled->header()->uuid_project()->str();
-    if (uuidProject.empty())
+    if (label->projectUuid()->str().empty())
     {
       answer = "a msg had no project uuid!";
     }
     else
     {
-      if (!bbslabeled->labels_bb())
+      if (!label->labels())
       {
-        answer = "a msg had no bounding boxes!";
+        answer = "a msg had no labels!";
       }
       else
       {
         try
         {
-          pointCloudFb->addBoundingBoxesLabeled(*bbslabeled);
+          pointCloudFb->addLabel(*label);
         }
         catch (std::runtime_error const& e)
         {

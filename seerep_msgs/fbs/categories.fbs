@@ -1,6 +1,0 @@
-
-namespace seerep.fb;
-
-table Categories {
-  categories:[string];
-}

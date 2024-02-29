@@ -80,7 +80,6 @@ include_directories(
   ${CURL_INCLUDE_DIR}
 )
 
-add_executable(${PROJECT_NAME}_client src/client.cpp)
 add_executable(${PROJECT_NAME}_hdf5dump src/hdf5dump.cpp)
 add_executable(${PROJECT_NAME}_querier src/querier.cpp)
 add_executable(${PROJECT_NAME}_querierFb src/querierFb.cpp)
@@ -91,10 +90,6 @@ add_executable(
   ${PROJECT_NAME}_clientImagesWithDetection src/clientImagesWithDetection.cpp
 )
 
-add_dependencies(
-  ${PROJECT_NAME}_client ${${PROJECT_NAME}_EXPORTED_TARGETS}
-  ${catkin_EXPORTED_TARGETS}
-)
 add_dependencies(
   ${PROJECT_NAME}_hdf5dump ${${PROJECT_NAME}_EXPORTED_TARGETS}
   ${catkin_EXPORTED_TARGETS}
@@ -120,13 +115,6 @@ add_dependencies(
   ${catkin_EXPORTED_TARGETS}
 )
 
-target_link_libraries(
-  ${PROJECT_NAME}_client
-  ${SeerepCom_LIBRARIES}
-  ${seerep_ros_conversions_pb_LIBRARIES}
-  ${catkin_LIBRARIES}
-  gRPC::grpc++_reflection
-)
 target_link_libraries(
   ${PROJECT_NAME}_hdf5dump
   ${SeerepCom_LIBRARIES}
@@ -190,8 +178,7 @@ target_link_libraries(
 )
 
 install(
-  TARGETS ${PROJECT_NAME}_client
-          ${PROJECT_NAME}_hdf5dump
+  TARGETS ${PROJECT_NAME}_hdf5dump
           ${PROJECT_NAME}_querier
           ${PROJECT_NAME}_querierFb
           ${PROJECT_NAME}_rosbagDumper

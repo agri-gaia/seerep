@@ -88,4 +88,19 @@ void Hdf5CoreGeneral::readHeader(const std::string& id, HighFive::AnnotateTraits
   header.frameId = Hdf5CoreGeneral::readFrameId(object, HEADER_FRAME_ID, id);
   header.sequence = Hdf5CoreGeneral::readAttributeFromHdf5<int32_t>(object, HEADER_SEQ, id);
 }
+
+template <class T>
+T Hdf5CoreGeneral::readDataset(const std::string& path) const
+{
+  T data;
+  m_file->getDataSet(path).read<T>(data);
+  return data;
+}
+
+template <typename T0, typename... TN>
+bool Hdf5CoreGeneral::hasEqualSize(const std::vector<T0>& first, const std::vector<TN>&... rest) const
+{
+  return ((first.size() == rest.size()) && ...);
+}
+
 }  // namespace seerep_hdf5_core
