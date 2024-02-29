@@ -131,10 +131,10 @@ class ChangeUtilPath(Command):
 
 
 class CustomBuild(build):
-    sub_commands = [('build_python', None), ('change_util_path', None)] + build.sub_commands
+    sub_commands = [("build_python", None), ("change_util_path", None)] + build.sub_commands
 
 
 setup(
     packages=[],
-    cmdclass={'build': CustomBuild, 'build_python': GeneratePythonFiles, 'change_util_path': ChangeUtilPath},
+    cmdclass={"build": CustomBuild, "build_python": GeneratePythonFiles, "change_util_path": ChangeUtilPath},
 )

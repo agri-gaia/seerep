@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import sys
+
 import flatbuffers
 from seerep.fb import Image
 from seerep.fb import image_service_grpc_fb as imageService
@@ -18,23 +20,21 @@ builder = flatbuffers.Builder(1024)
 channel = get_gRPC_channel()
 
 # 1. Get all projects from the server
-projectuuid = getProject(builder, channel, 'simulatedDataWithInstances')
+projectuuid = getProject(builder, channel, "simulatedDataWithInstances")
 
 # 2. Check if the defined project exist; if not exit
 if not projectuuid:
-    exit()
+    sys.exit()
 
 # 3. Get gRPC service object
 stub = imageService.ImageServiceStub(channel)
 
 # Create all necessary objects for the query
-l = 5
-polygon_vertices = []
-polygon_vertices.append(createPoint2d(builder, -1.0 * l, -1.0 * l))
-polygon_vertices.append(createPoint2d(builder, -1.0 * l, l))
-polygon_vertices.append(createPoint2d(builder, l, l))
-polygon_vertices.append(createPoint2d(builder, l, -1.0 * l))
-polygon2d = createPolygon2D(builder, 200, -100, polygon_vertices)
+scale = 5
+vertices = [
+    createPoint2d(builder, x * scale, y * scale) for x, y in [(-1.0, -1.0), (-1.0, 1.0), (1.0, 1.0), (1.0, -1.0)]
+]
+polygon2d = createPolygon2D(builder, 200, -100, vertices)
 
 timeMin = createTimeStamp(builder, 1654688920, 0)
 timeMax = createTimeStamp(builder, 1654688940, 0)
@@ -45,7 +45,8 @@ labels = createLabelWithCategory(builder, ["ground_truth"], [[builder.CreateStri
 
 # 4. Create a query with parameters
 # all parameters are optional
-# with all parameters set (especially with the data and instance uuids set) the result of the query will be empty. Set the query parameters to adequate values or remove them from the query creation
+# with all parameters set (especially with the data and instance uuids set) the result of the query will be empty.
+# Set the query parameters to adequate values or remove them from the query creation
 query = createQuery(
     builder,
     # boundingBox=boundingboxStamped,

@@ -9,7 +9,6 @@ from gRPC.images import gRPC_pb_sendLabeledImageGrid as send_grid
 
 # test sending and querying the images
 def test_gRPC_pb_sendAndQueryImageGrid(grpc_channel, project_setup):
-
     proj_name, proj_uuid = project_setup
     logging.info(f"Testing project: {proj_name}; {proj_uuid}")
 
@@ -22,7 +21,7 @@ def test_gRPC_pb_sendAndQueryImageGrid(grpc_channel, project_setup):
         sent_images.append([])
         for y in range(len(sent_images_grid[x])):
             sent_images[x].append([])
-            for i, img in enumerate(sent_images_grid[x][y]):
+            for i, _ in enumerate(sent_images_grid[x][y]):
                 completed_img = sent_images_grid[x][y][i][1]
                 completed_img.header.uuid_msgs = sent_images_grid[x][y][i][0]
                 sent_images[x][y].append(completed_img)

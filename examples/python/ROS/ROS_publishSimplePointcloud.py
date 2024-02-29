@@ -29,17 +29,17 @@ for i in range(lim):
             b = int(z * 255.0)
             a = 255
             print(r, g, b, a)
-            rgb = struct.unpack('I', struct.pack('BBBB', b, g, r, a))[0]
+            rgb = struct.unpack("I", struct.pack("BBBB", b, g, r, a))[0]
             print(hex(rgb))
             pt = [x, y, z, rgb]
             points.append(pt)
 
 fields = [
-    PointField('x', 0, PointField.FLOAT32, 1),
-    PointField('y', 4, PointField.FLOAT32, 1),
-    PointField('z', 8, PointField.FLOAT32, 1),
+    PointField("x", 0, PointField.FLOAT32, 1),
+    PointField("y", 4, PointField.FLOAT32, 1),
+    PointField("z", 8, PointField.FLOAT32, 1),
     # PointField('rgb', 12, PointField.UINT32, 1),
-    PointField('rgba', 12, PointField.UINT32, 1),
+    PointField("rgba", 12, PointField.UINT32, 1),
 ]
 
 print(points)

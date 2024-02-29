@@ -38,7 +38,6 @@ def add_camintrins(
         for project in response.projects:
             print(project.name + " " + project.uuid)
             if project.name == "testproject":
-                found = True
                 target_proj_uuid = project.uuid
 
         if target_proj_uuid is None:
@@ -70,7 +69,7 @@ def add_camintrins(
 
     buf = builder.Output()
 
-    ret = stub.TransferCameraIntrinsics(bytes(buf))
+    stub.TransferCameraIntrinsics(bytes(buf))
     return CameraIntrinsics.CameraIntrinsics.GetRootAs(buf)
 
 
@@ -78,7 +77,9 @@ if __name__ == "__main__":
     caminstrins_obj = add_camintrins()
     # for verification print the uuid of the added camera intrinsics
     print(
-        f"camera instrinsics were saved with the uuid {caminstrins_obj.Header().UuidMsgs().decode('utf-8')} on the project with the uuid {caminstrins_obj.Header().UuidProject().decode('utf-8')}"
+        f"camera instrinsics were saved with the uuid \
+        {caminstrins_obj.Header().UuidMsgs().decode('utf-8')} on the project with the uuid \
+        {caminstrins_obj.Header().UuidProject().decode('utf-8')}"
     )
     # and the contents of the distortion array
     print(f"camera instrinsics distortion matrix: {caminstrins_obj.DistortionAsNumpy()}")

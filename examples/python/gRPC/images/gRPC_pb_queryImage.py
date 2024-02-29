@@ -45,26 +45,11 @@ def query_images(
 
     theQuery.inMapFrame = True
 
-    l = 150
-    bottom_left = point2d.Point2D()
-    bottom_left.x = -l
-    bottom_left.y = -l
-    theQuery.polygon.vertices.append(bottom_left)
-
-    top_left = point2d.Point2D()
-    top_left.x = -l
-    top_left.y = l
-    theQuery.polygon.vertices.append(top_left)
-
-    top_right = point2d.Point2D()
-    top_right.x = l
-    top_right.y = l
-    theQuery.polygon.vertices.append(top_right)
-
-    bottom_right = point2d.Point2D()
-    bottom_right.x = l
-    bottom_right.y = -l
-    theQuery.polygon.vertices.append(bottom_right)
+    scale = 150
+    vertices = [
+        point2d.Point2D(x=x, y=y) for x, y in [(-scale, -scale), (-scale, scale), (scale, scale), (scale, -scale)]
+    ]
+    theQuery.polygon.vertices.extend(vertices)
 
     # since epoche
     theQuery.timeinterval.time_min.seconds = 1638549273

@@ -56,5 +56,9 @@ select = [
 ignore = [
     "E402", # module level import not at top of cell
     "PLR0913", # to many arguments in function definition
-    "PLR2004" # magic value used in comparison
+    "PLR2004", # magic value used in comparison
+    "B008", # do not perform function call default argument
+    "PLR0915", # to many statements
+    "B006", # do not use mutable data strucres for arguments defaults
+    "PLR0912" # to many branches
 ]

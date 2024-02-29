@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import sys
 from typing import List
 
 import flatbuffers
@@ -21,23 +22,21 @@ def get_points(target_proj_uuid: str = None, grpc_channel=get_gRPC_channel()) ->
     builder = flatbuffers.Builder(1024)
 
     # 1. Get all projects from the server
-    if target_proj_uuid == None:
+    if target_proj_uuid is None:
         target_proj_uuid = getProject(builder, grpc_channel, "testproject")
         # 2. Check if the defined project exist; if not exit
-        if target_proj_uuid == None:
+        if target_proj_uuid is None:
             print("Project does not exist")
-            exit()
+            sys.exit()
 
     # Create all necessary objects for the query
-    l = 200
-    h = 71
-    polygon_vertices = []
-    polygon_vertices.append(createPoint2d(builder, -1.0 * l, -1.0 * l))
-    polygon_vertices.append(createPoint2d(builder, -1.0 * l, l))
-    polygon_vertices.append(createPoint2d(builder, l, l))
-    polygon_vertices.append(createPoint2d(builder, l, -1.0 * l))
-    polygon2d = createPolygon2D(builder, 36, 0, polygon_vertices)
+    scale = 200
+    vertices = [
+        createPoint2d(builder, x * scale, y * scale) for x, y in [(-1.0, -1.0), (-1.0, 1.0), (1.0, 1.0), (1.0, -1.0)]
+    ]
+    polygon2d = createPolygon2D(builder, 36, 0, vertices)
 
+    # ruff: noqa: F841
     timeMin = createTimeStamp(builder, 1610549273, 0)
     timeMax = createTimeStamp(builder, 1938549273, 0)
     timeInterval = createTimeInterval(builder, timeMin, timeMax)
@@ -57,7 +56,8 @@ def get_points(target_proj_uuid: str = None, grpc_channel=get_gRPC_channel()) ->
 
     # 4. Create a query with parameters
     # all parameters are optional
-    # with all parameters set (especially with the data and instance uuids set) the result of the query will be empty. Set the query parameters to adequate values or remove them from the query creation
+    # with all parameters set (especially with the data and instance uuids set) the result of the query will be empty.
+    # Set the query parameters to adequate values or remove them from the query creation
     query = createQuery(
         builder,
         # timeInterval=timeInterval,

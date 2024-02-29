@@ -14,7 +14,6 @@ def query_camintrins(
     target_proj_uuid: Optional[str] = None,
     grpc_channel: Channel = get_gRPC_channel(),
 ):
-
     if target_proj_uuid is None:
         # 2. Get all projects from the server
         stubMeta = metaOperations.MetaOperationsStub(grpc_channel)
@@ -44,7 +43,8 @@ if __name__ == "__main__":
     queried_camintrinsics = query_camintrins()
     # for verification print the uuid of the added camera intrinsics
     print(
-        f"camera instrinsics were saved with the uuid {queried_camintrinsics.header.uuid_msgs} on the project with the uuid {queried_camintrinsics.header.uuid_project}"
+        f"camera instrinsics were saved with the uuid {queried_camintrinsics.header.uuid_msgs} \
+        on the project with the uuid {queried_camintrinsics.header.uuid_project}"
     )
     # print the distortion of the retrieved camera intrinsics
     print(f"camera intrinsics distortion array: {queried_camintrinsics.distortion}")

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import sys
 from typing import Any, List, Tuple
 
 import flatbuffers
@@ -23,7 +24,6 @@ from seerep.util.common import get_gRPC_channel
 def get_metadata(
     target_project_uuid: str = None, grpc_channel: Channel = get_gRPC_channel()
 ) -> Tuple[Any, Any, Any, Any]:
-
     builder = flatbuffers.Builder(1024)
 
     meta_stub = metaOperations.MetaOperationsStub(grpc_channel)
@@ -44,7 +44,7 @@ def get_metadata(
                 target_project_uuid = response.Projects(p_idx).Uuid().decode()
         if target_project_uuid is None:
             print("No test project found, create a project with 'gRPC_pb_sendLabeledImageGrid.py' beforehand!")
-            exit()
+            sys.exit()
 
     uuid_datatype_pair = fb_helper.createUuidDatatypePair(builder, target_project_uuid, Datatype.Datatype().All)
 

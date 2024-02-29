@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import sys
+
 import flatbuffers
 from seerep.fb import Datatype, UuidsPerProject
 from seerep.fb import instance_service_grpc_fb as instanceService
@@ -14,7 +16,6 @@ from seerep.util.fb_helper import (
     createTimeStamp,
     getProject,
 )
-from seerep.util.fb_to_dict import fb_obj_to_dict
 
 builder = flatbuffers.Builder(1024)
 # Default server is localhost !
@@ -26,7 +27,7 @@ projectuuid = getProject(builder, channel, "testproject")
 
 # 2. Check if the defined project exist; if not exit
 if not projectuuid:
-    exit()
+    sys.exit()
 
 # 3. Get gRPC service object
 stub = instanceService.InstanceServiceStub(channel)
@@ -59,8 +60,9 @@ dataUuids = [builder.CreateString("5a0438b8-37cf-412e-8331-a95ef95c1016")]
 instanceUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 
 # 4. Create a query with parameters
-# all parameters are optional
-# with all parameters set (especially with the data and instance uuids set) the result of the query will be empty. Set the query parameters to adequate values or remove them from the query creation
+# All parameters are optional
+# With all parameters set (especially with the data and instance uuids set) the result of the query will be empty.
+# Set the query parameters to adequate values or remove them from the query creation
 query = createQuery(
     builder,
     # boundingBox=boundingboxStamped,

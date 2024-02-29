@@ -27,9 +27,8 @@ import colorsys
 import random
 
 import matplotlib.pyplot as plt
-import matplotlib.ticker as ticker
 import numpy as np
-from matplotlib import patches
+from matplotlib import patches, ticker
 
 
 def random_colors(N, bright=True):
@@ -40,7 +39,7 @@ def random_colors(N, bright=True):
     """
     brightness = 1.0 if bright else 0.7
     hsv = [(i / N, 1, brightness) for i in range(N)]
-    colors = list(map(lambda c: colorsys.hsv_to_rgb(*c), hsv))
+    colors = [colorsys.hsv_to_rgb(*c) for c in hsv]
     random.shuffle(colors)
     return colors
 
@@ -94,10 +93,8 @@ def display_instances(
         assert boxes.shape[0] == class_ids.shape[0]
 
     # If no axis is passed, create one and automatically call show()
-    auto_show = False
     if not ax:
         _, ax = plt.subplots(1, figsize=figsize)
-        auto_show = True
 
     # Generate random colors
     colors = colors or random_colors(N)
@@ -106,7 +103,7 @@ def display_instances(
     height, width = image.shape[:2]
     ax.set_ylim(height + 10, -10)
     ax.set_xlim(-10, width + 10)
-    ax.axis('off')
+    ax.axis("off")
     ax.set_title(title)
 
     masked_image = image.astype(np.uint32).copy()
@@ -119,7 +116,7 @@ def display_instances(
             continue
         y1, x1, y2, x2 = boxes[i]
         p = patches.Rectangle(
-            (x1, y1), x2 - x1, y2 - y1, linewidth=5, alpha=0.9, linestyle="dashed", edgecolor=color, facecolor='none'
+            (x1, y1), x2 - x1, y2 - y1, linewidth=5, alpha=0.9, linestyle="dashed", edgecolor=color, facecolor="none"
         )
         ax.add_patch(p)
 
@@ -131,7 +128,7 @@ def display_instances(
             caption = "{} {:.3f}".format(label, score) if score else label
         else:
             caption = captions[i]
-        ax.text(x1 + 1, y1 + 13, caption, color='k', size=25, backgroundcolor=color, alpha=0.7)
+        ax.text(x1 + 1, y1 + 13, caption, color="k", size=25, backgroundcolor=color, alpha=0.7)
 
     plot = ax.imshow(masked_image.astype(np.uint8))
 
@@ -145,5 +142,5 @@ def display_instances(
         cb.formatter = ticker.FuncFormatter(label_cbrt)
         cb.update_ticks()
 
-    plt.savefig(image_name, bbox_inches='tight')
-    plt.close('all')
+    plt.savefig(image_name, bbox_inches="tight")
+    plt.close("all")

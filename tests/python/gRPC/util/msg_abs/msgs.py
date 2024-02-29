@@ -76,14 +76,11 @@ class FbQuery(MsgsFb[Query.Query]):
         in_map_frame = self.get_component(EnumFbQuery.IN_MAP_FRAME)
         timeinterval = self.get_component(EnumFbQuery.TIMEINTERVAL)
         label = self.get_component(EnumFbQuery.LABEL)
-        sparql_query = self.get_component(EnumFbQuery.SPARQL_QUERY)
-        ontology_uri = self.get_component(EnumFbQuery.ONTOLOGY_URI)
         must_have_all_labels = self.get_component(EnumFbQuery.MUST_HAVE_ALL_LABELS)
         projectuuid = self.get_component(EnumFbQuery.PROJECTUUID)
         instanceuuid = self.get_component(EnumFbQuery.INSTANCEUUID)
         datauuid = self.get_component(EnumFbQuery.DATAUUID)
         withoutdata = self.get_component(EnumFbQuery.WITHOUTDATA)
-        max_num_data = self.get_component(EnumFbQuery.MAX_NUM_DATA)
         sort_by_time = self.get_component(EnumFbQuery.SORT_BY_TIME)
 
         return fbh.createQuery(
@@ -114,7 +111,7 @@ class FbQueryInstance(MsgsFb[QueryInstance.QueryInstance]):
         }
 
     def query(self):
-        features = set([EnumFbQuery.WITHOUTDATA, EnumFbQuery.IN_MAP_FRAME, EnumFbQuery.PROJECTUUID])
+        features = {EnumFbQuery.WITHOUTDATA, EnumFbQuery.IN_MAP_FRAME, EnumFbQuery.PROJECTUUID}
         return FbQuery(self.channel, self.builder, features).datatype_instance
 
     def _assemble_datatype_instance(self):
@@ -171,10 +168,10 @@ class DatatypeImplementations:
         @classmethod
         # returns list of flatbuffered string, those are registered as ints
         def intanceuuid(cls, builder: Builder, channel: Channel, proj_uuid: int) -> List[int]:
-            query_builder = FbQuery(channel, enum_types=set([EnumFbQuery.PROJECTUUID]))
+            query_builder = FbQuery(channel, enum_types={EnumFbQuery.PROJECTUUID})
             query_builder.set_active_function(EnumFbQuery.PROJECTUUID, lambda: proj_uuid)
             query_builder.assemble_datatype_instance()
-            query_inst_builder = FbQueryInstance(channel, enum_types=set([EnumFbQueryInstance.QUERY]))
+            query_inst_builder = FbQueryInstance(channel, enum_types={EnumFbQueryInstance.QUERY})
             query_inst_builder.set_active_function(EnumFbQueryInstance.QUERY, lambda: query_builder.datatype_instance)
             query_inst_builder.assemble_datatype_instance()
             query_instance = query_inst_builder.datatype_instance

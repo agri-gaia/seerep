@@ -69,12 +69,12 @@ def get_func_lists_wparams(func_list, *endings) -> Dict[str, Tuple[bool, int]]:
 
     # count found endings and check if all endings are found
     for func in func_list:
-        inner_tuple = tuple()
+        inner_tuple = []
         for ending in endings:
-            if not func + ending in func_list:
+            if func + ending not in func_list:
                 break
             else:
-                inner_tuple += tuple([func + ending])
+                inner_tuple.append(func + ending)
         else:
             dict_tuples[func] = inner_tuple
     return dict_tuples
@@ -84,7 +84,7 @@ def unpack_union_type(
     enclosing_table_obj,
     union_type_mapping: Dict[Type, Tuple[str, List[Tuple[int, Type]]]],
     snake_case=False,
-    remappings: Dict[str, str] = dict(),
+    remappings: Dict[str, str] = {},
 ) -> Dict:
     union_field, field_nums_types = union_type_mapping[type(enclosing_table_obj)]
 
@@ -110,6 +110,7 @@ def unpack_union_type(
 
             return fb_obj_to_dict(union_val, snake_case, remappings, union_type_mapping)
     else:
+        # ruff: noqa: PLW0120
         raise ValueError(f"union type {union_type} not in {field_nums_types} of table {type(enclosing_table_obj)}")
 
 
@@ -117,8 +118,8 @@ def unpack_union_type(
 def fb_obj_to_dict(
     obj,
     snake_case=False,
-    remappings: Dict[str, str] = dict(),
-    union_type_mapping: Dict[Type, Tuple[str, List[Tuple[int, Type]]]] = dict(),
+    remappings: Dict[str, str] = {},
+    union_type_mapping: Dict[Type, Tuple[str, List[Tuple[int, Type]]]] = {},
 ) -> Dict:
     """
     Converts a flatbuffer object to a dictionary. This works recursively for nested flatbuffer objects.
@@ -152,9 +153,10 @@ def fb_obj_to_dict(
     funcs = [func for func in dir(obj) if callable(getattr(obj, func)) and not func.startswith("__")]
 
     # filter out the functions that are not needed
-    funcs = [func for func in funcs if not any([func.startswith(x) for x in FB_FILTEROUT_STARTS_WITH])]
-    funcs = [func for func in funcs if not any([func.endswith(x) for x in FB_FILTEROUT_ENDS_WITH])]
-    funcs = [func for func in funcs if not any([func == x for x in FB_FILTEROUT_IS])]
+    funcs = [func for func in funcs if not any(func.startswith(x) for x in FB_FILTEROUT_STARTS_WITH)]
+    funcs = [func for func in funcs if not any(func.endswith(x) for x in FB_FILTEROUT_ENDS_WITH)]
+    # ruff: noqa: PLR1714
+    funcs = [func for func in funcs if not any(func == x for x in FB_FILTEROUT_IS)]
     funcs = [func for func in funcs if not (func == "GetRootAs" or func == f"GetRootAs{type(obj).__name__}")]
 
     # group arrays and array functions together, so that arrays can be handled separately
@@ -165,12 +167,13 @@ def fb_obj_to_dict(
     funcs = [
         func
         for func in funcs
-        if not any([func.endswith(x) if func.split(x)[0] in farr_dict else False for x in FB_GROUP_LIST_ENDS_WITH])
+        if not any(func.endswith(x) if func.split(x)[0] in farr_dict else False for x in FB_GROUP_LIST_ENDS_WITH)
     ]
-    funcs = [func for func in funcs if not func in farr_dict]
+    funcs = [func for func in funcs if func not in farr_dict]
 
     res_dict = {}
     # get function results, if the result is a complex flatbuffer object, recursively call this function
+    # ruff: noqa: PLW2901
     for func in funcs:
         if type(obj) in union_type_mapping and func == union_type_mapping[type(obj)][0]:
             res_dict[func] = unpack_union_type(obj, union_type_mapping, snake_case, remappings)

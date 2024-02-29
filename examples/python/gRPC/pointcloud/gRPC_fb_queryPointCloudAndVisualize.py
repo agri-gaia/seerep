@@ -24,6 +24,7 @@ PROJECTNAME = "testproject"
 NUM_BB_LABELS = 1
 NUM_GENERAL_LABELS = 10
 
+
 # TODO: move to module in the seerep.fb library
 def unpack_point_fields(point_cloud: PointCloud2.PointCloud2) -> dict:
     """Extract the point fields from a Flatbuffer pcl message"""
@@ -88,6 +89,7 @@ def query_pcs(
             print(f"Project: {PROJECTNAME} does not exist")
             sys.exit()
 
+    # ruff: noqa: F841
     # create a polygon for a spatial query
     polygon_vertices = [createPoint2d(fb_builder, x, y) for x in [-10, 10] for y in [-10, 10]]
     query_polygon = createPolygon2D(fb_builder, 7, -1, polygon_vertices)
@@ -149,10 +151,12 @@ if __name__ == "__main__":
         for i in range(resp.LabelsBbLength()):
             for j in range(resp.LabelsBb(i).BoundingBoxLabeledLength()):
                 print(
-                    f"Label Label_BbLabeled {i}_{j}: {resp.LabelsBb(i).BoundingBoxLabeled(j).LabelWithInstance().Label().Label().decode('utf-8')}"
+                    f"Label Label_BbLabeled {i}_{j}: \
+                    {resp.LabelsBb(i).BoundingBoxLabeled(j).LabelWithInstance().Label().Label().decode('utf-8')}"
                 )
                 print(
-                    f"Instance Label_BbLabeled {i}_{j}: {resp.LabelsBb(i).BoundingBoxLabeled(j).LabelWithInstance().InstanceUuid().decode('utf-8')}"
+                    f"Instance Label_BbLabeled {i}_{j}: \
+                    {resp.LabelsBb(i).BoundingBoxLabeled(j).LabelWithInstance().InstanceUuid().decode('utf-8')}"
                 )
                 print(
                     f"Bounding Box Spatial Extent Label_BbLabeled {i}_{j}: "
@@ -179,7 +183,6 @@ if __name__ == "__main__":
 
         print("---General Labels----")
         for i in range(resp.LabelsGeneralLength()):
-
             for j in range(resp.LabelsGeneral(i).LabelsWithInstanceLength()):
                 print(f"Label {i}, {j}: {resp.LabelsGeneral(i).LabelsWithInstance(j).Label().Label().decode('utf-8')}")
                 print(

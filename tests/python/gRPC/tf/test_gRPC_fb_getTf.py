@@ -24,6 +24,7 @@ TIMESTAMP_NANOS = 1245
 TIMESTAMPS = [(t, TIMESTAMP_NANOS) for t in range(1661336507, 1661336528, 10)]
 NANOS_FACTOR = 1e-9
 
+
 # test sending and querying tfs
 def test_gRPC_fb_getTf(grpc_channel, project_setup):
     _, project_uuid = project_setup
@@ -39,7 +40,6 @@ def test_gRPC_fb_getTf(grpc_channel, project_setup):
     sent_tfs_base: List[Dict] = []
     time_lst: List[Tuple[int, int]] = []
     for idx, time in enumerate(TIMESTAMPS):
-
         timestmp = createTimeStamp(builder, time[0], time[1])
 
         # when not giving a uuid the corresponding retrieved tf from server has no uuid msg
@@ -62,7 +62,8 @@ def test_gRPC_fb_getTf(grpc_channel, project_setup):
     for obj in sent_tfs_base:
         obj["Header"]["UuidMsgs"] = ""
 
-    # access transform stamped objects, retrieve their times and check whether the get_Tf service provides those transforms
+    # Access transform stamped objects, retrieve their times and check whether
+    # the get_Tf service provides the transforms
     # todo: modularize tf by time calculation
 
     # currently queried_tfs do not include the uuid for the message itself
@@ -76,7 +77,8 @@ def test_gRPC_fb_getTf(grpc_channel, project_setup):
     # check if the objects are the same
     assert sent_tfs_base == queried_tfs_base
 
-    # check if interpolation of the tfs works correctly (set time = time[i] * interp_time_factor + (1-interp_time_factor) * time[i+1])
+    # check if interpolation of the tfs works correctly
+    # (set time = time[i] * interp_time_factor + (1-interp_time_factor) * time[i+1])
     interp_time_factor = 0.5
     interp_times: List[Tuple[int, int]] = []
 
