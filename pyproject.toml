@@ -27,11 +27,6 @@ local_scheme = "no-local-version"
 Repository = "https://github.com/agri-gaia/seerep"
 Documentation = "https://agri-gaia.github.io/seerep/mkdocs/home/index.html"
 
-[tool.black]
-line-length = 120
-target-version = ['py38']
-skip-string-normalization = true
-
 [tool.pytest.ini_options]
 minversion = "6.0"
 addopts = "-ra -q"
@@ -41,4 +36,18 @@ testpaths = [
 pythonpath = [
   "examples/python",
   "tests/python"
+]
+
+[tool.ruff]
+line-length = 120
+target-version = 'py38'
+exclude = ["docs/", "cmake-format.py"]
+
+[tool.ruff.lint]
+select = [
+    "E", # pycodestyle
+    "F", # pyflakes
+]
+ignore = [
+    "E402", # module level import not at top of cell
 ]
