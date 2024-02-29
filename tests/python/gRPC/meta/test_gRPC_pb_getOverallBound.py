@@ -147,9 +147,9 @@ def test_gRPC_pb_getOverallBound(grpc_channel, project_setup) -> None:
 
     coords = [coord for _, coord in img_coords]
 
-    x_coords = set([c.X() for c in coords])
-    y_coords = set([c.Y() for c in coords])
-    z_coords = set([c.Z() for c in coords])
+    x_coords = {c.X() for c in coords}
+    y_coords = {c.Y() for c in coords}
+    z_coords = {c.Z() for c in coords}
 
     # calculate center point and spatial extent based on the coordinates
     center_point_x = (max(x_coords) - min(x_coords)) / 2

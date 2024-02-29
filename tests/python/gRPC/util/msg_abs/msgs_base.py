@@ -10,7 +10,6 @@ from seerep.util.service_manager import ServiceManager
 
 
 class MsgsFunctions(NamedTuple):
-
     default_function: Callable
     active_function: Callable
 
@@ -24,7 +23,7 @@ def expect_component(*args: FrozenEnum):
         def wrapper(self, *fnargs, **fnkwargs):
             for arg in args:
                 self._validate_enum(arg)
-                if self.get_component(arg) == None:
+                if self.get_component(arg) is None:
                     raise ValueError(f"The component mapped to the enum {arg} is expected to be not None")
             return func(self, *fnargs, **fnkwargs)
 
@@ -79,14 +78,16 @@ class MsgsBase(ABC, Generic[T]):
         for enum_entry in enum_type:
             if self._enum_func_mapping.get(enum_entry, None) is None:
                 raise KeyError(
-                    f"No mapping of enum entry {enum_entry} to a instance function in implemented _set_enum_func_mapping()!"
+                    f"No mapping of enum entry {enum_entry} to a instance function in implemented \
+                    _set_enum_func_mapping()!"
                 )
 
         # check that the functions are callables
         for func in self._enum_func_mapping.values():
             if not (callable(func.active_function) or callable(func.default_function)):
                 raise ValueError(
-                    f"the functions in {func} mapped to a enum in implemented _set_enum_func_mapping() are not all callable!"
+                    f"the functions in {func} mapped to a enum in implemented _set_enum_func_mapping() \
+                    are not all callable!"
                 )
 
     def _validate_enum(self, enum):
@@ -102,7 +103,7 @@ class MsgsBase(ABC, Generic[T]):
         self._enum_func_mapping: Dict[FrozenEnum, MsgsFunctions] = self._set_enum_func_mapping()
 
         if len(self._enum_func_mapping) < 1:
-            raise KeyError(f"dict returned by implemented _set_enum_func_mapping() cannot be empty!")
+            raise KeyError("dict returned by implemented _set_enum_func_mapping() cannot be empty!")
 
         self._validate_enum_func_mappings()
 

@@ -40,7 +40,7 @@ class yoloAnnotatedImageLoader:
         self.stubImage.TransferImage(self.__loadImages())
 
     def __loadImages(self):
-        for root, dirs, files in os.walk(self.rootFolder):
+        for root, _, files in os.walk(self.rootFolder):
             if len(files) > 0:
                 labelGeneralPath = os.path.join(root, self.LABEL_GENERAL)
                 for file in files:
@@ -55,7 +55,6 @@ class yoloAnnotatedImageLoader:
                         yield bytes(builder.Output())
 
     def __createImageMsg(self, builder, imagePath, labelPath, labelGeneralPath):
-
         labelGeneral = self.__readLabelGeneral(labelGeneralPath)
         labelGeneral.append(imagePath)
         print(labelGeneral)
@@ -69,7 +68,7 @@ class yoloAnnotatedImageLoader:
             spatialExtents = []
             labelStrings = []
             for label in labels:
-                labelStrings.append('person')
+                labelStrings.append("person")
                 centerPoints.append(createPoint2d(builder, float(label[1]), float(label[2])))
                 spatialExtents.append(createPoint2d(builder, float(label[3]), float(label[4])))
 
@@ -129,9 +128,9 @@ class yoloAnnotatedImageLoader:
             except yaml.YAMLError as exc:
                 print(exc)
         labelGeneral = []
-        for key in labelGeneralYamlObject['labels']:
-            if key != 'sensor':
-                labelGeneral.append(key + "_" + labelGeneralYamlObject['labels'][key])
+        for key in labelGeneralYamlObject["labels"]:
+            if key != "sensor":
+                labelGeneral.append(key + "_" + labelGeneralYamlObject["labels"][key])
         return labelGeneral
 
     def __readLabel(self, labelPath):

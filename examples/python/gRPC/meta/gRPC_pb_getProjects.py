@@ -9,7 +9,6 @@ from seerep.util.common import get_gRPC_channel
 
 
 def get_projects(grpc_channel: Channel = get_gRPC_channel()) -> List[Tuple[str, str]]:
-
     stub = metaOperations.MetaOperationsStub(grpc_channel)
 
     response = stub.GetProjects(empty_pb2.Empty())

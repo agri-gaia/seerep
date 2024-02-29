@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import flatbuffers
-from seerep.fb.Empty import Empty
 from seerep.fb.meta_operations_grpc_fb import MetaOperationsStub
 from seerep.fb.ProjectInfos import ProjectInfos
 from seerep.util.common import get_gRPC_channel

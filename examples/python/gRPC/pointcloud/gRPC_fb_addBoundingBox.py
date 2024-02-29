@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 NUM_BB_LABELS = 5
 
+import sys
 import uuid
 from typing import List
 
@@ -24,15 +25,14 @@ from seerep.util.fb_helper import (
 
 
 def add_pc_bounding_boxes(target_proj_uuid: str = None, grpc_channel: Channel = get_gRPC_channel()):
-
     builder = flatbuffers.Builder(1024)
 
-    if target_proj_uuid == None:
+    if target_proj_uuid is None:
         target_proj_uuid = getProject(builder, grpc_channel, "testproject")
 
-        if target_proj_uuid == None:
+        if target_proj_uuid is None:
             print("Requested project does not exist")
-            exit()
+            sys.exit()
 
     stub = pointcloudService.PointCloudServiceStub(grpc_channel)
 
@@ -90,8 +90,8 @@ if __name__ == "__main__":
     for bbs in bbs_lst:
         for label_idx in range(bbs.LabelsBbLength()):
             for bb_idx in range(bbs.LabelsBb(label_idx).BoundingBoxLabeledLength()):
-                uuid = bbs.Header().UuidMsgs().decode()
-                print(f"uuid: {uuid}")
+                header_uuid = bbs.Header().UuidMsgs().decode()
+                print(f"uuid: {header_uuid}")
                 cp = bbs.LabelsBb(label_idx).BoundingBoxLabeled(bb_idx).BoundingBox().CenterPoint()
                 se = bbs.LabelsBb(label_idx).BoundingBoxLabeled(bb_idx).BoundingBox().SpatialExtent()
 

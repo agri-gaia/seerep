@@ -6,11 +6,10 @@ import imageio.v2 as imageio
 import numpy as np
 import yaml
 from seerep.pb import boundingbox2d_labeled_pb2 as bb
-from seerep.pb import boundingbox2d_labeled_with_category_pb2
+from seerep.pb import boundingbox2d_labeled_with_category_pb2, labels_with_instance_with_category_pb2
 from seerep.pb import image_pb2 as image
 from seerep.pb import image_service_pb2_grpc as imageService
 from seerep.pb import label_with_instance_pb2 as labelWithInstance
-from seerep.pb import labels_with_instance_with_category_pb2
 from seerep.pb import meta_operations_pb2_grpc as metaOperations
 from seerep.pb import point_cloud_2_pb2 as pointcloud
 from seerep.pb import point_cloud_service_pb2_grpc as pointcloudService
@@ -40,11 +39,11 @@ root = ["/seerep/seerep-data/simulatedData/lighting_01/", "/seerep/seerep-data/s
 # seerep-data/simulatedData/Beleuchtung_02/2022_06_07_16_52_48/
 
 labelSwitch = {
-    1.0: 'http://aims.fao.org/aos/agrovoc/c_14385',
-    2.0: 'http://aims.fao.org/aos/agrovoc/c_820',
-    3.0: 'http://aims.fao.org/aos/agrovoc/c_7910',
-    4.0: 'http://aims.fao.org/aos/agrovoc/c_cb9aeea7',
-    5.0: 'http://aims.fao.org/aos/agrovoc/c_71145989',
+    1.0: "http://aims.fao.org/aos/agrovoc/c_14385",
+    2.0: "http://aims.fao.org/aos/agrovoc/c_820",
+    3.0: "http://aims.fao.org/aos/agrovoc/c_7910",
+    4.0: "http://aims.fao.org/aos/agrovoc/c_cb9aeea7",
+    5.0: "http://aims.fao.org/aos/agrovoc/c_71145989",
 }
 
 for folderIndex in range(2):
@@ -109,21 +108,21 @@ for folderIndex in range(2):
         thePointcloud.data = pointcloudData.tobytes()
 
         thePointfieldX = pointfield.PointField()
-        thePointfieldX.name = 'x'
+        thePointfieldX.name = "x"
         thePointfieldX.offset = 0
         thePointfieldX.datatype = 7  # float32
         thePointfieldX.count = 1
         thePointcloud.fields.append(thePointfieldX)
 
         thePointfieldY = pointfield.PointField()
-        thePointfieldY.name = 'y'
+        thePointfieldY.name = "y"
         thePointfieldY.offset = 4
         thePointfieldY.datatype = 7  # float32
         thePointfieldY.count = 1
         thePointcloud.fields.append(thePointfieldY)
 
         thePointfieldZ = pointfield.PointField()
-        thePointfieldZ.name = 'z'
+        thePointfieldZ.name = "z"
         thePointfieldZ.offset = 8
         thePointfieldZ.datatype = 7  # float32
         thePointfieldZ.count = 1
@@ -145,8 +144,8 @@ for folderIndex in range(2):
         with open(baseFilePath + ".txt", "r") as stream:
             try:
                 pose = yaml.safe_load(stream)
-                position = np.fromstring(pose.get('camera_pose_translation'), dtype=float, sep=' ')
-                rotation = np.fromstring(pose.get('camera_pose_rotation_quaternion'), dtype=float, sep=' ')
+                position = np.fromstring(pose.get("camera_pose_translation"), dtype=float, sep=" ")
+                rotation = np.fromstring(pose.get("camera_pose_rotation_quaternion"), dtype=float, sep=" ")
 
                 # create tf with data valid for all following tfs
                 theTf = tf.TransformStamped()

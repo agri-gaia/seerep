@@ -9,7 +9,6 @@ import flatbuffers
 import numpy as np
 from google.protobuf import empty_pb2
 from grpc import Channel
-from grpc._channel import _MultiThreadedRendezvous
 from seerep.fb import BoundingBoxes2DLabeledStamped, Image
 from seerep.fb import image_service_grpc_fb as imageService
 from seerep.pb import meta_operations_pb2_grpc as metaOperations
@@ -117,12 +116,13 @@ if __name__ == "__main__":
         print(
             f"Added bounding boxes to image with uuid {img_uuid}, with the following center points and spatial extents:"
         )
-        print(f"[center_point(x, y) | spatial_extent(x, y)]")
+        print("[center_point(x, y) | spatial_extent(x, y)]")
         for bbs_wcat in [bbs_img.LabelsBb(idx) for idx in range(bbs_img.LabelsBbLength())]:
             for bb in [
                 bbs_wcat.BoundingBox2dLabeled(idx).BoundingBox() for idx in range(bbs_wcat.BoundingBox2dLabeledLength())
             ]:
                 print(
-                    f"[({bb.CenterPoint().X()}, {bb.CenterPoint().Y()}) | ({bb.SpatialExtent().X()}, {bb.SpatialExtent().Y()})]"
+                    f"[({bb.CenterPoint().X()}, {bb.CenterPoint().Y()}) | \
+                    ({bb.SpatialExtent().X()}, {bb.SpatialExtent().Y()})]"
                 )
         print()

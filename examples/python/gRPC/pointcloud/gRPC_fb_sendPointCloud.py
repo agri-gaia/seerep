@@ -7,9 +7,8 @@ import flatbuffers
 import numpy as np
 from grpc import Channel
 from quaternion import quaternion
-from seerep.fb import PointCloud2, Quaternion, Transform, TransformStamped, Vector3
+from seerep.fb import PointCloud2, Quaternion, Transform, TransformStamped, Vector3, tf_service_grpc_fb
 from seerep.fb import point_cloud_service_grpc_fb as pointCloudService
-from seerep.fb import tf_service_grpc_fb
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
     addToBoundingBoxLabeledVector,
@@ -104,9 +103,7 @@ def createPointClouds(projectUuid, numOf, theTime):
 
 
 def createTF(numOf, projectUuid, theTime):
-
     for i in range(numOf):
-
         builderTf = flatbuffers.Builder(1024)
 
         timeStamp = createTimeStamp(builderTf, theTime + i)
@@ -148,21 +145,21 @@ def send_pointcloud(
     builder = flatbuffers.Builder(1024)
     theTime = 1686038855
 
-    if target_proj_uuid == None:
+    if target_proj_uuid is None:
         target_proj_uuid = getOrCreateProject(builder, grpc_channel, "testproject")
 
     tfStub = tf_service_grpc_fb.TfServiceStub(grpc_channel)
     tfStub.TransferTransformStamped(createTF(NUM_POINT_CLOUDS, target_proj_uuid, theTime))
 
     stub = pointCloudService.PointCloudServiceStub(grpc_channel)
-    pc = createPointClouds(target_proj_uuid, NUM_POINT_CLOUDS, theTime)
+    pcl = createPointClouds(target_proj_uuid, NUM_POINT_CLOUDS, theTime)
 
-    pc_list: List = [p for p in pc]
+    pc_list: List = list(pcl)
 
     # one could directly pass the generator, e.g.
     # responseBuf = stub.TransferPointCloud2(pc)
     # but this would consume the generator and then the pc list cannot be returned, therefore use a iterator
-    responseBuf = stub.TransferPointCloud2(iter(pc_list))
+    stub.TransferPointCloud2(iter(pc_list))
 
     pc_list = [PointCloud2.PointCloud2.GetRootAs(p) for p in pc_list]
 

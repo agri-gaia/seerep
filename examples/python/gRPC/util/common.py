@@ -13,7 +13,7 @@ def get_gRPC_channel(target="local"):
         ("grpc.max_receive_message_length", 1 * 1024 * 1024 * 1024),
     ]
 
-    if target == "prod" or target == "dev":
+    if target in ("prod", "dev"):
         if target == "prod":
             targetName = "seerep-prod"
             certName = "tls-prod.pem"
@@ -50,6 +50,7 @@ def to_snake_case(string: str):
     return string.lower()
 
 
+# ruff: noqa: PLW2901
 def dict_snake_case_keys(d: Dict[str, Any]) -> Any:
     """
     Recursively converts all keys of a dict to snake case.

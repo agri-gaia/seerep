@@ -23,7 +23,7 @@ from seerep.util.service_manager import ServiceManager
 
 def get_sorted_uuids_per_proj(uuidspp: UuidsPerProject.UuidsPerProject) -> List[str]:
     if uuidspp.UuidsPerProjectLength() == 0:
-        return list()
+        return []
     return sorted(
         [uuidspp.UuidsPerProject(0).Uuids(i).decode() for i in range(uuidspp.UuidsPerProject(0).UuidsLength())]
     )
@@ -67,12 +67,11 @@ def filter_imgs_by_label(
                     if filter_label == instance.labelWithInstance.label.label:
                         found_label_list[idx] = True
 
-        if must_have_all_labels == True:
+        if must_have_all_labels:
             if all(found_label_list) and all(found_glabel_list):
                 bbs_instances = bbs_instances.union(sliced_uuids)
-        else:
-            if any(found_label_list) or any(found_glabel_list):
-                bbs_instances = bbs_instances.union(sliced_uuids)
+        elif any(found_label_list) or any(found_glabel_list):
+            bbs_instances = bbs_instances.union(sliced_uuids)
 
     return bbs_instances
 
@@ -97,7 +96,7 @@ def test_gRPC_getInstanceTypes(grpc_channel, project_setup):
 
     serv_man = ServiceManager(grpc_channel)
 
-    queryinst_builder = FbQueryInstance(grpc_channel, enum_types=set([EnumFbQueryInstance.DATATYPE]))
+    queryinst_builder = FbQueryInstance(grpc_channel, enum_types={EnumFbQueryInstance.DATATYPE})
     queryinst_builder.set_active_function(EnumFbQueryInstance.DATATYPE, lambda: Datatype.Datatype.Image)
     queryinst_builder.assemble_datatype_instance()
 
@@ -142,7 +141,7 @@ def test_gRPC_getInstanceTypes(grpc_channel, project_setup):
 
     instance_uuidspp = serv_man.call_get_instances_fb(queryinst_builder.builder, queryinst_builder.datatype_instance)
 
-    points_instance_uuids = sorted(list(points_imguuids))
+    points_instance_uuids = sorted(points_imguuids)
     instance_uuids = get_sorted_uuids_per_proj(instance_uuidspp)
 
     assert points_instance_uuids == instance_uuids
@@ -155,12 +154,12 @@ def test_gRPC_getInstanceTypes(grpc_channel, project_setup):
     instance_uuids = get_sorted_uuids_per_proj(instance_uuidspp)
 
     # because uuid duplicates are received
-    instance_uuids = sorted(list(set(instance_uuids)))
+    instance_uuids = sorted(set(instance_uuids))
 
     points_instance_uuids.extend(pcl_instance_uuids)
     points_instance_uuids.extend(bbs_instances)
 
-    instance_uuids_all = sorted(list(set(points_instance_uuids)))
+    instance_uuids_all = sorted(set(points_instance_uuids))
 
     assert instance_uuids == instance_uuids_all
 
@@ -182,8 +181,8 @@ def test_gRPC_getInstanceQueryPolygon(grpc_channel, project_setup):
     # retrieve the labelinstances of the bounding boxes
     bbs_instances = get_instances_from_imgs(timestamp_thresh_imgs)
 
-    query_builder = FbQuery(grpc_channel, enum_types=set([EnumFbQuery.POLYGON]))
-    queryinst_builder = FbQueryInstance(grpc_channel, enum_types=set([EnumFbQueryInstance.QUERY]))
+    query_builder = FbQuery(grpc_channel, enum_types={EnumFbQuery.POLYGON})
+    queryinst_builder = FbQueryInstance(grpc_channel, enum_types={EnumFbQueryInstance.QUERY})
     queryinst_builder.set_active_function(EnumFbQueryInstance.QUERY, lambda: query_builder.datatype_instance)
 
     queryinst_builder.assemble_datatype_instance()
@@ -213,8 +212,8 @@ def test_gRPC_getInstanceQueryTimeinterval(grpc_channel, project_setup):
     min_time_ = cur_time - time_offset
     max_time_ = cur_time + time_offset
 
-    query_builder = FbQuery(grpc_channel, enum_types=set([EnumFbQuery.TIMEINTERVAL]))
-    queryinst_builder = FbQueryInstance(grpc_channel, enum_types=set([EnumFbQueryInstance.QUERY]))
+    query_builder = FbQuery(grpc_channel, enum_types={EnumFbQuery.TIMEINTERVAL})
+    queryinst_builder = FbQueryInstance(grpc_channel, enum_types={EnumFbQueryInstance.QUERY})
 
     # test for time interval
     min_timestamp = fbh.createTimeStamp(queryinst_builder.builder, min_time_, 0)
@@ -274,9 +273,9 @@ def test_gRPC_getInstanceQueryLabel(grpc_channel, project_setup):
     # this is not a and with all labels attached to a bb
     # query_builder = FbQuery(grpc_channel, enum_types=set([EnumFbQuery.LABEL, EnumFbQuery.MUST_HAVE_ALL_LABELS]))
 
-    query_builder = FbQuery(grpc_channel, enum_types=set([EnumFbQuery.LABEL]))
+    query_builder = FbQuery(grpc_channel, enum_types={EnumFbQuery.LABEL})
 
-    queryinst_builder = FbQueryInstance(grpc_channel, enum_types=set([EnumFbQueryInstance.QUERY]))
+    queryinst_builder = FbQueryInstance(grpc_channel, enum_types={EnumFbQueryInstance.QUERY})
 
     queryinst_builder.set_active_function(EnumFbQueryInstance.QUERY, lambda: query_builder.datatype_instance)
 
@@ -289,7 +288,7 @@ def test_gRPC_getInstanceQueryLabel(grpc_channel, project_setup):
 
     bbs_instances = filter_imgs_by_label(images, filter_labels, filter_labels_general, False)
 
-    bbs_instances = sorted(list(bbs_instances))
+    bbs_instances = sorted(bbs_instances)
 
     assert instance_uuids == bbs_instances
 
@@ -312,10 +311,10 @@ def test_gRPC_getInstanceQueryMustHaveAllLabels(grpc_channel, project_setup):
 
     query_builder = FbQuery(
         grpc_channel,
-        enum_types=set([EnumFbQuery.LABEL, EnumFbQuery.MUST_HAVE_ALL_LABELS]),
+        enum_types={EnumFbQuery.LABEL, EnumFbQuery.MUST_HAVE_ALL_LABELS},
     )
 
-    queryinst_builder = FbQueryInstance(grpc_channel, enum_types=set([EnumFbQueryInstance.QUERY]))
+    queryinst_builder = FbQueryInstance(grpc_channel, enum_types={EnumFbQueryInstance.QUERY})
 
     queryinst_builder.set_active_function(EnumFbQueryInstance.QUERY, lambda: query_builder.datatype_instance)
 
@@ -328,7 +327,7 @@ def test_gRPC_getInstanceQueryMustHaveAllLabels(grpc_channel, project_setup):
 
     bbs_instances = filter_imgs_by_label(images, filter_labels, filter_labels_general, True)
 
-    bbs_instances = sorted(list(bbs_instances))
+    bbs_instances = sorted(bbs_instances)
 
     assert instance_uuids == bbs_instances
 
@@ -349,12 +348,12 @@ def test_gRPC_getInstanceQueryInstanceUuid(grpc_channel, project_setup):
 
     query_builder = FbQuery(
         grpc_channel,
-        enum_types=set([EnumFbQuery.PROJECTUUID, EnumFbQuery.INSTANCEUUID]),
+        enum_types=set(EnumFbQuery.PROJECTUUID, EnumFbQuery.INSTANCEUUID),
     )
     query_builder.set_active_function(EnumFbQuery.PROJECTUUID, lambda: [query_builder.builder.CreateString(proj_uuid)])
     query_builder.assemble_datatype_instance()
 
-    queryinst_builder = FbQueryInstance(grpc_channel, enum_types=set([EnumFbQueryInstance.QUERY]))
+    queryinst_builder = FbQueryInstance(grpc_channel, enum_types=set(EnumFbQueryInstance.QUERY))
     queryinst_builder.set_active_function(EnumFbQueryInstance.QUERY, lambda: query_builder.datatype_instance)
 
     queryinst_builder.assemble_datatype_instance()
@@ -376,9 +375,10 @@ def test_gRPC_getInstanceQueryInstanceUuid(grpc_channel, project_setup):
         if found_uuid:
             bbs_instances = bbs_instances.union(sliced_uuids)
 
-    assert instance_uuids == sorted(list(bbs_instances))
+    assert instance_uuids == sorted(bbs_instances)
 
 
+# ruff: noqa: F811
 def test_gRPC_getInstanceQueryInstanceUuid(grpc_channel, project_setup):
     _, proj_uuid = project_setup
 
@@ -395,12 +395,12 @@ def test_gRPC_getInstanceQueryInstanceUuid(grpc_channel, project_setup):
 
     query_builder = FbQuery(
         grpc_channel,
-        enum_types=set([EnumFbQuery.PROJECTUUID, EnumFbQuery.INSTANCEUUID]),
+        enum_types={EnumFbQuery.PROJECTUUID, EnumFbQuery.INSTANCEUUID},
     )
     query_builder.set_active_function(EnumFbQuery.PROJECTUUID, lambda: [query_builder.builder.CreateString(proj_uuid)])
     query_builder.assemble_datatype_instance()
 
-    queryinst_builder = FbQueryInstance(grpc_channel, enum_types=set([EnumFbQueryInstance.QUERY]))
+    queryinst_builder = FbQueryInstance(grpc_channel, enum_types={EnumFbQueryInstance.QUERY})
     queryinst_builder.set_active_function(EnumFbQueryInstance.QUERY, lambda: query_builder.datatype_instance)
 
     queryinst_builder.assemble_datatype_instance()
@@ -422,7 +422,7 @@ def test_gRPC_getInstanceQueryInstanceUuid(grpc_channel, project_setup):
         if found_uuid:
             bbs_instances = bbs_instances.union(sliced_uuids)
 
-    assert instance_uuids == sorted(list(bbs_instances))
+    assert instance_uuids == sorted(bbs_instances)
 
 
 def test_gRPC_getInstanceQueryDatauuid(grpc_channel, project_setup):
@@ -437,12 +437,12 @@ def test_gRPC_getInstanceQueryDatauuid(grpc_channel, project_setup):
 
     query_builder = FbQuery(
         grpc_channel,
-        enum_types=set([EnumFbQuery.PROJECTUUID, EnumFbQuery.DATAUUID]),
+        enum_types={EnumFbQuery.PROJECTUUID, EnumFbQuery.DATAUUID},
     )
     query_builder.set_active_function(EnumFbQuery.PROJECTUUID, lambda: [query_builder.builder.CreateString(proj_uuid)])
     query_builder.assemble_datatype_instance()
 
-    queryinst_builder = FbQueryInstance(grpc_channel, enum_types=set([EnumFbQueryInstance.QUERY]))
+    queryinst_builder = FbQueryInstance(grpc_channel, enum_types={EnumFbQueryInstance.QUERY})
     queryinst_builder.set_active_function(EnumFbQueryInstance.QUERY, lambda: query_builder.datatype_instance)
 
     queryinst_builder.assemble_datatype_instance()
@@ -451,7 +451,7 @@ def test_gRPC_getInstanceQueryDatauuid(grpc_channel, project_setup):
         serv_man.call_get_instances_fb(queryinst_builder.builder, queryinst_builder.datatype_instance)
     )
     # filter images by their uuids
-    sorted_img_uuids = sorted([img for img in images_uuids], key=lambda img: img[0])
+    sorted_img_uuids = sorted(images_uuids, key=lambda img: img[0])
     sorted_imgs_halved = [sorted_img_uuids[i][1] for i in range(0, len(sorted_img_uuids), 2)]
 
     # retrieve the labelinstances of the bounding boxes
@@ -479,9 +479,9 @@ def test_gRPC_getInstanceQueryFullyEncapsulated(grpc_channel, project_setup):
 
     query_builder = FbQuery(
         grpc_channel,
-        enum_types=set([EnumFbQuery.POLYGON, EnumFbQuery.FULLY_ENCAPSULATED]),
+        enum_types={EnumFbQuery.POLYGON, EnumFbQuery.FULLY_ENCAPSULATED},
     )
-    queryinst_builder = FbQueryInstance(grpc_channel, enum_types=set([EnumFbQueryInstance.QUERY]))
+    queryinst_builder = FbQueryInstance(grpc_channel, enum_types={EnumFbQueryInstance.QUERY})
     queryinst_builder.set_active_function(EnumFbQueryInstance.QUERY, lambda: query_builder.datatype_instance)
 
     queryinst_builder.assemble_datatype_instance()
@@ -507,9 +507,9 @@ def _test_gRPC_getInstanceQuerySortByTime(grpc_channel, project_setup):
 
     timestamp_sorted_imgs = sorted(images, key=lambda img: combine_stamps_nanos(img))
 
-    query_builder = FbQuery(grpc_channel, enum_types=set([EnumFbQuery.SORT_BY_TIME]))
+    query_builder = FbQuery(grpc_channel, enum_types=set(EnumFbQuery.SORT_BY_TIME))
 
-    queryinst_builder = FbQueryInstance(grpc_channel, enum_types=set([EnumFbQueryInstance.QUERY]))
+    queryinst_builder = FbQueryInstance(grpc_channel, enum_types=set(EnumFbQueryInstance.QUERY))
 
     queryinst_builder.set_active_function(EnumFbQueryInstance.QUERY, lambda: query_builder.datatype_instance)
 
@@ -551,14 +551,12 @@ def _test_gRPC_getInstanceQueryInMapFrame(grpc_channel, project_setup):
     query_builder = FbQuery(
         grpc_channel,
         enum_types=set(
-            [
-                EnumFbQuery.POLYGON,
-                EnumFbQuery.IN_MAP_FRAME,
-                EnumFbQuery.FULLY_ENCAPSULATED,
-            ]
+            EnumFbQuery.POLYGON,
+            EnumFbQuery.IN_MAP_FRAME,
+            EnumFbQuery.FULLY_ENCAPSULATED,
         ),
     )
-    queryinst_builder = FbQueryInstance(grpc_channel, enum_types=set([EnumFbQueryInstance.QUERY]))
+    queryinst_builder = FbQueryInstance(grpc_channel, enum_types=set(EnumFbQueryInstance.QUERY))
     queryinst_builder.set_active_function(EnumFbQueryInstance.QUERY, lambda: query_builder.datatype_instance)
 
     queryinst_builder.assemble_datatype_instance()

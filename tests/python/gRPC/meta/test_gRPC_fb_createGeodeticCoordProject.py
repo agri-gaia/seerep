@@ -5,11 +5,10 @@
 from typing import List
 
 import flatbuffers
-import seerep.util.fb_helper as fb_helper
 from gRPC.meta import gRPC_fb_createGeodeticCoordProject as project_creation
 from gRPC.meta import gRPC_fb_getProjects as projects_query
 from seerep.fb import ProjectInfo as PI
-from seerep.util import fb_to_dict
+from seerep.util import fb_helper, fb_to_dict
 
 
 def test_gRPC_fb_createGeoProjectAndGetProjects(grpc_channel):

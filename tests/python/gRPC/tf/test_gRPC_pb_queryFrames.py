@@ -42,7 +42,6 @@ def test_gRPC_pb_queryFrames(project_setup, grpc_channel):
     time_lst: List[Tuple[int, int]] = []
 
     for idx, time in enumerate(TIMESTAMPS):
-
         timestmp = createTimeStamp(builder, time[0], time[1])
 
         # when not giving a uuid the corresponding retrieved tf from server has no uuid msg

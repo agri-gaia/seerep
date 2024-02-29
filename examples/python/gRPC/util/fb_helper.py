@@ -45,6 +45,7 @@ from seerep.fb import (
 from seerep.fb import meta_operations_grpc_fb as metaOperations
 
 
+# ruff: noqa: PLR0911
 # TODO: should be moved into a separate module
 def rosToNumpyDtype(ros_dtype: int) -> np.dtype:
     """Converts the numeric represenations of dtypes in ROS to numpy dtype objects."""
@@ -206,7 +207,6 @@ def deleteProject(channel, builder, projectName, projectUuid):
     builder.Finish(projInfoMsg)
     buf = builder.Output()
     stub.DeleteProject(bytes(buf))
-    return None
 
 
 def createTimeStamp(builder, seconds, nanoseconds=0):
@@ -456,22 +456,6 @@ def createBoundingBox(builder, centerPoint, spatialExtent, rotation=None):
     if rotation:
         Boundingbox.AddRotation(builder, rotation)
     return Boundingbox.End(builder)
-
-
-def createPolygon2D(builder, height, z, vertices):
-    """Create a 2D Polygon in flatbuffers"""
-
-    Polygon2D.StartVerticesVector(builder, len(vertices))
-    for v in vertices:
-        builder.PrependUOffsetTRelative(v)
-    vertices_fb = builder.EndVector()
-
-    Polygon2D.Start(builder)
-    Polygon2D.AddHeight(builder, height)
-    Polygon2D.AddZ(builder, z)
-    Polygon2D.AddVertices(builder, vertices_fb)
-
-    return Polygon2D.End(builder)
 
 
 def createPolygon2D(builder, height, z, vertices):

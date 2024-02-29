@@ -6,7 +6,6 @@ from typing import List, Optional, Tuple
 import numpy as np
 from google.protobuf import empty_pb2
 from grpc import Channel
-from seerep.fb import camera_intrinsics_service_grpc_fb as ci_service
 from seerep.pb import boundingbox2d_labeled_pb2 as boundingbox2d_labeled
 from seerep.pb import (
     boundingbox2d_labeled_with_category_pb2 as boundingbox2d_labeled_with_category,
@@ -80,7 +79,7 @@ def send_labeled_images(
 
     camin.distortion_model = "plumb_bob"
 
-    camin.distortion.extend([i for i in range(0, 3)])
+    camin.distortion.extend(list(range(0, 3)))
 
     camin.intrinsic_matrix.extend([3, 4, 5, 10, 7, 8, 9, 10, 11])
     camin.rectification_matrix.extend([3, 4, 5, 6, 7, 8, 9, 10, 11])
@@ -201,11 +200,11 @@ def send_labeled_images(
 
 if __name__ == "__main__":
     sent_image_ls_data, _, _ = send_labeled_images()
-    camera_intrinsics_allimgs = set([intrins_uuid[1].uuid_camera_intrinsics for intrins_uuid in sent_image_ls_data])
+    camera_intrinsics_allimgs = {intrins_uuid[1].uuid_camera_intrinsics for intrins_uuid in sent_image_ls_data}
 
     # print statement to seperate the messages of the function
     print()
     print(f"camera intrinsics will be saved against the uuid(s): {camera_intrinsics_allimgs}")
     img_uuids = [img[0] for img in sent_image_ls_data]
-    for i, uuid in enumerate(img_uuids):
-        print(f"the uuid of the sent image number {i} is: {uuid}")
+    for i, img_uuid in enumerate(img_uuids):
+        print(f"the uuid of the sent image number {i} is: {img_uuid}")

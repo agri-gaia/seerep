@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import sys
 from typing import Any, Tuple
 
 import seerep.pb.datatype_pb2 as datatype
@@ -25,7 +26,7 @@ def get_metadata(
                 target_project_uuid = project.uuid
         if target_project_uuid is None:
             print("No test project found, create a project with 'gRPC_pb_sendLabeledImageGrid.py' beforehand!")
-            exit()
+            sys.exit()
 
     uuiddt = uuid_datatype_pair.UuidDatatypePair()
     uuiddt.projectuuid = target_project_uuid

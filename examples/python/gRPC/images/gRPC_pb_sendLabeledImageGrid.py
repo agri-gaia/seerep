@@ -9,7 +9,6 @@ import flatbuffers
 import numpy as np
 from google.protobuf import empty_pb2
 from grpc import Channel
-from seerep.fb import CameraIntrinsics
 from seerep.fb import camera_intrinsics_service_grpc_fb as ci_service
 from seerep.pb import boundingbox2d_labeled_pb2 as boundingbox2d_labeled
 from seerep.pb import (
@@ -41,7 +40,6 @@ from seerep.util.fb_helper import (
 def send_labeled_image_grid(
     target_proj_uuid: str = None, grpc_channel: Channel = get_gRPC_channel()
 ) -> Tuple[List[List[image.Image]], List[Tuple[int, int]], cameraintrinsics.CameraIntrinsics]:
-
     stub = imageService.ImageServiceStub(grpc_channel)
     stubTf = tfService.TfServiceStub(grpc_channel)
     stubMeta = metaOperations.MetaOperationsStub(grpc_channel)
@@ -87,11 +85,11 @@ def send_labeled_image_grid(
 
     camin.distortion_model = "plumb_bob"
 
-    camin.distortion.extend([i for i in range(0, 3)])
+    camin.distortion.extend(list(range(0, 3)))
 
     camin.intrinsic_matrix.extend([1, 0, 0, 0, 2, 0, 0, 0, 1])
-    camin.rectification_matrix.extend([i for i in range(12, 12 + 9)])
-    camin.projection_matrix.extend([i for i in range(21, 21 + 12)])
+    camin.rectification_matrix.extend(list(range(12, 12 + 9)))
+    camin.projection_matrix.extend(list(range(21, 21 + 12)))
 
     camin.binning_x = 6
     camin.binning_y = 7
@@ -225,7 +223,6 @@ def send_labeled_image_grid(
 
 
 def add_camintrins(target_proj_uuid: str, grpc_channel: Channel) -> str:
-
     builder = flatbuffers.Builder(1000)
 
     # 1. Get all projects from the server when no target specified
@@ -258,9 +255,7 @@ def add_camintrins(target_proj_uuid: str, grpc_channel: Channel) -> str:
     builder.Finish(ci_query)
     buf = builder.Output()
 
-    ret = stub.GetCameraIntrinsics(bytes(buf))
-
-    retrieved_ci = CameraIntrinsics.CameraIntrinsics.GetRootAs(ret)
+    stub.GetCameraIntrinsics(bytes(buf))
 
     return ciuuid
 
@@ -282,12 +277,3 @@ if __name__ == "__main__":
                     for label2d in label.labelWithInstance:
                         print(f"General label label: {label2d.label.label}")
                         print(f"General label instance uuid: {label2d.instanceUuid}")
-                # print("-------------------------------------------------------------")
-                # print(f"Image {img[0]} has {len(img[1].labels_bb)} bounding boxes.")
-                # for bb in img[1].labels_bb:
-                #     print(f"Bounding box category: {bb.category}")
-                #     for bb2d in bb.boundingBox2DLabeled:
-                #         print(f"Bounding box label: {bb2d.labelWithInstance.label.label}")
-                #         print(f"Bounding box instance uuid: {bb2d.labelWithInstance.instanceUuid}")
-                #         print(f"Bounding box center point: {bb2d.boundingBox.center_point.x}, {bb2d.boundingBox.center_point.y}")
-                #         print(f"Bounding box spatial extent: {bb2d.boundingBox.spatial_extent.x}, {bb2d.boundingBox.spatial_extent.y}")

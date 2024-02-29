@@ -22,7 +22,6 @@ from seerep.util.fb_helper import (
 def query_images(
     target_proj_uuid: Optional[str] = None, grpc_channel: Channel = get_gRPC_channel()
 ) -> List[Image.Image]:
-
     builder = flatbuffers.Builder(1024)
     if target_proj_uuid is None:
         # 1. Get all projects from the server
@@ -36,14 +35,13 @@ def query_images(
     stub = imageService.ImageServiceStub(grpc_channel)
 
     # Create all necessary objects for the query
-    l = 100
-    polygon_vertices = []
-    polygon_vertices.append(createPoint2d(builder, -1.0 * l, -1.0 * l))
-    polygon_vertices.append(createPoint2d(builder, -1.0 * l, l))
-    polygon_vertices.append(createPoint2d(builder, l, l))
-    polygon_vertices.append(createPoint2d(builder, l, -1.0 * l))
-    polygon2d = createPolygon2D(builder, 700, -100, polygon_vertices)
+    scale = 100
+    vertices = [
+        createPoint2d(builder, x * scale, y * scale) for x, y in [(-1.0, -1.0), (-1.0, 1.0), (1.0, 1.0), (1.0, -1.0)]
+    ]
+    polygon2d = createPolygon2D(builder, 700, -100, vertices)
 
+    # ruff: noqa: F841
     timeMin = createTimeStamp(builder, 1610549273, 0)
     timeMax = createTimeStamp(builder, 1938549273, 0)
     timeInterval = createTimeInterval(builder, timeMin, timeMax)
@@ -64,8 +62,9 @@ def query_images(
     instanceUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 
     # 4. Create a query with parameters
-    # all parameters are optional
-    # with all parameters set (especially with the data and instance uuids set) the result of the query will be empty. Set the query parameters to adequate values or remove them from the query creation
+    # All parameters are optional!
+    # With all parameters set (especially with the data and instance uuids set) the result of the query will be empty.
+    # Set the query parameters to adequate values or remove them from the query creation
     query = createQuery(
         builder,
         polygon2d=polygon2d,

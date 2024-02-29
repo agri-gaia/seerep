@@ -82,7 +82,8 @@ if __name__ == "__main__":
     sent_intrins = add_camintrins()
     # print the uuids of the project and the camera instrinsics
     print(
-        f"camera instrinsics were saved with the uuid {sent_intrins.header.uuid_msgs} on the project with the uuid {sent_intrins.header.uuid_project}"
+        f"camera instrinsics were saved with the uuid {sent_intrins.header.uuid_msgs} \
+        on the project with the uuid {sent_intrins.header.uuid_project}"
     )
 
     # do the same for the distortion array

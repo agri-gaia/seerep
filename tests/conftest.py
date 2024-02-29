@@ -1,4 +1,3 @@
-import os
 import shutil
 import subprocess
 import time
@@ -35,9 +34,7 @@ def grpc_channel(server_config: dict) -> Generator[Channel, None, None]:
     setup_util.remove_log_files(server_config["log-path"])
 
     # start server in the background
-    server_process = subprocess.Popen(
-        [server_exe_path, f"-c{SERVER_TEST_CONFIG_PATH}"],
-    )
+    server_process = subprocess.Popen([server_exe_path, f"-c{SERVER_TEST_CONFIG_PATH}"], stdout=subprocess.DEVNULL)
 
     if not server_process:
         raise RuntimeError("Failed to start SEEREP")

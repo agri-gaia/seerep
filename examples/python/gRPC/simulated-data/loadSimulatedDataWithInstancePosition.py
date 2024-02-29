@@ -163,7 +163,6 @@ class LoadSimulatedDataWithInstancePosition:
                 yield bytes(self.builder.Output())
 
     def __createTransformFromQuaternion(self, builder, extrinsics):
-
         calib_e = yaml.safe_load(extrinsics)["camera_pose"]
         calib_e = np.linalg.inv(np.matrix(calib_e))
 

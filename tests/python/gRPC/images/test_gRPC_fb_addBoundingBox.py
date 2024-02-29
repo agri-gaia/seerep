@@ -3,7 +3,7 @@
 # requires:
 #   gRPC_pb_sendLabeledImage.py
 
-from typing import List, cast
+from typing import List
 
 import flatbuffers
 from grpc import Channel
@@ -16,7 +16,6 @@ from seerep.util.fb_helper import createQuery
 
 
 def get_imgs(target_proj_uuid: str, grpc_channel: Channel) -> List:
-
     builder = flatbuffers.Builder(1024)
     stub = imageService.ImageServiceStub(grpc_channel)
     query = createQuery(builder, projectUuids=[builder.CreateString(target_proj_uuid)], withoutData=True)

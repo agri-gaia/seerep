@@ -3,7 +3,6 @@
 import flatbuffers
 from grpc import Channel
 from seerep.fb import ProjectInfo
-from seerep.fb import meta_operations_grpc_fb as metaOperations
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import createProjectRaw
 
@@ -11,8 +10,6 @@ from seerep.util.fb_helper import createProjectRaw
 def create_geo_proj(
     grpc_channel: Channel = get_gRPC_channel(),
 ) -> ProjectInfo.ProjectInfo:
-    stubMeta = metaOperations.MetaOperationsStub(grpc_channel)
-
     builder = flatbuffers.Builder(1024)
 
     response = createProjectRaw(

@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 t1 = True
+import sys
+
 gli_image = False
 
 import flatbuffers
@@ -10,6 +12,8 @@ from seerep.fb import image_service_grpc_fb as imageService
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
     createLabelWithCategory,
+    createPoint2d,
+    createPolygon2D,
     createQuery,
     createTimeInterval,
     createTimeStamp,
@@ -27,19 +31,17 @@ projectuuid = getProject(builder, channel, "plantmap01")
 # 2. Check if the defined project exist; if not exit
 if not projectuuid:
     print("project doesn't exist!")
-    exit()
+    sys.exit()
 
 # 3. Get gRPC service object
 stub = imageService.ImageServiceStub(channel)
 
 # Create all necessary objects for the query
-l = 10
-polygon_vertices = []
-polygon_vertices.append(createPoint2d(builder, -1.0 * l, -1.0 * l))
-polygon_vertices.append(createPoint2d(builder, -1.0 * l, l))
-polygon_vertices.append(createPoint2d(builder, l, l))
-polygon_vertices.append(createPoint2d(builder, l, -1.0 * l))
-polygon2d = createPolygon2D(builder, 7, -1, polygon_vertices)
+scale = 10
+vertices = [
+    createPoint2d(builder, x * scale, y * scale) for x, y in [(-1.0, -1.0), (-1.0, 1.0), (1.0, 1.0), (1.0, -1.0)]
+]
+polygon2d = createPolygon2D(builder, 7, -1, vertices)
 
 if t1:
     timeMin = createTimeStamp(builder, 1661336503, 0)
@@ -66,8 +68,9 @@ dataUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 instanceUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 
 # 4. Create a query with parameters
-# all parameters are optional
-# with all parameters set (especially with the data and instance uuids set) the result of the query will be empty. Set the query parameters to adequate values or remove them from the query creation
+# All parameters are optional
+# with all parameters set (especially with the data and instance uuids set) the result of the query will be empty.
+# Set the query parameters to adequate values or remove them from the query creation
 query = createQuery(
     builder,
     # boundingBox=boundingboxStamped,
@@ -99,8 +102,9 @@ for responseBuf in stub.GetImage(bytes(buf)):
         print(f"\tcategory: {response.LabelsBb(i).Category().decode('utf-8')}")
         for j in range(response.LabelsBb(i).BoundingBox2dLabeledLength()):
             print(
-                f"\t\t#{j} label: {response.LabelsBb(i).BoundingBox2dLabeled(j).LabelWithInstance().Label().decode('utf-8'):30}"
-                + f"bounding box (Xmin,Ymin,Xmax,Ymax): "
+                f"\t\t#{j} label: \
+                {response.LabelsBb(i).BoundingBox2dLabeled(j).LabelWithInstance().Label().decode('utf-8'):30}"
+                + "bounding box (Xmin,Ymin,Xmax,Ymax): "
                 + str(response.LabelsBb(i).BoundingBox2dLabeled(j).BoundingBox().PointMin().X())
                 + " "
                 + str(response.LabelsBb(i).BoundingBox2dLabeled(j).BoundingBox().PointMin().Y())

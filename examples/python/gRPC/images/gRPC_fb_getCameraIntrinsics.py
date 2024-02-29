@@ -15,7 +15,6 @@ def get_camintrins(
     target_proj_uuid: Optional[str] = None,
     grpc_channel: Channel = get_gRPC_channel(),
 ) -> Optional[CameraIntrinsics.CameraIntrinsics]:
-
     builder = flatbuffers.Builder(1000)
 
     # 1. Get all projects from the server when no target specified
@@ -43,7 +42,8 @@ if __name__ == "__main__":
     camintrins = get_camintrins()
     # printing the uuid of the retrieved camera intrinsics to verify the result of the query
     print(
-        f"the camera instrinsics with uuid {camintrins.Header().UuidMsgs().decode('utf-8')} was retrieved from the project with the uuid {camintrins.Header().UuidProject().decode('utf-8')}"
+        f"the camera instrinsics with uuid {camintrins.Header().UuidMsgs().decode('utf-8')} \
+        was retrieved from the project with the uuid {camintrins.Header().UuidProject().decode('utf-8')}"
     )
     # print the distortion of the retrieved camera intrinsics
     print(f"camera instrinsics distortion array: {camintrins.DistortionAsNumpy()}")
