@@ -506,6 +506,12 @@ def create_image(
     camera_intrinsics_uuid_offset = builder.CreateString(camera_intrinsics_uuid)
     data_offset = builder.CreateByteVector(image.tobytes())
 
+    if labels:
+        Image.ImageStartLabelsVector(builder, len(labels))
+        for label in reversed(labels):
+            builder.PrependUOffsetTRelative(label)
+        label_offset = builder.EndVector()
+
     Image.Start(builder)
     Image.AddHeader(builder, header)
     Image.AddHeight(builder, image.shape[0])
@@ -515,7 +521,7 @@ def create_image(
     Image.AddStep(builder, image.nbytes // image.shape[0])
     Image.AddData(builder, data_offset)
     if labels:
-        Image.AddLabels(builder, labels)
+        Image.AddLabels(builder, label_offset)
     Image.AddUuidCameraintrinsics(builder, camera_intrinsics_uuid_offset)
     return Image.End(builder)
 
