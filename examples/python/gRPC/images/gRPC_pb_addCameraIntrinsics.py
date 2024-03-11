@@ -39,7 +39,7 @@ projectuuid = ""
 for project in response.projects:
     print(project.name + " " + project.uuid + "\n")
     if project.name == "testproject":
-        projectuuid = "67b3fa5c-298b-4cff-8af6-f0444ebc2f89"
+        projectuuid = "f2e3c8d9-e9f0-4687-858c-8899a07038f4"
 
     if ciuuid is None:
         ciuuid = str(uuid.uuid4())
