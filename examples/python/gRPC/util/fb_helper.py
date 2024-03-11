@@ -1032,7 +1032,7 @@ def createImage(
     Image.AddStep(builder, image.nbytes // image.shape[0])
     Image.AddData(builder, data_offset)
     if labels:
-        Image.AddLabelCategory(builder, label_offset)
+        Image.AddLabels(builder, label_offset)
     Image.AddUuidCameraintrinsics(builder, camera_intrinsics_uuid_offset)
     return Image.End(builder)
 
