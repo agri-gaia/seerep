@@ -621,14 +621,18 @@ void CoreFbConversion::fromFbDataLabels(
         for (auto label : *labelsCategories->labels())
         {
           boost::uuids::string_generator gen;
-          boost::uuids::uuid uuidInstance;
-          try
+          boost::uuids::uuid uuidInstance = boost::uuids::nil_uuid();
+
+          if (label->instanceUuid())
           {
-            uuidInstance = gen(label->instanceUuid()->str());
-          }
-          catch (std::runtime_error const& e)
-          {
-            uuidInstance = boost::uuids::nil_uuid();
+            try
+            {
+              uuidInstance = gen(label->instanceUuid()->str());
+            }
+            catch (std::runtime_error const& e)
+            {
+              // is handled by the default value of uuidInstance
+            }
           }
 
           labelWithInstanceVecPtr->push_back(seerep_core_msgs::Label{ .label = label->label()->str(),
