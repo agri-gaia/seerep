@@ -63,8 +63,14 @@ void Hdf5FbGeneral::writeLabelsFb(const std::string& datatypeGroup, const std::s
       {
         labels.push_back(label->label()->str());
         labelsIdDatumaro.push_back(label->labelIdDatumaro());
-        instances.push_back(label->instanceUuid()->str());
-        instancesIdDatumaro.push_back(label->instanceIdDatumaro());
+        if (label->instanceUuid())
+        {
+          instances.push_back(label->instanceUuid()->str());
+        }
+        if (label->instanceIdDatumaro())
+        {
+          instancesIdDatumaro.push_back(label->instanceIdDatumaro());
+        }
       }
       seerep_core_msgs::LabelCategory labelCategory;
       labelCategory.category = labelsCategory->category()->c_str();
