@@ -100,13 +100,14 @@ void Hdf5CoreGeneral::readLabels(const std::string& datatypeGroup, const std::st
 {
   boost::uuids::string_generator gen;
 
-  std::string id = datatypeGroup + "/" + uuid;
+  const std::string id = datatypeGroup + "/" + uuid;
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace) << "loading labels general of " << id;
 
   getLabelCategories(id, LABEL, labelCategories);
 
-  for (std::string category : labelCategories)
+  for (const std::string& category : labelCategories)
   {
+    std::vector<seerep_core_msgs::Label> label;
     std::vector<std::string> labels = readDataset<std::vector<std::string>>(id + "/" + LABEL + "_" + category);
     std::vector<int> labelsIdDatumaro = readDataset<std::vector<int>>(id + "/" + LABEL_ID_DATUMARO + "_" + category);
     std::vector<std::string> instances =
@@ -115,34 +116,47 @@ void Hdf5CoreGeneral::readLabels(const std::string& datatypeGroup, const std::st
         readDataset<std::vector<int>>(id + "/" + LABELINSTANCES_ID_DATUMARO + "_" + category);
     datumaroJsonPerCategory.push_back(readDataset<std::string>(id + "/" + DATUMARO_JSON + "_" + category));
 
-    if (!hasEqualSize(labels, labelsIdDatumaro, instances, instancesIdDatumaro))
+    if (labels.size() != labelsIdDatumaro.size())
     {
-      std::string errorMsg = "size of labels (" + std::to_string(labels.size()) + ") and size of label datumaro ids (" +
-                             std::to_string(labelsIdDatumaro.size()) + ") and size of instances (" +
-                             std::to_string(instances.size()) + ") and size of instances datumaro ids (" +
-                             std::to_string(instancesIdDatumaro.size()) + ") do not fit.";
-      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning) << errorMsg;
+      const std::string errorMsg = "Unequal size of labels and datumaro label ids in category: " + category;
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << errorMsg;
       throw std::runtime_error(errorMsg);
     }
 
-    std::vector<seerep_core_msgs::Label> label;
-    for (long unsigned int i = 0; i < labels.size(); i++)
+    bool addInstances = false;
+    if (!instances.empty() && !instancesIdDatumaro.empty())
     {
-      boost::uuids::uuid instanceUuid;
-      try
+      if (!hasEqualSize(labels, labelsIdDatumaro, instances, instancesIdDatumaro))
       {
-        instanceUuid = gen(instances.at(i));
+        const std::string errorMsg = "unequal size of instances and labels in: " + category;
+        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << errorMsg;
+        throw std::runtime_error(errorMsg);
       }
-      catch (std::runtime_error&)
-      {
-        instanceUuid = boost::uuids::nil_uuid();
-      }
-      label.push_back(seerep_core_msgs::Label{ .label = labels.at(i),
-                                               .labelIdDatumaro = labelsIdDatumaro.at(i),
-                                               .uuidInstance = instanceUuid,
-                                               .instanceIdDatumaro = instancesIdDatumaro.at(i) });
+      addInstances = true;
     }
 
+    for (size_t i = 0; i < labels.size(); i++)
+    {
+      seerep_core_msgs::Label core_label;
+      core_label.label = labels.at(i);
+      core_label.labelIdDatumaro = labelsIdDatumaro.at(i);
+
+      if (addInstances)
+      {
+        try
+        {
+          core_label.instanceIdDatumaro = instancesIdDatumaro.at(i);
+          core_label.uuidInstance = gen(instances.at(i));
+        }
+        catch (std::runtime_error&)
+        {
+          core_label.uuidInstance = boost::uuids::nil_uuid();
+          BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning)
+              << "Could not convert instance uuid string to uuid: " << instances.at(i);
+        }
+      }
+      label.push_back(core_label);
+    }
     labelsPerCategory.push_back(label);
   }
 }
