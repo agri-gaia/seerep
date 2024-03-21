@@ -1,0 +1,26 @@
+services:
+  change_vol_ownership:
+    image: alpine:3.19
+    user: root
+    volumes:
+      - seerep_data:${SEEREP_DATA_FOLDER}
+      - seerep_log:${SEEREP_LOG_PATH}
+    command: chown -R ${USER_ID}:${GROUP_ID} ${SEEREP_DATA_FOLDER} ${SEEREP_LOG_PATH}
+  seerep:
+    image: ghcr.io/agri-gaia/seerep_base:latest
+    user: "${USER_ID}:${GROUP_ID}"
+    tty: true
+    container_name: seerep_server
+    env_file:
+      .env
+    ports:
+      - 9090:9090
+    volumes:
+      - seerep_data:${SEEREP_DATA_FOLDER}
+      - seerep_log:${SEEREP_LOG_PATH}
+    depends_on:
+      change_vol_ownership:
+        condition: service_completed_successfully
+volumes:
+  seerep_data:
+  seerep_log:
