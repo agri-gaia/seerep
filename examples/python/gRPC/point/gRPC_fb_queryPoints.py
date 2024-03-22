@@ -18,7 +18,7 @@ from seerep.util.fb_helper import (
 )
 
 
-def get_points(target_proj_uuid: str = None, grpc_channel=get_gRPC_channel()) -> List[PointStamped.PointStamped]:
+def get_points_raw(target_proj_uuid: str = None, grpc_channel=get_gRPC_channel()) -> List[bytearray]:
     builder = flatbuffers.Builder(1024)
 
     # 1. Get all projects from the server
@@ -75,19 +75,20 @@ def get_points(target_proj_uuid: str = None, grpc_channel=get_gRPC_channel()) ->
     buf = builder.Output()
 
     stub = pointService.PointServiceStub(grpc_channel)
-    pointsBuf = stub.GetPoint(bytes(buf))
+    pointsBuf: List[bytearray] = stub.GetPoint(bytes(buf))
 
-    point_lst: List[PointStamped.PointStamped] = []
+    return pointsBuf
 
-    for responseBuf in pointsBuf:
-        response: PointStamped.PointStamped = PointStamped.PointStamped.GetRootAs(responseBuf)
-        point_lst.append(response)
 
-    return point_lst
+def get_points(target_proj_uuid: str = None, grpc_channel=get_gRPC_channel()) -> List[PointStamped.PointStamped]:
+    return [
+        PointStamped.PointStamped.GetRootAs(responseBuf)
+        for responseBuf in get_points_raw(target_proj_uuid, grpc_channel)
+    ]
 
 
 if __name__ == "__main__":
-    p_list: List[PointStamped.PointStamped] = get_points()
+    p_list = get_points()
     for point in p_list:
         print(f"uuidmsg: {point.Header().UuidMsgs().decode('utf-8')}")
         for i in range(point.LabelsGeneralLength()):

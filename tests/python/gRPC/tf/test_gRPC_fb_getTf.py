@@ -8,7 +8,6 @@ import flatbuffers
 import numpy as np
 from gRPC.tf import gRPC_fb_getTf as get_tfs
 from quaternion import quaternion
-from seerep.fb import TransformStamped
 from seerep.fb import tf_service_grpc_fb as tf_serv
 from seerep.util.fb_helper import (
     createHeader,
@@ -18,7 +17,7 @@ from seerep.util.fb_helper import (
     createTransformStamped,
     createVector3,
 )
-from seerep.util.fb_to_dict import fb_obj_to_dict
+from seerep.util.fb_to_dict import SchemaFileNames, fb_flatc_dict
 
 TIMESTAMP_NANOS = 1245
 TIMESTAMPS = [(t, TIMESTAMP_NANOS) for t in range(1661336507, 1661336528, 10)]
@@ -53,14 +52,14 @@ def test_gRPC_fb_getTf(grpc_channel, project_setup):
 
         builder.Finish(tf_s)
         buf = builder.Output()
-        sent_tfs_base.append(fb_obj_to_dict(TransformStamped.TransformStamped.GetRootAs(buf)))
+        sent_tfs_base.append(fb_flatc_dict(buf, SchemaFileNames.TRANSFORM_STAMPED))
         tf_list.append(bytes(buf))
 
     stub_tf.TransferTransformStamped(iter(tf_list))
 
     # remove uuid msgs from sent tfs, because  they are not in the query either (possible bug?)
     for obj in sent_tfs_base:
-        obj["Header"]["UuidMsgs"] = ""
+        obj["header"]["uuid_msgs"] = ""
 
     # Access transform stamped objects, retrieve their times and check whether
     # the get_Tf service provides the transforms
@@ -68,7 +67,8 @@ def test_gRPC_fb_getTf(grpc_channel, project_setup):
 
     # currently queried_tfs do not include the uuid for the message itself
     queried_tfs_base: List[Dict] = [
-        fb_obj_to_dict(obj) for obj in get_tfs.get_tfs(time_lst, project_uuid, grpc_channel)
+        fb_flatc_dict(obj, SchemaFileNames.TRANSFORM_STAMPED)
+        for obj in get_tfs.get_tfs_raw(time_lst, project_uuid, grpc_channel)
     ]
 
     # check if the count of sent objects is the same as the retrieved
@@ -86,10 +86,10 @@ def test_gRPC_fb_getTf(grpc_channel, project_setup):
         # average the times by this factor
         interp_times.append(
             (
-                int(sent_tfs_base[idx]["Header"]["Stamp"]["Seconds"] * interp_time_factor)
-                + int((1 - interp_time_factor) * sent_tfs_base[idx + 1]["Header"]["Stamp"]["Seconds"]),
-                int(sent_tfs_base[idx]["Header"]["Stamp"]["Nanos"] * interp_time_factor)
-                + int((1 - interp_time_factor) * sent_tfs_base[idx + 1]["Header"]["Stamp"]["Nanos"]),
+                int(sent_tfs_base[idx]["header"]["stamp"]["seconds"] * interp_time_factor)
+                + int((1 - interp_time_factor) * sent_tfs_base[idx + 1]["header"]["stamp"]["seconds"]),
+                int(sent_tfs_base[idx]["header"]["stamp"]["nanos"] * interp_time_factor)
+                + int((1 - interp_time_factor) * sent_tfs_base[idx + 1]["header"]["stamp"]["nanos"]),
             )
         )
 
@@ -99,35 +99,45 @@ def test_gRPC_fb_getTf(grpc_channel, project_setup):
     interp_tfs = []
     for idx in range(len(sent_tfs_base) - 1):
         tf = deepcopy(sent_tfs_base[0])
-        sent_idx_stamp = sent_tfs_base[idx]["Header"]["Stamp"]
-        sent_idxpp_stamp = sent_tfs_base[idx + 1]["Header"]["Stamp"]
+        sent_idx_stamp = sent_tfs_base[idx]["header"]["stamp"]
+        sent_idxpp_stamp = sent_tfs_base[idx + 1]["header"]["stamp"]
         # recalculate time factor, due to numeric errors in float and int calculations
         time_factor = (
-            (interp_times[idx][0] - sent_idx_stamp["Seconds"])
-            + (interp_times[idx][1] - sent_idx_stamp["Nanos"]) * NANOS_FACTOR
+            (interp_times[idx][0] - sent_idx_stamp["seconds"])
+            + (interp_times[idx][1] - sent_idx_stamp["nanos"]) * NANOS_FACTOR
         ) / (
-            sent_idxpp_stamp["Seconds"]
-            - sent_idx_stamp["Seconds"]
-            + (sent_idxpp_stamp["Nanos"] - sent_idx_stamp["Nanos"]) * NANOS_FACTOR
+            sent_idxpp_stamp["seconds"]
+            - sent_idx_stamp["seconds"]
+            + (sent_idxpp_stamp["nanos"] - sent_idx_stamp["nanos"]) * NANOS_FACTOR
         )
-        sent_idx_tf_translation = sent_tfs_base[idx]["Transform"]["Translation"]
-        sent_idxpp_tf_translation = sent_tfs_base[idx + 1]["Transform"]["Translation"]
-        tf["Transform"]["Translation"]["X"] = (
-            sent_idx_tf_translation["X"] * (1 - time_factor) + time_factor * sent_idxpp_tf_translation["X"]
+        sent_idx_tf_translation = sent_tfs_base[idx]["transform"]["translation"]
+        sent_idxpp_tf_translation = sent_tfs_base[idx + 1]["transform"]["translation"]
+
+        # make sure x, y, z are set
+        sent_idx_tf_translation.setdefault("x", 0.0)
+        sent_idx_tf_translation.setdefault("y", 0.0)
+        sent_idx_tf_translation.setdefault("z", 0.0)
+        sent_idxpp_tf_translation.setdefault("x", 0.0)
+        sent_idxpp_tf_translation.setdefault("y", 0.0)
+        sent_idxpp_tf_translation.setdefault("z", 0.0)
+
+        tf["transform"]["translation"]["x"] = (
+            sent_idx_tf_translation["x"] * (1 - time_factor) + time_factor * sent_idxpp_tf_translation["x"]
         )
-        tf["Transform"]["Translation"]["Y"] = (
-            sent_idx_tf_translation["Y"] * (1 - time_factor) + time_factor * sent_idxpp_tf_translation["Y"]
+        tf["transform"]["translation"]["y"] = (
+            sent_idx_tf_translation["y"] * (1 - time_factor) + time_factor * sent_idxpp_tf_translation["y"]
         )
-        tf["Transform"]["Translation"]["Z"] = (
-            sent_idx_tf_translation["Z"] * (1 - time_factor) + time_factor * sent_idxpp_tf_translation["Z"]
+        tf["transform"]["translation"]["z"] = (
+            sent_idx_tf_translation["z"] * (1 - time_factor) + time_factor * sent_idxpp_tf_translation["z"]
         )
-        tf["Header"]["Stamp"]["Seconds"] = interp_times[idx][0]
-        tf["Header"]["Stamp"]["Nanos"] = interp_times[idx][1]
+        tf["header"]["stamp"]["seconds"] = interp_times[idx][0]
+        tf["header"]["stamp"]["nanos"] = interp_times[idx][1]
         interp_tfs.append(tf)
 
     # get tf by the times
     queried_tfs_interp: List[Dict] = [
-        fb_obj_to_dict(obj) for obj in get_tfs.get_tfs(interp_times, project_uuid, grpc_channel)
+        fb_flatc_dict(obj, SchemaFileNames.TRANSFORM_STAMPED)
+        for obj in get_tfs.get_tfs_raw(interp_times, project_uuid, grpc_channel)
     ]
 
     assert interp_tfs == queried_tfs_interp

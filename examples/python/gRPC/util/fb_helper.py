@@ -139,22 +139,23 @@ def createProjectRaw(
     buf = builder.Output()
 
     responseBuf = stubMeta.CreateProject(bytes(buf))
-    response = ProjectInfo.ProjectInfo.GetRootAs(responseBuf)
-    return response
+    return responseBuf
 
 
 def createProject(channel, builder, name, frameId, coordSys, altitude, latitude, longitude) -> str:
     """Create a project from the parameters"""
     return (
-        createProjectRaw(
-            channel,
-            builder,
-            name,
-            frameId,
-            coordSys,
-            altitude,
-            latitude,
-            longitude,
+        ProjectInfo.ProjectInfo.GetRootAs(
+            createProjectRaw(
+                channel,
+                builder,
+                name,
+                frameId,
+                coordSys,
+                altitude,
+                latitude,
+                longitude,
+            )
         )
         .Uuid()
         .decode("utf-8")
