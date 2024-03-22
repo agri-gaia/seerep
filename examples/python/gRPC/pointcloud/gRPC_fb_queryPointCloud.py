@@ -17,7 +17,6 @@ from seerep.util.fb_helper import (
     getProject,
     rosToNumpyDtype,
 )
-from seerep.util.fb_to_dict import fb_obj_to_dict
 
 PROJECTNAME = "testproject"
 NUM_BB_LABELS = 1
@@ -44,7 +43,7 @@ def unpack_header(point_cloud: PointCloud2.PointCloud2) -> dict:
     }
 
 
-def query_pcs(
+def query_pcs_raw(
     target_proj_uuid: str = None, grpc_channel: Channel = get_gRPC_channel()
 ) -> List[PointCloud2.PointCloud2]:
     fb_builder = flatbuffers.Builder(1024)
@@ -98,11 +97,13 @@ def query_pcs(
 
     fb_builder.Finish(query)
 
-    resp_list = [
-        PointCloud2.PointCloud2.GetRootAs(resp) for resp in pcl_stub.GetPointCloud2(bytes(fb_builder.Output()))
-    ]
+    return pcl_stub.GetPointCloud2(bytes(fb_builder.Output()))
 
-    return resp_list
+
+def query_pcs(
+    target_proj_uuid: str = None, grpc_channel: Channel = get_gRPC_channel()
+) -> List[PointCloud2.PointCloud2]:
+    return [PointCloud2.PointCloud2.GetRootAs(pcl_buf) for pcl_buf in query_pcs_raw(target_proj_uuid, grpc_channel)]
 
 
 if __name__ == "__main__":
@@ -110,7 +111,7 @@ if __name__ == "__main__":
     if not len(query_pcl):
         print("no response received")
     for resp in query_pcl:
-        print(fb_obj_to_dict(resp))
+        # print(fb_to_dict.fb_flatc_dict(resp, SchemaFileNames.POINT_CLOUD_2))
         print(f"---Header--- \n {unpack_header(resp)}")
 
         point_fields = unpack_point_fields(resp)

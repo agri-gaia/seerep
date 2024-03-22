@@ -19,9 +19,9 @@ from seerep.util.fb_helper import (
 )
 
 
-def query_images(
+def query_images_raw(
     target_proj_uuid: Optional[str] = None, grpc_channel: Channel = get_gRPC_channel()
-) -> List[Image.Image]:
+) -> List[bytearray]:
     builder = flatbuffers.Builder(1024)
     if target_proj_uuid is None:
         # 1. Get all projects from the server
@@ -81,15 +81,16 @@ def query_images(
     builder.Finish(query)
     buf = builder.Output()
 
-    # save the queried images in a list
-    queried_images = []
-
     # 5. Query the server for images matching the query and iterate over them
-    for responseBuf in stub.GetImage(bytes(buf)):
-        response = Image.Image.GetRootAs(responseBuf)
-        queried_images.append(response)
+    queried_images = stub.GetImage(bytes(buf))
 
     return queried_images
+
+
+def query_images(
+    target_proj_uuid: Optional[str] = None, grpc_channel: Channel = get_gRPC_channel()
+) -> List[Image.Image]:
+    return [Image.Image.GetRootAs(img) for img in query_images_raw(target_proj_uuid, grpc_channel)]
 
 
 if __name__ == "__main__":

@@ -3,12 +3,26 @@
 #   gRPC_pb_sendLabeledImage.py
 from typing import List
 
+from boltons.iterutils import remap
 from google.protobuf import json_format
 from gRPC.images import gRPC_fb_queryImage as query_img
 from gRPC.images import gRPC_pb_sendLabeledImage as send_img
 from seerep.fb import Image
-from seerep.util import fb_to_dict
-from seerep.util.common import dict_snake_case_keys
+from seerep.util.common import remap_keys, remap_to_snake_case, trunc_floats
+from seerep.util.fb_to_dict import SchemaFileNames, fb_flatc_dict
+
+
+def _image_dict_pipeline(p, k, v):
+    mapping_keys = {
+        "bounding_box2_d_labeled": "bounding_box2d_labeled",
+        "uuid_camera_intrinsics": "uuid_cameraintrinsics",
+        "labels_with_instance": "label_with_instance",
+    }
+
+    k, v = trunc_floats(p, k, v, ignore_after=10)
+    k, v = remap_to_snake_case(p, k, v)
+    k, v = remap_keys(p, k, v, mapping_keys)
+    return k, v
 
 
 # test sending and querying the images
@@ -28,21 +42,16 @@ def test_gRPC_fb_queryImages(grpc_channel, project_setup):
 
     print(f"Sending images to project: {proj_name}; {proj_uuid}")
 
-    # print(f"img:\n {pb_to_dict.pb_to_dict(sent_images[0])['header']}")
-    fb_to_pb_keys = {
-        "uuid_cameraintrinsics": "uuid_camera_intrinsics",
-        "bounding_box2d_labeled": "bounding_box2_d_labeled",
-        "labels_with_instance": "label_with_instance",
-    }
+    queried_image_list: List[Image.Image] = query_img.query_images_raw(proj_uuid, grpc_channel)
 
-    queried_image_list: List[Image.Image] = query_img.query_images(proj_uuid, grpc_channel)
-
-    queried_image_dicts = [fb_to_dict.fb_obj_to_dict(img, True, fb_to_pb_keys) for img in queried_image_list]
-    sent_image_dicts = dict_snake_case_keys([json_format.MessageToDict(img, float_precision=17) for img in sent_images])
+    queried_image_dicts = [
+        remap(fb_flatc_dict(img, SchemaFileNames.IMAGE), visit=_image_dict_pipeline) for img in queried_image_list
+    ]
+    sent_image_dicts = [remap(json_format.MessageToDict(img), visit=_image_dict_pipeline) for img in sent_images]
 
     # replace data field with because in the query withoutData is set to true
     for img in sent_image_dicts:
-        img["data"] = []
+        img.pop("data")
 
     # filter sent_images to only contain the 6 images which are queried with uuid_msgs
     filtered_sent_images = []

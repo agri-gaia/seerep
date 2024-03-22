@@ -16,15 +16,24 @@ from seerep.util.fb_helper import (
     createRegionOfInterest,
     createTimeStamp,
 )
-from seerep.util.fb_to_dict import fb_flatc_dict
 
 
 # Default server is localhost !
-def add_camintrins(
+def add_camintrins_raw(
     ciuuid: Optional[str] = "fa2f27e3-7484-48b0-9f21-ec362075baca",
     target_proj_uuid: Optional[str] = None,
     grpc_channel: Channel = get_gRPC_channel(),
-) -> Optional[CameraIntrinsics.CameraIntrinsics]:
+) -> Optional[bytearray]:
+    """
+    Creates a example cameraintrinsics object and sends it to a SEEREP server instance.
+
+    Args:
+        ciuuid: the uuid of the CameraIntrinsics object to be send
+        target_proj_uuid: the project uuid to which project to send the CameraIntrinsics object to
+        grpc_channel: the grpc channel to a SEEREP server
+
+    Returns: bytearray which contains the serialized type seerep.fb.CameraInstrinsics.CameraIntrinsics
+    """
     if ciuuid is None:
         ciuuid = str(uuid.uuid4())
 
@@ -71,7 +80,15 @@ def add_camintrins(
     buf = builder.Output()
 
     stub.TransferCameraIntrinsics(bytes(buf))
-    return CameraIntrinsics.CameraIntrinsics.GetRootAs(buf)
+    return buf
+
+
+def add_camintrins(
+    ciuuid: Optional[str] = "fa2f27e3-7484-48b0-9f21-ec362075baca",
+    target_proj_uuid: Optional[str] = None,
+    grpc_channel: Channel = get_gRPC_channel(),
+) -> Optional[CameraIntrinsics.CameraIntrinsics]:
+    return CameraIntrinsics.CameraIntrinsics.GetRootAs(add_camintrins_raw(ciuuid, target_proj_uuid, grpc_channel))
 
 
 if __name__ == "__main__":

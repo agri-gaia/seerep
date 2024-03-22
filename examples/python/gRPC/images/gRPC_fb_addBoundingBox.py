@@ -26,9 +26,9 @@ from seerep.util.fb_helper import (
 )
 
 
-def add_bb(
+def add_bb_raw(
     target_proj_uuid: Optional[str] = None, grpc_channel: Channel = get_gRPC_channel()
-) -> List[Tuple[str, BoundingBoxes2DLabeledStamped.BoundingBoxes2DLabeledStamped]]:
+) -> List[Tuple[str, bytearray]]:
     builder = flatbuffers.Builder(1024)
 
     target_proj_uuid = getProject(builder, grpc_channel, "testproject")
@@ -100,7 +100,7 @@ def add_bb(
         bb_list.append(
             (
                 img_uuid,
-                BoundingBoxes2DLabeledStamped.BoundingBoxes2DLabeledStamped.GetRootAs(buf),
+                buf,
             )
         )
 
@@ -110,8 +110,17 @@ def add_bb(
     return bb_list
 
 
+def add_bb(
+    target_proj_uuid: Optional[str] = None, grpc_channel: Channel = get_gRPC_channel()
+) -> List[Tuple[str, BoundingBoxes2DLabeledStamped.BoundingBoxes2DLabeledStamped]]:
+    return [
+        (img_uuid, BoundingBoxes2DLabeledStamped.BoundingBoxes2DLabeledStamped.GetRootAs(bbbuf))
+        for img_uuid, bbbuf in add_bb_raw(target_proj_uuid, grpc_channel)
+    ]
+
+
 if __name__ == "__main__":
-    bb_list = add_bb()
+    bb_list = add_bb(add_bb())
     for img_uuid, bbs_img in bb_list:
         print(
             f"Added bounding boxes to image with uuid {img_uuid}, with the following center points and spatial extents:"

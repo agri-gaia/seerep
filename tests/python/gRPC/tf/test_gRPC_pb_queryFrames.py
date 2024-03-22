@@ -8,7 +8,6 @@ import numpy as np
 import yaml
 from gRPC.tf import gRPC_pb_queryFrames as query_frames
 from quaternion import quaternion
-from seerep.fb import TransformStamped
 from seerep.fb import tf_service_grpc_fb as tf_serv
 from seerep.util.fb_helper import (
     createHeader,
@@ -18,7 +17,7 @@ from seerep.util.fb_helper import (
     createTransformStamped,
     createVector3,
 )
-from seerep.util.fb_to_dict import fb_obj_to_dict
+from seerep.util.fb_to_dict import SchemaFileNames, fb_flatc_dict
 
 TIMESTAMP_NANOS = 1245
 TIMESTAMPS = [(t, TIMESTAMP_NANOS) for t in range(1661336507, 1661336538, 10)]
@@ -55,7 +54,7 @@ def test_gRPC_pb_queryFrames(project_setup, grpc_channel):
 
         builder.Finish(tf_s)
         buf = builder.Output()
-        sent_tfs_base.append(fb_obj_to_dict(TransformStamped.TransformStamped.GetRootAs(buf)))
+        sent_tfs_base.append(fb_flatc_dict(buf, SchemaFileNames.TRANSFORM_STAMPED))
         tf_list.append(bytes(buf))
 
     stub_tf.TransferTransformStamped(iter(tf_list))
@@ -66,11 +65,11 @@ def test_gRPC_pb_queryFrames(project_setup, grpc_channel):
         frame_dict = yaml.safe_load(frame)
         assert child_frame_id in frame_dict
         assert frame_dict[child_frame_id]["parent"] == frame_id
-        max_time_tf = max(sent_tfs_base, key=lambda obj: obj["Header"]["Stamp"]["Seconds"])["Header"]["Stamp"][
-            "Seconds"
+        max_time_tf = max(sent_tfs_base, key=lambda obj: obj["header"]["stamp"]["seconds"])["header"]["stamp"][
+            "seconds"
         ]
-        min_time_tf = min(sent_tfs_base, key=lambda obj: obj["Header"]["Stamp"]["Seconds"])["Header"]["Stamp"][
-            "Seconds"
+        min_time_tf = min(sent_tfs_base, key=lambda obj: obj["header"]["stamp"]["seconds"])["header"]["stamp"][
+            "seconds"
         ]
         assert frame_dict[child_frame_id]["most_recent_transform"] == float(max_time_tf)
         assert frame_dict[child_frame_id]["oldest_transform"] == float(min_time_tf)
