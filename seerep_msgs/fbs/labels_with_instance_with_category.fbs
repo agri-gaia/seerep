@@ -1,4 +1,3 @@
-
 include "label_with_instance.fbs";
 
 namespace seerep.fb;
@@ -7,3 +6,5 @@ table LabelsWithInstanceWithCategory {
   category:string;
   labelsWithInstance:[LabelWithInstance];
 }
+
+root_type LabelsWithInstanceWithCategory;

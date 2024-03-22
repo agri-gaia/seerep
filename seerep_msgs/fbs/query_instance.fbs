@@ -1,4 +1,3 @@
-
 include "datatype.fbs";
 include "query.fbs";
 
@@ -8,3 +7,5 @@ table QueryInstance {
   datatype:Datatype;
   query:Query;
 }
+
+root_type QueryInstance;

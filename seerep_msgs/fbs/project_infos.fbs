@@ -6,3 +6,5 @@ table ProjectInfos
 {
   projects:[seerep.fb.ProjectInfo];
 }
+
+root_type ProjectInfos;

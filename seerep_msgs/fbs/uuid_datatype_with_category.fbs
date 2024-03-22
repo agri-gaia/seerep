@@ -1,4 +1,3 @@
-
 include "uuid_datatype_pair.fbs";
 
 namespace seerep.fb;
@@ -7,3 +6,5 @@ table UuidDatatypeWithCategory {
     category:string;
     UuidAndDatatype:UuidDatatypePair;
 }
+
+root_type UuidDatatypeWithCategory;

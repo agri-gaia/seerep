@@ -9,3 +9,5 @@ table Header {
   uuid_project:string;
   uuid_msgs:string;
 }
+
+root_type Header;

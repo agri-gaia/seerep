@@ -1,4 +1,3 @@
-
 include "vector3.fbs";
 include "quaternion.fbs";
 
@@ -8,3 +7,5 @@ table Transform {
   translation:seerep.fb.Vector3;
   rotation:seerep.fb.Quaternion;
 }
+
+root_type Transform;
