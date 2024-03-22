@@ -7,3 +7,5 @@ table ProjectCreation {
   map_frame_id:string;
   geodetic_position:seerep.fb.GeodeticCoordinates;
 }
+
+root_type ProjectCreation;

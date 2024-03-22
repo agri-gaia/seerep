@@ -1,4 +1,3 @@
-
 include "point.fbs";
 
 namespace seerep.fb;
@@ -6,3 +5,5 @@ namespace seerep.fb;
 table Polygon {
   points:[seerep.fb.Point];
 }
+
+root_type Polygon;

@@ -1,4 +1,3 @@
-
 include "point.fbs";
 include "quaternion.fbs";
 
@@ -8,3 +7,5 @@ table Pose {
   position:seerep.fb.Point;
   orientation:seerep.fb.Quaternion;
 }
+
+root_type Pose;

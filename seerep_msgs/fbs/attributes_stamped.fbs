@@ -7,3 +7,5 @@ table AttributesStamped {
   header:Header;
   attribute:[UnionMapEntry];
 }
+
+root_type AttributesStamped;

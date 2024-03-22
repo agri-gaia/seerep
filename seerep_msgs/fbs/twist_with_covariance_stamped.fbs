@@ -1,4 +1,3 @@
-
 include "header.fbs";
 include "twist_with_covariance.fbs";
 
@@ -8,3 +7,5 @@ table TwistWithCovarianceStamped {
   header:seerep.fb.Header;
   twist:seerep.fb.TwistWithCovariance;
 }
+
+root_type TwistWithCovarianceStamped;

@@ -1,4 +1,3 @@
-
 namespace seerep.fb;
 
 table Quaternion {
@@ -7,3 +6,5 @@ table Quaternion {
   z:double;
   w:double;
 }
+
+root_type Quaternion;

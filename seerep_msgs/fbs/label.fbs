@@ -1,7 +1,8 @@
-
 namespace seerep.fb;
 
 table Label {
   label:string;
   confidence:float;
 }
+
+root_type Label;

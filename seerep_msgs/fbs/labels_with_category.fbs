@@ -1,4 +1,3 @@
-
 include "label.fbs";
 
 namespace seerep.fb;
@@ -7,3 +6,5 @@ table LabelsWithCategory {
   category:string;
   labels:[Label];
 }
+
+root_type LabelsWithCategory;

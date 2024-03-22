@@ -1,4 +1,3 @@
-
 include "datatype.fbs";
 
 namespace seerep.fb;
@@ -7,3 +6,5 @@ table UuidDatatypePair {
     projectuuid:string;
     datatype:Datatype;
 }
+
+root_type UuidDatatypePair;

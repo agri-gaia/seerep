@@ -10,3 +10,5 @@ table ProjectInfo
   geodetic_position:seerep.fb.GeodeticCoordinates;
   version:string;
 }
+
+root_type ProjectInfo;

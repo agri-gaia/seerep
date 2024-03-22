@@ -1,4 +1,3 @@
-
 include "point2d.fbs";
 
 namespace seerep.fb;
@@ -8,3 +7,5 @@ table Polygon2D {
     z:double;
     height:double;
 }
+
+root_type Polygon2D;

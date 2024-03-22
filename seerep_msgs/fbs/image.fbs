@@ -1,4 +1,3 @@
-
 include "header.fbs";
 include "boundingbox2d_labeled_with_category.fbs";
 include "labels_with_instance_with_category.fbs";
@@ -17,3 +16,5 @@ table Image {
   labels_bb:[BoundingBox2DLabeledWithCategory];
   uuid_cameraintrinsics:string;
 }
+
+root_type Image;

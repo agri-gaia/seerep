@@ -1,4 +1,3 @@
-
 namespace seerep.fb;
 
 table RegionOfInterest
@@ -9,3 +8,5 @@ table RegionOfInterest
     width:uint32;
     do_rectify:bool;
 }
+
+root_type RegionOfInterest;

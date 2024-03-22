@@ -1,4 +1,3 @@
-
 include "timestamp.fbs";
 
 namespace seerep.fb;
@@ -14,3 +13,5 @@ table ServerResponse {
   message:string;
   transmission_state:seerep.fb.TRANSMISSION_STATE;
 }
+
+root_type ServerResponse;
