@@ -139,9 +139,7 @@ def createTF(numOf, projectUuid, theTime):
         yield bytes(builderTf.Output())
 
 
-def send_pointcloud(
-    target_proj_uuid: str = None, grpc_channel: Channel = get_gRPC_channel()
-) -> List[PointCloud2.PointCloud2]:
+def send_pointcloud_raw(target_proj_uuid: str = None, grpc_channel: Channel = get_gRPC_channel()) -> List[bytearray]:
     builder = flatbuffers.Builder(1024)
     theTime = 1686038855
 
@@ -161,9 +159,13 @@ def send_pointcloud(
     # but this would consume the generator and then the pc list cannot be returned, therefore use a iterator
     stub.TransferPointCloud2(iter(pc_list))
 
-    pc_list = [PointCloud2.PointCloud2.GetRootAs(p) for p in pc_list]
-
     return pc_list
+
+
+def send_pointcloud(
+    target_proj_uuid: str = None, grpc_channel: Channel = get_gRPC_channel()
+) -> List[PointCloud2.PointCloud2]:
+    return [PointCloud2.PointCloud2.GetRootAs(p) for p in send_pointcloud_raw(target_proj_uuid, grpc_channel)]
 
 
 if __name__ == "__main__":

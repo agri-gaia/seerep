@@ -10,11 +10,11 @@ from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import createCameraIntrinsicsQuery, getProject
 
 
-def get_camintrins(
+def get_camintrins_raw(
     ciuuid: str = "fa2f27e3-7484-48b0-9f21-ec362075baca",
     target_proj_uuid: Optional[str] = None,
     grpc_channel: Channel = get_gRPC_channel(),
-) -> Optional[CameraIntrinsics.CameraIntrinsics]:
+) -> Optional[bytearray]:
     builder = flatbuffers.Builder(1000)
 
     # 1. Get all projects from the server when no target specified
@@ -33,9 +33,15 @@ def get_camintrins(
 
     ret = stub.GetCameraIntrinsics(bytes(buf))
 
-    retrieved_ci = CameraIntrinsics.CameraIntrinsics.GetRootAs(ret)
+    return ret
 
-    return retrieved_ci
+
+def get_camintrins(
+    ciuuid: str = "fa2f27e3-7484-48b0-9f21-ec362075baca",
+    target_proj_uuid: Optional[str] = None,
+    grpc_channel: Channel = get_gRPC_channel(),
+) -> Optional[CameraIntrinsics.CameraIntrinsics]:
+    return CameraIntrinsics.CameraIntrinsics(get_camintrins_raw(ciuuid, target_proj_uuid, grpc_channel))
 
 
 if __name__ == "__main__":

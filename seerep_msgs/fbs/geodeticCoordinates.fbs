@@ -9,3 +9,5 @@ table GeodeticCoordinates {
     latitude:double; // latitude measured in radians
     altitude:double; // ellipsoidal height measured as a distance
 }
+
+root_type GeodeticCoordinates;

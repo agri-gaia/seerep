@@ -18,11 +18,11 @@ from seerep.util.fb_helper import (
 
 
 # where tf_times_list is a list which contains elements of the form Tuple[SECONDS, NANOSECONDS]
-def get_tfs(
+def get_tfs_raw(
     tf_times_list: List[Tuple[int, int]],
     target_proj_uuid: str = None,
     grpc_channel: Channel = get_gRPC_channel(),
-) -> List[TransformStamped.TransformStamped]:
+) -> List[bytearray]:
     builder = flatbuffers.Builder(1024)
 
     stubMeta = metaOperations.MetaOperationsStub(grpc_channel)
@@ -42,7 +42,7 @@ def get_tfs(
 
     stubTf = tfService.TfServiceStub(grpc_channel)
 
-    tf_per_time: List[TransformStamped.TransformStamped] = []
+    tf_per_time: List[bytearray] = []
 
     for time in tf_times_list:
         time_sec = time[0]
@@ -58,17 +58,26 @@ def get_tfs(
         tf_query = createTransformStampedQuery(builder, header, child_frame_id)
         builder.Finish(tf_query)
 
-        tf_buf = stubTf.GetTransformStamped(bytes(builder.Output()))
+        tf_buf: bytearray = stubTf.GetTransformStamped(bytes(builder.Output()))
 
         if not tf_buf:
             print("No tf received")
             continue
 
-        tf = TransformStamped.TransformStamped.GetRootAs(tf_buf)
-
-        tf_per_time.append(tf)
+        tf_per_time.append(tf_buf)
 
     return tf_per_time
+
+
+def get_tfs(
+    tf_times_list: List[Tuple[int, int]],
+    target_proj_uuid: str = None,
+    grpc_channel: Channel = get_gRPC_channel(),
+) -> List[TransformStamped.TransformStamped]:
+    return [
+        TransformStamped.TransformStamped.GetRootAs(ts)
+        for ts in get_tfs_raw(tf_times_list, target_proj_uuid, grpc_channel)
+    ]
 
 
 if __name__ == "__main__":

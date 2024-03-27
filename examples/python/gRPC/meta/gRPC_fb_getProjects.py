@@ -10,7 +10,10 @@ from seerep.util.common import get_gRPC_channel
 
 def get_projects(
     grpc_channel: Channel = get_gRPC_channel(),
-) -> List[ProjectInfo.ProjectInfo]:
+) -> bytearray:
+    """
+    Returns: bytearray of type ProjectInfos
+    """
     stub = metaOperations.MetaOperationsStub(grpc_channel)
 
     builder = flatbuffers.Builder(1024)
@@ -20,19 +23,17 @@ def get_projects(
     buf = builder.Output()
 
     responseBuf = stub.GetProjects(bytes(buf))
-    response = ProjectInfos.ProjectInfos.GetRootAs(responseBuf)
+    return responseBuf
+
+
+if __name__ == "__main__":
+    response = ProjectInfos.ProjectInfos.GetRootAs(get_projects())
 
     projects_list: List[ProjectInfo.ProjectInfo] = []
 
     for i in range(response.ProjectsLength()):
         projects_list.append(response.Projects(i))
 
-    return projects_list
-
-
-if __name__ == "__main__":
-    projects = get_projects()
-
     print("The server has the following projects (name/uuid):")
-    for project in projects:
+    for project in projects_list:
         print("\t" + project.Name().decode("utf-8") + " " + project.Uuid().decode("utf-8"))
