@@ -111,9 +111,7 @@ def getProjectInfo(builder, channel, name):
     return None
 
 
-def createProjectRaw(
-    channel, builder, name, frameId, coordSys, altitude, latitude, longitude
-) -> ProjectInfo.ProjectInfo:
+def createProjectRaw(channel, builder, name, frameId, coordSys, altitude, latitude, longitude) -> bytearray:
     stubMeta = metaOperations.MetaOperationsStub(channel)
 
     frameIdBuf = builder.CreateString(frameId)

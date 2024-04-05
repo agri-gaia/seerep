@@ -120,7 +120,7 @@ def add_bb(
 
 
 if __name__ == "__main__":
-    bb_list = add_bb(add_bb())
+    bb_list = add_bb()
     for img_uuid, bbs_img in bb_list:
         print(
             f"Added bounding boxes to image with uuid {img_uuid}, with the following center points and spatial extents:"

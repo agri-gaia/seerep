@@ -39,20 +39,12 @@ def get_gRPC_channel(target="local"):
 
 
 # based on https://github.com/jpvanhal/inflection
-def to_snake_case(string: str):
-    """
-    Tries to convert a common string to snake case.
-
-    """
-    string = re.sub(r"((?<=[a-z0-9])[A-Z]|(?!^)(?<!_)[A-Z](?=[a-z]))", r"_\1", string)
-    string = string.replace("-", "_")
-    return string.lower()
-
-
 # function to pass to boltons.iterutils.remap
 def remap_to_snake_case(p, k, v):
     if isinstance(k, str):
-        return to_snake_case(k), v
+        k = re.sub(r"((?<=[a-z0-9])[A-Z]|(?!^)(?<!_)[A-Z](?=[a-z]))", r"_\1", k)
+        k = k.replace("-", "_")
+        return k.lower(), v
     return k, v
 
 

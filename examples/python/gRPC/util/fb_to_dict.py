@@ -1,7 +1,7 @@
 import json
-import os
 import subprocess as sp
-import tempfile as tf
+import tempfile
+from enum import Enum
 from pathlib import Path
 from typing import Dict, Final
 
@@ -9,7 +9,7 @@ ROS_SCHEMA_PKG: Final[str] = "seerep_msgs"
 ROS_SCHEMA_SUBDIR: Final[str] = "fbs"
 
 
-class SchemaFileNames:
+class SchemaFileNames(Enum):
     ATTRIBUTES_STAMPED: Final[str] = "attributes_stamped.fbs"
     BOUNDINGBOX2D: Final[str] = "boundingbox2d.fbs"
     BOUNDINGBOX2D_LABELED: Final[str] = "boundingbox2d_labeled.fbs"
@@ -105,7 +105,7 @@ def catkin_find_schema_dir(ros_pkg_name: str, sub_dir: str) -> Path:
     return fbs_path
 
 
-def fb_flatc_dict(fb_obj: bytearray, schema_file_name: str) -> Dict:
+def fb_flatc_dict(fb_obj: bytearray, schema_file_name: SchemaFileNames) -> Dict:
     """
     Converts a binary flatbuffers object to a python dictionary using it's IDL file.
 
@@ -122,36 +122,32 @@ def fb_flatc_dict(fb_obj: bytearray, schema_file_name: str) -> Dict:
         FileNotFoundError: If the schema file on the system couldn't be found.
         ChildProcessError: If something went wrong using the flatc subcommand.
     """
-    schema_path = catkin_find_schema_dir(ROS_SCHEMA_PKG, ROS_SCHEMA_SUBDIR) / schema_file_name
+    schema_path = catkin_find_schema_dir(ROS_SCHEMA_PKG, ROS_SCHEMA_SUBDIR) / schema_file_name.value
 
     if not schema_path.is_file():
         raise FileNotFoundError(f"The schema file at {schema_path} does not exist!")
 
     try:
-        with tf.NamedTemporaryFile(delete=False) as tmp_f:
-            tmp_f.write(fb_obj)
-            temp_fname = tmp_f.name
+        with tempfile.NamedTemporaryFile(delete=False) as f:
+            f.write(fb_obj)
             flatc_proc = sp.Popen(
-                ["flatc", "--json", "--raw-binary", "--strict-json", schema_path, "--", temp_fname], cwd="/tmp"
+                ["flatc", "--json", "--raw-binary", "--strict-json", schema_path, "--", f.name], cwd="/tmp"
             )
+            tmp_file = Path(f.name)
+            tmp_json = Path(f.name + ".json")
 
         sp_ret_code = flatc_proc.wait()
 
-        temp_json = temp_fname + ".json"
-
-        if sp_ret_code != 0 or not Path(temp_json).is_file():
+        if sp_ret_code != 0 or not tmp_json.is_file():
             raise ChildProcessError(
                 f"A problem occured during flatbuffers object to json conversion using flatc!\
-                The file {temp_json} was not properly created. Has the fbs schema file the `root_type` directive set?"
+                The file {tmp_json} was not properly created. Has the fbs schema file the `root_type` directive set?"
             )
 
-        with open(temp_json, "r") as tmp_f:
+        with open(tmp_json, "r") as tmp_f:
             json_dict = json.loads(tmp_f.read())
     finally:
-        try:
-            os.remove(temp_fname)
-            os.remove(temp_json)
-        except (FileNotFoundError, UnboundLocalError):
-            pass
+        tmp_file.unlink(missing_ok=True)
+        tmp_json.unlink(missing_ok=True)
 
     return json_dict
