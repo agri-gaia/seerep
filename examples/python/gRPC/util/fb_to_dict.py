@@ -1,236 +1,153 @@
-# this module needs a revamp and tests for all possible flatbuffer type scenarios
-# the current implementation is dependent on hardcoded assumptions
-from typing import Dict, Iterable, List, Tuple, Type
+import json
+import subprocess as sp
+import tempfile
+from enum import Enum
+from pathlib import Path
+from typing import Dict, Final
 
-from seerep.util.common import to_snake_case
-
-FB_GROUP_LIST_ENDS_WITH = ["IsNone", "Length"]
-FB_FILTEROUT_STARTS_WITH = ["__", "GetRootAs"]
-FB_FILTEROUT_ENDS_WITH = ["AsNumpy", "Type"]
-FB_FILTEROUT_IS = [
-    "_tab",
-    "Init",
-    "capitalize",
-    "center",
-    "count",
-    "decode",
-    "endswith",
-    "expandtabs",
-    "find",
-    "fromhex",
-    "hex",
-    "index",
-    "isalnum",
-    "isalpha",
-    "isascii",
-    "isdigit",
-    "islower",
-    "isspace",
-    "istitle",
-    "isupper",
-    "join",
-    "ljust",
-    "lower",
-    "lstrip",
-    "maketrans",
-    "partition",
-    "replace",
-    "rfind",
-    "rindex",
-    "rjust",
-    "rpartition",
-    "rsplit",
-    "rstrip",
-    "split",
-    "splitlines",
-    "startswith",
-    "strip",
-    "swapcase",
-    "title",
-    "translate",
-    "upper",
-    "zfill",
-]
+ROS_SCHEMA_PKG: Final[str] = "seerep_msgs"
+ROS_SCHEMA_SUBDIR: Final[str] = "fbs"
 
 
-def get_func_lists_wparams(func_list, *endings) -> Dict[str, Tuple[bool, int]]:
+class SchemaFileNames(Enum):
+    ATTRIBUTES_STAMPED: Final[str] = "attributes_stamped.fbs"
+    BOUNDINGBOX2D: Final[str] = "boundingbox2d.fbs"
+    BOUNDINGBOX2D_LABELED: Final[str] = "boundingbox2d_labeled.fbs"
+    BOUNDINGBOX2D_LABELED_WITH_CATEGORY: Final[str] = "boundingbox2d_labeled_with_category.fbs"
+    BOUNDINGBOX2D_STAMPED: Final[str] = "boundingbox2d_stamped.fbs"
+    BOUNDINGBOXES2D_LABELED_STAMPED: Final[str] = "boundingboxes2d_labeled_stamped.fbs"
+    BOUNDINGBOXES_LABELED_STAMPED: Final[str] = "boundingboxes_labeled_stamped.fbs"
+    BOUNDINGBOX: Final[str] = "boundingbox.fbs"
+    BOUNDINGBOX_LABELED: Final[str] = "boundingbox_labeled.fbs"
+    BOUNDINGBOX_LABELED_WITH_CATEGORY: Final[str] = "boundingbox_labeled_with_category.fbs"
+    BOUNDINGBOX_STAMPED: Final[str] = "boundingbox_stamped.fbs"
+    CAMERA_INTRINSICS: Final[str] = "camera_intrinsics.fbs"
+    CAMERA_INTRINSICS_QUERY: Final[str] = "camera_intrinsics_query.fbs"
+    CATEGORIES: Final[str] = "categories.fbs"
+    DATATYPE: Final[str] = "datatype.fbs"
+    EMPTY: Final[str] = "empty.fbs"
+    FRAME_INFOS: Final[str] = "frame_infos.fbs"
+    FRAME_QUERY: Final[str] = "frame_query.fbs"
+    GEODETICCOORDINATES: Final[str] = "geodeticCoordinates.fbs"
+    HEADER: Final[str] = "header.fbs"
+    IMAGE: Final[str] = "image.fbs"
+    LABEL: Final[str] = "label.fbs"
+    LABELS: Final[str] = "labels.fbs"
+    LABELS_WITH_CATEGORY: Final[str] = "labels_with_category.fbs"
+    LABELS_WITH_INSTANCE_WITH_CATEGORY: Final[str] = "labels_with_instance_with_category.fbs"
+    LABEL_WITH_INSTANCE: Final[str] = "label_with_instance.fbs"
+    POINT2D: Final[str] = "point2d.fbs"
+    POINT_CLOUD_2: Final[str] = "point_cloud_2.fbs"
+    POINT: Final[str] = "point.fbs"
+    POINT_FIELD: Final[str] = "point_field.fbs"
+    POINT_STAMPED: Final[str] = "point_stamped.fbs"
+    POLYGON2D: Final[str] = "polygon2d.fbs"
+    POLYGON: Final[str] = "polygon.fbs"
+    POLYGON_STAMPED: Final[str] = "polygon_stamped.fbs"
+    POSE: Final[str] = "pose.fbs"
+    POSE_STAMPED: Final[str] = "pose_stamped.fbs"
+    PROJECTCREATION: Final[str] = "projectCreation.fbs"
+    PROJECT_INFO: Final[str] = "project_info.fbs"
+    PROJECT_INFOS: Final[str] = "project_infos.fbs"
+    QUATERNION: Final[str] = "quaternion.fbs"
+    QUATERNION_STAMPED: Final[str] = "quaternion_stamped.fbs"
+    QUERY: Final[str] = "query.fbs"
+    QUERY_INSTANCE: Final[str] = "query_instance.fbs"
+    REGION_OF_INTEREST: Final[str] = "region_of_interest.fbs"
+    SERVER_RESPONSE: Final[str] = "server_response.fbs"
+    SPARQL_QUERY: Final[str] = "sparql_query.fbs"
+    TIME_INTERVAL: Final[str] = "time_interval.fbs"
+    TIMESTAMP: Final[str] = "timestamp.fbs"
+    TRANSFORM: Final[str] = "transform.fbs"
+    TRANSFORM_STAMPED: Final[str] = "transform_stamped.fbs"
+    TRANSFORM_STAMPED_QUERY: Final[str] = "transform_stamped_query.fbs"
+    TWIST: Final[str] = "twist.fbs"
+    TWIST_STAMPED: Final[str] = "twist_stamped.fbs"
+    TWIST_WITH_COVARIANCE: Final[str] = "twist_with_covariance.fbs"
+    TWIST_WITH_COVARIANCE_STAMPED: Final[str] = "twist_with_covariance_stamped.fbs"
+    UNION_MAP_ENTRY: Final[str] = "union_map_entry.fbs"
+    UUID_DATATYPE_PAIR: Final[str] = "uuid_datatype_pair.fbs"
+    UUID_DATATYPE_WITH_CATEGORY: Final[str] = "uuid_datatype_with_category.fbs"
+    UUIDS_PER_PROJECT: Final[str] = "uuids_per_project.fbs"
+    UUIDS_PROJECT_PAIR: Final[str] = "uuids_project_pair.fbs"
+    VECTOR3: Final[str] = "vector3.fbs"
+    VECTOR3_STAMPED: Final[str] = "vector3_stamped.fbs"
+
+
+def catkin_find_schema_dir(ros_pkg_name: str, sub_dir: str) -> Path:
     """
-    Returns a list of tuples of functions that have versions of them with certain endings.
-    The first element of the tuple is the function name, the following elements are the results of the extra functions.
-    based on the function existence, the corresponding function is assumed to be a array.
-    the contained tuple are of the form (array, array_is_none, array_length)
-    """
-    if not isinstance(endings, Iterable):
-        raise ValueError("endings must be iterable")
-
-    # this will have the form (array, array_is_none, array_length)
-    dict_tuples = {}
-    # collect all functions that end with certain strings
-
-    # count found endings and check if all endings are found
-    for func in func_list:
-        inner_tuple = []
-        for ending in endings:
-            if func + ending not in func_list:
-                break
-            else:
-                inner_tuple.append(func + ending)
-        else:
-            dict_tuples[func] = inner_tuple
-    return dict_tuples
-
-
-def unpack_union_type(
-    enclosing_table_obj,
-    union_type_mapping: Dict[Type, Tuple[str, List[Tuple[int, Type]]]],
-    snake_case=False,
-    remappings: Dict[str, str] = {},
-) -> Dict:
-    union_field, field_nums_types = union_type_mapping[type(enclosing_table_obj)]
-
-    # extract value type
-    union_type = getattr(enclosing_table_obj, f"{union_field}Type")()
-    union_obj = getattr(enclosing_table_obj, union_field)()
-
-    for field_num, field_type in field_nums_types:
-        if union_type == field_num:
-            union_val = field_type()
-            union_val.Init(union_obj.Bytes, union_obj.Pos)
-
-            union_val = union_val.Data()
-
-            if isinstance(union_val, bytes):
-                try:
-                    union_val = union_val.decode()
-                except UnicodeDecodeError:
-                    pass
-
-            if isinstance(union_val, (int, float, str, bool)):
-                return union_val
-
-            return fb_obj_to_dict(union_val, snake_case, remappings, union_type_mapping)
-    else:
-        # ruff: noqa: PLW0120
-        raise ValueError(f"union type {union_type} not in {field_nums_types} of table {type(enclosing_table_obj)}")
-
-
-# todo: improve interface and rework functionality for more robustness
-def fb_obj_to_dict(
-    obj,
-    snake_case=False,
-    remappings: Dict[str, str] = {},
-    union_type_mapping: Dict[Type, Tuple[str, List[Tuple[int, Type]]]] = {},
-) -> Dict:
-    """
-    Converts a flatbuffer object to a dictionary. This works recursively for nested flatbuffer objects.
-    Warning: this implementation is not perfectly robust and might break due to changes in python or flatbuffers.
+    Tries to find the schema directory on the system using `catkin locate`.
 
     Args:
-        obj: The flatbuffer object to convert.
-        snake_case: If the resulting dictionary keys (flatbuffer field names) should be converted to snake case.
-        remappings: A dictionary of remappings for the resulting flatbuffer field names.
-        union_type_mapping:
-            union_type_mapping{ t: (field: str, [(num_type1, t_type1), (num_type2, t_type2), ...]) }
-            where t is the parent table of the union (the table in which the union is a field of).
-            The field is the name of the field containing the union.
-            num_type1, num_type2, ... are the possible numbers identifying the type of the union.
-            t_type1, t_type2, ... are the possible types of the union,
-              which have to correpondend to num_type1, num_type2, ...
-            For example:
-                union_type_mapping: Dict[Type, Tuple[str, List[Tuple[int, Type]]]] = {
-                    UnionMapEntry.UnionMapEntry: (
-                        "Value",
-                        [
-                            (Datatypes.Datatypes().Boolean, Boolean.Boolean),
-                            (Datatypes.Datatypes().Integer, Integer.Integer),
-                            (Datatypes.Datatypes().Double, Double.Double),
-                            (Datatypes.Datatypes().String, String.String),
-                        ],
-                    )
-                }
+        ros_pkg_name: The name of the ros package containing the relevant schema files
+        sub_dir: The name of the subdir of the package dir containing the relevant schema files
+
+    Returns:
+        The schema directory on the system if found.
+
+    Raises:
+        FileNotFoundError: If the path on the system is not present.
+        ChildProcessError: If `catkin locate` returns something on stderr or failed otherwise
     """
-    # get all non dunder functions of the object
-    funcs = [func for func in dir(obj) if callable(getattr(obj, func)) and not func.startswith("__")]
 
-    # filter out the functions that are not needed
-    funcs = [func for func in funcs if not any(func.startswith(x) for x in FB_FILTEROUT_STARTS_WITH)]
-    funcs = [func for func in funcs if not any(func.endswith(x) for x in FB_FILTEROUT_ENDS_WITH)]
-    # ruff: noqa: PLR1714
-    funcs = [func for func in funcs if not any(func == x for x in FB_FILTEROUT_IS)]
-    funcs = [func for func in funcs if not (func == "GetRootAs" or func == f"GetRootAs{type(obj).__name__}")]
+    catkin_proc = sp.Popen(["catkin", "locate", ros_pkg_name], encoding="utf-8", stdout=sp.PIPE, stderr=sp.PIPE)
+    catkin_out, catkin_err = catkin_proc.communicate()
 
-    # group arrays and array functions together, so that arrays can be handled separately
-    # e.g. (Distortion, DistortionIsNone, DistortionLength)
-    farr_dict: Dict[str, Tuple] = get_func_lists_wparams(funcs, *FB_GROUP_LIST_ENDS_WITH)
+    if catkin_proc.returncode != 0 or catkin_err != "":
+        raise ChildProcessError(f"Catkin call errored! {catkin_err}")
 
-    # filter funcs with endings out which are already in f_list
-    funcs = [
-        func
-        for func in funcs
-        if not any(func.endswith(x) if func.split(x)[0] in farr_dict else False for x in FB_GROUP_LIST_ENDS_WITH)
-    ]
-    funcs = [func for func in funcs if func not in farr_dict]
+    # splitlines needs to be used otherwise catkin_out contains \n at the end
+    fbs_path: Path = Path(catkin_out.splitlines()[0]) / sub_dir
 
-    res_dict = {}
-    # get function results, if the result is a complex flatbuffer object, recursively call this function
-    # ruff: noqa: PLW2901
-    for func in funcs:
-        if type(obj) in union_type_mapping and func == union_type_mapping[type(obj)][0]:
-            res_dict[func] = unpack_union_type(obj, union_type_mapping, snake_case, remappings)
-            continue
+    if not fbs_path.is_dir():
+        raise FileNotFoundError(f"The path for seerep flatbuffers schema files is not present! Should be {fbs_path}")
 
-        res = getattr(obj, func)()
+    return fbs_path
 
-        if isinstance(res, bytes):
-            res = res.decode()
 
-        if snake_case:
-            if res == 0:
-                continue
+def fb_flatc_dict(fb_obj: bytearray, schema_file_name: SchemaFileNames) -> Dict:
+    """
+    Converts a binary flatbuffers object to a python dictionary using it's IDL file.
 
-            func = to_snake_case(func)
+    This implementation uses temporary files in /tmp for conversion.
 
-            if func in remappings:
-                func = remappings[func]
+    Args:
+        fb_obj: The bytearray object as returned by builder.Output().
+        schema_file_name: The filename of the fb schema file.
 
-        # check if resulting type is a complex type by checking if the resulting type is a primitive type
-        if isinstance(res, (int, float, str, bool)):
-            res_dict[func] = res
-        else:
-            res_dict[func] = fb_obj_to_dict(res, snake_case, remappings, union_type_mapping)
+    Returns:
+        A python dictionary containing the objects attribute information.
 
-    # do the same for arrays
-    for f_key in farr_dict:
-        if getattr(obj, farr_dict[f_key][0])():
-            if snake_case:
-                f_key = to_snake_case(f_key)
-                if f_key in remappings:
-                    f_key = remappings[f_key]
+    Raises:
+        FileNotFoundError: If the schema file on the system couldn't be found.
+        ChildProcessError: If something went wrong using the flatc subcommand.
+    """
+    schema_path = catkin_find_schema_dir(ROS_SCHEMA_PKG, ROS_SCHEMA_SUBDIR) / schema_file_name.value
 
-            res_dict[f_key] = []
-            continue
+    if not schema_path.is_file():
+        raise FileNotFoundError(f"The schema file at {schema_path} does not exist!")
 
-        res_lst = []
-        for i in range(getattr(obj, farr_dict[f_key][1])()):
-            res = getattr(obj, f_key)(i)
+    try:
+        with tempfile.NamedTemporaryFile(delete=False) as f:
+            f.write(fb_obj)
+            flatc_proc = sp.Popen(
+                ["flatc", "--json", "--raw-binary", "--strict-json", schema_path, "--", f.name], cwd="/tmp"
+            )
+            tmp_file = Path(f.name)
+            tmp_json = Path(f.name + ".json")
 
-            if isinstance(res, bytes):
-                res = res.decode()
+        sp_ret_code = flatc_proc.wait()
 
-            if snake_case and res == 0:
-                continue
+        if sp_ret_code != 0 or not tmp_json.is_file():
+            raise ChildProcessError(
+                f"A problem occured during flatbuffers object to json conversion using flatc!\
+                The file {tmp_json} was not properly created. Has the fbs schema file the `root_type` directive set?"
+            )
 
-            if isinstance(res, (int, float, str, bool)):
-                res_lst.append(res)
-            else:
-                res_lst.append(fb_obj_to_dict(res, snake_case, remappings, union_type_mapping))
+        with open(tmp_json, "r") as tmp_f:
+            json_dict = json.loads(tmp_f.read())
+    finally:
+        tmp_file.unlink(missing_ok=True)
+        tmp_json.unlink(missing_ok=True)
 
-        # find first occurence of upper case letter replace it with underscore and lower case letter
-        if snake_case:
-            f_key = to_snake_case(f_key)
-            if f_key in remappings:
-                f_key = remappings[f_key]
-
-        res_dict[f_key] = res_lst
-
-    return res_dict
+    return json_dict

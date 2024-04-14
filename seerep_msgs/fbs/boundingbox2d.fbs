@@ -1,4 +1,3 @@
-
 include "point2d.fbs";
 
 namespace seerep.fb;
@@ -8,3 +7,5 @@ table Boundingbox2D {
   spatial_extent:Point2D;
   rotation:float;
 }
+
+root_type Boundingbox2D;

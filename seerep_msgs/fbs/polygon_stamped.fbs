@@ -1,4 +1,3 @@
-
 include "header.fbs";
 include "polygon.fbs";
 
@@ -8,3 +7,5 @@ table PolygonStamped {
   header:seerep.fb.Header;
   polygon:seerep.fb.Polygon;
 }
+
+root_type PolygonStamped;

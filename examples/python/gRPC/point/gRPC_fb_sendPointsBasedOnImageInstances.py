@@ -20,9 +20,9 @@ from seerep.util.fb_helper import (
 )
 
 
-def send_points(
+def send_points_raw(
     target_proj_uuid: str = None, grpc_channel: Channel = get_gRPC_channel()
-) -> Dict[str, PointStamped.PointStamped]:
+) -> Dict[str, List[bytearray]]:
     builder = flatbuffers.Builder(1024)
 
     if target_proj_uuid is None:
@@ -37,14 +37,14 @@ def send_points(
 
     bufBytes = []
 
-    img_uuid2point_map: Dict[str, List[PointStamped.PointStamped]] = {}
+    img_uuid_point_map: Dict[str, List[bytearray]] = {}
 
     for responseBuf in stubImage.GetImage(bytes(buf)):
         response = Image.Image.GetRootAs(responseBuf)
 
         uuid_img = response.Header().UuidMsgs().decode()
 
-        img_uuid2point_map.setdefault(uuid_img, [])
+        img_uuid_point_map.setdefault(uuid_img, [])
 
         if not response.LabelsBbIsNone():
             for i in range(response.LabelsBb(0).BoundingBox2dLabeledLength()):
@@ -106,13 +106,22 @@ def send_points(
 
                 buf = builder.Output()
 
-                img_uuid2point_map[uuid_img].append(PointStamped.PointStamped.GetRootAs(buf))
+                img_uuid_point_map[uuid_img].append(buf)
 
                 bufBytes.append(bytes(buf))
 
     stubPoint.TransferPoint(iter(bufBytes))
 
-    return img_uuid2point_map
+    return img_uuid_point_map
+
+
+def send_points(
+    target_proj_uuid: str = None, grpc_channel: Channel = get_gRPC_channel()
+) -> Dict[str, List[PointStamped.PointStamped]]:
+    img_uuid_point_map: Dict[str, List[PointStamped.PointStamped]] = {}
+    for k, v in send_points_raw(target_proj_uuid, grpc_channel).items():
+        img_uuid_point_map[k] = [PointStamped.PointStamped.GetRootAs(p) for p in v]
+    return img_uuid_point_map
 
 
 if __name__ == "__main__":

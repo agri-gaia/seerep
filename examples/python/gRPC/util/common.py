@@ -1,7 +1,6 @@
 import os
 import re
-from copy import deepcopy
-from typing import Any, Dict
+from typing import Dict
 
 import grpc
 
@@ -40,42 +39,38 @@ def get_gRPC_channel(target="local"):
 
 
 # based on https://github.com/jpvanhal/inflection
-def to_snake_case(string: str):
+# function to pass to boltons.iterutils.remap
+def remap_to_snake_case(p, k, v):
+    if isinstance(k, str):
+        k = re.sub(r"((?<=[a-z0-9])[A-Z]|(?!^)(?<!_)[A-Z](?=[a-z]))", r"_\1", k)
+        k = k.replace("-", "_")
+        return k.lower(), v
+    return k, v
+
+
+# function to pass to boltons.iterutils.remap
+def remap_keys(p, k, v, mapping: Dict[str, str] = {}):
+    k = mapping.get(k, k)
+    if k in mapping:
+        print(k)
+    return k, v
+
+
+# function to pass to boltons.iterutils.remap
+def trunc_floats(p, k, v, ignore_after: int = None):
     """
-    Tries to convert a common string to snake case.
-
-    """
-    string = re.sub(r"((?<=[a-z0-9])[A-Z]|(?!^)(?<!_)[A-Z](?=[a-z]))", r"_\1", string)
-    string = string.replace("-", "_")
-    return string.lower()
-
-
-# ruff: noqa: PLW2901
-def dict_snake_case_keys(d: Dict[str, Any]) -> Any:
-    """
-    Recursively converts all keys of a dict to snake case.
-
-    This recurses into lists and dicts, but not into other data structures.
-    Only keys of type `str` will be converted.
-    This implementation deepcopies the input parameter.
+    This Function can be provided to boltons.iterutils.remap
+    and truncates `ignore_after` decimal places after the specified position behind the dot.
 
     Args:
-        d: dictionary for conversion
-    Returns:
-        the resulting dictionary
-    """
-    obj = deepcopy(d)
-    if isinstance(obj, list):
-        for idx, elem in enumerate(obj):
-            obj[idx] = dict_snake_case_keys(elem)
-    if not isinstance(obj, dict):
-        return obj
-    for k, v in d.items():
-        obj.pop(k)
-        v = dict_snake_case_keys(v)
-        if isinstance(k, str):
-            obj[to_snake_case(k)] = v
-        else:
-            obj[k] = v
+        p, k, v: path, key, value for boltons.iterutils.remap
+        ignore_after: specifies at what position after the dot to strip the decimals,
+                      None means don't truncate the values
 
-    return obj
+    Returns: (k, v) as specified by boltons.iterutils.remap, where v is modified if v is of type float
+    """
+    if ignore_after is not None and isinstance(v, float):
+        # use string formatting to chop the float
+        s = f"{{:.{ignore_after}f}}".format(v)
+        v = float(s)
+    return k, v

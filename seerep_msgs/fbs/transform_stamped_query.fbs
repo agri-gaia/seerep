@@ -7,3 +7,5 @@ table TransformStampedQuery
   header:seerep.fb.Header;
   child_frame_id:string;
 }
+
+root_type TransformStampedQuery;

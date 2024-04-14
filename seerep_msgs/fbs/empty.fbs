@@ -1,5 +1,6 @@
-
 namespace seerep.fb;
 
 table Empty {
 }
+
+root_type Empty;

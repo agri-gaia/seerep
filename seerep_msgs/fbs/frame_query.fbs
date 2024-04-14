@@ -4,3 +4,5 @@ table FrameQuery
 {
   projectuuid:string;
 }
+
+root_type FrameQuery;

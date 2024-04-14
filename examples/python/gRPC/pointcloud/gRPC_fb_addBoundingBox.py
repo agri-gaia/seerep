@@ -24,7 +24,9 @@ from seerep.util.fb_helper import (
 )
 
 
-def add_pc_bounding_boxes(target_proj_uuid: str = None, grpc_channel: Channel = get_gRPC_channel()):
+def add_pc_bounding_boxes_raw(
+    target_proj_uuid: str = None, grpc_channel: Channel = get_gRPC_channel()
+) -> List[bytearray]:
     builder = flatbuffers.Builder(1024)
 
     if target_proj_uuid is None:
@@ -41,7 +43,6 @@ def add_pc_bounding_boxes(target_proj_uuid: str = None, grpc_channel: Channel = 
     buf = builder.Output()
 
     msgToSend = []
-    bbs_list: List[BoundingBoxesLabeledStamped.BoundingBoxesLabeledStamped] = []
 
     for responseBuf in stub.GetPointCloud2(bytes(buf)):
         response = PointCloud2.PointCloud2.GetRootAs(responseBuf)
@@ -77,11 +78,19 @@ def add_pc_bounding_boxes(target_proj_uuid: str = None, grpc_channel: Channel = 
         builder.Finish(labelsBbVector)
         buf = builder.Output()
 
-        bbs_list.append(BoundingBoxesLabeledStamped.BoundingBoxesLabeledStamped.GetRootAs(buf))
         msgToSend.append(bytes(buf))
 
     response = stub.AddBoundingBoxesLabeled(iter(msgToSend))
-    return bbs_list
+    return msgToSend
+
+
+def add_pc_bounding_boxes(
+    target_proj_uuid: str = None, grpc_channel: Channel = get_gRPC_channel()
+) -> List[BoundingBoxesLabeledStamped.BoundingBoxesLabeledStamped]:
+    return [
+        BoundingBoxesLabeledStamped.BoundingBoxesLabeledStamped.GetRootAs(resp_buf)
+        for resp_buf in add_pc_bounding_boxes_raw(target_proj_uuid, grpc_channel)
+    ]
 
 
 if __name__ == "__main__":

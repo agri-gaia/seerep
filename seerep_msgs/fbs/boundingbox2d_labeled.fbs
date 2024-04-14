@@ -1,4 +1,3 @@
-
 include "boundingbox2d.fbs";
 include "label_with_instance.fbs";
 
@@ -8,3 +7,5 @@ table BoundingBox2DLabeled {
   labelWithInstance:LabelWithInstance;
   bounding_box:seerep.fb.Boundingbox2D;
 }
+
+root_type BoundingBox2DLabeled;
