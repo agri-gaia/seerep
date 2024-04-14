@@ -45,6 +45,8 @@ markdown_extensions:
   # syntax highlighting in code blocks
   - pymdownx.highlight:
       anchor_linenums: true
+  # allow references to code blocks for more direct examples
+  - pymdownx.snippets
   - pymdownx.superfences
   # add tabs to navigate on the top
   - pymdownx.tabbed:
