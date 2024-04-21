@@ -13,27 +13,27 @@ Type definitions of all flatbuffers types can be found [here](https://github.com
 --8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/feat/tests-mkdocs/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:4:26"
 ```
 
-First some of the modules to interact with the servers services will now be highlighted.
+First some of the modules to interact with the servers services will be highlighted.
 `seerep.fb` contains all python interfaces for the SEEREP services as well as the Message types.
 In `sereep.util.fb_helper` contains helper functions related to flatbuffers, for instance functions to create a message
 type directly.
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/feat/tests-mkdocs/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:29:31"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/feat/tests-mkdocs/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:28:30"
 ```
 
-Next with the function definition containing the main logic, an option should be given to specify a target project, if
-the message type allows setting it in the header datatype.
-Additionally the `grpc_channel` should be a parameter in order to be able to target other servers.
+Next with the function definition, an option should be given to specify a target project, if
+the message type allows setting it.
+Additionally the `grpc_channel` should be a parameter in order to be able to target servers other than `localhost:9090`.
 Both options are useful for testing later. More parameters can be added optionally, if needed for the test cases.
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/feat/tests-mkdocs/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:34:49"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/feat/tests-mkdocs/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:31:49"
 ```
 
 At first, if `target_proj_uuid` is not set, the `MetaOperationsStub` utilizing flatbuffers gRPC communication
 with the SEEREP server is used to retrieve a list of all available projects of that server (specifically in the form of
-[project_infos.proto](https://github.com/agri-gaia/seerep/blob/feat/tests-mkdocs/seerep_msgs/protos/project_infos.proto)
+[project_infos.fbs](https://github.com/agri-gaia/seerep/blob/feat/tests-mkdocs/seerep_msgs/fbs/project_infos.fbs)
 ) and `target_proj_uuid` is set to the uuid of the first project with the name `testproject` on that list.
 
 ```python
@@ -59,7 +59,7 @@ This code builds a list of BoundingBoxes adding some sample data into the compon
 At the beginning two lists are defined `msgToSend` will be a list containing the serialized BoundingBoxes and
 `bb_list` will be a list containing mappings where each image uuid is mapped to it's added BoundingBoxes.
 After that the returned images from the query before are iterated.
-Next BoundingBoxes are created and their joint `header` uuids are set to the appropiate `project_uuid` and `msg_uuid` to
+Next BoundingBoxes are created and their joint `header` uuids are set to the appropriate `project_uuid` and `msg_uuid` to
 match that specific image.
 At the end the BoundingBoxes are serialized and added to the lists.
 
