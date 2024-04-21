@@ -9,6 +9,8 @@ will be reviewed.
 Service type definitions for all available flatbuffers type services can be found [here](https://github.com/agri-gaia/seerep/tree/feat/tests-mkdocs/seerep_com/fbs).
 Type definitions of all flatbuffers types can be found [here](https://github.com/agri-gaia/seerep/tree/feat/tests-mkdocs/seerep_msgs/fbs).
 
+## The code
+
 ```python
 --8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/feat/tests-mkdocs/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:4:26"
 ```
@@ -18,11 +20,14 @@ First some of the modules to interact with the servers services will be highligh
 In `sereep.util.fb_helper` contains helper functions related to flatbuffers, for instance functions to create a message
 type directly.
 
+### Interaction with SEEREP services and handling the data
+
 ```python
 --8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/feat/tests-mkdocs/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:28:30"
 ```
 
-Next with the function definition, an option should be given to specify a target project, if
+The interaction functionality is contained within this function.
+With the function definition, an option should be given to specify a target project, if
 the message type allows setting it.
 Additionally the `grpc_channel` should be a parameter in order to be able to target servers other than `localhost:9090`.
 Both options are useful for testing later. More parameters can be added optionally, if needed for the test cases.
@@ -40,7 +45,7 @@ with the SEEREP server is used to retrieve a list of all available projects of t
 --8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/feat/tests-mkdocs/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:50:60"
 ```
 
-Following on the script requests all images from the project with the `uuid` of `target_proj_uuid` using the
+Following on the code requests all images from the project with the `uuid` of `target_proj_uuid` using the
 `ImageServiceStub`. The service definition looks as follows:
 
 ```fbs
@@ -80,6 +85,8 @@ Note that the flatbuffers objects are not returned in their deserialized state a
 [here](https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/util/fb_to_dict.py)
 makes use of that state.
 
+### Wrapping the raw function
+
 ```python
 --8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/feat/tests-mkdocs/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:112:119"
 ```
@@ -87,9 +94,21 @@ makes use of that state.
 This function is essentially just a wrapper for `add_bb_raw()` to return the deserialized objects to be accessed through
 their regular flatbuffers interfaces (in this case of type `BoundingBoxes2DLabeledStamped.BoundingBoxes2DLabeledStamped`).
 
+### Allow for independent execution of the script
+
 ```python
 --8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/feat/tests-mkdocs/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:122:137"
 ```
 
 The last part executes the script independently and targets the server at the default address, which is `localhost:9090`.
 On successful execution a subset of the sent data based on the returned mapping is printed.
+
+## Some important considerations
+
+To conclude for most of the examples it is best practice to follow this structure, namely first having a function which
+returns the serialized data,
+then wrapping that function to return the deserialized variant and at the end the `if __name__ == "__main__"` part of
+the script, such that the script can be executed independently.
+Of course functionality can be outsourced into other functions, when it makes sense.
+This structure eases the process of writing tests later on (see [writing-tests.md](writing-python-tests.md)),
+especially when `fb_flatc_dict` should be utilized.

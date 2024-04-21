@@ -16,12 +16,14 @@ nav:
       - Tests: 'getting-started/server/tests.md'
   - Reference:
     - Package Overview: 'reference/packages.md'
+    - Python Helper functionality: 'reference/python-helpers.md'
   - Tutorials:
     - Overview: 'tutorials/overview.md'
     - gRPC Python: 'tutorials/overview.md'
     - Creating & retrieving projects: 'tutorials/projects.md'
     - Sending & Querying Images: 'tutorials/images.md'
-    - Writing examples: 'tutorials/writing-examples.md'
+    - Writing python examples: 'tutorials/writing-python-examples.md'
+    - Writing python integration tests: 'tutorials/writing-python-tests.md'
 theme:
   # use mkdocs material https://squidfunk.github.io/mkdocs-material/
   name: material
