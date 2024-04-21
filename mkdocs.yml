@@ -21,6 +21,7 @@ nav:
     - gRPC Python: 'tutorials/overview.md'
     - Creating & retrieving projects: 'tutorials/projects.md'
     - Sending & Querying Images: 'tutorials/images.md'
+    - Writing examples: 'tutorials/writing-examples.md'
 theme:
   # use mkdocs material https://squidfunk.github.io/mkdocs-material/
   name: material
@@ -46,7 +47,8 @@ markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
   # allow references to code blocks for more direct examples
-  - pymdownx.snippets
+  - pymdownx.snippets:
+      url_download: true
   - pymdownx.superfences
   # add tabs to navigate on the top
   - pymdownx.tabbed:

@@ -1,0 +1,95 @@
+# Writing examples for the SEEREP API
+
+To write a example it is a good idea to refer to already written ones.
+The focus in this documentation lies on flatbuffers type messages, because of the potential deprecation of protobuf in
+the project.
+All protobuf functionality can be replicated using flatbuffers, and flatbuffers should be used instead.
+In this case the example [gRPC_fb_addBoundingBox.py](https://github.com/agri-gaia/seerep/blob/feat/tests-mkdocs/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py)
+will be reviewed.
+Service type definitions for all available flatbuffers type services can be found [here](https://github.com/agri-gaia/seerep/tree/feat/tests-mkdocs/seerep_com/fbs).
+Type definitions of all flatbuffers types can be found [here](https://github.com/agri-gaia/seerep/tree/feat/tests-mkdocs/seerep_msgs/fbs).
+
+```python
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/feat/tests-mkdocs/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:4:26"
+```
+
+First some of the modules to interact with the servers services will now be highlighted.
+`seerep.fb` contains all python interfaces for the SEEREP services as well as the Message types.
+In `sereep.util.fb_helper` contains helper functions related to flatbuffers, for instance functions to create a message
+type directly.
+
+```python
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/feat/tests-mkdocs/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:29:31"
+```
+
+Next with the function definition containing the main logic, an option should be given to specify a target project, if
+the message type allows setting it in the header datatype.
+Additionally the `grpc_channel` should be a parameter in order to be able to target other servers.
+Both options are useful for testing later. More parameters can be added optionally, if needed for the test cases.
+
+```python
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/feat/tests-mkdocs/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:34:49"
+```
+
+At first, if `target_proj_uuid` is not set, the `MetaOperationsStub` utilizing flatbuffers gRPC communication
+with the SEEREP server is used to retrieve a list of all available projects of that server (specifically in the form of
+[project_infos.proto](https://github.com/agri-gaia/seerep/blob/feat/tests-mkdocs/seerep_msgs/protos/project_infos.proto)
+) and `target_proj_uuid` is set to the uuid of the first project with the name `testproject` on that list.
+
+```python
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/feat/tests-mkdocs/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:50:60"
+```
+
+Following on the script requests all images from the project with the `uuid` of `target_proj_uuid` using the
+`ImageServiceStub`. The service definition looks as follows:
+
+```fbs
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/feat/tests-mkdocs/seerep_com/fbs/image_service.fbs"
+```
+
+`GetImage()` takes a argument of type [seerep.fb.Query](https://github.com/agri-gaia/seerep/blob/feat/tests-mkdocs/seerep_msgs/fbs/query.fbs),
+a more generic build query type for use in various services in SEEREP, in it's serialized form and returns data of type
+[seerep.fb.Image](https://github.com/agri-gaia/seerep/blob/feat/tests-mkdocs/seerep_msgs/fbs/image.fbs) from the server.
+
+```python
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/feat/tests-mkdocs/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:62:107"
+```
+
+This code builds a list of BoundingBoxes adding some sample data into the components of each BoundingBox.
+At the beginning two lists are defined `msgToSend` will be a list containing the serialized BoundingBoxes and
+`bb_list` will be a list containing mappings where each image uuid is mapped to it's added BoundingBoxes.
+After that the returned images from the query before are iterated.
+Next BoundingBoxes are created and their joint `header` uuids are set to the appropiate `project_uuid` and `msg_uuid` to
+match that specific image.
+At the end the BoundingBoxes are serialized and added to the lists.
+
+The type definition of [BoundingBoxes2DLabeledStamped](https://github.com/agri-gaia/seerep/blob/feat/tests-mkdocs/seerep_msgs/fbs/boundingboxes2d_labeled_stamped.fbs)
+looks as follows:
+
+```fbs
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/feat/tests-mkdocs/seerep_msgs/fbs/boundingboxes2d_labeled_stamped.fbs"
+```
+
+```python
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/feat/tests-mkdocs/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:109:110"
+```
+
+Lastly the service is called, the BoundingBoxes are send to the SEEREP server and the list with the mappings is returned
+for further use.
+Note that the flatbuffers objects are not returned in their deserialized state as the function `fb_flatc_dict` defined in
+[here](https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/util/fb_to_dict.py)
+makes use of that state.
+
+```python
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/feat/tests-mkdocs/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:112:119"
+```
+
+This function is essentially just a wrapper for `add_bb_raw()` to return the deserialized objects to be accessed through
+their regular flatbuffers interfaces (in this case of type `BoundingBoxes2DLabeledStamped.BoundingBoxes2DLabeledStamped`).
+
+```python
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/feat/tests-mkdocs/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:122:137"
+```
+
+The last part executes the script independently and targets the server at the default address, which is `localhost:9090`.
+On successful execution a subset of the sent data based on the returned mapping is printed.

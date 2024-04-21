@@ -109,6 +109,9 @@ def fb_flatc_dict(fb_obj: bytearray, schema_file_name: SchemaFileNames) -> Dict:
     """
     Converts a binary flatbuffers object to a python dictionary using it's IDL file.
 
+    This function should only be used for debugging or testing purposes, as it alleviates the advantage of flatbuffers
+    lessening the amount of copied data.
+
     This implementation uses temporary files in /tmp for conversion.
 
     Args:
