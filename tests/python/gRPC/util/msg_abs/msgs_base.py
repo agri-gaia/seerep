@@ -44,7 +44,7 @@ class MsgsBase(ABC, Generic[T]):
         return self._channel
 
     @channel.setter
-    def set_channel(self, channel: Channel):
+    def channel(self, channel: Channel):
         self._service_manager: ServiceManager = ServiceManager(channel)
         self._channel: Channel = channel
 
@@ -96,7 +96,7 @@ class MsgsBase(ABC, Generic[T]):
             raise KeyError(f"the used enum of {self.__class__} is of type {enum_type} not of type {type(enum)}")
 
     def __init__(self, channel: Channel, enum_types: Set[FrozenEnum] = set()):
-        self._channel = channel
+        self.channel = channel
         self._active_enums = enum_types
         self._assembled_datatype_instance = None
 

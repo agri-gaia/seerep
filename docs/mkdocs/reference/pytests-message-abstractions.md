@@ -9,7 +9,7 @@ The tests can be found under [test_gRPC_fb_getInstances.py](https://github.com/a
 
 The idea is to provide default implementations for common datatypes,
 but still allow for modification of parts of that datatype.
-In some Flatbuffers implementations there exists a API for mutability for that
+In some `flatbuffers` implementations there exists a API for mutability for that
 but unfortunately not for python and even when it would, it would still impose other problems.
 
 To tackle the problem, a wrapper is used where a set of enums, which corresponds to a datatype's components,
@@ -27,13 +27,13 @@ FrozenEnum provided through [datastructures.py](https://github.com/agri-gaia/see
 which is essentially a unmodifiable enum.
 
 This is done for the `FbQuery` datatype, which corresponding
-flatbuffers definition can be found [here](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/query.fbs).
+`flatbuffers` definition can be found [here](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/query.fbs).
 
 ```python
 --8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/tests/python/gRPC/util/msg_abs/msgs.py:22:36"
 ```
 
-Then `FbQuery` inherits from MsgsFb, which itself is a template type from [msgs_base.py](https://github.com/agri-gaia/seerep/blob/main/tests/python/gRPC/util/msg_abs/msgs_base.py).
+Then `FbQuery` inherits from `MsgsFb`, which itself is a template type defined in [msgs_base.py](https://github.com/agri-gaia/seerep/blob/main/tests/python/gRPC/util/msg_abs/msgs_base.py).
 
 ```python
 --8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/tests/python/gRPC/util/msg_abs/msgs.py:44:99"
@@ -42,7 +42,7 @@ Then `FbQuery` inherits from MsgsFb, which itself is a template type from [msgs_
 In `MsgsFb` `_set_enum_func_mapping()` is a abstractmethod which return type is a dictionary,
 which maps the enum types to `MsgsFunctions`.
 `MsgsFunction` itself is just a structure to wrap two function pointers.
-The first function pointer should be a pointer to the default function, which gets called,
+The first function pointer should be a pointer to the `default_function`, which gets called,
 if the component is not set to be active.
 The second function pointer is the one that gets called when the component is set active.
 
@@ -65,7 +65,8 @@ The base class makes sure that all the components at this point are set.
 --8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/tests/python/gRPC/instances/test_gRPC_fb_getInstances.py:79:109"
 ```
 
-All the possible instance attached datatypes in the function are tested (this is just a snippet of that particular function).
+In this function all the possible datatypes with attached instances are tested
+(this is just a snippet of that particular function).
 
 The message abstractions are used by creating a object of `FbQueryInstance` first and
 setting the only active enum to `EnumFbQueryInstance.DATATYPE` using the `enum_types` variable on initialization,
@@ -89,4 +90,43 @@ e.g. like in this case calling the service function `call_get_instances_fb()` us
 **Note**: The `MsgsBase` class provides it's own `ServiceManager` property for building components,
 but that one shouldn't be used as it could change in the future.
 
-## The inner workings of the `MsgsFb` and `MsgsBase` classes
+## Inner workings of the `MsgsFb` and `MsgsBase` classes
+
+![message-abstractions](../imgs/message-abstractions.svg){ width=900px }
+
+**Meaning of Symbols and Notations in this diagram**:
+
+- Rectangular boxes: instance methods
+- Ellipsis: instance variables
+- Line arrows (with text): calls to methods or setting variables (with the help of those variables specified by the text)
+- Line arrows with numbers: show the order in which things are done
+- dotted arrows outgoing: Getter methods/properties
+- dotted arrows incoming: Setter methods/properties
+- red colored text: already used functionality in the examples above
+- purple colored text: `@abstractmethod` also used above
+- blue colored text: has a special meaning, is not mirrored exactly by the implementation
+
+**Note**: Some details are not shown like the validation methods for the given enum type.
+But they are not neccessary to understand the structure.
+
+First in the initialization phase variables (`_builder`, `_service_manager`, `_channel`, `_active_enums`) are set and
+managed by the `MsgsFb` instance, those are needed for the assembly of the datatype instance later.
+`_builder` is a simply a flatbuffers builder. `channel` is used to create `ServiceManager` instance
+and manage a `grpc_channel` type variable. At last `_active_enums` is a set of enum elements, which will be used to specify
+which component of the datatype is "active"
+(i.e. which component is set by the `active_function` of the `MsgsFunctions` class).
+
+After that the `_enum_func_mapping` is set by the `_set_enum_func_mapping()` function. This variable can also get
+manipulated by `set_active_function()` or `set_mapped_functions()`.
+Then `_assemble_components()` is called, which makes sure that the `_components` are set, i.e. the functions in the
+`_enum_func_mapping` are called
+and the components are set by those `default_functions` or those `active_functions`,
+if their corresponding enum is in the `_active_enums` set.
+
+**Note**: `_components` are implemented as multiple dynamically at runtime created instance variables with the name of
+the component specified by the enum element name.
+
+Finally the on the instance callable `assemble_datatype_instance()` method triggers a rebuild of the `_assembled_datatype_instance`,
+by first refreshing the components and then calling the `_assemble_datatype_instance()` method.
+The `assemble_datatype_instance()` method gets also called in the `__init__()` method,
+such that the message abstractions always try to guarantee a set `datatype_instance` variable.
