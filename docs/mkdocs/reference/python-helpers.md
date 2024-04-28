@@ -30,4 +30,4 @@ Example usage can be found in [msg_abs/msgs.py](https://github.com/agri-gaia/see
 
 The source is located [here](https://github.com/agri-gaia/seerep/blob/feat/tests-mkdocs/examples/python/gRPC/util/service_manager.py).
 
-Note: This module is currently incomplete and contains only a subset of the available service calls.
+**Note**: This module is currently incomplete and contains only a subset of the available service calls.

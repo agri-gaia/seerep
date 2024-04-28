@@ -16,7 +16,8 @@ nav:
       - Tests: 'getting-started/server/tests.md'
   - Reference:
     - Package Overview: 'reference/packages.md'
-    - Python Helper functionality: 'reference/python-helpers.md'
+    - Python helper functionality: 'reference/python-helpers.md'
+    - Python tests message abstractions: 'reference/pytests-message-abstractions.md'
   - Tutorials:
     - Overview: 'tutorials/overview.md'
     - gRPC Python: 'tutorials/overview.md'
