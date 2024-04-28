@@ -90,6 +90,17 @@ e.g. like in this case calling the service function `call_get_instances_fb()` us
 **Note**: The `MsgsBase` class provides it's own `ServiceManager` property for building components,
 but that one shouldn't be used as it could change in the future.
 
+Another snippet to highlight is one where one of the components of the datatype itself is inheriting from `MsgsFb`.
+
+```python
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/tests/python/gRPC/instances/test_gRPC_fb_getInstances.py:197:257"
+```
+
+Here `query_builder` is used to build the `Query.Query` datatype in order to
+supply that one to the `queryinst_builder` query component.
+It is important that `query_builder.assemble_datatype_instance()` is called before `queryinst_builder.assemble_datatype_instance()`,
+otherwise the changes by setting the active function on `query_builder` are not reflected in the `queryinst_builder.datatype_instance`.
+
 ## Inner workings of the `MsgsFb` and `MsgsBase` classes
 
 ![message-abstractions](../imgs/message-abstractions.svg){ width=900px }
