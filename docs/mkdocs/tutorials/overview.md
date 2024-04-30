@@ -4,6 +4,8 @@ The tutorials provide a starting point on how you can use SEEREP. Currently, the
 
 - Creating and Retrieving projects
 - Sending and Querying images
+- Writing python examples
+- Writing python integration tests
 
 Before running any of the tutorials, make sure that
 you have a  **running SEEREP instance available**.

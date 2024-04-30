@@ -4,6 +4,7 @@ To write a example it is a good idea to refer to already written ones.
 The focus in this documentation lies on flatbuffers type messages, because of the potential deprecation of protobuf in
 the project.
 All protobuf functionality can be replicated using flatbuffers, and flatbuffers should be used instead.
+
 In this case the example [gRPC_fb_addBoundingBox.py](https://github.com/agri-gaia/seerep/blob/feat/tests-mkdocs/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py)
 will be reviewed.
 Service type definitions for all available flatbuffers type services can be found [here](https://github.com/agri-gaia/seerep/tree/feat/tests-mkdocs/seerep_com/fbs).
@@ -17,8 +18,8 @@ Type definitions of all flatbuffers types can be found [here](https://github.com
 
 First some of the modules to interact with the servers services will be highlighted.
 `seerep.fb` contains all python interfaces for the SEEREP services as well as the Message types.
-In `sereep.util.fb_helper` contains helper functions related to flatbuffers, for instance functions to create a message
-type directly.
+[sereep.util.fb_helper](../reference/python-helpers.md) contains helper functions related to flatbuffers,
+for instance functions to create a message type directly.
 
 ### Interaction with SEEREP services and handling the data
 
@@ -61,8 +62,8 @@ a more generic build query type for use in various services in SEEREP, in it's s
 ```
 
 This code builds a list of BoundingBoxes adding some sample data into the components of each BoundingBox.
-At the beginning two lists are defined `msgToSend` will be a list containing the serialized BoundingBoxes and
-`bb_list` will be a list containing mappings where each image uuid is mapped to it's added BoundingBoxes.
+At the beginning two lists are defined `msgToSend` is a list containing the serialized BoundingBoxes and
+`bb_list` is a list containing mappings where each image uuid is mapped to it's added BoundingBoxes.
 After that the returned images from the query before are iterated.
 Next BoundingBoxes are created and their joint `header` uuids are set to the appropriate `project_uuid` and `msg_uuid` to
 match that specific image.
@@ -100,7 +101,7 @@ their regular flatbuffers interfaces (in this case of type `BoundingBoxes2DLabel
 --8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/feat/tests-mkdocs/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:122:137"
 ```
 
-The last part executes the script independently and targets the server at the default address, which is `localhost:9090`.
+The last part can execute the script independently and targets the server at the default address, which is `localhost:9090`.
 On successful execution a subset of the sent data based on the returned mapping is printed.
 
 ## Some important considerations

@@ -12,7 +12,7 @@ This is a module provided through the [seerep_grpc](https://pypi.org/project/see
 It provides functions to construct a subset of the SEEREP flatbuffers message in one function call.
 Most of the functions only return the component for further composition into another datatype.
 If the component itself should be serialized `builder.Finish()` as well as `builder.Output()` need to
-be called.
+be called, on the from the function retrieved value.
 
 The source is located [here](https://github.com/agri-gaia/seerep/blob/feat/tests-mkdocs/examples/python/gRPC/util/fb_helper.py).
 

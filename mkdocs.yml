@@ -20,7 +20,6 @@ nav:
     - Python tests message abstractions: 'reference/pytests-message-abstractions.md'
   - Tutorials:
     - Overview: 'tutorials/overview.md'
-    - gRPC Python: 'tutorials/overview.md'
     - Creating & retrieving projects: 'tutorials/projects.md'
     - Sending & Querying Images: 'tutorials/images.md'
     - Writing python examples: 'tutorials/writing-python-examples.md'

@@ -90,7 +90,7 @@ e.g. like in this case calling the service function `call_get_instances_fb()` us
 **Note**: The `MsgsBase` class provides it's own `ServiceManager` property for building components,
 but that one shouldn't be used as it could change in the future.
 
-Another snippet to highlight is one where one of the components of the datatype itself is inheriting from `MsgsFb`.
+Another snippet to highlight is the following where one of the components of the datatype itself is inheriting from `MsgsFb`.
 
 ```python
 --8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/tests/python/gRPC/instances/test_gRPC_fb_getInstances.py:197:257"
@@ -127,7 +127,7 @@ and manage a `grpc_channel` type variable. At last `_active_enums` is a set of e
 which component of the datatype is "active"
 (i.e. which component is set by the `active_function` of the `MsgsFunctions` class).
 
-After that the `_enum_func_mapping` is set by the `_set_enum_func_mapping()` function. This variable can also get
+After that the `_enum_func_mapping` variable is set by the `_set_enum_func_mapping()` function. This variable can also get
 manipulated by `set_active_function()` or `set_mapped_functions()`.
 Then `_assemble_components()` is called, which makes sure that the `_components` are set, i.e. the functions in the
 `_enum_func_mapping` are called
