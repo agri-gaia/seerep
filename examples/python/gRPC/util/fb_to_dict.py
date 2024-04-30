@@ -116,7 +116,7 @@ def fb_flatc_dict(fb_obj: bytearray, schema_file_name: SchemaFileNames) -> Dict:
 
     Args:
         fb_obj: The bytearray object as returned by builder.Output().
-        schema_file_name: The filename of the fb schema file.
+        schema_file_name: The to `fb_obj` corresponding datatype in the `SchemaFileNames` format
 
     Returns:
         A python dictionary containing the objects attribute information.

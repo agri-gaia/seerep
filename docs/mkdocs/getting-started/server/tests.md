@@ -15,7 +15,7 @@ they can also be run locally in a couple of different ways.
 - HDF Interface:
     This tests the SEEREP hdf5 write and read functionality with the [image.fbs](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/image.fbs),
     [image.proto](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/protos/image.proto) datatypes and therefore
-    serving as integration tests.
+    serves as integration tests.
     They are defined in [pb_write_load_test.cpp](https://github.com/agri-gaia/seerep/blob/main/seerep_hdf5/seerep_hdf5_pb/test/pb_write_load_test.cpp),
     [fb_write_load_test.cpp](https://github.com/agri-gaia/seerep/blob/main/seerep_hdf5/seerep_hdf5_fb/test/fb_write_load_test.cpp),
     [py_write_load_test.cpp](https://github.com/agri-gaia/seerep/blob/main/seerep_hdf5/seerep_hdf5_py/test/py_write_load_test.cpp).
@@ -53,6 +53,7 @@ pytest
 ```
 
 command in a shell environment.
+
 To execute a subset of the python tests specify the path to a specific test folder or file as the first argument to the
 pytest command, e.g.
 

@@ -21,7 +21,7 @@ nav:
   - Tutorials:
     - Overview: 'tutorials/overview.md'
     - Creating & retrieving projects: 'tutorials/projects.md'
-    - Sending & Querying Images: 'tutorials/images.md'
+    - Sending & querying images: 'tutorials/images.md'
     - Writing python examples: 'tutorials/writing-python-examples.md'
     - Writing python integration tests: 'tutorials/writing-python-tests.md'
 theme:

@@ -2,13 +2,17 @@
 
 The tutorials provide a starting point on how you can use SEEREP. Currently, the following topics are covered:
 
-- Creating and Retrieving projects
-- Sending and Querying images
+- Creating and retrieving projects
+- Sending and querying images
 - Writing python examples
 - Writing python integration tests
 
 Before running any of the tutorials, make sure that
 you have a  **running SEEREP instance available**.
+
+If you're not familiar with flatbuffers, it is highly recommended to look at the
+[tutorial](https://flatbuffers.dev/flatbuffers_guide_tutorial.html) first.
+Click on the python radio button to see the language specific tutorial.
 
 ## Local Instance
 
