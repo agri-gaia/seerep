@@ -14,7 +14,6 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         bash-completion \
         autoconf \
         automake \
-        libtool \
         wget \
         curl \
         cmake \
@@ -32,11 +31,8 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         libproj-dev \
         python3-catkin-tools \
         python3-osrf-pycommon \
-        libfile-pushd-perl \
         ros-noetic-vision-msgs \
         ros-noetic-geographic-msgs \
-        libgeographic-dev \
-        libfile-pushd-perl \
         python3-pip \
         flex \
         bison \
