@@ -27,9 +27,7 @@ find_package(
 find_package(catkin REQUIRED COMPONENTS tf2)
 
 find_package(CGAL REQUIRED)
-
-# https://github.com/OSGeo/PROJ/issues/3682
-pkg_check_modules(PROJ REQUIRED IMPORTED_TARGET)
+set(CGAL_DO_NOT_WARN_ABOUT_CMAKE_BUILD_TYPE TRUE)
 
 configure_file(include/SeerepCoreConfig.h.in SeerepCoreConfig.h)
 
