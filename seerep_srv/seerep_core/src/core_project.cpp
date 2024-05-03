@@ -82,7 +82,7 @@ seerep_core_msgs::Polygon2D CoreProject::transformToMapFrame(const seerep_core_m
   // we traverse the polygon and apply the transform
   for (seerep_core_msgs::Point2D p : polygon.vertices)
   {
-    PJ_COORD c = proj_coord(p.get<0>(), p.get<1>(), NULL, NULL);
+    PJ_COORD c = proj_coord(p.get<0>(), p.get<1>(), 0, 0);
     PJ_COORD t_coord = proj_trans(to_topographic, direction, c);
 
     seerep_core_msgs::Point2D transformed_p;
