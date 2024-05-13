@@ -14,9 +14,9 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         bash-completion \
         autoconf \
         automake \
-        libtool \
         wget \
         curl \
+        cmake \
         make \
         g++ \
         gdb \
@@ -31,11 +31,8 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         libproj-dev \
         python3-catkin-tools \
         python3-osrf-pycommon \
-        libfile-pushd-perl \
         ros-noetic-vision-msgs \
         ros-noetic-geographic-msgs \
-        libgeographic-dev \
-        libfile-pushd-perl \
         python3-pip \
         flex \
         bison \
@@ -76,17 +73,6 @@ RUN apt-get update -qq && apt-get -qq install -y --no-install-recommends \
                 clang-format-15 \
                 python3-catkin-lint \
         && rm -rf /var/lib/apt/lists/*
-
-####################################################
-#Install cmake
-####################################################
-RUN curl -s https://apt.kitware.com/kitware-archive.sh -o kitware-archive.sh \
-        && chmod +x kitware-archive.sh \
-        && /kitware-archive.sh \
-        && rm /kitware-archive.sh \
-        && apt-get update -qq && apt-get -qq install --no-install-recommends -y cmake \
-        && rm -rf /var/lib/apt/lists/*
-
 
 ####################################################
 #Install HighFive
