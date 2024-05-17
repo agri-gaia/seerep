@@ -142,8 +142,7 @@ RUN curl -LO $PB_REL/download/v$PB_VER/protobuf-cpp-3.$PB_VER.zip \
         && make -j"$(nproc)" \
         && make install \
         && cd ../.. \
-        && rm protobuf-cpp-3.$PB_VER.zip \
-        && rm -rf protobuf-$3.PB_VER
+        && rm -rf protobuf-cpp-3.$PB_VER.zip protobuf-3.$PB_VER
 
 ####################################################
 #Install GoogleTest
