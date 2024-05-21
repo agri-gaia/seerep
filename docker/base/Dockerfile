@@ -86,7 +86,7 @@ RUN wget https://github.com/ccache/ccache/releases/download/v4.9.1/ccache-4.9.1.
         && cd ../..  \
         && rm -rf ccache-4.9.1 ccache-4.9.1.tar.gz
 
-RUN ln -sf $(which ccache) /usr/local/bin/g++ && ln -sf $(which ccache) /usr/local/bin/gcc
+RUN ln -sf $(which ccache) /usr/local/bin/c++ && ln -sf $(which ccache) /usr/local/bin/cc
 
 ####################################################
 #Install HighFive
