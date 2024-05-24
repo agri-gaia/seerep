@@ -6,6 +6,7 @@ from flatbuffers import Builder
 from grpc import Channel
 from seerep.fb import (
     Boundingbox,
+    Boundingbox2D,
     BoundingBox2DLabeled,
     BoundingBox2DLabeledWithCategory,
     BoundingBoxes2DLabeledStamped,
@@ -15,7 +16,6 @@ from seerep.fb import (
     BoundingboxStamped,
     CameraIntrinsics,
     CameraIntrinsicsQuery,
-    Datatype,
     Empty,
     GeodeticCoordinates,
     Header,
@@ -24,7 +24,7 @@ from seerep.fb import (
     LabelsWithCategory,
     LabelWithInstance,
     Point,
-    Point_Field_Datatype,
+    Point2D,
     PointCloud2,
     PointField,
     PointStamped,
@@ -51,7 +51,16 @@ from seerep.fb import meta_operations_grpc_fb as metaOperations
 # ruff: noqa: PLR0911
 # TODO: should be moved into a separate module
 def rosToNumpyDtype(ros_dtype: int) -> np.dtype:
-    """Converts the numeric represenations of dtypes in ROS to numpy dtype objects."""
+    """
+    Converts the numeric represenations of dtypes in ROS to numpy dtype objects.
+
+    Args:
+        ros_dtype: The numeric representation of the dtype in ROS\
+            (see [ROS documentation](http://docs.ros.org/en/api/sensor_msgs/html/msg/PointField.html))
+
+    Returns:
+        The numpy dtype equivalent
+    """
     if ros_dtype == 1:
         return np.dtype(np.int8)
     elif ros_dtype == 2:
@@ -124,11 +133,15 @@ def getProjectInfo(builder: Builder, channel: Channel, name: str) -> Union[Dict[
 
     for i in range(response.ProjectsLength()):
         if response.Projects(i).Name().decode("utf-8") == name:
+            project = response.Projects(i)
             return {
-                "name": response.Projects(i).Name().decode("utf-8"),
-                "uuid": response.Projects(i).Uuid().decode("utf-8"),
-                "frameid": response.Projects(i).Frameid().decode("utf-8"),
-                "geodetic_position": response.Projects(i).GeodeticPosition(),
+                "name": project.Name().decode("utf-8"),
+                "uuid": project.Uuid().decode("utf-8"),
+                "frameid": project.Frameid().decode("utf-8"),
+                "geodetic_position": f"Lat: {project.GeodeticPosition().Latitude()},\
+                    Long: {project.GeodeticPosition().Longitude()},\
+                    Alt: {project.GeodeticPosition().Altitude()}",
+                "coordinate_system": project.GeodeticPosition().CoordinateSystem().decode("utf-8"),
             }
 
     return None
@@ -152,10 +165,11 @@ def createProjectRaw(
         builder: A flatbuffers Builder
         name: The name of the project
         frameId: The coordinate frame of the project
-        coordSys: The coordinate system type as a EPSG code
-        altitude: The altitude of the projects position on the globe (according to EPSG)
-        latitude: The latitude of the project position on the globe (according to EPSG)
-        longitude: The longitude of the project position on the globe (according to EPSG)
+        coordSys: The coordinate system type as a [proj ellipsoid](https://proj.org/en/stable/usage/ellipsoids.html#built-in-ellipsoid-definitions)\
+            code
+        altitude: The altitude of the projects position on the globe (according to coordSys)
+        latitude: The latitude of the projects position on the globe (according to coordSys)
+        longitude: The longitude of the project positition on the globe (according to coordSys)
 
     Returns:
         A flatbuffers object of type ProjectInfo representing the project
@@ -206,10 +220,11 @@ def createProject(
         builder: A flatbuffers Builder
         name: The name of the project
         frameId: The coordinate frame of the project
-        coordSys: The coordinate system type as a EPSG code
-        altitude: The altitude of the projects position on the globe (according to EPSG)
-        latitude: The latitude of the projects position on the globe (according to EPSG)
-        longitude: The longitude of the project positition on the globe (according to EPSG)
+        coordSys: The coordinate system type as a [proj ellipsoid](https://proj.org/en/stable/usage/ellipsoids.html#built-in-ellipsoid-definitions)\
+            code
+        altitude: The altitude of the projects position on the globe (according to coordSys)
+        latitude: The latitude of the projects position on the globe (according to coordSys)
+        longitude: The longitude of the project positition on the globe (according to coordSys)
 
     Returns:
         The UUID of the created project
@@ -252,10 +267,14 @@ def getOrCreateProject(
         name: The name of the project
         create: Whether to create the project if it does not exist
         mapFrameId: The coordinate frame of the project
-        coordSys: The coordinate system type as a EPSG code
-        altitude: The altitude of the projects position on the globe (according to EPSG)
-        latitude: The latitude of the project position on the globe (according to EPSG)
-        longitude: The longitude of the project position on the globe (according to EPSG)
+        coordSys: The coordinate system type as a [proj ellipsoid](https://proj.org/en/stable/usage/ellipsoids.html#built-in-ellipsoid-definitions)\
+            code
+        altitude: The altitude of the projects position on the globe (according to coordSys)
+        latitude: The latitude of the project position on the globe (according to coordSys)
+        longitude: The longitude of the project position on the globe (according to coordSys)
+
+    Returns:
+        The UUID of the project
     """
     projectUuid = getProject(builder, channel, name)
 
@@ -319,7 +338,7 @@ def createTimeStamp(builder: Builder, seconds: int, nanoseconds: int = 0) -> int
         nanoseconds: The nanoseconds since the last second
 
     Returns:
-        A pointer to the constructed timestamp object in memory.
+        A pointer to the constructed timestamp object
     """
     Timestamp.Start(builder)
     Timestamp.AddSeconds(builder, seconds)
@@ -331,17 +350,17 @@ def createHeader(
     builder: Builder, timeStamp: int = None, frame: str = None, projectUuid: str = None, msgUuid: str = None
 ) -> int:
     """
-    Creates a message header in flatbuffers, all parameters are optional.
+    Creates a message header in flatbuffers.
 
     Args:
         builder: A flatbuffers Builder
-        timeStamp: The pointer to a constructed Timestamp object in memory
+        timeStamp: The pointer to a constructed Timestamp object
         frame: The coordinate frame of the message
-        projectUuid: The UUID of the project the message belongs to (this is often set by the server itself)
-        msgUuid: The UUID of the message (when not provided it will be generated)
+        projectUuid: The UUID of the project the message belongs to
+        msgUuid: The UUID of the message (when not provided it will be set by the server)
 
     Returns:
-        A pointer to the constructed header object in memory.
+        A pointer to the constructed header object
     """
     if frame:
         frameStr = builder.CreateString(frame)
@@ -362,24 +381,23 @@ def createHeader(
 
 
 # Point clouds
-def createPointField(
-    builder: Builder, name: str, offset: int, datatype: Point_Field_Datatype.Point_Field_Datatype, count: int
-) -> int:
+def createPointField(builder: Builder, name: str, offset: int, datatype: int, count: int) -> int:
     """
     Creates a point field to describe the structure of a point entry in the Pointcloud2 message.
-    The same approach is used in the ROS \
-    [Pointfield](https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/PointField.html) message.
+    This esssentially mimicks the ROS\
+    [Pointfield](https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/PointField.html)\
+    message.
 
     Args:
         builder: A flatbuffers Builder
         name: The name of the point field
         offset: Offset from start of the point struct
-        datatype: Datatype used for the point entries \
+        datatype: Datatype used for the point entries\
             (see [fbs definition](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/point_field.fbs))
         count: Number of elements in the point field
 
     Returns:
-        A pointer to the constructed point field object in memory.
+        A pointer to the constructed point field object
     """
     nameStr = builder.CreateString(name)
     PointField.Start(builder)
@@ -393,7 +411,7 @@ def createPointField(
 def createPointFields(
     builder: Builder,
     channels: List[str],
-    datatype: Point_Field_Datatype.Point_Field_Datatype,
+    datatype: int,
     dataTypeOffset: int,
     count: int,
 ) -> List[int]:
@@ -403,13 +421,13 @@ def createPointFields(
     Args:
         builder: A flatbuffers Builder
         channels: List of channel names
-        datatype: Datatype used for the point entries \
+        datatype: Datatype used for the point entries\
             (see [fbs definition](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/point_field.fbs))
-        dataTypeOffset: Offset from start of the point struct, in this case it is used for every channel
+        dataTypeOffset: Offset from start of the point struct, in this case the offset is used for every channel
         count: Number of elements in each point field
 
     Returns:
-        A list of pointers to the constructed point field objects in memory.
+        A list of pointers to the constructed point field objects
     """
     pointFieldsList = []
     offset = 0
@@ -421,7 +439,8 @@ def createPointFields(
 
 def createLabelWithConfidence(builder: Builder, label: str, confidence: Union[float, None] = None) -> int:
     """
-    Creates a label with an associated confidence value.
+    Creates a label with an associated confidence value of type\
+    [Label](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label.fbs).
 
     Args:
         builder: A flatbuffers Builder
@@ -429,7 +448,7 @@ def createLabelWithConfidence(builder: Builder, label: str, confidence: Union[fl
         confidence: The confidence value of the label
 
     Returns:
-        A pointer to the constructed label object in memory.
+        A pointer to the constructed label object
     """
 
     labelStr = builder.CreateString(label)
@@ -440,9 +459,10 @@ def createLabelWithConfidence(builder: Builder, label: str, confidence: Union[fl
     return Label.End(builder)
 
 
-def createLabelWithInstance(builder: str, label: str, confidence: Union[float, None], instanceUuid: str) -> int:
+def createLabelWithInstance(builder: str, label: str, confidence: float, instanceUuid: str) -> int:
     """
-    Creates a label with an associated instance uuid in flatbuffers
+    Creates a label with an associated instance uuid of type\
+    [LabelWithInstance](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label_with_instance.fbs).
 
     Args:
         builder: A flatbuffers Builder
@@ -451,7 +471,7 @@ def createLabelWithInstance(builder: str, label: str, confidence: Union[float, N
         instanceUuid: The UUID of the instance which the label belongs to
 
     Returns:
-        A pointer to the constructed label object in memory.
+        A pointer to the constructed label object
     """
 
     labelConfidence = createLabelWithConfidence(builder, label, confidence)
@@ -466,15 +486,19 @@ def createLabelWithInstance(builder: str, label: str, confidence: Union[float, N
 # labels: list of list of labels (as fb-String msg) per category
 def createLabelWithCategory(builder: Builder, categories: List[str], labels: List[List[int]]) -> int:
     """
-    Creates the message representing the labels of a category.
+    Creates messages of type\
+    [LabelsWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/labels_with_category.fbs)\
+    as a vector, each entry containing the labels of a category, as a input to a Query.
 
     Args:
         builder: A flatbuffers Builder
         categories: A list with categories
-        labels: A list, which maps the categories to lists of labels according to the categories indices
+        labels: A list, which maps the categories to lists of\
+            [Labels](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label.fbs)\
+            according to the categories indices
 
     Returns:
-        A pointer to the vector of category to labels mappings in memory.
+        A pointer to the vector of category to labels mappings
     """
 
     LabelsCategories = []
@@ -498,19 +522,19 @@ def createLabelWithCategory(builder: Builder, categories: List[str], labels: Lis
 
 
 def createLabelsWithCategories(
-    builder: Builder, category: List[str], labels: List[str], confidences: List[float]
+    builder: Builder, category: List[int], labels: List[str], confidences: List[float]
 ) -> List[int]:
     """
-    Adds multiple of the same labels to a list of categories.
+    Adds the same list of labels to each category of a list of categories.
 
     Args:
         builder: A flatbuffers Builder
-        category: A list with categories
+        category: A list with categories used for indexing the labels
         labels: A list of labels
         confidences: A list of confidence values corresponding to the label on the same index
 
     Returns:
-        A pointer to the vector of category to labels mappings in memory.
+        A pointer to the vector of category to labels mappings
     """
     label_categories = []
 
@@ -541,12 +565,14 @@ def createLabelsWithInstance(
 
     Args:
         builder: A flatbuffers Builder
-        labels: A list of labels
+        labels: A list of label strings
         confidences: A list of confidence values corresponding to the label on the same index
         instanceUuids: A list of instance UUIDs corresponding to the label on the same index
 
     Returns:
-        A list of pointers to the constructed label objects in memory.
+        A list of pointers to the constructed\
+        [LabelWithInstance](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label_with_instance.fbs)\
+        objects
     """
     assert len(labels) == len(instanceUuids)
     labelsGeneral = []
@@ -565,46 +591,51 @@ def createPoint2d(builder: Builder, x: float, y: float) -> int:
         y: The y-coordinate of the 2D point
 
     Returns:
-        A pointer to the constructed point object in memory.
+        A pointer to the constructed point object
     """
-    Point.Start(builder)
-    Point.AddX(builder, x)
-    Point.AddY(builder, y)
+    Point2D.Start(builder)
+    Point2D.AddX(builder, x)
+    Point2D.AddY(builder, y)
     return Point.End(builder)
 
 
 def createBoundingBox2d(builder: Builder, centerPoint: int, spatialExtent: int, rotation: float = 0) -> int:
     """
-    Creates a 2D bounding box in flatbuffers.
+    Creates a [Boundingbox2D](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d.fbs)
+    in flatbuffers.
 
     Args:
         builder: A flatbuffers Builder
-        centerPoint: The pointer to the point object of the center point of the bounding box
-        spatialExtent: The pointer to the point object representing the spatial extent in x and y direction
+        centerPoint: The pointer to the Point2D object of the center point of the bounding box
+        spatialExtent: The pointer to the Point2D object representing the spatial extent in x and y direction
         rotation: The rotation of the bounding box
 
     Returns:
-        A pointer to the constructed bounding box object in memory.
+        A pointer to the constructed bounding box object
     """
-    Boundingbox.Start(builder)
-    Boundingbox.AddCenterPoint(builder, centerPoint)
-    Boundingbox.AddSpatialExtent(builder, spatialExtent)
-    Boundingbox.AddRotation(builder, rotation)
-    return Boundingbox.End(builder)
+    Boundingbox2D.Start(builder)
+    Boundingbox2D.AddCenterPoint(builder, centerPoint)
+    Boundingbox2D.AddSpatialExtent(builder, spatialExtent)
+    Boundingbox2D.AddRotation(builder, rotation)
+    return Boundingbox2D.End(builder)
 
 
 def createBoundingBox2dLabeled(builder: Builder, instance: int, boundingBox: int) -> int:
     """
-    Creates a 2d bounding box with label in flatbuffers.
+    Creates a\
+    [BoundingBox2DLabeled](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d_labeled.fbs)\
+    in flatbuffers.
 
     Args:
         builder: A flatbuffers Builder
-        instance: A pointer to the LabelWithInstance object of the bounding box
-        boundingBox: The pointer to a \
+        instance: A pointer to the\
+            [LabelWithInstance](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label_with_instance.fbs)\
+            object of the bounding box
+        boundingBox: The pointer to a\
             [Boundingbox2D](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d.fbs) object
 
     Returns:
-        A pointer to the constructed bounding box object in memory.
+        A pointer to the constructed bounding box object
     """
 
     BoundingBox2DLabeled.Start(builder)
@@ -619,13 +650,13 @@ def createBoundingBoxes2d(builder: Builder, centerPoints: List[int], spatialExte
 
     Args:
         builder: A flatbuffers Builder
-        centerPoints: A list of pointers to the point objects of the center points of the bounding boxes
-        spatialExtents: A list of pointers to the point objects representing the spatial extents in x and y direction
+        centerPoints: A list of pointers to the Point2D objects of the center points of the bounding boxes
+        spatialExtents: A list of pointers to the Point2D objects representing the spatial extents in x and y direction
 
     Returns:
-        A list of pointers to the constructed \
-            [Boundingbox2D](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d.fbs) \
-            objects in memory.
+        A list of pointers to the constructed\
+            [Boundingbox2D](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d.fbs)\
+            objects
     """
     assert len(centerPoints) == len(spatialExtents)
     boundingBoxes = []
@@ -636,15 +667,20 @@ def createBoundingBoxes2d(builder: Builder, centerPoints: List[int], spatialExte
 
 def createBoundingBoxes2dLabeled(builder: Builder, instances: List[int], boundingBoxes: List[int]) -> List[int]:
     """
-    Creates multiple labeled 2D bounding boxes.
+    Creates a list of pointers to\
+    [BoundingBox2DLabeled](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d_labeled.fbs)\
+    object to flatbuffers.
 
     Args:
         builder: A flatbuffers Builder
-        instances: A list of pointers to the LabelWithInstance objects of the bounding boxes
-        boundingBoxes: A list of pointers to 2D bounding box objects
+        instances: A list of pointers to the\
+            [LabelWithInstance](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label_with_instance.fbs)\
+            objects of the bounding boxes corresponding to the bounding boxes by the same index
+        boundingBoxes: A list of pointers to\
+            [Boundingbox2D](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d.fbs) objects
 
     Returns:
-        A list of pointers to the constructed bounding box objects in memory.
+        A list of pointers to the constructed bounding box objects
     """
     assert len(instances) == len(boundingBoxes)
     boundingBoxes2dLabeled = []
@@ -653,17 +689,21 @@ def createBoundingBoxes2dLabeled(builder: Builder, instances: List[int], boundin
     return boundingBoxes2dLabeled
 
 
-# ruff: noqa: E501
 def createBoundingBox2dLabeledStamped(builder: Builder, header: int, labelsBb: List[int]) -> int:
     """
-    Creates a labeled bounding box 2d in flatbuffers.
+    Creates a\
+    [BoundingBoxes2DLabeledStamped](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingboxes2d_labeled_stamped.fbs)\
+    object in flatbuffers and returns it's pointer.
 
     Args:
         builder: A flatbuffers Builder
-        header: The pointer to the header object of the bounding box
-        labelsBb: A list of pointers to \
-            [BoundingBoxes2DLabeledStamped](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d_labeled_with_category.fbs) \
+        header: The pointer to the header object of the bounding boxes
+        labelsBb: A list of pointers to\
+            [BoundingBox2DLabeledWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d_labeled_with_category.fbs)\
             objects
+
+    Returns:
+        A pointer to the constructed bounding boxes object
     """
     BoundingBoxes2DLabeledStamped.StartLabelsBbVector(builder, len(labelsBb))
     for labelBb in reversed(labelsBb):
@@ -676,17 +716,20 @@ def createBoundingBox2dLabeledStamped(builder: Builder, header: int, labelsBb: L
     return BoundingBoxes2DLabeledStamped.End(builder)
 
 
-# ruff: noqa: E501
 def createBoundingBoxLabeledStamped(builder: Builder, header: int, labelsBb: List[int]) -> int:
     """
-    Creates a labeled bounding box in flatbuffers.
+    Constructs a [BoundingBoxesLabeledStamped](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingboxes_labeled_stamped.fbs)\
+    object in flatbuffers and returns it's pointer.
 
     Args:
         builder: A flatbuffers Builder
-        header: The pointer to the header object of the bounding box
-        labelsBb: A list of pointers to \
-            [BoundingBoxLabeledWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox_labeled_with_category.fbs) \
+        header: The pointer to the header object for the bounding boxes
+        labelsBb: A list of pointers to\
+            [BoundingBoxLabeledWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox_labeled_with_category.fbs)\
             objects
+
+    Returns:
+        A pointer to the constructed bounding boxes object
     """
     BoundingBoxesLabeledStamped.StartLabelsBbVector(builder, len(labelsBb))
     for labelBb in reversed(labelsBb):
@@ -700,7 +743,21 @@ def createBoundingBoxLabeledStamped(builder: Builder, header: int, labelsBb: Lis
 
 
 def createBoundingBox2DLabeledWithCategory(builder: Builder, category: str, bb2dLabeled: List[int]) -> int:
-    """ """
+    """
+    Creates a flatbuffers\
+    [BoundingBox2DLabeledWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d_labeled_with_category.fbs)\
+    object.
+
+    Args:
+        builder: A flatbuffers Builder
+        category: The category of the bounding boxes
+        bb2dLabeled: A list of pointers to\
+            [BoundingBox2DLabeled](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d_labeled.fbs)\
+            objects
+
+    Returns:
+        A pointer to the constructed bounding box object
+    """
     BoundingBox2DLabeledWithCategory.StartBoundingBox2dLabeledVector(builder, len(bb2dLabeled))
     for labelBb in reversed(bb2dLabeled):
         builder.PrependUOffsetTRelative(labelBb)
@@ -713,7 +770,18 @@ def createBoundingBox2DLabeledWithCategory(builder: Builder, category: str, bb2d
 
 
 def createPoint(builder: Builder, x: float, y: float, z: float) -> int:
-    """Creates a 3D point in flatbuffers"""
+    """
+    Creates a 3D point in flatbuffers.
+
+    Args:
+        builder: A flatbuffers Builder
+        x: The x-coordinate of the 3D point
+        y: The y-coordinate of the 3D point
+        z: The z-coordinate of the 3D point
+
+    Returns:
+        A pointer to the constructed point object
+    """
     Point.Start(builder)
     Point.AddX(builder, x)
     Point.AddY(builder, y)
@@ -722,7 +790,20 @@ def createPoint(builder: Builder, x: float, y: float, z: float) -> int:
 
 
 def createPointStamped(builder: Builder, point: int, header: int, labelGeneralCategoryVector: int) -> int:
-    """Creates a 3D point stamped in flatbuffers"""
+    """
+    Creates a 3D point stamped in flatbuffers.
+
+    Args:
+        builder: A flatbuffers Builder
+        point: The pointer to a 3D point object
+        header: The pointer to the header object of the point
+        labelGeneralCategoryVector: The pointer to a vector of\
+            [LabelsWithInstanceWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/labels_with_category.fbs)\
+            objects of the point
+
+    Returns:
+        A pointer to the constructed point object
+    """
 
     PointStamped.Start(builder)
     PointStamped.AddPoint(builder, point)
@@ -731,8 +812,20 @@ def createPointStamped(builder: Builder, point: int, header: int, labelGeneralCa
     return PointStamped.End(builder)
 
 
-def createBoundingBox(builder: Builder, centerPoint: int, spatialExtent: int, rotation: float = None) -> int:
-    """Creates a 3D bounding box in flatbuffers"""
+def createBoundingBox(builder: Builder, centerPoint: int, spatialExtent: int, rotation: Union[int, None] = None) -> int:
+    """
+    Creates a 3D bounding box in flatbuffers.
+
+    Args:
+        builder: A flatbuffers Builder
+        centerPoint: The pointer to the 3D Point object of the center point of the bounding box
+        spatialExtent: The pointer to the 3D Point object representing the spatial extent in x, y and z direction
+        rotation: The rotation of the bounding box as a flatbuffers Quaternion
+
+    Returns:
+        A pointer to the constructed\
+        [BoundingBox](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox.fbs) object
+    """
     Boundingbox.Start(builder)
     Boundingbox.AddCenterPoint(builder, centerPoint)
     Boundingbox.AddSpatialExtent(builder, spatialExtent)
@@ -742,7 +835,21 @@ def createBoundingBox(builder: Builder, centerPoint: int, spatialExtent: int, ro
 
 
 def createPolygon2D(builder: Builder, height: float, z: float, vertices: List[int]) -> int:
-    """Create a 2D Polygon in flatbuffers"""
+    """
+    Create a 2D Polygon in flatbuffers.
+
+    Args:
+        builder: A flatbuffers Builder
+        height: The height of the polygon
+        z: The z-coordinate of the polygon from which the height is measured
+        vertices: A list of pointers to\
+            [Point2D](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/point2d.fbs)\
+            objects as the vertices of the polygon
+
+    Returns:
+        A pointer to the constructed\
+        [Polygon2D](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/polygon2d.fbs)
+    """
 
     Polygon2D.StartVerticesVector(builder, len(vertices))
     for v in vertices:
@@ -758,9 +865,23 @@ def createPolygon2D(builder: Builder, height: float, z: float, vertices: List[in
 
 
 def createBoundingBoxStamped(
-    builder: Builder, header: int, centerPoint: int, spatialExtent: int, rotation: float = None
+    builder: Builder, header: int, centerPoint: int, spatialExtent: int, rotation: int = None
 ) -> int:
-    """Creates a stamped 3D bounding box in flatbuffers"""
+    """
+    Creates a\
+    [BoundingboxStamped](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox_stamped.fbs)\
+    object in flatbuffers.
+
+    Args:
+        builder: A flatbuffers Builder
+        header: The pointer to the header object of the bounding box
+        centerPoint: The pointer to the 3D Point object of the center point of the bounding box
+        spatialExtent: The pointer to the 3D Point object representing the spatial extent in x and y direction
+        rotation: The rotation of the bounding box as a flatbuffers Quaternion
+
+    Returns:
+        A pointer to the constructed bounding box object
+    """
     boundingBox = createBoundingBox(builder, centerPoint, spatialExtent, rotation)
     BoundingboxStamped.Start(builder)
     BoundingboxStamped.AddHeader(builder, header)
@@ -768,7 +889,22 @@ def createBoundingBoxStamped(
     return BoundingboxStamped.End(builder)
 
 
-def createBoundingBoxes(builder: Builder, centerPoint: int, spatialExtent: int, rotation: float = None):
+def createBoundingBoxes(
+    builder: Builder, centerPoint: List[int], spatialExtent: List[int], rotation: Union[int, None] = None
+) -> List[int]:
+    """
+    Creates multiple [Boundingbox](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox.fbs)\
+    objects in flatbuffers.
+
+    Args:
+        builder: A flatbuffers Builder
+        centerPoint: A list of pointers to Point3D objects representing the center points of the bounding boxes
+        spatialExtent: A list of pointers to Point3D objects representing the spatial extents in x, y and z direction
+        rotation: A list of rotations for the rounding boxes as flatbuffers Quaternion pointers
+
+    Returns:
+        A list of pointers to the constructed bounding box objects
+    """
     assert len(centerPoint) == len(spatialExtent)
     boundingBoxes = []
     if rotation:
@@ -780,8 +916,24 @@ def createBoundingBoxes(builder: Builder, centerPoint: int, spatialExtent: int, 
     return boundingBoxes
 
 
-def createBoundingBoxLabeled(builder: Builder, instance: int, boundingBox: int):
-    """Creates a labeled bounding box in flatbuffers"""
+def createBoundingBoxLabeled(builder: Builder, instance: int, boundingBox: int) -> int:
+    """
+    Creates a\
+    [BoundingBoxLabeled](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox_labeled.fbs)\
+    object in flatbuffers.
+
+    Args:
+        builder: A flatbuffers Builder
+        instance: The pointer to the\
+            [LabelWithInstance](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label_with_instance.fbs)\
+            object of the bounding box
+        boundingBox: The pointer to the\
+            [Boundingbox](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox.fbs)\
+            object of the labeled bounding box
+
+    Returns:
+        A pointer to the constructed bounding box object
+    """
     BoundingBoxLabeled.Start(builder)
     BoundingBoxLabeled.AddLabelWithInstance(builder, instance)
     BoundingBoxLabeled.AddBoundingBox(builder, boundingBox)
@@ -789,7 +941,22 @@ def createBoundingBoxLabeled(builder: Builder, instance: int, boundingBox: int):
 
 
 def createBoundingBoxesLabeled(builder: Builder, instances: List[int], boundingBoxes: List[int]) -> List[int]:
-    """Creates multiple labeled bounding boxes"""
+    """
+    Creates multiple labeled bounding boxes.
+
+    Args:
+        builder: A flatbuffers Builder
+        instances: A list of pointers to\
+            [LabelWithInstance](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label_with_instance.fbs)\
+            objects
+        boundingBoxes: A list of pointers to\
+            [Boundingbox](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox.fbs)
+
+    Returns:
+        A list of pointers to the constructed\
+        [BoundingBoxLabeled](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox_labeled.fbs)\
+        objects
+    """
     assert len(instances) == len(boundingBoxes)
     boundingBoxesLabeled = []
     for instance, boundingBox in zip(instances, boundingBoxes):
@@ -798,6 +965,20 @@ def createBoundingBoxesLabeled(builder: Builder, instances: List[int], boundingB
 
 
 def createBoundingBoxLabeledWithCategory(builder: Builder, category: str, bbLabeled: List[int]) -> int:
+    """
+    Creates a [BoundingBoxLabeledWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox_labeled_with_category.fbs)\
+    object in flatbuffers.
+
+    Args:
+        builder: A flatbuffers Builder
+        category: The category of the bounding boxes
+        bbLabeled: A list of pointers to\
+            [BoundingBoxLabeled](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox_labeled.fbs)\
+            objects
+
+    Returns:
+        A pointer to the constructed labeled with category bounding box object
+    """
     BoundingBoxLabeledWithCategory.StartBoundingBoxLabeledVector(builder, len(bbLabeled))
     for labelBb in reversed(bbLabeled):
         builder.PrependUOffsetTRelative(labelBb)
@@ -810,7 +991,17 @@ def createBoundingBoxLabeledWithCategory(builder: Builder, category: str, bbLabe
 
 
 def addToBoundingBoxLabeledVector(builder: Builder, boundingBoxLabeledList: List[int]) -> int:
-    """Adds list of boudingBoxLabeled into the labelsBbVector of a flatbuffers pointcloud2"""
+    """
+    Adds list of boudingBoxLabeled into the labelsBbVector of a flatbuffers pointcloud2.
+
+    Args:
+        builder: A flatbuffers Builder
+        boundingBoxLabeledList: A list of pointers to\
+            [BoundingBoxLabeledWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox_labeled_with_category.fbs)
+
+    Returns:
+        A pointer to the constructed vector of bounding box labeled with category objects
+    """
     PointCloud2.StartLabelsBbVector(builder, len(boundingBoxLabeledList))
     # Note: reverse because we prepend
     for bb in reversed(boundingBoxLabeledList):
@@ -819,7 +1010,17 @@ def addToBoundingBoxLabeledVector(builder: Builder, boundingBoxLabeledList: List
 
 
 def addToGeneralLabelsVector(builder: Builder, generalLabelList: List[int]) -> int:
-    """Adds list of generalLabels into the labelsGeneralVector of a flatbuffers pointcloud2"""
+    """
+    Adds list of generalLabels into the labelsGeneralVector of a flatbuffers pointcloud2.
+
+    Args:
+        builder: A flatbuffers Builder
+        generalLabelList: A list of pointers to\
+            [LabelsWithInstanceWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/labels_with_instance_with_category.fbs)
+
+    Returns:
+        A pointer to the constructed vector of general labels objects
+    """
     PointCloud2.StartLabelsGeneralVector(builder, len(generalLabelList))
     # Note: reverse because we prepend
     for label in reversed(generalLabelList):
@@ -828,7 +1029,17 @@ def addToGeneralLabelsVector(builder: Builder, generalLabelList: List[int]) -> i
 
 
 def addToPointFieldVector(builder: Builder, pointFieldList: List[int]) -> int:
-    """Adds a list of pointFields into the fieldsVector of a flatbuffers pointcloud2"""
+    """
+    Adds a list of pointFields into the fieldsVector of a flatbuffers pointcloud2.
+
+    Args:
+        builder: A flatbuffers Builder
+        pointFieldList: A list of pointers to\
+            [PointField](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/point_field.fbs) objects
+
+    Returns:
+        A pointer to the constructed vector of point fields objects
+    """
     PointCloud2.StartFieldsVector(builder, len(pointFieldList))
     # Note: reverse because we prepend
     for pointField in reversed(pointFieldList):
@@ -845,12 +1056,33 @@ def createQuery(
     instanceUuids: List[str] = None,
     dataUuids: List[str] = None,
     withoutData: bool = False,
-    polygon2d: Union[int] = None,
+    polygon2d: Union[int, None] = None,
     fullyEncapsulated: bool = False,
     inMapFrame: bool = True,
     sortByTime: bool = False,
-):
-    """Create a query, all parameters are optional"""
+) -> int:
+    """
+    Create a query, all parameters are optional.
+
+    Args:
+        builder: A flatbuffers Builder
+        timeInterval: The pointer to a TimeInterval object representing the time frame of the returned instances
+        labels: A list of pointers to\
+            [LabelsWithInstanceWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/labels_with_instance_with_category.fbs)\
+            flatbuffers objects, which the instances should atleast have one of
+        mustHaveAllLabels: A boolean indicating if the returned instances should have all the labels each
+        projectUuids: A list of project UUIDs to execute the query on
+        instanceUuids: A list of specific instance UUIDs to query
+        dataUuids: A list of specific data UUIDs to query
+        withoutData: A boolean indicating if the query should return instances without their attached data
+        polygon2d: A pointer to a Polygon2D object to retrieve only instances within the polygon
+        fullyEncapsulated: A boolean indicating if the returned instances should be fully encapsulated by the polygon
+        inMapFrame: A boolean indicating if the polygon coordinates are in the map frame or in EPSG world coordinates
+        sortByTime: A boolean indicating if the returned instances should be sorted by time
+
+    Returns:
+        A pointer to the constructed query object
+    """
 
     # Note: reverse because we prepend
     if projectUuids:
@@ -901,8 +1133,19 @@ def createQuery(
     return Query.End(builder)
 
 
-def createQueryInstance(builder: Builder, query: int, datatype: Datatype.Datatype) -> int:
-    """Create a query for instances"""
+def createQueryInstance(builder: Builder, query: int, datatype: int) -> int:
+    """
+    Create a query for instances.
+
+    Args:
+        builder: A flatbuffers Builder
+        query: The pointer to the query object
+        datatype: The [Datatype](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/datatype.fbs)\
+            of the instances to query
+
+    Returns:
+        A pointer to the constructed query instance object
+    """
     QueryInstance.Start(builder)
     QueryInstance.AddDatatype(builder, datatype)
     QueryInstance.AddQuery(builder, query)
@@ -910,7 +1153,17 @@ def createQueryInstance(builder: Builder, query: int, datatype: Datatype.Datatyp
 
 
 def createTimeInterval(builder: Builder, timeMin: int, timeMax: int) -> int:
-    """Create a time time interval in flatbuffers"""
+    """
+    Create a closed time interval in flatbuffers.
+
+    Args:
+        builder: A flatbuffers Builder
+        timeMin: The pointer to a Timestamp object representing the lower bound of the time of the interval
+        timeMax: The pointer to a Timestamp object representing the upper bound of the time of the interval
+
+    Returns:
+        A pointer to the constructed time interval object
+    """
     TimeInterval.Start(builder)
     TimeInterval.AddTimeMin(builder, timeMin)
     TimeInterval.AddTimeMax(builder, timeMax)
@@ -918,13 +1171,41 @@ def createTimeInterval(builder: Builder, timeMin: int, timeMax: int) -> int:
 
 
 def createTransformStampedQuery(builder: Builder, header: int, childFrameId: str) -> int:
+    """
+    Create a transform stamped query in flatbuffers.
+
+    Args:
+        builder: A flatbuffers Builder
+        header: The pointer to a header object including the parent frame id
+        childFrameId: The child frame id
+
+    Returns:
+        A pointer to the constructed transform stamped query object
+    """
     TransformStampedQuery.Start(builder)
     TransformStampedQuery.AddHeader(builder, header)
     TransformStampedQuery.AddChildFrameId(builder, childFrameId)
     return TransformStampedQuery.End(builder)
 
 
-def createRegionOfInterest(builder: Builder, x_offset: int, y_offset: int, height: int, width: int, do_rectify: bool):
+def createRegionOfInterest(
+    builder: Builder, x_offset: int, y_offset: int, height: int, width: int, do_rectify: bool
+) -> int:
+    """
+    Create a region of interest in flatbuffers. This has the same structure as the ROS message\
+    [RegionOfInterest](https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/RegionOfInterest.html) type.
+
+    Args:
+        builder: A flatbuffers Builder
+        x_offset: Leftmost pixel of the region
+        y_offset: Topmost pixel of the region
+        height: The height of the region
+        width: The width of the region
+        do_rectify: A boolean indicating if a distinct ROI should be calculated
+
+    Returns:
+        A pointer to the constructed region of interest object
+    """
     RegionOfInterest.Start(builder)
     RegionOfInterest.AddXOffset(builder, x_offset)
     RegionOfInterest.AddYOffset(builder, y_offset)
@@ -949,6 +1230,29 @@ def createCameraIntrinsics(
     region_of_interest: int,
     max_viewing_dist: float,
 ) -> int:
+    """
+    Create a camera intrinsics object in flatbuffers.
+    This is structured in the same way as the ROS message\
+    [CameraInfo](https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/CameraInfo.html).
+
+    Args:
+        builder: A flatbuffers Builder
+        header: The pointer to the header object of the camera intrinsics
+        height: The height of the camera image
+        width: The width of the camera image
+        distortion_model: The distortion model of the camera
+        distortion: The distortion coefficients of the camera
+        intrinsics_matrix: The intrinsics matrix of the camera
+        rectification_matrix: The rectification matrix of the camera
+        projection_matrix: The projection matrix of the camera
+        binning_x: The binning in horizontal direction
+        binning_y: The binning in vertical direction
+        region_of_interest: The region of interest of the camera
+        max_viewing_dist: The maximum viewing distance of the camera
+
+    Returns:
+        A pointer to the constructed camera intrinsics object.
+    """
     dm_buf = builder.CreateString(distortion_model)
 
     CameraIntrinsics.StartDistortionVector(builder, len(distortion))
@@ -989,6 +1293,17 @@ def createCameraIntrinsics(
 
 
 def createCameraIntrinsicsQuery(builder: Builder, ci_uuid: str, project_uuid: str) -> str:
+    """
+    Create a query for camera intrinsics objects in flatbuffers.
+
+    Args:
+        builder: A flatbuffers Builder
+        ci_uuid: The UUID of the camera intrinsics
+        project_uuid: The UUID of the project to query the camera intrinsics from
+
+    Returns:
+        A pointer to the constructed camera intrinsics query object
+    """
     ci_uuid_str = builder.CreateString(ci_uuid)
     project_uuid_str = builder.CreateString(project_uuid)
     CameraIntrinsicsQuery.Start(builder)
@@ -998,7 +1313,19 @@ def createCameraIntrinsicsQuery(builder: Builder, ci_uuid: str, project_uuid: st
     return CameraIntrinsicsQuery.End(builder)
 
 
-def createUuidDatatypePair(builder: Builder, uuid: str, datatype: Datatype.Datatype) -> int:
+def createUuidDatatypePair(builder: Builder, uuid: str, datatype: int) -> int:
+    """
+    Create a UUID datatype pair in flatbuffers for meta type services.
+
+    Args:
+        builder: A flatbuffers Builder
+        uuid: The UUID of a project to retrieve the information from
+        datatype: The [Datatype](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/datatype.fbs)\
+            of the instance to retrieve the information from
+
+    Returns:
+        A pointer to the constructed UUID datatype pair object
+    """
     uuidStr = builder.CreateString(uuid)
 
     UuidDatatypePair.Start(builder)
@@ -1007,7 +1334,20 @@ def createUuidDatatypePair(builder: Builder, uuid: str, datatype: Datatype.Datat
     return UuidDatatypePair.End(builder)
 
 
-def createUuidDatatypeWithCategory(builder: Builder, uuid: str, datatype: Datatype.Datatype, category: str) -> int:
+def createUuidDatatypeWithCategory(builder: Builder, uuid: str, datatype: int, category: str) -> int:
+    """
+    Create a UUID datatype pair with a category in flatbuffers for meta type services.
+
+    Args:
+        builder: A flatbuffers Builder
+        uuid: The UUID of a project to retrieve the information from
+        datatype: The [Datatype](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/datatype.fbs)\
+            of the instance to retrieve the information from
+        category: The category to which the instance belongs
+
+    Returns:
+        A pointer to the constructed UUID datatype with category object
+    """
     categoryStr = builder.CreateString(category)
 
     UuidDatatypePair = createUuidDatatypePair(builder, uuid, datatype)
@@ -1019,6 +1359,17 @@ def createUuidDatatypeWithCategory(builder: Builder, uuid: str, datatype: Dataty
 
 
 def createProjectInfo(builder: Builder, name: str, uuid: str) -> int:
+    """
+    Create a project info object in flatbuffers.
+
+    Args:
+        builder: A flatbuffers Builder
+        name: The name of the project
+        uuid: The UUID of the project
+
+    Returns:
+        A pointer to the constructed project info object
+    """
     nameStr = builder.CreateString(name)
     uuidStr = builder.CreateString(uuid)
 
@@ -1029,6 +1380,16 @@ def createProjectInfo(builder: Builder, name: str, uuid: str) -> int:
 
 
 def createVector3(builder: Builder, t: Tuple[float, float, float]) -> int:
+    """
+    Create a 3D vector in flatbuffers.
+
+    Args:
+        builder: A flatbuffers Builder
+        t: The 3D vector to be created
+
+    Returns:
+        A pointer to the constructed 3D vector object
+    """
     Vector3.Start(builder)
     Vector3.AddX(builder, t[0])
     Vector3.AddY(builder, t[1])
@@ -1037,6 +1398,16 @@ def createVector3(builder: Builder, t: Tuple[float, float, float]) -> int:
 
 
 def createQuaternion(builder: Builder, quat: Quaternion.Quaternion) -> int:
+    """
+    Create a quaternion in flatbuffers.
+
+    Args:
+        builder: A flatbuffers Builder
+        quat: The quaternion to be created
+
+    Returns:
+        A pointer to the constructed quaternion object
+    """
     Quaternion.Start(builder)
     Quaternion.AddX(builder, quat.x)
     Quaternion.AddY(builder, quat.y)
@@ -1045,7 +1416,18 @@ def createQuaternion(builder: Builder, quat: Quaternion.Quaternion) -> int:
     return Quaternion.End(builder)
 
 
-def createTransform(builder: Builder, t: Tuple[float, float, float], quat: Quaternion.Quaternion) -> int:
+def createTransform(builder: Builder, t: int, quat: int) -> int:
+    """
+    Create a transform in flatbuffers.
+
+    Args:
+        builder: A flatbuffers Builder
+        t: A pointer to a Vector3 representing the translation of the transform
+        quat: The pointer to the Quaternion flatbuffers object of the transform
+
+    Returns:
+        A pointer to the constructed transform object
+    """
     Transform.Start(builder)
     Transform.AddTranslation(builder, t)
     Transform.AddRotation(builder, quat)
@@ -1053,6 +1435,18 @@ def createTransform(builder: Builder, t: Tuple[float, float, float], quat: Quate
 
 
 def createTransformStamped(builder: Builder, childFrame: str, headerTf: int, transform: int) -> int:
+    """
+    Create a stamped transform in flatbuffers.
+
+    Args:
+        builder: A flatbuffers Builder
+        childFrame: The child frame of the transform
+        headerTf: The pointer to the flatbuffers header of the transform
+        transform: The pointer to the flatbuffers transform
+
+    Returns:
+        A pointer to the constructed stamped transform object
+    """
     childFrame = builder.CreateString(childFrame)
     TransformStamped.Start(builder)
     TransformStamped.AddChildFrameId(builder, childFrame)
@@ -1066,9 +1460,26 @@ def createImage(
     image: np.ndarray,
     header: int,
     encoding: str,
-    boundingBox2dLabeledVector: Union[int, None] = None,
-    labelsGeneral: Union[int, None] = None,
+    boundingBox2dLabeledVector: Union[List[int], None] = None,
+    labelsGeneral: Union[List[int], None] = None,
 ) -> int:
+    """
+    Create an image in flatbuffers.
+
+    Args:
+        builder: A flatbuffers Builder
+        image: The image to be created (can be read from a file using imageio.imread())
+        header: The pointer to the header object of the image
+        encoding: The encoding of the image, e.g. rgb8
+        boundingBox2dLabeledVector: A list of pointers to\
+            [BoundingBox2DLabeledWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d_labeled_with_category.fbs)\
+            objects to attach to the image
+        labelsGeneral: A list to pointers to objects of type\
+            [LabelsWithInstanceWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/labels_with_instance_with_category.fbs)
+
+    Returns:
+        A pointer to the constructed image object
+    """
     encoding = builder.CreateString(encoding)
 
     if boundingBox2dLabeledVector:

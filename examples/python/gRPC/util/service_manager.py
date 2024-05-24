@@ -28,10 +28,6 @@ class ServiceManager:
     def channel(self) -> Channel:
         return self._channel
 
-    @channel.setter
-    def set_channel(self, channel: Channel):
-        self._channel = channel
-
     def get_stub(self, stub_type):
         if not getattr(self, f"_stub_{stub_type.__name__}", False):
             setattr(self, f"_stub_{stub_type.__name__}", stub_type(self._channel))
