@@ -18,7 +18,7 @@ from seerep.util.fb_helper import (
     createBoundingBoxLabeledWithCategory,
     createHeader,
     createLabelsWithInstance,
-    createLabelWithCategory,
+    createLabelsWithInstanceWithCategory,
     createPoint,
     createPointFields,
     createQuaternion,
@@ -37,13 +37,18 @@ def createPointCloud(builder, header, height=960, width=1280):
     pointFieldsVector = addToPointFieldVector(builder, pointFields)
 
     # create general labels
-    labelsGeneral = createLabelsWithInstance(
-        builder,
-        ["GeneralLabel" + str(i) for i in range(NUM_GENERAL_LABELS)],
-        [i * 10.0 for i in range(NUM_GENERAL_LABELS)],
-        [str(uuid.uuid4()) for _ in range(NUM_GENERAL_LABELS)],
+    labels = [[f"GeneralLabel{i}" for i in range(NUM_GENERAL_LABELS)]]
+    confidences = [[i * 10.0 for i in range(NUM_GENERAL_LABELS)]]
+    instance_uuids = [[str(uuid.uuid4()) for i in range(NUM_GENERAL_LABELS)]]
+
+    labelsGeneralCat = createLabelsWithInstanceWithCategory(
+        builder, ["myCategory"], labels, instance_uuids, confidences
     )
-    labelsGeneralCat = createLabelWithCategory(builder, ["myCategory"], [labelsGeneral])
+
+    PointCloud2.StartLabelsGeneralVector(builder, len(labelsGeneralCat))
+    for label in labelsGeneralCat:
+        builder.PrependUOffsetTRelative(label)
+    labelsGeneralCat = builder.EndVector()
 
     # create bounding box labels
     boundingBoxes = createBoundingBoxes(
@@ -55,8 +60,8 @@ def createPointCloud(builder, header, height=960, width=1280):
     labelWithInstances = createLabelsWithInstance(
         builder,
         ["BoundingBoxLabel" + str(i) for i in range(NUM_BB_LABELS)],
-        [i * 10.0 for i in range(NUM_BB_LABELS)],
         [str(uuid.uuid4()) for _ in range(NUM_BB_LABELS)],
+        [i * 10.0 for i in range(NUM_BB_LABELS)],
     )
     labelsBb = createBoundingBoxesLabeled(builder, labelWithInstances, boundingBoxes)
     labelsBBCat = createBoundingBoxLabeledWithCategory(builder, builder.CreateString("myCategory"), labelsBb)

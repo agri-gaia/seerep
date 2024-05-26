@@ -16,7 +16,7 @@ from seerep.util.fb_helper import (
     createBoundingBoxes2dLabeled,
     createHeader,
     createLabelsWithInstance,
-    createLabelWithCategory,
+    createLabelsWithInstanceWithCategory,
     createPoint2d,
     createTimeStamp,
     getOrCreateProject,
@@ -76,8 +76,8 @@ class yoloAnnotatedImageLoader:
             labelWithInstances = createLabelsWithInstance(
                 builder,
                 labelStrings,
-                [1.0 for _ in range(len(labelStrings))],
                 [str(uuid.uuid4()) for _ in range(len(labelStrings))],
+                [1.0 for _ in range(len(labelStrings))],
             )
             labelsBb = createBoundingBoxes2dLabeled(builder, labelWithInstances, boundingBoxes)
 
@@ -89,13 +89,17 @@ class yoloAnnotatedImageLoader:
             builder.PrependUOffsetTRelative(boundingBox2DLabeledWithCategory)
             boundingBox2DLabeledWithCategoryVector = builder.EndVector()
 
-        labelsGeneral = createLabelsWithInstance(
-            builder,
-            labelGeneral,
-            [1.0 for _ in range(len(labelGeneral))],
-            [str(uuid.uuid4()) for _ in range(len(labelGeneral))],
+        labels_general = labelGeneral
+        confidences = [1.0 for _ in range(len(labelGeneral))]
+        instances = [[str(uuid.uuid4())] for _ in range(len(labelGeneral))]
+
+        labelsGeneralCat = createLabelsWithInstanceWithCategory(
+            builder, [self.labelCategory], labels_general, instances, confidences
         )
-        labelsGeneralCat = createLabelWithCategory(builder, [self.labelCategory], [labelsGeneral])
+        Image.StartLabelsGeneralVector(builder, len(labelsGeneralCat))
+        for label in reversed(labelsGeneralCat):
+            builder.PrependUOffsetTRelative(label)
+        labelsGeneralCat = builder.EndVector()
 
         header = createHeader(
             builder,

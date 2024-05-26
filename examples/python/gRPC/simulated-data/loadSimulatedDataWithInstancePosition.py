@@ -5,7 +5,7 @@ import imageio.v2 as imageio
 import numpy as np
 import quaternion
 import yaml
-from seerep.fb import Transform
+from seerep.fb import PointStamped, Transform
 from seerep.fb import image_service_grpc_fb as imageService
 from seerep.fb import point_service_grpc_fb as pointService
 from seerep.fb import tf_service_grpc_fb as tfService
@@ -16,7 +16,7 @@ from seerep.util.fb_helper import (
     createBoundingBox2DLabeledWithCategory,
     createHeader,
     createImage,
-    createLabelWithCategory,
+    createLabelsWithInstanceWithCategory,
     createLabelWithInstance,
     createPoint,
     createPoint2d,
@@ -84,9 +84,13 @@ class LoadSimulatedDataWithInstancePosition:
         position = pointCloudData[pixelY][pixelX]
         point = createPoint(builder, position[0], position[1], position[2])
 
-        labelGeneral = []
-        labelGeneral.append(createLabelWithInstance(builder, label, 1.0, instanceUuid))
-        labelGeneralCategory = createLabelWithCategory(builder, [self.labelCategory], [labelGeneral])
+        labelGeneralCategory = createLabelsWithInstanceWithCategory(
+            builder, [self.labelCategory], [[label]], [[instanceUuid]], [[1.0]]
+        )
+        PointStamped.StartLabelsGeneralVector(builder, len(labelGeneralCategory))
+        for label in reversed(labelGeneralCategory):
+            builder.PrependUOffsetTRelative(label)
+        labelGeneralCategory = builder.EndVector()
 
         timestamp = createTimeStamp(builder, time)
         header = createHeader(builder, timestamp, frame, self.projectUuid)
@@ -106,7 +110,7 @@ class LoadSimulatedDataWithInstancePosition:
             print("uuid: " + instanceUuid)
 
             label = self.labelSwitch.get(int(round(labelFloat)))
-            labelWithInstance = createLabelWithInstance(builder, label, 1.0, instanceUuid)
+            labelWithInstance = createLabelWithInstance(builder, label, instanceUuid, 1.0)
             centerPoint = createPoint2d(builder, x, y)
             spatialExtent = createPoint2d(builder, xExtent, yExtent)
             boundingBox2D = createBoundingBox2d(builder, centerPoint, spatialExtent)

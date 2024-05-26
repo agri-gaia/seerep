@@ -11,8 +11,7 @@ from seerep.fb import point_service_grpc_fb as pointService
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
     createHeader,
-    createLabelWithCategory,
-    createLabelWithInstance,
+    createLabelsWithInstanceWithCategory,
     createPoint,
     createQuery,
     createTimeStamp,
@@ -60,14 +59,20 @@ def send_points_raw(
                 coordinates = (1, 2, 3)
                 point = createPoint(builder, *coordinates)
 
-                labelWithInstanceMsg = createLabelWithInstance(
-                    builder,
-                    response.LabelsBb(0).BoundingBox2dLabeled(i).LabelWithInstance().Label().Label().decode("utf-8"),
-                    response.LabelsBb(0).BoundingBox2dLabeled(i).LabelWithInstance().Label().Confidence(),
-                    response.LabelsBb(0).BoundingBox2dLabeled(i).LabelWithInstance().InstanceUuid().decode("utf-8"),
+                label = response.LabelsBb(0).BoundingBox2dLabeled(i).LabelWithInstance().Label().Label().decode("utf-8")
+                confidence = response.LabelsBb(0).BoundingBox2dLabeled(i).LabelWithInstance().Label().Confidence()
+                instance_uuid = (
+                    response.LabelsBb(0).BoundingBox2dLabeled(i).LabelWithInstance().InstanceUuid().decode("utf-8")
                 )
 
-                labelWithCat = createLabelWithCategory(builder, ["myCategory"], [[labelWithInstanceMsg]])
+                labelWithCat = createLabelsWithInstanceWithCategory(
+                    builder, ["myCategory"], [[label]], [[instance_uuid]], [[confidence]]
+                )
+
+                PointStamped.StartLabelsGeneralVector(builder, len(labelWithCat))
+                for label in reversed(labelWithCat):
+                    builder.PrependUOffsetTRelative(label)
+                labelWithCat = builder.EndVector()
 
                 unionMapEntryKey1 = builder.CreateString("exampleKey1")
                 value1String = builder.CreateString("exampleValue1")

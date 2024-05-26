@@ -11,8 +11,7 @@ from seerep.fb import Image
 from seerep.fb import image_service_grpc_fb as imageService
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
-    createLabelWithCategory,
-    createLabelWithConfidence,
+    createLabelsWithCategoryVector,
     createPoint2d,
     createPolygon2D,
     createQuery,
@@ -56,11 +55,11 @@ def query_images_raw(
     # list of labels per category
     labels = [
         [
-            createLabelWithConfidence(builder, "testlabel0"),
-            createLabelWithConfidence(builder, "testlabelgeneral0"),
+            "testlabel0",
+            "testlabelgeneral0",
         ]
     ]
-    labelCategory = createLabelWithCategory(builder, category, labels)
+    labelCategory = createLabelsWithCategoryVector(builder, category, labels)
     dataUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
     instanceUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 

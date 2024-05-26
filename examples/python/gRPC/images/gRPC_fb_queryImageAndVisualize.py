@@ -11,7 +11,7 @@ from seerep.fb import Image
 from seerep.fb import image_service_grpc_fb as imageService
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
-    createLabelWithCategory,
+    createLabelsWithCategoryVector,
     createPoint2d,
     createPolygon2D,
     createQuery,
@@ -57,13 +57,14 @@ projectUuids = [builder.CreateString(projectuuid)]
 # category = ["image_type"]
 category = ["image_type", "crops"]
 if gli_image:
-    imageType = [builder.CreateString("image_type_gli")]
+    imageType = ["image_type_gli"]
 else:
-    imageType = [builder.CreateString("image_type_rgb")]
-crops = [builder.CreateString("white_cabbage_young")]
+    imageType = ["image_type_rgb"]
+crops = ["white_cabbage_young"]
 # labels = [imageType]
 labels = [imageType, crops]
-labelCategory = createLabelWithCategory(builder, category, labels)
+
+labelCategory = createLabelsWithCategoryVector(builder, category, labels)
 dataUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 instanceUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 

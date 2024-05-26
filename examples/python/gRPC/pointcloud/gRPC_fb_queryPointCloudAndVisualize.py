@@ -100,11 +100,11 @@ def query_pcs(
 
     # create labels for a semantic query
     category = ["myCategory"]
-    labels = {
-        "myCategory": [(fb_builder.CreateString(f"GeneralLabel{i}"), i * 10.0) for i in range(NUM_GENERAL_LABELS)]
-    }
+    labels = [[f"GeneralLabel{i}" for i in range(NUM_GENERAL_LABELS)]]
 
-    label_wcategories = createLabelsWithCategories(fb_builder, category, labels)
+    confidences = [[i * 10.0 for i in range(NUM_GENERAL_LABELS)]]
+
+    label_wcategories = createLabelsWithCategories(fb_builder, category, labels, confidences)
 
     # filter for specific data
     data_uuids = [fb_builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]

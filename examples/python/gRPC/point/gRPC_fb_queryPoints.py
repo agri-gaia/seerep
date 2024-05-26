@@ -7,8 +7,7 @@ from seerep.fb import Datatypes, PointStamped, String
 from seerep.fb import point_service_grpc_fb as pointService
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
-    createLabelWithCategory,
-    createLabelWithConfidence,
+    createLabelsWithCategoryVector,
     createPoint2d,
     createPolygon2D,
     createQuery,
@@ -42,15 +41,10 @@ def get_points_raw(target_proj_uuid: str = None, grpc_channel=get_gRPC_channel()
     timeInterval = createTimeInterval(builder, timeMin, timeMax)
 
     projectUuids = [builder.CreateString(target_proj_uuid)]
-    category = "0"
+    category = ["0"]
 
-    labels = [
-        [
-            createLabelWithConfidence(builder, "testlabel0"),
-            createLabelWithConfidence(builder, "testlabelgeneral0"),
-        ]
-    ]
-    labelCategory = createLabelWithCategory(builder, category, labels)
+    labels = [["testlabel0", "testlabelgeneral0"]]
+    labelCategory = createLabelsWithCategoryVector(builder, category, labels)
     dataUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
     instanceUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 

@@ -148,14 +148,15 @@ class DatatypeImplementations:
         @classmethod
         def label_with_category(cls, builder: Builder) -> LabelsWithCategory.LabelsWithCategory:
             category = ["0"]
-            labels = {
-                "0": [
-                    (builder.CreateString("testlabel0"), 0.3),
-                    (builder.CreateString("testlabel1"), 0.3),
-                    (builder.CreateString("testlabelgeneral0"), 0.7),
+            labels = [
+                [
+                    "testlabel0",
+                    "testlabel1",
+                    "testlabelgeneral0",
                 ]
-            }
-            return fbh.createLabelsWithCategories(builder, category, labels)
+            ]
+            confidences = [[0.3, 0.3, 0.7]]
+            return fbh.createLabelsWithCategories(builder, category, labels, confidences)
 
         @classmethod
         def sparql_query(cls, builder: Builder):

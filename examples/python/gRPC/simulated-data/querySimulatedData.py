@@ -7,7 +7,7 @@ from seerep.fb import Image
 from seerep.fb import image_service_grpc_fb as imageService
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
-    createLabelWithCategory,
+    createLabelsWithCategoryVector,
     createPoint2d,
     createPolygon2D,
     createQuery,
@@ -41,7 +41,7 @@ timeMax = createTimeStamp(builder, 1654688940, 0)
 timeInterval = createTimeInterval(builder, timeMin, timeMax)
 
 projectUuids = [builder.CreateString(projectuuid)]
-labels = createLabelWithCategory(builder, ["ground_truth"], [[builder.CreateString("Gänseblümchen")]])
+labels = createLabelsWithCategoryVector(builder, ["ground_truth"], [["Gänseblümchen"]])
 
 # 4. Create a query with parameters
 # all parameters are optional
