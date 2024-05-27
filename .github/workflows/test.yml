@@ -4,71 +4,75 @@ on:
   push:
 
 jobs:
-  hdf5-interface:
-    name: HDF5 Interface
+  Unit-Tests:
+    name: Unit Tests
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/agri-gaia/seerep_base:latest
     steps:
-    - name: Checkout code
+
+    - name: Checkout Code
       uses: actions/checkout@v4
       with:
         path: src
-    - name: Build seerep_hdf5 packages
+
+    - run: apt update
+    - name: Ccache
+      uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        create-symlink: true
+
+    - name: Build Packages
       run: |
         source /opt/ros/noetic/setup.bash
-        catkin build seerep_hdf5_* --workspace $GITHUB_WORKSPACE/
+        catkin build seerep_hdf5_fb seerep_hdf5_pb seerep_ros_conversions_fb --workspace $GITHUB_WORKSPACE/
         source $GITHUB_WORKSPACE/devel/setup.bash
       shell: bash
-    - name: Run flatbuffer tests
+
+    - name: HDF5 Flatbuffer Unit Tests
       run: catkin test seerep_hdf5_fb
       shell: bash
-    - name: Run protobuf tests
+
+    - name: HDF5 Protobuf Unit Tests
       run: catkin test seerep_hdf5_pb
       shell: bash
 
-  ros-converions:
-    name: ROS Conversions
-    runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/agri-gaia/seerep_base:latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        path: src
-    - name: Build seerep_ros packages
-      run: |
-        source /opt/ros/noetic/setup.bash
-        catkin build seerep_ros_* --workspace $GITHUB_WORKSPACE/
-        source $GITHUB_WORKSPACE/devel/setup.bash
-      shell: bash
-    - name: Test flatbuffer conversions
+    - name: ROS Conversions Unit Tests
       run: catkin test seerep_ros_conversions_fb
       shell: bash
 
-  integration-examples:
+  Integration-Tests:
     name: Integration Tests
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/agri-gaia/seerep_base:latest
     steps:
-    - name: Checkout code
+
+    - name: Checkout Code
       uses: actions/checkout@v4
       with:
         path: src
-    - name: Set up python 3.8
+
+    - name: Set up Python 3.8
       run: |
         apt update
         apt install -y python3.8
         ln -s `which python3.8` /usr/local/bin/python
       shell: bash
-    - name: Build seerep
+
+    - run: apt update
+    - name: Ccache
+      uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        create-symlink: true
+
+    - name: Build SEEREP
       run: |
         source /opt/ros/noetic/setup.bash
         catkin build --workspace $GITHUB_WORKSPACE
       shell: bash
-    - name: Execute pytest
+
+    - name: Execute Pytest
       run: |
         source $GITHUB_WORKSPACE/devel/setup.bash
         PYTHONPATH=$GITHUB_WORKSPACE/devel/include/seerep_com/fbs:$PYTHONPATH pytest --force-sugar $GITHUB_WORKSPACE/src

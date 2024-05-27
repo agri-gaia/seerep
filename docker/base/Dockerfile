@@ -18,8 +18,6 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         curl \
         cmake \
         make \
-        g++ \
-        gdb \
         unzip \
         git \
         libcgal-dev \
@@ -57,7 +55,7 @@ RUN pip3 install --upgrade pip \
         && pip3 install -r /tmp/requirements.txt --ignore-installed PyYAML --no-cache-dir \
         && rm /tmp/requirements.txt
 
-        #Install seerep dependencies from apt
+#Install seerep dependencies from apt
 RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         ros-noetic-tf \
         ros-noetic-vision-msgs \
@@ -72,7 +70,23 @@ RUN apt-get update -qq && apt-get -qq install -y --no-install-recommends \
                 ruby shellcheck \
                 clang-format-15 \
                 python3-catkin-lint \
-        && rm -rf /var/lib/apt/lists/*
+                && rm -rf /var/lib/apt/lists/*
+
+####################################################
+#Install CCACHE
+####################################################
+
+RUN wget https://github.com/ccache/ccache/releases/download/v4.9.1/ccache-4.9.1.tar.gz \
+        && tar -xf ccache-4.9.1.tar.gz \
+        && mkdir -p ccache-4.9.1/build \
+        && cd ccache-4.9.1/build \
+        && cmake -D CMAKE_BUILD_TYPE=Release .. \
+        && make -j"$(nproc)" \
+        && make install \
+        && cd ../..  \
+        && rm -rf ccache-4.9.1 ccache-4.9.1.tar.gz
+
+RUN ln -sf $(which ccache) /usr/local/bin/c++ && ln -sf $(which ccache) /usr/local/bin/cc
 
 ####################################################
 #Install HighFive
@@ -90,7 +104,7 @@ RUN git clone --depth 1 -b v2.4.0 $HDF5_REL.git \
         && rm -rf HighFive
 
 ####################################################
-#Install flatbuffer
+#Install Flatbuffers
 ####################################################
 RUN wget https://github.com/google/flatbuffers/archive/refs/tags/v2.0.0.tar.gz \
         && tar -xf v2.0.0.tar.gz \
@@ -117,7 +131,7 @@ RUN git clone --recurse-submodules --depth 1 -b v1.35.0 https://github.com/grpc/
         && rm -rf grpc
 
 ####################################################
-#Install protobuf from github
+#Install Protobuf
 ####################################################
 RUN curl -LO $PB_REL/download/v$PB_VER/protobuf-cpp-3.$PB_VER.zip \
         && unzip protobuf-cpp-3.$PB_VER.zip \
@@ -128,11 +142,10 @@ RUN curl -LO $PB_REL/download/v$PB_VER/protobuf-cpp-3.$PB_VER.zip \
         && make -j"$(nproc)" \
         && make install \
         && cd ../.. \
-        && rm protobuf-cpp-3.$PB_VER.zip \
-        && rm -rf protobuf-$3.PB_VER
+        && rm -rf protobuf-cpp-3.$PB_VER.zip protobuf-3.$PB_VER
 
 ####################################################
-#Install current googletest release
+#Install GoogleTest
 ####################################################
 
 RUN git clone https://github.com/google/googletest.git -b release-1.12.0 \
@@ -146,10 +159,9 @@ RUN git clone https://github.com/google/googletest.git -b release-1.12.0 \
         && rm -rf googletest
 
 ####################################################
-#Install documentation dependencies
+#Install Doxygen
 ####################################################
 
-#Install doxygen
 RUN wget ${DOX_REL}/${DOX_VER}.tar.gz \
         && tar -xf ${DOX_VER}.tar.gz \
         && mkdir -p doxygen-${DOX_VER}/build \
@@ -173,6 +185,6 @@ RUN echo "source /opt/ros/noetic/setup.bash" >> /home/docker/.bashrc \
         && echo "[[ -e /seerep/devel/setup.bash ]] && source /seerep/devel/setup.bash" >> /home/docker/.bashrc \
         && echo "[[ -e /seerep/devel/setup.zsh ]] && source /seerep/devel/setup.zsh" >> /home/docker/.zshrc
 
-RUN echo 'export PYTHONPATH="${PYTHONPATH}:/seerep/devel/lib:/seerep/devel/include/seerep_com/fbs/"' >> /home/docker/.bashrc
+ENV PYTHONPATH="${PYTHONPATH}:/seerep/devel/lib:/seerep/devel/include/seerep_com/fbs/"
 
 ENTRYPOINT [ "/bin/sh", "-c", "while sleep 1000; do :; done" ]
