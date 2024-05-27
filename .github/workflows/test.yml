@@ -16,12 +16,6 @@ jobs:
       with:
         path: src
 
-    - run: apt update
-    - name: Ccache
-      uses: hendrikmuhs/ccache-action@v1.2
-      with:
-        create-symlink: true
-
     - name: Build Packages
       run: |
         source /opt/ros/noetic/setup.bash
@@ -59,12 +53,6 @@ jobs:
         apt install -y python3.8
         ln -s `which python3.8` /usr/local/bin/python
       shell: bash
-
-    - run: apt update
-    - name: Ccache
-      uses: hendrikmuhs/ccache-action@v1.2
-      with:
-        create-symlink: true
 
     - name: Build SEEREP
       run: |
