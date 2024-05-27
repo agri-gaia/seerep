@@ -139,9 +139,9 @@ def getProjectInfo(builder: Builder, channel: Channel, name: str) -> Union[Dict[
                 "name": project.Name().decode("utf-8"),
                 "uuid": project.Uuid().decode("utf-8"),
                 "frameid": project.Frameid().decode("utf-8"),
-                "geodetic_position": f"Lat: {project.GeodeticPosition().Latitude()},\
-                    Long: {project.GeodeticPosition().Longitude()},\
-                    Alt: {project.GeodeticPosition().Altitude()}",
+                "geodetic_position": f"lat: {project.GeodeticPosition().Latitude()},\
+                    long: {project.GeodeticPosition().Longitude()},\
+                    alt: {project.GeodeticPosition().Altitude()}",
                 "coordinate_system": project.GeodeticPosition().CoordinateSystem().decode("utf-8"),
             }
 
@@ -297,7 +297,7 @@ def getOrCreateProject(
     return projectUuid
 
 
-def createEmpty(builder: Builder) -> bytearray:
+def createEmpty(builder: Builder) -> bytes:
     """
     Create an empty flatbuffer
 
@@ -310,7 +310,7 @@ def createEmpty(builder: Builder) -> bytearray:
     Empty.Start(builder)
     emptyMsg = Empty.End(builder)
     builder.Finish(emptyMsg)
-    return builder.Output()
+    return bytes(builder.Output())
 
 
 def deleteProject(channel: Channel, builder: Builder, projectName: str, projectUuid: str):

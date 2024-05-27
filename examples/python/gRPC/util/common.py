@@ -48,12 +48,11 @@ def get_gRPC_channel(target: str = "local") -> grpc.Channel:
     return channel
 
 
-# based on https://github.com/jpvanhal/inflection
-# function to pass to boltons.iterutils.remap
 def remap_to_snake_case(p: tuple, k: Hashable, v):
     """
     Remaps all string type keys of a dictionary to snake_case.
     This is a function to pass to boltons.iterutils.remap.
+    Based on https://github.com/jpvanhal/inflection.
 
     Args:
         p, k, v: path, key, value for boltons.iterutils.remap
@@ -68,10 +67,10 @@ def remap_to_snake_case(p: tuple, k: Hashable, v):
     return k, v
 
 
-# function to pass to boltons.iterutils.remap
 def remap_keys(p: tuple, k: Hashable, v, mapping: Dict[str, str] = {}):
     """
     Remaps all keys of a dictionary according to the mapping provided.
+    This is a function to pass to boltons.iterutils.remap.
 
     Args:
         p, k, v: path, key, value for boltons.iterutils.remap
@@ -84,7 +83,6 @@ def remap_keys(p: tuple, k: Hashable, v, mapping: Dict[str, str] = {}):
     return k, v
 
 
-# function to pass to boltons.iterutils.remap
 def trunc_floats(p: tuple, k: Hashable, v, ignore_after: int = None):
     """
     This Function can be provided to boltons.iterutils.remap

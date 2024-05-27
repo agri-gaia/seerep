@@ -11,7 +11,7 @@ channel = get_gRPC_channel()
 stub = MetaOperationsStub(channel)
 
 fbb = flatbuffers.Builder(1024)
-responseBuf = stub.LoadProjects(bytes(createEmpty(fbb)))
+responseBuf = stub.LoadProjects(createEmpty(fbb))
 responseBuf = ProjectInfos.GetRootAs(responseBuf)
 
 if responseBuf:
