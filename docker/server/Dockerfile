@@ -17,6 +17,9 @@ COPY docker/server/start_server.sh src/start_server.sh
 
 RUN /bin/bash -c "source /opt/ros/noetic/setup.bash; catkin config --cmake-args -DCMAKE_BUILD_TYPE=Release; catkin build"
 
+# also remove the configuration next to the actual cache
+RUN rm -r $(ccache -k cache_dir)
+
 EXPOSE 9090
 
 ENTRYPOINT ["/bin/bash", "src/start_server.sh"]
