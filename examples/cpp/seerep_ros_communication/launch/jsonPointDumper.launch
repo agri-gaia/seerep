@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <launch>
-    <arg name="hdf5FolderPath" default="/seerep/seerep-data/cognitiveWeeding/fr/"/>
-    <arg name="jsonFilePath" default="/seerep/seerep-data/cognitiveWeeding/fr/data.json"/>
-    <arg name="classesMappingPath" default="/seerep/seerep-data/cognitiveWeeding/fr/label_seerep_fr.json"/>
-    <arg name="dataSource" default="fr"/> <!-- fr or uos -->
+    <arg name="workDir" default="/seerep/seerep-data/cognitiveWeeding/fr/20240611/mais_konv_chem"/>
+    <arg name="classesMappingPath" default="/seerep/seerep-data/cognitiveWeeding/fr/label_seerep_fr_3_2024.json"/>
+    <!-- <arg name="projectUuid" default="asdf"/> -->
 
-    <node name="seerep_ros_communication_jsonPointDumper" pkg="seerep_ros_communication" type="seerep_ros_communication_jsonPointDumper" output="screen">
-        <rosparam param="hdf5FolderPath" subst_value="True">$(arg hdf5FolderPath)</rosparam>
-        <rosparam param="jsonFilePath" subst_value="True">$(arg jsonFilePath)</rosparam>
+    <node name="seerep_ros_communication_jsonPointDumper" pkg="seerep_ros_communication"
+        type="seerep_ros_communication_jsonPointDumper" output="screen" clear_params="true">
+
+        <rosparam param="workDir" subst_value="True">$(arg workDir)</rosparam>
         <rosparam param="classesMappingPath" subst_value="True">$(arg classesMappingPath)</rosparam>
-        <rosparam param="dataSource" subst_value="True">$(arg dataSource)</rosparam>
+        <!-- <rosparam param="projectUuid" subst_value="True">$(arg projectUuid)</rosparam> -->
     </node>
 </launch>

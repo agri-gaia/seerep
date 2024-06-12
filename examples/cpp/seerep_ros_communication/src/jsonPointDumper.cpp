@@ -3,7 +3,7 @@
 namespace seerep_grpc_ros
 {
 JsonPointDumper::JsonPointDumper(const std::string& filePath, const std::string& hdf5FilePath,
-                                 const std::string& dataSource, const std::string& classesMappingPath)
+                                 const std::string& classesMappingPath)
 {
   if (!std::filesystem::exists(filePath))
   {
@@ -22,17 +22,17 @@ JsonPointDumper::JsonPointDumper(const std::string& filePath, const std::string&
 
   ioCoreGeneral->writeProjectname(std::filesystem::path(filePath).filename());
 
-  if (dataSource == "uos")
+  if (hdf5FilePath.find("/uos/") != std::string::npos || hdf5FilePath.find("/hs/") != std::string::npos)
   {
     readAndDumpJsonUos(filePath);
   }
-  else if (dataSource == "fr")
+  else if (hdf5FilePath.find("/fr/") != std::string::npos)
   {
     readAndDumpJsonFr(filePath, classesMappingPath);
   }
   else
   {
-    ROS_ERROR_STREAM("no valid data source. Set to \"uos\" or \"fr\"");
+    ROS_ERROR_STREAM("no valid data source. The path must contain \"/uos/\", \"/hs/\" or \"/fr/\"");
   }
 }
 
@@ -73,7 +73,7 @@ void JsonPointDumper::readAndDumpJsonUos(const std::string& jsonFilePath)
                  std::abs(detection["properties"]["miny"].asDouble() - detection["properties"]["maxy"].asDouble()));
 
     std::string trivialName;
-    if (detection["properties"]["botanical"].asString() == "-")
+    if (detection["properties"]["botanical"].asString() == "-" || detection["properties"]["botanical"].asString() == " ")
     {
       trivialName = detection["properties"]["german"].asString();
     }
@@ -281,15 +281,8 @@ std::string JsonPointDumper::translateNameToAgrovocConcept(std::string name)
 
 }  // namespace seerep_grpc_ros
 
-std::string getHDF5FilePath(ros::NodeHandle privateNh)
+std::string getHDF5FilePath(ros::NodeHandle privateNh, std::string workDir)
 {
-  std::string hdf5FolderPath;
-  if (!privateNh.getParam("hdf5FolderPath", hdf5FolderPath))
-  {
-    ROS_WARN_STREAM("Use the \"hdf5FolderPath\" parameter to specify the HDF5 file!");
-    return "";
-  }
-
   std::string projectUuid;
   if (privateNh.getParam("projectUuid", projectUuid))
   {
@@ -314,7 +307,40 @@ std::string getHDF5FilePath(ros::NodeHandle privateNh)
                     projectUuid + ".h5)");
   }
 
-  return hdf5FolderPath + "/" + projectUuid + ".h5";
+  return workDir + "/" + projectUuid + ".h5";
+}
+
+std::vector<std::string> getJsonFilePaths(std::string workDir)
+{
+  std::vector<std::string> filePaths;
+  for (const auto& entry : std::filesystem::directory_iterator(workDir))
+  {
+    if (entry.path().extension() == ".json")
+    {
+      filePaths.push_back(entry.path());
+    }
+  }
+  return filePaths;
+}
+
+std::vector<std::string> getWorkDirs(std::string workDir)
+{
+  std::vector<std::string> workDirs;
+
+  for (const auto& entry : std::filesystem::directory_iterator(workDir))
+  {
+    if (entry.is_directory())
+    {
+      workDirs.push_back(entry.path());
+    }
+  }
+
+  if (workDirs.empty())
+  {
+    workDirs.push_back(workDir);
+  }
+
+  return workDirs;
 }
 
 int main(int argc, char** argv)
@@ -322,20 +348,27 @@ int main(int argc, char** argv)
   ros::init(argc, argv, "seerep_ros_communication_JsonPointDumper");
   ros::NodeHandle privateNh("~");
 
-  std::string jsonFilePath, dataSource, classesMappingPath;
+  std::string workDir, classesMappingPath;
 
-  const std::string hdf5FilePath = getHDF5FilePath(privateNh);
-
-  if (privateNh.getParam("jsonFilePath", jsonFilePath), privateNh.getParam("dataSource", dataSource),
-      privateNh.getParam("classesMappingPath", classesMappingPath))
+  if (privateNh.getParam("workDir", workDir), privateNh.getParam("classesMappingPath", classesMappingPath))
   {
     {
-      ROS_INFO_STREAM("hdf5FilePath: " << hdf5FilePath);
-      ROS_INFO_STREAM("jsonFilePath: " << jsonFilePath);
-      ROS_INFO_STREAM("dataSource: " << dataSource);
+      ROS_INFO_STREAM("workDir: " << workDir);
       ROS_INFO_STREAM("classesMappingPath: " << classesMappingPath);
 
-      seerep_grpc_ros::JsonPointDumper JsonPointDumper(jsonFilePath, hdf5FilePath, dataSource, classesMappingPath);
+      std::vector<std::string> workDirs = getWorkDirs(workDir);
+
+      for (auto workDirAct : workDirs)
+      {
+        std::vector<std::string> jsonFilePaths = getJsonFilePaths(workDirAct);
+        const std::string hdf5FilePath = getHDF5FilePath(privateNh, workDirAct);
+        ROS_INFO_STREAM("hdf5FilePath: " << hdf5FilePath);
+
+        for (auto jsonFilePath : jsonFilePaths)
+        {
+          seerep_grpc_ros::JsonPointDumper JsonPointDumper(jsonFilePath, hdf5FilePath, classesMappingPath);
+        }
+      }
     }
   }
   else

@@ -35,8 +35,7 @@ namespace seerep_grpc_ros
 class JsonPointDumper
 {
 public:
-  JsonPointDumper(const std::string& filePath, const std::string& hdf5FilePath, const std::string& dataSource,
-                  const std::string& classesMappingPath);
+  JsonPointDumper(const std::string& filePath, const std::string& hdf5FilePath, const std::string& classesMappingPath);
   ~JsonPointDumper();
 
 private:
