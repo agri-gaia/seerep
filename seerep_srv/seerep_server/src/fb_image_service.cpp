@@ -97,17 +97,21 @@ grpc::Status FbImageService::TransferImage(grpc::ServerContext* context,
   std::string answer = "everything stored!";
 
   flatbuffers::grpc::Message<seerep::fb::Image> imageMsg;
+  std::unordered_map<std::string, std::vector<boost::uuids::uuid>> projectsImgUuids;
   while (reader->Read(&imageMsg))
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "received image... ";
     auto image = imageMsg.GetRoot();
-
     std::string uuidProject = image->header()->uuid_project()->str();
     if (!uuidProject.empty())
     {
       try
       {
-        imageFb->addData(*image);
+        if (projectsImgUuids.find(uuidProject) == projectsImgUuids.end())
+        {
+          projectsImgUuids.insert({ uuidProject, std::vector<boost::uuids::uuid>{} });
+        }
+        projectsImgUuids.at(uuidProject).push_back(imageFb->addDataToHdf5(*image));
       }
       catch (std::runtime_error const& e)
       {
@@ -141,6 +145,9 @@ grpc::Status FbImageService::TransferImage(grpc::ServerContext* context,
       answer = "a msg had no project uuid!";
     }
   }
+
+  // defer index creation
+  imageFb->buildIndices(projectsImgUuids);
 
   seerep_server_util::createResponseFb(answer, seerep::fb::TRANSMISSION_STATE_SUCCESS, response);
 
