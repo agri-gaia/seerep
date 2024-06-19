@@ -1,5 +1,7 @@
 # SEEREP
 
+![logo](logo/Seerep%20Logo.svg)
+
 ![unstable](https://img.shields.io/badge/stability-unstable-orange)
 [![License](https://img.shields.io/badge/license-BSD_3-brightgreen)](./LICENSE)
 [![catkin build workflow](https://github.com/agri-gaia/seerep/actions/workflows/main.yml/badge.svg)](https://github.com/agri-gaia/seerep/actions)
