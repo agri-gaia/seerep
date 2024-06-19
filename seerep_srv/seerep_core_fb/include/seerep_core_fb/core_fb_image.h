@@ -64,14 +64,28 @@ public:
   void getData(const seerep::fb::Query* query,
                grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::Image>>* const writer);
   /**
-   * @brief Add an image to the indices and write the data to hdf5
+   * @brief Write image data to hdf5
    * @param img the flatbuffer message containing the image
    * @return the uuid of the stored image
    *
    * The image is stored in the hdf5 file via hdf5-io-fb. The data needed for the indices is extracted and added to the
    * core. If the uuid of image is not defined yet, a uuid is generated and returned.
    */
-  boost::uuids::uuid addData(const seerep::fb::Image& img);
+  boost::uuids::uuid addDataToHdf5(const seerep::fb::Image& img);
+
+  /**
+   * @brief Extract image data from hdf5 and build the indices.
+   *
+   * This method complements @ref addDataToHdf5 and should be called after
+   * the data has been added to hdf5. The data for the indices is retrieved from hdf5 and added to the indices to the
+   * core.
+   *
+   * @param projectsImgUuids a mapping from a project uuid to possibly multiple image uuids
+   *
+   * @see seerep_core_fb::CoreFbImage::addDataToHdf5
+   */
+  void buildIndices(const std::unordered_map<std::string, std::vector<boost::uuids::uuid>>& projectsImgUuids);
+
   /**
    * @brief Adds bounding box based labels to an existing image
    * @param bbs2dlabeled the flatbuffer message containing bounding box based labels
