@@ -28,6 +28,9 @@ repos:
       - id: check-yaml
         args: [--allow-multiple-documents]
         exclude: mkdocs.yml
+      - id: check-yaml
+        args: [--unsafe]
+        files: mkdocs.yml
       - id: check-json
       - id: debug-statements
       - id: end-of-file-fixer
