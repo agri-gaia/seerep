@@ -67,17 +67,22 @@ void CoreFbImage::buildIndices(const std::unordered_map<std::string, std::vector
   for (auto kv : projectsImgUuids)
   {
     auto hdf5io = CoreFbGeneral::getHdf5(kv.first, m_seerepCore, m_hdf5IoMap);
+
+    // go through all uuids of the project
     for (auto uuid : kv.second)
     {
-      auto optImg = hdf5io->readImage(boost::lexical_cast<std::string>(uuid), true);
-      if (optImg.has_value())
-      {
-        auto img = optImg.value().GetRoot();
-        auto dataForIndices = CoreFbConversion::fromFb(*img);
+      auto optionalImg = hdf5io->readImage(boost::lexical_cast<std::string>(uuid), true);
 
-        hdf5io->computeFrustumBB(img->uuid_cameraintrinsics()->str(), dataForIndices.boundingbox);
-        m_seerepCore->addDataset(dataForIndices);
+      if (!optionalImg.has_value())
+      {
+        return;
       }
+
+      auto img = optionalImg.value().GetRoot();
+      auto dataForIndices = CoreFbConversion::fromFb(*img);
+
+      hdf5io->computeFrustumBB(img->uuid_cameraintrinsics()->str(), dataForIndices.boundingbox);
+      m_seerepCore->addDataset(dataForIndices);
     }
   }
 }

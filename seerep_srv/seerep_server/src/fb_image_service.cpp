@@ -98,11 +98,14 @@ grpc::Status FbImageService::TransferImage(grpc::ServerContext* context,
 
   flatbuffers::grpc::Message<seerep::fb::Image> imageMsg;
   std::unordered_map<std::string, std::vector<boost::uuids::uuid>> projectsImgUuids;
+
+  // add incoming image data to hdf5
   while (reader->Read(&imageMsg))
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "received image... ";
     auto image = imageMsg.GetRoot();
     std::string uuidProject = image->header()->uuid_project()->str();
+
     if (!uuidProject.empty())
     {
       try
@@ -118,9 +121,7 @@ grpc::Status FbImageService::TransferImage(grpc::ServerContext* context,
         // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
         // also catching core doesn't have project with uuid error
         BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
-
         seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
-
         return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
       }
       catch (const std::exception& e)
@@ -146,8 +147,34 @@ grpc::Status FbImageService::TransferImage(grpc::ServerContext* context,
     }
   }
 
-  // defer index creation
-  imageFb->buildIndices(projectsImgUuids);
+  // create the indices when all image data was written to hdf5
+  try
+  {
+    imageFb->buildIndices(projectsImgUuids);
+  }
+  catch (std::runtime_error const& e)
+  {
+    // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
+    // also catching core doesn't have project with uuid error
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (const std::exception& e)
+  {
+    // specific handling for all exceptions extending std::exception, except
+    // std::runtime_error which is handled explicitly
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (...)
+  {
+    std::string msg = "Unknown failure occurred. Possible memory corruption";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+    seerep_server_util::createResponseFb(msg, seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
+  }
 
   seerep_server_util::createResponseFb(answer, seerep::fb::TRANSMISSION_STATE_SUCCESS, response);
 
