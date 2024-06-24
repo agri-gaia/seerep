@@ -8,6 +8,14 @@ on:
       - docs/**
       - mkdocs.yml
       - Doxyfile
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - docs/**
+      - mkdocs.yml
+      - Doxyfile
   workflow_dispatch:
 
 env:
@@ -55,6 +63,7 @@ jobs:
           cp -r ./docs/gh-pages/index.html ${{ github.workspace }}//public/index.html
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
+        if: ${{ GitHub.event_name != 'pull_request'}}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ${{ github.workspace }}/public
