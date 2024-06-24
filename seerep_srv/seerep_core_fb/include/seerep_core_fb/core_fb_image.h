@@ -68,8 +68,8 @@ public:
    * @param img the flatbuffer message containing the image
    * @return the uuid of the stored image
    *
-   * The image is stored in the hdf5 file via hdf5-io-fb. The data needed for the indices is extracted and added to the
-   * core. If the uuid of image is not defined yet, a uuid is generated and returned.
+   * The image is stored in the hdf5 file via hdf5-io-fb.
+   * If the uuid of image is not defined yet, a uuid is generated and returned.
    */
   boost::uuids::uuid addDataToHdf5(const seerep::fb::Image& img);
 
