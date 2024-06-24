@@ -34,7 +34,7 @@ void CoreFbPointCloud::getData(const seerep::fb::Query* query,
   }
 }
 
-boost::uuids::uuid CoreFbPointCloud::addData(const seerep::fb::PointCloud2& pcl)
+boost::uuids::uuid CoreFbPointCloud::addDataToHdf5(const seerep::fb::PointCloud2& pcl)
 {
   seerep_core_msgs::DatasetIndexable dataForIndices = CoreFbConversion::fromFb(pcl);
 
@@ -49,6 +49,24 @@ boost::uuids::uuid CoreFbPointCloud::addData(const seerep::fb::PointCloud2& pcl)
   m_seerepCore->addDataset(dataForIndices);
 
   return dataForIndices.header.uuidData;
+}
+
+void CoreFbPointCloud::buildIndices(std::unordered_map<std::string, std::vector<boost::uuids::uuid>> projectPclUuids)
+{
+  for (auto kv : projectPclUuids)
+  {
+    auto hdf5io = CoreFbGeneral::getHdf5(kv.first, m_seerepCore, m_hdf5IoMap);
+    for (auto uuid : kv.second)
+    {
+      auto optionalPcl = hdf5io->readPointCloud2(boost::lexical_cast<std::string>(uuid), true);
+      if (!optionalPcl.has_value())
+      {
+        return;
+      }
+      auto pcl = optionalPcl.value().GetRoot();
+      auto dataForIndices = CoreFbConversion::fromFb(*pcl);
+    }
+  }
 }
 
 void CoreFbPointCloud::addBoundingBoxesLabeled(const seerep::fb::BoundingBoxesLabeledStamped& boundingBoxeslabeled)

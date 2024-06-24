@@ -97,7 +97,7 @@ grpc::Status FbPointCloudService::TransferPointCloud2(
       const std::string& uuidProject = pointCloud->header()->uuid_project()->str();
       if (!uuidProject.empty())
       {
-        pointCloudFb->addData(*pointCloud);
+        pointCloudFb->addDataToHdf5(*pointCloud);
       }
       else
       {
