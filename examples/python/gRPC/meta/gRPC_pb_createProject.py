@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-
+# NOTE: This file is referenced in the following mkdocs files:
+#   projects.md
+# Any changes done in here will be reflected in there
 from typing import Tuple
 
 from grpc import Channel

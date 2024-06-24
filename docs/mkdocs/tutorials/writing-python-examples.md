@@ -13,7 +13,7 @@ Type definitions of all flatbuffers types can be found [here](https://github.com
 ## The code
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:4:26"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:8:30"
 ```
 
 First some of the modules to interact with the servers services will be highlighted.
@@ -24,7 +24,7 @@ for instance functions to create a message type directly.
 ### Interaction with SEEREP services and handling the data
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:28:30"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:32:34"
 ```
 
 The interaction functionality is contained within this function.
@@ -34,7 +34,7 @@ Additionally the `grpc_channel` should be a parameter in order to be able to tar
 Both options are useful for testing later. More parameters can be added optionally, if needed for the test cases.
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:31:49"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:35:53"
 ```
 
 At first, if `target_proj_uuid` is not set, the `MetaOperationsStub` utilizing flatbuffers gRPC communication
@@ -43,7 +43,7 @@ with the SEEREP server is used to retrieve a list of all available projects of t
 ) and `target_proj_uuid` is set to the uuid of the first project with the name `testproject` on that list.
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:50:60"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:54:64"
 ```
 
 Following on the code requests all images from the project with the `uuid` of `target_proj_uuid` using the
@@ -58,7 +58,7 @@ a more generic build query type for use in various services in SEEREP, in it's s
 [seerep.fb.Image](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/image.fbs) from the server.
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:62:107"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:66:111"
 ```
 
 This code builds a list of BoundingBoxes adding some sample data into the components of each BoundingBox.
@@ -77,7 +77,7 @@ looks as follows:
 ```
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:109:110"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:113:114"
 ```
 
 Lastly the service is called, the BoundingBoxes are send to the SEEREP server and the list with the mappings is returned
@@ -89,7 +89,7 @@ makes use of that state.
 ### Wrapping the raw function
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:112:119"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:116:123"
 ```
 
 This function is essentially just a wrapper for `add_bb_raw()` to return the deserialized objects to be accessed through
@@ -98,7 +98,7 @@ their regular flatbuffers interfaces (in this case of type `BoundingBoxes2DLabel
 ### Allow for independent execution of the script
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:122:137"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:126:141"
 ```
 
 The last part can execute the script independently and targets the server at the default address, which is `localhost:9090`.

@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# NOTE: This file is referenced in the following mkdocs files:
+#   writing-python-examples.md
+# If any line changes on this file occur, those files may have to be updated as well
+
 NUM_BB_LABELS = 5
 
 import sys

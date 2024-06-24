@@ -10,14 +10,14 @@ As the testing framework for python [pytest](https://github.com/pytest-dev/pytes
 ## The code
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/tests/python/gRPC/images/test_gRPC_fb_addBoundingBox.py:6:14"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/tests/python/gRPC/images/test_gRPC_fb_addBoundingBox.py:9:17"
 ```
 
 For the imported modules, note that the examples themselves are imported to be used in the tests.
 Furthermore helper functions from `seerep.util.fb_helper`, as well as `fb_flatc_dict` are imported.
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/tests/python/gRPC/images/test_gRPC_fb_addBoundingBox.py:17:25"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/tests/python/gRPC/images/test_gRPC_fb_addBoundingBox.py:20:28"
 ```
 
 This is a helper function to retrieve all images the targeted project on the targeted server has.
@@ -27,7 +27,7 @@ which on the return line are converted to a python dictionary with the help of t
 flatbuffers types, this is required for the `flatc` compiler to know how to decode the object.
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/tests/python/gRPC/images/test_gRPC_fb_addBoundingBox.py:28:52"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/tests/python/gRPC/images/test_gRPC_fb_addBoundingBox.py:31:55"
 ```
 
 Next up the test function is defined and uses the fixture `grpc_channel`,
