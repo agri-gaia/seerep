@@ -60,5 +60,5 @@ as the dictionary and therefore the objects data contents can be printed that wa
 [remap()](https://boltons.readthedocs.io/en/latest/iterutils.html#boltons.iterutils.remap)
 function can be used, like in
 [test_gRPC_fb_createGeodeticCoordProject.py](https://github.com/agri-gaia/seerep/blob/main/tests/python/gRPC/meta/test_gRPC_fb_createGeodeticCoordProject.py).
-- If a test should contain a lot of variations in the components of a datatype a look [here](../../reference/pytests-message-abstractions)
+- If a test should contain a lot of variations in the components of a datatype a look [here](../reference/pytests-message-abstractions.md)
 could simplify things

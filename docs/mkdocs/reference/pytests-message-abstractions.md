@@ -85,7 +85,7 @@ has to be called to reassemble the underlying datatype.
 
 Now the assembled datatype can be accessed using the property `queryinst_builder.datatype_instance` and
 the underlying flatbuffers builder can be accessed by using `queryinst_builder.builder` for further use,
-e.g. like in this case calling the service function `call_get_instances_fb()` using the [ServiceManager](http://127.0.0.1:8001/reference/python-helpers/#service_managerpy).
+e.g. like in this case calling the service function `call_get_instances_fb()` using the [ServiceManager](python-helpers.md#service_managerpy).
 
 **Note**: The `MsgsBase` class provides it's own `ServiceManager` property for building components,
 but that one shouldn't be used as it could change in the future.

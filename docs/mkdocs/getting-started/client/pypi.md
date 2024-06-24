@@ -21,4 +21,4 @@ from seerep.fb import Image
 from seerep.fb import image_service_grpc_fb as imageService
 ```
 
-For more advanved examples take a look at the [Tutorial](/tutorials/overview/) or at the [SEEREP repository](https://github.com/agri-gaia/seerep/tree/main/examples/python/gRPC).
+For more advanved examples take a look at the [Tutorial](../../tutorials/overview.md) or at the [SEEREP repository](https://github.com/agri-gaia/seerep/tree/main/examples/python/gRPC).
