@@ -51,18 +51,6 @@ public:
   void writeImage(const std::string& id, const seerep::fb::Image& image);
 
   /**
-   * @brief Write a BoundingBoxes2D flatbuffers message to hdf5
-   *
-   * Currently only used by the ROS dumper
-   *
-   * @param id the uuid of the image data group
-   * @param bb2DLabeledWithCategory the flatbuffers BoundingBoxes2D with category message
-   */
-  void writeImageBoundingBox2DLabeled(
-      const std::string& id,
-      const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeledWithCategory>>*
-          bb2DLabeledWithCategory);
-  /**
    * @brief Read an image from hdf5 and receive it as a flatbuffers message
    *
    * @param id the uuid of the image data group

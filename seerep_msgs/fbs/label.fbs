@@ -2,7 +2,9 @@ namespace seerep.fb;
 
 table Label {
   label:string;
-  confidence:float;
+  labelIdDatumaro:int;
+  instanceUuid:string;
+  instanceIdDatumaro:int;
 }
 
 root_type Label;

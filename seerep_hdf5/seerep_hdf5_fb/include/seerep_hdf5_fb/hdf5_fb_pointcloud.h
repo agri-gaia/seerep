@@ -62,15 +62,6 @@ public:
                         const seerep_core_msgs::Point& max_corner);
 
   /**
-   * @brief Write a BoundingBoxes flatbuffers message to hdf5
-   *
-   * @param id the uuid of the image data group
-   * @param bbLabeledWithCategory the flatbuffers BoundingBoxes with category message
-   */
-  void writePointCloudBoundingBoxLabeled(
-      const std::string& id,
-      const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBoxLabeledWithCategory>>* bbLabeledWithCategory);
-  /**
    * @brief Method for reading a flatbuffers PointCloud2 message from hdf5
    *
    * @param uuid the uuid of the point cloud

@@ -13,8 +13,6 @@ TransferImagesWithDetection::TransferImagesWithDetection(std::shared_ptr<grpc::C
 
   writerImage_ = stubImage_->TransferImage(&contextImage_, &imageResponse_);
 
-  writerImageDetection_ = stubImage_->AddBoundingBoxes2dLabeled(&contextImageDetection_, &imageDetectionResponse_);
-
   createProject();
   createSubscriber();
 }
@@ -82,11 +80,7 @@ void seerep_grpc_ros::TransferImagesWithDetection::send(const vision_msgs::Detec
   }
   else
   {
-    if (!writerImageDetection_->Write(
-            seerep_ros_conversions_fb::toFlat(*msg, projectuuid_, categoryLabels_, uuidstring)))
-    {
-      ROS_ERROR_STREAM("error while transfering detection");
-    }
+    // TODO write vision_msgs::Detection2D to datumaro converter and add to image
   }
 }
 

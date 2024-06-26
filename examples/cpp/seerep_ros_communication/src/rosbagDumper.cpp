@@ -187,11 +187,7 @@ void RosbagDumper::iterateAndDumpDetections(bool storeImages)
 
         if (storeImages)
         {
-          ioImage->writeImageBoundingBox2DLabeled(
-              uuidstring, seerep_ros_conversions_fb::toFlat(*msg, projectUuid, "agrovoc", std::string(""), detections,
-                                                            instanceUUIDs)
-                              .GetRoot()
-                              ->labels_bb());
+          // TODO add the labels to the image
         }
       }
     }
@@ -249,30 +245,32 @@ RosbagDumper::createPointForDetection(vision_msgs::Detection2D detection, int32_
 
   auto point = seerep::fb::CreatePoint(builder, x, y, z);
 
-  std::vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>> labelAgrovocVector;
-  labelAgrovocVector.push_back(seerep::fb::CreateLabelWithInstance(
-      builder, seerep::fb::CreateLabel(builder, builder.CreateString(labelAgrovoc), 1.0),
-      builder.CreateString(instanceUUID)));
+  std::vector<flatbuffers::Offset<seerep::fb::Label>> labelAgrovocVector;
+  labelAgrovocVector.push_back(
+      seerep::fb::CreateLabel(builder, builder.CreateString(labelAgrovoc), -1, builder.CreateString(instanceUUID), -1));
 
-  std::vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>> labelTrivialVector;
-  labelTrivialVector.push_back(seerep::fb::CreateLabelWithInstance(
-      builder, seerep::fb::CreateLabel(builder, builder.CreateString(labelTrivial), 1.0),
-      builder.CreateString(instanceUUID)));
+  std::vector<flatbuffers::Offset<seerep::fb::Label>> labelTrivialVector;
+  labelTrivialVector.push_back(
+      seerep::fb::CreateLabel(builder, builder.CreateString(labelTrivial), -1, builder.CreateString(instanceUUID), -1));
 
-  std::vector<flatbuffers::Offset<seerep::fb::LabelsWithInstanceWithCategory>> labelsWithInstanceWithCategoryVector;
-  labelsWithInstanceWithCategoryVector.push_back(seerep::fb::CreateLabelsWithInstanceWithCategory(
-      builder, builder.CreateString("agrovoc"), builder.CreateVector(labelAgrovocVector)));
-  labelsWithInstanceWithCategoryVector.push_back(seerep::fb::CreateLabelsWithInstanceWithCategory(
-      builder, builder.CreateString("trivial"), builder.CreateVector(labelTrivialVector)));
+  // TODO create datumaro json based on the labels
+  std::string datumaroJson;
+
+  std::vector<flatbuffers::Offset<seerep::fb::LabelCategory>> labelsCategoryVector;
+  labelsCategoryVector.push_back(seerep::fb::CreateLabelCategory(builder, builder.CreateString("agrovoc"),
+                                                                 builder.CreateVector(labelAgrovocVector),
+                                                                 builder.CreateString(datumaroJson)));
+  labelsCategoryVector.push_back(seerep::fb::CreateLabelCategory(builder, builder.CreateString("trivial"),
+                                                                 builder.CreateVector(labelTrivialVector),
+                                                                 builder.CreateString(datumaroJson)));
 
   std::vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>> attributes;
   attributes.push_back(
       seerep::fb::CreateUnionMapEntry(builder, builder.CreateString("plant_diameter"), seerep::fb::Datatypes_Double,
                                       seerep::fb::CreateDouble(builder, calcDiameter(detection)).Union()));
 
-  auto pointStamped =
-      seerep::fb::CreatePointStamped(builder, header, point, builder.CreateVector(labelsWithInstanceWithCategoryVector),
-                                     builder.CreateVector(attributes));
+  auto pointStamped = seerep::fb::CreatePointStamped(builder, header, point, builder.CreateVector(labelsCategoryVector),
+                                                     builder.CreateVector(attributes));
 
   builder.Finish(pointStamped);
 

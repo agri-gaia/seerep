@@ -5,13 +5,6 @@ import numpy as np
 from flatbuffers import Builder
 from seerep.fb import (
     Boundingbox,
-    BoundingBox2DLabeled,
-    BoundingBox2DLabeledWithCategory,
-    BoundingBoxes2DLabeledStamped,
-    BoundingBoxesLabeledStamped,
-    BoundingBoxLabeled,
-    BoundingBoxLabeledWithCategory,
-    BoundingboxStamped,
     CameraIntrinsics,
     CameraIntrinsicsQuery,
     Empty,
@@ -19,8 +12,7 @@ from seerep.fb import (
     Header,
     Image,
     Label,
-    LabelsWithCategory,
-    LabelWithInstance,
+    LabelCategory,
     Point,
     PointCloud2,
     PointField,
@@ -258,174 +250,12 @@ def createPointFields(builder, channels, datatype, dataTypeOffset, count):
     return pointFieldsList
 
 
-def createLabel(builder, label):
-    """
-    Creates a label.
-
-    Args:
-        builder: A flatbuffers Builder.
-        label: A Tuple consisting of a flatbuffers String as the first entry and a float as the second.
-
-    Returns:
-        The created label represented as a flatbuffers internal object.
-    """
-    Label.Start(builder)
-    Label.AddLabel(builder, label[0])
-    Label.AddConfidence(builder, label[1])
-    return Label.End(builder)
-
-
-def createLabelWithConfidence(builder, label, confidence=None):
-    labelStr = builder.CreateString(label)
-    Label.Start(builder)
-    Label.AddLabel(builder, labelStr)
-    if confidence:
-        Label.AddConfidence(builder, confidence)
-    return Label.End(builder)
-
-
-def createLabelWithInstance(builder, label, confidence, instanceUuid):
-    """Creates a label with an associated instance uuid in flatbuffers"""
-    labelConfidence = createLabelWithConfidence(builder, label, confidence)
-    instanceUuidStr = builder.CreateString(instanceUuid)
-    LabelWithInstance.Start(builder)
-    LabelWithInstance.AddLabel(builder, labelConfidence)
-    LabelWithInstance.AddInstanceUuid(builder, instanceUuidStr)
-    return LabelWithInstance.End(builder)
-
-
-# category: list of categories
-# labels: list of list of labels (as fb-String msg) per category
-def createLabelWithCategory(builder, category, labels):
-    """Creates the message representing the labels of a catogory"""
-    LabelsCategories = []
-    for iCategory in range(len(category)):
-        categoryStr = builder.CreateString(category[iCategory])
-
-        LabelsWithCategory.StartLabelsVector(builder, len(labels[iCategory]))
-        for label in reversed(labels[iCategory]):
-            builder.PrependUOffsetTRelative(label)
-        labelsOffset = builder.EndVector()
-
-        LabelsWithCategory.Start(builder)
-        LabelsWithCategory.AddCategory(builder, categoryStr)
-        LabelsWithCategory.AddLabels(builder, labelsOffset)
-        LabelsCategories.append(LabelsWithCategory.End(builder))
-
-    Query.StartLabelVector(builder, len(LabelsCategories))
-    for LabelCategory in reversed(LabelsCategories):
-        builder.PrependUOffsetTRelative(LabelCategory)
-    return builder.EndVector()
-
-
-def createLabelsWithCategories(builder: Builder, category: List[str], labels):
-    """Creates the message representing the labels of a category"""
-    label_categories = []
-
-    for cat in category:
-        cat_str = builder.CreateString(str(cat))
-        labels_processed = [createLabel(builder, label) for label in labels[cat]]
-
-        LabelsWithCategory.StartLabelsVector(builder, len(labels_processed))
-        for label in reversed(labels_processed):
-            builder.PrependUOffsetTRelative(label)
-        labels_offset = builder.EndVector()
-
-        LabelsWithCategory.Start(builder)
-        LabelsWithCategory.AddCategory(builder, cat_str)
-        LabelsWithCategory.AddLabels(builder, labels_offset)
-        label_categories.append(LabelsWithCategory.End(builder))
-
-    return label_categories
-
-
-def createLabelsWithInstance(builder, labels, confidences, instanceUuids):
-    """Creates multiple general labels"""
-    assert len(labels) == len(instanceUuids)
-    labelsGeneral = []
-    for label, confidence, uuid in zip(labels, confidences, instanceUuids):
-        labelsGeneral.append(createLabelWithInstance(builder, label, confidence, uuid))
-    return labelsGeneral
-
-
 def createPoint2d(builder, x, y):
     """Creates a 2D point in flatbuffers"""
     Point.Start(builder)
     Point.AddX(builder, x)
     Point.AddY(builder, y)
     return Point.End(builder)
-
-
-def createBoundingBox2d(builder, centerPoint, spatialExtent, rotation=0):
-    """Creates a 3D bounding box in flatbuffers"""
-    Boundingbox.Start(builder)
-    Boundingbox.AddCenterPoint(builder, centerPoint)
-    Boundingbox.AddSpatialExtent(builder, spatialExtent)
-    Boundingbox.AddRotation(builder, rotation)
-    return Boundingbox.End(builder)
-
-
-def createBoundingBox2dLabeled(builder, instance, boundingBox):
-    """Creates a labeled bounding box 2d in flatbuffers"""
-    BoundingBox2DLabeled.Start(builder)
-    BoundingBox2DLabeled.AddLabelWithInstance(builder, instance)
-    BoundingBox2DLabeled.AddBoundingBox(builder, boundingBox)
-    return BoundingBox2DLabeled.End(builder)
-
-
-def createBoundingBoxes2d(builder, centerPoints, spatialExtents):
-    assert len(centerPoints) == len(spatialExtents)
-    boundingBoxes = []
-    for centerPoint, spatialExtent in zip(centerPoints, spatialExtents):
-        boundingBoxes.append(createBoundingBox2d(builder, centerPoint, spatialExtent))
-    return boundingBoxes
-
-
-def createBoundingBoxes2dLabeled(builder, instances, boundingBoxes):
-    """Creates multiple labeled bounding boxes"""
-    assert len(instances) == len(boundingBoxes)
-    boundingBoxes2dLabeled = []
-    for instance, boundingBox in zip(instances, boundingBoxes):
-        boundingBoxes2dLabeled.append(createBoundingBox2dLabeled(builder, instance, boundingBox))
-    return boundingBoxes2dLabeled
-
-
-def createBoundingBox2dLabeledStamped(builder, header, labelsBb):
-    """Creates a labeled bounding box 2d in flatbuffers"""
-    BoundingBoxes2DLabeledStamped.StartLabelsBbVector(builder, len(labelsBb))
-    for labelBb in reversed(labelsBb):
-        builder.PrependUOffsetTRelative(labelBb)
-    labelsBbVector = builder.EndVector()
-
-    BoundingBoxes2DLabeledStamped.Start(builder)
-    BoundingBoxes2DLabeledStamped.AddHeader(builder, header)
-    BoundingBoxes2DLabeledStamped.AddLabelsBb(builder, labelsBbVector)
-    return BoundingBoxes2DLabeledStamped.End(builder)
-
-
-def createBoundingBoxLabeledStamped(builder, header, labelsBb):
-    """Creates a labeled bounding box in flatbuffers"""
-    BoundingBoxesLabeledStamped.StartLabelsBbVector(builder, len(labelsBb))
-    for labelBb in reversed(labelsBb):
-        builder.PrependUOffsetTRelative(labelBb)
-    labelsBbVector = builder.EndVector()
-
-    BoundingBoxesLabeledStamped.Start(builder)
-    BoundingBoxesLabeledStamped.AddHeader(builder, header)
-    BoundingBoxesLabeledStamped.AddLabelsBb(builder, labelsBbVector)
-    return BoundingBoxesLabeledStamped.End(builder)
-
-
-def createBoundingBox2DLabeledWithCategory(builder, category, bb2dLabeled):
-    BoundingBox2DLabeledWithCategory.StartBoundingBox2dLabeledVector(builder, len(bb2dLabeled))
-    for labelBb in reversed(bb2dLabeled):
-        builder.PrependUOffsetTRelative(labelBb)
-    labelsBbVector = builder.EndVector()
-
-    BoundingBox2DLabeledWithCategory.Start(builder)
-    BoundingBox2DLabeledWithCategory.AddCategory(builder, category)
-    BoundingBox2DLabeledWithCategory.AddBoundingBox2dLabeled(builder, labelsBbVector)
-    return BoundingBox2DLabeledWithCategory.End(builder)
 
 
 def createPoint(builder, x, y, z):
@@ -473,78 +303,17 @@ def createPolygon2D(builder, height, z, vertices):
     return Polygon2D.End(builder)
 
 
-def createBoundingBoxStamped(builder, header, centerPoint, spatialExtent, rotation=None):
-    """Creates a stamped 3D bounding box in flatbuffers"""
-    boundingBox = createBoundingBox(builder, centerPoint, spatialExtent, rotation)
-    BoundingboxStamped.Start(builder)
-    BoundingboxStamped.AddHeader(builder, header)
-    BoundingboxStamped.AddBoundingbox(builder, boundingBox)
-    return BoundingboxStamped.End(builder)
-
-
-def createBoundingBoxes(builder, centerPoint, spatialExtent, rotation=None):
-    assert len(centerPoint) == len(spatialExtent)
-    boundingBoxes = []
-    if rotation:
-        for center, extent, rot in zip(centerPoint, spatialExtent, rotation):
-            boundingBoxes.append(createBoundingBox(builder, center, extent, rot))
-    else:
-        for center, extent in zip(centerPoint, spatialExtent):
-            boundingBoxes.append(createBoundingBox(builder, center, extent))
-    return boundingBoxes
-
-
-def createBoundingBoxLabeled(builder, instance, boundingBox):
-    """Creates a labeled bounding box in flatbuffers"""
-    BoundingBoxLabeled.Start(builder)
-    BoundingBoxLabeled.AddLabelWithInstance(builder, instance)
-    BoundingBoxLabeled.AddBoundingBox(builder, boundingBox)
-    return BoundingBoxLabeled.End(builder)
-
-
-def createBoundingBoxesLabeled(builder, instances, boundingBoxes):
-    """Creates multiple labeled bounding boxes"""
-    assert len(instances) == len(boundingBoxes)
-    boundingBoxesLabeled = []
-    for instance, boundingBox in zip(instances, boundingBoxes):
-        boundingBoxesLabeled.append(createBoundingBoxLabeled(builder, instance, boundingBox))
-    return boundingBoxesLabeled
-
-
-def createBoundingBoxLabeledWithCategory(builder, category, bbLabeled):
-    BoundingBoxLabeledWithCategory.StartBoundingBoxLabeledVector(builder, len(bbLabeled))
-    for labelBb in reversed(bbLabeled):
-        builder.PrependUOffsetTRelative(labelBb)
-    labelsBbVector = builder.EndVector()
-
-    BoundingBoxLabeledWithCategory.Start(builder)
-    BoundingBoxLabeledWithCategory.AddCategory(builder, category)
-    BoundingBoxLabeledWithCategory.AddBoundingBoxLabeled(builder, labelsBbVector)
-    return BoundingBoxLabeledWithCategory.End(builder)
-
-
 def addToBoundingBoxLabeledVector(builder, boundingBoxLabeledList):
     """Adds list of boudingBoxLabeled into the labelsBbVector of a flatbuffers pointcloud2"""
     PointCloud2.StartLabelsBbVector(builder, len(boundingBoxLabeledList))
-    # Note: reverse because we prepend
     for bb in reversed(boundingBoxLabeledList):
         builder.PrependUOffsetTRelative(bb)
-    return builder.EndVector()
-
-
-def addToGeneralLabelsVector(builder, generalLabelList):
-    """Adds list of generalLabels into the labelsGeneralVector of a flatbuffers pointcloud2"""
-    PointCloud2.StartLabelsGeneralVector(builder, len(generalLabelList))
-    # Note: reverse because we prepend
-    for label in reversed(generalLabelList):
-        builder.PrependUOffsetTRelative(label)
     return builder.EndVector()
 
 
 def addToPointFieldVector(builder, pointFieldList):
     """Adds a list of pointFields into the fieldsVector of a flatbuffers pointcloud2"""
     PointCloud2.StartFieldsVector(builder, len(pointFieldList))
-    # Note: reverse because we prepend
     for pointField in reversed(pointFieldList):
         builder.PrependUOffsetTRelative(pointField)
     return builder.EndVector()
@@ -566,7 +335,6 @@ def createQuery(
 ):
     """Create a query, all parameters are optional"""
 
-    # Note: reverse because we prepend
     if projectUuids:
         Query.StartProjectuuidVector(builder, len(projectUuids))
         for projectUuid in reversed(projectUuids):
@@ -775,38 +543,67 @@ def createTransformStamped(builder, childFrame, headerTf, transform):
     return TransformStamped.End(builder)
 
 
-def createImage(
+def create_image(
     builder,
-    image,
-    header,
-    encoding,
-    boundingBox2dLabeledVector=None,
-    labelsGeneral=None,
+    header: Header.Header,
+    encoding: str,
+    is_bigendian: bool,
+    image: np.ndarray,
+    camera_intrinsics_uuid: str,
+    labels: LabelCategory.LabelCategory = None,
 ):
-    encoding = builder.CreateString(encoding)
+    encoding_offset = builder.CreateString(encoding)
+    camera_intrinsics_uuid_offset = builder.CreateString(camera_intrinsics_uuid)
+    data_offset = builder.CreateByteVector(image.tobytes())
 
-    if boundingBox2dLabeledVector:
-        Image.StartLabelsBbVector(builder, len(boundingBox2dLabeledVector))
-        for bb in reversed(boundingBox2dLabeledVector):
-            builder.PrependUOffsetTRelative(bb)
-        bbs = builder.EndVector()
-
-    if labelsGeneral:
-        Image.StartLabelsGeneralVector(builder, len(labelsGeneral))
-        for label in reversed(labelsGeneral):
+    if labels:
+        Image.ImageStartLabelsVector(builder, len(labels))
+        for label in reversed(labels):
             builder.PrependUOffsetTRelative(label)
-        labelsGeneralVector = builder.EndVector()
+        label_offset = builder.EndVector()
 
-    imData = builder.CreateByteVector(image.tobytes())
     Image.Start(builder)
     Image.AddHeader(builder, header)
     Image.AddHeight(builder, image.shape[0])
     Image.AddWidth(builder, image.shape[1])
-    Image.AddEncoding(builder, encoding)
-    Image.AddStep(builder, 3 * image.shape[1])
-    Image.AddData(builder, imData)
-    if boundingBox2dLabeledVector:
-        Image.AddLabelsBb(builder, bbs)
-    if labelsGeneral:
-        Image.AddLabelsGeneral(builder, labelsGeneralVector)
+    Image.AddEncoding(builder, encoding_offset)
+    Image.AddIsBigendian(builder, is_bigendian)
+    Image.AddStep(builder, image.nbytes // image.shape[0])
+    Image.AddData(builder, data_offset)
+    if labels:
+        Image.AddLabels(builder, label_offset)
+    Image.AddUuidCameraintrinsics(builder, camera_intrinsics_uuid_offset)
     return Image.End(builder)
+
+
+# TODO: find a way to not use to ifs for the optional parameters
+def create_label(builder, label: str, label_id: int, instance_uuid: str = None, instance_id: int = None):
+    label_offset = builder.CreateString(label)
+    if instance_uuid:
+        instance_uuid_offset = builder.CreateString(instance_uuid)
+    Label.Start(builder)
+    Label.AddLabel(builder, label_offset)
+    Label.LabelAddLabelIdDatumaro(builder, label_id)
+    if instance_uuid:
+        Label.AddInstanceUuid(builder, instance_uuid_offset)
+    if instance_id:
+        Label.AddInstanceId(builder, instance_id)
+    return Label.End(builder)
+
+
+def create_label_category(builder, labels: List[Label.Label], datumaro_json: str, category: str = None):
+    if category:
+        category_offset = builder.CreateString(category)
+    datumaro_json_offset = builder.CreateString(datumaro_json)
+
+    LabelCategory.StartLabelsVector(builder, len(labels))
+    for label in labels:
+        builder.PrependUOffsetTRelative(label)
+    vec_offset = builder.EndVector()
+
+    LabelCategory.Start(builder)
+    if category:
+        LabelCategory.AddCategory(builder, category_offset)
+    LabelCategory.AddLabels(builder, vec_offset)
+    LabelCategory.AddDatumaroJson(builder, datumaro_json_offset)
+    return LabelCategory.End(builder)

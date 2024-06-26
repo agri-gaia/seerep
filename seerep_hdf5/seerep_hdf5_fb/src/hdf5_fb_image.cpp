@@ -31,21 +31,10 @@ void Hdf5FbImage::writeImage(const std::string& id, const seerep::fb::Image& ima
   // use pointers from start and end of the array as iterators
   dataSetPtr->write(std::vector<uint8_t>(arrayStartPtr, arrayStartPtr + image.data()->size()));
 
-  writeBoundingBox2DLabeled(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id, image.labels_bb());
   // name is currently ambiguous, use fully qualified name
-  seerep_hdf5_fb::Hdf5FbGeneral::writeLabelsGeneral(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id,
-                                                    image.labels_general());
+  seerep_hdf5_fb::Hdf5FbGeneral::writeLabelsFb(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id, image.labels());
 
   m_file->flush();
-}
-
-void Hdf5FbImage::writeImageBoundingBox2DLabeled(
-    const std::string& id,
-    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeledWithCategory>>* bb2DLabeledWithCategory)
-{
-  const std::scoped_lock lock(*m_write_mtx);
-
-  writeBoundingBox2DLabeled(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id, bb2DLabeledWithCategory);
 }
 
 std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readImage(const std::string& id,
@@ -76,9 +65,7 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
   auto dataGroupPtr = getHdf5Group(hdf5GroupPath);
 
   auto headerOffset = readHeaderAttributes(builder, *dataGroupPtr, id);
-  auto boxes2DLabeledOffset =
-      readBoundingBoxes2DLabeled(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id, builder);
-  auto generalLabelsOffset = readGeneralLabels(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id, builder);
+  auto labelsOffset = readLabels(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id, builder);
   auto encodingStringOffset = builder.CreateString(imageAttributes.encoding);
 
   std::vector<uint8_t> data;
@@ -107,8 +94,7 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> Hdf5FbImage::readIm
     imageBuilder.add_data(imageDataOffset);
   }
   imageBuilder.add_header(headerOffset);
-  imageBuilder.add_labels_bb(boxes2DLabeledOffset);
-  imageBuilder.add_labels_general(generalLabelsOffset);
+  imageBuilder.add_labels(labelsOffset);
 
   auto imageOffset = imageBuilder.Finish();
   builder.Finish(imageOffset);
