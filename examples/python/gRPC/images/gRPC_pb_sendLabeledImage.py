@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# NOTE: This file is referenced in the following mkdocs files:
+#   images.md
+# Any changes done in here will be reflected in there
 import time
 import uuid
 from typing import List, Optional, Tuple
@@ -36,9 +39,9 @@ def send_labeled_images(
     stubMeta = metaOperations.MetaOperationsStub(grpc_channel)
     stubCI = camintrinsics_service.CameraIntrinsicsServiceStub(grpc_channel)
 
-    # 3. Check if we have an existing test project, if not, one is created.
+    # 2. Check if we have an existing test project (or target_proj_uuid is set), if not, one is created.
     if target_proj_uuid is None:
-        # 2. Get all projects from the server
+        # 3. Get all projects from the server
         response = stubMeta.GetProjects(empty_pb2.Empty())
         for project in response.projects:
             print(project.name + " " + project.uuid)
@@ -46,6 +49,7 @@ def send_labeled_images(
                 target_proj_uuid = project.uuid
 
         if target_proj_uuid is None:
+            # 4. create a project
             creation = projectCreation.ProjectCreation(name="testproject", mapFrameId="map")
             projectCreated = stubMeta.CreateProject(creation)
             target_proj_uuid = projectCreated.uuid
@@ -54,7 +58,7 @@ def send_labeled_images(
 
     #####
     # A valid camera intrinsics UUID is needed here for succesful storage of Images
-    # Add new Camera Intrinsics
+    # Add new Camera Intrinsics with placeholder data
 
     ciuuid = str(uuid.uuid4())
 
@@ -92,9 +96,10 @@ def send_labeled_images(
 
     stubCI.TransferCameraIntrinsics(camin)
 
-    # 4. Create ten images
+    # 5. Create ten images
     # for debugging and testing this example add all sent images to a list
     sent_images_list: List[Tuple[str, image.Image]] = []
+
     for n in range(10):
         theImage = image.Image()
 
@@ -126,10 +131,11 @@ def send_labeled_images(
         # Add image data
         theImage.data = bytes(rgb)
 
+        # 5. create categories for bounding boxes
         for iCategory in range(0, 2):
             bbCat = boundingbox2d_labeled_with_category.BoundingBox2DLabeledWithCategory()
             bbCat.category = str(iCategory)
-            # 5. Create bounding boxes with labels
+            # 6. Create bounding boxes with labels with variations in the labels according to their index
             bb = boundingbox2d_labeled.BoundingBox2DLabeled()
             for i in range(0, 2):
                 bb.labelWithInstance.label.label = "testlabel" + str(i)
@@ -147,7 +153,7 @@ def send_labeled_images(
                 bbCat.boundingBox2DLabeled.append(bb)
             theImage.labels_bb.append(bbCat)
 
-            # # 6. Add general labels to the image
+            # # 7. Add general labels to the image (in the same way as to the bounding boxes)
             labelsCat = labels_with_instance_with_category.LabelsWithInstanceWithCategory()
             labelsCat.category = str(iCategory)
             for i in range(0, 2):
@@ -164,11 +170,14 @@ def send_labeled_images(
                 labelsCat.labelWithInstance.append(label)
             theImage.labels_general.append(labelsCat)
 
-        # 7. Send image to the server
+        # 8. Send image to the server
         uuidImg = stub.TransferImage(theImage)
 
+        # also add them to the list
         sent_images_list.append((uuidImg.message, theImage))
 
+    # a list for debugging and testing, if interpolated coordinates
+    # according to timestamp of the images and tfs are correct
     tf_times: List[int] = []
 
     # 8. Add coordinate transformations and send them to the server

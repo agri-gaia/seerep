@@ -1,3 +1,7 @@
+# NOTE: This file is referenced in the following mkdocs files:
+#   pytests-message-abstractions.md
+#   python-helpers.md
+# If any line changes on this file occur, those files may have to be updated as well
 from enum import auto
 from typing import Dict, List
 

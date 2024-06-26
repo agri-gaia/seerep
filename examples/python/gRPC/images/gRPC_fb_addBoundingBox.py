@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# NOTE: This file is referenced in the following mkdocs files:
+#   writing-python-examples.md
+# If any line changes on this file occur, those files may have to be updated as well
+
 NUM_BB_LABELS = 5
 
 import sys
@@ -7,42 +11,41 @@ from typing import List, Optional, Tuple
 
 import flatbuffers
 import numpy as np
-from google.protobuf import empty_pb2
 from grpc import Channel
-from seerep.fb import BoundingBoxes2DLabeledStamped, Image
+from seerep.fb import BoundingBoxes2DLabeledStamped, Image, ProjectInfos
 from seerep.fb import image_service_grpc_fb as imageService
-from seerep.pb import meta_operations_pb2_grpc as metaOperations
+from seerep.fb import meta_operations_grpc_fb as meta_ops
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
     createBoundingBox2dLabeledStamped,
     createBoundingBox2DLabeledWithCategory,
     createBoundingBoxes2d,
     createBoundingBoxes2dLabeled,
+    createEmpty,
     createHeader,
     createLabelsWithInstance,
     createPoint2d,
     createQuery,
-    getProject,
 )
 
 
 def add_bb_raw(
     target_proj_uuid: Optional[str] = None, grpc_channel: Channel = get_gRPC_channel()
 ) -> List[Tuple[str, bytearray]]:
-    builder = flatbuffers.Builder(1024)
-
-    target_proj_uuid = getProject(builder, grpc_channel, "testproject")
-
-    stubMeta = metaOperations.MetaOperationsStub(grpc_channel)
+    stubMeta = meta_ops.MetaOperationsStub(grpc_channel)
 
     # 3. Check if we have an existing test project, if not, one is created.
     if target_proj_uuid is None:
         # 2. Get all projects from the server
-        response = stubMeta.GetProjects(empty_pb2.Empty())
-        for project in response.projects:
-            print(project.name + " " + project.uuid)
-            if project.name == "testproject":
-                target_proj_uuid = project.uuid
+        response = ProjectInfos.ProjectInfos.GetRootAs(
+            stubMeta.GetProjects(bytes(createEmpty(flatbuffers.Builder(1024))))
+        )
+        for i in range(response.ProjectsLength()):
+            proj_name = response.Projects(i).Name().decode()
+            proj_uuid = response.Projects(i).Uuid().decode()
+            print(proj_name + " " + proj_uuid)
+            if proj_name == "testproject":
+                target_proj_uuid = proj_uuid
 
         if target_proj_uuid is None:
             print("Please create a project with labeled images using gRPC_pb_sendLabeledImage.py first.")
@@ -50,6 +53,7 @@ def add_bb_raw(
 
     stub = imageService.ImageServiceStub(grpc_channel)
 
+    builder = flatbuffers.Builder(1024)
     query = createQuery(builder, projectUuids=[builder.CreateString(target_proj_uuid)], withoutData=True)
     builder.Finish(query)
     buf = builder.Output()
@@ -60,7 +64,7 @@ def add_bb_raw(
         sys.exit()
 
     msgToSend = []
-    bb_list: List[Tuple[str, BoundingBoxes2DLabeledStamped.BoundingBoxes2DLabeledStamped]] = []
+    bb_list: List[Tuple[str, bytearray]] = []
 
     for responseBuf in response_ls:
         response = Image.Image.GetRootAs(responseBuf)

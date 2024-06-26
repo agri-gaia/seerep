@@ -1,39 +1,68 @@
 # Tests
 
-We are currently working on integrating more tests into SEEREP.
-[GoogleTest](https://github.com/google/googletest) is used as  a testing
-framework. The tests are run in a GitHub workflow for every PR and push to
-the main branch, the tests can also be run locally in a couple of
-different ways.
+SEEREP uses [GoogleTest](https://github.com/google/googletest) for C++ Unit Tests and
+[pytest](https://github.com/pytest-dev/pytest) for integration tests.
+Unit tests are placed into the individual ROS packages while the intregation tests are setup in the `/tests` directory.
+The tests run automatically as a GitHub Action with every push.
 
-## Running tests locally
+## C++ Unit Tests
 
-### Catkin
+Currently tests are set up for:
 
-The tests can be run via `catkin` in the command line. When run without a
-specific package, all tests in the workspace are executed. But while this is very
-convenient, catkin does not provide much information/output if a test fails.
+- [Flatbuffer ROS Conversions](https://github.com/agri-gaia/seerep/blob/main/seerep_ros/seerep_ros_conversions_fb/test/ros_to_fb_conversion_test.cpp):
+    Functions for converting ROS message to Flatbuffers message and vice versa.
+- [HDF5 PB Image Interface](https://github.com/agri-gaia/seerep/blob/main/seerep_hdf5/seerep_hdf5_pb/test/pb_write_load_test.cpp)
+    : Reading and writing of ProtoBuf Image messages to HDF5.
+- [HDF5 FB Image Interface](https://github.com/agri-gaia/seerep/blob/main/seerep_hdf5/seerep_hdf5_fb/test/fb_write_load_test.cpp)
+    : Reading and writing of Flatbuffer Image messages to HDF5.
 
-```bash
-catkin test (<specific-package>)
+### Using catkin
+
+To run the tests with `catkin` use:
+
+```shell
+catkin test # run all availabe tests
+catkin test <specific-package> # test a specific package
 ```
 
-### Vs-Code
+## Python Integration Tests
 
-Another way to run the test is via the Vs-Code test explorer (triangle test-tube on
-the left bar of VS-Code). If you have done a fresh installation of the project, it
-can happen, that the test cases won't be recognized. In order to fix that, just
-restart the development container. For that, you can use `Reopen Folder Locally`
-and then `Reopen In Container` again. Now you should be able to see the test cases as,
-in the example below:
+The integration tests cover most of the send and receive operations of SEEREP via Python.
+They use the [Python examples](https://github.com/agri-gaia/seerep/tree/main/examples/python/gRPC) as a base.
 
-![vs-code-test-explorer](../imgs/Vs-Code-Testing.png)
+### Using pytest
 
-The icons in the top of the test explorer are mostly self-explanatory, refresh, all tests
-can be run, a single test can be debugged, and a terminal can be opened to print
-the output of the tests.
+To run all integration tests use:
 
-### Executables
+```shell
+pytest
+```
 
-If you would like to run the tests via their executables, they are located under
-`/seerep/devel/bin/<test-name>` or `/seerep/build/<package>/<test-name>`.
+in source directory `/seerep/src/`.
+
+To execute a subset of the integration tests:
+
+```shell
+# Recursively executes all tests in the meta directory
+pytest tests/python/gRPC/meta
+
+# Same execution as above
+cd tests/python/gRPC/meta
+pytest
+
+# Run all tests specified in this file
+pytest tests/python/gRPC/meta/test_gRPC_pb_projectCreation.py
+
+```
+
+## Testing through VSCode
+
+Another way to run the tests is via the VSCode Testing Tab (:octicons-beaker-24: icon)
+
+If you have a fresh installation of the project, it
+can happen, that the test cases won't be recognized.
+In order to fix that, use the reload icon :octicons-sync-16: in the top menu
+
+![vs-code-test-explorer](../../imgs/VSCode-Testing.png)
+
+To run the tests use the play icon :material-play-outline: at the top.

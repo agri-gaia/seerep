@@ -1,6 +1,6 @@
 # Kubernetes Deployment
 
-Besides, the local installation and the usage of an available docker container (see [installation](installation.md)),
+Besides, the local installation and the usage of an available docker container (see [installation](local-deployment.md)),
 one can also deploy the seerep-server within a kubernetes cluster.
 
 ## Relevant files

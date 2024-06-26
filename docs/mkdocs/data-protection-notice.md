@@ -10,7 +10,7 @@ when visiting and using our web site.
 Deutsches Forschungszentrum für Künstliche Intelligenz GmbH (DFKI)<br>
 Phone: [+49 631 20575 0](tel:+49631205750)<br>
 [info@dfki.de](mailto:info@dfki.de)<br>
-[Legal Notice](/seerep/mkdocs/legal-notice/index.html)
+[Legal Notice](https://agri-gaia.github.io/seerep/mkdocs/legal-notice/index.html)
 
 ## Data protection officer
 

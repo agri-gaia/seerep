@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-
+# NOTE: This file is referenced in the following mkdocs files:
+#   projects.md
+# Any changes done in here will be reflected in there
 from typing import List, Tuple
 
 from google.protobuf import empty_pb2
@@ -17,11 +19,12 @@ def get_projects(grpc_channel: Channel = get_gRPC_channel()) -> List[Tuple[str, 
     print("The server has the following projects (name/uuid):")
 
     for projectinfo in response.projects:
-        print("\t" + projectinfo.name + " " + projectinfo.uuid)
         projects_list.append((projectinfo.name, projectinfo.uuid))
 
     return projects_list
 
 
 if __name__ == "__main__":
-    get_projects()
+    project_list = get_projects()
+    for proj in project_list:
+        print("\t" + proj[0] + " " + proj[1])

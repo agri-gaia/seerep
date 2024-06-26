@@ -2,8 +2,8 @@
 
 ## Responsible service provider
 
-Responsible for the content of the domain *[agri-gaia.github.io/seerep](agri-gaia.github.io/seerep/)* from the point of
-view of § 5 TMG:
+Responsible for the content of the domain *[agri-gaia.github.io/seerep](https://agri-gaia.github.io/seerep/)* from
+the point of view of § 5 TMG:
 
 **Deutsches Forschungszentrum für Künstliche Intelligenz GmbH (DFKI)**</br>
 Management:<br>
@@ -21,7 +21,7 @@ Register Number: HRB 2313
 
 ID-Number: DE 148 646 973
 
-The person responsible for the editorial content of the domain *[agri-gaia.github.io/seerep](agri-gaia.github.io/seerep/)*
+The person responsible for the editorial content of the domain *[agri-gaia.github.io/seerep](https://agri-gaia.github.io/seerep/)*
 of the German Research Center for Artificial Intelligence GmbH within the meaning of § 18 para. 2 MStV is:
 
 Mark Niemeyer<br>

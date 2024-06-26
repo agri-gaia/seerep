@@ -16,11 +16,14 @@ nav:
       - Tests: 'getting-started/server/tests.md'
   - Reference:
     - Package Overview: 'reference/packages.md'
+    - Python helper functionality: 'reference/python-helpers.md'
+    - Python tests message abstractions: 'reference/pytests-message-abstractions.md'
   - Tutorials:
     - Overview: 'tutorials/overview.md'
-    - gRPC Python: 'tutorials/overview.md'
     - Creating & retrieving projects: 'tutorials/projects.md'
-    - Sending & Querying Images: 'tutorials/images.md'
+    - Sending & querying images: 'tutorials/images.md'
+    - Writing python examples: 'tutorials/writing-python-examples.md'
+    - Writing python integration tests: 'tutorials/writing-python-tests.md'
 theme:
   # use mkdocs material https://squidfunk.github.io/mkdocs-material/
   name: material
@@ -45,10 +48,16 @@ markdown_extensions:
   # syntax highlighting in code blocks
   - pymdownx.highlight:
       anchor_linenums: true
+  # allow references to code blocks for more direct examples
+  - pymdownx.snippets:
+      url_download: true
   - pymdownx.superfences
   # add tabs to navigate on the top
   - pymdownx.tabbed:
       alternate_style: true
   - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
 copyright: >
         <a href="/seerep/mkdocs/legal-notice/index.html">Legal Notice</a> - <a href="/seerep/mkdocs/data-protection-notice/index.html">Data Protection Notice</a>

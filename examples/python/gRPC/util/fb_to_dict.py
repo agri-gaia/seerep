@@ -1,3 +1,6 @@
+# NOTE: This file is referenced in the following mkdocs files:
+#   python-helpers.md
+# If any line changes on this file occur, those files may have to be updated as well
 import json
 import subprocess as sp
 import tempfile
@@ -109,11 +112,14 @@ def fb_flatc_dict(fb_obj: bytearray, schema_file_name: SchemaFileNames) -> Dict:
     """
     Converts a binary flatbuffers object to a python dictionary using it's IDL file.
 
+    This function should only be used for debugging or testing purposes, as it alleviates the advantage of flatbuffers
+    lessening the amount of copied data.
+
     This implementation uses temporary files in /tmp for conversion.
 
     Args:
         fb_obj: The bytearray object as returned by builder.Output().
-        schema_file_name: The filename of the fb schema file.
+        schema_file_name: The to `fb_obj` corresponding datatype in the `SchemaFileNames` format
 
     Returns:
         A python dictionary containing the objects attribute information.

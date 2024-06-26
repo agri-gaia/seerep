@@ -18,6 +18,9 @@
             "--proto_path=${workspaceRoot}/src/seerep-msgs/protos"
         ]
     },
-    "testMate.cpp.testexecutables": "/devel/bin/**{Test, TEST, test}",
-    "testMate.cpp.test.workingDirectory": "/seerep/src"
+    "python.testing.pytestArgs": [
+        "src"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
 }

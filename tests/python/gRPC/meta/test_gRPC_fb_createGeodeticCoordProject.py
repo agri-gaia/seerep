@@ -13,7 +13,7 @@ from seerep.util.fb_to_dict import SchemaFileNames, fb_flatc_dict
 def test_gRPC_fb_createGeoProjectAndGetProjects(grpc_channel):
     # get already created projects
     current_projects = remap(
-        fb_flatc_dict(projects_query.get_projects(grpc_channel), SchemaFileNames.PROJECT_INFOS)["projects"],
+        fb_flatc_dict(projects_query.get_projects_raw(grpc_channel), SchemaFileNames.PROJECT_INFOS)["projects"],
         visit=common.remap_to_snake_case,
     )
 
@@ -25,7 +25,7 @@ def test_gRPC_fb_createGeoProjectAndGetProjects(grpc_channel):
 
     # get a list of all created projects
     projects_list = remap(
-        fb_flatc_dict(projects_query.get_projects(grpc_channel), SchemaFileNames.PROJECT_INFOS)["projects"],
+        fb_flatc_dict(projects_query.get_projects_raw(grpc_channel), SchemaFileNames.PROJECT_INFOS)["projects"],
         visit=common.remap_to_snake_case,
     )
 

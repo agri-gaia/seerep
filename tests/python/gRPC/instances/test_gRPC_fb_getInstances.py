@@ -1,3 +1,7 @@
+# NOTE: This file is referenced in the following mkdocs files:
+#   pytests-message-abstractions.md
+# If any line changes on this file occur, those files may have to be updated as well
+
 # test file for
 #   gRPC_fb_getInstances.py
 # requires:
