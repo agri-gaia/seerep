@@ -37,6 +37,7 @@ var NAVTREE =
       [ "Namespace Members", "namespacemembers.html", [
         [ "All", "namespacemembers.html", null ],
         [ "Functions", "namespacemembers_func.html", null ],
+        [ "Variables", "namespacemembers_vars.html", null ],
         [ "Typedefs", "namespacemembers_type.html", null ],
         [ "Enumerations", "namespacemembers_enum.html", null ]
       ] ]
@@ -73,9 +74,10 @@ var NAVTREEINDEX =
 "classseerep__hdf5__py_1_1Hdf5FileWrapper.html",
 "classseerep__server_1_1PbPointCloudService.html#ac5f2e316d9391158bb87586b076a6722",
 "fb__instance__service_8h.html",
-"namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0",
-"ros__to__fb__conversion__test_8cpp.html#a9426f023ee3173ec891887e61e1d80bf",
-"structseerep__core__msgs_1_1ProjectInfo.html#acc5fcbe9996033f1ddc9905df1202632"
+"namespaceseerep__core__msgs.html#a640f042e3954e22bedec9e6ad857c28e",
+"ros__to__fb__conversion__test_8cpp.html#a7b4c153fc68b9b788c4267f7376670e1",
+"structseerep__core__msgs_1_1ProjectInfo.html",
+"vector3_8fbs.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

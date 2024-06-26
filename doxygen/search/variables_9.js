@@ -1,19 +1,4 @@
 var searchData=
 [
-  ['label_0',['label',['../structseerep__core__msgs_1_1Query.html#a471853abd5af820081ba91fa0c5ffbed',1,'seerep_core_msgs::Query::label()'],['../structseerep__core__msgs_1_1LabelWithInstance.html#a17f435deba14ad847b8dfd97d8955f08',1,'seerep_core_msgs::LabelWithInstance::label()']]],
-  ['label_5f_1',['label_',['../structseerep__hdf5__py_1_1InstanceLabel.html#aa14ddf20a97213e1e79fb47d993c997d',1,'seerep_hdf5_py::InstanceLabel::label_()'],['../structseerep__hdf5__py_1_1BoundingBoxLabel.html#aed3989e1b7129d79ba9ee3c9ddfff34b',1,'seerep_hdf5_py::BoundingBoxLabel::label_()']]],
-  ['labelbb_2',['LABELBB',['../classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ac3bc18459b28fbf568ce5ddc6629abb9',1,'seerep_hdf5_core::Hdf5CoreGeneral']]],
-  ['labelbbboxeswithrotation_3',['LABELBBBOXESWITHROTATION',['../classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a7232dfcef303e5dfa6348696851bbd66',1,'seerep_hdf5_core::Hdf5CoreGeneral']]],
-  ['labelbbconfidences_4',['LABELBBCONFIDENCES',['../classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#aea70d38a5a6c66d69f5ba5e46e167be2',1,'seerep_hdf5_core::Hdf5CoreGeneral']]],
-  ['labelbbinstances_5',['LABELBBINSTANCES',['../classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a982821eb1b6284a7eb396d1d65af671c',1,'seerep_hdf5_core::Hdf5CoreGeneral']]],
-  ['labelconfidence_6',['labelConfidence',['../structseerep__core__msgs_1_1LabelWithInstance.html#a7fa0e05d57bb217a5744f11170235706',1,'seerep_core_msgs::LabelWithInstance']]],
-  ['labelconfidences_7',['labelConfidences',['../structseerep__core__msgs_1_1LabelsWithInstanceWithCategory.html#af7673d27c22c55499720acecbac5ec15',1,'seerep_core_msgs::LabelsWithInstanceWithCategory']]],
-  ['labelgeneral_8',['LABELGENERAL',['../classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ac621f66d2e9dab8025b42b0b39c8e924',1,'seerep_hdf5_core::Hdf5CoreGeneral']]],
-  ['labelgeneralconfidences_9',['LABELGENERALCONFIDENCES',['../classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#abbefe86be5f50843d789eda9eedefb77',1,'seerep_hdf5_core::Hdf5CoreGeneral']]],
-  ['labelgeneralinstances_10',['LABELGENERALINSTANCES',['../classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a19b4fe044e996991f97a0f9780a2b7fa',1,'seerep_hdf5_core::Hdf5CoreGeneral']]],
-  ['labels_11',['labels',['../structseerep__core__msgs_1_1LabelsWithInstanceWithCategory.html#a65134794164ce99705d24760837272a9',1,'seerep_core_msgs::LabelsWithInstanceWithCategory']]],
-  ['labels_5f_12',['labels_',['../structseerep__hdf5__py_1_1GeneralLabel.html#a3f21c6e7befbaad194d189961579cba2',1,'seerep_hdf5_py::GeneralLabel::labels_()'],['../structseerep__hdf5__py_1_1CategorizedBoundingBoxLabel.html#a2d7bedc9b07c057d20690fd7a7a4e8dd',1,'seerep_hdf5_py::CategorizedBoundingBoxLabel::labels_()']]],
-  ['labelswithinstanceswithcategory_13',['labelsWithInstancesWithCategory',['../structseerep__core__msgs_1_1DatasetIndexable.html#ab0da18f1ec8d179cb089013e22236eb6',1,'seerep_core_msgs::DatasetIndexable']]],
-  ['latitude_14',['latitude',['../structseerep__core__msgs_1_1GeodeticCoordinates.html#a0759fd44a02e96316943dc27c8cc6df4',1,'seerep_core_msgs::GeodeticCoordinates']]],
-  ['longitude_15',['longitude',['../structseerep__core__msgs_1_1GeodeticCoordinates.html#a320679848715b7b6e94172ca73f8bd37',1,'seerep_core_msgs::GeodeticCoordinates']]]
+  ['kcameradistortionmodels_0',['kCameraDistortionModels',['../namespaceseerep__server__constants.html#a72102a939bef8f78365799461f9b2eda',1,'seerep_server_constants']]]
 ];

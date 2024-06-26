@@ -232,9 +232,10 @@ var NAVTREEINDEX6 =
 "meta__operations_8fbs.html":[9,0,0,0,3],
 "meta__operations_8proto.html":[9,0,0,1,2],
 "namespacemembers.html":[7,1,0],
-"namespacemembers_enum.html":[7,1,3],
+"namespacemembers_enum.html":[7,1,4],
 "namespacemembers_func.html":[7,1,1],
-"namespacemembers_type.html":[7,1,2],
+"namespacemembers_type.html":[7,1,3],
+"namespacemembers_vars.html":[7,1,2],
 "namespaces.html":[7,0],
 "namespaceseerep__core.html":[7,0,0],
 "namespaceseerep__core__fb.html":[7,0,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX6 =
 "namespaceseerep__core__msgs.html#a436d34bbff9d6912777d99436d77888d":[7,0,2,27],
 "namespaceseerep__core__msgs.html#a462e030bf0678780557fa637dabd7c1c":[7,0,2,30],
 "namespaceseerep__core__msgs.html#a4fa9acaa8379c69c4ce575c6ba8262ea":[7,0,2,28],
-"namespaceseerep__core__msgs.html#a51f23338981d650d0d2ffb8cb403adc0":[7,0,2,17],
-"namespaceseerep__core__msgs.html#a640f042e3954e22bedec9e6ad857c28e":[7,0,2,20]
+"namespaceseerep__core__msgs.html#a51f23338981d650d0d2ffb8cb403adc0":[7,0,2,17]
 };

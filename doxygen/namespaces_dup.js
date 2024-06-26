@@ -82,5 +82,8 @@ var namespaces_dup =
       [ "toROS", "namespaceseerep__ros__conversions__pb.html#aece07205724cf02c4c05dd0b9639b5af", null ],
       [ "toROS", "namespaceseerep__ros__conversions__pb.html#ae59532726a2779eb43760c6d99a2292a", null ]
     ] ],
-    [ "seerep_server", "namespaceseerep__server.html", "namespaceseerep__server" ]
+    [ "seerep_server", "namespaceseerep__server.html", "namespaceseerep__server" ],
+    [ "seerep_server_constants", "namespaceseerep__server__constants.html", [
+      [ "kCameraDistortionModels", "namespaceseerep__server__constants.html#a72102a939bef8f78365799461f9b2eda", null ]
+    ] ]
 ];

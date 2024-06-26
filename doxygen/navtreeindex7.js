@@ -1,5 +1,6 @@
 var NAVTREEINDEX7 =
 {
+"namespaceseerep__core__msgs.html#a640f042e3954e22bedec9e6ad857c28e":[7,0,2,20],
 "namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0":[7,0,2,32],
 "namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0a2a3cd5946cfd317eb99c3d32e35e2d4c":[7,0,2,32,3],
 "namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0a88183b946cc5f0e8c96b2e66e1c74a7e":[7,0,2,32,0],
@@ -128,6 +129,8 @@ var NAVTREEINDEX7 =
 "namespaceseerep__ros__conversions__pb.html#afc4b4a11e4e63516d57380635160983a":[7,0,10,13],
 "namespaceseerep__ros__conversions__pb.html#afd51dffcaef62d968310d5e2c806e763":[7,0,10,12],
 "namespaceseerep__server.html":[7,0,11],
+"namespaceseerep__server__constants.html":[7,0,12],
+"namespaceseerep__server__constants.html#a72102a939bef8f78365799461f9b2eda":[7,0,12,0],
 "pages.html":[],
 "pb__camera__intrinsics__service_8cpp.html":[9,0,4,3,1,7],
 "pb__camera__intrinsics__service_8h.html":[9,0,4,3,0,0,7],
@@ -246,8 +249,5 @@ var NAVTREEINDEX7 =
 "ros__to__fb__conversion__test_8cpp.html#a5d492ed3a3ab64b7de008c2e14ad2bda":[9,0,3,0,2,0,17],
 "ros__to__fb__conversion__test_8cpp.html#a6049ddeb7bbb752315ff88c57dc34356":[9,0,3,0,2,0,30],
 "ros__to__fb__conversion__test_8cpp.html#a70512f41723b269ee74aa50d2230303d":[9,0,3,0,2,0,32],
-"ros__to__fb__conversion__test_8cpp.html#a716f9bdfd8e28241b5357af31d7eaea7":[9,0,3,0,2,0,6],
-"ros__to__fb__conversion__test_8cpp.html#a7b4c153fc68b9b788c4267f7376670e1":[9,0,3,0,2,0,4],
-"ros__to__fb__conversion__test_8cpp.html#a8a923e73bea652a62b5203ea0a4c6469":[9,0,3,0,2,0,26],
-"ros__to__fb__conversion__test_8cpp.html#a915845b4eafad522dfeca918f3d93573":[9,0,3,0,2,0,24]
+"ros__to__fb__conversion__test_8cpp.html#a716f9bdfd8e28241b5357af31d7eaea7":[9,0,3,0,2,0,6]
 };

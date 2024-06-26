@@ -128,8 +128,8 @@ $(document).ready(function(){initNavTree('server_8h_source.html',''); initResiza
   <div class="headertitle"><div class="title">server.h</div></div>
 </div><!--header-->
 <div class="contents">
-<a href="server_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#ifndef SEEREP_SERVER_SERVER_H_</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#define SEEREP_SERVER_SERVER_H_</span></div>
+<a href="server_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#ifndef SEEREP_SERVER_H_</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#define SEEREP_SERVER_H_</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;signal.h&gt;</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
@@ -228,7 +228,7 @@ $(document).ready(function(){initNavTree('server_8h_source.html',''); initResiza
 <div class="line"><a id="l00187" name="l00187"></a><span class="lineno"><a class="line" href="classseerep__server_1_1server.html#a0bdb015952b6965eac3dcbf4e52a7db3">  187</a></span>  boost::log::sources::severity_logger&lt;boost::log::trivial::severity_level&gt; <a class="code hl_variable" href="classseerep__server_1_1server.html#a0bdb015952b6965eac3dcbf4e52a7db3">m_logger</a>;</div>
 <div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>};</div>
 <div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>} <span class="comment">/* namespace seerep_server */</span></div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span><span class="preprocessor">#endif  </span><span class="comment">// SEEREP_SERVER_SERVER_H_</span></div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span><span class="preprocessor">#endif  </span><span class="comment">// SEEREP_SERVER_H_</span></div>
 <div class="ttc" id="aclassseerep__server_1_1server_html"><div class="ttname"><a href="classseerep__server_1_1server.html">seerep_server::server</a></div><div class="ttdoc">This class is the main class of SEEREP. It creates everything else and serves the gRPC interface.</div><div class="ttdef"><b>Definition:</b> server.h:53</div></div>
 <div class="ttc" id="aclassseerep__server_1_1server_html_a0bdb015952b6965eac3dcbf4e52a7db3"><div class="ttname"><a href="classseerep__server_1_1server.html#a0bdb015952b6965eac3dcbf4e52a7db3">seerep_server::server::m_logger</a></div><div class="ttdeci">boost::log::sources::severity_logger&lt; boost::log::trivial::severity_level &gt; m_logger</div><div class="ttdoc">the logger object for logging to file and stdout</div><div class="ttdef"><b>Definition:</b> server.h:187</div></div>
 <div class="ttc" id="aclassseerep__server_1_1server_html_a0c5eb8434090a60a060cf4ae1d310464"><div class="ttname"><a href="classseerep__server_1_1server.html#a0c5eb8434090a60a060cf4ae1d310464">seerep_server::server::getDataFolder</a></div><div class="ttdeci">std::string getDataFolder()</div><div class="ttdoc">Returns the path to the data folder. The folder is created if not existing.</div><div class="ttdef"><b>Definition:</b> server.cpp:243</div></div>
@@ -272,7 +272,7 @@ $(document).ready(function(){initNavTree('server_8h_source.html',''); initResiza
 <div class="ttc" id="afb__point__cloud__service_8h_html"><div class="ttname"><a href="fb__point__cloud__service_8h.html">fb_point_cloud_service.h</a></div></div>
 <div class="ttc" id="afb__point__service_8h_html"><div class="ttname"><a href="fb__point__service_8h.html">fb_point_service.h</a></div></div>
 <div class="ttc" id="afb__tf__service_8h_html"><div class="ttname"><a href="fb__tf__service_8h.html">fb_tf_service.h</a></div></div>
-<div class="ttc" id="anamespaceseerep__server_html"><div class="ttname"><a href="namespaceseerep__server.html">seerep_server</a></div><div class="ttdef"><b>Definition:</b> fb_cameraintrinsics_service.h:17</div></div>
+<div class="ttc" id="anamespaceseerep__server_html"><div class="ttname"><a href="namespaceseerep__server.html">seerep_server</a></div><div class="ttdef"><b>Definition:</b> fb_cameraintrinsics_service.h:18</div></div>
 <div class="ttc" id="apb__camera__intrinsics__service_8h_html"><div class="ttname"><a href="pb__camera__intrinsics__service_8h.html">pb_camera_intrinsics_service.h</a></div></div>
 <div class="ttc" id="apb__image__service_8h_html"><div class="ttname"><a href="pb__image__service_8h.html">pb_image_service.h</a></div></div>
 <div class="ttc" id="apb__meta__operations_8h_html"><div class="ttname"><a href="pb__meta__operations_8h.html">pb_meta_operations.h</a></div></div>
