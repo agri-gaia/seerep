@@ -88,8 +88,8 @@ def add_bb_raw(
         labelWithInstances = createLabelsWithInstance(
             builder,
             ["BoundingBoxLabel" + str(i) for i in range(NUM_BB_LABELS)],
-            [1.0 / (i + 0.1) for i in range(NUM_BB_LABELS)],
             [str(uuid.uuid4()) for _ in range(NUM_BB_LABELS)],
+            [float(1.0 / (i + 0.1)) for i in range(NUM_BB_LABELS)],
         )
         labelsBb = createBoundingBoxes2dLabeled(builder, labelWithInstances, boundingBoxes)
 

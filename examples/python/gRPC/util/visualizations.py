@@ -25,17 +25,25 @@
 
 import colorsys
 import random
+from typing import Iterable, Tuple, Union
 
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib import patches, ticker
+from matplotlib import axes, patches, ticker
 
 
-def random_colors(N, bright=True):
+def random_colors(N: int, bright: bool = True):
     """
-    Generate random colors.
-    To get visually distinct colors, generate them in HSV space then
+    Generate random colors.\
+    To get visually distinct colors, generate them in HSV space then\
     convert to RGB.
+
+    Args:
+        N: The count of colors to generate
+        bright: Whether to generate bright colors
+
+    Returns:
+        A list of RGB colors
     """
     brightness = 1.0 if bright else 0.7
     hsv = [(i / N, 1, brightness) for i in range(N)]
@@ -45,33 +53,35 @@ def random_colors(N, bright=True):
 
 
 def display_instances(
-    image,
-    boxes,
-    class_ids,
-    class_names,
-    scores=None,
-    title="",
-    figsize=(16, 16),
-    ax=None,
-    colors=None,
-    captions=None,
-    image_name="test.png",
-    gli_image=False,
-    rotate=False,
-    offset=0,
-    scale=1.0,
+    image: np.ndarray,
+    boxes: np.ndarray,
+    class_ids: Iterable,
+    class_names: Iterable,
+    scores: Union[Iterable[float], None] = None,
+    title: str = "",
+    figsize: Tuple[int, int] = (16, 16),
+    ax: Union[axes.Axes, None] = None,
+    colors: Iterable[Tuple[float, float, float]] = None,
+    captions: Iterable[str] = None,
+    image_name: str = "test.png",
+    gli_image: bool = False,
+    rotate: bool = False,
+    offset: int = 0,
+    scale: float = 1.0,
 ):
     """
-    image: RGB image
-    depth_image: respective Depth image for an RGB image
-    boxes: [num_instance, (y1, x1, y2, x2, class_id)] in image coordinates.
-    class_ids: [num_instances]
-    class_names: list of class names of the dataset
-    scores: (optional) confidence scores for each box
-    title: (optional) Figure title
-    figsize: (optional) the size of the image
-    colors: (optional) An array or colors to use with each object
-    captions: (optional) A list of strings to use as captions for each object
+    Displays intances on image with bounding boxes and captions.
+
+    Args:
+        image: RGB image
+        boxes: [num_instance, (y1, x1, y2, x2, class_id)] in image coordinates.
+        class_ids: [num_instances]
+        class_names: list of class names of the dataset
+        scores: (optional) confidence scores for each box
+        title: (optional) Figure title
+        figsize: (optional) the size of the image
+        colors: (optional) An array or colors to use with each object
+        captions: (optional) A list of strings to use as captions for each object
     """
     if rotate:
         image = np.rot90(np.rot90(image))

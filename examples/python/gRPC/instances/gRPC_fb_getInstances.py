@@ -48,14 +48,13 @@ timeInterval = createTimeInterval(builder, timeMin, timeMax)
 
 projectUuids = [builder.CreateString(projectuuid)]
 category = ["0"]
-labels = {
-    "0": [
-        (builder.CreateString("testlabel0"), 0.8),
-        (builder.CreateString("testlabelgeneral0"), 0.9),
-    ]
-}
+labels = [["testlabel0", "testlabelgeneral0"]]
 
-labelCategory = createLabelsWithCategories(builder, category, labels)
+confidences = [[0.8, 0.9]]
+
+categories = []
+
+labelCategory = createLabelsWithCategories(builder, category, labels, confidences)
 dataUuids = [builder.CreateString("5a0438b8-37cf-412e-8331-a95ef95c1016")]
 instanceUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 

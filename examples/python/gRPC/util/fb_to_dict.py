@@ -2,6 +2,7 @@
 #   python-helpers.md
 # If any line changes on this file occur, those files may have to be updated as well
 import json
+import os
 import subprocess as sp
 import tempfile
 from enum import Enum
@@ -143,6 +144,7 @@ def fb_flatc_dict(fb_obj: bytearray, schema_file_name: SchemaFileNames) -> Dict:
             tmp_json = Path(f.name + ".json")
 
         sp_ret_code = flatc_proc.wait()
+        os.sync()
 
         if sp_ret_code != 0 or not tmp_json.is_file():
             raise ChildProcessError(
