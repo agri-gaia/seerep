@@ -80,11 +80,12 @@ public:
    * the data has been added to hdf5. The data for the indices is retrieved from hdf5 and added to the indices to the
    * core.
    *
-   * @param projectsImgUuids a mapping from a project uuid to possibly multiple image uuids
+   * @param projectImgUuids a vector containing image uuids mapped to the projects where they reside.
+   * The first slot contains the project uuid and the second slot the image uuid.
    *
    * @see seerep_core_fb::CoreFbImage::addDataToHdf5
    */
-  void buildIndices(const std::unordered_map<std::string, std::vector<boost::uuids::uuid>>& projectsImgUuids);
+  void buildIndices(const std::vector<std::pair<std::string, boost::uuids::uuid>>& projectImgUuids);
 
   /**
    * @brief Adds bounding box based labels to an existing image
