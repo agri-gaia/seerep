@@ -97,7 +97,7 @@ grpc::Status FbImageService::TransferImage(grpc::ServerContext* context,
   std::string answer = "everything stored!";
 
   flatbuffers::grpc::Message<seerep::fb::Image> imageMsg;
-  std::unordered_map<std::string, std::vector<boost::uuids::uuid>> projectsImgUuids;
+  std::vector<std::pair<std::string, boost::uuids::uuid>> projectImgUuids;
 
   // add incoming image data to hdf5
   while (reader->Read(&imageMsg))
@@ -110,11 +110,7 @@ grpc::Status FbImageService::TransferImage(grpc::ServerContext* context,
     {
       try
       {
-        if (projectsImgUuids.find(uuidProject) == projectsImgUuids.end())
-        {
-          projectsImgUuids.insert({ uuidProject, std::vector<boost::uuids::uuid>{} });
-        }
-        projectsImgUuids.at(uuidProject).push_back(imageFb->addDataToHdf5(*image));
+        projectImgUuids.push_back({ uuidProject, imageFb->addDataToHdf5(*image) });
       }
       catch (std::runtime_error const& e)
       {
@@ -150,7 +146,7 @@ grpc::Status FbImageService::TransferImage(grpc::ServerContext* context,
   // create the indices when all image data was written to hdf5
   try
   {
-    imageFb->buildIndices(projectsImgUuids);
+    imageFb->buildIndices(projectImgUuids);
   }
   catch (std::runtime_error const& e)
   {
@@ -175,7 +171,6 @@ grpc::Status FbImageService::TransferImage(grpc::ServerContext* context,
     seerep_server_util::createResponseFb(msg, seerep::fb::TRANSMISSION_STATE_FAILURE, response);
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
   }
-
   seerep_server_util::createResponseFb(answer, seerep::fb::TRANSMISSION_STATE_SUCCESS, response);
 
   return grpc::Status::OK;

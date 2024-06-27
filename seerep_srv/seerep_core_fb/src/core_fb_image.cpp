@@ -62,28 +62,24 @@ boost::uuids::uuid CoreFbImage::addDataToHdf5(const seerep::fb::Image& img)
   }
 }
 
-void CoreFbImage::buildIndices(const std::unordered_map<std::string, std::vector<boost::uuids::uuid>>& projectsImgUuids)
+void CoreFbImage::buildIndices(const std::vector<std::pair<std::string, boost::uuids::uuid>>& projecImgUuids)
 {
-  for (auto kv : projectsImgUuids)
+  for (auto [projectUuid, imgUuid] : projecImgUuids)
   {
-    auto hdf5io = CoreFbGeneral::getHdf5(kv.first, m_seerepCore, m_hdf5IoMap);
+    auto hdf5io = CoreFbGeneral::getHdf5(projectUuid, m_seerepCore, m_hdf5IoMap);
 
-    // go through all uuids of the project
-    for (auto uuid : kv.second)
+    auto optionalImg = hdf5io->readImage(boost::lexical_cast<std::string>(imgUuid), true);
+
+    if (!optionalImg.has_value())
     {
-      auto optionalImg = hdf5io->readImage(boost::lexical_cast<std::string>(uuid), true);
-
-      if (!optionalImg.has_value())
-      {
-        return;
-      }
-
-      auto img = optionalImg.value().GetRoot();
-      auto dataForIndices = CoreFbConversion::fromFb(*img);
-
-      hdf5io->computeFrustumBB(img->uuid_cameraintrinsics()->str(), dataForIndices.boundingbox);
-      m_seerepCore->addDataset(dataForIndices);
+      throw std::runtime_error("images couldn't be retrieved correctly!");
     }
+
+    auto img = optionalImg.value().GetRoot();
+    auto dataForIndices = CoreFbConversion::fromFb(*img);
+
+    hdf5io->computeFrustumBB(img->uuid_cameraintrinsics()->str(), dataForIndices.boundingbox);
+    m_seerepCore->addDataset(dataForIndices);
   }
 }
 
