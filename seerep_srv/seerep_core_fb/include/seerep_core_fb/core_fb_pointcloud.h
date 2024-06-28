@@ -77,7 +77,7 @@ public:
    *
    * @see seerep_core_fb::CoreFbPointCloud::addDataToHdf5
    */
-  void buildIndices(std::unordered_map<std::string, std::vector<boost::uuids::uuid>> projectPclUuids);
+  void buildIndices(std::vector<std::pair<std::string, boost::uuids::uuid>>& projectPclUuids);
 
   /**
    * @brief Adds bounding box based labels to an existing pointcloud
