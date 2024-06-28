@@ -49,11 +49,10 @@ boost::uuids::uuid CoreFbPointCloud::addDataToHdf5(const seerep::fb::PointCloud2
 void CoreFbPointCloud::buildIndices(std::vector<std::pair<std::string, boost::uuids::uuid>>& projectPclUuids)
 {
   seerep_core_msgs::AABB bb;
-  std::string uuidStr;
   for (auto [projectUuid, pclUuid] : projectPclUuids)
   {
     auto hdf5io = CoreFbGeneral::getHdf5(projectUuid, m_seerepCore, m_hdf5IoMap);
-    uuidStr = boost::lexical_cast<std::string>(pclUuid);
+    auto uuidStr = boost::lexical_cast<std::string>(pclUuid);
 
     auto optionalPcl = hdf5io->readPointCloud2(uuidStr, true);
     hdf5io->readAABB(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, uuidStr, bb);

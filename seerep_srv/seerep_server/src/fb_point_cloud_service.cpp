@@ -87,6 +87,7 @@ grpc::Status FbPointCloudService::TransferPointCloud2(
   flatbuffers::grpc::Message<seerep::fb::PointCloud2> pointCloudMsg;
   std::vector<std::pair<std::string, boost::uuids::uuid>> projectPclUuids;
 
+  // write pointcloud data to hdf5
   while (reader->Read(&pointCloudMsg))
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "received flatbuffers point cloud";
@@ -131,8 +132,8 @@ grpc::Status FbPointCloudService::TransferPointCloud2(
       return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
     }
   }
-  seerep_server_util::createResponseFb(answer, seerep::fb::TRANSMISSION_STATE_SUCCESS, response);
 
+  // build the indices from the written data
   try
   {
     pointCloudFb->buildIndices(projectPclUuids);
@@ -161,6 +162,8 @@ grpc::Status FbPointCloudService::TransferPointCloud2(
     seerep_server_util::createResponseFb(msg, seerep::fb::TRANSMISSION_STATE_FAILURE, response);
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
   }
+
+  seerep_server_util::createResponseFb(answer, seerep::fb::TRANSMISSION_STATE_SUCCESS, response);
 
   return grpc::Status::OK;
 }
