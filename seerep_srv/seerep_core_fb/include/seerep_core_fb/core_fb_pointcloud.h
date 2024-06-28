@@ -61,10 +61,10 @@ public:
   /**
    * @brief Write the pointcloud data to hdf5
    *
-   * @param pc the point cloud message to index and save
+   * @param pcl the point cloud message to write
    * @return boost::uuids::uuid the uuid of the stored pointcloud
    */
-  boost::uuids::uuid addDataToHdf5(const seerep::fb::PointCloud2& pc);
+  boost::uuids::uuid addDataToHdf5(const seerep::fb::PointCloud2& pcl);
 
   /**
    * @brief Extract pointcloud data from hdf5 and build the indices.
@@ -73,7 +73,8 @@ public:
    * the data has been added to hdf5. The data for the indices is retrieved from hdf5 and added to the indices to the
    * core.
    *
-   * @param projectPclUuids a mapping from a project uuid to possibly multiple pointcloud2 uuids
+   * @param projectPclUuids a vector of pairs of first project uuids and second pointcloud uuids, where the pointcloud
+   * belongs to the specified project
    *
    * @see seerep_core_fb::CoreFbPointCloud::addDataToHdf5
    */
