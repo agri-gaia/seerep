@@ -6,9 +6,6 @@ grpcio==1.53.0
 imageio==2.20.0
 numpy==1.22.0
 numpy-quaternion==2022.4.2
-mkdocs==1.6.0
-mkdocs-material==9.5.27
-mkdocs-glightbox==0.4.0
 twine==4.0.2
 build==0.10.0
 setuptools==65.7.0
