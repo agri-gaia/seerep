@@ -39,7 +39,8 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         && rm -rf /var/lib/apt/lists/*
 
 
-COPY requirements.txt /tmp/requirements.txt
+COPY requirements.dev.txt /tmp/requirements.dev.txt
+COPY requirements.docs.txt /tmp/requirements.docs.txt
 
 # Not sure why the path must be updated directly after upgrading pip.
 # Setting it before via the Dockerfile ENV command does not work.
@@ -52,8 +53,9 @@ COPY requirements.txt /tmp/requirements.txt
 # With --ignore-installed, the uninstall is skipped and the new version is installd on top of the old one.
 RUN pip3 install --upgrade pip \
         && PATH=/home/docker/.local/bin:${PATH} \
-        && pip3 install -r /tmp/requirements.txt --ignore-installed PyYAML --no-cache-dir \
-        && rm /tmp/requirements.txt
+        && pip3 install -r /tmp/requirements.dev.txt --ignore-installed PyYAML --no-cache-dir \
+        && pip3 install -r /tmp/requirements.docs.txt --ignore-installed PyYAML --no-cache-dir \
+        && rm /tmp/requirements.dev.txt /tmp/requirements.docs.txt
 
 #Install seerep dependencies from apt
 RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \

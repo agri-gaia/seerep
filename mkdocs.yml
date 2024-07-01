@@ -1,7 +1,64 @@
 site_name: SEEREP Documentation
+site_description: Documentation for the SEemantic Environment REpresentation (SEEREP)
+site_author: Mark Niemeyer, Julian Arkenau, Marc Meijer
+
 repo_url: https://github.com/agri-gaia/seerep
+repo_name: agri-gaia/seerep
+edit_uri: edit/main/docs/mkdocs
+
 docs_dir: docs/mkdocs
-# define navigation structure
+theme:
+  name: material
+  features:
+    - navigation.tracking
+    - navigation.instant
+    - navigation.top
+    - navigation.tabs
+    - navigation.expand
+    - navigation.indexes
+    - content.code.copy
+    - content.tabs
+    - content.action.edit
+    - search.suggest
+  language: en
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/lightbulb
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/lightbulb-outline
+        name: Switch to light mode
+  icon:
+    repo: fontawesome/brands/github
+    edit: material/pencil
+  logo: imgs/Seerep_Logo_White.svg
+  favicon: imgs/Seerep_Favicon.png
+  font:
+    text: IBM Plex Sans
+    code: IBM Plex Mono
+
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight:
+      anchor_linenums: true
+  # allow references to code blocks for more direct examples
+  - pymdownx.snippets:
+      url_download: true
+  - pymdownx.superfences
+  - pymdownx.keys
+  - pymdownx.tabbed:
+      alternate_style: true
+  - attr_list
+  - md_in_html
+
 nav:
   - Home: 'home/index.md'
   - Getting started:
@@ -16,48 +73,19 @@ nav:
       - Tests: 'getting-started/server/tests.md'
   - Reference:
     - Package Overview: 'reference/packages.md'
-    - Python helper functionality: 'reference/python-helpers.md'
-    - Python tests message abstractions: 'reference/pytests-message-abstractions.md'
   - Tutorials:
     - Overview: 'tutorials/overview.md'
+    - gRPC Python: 'tutorials/overview.md'
     - Creating & retrieving projects: 'tutorials/projects.md'
-    - Sending & querying images: 'tutorials/images.md'
-    - Writing python examples: 'tutorials/writing-python-examples.md'
-    - Writing python integration tests: 'tutorials/writing-python-tests.md'
-theme:
-  # use mkdocs material https://squidfunk.github.io/mkdocs-material/
-  name: material
-  language: en
-  logo: imgs/DFKI_logo_outline_w.png
+    - Sending & Querying Images: 'tutorials/images.md'
 
-  # navigation features
-  features:
-    - navigation.tracking
-    - navigation.tabs
-    - navigation.expand
-    - navigation.sections
-  # disable google fonts due to GDPR
-  font: false
+copyright: Copyright &copy; 2021 - 2024 Deutsches Forschungszentrum für Künstliche Intelligenz GmbH (DFKI) <br>
+  <a href="/seerep/mkdocs/legal-notice/index.html">Legal Notice</a> - <a href="/seerep/mkdocs/data-protection-notice/index.html">Data Protection Notice</a>
 
-# dfki color theme
 extra_css:
   - stylesheets/extra.css
-markdown_extensions:
-  # aka call-outs, way to include side content
-  - admonition
-  # syntax highlighting in code blocks
-  - pymdownx.highlight:
-      anchor_linenums: true
-  # allow references to code blocks for more direct examples
-  - pymdownx.snippets:
-      url_download: true
-  - pymdownx.superfences
-  # add tabs to navigate on the top
-  - pymdownx.tabbed:
-      alternate_style: true
-  - attr_list
-  - pymdownx.emoji:
-      emoji_index: !!python/name:material.extensions.emoji.twemoji
-      emoji_generator: !!python/name:material.extensions.emoji.to_svg
-copyright: >
-        <a href="/seerep/mkdocs/legal-notice/index.html">Legal Notice</a> - <a href="/seerep/mkdocs/data-protection-notice/index.html">Data Protection Notice</a>
+
+plugins:
+  - search
+  - privacy
+  - glightbox

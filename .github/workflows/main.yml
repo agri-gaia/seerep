@@ -78,7 +78,8 @@ jobs:
         with:
           files: |
             docker/base/Dockerfile
-            docker/base/requirements.txt
+            docker/base/requirements.dev.txt
+            docker/base/requirements.docs.txt
       -
         name: Set up Docker Buildx
         if: github.ref_type == 'tag' || steps.changed-files-specific-docker-base.outputs.any_changed == 'true'

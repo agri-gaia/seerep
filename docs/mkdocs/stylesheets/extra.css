@@ -1,7 +1,20 @@
-:root > *{
-  --md-primary-fg-color:        #3668a0;
-  --md-typeset-a-color:         #3668a0;
-  --md-accent-fg-color:         #de7c0a;
-  --md-footer-fg-color:         #ffffff;
-  --md-footer-bg-color:         #58585a;
+[data-md-color-scheme="default"] {
+  --md-primary-fg-color: #6ABFA3;
+  --md-accent-fg-color: #F7A712;
+}
+
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: #6ABFA3;
+  --md-accent-fg-color: #F7A712;
+  --md-default-bg-color: #272d35;
+}
+
+.md-header__button.md-logo {
+    margin: 0;
+    padding: 0;
+}
+
+.md-header__button.md-logo img, .md-header__button.md-logo svg {
+  height: 2.6rem;
+  width: 3.2rem;
 }

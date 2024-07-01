@@ -33,7 +33,7 @@ jobs:
       - name: Download MkDocs
         shell: bash
         run: |
-          sudo python3 -m pip install mkdocs-material
+          sudo python3 -m pip install -r docker/base/requirements.docs.txt
       - name: Download Doxygen
         shell: bash
         run: |

@@ -62,3 +62,6 @@ wheels/
 MANIFEST
 
 **/other_packages/**
+
+# mkdocs-material privacy plugin
+.cache
