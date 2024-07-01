@@ -39,8 +39,8 @@ theme:
   icon:
     repo: fontawesome/brands/github
     edit: material/pencil
-  favicon: imgs/DFKI-Logo_ohne_RGB_weiss.svg
   logo: imgs/Seerep_Logo_White.svg
+  favicon: imgs/Seerep_Favicon.png
   font:
     text: IBM Plex Sans
     code: IBM Plex Mono
