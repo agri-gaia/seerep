@@ -63,6 +63,7 @@ extra_css:
 plugins:
   - search
   - privacy
+  - glightbox
 markdown_extensions:
   # aka call-outs, way to include side content
   - admonition
