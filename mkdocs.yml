@@ -63,6 +63,7 @@ nav:
   - Home: 'home/index.md'
   - Getting started:
     - Development Setup: 'getting-started/dev_setup.md'
+    - Kown Issues: 'getting-started/known_issues.md'
     - Client:
       - gRPC python: 'getting-started/client/pypi.md'
     - Server:
