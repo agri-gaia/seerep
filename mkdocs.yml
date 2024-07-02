@@ -62,13 +62,12 @@ markdown_extensions:
 nav:
   - Home: 'home/index.md'
   - Getting started:
+    - Development Setup: 'getting-started/dev_setup.md'
     - Client:
       - gRPC python: 'getting-started/client/pypi.md'
     - Server:
       - Configuration: 'getting-started/server/configuration.md'
-      - Dev Environment: 'getting-started/server/installationDev.md'
       - Kubernetes Deployment: 'getting-started/server/kubernetes-deployment.md'
-      - Local Deployment: 'getting-started/server/local-deployment.md'
       - Docs: 'getting-started/server/docs.md'
       - Tests: 'getting-started/server/tests.md'
   - Reference:
