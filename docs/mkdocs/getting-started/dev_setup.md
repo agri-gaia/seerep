@@ -90,3 +90,27 @@ The main hooks are:
 
 Along with other checks for Dockerfiles and YAML, see the complete list in the
 [configuration](https://github.com/agri-gaia/seerep/blob/main/.pre-commit-config.yaml).
+
+## Debugging with VS-Code
+
+Inside the Dev-Container, `catkin` builds the server executable in debug mode by default.
+To start debugging with VS-Code support, the provided launch configurations can be used.
+For that switch into the `Run and Debug` window (++ctrl+shift+d++ ) and select `seerep_server`from the dropdown.
+To finally launch the server, click the :arrow_forward: button.
+
+<figure markdown>
+  ![SEEREP start in D](../imgs/Seerep_Debug_Start.png)
+  <figcaption> Start SEEREP in debug mode inside VS-Code </figcaption>
+</figure>
+
+The `gdb` debug console should be displayed at the bottom.
+Switching to the terminal tab provides access to the logging output.
+An example from a fresh server start is shown below:
+
+<figure markdown>
+  ![SEEREP start in D](../imgs/Seerep_Start_Output.png)
+  <figcaption> Terminal output upon start </figcaption>
+</figure>
+
+For further information regarding debugging in VS-Code check the
+[offical docs](https://code.visualstudio.com/docs/editor/debugging).
