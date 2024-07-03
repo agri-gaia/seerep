@@ -15,7 +15,6 @@ from seerep.fb import (
     Label,
     LabelCategory,
     Point,
-    Point2D,
     PointCloud2,
     PointField,
     PointStamped,
@@ -1018,11 +1017,9 @@ def createImage(
             builder.PrependUOffsetTRelative(label)
         label_offset = builder.EndVector()
 
-
-
     camera_intrinsics_uuid_offset = builder.CreateString(camera_intrinsics_uuid)
     data_offset = builder.CreateByteVector(image.tobytes())
-    
+
     Image.Start(builder)
     Image.AddHeader(builder, header)
     Image.AddHeight(builder, image.shape[0])

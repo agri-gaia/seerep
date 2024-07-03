@@ -7,7 +7,6 @@ from grpc import Channel
 from seerep.pb import camera_intrinsics_pb2 as cameraintrinsics
 from seerep.pb import camera_intrinsics_service_pb2_grpc as camintrinsics_service
 from seerep.pb import meta_operations_pb2_grpc as metaOperations
-from seerep.pb import projectCreation_pb2
 from seerep.util.common import get_gRPC_channel
 
 
@@ -33,13 +32,6 @@ def add_camintrins(
             print(project.name + " " + project.uuid)
             if project.name == "testproject":
                 target_proj_uuid = project.uuid
-
-# 3. Check if we have an existing test project, if not, we stop here
-projectuuid = ""
-for project in response.projects:
-    print(project.name + " " + project.uuid + "\n")
-    if project.name == "testproject":
-        projectuuid = "d0f968d9-baaf-419d-be99-6ec95a6013bd"
 
     if ciuuid is None:
         ciuuid = str(uuid.uuid4())
