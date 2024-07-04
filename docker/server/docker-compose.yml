@@ -23,4 +23,6 @@ services:
         condition: service_completed_successfully
 volumes:
   seerep_data:
+    name: seerep_data
   seerep_log:
+    name: seerep_log
