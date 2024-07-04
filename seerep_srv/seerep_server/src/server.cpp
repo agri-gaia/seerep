@@ -34,17 +34,18 @@ void server::parseProgramOptions(int argc, char** argv)
   {
     // Declare a group of options that will be allowed only on command line
     boost::program_options::options_description generic("Generic options");
-    generic.add_options()("version,v", "print version string")("help", "produce help message")(
-        "config,c", boost::program_options::value<std::string>(), "name of a file of a configuration.");
+    generic.add_options()("version,v", "Get a version string")("help", "Help message")(
+        "config,c", boost::program_options::value<std::string>(), "Path to a configuration file");
 
     // Declare a group of options that will be allowed both on command line and in config file
     boost::program_options::options_description config("Configuration");
     config.add_options()("data-folder,D",
                          boost::program_options::value<std::string>()->default_value(std::filesystem::current_path()),
-                         "data folder")("log-path,L", boost::program_options::value<std::string>(), "log path")(
-        "log-level", boost::program_options::value<std::string>()->default_value("info"),
-        "log-level [trace, debug, info, warning, error, fatal]")(
-        "port,p", boost::program_options::value<std::string>()->default_value("9090"), "gRPC port");
+                         "Data storage folder")(
+        "log-path,L", boost::program_options::value<std::string>()->default_value(std::filesystem::current_path()),
+        "Path to store the logs")("log-level", boost::program_options::value<std::string>()->default_value("info"),
+                                  "log-level [trace, debug, info, warning, error, fatal]")(
+        "port,p", boost::program_options::value<std::string>()->default_value("9090"), "gRPC port to use");
 
     boost::program_options::options_description cmdline_options;
     cmdline_options.add(generic).add(config);
@@ -127,7 +128,7 @@ void server::initLogging()
 
   std::string logPath = initFileLogging();
   initConsoleLogging();
-
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "Initialized logging";
   try
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "The used logging folder is: " << logPath;
@@ -138,7 +139,7 @@ void server::initLogging()
     // remove file logging (=remove all sinks add console logging again)
     boost::log::core::get()->remove_all_sinks();
     initConsoleLogging();
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << "file logging exeption: " << e.what();
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << "File logging exeption: " << e.what();
   }
 }
 
@@ -236,7 +237,7 @@ void server::createGrpcServer()
   // create the server and serve
   m_grpcServer = std::shared_ptr<grpc::Server>(serverBuilder.BuildAndStart());
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
-      << "serving gRPC Server on \"" << serverAddress << "\"...";
+      << "Serving gRPC Server on \"" << serverAddress << "\"";
 }
 
 std::string server::getDataFolder()
@@ -264,24 +265,18 @@ std::string server::getDataFolder()
 
 void server::addServicesPb(grpc::ServerBuilder& server_builder)
 {
-  // create services
   createServicesPb();
-  // add services
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "add the protobuf gRPC services...";
   server_builder.RegisterService(&*m_metaOperationsPb);
   server_builder.RegisterService(&*m_tfServicePb);
   server_builder.RegisterService(&*m_imageServicePb);
   server_builder.RegisterService(&*m_pointCloudServicePb);
   server_builder.RegisterService(&*m_cameraIntrinsicsServicePb);
-  // server_builder.RegisterService(receiveSensorMsgs);
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "Addded Protocol Buffers gRPC services";
 }
 
 void server::addServicesFb(grpc::ServerBuilder& server_builder)
 {
-  // create services
   createServicesFb();
-  // add services
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "add the flatbuffer gRPC services...";
   server_builder.RegisterService(&*m_metaOperationsFb);
   server_builder.RegisterService(&*m_tfServiceFb);
   server_builder.RegisterService(&*m_instanceServiceFb);
@@ -289,6 +284,7 @@ void server::addServicesFb(grpc::ServerBuilder& server_builder)
   server_builder.RegisterService(&*m_pointServiceFb);
   server_builder.RegisterService(&*m_pointCloudServiceFb);
   server_builder.RegisterService(&*m_cameraIntrinsicsServiceFb);
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "Added Flatbuffers gRPC services";
 }
 
 void server::createServicesPb()
