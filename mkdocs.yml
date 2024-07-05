@@ -75,11 +75,14 @@ nav:
     - Kown Issues: 'getting-started/known_issues.md'
   - Reference:
     - Package Overview: 'reference/packages.md'
+    - Flatbuffers Abstractions: 'reference/pytests-message-abstractions.md'
+    - Python Helpers: 'reference/python-helpers.md'
   - Tutorials:
     - Overview: 'tutorials/overview.md'
-    - gRPC Python: 'tutorials/overview.md'
     - Creating & retrieving projects: 'tutorials/projects.md'
     - Sending & Querying Images: 'tutorials/images.md'
+    - Writing Python Tests: 'tutorials/writing-python-tests.md'
+    - Writing Python Examples: 'tutorials/writing-python-examples.md'
 
 copyright: Copyright &copy; 2021 - 2024 Deutsches Forschungszentrum für Künstliche Intelligenz GmbH (DFKI) <br>
   <a href="/seerep/mkdocs/legal-notice/index.html">Legal Notice</a> - <a href="/seerep/mkdocs/data-protection-notice/index.html">Data Protection Notice</a>
