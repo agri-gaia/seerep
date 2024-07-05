@@ -69,11 +69,10 @@ nav:
   - Getting started:
     - Development Setup: 'getting-started/dev_setup.md'
     - Server Deployment: 'getting-started/server_deployment.md'
+    - gRPC Clients: 'getting-started/grpc_clients.md'
     - Documentation Setup: 'getting-started/docs.md'
     - Kown Issues: 'getting-started/known_issues.md'
-    - Client:
-      - gRPC python: 'getting-started/client/pypi.md'
-      - Tests: 'getting-started/server/tests.md'
+    - Tests: 'getting-started/server/tests.md'
   - Reference:
     - Package Overview: 'reference/packages.md'
   - Tutorials:
