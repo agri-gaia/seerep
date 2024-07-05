@@ -71,8 +71,8 @@ nav:
     - Server Deployment: 'getting-started/server_deployment.md'
     - gRPC Clients: 'getting-started/grpc_clients.md'
     - Documentation Setup: 'getting-started/docs.md'
+    - Test Setup: 'getting-started/tests.md'
     - Kown Issues: 'getting-started/known_issues.md'
-    - Tests: 'getting-started/server/tests.md'
   - Reference:
     - Package Overview: 'reference/packages.md'
   - Tutorials:
