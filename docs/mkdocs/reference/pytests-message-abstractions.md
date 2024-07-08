@@ -1,4 +1,4 @@
-# Flatbuffers message abstractions
+# Flatbuffers Message Abstractions
 
 The message abstractions are a rather experimental way to more easily create test variations.
 

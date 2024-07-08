@@ -57,27 +57,32 @@ markdown_extensions:
   - pymdownx.tabbed:
       alternate_style: true
   - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - md_in_html
+  - toc:
+      permalink: true
 
 nav:
   - Home: 'home/index.md'
   - Getting started:
-    - Client:
-      - gRPC python: 'getting-started/client/pypi.md'
-    - Server:
-      - Configuration: 'getting-started/server/configuration.md'
-      - Dev Environment: 'getting-started/server/installationDev.md'
-      - Kubernetes Deployment: 'getting-started/server/kubernetes-deployment.md'
-      - Local Deployment: 'getting-started/server/local-deployment.md'
-      - Docs: 'getting-started/server/docs.md'
-      - Tests: 'getting-started/server/tests.md'
+    - Development Setup: 'getting-started/dev_setup.md'
+    - Server Deployment: 'getting-started/server_deployment.md'
+    - gRPC Clients: 'getting-started/grpc_clients.md'
+    - Documentation Setup: 'getting-started/docs.md'
+    - Test Setup: 'getting-started/tests.md'
+    - Kown Issues: 'getting-started/known_issues.md'
   - Reference:
     - Package Overview: 'reference/packages.md'
+    - Flatbuffers Abstractions: 'reference/pytests-message-abstractions.md'
+    - Python Helpers: 'reference/python-helpers.md'
   - Tutorials:
     - Overview: 'tutorials/overview.md'
-    - gRPC Python: 'tutorials/overview.md'
     - Creating & retrieving projects: 'tutorials/projects.md'
     - Sending & Querying Images: 'tutorials/images.md'
+    - Writing Python Tests: 'tutorials/writing-python-tests.md'
+    - Writing Python Examples: 'tutorials/writing-python-examples.md'
 
 copyright: Copyright &copy; 2021 - 2024 Deutsches Forschungszentrum für Künstliche Intelligenz GmbH (DFKI) <br>
   <a href="/seerep/mkdocs/legal-notice/index.html">Legal Notice</a> - <a href="/seerep/mkdocs/data-protection-notice/index.html">Data Protection Notice</a>

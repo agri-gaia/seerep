@@ -20,6 +20,7 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         make \
         unzip \
         git \
+        gdb \
         libcgal-dev \
         sudo \
         ssh \
