@@ -97,26 +97,27 @@ grpc::Status FbImageService::TransferImage(grpc::ServerContext* context,
   std::string answer = "everything stored!";
 
   flatbuffers::grpc::Message<seerep::fb::Image> imageMsg;
+  std::vector<std::pair<std::string, boost::uuids::uuid>> projectImgUuids;
+
+  // add incoming image data to hdf5
   while (reader->Read(&imageMsg))
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "received image... ";
     auto image = imageMsg.GetRoot();
-
     std::string uuidProject = image->header()->uuid_project()->str();
+
     if (!uuidProject.empty())
     {
       try
       {
-        imageFb->addData(*image);
+        projectImgUuids.push_back({ uuidProject, imageFb->addDataToHdf5(*image) });
       }
       catch (std::runtime_error const& e)
       {
         // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
         // also catching core doesn't have project with uuid error
         BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
-
         seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
-
         return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
       }
       catch (const std::exception& e)
@@ -142,6 +143,34 @@ grpc::Status FbImageService::TransferImage(grpc::ServerContext* context,
     }
   }
 
+  // create the indices when all image data was written to hdf5
+  try
+  {
+    imageFb->buildIndices(projectImgUuids);
+  }
+  catch (std::runtime_error const& e)
+  {
+    // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
+    // also catching core doesn't have project with uuid error
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (const std::exception& e)
+  {
+    // specific handling for all exceptions extending std::exception, except
+    // std::runtime_error which is handled explicitly
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (...)
+  {
+    std::string msg = "Unknown failure occurred. Possible memory corruption";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+    seerep_server_util::createResponseFb(msg, seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
+  }
   seerep_server_util::createResponseFb(answer, seerep::fb::TRANSMISSION_STATE_SUCCESS, response);
 
   return grpc::Status::OK;
