@@ -13,25 +13,25 @@
       
       
       
-        <link rel="prev" href="../installationDev/">
+        <link rel="prev" href="../dev_setup/">
       
       
-        <link rel="next" href="../local-deployment/">
+        <link rel="next" href="../grpc_clients/">
       
       
-      <link rel="icon" href="../../../imgs/Seerep_Favicon.png">
+      <link rel="icon" href="../../imgs/Seerep_Favicon.png">
       <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.27">
     
     
       
-        <title>Kubernetes Deployment - SEEREP Documentation</title>
+        <title>Server Deployment - SEEREP Documentation</title>
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.6543a935.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6543a935.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -45,21 +45,21 @@
         
         
         
-        <link rel="stylesheet" href="../../../assets/external/fonts.googleapis.com/css.804a7bde.css">
+        <link rel="stylesheet" href="../../assets/external/fonts.googleapis.com/css.804a7bde.css">
         <style>:root{--md-text-font:"IBM Plex Sans";--md-code-font:"IBM Plex Mono"}</style>
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
     
     
     
-   <link href="../../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+   <link href="../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
     html.glightbox-open { overflow: initial; height: 100%; }
     .gslide-title { margin-top: 0px; user-select: text; }
     .gslide-desc { color: #666; user-select: text; }
@@ -68,7 +68,7 @@
     .gdesc-inner { font-size: 0.75rem; }
     body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
     body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
-    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../../../assets/javascripts/glightbox.min.js"></script></head>
+    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../../assets/javascripts/glightbox.min.js"></script></head>
   
   
     
@@ -87,7 +87,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#kubernetes-deployment" class="md-skip">
+        <a href="#server-deployment" class="md-skip">
           Skip to content
         </a>
       
@@ -101,9 +101,9 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../../.." title="SEEREP Documentation" class="md-header__button md-logo" aria-label="SEEREP Documentation" data-md-component="logo">
+    <a href="../.." title="SEEREP Documentation" class="md-header__button md-logo" aria-label="SEEREP Documentation" data-md-component="logo">
       
-  <img src="../../../imgs/Seerep_Logo_White.svg" alt="logo">
+  <img src="../../imgs/Seerep_Logo_White.svg" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Kubernetes Deployment
+              Server Deployment
             
           </span>
         </div>
@@ -229,7 +229,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../../home/" class="md-tabs__link">
+      <a href="../../home/" class="md-tabs__link">
         
   
     
@@ -249,16 +249,8 @@
   
     
     
-      
-  
-  
-    
-  
-  
-    
-    
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="../../client/pypi/" class="md-tabs__link">
+        <a href="../dev_setup/" class="md-tabs__link">
           
   
     
@@ -270,9 +262,6 @@
     
   
 
-    
-  
-
       
         
   
@@ -281,7 +270,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../reference/packages/" class="md-tabs__link">
+        <a href="../../reference/packages/" class="md-tabs__link">
           
   
     
@@ -301,7 +290,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../tutorials/overview/" class="md-tabs__link">
+        <a href="../../tutorials/overview/" class="md-tabs__link">
           
   
     
@@ -336,9 +325,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../.." title="SEEREP Documentation" class="md-nav__button md-logo" aria-label="SEEREP Documentation" data-md-component="logo">
+    <a href="../.." title="SEEREP Documentation" class="md-nav__button md-logo" aria-label="SEEREP Documentation" data-md-component="logo">
       
-  <img src="../../../imgs/Seerep_Logo_White.svg" alt="logo">
+  <img src="../../imgs/Seerep_Logo_White.svg" alt="logo">
 
     </a>
     SEEREP Documentation
@@ -365,7 +354,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../home/" class="md-nav__link">
+      <a href="../../home/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -388,6 +377,14 @@
   
     
     
+      
+        
+      
+        
+      
+        
+      
+        
       
         
       
@@ -433,160 +430,12 @@
   
   
   
-    
-    
-      
-        
-      
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_1" >
-        
-          
-          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
-            
-  
-  <span class="md-ellipsis">
-    Client
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_1">
-            <span class="md-nav__icon md-icon"></span>
-            Client
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
-      <a href="../../client/pypi/" class="md-nav__link">
+      <a href="../dev_setup/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    gRPC python
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-    
-  
-  
-  
-    
-    
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
-        
-          
-          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
-            
-  
-  <span class="md-ellipsis">
-    Server
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_2_2">
-            <span class="md-nav__icon md-icon"></span>
-            Server
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../configuration/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Configuration
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../installationDev/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Dev Environment
+    Development Setup
   </span>
   
 
@@ -616,7 +465,7 @@
           
   
   <span class="md-ellipsis">
-    Kubernetes Deployment
+    Server Deployment
   </span>
   
 
@@ -627,7 +476,7 @@
         
   
   <span class="md-ellipsis">
-    Kubernetes Deployment
+    Server Deployment
   </span>
   
 
@@ -649,6 +498,25 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      Docker
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kubernetes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Kubernetes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Kubernetes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#relevant-files" class="md-nav__link">
     <span class="md-ellipsis">
       Relevant files
@@ -656,8 +524,8 @@
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#building-with-kustomize" class="md-nav__link">
     <span class="md-ellipsis">
       Building with Kustomize
@@ -665,13 +533,60 @@
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#sealed-secrets" class="md-nav__link">
     <span class="md-ellipsis">
       Sealed Secrets
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#command-line" class="md-nav__link">
+    <span class="md-ellipsis">
+      Command line
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      Config file
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#environment-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      Environment Variables
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -691,11 +606,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../local-deployment/" class="md-nav__link">
+      <a href="../grpc_clients/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Local Deployment
+    gRPC Clients
   </span>
   
 
@@ -716,7 +631,7 @@
         
   
   <span class="md-ellipsis">
-    Docs
+    Documentation Setup
   </span>
   
 
@@ -737,7 +652,28 @@
         
   
   <span class="md-ellipsis">
-    Tests
+    Test Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../known_issues/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Kown Issues
   </span>
   
 
@@ -753,14 +689,6 @@
     </li>
   
 
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
     
       
       
@@ -770,6 +698,10 @@
   
     
     
+      
+        
+      
+        
       
         
       
@@ -813,11 +745,53 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../reference/packages/" class="md-nav__link">
+      <a href="../../reference/packages/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     Package Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/pytests-message-abstractions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Flatbuffers Abstractions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/python-helpers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Python Helpers
   </span>
   
 
@@ -842,6 +816,8 @@
   
     
     
+      
+        
       
         
       
@@ -891,7 +867,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../tutorials/overview/" class="md-nav__link">
+      <a href="../../tutorials/overview/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -912,28 +888,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../tutorials/overview/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Overview
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../tutorials/projects/" class="md-nav__link">
+      <a href="../../tutorials/projects/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -954,11 +909,53 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../tutorials/images/" class="md-nav__link">
+      <a href="../../tutorials/images/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     Sending & Querying Images
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/writing-python-tests/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Writing Python Tests
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/writing-python-examples/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Writing Python Examples
   </span>
   
 
@@ -1002,6 +999,25 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      Docker
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kubernetes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Kubernetes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Kubernetes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#relevant-files" class="md-nav__link">
     <span class="md-ellipsis">
       Relevant files
@@ -1009,8 +1025,8 @@
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#building-with-kustomize" class="md-nav__link">
     <span class="md-ellipsis">
       Building with Kustomize
@@ -1018,13 +1034,60 @@
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#sealed-secrets" class="md-nav__link">
     <span class="md-ellipsis">
       Sealed Secrets
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#command-line" class="md-nav__link">
+    <span class="md-ellipsis">
+      Command line
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      Config file
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#environment-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      Environment Variables
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1043,7 +1106,7 @@
                   
 
   
-    <a href="https://github.com/agri-gaia/seerep/edit/main/docs/mkdocs/getting-started/server/kubernetes-deployment.md" title="Edit this page" class="md-content__button md-icon">
+    <a href="https://github.com/agri-gaia/seerep/edit/main/docs/mkdocs/getting-started/server_deployment.md" title="Edit this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
     </a>
@@ -1051,52 +1114,139 @@
   
 
 
-<h1 id="kubernetes-deployment">Kubernetes Deployment</h1>
-<p>Besides, the local installation and the usage of an available docker container (see <a href="../local-deployment/">installation</a>),
-one can also deploy the seerep-server within a kubernetes cluster.</p>
-<h2 id="relevant-files">Relevant files</h2>
+<h1 id="server-deployment">Server Deployment<a class="headerlink" href="#server-deployment" title="Permanent link">&para;</a></h1>
+<h2 id="docker">Docker<a class="headerlink" href="#docker" title="Permanent link">&para;</a></h2>
+<p>The easiest way to start a production instance of SEEREP is with <code>docker compose</code>,
+using the corresponding file in the <code>docker/server</code> directory:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">cd</span><span class="w"> </span>docker/server
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>docker<span class="w"> </span>compose<span class="w"> </span>up
+</code></pre></div>
+<div class="admonition info">
+<p class="admonition-title">Use of named Docker volumes</p>
+<p><!-- markdownlint-disable-next-line -->
+Compared to the Dev-Container, the production setup uses <a href="https://docs.docker.com/storage/volumes/">named Docker volumes</a>.
+Which do not require any specific directory on the host system. The volumes also keeps the data between restarts.
+For an empty server delete the volumes with <code>docker volume rm seerep_log seerep_data</code>.</p>
+</div>
+<p>Configuration of the compose setup is done through the <code>.env</code> file located in the same directory.
+For details on the individual options, refer to the <a href="#configuration">configuration</a> section.</p>
+<p>A closer look at the Docker compose file might lead to questions about
+the extra service, that adjusts the owner of the log and data directories. The main reason for this is that
+named volumes are created with root permissions when the mount location does not exist. However since the container is
+run as non-root for security reasons (as should ever other container), we are not able to change the permissions
+without hard-coding the mount locations in the Dockerfile. To change the permissions, a very small container mounts the
+volumes and changes the permission to the specified <code>uid</code> and <code>guid</code> after which SEEREP is started with the same user.
+Additional information can be found in the <a href="https://github.com/agri-gaia/seerep/pull/376">PR#376</a> discussion.</p>
+<h2 id="kubernetes">Kubernetes<a class="headerlink" href="#kubernetes" title="Permanent link">&para;</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Not actively maintained!</p>
+<p><!-- markdownlint-disable-next-line -->
+The deployment of SEEREP using Kubernetes is currently not actively maintained.</p>
+</div>
+<h3 id="relevant-files">Relevant files<a class="headerlink" href="#relevant-files" title="Permanent link">&para;</a></h3>
 <p>Seerep can either be installed with the latest development state or the latest stable version. The relevant files can
-be found under</p>
-<ul>
-<li>/docker/kustomize/base --&gt; development</li>
-<li>/docker/kustomize/overlays/production --&gt; latest stable release</li>
-</ul>
-<p>The base-folder contains all yaml-files for a cluster deployments. This includes</p>
+be found under:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>/docker/kustomize/base<span class="w"> </span>--&gt;<span class="w"> </span>development
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>/docker/kustomize/overlays/production<span class="w"> </span>--&gt;<span class="w"> </span>latest<span class="w"> </span>stable<span class="w"> </span>release
+</code></pre></div>
+<p>The base-folder contains all yaml-files for a cluster deployment. This includes:</p>
 <ul>
 <li>Deployment</li>
-<li>PersistentVolume and PersistentVolumeClaim</li>
+<li>PersistentVolume (PV) and PersistentVolumeClaim (PVC)</li>
 <li>Service</li>
 <li>Ingress</li>
 <li>Configuration</li>
 </ul>
 <p>The yaml-file for the cluster is create via <a href="https://kubectl.docs.kubernetes.io/references/kustomize/">Kustomize</a>, hence
 this folder also contains a kustomization.yaml which puts everything together.</p>
-<p>The /overlay/production folder contains a second kustomization.yaml. Within this file everything needed to install a
-production system is overridden. This means, that the sealed secret is replaced with a new one, while the base secret
-is deleted. Further, the labels and the names of PV and PVC are changed to create new storage explicitly for the
-production system. Finally, the used image is replaced with the latest stable release.</p>
+<p>The <code>/overlay/production</code> directory contains a second <code>kustomization.yaml</code>. Within this file everything needed to
+install a production system is overridden. This means, that the sealed secret is replaced with a new one, while the
+base secret is deleted. Further, the labels and the names of PV and PVC are changed to create new storage explicitly
+for the production system. Finally, the used image is replaced with the latest stable release.</p>
 <p>The usage of an overlay, thereby, follows the principles of Kustomize.</p>
-<h2 id="building-with-kustomize">Building with Kustomize</h2>
-<p>Before one can build the kubernetes manifest, one needs to install Kustomize (<a href="https://kubectl.docs.kubernetes.io/installation/kustomize/">Kustomize installation</a>)
-The easiest way to that is the download the latest binary from the <a href="https://github.com/kubernetes-sigs/kustomize/releases">offical release page</a></p>
-<p>To install the base-version of seerep either one can run:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>kustomize<span class="w"> </span>build<span class="w"> </span>base/<span class="w"> </span>&gt;<span class="w"> </span>seerep-deployment.yaml
+<h3 id="building-with-kustomize">Building with Kustomize<a class="headerlink" href="#building-with-kustomize" title="Permanent link">&para;</a></h3>
+<p>Kustomize needs to be installed before building the Kubernetes manifest
+(<a href="https://kubectl.docs.kubernetes.io/installation/kustomize/">Kustomize installation</a>).
+The easiest way to do that is to download the latest binary from the
+<a href="https://github.com/kubernetes-sigs/kustomize/releases">offical release page</a>.</p>
+<p>To install the base version of SEEREP, one can either run:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>kustomize<span class="w"> </span>build<span class="w"> </span>base/<span class="w"> </span>&gt;<span class="w"> </span>seerep-deployment.yaml
 </code></pre></div>
-<p>to store the manifest in a separate yaml file. Or directly use <a href="https://kubernetes.io/docs/reference/kubectl/">kubectl</a>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-k<span class="w"> </span>base/
+<p>to store the manifest in a separate <code>.yaml</code> file. Or directly use
+<a href="https://kubernetes.io/docs/reference/kubectl/">kubectl</a>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-k<span class="w"> </span>base/
 </code></pre></div>
 <p>In order to install the production version, the commands look slightly different:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>kustomize<span class="w"> </span>build<span class="w"> </span>overlays/production/<span class="w"> </span>&gt;<span class="w"> </span>seerep-deployment.yaml
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>kustomize<span class="w"> </span>build<span class="w"> </span>overlays/production/<span class="w"> </span>&gt;<span class="w"> </span>seerep-deployment.yaml
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-k<span class="w"> </span>overlays/production/
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-k<span class="w"> </span>overlays/production/
 </code></pre></div>
-<p>If someone has a running <a href="https://argo-cd.readthedocs.io/en/stable/">ArgoCD</a> instance, it is also
-possible to integrate seerep as a project into ArgoCD.</p>
-<h2 id="sealed-secrets">Sealed Secrets</h2>
-<p>The certificates used for the secured ingress are created as <a href="https://github.com/bitnami-labs/sealed-secrets">sealed-secret</a>.
+<p>If a <a href="https://argo-cd.readthedocs.io/en/stable/">ArgoCD</a> instance is available, SEEREP can also be added as a project.</p>
+<h3 id="sealed-secrets">Sealed Secrets<a class="headerlink" href="#sealed-secrets" title="Permanent link">&para;</a></h3>
+<p>The certificates used for the secured ingress are created as a
+<a href="https://github.com/bitnami-labs/sealed-secrets">sealed-secret</a>.
 Hence, the secret can safely be stored in a repository. The sealed secret controller installed
 within the cluster will take care of unsealing the secret and make it usable. To combine Kustomize and
-sealed secrets this blogs-post was followed <a href="https://faun.pub/sealing-secrets-with-kustomize-51d1b79105d8">faun.pub</a></p>
+sealed secrets this blogs-post was followed <a href="https://faun.pub/sealing-secrets-with-kustomize-51d1b79105d8">faun.pub</a>.</p>
+<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
+<p>SEEREP can be configured in three different ways: via command line arguments, a config file, or environment variables.</p>
+<h3 id="command-line">Command line<a class="headerlink" href="#command-line" title="Permanent link">&para;</a></h3>
+<p>To get a full list of all arguments use <code>--help</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Allowed<span class="w"> </span>options:
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>Generic<span class="w"> </span>options:
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span>-v<span class="w"> </span><span class="o">[</span><span class="w"> </span>--version<span class="w"> </span><span class="o">]</span><span class="w">                      </span>Get<span class="w"> </span>a<span class="w"> </span>version<span class="w"> </span>string
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span>--help<span class="w">                                </span>Help<span class="w"> </span>message
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">  </span>-c<span class="w"> </span><span class="o">[</span><span class="w"> </span>--config<span class="w"> </span><span class="o">]</span><span class="w"> </span>arg<span class="w">                   </span>Path<span class="w"> </span>to<span class="w"> </span>a<span class="w"> </span>configuration<span class="w"> </span>file
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>Configuration:
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">  </span>-D<span class="w"> </span><span class="o">[</span><span class="w"> </span>--data-folder<span class="w"> </span><span class="o">]</span><span class="w"> </span>arg<span class="w"> </span><span class="o">(=</span>/seerep/src<span class="o">)</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">                                        </span>Data<span class="w"> </span>storage<span class="w"> </span>folder
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">  </span>-L<span class="w"> </span><span class="o">[</span><span class="w"> </span>--log-path<span class="w"> </span><span class="o">]</span><span class="w"> </span>arg<span class="w"> </span><span class="o">(=</span>/seerep/src<span class="o">)</span><span class="w">  </span>Path<span class="w"> </span>to<span class="w"> </span>store<span class="w"> </span>the<span class="w"> </span>logs
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">  </span>--log-level<span class="w"> </span>arg<span class="w"> </span><span class="o">(=</span>info<span class="o">)</span><span class="w">               </span>log-level<span class="w"> </span><span class="o">[</span>trace,<span class="w"> </span>debug,<span class="w"> </span>info,<span class="w"> </span>warning,
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">                                        </span>error,<span class="w"> </span>fatal<span class="o">]</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">  </span>-p<span class="w"> </span><span class="o">[</span><span class="w"> </span>--port<span class="w"> </span><span class="o">]</span><span class="w"> </span>arg<span class="w"> </span><span class="o">(=</span><span class="m">9090</span><span class="o">)</span><span class="w">             </span>gRPC<span class="w"> </span>port<span class="w"> </span>to<span class="w"> </span>use
+</code></pre></div>
+<p>The configuration parameters are provided with default values (shown in parentheses).</p>
+<h3 id="config-file">Config file<a class="headerlink" href="#config-file" title="Permanent link">&para;</a></h3>
+<p>The command line options can also be set through a config file:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">$(</span>which<span class="w"> </span>seerep_server<span class="k">)</span><span class="w"> </span>--config<span class="w"> </span>seerep.cfg
+</code></pre></div>
+<p>An example config file is shown below:</p>
+<div class="highlight"><span class="filename">seerep.cfg</span><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="na">data-folder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">/seerep/seerep-data/</span><span class="w"> </span><span class="c1">#defaulting to work dir</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="na">log-path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">/seerep/seerep-data/log/</span><span class="w"> </span><span class="c1">#file logging disabled if not set</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="na">log-level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">info</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1">#port = 9090</span>
+</code></pre></div>
+<h3 id="environment-variables">Environment Variables<a class="headerlink" href="#environment-variables" title="Permanent link">&para;</a></h3>
+<p>Additionally, SEEREP can be configured using environment variables, which correspond
+to the command line arguments as follows:</p>
+<table>
+<thead>
+<tr>
+<th>Environment variable</th>
+<th>Command Line</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SEEREP_DATA_FOLDER</td>
+<td>--data-folder</td>
+</tr>
+<tr>
+<td>SEEREP_LOG_PATH</td>
+<td>--log-path</td>
+</tr>
+<tr>
+<td>SEEREP_LOG_LEVEL</td>
+<td>--log-level</td>
+</tr>
+<tr>
+<td>SEEREP_PORT</td>
+<td>--port</td>
+</tr>
+</tbody>
+</table>
 
 
 
@@ -1153,12 +1303,12 @@ sealed secrets this blogs-post was followed <a href="https://faun.pub/sealing-se
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tracking", "navigation.instant", "navigation.top", "navigation.tabs", "navigation.expand", "navigation.indexes", "content.code.copy", "content.tabs", "content.action.edit", "search.suggest"], "search": "../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tracking", "navigation.instant", "navigation.top", "navigation.tabs", "navigation.expand", "navigation.indexes", "content.code.copy", "content.tabs", "content.action.edit", "search.suggest"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.ad660dcc.min.js"></script>
+      <script src="../../assets/javascripts/bundle.ad660dcc.min.js"></script>
       
-        <script src="../../../assets/external/unpkg.com/mermaid@10/dist/mermaid.min.js"></script>
+        <script src="../../assets/external/unpkg.com/mermaid@10/dist/mermaid.min.js"></script>
       
     
   <script id="init-glightbox">document.querySelectorAll('.glightbox').forEach(function(element) {

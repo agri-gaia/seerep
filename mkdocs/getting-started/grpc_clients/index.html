@@ -13,25 +13,25 @@
       
       
       
-        <link rel="prev" href="../../client/pypi/">
+        <link rel="prev" href="../server_deployment/">
       
       
-        <link rel="next" href="../installationDev/">
+        <link rel="next" href="../docs/">
       
       
-      <link rel="icon" href="../../../imgs/Seerep_Favicon.png">
+      <link rel="icon" href="../../imgs/Seerep_Favicon.png">
       <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.27">
     
     
       
-        <title>Configuration - SEEREP Documentation</title>
+        <title>gRPC Clients - SEEREP Documentation</title>
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.6543a935.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6543a935.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -45,21 +45,21 @@
         
         
         
-        <link rel="stylesheet" href="../../../assets/external/fonts.googleapis.com/css.804a7bde.css">
+        <link rel="stylesheet" href="../../assets/external/fonts.googleapis.com/css.804a7bde.css">
         <style>:root{--md-text-font:"IBM Plex Sans";--md-code-font:"IBM Plex Mono"}</style>
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
     
     
     
-   <link href="../../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+   <link href="../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
     html.glightbox-open { overflow: initial; height: 100%; }
     .gslide-title { margin-top: 0px; user-select: text; }
     .gslide-desc { color: #666; user-select: text; }
@@ -68,7 +68,7 @@
     .gdesc-inner { font-size: 0.75rem; }
     body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
     body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
-    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../../../assets/javascripts/glightbox.min.js"></script></head>
+    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../../assets/javascripts/glightbox.min.js"></script></head>
   
   
     
@@ -87,7 +87,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#configure-the-server" class="md-skip">
+        <a href="#grpc-clients" class="md-skip">
           Skip to content
         </a>
       
@@ -101,9 +101,9 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../../.." title="SEEREP Documentation" class="md-header__button md-logo" aria-label="SEEREP Documentation" data-md-component="logo">
+    <a href="../.." title="SEEREP Documentation" class="md-header__button md-logo" aria-label="SEEREP Documentation" data-md-component="logo">
       
-  <img src="../../../imgs/Seerep_Logo_White.svg" alt="logo">
+  <img src="../../imgs/Seerep_Logo_White.svg" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Configuration
+              gRPC Clients
             
           </span>
         </div>
@@ -229,7 +229,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../../home/" class="md-tabs__link">
+      <a href="../../home/" class="md-tabs__link">
         
   
     
@@ -249,16 +249,8 @@
   
     
     
-      
-  
-  
-    
-  
-  
-    
-    
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="../../client/pypi/" class="md-tabs__link">
+        <a href="../dev_setup/" class="md-tabs__link">
           
   
     
@@ -270,9 +262,6 @@
     
   
 
-    
-  
-
       
         
   
@@ -281,7 +270,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../reference/packages/" class="md-tabs__link">
+        <a href="../../reference/packages/" class="md-tabs__link">
           
   
     
@@ -301,7 +290,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../tutorials/overview/" class="md-tabs__link">
+        <a href="../../tutorials/overview/" class="md-tabs__link">
           
   
     
@@ -336,9 +325,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../.." title="SEEREP Documentation" class="md-nav__button md-logo" aria-label="SEEREP Documentation" data-md-component="logo">
+    <a href="../.." title="SEEREP Documentation" class="md-nav__button md-logo" aria-label="SEEREP Documentation" data-md-component="logo">
       
-  <img src="../../../imgs/Seerep_Logo_White.svg" alt="logo">
+  <img src="../../imgs/Seerep_Logo_White.svg" alt="logo">
 
     </a>
     SEEREP Documentation
@@ -365,7 +354,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../home/" class="md-nav__link">
+      <a href="../../home/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -388,6 +377,14 @@
   
     
     
+      
+        
+      
+        
+      
+        
+      
+        
       
         
       
@@ -433,56 +430,12 @@
   
   
   
-    
-    
-      
-        
-      
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_1" >
-        
-          
-          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
-            
-  
-  <span class="md-ellipsis">
-    Client
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_1">
-            <span class="md-nav__icon md-icon"></span>
-            Client
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
-      <a href="../../client/pypi/" class="md-nav__link">
+      <a href="../dev_setup/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    gRPC python
+    Development Setup
   </span>
   
 
@@ -492,67 +445,26 @@
 
               
             
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
               
                 
   
   
-    
   
   
-  
-    
-    
-      
+    <li class="md-nav__item">
+      <a href="../server_deployment/" class="md-nav__link">
         
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
-        
-          
-          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
-            
   
   <span class="md-ellipsis">
-    Server
+    Server Deployment
   </span>
   
 
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_2_2">
-            <span class="md-nav__icon md-icon"></span>
-            Server
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -574,7 +486,7 @@
           
   
   <span class="md-ellipsis">
-    Configuration
+    gRPC Clients
   </span>
   
 
@@ -585,7 +497,7 @@
         
   
   <span class="md-ellipsis">
-    Configuration
+    gRPC Clients
   </span>
   
 
@@ -607,27 +519,51 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#command-line" class="md-nav__link">
+  <a href="#python-api" class="md-nav__link">
     <span class="md-ellipsis">
-      Command line
+      Python API
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Python API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#package-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Package Structure
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#config-file" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#building-locally" class="md-nav__link">
     <span class="md-ellipsis">
-      Config file
+      Building Locally
     </span>
   </a>
   
 </li>
+        
+          <li class="md-nav__item">
+  <a href="#releasing-a-new-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      Releasing a New Version
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
-  <a href="#environment-variables" class="md-nav__link">
+  <a href="#c-api" class="md-nav__link">
     <span class="md-ellipsis">
-      Environment Variables
+      C++ API
     </span>
   </a>
   
@@ -649,74 +585,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../installationDev/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Dev Environment
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../kubernetes-deployment/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Kubernetes Deployment
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../local-deployment/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Local Deployment
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../docs/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Docs
+    Documentation Setup
   </span>
   
 
@@ -737,7 +610,28 @@
         
   
   <span class="md-ellipsis">
-    Tests
+    Test Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../known_issues/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Kown Issues
   </span>
   
 
@@ -753,14 +647,6 @@
     </li>
   
 
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
     
       
       
@@ -770,6 +656,10 @@
   
     
     
+      
+        
+      
+        
       
         
       
@@ -813,11 +703,53 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../reference/packages/" class="md-nav__link">
+      <a href="../../reference/packages/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     Package Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/pytests-message-abstractions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Flatbuffers Abstractions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/python-helpers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Python Helpers
   </span>
   
 
@@ -842,6 +774,8 @@
   
     
     
+      
+        
       
         
       
@@ -891,7 +825,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../tutorials/overview/" class="md-nav__link">
+      <a href="../../tutorials/overview/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -912,28 +846,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../tutorials/overview/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Overview
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../tutorials/projects/" class="md-nav__link">
+      <a href="../../tutorials/projects/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -954,11 +867,53 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../tutorials/images/" class="md-nav__link">
+      <a href="../../tutorials/images/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     Sending & Querying Images
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/writing-python-tests/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Writing Python Tests
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/writing-python-examples/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Writing Python Examples
   </span>
   
 
@@ -1002,27 +957,51 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#command-line" class="md-nav__link">
+  <a href="#python-api" class="md-nav__link">
     <span class="md-ellipsis">
-      Command line
+      Python API
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Python API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#package-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Package Structure
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#config-file" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#building-locally" class="md-nav__link">
     <span class="md-ellipsis">
-      Config file
+      Building Locally
     </span>
   </a>
   
 </li>
+        
+          <li class="md-nav__item">
+  <a href="#releasing-a-new-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      Releasing a New Version
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
-  <a href="#environment-variables" class="md-nav__link">
+  <a href="#c-api" class="md-nav__link">
     <span class="md-ellipsis">
-      Environment Variables
+      C++ API
     </span>
   </a>
   
@@ -1043,7 +1022,7 @@
                   
 
   
-    <a href="https://github.com/agri-gaia/seerep/edit/main/docs/mkdocs/getting-started/server/configuration.md" title="Edit this page" class="md-content__button md-icon">
+    <a href="https://github.com/agri-gaia/seerep/edit/main/docs/mkdocs/getting-started/grpc_clients.md" title="Edit this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
     </a>
@@ -1051,62 +1030,53 @@
   
 
 
-<h1 id="configure-the-server">Configure the server</h1>
-<p>When starting the server some options to configure the server are available. The configuration is possible via the
-command line, via a config file or via environment variables.</p>
-<h2 id="command-line">Command line</h2>
-<p>For the command line the following options are available. All of them are optional and have default values. The latest
-list of options can always be retrieved by starting the server with the <code>--help</code> argument.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Generic<span class="w"> </span>options:
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span>-v<span class="w"> </span><span class="o">[</span><span class="w"> </span>--version<span class="w"> </span><span class="o">]</span><span class="w">                      </span>print<span class="w"> </span>version<span class="w"> </span>string
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span>--help<span class="w">                                </span>produce<span class="w"> </span><span class="nb">help</span><span class="w"> </span>message
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span>-c<span class="w"> </span><span class="o">[</span><span class="w"> </span>--config<span class="w"> </span><span class="o">]</span><span class="w"> </span>arg<span class="w">                   </span>name<span class="w"> </span>of<span class="w"> </span>a<span class="w"> </span>file<span class="w"> </span>of<span class="w"> </span>a<span class="w"> </span>configuration.
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>Configuration:
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span>-D<span class="w"> </span><span class="o">[</span><span class="w"> </span>--data-folder<span class="w"> </span><span class="o">]</span><span class="w"> </span>arg<span class="w"> </span><span class="o">(=</span>/seerep/devel/bin<span class="o">)</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">                                        </span>data<span class="w"> </span>folder
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">  </span>-L<span class="w"> </span><span class="o">[</span><span class="w"> </span>--log-path<span class="w"> </span><span class="o">]</span><span class="w"> </span>arg<span class="w">                 </span>log<span class="w"> </span>path
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">  </span>--log-level<span class="w"> </span>arg<span class="w"> </span><span class="o">(=</span>info<span class="o">)</span><span class="w">               </span>log-level<span class="w"> </span><span class="o">[</span>trace,<span class="w"> </span>debug,<span class="w"> </span>info,<span class="w"> </span>warning,
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">                                        </span>error,<span class="w"> </span>fatal<span class="o">]</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">  </span>-p<span class="w"> </span><span class="o">[</span><span class="w"> </span>--port<span class="w"> </span><span class="o">]</span><span class="w"> </span>arg<span class="w"> </span><span class="o">(=</span><span class="m">9090</span><span class="o">)</span><span class="w">             </span>gRPC<span class="w"> </span>port
+<h1 id="grpc-clients">gRPC Clients<a class="headerlink" href="#grpc-clients" title="Permanent link">&para;</a></h1>
+<h2 id="python-api">Python API<a class="headerlink" href="#python-api" title="Permanent link">&para;</a></h2>
+<p>The gRPC API of SEEREP is bundeled as a Python package and is available as <code>seerep-grpc</code> on
+<a href="https://pypi.org/project/seerep-grpc/">PyPi</a>. To install use:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip3<span class="w"> </span>install<span class="w"> </span>seerep-grpc
 </code></pre></div>
-<h2 id="config-file">Config file</h2>
-<p>The configuration options of the command line options can also be set via a config file. The path and name of the config
-file has to be given to the server using the <code>--config</code> option.</p>
-<p>An example config file:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">data</span><span class="o">-</span><span class="n">folder</span> <span class="o">=</span> <span class="o">/</span><span class="n">seerep</span><span class="o">/</span><span class="n">seerep</span><span class="o">-</span><span class="n">data</span><span class="o">/</span> <span class="c1">#defaulting to work dir</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">log</span><span class="o">-</span><span class="n">path</span> <span class="o">=</span> <span class="o">/</span><span class="n">seerep</span><span class="o">/</span><span class="n">seerep</span><span class="o">-</span><span class="n">data</span><span class="o">/</span><span class="n">log</span><span class="o">/</span> <span class="c1">#file logging disabled if not set</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">log</span><span class="o">-</span><span class="n">level</span> <span class="o">=</span> <span class="n">info</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">port</span> <span class="o">=</span> <span class="mi">9090</span>
+<h3 id="package-structure">Package Structure<a class="headerlink" href="#package-structure" title="Permanent link">&para;</a></h3>
+<p>The package contains the Python bindings generated by the <code>protoc</code> (Protocol Buffers) and <code>flatc</code> (Flatbuffers)
+compilers as well as general wrappers and helper functions. The package is structured as follows:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>seerep/
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>fb/
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span>*.py<span class="w"> </span><span class="c1"># flatbuffer msgs and interfaces</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span>pb/
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span>*.py<span class="w"> </span><span class="c1"># protocl buffer msgs and interfaces</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span>util/
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span>common.py<span class="w"> </span><span class="c1"># general helpers e.g setting up a grpc connection</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span>fb_helper.py<span class="w"> </span><span class="c1"># wrappers to create flatbuffer messages more easily</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span>visualizations.py<span class="w"> </span><span class="c1"># visualizations</span>
 </code></pre></div>
-<h2 id="environment-variables">Environment Variables</h2>
-<p>If one of the following environment variables is set, it will be parsed and set as the command line equivalent.</p>
-<table>
-<thead>
-<tr>
-<th>Environment variable</th>
-<th>command line equivalent</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>SEEREP_DATA_FOLDER</td>
-<td>--data-folder</td>
-</tr>
-<tr>
-<td>SEEREP_LOG_PATH</td>
-<td>--log-path</td>
-</tr>
-<tr>
-<td>SEEREP_LOG_LEVEL</td>
-<td>--log-level</td>
-</tr>
-<tr>
-<td>SEEREP_PORT</td>
-<td>--port</td>
-</tr>
-</tbody>
-</table>
+<p>Importing from the modules can be done like this:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span> <span class="nn">seerep.pb</span> <span class="kn">import</span> <span class="n">image_pb2</span> <span class="k">as</span> <span class="n">image</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kn">from</span> <span class="nn">seerep.pb</span> <span class="kn">import</span> <span class="n">image_service_pb2_grpc</span> <span class="k">as</span> <span class="n">image_service_fb</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span> <span class="nn">seerep.fb</span> <span class="kn">import</span> <span class="n">Image</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">from</span> <span class="nn">seerep.fb</span> <span class="kn">import</span> <span class="n">image_service_grpc_fb</span> <span class="k">as</span> <span class="n">image_service_pb</span>
+</code></pre></div>
+<p>For more advanced examples have a look at the
+<a href="https://github.com/agri-gaia/seerep/tree/main/examples/python/gRPC">examples section</a>.</p>
+<h3 id="building-locally">Building Locally<a class="headerlink" href="#building-locally" title="Permanent link">&para;</a></h3>
+<p>To build the package locally e.g. to distribute recent changes from a branch use:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>python3<span class="w"> </span>-m<span class="w"> </span>build
+</code></pre></div>
+<p>in the main repository directory. There now should be a <code>dist</code> directory which contains the wheel files (<code>*.whl</code>)
+and the archived source files.</p>
+<p>Within the Dev-Container, the package building process is integrated into the CMake workflow, such that running:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>catkin<span class="w"> </span>build<span class="w"> </span><span class="c1"># generally works but takes a bit longer</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>catkin<span class="w"> </span>build<span class="w"> </span>seerep_msgs<span class="w"> </span><span class="c1"># update on the messages</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>catkin<span class="w"> </span>build<span class="w"> </span>seerep_com<span class="w"> </span><span class="c1"># update on the interface</span>
+</code></pre></div>
+<p>is required, to see the changes reflected</p>
+<h3 id="releasing-a-new-version">Releasing a New Version<a class="headerlink" href="#releasing-a-new-version" title="Permanent link">&para;</a></h3>
+<p>A new version of the package is automatically released whenever there is a new SEEREP release, using the
+<a href="https://github.com/agri-gaia/seerep/blob/88ea59605446caf2d1500f111d6f16bb6a6e2bba/.github/workflows/main.yml#L138-L144">main workflow</a>.</p>
+<h2 id="c-api">C++ API<a class="headerlink" href="#c-api" title="Permanent link">&para;</a></h2>
+<p>The C++ bindings for the interfaces and messages are also generated within the Dev-Container and can be included in
+other packages using standard CMake methods. As an example use the <code>examples_cpp</code> package from the
+<a href="https://github.com/agri-gaia/seerep/tree/main/examples/cpp/gRPC">repository</a>.</p>
 
 
 
@@ -1163,12 +1133,12 @@ file has to be given to the server using the <code>--config</code> option.</p>
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tracking", "navigation.instant", "navigation.top", "navigation.tabs", "navigation.expand", "navigation.indexes", "content.code.copy", "content.tabs", "content.action.edit", "search.suggest"], "search": "../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tracking", "navigation.instant", "navigation.top", "navigation.tabs", "navigation.expand", "navigation.indexes", "content.code.copy", "content.tabs", "content.action.edit", "search.suggest"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.ad660dcc.min.js"></script>
+      <script src="../../assets/javascripts/bundle.ad660dcc.min.js"></script>
       
-        <script src="../../../assets/external/unpkg.com/mermaid@10/dist/mermaid.min.js"></script>
+        <script src="../../assets/external/unpkg.com/mermaid@10/dist/mermaid.min.js"></script>
       
     
   <script id="init-glightbox">document.querySelectorAll('.glightbox').forEach(function(element) {
