@@ -85,7 +85,9 @@ grpc::Status FbPointCloudService::TransferPointCloud2(
   std::string answer = "Saved the flatbuffers point cloud message!";
 
   flatbuffers::grpc::Message<seerep::fb::PointCloud2> pointCloudMsg;
+  std::vector<std::pair<std::string, boost::uuids::uuid>> projectPclUuids;
 
+  // write pointcloud data to hdf5
   while (reader->Read(&pointCloudMsg))
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "received flatbuffers point cloud";
@@ -97,7 +99,7 @@ grpc::Status FbPointCloudService::TransferPointCloud2(
       const std::string& uuidProject = pointCloud->header()->uuid_project()->str();
       if (!uuidProject.empty())
       {
-        pointCloudFb->addData(*pointCloud);
+        projectPclUuids.push_back({ uuidProject, pointCloudFb->addDataToHdf5(*pointCloud) });
       }
       else
       {
@@ -130,6 +132,37 @@ grpc::Status FbPointCloudService::TransferPointCloud2(
       return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
     }
   }
+
+  // build the indices from the written data
+  try
+  {
+    pointCloudFb->buildIndices(projectPclUuids);
+  }
+  catch (std::runtime_error const& e)
+  {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning) << e.what();
+
+    seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (const std::exception& e)
+  {
+    // specific handling for all exceptions extending std::exception, except
+    // std::runtime_error which is handled explicitly
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (...)
+  {
+    // catch any other errors (that we have no information about)
+    std::string msg = "Unknown failure occurred. Possible memory corruption";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+    seerep_server_util::createResponseFb(msg, seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
+  }
+
   seerep_server_util::createResponseFb(answer, seerep::fb::TRANSMISSION_STATE_SUCCESS, response);
 
   return grpc::Status::OK;

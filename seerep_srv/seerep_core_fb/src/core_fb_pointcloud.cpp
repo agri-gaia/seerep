@@ -34,7 +34,7 @@ void CoreFbPointCloud::getData(const seerep::fb::Query* query,
   }
 }
 
-boost::uuids::uuid CoreFbPointCloud::addData(const seerep::fb::PointCloud2& pcl)
+boost::uuids::uuid CoreFbPointCloud::addDataToHdf5(const seerep::fb::PointCloud2& pcl)
 {
   seerep_core_msgs::DatasetIndexable dataForIndices = CoreFbConversion::fromFb(pcl);
 
@@ -43,12 +43,33 @@ boost::uuids::uuid CoreFbPointCloud::addData(const seerep::fb::PointCloud2& pcl)
   hdf5io->writePointCloud2(boost::lexical_cast<std::string>(dataForIndices.header.uuidData), pcl);
   hdf5io->writeBoundingBox(boost::lexical_cast<std::string>(dataForIndices.header.uuidData), min_corner, max_corner);
 
-  dataForIndices.boundingbox.min_corner() = min_corner;
-  dataForIndices.boundingbox.max_corner() = max_corner;
-
-  m_seerepCore->addDataset(dataForIndices);
-
   return dataForIndices.header.uuidData;
+}
+
+void CoreFbPointCloud::buildIndices(std::vector<std::pair<std::string, boost::uuids::uuid>>& projectPclUuids)
+{
+  seerep_core_msgs::AABB bb;
+  for (auto [projectUuid, pclUuid] : projectPclUuids)
+  {
+    auto hdf5io = CoreFbGeneral::getHdf5(projectUuid, m_seerepCore, m_hdf5IoMap);
+    auto uuidStr = boost::lexical_cast<std::string>(pclUuid);
+
+    auto optionalPcl = hdf5io->readPointCloud2(uuidStr, true);
+    hdf5io->readAABB(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD, uuidStr, bb);
+
+    if (!optionalPcl.has_value())
+    {
+      throw std::runtime_error("pointclouds couldn't be retrieved correctly!");
+    }
+
+    auto pcl = optionalPcl.value().GetRoot();
+    auto dataForIndices = CoreFbConversion::fromFb(*pcl);
+
+    dataForIndices.boundingbox.max_corner() = bb.max_corner();
+    dataForIndices.boundingbox.min_corner() = bb.min_corner();
+
+    m_seerepCore->addDataset(dataForIndices);
+  }
 }
 
 void CoreFbPointCloud::addBoundingBoxesLabeled(const seerep::fb::BoundingBoxesLabeledStamped& boundingBoxeslabeled)

@@ -59,12 +59,27 @@ public:
   void getData(const seerep::fb::Query* query,
                grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::PointCloud2>>* const writer);
   /**
-   * @brief Add a point cloud to the indices and write the data to hdf5
+   * @brief Write the pointcloud data to hdf5
    *
-   * @param pc the point cloud message to index and save
+   * @param pcl the point cloud message to write
    * @return boost::uuids::uuid the uuid of the stored pointcloud
    */
-  boost::uuids::uuid addData(const seerep::fb::PointCloud2& pc);
+  boost::uuids::uuid addDataToHdf5(const seerep::fb::PointCloud2& pcl);
+
+  /**
+   * @brief Extract pointcloud data from hdf5 and build the indices.
+   *
+   * This method complements @ref addDataToHdf5 and should be called after
+   * the data has been added to hdf5. The data for the indices is retrieved from hdf5 and added to the indices to the
+   * core.
+   *
+   * @param projectPclUuids a vector of pairs of first project uuids and second pointcloud uuids, where the pointcloud
+   * belongs to the specified project
+   *
+   * @see seerep_core_fb::CoreFbPointCloud::addDataToHdf5
+   */
+  void buildIndices(std::vector<std::pair<std::string, boost::uuids::uuid>>& projectPclUuids);
+
   /**
    * @brief Adds bounding box based labels to an existing pointcloud
    * @param bbslabeled the flatbuffer message containing bounding box based labels
