@@ -92,30 +92,31 @@ The [Doxygen](https://doxygen.nl/) based code documentation can be found [here](
 ## Related Publications
 
 ```bibtex
-@inproceedings{hoellmann2021seerep,
-  author = {Höllmann, Mark and Hertzberg, Joachim},
-  title = {SEEREP: towards a spatio-temporal-SEmantic Environment REPresentation for robots in an agricultural context},
-  booktitle = {Perception and Navigation for Autonomous Robotics in Unstructured and Dynamic Environments Workshop on
-  2021 IEEE/RSJ International Conference on Intelligent Robots and Systems},
-  year = {2021},
-  month = {10}
-}
-
-@inproceedings{niemeyer2022seerep,
-  author = {Niemeyer, Mark and Pütz, Sebastian and Hertzberg, Joachim},
-  title = {A Spatio-Temporal-Semantic Environment Representation for Autonomous Mobile Robots equipped with
-  various Sensor Systems},
-  booktitle = {2022 IEEE International Conference on Multisensor Fusion and Integration for Intelligent Systems},
-  year = {2022},
-  month = {9},
+@inproceedings{Niemeyer2024,
+  author = {Niemeyer, Mark and Arkenau, Julian and Pütz, Sebastian and Hertzberg, Joachim},
+  title = {Streamlined Acquisition of Large Sensor Data for Autonomous Mobile Robots to
+  Enable Efficient Creation and Analysis of Datasets },
+  booktitle = {2024 IEEE International Conference on Robotics and Automation (ICRA)},
+  year = {2024},
   publisher = {IEEE}
 }
 
-@inproceedings{Niemeyer2023Anchoring,
+@inproceedings{Niemeyer2023,
   author = {Niemeyer, Mark and Renz, Marian and Hertzberg, Joachim},
-  title = {Object Anchoring for Autonomous Robots using the Spatio-Temporal-Semantic Environment Representation SEEREP},
-  booktitle = {KI 2023. German Conference on Artificial Intelligence (KI-2023), 46th, September 27-29, Berlin, Germany},
+  title = {Object Anchoring for Autonomous Robots using the Spatio-Temporal-Semantic
+  Environment Representation SEEREP},
+  booktitle = {KI 2023. German Conference on Artificial Intelligence (KI-2023)},
   year = {2023},
   publisher = {Springer}
+}
+
+@inproceedings{Niemeyer2022,
+  author = {Niemeyer, Mark and Pütz, Sebastian and Hertzberg, Joachim},
+  title = {A Spatio-Temporal-Semantic Environment Representation for Autonomous Mobile Robots
+  equipped with   various Sensor Systems},
+  booktitle = {2022 IEEE International Conference on Multisensor Fusion and Integration for
+  Intelligent Systems (MFI)},
+  year = {2022},
+  publisher = {IEEE}
 }
 ```
