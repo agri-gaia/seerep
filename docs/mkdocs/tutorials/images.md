@@ -2,15 +2,18 @@
 
 ## Sending images
 
-In this example we will send images with labeled bounding boxes as well as general labels to SEEREP.
+In this example we will send images with labeled bounding boxes as well as
+general labels to SEEREP.
 
-In order to save images, we need to mandatorily provide the intrinsics of the camera used to capture them.
-After the successfully saving the camera intrinsics, we need to provide the uuid of it along with the images.
-SEEREP will ensure that the Camera Intrinsics UUID provided with an image has a UUID stored against it.
+In order to save images, we need to mandatorily provide the intrinsics of the
+camera used to capture them. After the successfully saving the camera intrinsics,
+we need to provide the uuid of it along with the images. SEEREP will ensure that
+the Camera Intrinsics UUID provided with an image has a UUID stored against it.
 
 Additionally we add some coordinate transformations at the end.
 
-Source: [examples/python/gRPC/images/gRPC_pb_sendLabeledImage.py](https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/images/gRPC_pb_sendLabeledImage.py)
+Source:
+[examples/python/gRPC/images/gRPC_pb_sendLabeledImage.py](https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/images/gRPC_pb_sendLabeledImage.py)
 
 ```python
 --8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_pb_sendLabeledImage.py"
@@ -37,26 +40,27 @@ the uuid of the sent image number 9 is: b9619d15-5421-47db-a08b-ffb9f5cc8f3e
 
 ## Query images
 
-Now we will query the previously send images with some criteria. Possible query parameters are:
+Now we will query the previously send images with some criteria. Possible query
+parameters are:
 
 ### 2D Polygon (spatial query)
 
-Spatial queries in SEEREP are performed using a 2D polygon. This polygon should be simple (no more than 2
-vertices on the same edge) and convex (no edges curving inward).
-This 2D polygon lies on a interval on the z-axis defined through a z-coordinate point and a height value.
-Queries are performed by forming an encompassing axis aligned bounding box from the polygon.
-This can lead to an AABB larger than the polygon and poses the potential problem of returning results to the
-user which are not fully inside the query polygon.
-That problem is resolved by providing a boolean variable called
-fullyEncapsulated`.
-If false, resultant polygons, which are partially inside the query polygon are also returned.
+Spatial queries in SEEREP are performed using a 2D polygon. This polygon should
+be simple (no more than 2 vertices on the same edge) and convex (no edges curving
+inward). This 2D polygon lies on a interval on the z-axis defined through a
+z-coordinate point and a height value. Queries are performed by forming an
+encompassing axis aligned bounding box from the polygon. This can lead to an
+AABB larger than the polygon and poses the potential problem of returning results
+to the user which are not fully inside the query polygon. That problem is
+resolved by providing a boolean variable called fullyEncapsulated`. If false,
+resultant polygons, which are partially inside the query polygon are also returned.
 
 ### A time interval (temporal query)
 
-Temporal queries in SEEREP are performed using a time interval.
-When using image queries the stamp in the `header` of those images is used and when that time
-lies in the interval the image is returned as part of the response.
-The interval is closed.
+Temporal queries in SEEREP are performed using a time interval. When using image
+queries the stamp in the `header` of those images is used and when that time
+lies in the interval the image is returned as part of the response. The interval
+is closed.
 
 ### Labels (semantic query)
 
@@ -71,8 +75,8 @@ If the pixel data of the image should not be returned in order to save bandwith.
 ### InMapFrame
 
 Whether the query is done in the map frame.
-If not, the provided polygon for the spatial query will be transformed from the geodesic coordinates of the project
-into the map frame beforehand.
+If not, the provided polygon for the spatial query will be transformed from the
+geodesic coordinates of the project into the map frame beforehand.
 
 ### Example code for querying images
 
@@ -125,13 +129,15 @@ into the map frame beforehand.
 
 === "Protocol Buffers"
 
-    Source: [examples/python/gRPC/images/gRPC_pb_queryImage.py](https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/images/gRPC_pb_queryImage.py)
+    Source:
+    [examples/python/gRPC/images/gRPC_pb_queryImage.py](https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/images/gRPC_pb_queryImage.py)
 
     ```python
     --8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_pb_queryImage.py"
     ```
 
-    After sending the images, executing the query script results in the following output:
+    After sending the images, executing the query script results in the
+    following output:
 
     ```txt
     count of images 8

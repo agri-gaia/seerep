@@ -22,30 +22,36 @@
 
 ## Maintainer
 
-[Mark Niemeyer](https://github.com/Mark-Niemeyer) <br>
+[Mark Niemeyer](https://github.com/Mark-Niemeyer)<br>
 [mark.niemeyer@dfki.de](mailto:mark.niemeyer@dfki.de)
 
-[German Research Center for Artificial Intelligence](https://www.dfki.de/en/web) <br>
-[DFKI Niedersachsen](https://www.dfki.de/en/web/about-us/locations-contact/osnabrueck-oldenburg) <br>
-[Plan-Based Robot Control](https://www.dfki.de/en/web/research/research-departments/plan-based-robot-control) <br>
+[German Research Center for Artificial Intelligence](https://www.dfki.de/en/web)<br>
+[DFKI Niedersachsen](https://www.dfki.de/en/web/about-us/locations-contact/osnabrueck-oldenburg)<br>
+[Plan-Based Robot Control](https://www.dfki.de/en/web/research/research-departments/plan-based-robot-control)<br>
 
 ## General
 
-The large amount of temporally and spatially high resolution sensor data of autonomous mobile robots that have to be
-collected in today’s systems require a structured and, above all, efficient management and storage already during the
-robot mission. We present SEEREP: A _Spatio-Temporal-Semantic Environment Representation for Autonomous Mobile Robots_.
-SEEREP deals with spatial, temporal and semantic linked data at once and provides an efficient query interface for all
-three modalities that can be combined for high-level analyses. It supports the most popular robotic sensor data such as
-images and point clouds, as well as sensor and robot coordinate frames changing over time. Furthermore, SEEREP provides
-an efficient HDF5-based storage system running on the robot during operation compatible with ROS and the corresponding
-sensor message definitions. The compressed HDF5 data backend can be transferred efficiently to an application server
-with a running SEEREP query server providing gRPC interfaces with Protobuf and Flattbuffer message types. Partially
-unstructured environments that change over time, as for example agricultural environments, can be understood based on
-high-level planning and reasoning systems using the SEEREP query server.
+The large amount of temporally and spatially high resolution sensor data of
+autonomous mobile robots that have to be collected in today’s systems require a
+structured and, above all, efficient management and storage already during the
+robot mission. We present SEEREP: A _Spatio-Temporal-Semantic Environment
+Representation for Autonomous Mobile Robots_. SEEREP deals with spatial,
+temporal and semantic linked data at once and provides an efficient query
+interface for all three modalities that can be combined for high-level analyses.
+It supports the most popular robotic sensor data such as images and point clouds,
+as well as sensor and robot coordinate frames changing over time. Furthermore,
+SEEREP provides an efficient HDF5-based storage system running on the robot
+during operation compatible with ROS and the corresponding sensor message
+definitions. The compressed HDF5 data backend can be transferred efficiently to
+an application server with a running SEEREP query server providing gRPC interfaces
+with Protobuf and Flattbuffer message types. Partially unstructured environments
+that change over time, as for example agricultural environments, can be understood
+based on high-level planning and reasoning systems using the SEEREP query server.
 
 ## Quick Start
 
-To deploy the server locally the following `docker run` command or the following `docker-compose.yml` can be used.
+To deploy the server locally the following `docker run` command or the following
+`docker-compose.yml` can be used.
 
 ```bash
 docker run \
@@ -83,19 +89,22 @@ volumes:
 
 ## Documentation
 
-The general [MkDocs](https://www.mkdocs.org/) based documentation of this project is available
-[here](https://agri-gaia.github.io/seerep/mkdocs/home/). There the general architecture is described, installation
-instructions and basic tutorials are given.
+The general [MkDocs](https://www.mkdocs.org/) based documentation of this project
+is available [here](https://agri-gaia.github.io/seerep/mkdocs/home/). There the
+general architecture is described, installation instructions and basic tutorials
+are given.
 
-The [Doxygen](https://doxygen.nl/) based code documentation can be found [here](https://agri-gaia.github.io/seerep/doxygen).
+The [Doxygen](https://doxygen.nl/) based code documentation can be found
+[here](https://agri-gaia.github.io/seerep/doxygen).
 
 ## Related Publications
 
 ```bibtex
 @inproceedings{Niemeyer2024,
-  author = {Niemeyer, Mark and Arkenau, Julian and Pütz, Sebastian and Hertzberg, Joachim},
-  title = {Streamlined Acquisition of Large Sensor Data for Autonomous Mobile Robots to
-  Enable Efficient Creation and Analysis of Datasets },
+  author = {Niemeyer, Mark and Arkenau, Julian and Pütz, Sebastian and
+  Hertzberg, Joachim},
+  title = {Streamlined Acquisition of Large Sensor Data for Autonomous Mobile
+  Robots to   Enable Efficient Creation and Analysis of Datasets },
   booktitle = {2024 IEEE International Conference on Robotics and Automation (ICRA)},
   year = {2024},
   publisher = {IEEE}
@@ -112,10 +121,10 @@ The [Doxygen](https://doxygen.nl/) based code documentation can be found [here](
 
 @inproceedings{Niemeyer2022,
   author = {Niemeyer, Mark and Pütz, Sebastian and Hertzberg, Joachim},
-  title = {A Spatio-Temporal-Semantic Environment Representation for Autonomous Mobile Robots
-  equipped with   various Sensor Systems},
-  booktitle = {2022 IEEE International Conference on Multisensor Fusion and Integration for
-  Intelligent Systems (MFI)},
+  title = {A Spatio-Temporal-Semantic Environment Representation for Autonomous
+  Mobile Robots   equipped with   various Sensor Systems},
+  booktitle = {2022 IEEE International Conference on Multisensor Fusion and
+  Integration for Intelligent Systems (MFI)},
   year = {2022},
   publisher = {IEEE}
 }

@@ -1,6 +1,7 @@
 # Tutorials Overviews
 
-The tutorials provide a starting point on how you can use SEEREP. Currently, the following topics are covered:
+The tutorials provide a starting point on how you can use SEEREP. Currently, the
+following topics are covered:
 
 - Creating and retrieving projects
 - Sending and querying images
@@ -16,8 +17,9 @@ Click on the python radio button to see the language specific tutorial.
 
 ## Local Instance
 
-To start SEEREP locally use `STRG+SHIFT+D` to open the Run & Debug Menu in Vs-Code, select `seerep server` and press run.
-Now a terminal should open and print the following info messages:
+To start SEEREP locally use `STRG+SHIFT+D` to open the Run & Debug Menu in
+Vs-Code, select `seerep server` and press run. Now a terminal should open and
+print the following info messages:
 
 ```bash
 Starting seerep server

@@ -1,9 +1,10 @@
 # Tests
 
-SEEREP uses [GoogleTest](https://github.com/google/googletest) for C++ Unit Tests and
-[pytest](https://github.com/pytest-dev/pytest) for integration tests.
-unit tests are placed into the individual ROS packages while the intregation tests are setup in the `/test` directory.
-The tests run automatically as a GitHub Action with every push.
+SEEREP uses [GoogleTest](https://github.com/google/googletest) for C++ Unit Tests
+and [pytest](https://github.com/pytest-dev/pytest) for integration tests. Unit
+tests are placed into the individual ROS packages while the intregation tests
+are setup in the `/test` directory. The tests run automatically as a GitHub
+Action with every push.
 
 ## C++ Unit Tests
 
@@ -58,14 +59,17 @@ pytest tests/python/gRPC/meta/test_gRPC_pb_projectCreation.py
 
 ## Testing through VSCode
 
-Another way to run the tests is through the VSCode Testing Tab (:octicons-beaker-24: icon)
+Another way to run the tests is through the VSCode Testing Tab
+(:octicons-beaker-24: icon)
 
 !!! info
     <!-- markdownlint-disable-next-line -->
-    With a fresh installation of the project, the test cases might not be recognized.
-    To resolve this, use the :octicons-sync-16: button in the top menu to refresh.
+    With a fresh installation of the project, the test cases might not be
+    recognized. To resolve this, use the :octicons-sync-16: button in the top
+    menu to refresh.
 
-To run the tests use the :material-play-outline: button at the top or select individual test cases to run.
+To run the tests use the :material-play-outline: button at the top or select
+individual test cases to run.
 
 <figure markdown>
   ![VS-Code Test Explorer](../imgs/VS_Code_Testing.png){width="450"}
