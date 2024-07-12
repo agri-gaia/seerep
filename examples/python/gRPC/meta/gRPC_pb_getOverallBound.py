@@ -39,7 +39,7 @@ def get_metadata(
     resp_all_categories = stub.GetAllCategories(uuiddt)
 
     uuiddt_category = uuid_datatype_with_category.UuidDatatypeWithCategory()
-    uuiddt_category.category = "1"
+    uuiddt_category.category = "category A"
     uuiddt_category.uuid_with_datatype.projectuuid = target_project_uuid
     uuiddt_category.uuid_with_datatype.datatype = datatype.all
 

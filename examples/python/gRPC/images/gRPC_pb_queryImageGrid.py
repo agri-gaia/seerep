@@ -7,8 +7,7 @@ from google.protobuf import empty_pb2
 from grpc import Channel
 from seerep.pb import image_pb2 as image
 from seerep.pb import image_service_pb2_grpc as imageService
-from seerep.pb import label_pb2
-from seerep.pb import labels_with_category_pb2 as labels_with_category
+from seerep.pb import label_category_pb2, label_pb2
 from seerep.pb import meta_operations_pb2_grpc as metaOperations
 from seerep.pb import point2d_pb2 as point2d
 from seerep.pb import query_pb2 as query
@@ -54,12 +53,12 @@ def query_image_grid(
     theQuery.fullyEncapsulated = False
 
     # labels
-    label = labels_with_category.LabelsWithCategory()
-    label.category = "0"
-    labelWithConfidence = label_pb2.Label()
-    labelWithConfidence.label = "testlabel1"
-    label.labels.extend([labelWithConfidence])
-    theQuery.labelsWithCategory.append(label)
+    labelsCategory = label_category_pb2.LabelCategory()
+    labelsCategory.category = "category A"
+    label = label_pb2.Label()
+    label.label = "label1"
+    labelsCategory.labels.append(label)
+    theQuery.labelCategory.append(labelsCategory)
 
     # query all images of the grid seperately such that in total a 3x3 2(.5)d grid is queried
     # 1. (-0.5,-0.5) to (0.5,0.5)
@@ -122,6 +121,4 @@ if __name__ == "__main__":
             print(f"Number of images: {len(grid_img_list[x][y])}")
             for img in grid_img_list[x][y]:
                 print(f"Image uuid: {img.header.uuid_msgs}")
-                # print( f"General label of transferred img: {img.labels_general[0].labelWithInstance[1].label.label}")
-                # print( f"General label confidence: {img.labels_general[0].labelWithInstance[1].label.confidence}")
             print("--------------------")

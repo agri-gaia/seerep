@@ -9,7 +9,8 @@ from seerep.fb import PointCloud2
 from seerep.fb import point_cloud_service_grpc_fb as pointCloudService
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
-    createLabelsWithCategories,
+    create_label,
+    create_label_category,
     createPoint2d,
     createPolygon2D,
     createQuery,
@@ -18,7 +19,6 @@ from seerep.util.fb_helper import (
     getProject,
     rosToNumpyDtype,
 )
-from seerep.util.fb_to_dict import fb_obj_to_dict
 
 PROJECTNAME = "testproject"
 NUM_BB_LABELS = 1
@@ -99,12 +99,17 @@ def query_pcs(
     time_interval = createTimeInterval(fb_builder, time_min, time_max)
 
     # create labels for a semantic query
-    category = ["myCategory"]
-    labels = [[f"GeneralLabel{i}" for i in range(NUM_GENERAL_LABELS)]]
+    labelsStrings = [f"Label{i}" for i in range(10)]
 
-    confidences = [[i * 10.0 for i in range(NUM_GENERAL_LABELS)]]
-
-    label_wcategories = createLabelsWithCategories(fb_builder, category, labels, confidences)
+    labels = []
+    for i in range(len(labelsStrings)):
+        labels.append(create_label(builder=fb_builder, label=labelsStrings[i], label_id=1))
+    labelsCategory = []
+    labelsCategory.append(
+        create_label_category(
+            builder=fb_builder, labels=labels, datumaro_json="a very valid datumaro json", category="category Z"
+        )
+    )
 
     # filter for specific data
     data_uuids = [fb_builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
@@ -116,7 +121,7 @@ def query_pcs(
     query = createQuery(
         fb_builder,
         # timeInterval=time_interval,
-        labels=label_wcategories,
+        labels=labelsCategory,
         # mustHaveAllLabels=False,
         # projectUuids=project_uuids,
         # instanceUuids=instance_uuids,
@@ -141,53 +146,16 @@ if __name__ == "__main__":
     if not len(query_pcl):
         print("no response received")
     for resp in query_pcl:
-        print(fb_obj_to_dict(resp))
         print(f"---Header--- \n {unpack_header(resp)}")
 
         point_fields = unpack_point_fields(resp)
         print(f"---Point Fields--- \n {point_fields}")
 
-        print("---Bounding Box Labels---")
-        for i in range(resp.LabelsBbLength()):
-            for j in range(resp.LabelsBb(i).BoundingBoxLabeledLength()):
-                print(
-                    f"Label Label_BbLabeled {i}_{j}: \
-                    {resp.LabelsBb(i).BoundingBoxLabeled(j).LabelWithInstance().Label().Label().decode('utf-8')}"
-                )
-                print(
-                    f"Instance Label_BbLabeled {i}_{j}: \
-                    {resp.LabelsBb(i).BoundingBoxLabeled(j).LabelWithInstance().InstanceUuid().decode('utf-8')}"
-                )
-                print(
-                    f"Bounding Box Spatial Extent Label_BbLabeled {i}_{j}: "
-                    f"{resp.LabelsBb(i).BoundingBoxLabeled(j).BoundingBox().SpatialExtent().X()},"
-                    f"{resp.LabelsBb(i).BoundingBoxLabeled(j).BoundingBox().SpatialExtent().Y()},"
-                    f"{resp.LabelsBb(i).BoundingBoxLabeled(j).BoundingBox().SpatialExtent().Z()} "
-                    f"(x,y,z)"
-                )
-                print(
-                    f"Bounding Box Center Point Label_BbLabeled {i}_{j}: "
-                    f"{resp.LabelsBb(i).BoundingBoxLabeled(j).BoundingBox().CenterPoint().X()},"
-                    f"{resp.LabelsBb(i).BoundingBoxLabeled(j).BoundingBox().CenterPoint().Y()},"
-                    f"{resp.LabelsBb(i).BoundingBoxLabeled(j).BoundingBox().CenterPoint().Z()} "
-                    f"(x,y,z)"
-                )
-                print(
-                    f"Bounding Box Rotation Label_BbLabeled {i}_{j}: "
-                    f"({resp.LabelsBb(i).BoundingBoxLabeled(j).BoundingBox().Rotation().X()}, "
-                    f"{resp.LabelsBb(i).BoundingBoxLabeled(j).BoundingBox().Rotation().Y()}, "
-                    f"{resp.LabelsBb(i).BoundingBoxLabeled(j).BoundingBox().Rotation().Z()}, "
-                    f"{resp.LabelsBb(i).BoundingBoxLabeled(j).BoundingBox().Rotation().W()}) "
-                    f"(x,y,z,w)"
-                )
-
-        print("---General Labels----")
-        for i in range(resp.LabelsGeneralLength()):
-            for j in range(resp.LabelsGeneral(i).LabelsWithInstanceLength()):
-                print(f"Label {i}, {j}: {resp.LabelsGeneral(i).LabelsWithInstance(j).Label().Label().decode('utf-8')}")
-                print(
-                    f"Instance {i}, {j}: {resp.LabelsGeneral(i).LabelsWithInstance(j).InstanceUuid().decode('utf-8')}"
-                )
+        print("---Labels----")
+        for i in range(resp.LabelsLength()):
+            for j in range(resp.Labels(i).LabelsLength()):
+                print(f"Label {i}, {j}: {resp.Labels(i).Labels(j).Label().decode('utf-8')}")
+                print(f"Instance {i}, {j}: {resp.Labels(i).Labels(j).InstanceUuid().decode('utf-8')}")
 
         if not resp.DataIsNone():
             dtypes = np.dtype(

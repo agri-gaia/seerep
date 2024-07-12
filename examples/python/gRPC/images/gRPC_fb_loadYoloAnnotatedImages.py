@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# TODO update to datumaro
+
 import csv
 import os
 import uuid

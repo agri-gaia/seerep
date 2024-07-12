@@ -10,8 +10,9 @@ from seerep.fb import image_service_grpc_fb as imageService
 from seerep.fb import point_service_grpc_fb as pointService
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
+    create_label,
+    create_label_category,
     createHeader,
-    createLabelsWithInstanceWithCategory,
     createPoint,
     createQuery,
     createTimeStamp,
@@ -45,8 +46,8 @@ def send_points_raw(
 
         img_uuid_point_map.setdefault(uuid_img, [])
 
-        if not response.LabelsBbIsNone():
-            for i in range(response.LabelsBb(0).BoundingBox2dLabeledLength()):
+        if not response.LabelsIsNone():
+            for i in range(response.Labels(0).LabelsLength()):
                 frameId = response.Header().FrameId().decode("utf-8")
                 uuidProject = response.Header().UuidProject().decode("utf-8")
                 timestampMsg = createTimeStamp(
@@ -59,20 +60,34 @@ def send_points_raw(
                 coordinates = (1, 2, 3)
                 point = createPoint(builder, *coordinates)
 
-                label = response.LabelsBb(0).BoundingBox2dLabeled(i).LabelWithInstance().Label().Label().decode("utf-8")
-                confidence = response.LabelsBb(0).BoundingBox2dLabeled(i).LabelWithInstance().Label().Confidence()
-                instance_uuid = (
-                    response.LabelsBb(0).BoundingBox2dLabeled(i).LabelWithInstance().InstanceUuid().decode("utf-8")
+                instance_uuid = [response.Labels(0).Labels(i).InstanceUuid().decode("utf-8")]
+                labelStr = [response.Labels(0).Labels(i).Label().decode("utf-8")]
+
+                labels = []
+                for label_i in range(len(labelStr)):
+                    labels.append(
+                        create_label(
+                            builder=builder,
+                            label=labelStr[label_i],
+                            label_id=1,
+                            instance_uuid=instance_uuid[label_i],
+                            instance_id=5,
+                        )
+                    )
+                labelsCategory = []
+                labelsCategory.append(
+                    create_label_category(
+                        builder=builder,
+                        labels=labels,
+                        datumaro_json="a very valid datumaro json",
+                        category="category P",
+                    )
                 )
 
-                labelWithCat = createLabelsWithInstanceWithCategory(
-                    builder, ["myCategory"], [[label]], [[instance_uuid]], [[confidence]]
-                )
-
-                PointStamped.StartLabelsGeneralVector(builder, len(labelWithCat))
-                for label in reversed(labelWithCat):
-                    builder.PrependUOffsetTRelative(label)
-                labelWithCat = builder.EndVector()
+                PointStamped.StartLabelsVector(builder, len(labelsCategory))
+                for labelAct in labelsCategory:
+                    builder.PrependUOffsetTRelative(labelAct)
+                labelsOffset = builder.EndVector()
 
                 unionMapEntryKey1 = builder.CreateString("exampleKey1")
                 value1String = builder.CreateString("exampleValue1")
@@ -104,7 +119,7 @@ def send_points_raw(
                 PointStamped.AddHeader(builder, header)
                 PointStamped.AddPoint(builder, point)
                 PointStamped.AddAttribute(builder, attributes)
-                PointStamped.AddLabelsGeneral(builder, labelWithCat)
+                PointStamped.AddLabels(builder, labelsOffset)
                 pointStampedMsg = PointStamped.End(builder)
 
                 builder.Finish(pointStampedMsg)
@@ -137,7 +152,7 @@ if __name__ == "__main__":
     for k in p_dict:
         print(f"uuidmsg: {k}")
         for val in p_dict[k]:
-            print(f"    uuidlabel: {val.LabelsGeneral(0).LabelsWithInstance(0).Label().Label().decode('utf-8')}")
+            print(f"    uuidlabel: {val.Labels(0).Labels(0).Label().decode('utf-8')}")
             print(f"    point_uuidmsg: {val.Header().UuidMsgs().decode('utf-8')}")
             print(f"    point_uuidproject: {val.Header().UuidProject().decode('utf-8')}")
             # check for attribute 0

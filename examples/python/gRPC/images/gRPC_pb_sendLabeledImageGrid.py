@@ -10,18 +10,11 @@ import numpy as np
 from google.protobuf import empty_pb2
 from grpc import Channel
 from seerep.fb import camera_intrinsics_service_grpc_fb as ci_service
-from seerep.pb import boundingbox2d_labeled_pb2 as boundingbox2d_labeled
-from seerep.pb import (
-    boundingbox2d_labeled_with_category_pb2 as boundingbox2d_labeled_with_category,
-)
 from seerep.pb import camera_intrinsics_pb2 as cameraintrinsics
 from seerep.pb import camera_intrinsics_service_pb2_grpc as camintrinsics_service
 from seerep.pb import image_pb2 as image
 from seerep.pb import image_service_pb2_grpc as imageService
-from seerep.pb import label_with_instance_pb2 as labelWithInstance
-from seerep.pb import (
-    labels_with_instance_with_category_pb2 as labels_with_instance_with_category,
-)
+from seerep.pb import label_category_pb2, label_pb2
 from seerep.pb import meta_operations_pb2_grpc as metaOperations
 from seerep.pb import projectCreation_pb2 as projectCreation
 from seerep.pb import tf_service_pb2_grpc as tfService
@@ -154,33 +147,21 @@ def send_labeled_image_grid(
             # Add image data
             theImage.data = bytes(rgb)
 
-            for iCategory in range(0, 2):
-                bbCat = boundingbox2d_labeled_with_category.BoundingBox2DLabeledWithCategory()
-                bbCat.category = str(iCategory)
-                # 5. Create bounding boxes with labels
-                bb = boundingbox2d_labeled.BoundingBox2DLabeled()
-                for i in range(0, 2):
-                    bb.labelWithInstance.label.label = "testlabel" + str(i)
-                    bb.labelWithInstance.label.confidence = i / 10.0
-                    bb.labelWithInstance.instanceUuid = str(uuid.uuid4())
-                    bb.boundingBox.center_point.x = 0.01 + i / 10
-                    bb.boundingBox.center_point.y = 0.02 + i / 10
-                    bb.boundingBox.spatial_extent.x = 0.03 + i / 10
-                    bb.boundingBox.spatial_extent.y = 0.04 + i / 10
-                    bbCat.boundingBox2DLabeled.append(bb)
-                theImage.labels_bb.append(bbCat)
+            labelStr = ["label1", "label2"]
+            for iCategory in ["category A", "category B"]:
+                labelsCategory = label_category_pb2.LabelCategory()
+                labelsCategory.category = iCategory
+                labelsCategory.datumaroJson = "a very valid datumaro json"
 
-            # # 6. Add general labels to the image
-            labelsCat = labels_with_instance_with_category.LabelsWithInstanceWithCategory()
-            labelsCat.category = str(iCategory)
-            for i in range(0, 2):
-                label = labelWithInstance.LabelWithInstance()
-                label.label.label = "testlabelgeneral" + str(i)
-                label.label.confidence = i / 10.0
-                # assuming that that the general labels are not instance related -> no instance uuid
-                label.instanceUuid = str(uuid.uuid4())
-                labelsCat.labelWithInstance.append(label)
-            theImage.labels_general.append(labelsCat)
+                for labelAct in labelStr:
+                    label = label_pb2.Label()
+                    label.label = labelAct
+                    label.labelIdDatumaro = 1
+                    label.instanceUuid = str(uuid.uuid4())
+                    label.instanceIdDatumaro = 22
+                    labelsCategory.labels.append(label)
+
+                theImage.labels.append(labelsCategory)
 
             # transfer image
             uuidImg = stub.TransferImage(theImage)
@@ -271,9 +252,11 @@ if __name__ == "__main__":
             print(f"Grid cell {x}, {y} has {len(grid_list[x][y])} images.")
             for img in grid_list[x][y]:
                 print("-------------------------------------------------------------")
-                print(f"Image {img[0]} has {len(img[1].labels_general)} general labels.")
-                for label in img[1].labels_general:
-                    print(f"General label category: {label.category}")
-                    for label2d in label.labelWithInstance:
-                        print(f"General label label: {label2d.label.label}")
-                        print(f"General label instance uuid: {label2d.instanceUuid}")
+                print(f"Image {img[0]} has {len(img[1].labels)} labels.")
+                for labelCategory in img[1].labels:
+                    print(f"\nlabel category: {labelCategory.category}")
+                    for label in labelCategory.labels:
+                        print(f"label: {label.label}")
+                        print(f"labelIdDatumaro: {label.labelIdDatumaro}")
+                        print(f"instanceUuid: {label.instanceUuid}")
+                        print(f"instanceIdDatumaro: {label.instanceIdDatumaro}")

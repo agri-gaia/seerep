@@ -41,7 +41,7 @@ def get_camintrins(
     target_proj_uuid: Optional[str] = None,
     grpc_channel: Channel = get_gRPC_channel(),
 ) -> Optional[CameraIntrinsics.CameraIntrinsics]:
-    return CameraIntrinsics.CameraIntrinsics(get_camintrins_raw(ciuuid, target_proj_uuid, grpc_channel))
+    return CameraIntrinsics.CameraIntrinsics.GetRootAs(get_camintrins_raw(ciuuid, target_proj_uuid, grpc_channel))
 
 
 if __name__ == "__main__":

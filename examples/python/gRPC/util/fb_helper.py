@@ -8,6 +8,7 @@ from seerep.fb import (
     Boundingbox,
     CameraIntrinsics,
     CameraIntrinsicsQuery,
+    DatasetUuidLabel,
     Empty,
     GeodeticCoordinates,
     Header,
@@ -1045,7 +1046,7 @@ def create_label(builder, label: str, label_id: int, instance_uuid: str = None, 
     if instance_uuid:
         Label.AddInstanceUuid(builder, instance_uuid_offset)
     if instance_id:
-        Label.AddInstanceId(builder, instance_id)
+        Label.AddInstanceIdDatumaro(builder, instance_id)
     return Label.End(builder)
 
 
@@ -1065,3 +1066,19 @@ def create_label_category(builder, labels: List[Label.Label], datumaro_json: str
     LabelCategory.AddLabels(builder, vec_offset)
     LabelCategory.AddDatumaroJson(builder, datumaro_json_offset)
     return LabelCategory.End(builder)
+
+
+def create_dataset_uuid_label(builder, projectUuid: str, datasetUuid: str, labels: List[LabelCategory.LabelCategory]):
+    DatasetUuidLabel.StartLabelsVector(builder, len(labels))
+    for label in labels:
+        builder.PrependUOffsetTRelative(label)
+    vec_offset = builder.EndVector()
+
+    projectUuidOffset = builder.CreateString(projectUuid)
+    datasetUuidOffset = builder.CreateString(datasetUuid)
+
+    DatasetUuidLabel.Start(builder)
+    DatasetUuidLabel.AddProjectUuid(builder, projectUuidOffset)
+    DatasetUuidLabel.AddDatasetUuid(builder, datasetUuidOffset)
+    DatasetUuidLabel.AddLabels(builder, vec_offset)
+    return DatasetUuidLabel.End(builder)

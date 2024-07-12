@@ -7,7 +7,8 @@ from seerep.fb import Datatype, UuidsPerProject
 from seerep.fb import instance_service_grpc_fb as instanceService
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
-    createLabelsWithCategories,
+    create_label,
+    create_label_category,
     createPoint2d,
     createPolygon2D,
     createQuery,
@@ -47,14 +48,18 @@ timeInterval = createTimeInterval(builder, timeMin, timeMax)
 
 
 projectUuids = [builder.CreateString(projectuuid)]
-category = ["0"]
-labels = [["testlabel0", "testlabelgeneral0"]]
 
-confidences = [[0.8, 0.9]]
+labelStr = ["label1", "label2"]
+labels = []
+for labelAct in labelStr:
+    labels.append(create_label(builder=builder, label=labelAct, label_id=1))
+labelsCategory = []
+labelsCategory.append(
+    create_label_category(
+        builder=builder, labels=labels, datumaro_json="a very valid datumaro json", category="category Z"
+    )
+)
 
-categories = []
-
-labelCategory = createLabelsWithCategories(builder, category, labels, confidences)
 dataUuids = [builder.CreateString("5a0438b8-37cf-412e-8331-a95ef95c1016")]
 instanceUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 
@@ -66,7 +71,7 @@ query = createQuery(
     builder,
     # boundingBox=boundingboxStamped,
     # timeInterval=timeInterval,
-    # labels=labelCategory,
+    labels=labelsCategory,
     # projectUuids=projectUuids,
     # instanceUuids=instanceUuids,
     # dataUuids=dataUuids,

@@ -10,26 +10,21 @@ import uuid
 from typing import List, Optional, Tuple
 
 import flatbuffers
-import numpy as np
 from grpc import Channel
-from seerep.fb import BoundingBoxes2DLabeledStamped, Image, ProjectInfos
+from seerep.fb import DatasetUuidLabel, Image, ProjectInfos
 from seerep.fb import image_service_grpc_fb as imageService
 from seerep.fb import meta_operations_grpc_fb as meta_ops
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
-    createBoundingBox2dLabeledStamped,
-    createBoundingBox2DLabeledWithCategory,
-    createBoundingBoxes2d,
-    createBoundingBoxes2dLabeled,
+    create_dataset_uuid_label,
+    create_label,
+    create_label_category,
     createEmpty,
-    createHeader,
-    createLabelsWithInstance,
-    createPoint2d,
     createQuery,
 )
 
 
-def add_bb_raw(
+def add_label_raw(
     target_proj_uuid: Optional[str] = None, grpc_channel: Channel = get_gRPC_channel()
 ) -> List[Tuple[str, bytearray]]:
     stubMeta = meta_ops.MetaOperationsStub(grpc_channel)
@@ -70,35 +65,29 @@ def add_bb_raw(
         response = Image.Image.GetRootAs(responseBuf)
 
         img_uuid = response.Header().UuidMsgs().decode("utf-8")
-        header = createHeader(
-            builder,
-            projectUuid=response.Header().UuidProject().decode("utf-8"),
-            msgUuid=img_uuid,
+        projectUuid = response.Header().UuidProject().decode("utf-8")
+
+        labelStr = ["label1", "label2"]
+        labels = []
+
+        for labelAct in labelStr:
+            labels.append(
+                create_label(
+                    builder=builder, label=labelAct, label_id=1, instance_uuid=str(uuid.uuid4()), instance_id=2
+                )
+            )
+        labelsCategory = []
+        labelsCategory.append(
+            create_label_category(
+                builder=builder, labels=labels, datumaro_json="a very valid datumaro json", category="category Z"
+            )
         )
 
-        # create bounding box labels
-        x1, y1 = np.random.rand(), np.random.rand()
-        x2, y2 = np.random.rand(), np.random.rand()
-
-        boundingBoxes = createBoundingBoxes2d(
-            builder,
-            [createPoint2d(builder, x1, y1) for _ in range(NUM_BB_LABELS)],
-            [createPoint2d(builder, x2, y2) for _ in range(NUM_BB_LABELS)],
-        )
-        labelWithInstances = createLabelsWithInstance(
-            builder,
-            ["BoundingBoxLabel" + str(i) for i in range(NUM_BB_LABELS)],
-            [str(uuid.uuid4()) for _ in range(NUM_BB_LABELS)],
-            [float(1.0 / (i + 0.1)) for i in range(NUM_BB_LABELS)],
-        )
-        labelsBb = createBoundingBoxes2dLabeled(builder, labelWithInstances, boundingBoxes)
-
-        boundingBox2DLabeledWithCategory = createBoundingBox2DLabeledWithCategory(
-            builder, builder.CreateString("laterAddedBB"), labelsBb
+        dataset_uuid_label = create_dataset_uuid_label(
+            builder=builder, projectUuid=projectUuid, datasetUuid=img_uuid, labels=labelsCategory
         )
 
-        labelsBbVector = createBoundingBox2dLabeledStamped(builder, header, [boundingBox2DLabeledWithCategory])
-        builder.Finish(labelsBbVector)
+        builder.Finish(dataset_uuid_label)
         buf = builder.Output()
 
         bb_list.append(
@@ -110,32 +99,21 @@ def add_bb_raw(
 
         msgToSend.append(bytes(buf))
 
-    stub.AddBoundingBoxes2dLabeled(iter(msgToSend))
+    stub.AddLabels(iter(msgToSend))
     return bb_list
 
 
-def add_bb(
+def add_label(
     target_proj_uuid: Optional[str] = None, grpc_channel: Channel = get_gRPC_channel()
-) -> List[Tuple[str, BoundingBoxes2DLabeledStamped.BoundingBoxes2DLabeledStamped]]:
+) -> List[Tuple[str, DatasetUuidLabel.DatasetUuidLabel]]:
     return [
-        (img_uuid, BoundingBoxes2DLabeledStamped.BoundingBoxes2DLabeledStamped.GetRootAs(bbbuf))
-        for img_uuid, bbbuf in add_bb_raw(target_proj_uuid, grpc_channel)
+        (img_uuid, DatasetUuidLabel.DatasetUuidLabel.GetRootAs(labelbuf))
+        for img_uuid, labelbuf in add_label_raw(target_proj_uuid, grpc_channel)
     ]
 
 
 if __name__ == "__main__":
-    bb_list = add_bb()
-    for img_uuid, bbs_img in bb_list:
-        print(
-            f"Added bounding boxes to image with uuid {img_uuid}, with the following center points and spatial extents:"
-        )
-        print("[center_point(x, y) | spatial_extent(x, y)]")
-        for bbs_wcat in [bbs_img.LabelsBb(idx) for idx in range(bbs_img.LabelsBbLength())]:
-            for bb in [
-                bbs_wcat.BoundingBox2dLabeled(idx).BoundingBox() for idx in range(bbs_wcat.BoundingBox2dLabeledLength())
-            ]:
-                print(
-                    f"[({bb.CenterPoint().X()}, {bb.CenterPoint().Y()}) | \
-                    ({bb.SpatialExtent().X()}, {bb.SpatialExtent().Y()})]"
-                )
+    label_list = add_label()
+    for img_uuid, _ in label_list:
+        print(f"Added label to image with uuid {img_uuid}:")
         print()

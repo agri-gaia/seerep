@@ -91,7 +91,7 @@ void CoreFbImage::addLabel(const seerep::fb::DatasetUuidLabel& datasetUuidLabel)
 
   auto hdf5io = CoreFbGeneral::getHdf5(uuidProject, m_seerepCore, m_hdf5IoMap);
 
-  hdf5io->writeLabelsFb(datasetUuidLabel.datasetUuid()->str(), datasetUuidLabel.datasetUuid()->str(),
+  hdf5io->writeLabelsFb(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, datasetUuidLabel.datasetUuid()->str(),
                         datasetUuidLabel.labels());
 
   auto labelPerCategory = seerep_core_fb::CoreFbGeneral::extractLabelsPerCategory(datasetUuidLabel);
