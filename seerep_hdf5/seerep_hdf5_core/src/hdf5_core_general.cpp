@@ -81,7 +81,7 @@ const std::optional<std::string> Hdf5CoreGeneral::readVersion()
 
 void Hdf5CoreGeneral::readLabelsAndAddToLabelsPerCategory(
     const std::string& datatypeGroup, const std::string& uuid,
-    std::unordered_map<std::string, std::vector<seerep_core_msgs::Label>>& labelsCategoryMap)
+    std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>& labelsCategoryMap)
 {
   std::vector<std::string> labelCategories, datumaroJsonPerCategory;
   std::vector<std::vector<seerep_core_msgs::Label>> labelsPerCategory;
@@ -89,7 +89,11 @@ void Hdf5CoreGeneral::readLabelsAndAddToLabelsPerCategory(
 
   for (std::size_t i = 0; i < labelCategories.size(); i++)
   {
-    labelsCategoryMap.emplace(labelCategories.at(i), labelsPerCategory.at(i));
+    labelsCategoryMap.emplace(labelCategories.at(i),
+                              seerep_core_msgs::LabelDatumaro{ .labels = labelsPerCategory.at(i),
+                                                               .datumaroJson = datumaroJsonPerCategory.at(i) }
+
+    );
   }
 }
 

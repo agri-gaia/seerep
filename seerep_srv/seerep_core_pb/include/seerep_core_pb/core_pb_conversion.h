@@ -21,6 +21,7 @@
 #include <seerep_msgs/camera_intrinsics_query.h>
 #include <seerep_msgs/dataset_indexable.h>
 #include <seerep_msgs/label.h>
+#include <seerep_msgs/label_datumaro.h>
 #include <seerep_msgs/query.h>
 #include <seerep_msgs/query_result.h>
 #include <seerep_msgs/query_tf.h>

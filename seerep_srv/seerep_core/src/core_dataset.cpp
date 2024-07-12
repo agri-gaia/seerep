@@ -584,7 +584,7 @@ void CoreDataset::addDatasetToIndices(const seerep_core_msgs::Datatype& datatype
 }
 
 void CoreDataset::addLabels(const seerep_core_msgs::Datatype& datatype,
-                            const std::unordered_map<std::string, std::vector<seerep_core_msgs::Label>>& labelPerCategory,
+                            const std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>& labelPerCategory,
                             const boost::uuids::uuid& msgUuid)
 {
   addLabels(datatype, m_datatypeDatatypeSpecificsMap.at(datatype), labelPerCategory, msgUuid);
@@ -592,7 +592,7 @@ void CoreDataset::addLabels(const seerep_core_msgs::Datatype& datatype,
 
 void CoreDataset::addLabels(const seerep_core_msgs::Datatype& datatype,
                             std::shared_ptr<seerep_core::CoreDataset::DatatypeSpecifics> datatypeSpecifics,
-                            const std::unordered_map<std::string, std::vector<seerep_core_msgs::Label>>& labelPerCategory,
+                            const std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>& labelPerCategory,
                             const boost::uuids::uuid& msgUuid)
 {
   std::vector<boost::uuids::uuid> instanceUuids;
@@ -612,7 +612,7 @@ void CoreDataset::addLabels(const seerep_core_msgs::Datatype& datatype,
       categoryMapEntry = emplaceReturn.first;
     }
     // loop labels
-    for (auto labelWithInstance : labelOfCategory.second)
+    for (auto labelWithInstance : labelOfCategory.second.labels)
     {
       // check if label already exists
       auto labelMapEntry = categoryMapEntry->second.find(labelWithInstance.label);

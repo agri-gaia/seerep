@@ -159,7 +159,7 @@ public:
    */
   void readLabelsAndAddToLabelsPerCategory(
       const std::string& datatypeGroup, const std::string& uuid,
-      std::unordered_map<std::string, std::vector<seerep_core_msgs::Label>>& labelsCategoryMap);
+      std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>& labelsCategoryMap);
   void readLabels(const std::string& datatypeGroup, const std::string& uuid, std::vector<std::string>& labelCategories,
                   std::vector<std::vector<seerep_core_msgs::Label>>& labelsPerCategory,
                   std::vector<std::string>& datumaroJsonPerCategory);

@@ -85,7 +85,7 @@ public:
       std::shared_ptr<seerep_core::Core>& seerepCore,
       std::unordered_map<boost::uuids::uuid, std::shared_ptr<C>, boost::hash<boost::uuids::uuid>>& hdf5IoMap);
 
-  static std::unordered_map<std::string, std::vector<seerep_core_msgs::Label>>
+  static std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>
   extractLabelsPerCategory(const seerep::fb::DatasetUuidLabel& datasetUuidLabel);
 
 private:

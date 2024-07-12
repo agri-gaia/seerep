@@ -170,7 +170,7 @@ void Core::addDataset(const seerep_core_msgs::DatasetIndexable& dataset)
 }
 
 void Core::addLabels(const seerep_core_msgs::Datatype& datatype,
-                     const std::unordered_map<std::string, std::vector<seerep_core_msgs::Label>>& labelPerCategory,
+                     const std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>& labelPerCategory,
                      const boost::uuids::uuid& msgUuid, const boost::uuids::uuid& projectuuid)
 {
   auto project = findProject(projectuuid);

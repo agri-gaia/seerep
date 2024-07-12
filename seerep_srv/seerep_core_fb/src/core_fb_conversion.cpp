@@ -596,28 +596,29 @@ boost::uuids::uuid CoreFbConversion::fromFbDataHeaderUuid(const std::string& uui
 
 void CoreFbConversion::fromFbDataLabels(
     const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelCategory>>* labels,
-    std::unordered_map<std::string, std::vector<seerep_core_msgs::Label>>& labelsPerCategory)
+    std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>& labelsPerCategory)
 {
   if (labels)
   {
     for (auto labelsCategories : *labels)
     {
-      LabelVec* labelWithInstanceVecPtr;
+      seerep_core_msgs::LabelDatumaro* labelDatumaroPtr;
 
       auto catMap = labelsPerCategory.find(labelsCategories->category()->c_str());
       if (catMap != labelsPerCategory.end())
       {
-        labelWithInstanceVecPtr = &(catMap->second);
+        labelDatumaroPtr = &(catMap->second);
       }
       else
       {
-        std::vector<seerep_core_msgs::Label> labelVector;
-        auto entry = labelsPerCategory.emplace(labelsCategories->category()->c_str(), labelVector);
-        labelWithInstanceVecPtr = &(entry.first->second);
+        seerep_core_msgs::LabelDatumaro labelDatumaro;
+        auto entry = labelsPerCategory.emplace(labelsCategories->category()->c_str(), labelDatumaro);
+        labelDatumaroPtr = &(entry.first->second);
       }
 
       if (labelsCategories->labels())
       {
+        seerep_core_fb::LabelVec labelVector;
         for (auto label : *labelsCategories->labels())
         {
           boost::uuids::string_generator gen;
@@ -635,11 +636,13 @@ void CoreFbConversion::fromFbDataLabels(
             }
           }
 
-          labelWithInstanceVecPtr->push_back(seerep_core_msgs::Label{ .label = label->label()->str(),
-                                                                      .labelIdDatumaro = label->labelIdDatumaro(),
-                                                                      .uuidInstance = uuidInstance,
-                                                                      .instanceIdDatumaro = label->labelIdDatumaro() });
+          labelVector.push_back(seerep_core_msgs::Label{ .label = label->label()->str(),
+                                                         .labelIdDatumaro = label->labelIdDatumaro(),
+                                                         .uuidInstance = uuidInstance,
+                                                         .instanceIdDatumaro = label->labelIdDatumaro() });
         }
+        labelDatumaroPtr->datumaroJson = labelsCategories->datumaroJson()->str();
+        labelDatumaroPtr->labels = labelVector;
       }
     }
   }

@@ -12,8 +12,10 @@ CoreInstances::~CoreInstances()
 
 std::shared_ptr<seerep_core::CoreInstance> CoreInstances::createNewInstance(const std::string& label)
 {
-  return createNewInstance(
-      seerep_core_msgs::Label{ .label = label, .uuidInstance = boost::uuids::random_generator()() });
+  return createNewInstance(seerep_core_msgs::Label{ .label = label,
+                                                    .labelIdDatumaro = 0,
+                                                    .uuidInstance = boost::uuids::random_generator()(),
+                                                    .instanceIdDatumaro = 0 });
 }
 std::shared_ptr<seerep_core::CoreInstance> CoreInstances::createNewInstance(const seerep_core_msgs::Label& label)
 {

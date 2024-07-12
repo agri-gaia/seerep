@@ -101,6 +101,7 @@ set(MY_CORE_MSGS
     ${CMAKE_CURRENT_SOURCE_DIR}/core/datatype.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/label.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/label_category.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/label_datumaro.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/project_info.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/polygon2d.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/query_result_project.h

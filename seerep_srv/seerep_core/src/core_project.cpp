@@ -139,7 +139,7 @@ void CoreProject::addDataset(const seerep_core_msgs::DatasetIndexable& dataset)
 }
 
 void CoreProject::addLabels(const seerep_core_msgs::Datatype& datatype,
-                            const std::unordered_map<std::string, std::vector<seerep_core_msgs::Label>>& labelPerCategory,
+                            const std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>& labelPerCategory,
                             const boost::uuids::uuid& msgUuid)
 {
   m_coreDatasets->addLabels(datatype, labelPerCategory, msgUuid);

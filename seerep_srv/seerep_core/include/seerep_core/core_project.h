@@ -126,7 +126,7 @@ public:
    * @param msgUuid the UUID of the targeted dataset
    */
   void addLabels(const seerep_core_msgs::Datatype& datatype,
-                 const std::unordered_map<std::string, std::vector<seerep_core_msgs::Label>>& labelPerCategory,
+                 const std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>& labelPerCategory,
                  const boost::uuids::uuid& msgUuid);
 
   // tf

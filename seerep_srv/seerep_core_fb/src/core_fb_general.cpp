@@ -2,11 +2,11 @@
 
 namespace seerep_core_fb
 {
-std::unordered_map<std::string, std::vector<seerep_core_msgs::Label>>
+std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>
 CoreFbGeneral::extractLabelsPerCategory(const seerep::fb::DatasetUuidLabel& datasetUuidLabel)
 {
   boost::uuids::string_generator string_generator;
-  std::unordered_map<std::string, std::vector<seerep_core_msgs::Label>> labelPerCategory;
+  std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro> labelPerCategory;
   for (auto labelCategory : *datasetUuidLabel.labels())
   {
     if (labelCategory->labels())
@@ -29,7 +29,10 @@ CoreFbGeneral::extractLabelsPerCategory(const seerep::fb::DatasetUuidLabel& data
         }
         labelVector.push_back(label);
       }
-      labelPerCategory.emplace(labelCategory->category()->str(), labelVector);
+      seerep_core_msgs::LabelDatumaro labelDatumaro;
+      labelDatumaro.datumaroJson = labelCategory->datumaroJson()->str();
+      labelDatumaro.labels = labelVector;
+      labelPerCategory.emplace(labelCategory->category()->str(), labelDatumaro);
     }
   }
   return labelPerCategory;

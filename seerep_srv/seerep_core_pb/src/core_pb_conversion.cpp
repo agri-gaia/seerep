@@ -78,7 +78,10 @@ seerep_core_msgs::DatasetIndexable CorePbConversion::fromPb(const seerep::pb::Im
                                                          .uuidInstance = uuidInstance,
                                                          .instanceIdDatumaro = label.instanceiddatumaro() });
         }
-        dataForIndices.labelsCategory.emplace(labelsCategories.category().c_str(), labelVector);
+
+        dataForIndices.labelsCategory.emplace(
+            labelsCategories.category().c_str(),
+            seerep_core_msgs::LabelDatumaro{ .labels = labelVector, .datumaroJson = labelsCategories.datumarojson() });
       }
     }
   }

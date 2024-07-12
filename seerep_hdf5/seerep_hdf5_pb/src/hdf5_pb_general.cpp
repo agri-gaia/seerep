@@ -32,6 +32,7 @@ void Hdf5PbGeneral::writeLabels(const std::string& datatypeGroup, const std::str
       labelCategory.labelsIdDatumaro = labelsIdDatumaro;
       labelCategory.instances = instances;
       labelCategory.instancesIdDatumaro = instancesIdDatumaro;
+      labelCategory.datumaroJson = labelCategoryPb.datumarojson();
       labelCategoryVector.push_back(labelCategory);
     }
     Hdf5CoreGeneral::writeLabels(datatypeGroup, uuid, labelCategoryVector);

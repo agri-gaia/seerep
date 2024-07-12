@@ -308,7 +308,7 @@ private:
    * @param label the llabel (per category) in the data message in seerep core format
    */
   static void fromFbDataLabels(const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelCategory>>* labelFb,
-                               std::unordered_map<std::string, std::vector<seerep_core_msgs::Label>>& label);
+                               std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>& label);
 };
 
 }  // namespace seerep_core_fb

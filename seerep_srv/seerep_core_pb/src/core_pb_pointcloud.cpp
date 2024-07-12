@@ -80,7 +80,7 @@ boost::uuids::uuid CorePbPointCloud::addData(const seerep::pb::PointCloud2& pc)
   {
     for (auto labelsCategories : pc.labels())
     {
-      std::vector<seerep_core_msgs::Label> labelWithInstanceVector;
+      std::vector<seerep_core_msgs::Label> labelVector;
       if (!labelsCategories.labels().empty())
       {
         for (auto label : labelsCategories.labels())
@@ -96,12 +96,14 @@ boost::uuids::uuid CorePbPointCloud::addData(const seerep::pb::PointCloud2& pc)
             uuidInstance = boost::uuids::nil_uuid();
           }
 
-          labelWithInstanceVector.push_back(seerep_core_msgs::Label{ .label = label.label(),
-                                                                     .labelIdDatumaro = label.labeliddatumaro(),
-                                                                     .uuidInstance = uuidInstance,
-                                                                     .instanceIdDatumaro = label.instanceiddatumaro() });
+          labelVector.push_back(seerep_core_msgs::Label{ .label = label.label(),
+                                                         .labelIdDatumaro = label.labeliddatumaro(),
+                                                         .uuidInstance = uuidInstance,
+                                                         .instanceIdDatumaro = label.instanceiddatumaro() });
         }
-        dataForIndices.labelsCategory.emplace(labelsCategories.category().c_str(), labelWithInstanceVector);
+        dataForIndices.labelsCategory.emplace(
+            labelsCategories.category().c_str(),
+            seerep_core_msgs::LabelDatumaro{ .labels = labelVector, .datumaroJson = labelsCategories.datumarojson() });
       }
     }
   }
