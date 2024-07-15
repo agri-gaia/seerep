@@ -3,7 +3,7 @@ NUM_BB_LABELS = 5
 
 import sys
 import uuid
-from typing import List
+from typing import List, Tuple
 
 import flatbuffers
 from grpc import Channel
@@ -19,7 +19,9 @@ from seerep.util.fb_helper import (
 )
 
 
-def add_pc_label_raw(target_proj_uuid: str = None, grpc_channel: Channel = get_gRPC_channel()) -> List[bytearray]:
+def add_pc_label_raw(
+    target_proj_uuid: str = None, grpc_channel: Channel = get_gRPC_channel()
+) -> List[Tuple[str, bytearray]]:
     builder = flatbuffers.Builder(1024)
 
     if target_proj_uuid is None:
@@ -36,11 +38,12 @@ def add_pc_label_raw(target_proj_uuid: str = None, grpc_channel: Channel = get_g
     buf = builder.Output()
 
     msgToSend = []
+    label_list: List[Tuple[str, bytearray]] = []
 
     for responseBuf in stub.GetPointCloud2(bytes(buf)):
         response = PointCloud2.PointCloud2.GetRootAs(responseBuf)
 
-        img_uuid = response.Header().UuidMsgs().decode("utf-8")
+        pc_uuid = response.Header().UuidMsgs().decode("utf-8")
         projectUuid = response.Header().UuidProject().decode("utf-8")
 
         labelStr = ["label1", "label2"]
@@ -55,36 +58,44 @@ def add_pc_label_raw(target_proj_uuid: str = None, grpc_channel: Channel = get_g
         labelsCategory = []
         labelsCategory.append(
             create_label_category(
-                builder=builder, labels=labels, datumaro_json="a very valid datumaro json", category="category P"
+                builder=builder, labels=labels, datumaro_json="a very valid datumaro json", category="laterAddedLabel"
             )
         )
 
         dataset_uuid_label = create_dataset_uuid_label(
-            builder=builder, projectUuid=projectUuid, datasetUuid=img_uuid, labels=labelsCategory
+            builder=builder, projectUuid=projectUuid, datasetUuid=pc_uuid, labels=labelsCategory
         )
 
         builder.Finish(dataset_uuid_label)
         buf = builder.Output()
 
+        label_list.append(
+            (
+                pc_uuid,
+                buf,
+            )
+        )
+
         msgToSend.append(bytes(buf))
 
     response = stub.AddLabels(iter(msgToSend))
-    return msgToSend
+    return label_list
 
 
 def add_pc_label(
     target_proj_uuid: str = None, grpc_channel: Channel = get_gRPC_channel()
-) -> List[DatasetUuidLabel.DatasetUuidLabel]:
+) -> List[Tuple[str, DatasetUuidLabel.DatasetUuidLabel]]:
     return [
-        DatasetUuidLabel.DatasetUuidLabel.GetRootAs(resp_buf)
-        for resp_buf in add_pc_label_raw(target_proj_uuid, grpc_channel)
+        (pc_uuid, DatasetUuidLabel.DatasetUuidLabel.GetRootAs(resp_buf))
+        for pc_uuid, resp_buf in add_pc_label_raw(target_proj_uuid, grpc_channel)
     ]
 
 
 if __name__ == "__main__":
-    label_list: List[DatasetUuidLabel.DatasetUuidLabel] = add_pc_label()
+    label_list = add_pc_label()
 
-    for label in label_list:
+    for pc_uuid, label in label_list:
+        print(f"Added label to pc with uuid {pc_uuid}:")
         for labelCategory_idx in range(label.LabelsLength()):
             for label_idx in range(label.Labels(labelCategory_idx).LabelsLength()):
                 print(f"uuid: {label.Labels(labelCategory_idx).Labels(label_idx).Label().decode()}")

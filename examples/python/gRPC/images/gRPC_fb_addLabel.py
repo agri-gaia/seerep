@@ -59,7 +59,7 @@ def add_label_raw(
         sys.exit()
 
     msgToSend = []
-    bb_list: List[Tuple[str, bytearray]] = []
+    label_list: List[Tuple[str, bytearray]] = []
 
     for responseBuf in response_ls:
         response = Image.Image.GetRootAs(responseBuf)
@@ -79,7 +79,7 @@ def add_label_raw(
         labelsCategory = []
         labelsCategory.append(
             create_label_category(
-                builder=builder, labels=labels, datumaro_json="a very valid datumaro json", category="category Z"
+                builder=builder, labels=labels, datumaro_json="a very valid datumaro json", category="laterAddedLabel"
             )
         )
 
@@ -90,7 +90,7 @@ def add_label_raw(
         builder.Finish(dataset_uuid_label)
         buf = builder.Output()
 
-        bb_list.append(
+        label_list.append(
             (
                 img_uuid,
                 buf,
@@ -100,7 +100,7 @@ def add_label_raw(
         msgToSend.append(bytes(buf))
 
     stub.AddLabels(iter(msgToSend))
-    return bb_list
+    return label_list
 
 
 def add_label(
@@ -114,6 +114,8 @@ def add_label(
 
 if __name__ == "__main__":
     label_list = add_label()
-    for img_uuid, _ in label_list:
+    for img_uuid, label in label_list:
         print(f"Added label to image with uuid {img_uuid}:")
-        print()
+        for labelCategory_idx in range(label.LabelsLength()):
+            for label_idx in range(label.Labels(labelCategory_idx).LabelsLength()):
+                print(f"uuid: {label.Labels(labelCategory_idx).Labels(label_idx).Label().decode()}")

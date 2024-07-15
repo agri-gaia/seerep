@@ -31,8 +31,6 @@ def test_gRPC_fb_getOverallBound(grpc_channel, project_setup) -> None:
 
     # get information such as timestamp, boundingbox, category, all labels of images in a specified project
     timestamps: Set[Tuple[int, int]] = set()
-    center_points: Set[Tuple[float, float]] = set()
-    spatial_extents: Set[Tuple[float, float]] = set()
     categories: Set[str] = set()
     labels: Set[str] = set()
 
@@ -40,26 +38,10 @@ def test_gRPC_fb_getOverallBound(grpc_channel, project_setup) -> None:
         for img_lst in inner_lst:
             for _, img in img_lst:
                 timestamps.add((img.header.stamp.seconds, img.header.stamp.nanos))
-                for label_general in img.labels_general:
-                    for label_with_instance in label_general.labelWithInstance:
-                        labels.add(label_with_instance.label.label)
-
-                for bb_cat in img.labels_bb:
-                    categories.add(bb_cat.category)
-                    for labelbb in bb_cat.boundingBox2DLabeled:
-                        center_points.add(
-                            (
-                                labelbb.boundingBox.center_point.x,
-                                labelbb.boundingBox.center_point.y,
-                            )
-                        )
-                        spatial_extents.add(
-                            (
-                                labelbb.boundingBox.spatial_extent.x,
-                                labelbb.boundingBox.spatial_extent.y,
-                            )
-                        )
-                        labels.add(labelbb.labelWithInstance.label.label)
+                for labelCategory in img.labels:
+                    categories.add(labelCategory.category)
+                    for label in labelCategory.labels:
+                        labels.add(label.label)
 
     # sort imgs by timestamp
     imgs_flattened = [img for inner_lst in sent_grid for img_lst in inner_lst for _, img in img_lst]

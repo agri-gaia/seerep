@@ -16,7 +16,7 @@ from seerep.util.fb_to_dict import SchemaFileNames, fb_flatc_dict
 
 # todo: test query dependant on tf
 def test_sendAndQueryPoints(grpc_channel, project_setup):
-    proj_name, proj_uuid = project_setup
+    _, proj_uuid = project_setup
 
     # send images to the project
     send_grid.send_labeled_image_grid(proj_uuid, grpc_channel)

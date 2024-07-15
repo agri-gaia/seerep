@@ -141,5 +141,5 @@ if __name__ == "__main__":
             decoded_payload = np.frombuffer(resp.DataAsNumpy(), dtype=dtypes)
 
             print(f"---Is dense--- \n {resp.IsDense()}")
-            print(f"---Payload--- \n {decoded_payload}")
-            points = np.array([decoded_payload["x"], decoded_payload["y"], decoded_payload["z"]]).T.astype(np.float64)
+            # print(f"---Payload--- \n {decoded_payload}")
+            # points = np.array([decoded_payload["x"], decoded_payload["y"], decoded_payload["z"]]).T.astype(np.float64)

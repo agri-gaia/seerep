@@ -58,7 +58,7 @@ def query_images_raw(
     labelsCategory = []
     labelsCategory.append(
         create_label_category(
-            builder=builder, labels=labels, datumaro_json="a very valid datumaro json", category="category Z"
+            builder=builder, labels=labels, datumaro_json="a very valid datumaro json", category="category A"
         )
     )
 

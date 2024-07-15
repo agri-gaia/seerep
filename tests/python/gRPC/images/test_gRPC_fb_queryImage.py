@@ -35,9 +35,6 @@ def test_gRPC_fb_queryImages(grpc_channel, project_setup):
     for img in send_img.send_labeled_images(proj_uuid, grpc_channel)[0]:
         completed_img = img[1]
         completed_img.header.uuid_msgs = img[0]
-        for category in completed_img.labels_general:
-            for instance in category.labelWithInstance:
-                instance.instanceUuid = "00000000-0000-0000-0000-000000000000"
         sent_images.append(completed_img)
 
     print(f"Sending images to project: {proj_name}; {proj_uuid}")

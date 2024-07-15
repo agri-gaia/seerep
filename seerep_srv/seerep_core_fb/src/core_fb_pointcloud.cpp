@@ -80,8 +80,8 @@ void CoreFbPointCloud::addLabel(const seerep::fb::DatasetUuidLabel& datasetUuidL
 
   auto hdf5io = CoreFbGeneral::getHdf5(uuidProject, m_seerepCore, m_hdf5IoMap);
 
-  hdf5io->writeLabelsFb(boost::lexical_cast<std::string>(uuidMsg), datasetUuidLabel.datasetUuid()->str(),
-                        datasetUuidLabel.labels());
+  hdf5io->writeLabelsFb(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD,
+                        datasetUuidLabel.datasetUuid()->str(), datasetUuidLabel.labels());
 
   auto labelPerCategory = seerep_core_fb::CoreFbGeneral::extractLabelsPerCategory(datasetUuidLabel);
 

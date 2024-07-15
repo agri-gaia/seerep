@@ -8,3 +8,5 @@ table DatasetUuidLabel {
   datasetUuid:string;
   labels:[LabelCategory];
 }
+
+root_type DatasetUuidLabel;

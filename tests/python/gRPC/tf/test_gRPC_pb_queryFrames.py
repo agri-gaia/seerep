@@ -61,7 +61,7 @@ def test_gRPC_pb_queryFrames(project_setup, grpc_channel):
 
     frames = query_frames.get_frames(project_uuid, grpc_channel)
 
-    for frame in frames.frames:
+    for frame in frames.stringVector:
         frame_dict = yaml.safe_load(frame)
         assert child_frame_id in frame_dict
         assert frame_dict[child_frame_id]["parent"] == frame_id
