@@ -25,14 +25,18 @@ pc_io = seerep.PointCloudIO(file)
 # create dummy data
 # labels
 general_labels_crops = seerep.GeneralLabel(category="crops")
-general_labels_crops.addLabel(seerep.InstanceLabel(label="label", confidence=0.9, instance_uuid="instance"))
-general_labels_crops.addLabel(seerep.InstanceLabel(label="label1", confidence=0.8, instance_uuid="instance1"))
+general_labels_crops.addLabel(seerep.InstanceLabel(label="label", confidence=0.9,
+instance_uuid="instance"))
+general_labels_crops.addLabel(seerep.InstanceLabel(label="label1", confidence=0.8,
+instance_uuid="instance1"))
 
 general_labels_weeds = seerep.GeneralLabel(category="weeds")
-general_labels_weeds.addLabel(seerep.InstanceLabel(label="label2", confidence=0.8, instance_uuid="instance2"))
+general_labels_weeds.addLabel(seerep.InstanceLabel(label="label2", confidence=0.8,
+instance_uuid="instance2"))
 
 bb_labels = seerep.CategorizedBoundingBoxLabel3D(category="crops")
-bb_labels.addLabel(seerep.BoundingBoxLabel3D(seerep.InstanceLabel(label="label3", confidence=0.1, instance_uuid="instance3"),
+bb_labels.addLabel(seerep.BoundingBoxLabel3D(seerep.InstanceLabel(label="label3",
+confidence=0.1, instance_uuid="instance3"),
                                             center=[0, 0, 0],
                                             spatial_extent=[1, 1, 2],
                                             rotation=[1, 0, 0, 0]))
@@ -106,10 +110,12 @@ img_io = seerep.ImageIO(file)
 
 # generate labels
 general_labels = seerep.GeneralLabel(category="crops")
-general_labels.addLabel(seerep.InstanceLabel(label="label", confidence=0.9, instance_uuid="instance"))
+general_labels.addLabel(seerep.InstanceLabel(label="label", confidence=0.9,
+instance_uuid="instance"))
 
 bb_labels = seerep.CategorizedBoundingBoxLabel2D(category="crops")
-bb_labels.addLabel(seerep.BoundingBoxLabel2D(seerep.InstanceLabel(label="label", confidence=0.9, instance_uuid="instance"),
+bb_labels.addLabel(seerep.BoundingBoxLabel2D(seerep.InstanceLabel(label="label",
+confidence=0.9, instance_uuid="instance"),
                                             center=[0, 1.4],
                                             spatial_extent=[1, 2],
                                             rotation=[1.57]))

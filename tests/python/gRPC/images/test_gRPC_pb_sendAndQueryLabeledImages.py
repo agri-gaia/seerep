@@ -14,7 +14,8 @@ def test_gRPC_pb_sendAndQueryImages(grpc_channel, project_setup):
     proj_name, proj_uuid = project_setup
 
     sent_images = []
-    # this adds the servers image uuid to the images and a instance uuid which is given by the server aswell
+    # this adds the servers image uuid to the images and a instance uuid which
+    # is given by the server aswell
     for img in send_img.send_labeled_images(proj_uuid, grpc_channel)[0]:
         completed_img = img[1]
         completed_img.header.uuid_msgs = img[0]
@@ -22,7 +23,9 @@ def test_gRPC_pb_sendAndQueryImages(grpc_channel, project_setup):
 
     logging.info(f"Sending images to project: {proj_name}; {proj_uuid}")
 
-    queried_image_list: List[image.Image] = query_img.query_images(proj_uuid, grpc_channel)
+    queried_image_list: List[image.Image] = query_img.query_images(
+        proj_uuid, grpc_channel
+    )
 
     # 10 images are sent
     # the query is constraint to request 8 based on their attributes

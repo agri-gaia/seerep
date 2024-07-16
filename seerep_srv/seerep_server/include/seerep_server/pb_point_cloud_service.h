@@ -19,15 +19,18 @@ class PbPointCloudService final : public seerep::pb::PointCloudService::Service
 public:
   PbPointCloudService(std::shared_ptr<seerep_core::Core> seerepCore);
 
-  grpc::Status GetPointCloud2(grpc::ServerContext* context, const seerep::pb::Query* request,
-                              grpc::ServerWriter<seerep::pb::PointCloud2>* writer);
+  grpc::Status
+  GetPointCloud2(grpc::ServerContext* context, const seerep::pb::Query* request,
+                 grpc::ServerWriter<seerep::pb::PointCloud2>* writer);
 
-  grpc::Status TransferPointCloud2(grpc::ServerContext* context, const seerep::pb::PointCloud2* pointCloud2,
+  grpc::Status TransferPointCloud2(grpc::ServerContext* context,
+                                   const seerep::pb::PointCloud2* pointCloud2,
                                    seerep::pb::ServerResponse* response);
 
 private:
   std::shared_ptr<seerep_core_pb::CorePbPointCloud> pointCloudPb;
-  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level>
+      m_logger;
 };
 
 } /* namespace seerep_server */

@@ -1,12 +1,13 @@
 # Known Issues
 
-This page serves as a list of fixes or workarounds for common errors encountered while developing SEEREP.
-If you find a fix that isn't included, please consider adding it.
+This page serves as a list of fixes or workarounds for common errors encountered
+while developing SEEREP. If you find a fix that isn't included, please consider
+adding it.
 
 ## Starting the Dev-Container Fails
 
-If the automatic contianer setup or the `Remote-Containers: Reopen Folder in Container` fails,
-one of the following steps may resolve it:
+If the automatic contianer setup or the `Remote-Containers: Reopen Folder in Container`
+fails, one of the following steps may resolve it:
 
 1. Make sure that the container is not running in the backgound:
 
@@ -14,7 +15,8 @@ one of the following steps may resolve it:
     docker stop $(docker ps | grep seerep | awk '{print $1}')
     ```
 
-2. Often, a fresh install can fix problems. Use the following commands to delete everything regarding SEEREP from Docker:
+2. Often, a fresh install can fix problems. Use the following commands to delete
+everything regarding SEEREP from Docker:
 
     ```shell
     # remove container
@@ -27,8 +29,9 @@ one of the following steps may resolve it:
 
 ## Running out of RAM when Compiling
 
-When compiling and linking the server executable (especially when using [WSL](https://ubuntu.com/desktop/wsl)) catkin may
-allocate more than 13 GB of system memory. To restrict the memory usage of `catkin` use:
+When compiling and linking the server executable (especially when using
+[WSL](https://ubuntu.com/desktop/wsl)) catkin may allocate more than 13 GB of
+system memory. To restrict the memory usage of `catkin` use:
 
 ```shell
 pip3 install psutil

@@ -34,7 +34,8 @@
 namespace seerep_core_fb
 {
 /**
- * @brief This class is the center piece between the gRPC interface, the core and the hdf5-io for tf
+ * @brief This class is the center piece between the gRPC interface, the core
+ * and the hdf5-io for tf
  */
 class CoreFbTf
 {
@@ -47,13 +48,15 @@ public:
    * @param query the flatbuffer query for transformations
    * @param response the gRPC flatbuffer message containing the queried transformation
    */
-  void getData(const seerep::fb::TransformStampedQuery& query,
-               flatbuffers::grpc::Message<seerep::fb::TransformStamped>* response);
+  void
+  getData(const seerep::fb::TransformStampedQuery& query,
+          flatbuffers::grpc::Message<seerep::fb::TransformStamped>* response);
   /**
    * @brief Add a tf to the tf buffer and write it to hdf5
    * @param tf the flatbuffer message containing the tf
    *
-   * The tf is stored in the hdf5 file via hdf5-io-fb. The tf is also added to the tf buffer.
+   * The tf is stored in the hdf5 file via hdf5-io-fb. The tf is also added to
+   * the tf buffer.
    */
   void addData(const seerep::fb::TransformStamped& tf);
 
@@ -70,10 +73,13 @@ private:
   /** @brief a shared pointer to the general core */
   std::shared_ptr<seerep_core::Core> m_seerepCore;
   /** a map from the uuids of the projects to the hdf5-io objects handling the io for the object */
-  std::unordered_map<boost::uuids::uuid, std::shared_ptr<seerep_hdf5_fb::Hdf5FbTf>, boost::hash<boost::uuids::uuid>>
+  std::unordered_map<boost::uuids::uuid,
+                     std::shared_ptr<seerep_hdf5_fb::Hdf5FbTf>,
+                     boost::hash<boost::uuids::uuid>>
       m_hdf5IoMap;
   /** the logger for the logging framework */
-  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level>
+      m_logger;
 };
 
 }  // namespace seerep_core_fb

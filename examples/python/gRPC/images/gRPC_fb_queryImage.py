@@ -23,7 +23,8 @@ from seerep.util.fb_helper import (
 
 
 def query_images_raw(
-    target_proj_uuid: Optional[str] = None, grpc_channel: Channel = get_gRPC_channel()
+    target_proj_uuid: Optional[str] = None,
+    grpc_channel: Channel = get_gRPC_channel(),
 ) -> List[bytearray]:
     builder = flatbuffers.Builder(1024)
     if target_proj_uuid is None:
@@ -31,7 +32,10 @@ def query_images_raw(
         target_proj_uuid = getProject(builder, grpc_channel, "testproject")
         # 2. Check if the defined project exist, else return None
         if target_proj_uuid is None:
-            print("valid project doesn't exist! Please execute gRPC_fb_addCameraIntrinsics.py beforehand.")
+            print("""
+                valid project doesn't exist! Please execute
+                gRPC_fb_addCameraIntrinsics.py beforehand.
+            """)
             return None
 
     # 3. Get gRPC service object
@@ -40,7 +44,8 @@ def query_images_raw(
     # Create all necessary objects for the query
     scale = 100
     vertices = [
-        createPoint2d(builder, x * scale, y * scale) for x, y in [(-1.0, -1.0), (-1.0, 1.0), (1.0, 1.0), (1.0, -1.0)]
+        createPoint2d(builder, x * scale, y * scale)
+        for x, y in [(-1.0, -1.0), (-1.0, 1.0), (1.0, 1.0), (1.0, -1.0)]
     ]
     polygon2d = createPolygon2D(builder, 700, -100, vertices)
 
@@ -58,17 +63,24 @@ def query_images_raw(
     labelsCategory = []
     labelsCategory.append(
         create_label_category(
-            builder=builder, labels=labels, datumaro_json="a very valid datumaro json", category="category A"
+            builder=builder,
+            labels=labels,
+            datumaro_json="a very valid datumaro json",
+            category="category A",
         )
     )
 
     dataUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
-    instanceUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
+    instanceUuids = [
+        builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")
+    ]
 
     # 4. Create a query with parameters
     # All parameters are optional!
-    # With all parameters set (especially with the data and instance uuids set) the result of the query will be empty.
-    # Set the query parameters to adequate values or remove them from the query creation
+    # With all parameters set (especially with the data and instance uuids set)
+    # the result of the query will be empty.
+    # Set the query parameters to adequate values or remove them from the query
+    # creation
     query = createQuery(
         builder,
         polygon2d=polygon2d,
@@ -92,9 +104,13 @@ def query_images_raw(
 
 
 def query_images(
-    target_proj_uuid: Optional[str] = None, grpc_channel: Channel = get_gRPC_channel()
+    target_proj_uuid: Optional[str] = None,
+    grpc_channel: Channel = get_gRPC_channel(),
 ) -> List[Image.Image]:
-    return [Image.Image.GetRootAs(img) for img in query_images_raw(target_proj_uuid, grpc_channel)]
+    return [
+        Image.Image.GetRootAs(img)
+        for img in query_images_raw(target_proj_uuid, grpc_channel)
+    ]
 
 
 if __name__ == "__main__":
@@ -105,9 +121,14 @@ if __name__ == "__main__":
     print(f"count of images: {len(queried_images)}")
 
     for img in queried_images:
-        print("--------------------------------------------------------------------------------------------")
+        print(
+            "------------------------------------------------------------------"
+        )
         print(f"uuidmsg: {img.Header().UuidMsgs().decode('utf-8')}")
         print(f"count of bounding box labels: {img.LabelsLength()}")
         if img.LabelsLength() > 0:
-            print("first label: " + img.Labels(0).Labels(0).Label().decode("utf-8"))
-    print("--------------------------------------------------------------------------------------------")
+            print(
+                "first label: "
+                + img.Labels(0).Labels(0).Label().decode("utf-8")
+            )
+    print("------------------------------------------------------------------")

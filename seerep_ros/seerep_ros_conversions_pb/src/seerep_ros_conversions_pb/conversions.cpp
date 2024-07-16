@@ -51,7 +51,8 @@ sensor_msgs::PointField toROS(const seerep::pb::PointField& point_field)
 /*
  * PointCloud2
  */
-seerep::pb::PointCloud2 toProto(const sensor_msgs::PointCloud2& cloud, std::string projectuuid)
+seerep::pb::PointCloud2 toProto(const sensor_msgs::PointCloud2& cloud,
+                                std::string projectuuid)
 {
   seerep::pb::PointCloud2 ret;
   *ret.mutable_header() = toProto(cloud.header);
@@ -83,7 +84,8 @@ sensor_msgs::PointCloud2 toROS(const seerep::pb::PointCloud2& cloud)
   ret.is_bigendian = cloud.is_bigendian();
   ret.point_step = cloud.point_step();
   ret.row_step = cloud.row_step();
-  std::copy(cloud.data().begin(), cloud.data().end(), std::back_inserter(ret.data));
+  std::copy(cloud.data().begin(), cloud.data().end(),
+            std::back_inserter(ret.data));
   ret.is_dense = cloud.is_dense();
   return ret;
 }
@@ -91,7 +93,8 @@ sensor_msgs::PointCloud2 toROS(const seerep::pb::PointCloud2& cloud)
 /*
  * Image
  */
-seerep::pb::Image toProto(const sensor_msgs::Image& image, std::string projectuuid)
+seerep::pb::Image toProto(const sensor_msgs::Image& image,
+                          std::string projectuuid)
 {
   seerep::pb::Image ret;
   *ret.mutable_header() = toProto(image.header);
@@ -114,7 +117,8 @@ sensor_msgs::Image toROS(const seerep::pb::Image& image)
   ret.encoding = image.encoding();
   ret.is_bigendian = image.is_bigendian();
   ret.step = image.step();
-  std::copy(image.data().begin(), image.data().end(), std::back_inserter(ret.data));
+  std::copy(image.data().begin(), image.data().end(),
+            std::back_inserter(ret.data));
   return ret;
 }
 
@@ -205,8 +209,9 @@ geometry_msgs::Transform toROS(const seerep::pb::Transform& transform)
 /*
  * TransformStamped
  */
-seerep::pb::TransformStamped toProto(const geometry_msgs::TransformStamped& transform, const bool isStatic,
-                                     std::string projectuuid)
+seerep::pb::TransformStamped
+toProto(const geometry_msgs::TransformStamped& transform, const bool isStatic,
+        std::string projectuuid)
 {
   seerep::pb::TransformStamped ret;
   *ret.mutable_header() = toProto(transform.header);
@@ -218,7 +223,8 @@ seerep::pb::TransformStamped toProto(const geometry_msgs::TransformStamped& tran
   return ret;
 }
 
-geometry_msgs::TransformStamped toROS(const seerep::pb::TransformStamped& transform)
+geometry_msgs::TransformStamped
+toROS(const seerep::pb::TransformStamped& transform)
 {
   geometry_msgs::TransformStamped ret;
   ret.header = toROS(transform.header());

@@ -41,23 +41,32 @@ def test_gRPC_fb_getTf(grpc_channel, project_setup):
     for idx, time in enumerate(TIMESTAMPS):
         timestmp = createTimeStamp(builder, time[0], time[1])
 
-        # when not giving a uuid the corresponding retrieved tf from server has no uuid msg
-        header = createHeader(builder, timestmp, frame_id, project_uuid, str(uuid.uuid4()))
+        # when not giving a uuid the corresponding retrieved tf from server has
+        # no uuid msg
+        header = createHeader(
+            builder, timestmp, frame_id, project_uuid, str(uuid.uuid4())
+        )
         time_lst.append(time)
 
-        translation = createVector3(builder, np.array([300 * idx, 300 * idx, 30 * idx], dtype=np.float64))
+        translation = createVector3(
+            builder,
+            np.array([300 * idx, 300 * idx, 30 * idx], dtype=np.float64),
+        )
 
         tf = createTransform(builder, translation, quat)
         tf_s = createTransformStamped(builder, child_frame_id, header, tf)
 
         builder.Finish(tf_s)
         buf = builder.Output()
-        sent_tfs_base.append(fb_flatc_dict(buf, SchemaFileNames.TRANSFORM_STAMPED))
+        sent_tfs_base.append(
+            fb_flatc_dict(buf, SchemaFileNames.TRANSFORM_STAMPED)
+        )
         tf_list.append(bytes(buf))
 
     stub_tf.TransferTransformStamped(iter(tf_list))
 
-    # remove uuid msgs from sent tfs, because  they are not in the query either (possible bug?)
+    # remove uuid msgs from sent tfs, because  they are not in the query either
+    # (possible bug?)
     for obj in sent_tfs_base:
         obj["header"]["uuid_msgs"] = ""
 
@@ -78,7 +87,8 @@ def test_gRPC_fb_getTf(grpc_channel, project_setup):
     assert sent_tfs_base == queried_tfs_base
 
     # check if interpolation of the tfs works correctly
-    # (set time = time[i] * interp_time_factor + (1-interp_time_factor) * time[i+1])
+    # (set time = time[i] * interp_time_factor + (1-interp_time_factor) *
+    # time[i+1])
     interp_time_factor = 0.5
     interp_times: List[Tuple[int, int]] = []
 
@@ -86,14 +96,27 @@ def test_gRPC_fb_getTf(grpc_channel, project_setup):
         # average the times by this factor
         interp_times.append(
             (
-                int(sent_tfs_base[idx]["header"]["stamp"]["seconds"] * interp_time_factor)
-                + int((1 - interp_time_factor) * sent_tfs_base[idx + 1]["header"]["stamp"]["seconds"]),
-                int(sent_tfs_base[idx]["header"]["stamp"]["nanos"] * interp_time_factor)
-                + int((1 - interp_time_factor) * sent_tfs_base[idx + 1]["header"]["stamp"]["nanos"]),
+                int(
+                    sent_tfs_base[idx]["header"]["stamp"]["seconds"]
+                    * interp_time_factor
+                )
+                + int(
+                    (1 - interp_time_factor)
+                    * sent_tfs_base[idx + 1]["header"]["stamp"]["seconds"]
+                ),
+                int(
+                    sent_tfs_base[idx]["header"]["stamp"]["nanos"]
+                    * interp_time_factor
+                )
+                + int(
+                    (1 - interp_time_factor)
+                    * sent_tfs_base[idx + 1]["header"]["stamp"]["nanos"]
+                ),
             )
         )
 
-    # this should only affect the translations in this case, calculate the new translations using the factor
+    # this should only affect the translations in this case, calculate the new
+    # translations using the factor
     # interp_tfs_secs = [elem[0] for elem in interp_times]
 
     interp_tfs = []
@@ -101,17 +124,21 @@ def test_gRPC_fb_getTf(grpc_channel, project_setup):
         tf = deepcopy(sent_tfs_base[0])
         sent_idx_stamp = sent_tfs_base[idx]["header"]["stamp"]
         sent_idxpp_stamp = sent_tfs_base[idx + 1]["header"]["stamp"]
-        # recalculate time factor, due to numeric errors in float and int calculations
+        # recalculate time factor, due to numeric errors in float and int
+        # calculations
         time_factor = (
             (interp_times[idx][0] - sent_idx_stamp["seconds"])
             + (interp_times[idx][1] - sent_idx_stamp["nanos"]) * NANOS_FACTOR
         ) / (
             sent_idxpp_stamp["seconds"]
             - sent_idx_stamp["seconds"]
-            + (sent_idxpp_stamp["nanos"] - sent_idx_stamp["nanos"]) * NANOS_FACTOR
+            + (sent_idxpp_stamp["nanos"] - sent_idx_stamp["nanos"])
+            * NANOS_FACTOR
         )
         sent_idx_tf_translation = sent_tfs_base[idx]["transform"]["translation"]
-        sent_idxpp_tf_translation = sent_tfs_base[idx + 1]["transform"]["translation"]
+        sent_idxpp_tf_translation = sent_tfs_base[idx + 1]["transform"][
+            "translation"
+        ]
 
         # make sure x, y, z are set
         sent_idx_tf_translation.setdefault("x", 0.0)
@@ -122,13 +149,16 @@ def test_gRPC_fb_getTf(grpc_channel, project_setup):
         sent_idxpp_tf_translation.setdefault("z", 0.0)
 
         tf["transform"]["translation"]["x"] = (
-            sent_idx_tf_translation["x"] * (1 - time_factor) + time_factor * sent_idxpp_tf_translation["x"]
+            sent_idx_tf_translation["x"] * (1 - time_factor)
+            + time_factor * sent_idxpp_tf_translation["x"]
         )
         tf["transform"]["translation"]["y"] = (
-            sent_idx_tf_translation["y"] * (1 - time_factor) + time_factor * sent_idxpp_tf_translation["y"]
+            sent_idx_tf_translation["y"] * (1 - time_factor)
+            + time_factor * sent_idxpp_tf_translation["y"]
         )
         tf["transform"]["translation"]["z"] = (
-            sent_idx_tf_translation["z"] * (1 - time_factor) + time_factor * sent_idxpp_tf_translation["z"]
+            sent_idx_tf_translation["z"] * (1 - time_factor)
+            + time_factor * sent_idxpp_tf_translation["z"]
         )
         tf["header"]["stamp"]["seconds"] = interp_times[idx][0]
         tf["header"]["stamp"]["nanos"] = interp_times[idx][1]

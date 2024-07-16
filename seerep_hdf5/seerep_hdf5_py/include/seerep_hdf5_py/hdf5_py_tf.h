@@ -22,8 +22,10 @@ namespace seerep_hdf5_py
 struct TfTransform
 {
 public:
-  TfTransform(int64_t seconds, int32_t nanos, const std::string& frameId, const std::string& childFrameId,
-              const std::array<double, 3>& translation, const std::array<double, 4>& rotation)
+  TfTransform(int64_t seconds, int32_t nanos, const std::string& frameId,
+              const std::string& childFrameId,
+              const std::array<double, 3>& translation,
+              const std::array<double, 4>& rotation)
     : seconds_(seconds)
     , nanos_(nanos)
     , frameId_(frameId)
@@ -55,7 +57,8 @@ public:
   std::vector<TfTransform> readTransformStamped(const std::string& frameId);
 
 private:
-  std::vector<TfTransform> readGroupTransformStamped(const std::string& tfGroupId);
+  std::vector<TfTransform>
+  readGroupTransformStamped(const std::string& tfGroupId);
 };
 
 } /* namespace seerep_hdf5_py */

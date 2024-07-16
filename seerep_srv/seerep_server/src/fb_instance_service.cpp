@@ -2,14 +2,16 @@
 
 namespace seerep_server
 {
-FbInstanceService::FbInstanceService(std::shared_ptr<seerep_core::Core> seerepCore)
+FbInstanceService::FbInstanceService(
+    std::shared_ptr<seerep_core::Core> seerepCore)
   : m_instanceFb(std::make_shared<seerep_core_fb::CoreFbInstance>(seerepCore))
 {
 }
 
-grpc::Status FbInstanceService::GetInstances(grpc::ServerContext* context,
-                                             const flatbuffers::grpc::Message<seerep::fb::QueryInstance>* request,
-                                             flatbuffers::grpc::Message<seerep::fb::UuidsPerProject>* response)
+grpc::Status FbInstanceService::GetInstances(
+    grpc::ServerContext* context,
+    const flatbuffers::grpc::Message<seerep::fb::QueryInstance>* request,
+    flatbuffers::grpc::Message<seerep::fb::UuidsPerProject>* response)
 {
   (void)context;  // ignore that variable without causing warnings
   try
@@ -18,16 +20,18 @@ grpc::Status FbInstanceService::GetInstances(grpc::ServerContext* context,
   }
   catch (std::runtime_error const& e)
   {
-    // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
-    // also catching core doesn't have project with uuid error
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    // mainly catching "invalid uuid string" when transforming uuid_project from
+    // string to uuid also catching core doesn't have project with uuid error
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+        << e.what();
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
   }
   catch (const std::exception& e)
   {
     // specific handling for all exceptions extending std::exception, except
     // std::runtime_error which is handled explicitly
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+        << e.what();
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
   }
   catch (...)

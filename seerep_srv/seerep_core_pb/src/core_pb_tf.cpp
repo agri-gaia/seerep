@@ -3,7 +3,8 @@
 namespace seerep_core_pb
 {
 // constructor when data received and stored to hdf5
-CorePbTf::CorePbTf(std::shared_ptr<seerep_core::Core> seerepCore) : m_seerepCore(seerepCore)
+CorePbTf::CorePbTf(std::shared_ptr<seerep_core::Core> seerepCore)
+  : m_seerepCore(seerepCore)
 {
   for (seerep_core_msgs::ProjectInfo projectInfo : m_seerepCore->getProjects())
   {
@@ -15,12 +16,14 @@ CorePbTf::~CorePbTf()
 {
 }
 
-std::optional<seerep::pb::TransformStamped> CorePbTf::getData(const seerep::pb::TransformStampedQuery& query)
+std::optional<seerep::pb::TransformStamped>
+CorePbTf::getData(const seerep::pb::TransformStampedQuery& query)
 {
   std::cout << "loading tf from tfs/" << std::endl;
   seerep_core_msgs::QueryTf queryTf = CorePbConversion::fromPb(query);
 
-  std::optional<geometry_msgs::TransformStamped> result = m_seerepCore->getTF(queryTf);
+  std::optional<geometry_msgs::TransformStamped> result =
+      m_seerepCore->getTF(queryTf);
 
   if (result)
   {
@@ -45,7 +48,8 @@ void CorePbTf::addData(const seerep::pb::TransformStamped& tf)
   m_seerepCore->addTF(seerep_ros_conversions_pb::toROS(tf), projectuuid);
 }
 
-std::vector<std::string> CorePbTf::getFrames(const boost::uuids::uuid& projectuuid)
+std::vector<std::string>
+CorePbTf::getFrames(const boost::uuids::uuid& projectuuid)
 {
   return m_seerepCore->getFrames(projectuuid);
 }
@@ -54,11 +58,13 @@ void CorePbTf::getFileAccessorFromCore(boost::uuids::uuid project)
 {
   auto hdf5file = m_seerepCore->getHdf5File(project);
   auto hdf5fileMutex = m_seerepCore->getHdf5FileMutex(project);
-  auto tfIo = std::make_shared<seerep_hdf5_pb::Hdf5PbTf>(hdf5file, hdf5fileMutex);
+  auto tfIo =
+      std::make_shared<seerep_hdf5_pb::Hdf5PbTf>(hdf5file, hdf5fileMutex);
   m_hdf5IoMap.insert(std::make_pair(project, tfIo));
 }
 
-std::shared_ptr<seerep_hdf5_pb::Hdf5PbTf> CorePbTf::getHdf5(boost::uuids::uuid project)
+std::shared_ptr<seerep_hdf5_pb::Hdf5PbTf>
+CorePbTf::getHdf5(boost::uuids::uuid project)
 {
   // find the project based on its uuid
   auto hdf5io = m_hdf5IoMap.find(project);

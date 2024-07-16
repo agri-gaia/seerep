@@ -33,7 +33,8 @@ def query_image_grid(
 
         if target_project_uuid is None:
             print(
-                "No project with name 'LabeledImagesInGrid' found! Execute gRPC_pb_sendLabeledImageGrid.py beforehand!"
+                "No project with name 'LabeledImagesInGrid' found! Execute \
+                    gRPC_pb_sendLabeledImageGrid.py beforehand!"
             )
             sys.exit()
 
@@ -60,7 +61,8 @@ def query_image_grid(
     labelsCategory.labels.append(label)
     theQuery.labelCategory.append(labelsCategory)
 
-    # query all images of the grid seperately such that in total a 3x3 2(.5)d grid is queried
+    # query all images of the grid seperately such that
+    # in total a 3x3 2(.5)d grid is queried
     # 1. (-0.5,-0.5) to (0.5,0.5)
     # 2. (0.5, -0.5) to (1.5, 0.5)
     # 3. (1.5, -0.5) to (2.5, 0.5)
@@ -117,7 +119,10 @@ if __name__ == "__main__":
     # print the results
     for x in range(len(grid_img_list)):
         for y in range(len(grid_img_list[x])):
-            print(f"center point query (x/y): ( {x} / {y} ) with a extent of {2 * OFFSET} in x and y directions")
+            print(
+                f"center point query (x/y): ( {x} / {y} ) with a extent of "
+                f"{2 * OFFSET} in x and y directions"
+            )
             print(f"Number of images: {len(grid_img_list[x][y])}")
             for img in grid_img_list[x][y]:
                 print(f"Image uuid: {img.header.uuid_msgs}")

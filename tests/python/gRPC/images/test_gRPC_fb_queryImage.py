@@ -31,7 +31,8 @@ def test_gRPC_fb_queryImages(grpc_channel, project_setup):
 
     sent_images = []
 
-    # this adds the servers image uuid to the images and a instance uuid which is given by the server aswell
+    # this adds the servers image uuid to the images and a instance uuid which
+    # is given by the server aswell
     for img in send_img.send_labeled_images(proj_uuid, grpc_channel)[0]:
         completed_img = img[1]
         completed_img.header.uuid_msgs = img[0]
@@ -39,26 +40,42 @@ def test_gRPC_fb_queryImages(grpc_channel, project_setup):
 
     print(f"Sending images to project: {proj_name}; {proj_uuid}")
 
-    queried_image_list: List[Image.Image] = query_img.query_images_raw(proj_uuid, grpc_channel)
+    queried_image_list: List[Image.Image] = query_img.query_images_raw(
+        proj_uuid, grpc_channel
+    )
 
     queried_image_dicts = [
-        remap(fb_flatc_dict(img, SchemaFileNames.IMAGE), visit=_image_dict_pipeline) for img in queried_image_list
+        remap(
+            fb_flatc_dict(img, SchemaFileNames.IMAGE),
+            visit=_image_dict_pipeline,
+        )
+        for img in queried_image_list
     ]
-    sent_image_dicts = [remap(json_format.MessageToDict(img), visit=_image_dict_pipeline) for img in sent_images]
+    sent_image_dicts = [
+        remap(json_format.MessageToDict(img), visit=_image_dict_pipeline)
+        for img in sent_images
+    ]
 
     # replace data field with because in the query withoutData is set to true
     for img in sent_image_dicts:
         img.pop("data")
 
-    # filter sent_images to only contain the 6 images which are queried with uuid_msgs
+    # filter sent_images to only contain the 6 images which are queried with
+    # uuid_msgs
     filtered_sent_images = []
     for img in sent_image_dicts:
-        if img["header"]["uuid_msgs"] in [img["header"]["uuid_msgs"] for img in queried_image_dicts]:
+        if img["header"]["uuid_msgs"] in [
+            img["header"]["uuid_msgs"] for img in queried_image_dicts
+        ]:
             filtered_sent_images.append(img)
 
     assert len(queried_image_dicts) == len(filtered_sent_images) == 6
 
-    ordered_sent_imgs = sorted(filtered_sent_images, key=lambda x: x["header"]["uuid_msgs"])
-    ordered_queried_imgs = sorted(queried_image_dicts, key=lambda x: x["header"]["uuid_msgs"])
+    ordered_sent_imgs = sorted(
+        filtered_sent_images, key=lambda x: x["header"]["uuid_msgs"]
+    )
+    ordered_queried_imgs = sorted(
+        queried_image_dicts, key=lambda x: x["header"]["uuid_msgs"]
+    )
 
     assert ordered_queried_imgs == ordered_sent_imgs

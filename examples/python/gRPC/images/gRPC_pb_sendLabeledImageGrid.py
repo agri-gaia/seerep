@@ -11,7 +11,9 @@ from google.protobuf import empty_pb2
 from grpc import Channel
 from seerep.fb import camera_intrinsics_service_grpc_fb as ci_service
 from seerep.pb import camera_intrinsics_pb2 as cameraintrinsics
-from seerep.pb import camera_intrinsics_service_pb2_grpc as camintrinsics_service
+from seerep.pb import (
+    camera_intrinsics_service_pb2_grpc as camintrinsics_service,
+)
 from seerep.pb import image_pb2 as image
 from seerep.pb import image_service_pb2_grpc as imageService
 from seerep.pb import label_category_pb2, label_pb2
@@ -32,7 +34,11 @@ from seerep.util.fb_helper import (
 
 def send_labeled_image_grid(
     target_proj_uuid: str = None, grpc_channel: Channel = get_gRPC_channel()
-) -> Tuple[List[List[image.Image]], List[Tuple[int, int]], cameraintrinsics.CameraIntrinsics]:
+) -> Tuple[
+    List[List[image.Image]],
+    List[Tuple[int, int]],
+    cameraintrinsics.CameraIntrinsics,
+]:
     stub = imageService.ImageServiceStub(grpc_channel)
     stubTf = tfService.TfServiceStub(grpc_channel)
     stubMeta = metaOperations.MetaOperationsStub(grpc_channel)
@@ -47,12 +53,15 @@ def send_labeled_image_grid(
                 target_proj_uuid = project.uuid
 
         if target_proj_uuid is None:
-            creation = projectCreation.ProjectCreation(name="LabeledImagesInGrid", mapFrameId="map")
+            creation = projectCreation.ProjectCreation(
+                name="LabeledImagesInGrid", mapFrameId="map"
+            )
             projectCreated = stubMeta.CreateProject(creation)
             target_proj_uuid = projectCreated.uuid
 
     #####
-    # A valid camera intrinsics UUID is needed here for succesful storage of Images
+    # A valid camera intrinsics UUID is needed here for succesful storage
+    # of Images
     # Add new Camera Intrinsics
 
     ciuuid = str(uuid.uuid4())
@@ -87,7 +96,8 @@ def send_labeled_image_grid(
     camin.binning_x = 6
     camin.binning_y = 7
 
-    # this deactivates the influence of the frustum matrix on the coordinates of the images, for easier testing
+    # this deactivates the influence of the frustum matrix on the coordinates
+    # of the images, for easier testing
     camin.maximum_viewing_distance = 0
 
     # old value:
@@ -111,7 +121,8 @@ def send_labeled_image_grid(
             idx_oldy = idx_y
             grid_imgs.append([])
         grid_imgs[idx_y].append([])
-        # create an image more per cell (1 image in first cell; 9 images in 9th cell...)
+        # create an image more per cell
+        # (1 image in first cell; 9 images in 9th cell...)
         while n <= k:
             n = n + 1
             theImage = image.Image()
@@ -208,7 +219,9 @@ def add_camintrins(target_proj_uuid: str, grpc_channel: Channel) -> str:
 
     # 1. Get all projects from the server when no target specified
     if target_proj_uuid is None:
-        target_proj_uuid = getProject(builder, grpc_channel, "LabeledImagesInGrid")
+        target_proj_uuid = getProject(
+            builder, grpc_channel, "LabeledImagesInGrid"
+        )
 
     ciuuid = str(uuid.uuid4())
 
@@ -221,7 +234,21 @@ def add_camintrins(target_proj_uuid: str, grpc_channel: Channel) -> str:
     roi = createRegionOfInterest(builder, 3, 5, 6, 7, True)
 
     matrix = [4, 5, 6, 7, 0.1]
-    ci = createCameraIntrinsics(builder, header, 3, 4, "plump_bob", matrix, matrix, matrix, matrix, 4, 5, roi, 5)
+    ci = createCameraIntrinsics(
+        builder,
+        header,
+        3,
+        4,
+        "plump_bob",
+        matrix,
+        matrix,
+        matrix,
+        matrix,
+        4,
+        5,
+        roi,
+        5,
+    )
     builder.Finish(ci)
 
     buf = builder.Output()
@@ -248,10 +275,14 @@ if __name__ == "__main__":
 
     for x in range(len(grid_list)):
         for y in range(len(grid_list[x])):
-            print("#############################################################")
+            print(
+                "#############################################################"
+            )
             print(f"Grid cell {x}, {y} has {len(grid_list[x][y])} images.")
             for img in grid_list[x][y]:
-                print("-------------------------------------------------------------")
+                print(
+                    "----------------------------------------------------------"
+                )
                 print(f"Image {img[0]} has {len(img[1].labels)} labels.")
                 for labelCategory in img[1].labels:
                     print(f"\nlabel category: {labelCategory.category}")

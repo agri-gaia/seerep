@@ -19,17 +19,22 @@ class PbTfService final : public seerep::pb::TfService::Service
 public:
   PbTfService(std::shared_ptr<seerep_core::Core> seerepCore);
 
-  grpc::Status TransferTransformStamped(grpc::ServerContext* context, const seerep::pb::TransformStamped* transform,
-                                        seerep::pb::ServerResponse* response);
-  grpc::Status GetFrames(grpc::ServerContext* context, const seerep::pb::FrameQuery* frameQuery,
+  grpc::Status
+  TransferTransformStamped(grpc::ServerContext* context,
+                           const seerep::pb::TransformStamped* transform,
+                           seerep::pb::ServerResponse* response);
+  grpc::Status GetFrames(grpc::ServerContext* context,
+                         const seerep::pb::FrameQuery* frameQuery,
                          seerep::pb::StringVector* response);
-  grpc::Status GetTransformStamped(grpc::ServerContext* context,
-                                   const seerep::pb::TransformStampedQuery* transformQuery,
-                                   seerep::pb::TransformStamped* response);
+  grpc::Status
+  GetTransformStamped(grpc::ServerContext* context,
+                      const seerep::pb::TransformStampedQuery* transformQuery,
+                      seerep::pb::TransformStamped* response);
 
 private:
   std::shared_ptr<seerep_core_pb::CorePbTf> tfPb;
-  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level>
+      m_logger;
 };
 
 } /* namespace seerep_server */

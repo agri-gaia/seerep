@@ -10,7 +10,8 @@ def get_gRPC_channel(target: str = "local") -> grpc.Channel:
     Returns a gRPC channel to the specified target.
 
     Args:
-        target: The target to connect to, can be "local", "prod", "dev" or an IP address with a port\
+        target: The target to connect to, can be "local", "prod", "dev" or an \
+            IP address with a port\
             in the format "IP:PORT"
 
     Returns:
@@ -31,8 +32,12 @@ def get_gRPC_channel(target: str = "local") -> grpc.Channel:
             certName = "tls.pem"
 
         # server with certs
-        __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
-        with open(os.path.join(__location__, "../../../certs/" + certName), "rb") as f:
+        __location__ = os.path.realpath(
+            os.path.join(os.getcwd(), os.path.dirname(__file__))
+        )
+        with open(
+            os.path.join(__location__, "../../../certs/" + certName), "rb"
+        ) as f:
             root_cert = f.read()
         server = targetName + ".robot.10.249.3.13.nip.io:31723"
         creds = grpc.ssl_channel_credentials(root_cert)
@@ -58,7 +63,8 @@ def remap_to_snake_case(p: tuple, k: Hashable, v):
         p, k, v: path, key, value for boltons.iterutils.remap
 
     Returns:
-        (k, v) as specified by boltons.iterutils.remap, where k is modified if k is of type string
+        (k, v) as specified by boltons.iterutils.remap, where k is modified
+        if k is of type string
     """
     if isinstance(k, str):
         k = re.sub(r"((?<=[a-z0-9])[A-Z]|(?!^)(?<!_)[A-Z](?=[a-z]))", r"_\1", k)
@@ -77,7 +83,8 @@ def remap_keys(p: tuple, k: Hashable, v, mapping: Dict[str, str] = {}):
         mapping: a dictionary that maps the old key to the new key
 
     Returns:
-        (k, v) as specified by boltons.iterutils.remap, where k is modified if k is in the mapping
+        (k, v) as specified by boltons.iterutils.remap, where k is modified
+        if k is in the mapping
     """
     k = mapping.get(k, k)
     return k, v
@@ -86,15 +93,17 @@ def remap_keys(p: tuple, k: Hashable, v, mapping: Dict[str, str] = {}):
 def trunc_floats(p: tuple, k: Hashable, v, ignore_after: int = None):
     """
     This Function can be provided to boltons.iterutils.remap
-    and truncates `ignore_after` decimal places after the specified position behind the dot.
+    and truncates `ignore_after` decimal places after the specified position
+    behind the dot.
 
     Args:
         p, k, v: path, key, value for boltons.iterutils.remap
-        ignore_after: specifies at what position after the dot to strip the decimals,
-                      None means don't truncate the values
+        ignore_after: specifies at what position after the dot to strip the
+        decimals, None means don't truncate the values
 
     Returns:
-        (k, v) as specified by boltons.iterutils.remap, where v is modified if v is of type float
+        (k, v) as specified by boltons.iterutils.remap, where v is modified
+        if v is of type float
     """
     if ignore_after is not None and isinstance(v, float):
         # use string formatting to chop the float

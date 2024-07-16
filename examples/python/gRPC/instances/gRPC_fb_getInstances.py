@@ -56,7 +56,10 @@ for labelAct in labelStr:
 labelsCategory = []
 labelsCategory.append(
     create_label_category(
-        builder=builder, labels=labels, datumaro_json="a very valid datumaro json", category="category Z"
+        builder=builder,
+        labels=labels,
+        datumaro_json="a very valid datumaro json",
+        category="category Z",
     )
 )
 
@@ -65,8 +68,10 @@ instanceUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 
 # 4. Create a query with parameters
 # All parameters are optional
-# With all parameters set (especially with the data and instance uuids set) the result of the query will be empty.
-# Set the query parameters to adequate values or remove them from the query creation
+# With all parameters set (especially with the data and instance uuids set) the
+# result of the query will be empty.
+# Set the query parameters to adequate values or remove them from
+# the query creation
 query = createQuery(
     builder,
     # boundingBox=boundingboxStamped,

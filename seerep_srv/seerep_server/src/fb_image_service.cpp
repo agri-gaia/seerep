@@ -7,9 +7,10 @@ FbImageService::FbImageService(std::shared_ptr<seerep_core::Core> seerepCore)
 {
 }
 
-grpc::Status FbImageService::GetImage(grpc::ServerContext* context,
-                                      const flatbuffers::grpc::Message<seerep::fb::Query>* request,
-                                      grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::Image>>* writer)
+grpc::Status FbImageService::GetImage(
+    grpc::ServerContext* context,
+    const flatbuffers::grpc::Message<seerep::fb::Query>* request,
+    grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::Image>>* writer)
 {
   (void)context;  // ignore that variable without causing warnings
   auto requestRoot = request->GetRoot();
@@ -20,14 +21,17 @@ grpc::Status FbImageService::GetImage(grpc::ServerContext* context,
   {
     for (auto point : *requestRoot->polygon()->vertices())
     {
-      debuginfo << "bounding box vertex (" << point->x() << ", " << point->y() << ") /";
+      debuginfo << "bounding box vertex (" << point->x() << ", " << point->y()
+                << ") /";
     }
     debuginfo << "bounding box z " << requestRoot->polygon()->z() << " /";
-    debuginfo << "bounding box height " << requestRoot->polygon()->height() << " /";
+    debuginfo << "bounding box height " << requestRoot->polygon()->height()
+              << " /";
   }
   if (requestRoot->timeinterval() != NULL)
   {
-    debuginfo << "\n time interval (" << requestRoot->timeinterval()->time_min()->seconds() << "/"
+    debuginfo << "\n time interval ("
+              << requestRoot->timeinterval()->time_min()->seconds() << "/"
               << requestRoot->timeinterval()->time_max()->seconds() << ")";
   }
   if (requestRoot->label() != NULL)
@@ -43,21 +47,25 @@ grpc::Status FbImageService::GetImage(grpc::ServerContext* context,
     }
   }
 
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << debuginfo.rdbuf();
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
+      << debuginfo.rdbuf();
 
   if (requestRoot->polygon() != NULL)
   {
     for (auto point : *(requestRoot->polygon()->vertices()))
     {
-      debuginfo << "bounding box vertex (" << point->x() << ", " << point->y() << ") /";
+      debuginfo << "bounding box vertex (" << point->x() << ", " << point->y()
+                << ") /";
     }
     debuginfo << "bounding box z " << requestRoot->polygon()->z() << " /";
-    debuginfo << "bounding box height " << requestRoot->polygon()->height() << " /";
+    debuginfo << "bounding box height " << requestRoot->polygon()->height()
+              << " /";
   }
   if (requestRoot->timeinterval() != NULL)
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
-        << "in time interval (" << requestRoot->timeinterval()->time_min()->seconds() << "/"
+        << "in time interval ("
+        << requestRoot->timeinterval()->time_min()->seconds() << "/"
         << requestRoot->timeinterval()->time_max()->seconds() << ")";
   }
   try
@@ -66,16 +74,18 @@ grpc::Status FbImageService::GetImage(grpc::ServerContext* context,
   }
   catch (std::runtime_error const& e)
   {
-    // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
-    // also catching core doesn't have project with uuid error
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    // mainly catching "invalid uuid string" when transforming uuid_project from
+    // string to uuid also catching core doesn't have project with uuid error
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+        << e.what();
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
   }
   catch (const std::exception& e)
   {
     // specific handling for all exceptions extending std::exception, except
     // std::runtime_error which is handled explicitly
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+        << e.what();
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
   }
   catch (...)
@@ -89,9 +99,10 @@ grpc::Status FbImageService::GetImage(grpc::ServerContext* context,
   return grpc::Status::OK;
 }
 
-grpc::Status FbImageService::TransferImage(grpc::ServerContext* context,
-                                           grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::Image>>* reader,
-                                           flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response)
+grpc::Status FbImageService::TransferImage(
+    grpc::ServerContext* context,
+    grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::Image>>* reader,
+    flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response)
 {
   (void)context;  // ignore that variable without causing warnings
   std::string answer = "everything stored!";
@@ -102,7 +113,8 @@ grpc::Status FbImageService::TransferImage(grpc::ServerContext* context,
   // add incoming image data to hdf5
   while (reader->Read(&imageMsg))
   {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "received image... ";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
+        << "received image... ";
     auto image = imageMsg.GetRoot();
     std::string uuidProject = image->header()->uuid_project()->str();
 
@@ -110,30 +122,41 @@ grpc::Status FbImageService::TransferImage(grpc::ServerContext* context,
     {
       try
       {
-        projectImgUuids.push_back({ uuidProject, imageFb->addDataToHdf5(*image) });
+        projectImgUuids.push_back(
+            { uuidProject, imageFb->addDataToHdf5(*image) });
       }
       catch (std::runtime_error const& e)
       {
-        // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
-        // also catching core doesn't have project with uuid error
-        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
-        seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+        // mainly catching "invalid uuid string" when transforming uuid_project
+        // from string to uuid also catching core doesn't have project with uuid
+        // error
+        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+            << e.what();
+        seerep_server_util::createResponseFb(
+            std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE,
+            response);
         return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
       }
       catch (const std::exception& e)
       {
         // specific handling for all exceptions extending std::exception, except
         // std::runtime_error which is handled explicitly
-        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
-        seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+            << e.what();
+        seerep_server_util::createResponseFb(
+            std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE,
+            response);
         return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
       }
       catch (...)
       {
         // catch any other errors (that we have no information about)
-        std::string msg = "Unknown failure occurred. Possible memory corruption";
-        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
-        seerep_server_util::createResponseFb(msg, seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+        std::string msg =
+            "Unknown failure occurred. Possible memory corruption";
+        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+            << msg;
+        seerep_server_util::createResponseFb(
+            msg, seerep::fb::TRANSMISSION_STATE_FAILURE, response);
         return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
       }
     }
@@ -150,36 +173,45 @@ grpc::Status FbImageService::TransferImage(grpc::ServerContext* context,
   }
   catch (std::runtime_error const& e)
   {
-    // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
-    // also catching core doesn't have project with uuid error
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
-    seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+    // mainly catching "invalid uuid string" when transforming uuid_project from
+    // string to uuid also catching core doesn't have project with uuid error
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+        << e.what();
+    seerep_server_util::createResponseFb(std::string(e.what()),
+                                         seerep::fb::TRANSMISSION_STATE_FAILURE,
+                                         response);
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
   }
   catch (const std::exception& e)
   {
     // specific handling for all exceptions extending std::exception, except
     // std::runtime_error which is handled explicitly
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
-    seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+        << e.what();
+    seerep_server_util::createResponseFb(std::string(e.what()),
+                                         seerep::fb::TRANSMISSION_STATE_FAILURE,
+                                         response);
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
   }
   catch (...)
   {
     std::string msg = "Unknown failure occurred. Possible memory corruption";
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
-    seerep_server_util::createResponseFb(msg, seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+    seerep_server_util::createResponseFb(
+        msg, seerep::fb::TRANSMISSION_STATE_FAILURE, response);
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
   }
-  seerep_server_util::createResponseFb(answer, seerep::fb::TRANSMISSION_STATE_SUCCESS, response);
+  seerep_server_util::createResponseFb(
+      answer, seerep::fb::TRANSMISSION_STATE_SUCCESS, response);
 
   return grpc::Status::OK;
 }
 
-grpc::Status
-FbImageService::AddLabels(grpc::ServerContext* context,
-                          grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::DatasetUuidLabel>>* reader,
-                          flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response)
+grpc::Status FbImageService::AddLabels(
+    grpc::ServerContext* context,
+    grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::DatasetUuidLabel>>*
+        reader,
+    flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response)
 {
   (void)context;  // ignore that variable without causing warnings
   std::string answer = "everything stored!";
@@ -187,7 +219,8 @@ FbImageService::AddLabels(grpc::ServerContext* context,
   flatbuffers::grpc::Message<seerep::fb::DatasetUuidLabel> labelMsg;
   while (reader->Read(&labelMsg))
   {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "received label...";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
+        << "received label...";
     auto label = labelMsg.GetRoot();
 
     if (label->projectUuid()->str().empty())
@@ -208,34 +241,44 @@ FbImageService::AddLabels(grpc::ServerContext* context,
         }
         catch (std::runtime_error const& e)
         {
-          // mainly catching "invalid uuid string" when transforming uuid_project from string to uuid
-          // also catching core doesn't have project with uuid error
-          BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+          // mainly catching "invalid uuid string" when transforming uuid_project
+          // from string to uuid also catching core doesn't have project with uuid error
+          BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+              << e.what();
 
-          seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+          seerep_server_util::createResponseFb(
+              std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE,
+              response);
 
           return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
         }
         catch (const std::exception& e)
         {
-          // specific handling for all exceptions extending std::exception, except
-          // std::runtime_error which is handled explicitly
-          BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
-          seerep_server_util::createResponseFb(std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+          // specific handling for all exceptions extending std::exception,
+          // except std::runtime_error which is handled explicitly
+          BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+              << e.what();
+          seerep_server_util::createResponseFb(
+              std::string(e.what()), seerep::fb::TRANSMISSION_STATE_FAILURE,
+              response);
           return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
         }
         catch (...)
         {
           // catch any other errors (that we have no information about)
-          std::string msg = "Unknown failure occurred. Possible memory corruption";
-          BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
-          seerep_server_util::createResponseFb(msg, seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+          std::string msg =
+              "Unknown failure occurred. Possible memory corruption";
+          BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+              << msg;
+          seerep_server_util::createResponseFb(
+              msg, seerep::fb::TRANSMISSION_STATE_FAILURE, response);
           return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
         }
       }
     }
   }
-  seerep_server_util::createResponseFb(answer, seerep::fb::TRANSMISSION_STATE_SUCCESS, response);
+  seerep_server_util::createResponseFb(
+      answer, seerep::fb::TRANSMISSION_STATE_SUCCESS, response);
 
   return grpc::Status::OK;
 }

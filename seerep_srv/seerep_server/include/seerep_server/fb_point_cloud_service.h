@@ -15,8 +15,9 @@
 namespace seerep_server
 {
 /**
- * @brief Class which implements the flatbuffers PointCloudService defined in seerep-com.
- *        Main task is to forward the calls to the core-fb specific write and read functions.
+ * @brief Class which implements the flatbuffers PointCloudService defined in
+ * seerep-com. Main task is to forward the calls to the core-fb specific write
+ * and read functions.
  *
  */
 class FbPointCloudService final : public seerep::fb::PointCloudService::Service
@@ -36,9 +37,11 @@ public:
    * @param writer  writer object used to stream the point clouds
    * @return grpc::Status status of the request. Did it work?
    */
-  grpc::Status GetPointCloud2(grpc::ServerContext* context,
-                              const flatbuffers::grpc::Message<seerep::fb::Query>* request,
-                              grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::PointCloud2>>* writer) override;
+  grpc::Status GetPointCloud2(
+      grpc::ServerContext* context,
+      const flatbuffers::grpc::Message<seerep::fb::Query>* request,
+      grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::PointCloud2>>*
+          writer) override;
   /**
    * @brief Save point clouds from the incoming gRPC stream on the server
    *
@@ -47,26 +50,32 @@ public:
    * @param response gRPC message to describe the transmission state of the point clouds
    * @return grpc::Status status of the request. Did it work?
    */
-  grpc::Status TransferPointCloud2(grpc::ServerContext* context,
-                                   grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::PointCloud2>>* reader,
-                                   flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response) override;
+  grpc::Status TransferPointCloud2(
+      grpc::ServerContext* context,
+      grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::PointCloud2>>*
+          reader,
+      flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response) override;
   /**
    * @brief Adds a stream of labels to already stored point clouds
    *
    * @param context custom inital and trailing metadata (currently not used)
    * @param reader incoming message stream of labels from the client
-   * @param response gRPC message to describe the transmission state of the bounding boxes
+   * @param response gRPC message to describe the transmission state of the
+   * bounding boxes
    * @return grpc::Status status of the request. Did it work?
    */
-  grpc::Status AddLabels(grpc::ServerContext* context,
-                         grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::DatasetUuidLabel>>* reader,
-                         flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response) override;
+  grpc::Status AddLabels(
+      grpc::ServerContext* context,
+      grpc::ServerReader<
+          flatbuffers::grpc::Message<seerep::fb::DatasetUuidLabel>>* reader,
+      flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response) override;
 
 private:
   /** @brief a shared pointer to the general core */
   std::shared_ptr<seerep_core_fb::CoreFbPointCloud> pointCloudFb;
   /** @brief the logger for the logging framework */
-  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level>
+      m_logger;
 };
 } /* namespace seerep_server */
 

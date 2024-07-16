@@ -21,20 +21,26 @@ def server_config() -> Generator[dict, None, None]:
     yield setup_util.get_server_config(SERVER_TEST_CONFIG_PATH)
 
 
-# TODO: Compile server executable if not present? Make sure it has been build in Release mode?
+# TODO: Compile server executable if not present? Make sure it has been build in
+# Release mode?
 @pytest.fixture(scope="session")
 def grpc_channel(server_config: dict) -> Generator[Channel, None, None]:
     # find the server executable
     server_exe_path = shutil.which(SERVER_EXECUTABLE_NAME)
     if not server_exe_path:
-        raise FileNotFoundError(f"Server executable '{SERVER_EXECUTABLE_NAME}' not found")
+        raise FileNotFoundError(
+            f"Server executable '{SERVER_EXECUTABLE_NAME}' not found"
+        )
 
     # remove any leftover files from previous tests
     setup_util.remove_hdf5_files(server_config["data-folder"])
     setup_util.remove_log_files(server_config["log-path"])
 
     # start server in the background
-    server_process = subprocess.Popen([server_exe_path, f"-c{SERVER_TEST_CONFIG_PATH}"], stdout=subprocess.DEVNULL)
+    server_process = subprocess.Popen(
+        [server_exe_path, f"-c{SERVER_TEST_CONFIG_PATH}"],
+        stdout=subprocess.DEVNULL,
+    )
 
     if not server_process:
         raise RuntimeError("Failed to start SEEREP")
@@ -55,4 +61,6 @@ def project_setup(grpc_channel) -> Generator[Tuple[str, str], None, None]:
 
     yield project_name, project_uuid
 
-    fb_helper.deleteProject(grpc_channel, flatbuffers.Builder(), project_name, project_uuid)
+    fb_helper.deleteProject(
+        grpc_channel, flatbuffers.Builder(), project_name, project_uuid
+    )

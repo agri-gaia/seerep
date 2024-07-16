@@ -22,13 +22,17 @@ namespace seerep_hdf5_pb
 class Hdf5PbPointCloud : public Hdf5PbGeneral
 {
 public:
-  Hdf5PbPointCloud(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
+  Hdf5PbPointCloud(std::shared_ptr<HighFive::File>& file,
+                   std::shared_ptr<std::mutex>& write_mtx);
 
   std::map<std::string, HighFive::Group> getPointClouds();
 
-  std::shared_ptr<HighFive::Group> writePointCloud2(const std::string& uuid, const seerep::pb::PointCloud2& pointcloud2);
+  std::shared_ptr<HighFive::Group>
+  writePointCloud2(const std::string& uuid,
+                   const seerep::pb::PointCloud2& pointcloud2);
 
-  std::optional<seerep::pb::PointCloud2> readPointCloud2(const std::string& uuid);
+  std::optional<seerep::pb::PointCloud2>
+  readPointCloud2(const std::string& uuid);
 
   std::vector<float> loadBoundingBox(const std::string& uuid);
 
@@ -43,10 +47,12 @@ private:
   };
 
   template <typename T>
-  void read(const std::string cloud_uuid, const std::string& field_name, seerep::pb::PointCloud2& cloud, size_t size)
+  void read(const std::string cloud_uuid, const std::string& field_name,
+            seerep::pb::PointCloud2& cloud, size_t size)
   {
     const std::string id =
-        seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + cloud_uuid + "/" + field_name;
+        seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" +
+        cloud_uuid + "/" + field_name;
     PointCloud2Iterator<T> iter(cloud, field_name);
     HighFive::DataSet dataset = m_file->getDataSet(id);
     std::vector<T> data;
@@ -61,17 +67,19 @@ private:
   }
 
   template <typename T>
-  void write(const std::string cloud_uuid, const std::string& field_name, const seerep::pb::PointCloud2& cloud,
-             size_t size)
+  void write(const std::string cloud_uuid, const std::string& field_name,
+             const seerep::pb::PointCloud2& cloud, size_t size)
   {
     const std::string id =
-        seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" + cloud_uuid + "/" + field_name;
+        seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD + "/" +
+        cloud_uuid + "/" + field_name;
     HighFive::DataSpace data_space(size);
 
     std::shared_ptr<HighFive::DataSet> dataset_ptr;
     if (!m_file->exist(id))
     {
-      dataset_ptr = std::make_shared<HighFive::DataSet>(m_file->createDataSet<T>(id, data_space));
+      dataset_ptr = std::make_shared<HighFive::DataSet>(
+          m_file->createDataSet<T>(id, data_space));
     }
     else
     {
@@ -93,17 +101,24 @@ private:
 
   CloudInfo getCloudInfo(const seerep::pb::PointCloud2& cloud);
 
-  void writePoints(HighFive::Group& cloud_groups, const std::string& uuid, const seerep::pb::PointCloud2& cloud);
+  void writePoints(HighFive::Group& cloud_groups, const std::string& uuid,
+                   const seerep::pb::PointCloud2& cloud);
 
-  void writeColorsRGB(const std::string& uuid, const seerep::pb::PointCloud2& cloud);
+  void writeColorsRGB(const std::string& uuid,
+                      const seerep::pb::PointCloud2& cloud);
 
-  void writeColorsRGBA(const std::string& uuid, const seerep::pb::PointCloud2& cloud);
+  void writeColorsRGBA(const std::string& uuid,
+                       const seerep::pb::PointCloud2& cloud);
 
-  void writeOtherFields(const std::string& uuid, const seerep::pb::PointCloud2& cloud,
-                        const std::map<std::string, seerep::pb::PointField>& fields);
+  void
+  writeOtherFields(const std::string& uuid,
+                   const seerep::pb::PointCloud2& cloud,
+                   const std::map<std::string, seerep::pb::PointField>& fields);
 
-  void writePointFieldAttributes(HighFive::Group& cloud_group,
-                                 const google::protobuf::RepeatedPtrField<seerep::pb::PointField> repeatedPointField);
+  void writePointFieldAttributes(
+      HighFive::Group& cloud_group,
+      const google::protobuf::RepeatedPtrField<seerep::pb::PointField>
+          repeatedPointField);
 
   void readPoints(const std::string& uuid, seerep::pb::PointCloud2& cloud);
 
@@ -111,10 +126,12 @@ private:
 
   void readColorsRGBA(const std::string& uuid, seerep::pb::PointCloud2& cloud);
 
-  void readOtherFields(const std::string& uuid, seerep::pb::PointCloud2& cloud,
-                       const std::map<std::string, seerep::pb::PointField>& fields);
+  void
+  readOtherFields(const std::string& uuid, seerep::pb::PointCloud2& cloud,
+                  const std::map<std::string, seerep::pb::PointField>& fields);
 
-  google::protobuf::RepeatedPtrField<seerep::pb::PointField> readPointFieldAttributes(HighFive::Group& cloud_group);
+  google::protobuf::RepeatedPtrField<seerep::pb::PointField>
+  readPointFieldAttributes(HighFive::Group& cloud_group);
 };
 } /* namespace seerep_hdf5_pb */
 

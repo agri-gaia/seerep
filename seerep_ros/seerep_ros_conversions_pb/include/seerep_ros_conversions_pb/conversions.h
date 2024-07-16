@@ -61,7 +61,8 @@ sensor_msgs::PointField toROS(const seerep::pb::PointField& point_field);
  * @param optional projectuuid std::string
  * @return Protobuf PointCloud2 message
  */
-seerep::pb::PointCloud2 toProto(const sensor_msgs::PointCloud2& cloud, std::string projectuuid = "");
+seerep::pb::PointCloud2 toProto(const sensor_msgs::PointCloud2& cloud,
+                                std::string projectuuid = "");
 
 /**
  * @brief Converts a Protobuf PointCloud2 message to the corresponding
@@ -78,7 +79,8 @@ sensor_msgs::PointCloud2 toROS(const seerep::pb::PointCloud2& cloud);
  * @param optional projectuuid std::string
  * @return Protobuf Image message
  */
-seerep::pb::Image toProto(const sensor_msgs::Image& image, std::string projectuuid = "");
+seerep::pb::Image toProto(const sensor_msgs::Image& image,
+                          std::string projectuuid = "");
 
 /**
  * @brief Converts a Protobuf Image message to the corresponding
@@ -153,14 +155,15 @@ seerep::pb::Transform toProto(const geometry_msgs::Transform& transform);
 geometry_msgs::Transform toROS(const seerep::pb::Transform& transform);
 
 /**
- * @brief Converts a ROS geometry_msgs::TransformStamped message to the corresponding
- * Protobuf TransformStamped message
+ * @brief Converts a ROS geometry_msgs::TransformStamped message to the
+ * corresponding Protobuf TransformStamped message
  * @param transform geometry_msgs::TransformStamped
  * @param optional projectuuid std::string
  * @return Protobuf TransformStamped message
  */
-seerep::pb::TransformStamped toProto(const geometry_msgs::TransformStamped& transform, const bool isStatic,
-                                     std::string projectuuid = "");
+seerep::pb::TransformStamped
+toProto(const geometry_msgs::TransformStamped& transform, const bool isStatic,
+        std::string projectuuid = "");
 
 /**
  * @brief Converts a Protobuf TransformStamped message to the corresponding
@@ -168,7 +171,8 @@ seerep::pb::TransformStamped toProto(const geometry_msgs::TransformStamped& tran
  * @param transform Protobuf TransformStamped
  * @return ROS geometry_msgs::TransformStamped
  */
-geometry_msgs::TransformStamped toROS(const seerep::pb::TransformStamped& transform);
+geometry_msgs::TransformStamped
+toROS(const seerep::pb::TransformStamped& transform);
 } /* namespace seerep_ros_conversions_pb */
 
 #endif /* SEEREP_ROS_CONVERSIONS_PB */

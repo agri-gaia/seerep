@@ -4,9 +4,11 @@ namespace seerep_hdf5_fb
 template <typename T>
 void Hdf5FbPointCloud::writePointFieldAttributes(
     HighFive::AnnotateTraits<T>& object,
-    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::PointField>>* pointFields)
+    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::PointField>>*
+        pointFields)
 {
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "writing point field attributes to hdf5";
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
+      << "writing point field attributes to hdf5";
 
   if (pointFields)
   {
@@ -22,10 +24,14 @@ void Hdf5FbPointCloud::writePointFieldAttributes(
       counts.push_back(pointField->count());
     }
 
-    writeAttributeToHdf5<std::vector<std::string>>(object, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_NAME, names);
-    writeAttributeToHdf5<std::vector<uint32_t>>(object, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_OFFSET, offsets);
-    writeAttributeToHdf5<std::vector<uint8_t>>(object, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_DATATYPE, datatypes);
-    writeAttributeToHdf5<std::vector<uint32_t>>(object, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_COUNT, counts);
+    writeAttributeToHdf5<std::vector<std::string>>(
+        object, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_NAME, names);
+    writeAttributeToHdf5<std::vector<uint32_t>>(
+        object, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_OFFSET, offsets);
+    writeAttributeToHdf5<std::vector<uint8_t>>(
+        object, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_DATATYPE, datatypes);
+    writeAttributeToHdf5<std::vector<uint32_t>>(
+        object, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_COUNT, counts);
   }
 }
 

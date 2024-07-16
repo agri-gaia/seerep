@@ -25,14 +25,17 @@ def add_camintrins_raw(
     grpc_channel: Channel = get_gRPC_channel(),
 ) -> Optional[bytearray]:
     """
-    Creates a example cameraintrinsics object and sends it to a SEEREP server instance.
+    Creates a example cameraintrinsics object and sends it to a SEEREP server
+    instance.
 
     Args:
         ciuuid: the uuid of the CameraIntrinsics object to be send
-        target_proj_uuid: the project uuid to which project to send the CameraIntrinsics object to
-        grpc_channel: the grpc channel to a SEEREP server
+        target_proj_uuid: the project uuid to which project to send the
+        CameraIntrinsics object to grpc_channel: the grpc channel to a SEEREP
+        server
 
-    Returns: bytearray which contains the serialized type seerep.fb.CameraInstrinsics.CameraIntrinsics
+    Returns: bytearray which contains the serialized type
+    seerep.fb.CameraInstrinsics.CameraIntrinsics
     """
     if ciuuid is None:
         ciuuid = str(uuid.uuid4())
@@ -51,7 +54,11 @@ def add_camintrins_raw(
                 target_proj_uuid = project.uuid
 
         if target_proj_uuid is None:
-            response = stubMeta.CreateProject(projectCreation_pb2.ProjectCreation(name="testproject", mapFrameId="map"))
+            response = stubMeta.CreateProject(
+                projectCreation_pb2.ProjectCreation(
+                    name="testproject", mapFrameId="map"
+                )
+            )
             target_proj_uuid = response.uuid
 
     # 2. Check if the defined project exist; if not return None
@@ -73,7 +80,19 @@ def add_camintrins_raw(
     proj_matrix = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
     ci = createCameraIntrinsics(
-        builder, header, 3, 4, "plumb_bob", distortion_matrix, intrins_matrix, rect_matrix, proj_matrix, 4, 5, roi, 5
+        builder,
+        header,
+        3,
+        4,
+        "plumb_bob",
+        distortion_matrix,
+        intrins_matrix,
+        rect_matrix,
+        proj_matrix,
+        4,
+        5,
+        roi,
+        5,
     )
     builder.Finish(ci)
 
@@ -88,7 +107,9 @@ def add_camintrins(
     target_proj_uuid: Optional[str] = None,
     grpc_channel: Channel = get_gRPC_channel(),
 ) -> Optional[CameraIntrinsics.CameraIntrinsics]:
-    return CameraIntrinsics.CameraIntrinsics.GetRootAs(add_camintrins_raw(ciuuid, target_proj_uuid, grpc_channel))
+    return CameraIntrinsics.CameraIntrinsics.GetRootAs(
+        add_camintrins_raw(ciuuid, target_proj_uuid, grpc_channel)
+    )
 
 
 if __name__ == "__main__":
@@ -96,8 +117,12 @@ if __name__ == "__main__":
     # for verification print the uuid of the added camera intrinsics
     print(
         f"camera instrinsics were saved with the uuid \
-        {caminstrins_obj.Header().UuidMsgs().decode('utf-8')} on the project with the uuid \
+        {caminstrins_obj.Header().UuidMsgs().decode('utf-8')} on the project \
+        with the uuid \
         {caminstrins_obj.Header().UuidProject().decode('utf-8')}"
     )
     # and the contents of the distortion array
-    print(f"camera instrinsics distortion matrix: {caminstrins_obj.DistortionAsNumpy()}")
+    print(
+        f"camera instrinsics distortion matrix: "
+        f"{caminstrins_obj.DistortionAsNumpy()}"
+    )

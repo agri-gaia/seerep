@@ -28,7 +28,8 @@
 namespace seerep_core_fb
 {
 /**
- * @brief This class is the center piece between the gRPC interface, the core and the hdf5-io for instances
+ * @brief This class is the center piece between the gRPC interface, the core
+ * and the hdf5-io for instances
  */
 class CoreFbInstance
 {
@@ -43,16 +44,19 @@ public:
   /**
    * @brief Function to instances images
    * @param request the flatbuffer query
-   * @param response the gRPC flatbuffer message containing the uuids of the instances per project
+   * @param response the gRPC flatbuffer message containing the uuids of the
+   * instances per project
    */
-  void getInstances(const flatbuffers::grpc::Message<seerep::fb::QueryInstance>* request,
-                    flatbuffers::grpc::Message<seerep::fb::UuidsPerProject>* response);
+  void getInstances(
+      const flatbuffers::grpc::Message<seerep::fb::QueryInstance>* request,
+      flatbuffers::grpc::Message<seerep::fb::UuidsPerProject>* response);
 
 private:
   /** @brief a shared pointer to the general core */
   std::shared_ptr<seerep_core::Core> m_seerepCore;
   /** @brief object handling the logging */
-  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level>
+      m_logger;
 };
 
 }  // namespace seerep_core_fb

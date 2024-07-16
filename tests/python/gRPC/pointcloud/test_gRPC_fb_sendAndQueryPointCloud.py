@@ -20,7 +20,10 @@ def test_sendAndQueryPCs(grpc_channel, project_setup):
     )
 
     queried_pcs = sorted(
-        [fb_flatc_dict(pcl, SchemaFileNames.POINT_CLOUD_2) for pcl in query_pc.query_pcs_raw(proj_uuid, grpc_channel)],
+        [
+            fb_flatc_dict(pcl, SchemaFileNames.POINT_CLOUD_2)
+            for pcl in query_pc.query_pcs_raw(proj_uuid, grpc_channel)
+        ],
         key=lambda pc: pc["header"]["uuid_msgs"],
     )
 

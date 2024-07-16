@@ -3,7 +3,10 @@
 import cv2
 import numpy as np
 
-root = ["/seerep/seerep-data/simulatedData/lighting_01/", "/seerep/seerep-data/simulatedData/lighting_02/"]
+root = [
+    "/seerep/seerep-data/simulatedData/lighting_01/",
+    "/seerep/seerep-data/simulatedData/lighting_02/",
+]
 
 labelSwitch = {
     1.0: "corn",
@@ -18,7 +21,9 @@ color = (255, 255, 255)
 for folderIndex in range(2):
     imagePath = root[folderIndex] + "camera_main_camera/rect/"
     outputPath = root[folderIndex] + "camera_main_camera/withAnnotation/"
-    annotationPath = root[folderIndex] + "camera_main_camera_annotations/bounding_box/"
+    annotationPath = (
+        root[folderIndex] + "camera_main_camera_annotations/bounding_box/"
+    )
 
     for i in range(16):
         baseFilePath = imagePath + str(i).zfill(4)
@@ -62,6 +67,8 @@ for folderIndex in range(2):
             if y < 0:
                 y = ymax + 24
 
-            cv2.putText(imageData, label, (xmin, y), 0, 1e-3 * imgHeight, color, thick)
+            cv2.putText(
+                imageData, label, (xmin, y), 0, 1e-3 * imgHeight, color, thick
+            )
 
         cv2.imwrite(baseOutputPath + ".png", imageData)

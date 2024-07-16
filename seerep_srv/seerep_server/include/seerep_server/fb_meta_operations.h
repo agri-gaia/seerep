@@ -16,32 +16,44 @@ class FbMetaOperations final : public seerep::fb::MetaOperations::Service
 public:
   FbMetaOperations(std::shared_ptr<seerep_core::Core> seerepCore);
 
-  grpc::Status CreateProject(grpc::ServerContext* context,
-                             const flatbuffers::grpc::Message<seerep::fb::ProjectCreation>* request,
-                             flatbuffers::grpc::Message<seerep::fb::ProjectInfo>* response) override;
-  grpc::Status GetProjects(grpc::ServerContext* context, const flatbuffers::grpc::Message<seerep::fb::Empty>* request,
-                           flatbuffers::grpc::Message<seerep::fb::ProjectInfos>* response) override;
-  grpc::Status LoadProjects(grpc::ServerContext* context, const flatbuffers::grpc::Message<seerep::fb::Empty>* request,
-                            flatbuffers::grpc::Message<seerep::fb::ProjectInfos>* response) override;
-  grpc::Status DeleteProject(grpc::ServerContext* context,
-                             const flatbuffers::grpc::Message<seerep::fb::ProjectInfo>* request,
-                             flatbuffers::grpc::Message<seerep::fb::Empty>* response) override;
-  grpc::Status GetOverallTimeInterval(grpc::ServerContext* context,
-                                      const flatbuffers::grpc::Message<seerep::fb::UuidDatatypePair>* request,
-                                      flatbuffers::grpc::Message<seerep::fb::TimeInterval>* response) override;
-  grpc::Status GetOverallBoundingBox(grpc::ServerContext* context,
-                                     const flatbuffers::grpc::Message<seerep::fb::UuidDatatypePair>* request,
-                                     flatbuffers::grpc::Message<seerep::fb::Boundingbox>* response) override;
-  grpc::Status GetAllCategories(grpc::ServerContext* context,
-                                const flatbuffers::grpc::Message<seerep::fb::UuidDatatypePair>* request,
-                                flatbuffers::grpc::Message<seerep::fb::StringVector>* response) override;
-  grpc::Status GetAllLabels(grpc::ServerContext* context,
-                            const flatbuffers::grpc::Message<seerep::fb::UuidDatatypeWithCategory>* request,
-                            flatbuffers::grpc::Message<seerep::fb::StringVector>* response) override;
+  grpc::Status CreateProject(
+      grpc::ServerContext* context,
+      const flatbuffers::grpc::Message<seerep::fb::ProjectCreation>* request,
+      flatbuffers::grpc::Message<seerep::fb::ProjectInfo>* response) override;
+  grpc::Status GetProjects(
+      grpc::ServerContext* context,
+      const flatbuffers::grpc::Message<seerep::fb::Empty>* request,
+      flatbuffers::grpc::Message<seerep::fb::ProjectInfos>* response) override;
+  grpc::Status LoadProjects(
+      grpc::ServerContext* context,
+      const flatbuffers::grpc::Message<seerep::fb::Empty>* request,
+      flatbuffers::grpc::Message<seerep::fb::ProjectInfos>* response) override;
+  grpc::Status DeleteProject(
+      grpc::ServerContext* context,
+      const flatbuffers::grpc::Message<seerep::fb::ProjectInfo>* request,
+      flatbuffers::grpc::Message<seerep::fb::Empty>* response) override;
+  grpc::Status GetOverallTimeInterval(
+      grpc::ServerContext* context,
+      const flatbuffers::grpc::Message<seerep::fb::UuidDatatypePair>* request,
+      flatbuffers::grpc::Message<seerep::fb::TimeInterval>* response) override;
+  grpc::Status GetOverallBoundingBox(
+      grpc::ServerContext* context,
+      const flatbuffers::grpc::Message<seerep::fb::UuidDatatypePair>* request,
+      flatbuffers::grpc::Message<seerep::fb::Boundingbox>* response) override;
+  grpc::Status GetAllCategories(
+      grpc::ServerContext* context,
+      const flatbuffers::grpc::Message<seerep::fb::UuidDatatypePair>* request,
+      flatbuffers::grpc::Message<seerep::fb::StringVector>* response) override;
+  grpc::Status GetAllLabels(
+      grpc::ServerContext* context,
+      const flatbuffers::grpc::Message<seerep::fb::UuidDatatypeWithCategory>*
+          request,
+      flatbuffers::grpc::Message<seerep::fb::StringVector>* response) override;
 
 private:
   std::shared_ptr<seerep_core::Core> seerepCore;
-  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level>
+      m_logger;
 };
 
 } /* namespace seerep_server */

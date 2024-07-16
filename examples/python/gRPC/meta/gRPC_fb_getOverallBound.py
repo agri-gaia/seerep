@@ -39,13 +39,21 @@ def get_metadata(
 
         response = ProjectInfos.ProjectInfos.GetRootAs(response_buf)
         for p_idx in range(response.ProjectsLength()):
-            if response.Projects(p_idx).Name().decode() == "LabeledImagesInGrid":
+            if (
+                response.Projects(p_idx).Name().decode()
+                == "LabeledImagesInGrid"
+            ):
                 target_project_uuid = response.Projects(p_idx).Uuid().decode()
         if target_project_uuid is None:
-            print("No test project found, create a project with 'gRPC_pb_sendLabeledImageGrid.py' beforehand!")
+            print("""
+                No test project found, create a project with
+                'gRPC_pb_sendLabeledImageGrid.py' beforehand!
+            """)
             sys.exit()
 
-    uuid_datatype_pair = fb_helper.createUuidDatatypePair(builder, target_project_uuid, Datatype.Datatype().All)
+    uuid_datatype_pair = fb_helper.createUuidDatatypePair(
+        builder, target_project_uuid, Datatype.Datatype().All
+    )
 
     builder.Finish(uuid_datatype_pair)
     buf = builder.Output()
@@ -149,14 +157,21 @@ if __name__ == "__main__":
     ) = get_metadata()
     print(
         f"""the overall time intervall response over all images is:
-          Min: {resp_overall_time_intervall[0][0]} secs, {resp_overall_time_intervall[0][1]} nanos
-          Max: {resp_overall_time_intervall[1][0]} secs, {resp_overall_time_intervall[1][1]} nanos\n
+          Min: {resp_overall_time_intervall[0][0]} secs,
+          {resp_overall_time_intervall[0][1]} nanos
+          Max: {resp_overall_time_intervall[1][0]} secs,
+          {resp_overall_time_intervall[1][1]} nanos\n
           """
     )
     print(
         f"""the overall bounding box response over all images is:
-          CenterPoint (X, Y, Z): ({resp_overall_bb[0][0]}, {resp_overall_bb[0][1]}, {resp_overall_bb[0][2]})
-          SpatialExtent (X, Y, Z): ({resp_overall_bb[1][0]}, {resp_overall_bb[1][1]}, {resp_overall_bb[1][2]})\n"""
+          CenterPoint (X, Y, Z): ({resp_overall_bb[0][0]},
+          {resp_overall_bb[0][1]}, {resp_overall_bb[0][2]})
+          SpatialExtent (X, Y, Z): ({resp_overall_bb[1][0]},
+          {resp_overall_bb[1][1]}, {resp_overall_bb[1][2]})\n"""
     )
-    print(f"the all categories response over all images is:\n{resp_all_categories}\n")
+    print(
+        f"the all categories response over all images is "
+        f"\n{resp_all_categories}\n"
+    )
     print(f"the all labels response over all images is:\n{resp_all_labels}")

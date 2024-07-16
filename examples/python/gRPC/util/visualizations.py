@@ -80,8 +80,9 @@ def display_instances(
         scores: (optional) confidence scores for each box
         title: (optional) Figure title
         figsize: (optional) the size of the image
-        colors: (optional) An array or colors to use with each object
-        captions: (optional) A list of strings to use as captions for each object
+        colors: (optional) An array or colors to use with each object captions:
+        (optional) A list of strings to use as captions for each
+        object
     """
     if rotate:
         image = np.rot90(np.rot90(image))
@@ -126,7 +127,14 @@ def display_instances(
             continue
         y1, x1, y2, x2 = boxes[i]
         p = patches.Rectangle(
-            (x1, y1), x2 - x1, y2 - y1, linewidth=5, alpha=0.9, linestyle="dashed", edgecolor=color, facecolor="none"
+            (x1, y1),
+            x2 - x1,
+            y2 - y1,
+            linewidth=5,
+            alpha=0.9,
+            linestyle="dashed",
+            edgecolor=color,
+            facecolor="none",
         )
         ax.add_patch(p)
 
@@ -138,7 +146,15 @@ def display_instances(
             caption = "{} {:.3f}".format(label, score) if score else label
         else:
             caption = captions[i]
-        ax.text(x1 + 1, y1 + 13, caption, color="k", size=25, backgroundcolor=color, alpha=0.7)
+        ax.text(
+            x1 + 1,
+            y1 + 13,
+            caption,
+            color="k",
+            size=25,
+            backgroundcolor=color,
+            alpha=0.7,
+        )
 
     plot = ax.imshow(masked_image.astype(np.uint8))
 

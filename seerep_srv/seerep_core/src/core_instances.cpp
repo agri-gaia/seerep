@@ -2,7 +2,9 @@
 
 namespace seerep_core
 {
-CoreInstances::CoreInstances(std::shared_ptr<seerep_hdf5_core::Hdf5CoreInstance> hdf5_io) : m_hdf5_io(hdf5_io)
+CoreInstances::CoreInstances(
+    std::shared_ptr<seerep_hdf5_core::Hdf5CoreInstance> hdf5_io)
+  : m_hdf5_io(hdf5_io)
 {
   recreateInstances();
 }
@@ -10,24 +12,29 @@ CoreInstances::~CoreInstances()
 {
 }
 
-std::shared_ptr<seerep_core::CoreInstance> CoreInstances::createNewInstance(const std::string& label)
+std::shared_ptr<seerep_core::CoreInstance>
+CoreInstances::createNewInstance(const std::string& label)
 {
-  return createNewInstance(seerep_core_msgs::Label{ .label = label,
-                                                    .labelIdDatumaro = 0,
-                                                    .uuidInstance = boost::uuids::random_generator()(),
-                                                    .instanceIdDatumaro = 0 });
+  return createNewInstance(seerep_core_msgs::Label{
+      .label = label,
+      .labelIdDatumaro = 0,
+      .uuidInstance = boost::uuids::random_generator()(),
+      .instanceIdDatumaro = 0 });
 }
-std::shared_ptr<seerep_core::CoreInstance> CoreInstances::createNewInstance(const seerep_core_msgs::Label& label)
+std::shared_ptr<seerep_core::CoreInstance>
+CoreInstances::createNewInstance(const seerep_core_msgs::Label& label)
 {
-  auto instance = std::make_shared<seerep_core::CoreInstance>(seerep_core::CoreInstance(m_hdf5_io, label.uuidInstance));
+  auto instance = std::make_shared<seerep_core::CoreInstance>(
+      seerep_core::CoreInstance(m_hdf5_io, label.uuidInstance));
 
   instance->writeAttribute(CoreInstances::ATTRIBUTELABEL, label.label);
   m_instances.emplace(label.uuidInstance, instance);
   return instance;
 }
 
-std::optional<std::string> CoreInstances::getAttribute(const boost::uuids::uuid& uuidInstance,
-                                                       const std::string& key) const
+std::optional<std::string>
+CoreInstances::getAttribute(const boost::uuids::uuid& uuidInstance,
+                            const std::string& key) const
 {
   auto instance = m_instances.find(uuidInstance);
 
@@ -40,7 +47,8 @@ std::optional<std::string> CoreInstances::getAttribute(const boost::uuids::uuid&
     return std::nullopt;
   }
 }
-void CoreInstances::writeAttribute(const boost::uuids::uuid& uuidInstance, const std::string& key,
+void CoreInstances::writeAttribute(const boost::uuids::uuid& uuidInstance,
+                                   const std::string& key,
                                    const std::string& value)
 {
   auto instance = m_instances.find(uuidInstance);
@@ -51,12 +59,14 @@ void CoreInstances::writeAttribute(const boost::uuids::uuid& uuidInstance, const
   }
   else
   {
-    throw std::runtime_error("there is no instance with id " + boost::lexical_cast<std::string>(uuidInstance));
+    throw std::runtime_error("there is no instance with id " +
+                             boost::lexical_cast<std::string>(uuidInstance));
   }
 }
 
-std::vector<boost::uuids::uuid> CoreInstances::getDatasets(const std::vector<boost::uuids::uuid>& instanceIds,
-                                                           const seerep_core_msgs::Datatype& datatype) const
+std::vector<boost::uuids::uuid>
+CoreInstances::getDatasets(const std::vector<boost::uuids::uuid>& instanceIds,
+                           const seerep_core_msgs::Datatype& datatype) const
 {
   std::vector<boost::uuids::uuid> imagesAll;
 
@@ -73,7 +83,8 @@ std::vector<boost::uuids::uuid> CoreInstances::getDatasets(const std::vector<boo
 
   return imagesAll;
 }
-void CoreInstances::addDataset(const seerep_core_msgs::Label& label, const boost::uuids::uuid& uuidDataset,
+void CoreInstances::addDataset(const seerep_core_msgs::Label& label,
+                               const boost::uuids::uuid& uuidDataset,
                                const seerep_core_msgs::Datatype& datatype)
 {
   auto instanceMapEntry = m_instances.find(label.uuidInstance);
@@ -94,27 +105,31 @@ void CoreInstances::addDataset(const seerep_core_msgs::Label& label, const boost
   }
   else
   {
-    throw std::runtime_error("label of instance and of new dataset do not match!");
+    throw std::runtime_error(
+        "label of instance and of new dataset do not match!");
   }
 }
 
 void CoreInstances::recreateInstances()
 {
-  std::vector<std::string> instances =
-      m_hdf5_io->getGroupDatasets(seerep_hdf5_core::Hdf5CoreInstance::HDF5_GROUP_INSTANCE);
+  std::vector<std::string> instances = m_hdf5_io->getGroupDatasets(
+      seerep_hdf5_core::Hdf5CoreInstance::HDF5_GROUP_INSTANCE);
   for (auto const& name : instances)
   {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "found " << name << " in HDF5 file.";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
+        << "found " << name << " in HDF5 file.";
 
     try
     {
       boost::uuids::string_generator gen;
       boost::uuids::uuid uuid = gen(name);
-      m_instances.emplace(uuid, std::make_shared<seerep_core::CoreInstance>(seerep_core::CoreInstance(m_hdf5_io, uuid)));
+      m_instances.emplace(uuid, std::make_shared<seerep_core::CoreInstance>(
+                                    seerep_core::CoreInstance(m_hdf5_io, uuid)));
     }
     catch (const std::runtime_error& e)
     {
-      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+          << e.what();
     }
   }
 }

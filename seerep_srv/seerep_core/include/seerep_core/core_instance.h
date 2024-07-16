@@ -22,14 +22,15 @@ namespace seerep_core
 /**
  * @brief This is the class for a single instance
  *
- * It handles all data regarding instances. The attributes of the instances are queryable.
- * And the attributes can also be written. The changes are persisted in the HDF5 file via the
- * corresponding IO class.
+ * It handles all data regarding instances. The attributes of the instances are
+ * queryable. And the attributes can also be written. The changes are persisted
+ * in the HDF5 file via the corresponding IO class.
  *
- * The UUID of all data showing the instances are stored and can be easily queried.
+ * The UUID of all data showing the instances are stored and can be easily
+ * queried.
  *
- * @todo check if core-instance and core-instances can be merge into one class like
- * it's done for image and point cloud
+ * @todo check if core-instance and core-instances can be merge into one class
+ * like it's done for image and point cloud
  */
 class CoreInstance
 {
@@ -39,7 +40,8 @@ public:
    * @param hdf5_io a shared pointer to the object handling the HDF5 io for instances
    * @param uuid the UUID of this instance
    */
-  CoreInstance(std::shared_ptr<seerep_hdf5_core::Hdf5CoreInstance> hdf5_io, const boost::uuids::uuid& uuidInstance);
+  CoreInstance(std::shared_ptr<seerep_hdf5_core::Hdf5CoreInstance> hdf5_io,
+               const boost::uuids::uuid& uuidInstance);
   ~CoreInstance();
 
   /**
@@ -66,13 +68,15 @@ public:
    * @param datatype the datatype to be considered
    * @return Vector of the UUIDs of the images showings this instance
    */
-  std::vector<boost::uuids::uuid> getDatasets(const seerep_core_msgs::Datatype& datatype) const;
+  std::vector<boost::uuids::uuid>
+  getDatasets(const seerep_core_msgs::Datatype& datatype) const;
   /**
    * @brief adds a dataset to this instance
    * @param uuidDataset the UUID of the dataset
    * @param datatype the type of the dataset
    */
-  void addDataset(const boost::uuids::uuid& uuidDataset, const seerep_core_msgs::Datatype& datatype);
+  void addDataset(const boost::uuids::uuid& uuidDataset,
+                  const seerep_core_msgs::Datatype& datatype);
 
 private:
   /**
@@ -88,9 +92,11 @@ private:
   std::unordered_map<std::string, std::string> m_attributes;
 
   /** @brief map from datatype to the vector of UUIDs of datasets showing this instance */
-  std::unordered_map<seerep_core_msgs::Datatype, std::vector<boost::uuids::uuid>> m_typeUUIDMap;
+  std::unordered_map<seerep_core_msgs::Datatype, std::vector<boost::uuids::uuid>>
+      m_typeUUIDMap;
   /** @brief object handling the logging */
-  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level>
+      m_logger;
 };
 
 } /* namespace seerep_core */

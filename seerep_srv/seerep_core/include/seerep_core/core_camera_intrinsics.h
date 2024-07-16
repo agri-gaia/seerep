@@ -15,7 +15,8 @@ namespace seerep_core
 class CoreCameraIntrinsics
 {
 public:
-  CoreCameraIntrinsics(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
+  CoreCameraIntrinsics(std::shared_ptr<HighFive::File>& file,
+                       std::shared_ptr<std::mutex>& write_mtx);
   ~CoreCameraIntrinsics();
 
   /**
@@ -29,7 +30,8 @@ public:
    *
    * @param camIntrinsicsUuid [in] UUID of the camera intrinsics to be fetched
    */
-  std::optional<seerep_core_msgs::camera_intrinsics> getData(boost::uuids::uuid camIntrinsicsUuid);
+  std::optional<seerep_core_msgs::camera_intrinsics>
+  getData(boost::uuids::uuid camIntrinsicsUuid);
 
   /**
    * @brief Check if there exists a camera intrinsics against the provided uuid
@@ -44,7 +46,8 @@ private:
   /** @brief shared pointer to the object handling the HDF5 io for Camera Intrinsics */
   std::shared_ptr<seerep_hdf5_core::Hdf5CoreCameraIntrinsics> m_hdf5_io;
   /** @brief object handling the logging */
-  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level>
+      m_logger;
 };
 }  // namespace seerep_core
 

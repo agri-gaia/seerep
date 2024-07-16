@@ -22,8 +22,8 @@ namespace seerep_core_fb
 class CoreFbCameraIntrinsics
 {
   /**
-   * @brief This class is the first layer below a user level call to manipulate camera intrinsics. Calls from this class
-   * are directly to the agnostic seerep core.
+   * @brief This class is the first layer below a user level call to manipulate
+   * camera intrinsics. Calls from this class are directly to the agnostic seerep core.
    *
    */
 public:
@@ -39,10 +39,12 @@ public:
    * @brief Function to query camera intrinsics
    *
    * @param query camera intrinsics query
-   * @param writer the writer object used to send the camera intrinsics matching the query directly via gRPC
+   * @param writer the writer object used to send the camera intrinsics matching
+   * the query directly via gRPC
    */
-  void getData(const seerep::fb::CameraIntrinsicsQuery& query,
-               flatbuffers::grpc::Message<seerep::fb::CameraIntrinsics>* const response);
+  void getData(
+      const seerep::fb::CameraIntrinsicsQuery& query,
+      flatbuffers::grpc::Message<seerep::fb::CameraIntrinsics>* const response);
 
   /**
    * @brief Add new camera intrinsics to an hdf5 file
@@ -50,13 +52,15 @@ public:
    * @param ci seerep flatbuffers camera intrinsics object
    * @return boost::uuids::uuid uuid of the stored camera intrinsics
    */
-  boost::uuids::uuid setData(const seerep::fb::CameraIntrinsics& cameraintrinsics);
+  boost::uuids::uuid
+  setData(const seerep::fb::CameraIntrinsics& cameraintrinsics);
 
 private:
   /** @brief a shared pointer to the general core */
   std::shared_ptr<seerep_core::Core> m_seerepCore;
   /** the logger for the logging framework */
-  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level>
+      m_logger;
 };
 }  // namespace seerep_core_fb
 

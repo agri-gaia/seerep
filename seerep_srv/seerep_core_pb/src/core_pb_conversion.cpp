@@ -2,7 +2,9 @@
 
 namespace seerep_core_pb
 {
-seerep_core_msgs::Query CorePbConversion::fromPb(const seerep::pb::Query& query, seerep_core_msgs::Datatype datatype)
+seerep_core_msgs::Query
+CorePbConversion::fromPb(const seerep::pb::Query& query,
+                         seerep_core_msgs::Datatype datatype)
 {
   seerep_core_msgs::Query queryCore;
   queryCore.header.datatype = datatype;
@@ -24,7 +26,8 @@ seerep_core_msgs::Query CorePbConversion::fromPb(const seerep::pb::Query& query,
   return queryCore;
 }
 
-seerep_core_msgs::DatasetIndexable CorePbConversion::fromPb(const seerep::pb::Image& img)
+seerep_core_msgs::DatasetIndexable
+CorePbConversion::fromPb(const seerep::pb::Image& img)
 {
   boost::uuids::string_generator gen;
   boost::uuids::uuid uuid;
@@ -73,15 +76,18 @@ seerep_core_msgs::DatasetIndexable CorePbConversion::fromPb(const seerep::pb::Im
             uuidInstance = boost::uuids::nil_uuid();
           }
 
-          labelVector.push_back(seerep_core_msgs::Label{ .label = label.label(),
-                                                         .labelIdDatumaro = label.labeliddatumaro(),
-                                                         .uuidInstance = uuidInstance,
-                                                         .instanceIdDatumaro = label.instanceiddatumaro() });
+          labelVector.push_back(seerep_core_msgs::Label{
+              .label = label.label(),
+              .labelIdDatumaro = label.labeliddatumaro(),
+              .uuidInstance = uuidInstance,
+              .instanceIdDatumaro = label.instanceiddatumaro() });
         }
 
         dataForIndices.labelsCategory.emplace(
             labelsCategories.category().c_str(),
-            seerep_core_msgs::LabelDatumaro{ .labels = labelVector, .datumaroJson = labelsCategories.datumarojson() });
+            seerep_core_msgs::LabelDatumaro{
+                .labels = labelVector,
+                .datumaroJson = labelsCategories.datumarojson() });
       }
     }
   }
@@ -89,7 +95,8 @@ seerep_core_msgs::DatasetIndexable CorePbConversion::fromPb(const seerep::pb::Im
   return dataForIndices;
 }
 
-seerep_core_msgs::QueryTf CorePbConversion::fromPb(const seerep::pb::TransformStampedQuery& query)
+seerep_core_msgs::QueryTf
+CorePbConversion::fromPb(const seerep::pb::TransformStampedQuery& query)
 {
   boost::uuids::string_generator gen;
   seerep_core_msgs::QueryTf queryTf;
@@ -102,7 +109,8 @@ seerep_core_msgs::QueryTf CorePbConversion::fromPb(const seerep::pb::TransformSt
   return queryTf;
 }
 
-seerep_core_msgs::region_of_interest CorePbConversion::fromPb(const seerep::pb::RegionOfInterest& roi)
+seerep_core_msgs::region_of_interest
+CorePbConversion::fromPb(const seerep::pb::RegionOfInterest& roi)
 {
   seerep_core_msgs::region_of_interest roi_core;
   roi_core.height = roi.height();
@@ -114,7 +122,8 @@ seerep_core_msgs::region_of_interest CorePbConversion::fromPb(const seerep::pb::
   return roi_core;
 }
 
-seerep::pb::RegionOfInterest CorePbConversion::toPb(const seerep_core_msgs::region_of_interest& roi_core)
+seerep::pb::RegionOfInterest
+CorePbConversion::toPb(const seerep_core_msgs::region_of_interest& roi_core)
 {
   seerep::pb::RegionOfInterest roi;
   roi.set_height(roi_core.height);
@@ -126,7 +135,8 @@ seerep::pb::RegionOfInterest CorePbConversion::toPb(const seerep_core_msgs::regi
   return roi;
 }
 
-seerep_core_msgs::Timestamp CorePbConversion::fromPb(const seerep::pb::Timestamp& timestamp)
+seerep_core_msgs::Timestamp
+CorePbConversion::fromPb(const seerep::pb::Timestamp& timestamp)
 {
   seerep_core_msgs::Timestamp ts_core;
   ts_core.nanos = timestamp.nanos();
@@ -135,7 +145,8 @@ seerep_core_msgs::Timestamp CorePbConversion::fromPb(const seerep::pb::Timestamp
   return ts_core;
 }
 
-seerep::pb::Timestamp CorePbConversion::toPb(const seerep_core_msgs::Timestamp& timestamp)
+seerep::pb::Timestamp
+CorePbConversion::toPb(const seerep_core_msgs::Timestamp& timestamp)
 {
   seerep::pb::Timestamp ts_pb;
   ts_pb.set_nanos(timestamp.nanos);
@@ -144,14 +155,17 @@ seerep::pb::Timestamp CorePbConversion::toPb(const seerep_core_msgs::Timestamp& 
   return ts_pb;
 }
 
-seerep_core_msgs::Header CorePbConversion::fromPb(const seerep::pb::Header& header)
+seerep_core_msgs::Header
+CorePbConversion::fromPb(const seerep::pb::Header& header)
 {
   seerep_core_msgs::Header header_core;
   header_core.frameId = header.frame_id();
   header_core.sequence = header.seq();
   header_core.timestamp = CorePbConversion::fromPb(header.stamp());
-  header_core.uuidData = boost::lexical_cast<boost::uuids::uuid>(header.uuid_msgs());
-  header_core.uuidProject = boost::lexical_cast<boost::uuids::uuid>(header.uuid_project());
+  header_core.uuidData =
+      boost::lexical_cast<boost::uuids::uuid>(header.uuid_msgs());
+  header_core.uuidProject =
+      boost::lexical_cast<boost::uuids::uuid>(header.uuid_project());
 
   return header_core;
 }
@@ -168,23 +182,28 @@ seerep::pb::Header CorePbConversion::toPb(const seerep_core_msgs::Header& header
   *header_pb.mutable_stamp() = ts_pb;
 
   header_pb.set_uuid_msgs(boost::lexical_cast<std::string>(header.uuidData));
-  header_pb.set_uuid_project(boost::lexical_cast<std::string>(header.uuidProject));
+  header_pb.set_uuid_project(
+      boost::lexical_cast<std::string>(header.uuidProject));
 
   return header_pb;
 }
 
-seerep_core_msgs::camera_intrinsics_query
-CorePbConversion::fromPb(const seerep::pb::CameraIntrinsicsQuery& camintrinsics_query)
+seerep_core_msgs::camera_intrinsics_query CorePbConversion::fromPb(
+    const seerep::pb::CameraIntrinsicsQuery& camintrinsics_query)
 {
   seerep_core_msgs::camera_intrinsics_query camintrinsics_query_core;
   camintrinsics_query_core.uuidCameraIntrinsics =
-      boost::lexical_cast<boost::uuids::uuid>(camintrinsics_query.uuid_camera_intrinsics());
-  camintrinsics_query_core.uuidProject = boost::lexical_cast<boost::uuids::uuid>(camintrinsics_query.uuid_project());
+      boost::lexical_cast<boost::uuids::uuid>(
+          camintrinsics_query.uuid_camera_intrinsics());
+  camintrinsics_query_core.uuidProject =
+      boost::lexical_cast<boost::uuids::uuid>(
+          camintrinsics_query.uuid_project());
 
   return camintrinsics_query_core;
 }
 
-seerep_core_msgs::camera_intrinsics CorePbConversion::fromPb(const seerep::pb::CameraIntrinsics& camintrinsics)
+seerep_core_msgs::camera_intrinsics
+CorePbConversion::fromPb(const seerep::pb::CameraIntrinsics& camintrinsics)
 {
   seerep_core_msgs::camera_intrinsics camintrinsics_core;
   camintrinsics_core.binning_x = camintrinsics.binning_x();
@@ -215,14 +234,17 @@ seerep_core_msgs::camera_intrinsics CorePbConversion::fromPb(const seerep::pb::C
     camintrinsics_core.rectification_matrix.push_back(rm);
   }
 
-  camintrinsics_core.region_of_interest = CorePbConversion::fromPb(camintrinsics.region_of_interest());
+  camintrinsics_core.region_of_interest =
+      CorePbConversion::fromPb(camintrinsics.region_of_interest());
 
-  camintrinsics_core.maximum_viewing_distance = camintrinsics.maximum_viewing_distance();
+  camintrinsics_core.maximum_viewing_distance =
+      camintrinsics.maximum_viewing_distance();
 
   return camintrinsics_core;
 }
 
-seerep::pb::CameraIntrinsics CorePbConversion::toPb(const seerep_core_msgs::camera_intrinsics& camintrinsics)
+seerep::pb::CameraIntrinsics
+CorePbConversion::toPb(const seerep_core_msgs::camera_intrinsics& camintrinsics)
 {
   seerep::pb::CameraIntrinsics ci_pb;
   ci_pb.set_binning_x(camintrinsics.binning_x);
@@ -257,7 +279,8 @@ seerep::pb::CameraIntrinsics CorePbConversion::toPb(const seerep_core_msgs::came
     ci_pb.add_rectification_matrix(rm);
   }
 
-  seerep::pb::RegionOfInterest roi_pb = CorePbConversion::toPb(camintrinsics.region_of_interest);
+  seerep::pb::RegionOfInterest roi_pb =
+      CorePbConversion::toPb(camintrinsics.region_of_interest);
   *ci_pb.mutable_region_of_interest() = roi_pb;
 
   ci_pb.set_maximum_viewing_distance(camintrinsics.maximum_viewing_distance);
@@ -265,7 +288,8 @@ seerep::pb::CameraIntrinsics CorePbConversion::toPb(const seerep_core_msgs::came
   return ci_pb;
 }
 
-void CorePbConversion::fromPbProject(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
+void CorePbConversion::fromPbProject(const seerep::pb::Query& query,
+                                     seerep_core_msgs::Query& queryCore)
 {
   boost::uuids::string_generator gen;
   if (!query.projectuuid().empty())
@@ -278,11 +302,13 @@ void CorePbConversion::fromPbProject(const seerep::pb::Query& query, seerep_core
   }
 }
 
-void CorePbConversion::fromPbLabel(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
+void CorePbConversion::fromPbLabel(const seerep::pb::Query& query,
+                                   seerep_core_msgs::Query& queryCore)
 {
   if (!query.labelcategory().empty())
   {
-    queryCore.label = std::unordered_map<std::string, std::vector<std::string>>();
+    queryCore.label =
+        std::unordered_map<std::string, std::vector<std::string>>();
     for (auto labelWithCategory : query.labelcategory())
     {
       std::vector<std::string> labels;
@@ -295,19 +321,25 @@ void CorePbConversion::fromPbLabel(const seerep::pb::Query& query, seerep_core_m
   }
 }
 
-void CorePbConversion::fromPbTime(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
+void CorePbConversion::fromPbTime(const seerep::pb::Query& query,
+                                  seerep_core_msgs::Query& queryCore)
 {
   if (query.timeinterval().has_time_min() && query.timeinterval().has_time_max())
   {
     queryCore.timeinterval = seerep_core_msgs::Timeinterval();
-    queryCore.timeinterval.value().timeMin.seconds = query.timeinterval().time_min().seconds();
-    queryCore.timeinterval.value().timeMax.seconds = query.timeinterval().time_max().seconds();
-    queryCore.timeinterval.value().timeMin.nanos = query.timeinterval().time_min().nanos();
-    queryCore.timeinterval.value().timeMax.nanos = query.timeinterval().time_max().nanos();
+    queryCore.timeinterval.value().timeMin.seconds =
+        query.timeinterval().time_min().seconds();
+    queryCore.timeinterval.value().timeMax.seconds =
+        query.timeinterval().time_max().seconds();
+    queryCore.timeinterval.value().timeMin.nanos =
+        query.timeinterval().time_min().nanos();
+    queryCore.timeinterval.value().timeMax.nanos =
+        query.timeinterval().time_max().nanos();
   }
 }
 
-seerep_core_msgs::Point2D CorePbConversion::fromPbPoint2D(const seerep::pb::Point2D& point)
+seerep_core_msgs::Point2D
+CorePbConversion::fromPbPoint2D(const seerep::pb::Point2D& point)
 {
   seerep_core_msgs::Point2D pointCore;
 
@@ -317,7 +349,8 @@ seerep_core_msgs::Point2D CorePbConversion::fromPbPoint2D(const seerep::pb::Poin
   return pointCore;
 }
 
-void CorePbConversion::fromPbPolygon(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
+void CorePbConversion::fromPbPolygon(const seerep::pb::Query& query,
+                                     seerep_core_msgs::Query& queryCore)
 {
   if (query.has_polygon())
   {
@@ -333,22 +366,26 @@ void CorePbConversion::fromPbPolygon(const seerep::pb::Query& query, seerep_core
   }
 }
 
-void CorePbConversion::fromPbMustHaveAllLabels(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
+void CorePbConversion::fromPbMustHaveAllLabels(
+    const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
 {
   queryCore.mustHaveAllLabels = query.musthavealllabels();
 }
 
-void CorePbConversion::fromPbInMapFrame(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
+void CorePbConversion::fromPbInMapFrame(const seerep::pb::Query& query,
+                                        seerep_core_msgs::Query& queryCore)
 {
   queryCore.inMapFrame = query.inmapframe();
 }
 
-void CorePbConversion::fromPbFullyEncapsulated(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
+void CorePbConversion::fromPbFullyEncapsulated(
+    const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
 {
   queryCore.fullyEncapsulated = query.fullyencapsulated();
 }
 
-void CorePbConversion::fromPbInstance(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
+void CorePbConversion::fromPbInstance(const seerep::pb::Query& query,
+                                      seerep_core_msgs::Query& queryCore)
 {
   boost::uuids::string_generator gen;
   if (!query.instanceuuid().empty())
@@ -361,7 +398,8 @@ void CorePbConversion::fromPbInstance(const seerep::pb::Query& query, seerep_cor
   }
 }
 
-void CorePbConversion::fromPbDataUuids(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
+void CorePbConversion::fromPbDataUuids(const seerep::pb::Query& query,
+                                       seerep_core_msgs::Query& queryCore)
 {
   boost::uuids::string_generator gen;
   if (!query.datauuid().empty())
@@ -374,18 +412,21 @@ void CorePbConversion::fromPbDataUuids(const seerep::pb::Query& query, seerep_co
   }
 }
 
-void CorePbConversion::fromPbWithOutData(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
+void CorePbConversion::fromPbWithOutData(const seerep::pb::Query& query,
+                                         seerep_core_msgs::Query& queryCore)
 {
   queryCore.withoutData = query.withoutdata();
 }
 
-void CorePbConversion::fromFbQueryMaxNumData(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore)
+void CorePbConversion::fromFbQueryMaxNumData(const seerep::pb::Query& query,
+                                             seerep_core_msgs::Query& queryCore)
 {
   queryCore.maxNumData = query.maxnumdata();
 }
 
-void CorePbConversion::fromPbDatatypeVector(const seerep::datatype& datatype,
-                                            std::vector<seerep_core_msgs::Datatype>& dtCore)
+void CorePbConversion::fromPbDatatypeVector(
+    const seerep::datatype& datatype,
+    std::vector<seerep_core_msgs::Datatype>& dtCore)
 {
   if (datatype == seerep::datatype::image)
   {
@@ -407,7 +448,8 @@ void CorePbConversion::fromPbDatatypeVector(const seerep::datatype& datatype,
   }
 }
 
-void CorePbConversion::toPb(const seerep_core_msgs::AabbTime& timeinterval, seerep::pb::TimeInterval* ti_pb)
+void CorePbConversion::toPb(const seerep_core_msgs::AabbTime& timeinterval,
+                            seerep::pb::TimeInterval* ti_pb)
 {
   // isolate second and nano second bits from min time
   int64_t mintime = timeinterval.min_corner().get<0>();
@@ -426,12 +468,16 @@ void CorePbConversion::toPb(const seerep_core_msgs::AabbTime& timeinterval, seer
   ti_pb->mutable_time_max()->set_seconds(max_seconds);
 }
 
-void CorePbConversion::toPb(const seerep_core_msgs::AABB& aabb, seerep::pb::Boundingbox* bb_pb)
+void CorePbConversion::toPb(const seerep_core_msgs::AABB& aabb,
+                            seerep::pb::Boundingbox* bb_pb)
 {
   // center
-  float center_x = (aabb.min_corner().get<0>() + aabb.max_corner().get<0>()) / 2;
-  float center_y = (aabb.min_corner().get<1>() + aabb.max_corner().get<1>()) / 2;
-  float center_z = (aabb.min_corner().get<2>() + aabb.max_corner().get<2>()) / 2;
+  float center_x =
+      (aabb.min_corner().get<0>() + aabb.max_corner().get<0>()) / 2;
+  float center_y =
+      (aabb.min_corner().get<1>() + aabb.max_corner().get<1>()) / 2;
+  float center_z =
+      (aabb.min_corner().get<2>() + aabb.max_corner().get<2>()) / 2;
 
   // spatial extent
   float se_x = (aabb.max_corner().get<0>() - aabb.min_corner().get<0>());

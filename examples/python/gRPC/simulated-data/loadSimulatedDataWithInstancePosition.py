@@ -32,7 +32,9 @@ from seerep.util.fb_helper import (
 class LoadSimulatedDataWithInstancePosition:
     def __init__(self) -> None:
         self.IMAGE_SUBPATH = "camera_main_camera/rect/"
-        self.BOUNDINGBOX_SUBPATH = "camera_main_camera_annotations/bounding_box_uuid/"
+        self.BOUNDINGBOX_SUBPATH = (
+            "camera_main_camera_annotations/bounding_box_uuid/"
+        )
         self.POINTCLOUD_SUBPATH = "camera_main_camera_annotations/pcl/"
         self.EXTRINSICS_SUBPATH = "camera_main_camera/extrinsics/"
 
@@ -53,7 +55,9 @@ class LoadSimulatedDataWithInstancePosition:
 
         self.builder = flatbuffers.Builder(1024)
         self.channel = get_gRPC_channel()
-        self.projectUuid = getOrCreateProject(self.builder, self.channel, self.PROJECT_NAME)
+        self.projectUuid = getOrCreateProject(
+            self.builder, self.channel, self.PROJECT_NAME
+        )
         self.theTime = [1654688921]  # 08.06.2022 13:49 #int(time.time())
         self.root = ["/seerep/seerep-data/cw_synthetic_maize/dataset_v2/"]
 
@@ -77,7 +81,17 @@ class LoadSimulatedDataWithInstancePosition:
         self.stubTf.TransferTransformStamped(self.__loadTf())
         self.stubPoint.TransferPoint(iter(self.points))
 
-    def __createPointForInstance(self, pointCloudData, instanceUuid, label, imageX, imageY, time, frame, img):
+    def __createPointForInstance(
+        self,
+        pointCloudData,
+        instanceUuid,
+        label,
+        imageX,
+        imageY,
+        time,
+        frame,
+        img,
+    ):
         builder = flatbuffers.Builder(1024)
         pixelX = int(img.shape[1] * imageX)
         pixelY = int(img.shape[0] * imageY)
@@ -87,22 +101,32 @@ class LoadSimulatedDataWithInstancePosition:
         labelGeneralCategory = createLabelsWithInstanceWithCategory(
             builder, [self.labelCategory], [[label]], [[instanceUuid]], [[1.0]]
         )
-        PointStamped.StartLabelsGeneralVector(builder, len(labelGeneralCategory))
-        for label in reversed(labelGeneralCategory):
-            builder.PrependUOffsetTRelative(label)
+        PointStamped.StartLabelsGeneralVector(
+            builder, len(labelGeneralCategory)
+        )
+        for labelCat in reversed(labelGeneralCategory):
+            builder.PrependUOffsetTRelative(labelCat)
         labelGeneralCategory = builder.EndVector()
 
         timestamp = createTimeStamp(builder, time)
         header = createHeader(builder, timestamp, frame, self.projectUuid)
 
-        pointStamped = createPointStamped(builder, point, header, labelGeneralCategory)
+        pointStamped = createPointStamped(
+            builder, point, header, labelGeneralCategory
+        )
         builder.Finish(pointStamped)
 
         self.points.append(bytes(builder.Output()))
 
-    def __createBoundingBox2dCategory(self, builder, baseAnnotationPath, basePointCloudPath, time, frame, img):
-        annotations = np.genfromtxt(baseAnnotationPath + self.ANNOTATIONS_FILE_EXTENSION, dtype="<U40")
-        pointCloudData = np.load(basePointCloudPath + self.POINTCLOUD_FILE_EXTENSION)
+    def __createBoundingBox2dCategory(
+        self, builder, baseAnnotationPath, basePointCloudPath, time, frame, img
+    ):
+        annotations = np.genfromtxt(
+            baseAnnotationPath + self.ANNOTATIONS_FILE_EXTENSION, dtype="<U40"
+        )
+        pointCloudData = np.load(
+            basePointCloudPath + self.POINTCLOUD_FILE_EXTENSION
+        )
         boundingBox2dLabeledVector = []
         for a in annotations:
             labelFloat, x, y, xExtent, yExtent = a[:-1].astype("float64")
@@ -110,20 +134,32 @@ class LoadSimulatedDataWithInstancePosition:
             print("uuid: " + instanceUuid)
 
             label = self.labelSwitch.get(int(round(labelFloat)))
-            labelWithInstance = createLabelWithInstance(builder, label, instanceUuid, 1.0)
+            labelWithInstance = createLabelWithInstance(
+                builder, label, instanceUuid, 1.0
+            )
             centerPoint = createPoint2d(builder, x, y)
             spatialExtent = createPoint2d(builder, xExtent, yExtent)
-            boundingBox2D = createBoundingBox2d(builder, centerPoint, spatialExtent)
+            boundingBox2D = createBoundingBox2d(
+                builder, centerPoint, spatialExtent
+            )
 
-            boundingBox2dLabeledVector.append(createBoundingBox2dLabeled(builder, labelWithInstance, boundingBox2D))
+            boundingBox2dLabeledVector.append(
+                createBoundingBox2dLabeled(
+                    builder, labelWithInstance, boundingBox2D
+                )
+            )
 
             if instanceUuid not in self.instanceUuidSet:
-                self.__createPointForInstance(pointCloudData, instanceUuid, label, x, y, time, frame, img)
+                self.__createPointForInstance(
+                    pointCloudData, instanceUuid, label, x, y, time, frame, img
+                )
                 self.instanceUuidSet.append(instanceUuid)
         categoryString = builder.CreateString(self.labelCategory)
         boundingBox2dCategoryVector = []
         boundingBox2dCategoryVector.append(
-            createBoundingBox2DLabeledWithCategory(self.builder, categoryString, boundingBox2dLabeledVector)
+            createBoundingBox2DLabeledWithCategory(
+                self.builder, categoryString, boundingBox2dLabeledVector
+            )
         )
         return boundingBox2dCategoryVector
 
@@ -141,8 +177,12 @@ class LoadSimulatedDataWithInstancePosition:
 
         for folderIndex in range(len(self.root)):
             imagePath = self.__getPath(folderIndex, self.IMAGE_SUBPATH)
-            annotationPath = self.__getPath(folderIndex, self.BOUNDINGBOX_SUBPATH)
-            pointcloudPath = self.__getPath(folderIndex, self.POINTCLOUD_SUBPATH)
+            annotationPath = self.__getPath(
+                folderIndex, self.BOUNDINGBOX_SUBPATH
+            )
+            pointcloudPath = self.__getPath(
+                folderIndex, self.POINTCLOUD_SUBPATH
+            )
 
             for i in range(self.NUM_IMAGES):
                 print("image " + str(i))
@@ -156,12 +196,25 @@ class LoadSimulatedDataWithInstancePosition:
                 img = imageio.imread(baseFilePath + self.IMAGE_FILE_EXTENSION)
 
                 bb2dWithCategory = self.__createBoundingBox2dCategory(
-                    self.builder, baseAnnotationPath, basePointcloudPath, timeThisIteration, self.CAMERA_FRAME, img
+                    self.builder,
+                    baseAnnotationPath,
+                    basePointcloudPath,
+                    timeThisIteration,
+                    self.CAMERA_FRAME,
+                    img,
                 )
                 timestamp = createTimeStamp(self.builder, timeThisIteration)
-                header = createHeader(self.builder, timestamp, self.CAMERA_FRAME, self.projectUuid)
+                header = createHeader(
+                    self.builder, timestamp, self.CAMERA_FRAME, self.projectUuid
+                )
 
-                imageMsg = createImage(self.builder, img, header, self.IMAGE_ENCODING, bb2dWithCategory)
+                imageMsg = createImage(
+                    self.builder,
+                    img,
+                    header,
+                    self.IMAGE_ENCODING,
+                    bb2dWithCategory,
+                )
 
                 self.builder.Finish(imageMsg)
                 yield bytes(self.builder.Output())
@@ -184,19 +237,29 @@ class LoadSimulatedDataWithInstancePosition:
 
     def __loadTf(self):
         for folderIndex in range(len(self.root)):
-            extrinsicsPath = self.__getPath(folderIndex, self.EXTRINSICS_SUBPATH)
+            extrinsicsPath = self.__getPath(
+                folderIndex, self.EXTRINSICS_SUBPATH
+            )
 
             for i in range(self.NUM_IMAGES):
                 builder = flatbuffers.Builder(1024)
                 timeThisIteration = self.__getCurrentTime(folderIndex, i)
                 baseFilePath = self.__createBasePath(extrinsicsPath, i)
 
-                with open(baseFilePath + self.EXTRINSICS_FILE_EXTENSION, "r") as extrinsics:
+                with open(
+                    baseFilePath + self.EXTRINSICS_FILE_EXTENSION, "r"
+                ) as extrinsics:
                     try:
-                        transform = self.__createTransformFromQuaternion(builder, extrinsics)
+                        transform = self.__createTransformFromQuaternion(
+                            builder, extrinsics
+                        )
                         timestamp = createTimeStamp(builder, timeThisIteration)
-                        headerTf = createHeader(builder, timestamp, self.MAP_FRAME, self.projectUuid)
-                        tf = createTransformStamped(builder, self.CAMERA_FRAME, headerTf, transform)
+                        headerTf = createHeader(
+                            builder, timestamp, self.MAP_FRAME, self.projectUuid
+                        )
+                        tf = createTransformStamped(
+                            builder, self.CAMERA_FRAME, headerTf, transform
+                        )
 
                         builder.Finish(tf)
                         yield bytes(builder.Output())

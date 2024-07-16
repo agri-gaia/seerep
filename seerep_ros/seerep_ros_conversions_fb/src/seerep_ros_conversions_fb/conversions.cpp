@@ -5,15 +5,17 @@ namespace seerep_ros_conversions_fb
 /*
  * Header
  */
-flatbuffers::grpc::Message<seerep::fb::Header> toFlat(const std_msgs::Header& header, std::string projectuuid,
-                                                      std::string msguuid = "")
+flatbuffers::grpc::Message<seerep::fb::Header>
+toFlat(const std_msgs::Header& header, std::string projectuuid,
+       std::string msguuid = "")
 {
   flatbuffers::grpc::MessageBuilder builder;
   builder.Finish(toFlat(header, projectuuid, builder, msguuid));
   return builder.ReleaseMessage<seerep::fb::Header>();
 }
-flatbuffers::Offset<seerep::fb::Header> toFlat(const std_msgs::Header& header, std::string projectuuid,
-                                               flatbuffers::grpc::MessageBuilder& builder, std::string msguuid = "")
+flatbuffers::Offset<seerep::fb::Header>
+toFlat(const std_msgs::Header& header, std::string projectuuid,
+       flatbuffers::grpc::MessageBuilder& builder, std::string msguuid = "")
 {
   seerep::fb::TimestampBuilder timestampbuilder(builder);
   timestampbuilder.add_seconds(header.stamp.sec);
@@ -47,14 +49,16 @@ std_msgs::Header toROS(const seerep::fb::Header& header)
 /*
  * PointField
  */
-flatbuffers::grpc::Message<seerep::fb::PointField> toFlat(const sensor_msgs::PointField& point_field)
+flatbuffers::grpc::Message<seerep::fb::PointField>
+toFlat(const sensor_msgs::PointField& point_field)
 {
   flatbuffers::grpc::MessageBuilder builder;
   builder.Finish(toFlat(point_field, builder));
   return builder.ReleaseMessage<seerep::fb::PointField>();
 }
-flatbuffers::Offset<seerep::fb::PointField> toFlat(const sensor_msgs::PointField& point_field,
-                                                   flatbuffers::grpc::MessageBuilder& builder)
+flatbuffers::Offset<seerep::fb::PointField>
+toFlat(const sensor_msgs::PointField& point_field,
+       flatbuffers::grpc::MessageBuilder& builder)
 
 {
   auto nameOffset = builder.CreateString(point_field.name);
@@ -62,7 +66,8 @@ flatbuffers::Offset<seerep::fb::PointField> toFlat(const sensor_msgs::PointField
   seerep::fb::PointFieldBuilder pointFieldBuilder(builder);
   pointFieldBuilder.add_name(nameOffset);
   pointFieldBuilder.add_offset(point_field.offset);
-  pointFieldBuilder.add_datatype(seerep::fb::Point_Field_Datatype(point_field.datatype));
+  pointFieldBuilder.add_datatype(
+      seerep::fb::Point_Field_Datatype(point_field.datatype));
   pointFieldBuilder.add_count(point_field.count);
   return pointFieldBuilder.Finish();
 }
@@ -80,16 +85,17 @@ sensor_msgs::PointField toROS(const seerep::fb::PointField& point_field)
 /*
  * PointCloud2
  */
-flatbuffers::grpc::Message<seerep::fb::PointCloud2> toFlat(const sensor_msgs::PointCloud2& cloud,
-                                                           std::string projectuuid, std::string msguuid = "")
+flatbuffers::grpc::Message<seerep::fb::PointCloud2>
+toFlat(const sensor_msgs::PointCloud2& cloud, std::string projectuuid,
+       std::string msguuid = "")
 {
   flatbuffers::grpc::MessageBuilder builder;
   builder.Finish(toFlat(cloud, projectuuid, builder, msguuid));
   return builder.ReleaseMessage<seerep::fb::PointCloud2>();
 }
-flatbuffers::Offset<seerep::fb::PointCloud2> toFlat(const sensor_msgs::PointCloud2& cloud, std::string projectuuid,
-                                                    flatbuffers::grpc::MessageBuilder& builder,
-                                                    std::string msguuid = "")
+flatbuffers::Offset<seerep::fb::PointCloud2>
+toFlat(const sensor_msgs::PointCloud2& cloud, std::string projectuuid,
+       flatbuffers::grpc::MessageBuilder& builder, std::string msguuid = "")
 {
   auto header = toFlat(cloud.header, projectuuid, builder, msguuid);
 
@@ -130,7 +136,8 @@ sensor_msgs::PointCloud2 toROS(const seerep::fb::PointCloud2& cloud)
   ret.point_step = cloud.point_step();
   ret.row_step = cloud.row_step();
   // std::copy(cloud.data().begin(), cloud.data().end(), std::back_inserter(ret.data));
-  std::copy_n(cloud.data()->Data(), cloud.data()->size(), std::back_inserter(ret.data));
+  std::copy_n(cloud.data()->Data(), cloud.data()->size(),
+              std::back_inserter(ret.data));
   ret.is_dense = cloud.is_dense();
   return ret;
 }
@@ -138,16 +145,19 @@ sensor_msgs::PointCloud2 toROS(const seerep::fb::PointCloud2& cloud)
 /*
  * Image
  */
-flatbuffers::grpc::Message<seerep::fb::Image> toFlat(const sensor_msgs::Image& image, std::string projectuuid,
-                                                     std::string cameraInstrinsicUuid, std::string msguuid)
+flatbuffers::grpc::Message<seerep::fb::Image>
+toFlat(const sensor_msgs::Image& image, std::string projectuuid,
+       std::string cameraInstrinsicUuid, std::string msguuid)
 {
   flatbuffers::grpc::MessageBuilder builder;
-  builder.Finish(toFlat(image, projectuuid, builder, cameraInstrinsicUuid, msguuid));
+  builder.Finish(
+      toFlat(image, projectuuid, builder, cameraInstrinsicUuid, msguuid));
   return builder.ReleaseMessage<seerep::fb::Image>();
 }
-flatbuffers::Offset<seerep::fb::Image> toFlat(const sensor_msgs::Image& image, std::string projectuuid,
-                                              flatbuffers::grpc::MessageBuilder& builder,
-                                              std::string cameraInstrinsicUuid, std::string msguuid)
+flatbuffers::Offset<seerep::fb::Image>
+toFlat(const sensor_msgs::Image& image, std::string projectuuid,
+       flatbuffers::grpc::MessageBuilder& builder,
+       std::string cameraInstrinsicUuid, std::string msguuid)
 {
   auto header = toFlat(image.header, projectuuid, builder, msguuid);
 
@@ -180,21 +190,24 @@ sensor_msgs::Image toROS(const seerep::fb::Image& image)
   ret.step = image.step();
   ret.data.reserve(image.data()->size());
 
-  std::copy_n(image.data()->Data(), image.data()->size(), std::back_inserter(ret.data));
+  std::copy_n(image.data()->Data(), image.data()->size(),
+              std::back_inserter(ret.data));
   return ret;
 }
 
 /*
  * Point
  */
-flatbuffers::grpc::Message<seerep::fb::Point> toFlat(const geometry_msgs::Point& point)
+flatbuffers::grpc::Message<seerep::fb::Point>
+toFlat(const geometry_msgs::Point& point)
 {
   flatbuffers::grpc::MessageBuilder builder;
   builder.Finish(toFlat(point, builder));
   return builder.ReleaseMessage<seerep::fb::Point>();
 }
-flatbuffers::Offset<seerep::fb::Point> toFlat(const geometry_msgs::Point& point,
-                                              flatbuffers::grpc::MessageBuilder& builder)
+flatbuffers::Offset<seerep::fb::Point>
+toFlat(const geometry_msgs::Point& point,
+       flatbuffers::grpc::MessageBuilder& builder)
 {
   seerep::fb::PointBuilder pointbuilder(builder);
   pointbuilder.add_x(point.x);
@@ -215,14 +228,16 @@ geometry_msgs::Point toROS(const seerep::fb::Point& point)
 /*
  * Quaternion
  */
-flatbuffers::grpc::Message<seerep::fb::Quaternion> toFlat(const geometry_msgs::Quaternion& quaternion)
+flatbuffers::grpc::Message<seerep::fb::Quaternion>
+toFlat(const geometry_msgs::Quaternion& quaternion)
 {
   flatbuffers::grpc::MessageBuilder builder;
   builder.Finish(toFlat(quaternion, builder));
   return builder.ReleaseMessage<seerep::fb::Quaternion>();
 }
-flatbuffers::Offset<seerep::fb::Quaternion> toFlat(const geometry_msgs::Quaternion& quaternion,
-                                                   flatbuffers::grpc::MessageBuilder& builder)
+flatbuffers::Offset<seerep::fb::Quaternion>
+toFlat(const geometry_msgs::Quaternion& quaternion,
+       flatbuffers::grpc::MessageBuilder& builder)
 {
   seerep::fb::QuaternionBuilder quaternionbuilder(builder);
   quaternionbuilder.add_x(quaternion.x);
@@ -245,14 +260,16 @@ geometry_msgs::Quaternion toROS(const seerep::fb::Quaternion& quaternion)
 /*
  * Vector3
  */
-flatbuffers::grpc::Message<seerep::fb::Vector3> toFlat(const geometry_msgs::Vector3& vector)
+flatbuffers::grpc::Message<seerep::fb::Vector3>
+toFlat(const geometry_msgs::Vector3& vector)
 {
   flatbuffers::grpc::MessageBuilder builder;
   builder.Finish(toFlat(vector, builder));
   return builder.ReleaseMessage<seerep::fb::Vector3>();
 }
-flatbuffers::Offset<seerep::fb::Vector3> toFlat(const geometry_msgs::Vector3& vector,
-                                                flatbuffers::grpc::MessageBuilder& builder)
+flatbuffers::Offset<seerep::fb::Vector3>
+toFlat(const geometry_msgs::Vector3& vector,
+       flatbuffers::grpc::MessageBuilder& builder)
 {
   seerep::fb::Vector3Builder vector3builder(builder);
   vector3builder.add_x(vector.x);
@@ -273,14 +290,16 @@ geometry_msgs::Vector3 toROS(const seerep::fb::Vector3& vector)
 /*
  * Transform
  */
-flatbuffers::grpc::Message<seerep::fb::Transform> toFlat(const geometry_msgs::Transform& transform)
+flatbuffers::grpc::Message<seerep::fb::Transform>
+toFlat(const geometry_msgs::Transform& transform)
 {
   flatbuffers::grpc::MessageBuilder builder;
   builder.Finish(toFlat(transform, builder));
   return builder.ReleaseMessage<seerep::fb::Transform>();
 }
-flatbuffers::Offset<seerep::fb::Transform> toFlat(const geometry_msgs::Transform& transform,
-                                                  flatbuffers::grpc::MessageBuilder& builder)
+flatbuffers::Offset<seerep::fb::Transform>
+toFlat(const geometry_msgs::Transform& transform,
+       flatbuffers::grpc::MessageBuilder& builder)
 {
   auto translation = toFlat(transform.translation, builder);
   auto rotation = toFlat(transform.rotation, builder);
@@ -302,16 +321,18 @@ geometry_msgs::Transform toROS(const seerep::fb::Transform& transform)
 /*
  * TransformStamped
  */
-flatbuffers::grpc::Message<seerep::fb::TransformStamped> toFlat(const geometry_msgs::TransformStamped& transform,
-                                                                std::string projectuuid, const bool isStatic)
+flatbuffers::grpc::Message<seerep::fb::TransformStamped>
+toFlat(const geometry_msgs::TransformStamped& transform,
+       std::string projectuuid, const bool isStatic)
 {
   flatbuffers::grpc::MessageBuilder builder;
   builder.Finish(toFlat(transform, projectuuid, isStatic, builder));
   return builder.ReleaseMessage<seerep::fb::TransformStamped>();
 }
-flatbuffers::Offset<seerep::fb::TransformStamped> toFlat(const geometry_msgs::TransformStamped& transform,
-                                                         std::string projectuuid, const bool isStatic,
-                                                         flatbuffers::grpc::MessageBuilder& builder)
+flatbuffers::Offset<seerep::fb::TransformStamped>
+toFlat(const geometry_msgs::TransformStamped& transform,
+       std::string projectuuid, const bool isStatic,
+       flatbuffers::grpc::MessageBuilder& builder)
 {
   auto headerOffset = toFlat(transform.header, projectuuid, builder);
   auto transformOffset = toFlat(transform.transform, builder);
@@ -325,7 +346,8 @@ flatbuffers::Offset<seerep::fb::TransformStamped> toFlat(const geometry_msgs::Tr
   return transformbuilder.Finish();
 }
 
-geometry_msgs::TransformStamped toROS(const seerep::fb::TransformStamped& transform)
+geometry_msgs::TransformStamped
+toROS(const seerep::fb::TransformStamped& transform)
 {
   geometry_msgs::TransformStamped ret;
   ret.header = toROS(*transform.header());
@@ -339,15 +361,17 @@ geometry_msgs::TransformStamped toROS(const seerep::fb::TransformStamped& transf
  */
 
 flatbuffers::grpc::Message<seerep::fb::CameraIntrinsics>
-toFlat(const sensor_msgs::CameraInfo& ci, std::string& projectuuid, std::string& msgUuid, double maxViewingDistance)
+toFlat(const sensor_msgs::CameraInfo& ci, std::string& projectuuid,
+       std::string& msgUuid, double maxViewingDistance)
 {
   flatbuffers::grpc::MessageBuilder builder;
   builder.Finish(toFlat(ci, projectuuid, msgUuid, maxViewingDistance, builder));
   return builder.ReleaseMessage<seerep::fb::CameraIntrinsics>();
 }
-flatbuffers::Offset<seerep::fb::CameraIntrinsics> toFlat(const sensor_msgs::CameraInfo& ci, std::string& projectuuid,
-                                                         std::string& msgUuid, double maxViewingDistance,
-                                                         flatbuffers::grpc::MessageBuilder& builder)
+flatbuffers::Offset<seerep::fb::CameraIntrinsics>
+toFlat(const sensor_msgs::CameraInfo& ci, std::string& projectuuid,
+       std::string& msgUuid, double maxViewingDistance,
+       flatbuffers::grpc::MessageBuilder& builder)
 {
   auto header = toFlat(ci.header, projectuuid, builder, msgUuid);
 
@@ -403,9 +427,10 @@ flatbuffers::Offset<seerep::fb::CameraIntrinsics> toFlat(const sensor_msgs::Came
   cibuilder.add_height(ci.height);
   return cibuilder.Finish();
 }
-flatbuffers::Offset<seerep::fb::RegionOfInterest> toFlat(const sensor_msgs::RegionOfInterest& roi,
+flatbuffers::Offset<seerep::fb::RegionOfInterest>
+toFlat(const sensor_msgs::RegionOfInterest& roi,
 
-                                                         flatbuffers::grpc::MessageBuilder& builder)
+       flatbuffers::grpc::MessageBuilder& builder)
 {
   seerep::fb::RegionOfInterestBuilder roiBuilder(builder);
   roiBuilder.add_do_rectify(roi.do_rectify);

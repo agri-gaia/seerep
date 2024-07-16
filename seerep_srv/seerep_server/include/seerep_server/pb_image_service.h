@@ -19,15 +19,18 @@ class PbImageService final : public seerep::pb::ImageService::Service
 public:
   PbImageService(std::shared_ptr<seerep_core::Core> seerepCore);
 
-  grpc::Status GetImage(grpc::ServerContext* context, const seerep::pb::Query* request,
+  grpc::Status GetImage(grpc::ServerContext* context,
+                        const seerep::pb::Query* request,
                         grpc::ServerWriter<seerep::pb::Image>* writer);
 
-  grpc::Status TransferImage(grpc::ServerContext* context, const seerep::pb::Image* image,
+  grpc::Status TransferImage(grpc::ServerContext* context,
+                             const seerep::pb::Image* image,
                              seerep::pb::ServerResponse* response);
 
 private:
   std::shared_ptr<seerep_core_pb::CorePbImage> imagePb;
-  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level>
+      m_logger;
 };
 
 } /* namespace seerep_server */

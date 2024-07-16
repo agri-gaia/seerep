@@ -63,7 +63,8 @@ sensor_msgs::PointCloud2 createPointCloud()
   pc2.width = 6;
 
   // create two pointfield objects in a vector and assign it to the point count fields attribute
-  std::vector<sensor_msgs::PointField> pf = { createPointField(), createPointField() };
+  std::vector<sensor_msgs::PointField> pf = { createPointField(),
+                                              createPointField() };
   pc2.fields = pf;
 
   pc2.is_bigendian = true;
@@ -239,7 +240,8 @@ public:
     flatbuffers::grpc::Message<seerep::fb::Header> fb_header;
 
     // convert from ROS to Flatbuffer
-    fb_header = seerep_ros_conversions_fb::toFlat(original_header, p_uuid, m_uuid);
+    fb_header =
+        seerep_ros_conversions_fb::toFlat(original_header, p_uuid, m_uuid);
 
     // convert from Flatbuffer to ROS
     converted_header = seerep_ros_conversions_fb::toROS(*fb_header.GetRoot());
@@ -264,7 +266,8 @@ public:
     original_pc2 = createPointCloud();
 
     flatbuffers::grpc::Message<seerep::fb::PointCloud2> fb_pointcloud2;
-    fb_pointcloud2 = seerep_ros_conversions_fb::toFlat(original_pc2, p_uuid, m_uuid);
+    fb_pointcloud2 =
+        seerep_ros_conversions_fb::toFlat(original_pc2, p_uuid, m_uuid);
 
     converted_pc2 = seerep_ros_conversions_fb::toROS(*fb_pointcloud2.GetRoot());
     // PointCloud2 Test End
@@ -336,14 +339,17 @@ public:
     original_t_stamped = createTransformStamped();
 
     flatbuffers::grpc::Message<seerep::fb::TransformStamped> fb_transform_stamped;
-    fb_transform_stamped = seerep_ros_conversions_fb::toFlat(original_t_stamped, p_uuid, false);
+    fb_transform_stamped =
+        seerep_ros_conversions_fb::toFlat(original_t_stamped, p_uuid, false);
 
-    converted_t_stamped = seerep_ros_conversions_fb::toROS(*fb_transform_stamped.GetRoot());
+    converted_t_stamped =
+        seerep_ros_conversions_fb::toROS(*fb_transform_stamped.GetRoot());
     // Transform End
   }
 
   /**
-   * @brief This function instantiates all the attributes and fills them with arbitrary values.
+   * @brief This function instantiates all the attributes and fills them with
+   * arbitrary values.
    * */
   rosToFbConversionTest()
   {
@@ -371,14 +377,17 @@ public:
 };
 
 /**
- * @brief Given two ROS std_msgs::Header instances, this function tests their sub attributes of equality.
+ * @brief Given two ROS std_msgs::Header instances, this function tests their
+ * sub attributes of equality.
  * */
-void testHeader(std_msgs::Header original_header, std_msgs::Header converted_header)
+void testHeader(std_msgs::Header original_header,
+                std_msgs::Header converted_header)
 {
   EXPECT_EQ(original_header.seq, converted_header.seq);
   EXPECT_EQ(original_header.stamp.sec, converted_header.stamp.sec);
   EXPECT_EQ(original_header.stamp.nsec, converted_header.stamp.nsec);
-  EXPECT_STREQ(original_header.frame_id.c_str(), converted_header.frame_id.c_str());
+  EXPECT_STREQ(original_header.frame_id.c_str(),
+               converted_header.frame_id.c_str());
 }
 
 // test header
@@ -417,7 +426,8 @@ TEST_F(rosToFbConversionTest, testPointCloud2)
   EXPECT_EQ(original_pc2.is_bigendian, converted_pc2.is_bigendian);
   EXPECT_EQ(original_pc2.point_step, converted_pc2.point_step);
   EXPECT_EQ(original_pc2.row_step, converted_pc2.row_step);
-  EXPECT_EQ(original_pc2.data, converted_pc2.data);  // test in a loop separately
+  EXPECT_EQ(original_pc2.data,
+            converted_pc2.data);  // test in a loop separately
 
   EXPECT_EQ(original_pc2.is_dense, converted_pc2.is_dense);
 }
@@ -469,7 +479,8 @@ TEST_F(rosToFbConversionTest, testImgData)
 }
 
 /**
- * @brief Given two ROS geometry_msgs::Point instances, this function tests their sub attributes of equality.
+ * @brief Given two ROS geometry_msgs::Point instances, this function tests
+ * their sub attributes of equality.
  * */
 void testPoint(geometry_msgs::Point original_p, geometry_msgs::Point converted_p)
 {
@@ -487,9 +498,11 @@ TEST_F(rosToFbConversionTest, testPoint)
 }
 
 /**
- * @brief Given two ROS geometry_msgs::Quaternion instances, this function tests their sub attributes of equality.
+ * @brief Given two ROS geometry_msgs::Quaternion instances, this function tests
+ * their sub attributes of equality.
  * */
-void testQuaternion(geometry_msgs::Quaternion original_q, geometry_msgs::Quaternion converted_q)
+void testQuaternion(geometry_msgs::Quaternion original_q,
+                    geometry_msgs::Quaternion converted_q)
 {
   EXPECT_EQ(original_q.x, converted_q.x);
   EXPECT_EQ(original_q.y, converted_q.y);
@@ -506,9 +519,11 @@ TEST_F(rosToFbConversionTest, testQuaternion)
 }
 
 /**
- * @brief Given two ROS geometry_msgs::Vector3 instances, this function tests their sub attributes of equality.
+ * @brief Given two ROS geometry_msgs::Vector3 instances, this function tests
+ * their sub attributes of equality.
  * */
-void testVector3(geometry_msgs::Vector3 original_v, geometry_msgs::Vector3 converted_v)
+void testVector3(geometry_msgs::Vector3 original_v,
+                 geometry_msgs::Vector3 converted_v)
 {
   EXPECT_EQ(original_v.x, converted_v.x);
   EXPECT_EQ(original_v.y, converted_v.y);
@@ -539,7 +554,8 @@ TEST_F(rosToFbConversionTest, testTransformStamped)
 {
   testHeader(original_t_stamped.header, converted_t_stamped.header);
 
-  EXPECT_STREQ(original_t_stamped.child_frame_id.c_str(), converted_t_stamped.child_frame_id.c_str());
+  EXPECT_STREQ(original_t_stamped.child_frame_id.c_str(),
+               converted_t_stamped.child_frame_id.c_str());
 
   testVector3(original_t.translation, converted_t.translation);
   testQuaternion(original_t.rotation, converted_t.rotation);

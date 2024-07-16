@@ -32,9 +32,11 @@ namespace seerep_grpc_ros
 class DumpSensorMsgs
 {
 public:
-  DumpSensorMsgs(std::string hdf5FilePath, std::string project_frame_id, std::string project_name);
+  DumpSensorMsgs(std::string hdf5FilePath, std::string project_frame_id,
+                 std::string project_name);
 
-  std::optional<ros::Subscriber> getSubscriber(const std::string& message_type, const std::string& topic);
+  std::optional<ros::Subscriber> getSubscriber(const std::string& message_type,
+                                               const std::string& topic);
 
   void dump(const std_msgs::Header::ConstPtr& msg) const;
 

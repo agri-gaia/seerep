@@ -13,7 +13,8 @@ def get_server_config(config_path: str) -> dict:
         dict: A dictionary containing the server configuration.
 
     Raises:
-        ValueError: If the config file is not found or if it is missing required settings.
+        ValueError: If the config file is not found or if it is missing required
+        settings.
     """
     REQUIRED_KEYS = ["data-folder", "log-path", "port"]
     config_path = Path(config_path)
@@ -26,11 +27,16 @@ def get_server_config(config_path: str) -> dict:
             if line.startswith("#"):
                 continue
             key, value = line.split("=")
-            value = value.split("#")[0].strip() if "#" in value else value.strip()
+            value = (
+                value.split("#")[0].strip() if "#" in value else value.strip()
+            )
             config[key.strip()] = int(value) if value.isdigit() else value
     for key in REQUIRED_KEYS:
         if key not in config:
-            raise ValueError(f"Config file at '{config_path}' is missing required setting '{key}'")
+            raise ValueError(
+                f"Config file at '{config_path}' is missing required setting \
+                '{key}'"
+            )
     return config
 
 
@@ -40,16 +46,21 @@ def remove_files(directory: str, file_ending: str) -> None:
 
     Args:
         path (str): The path to the directory
-        file_ending (str): The file ending of the files to remove (without the dot)
+        file_ending (str): The file ending of the files to remove
+        (without the dot)
 
     Returns:
         None
     """
     if file_ending and "." in file_ending:
-        raise ValueError("Invalid file ending: File extensions must not contain a dot")
+        raise ValueError(
+            "Invalid file ending: File extensions must not contain a dot"
+        )
     directory = Path(directory)
     if directory.is_dir():
-        log_files = [f for f in directory.glob(f"*.{file_ending}") if f.is_file()]
+        log_files = [
+            f for f in directory.glob(f"*.{file_ending}") if f.is_file()
+        ]
         for file in log_files:
             file.unlink()
 

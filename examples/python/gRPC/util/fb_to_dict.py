@@ -1,6 +1,7 @@
 # NOTE: This file is referenced in the following mkdocs files:
 #   python-helpers.md
-# If any line changes on this file occur, those files may have to be updated as well
+# If any line changes on this file occur, those files may have to be updated as
+# well
 import json
 import os
 import subprocess as sp
@@ -62,18 +63,26 @@ def catkin_find_schema_dir(ros_pkg_name: str, sub_dir: str) -> Path:
     Tries to find the schema directory on the system using `catkin locate`.
 
     Args:
-        ros_pkg_name: The name of the ros package containing the relevant schema files
-        sub_dir: The name of the subdir of the package dir containing the relevant schema files
+        ros_pkg_name: The name of the ros package containing the relevant
+        schema files
+        sub_dir: The name of the subdir of the package dir containing the
+        relevant schema files
 
     Returns:
         The schema directory on the system if found.
 
     Raises:
         FileNotFoundError: If the path on the system is not present.
-        ChildProcessError: If `catkin locate` returns something on stderr or failed otherwise
+        ChildProcessError: If `catkin locate` returns something on stderr
+        or failed otherwise
     """
 
-    catkin_proc = sp.Popen(["catkin", "locate", ros_pkg_name], encoding="utf-8", stdout=sp.PIPE, stderr=sp.PIPE)
+    catkin_proc = sp.Popen(
+        ["catkin", "locate", ros_pkg_name],
+        encoding="utf-8",
+        stdout=sp.PIPE,
+        stderr=sp.PIPE,
+    )
     catkin_out, catkin_err = catkin_proc.communicate()
 
     if catkin_proc.returncode != 0 or catkin_err != "":
@@ -83,23 +92,28 @@ def catkin_find_schema_dir(ros_pkg_name: str, sub_dir: str) -> Path:
     fbs_path: Path = Path(catkin_out.splitlines()[0]) / sub_dir
 
     if not fbs_path.is_dir():
-        raise FileNotFoundError(f"The path for seerep flatbuffers schema files is not present! Should be {fbs_path}")
+        raise FileNotFoundError(
+            f"The path for seerep flatbuffers schema files is not present! "
+            f"Should be {fbs_path}"
+        )
 
     return fbs_path
 
 
 def fb_flatc_dict(fb_obj: bytearray, schema_file_name: SchemaFileNames) -> Dict:
     """
-    Converts a binary flatbuffers object to a python dictionary using it's IDL file.
+    Converts a binary flatbuffers object to a python dictionary using it's IDL
+    file.
 
-    This function should only be used for debugging or testing purposes, as it alleviates the advantage of flatbuffers
-    lessening the amount of copied data.
+    This function should only be used for debugging or testing purposes, as it
+    alleviates the advantage of flatbuffers lessening the amount of copied data.
 
     This implementation uses temporary files in /tmp for conversion.
 
     Args:
         fb_obj: The bytearray object as returned by builder.Output().
-        schema_file_name: The to `fb_obj` corresponding datatype in the `SchemaFileNames` format
+        schema_file_name: The to `fb_obj` corresponding datatype in the
+        `SchemaFileNames` format
 
     Returns:
         A python dictionary containing the objects attribute information.
@@ -108,16 +122,30 @@ def fb_flatc_dict(fb_obj: bytearray, schema_file_name: SchemaFileNames) -> Dict:
         FileNotFoundError: If the schema file on the system couldn't be found.
         ChildProcessError: If something went wrong using the flatc subcommand.
     """
-    schema_path = catkin_find_schema_dir(ROS_SCHEMA_PKG, ROS_SCHEMA_SUBDIR) / schema_file_name.value
+    schema_path = (
+        catkin_find_schema_dir(ROS_SCHEMA_PKG, ROS_SCHEMA_SUBDIR)
+        / schema_file_name.value
+    )
 
     if not schema_path.is_file():
-        raise FileNotFoundError(f"The schema file at {schema_path} does not exist!")
+        raise FileNotFoundError(
+            f"The schema file at {schema_path} does not exist!"
+        )
 
     try:
         with tempfile.NamedTemporaryFile(delete=False) as f:
             f.write(fb_obj)
             flatc_proc = sp.Popen(
-                ["flatc", "--json", "--raw-binary", "--strict-json", schema_path, "--", f.name], cwd="/tmp"
+                [
+                    "flatc",
+                    "--json",
+                    "--raw-binary",
+                    "--strict-json",
+                    schema_path,
+                    "--",
+                    f.name,
+                ],
+                cwd="/tmp",
             )
             tmp_file = Path(f.name)
             tmp_json = Path(f.name + ".json")
@@ -127,8 +155,10 @@ def fb_flatc_dict(fb_obj: bytearray, schema_file_name: SchemaFileNames) -> Dict:
 
         if sp_ret_code != 0 or not tmp_json.is_file():
             raise ChildProcessError(
-                f"A problem occured during flatbuffers object to json conversion using flatc!\
-                The file {tmp_json} was not properly created. Has the fbs schema file the `root_type` directive set?"
+                f"A problem occured during flatbuffers object to json "
+                f"conversion using flatc! "
+                f"The file {tmp_json} was not properly created. Has the fbs "
+                f"schema file the `root_type` directive set?"
             )
 
         with open(tmp_json, "r") as tmp_f:

@@ -2,8 +2,10 @@
 
 namespace seerep_core
 {
-CoreDataset::CoreDataset(std::shared_ptr<seerep_core::CoreTf> tfOverview,
-                         std::shared_ptr<seerep_core::CoreInstances> coreInstances, const std::string& frameId)
+CoreDataset::CoreDataset(
+    std::shared_ptr<seerep_core::CoreTf> tfOverview,
+    std::shared_ptr<seerep_core::CoreInstances> coreInstances,
+    const std::string& frameId)
   : m_frameId(frameId), m_tfOverview(tfOverview), m_coreInstances(coreInstances)
 {
 }
@@ -11,34 +13,42 @@ CoreDataset::~CoreDataset()
 {
 }
 
-void CoreDataset::addDatatype(const seerep_core_msgs::Datatype& datatype,
-                              std::shared_ptr<seerep_hdf5_core::Hdf5CoreDatatypeInterface> hdf5Io)
+void CoreDataset::addDatatype(
+    const seerep_core_msgs::Datatype& datatype,
+    std::shared_ptr<seerep_hdf5_core::Hdf5CoreDatatypeInterface> hdf5Io)
 {
   DatatypeSpecifics datatypeSpecifics = {
     .hdf5io = hdf5Io,
-    .dataWithMissingTF = std::vector<std::shared_ptr<seerep_core_msgs::DatasetIndexable>>(),
+    .dataWithMissingTF =
+        std::vector<std::shared_ptr<seerep_core_msgs::DatasetIndexable>>(),
     .rt = seerep_core_msgs::rtree(),
     .timetree = seerep_core_msgs::timetree(),
-    .categoryLabelDatasetsMap =
-        std::unordered_map<std::string, std::unordered_map<std::string, std::vector<boost::uuids::uuid>>>(),
+    .categoryLabelDatasetsMap = std::unordered_map<
+        std::string,
+        std::unordered_map<std::string, std::vector<boost::uuids::uuid>>>(),
     .datasetInstancesMap =
-        std::unordered_map<boost::uuids::uuid, std::vector<boost::uuids::uuid>, boost::hash<boost::uuids::uuid>>()
+        std::unordered_map<boost::uuids::uuid, std::vector<boost::uuids::uuid>,
+                           boost::hash<boost::uuids::uuid>>()
   };
-  m_datatypeDatatypeSpecificsMap.emplace(datatype, std::make_shared<DatatypeSpecifics>(datatypeSpecifics));
+  m_datatypeDatatypeSpecificsMap.emplace(
+      datatype, std::make_shared<DatatypeSpecifics>(datatypeSpecifics));
   recreateDatasets(datatype, hdf5Io);
 }
 
-void CoreDataset::recreateDatasets(const seerep_core_msgs::Datatype& datatype,
-                                   std::shared_ptr<seerep_hdf5_core::Hdf5CoreDatatypeInterface> hdf5Io)
+void CoreDataset::recreateDatasets(
+    const seerep_core_msgs::Datatype& datatype,
+    std::shared_ptr<seerep_hdf5_core::Hdf5CoreDatatypeInterface> hdf5Io)
 {
   std::vector<std::string> datasets = hdf5Io->getDatasetUuids();
   for (auto uuid : datasets)
   {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "found " << uuid << " in HDF5 file.";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
+        << "found " << uuid << " in HDF5 file.";
 
     try
     {
-      std::optional<seerep_core_msgs::DatasetIndexable> dataset = hdf5Io->readDataset(uuid);
+      std::optional<seerep_core_msgs::DatasetIndexable> dataset =
+          hdf5Io->readDataset(uuid);
 
       if (dataset)
       {
@@ -47,19 +57,22 @@ void CoreDataset::recreateDatasets(const seerep_core_msgs::Datatype& datatype,
     }
     catch (const std::runtime_error& e)
     {
-      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+          << e.what();
     }
   }
 }
 
-std::vector<boost::uuids::uuid> CoreDataset::getData(const seerep_core_msgs::Query& query)
+std::vector<boost::uuids::uuid>
+CoreDataset::getData(const seerep_core_msgs::Query& query)
 {
   std::vector<boost::uuids::uuid> result;
 
   // check if the data has now some tf for adding it to spatial rtree
   tryAddingDataWithMissingTF(query.header.datatype);
 
-  auto datatypeSpecifics = m_datatypeDatatypeSpecificsMap.at(query.header.datatype);
+  auto datatypeSpecifics =
+      m_datatypeDatatypeSpecificsMap.at(query.header.datatype);
   // space
   auto resultRt = querySpatial(datatypeSpecifics, query);
   // time
@@ -71,22 +84,27 @@ std::vector<boost::uuids::uuid> CoreDataset::getData(const seerep_core_msgs::Que
   std::optional<std::vector<boost::uuids::uuid>> instanceResult;
   if (query.instances)
   {
-    auto instances = m_coreInstances->getDatasets(query.instances.value(), query.header.datatype);
+    auto instances = m_coreInstances->getDatasets(query.instances.value(),
+                                                  query.header.datatype);
     if (!instances.empty())
     {
       instanceResult = instances;
     }
   }
 
-  if (!query.polygon && !query.timeinterval && !query.label && !query.instances && !query.dataUuids)
+  if (!query.polygon && !query.timeinterval && !query.label &&
+      !query.instances && !query.dataUuids)
   {
     return getAllDatasetUuids(datatypeSpecifics, query.sortByTime);
   }
 
-  return intersectQueryResults(resultRt, resultTime, resultSemantic, instanceResult, query.dataUuids, query.sortByTime);
+  return intersectQueryResults(resultRt, resultTime, resultSemantic,
+                               instanceResult, query.dataUuids,
+                               query.sortByTime);
 }
 
-std::vector<boost::uuids::uuid> CoreDataset::getInstances(const seerep_core_msgs::Query& query)
+std::vector<boost::uuids::uuid>
+CoreDataset::getInstances(const seerep_core_msgs::Query& query)
 {
   std::vector<boost::uuids::uuid> result;
   if (query.header.datatype == seerep_core_msgs::Datatype::Unknown)
@@ -96,20 +114,25 @@ std::vector<boost::uuids::uuid> CoreDataset::getInstances(const seerep_core_msgs
     {
       queryLocal.header.datatype = datatypeSpecifics.first;
       auto datasets = getData(queryLocal);
-      getUuidsFromMap(datatypeSpecifics.second->datasetInstancesMap, datasets, result);
+      getUuidsFromMap(datatypeSpecifics.second->datasetInstancesMap, datasets,
+                      result);
     }
   }
   else
   {
     auto datasets = getData(query);
-    getUuidsFromMap(m_datatypeDatatypeSpecificsMap.at(query.header.datatype)->datasetInstancesMap, datasets, result);
+    getUuidsFromMap(m_datatypeDatatypeSpecificsMap.at(query.header.datatype)
+                        ->datasetInstancesMap,
+                    datasets, result);
   }
   return result;
 }
 
-void CoreDataset::getUuidsFromMap(std::unordered_map<boost::uuids::uuid, std::vector<boost::uuids::uuid>,
-                                                     boost::hash<boost::uuids::uuid>>& datasetInstancesMap,
-                                  std::vector<boost::uuids::uuid>& datasets, std::vector<boost::uuids::uuid>& result)
+void CoreDataset::getUuidsFromMap(
+    std::unordered_map<boost::uuids::uuid, std::vector<boost::uuids::uuid>,
+                       boost::hash<boost::uuids::uuid>>& datasetInstancesMap,
+    std::vector<boost::uuids::uuid>& datasets,
+    std::vector<boost::uuids::uuid>& result)
 {
   std::set<boost::uuids::uuid> instances;
   for (auto dataset : datasets)
@@ -120,14 +143,16 @@ void CoreDataset::getUuidsFromMap(std::unordered_map<boost::uuids::uuid, std::ve
     if (resultPtr != datasetInstancesMap.end())
     {
       // add instances of dataset to instances set
-      std::copy(resultPtr->second.begin(), resultPtr->second.end(), std::inserter(instances, instances.end()));
+      std::copy(resultPtr->second.begin(), resultPtr->second.end(),
+                std::inserter(instances, instances.end()));
     }
   }
 
   std::copy(instances.begin(), instances.end(), std::back_inserter(result));
 }
 
-seerep_core_msgs::AABB CoreDataset::polygonToAABB(const seerep_core_msgs::Polygon2D& polygon)
+seerep_core_msgs::AABB
+CoreDataset::polygonToAABB(const seerep_core_msgs::Polygon2D& polygon)
 {
   seerep_core_msgs::Point min, max;
 
@@ -174,17 +199,20 @@ seerep_core_msgs::AABB CoreDataset::polygonToAABB(const seerep_core_msgs::Polygo
 }
 
 std::optional<std::vector<seerep_core_msgs::AabbIdPair>>
-CoreDataset::querySpatial(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics, const seerep_core_msgs::Query& query)
+CoreDataset::querySpatial(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
+                          const seerep_core_msgs::Query& query)
 {
   if (query.polygon)
   {
     // generate rtree result container
-    std::optional<std::vector<seerep_core_msgs::AabbIdPair>> rt_result = std::vector<seerep_core_msgs::AabbIdPair>();
+    std::optional<std::vector<seerep_core_msgs::AabbIdPair>> rt_result =
+        std::vector<seerep_core_msgs::AabbIdPair>();
 
     seerep_core_msgs::AABB aabb = polygonToAABB(query.polygon.value());
 
     // perform the query on the r tree using the aabb
-    datatypeSpecifics->rt.query(boost::geometry::index::intersects(aabb), std::back_inserter(rt_result.value()));
+    datatypeSpecifics->rt.query(boost::geometry::index::intersects(aabb),
+                                std::back_inserter(rt_result.value()));
 
     bool fullyEncapsulated = false;
     bool partiallyEncapsulated = false;
@@ -194,9 +222,11 @@ CoreDataset::querySpatial(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics, 
     for (it = rt_result.value().begin(); it != rt_result.value().end();)
     {
       // check if query result is not fully distant to the oriented bb box provided in the query
-      intersectionDegree(it->first, query.polygon.value(), fullyEncapsulated, partiallyEncapsulated);
+      intersectionDegree(it->first, query.polygon.value(), fullyEncapsulated,
+                         partiallyEncapsulated);
 
-      // if there is no intersection between the result and the user's request, remove it from the iterator
+      // if there is no intersection between the result and the user's request,
+      // remove it from the iterator
       if (!partiallyEncapsulated && !fullyEncapsulated)
       {
         it = rt_result.value().erase(it);
@@ -225,20 +255,24 @@ CoreDataset::querySpatial(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics, 
 }
 
 std::optional<std::vector<seerep_core_msgs::AabbTimeIdPair>>
-CoreDataset::queryTemporal(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics, const seerep_core_msgs::Query& query)
+CoreDataset::queryTemporal(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
+                           const seerep_core_msgs::Query& query)
 {
   if (query.timeinterval)
   {
     std::optional<std::vector<seerep_core_msgs::AabbTimeIdPair>> timetree_result =
         std::vector<seerep_core_msgs::AabbTimeIdPair>();
     seerep_core_msgs::AabbTime aabbtime(
-        seerep_core_msgs::TimePoint(((int64_t)query.timeinterval.value().timeMin.seconds) << 32 |
-                                    ((uint64_t)query.timeinterval.value().timeMin.nanos)),
-        seerep_core_msgs::TimePoint(((int64_t)query.timeinterval.value().timeMax.seconds) << 32 |
-                                    ((uint64_t)query.timeinterval.value().timeMax.nanos)));
+        seerep_core_msgs::TimePoint(
+            ((int64_t)query.timeinterval.value().timeMin.seconds) << 32 |
+            ((uint64_t)query.timeinterval.value().timeMin.nanos)),
+        seerep_core_msgs::TimePoint(
+            ((int64_t)query.timeinterval.value().timeMax.seconds) << 32 |
+            ((uint64_t)query.timeinterval.value().timeMax.nanos)));
 
-    datatypeSpecifics->timetree.query(boost::geometry::index::intersects(aabbtime),
-                                      std::back_inserter(timetree_result.value()));
+    datatypeSpecifics->timetree.query(
+        boost::geometry::index::intersects(aabbtime),
+        std::back_inserter(timetree_result.value()));
     return timetree_result;
   }
   else
@@ -248,7 +282,8 @@ CoreDataset::queryTemporal(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
 }
 
 std::optional<std::set<boost::uuids::uuid>>
-CoreDataset::querySemantic(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics, const seerep_core_msgs::Query& query)
+CoreDataset::querySemantic(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
+                           const seerep_core_msgs::Query& query)
 {
   if (query.label)
   {
@@ -266,15 +301,18 @@ CoreDataset::querySemantic(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
 }
 
 std::optional<std::set<boost::uuids::uuid>>
-CoreDataset::querySemanticWithAnyOfLabels(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
-                                          const seerep_core_msgs::Query& query)
+CoreDataset::querySemanticWithAnyOfLabels(
+    std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
+    const seerep_core_msgs::Query& query)
 {
-  std::optional<std::set<boost::uuids::uuid>> result = std::set<boost::uuids::uuid>();
+  std::optional<std::set<boost::uuids::uuid>> result =
+      std::set<boost::uuids::uuid>();
   // find the queried label in the label-imageID-map
   for (auto categorylabelquery : query.label.value())
   {
     auto& category = categorylabelquery.first;
-    auto categoryPtr = datatypeSpecifics->categoryLabelDatasetsMap.find(category);
+    auto categoryPtr =
+        datatypeSpecifics->categoryLabelDatasetsMap.find(category);
     if (categoryPtr != datatypeSpecifics->categoryLabelDatasetsMap.end())
     {
       for (std::string label : categorylabelquery.second)
@@ -295,8 +333,9 @@ CoreDataset::querySemanticWithAnyOfLabels(std::shared_ptr<DatatypeSpecifics> dat
 }
 
 std::optional<std::set<boost::uuids::uuid>>
-CoreDataset::querySemanticWithAllTheLabels(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
-                                           const seerep_core_msgs::Query& query)
+CoreDataset::querySemanticWithAllTheLabels(
+    std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
+    const seerep_core_msgs::Query& query)
 {
   std::set<boost::uuids::uuid> result;
   bool firstLabel = true;
@@ -306,7 +345,8 @@ CoreDataset::querySemanticWithAllTheLabels(std::shared_ptr<DatatypeSpecifics> da
     auto& category = categorylabelquery.first;
     for (std::string label : categorylabelquery.second)
     {
-      auto categoryPtr = datatypeSpecifics->categoryLabelDatasetsMap.find(category);
+      auto categoryPtr =
+          datatypeSpecifics->categoryLabelDatasetsMap.find(category);
       if (categoryPtr != datatypeSpecifics->categoryLabelDatasetsMap.end())
       {
         auto labelPtr = categoryPtr->second.find(label);
@@ -327,8 +367,10 @@ CoreDataset::querySemanticWithAllTheLabels(std::shared_ptr<DatatypeSpecifics> da
           else
           {
             std::set<boost::uuids::uuid> intersection;
-            std::set_intersection(result.begin(), result.end(), thisLabelSet.begin(), thisLabelSet.end(),
-                                  std::inserter(intersection, intersection.begin()));
+            std::set_intersection(result.begin(), result.end(),
+                                  thisLabelSet.begin(), thisLabelSet.end(),
+                                  std::inserter(intersection,
+                                                intersection.begin()));
             result = std::move(intersection);
           }
         }
@@ -351,12 +393,13 @@ CoreDataset::querySemanticWithAllTheLabels(std::shared_ptr<DatatypeSpecifics> da
   return result;
 }
 
-std::vector<boost::uuids::uuid>
-CoreDataset::intersectQueryResults(std::optional<std::vector<seerep_core_msgs::AabbIdPair>>& rt_result,
-                                   std::optional<std::vector<seerep_core_msgs::AabbTimeIdPair>>& timetree_result,
-                                   std::optional<std::set<boost::uuids::uuid>>& semanticResult,
-                                   std::optional<std::vector<boost::uuids::uuid>>& instanceResult,
-                                   const std::optional<std::vector<boost::uuids::uuid>>& dataUuids, bool sortByTime)
+std::vector<boost::uuids::uuid> CoreDataset::intersectQueryResults(
+    std::optional<std::vector<seerep_core_msgs::AabbIdPair>>& rt_result,
+    std::optional<std::vector<seerep_core_msgs::AabbTimeIdPair>>& timetree_result,
+    std::optional<std::set<boost::uuids::uuid>>& semanticResult,
+    std::optional<std::vector<boost::uuids::uuid>>& instanceResult,
+    const std::optional<std::vector<boost::uuids::uuid>>& dataUuids,
+    bool sortByTime)
 {
   std::vector<std::set<boost::uuids::uuid>> idsPerSingleModality;
 
@@ -391,14 +434,14 @@ CoreDataset::intersectQueryResults(std::optional<std::vector<seerep_core_msgs::A
 
   if (instanceResult)
   {
-    idsPerSingleModality.push_back(
-        std::move(std::set<boost::uuids::uuid>(instanceResult.value().begin(), instanceResult.value().end())));
+    idsPerSingleModality.push_back(std::move(std::set<boost::uuids::uuid>(
+        instanceResult.value().begin(), instanceResult.value().end())));
   }
 
   if (dataUuids)
   {
-    idsPerSingleModality.push_back(
-        std::move(std::set<boost::uuids::uuid>(dataUuids.value().begin(), dataUuids.value().end())));
+    idsPerSingleModality.push_back(std::move(std::set<boost::uuids::uuid>(
+        dataUuids.value().begin(), dataUuids.value().end())));
   }
 
   auto intersectionResult = intersectVectorOfSets(idsPerSingleModality);
@@ -413,7 +456,8 @@ CoreDataset::intersectQueryResults(std::optional<std::vector<seerep_core_msgs::A
     else
     {
       BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning)
-          << "Results will not be sorted by time (even though it was requested), because there is no temporal part in "
+          << "Results will not be sorted by time (even though it was "
+             "requested), because there is no temporal part in "
              "the query";
     }
   }
@@ -421,9 +465,9 @@ CoreDataset::intersectQueryResults(std::optional<std::vector<seerep_core_msgs::A
   return std::vector(intersectionResult.begin(), intersectionResult.end());
 }
 
-std::vector<boost::uuids::uuid>
-CoreDataset::sortResultByTime(std::optional<std::vector<seerep_core_msgs::AabbTimeIdPair>>& timetree_result,
-                              std::optional<std::set<boost::uuids::uuid>> intersectionResult)
+std::vector<boost::uuids::uuid> CoreDataset::sortResultByTime(
+    std::optional<std::vector<seerep_core_msgs::AabbTimeIdPair>>& timetree_result,
+    std::optional<std::set<boost::uuids::uuid>> intersectionResult)
 {
   std::vector<std::pair<int64_t, boost::uuids::uuid>> sortingVector;
   for (auto it = std::make_move_iterator(timetree_result.value().begin()),
@@ -431,9 +475,11 @@ CoreDataset::sortResultByTime(std::optional<std::vector<seerep_core_msgs::AabbTi
        it != end; ++it)
   {
     if (!intersectionResult.has_value() ||
-        intersectionResult.value().find(it->second) != intersectionResult.value().end())
+        intersectionResult.value().find(it->second) !=
+            intersectionResult.value().end())
     {
-      sortingVector.push_back(std::make_pair(boost::geometry::get<0>(it->first.min_corner()), it->second));
+      sortingVector.push_back(std::make_pair(
+          boost::geometry::get<0>(it->first.min_corner()), it->second));
     }
   }
 
@@ -447,7 +493,8 @@ CoreDataset::sortResultByTime(std::optional<std::vector<seerep_core_msgs::AabbTi
   return sortedResults;
 }
 
-std::set<boost::uuids::uuid> CoreDataset::intersectVectorOfSets(std::vector<std::set<boost::uuids::uuid>>& vectorOfSets)
+std::set<boost::uuids::uuid> CoreDataset::intersectVectorOfSets(
+    std::vector<std::set<boost::uuids::uuid>>& vectorOfSets)
 {
   if (vectorOfSets.size() > 1)
   {
@@ -459,7 +506,8 @@ std::set<boost::uuids::uuid> CoreDataset::intersectVectorOfSets(std::vector<std:
                           vectorOfSets.at(vectorOfSets.size() - 1).end(),
                           vectorOfSets.at(vectorOfSets.size() - 2).begin(),
                           vectorOfSets.at(vectorOfSets.size() - 2).end(),
-                          std::inserter(intersectionResult, intersectionResult.begin()));
+                          std::inserter(intersectionResult,
+                                        intersectionResult.begin()));
     // pop the two intersected sets
     vectorOfSets.pop_back();
     vectorOfSets.pop_back();
@@ -479,19 +527,24 @@ std::set<boost::uuids::uuid> CoreDataset::intersectVectorOfSets(std::vector<std:
   return std::set<boost::uuids::uuid>();
 }
 
-std::vector<boost::uuids::uuid>
-CoreDataset::getAllDatasetUuids(std::shared_ptr<seerep_core::CoreDataset::DatatypeSpecifics> datatypeSpecifics,
-                                bool sortByTime)
+std::vector<boost::uuids::uuid> CoreDataset::getAllDatasetUuids(
+    std::shared_ptr<seerep_core::CoreDataset::DatatypeSpecifics>
+        datatypeSpecifics,
+    bool sortByTime)
 {
-  std::optional<std::vector<seerep_core_msgs::AabbTimeIdPair>> allIdsFromTimeTree =
-      std::vector<seerep_core_msgs::AabbTimeIdPair>();
-  seerep_core_msgs::AabbTime aabbtime(seerep_core_msgs::TimePoint(((int64_t)std::numeric_limits<uint32_t>::min() << 32 |
-                                                                   ((uint64_t)std::numeric_limits<uint32_t>::min()))),
-                                      seerep_core_msgs::TimePoint(((int64_t)std::numeric_limits<int32_t>::max()) << 32 |
-                                                                  ((uint64_t)std::numeric_limits<uint32_t>::max())));
+  std::optional<std::vector<seerep_core_msgs::AabbTimeIdPair>>
+      allIdsFromTimeTree = std::vector<seerep_core_msgs::AabbTimeIdPair>();
+  seerep_core_msgs::AabbTime aabbtime(
+      seerep_core_msgs::TimePoint(
+          ((int64_t)std::numeric_limits<uint32_t>::min() << 32 |
+           ((uint64_t)std::numeric_limits<uint32_t>::min()))),
+      seerep_core_msgs::TimePoint(
+          ((int64_t)std::numeric_limits<int32_t>::max()) << 32 |
+          ((uint64_t)std::numeric_limits<uint32_t>::max())));
 
-  datatypeSpecifics->timetree.query(boost::geometry::index::intersects(aabbtime),
-                                    std::back_inserter(allIdsFromTimeTree.value()));
+  datatypeSpecifics->timetree.query(
+      boost::geometry::index::intersects(aabbtime),
+      std::back_inserter(allIdsFromTimeTree.value()));
 
   if (sortByTime)
   {
@@ -519,7 +572,8 @@ void CoreDataset::addDataset(const seerep_core_msgs::DatasetIndexable& dataset)
   }
 
   // check if datatype is available
-  if (m_datatypeDatatypeSpecificsMap.find(dataset.header.datatype) == m_datatypeDatatypeSpecificsMap.end())
+  if (m_datatypeDatatypeSpecificsMap.find(dataset.header.datatype) ==
+      m_datatypeDatatypeSpecificsMap.end())
   {
     throw std::invalid_argument("datatype not available in seerep_core");
   }
@@ -531,22 +585,25 @@ void CoreDataset::addDataset(const seerep_core_msgs::DatasetIndexable& dataset)
  * Data without tf cannot be added to rtree
  * check if tf is now available and add data to spatial rtree
  */
-void CoreDataset::tryAddingDataWithMissingTF(const seerep_core_msgs::Datatype& datatype)
+void CoreDataset::tryAddingDataWithMissingTF(
+    const seerep_core_msgs::Datatype& datatype)
 {
   auto datatypeSpecifics = m_datatypeDatatypeSpecificsMap.at(datatype);
 
-  for (std::vector<std::shared_ptr<seerep_core_msgs::DatasetIndexable>>::iterator it =
-           datatypeSpecifics->dataWithMissingTF.begin();
+  for (std::vector<std::shared_ptr<seerep_core_msgs::DatasetIndexable>>::iterator
+           it = datatypeSpecifics->dataWithMissingTF.begin();
        it != datatypeSpecifics->dataWithMissingTF.end();
        /*it++*/ /*<-- increment in loop itself!*/)
   {
-    if (m_tfOverview->canTransform((*it)->header.frameId, m_frameId, (*it)->header.timestamp.seconds,
+    if (m_tfOverview->canTransform((*it)->header.frameId, m_frameId,
+                                   (*it)->header.timestamp.seconds,
                                    (*it)->header.timestamp.nanos))
     {
-      datatypeSpecifics->rt.insert(
-          std::make_pair(m_tfOverview->transformAABB((*it)->boundingbox, (*it)->header.frameId, m_frameId,
-                                                     (*it)->header.timestamp.seconds, (*it)->header.timestamp.nanos),
-                         (*it)->header.uuidData));
+      datatypeSpecifics->rt.insert(std::make_pair(
+          m_tfOverview->transformAABB(
+              (*it)->boundingbox, (*it)->header.frameId, m_frameId,
+              (*it)->header.timestamp.seconds, (*it)->header.timestamp.nanos),
+          (*it)->header.uuidData));
       it = datatypeSpecifics->dataWithMissingTF.erase(it);
     }
     else
@@ -556,58 +613,76 @@ void CoreDataset::tryAddingDataWithMissingTF(const seerep_core_msgs::Datatype& d
   }
 }
 
-void CoreDataset::addDatasetToIndices(const seerep_core_msgs::Datatype& datatype,
-                                      const seerep_core_msgs::DatasetIndexable& dataset)
+void CoreDataset::addDatasetToIndices(
+    const seerep_core_msgs::Datatype& datatype,
+    const seerep_core_msgs::DatasetIndexable& dataset)
 {
   auto datatypeSpecifics = m_datatypeDatatypeSpecificsMap.at(datatype);
 
-  if (m_tfOverview->canTransform(dataset.header.frameId, m_frameId, dataset.header.timestamp.seconds,
+  if (m_tfOverview->canTransform(dataset.header.frameId, m_frameId,
+                                 dataset.header.timestamp.seconds,
                                  dataset.header.timestamp.nanos))
   {
-    datatypeSpecifics->rt.insert(
-        std::make_pair(m_tfOverview->transformAABB(dataset.boundingbox, dataset.header.frameId, m_frameId,
-                                                   dataset.header.timestamp.seconds, dataset.header.timestamp.nanos),
-                       dataset.header.uuidData));
+    datatypeSpecifics->rt.insert(std::make_pair(
+        m_tfOverview->transformAABB(dataset.boundingbox, dataset.header.frameId,
+                                    m_frameId, dataset.header.timestamp.seconds,
+                                    dataset.header.timestamp.nanos),
+        dataset.header.uuidData));
   }
   else
   {
-    datatypeSpecifics->dataWithMissingTF.push_back(std::make_shared<seerep_core_msgs::DatasetIndexable>(dataset));
+    datatypeSpecifics->dataWithMissingTF.push_back(
+        std::make_shared<seerep_core_msgs::DatasetIndexable>(dataset));
   }
 
-  seerep_core_msgs::AabbTime aabbTime(seerep_core_msgs::TimePoint(((int64_t)dataset.header.timestamp.seconds) << 32 |
-                                                                  ((uint64_t)dataset.header.timestamp.nanos)),
-                                      seerep_core_msgs::TimePoint(((int64_t)dataset.header.timestamp.seconds) << 32 |
-                                                                  ((uint64_t)dataset.header.timestamp.nanos)));
-  datatypeSpecifics->timetree.insert(std::make_pair(aabbTime, dataset.header.uuidData));
+  seerep_core_msgs::AabbTime aabbTime(
+      seerep_core_msgs::TimePoint(((int64_t)dataset.header.timestamp.seconds)
+                                      << 32 |
+                                  ((uint64_t)dataset.header.timestamp.nanos)),
+      seerep_core_msgs::TimePoint(((int64_t)dataset.header.timestamp.seconds)
+                                      << 32 |
+                                  ((uint64_t)dataset.header.timestamp.nanos)));
+  datatypeSpecifics->timetree.insert(
+      std::make_pair(aabbTime, dataset.header.uuidData));
 
-  addLabels(datatype, datatypeSpecifics, dataset.labelsCategory, dataset.header.uuidData);
+  addLabels(datatype, datatypeSpecifics, dataset.labelsCategory,
+            dataset.header.uuidData);
 }
 
-void CoreDataset::addLabels(const seerep_core_msgs::Datatype& datatype,
-                            const std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>& labelPerCategory,
-                            const boost::uuids::uuid& msgUuid)
+void CoreDataset::addLabels(
+    const seerep_core_msgs::Datatype& datatype,
+    const std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>&
+        labelPerCategory,
+    const boost::uuids::uuid& msgUuid)
 {
-  addLabels(datatype, m_datatypeDatatypeSpecificsMap.at(datatype), labelPerCategory, msgUuid);
+  addLabels(datatype, m_datatypeDatatypeSpecificsMap.at(datatype),
+            labelPerCategory, msgUuid);
 }
 
-void CoreDataset::addLabels(const seerep_core_msgs::Datatype& datatype,
-                            std::shared_ptr<seerep_core::CoreDataset::DatatypeSpecifics> datatypeSpecifics,
-                            const std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>& labelPerCategory,
-                            const boost::uuids::uuid& msgUuid)
+void CoreDataset::addLabels(
+    const seerep_core_msgs::Datatype& datatype,
+    std::shared_ptr<seerep_core::CoreDataset::DatatypeSpecifics>
+        datatypeSpecifics,
+    const std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>&
+        labelPerCategory,
+    const boost::uuids::uuid& msgUuid)
 {
   std::vector<boost::uuids::uuid> instanceUuids;
   // loop categories
   for (auto labelOfCategory : labelPerCategory)
   {
     // check if label already exists
-    auto categoryMapEntry = datatypeSpecifics->categoryLabelDatasetsMap.find(labelOfCategory.first);
+    auto categoryMapEntry =
+        datatypeSpecifics->categoryLabelDatasetsMap.find(labelOfCategory.first);
     if (categoryMapEntry == datatypeSpecifics->categoryLabelDatasetsMap.end())
     {
       auto emplaceReturn = datatypeSpecifics->categoryLabelDatasetsMap.emplace(
-          labelOfCategory.first, std::unordered_map<std::string, std::vector<boost::uuids::uuid>>());
+          labelOfCategory.first,
+          std::unordered_map<std::string, std::vector<boost::uuids::uuid>>());
       if (!emplaceReturn.second)
       {
-        throw std::runtime_error("could not insert label category to datatype specifics.");
+        throw std::runtime_error(
+            "could not insert label category to datatype specifics.");
       }
       categoryMapEntry = emplaceReturn.first;
     }
@@ -615,7 +690,8 @@ void CoreDataset::addLabels(const seerep_core_msgs::Datatype& datatype,
     for (auto labelWithInstance : labelOfCategory.second.labels)
     {
       // check if label already exists
-      auto labelMapEntry = categoryMapEntry->second.find(labelWithInstance.label);
+      auto labelMapEntry =
+          categoryMapEntry->second.find(labelWithInstance.label);
       if (labelMapEntry != categoryMapEntry->second.end())
       {
         // label already exists, add id of dataset to the vector
@@ -624,7 +700,8 @@ void CoreDataset::addLabels(const seerep_core_msgs::Datatype& datatype,
       else
       {
         // label doesn't already exist. Create new pair of label and vector of dataset ids
-        categoryMapEntry->second.emplace(labelWithInstance.label, std::vector<boost::uuids::uuid>{ msgUuid });
+        categoryMapEntry->second.emplace(
+            labelWithInstance.label, std::vector<boost::uuids::uuid>{ msgUuid });
       }
 
       // add to instance
@@ -651,7 +728,8 @@ bool CoreDataset::verifyPolygonIntegrity(CGAL::Polygon_2<Kernel>& polygon_cgal)
   }
   if (!polygon_cgal.is_convex())
   {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << "Polygon is not convex.";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+        << "Polygon is not convex.";
     return false;
   }
 
@@ -664,35 +742,42 @@ bool CoreDataset::verifyPolygonIntegrity(CGAL::Polygon_2<Kernel>& polygon_cgal)
   return true;
 }
 
-CGAL::Polygon_2<Kernel> CoreDataset::toCGALPolygon(const seerep_core_msgs::Polygon2D& polygon)
+CGAL::Polygon_2<Kernel>
+CoreDataset::toCGALPolygon(const seerep_core_msgs::Polygon2D& polygon)
 {
   CGAL::Polygon_2<Kernel> polygon_cgal;
   for (auto point : polygon.vertices)
   {
-    polygon_cgal.push_back(Kernel::Point_2(bg::get<0>(point), bg::get<1>(point)));
+    polygon_cgal.push_back(
+        Kernel::Point_2(bg::get<0>(point), bg::get<1>(point)));
   }
 
   return polygon_cgal;
 }
 
-CGAL::Polygon_2<Kernel> CoreDataset::toCGALPolygon(const seerep_core_msgs::AABB& aabb)
+CGAL::Polygon_2<Kernel>
+CoreDataset::toCGALPolygon(const seerep_core_msgs::AABB& aabb)
 {
   /* Check if the bounding box has no spatial extent -> Only add one point to the polygon */
   if (bg::get<bg::min_corner, 0>(aabb) == bg::get<bg::max_corner, 0>(aabb) &&
       bg::get<bg::min_corner, 1>(aabb) == bg::get<bg::max_corner, 1>(aabb))
   {
-    Kernel::Point_2 points_aabb[] = { Kernel::Point_2(bg::get<bg::min_corner, 0>(aabb),
-                                                      bg::get<bg::min_corner, 1>(aabb)) };
+    Kernel::Point_2 points_aabb[] = { Kernel::Point_2(
+        bg::get<bg::min_corner, 0>(aabb), bg::get<bg::min_corner, 1>(aabb)) };
     CGAL::Polygon_2<Kernel> aabb_cgal(points_aabb, points_aabb + 1);
     return aabb_cgal;
   }
   else
   {
     Kernel::Point_2 points_aabb[] = {
-      Kernel::Point_2(bg::get<bg::min_corner, 0>(aabb), bg::get<bg::min_corner, 1>(aabb)),
-      Kernel::Point_2(bg::get<bg::max_corner, 0>(aabb), bg::get<bg::min_corner, 1>(aabb)),
-      Kernel::Point_2(bg::get<bg::max_corner, 0>(aabb), bg::get<bg::max_corner, 1>(aabb)),
-      Kernel::Point_2(bg::get<bg::min_corner, 0>(aabb), bg::get<bg::max_corner, 1>(aabb)),
+      Kernel::Point_2(bg::get<bg::min_corner, 0>(aabb),
+                      bg::get<bg::min_corner, 1>(aabb)),
+      Kernel::Point_2(bg::get<bg::max_corner, 0>(aabb),
+                      bg::get<bg::min_corner, 1>(aabb)),
+      Kernel::Point_2(bg::get<bg::max_corner, 0>(aabb),
+                      bg::get<bg::max_corner, 1>(aabb)),
+      Kernel::Point_2(bg::get<bg::min_corner, 0>(aabb),
+                      bg::get<bg::max_corner, 1>(aabb)),
     };
     CGAL::Polygon_2<Kernel> aabb_cgal(points_aabb, points_aabb + 4);
 
@@ -700,8 +785,10 @@ CGAL::Polygon_2<Kernel> CoreDataset::toCGALPolygon(const seerep_core_msgs::AABB&
   }
 }
 
-void CoreDataset::intersectionDegree(const seerep_core_msgs::AABB& aabb, const seerep_core_msgs::Polygon2D& polygon,
-                                     bool& fullEncapsulation, bool& partialEncapsulation)
+void CoreDataset::intersectionDegree(const seerep_core_msgs::AABB& aabb,
+                                     const seerep_core_msgs::Polygon2D& polygon,
+                                     bool& fullEncapsulation,
+                                     bool& partialEncapsulation)
 {
   // convert seerep core aabb to cgal polygon
   CGAL::Polygon_2<Kernel> aabb_cgal = toCGALPolygon(aabb);
@@ -709,8 +796,10 @@ void CoreDataset::intersectionDegree(const seerep_core_msgs::AABB& aabb, const s
   // convert seerep core polygon to cgal polygon
   CGAL::Polygon_2<Kernel> polygon_cgal = toCGALPolygon(polygon);
 
-  // a cgal polyon needs to be simple, convex and the points should be added in a counter clockwise order
-  if (!verifyPolygonIntegrity(polygon_cgal) || !verifyPolygonIntegrity(aabb_cgal))
+  // a cgal polyon needs to be simple, convex and the points should be added in
+  // a counter clockwise order
+  if (!verifyPolygonIntegrity(polygon_cgal) ||
+      !verifyPolygonIntegrity(aabb_cgal))
   {
     return;
   }
@@ -721,13 +810,15 @@ void CoreDataset::intersectionDegree(const seerep_core_msgs::AABB& aabb, const s
   bool xy_bounded, z_bounded;
 
   // are the corners of the aabb inside the polygon on the z axis
-  z_bounded = polygon.z <= bg::get<bg::min_corner, 2>(aabb) &&
-              (polygon.z + polygon.height) >= bg::get<bg::min_corner, 2>(aabb) &&
-              polygon.z <= bg::get<bg::max_corner, 2>(aabb) &&
-              (polygon.z + polygon.height) >= bg::get<bg::max_corner, 2>(aabb);
+  z_bounded =
+      polygon.z <= bg::get<bg::min_corner, 2>(aabb) &&
+      (polygon.z + polygon.height) >= bg::get<bg::min_corner, 2>(aabb) &&
+      polygon.z <= bg::get<bg::max_corner, 2>(aabb) &&
+      (polygon.z + polygon.height) >= bg::get<bg::max_corner, 2>(aabb);
 
   // traverse the axis aligned bounding box
-  for (CGAL::Polygon_2<Kernel>::Vertex_iterator vi = aabb_cgal.vertices_begin(); vi != aabb_cgal.vertices_end(); ++vi)
+  for (CGAL::Polygon_2<Kernel>::Vertex_iterator vi = aabb_cgal.vertices_begin();
+       vi != aabb_cgal.vertices_end(); ++vi)
   {
     // is the vertex of the aabb inside the polygon on the x and y axis
     xy_bounded = !(polygon_cgal.bounded_side(*vi) == CGAL::ON_UNBOUNDED_SIDE);
@@ -744,7 +835,8 @@ void CoreDataset::intersectionDegree(const seerep_core_msgs::AABB& aabb, const s
   }
 }
 
-seerep_core_msgs::AabbTime CoreDataset::getTimeBounds(std::vector<seerep_core_msgs::Datatype> datatypes)
+seerep_core_msgs::AabbTime
+CoreDataset::getTimeBounds(std::vector<seerep_core_msgs::Datatype> datatypes)
 {
   seerep_core_msgs::AabbTime overalltime;
 
@@ -753,7 +845,8 @@ seerep_core_msgs::AabbTime CoreDataset::getTimeBounds(std::vector<seerep_core_ms
 
   for (seerep_core_msgs::Datatype dt : datatypes)
   {
-    seerep_core_msgs::AabbTime timeinterval = m_datatypeDatatypeSpecificsMap.at(dt)->timetree.bounds();
+    seerep_core_msgs::AabbTime timeinterval =
+        m_datatypeDatatypeSpecificsMap.at(dt)->timetree.bounds();
 
     // compare min and update if need be
     if (timeinterval.min_corner().get<0>() < overalltime.min_corner().get<0>())
@@ -771,7 +864,8 @@ seerep_core_msgs::AabbTime CoreDataset::getTimeBounds(std::vector<seerep_core_ms
   return overalltime;
 }
 
-seerep_core_msgs::AABB CoreDataset::getSpatialBounds(std::vector<seerep_core_msgs::Datatype> datatypes)
+seerep_core_msgs::AABB
+CoreDataset::getSpatialBounds(std::vector<seerep_core_msgs::Datatype> datatypes)
 {
   seerep_core_msgs::AABB overallbb;
 
@@ -790,7 +884,8 @@ seerep_core_msgs::AABB CoreDataset::getSpatialBounds(std::vector<seerep_core_msg
     // check if the data has now some tf for adding it to spatial rtree
     tryAddingDataWithMissingTF(dt);
 
-    seerep_core_msgs::AABB rtree_bounds = m_datatypeDatatypeSpecificsMap.at(dt)->rt.bounds();
+    seerep_core_msgs::AABB rtree_bounds =
+        m_datatypeDatatypeSpecificsMap.at(dt)->rt.bounds();
 
     // update the min if needed for dimension 0
     if (rtree_bounds.min_corner().get<0>() < overallbb.min_corner().get<0>())
@@ -831,7 +926,8 @@ seerep_core_msgs::AABB CoreDataset::getSpatialBounds(std::vector<seerep_core_msg
   return overallbb;
 }
 
-std::unordered_set<std::string> CoreDataset::getAllCategories(std::vector<seerep_core_msgs::Datatype> datatypes)
+std::unordered_set<std::string>
+CoreDataset::getAllCategories(std::vector<seerep_core_msgs::Datatype> datatypes)
 {
   std::unordered_set<std::string> categories;
 
@@ -839,7 +935,8 @@ std::unordered_set<std::string> CoreDataset::getAllCategories(std::vector<seerep
   for (seerep_core_msgs::Datatype dt : datatypes)
   {
     // obtain the map which holds the categories
-    auto categories_map = &(m_datatypeDatatypeSpecificsMap.at(dt)->categoryLabelDatasetsMap);
+    auto categories_map =
+        &(m_datatypeDatatypeSpecificsMap.at(dt)->categoryLabelDatasetsMap);
 
     // traverse this map
     for (auto& [category, value] : *categories_map)
@@ -851,8 +948,9 @@ std::unordered_set<std::string> CoreDataset::getAllCategories(std::vector<seerep
   return categories;
 }
 
-std::unordered_set<std::string> CoreDataset::getAllLabels(std::vector<seerep_core_msgs::Datatype> datatypes,
-                                                          std::string category)
+std::unordered_set<std::string>
+CoreDataset::getAllLabels(std::vector<seerep_core_msgs::Datatype> datatypes,
+                          std::string category)
 {
   std::unordered_set<std::string> labels;
 
@@ -860,8 +958,9 @@ std::unordered_set<std::string> CoreDataset::getAllLabels(std::vector<seerep_cor
   for (seerep_core_msgs::Datatype dt : datatypes)
   {
     // obtain the map pertaining to the provided category
-    std::unordered_map<std::string, std::vector<boost::uuids::uuid>>* label_to_uuid_map =
-        &(m_datatypeDatatypeSpecificsMap.at(dt)->categoryLabelDatasetsMap[category]);
+    std::unordered_map<std::string, std::vector<boost::uuids::uuid>>*
+        label_to_uuid_map = &(m_datatypeDatatypeSpecificsMap.at(dt)
+                                  ->categoryLabelDatasetsMap[category]);
 
     // traverse this map
     for (auto& [label, value] : *label_to_uuid_map)

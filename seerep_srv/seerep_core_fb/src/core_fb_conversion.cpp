@@ -2,12 +2,15 @@
 
 namespace seerep_core_fb
 {
-seerep_core_msgs::Query CoreFbConversion::fromFb(const seerep::fb::QueryInstance* queryInstance)
+seerep_core_msgs::Query
+CoreFbConversion::fromFb(const seerep::fb::QueryInstance* queryInstance)
 {
-  return seerep_core_fb::CoreFbConversion::fromFb(queryInstance->query(), fromFb(queryInstance->datatype()));
+  return seerep_core_fb::CoreFbConversion::fromFb(
+      queryInstance->query(), fromFb(queryInstance->datatype()));
 }
 
-seerep_core_msgs::Datatype CoreFbConversion::fromFb(const seerep::fb::Datatype& datatype)
+seerep_core_msgs::Datatype
+CoreFbConversion::fromFb(const seerep::fb::Datatype& datatype)
 {
   if (datatype == seerep::fb::Datatype_Image)
   {
@@ -27,8 +30,9 @@ seerep_core_msgs::Datatype CoreFbConversion::fromFb(const seerep::fb::Datatype& 
   }
 }
 
-seerep_core_msgs::Query CoreFbConversion::fromFb(const seerep::fb::Query* query,
-                                                 const seerep_core_msgs::Datatype& datatype)
+seerep_core_msgs::Query
+CoreFbConversion::fromFb(const seerep::fb::Query* query,
+                         const seerep_core_msgs::Datatype& datatype)
 {
   seerep_core_msgs::Query queryCore;
   queryCore.header.datatype = datatype;
@@ -51,11 +55,13 @@ seerep_core_msgs::Query CoreFbConversion::fromFb(const seerep::fb::Query* query,
   return queryCore;
 }
 
-seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::Image& img)
+seerep_core_msgs::DatasetIndexable
+CoreFbConversion::fromFb(const seerep::fb::Image& img)
 {
   seerep_core_msgs::DatasetIndexable dataForIndices;
 
-  fromFbDataHeader(img.header(), dataForIndices.header, seerep_core_msgs::Datatype::Image);
+  fromFbDataHeader(img.header(), dataForIndices.header,
+                   seerep_core_msgs::Datatype::Image);
 
   // set bounding box for images to 0. assume no spatial extent
   dataForIndices.boundingbox.min_corner().set<0>(0);
@@ -73,11 +79,13 @@ seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::Im
 
   return dataForIndices;
 }
-seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::PointStamped* point)
+seerep_core_msgs::DatasetIndexable
+CoreFbConversion::fromFb(const seerep::fb::PointStamped* point)
 {
   seerep_core_msgs::DatasetIndexable dataForIndices;
 
-  fromFbDataHeader(point->header(), dataForIndices.header, seerep_core_msgs::Datatype::Point);
+  fromFbDataHeader(point->header(), dataForIndices.header,
+                   seerep_core_msgs::Datatype::Point);
 
   // set bounding box for point to point coordinates. assume no spatial extent
   dataForIndices.boundingbox.min_corner().set<0>(point->point()->x());
@@ -97,10 +105,12 @@ seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::Po
   return dataForIndices;
 }
 
-seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::PointCloud2& cloud)
+seerep_core_msgs::DatasetIndexable
+CoreFbConversion::fromFb(const seerep::fb::PointCloud2& cloud)
 {
   seerep_core_msgs::DatasetIndexable dataForIndices;
-  fromFbDataHeader(cloud.header(), dataForIndices.header, seerep_core_msgs::Datatype::PointCloud);
+  fromFbDataHeader(cloud.header(), dataForIndices.header,
+                   seerep_core_msgs::Datatype::PointCloud);
 
   // semantic
   if (flatbuffers::IsFieldPresent(&cloud, seerep::fb::PointCloud2::VT_LABELS))
@@ -110,13 +120,15 @@ seerep_core_msgs::DatasetIndexable CoreFbConversion::fromFb(const seerep::fb::Po
   return dataForIndices;
 }
 
-seerep_core_msgs::QueryTf CoreFbConversion::fromFb(const seerep::fb::TransformStampedQuery& query)
+seerep_core_msgs::QueryTf
+CoreFbConversion::fromFb(const seerep::fb::TransformStampedQuery& query)
 {
   boost::uuids::string_generator gen;
   seerep_core_msgs::QueryTf queryTf;
   queryTf.childFrameId = query.child_frame_id()->str();
   queryTf.parentFrameId = query.header()->frame_id()->str();
-  if (flatbuffers::IsFieldPresent(query.header(), seerep::fb::Header::VT_UUID_PROJECT))
+  if (flatbuffers::IsFieldPresent(query.header(),
+                                  seerep::fb::Header::VT_UUID_PROJECT))
   {
     queryTf.project = gen(query.header()->uuid_project()->str());
   }
@@ -130,18 +142,21 @@ seerep_core_msgs::QueryTf CoreFbConversion::fromFb(const seerep::fb::TransformSt
   return queryTf;
 }
 
-seerep_core_msgs::camera_intrinsics CoreFbConversion::fromFb(const seerep::fb::CameraIntrinsics& ci)
+seerep_core_msgs::camera_intrinsics
+CoreFbConversion::fromFb(const seerep::fb::CameraIntrinsics& ci)
 {
   seerep_core_msgs::camera_intrinsics ciCore;
 
-  CoreFbConversion::fromFbDataHeader(ci.header(), ciCore.header, seerep_core_msgs::Datatype::Unknown);
+  CoreFbConversion::fromFbDataHeader(ci.header(), ciCore.header,
+                                     seerep_core_msgs::Datatype::Unknown);
 
   ciCore.height = ci.height();
   ciCore.width = ci.width();
   ciCore.distortion_model = ci.distortion_model()->str();
 
   // traverse distortion list and convert
-  if (flatbuffers::IsFieldPresent(&ci, seerep::fb::CameraIntrinsics::VT_DISTORTION))
+  if (flatbuffers::IsFieldPresent(&ci,
+                                  seerep::fb::CameraIntrinsics::VT_DISTORTION))
   {
     for (auto distortion_val : *ci.distortion())
     {
@@ -150,7 +165,8 @@ seerep_core_msgs::camera_intrinsics CoreFbConversion::fromFb(const seerep::fb::C
   }
 
   // traverse intrinsics matrix and convert
-  if (flatbuffers::IsFieldPresent(&ci, seerep::fb::CameraIntrinsics::VT_INTRINSIC_MATRIX))
+  if (flatbuffers::IsFieldPresent(
+          &ci, seerep::fb::CameraIntrinsics::VT_INTRINSIC_MATRIX))
   {
     for (auto intrinsic_matrix_elem : *ci.intrinsic_matrix())
     {
@@ -159,7 +175,8 @@ seerep_core_msgs::camera_intrinsics CoreFbConversion::fromFb(const seerep::fb::C
   }
 
   // traverse rectification matrix and convert
-  if (flatbuffers::IsFieldPresent(&ci, seerep::fb::CameraIntrinsics::VT_RECTIFICATION_MATRIX))
+  if (flatbuffers::IsFieldPresent(
+          &ci, seerep::fb::CameraIntrinsics::VT_RECTIFICATION_MATRIX))
   {
     for (auto rectification_matrix_elem : *ci.rectification_matrix())
     {
@@ -168,7 +185,8 @@ seerep_core_msgs::camera_intrinsics CoreFbConversion::fromFb(const seerep::fb::C
   }
 
   // traverse projection matrix and convert
-  if (flatbuffers::IsFieldPresent(&ci, seerep::fb::CameraIntrinsics::VT_PROJECTION_MATRIX))
+  if (flatbuffers::IsFieldPresent(
+          &ci, seerep::fb::CameraIntrinsics::VT_PROJECTION_MATRIX))
   {
     for (auto projection_matrix_elem : *ci.projection_matrix())
     {
@@ -179,14 +197,16 @@ seerep_core_msgs::camera_intrinsics CoreFbConversion::fromFb(const seerep::fb::C
   ciCore.binning_x = ci.binning_x();
   ciCore.binning_y = ci.binning_y();
 
-  ciCore.region_of_interest = CoreFbConversion::fromFb(*ci.region_of_interest());
+  ciCore.region_of_interest =
+      CoreFbConversion::fromFb(*ci.region_of_interest());
 
   ciCore.maximum_viewing_distance = ci.maximum_viewing_distance();
 
   return ciCore;
 }
 
-seerep_core_msgs::region_of_interest CoreFbConversion::fromFb(const seerep::fb::RegionOfInterest& roi)
+seerep_core_msgs::region_of_interest
+CoreFbConversion::fromFb(const seerep::fb::RegionOfInterest& roi)
 {
   seerep_core_msgs::region_of_interest roiCore;
 
@@ -200,7 +220,8 @@ seerep_core_msgs::region_of_interest CoreFbConversion::fromFb(const seerep::fb::
 }
 
 flatbuffers::Offset<seerep::fb::RegionOfInterest>
-CoreFbConversion::toFb(flatbuffers::grpc::MessageBuilder& mb, const seerep_core_msgs::region_of_interest& roi)
+CoreFbConversion::toFb(flatbuffers::grpc::MessageBuilder& mb,
+                       const seerep_core_msgs::region_of_interest& roi)
 {
   seerep::fb::RegionOfInterestBuilder roi_builder(mb);
 
@@ -213,8 +234,9 @@ CoreFbConversion::toFb(flatbuffers::grpc::MessageBuilder& mb, const seerep_core_
   return roi_builder.Finish();
 }
 
-flatbuffers::Offset<seerep::fb::Timestamp> CoreFbConversion::toFb(flatbuffers::grpc::MessageBuilder& mb,
-                                                                  const seerep_core_msgs::Timestamp ts)
+flatbuffers::Offset<seerep::fb::Timestamp>
+CoreFbConversion::toFb(flatbuffers::grpc::MessageBuilder& mb,
+                       const seerep_core_msgs::Timestamp ts)
 {
   seerep::fb::TimestampBuilder tsb(mb);
 
@@ -224,13 +246,17 @@ flatbuffers::Offset<seerep::fb::Timestamp> CoreFbConversion::toFb(flatbuffers::g
   return tsb.Finish();
 }
 
-flatbuffers::Offset<seerep::fb::Header> CoreFbConversion::toFb(flatbuffers::grpc::MessageBuilder& mb,
-                                                               const seerep_core_msgs::Header header)
+flatbuffers::Offset<seerep::fb::Header>
+CoreFbConversion::toFb(flatbuffers::grpc::MessageBuilder& mb,
+                       const seerep_core_msgs::Header header)
 {
   auto timeStampMsg = CoreFbConversion::toFb(mb, header.timestamp);
-  auto uuidProject = mb.CreateString(boost::lexical_cast<std::string>(header.uuidProject));
-  auto uuidMsg = mb.CreateString(boost::lexical_cast<std::string>(header.uuidData));
-  auto frameIdMsg = mb.CreateString(boost::lexical_cast<std::string>(header.frameId));
+  auto uuidProject =
+      mb.CreateString(boost::lexical_cast<std::string>(header.uuidProject));
+  auto uuidMsg =
+      mb.CreateString(boost::lexical_cast<std::string>(header.uuidData));
+  auto frameIdMsg =
+      mb.CreateString(boost::lexical_cast<std::string>(header.frameId));
 
   seerep::fb::HeaderBuilder headerBuilder(mb);
   headerBuilder.add_uuid_msgs(uuidMsg);
@@ -242,8 +268,9 @@ flatbuffers::Offset<seerep::fb::Header> CoreFbConversion::toFb(flatbuffers::grpc
   return headerBuilder.Finish();
 }
 
-flatbuffers::Offset<seerep::fb::CameraIntrinsics> CoreFbConversion::toFb(flatbuffers::grpc::MessageBuilder& mb,
-                                                                         const seerep_core_msgs::camera_intrinsics ci)
+flatbuffers::Offset<seerep::fb::CameraIntrinsics>
+CoreFbConversion::toFb(flatbuffers::grpc::MessageBuilder& mb,
+                       const seerep_core_msgs::camera_intrinsics ci)
 {
   auto dist_model = mb.CreateString(ci.distortion_model);
   auto dist = mb.CreateVector<double>(ci.distortion);
@@ -280,19 +307,21 @@ flatbuffers::Offset<seerep::fb::CameraIntrinsics> CoreFbConversion::toFb(flatbuf
   return cib.Finish();
 }
 
-seerep_core_msgs::camera_intrinsics_query
-CoreFbConversion::fromFb(const seerep::fb::CameraIntrinsicsQuery& camIntrinsicsQuery)
+seerep_core_msgs::camera_intrinsics_query CoreFbConversion::fromFb(
+    const seerep::fb::CameraIntrinsicsQuery& camIntrinsicsQuery)
 {
   seerep_core_msgs::camera_intrinsics_query ciq;
 
   boost::uuids::string_generator gen;
-  ciq.uuidCameraIntrinsics = gen(camIntrinsicsQuery.uuid_camera_intrinsics()->str());
+  ciq.uuidCameraIntrinsics =
+      gen(camIntrinsicsQuery.uuid_camera_intrinsics()->str());
   ciq.uuidProject = gen(camIntrinsicsQuery.uuid_project()->str());
 
   return ciq;
 }
 
-flatbuffers::grpc::Message<seerep::fb::UuidsPerProject> CoreFbConversion::toFb(seerep_core_msgs::QueryResult& result)
+flatbuffers::grpc::Message<seerep::fb::UuidsPerProject>
+CoreFbConversion::toFb(seerep_core_msgs::QueryResult& result)
 {
   flatbuffers::grpc::MessageBuilder builder;
 
@@ -304,11 +333,13 @@ flatbuffers::grpc::Message<seerep::fb::UuidsPerProject> CoreFbConversion::toFb(s
     uuids.reserve(projectResult.dataOrInstanceUuids.size());
     for (auto uuid : projectResult.dataOrInstanceUuids)
     {
-      uuids.push_back(builder.CreateString(boost::lexical_cast<std::string>(uuid)));
+      uuids.push_back(
+          builder.CreateString(boost::lexical_cast<std::string>(uuid)));
     }
 
     auto uuidsVector = builder.CreateVector(uuids);
-    auto projectUuid = builder.CreateString(boost::lexical_cast<std::string>(projectResult.projectUuid));
+    auto projectUuid = builder.CreateString(
+        boost::lexical_cast<std::string>(projectResult.projectUuid));
 
     seerep::fb::UuidsProjectPairBuilder uuidsProjectPairBuilder(builder);
     uuidsProjectPairBuilder.add_projectUuid(projectUuid);
@@ -323,13 +354,17 @@ flatbuffers::grpc::Message<seerep::fb::UuidsPerProject> CoreFbConversion::toFb(s
   return builder.ReleaseMessage<seerep::fb::UuidsPerProject>();
 }
 
-flatbuffers::Offset<seerep::fb::Boundingbox> CoreFbConversion::toFb(flatbuffers::grpc::MessageBuilder& mb,
-                                                                    seerep_core_msgs::AABB& aabb)
+flatbuffers::Offset<seerep::fb::Boundingbox>
+CoreFbConversion::toFb(flatbuffers::grpc::MessageBuilder& mb,
+                       seerep_core_msgs::AABB& aabb)
 {
   // center
-  float center_x = (aabb.min_corner().get<0>() + aabb.max_corner().get<0>()) / 2;
-  float center_y = (aabb.min_corner().get<1>() + aabb.max_corner().get<1>()) / 2;
-  float center_z = (aabb.min_corner().get<2>() + aabb.max_corner().get<2>()) / 2;
+  float center_x =
+      (aabb.min_corner().get<0>() + aabb.max_corner().get<0>()) / 2;
+  float center_y =
+      (aabb.min_corner().get<1>() + aabb.max_corner().get<1>()) / 2;
+  float center_z =
+      (aabb.min_corner().get<2>() + aabb.max_corner().get<2>()) / 2;
 
   // spatial extent
   float se_x = (aabb.max_corner().get<0>() - aabb.min_corner().get<0>());
@@ -340,13 +375,15 @@ flatbuffers::Offset<seerep::fb::Boundingbox> CoreFbConversion::toFb(flatbuffers:
   centerPointBuilder.add_x(center_x);
   centerPointBuilder.add_y(center_y);
   centerPointBuilder.add_z(center_z);
-  flatbuffers::Offset<seerep::fb::Point> centerPoint = centerPointBuilder.Finish();
+  flatbuffers::Offset<seerep::fb::Point> centerPoint =
+      centerPointBuilder.Finish();
 
   seerep::fb::PointBuilder spatialExtentBuilder(mb);
   spatialExtentBuilder.add_x(se_x);
   spatialExtentBuilder.add_y(se_y);
   spatialExtentBuilder.add_z(se_z);
-  flatbuffers::Offset<seerep::fb::Point> spatialExtent = spatialExtentBuilder.Finish();
+  flatbuffers::Offset<seerep::fb::Point> spatialExtent =
+      spatialExtentBuilder.Finish();
 
   seerep::fb::BoundingboxBuilder boundingBoxBuilder(mb);
   boundingBoxBuilder.add_center_point(centerPoint);
@@ -355,8 +392,9 @@ flatbuffers::Offset<seerep::fb::Boundingbox> CoreFbConversion::toFb(flatbuffers:
   return boundingBoxBuilder.Finish();
 }
 
-flatbuffers::Offset<seerep::fb::TimeInterval> CoreFbConversion::toFb(flatbuffers::grpc::MessageBuilder& mb,
-                                                                     seerep_core_msgs::AabbTime& timeinterval)
+flatbuffers::Offset<seerep::fb::TimeInterval>
+CoreFbConversion::toFb(flatbuffers::grpc::MessageBuilder& mb,
+                       seerep_core_msgs::AabbTime& timeinterval)
 {
   // isolate second and nano second bits from min time
   int64_t mintime = timeinterval.min_corner().get<0>();
@@ -385,22 +423,24 @@ flatbuffers::Offset<seerep::fb::TimeInterval> CoreFbConversion::toFb(flatbuffers
   return timeIntervalBuilder.Finish();
 }
 
-flatbuffers::Offset<seerep::fb::ProjectInfo> CoreFbConversion::toFb(flatbuffers::grpc::MessageBuilder& fbb,
-                                                                    const seerep_core_msgs::ProjectInfo& prjInfo)
+flatbuffers::Offset<seerep::fb::ProjectInfo>
+CoreFbConversion::toFb(flatbuffers::grpc::MessageBuilder& fbb,
+                       const seerep_core_msgs::ProjectInfo& prjInfo)
 {
-  auto geoCordsOffset =
-      seerep::fb::CreateGeodeticCoordinatesDirect(fbb, prjInfo.geodetCoords.coordinateSystem.c_str(),
-                                                  prjInfo.geodetCoords.longitude, prjInfo.geodetCoords.latitude,
-                                                  prjInfo.geodetCoords.altitude);
+  auto geoCordsOffset = seerep::fb::CreateGeodeticCoordinatesDirect(
+      fbb, prjInfo.geodetCoords.coordinateSystem.c_str(),
+      prjInfo.geodetCoords.longitude, prjInfo.geodetCoords.latitude,
+      prjInfo.geodetCoords.altitude);
 
-  return seerep::fb::CreateProjectInfoDirect(fbb, prjInfo.name.c_str(),
-                                             boost::lexical_cast<std::string>(prjInfo.uuid).c_str(),
-                                             prjInfo.frameId.c_str(), geoCordsOffset, prjInfo.version.c_str());
+  return seerep::fb::CreateProjectInfoDirect(
+      fbb, prjInfo.name.c_str(),
+      boost::lexical_cast<std::string>(prjInfo.uuid).c_str(),
+      prjInfo.frameId.c_str(), geoCordsOffset, prjInfo.version.c_str());
 }
 
-flatbuffers::Offset<seerep::fb::ProjectInfos>
-CoreFbConversion::toFb(flatbuffers::grpc::MessageBuilder& fbb,
-                       const std::vector<seerep_core_msgs::ProjectInfo>& prjInfos)
+flatbuffers::Offset<seerep::fb::ProjectInfos> CoreFbConversion::toFb(
+    flatbuffers::grpc::MessageBuilder& fbb,
+    const std::vector<seerep_core_msgs::ProjectInfo>& prjInfos)
 {
   std::vector<flatbuffers::Offset<seerep::fb::ProjectInfo>> prjInfosConv;
   for (auto prjInfo : prjInfos)
@@ -410,8 +450,9 @@ CoreFbConversion::toFb(flatbuffers::grpc::MessageBuilder& fbb,
   return seerep::fb::CreateProjectInfosDirect(fbb, &prjInfosConv);
 }
 
-void CoreFbConversion::fromFbQueryProject(const seerep::fb::Query* query,
-                                          std::optional<std::vector<boost::uuids::uuid>>& queryCoreProjects)
+void CoreFbConversion::fromFbQueryProject(
+    const seerep::fb::Query* query,
+    std::optional<std::vector<boost::uuids::uuid>>& queryCoreProjects)
 {
   if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_PROJECTUUID))
   {
@@ -424,8 +465,9 @@ void CoreFbConversion::fromFbQueryProject(const seerep::fb::Query* query,
   }
 }
 
-void CoreFbConversion::fromFbQueryInstance(const seerep::fb::Query* query,
-                                           std::optional<std::vector<boost::uuids::uuid>>& queryCoreInstances)
+void CoreFbConversion::fromFbQueryInstance(
+    const seerep::fb::Query* query,
+    std::optional<std::vector<boost::uuids::uuid>>& queryCoreInstances)
 {
   if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_INSTANCEUUID))
   {
@@ -438,8 +480,9 @@ void CoreFbConversion::fromFbQueryInstance(const seerep::fb::Query* query,
   }
 }
 
-void CoreFbConversion::fromFbQueryDataUuids(const seerep::fb::Query* query,
-                                            std::optional<std::vector<boost::uuids::uuid>>& queryCoreDataUuids)
+void CoreFbConversion::fromFbQueryDataUuids(
+    const seerep::fb::Query* query,
+    std::optional<std::vector<boost::uuids::uuid>>& queryCoreDataUuids)
 {
   if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_DATAUUID))
   {
@@ -454,11 +497,13 @@ void CoreFbConversion::fromFbQueryDataUuids(const seerep::fb::Query* query,
 
 void CoreFbConversion::fromFbQueryLabel(
     const seerep::fb::Query* query,
-    std::optional<std::unordered_map<std::string, std::vector<std::string>>>& queryCoreLabel)
+    std::optional<std::unordered_map<std::string, std::vector<std::string>>>&
+        queryCoreLabel)
 {
   if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_LABEL))
   {
-    queryCoreLabel = std::unordered_map<std::string, std::vector<std::string>>();
+    queryCoreLabel =
+        std::unordered_map<std::string, std::vector<std::string>>();
     for (auto labelWithCategory : *query->label())
     {
       std::vector<std::string> labels;
@@ -466,21 +511,27 @@ void CoreFbConversion::fromFbQueryLabel(
       {
         labels.push_back(label->label()->str());
       }
-      queryCoreLabel.value().emplace(labelWithCategory->category()->c_str(), labels);
+      queryCoreLabel.value().emplace(labelWithCategory->category()->c_str(),
+                                     labels);
     }
   }
 }
 
-void CoreFbConversion::fromFbQueryTime(const seerep::fb::Query* query,
-                                       std::optional<seerep_core_msgs::Timeinterval>& queryCoreTime)
+void CoreFbConversion::fromFbQueryTime(
+    const seerep::fb::Query* query,
+    std::optional<seerep_core_msgs::Timeinterval>& queryCoreTime)
 {
   if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_TIMEINTERVAL))
   {
     queryCoreTime = seerep_core_msgs::Timeinterval();
-    queryCoreTime.value().timeMin.seconds = query->timeinterval()->time_min()->seconds();
-    queryCoreTime.value().timeMax.seconds = query->timeinterval()->time_max()->seconds();
-    queryCoreTime.value().timeMin.nanos = query->timeinterval()->time_min()->nanos();
-    queryCoreTime.value().timeMax.nanos = query->timeinterval()->time_max()->nanos();
+    queryCoreTime.value().timeMin.seconds =
+        query->timeinterval()->time_min()->seconds();
+    queryCoreTime.value().timeMax.seconds =
+        query->timeinterval()->time_max()->seconds();
+    queryCoreTime.value().timeMin.nanos =
+        query->timeinterval()->time_min()->nanos();
+    queryCoreTime.value().timeMax.nanos =
+        query->timeinterval()->time_max()->nanos();
   }
 }
 
@@ -494,21 +545,24 @@ bool CoreFbConversion::fromFbQueryWithoutData(const seerep::fb::Query* query)
   return false;
 }
 
-std::optional<seerep_core_msgs::SparqlQuery> CoreFbConversion::fromFbSparqlQuery(const seerep::fb::Query* query)
+std::optional<seerep_core_msgs::SparqlQuery>
+CoreFbConversion::fromFbSparqlQuery(const seerep::fb::Query* query)
 {
   if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_SPARQLQUERY))
   {
     seerep_core_msgs::SparqlQuery sparql;
     sparql.category = query->sparqlQuery()->category()->str();
     sparql.sparql = query->sparqlQuery()->sparql()->str();
-    sparql.variableNameOfConcept = query->sparqlQuery()->variableNameOfCategory()->str();
+    sparql.variableNameOfConcept =
+        query->sparqlQuery()->variableNameOfCategory()->str();
     return sparql;
   }
 
   return std::nullopt;
 }
 
-std::optional<std::string> CoreFbConversion::fromFbOntologyURI(const seerep::fb::Query* query)
+std::optional<std::string>
+CoreFbConversion::fromFbOntologyURI(const seerep::fb::Query* query)
 {
   if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_ONTOLOGYURI))
   {
@@ -518,9 +572,11 @@ std::optional<std::string> CoreFbConversion::fromFbOntologyURI(const seerep::fb:
   return std::nullopt;
 }
 
-bool CoreFbConversion::fromFbQueryMustHaveAllLabels(const seerep::fb::Query* query)
+bool CoreFbConversion::fromFbQueryMustHaveAllLabels(
+    const seerep::fb::Query* query)
 {
-  if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_MUSTHAVEALLLABELS))
+  if (flatbuffers::IsFieldPresent(query,
+                                  seerep::fb::Query::VT_MUSTHAVEALLLABELS))
   {
     return query->mustHaveAllLabels();
   }
@@ -538,9 +594,11 @@ bool CoreFbConversion::fromFbQueryInMapFrame(const seerep::fb::Query* query)
   return false;
 }
 
-bool CoreFbConversion::fromFbQueryFullyEncapsulated(const seerep::fb::Query* query)
+bool CoreFbConversion::fromFbQueryFullyEncapsulated(
+    const seerep::fb::Query* query)
 {
-  if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_FULLYENCAPSULATED))
+  if (flatbuffers::IsFieldPresent(query,
+                                  seerep::fb::Query::VT_FULLYENCAPSULATED))
   {
     return query->fullyEncapsulated();
   }
@@ -558,7 +616,8 @@ uint CoreFbConversion::fromFbQueryMaxNumData(const seerep::fb::Query* query)
   return 0;
 }
 
-void CoreFbConversion::fromFbDataHeader(const seerep::fb::Header* header, seerep_core_msgs::Header& coreHeader,
+void CoreFbConversion::fromFbDataHeader(const seerep::fb::Header* header,
+                                        seerep_core_msgs::Header& coreHeader,
                                         seerep_core_msgs::Datatype&& datatype)
 {
   if (flatbuffers::IsFieldPresent(header, seerep::fb::Header::VT_UUID_MSGS))
@@ -580,7 +639,8 @@ void CoreFbConversion::fromFbDataHeader(const seerep::fb::Header* header, seerep
   coreHeader.uuidProject = gen(header->uuid_project()->str());
 }
 
-boost::uuids::uuid CoreFbConversion::fromFbDataHeaderUuid(const std::string& uuidMsg)
+boost::uuids::uuid
+CoreFbConversion::fromFbDataHeaderUuid(const std::string& uuidMsg)
 {
   boost::uuids::string_generator gen;
 
@@ -595,8 +655,10 @@ boost::uuids::uuid CoreFbConversion::fromFbDataHeaderUuid(const std::string& uui
 }
 
 void CoreFbConversion::fromFbDataLabels(
-    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelCategory>>* labels,
-    std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>& labelsPerCategory)
+    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelCategory>>*
+        labels,
+    std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>&
+        labelsPerCategory)
 {
   if (labels)
   {
@@ -604,7 +666,8 @@ void CoreFbConversion::fromFbDataLabels(
     {
       seerep_core_msgs::LabelDatumaro* labelDatumaroPtr;
 
-      auto catMap = labelsPerCategory.find(labelsCategories->category()->c_str());
+      auto catMap =
+          labelsPerCategory.find(labelsCategories->category()->c_str());
       if (catMap != labelsPerCategory.end())
       {
         labelDatumaroPtr = &(catMap->second);
@@ -612,7 +675,8 @@ void CoreFbConversion::fromFbDataLabels(
       else
       {
         seerep_core_msgs::LabelDatumaro labelDatumaro;
-        auto entry = labelsPerCategory.emplace(labelsCategories->category()->c_str(), labelDatumaro);
+        auto entry = labelsPerCategory.emplace(
+            labelsCategories->category()->c_str(), labelDatumaro);
         labelDatumaroPtr = &(entry.first->second);
       }
 
@@ -636,19 +700,22 @@ void CoreFbConversion::fromFbDataLabels(
             }
           }
 
-          labelVector.push_back(seerep_core_msgs::Label{ .label = label->label()->str(),
-                                                         .labelIdDatumaro = label->labelIdDatumaro(),
-                                                         .uuidInstance = uuidInstance,
-                                                         .instanceIdDatumaro = label->labelIdDatumaro() });
+          labelVector.push_back(seerep_core_msgs::Label{
+              .label = label->label()->str(),
+              .labelIdDatumaro = label->labelIdDatumaro(),
+              .uuidInstance = uuidInstance,
+              .instanceIdDatumaro = label->labelIdDatumaro() });
         }
-        labelDatumaroPtr->datumaroJson = labelsCategories->datumaroJson()->str();
+        labelDatumaroPtr->datumaroJson =
+            labelsCategories->datumaroJson()->str();
         labelDatumaroPtr->labels = labelVector;
       }
     }
   }
 }
 
-std::optional<seerep_core_msgs::Polygon2D> CoreFbConversion::fromFbQueryPolygon(const seerep::fb::Query* query)
+std::optional<seerep_core_msgs::Polygon2D>
+CoreFbConversion::fromFbQueryPolygon(const seerep::fb::Query* query)
 {
   if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_POLYGON))
   {
@@ -670,7 +737,8 @@ std::optional<seerep_core_msgs::Polygon2D> CoreFbConversion::fromFbQueryPolygon(
   }
 }
 
-std::vector<seerep_core_msgs::Datatype> CoreFbConversion::fromFbDatatypeVector(const seerep::fb::Datatype& dt)
+std::vector<seerep_core_msgs::Datatype>
+CoreFbConversion::fromFbDatatypeVector(const seerep::fb::Datatype& dt)
 {
   std::vector<seerep_core_msgs::Datatype> dt_vector;
 

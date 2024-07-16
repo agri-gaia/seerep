@@ -4,7 +4,8 @@
 
 New projects for new data can be created in the following way:
 
-Source: [examples/gRPC/meta/gRPC_pb_createProject.py](https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/meta/gRPC_pb_createProject.py)
+Source:
+[examples/gRPC/meta/gRPC_pb_createProject.py](https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/meta/gRPC_pb_createProject.py)
 
 ```python
 --8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/meta/gRPC_pb_createProject.py"
@@ -19,13 +20,15 @@ The new project on the server is (name/uuid):
 
 ## Retrieving projects
 
-After we created two projects, we can query them. Currently the name doesn't have to be unique.
+After we created two projects, we can query them. Currently the name doesn't
+have to be unique.
 
 <!-- markdownlint-disable -->
 
 === "Flatbuffers"
 
-    Source: [examples/gRPC/meta/gRPC_fb_getProjects.py](https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/meta/gRPC_fb_getProjects.py)
+    Source:
+    [examples/gRPC/meta/gRPC_fb_getProjects.py](https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/meta/gRPC_fb_getProjects.py)
 
 
     ```python
@@ -42,7 +45,8 @@ After we created two projects, we can query them. Currently the name doesn't hav
 
 === "Protocol Buffers"
 
-    Source: [examples/gRPC/meta/gRPC_pb_getProjects.py](https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/meta/gRPC_pb_getProjects.py)
+    Source:
+    [examples/gRPC/meta/gRPC_pb_getProjects.py](https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/meta/gRPC_pb_getProjects.py)
 
     ```python
     --8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/meta/gRPC_pb_getProjects.py"

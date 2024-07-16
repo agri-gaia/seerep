@@ -76,14 +76,13 @@
 
 ### Header
 
-Standard metadata for higher-level stamped data types. This is generally used to communicate timestamped data in a
-particular coordinate frame.
+Standard metadata for higher-level stamped data types. This is generally used to
+communicate timestamped data in a particular coordinate frame.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | seq | [uint32](#uint32) |  | sequence id, consecutively increasing id |
-<!-- markdownlint-disable-next-line MD051 -->
-| stamp | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  | time this data is associated with |
+| stamp | google.protobuf.Timestamp |  | time this data is associated with |
 | frame_id | [string](#string) |  | name of the coordinate frame this data is associated with |
 
 <a name="Image.proto"></a>

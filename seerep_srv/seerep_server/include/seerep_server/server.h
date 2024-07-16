@@ -43,11 +43,14 @@
 namespace seerep_server
 {
 /**
- * @brief This class is the main class of SEEREP. It creates everything else and serves the gRPC interface.
+ * @brief This class is the main class of SEEREP. It creates everything else and
+ * serves the gRPC interface.
  *
- * It initialises the logging and parses the configuration from command line or cfg file.
+ * It initialises the logging and parses the configuration from command line or
+ * cfg file.
  *
- * The various flatbuffer and protobuf services are created here and served via the server.
+ * The various flatbuffer and protobuf services are created here and served via
+ * the server.
  */
 class server
 {
@@ -116,8 +119,8 @@ private:
   /**
    * @brief creates the gRPC server
    *
-   * The SEEREP core, the flatbuffer services and the protobuf services are created
-   * and used to create the server
+   * The SEEREP core, the flatbuffer services and the protobuf services are
+   * created and used to create the server
    */
   void createGrpcServer();
   /**
@@ -128,12 +131,14 @@ private:
 
   /**
    * @brief calls the create function and registers the protobuf services at the server
-   * @param server_builder the ServerBuilder which is used to build the server and needed to add the services
+   * @param server_builder the ServerBuilder which is used to build the server
+   * and needed to add the services
    */
   void addServicesPb(grpc::ServerBuilder& server_builder);
   /**
    * @brief calls the create function and registers the flatbuffer services at the server
-   * @param server_builder the ServerBuilder which is used to build the server and needed to add the services
+   * @param server_builder the ServerBuilder which is used to build the server
+   * and needed to add the services
    */
   void addServicesFb(grpc::ServerBuilder& server_builder);
 
@@ -166,7 +171,8 @@ private:
   /** @brief the protobuf service for point cloud related queries*/
   std::shared_ptr<seerep_server::PbPointCloudService> m_pointCloudServicePb;
   /** @brief the protobuf service for camera intrinsics related queries*/
-  std::shared_ptr<seerep_server::PbCameraIntrinsicsService> m_cameraIntrinsicsServicePb;
+  std::shared_ptr<seerep_server::PbCameraIntrinsicsService>
+      m_cameraIntrinsicsServicePb;
 
   /** @brief the flatbuffer service for meta operations*/
   std::shared_ptr<seerep_server::FbMetaOperations> m_metaOperationsFb;
@@ -181,10 +187,12 @@ private:
   /** @brief the flatbuffer service for point clouds */
   std::shared_ptr<seerep_server::FbPointCloudService> m_pointCloudServiceFb;
   /** @brief the flatbuffer service for camera intrinsics */
-  std::shared_ptr<seerep_server::FbCameraIntrinsicsService> m_cameraIntrinsicsServiceFb;
+  std::shared_ptr<seerep_server::FbCameraIntrinsicsService>
+      m_cameraIntrinsicsServiceFb;
 
   /** @brief the logger object for logging to file and stdout*/
-  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level>
+      m_logger;
 };
 } /* namespace seerep_server */
 #endif  // SEEREP_SERVER_H_

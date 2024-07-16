@@ -12,20 +12,26 @@ docker compose up
 
 !!! info "Use of named Docker volumes"
     <!-- markdownlint-disable-next-line -->
-    Compared to the Dev-Container, the production setup uses [named Docker volumes](https://docs.docker.com/storage/volumes/).
-    Which do not require any specific directory on the host system. The volumes also keeps the data between restarts.
-    For an empty server delete the volumes with `docker volume rm seerep_log seerep_data`.
+    Compared to the Dev-Container, the production setup uses
+    [named Docker volumes](https://docs.docker.com/storage/volumes/). Which do
+    not require any specific directory on the host system. The volumes also keeps
+    the data between restarts.     For an empty server delete the volumes with
+    `docker volume rm seerep_log seerep_data`.
 
-Configuration of the compose setup is done through the `.env` file located in the same directory.
-For details on the individual options, refer to the [configuration](#configuration) section.
+Configuration of the compose setup is done through the `.env` file located in
+the same directory. For details on the individual options, refer to the
+[configuration](#configuration) section.
 
-A closer look at the Docker compose file might lead to questions about
-the extra service, that adjusts the owner of the log and data directories. The main reason for this is that
-named volumes are created with root permissions when the mount location does not exist. However since the container is
-run as non-root for security reasons (as should ever other container), we are not able to change the permissions
-without hard-coding the mount locations in the Dockerfile. To change the permissions, a very small container mounts the
-volumes and changes the permission to the specified `uid` and `guid` after which SEEREP is started with the same user.
-Additional information can be found in the [PR#376](https://github.com/agri-gaia/seerep/pull/376) discussion.
+A closer look at the Docker compose file might lead to questions about the extra
+service, that adjusts the owner of the log and data directories. The main reason
+for this is that named volumes are created with root permissions when the mount
+location does not exist. However since the container is run as non-root for
+security reasons (as should ever other container), we are not able to change the
+permissions without hard-coding the mount locations in the Dockerfile. To change
+the permissions, a very small container mounts the volumes and changes the
+permission to the specified `uid` and `guid` after which SEEREP is started with
+the same user. Additional information can be found in the
+[PR#376](https://github.com/agri-gaia/seerep/pull/376) discussion.
 
 ## Kubernetes
 
@@ -35,8 +41,8 @@ Additional information can be found in the [PR#376](https://github.com/agri-gaia
 
 ### Relevant files
 
-Seerep can either be installed with the latest development state or the latest stable version. The relevant files can
-be found under:
+Seerep can either be installed with the latest development state or the latest
+stable version. The relevant files can be found under:
 
 ```bash
 /docker/kustomize/base --> development
@@ -51,13 +57,16 @@ The base-folder contains all yaml-files for a cluster deployment. This includes:
 * Ingress
 * Configuration
 
-The yaml-file for the cluster is create via [Kustomize](https://kubectl.docs.kubernetes.io/references/kustomize/), hence
+The yaml-file for the cluster is create via
+[Kustomize](https://kubectl.docs.kubernetes.io/references/kustomize/), hence
 this folder also contains a kustomization.yaml which puts everything together.
 
-The `/overlay/production` directory contains a second `kustomization.yaml`. Within this file everything needed to
-install a production system is overridden. This means, that the sealed secret is replaced with a new one, while the
-base secret is deleted. Further, the labels and the names of PV and PVC are changed to create new storage explicitly
-for the production system. Finally, the used image is replaced with the latest stable release.
+The `/overlay/production` directory contains a second `kustomization.yaml`.
+Within this file everything needed to install a production system is overridden.
+This means, that the sealed secret is replaced with a new one, while the base
+secret is deleted. Further, the labels and the names of PV and PVC are changed
+to create new storage explicitly for the production system. Finally, the used
+image is replaced with the latest stable release.
 
 The usage of an overlay, thereby, follows the principles of Kustomize.
 
@@ -91,19 +100,22 @@ kustomize build overlays/production/ > seerep-deployment.yaml
 kubectl apply -k overlays/production/
 ```
 
-If a [ArgoCD](https://argo-cd.readthedocs.io/en/stable/) instance is available, SEEREP can also be added as a project.
+If a [ArgoCD](https://argo-cd.readthedocs.io/en/stable/) instance is available,
+SEEREP can also be added as a project.
 
 ### Sealed Secrets
 
 The certificates used for the secured ingress are created as a
 [sealed-secret](https://github.com/bitnami-labs/sealed-secrets).
-Hence, the secret can safely be stored in a repository. The sealed secret controller installed
-within the cluster will take care of unsealing the secret and make it usable. To combine Kustomize and
-sealed secrets this blogs-post was followed [faun.pub](https://faun.pub/sealing-secrets-with-kustomize-51d1b79105d8).
+Hence, the secret can safely be stored in a repository. The sealed secret
+controller installed within the cluster will take care of unsealing the secret
+and make it usable. To combine Kustomize and sealed secrets this blogs-post was
+followed [faun.pub](https://faun.pub/sealing-secrets-with-kustomize-51d1b79105d8).
 
 ## Configuration
 
-SEEREP can be configured in three different ways: via command line arguments, a config file, or environment variables.
+SEEREP can be configured in three different ways: via command line arguments, a
+config file, or environment variables.
 
 ### Command line
 

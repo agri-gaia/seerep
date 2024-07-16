@@ -10,7 +10,9 @@ import numpy as np
 from google.protobuf import empty_pb2
 from grpc import Channel
 from seerep.pb import camera_intrinsics_pb2 as cameraintrinsics
-from seerep.pb import camera_intrinsics_service_pb2_grpc as camintrinsics_service
+from seerep.pb import (
+    camera_intrinsics_service_pb2_grpc as camintrinsics_service,
+)
 from seerep.pb import image_pb2 as image
 from seerep.pb import image_service_pb2_grpc as imageService
 from seerep.pb import label_category_pb2, label_pb2
@@ -22,9 +24,13 @@ from seerep.util.common import get_gRPC_channel
 
 
 def send_labeled_images(
-    target_proj_uuid: Optional[str] = None, grpc_channel: Channel = get_gRPC_channel()
-) -> Tuple[List[List[image.Image]], List[int], cameraintrinsics.CameraIntrinsics]:
-    """sends test images via the given grpc_channel to the specified target project uuid"""
+    target_proj_uuid: Optional[str] = None,
+    grpc_channel: Channel = get_gRPC_channel(),
+) -> Tuple[
+    List[List[image.Image]], List[int], cameraintrinsics.CameraIntrinsics
+]:
+    """sends test images via the given grpc_channel to the specified target
+    project uuid"""
 
     # 1. Get gRPC service objects
     stub = imageService.ImageServiceStub(grpc_channel)
@@ -32,7 +38,8 @@ def send_labeled_images(
     stubMeta = metaOperations.MetaOperationsStub(grpc_channel)
     stubCI = camintrinsics_service.CameraIntrinsicsServiceStub(grpc_channel)
 
-    # 2. Check if we have an existing test project (or target_proj_uuid is set), if not, one is created.
+    # 2. Check if we have an existing test project (or target_proj_uuid is set),
+    # if not, one is created.
     if target_proj_uuid is None:
         # 3. Get all projects from the server
         response = stubMeta.GetProjects(empty_pb2.Empty())
@@ -43,14 +50,17 @@ def send_labeled_images(
 
         if target_proj_uuid is None:
             # 4. create a project
-            creation = projectCreation.ProjectCreation(name="testproject", mapFrameId="map")
+            creation = projectCreation.ProjectCreation(
+                name="testproject", mapFrameId="map"
+            )
             projectCreated = stubMeta.CreateProject(creation)
             target_proj_uuid = projectCreated.uuid
 
     theTime = int(time.time())
 
     #####
-    # A valid camera intrinsics UUID is needed here for succesful storage of Images
+    # A valid camera intrinsics UUID is needed here for succesful storage
+    # of Images
     # Add new Camera Intrinsics with placeholder data
 
     ciuuid = str(uuid.uuid4())
@@ -180,11 +190,17 @@ def send_labeled_images(
 
 if __name__ == "__main__":
     sent_image_ls_data, _, _ = send_labeled_images()
-    camera_intrinsics_allimgs = {intrins_uuid[1].uuid_camera_intrinsics for intrins_uuid in sent_image_ls_data}
+    camera_intrinsics_allimgs = {
+        intrins_uuid[1].uuid_camera_intrinsics
+        for intrins_uuid in sent_image_ls_data
+    }
 
     # print statement to seperate the messages of the function
     print()
-    print(f"camera intrinsics will be saved against the uuid(s): {camera_intrinsics_allimgs}")
+    print(
+        f"camera intrinsics will be saved against the uuid(s): "
+        f"{camera_intrinsics_allimgs}"
+    )
     img_uuids = [img[0] for img in sent_image_ls_data]
     for i, img_uuid in enumerate(img_uuids):
         print(f"the uuid of the sent image number {i} is: {img_uuid}")

@@ -22,7 +22,8 @@ def test_gRPC_pb_createProjectAndGetProjects(grpc_channel):
 
     projects_list = projects_query.get_projects(grpc_channel)
 
-    # check if count of created projects matches the count of the newly queried projects,
+    # check if count of created projects matches the count of the newly queried
+    # projects,
     # returned by the gRPC_pb_getProjects example
     assert len(projects_list) - len(current_projects) == len(created_projects)
 

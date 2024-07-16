@@ -13,8 +13,10 @@ namespace seerep_hdf5_core
 class Hdf5CoreDatatypeInterface
 {
 public:
-  virtual std::optional<seerep_core_msgs::DatasetIndexable> readDataset(const boost::uuids::uuid& uuid) = 0;
-  virtual std::optional<seerep_core_msgs::DatasetIndexable> readDataset(const std::string& uuid) = 0;
+  virtual std::optional<seerep_core_msgs::DatasetIndexable>
+  readDataset(const boost::uuids::uuid& uuid) = 0;
+  virtual std::optional<seerep_core_msgs::DatasetIndexable>
+  readDataset(const std::string& uuid) = 0;
 
   virtual std::vector<std::string> getDatasetUuids() = 0;
 };

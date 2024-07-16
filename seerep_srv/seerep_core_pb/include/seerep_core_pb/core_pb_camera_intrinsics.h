@@ -22,13 +22,15 @@ public:
   CorePbCameraIntrinsics(std::shared_ptr<seerep_core::Core> seerepCore);
   ~CorePbCameraIntrinsics();
 
-  std::optional<seerep::pb::CameraIntrinsics> getData(const seerep::pb::CameraIntrinsicsQuery& query);
+  std::optional<seerep::pb::CameraIntrinsics>
+  getData(const seerep::pb::CameraIntrinsicsQuery& query);
   boost::uuids::uuid addData(const seerep::pb::CameraIntrinsics& camintrinsics);
 
 private:
   std::shared_ptr<seerep_core::Core> m_seerepCore;
   /** the logger for the logging framework */
-  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level>
+      m_logger;
 };
 
 }  // namespace seerep_core_pb

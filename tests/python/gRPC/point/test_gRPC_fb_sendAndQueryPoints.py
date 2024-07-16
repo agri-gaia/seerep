@@ -25,7 +25,9 @@ def test_sendAndQueryPoints(grpc_channel, project_setup):
     sent_points: List[PointStamped.PointStamped] = sorted(
         [
             fb_flatc_dict(p, SchemaFileNames.POINT_STAMPED)
-            for ls in send_points.send_points_raw(proj_uuid, grpc_channel).values()
+            for ls in send_points.send_points_raw(
+                proj_uuid, grpc_channel
+            ).values()
             for p in ls
         ],
         key=lambda p: p["header"]["uuid_msgs"],
@@ -42,8 +44,8 @@ def test_sendAndQueryPoints(grpc_channel, project_setup):
 
     assert len(sent_points) == len(queried_points)
 
-    # Fix current discrepancy between the sent and queried points in the attributes,
-    # because the queried points contain the header additionally
+    # Fix current discrepancy between the sent and queried points in the
+    # attributes, because the queried points contain the header additionally
 
     # remove the header entries of the queried points from the attributes
     for p in queried_points:

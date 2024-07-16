@@ -4,14 +4,16 @@
 
 namespace seerep_hdf5_fb
 {
-Hdf5FbGeneral::Hdf5FbGeneral(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx)
+Hdf5FbGeneral::Hdf5FbGeneral(std::shared_ptr<HighFive::File>& file,
+                             std::shared_ptr<std::mutex>& write_mtx)
   : seerep_hdf5_core::Hdf5CoreGeneral(file, write_mtx)
 {
 }
 
 void Hdf5FbGeneral::writeAttributeMap(
     const std::shared_ptr<HighFive::DataSet> dataSetPtr,
-    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>>* attributes)
+    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>>*
+        attributes)
 {
   if (attributes)
   {
@@ -19,37 +21,45 @@ void Hdf5FbGeneral::writeAttributeMap(
     {
       if (attribute->value_type() == seerep::fb::Datatypes_Boolean)
       {
-        writeAttributeToHdf5(*dataSetPtr, attribute->key()->str(),
-                             static_cast<const seerep::fb::Boolean*>(attribute->value())->data());
+        writeAttributeToHdf5(
+            *dataSetPtr, attribute->key()->str(),
+            static_cast<const seerep::fb::Boolean*>(attribute->value())->data());
       }
       else if (attribute->value_type() == seerep::fb::Datatypes_Integer)
       {
-        writeAttributeToHdf5(*dataSetPtr, attribute->key()->str(),
-                             static_cast<const seerep::fb::Integer*>(attribute->value())->data());
+        writeAttributeToHdf5(
+            *dataSetPtr, attribute->key()->str(),
+            static_cast<const seerep::fb::Integer*>(attribute->value())->data());
       }
       else if (attribute->value_type() == seerep::fb::Datatypes_Double)
       {
-        writeAttributeToHdf5(*dataSetPtr, attribute->key()->str(),
-                             static_cast<const seerep::fb::Double*>(attribute->value())->data());
+        writeAttributeToHdf5(
+            *dataSetPtr, attribute->key()->str(),
+            static_cast<const seerep::fb::Double*>(attribute->value())->data());
       }
       else if (attribute->value_type() == seerep::fb::Datatypes_String)
       {
-        writeAttributeToHdf5(*dataSetPtr, attribute->key()->str(),
-                             static_cast<const seerep::fb::String*>(attribute->value())->data()->str());
+        writeAttributeToHdf5(
+            *dataSetPtr, attribute->key()->str(),
+            static_cast<const seerep::fb::String*>(attribute->value())
+                ->data()
+                ->str());
       }
       else
       {
         std::stringstream errorMsg;
-        errorMsg << "type " << attribute->value_type() << " of attribute " << attribute->key()->c_str()
-                 << " not implemented in hdf5-io.";
-        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << errorMsg.str();
+        errorMsg << "type " << attribute->value_type() << " of attribute "
+                 << attribute->key()->c_str() << " not implemented in hdf5-io.";
+        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+            << errorMsg.str();
         throw std::invalid_argument(errorMsg.str());
       }
     }
   }
 }
 
-void Hdf5FbGeneral::writeLabelsFb(const std::string& datatypeGroup, const std::string& uuid,
+void Hdf5FbGeneral::writeLabelsFb(const std::string& datatypeGroup,
+                                  const std::string& uuid,
                                   const LabelsCategoryFb* labelCategoryVectorFb)
 {
   if (labelCategoryVectorFb && labelCategoryVectorFb->size() != 0)
@@ -85,14 +95,16 @@ void Hdf5FbGeneral::writeLabelsFb(const std::string& datatypeGroup, const std::s
   }
 }
 
-flatbuffers::Offset<LabelsCategoryFb> Hdf5FbGeneral::readLabels(const std::string& datatypeGroup,
-                                                                const std::string& uuid,
-                                                                flatbuffers::grpc::MessageBuilder& builder)
+flatbuffers::Offset<LabelsCategoryFb>
+Hdf5FbGeneral::readLabels(const std::string& datatypeGroup,
+                          const std::string& uuid,
+                          flatbuffers::grpc::MessageBuilder& builder)
 {
   std::vector<std::string> labelCategories, datumaroJsonPerCategory;
   std::vector<std::vector<seerep_core_msgs::Label>> labelsCategory;
 
-  seerep_hdf5_core::Hdf5CoreGeneral::readLabels(datatypeGroup, uuid, labelCategories, labelsCategory,
+  seerep_hdf5_core::Hdf5CoreGeneral::readLabels(datatypeGroup, uuid,
+                                                labelCategories, labelsCategory,
                                                 datumaroJsonPerCategory);
 
   std::vector<flatbuffers::Offset<seerep::fb::LabelCategory>> labelCategory;
@@ -109,21 +121,27 @@ flatbuffers::Offset<LabelsCategoryFb> Hdf5FbGeneral::readLabels(const std::strin
     {
       auto labelStr = builder.CreateString(labelsCategory.at(icat).at(i).label);
       auto instanceOffset =
-          builder.CreateString(boost::lexical_cast<std::string>(labelsCategory.at(icat).at(i).uuidInstance));
+          builder.CreateString(boost::lexical_cast<std::string>(
+              labelsCategory.at(icat).at(i).uuidInstance));
 
       seerep::fb::LabelBuilder labelBuilder(builder);
       labelBuilder.add_label(labelStr);
-      labelBuilder.add_labelIdDatumaro(labelsCategory.at(icat).at(i).labelIdDatumaro);
+      labelBuilder.add_labelIdDatumaro(
+          labelsCategory.at(icat).at(i).labelIdDatumaro);
       labelBuilder.add_instanceUuid(instanceOffset);
-      labelBuilder.add_instanceIdDatumaro(labelsCategory.at(icat).at(i).instanceIdDatumaro);
+      labelBuilder.add_instanceIdDatumaro(
+          labelsCategory.at(icat).at(i).instanceIdDatumaro);
       labelVector.push_back(labelBuilder.Finish());
     }
 
-    auto labelOffset = builder.CreateVector<flatbuffers::Offset<seerep::fb::Label>>(labelVector);
+    auto labelOffset =
+        builder.CreateVector<flatbuffers::Offset<seerep::fb::Label>>(
+            labelVector);
 
     auto categoryOffset = builder.CreateString(labelCategories.at(icat));
 
-    auto datumaroJsonOffset = builder.CreateString(datumaroJsonPerCategory.at(icat));
+    auto datumaroJsonOffset =
+        builder.CreateString(datumaroJsonPerCategory.at(icat));
 
     seerep::fb::LabelCategoryBuilder labelsCategoryBuilder(builder);
     labelsCategoryBuilder.add_category(categoryOffset);
@@ -134,6 +152,7 @@ flatbuffers::Offset<LabelsCategoryFb> Hdf5FbGeneral::readLabels(const std::strin
     labelCategory.push_back(labelsOfCategory);
   }
 
-  return builder.CreateVector<flatbuffers::Offset<seerep::fb::LabelCategory>>(labelCategory);
+  return builder.CreateVector<flatbuffers::Offset<seerep::fb::LabelCategory>>(
+      labelCategory);
 }
 }  // namespace seerep_hdf5_fb

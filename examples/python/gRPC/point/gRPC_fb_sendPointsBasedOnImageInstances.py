@@ -5,7 +5,14 @@ from typing import Dict, List
 
 import flatbuffers
 from grpc import Channel
-from seerep.fb import Datatypes, Image, Integer, PointStamped, String, UnionMapEntry
+from seerep.fb import (
+    Datatypes,
+    Image,
+    Integer,
+    PointStamped,
+    String,
+    UnionMapEntry,
+)
 from seerep.fb import image_service_grpc_fb as imageService
 from seerep.fb import point_service_grpc_fb as pointService
 from seerep.util.common import get_gRPC_channel
@@ -26,7 +33,9 @@ def send_points_raw(
     builder = flatbuffers.Builder(1024)
 
     if target_proj_uuid is None:
-        target_proj_uuid = getOrCreateProject(builder, grpc_channel, "testproject")
+        target_proj_uuid = getOrCreateProject(
+            builder, grpc_channel, "testproject"
+        )
 
     stubImage = imageService.ImageServiceStub(grpc_channel)
     stubPoint = pointService.PointServiceStub(grpc_channel)
@@ -55,13 +64,23 @@ def send_points_raw(
                     response.Header().Stamp().Seconds(),
                     response.Header().Stamp().Nanos(),
                 )
-                header = createHeader(builder, timestampMsg, frameId, uuidProject, str(uuid.uuid4()))
+                header = createHeader(
+                    builder,
+                    timestampMsg,
+                    frameId,
+                    uuidProject,
+                    str(uuid.uuid4()),
+                )
 
                 coordinates = (1, 2, 3)
                 point = createPoint(builder, *coordinates)
 
-                instance_uuid = [response.Labels(0).Labels(i).InstanceUuid().decode("utf-8")]
-                labelStr = [response.Labels(0).Labels(i).Label().decode("utf-8")]
+                instance_uuid = [
+                    response.Labels(0).Labels(i).InstanceUuid().decode("utf-8")
+                ]
+                labelStr = [
+                    response.Labels(0).Labels(i).Label().decode("utf-8")
+                ]
 
                 labels = []
                 for label_i in range(len(labelStr)):
@@ -101,12 +120,16 @@ def send_points_raw(
 
                 UnionMapEntry.Start(builder)
                 UnionMapEntry.AddKey(builder, unionMapEntryKey1)
-                UnionMapEntry.UnionMapEntryAddValueType(builder, Datatypes.Datatypes.String)
+                UnionMapEntry.UnionMapEntryAddValueType(
+                    builder, Datatypes.Datatypes.String
+                )
                 UnionMapEntry.AddValue(builder, unionMapEntryValue1)
                 unionMapEntry1 = UnionMapEntry.End(builder)
                 UnionMapEntry.Start(builder)
                 UnionMapEntry.AddKey(builder, unionMapEntryKey2)
-                UnionMapEntry.UnionMapEntryAddValueType(builder, Datatypes.Datatypes.Integer)
+                UnionMapEntry.UnionMapEntryAddValueType(
+                    builder, Datatypes.Datatypes.Integer
+                )
                 UnionMapEntry.AddValue(builder, unionMapEntryValue2)
                 unionMapEntry2 = UnionMapEntry.End(builder)
 
@@ -140,7 +163,9 @@ def send_points(
 ) -> Dict[str, List[PointStamped.PointStamped]]:
     img_uuid_point_map: Dict[str, List[PointStamped.PointStamped]] = {}
     for k, v in send_points_raw(target_proj_uuid, grpc_channel).items():
-        img_uuid_point_map[k] = [PointStamped.PointStamped.GetRootAs(p) for p in v]
+        img_uuid_point_map[k] = [
+            PointStamped.PointStamped.GetRootAs(p) for p in v
+        ]
     return img_uuid_point_map
 
 
@@ -152,13 +177,24 @@ if __name__ == "__main__":
     for k in p_dict:
         print(f"uuidmsg: {k}")
         for val in p_dict[k]:
-            print(f"    uuidlabel: {val.Labels(0).Labels(0).Label().decode('utf-8')}")
-            print(f"    point_uuidmsg: {val.Header().UuidMsgs().decode('utf-8')}")
-            print(f"    point_uuidproject: {val.Header().UuidProject().decode('utf-8')}")
+            print(
+                f"    uuidlabel: "
+                f"{val.Labels(0).Labels(0).Label().decode('utf-8')}"
+            )
+            print(
+                f"    point_uuidmsg: "
+                f"{val.Header().UuidMsgs().decode('utf-8')}"
+            )
+            print(
+                f"    point_uuidproject: "
+                f"{val.Header().UuidProject().decode('utf-8')}"
+            )
             # check for attribute 0
             if val.Attribute(0).ValueType() == Datatypes.Datatypes().String:
                 union_str = String.String()
-                union_str.Init(val.Attribute(0).Value().Bytes, val.Attribute(0).Value().Pos)
+                union_str.Init(
+                    val.Attribute(0).Value().Bytes, val.Attribute(0).Value().Pos
+                )
                 print(f"    Attribute 0 Value: {union_str.Data().decode()}\n")
             count_points += 1
     print(f"sent {count_points} points in total")

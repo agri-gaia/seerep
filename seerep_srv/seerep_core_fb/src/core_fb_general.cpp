@@ -3,10 +3,12 @@
 namespace seerep_core_fb
 {
 std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>
-CoreFbGeneral::extractLabelsPerCategory(const seerep::fb::DatasetUuidLabel& datasetUuidLabel)
+CoreFbGeneral::extractLabelsPerCategory(
+    const seerep::fb::DatasetUuidLabel& datasetUuidLabel)
 {
   boost::uuids::string_generator string_generator;
-  std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro> labelPerCategory;
+  std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>
+      labelPerCategory;
   for (auto labelCategory : *datasetUuidLabel.labels())
   {
     if (labelCategory->labels())

@@ -31,9 +31,10 @@ namespace seerep_core
 /**
  * @brief This is the class handling the TF buffer
  *
- * TFs are stored in a tf2::BufferCore. TFs can be added to this buffer and queries from one frame to another
- * can be queried for a specific point in time. AABBs and spatial queries can also be transformed directly in the
- * map frame of the project via public methods.
+ * TFs are stored in a tf2::BufferCore. TFs can be added to this buffer and
+ * queries from one frame to another can be queried for a specific point in
+ * time. AABBs and spatial queries can also be transformed directly in the map
+ * frame of the project via public methods.
  */
 class CoreTf
 {
@@ -45,21 +46,23 @@ public:
   CoreTf(std::shared_ptr<seerep_hdf5_core::Hdf5CoreTf> hdf5_io);
   ~CoreTf();
   /**
-   * @brief Returns the queried transformation between the two given frames at the given point in time
+   * @brief Returns the queried transformation between the two given frames at
+   * the given point in time
    * @param timesecs queried transformation time; seconds
    * @param timenanos queried transformation time; nanoseconds
    * @param targetFrame the target frame of the transformation
    * @param sourceFrame the source frame of the transformation
    * @return the queried TF if it exists
    */
-  std::optional<geometry_msgs::TransformStamped> getData(const int64_t& timesecs, const int64_t& timenanos,
-                                                         const std::string& targetFrame,
-                                                         const std::string& sourceFrame);
+  std::optional<geometry_msgs::TransformStamped>
+  getData(const int64_t& timesecs, const int64_t& timenanos,
+          const std::string& targetFrame, const std::string& sourceFrame);
   /**
    * @brief Adds a tf to the tf buffer
    * @param tf the TransformStamped to be added to the buffer
    */
-  void addDataset(const geometry_msgs::TransformStamped& tf, const bool isStatic = false);
+  void addDataset(const geometry_msgs::TransformStamped& tf,
+                  const bool isStatic = false);
 
   /**
    * @brief Transforms an AABB into the target frame
@@ -70,8 +73,10 @@ public:
    * @param timeNanos the point in time to be used for the transformation; nanoseconds
    * @return the AABB transformed into the target frame
    */
-  seerep_core_msgs::AABB transformAABB(seerep_core_msgs::AABB aabb, const std::string& sourceFrame,
-                                       const std::string& targetFrame, const int64_t& timeSecs,
+  seerep_core_msgs::AABB transformAABB(seerep_core_msgs::AABB aabb,
+                                       const std::string& sourceFrame,
+                                       const std::string& targetFrame,
+                                       const int64_t& timeSecs,
                                        const int64_t& timeNanos);
   /**
    * @brief Check if a transformation from the source to the target frame is available
@@ -82,7 +87,8 @@ public:
    * @param timeNanos the point in time to be used for the transformation; nanoseconds
    * @return true if transformation is available; false otherwise
    */
-  bool canTransform(const std::string& sourceFrame, const std::string& targetFrame, const int64_t& timeSecs,
+  bool canTransform(const std::string& sourceFrame,
+                    const std::string& targetFrame, const int64_t& timeSecs,
                     const int64_t& timeNanos);
 
   /**
@@ -102,11 +108,13 @@ private:
    * @brief adds a transformation to the TF buffer
    * @param transform the transformation to be added to the buffer
    */
-  void addToTfBuffer(geometry_msgs::TransformStamped transform, const bool isStatic);
+  void addToTfBuffer(geometry_msgs::TransformStamped transform,
+                     const bool isStatic);
 
   /**
-   * @brief Transforms the AABB based on the min/max coordinates into another frame. Transforms all 8 vertices of the
-   * AABB into the new frame and gets the new AABB based on all 8 transformed vertices
+   * @brief Transforms the AABB based on the min/max coordinates into another
+   * frame. Transforms all 8 vertices of the AABB into the new frame and gets
+   * the new AABB based on all 8 transformed vertices
    *
    * @param transform the transform to the new frame
    * @param x the x coordinates of the old min/max vertices
@@ -119,16 +127,19 @@ private:
    * @param ymax the max y value of the new AABB
    * @param zmax the max z value of the new AABB
    */
-  void getAABBinNewFrame(const tf2::Transform& transform, const std::vector<float>& x, const std::vector<float>& y,
-                         const std::vector<float>& z, float& xmin, float& ymin, float& zmin, float& xmax, float& ymax,
-                         float& zmax);
+  void getAABBinNewFrame(const tf2::Transform& transform,
+                         const std::vector<float>& x,
+                         const std::vector<float>& y,
+                         const std::vector<float>& z, float& xmin, float& ymin,
+                         float& zmin, float& xmax, float& ymax, float& zmax);
 
   /** @brief shared pointer to the object handling the HDF5 io for TFs */
   std::shared_ptr<seerep_hdf5_core::Hdf5CoreTf> m_hdf5_io;
   /** @brief the TF buffer */
   tf2::BufferCore m_tfBuffer;
   /** @brief object handling the logging */
-  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level>
+      m_logger;
 };
 
 } /* namespace seerep_core */

@@ -32,8 +32,9 @@ message Image
   uint32 width = 3;
 
   /*
-   * Encoding of pixels -- channel meaning, ordering, size, e.g. rgb8, rgba8, bgr8, bgra8, mono8, mono16
-   * see http://docs.ros.org/en/diamondback/api/sensor_msgs/html/image__encodings_8cpp_source.html
+   * Encoding of pixels -- channel meaning, ordering, size, e.g. rgb8, rgba8,
+   * bgr8, bgra8, mono8, mono16 see
+   * http://docs.ros.org/en/diamondback/api/sensor_msgs/html/image__encodings_8cpp_source.html
    */
   string encoding = 4;
 

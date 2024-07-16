@@ -1,4 +1,5 @@
-# this will provide a interface to creating a query with the following service definition
+# this will provide a interface to creating a query with the following service
+# definition
 from enum import Enum, EnumMeta
 
 

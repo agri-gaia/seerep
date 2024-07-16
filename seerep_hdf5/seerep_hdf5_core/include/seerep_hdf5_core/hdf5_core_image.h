@@ -41,12 +41,15 @@ struct ImageAttributes
 };
 
 /**
- * @brief This class encompasses all hdf5-io functions which are message type independent
+ * @brief This class encompasses all hdf5-io functions which are message type
+ * independent
  *
- * This means that the functions can currently be used for flatbuffers and protocol buffers
+ * This means that the functions can currently be used for flatbuffers and
+ * protocol buffers
  *
  */
-class Hdf5CoreImage : public virtual Hdf5CoreGeneral, public Hdf5CoreDatatypeInterface
+class Hdf5CoreImage : public virtual Hdf5CoreGeneral,
+                      public Hdf5CoreDatatypeInterface
 {
 public:
   /**
@@ -55,15 +58,18 @@ public:
    * @param file
    * @param write_mtx
    */
-  Hdf5CoreImage(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
+  Hdf5CoreImage(std::shared_ptr<HighFive::File>& file,
+                std::shared_ptr<std::mutex>& write_mtx);
 
   /**
    * @brief Get the indices for the seerep core from an image data group
    *
    * @param uuid the uuid of the image data group
-   * @return std::optional<seerep_core_msgs::DatasetIndexable> the seerep core message with the indices
+   * @return std::optional<seerep_core_msgs::DatasetIndexable> the seerep core
+   * message with the indices
    */
-  std::optional<seerep_core_msgs::DatasetIndexable> readDataset(const boost::uuids::uuid& uuid);
+  std::optional<seerep_core_msgs::DatasetIndexable>
+  readDataset(const boost::uuids::uuid& uuid);
 
   /**
    * @brief Get the indices for the seerep core from an image data group
@@ -71,9 +77,11 @@ public:
    * Used when recreating the indices on a server restart
    *
    * @param uuid the uuid of the image data group
-   * @return std::optional<seerep_core_msgs::DatasetIndexable> the seerep core message with the indices
+   * @return std::optional<seerep_core_msgs::DatasetIndexable> the seerep core
+   * message with the indices
    */
-  std::optional<seerep_core_msgs::DatasetIndexable> readDataset(const std::string& uuid);
+  std::optional<seerep_core_msgs::DatasetIndexable>
+  readDataset(const std::string& uuid);
 
   /**
    * @brief Get all of the data set UUIDs in an image data group
@@ -88,7 +96,9 @@ public:
    * @param uuid uuid of the image data group
    * @param labelCategory vector of labels with instances in multiple categories
    */
-  void writeLabels(const std::string& uuid, const std::vector<seerep_core_msgs::LabelCategory>& labelCategory);
+  void
+  writeLabels(const std::string& uuid,
+              const std::vector<seerep_core_msgs::LabelCategory>& labelCategory);
 
   /**
    * @brief Write the general attributes of an image to hdf5
@@ -96,7 +106,8 @@ public:
    * @param id uuid of the image data group
    * @param attributes struct with the general attributes
    */
-  void writeImageAttributes(const std::string& id, const ImageAttributes& attributes);
+  void writeImageAttributes(const std::string& id,
+                            const ImageAttributes& attributes);
 
   /**
    * @brief Read general attributes of an image from hdf5
@@ -123,13 +134,14 @@ public:
   const std::string getHdf5DataSetPath(const std::string& id) const;
 
   /**
-   * @brief Computes the frustum for given camera intrinsic parameters and stores the result in an axis
-   * aligned bounding box
+   * @brief Computes the frustum for given camera intrinsic parameters and stores
+   * the result in an axis aligned bounding box
    *
    * @param camintrinsics_uuid The UUID of the camera intrinsic parameters to use.
    * @param bb Axis aligned bounding box to store the result in.
    */
-  void computeFrustumBB(const std::string& camintrinsics_uuid, seerep_core_msgs::AABB& bb);
+  void computeFrustumBB(const std::string& camintrinsics_uuid,
+                        seerep_core_msgs::AABB& bb);
 
 public:
   // image attribute keys
@@ -139,7 +151,8 @@ public:
   inline static const std::string IS_BIGENDIAN = "is_bigendian";
   inline static const std::string STEP = "step";
   inline static const std::string IS_DENSE = "is_dense";
-  inline static const std::string CAMERA_INTRINSICS_UUID = "camera_intrinsics_uuid";
+  inline static const std::string CAMERA_INTRINSICS_UUID =
+      "camera_intrinsics_uuid";
 
   inline static const std::string RAWDATA = "rawdata";
 

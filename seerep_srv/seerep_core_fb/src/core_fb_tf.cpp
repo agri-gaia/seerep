@@ -3,7 +3,8 @@
 namespace seerep_core_fb
 {
 // constructor when data received and stored to hdf5
-CoreFbTf::CoreFbTf(std::shared_ptr<seerep_core::Core> seerepCore) : m_seerepCore(seerepCore)
+CoreFbTf::CoreFbTf(std::shared_ptr<seerep_core::Core> seerepCore)
+  : m_seerepCore(seerepCore)
 {
   CoreFbGeneral::getAllFileAccessorFromCore(m_seerepCore, m_hdf5IoMap);
 }
@@ -12,17 +13,21 @@ CoreFbTf::~CoreFbTf()
 {
 }
 
-void CoreFbTf::getData(const seerep::fb::TransformStampedQuery& query,
-                       flatbuffers::grpc::Message<seerep::fb::TransformStamped>* response)
+void CoreFbTf::getData(
+    const seerep::fb::TransformStampedQuery& query,
+    flatbuffers::grpc::Message<seerep::fb::TransformStamped>* response)
 {
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "loading tf from tfs/";
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
+      << "loading tf from tfs/";
   seerep_core_msgs::QueryTf queryTf = CoreFbConversion::fromFb(query);
 
-  std::optional<geometry_msgs::TransformStamped> result = m_seerepCore->getTF(queryTf);
+  std::optional<geometry_msgs::TransformStamped> result =
+      m_seerepCore->getTF(queryTf);
 
   if (result)
   {
-    *response = seerep_ros_conversions_fb::toFlat(result.value(), query.header()->uuid_project()->str(), false);
+    *response = seerep_ros_conversions_fb::toFlat(
+        result.value(), query.header()->uuid_project()->str(), false);
   }
   else
   {
@@ -43,7 +48,8 @@ void CoreFbTf::addData(const seerep::fb::TransformStamped& tf)
   m_seerepCore->addTF(seerep_ros_conversions_fb::toROS(tf), projectuuid);
 }
 
-std::vector<std::string> CoreFbTf::getFrames(const boost::uuids::uuid& projectuuid)
+std::vector<std::string>
+CoreFbTf::getFrames(const boost::uuids::uuid& projectuuid)
 {
   return m_seerepCore->getFrames(projectuuid);
 }

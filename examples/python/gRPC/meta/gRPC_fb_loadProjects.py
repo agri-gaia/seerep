@@ -16,4 +16,8 @@ responseBuf = ProjectInfos.GetRootAs(responseBuf)
 
 if responseBuf:
     for i in range(responseBuf.ProjectsLength()):
-        print(responseBuf.Projects(i).Name().decode("utf-8") + " " + responseBuf.Projects(i).Uuid().decode("utf-8"))
+        print(
+            responseBuf.Projects(i).Name().decode("utf-8")
+            + " "
+            + responseBuf.Projects(i).Uuid().decode("utf-8")
+        )

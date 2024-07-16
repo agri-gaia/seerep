@@ -4,13 +4,16 @@
 
 namespace seerep_hdf5_pb
 {
-Hdf5PbGeneral::Hdf5PbGeneral(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx)
+Hdf5PbGeneral::Hdf5PbGeneral(std::shared_ptr<HighFive::File>& file,
+                             std::shared_ptr<std::mutex>& write_mtx)
   : seerep_hdf5_core::Hdf5CoreGeneral(file, write_mtx)
 {
 }
 
-void Hdf5PbGeneral::writeLabels(const std::string& datatypeGroup, const std::string& uuid,
-                                const google::protobuf::RepeatedPtrField<seerep::pb::LabelCategory>& labelsCategoryPb)
+void Hdf5PbGeneral::writeLabels(
+    const std::string& datatypeGroup, const std::string& uuid,
+    const google::protobuf::RepeatedPtrField<seerep::pb::LabelCategory>&
+        labelsCategoryPb)
 {
   if (!labelsCategoryPb.empty())
   {
@@ -40,11 +43,14 @@ void Hdf5PbGeneral::writeLabels(const std::string& datatypeGroup, const std::str
 }
 
 std::optional<google::protobuf::RepeatedPtrField<seerep::pb::LabelCategory>>
-Hdf5PbGeneral::readLabels(const std::string& datatypeGroup, const std::string& uuid)
+Hdf5PbGeneral::readLabels(const std::string& datatypeGroup,
+                          const std::string& uuid)
 {
   std::vector<std::string> labelCategories, datumaroJsonPerCategory;
   std::vector<std::vector<seerep_core_msgs::Label>> labelsPerCategory;
-  seerep_hdf5_core::Hdf5CoreGeneral::readLabels(datatypeGroup, uuid, labelCategories, labelsPerCategory,
+  seerep_hdf5_core::Hdf5CoreGeneral::readLabels(datatypeGroup, uuid,
+                                                labelCategories,
+                                                labelsPerCategory,
                                                 datumaroJsonPerCategory);
 
   google::protobuf::RepeatedPtrField<seerep::pb::LabelCategory> result;
@@ -58,9 +64,12 @@ Hdf5PbGeneral::readLabels(const std::string& datatypeGroup, const std::string& u
     {
       auto label = resultCat.add_labels();
       label->set_label(labelsPerCategory.at(iCategory).at(i).label);
-      label->set_labeliddatumaro(labelsPerCategory.at(iCategory).at(i).labelIdDatumaro);
-      label->set_instanceuuid(boost::lexical_cast<std::string>(labelsPerCategory.at(iCategory).at(i).uuidInstance));
-      label->set_instanceiddatumaro(labelsPerCategory.at(iCategory).at(i).instanceIdDatumaro);
+      label->set_labeliddatumaro(
+          labelsPerCategory.at(iCategory).at(i).labelIdDatumaro);
+      label->set_instanceuuid(boost::lexical_cast<std::string>(
+          labelsPerCategory.at(iCategory).at(i).uuidInstance));
+      label->set_instanceiddatumaro(
+          labelsPerCategory.at(iCategory).at(i).instanceIdDatumaro);
     }
     result.Add(std::move(resultCat));
   }

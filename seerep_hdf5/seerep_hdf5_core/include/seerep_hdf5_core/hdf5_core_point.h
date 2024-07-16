@@ -27,10 +27,13 @@ namespace seerep_hdf5_core
 class Hdf5CorePoint : public Hdf5CoreGeneral, public Hdf5CoreDatatypeInterface
 {
 public:
-  Hdf5CorePoint(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
+  Hdf5CorePoint(std::shared_ptr<HighFive::File>& file,
+                std::shared_ptr<std::mutex>& write_mtx);
 
-  std::optional<seerep_core_msgs::DatasetIndexable> readDataset(const boost::uuids::uuid& uuid);
-  std::optional<seerep_core_msgs::DatasetIndexable> readDataset(const std::string& uuid);
+  std::optional<seerep_core_msgs::DatasetIndexable>
+  readDataset(const boost::uuids::uuid& uuid);
+  std::optional<seerep_core_msgs::DatasetIndexable>
+  readDataset(const std::string& uuid);
 
   std::vector<std::string> getDatasetUuids();
 

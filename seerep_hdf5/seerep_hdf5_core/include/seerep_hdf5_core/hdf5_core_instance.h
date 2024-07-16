@@ -26,12 +26,17 @@ namespace seerep_hdf5_core
 class Hdf5CoreInstance : public Hdf5CoreGeneral
 {
 public:
-  Hdf5CoreInstance(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
+  Hdf5CoreInstance(std::shared_ptr<HighFive::File>& file,
+                   std::shared_ptr<std::mutex>& write_mtx);
 
-  std::optional<std::unordered_map<std::string, std::string>> readAttributes(const boost::uuids::uuid& uuid);
-  std::optional<std::unordered_map<std::string, std::string>> readAttributes(const std::string& uuid);
-  void writeAttribute(const boost::uuids::uuid& uuid, std::string key, std::string value);
-  void writeAttribute(const std::string& uuid, std::string key, std::string value);
+  std::optional<std::unordered_map<std::string, std::string>>
+  readAttributes(const boost::uuids::uuid& uuid);
+  std::optional<std::unordered_map<std::string, std::string>>
+  readAttributes(const std::string& uuid);
+  void writeAttribute(const boost::uuids::uuid& uuid, std::string key,
+                      std::string value);
+  void writeAttribute(const std::string& uuid, std::string key,
+                      std::string value);
 
 public:
   // datatype group names in hdf5

@@ -4,7 +4,9 @@ from typing import Optional
 from google.protobuf import empty_pb2
 from grpc import Channel
 from seerep.pb import camera_intrinsics_query_pb2 as cameraintrinsicsquery
-from seerep.pb import camera_intrinsics_service_pb2_grpc as camintrinsics_service
+from seerep.pb import (
+    camera_intrinsics_service_pb2_grpc as camintrinsics_service,
+)
 from seerep.pb import meta_operations_pb2_grpc as metaOperations
 from seerep.util.common import get_gRPC_channel
 
@@ -24,7 +26,10 @@ def query_camintrins(
                 target_proj_uuid = project.uuid
 
         if target_proj_uuid is None:
-            print("valid project doesn't exist! Please execute gRPC_pb_addCameraIntrinsics.py beforehand.")
+            print("""
+                valid project doesn't exist! Please execute
+                gRPC_pb_addCameraIntrinsics.py beforehand.
+            """)
 
     stub = camintrinsics_service.CameraIntrinsicsServiceStub(grpc_channel)
 
@@ -43,8 +48,13 @@ if __name__ == "__main__":
     queried_camintrinsics = query_camintrins()
     # for verification print the uuid of the added camera intrinsics
     print(
-        f"camera instrinsics were saved with the uuid {queried_camintrinsics.header.uuid_msgs} \
-        on the project with the uuid {queried_camintrinsics.header.uuid_project}"
+        f"camera instrinsics were saved with the uuid \
+        {queried_camintrinsics.header.uuid_msgs}"
+        f" on the project with the uuid \
+        {queried_camintrinsics.header.uuid_project}"
     )
     # print the distortion of the retrieved camera intrinsics
-    print(f"camera intrinsics distortion array: {queried_camintrinsics.distortion}")
+    print(
+        f"camera intrinsics distortion array: \
+            {queried_camintrinsics.distortion}"
+    )

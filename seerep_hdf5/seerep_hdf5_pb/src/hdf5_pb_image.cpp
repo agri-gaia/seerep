@@ -4,12 +4,16 @@
 
 namespace seerep_hdf5_pb
 {
-Hdf5PbImage::Hdf5PbImage(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx)
-  : Hdf5CoreGeneral(file, write_mtx), Hdf5CoreImage(file, write_mtx), Hdf5PbGeneral(file, write_mtx)
+Hdf5PbImage::Hdf5PbImage(std::shared_ptr<HighFive::File>& file,
+                         std::shared_ptr<std::mutex>& write_mtx)
+  : Hdf5CoreGeneral(file, write_mtx)
+  , Hdf5CoreImage(file, write_mtx)
+  , Hdf5PbGeneral(file, write_mtx)
 {
 }
 
-void Hdf5PbImage::writeImage(const std::string& id, const seerep::pb::Image& image)
+void Hdf5PbImage::writeImage(const std::string& id,
+                             const seerep::pb::Image& image)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
@@ -22,16 +26,20 @@ void Hdf5PbImage::writeImage(const std::string& id, const seerep::pb::Image& ima
 
   writeHeaderAttributes(*dataGroupPtr, image.header());
 
-  seerep_hdf5_core::ImageAttributes imageAttributes = { image.height(),       image.width(),
-                                                        image.step(),         image.encoding(),
-                                                        image.is_bigendian(), image.uuid_camera_intrinsics() };
+  seerep_hdf5_core::ImageAttributes imageAttributes = {
+    image.height(),   image.width(),        image.step(),
+    image.encoding(), image.is_bigendian(), image.uuid_camera_intrinsics()
+  };
 
   writeImageAttributes(id, imageAttributes);
 
-  const uint8_t* arrayStartPtr = reinterpret_cast<const uint8_t*>(image.data().c_str());
-  dataSetPtr->write(std::vector<uint8_t>(arrayStartPtr, arrayStartPtr + image.data().size()));
+  const uint8_t* arrayStartPtr =
+      reinterpret_cast<const uint8_t*>(image.data().c_str());
+  dataSetPtr->write(
+      std::vector<uint8_t>(arrayStartPtr, arrayStartPtr + image.data().size()));
 
-  seerep_hdf5_pb::Hdf5PbGeneral::writeLabels(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id, image.labels());
+  seerep_hdf5_pb::Hdf5PbGeneral::writeLabels(
+      seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id, image.labels());
 
   m_file->flush();
 }
@@ -61,7 +69,8 @@ std::optional<seerep::pb::Image> Hdf5PbImage::readImage(const std::string& id)
 
   auto ImageAttributes = readImageAttributes(id);
 
-  auto labels = readLabels(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id);
+  auto labels =
+      readLabels(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id);
 
   std::vector<uint8_t> data;
   dataSetPtr->read(data);
@@ -76,7 +85,8 @@ std::optional<seerep::pb::Image> Hdf5PbImage::readImage(const std::string& id)
   image.set_step(ImageAttributes.step);
   image.set_encoding(ImageAttributes.encoding);
   image.set_is_bigendian(ImageAttributes.isBigendian);
-  *image.mutable_uuid_camera_intrinsics() = ImageAttributes.cameraIntrinsicsUuid;
+  *image.mutable_uuid_camera_intrinsics() =
+      ImageAttributes.cameraIntrinsicsUuid;
 
   *image.mutable_data() = { data.begin(), data.end() };
 
