@@ -6,11 +6,10 @@ import flatbuffers
 from grpc import Channel
 from seerep.fb import (
     Boundingbox,
-    Categories,
     Datatype,
     Empty,
-    Labels,
     ProjectInfos,
+    StringVector,
     TimeInterval,
 )
 from seerep.fb import meta_operations_grpc_fb as metaOperations
@@ -103,14 +102,14 @@ def get_metadata(
     # Fetching all category names
 
     responseBuf = meta_stub.GetAllCategories(bytes(buf))
-    response = Categories.Categories.GetRootAs(responseBuf)
+    response = StringVector.StringVector.GetRootAs(responseBuf)
 
     resp_all_categories: List[str] = []
 
     print("Saved Category names are:")
-    for idx in range(response.CategoriesLength()):
-        print(response.Categories(idx).decode())
-        resp_all_categories.append(response.Categories(idx).decode())
+    for idx in range(response.StringVectorLength()):
+        print(response.StringVector(idx).decode())
+        resp_all_categories.append(response.StringVector(idx).decode())
 
     ###
     # Fetching all label names for a given category
@@ -118,20 +117,20 @@ def get_metadata(
     builder = flatbuffers.Builder(1024)
 
     uuid_datatype_w_category = fb_helper.createUuidDatatypeWithCategory(
-        builder, target_project_uuid, Datatype.Datatype().Image, "1"
+        builder, target_project_uuid, Datatype.Datatype().Image, "category A"
     )
 
     builder.Finish(uuid_datatype_w_category)
     buf = builder.Output()
 
     responseBuf = meta_stub.GetAllLabels(bytes(buf))
-    response = Labels.Labels.GetRootAs(responseBuf)
+    response = StringVector.StringVector.GetRootAs(responseBuf)
 
     resp_all_labels: List[str] = []
     print("Saved Label names are:")
-    for idx in range(response.LabelsLength()):
-        print(response.Labels(idx).decode())
-        resp_all_labels.append(response.Labels(idx).decode())
+    for idx in range(response.StringVectorLength()):
+        print(response.StringVector(idx).decode())
+        resp_all_labels.append(response.StringVector(idx).decode())
 
     return (
         resp_overall_time_intervall,

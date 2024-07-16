@@ -4,8 +4,7 @@ package seerep.pb;
 
 import "point_field.proto";
 import "header.proto";
-import "boundingbox_labeled_with_category.proto";
-import "labels_with_instance_with_category.proto";
+import "label_category.proto";
 
 /**
  * This message holds a collection of N-dimensional points, which may
@@ -39,8 +38,5 @@ message PointCloud2
   bool is_dense = 9;
 
   // (optional) labels for the complete image
-  repeated LabelsWithInstanceWithCategory labels_general = 10;
-
-  // (optional) bounding box based labels
-  repeated BoundingBoxLabeledWithCategory labels_bb = 11;
+  repeated LabelCategory labels = 10;
 }

@@ -11,7 +11,8 @@ from seerep.fb import Image
 from seerep.fb import image_service_grpc_fb as imageService
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
-    createLabelsWithCategoryVector,
+    create_label,
+    create_label_category,
     createPoint2d,
     createPolygon2D,
     createQuery,
@@ -50,16 +51,17 @@ def query_images_raw(
 
     projectUuids = [builder.CreateString(target_proj_uuid)]
 
-    # list of categories
-    category = ["0"]
-    # list of labels per category
-    labels = [
-        [
-            "testlabel0",
-            "testlabelgeneral0",
-        ]
-    ]
-    labelCategory = createLabelsWithCategoryVector(builder, category, labels)
+    labelStr = ["label1", "label2"]
+    labels = []
+    for labelAct in labelStr:
+        labels.append(create_label(builder=builder, label=labelAct, label_id=1))
+    labelsCategory = []
+    labelsCategory.append(
+        create_label_category(
+            builder=builder, labels=labels, datumaro_json="a very valid datumaro json", category="category A"
+        )
+    )
+
     dataUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
     instanceUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 
@@ -71,7 +73,7 @@ def query_images_raw(
         builder,
         polygon2d=polygon2d,
         # timeInterval=timeInterval,
-        # labels=labelCategory,
+        labels=labelsCategory,
         # mustHaveAllLabels=True,
         projectUuids=projectUuids,
         # instanceUuids=instanceUuids,
@@ -105,24 +107,7 @@ if __name__ == "__main__":
     for img in queried_images:
         print("--------------------------------------------------------------------------------------------")
         print(f"uuidmsg: {img.Header().UuidMsgs().decode('utf-8')}")
-        print(f"count of bounding box labels: {img.LabelsBbLength()}")
-        if img.LabelsBbLength() > 0:
-            print(
-                "first label: "
-                + img.LabelsBb(0).BoundingBox2dLabeled(0).LabelWithInstance().Label().Label().decode("utf-8")
-                + " ; confidence: "
-                + str(img.LabelsBb(0).BoundingBox2dLabeled(0).LabelWithInstance().Label().Confidence())
-            )
-            print(
-                "first bounding box (Xcenter,Ycenter,Xextent,Yextent, rotation): "
-                + str(img.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().CenterPoint().X())
-                + " "
-                + str(img.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().CenterPoint().Y())
-                + " "
-                + str(img.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().SpatialExtent().X())
-                + " "
-                + str(img.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().SpatialExtent().Y())
-                + " "
-                + str(img.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().Rotation())
-            )
+        print(f"count of bounding box labels: {img.LabelsLength()}")
+        if img.LabelsLength() > 0:
+            print("first label: " + img.Labels(0).Labels(0).Label().decode("utf-8"))
     print("--------------------------------------------------------------------------------------------")

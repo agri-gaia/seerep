@@ -41,6 +41,7 @@ include_directories(
 
 add_library(
   seerepcorefb
+  src/core_fb_general.cpp
   src/core_fb_conversion.cpp
   src/core_fb_image.cpp
   src/core_fb_instance.cpp

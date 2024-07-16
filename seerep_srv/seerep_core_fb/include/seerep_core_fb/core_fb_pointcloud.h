@@ -81,10 +81,10 @@ public:
   void buildIndices(std::vector<std::pair<std::string, boost::uuids::uuid>>& projectPclUuids);
 
   /**
-   * @brief Adds bounding box based labels to an existing pointcloud
-   * @param bbslabeled the flatbuffer message containing bounding box based labels
+   * @brief Adds labels to an existing pointcloud
+   * @param datasetUuidLabel the flatbuffer message containing  labels
    */
-  void addBoundingBoxesLabeled(const seerep::fb::BoundingBoxesLabeledStamped& boundingBoxeslabeled);
+  void addLabel(const seerep::fb::DatasetUuidLabel& datasetUuidLabel);
 
 private:
   /** @brief a shared pointer to the general core */

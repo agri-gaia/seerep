@@ -31,8 +31,6 @@ def test_gRPC_pb_getOverallBound(grpc_channel, project_setup) -> None:
 
     # get information such as timestamp, boundingbox, category, all labels of images in a specified project
     timestamps: Set[Tuple[int, int]] = set()
-    center_points: Set[Tuple[float, float]] = set()
-    spatial_extents: Set[Tuple[float, float]] = set()
     categories: Set[str] = set()
     labels: Set[str] = set()
 
@@ -40,26 +38,10 @@ def test_gRPC_pb_getOverallBound(grpc_channel, project_setup) -> None:
         for img_lst in inner_lst:
             for _, img in img_lst:
                 timestamps.add((img.header.stamp.seconds, img.header.stamp.nanos))
-                for label_general in img.labels_general:
-                    for label_with_instance in label_general.labelWithInstance:
-                        labels.add(label_with_instance.label.label)
-
-                for bb_cat in img.labels_bb:
-                    categories.add(bb_cat.category)
-                    for labelbb in bb_cat.boundingBox2DLabeled:
-                        center_points.add(
-                            (
-                                labelbb.boundingBox.center_point.x,
-                                labelbb.boundingBox.center_point.y,
-                            )
-                        )
-                        spatial_extents.add(
-                            (
-                                labelbb.boundingBox.spatial_extent.x,
-                                labelbb.boundingBox.spatial_extent.y,
-                            )
-                        )
-                        labels.add(labelbb.labelWithInstance.label.label)
+                for labelCategory in img.labels:
+                    categories.add(labelCategory.category)
+                    for label in labelCategory.labels:
+                        labels.add(label.label)
 
     # sort imgs by timestamp
     imgs_flattened = [img for inner_lst in sent_grid for img_lst in inner_lst for _, img in img_lst]
@@ -179,6 +161,10 @@ def test_gRPC_pb_getOverallBound(grpc_channel, project_setup) -> None:
         resp_all_labels,
     ) = gRPC_pb_getOverallBound.get_metadata(proj_uuid, grpc_channel)
 
+    # resp_all_categories: Set[str] = set()
+    # for category in resp_all_categories_temp.stringVector:
+    #     resp_all_categories.add(category)
+
     # check if any of the values of the set contain only zero
     # cause then the floating point numbers of resp_overall_bb are not exactly zero
     epsilon = 1e-34
@@ -216,5 +202,5 @@ def test_gRPC_pb_getOverallBound(grpc_channel, project_setup) -> None:
     assert resp_overall_time_intervall.time_min.nanos == min_time_nanos
     assert resp_overall_time_intervall.time_max.nanos == max_time_nanos
 
-    assert set(resp_all_categories.categories) == categories
-    assert set(resp_all_labels.labels) == labels
+    assert set(resp_all_categories.stringVector) == categories
+    assert set(resp_all_labels.stringVector) == labels

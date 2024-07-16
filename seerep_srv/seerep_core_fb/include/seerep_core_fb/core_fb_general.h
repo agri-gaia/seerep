@@ -10,6 +10,9 @@
 // seerep-core
 #include <seerep_core/core.h>
 
+// seerep_msgs
+#include <seerep_msgs/dataset_uuid_label_generated.h>
+
 // uuid
 #include <boost/functional/hash.hpp>
 #include <boost/lexical_cast.hpp>
@@ -81,6 +84,9 @@ public:
   static void getAllFileAccessorFromCore(
       std::shared_ptr<seerep_core::Core>& seerepCore,
       std::unordered_map<boost::uuids::uuid, std::shared_ptr<C>, boost::hash<boost::uuids::uuid>>& hdf5IoMap);
+
+  static std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>
+  extractLabelsPerCategory(const seerep::fb::DatasetUuidLabel& datasetUuidLabel);
 
 private:
   /** the logger for the logging framework */

@@ -9,14 +9,7 @@ from flatbuffers import Builder
 from grpc import Channel
 from gRPC.util.datastructures import FrozenEnum
 from gRPC.util.msg_abs.msgs_base import MsgsFb, MsgsFunctions, expect_component
-from seerep.fb import (
-    Datatype,
-    LabelsWithCategory,
-    Polygon2D,
-    Query,
-    QueryInstance,
-    TimeInterval,
-)
+from seerep.fb import Datatype, LabelCategory, Polygon2D, Query, QueryInstance, TimeInterval
 from seerep.util import fb_helper as fbh
 from seerep.util.service_manager import ServiceManager
 
@@ -52,7 +45,7 @@ class FbQuery(MsgsFb[Query.Query]):
             EnumFbQuery.FULLY_ENCAPSULATED: MsgsFunctions(lambda: False, lambda: True),
             EnumFbQuery.IN_MAP_FRAME: MsgsFunctions(lambda: True, lambda: False),
             EnumFbQuery.TIMEINTERVAL: MsgsFunctions(lambda: None, lambda: Dtypes.Fb.time_interval(self.builder)),
-            EnumFbQuery.LABEL: MsgsFunctions(lambda: None, lambda: Dtypes.Fb.label_with_category(self.builder)),
+            EnumFbQuery.LABEL: MsgsFunctions(lambda: None, lambda: Dtypes.Fb.label_category(self.builder)),
             EnumFbQuery.SPARQL_QUERY: MsgsFunctions(lambda: None, lambda: Dtypes.Fb.sparql_query(self.builder)),
             EnumFbQuery.ONTOLOGY_URI: MsgsFunctions(lambda: None, lambda: Dtypes.Fb.ontology_uri(self.builder)),
             EnumFbQuery.MUST_HAVE_ALL_LABELS: MsgsFunctions(lambda: False, lambda: True),
@@ -146,17 +139,20 @@ class DatatypeImplementations:
             return fbh.createTimeInterval(builder, timeMin, timeMax)
 
         @classmethod
-        def label_with_category(cls, builder: Builder) -> LabelsWithCategory.LabelsWithCategory:
+        def label_category(cls, builder: Builder) -> LabelCategory.LabelCategory:
             category = ["0"]
-            labels = [
-                [
-                    "testlabel0",
-                    "testlabel1",
-                    "testlabelgeneral0",
-                ]
-            ]
-            confidences = [[0.3, 0.3, 0.7]]
-            return fbh.createLabelsWithCategories(builder, category, labels, confidences)
+
+            labelCategoryMsgs = []
+            for cat in category:
+                labels = ["testlabel0", "testlabel1"]
+
+                labelMsgs = []
+                for label in labels:
+                    labelMsgs.append(fbh.create_label(builder, label, 2))
+
+                datumaro_json = "a very valid datumaro json"
+                labelCategoryMsgs.append(fbh.create_label_category(builder, labelMsgs, datumaro_json, cat))
+            return labelCategoryMsgs
 
         @classmethod
         def sparql_query(cls, builder: Builder):

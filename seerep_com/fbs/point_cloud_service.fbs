@@ -1,7 +1,7 @@
 
 include "point_cloud_2.fbs";
 include "query.fbs";
-include "boundingboxes_labeled_stamped.fbs";
+include "dataset_uuid_label.fbs";
 
 include "server_response.fbs";
 
@@ -10,5 +10,5 @@ namespace seerep.fb;
 rpc_service PointCloudService {
     GetPointCloud2(seerep.fb.Query):seerep.fb.PointCloud2 (streaming: "server");
     TransferPointCloud2(seerep.fb.PointCloud2):seerep.fb.ServerResponse (streaming: "client");
-    AddBoundingBoxesLabeled(seerep.fb.BoundingBoxesLabeledStamped):seerep.fb.ServerResponse (streaming: "client");
+    AddLabels(seerep.fb.DatasetUuidLabel):seerep.fb.ServerResponse (streaming: "client");
 }

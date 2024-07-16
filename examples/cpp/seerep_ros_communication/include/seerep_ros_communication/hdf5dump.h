@@ -46,14 +46,10 @@ public:
 
   void dump(const geometry_msgs::Quaternion::ConstPtr& msg) const;
 
-  void dump(const geometry_msgs::Pose::ConstPtr& msg) const;
-
-  void dump(const geometry_msgs::PoseStamped::ConstPtr& msg) const;
-
   void dump(const tf2_msgs::TFMessage::ConstPtr& msg) const;
 
 private:
-  std::vector<seerep_core_msgs::LabelsWithInstanceWithCategory> m_labelsWithInstanceWithCategory;
+  std::vector<seerep_core_msgs::LabelCategory> m_labelsCategory;
 
   std::shared_ptr<seerep_hdf5_pb::Hdf5PbTf> m_ioTf;
   std::shared_ptr<seerep_hdf5_pb::Hdf5PbPointCloud> m_ioPointCloud;

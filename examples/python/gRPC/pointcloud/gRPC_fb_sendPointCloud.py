@@ -6,28 +6,20 @@ from typing import List
 import flatbuffers
 import numpy as np
 from grpc import Channel
-from quaternion import quaternion
 from seerep.fb import PointCloud2, Quaternion, Transform, TransformStamped, Vector3, tf_service_grpc_fb
 from seerep.fb import point_cloud_service_grpc_fb as pointCloudService
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
-    addToBoundingBoxLabeledVector,
     addToPointFieldVector,
-    createBoundingBoxes,
-    createBoundingBoxesLabeled,
-    createBoundingBoxLabeledWithCategory,
+    create_label,
+    create_label_category,
     createHeader,
-    createLabelsWithInstance,
-    createLabelsWithInstanceWithCategory,
-    createPoint,
     createPointFields,
-    createQuaternion,
     createTimeStamp,
     getOrCreateProject,
 )
 
-NUM_GENERAL_LABELS = 10
-NUM_BB_LABELS = 1
+NUM_LABELS = 10
 NUM_POINT_CLOUDS = 10
 
 
@@ -36,36 +28,28 @@ def createPointCloud(builder, header, height=960, width=1280):
     pointFields = createPointFields(builder, ["x", "y", "z", "rgba"], 7, 4, 1)
     pointFieldsVector = addToPointFieldVector(builder, pointFields)
 
-    # create general labels
-    labels = [[f"GeneralLabel{i}" for i in range(NUM_GENERAL_LABELS)]]
-    confidences = [[i * 10.0 for i in range(NUM_GENERAL_LABELS)]]
-    instance_uuids = [[str(uuid.uuid4()) for i in range(NUM_GENERAL_LABELS)]]
+    # create labels
+    labelsStrings = [f"Label{i}" for i in range(NUM_LABELS)]
+    instance_uuids = [str(uuid.uuid4()) for _ in range(NUM_LABELS)]
 
-    labelsGeneralCat = createLabelsWithInstanceWithCategory(
-        builder, ["myCategory"], labels, instance_uuids, confidences
+    labels = []
+    for i in range(len(labelsStrings)):
+        labels.append(
+            create_label(
+                builder=builder, label=labelsStrings[i], label_id=1, instance_uuid=instance_uuids[i], instance_id=5
+            )
+        )
+    labelsCategory = []
+    labelsCategory.append(
+        create_label_category(
+            builder=builder, labels=labels, datumaro_json="a very valid datumaro json", category="category Z"
+        )
     )
 
-    PointCloud2.StartLabelsGeneralVector(builder, len(labelsGeneralCat))
-    for label in labelsGeneralCat:
+    PointCloud2.StartLabelsVector(builder, len(labelsCategory))
+    for label in labelsCategory:
         builder.PrependUOffsetTRelative(label)
-    labelsGeneralCat = builder.EndVector()
-
-    # create bounding box labels
-    boundingBoxes = createBoundingBoxes(
-        builder,
-        [createPoint(builder, np.random.rand(), np.random.rand(), np.random.rand()) for _ in range(NUM_BB_LABELS)],
-        [createPoint(builder, np.random.rand(), np.random.rand(), np.random.rand()) for _ in range(NUM_BB_LABELS)],
-        [createQuaternion(builder, quaternion(1.0, 0.0, 0.0, 0.0)) for _ in range(NUM_BB_LABELS)],
-    )
-    labelWithInstances = createLabelsWithInstance(
-        builder,
-        ["BoundingBoxLabel" + str(i) for i in range(NUM_BB_LABELS)],
-        [str(uuid.uuid4()) for _ in range(NUM_BB_LABELS)],
-        [i * 10.0 for i in range(NUM_BB_LABELS)],
-    )
-    labelsBb = createBoundingBoxesLabeled(builder, labelWithInstances, boundingBoxes)
-    labelsBBCat = createBoundingBoxLabeledWithCategory(builder, builder.CreateString("myCategory"), labelsBb)
-    labelsBbVector = addToBoundingBoxLabeledVector(builder, [labelsBBCat])
+    labelsCatOffset = builder.EndVector()
 
     # Note: rgb field is float, for simplification
     pointsBox = [[]]
@@ -88,8 +72,7 @@ def createPointCloud(builder, header, height=960, width=1280):
     PointCloud2.AddRowStep(builder, points.shape[1] * 16)
     PointCloud2.AddFields(builder, pointFieldsVector)
     PointCloud2.AddData(builder, pointsVector)
-    PointCloud2.AddLabelsGeneral(builder, labelsGeneralCat)
-    PointCloud2.AddLabelsBb(builder, labelsBbVector)
+    PointCloud2.AddLabels(builder, labelsCatOffset)
     return PointCloud2.End(builder)
 
 

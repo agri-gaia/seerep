@@ -1,7 +1,0 @@
-namespace seerep.fb;
-
-table Labels {
-  labels:[string];
-}
-
-root_type Labels;

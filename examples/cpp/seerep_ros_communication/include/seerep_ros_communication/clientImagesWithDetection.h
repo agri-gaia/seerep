@@ -76,8 +76,7 @@ private:
   grpc::ClientContext contextImage_;
   flatbuffers::grpc::Message<seerep::fb::ServerResponse> imageResponse_;
   // image detections
-  std::unique_ptr<::grpc::ClientWriter<flatbuffers::grpc::Message<seerep::fb::BoundingBoxes2DLabeledStamped>>>
-      writerImageDetection_;
+
   grpc::ClientContext contextImageDetection_;
   flatbuffers::grpc::Message<seerep::fb::ServerResponse> imageDetectionResponse_;
 

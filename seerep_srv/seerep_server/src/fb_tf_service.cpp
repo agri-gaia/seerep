@@ -66,7 +66,7 @@ grpc::Status FbTfService::TransferTransformStamped(
 
 grpc::Status FbTfService::GetFrames(grpc::ServerContext* context,
                                     const flatbuffers::grpc::Message<seerep::fb::FrameQuery>* request,
-                                    flatbuffers::grpc::Message<seerep::fb::FrameInfos>* response)
+                                    flatbuffers::grpc::Message<seerep::fb::StringVector>* response)
 {
   (void)context;  // ignore that variable without causing warnings
   boost::uuids::uuid uuid;
@@ -85,11 +85,11 @@ grpc::Status FbTfService::GetFrames(grpc::ServerContext* context,
       framesOffset.push_back(builder.CreateString(framename));
     }
 
-    seerep::fb::FrameInfosBuilder frameinfosbuilder(builder);
-    frameinfosbuilder.add_frames(builder.CreateVector(framesOffset));
+    seerep::fb::StringVectorBuilder frameinfosbuilder(builder);
+    frameinfosbuilder.add_stringVector(builder.CreateVector(framesOffset));
     auto frameinfosOffset = frameinfosbuilder.Finish();
     builder.Finish(frameinfosOffset);
-    *response = builder.ReleaseMessage<seerep::fb::FrameInfos>();
+    *response = builder.ReleaseMessage<seerep::fb::StringVector>();
     assert(response->Verify());
   }
   catch (std::runtime_error const& e)

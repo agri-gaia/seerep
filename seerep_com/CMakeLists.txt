@@ -16,7 +16,6 @@ find_package(Flatbuffers REQUIRED)
 list(APPEND PROTOBUF_IMPORT_DIRS ${SeerepMsgs_PROTOBUF_IMPORT_DIRS})
 
 set(MY_PROTO_FILES
-    protos/transfer_sensor_msgs.proto
     protos/meta_operations.proto
     protos/tf_service.proto
     protos/image_service.proto
@@ -32,7 +31,6 @@ set(MY_FBS_FILES
     fbs/meta_operations.fbs
     fbs/point_service.fbs
     fbs/tf_service.fbs
-    fbs/transfer_sensor_msgs.fbs
     fbs/point_cloud_service.fbs
     fbs/camera_intrinsics_service.fbs
 )

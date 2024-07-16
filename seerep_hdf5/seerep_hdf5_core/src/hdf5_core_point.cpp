@@ -48,7 +48,7 @@ std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CorePoint::readDataset(con
   data.boundingbox.max_corner().set<1>(read_data.at(1));
   data.boundingbox.max_corner().set<2>(read_data.at(2));
 
-  readLabelsGeneralAndAddToLabelsWithInstancesWithCategory(HDF5_GROUP_POINT, uuid, data.labelsWithInstancesWithCategory);
+  readLabelsAndAddToLabelsPerCategory(HDF5_GROUP_POINT, uuid, data.labelsCategory);
 
   return data;
 }

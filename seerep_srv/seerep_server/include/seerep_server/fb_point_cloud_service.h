@@ -51,17 +51,16 @@ public:
                                    grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::PointCloud2>>* reader,
                                    flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response) override;
   /**
-   * @brief Adds a stream of labeled bounding boxes to already stored point clouds
+   * @brief Adds a stream of labels to already stored point clouds
    *
    * @param context custom inital and trailing metadata (currently not used)
-   * @param reader incoming message stream of bounding boxes from the client
+   * @param reader incoming message stream of labels from the client
    * @param response gRPC message to describe the transmission state of the bounding boxes
    * @return grpc::Status status of the request. Did it work?
    */
-  grpc::Status AddBoundingBoxesLabeled(
-      grpc::ServerContext* context,
-      grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::BoundingBoxesLabeledStamped>>* reader,
-      flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response) override;
+  grpc::Status AddLabels(grpc::ServerContext* context,
+                         grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::DatasetUuidLabel>>* reader,
+                         flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response) override;
 
 private:
   /** @brief a shared pointer to the general core */

@@ -6,26 +6,16 @@ from flatbuffers import Builder
 from grpc import Channel
 from seerep.fb import (
     Boundingbox,
-    Boundingbox2D,
-    BoundingBox2DLabeled,
-    BoundingBox2DLabeledWithCategory,
-    BoundingBoxes2DLabeledStamped,
-    BoundingBoxesLabeledStamped,
-    BoundingBoxLabeled,
-    BoundingBoxLabeledWithCategory,
-    BoundingboxStamped,
     CameraIntrinsics,
     CameraIntrinsicsQuery,
+    DatasetUuidLabel,
     Empty,
     GeodeticCoordinates,
     Header,
     Image,
     Label,
-    LabelsWithCategory,
-    LabelsWithInstanceWithCategory,
-    LabelWithInstance,
+    LabelCategory,
     Point,
-    Point2D,
     PointCloud2,
     PointField,
     PointStamped,
@@ -438,268 +428,6 @@ def createPointFields(
     return pointFieldsList
 
 
-def createLabelWithConfidence(builder: Builder, label: str, confidence: Union[float, None] = None) -> int:
-    """
-    Creates a label with an associated confidence value of type\
-    [Label](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label.fbs).
-
-    Args:
-        builder: A flatbuffers Builder
-        label: The label string
-        confidence: The confidence value of the label
-
-    Returns:
-        A pointer to the constructed label object
-    """
-
-    labelStr = builder.CreateString(label)
-    Label.Start(builder)
-    Label.AddLabel(builder, labelStr)
-    if confidence:
-        Label.AddConfidence(builder, confidence)
-    return Label.End(builder)
-
-
-def createLabelsWithConfidences(
-    builder: Builder, labels: List[str], confidences: Union[List[float], None] = None
-) -> List[int]:
-    """
-    Creates multiple labels with associated confidence values of type\
-    [Label](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label.fbs).
-
-    Args:
-        builder: A flatbuffers Builder
-        labels: A list of label strings
-        confidences: A list of confidence values corresponding to the label on the same index
-
-    Returns:
-        A list of pointers to the constructed label objects
-    """
-
-    labels_with_confidences = []
-    if confidences:
-        for label, confidence in zip(labels, confidences):
-            labels_with_confidences.append(createLabelWithConfidence(builder, label, confidence))
-    else:
-        for label in labels:
-            labels_with_confidences.append(createLabelWithConfidence(builder, label))
-
-    return labels_with_confidences
-
-
-def createLabelWithInstance(builder: str, label: str, instanceUuid: str, confidence: Union[float, None] = None) -> int:
-    """
-    Creates a label with an associated instance uuid of type\
-    [LabelWithInstance](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label_with_instance.fbs).
-
-    Args:
-        builder: A flatbuffers Builder
-        label: The label string
-        confidence: The confidence value of the label
-        instanceUuid: The UUID of the instance which the label belongs to
-
-    Returns:
-        A pointer to the constructed label object
-    """
-
-    labelConfidence = createLabelWithConfidence(builder, label, confidence)
-    instanceUuidStr = builder.CreateString(instanceUuid)
-    LabelWithInstance.Start(builder)
-    LabelWithInstance.AddLabel(builder, labelConfidence)
-    LabelWithInstance.AddInstanceUuid(builder, instanceUuidStr)
-    return LabelWithInstance.End(builder)
-
-
-# category: list of categories
-# labels: list of list of labels (as fb-String msg) per category
-def createLabelsWithCategoryVector(
-    builder: Builder,
-    categories: List[int],
-    cat_labels: List[List[str]],
-    cat_confidences: Union[List[List[float]], None] = None,
-) -> int:
-    """
-    Adds the same list of labels to each category of a list of categories.
-
-    Args:
-        builder: A flatbuffers Builder
-        categories: A list with categories
-        labels: A inner list of labels for each category the outer list corresponding to the categories
-        confidences: A inner list of confidence values for each category with the outer\
-            list corresponding to the categories
-
-    Returns:
-        A pointer to the vector of category to labels mappings
-    """
-
-    LabelsCategories = createLabelsWithCategories(builder, categories, cat_labels, cat_confidences)
-
-    Query.StartLabelVector(builder, len(LabelsCategories))
-    for LabelCategory in reversed(LabelsCategories):
-        builder.PrependUOffsetTRelative(LabelCategory)
-    return builder.EndVector()
-
-
-def createLabelsWithCategories(
-    builder: Builder,
-    categories: List[int],
-    cat_labels: List[List[str]],
-    cat_confidences: Union[List[List[float]], None] = None,
-) -> List[int]:
-    """
-    Adds the same list of labels to each category of a list of categories.
-
-    Args:
-        builder: A flatbuffers Builder
-        categories: A list with categories
-        labels: A inner list of labels for each category the outer list corresponding to the categories
-        confidences: A inner list of confidence values for each category with the outer\
-            list corresponding to the categories
-
-    Returns:
-        A list to pointers to\
-        [LabelsWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/labels_with_category.fbs)\
-        objects
-    """
-    label_categories = []
-
-    assert len(cat_labels) == len(categories)
-
-    for triple in zip(categories, cat_labels, cat_confidences) if cat_confidences else zip(categories, cat_labels):
-        cat_str = builder.CreateString(str(triple[0]))
-
-        if len(triple) > 2:
-            labels_processed = createLabelsWithConfidences(builder, triple[1], triple[2])
-        else:
-            labels_processed = createLabelsWithConfidences(builder, triple[1])
-
-        LabelsWithCategory.StartLabelsVector(builder, len(labels_processed))
-        for label in reversed(labels_processed):
-            builder.PrependUOffsetTRelative(label)
-        labels_offset = builder.EndVector()
-
-        LabelsWithCategory.Start(builder)
-        LabelsWithCategory.AddCategory(builder, cat_str)
-        LabelsWithCategory.AddLabels(builder, labels_offset)
-        label_categories.append(LabelsWithCategory.End(builder))
-
-    return label_categories
-
-
-def createLabelWithInstanceWithCategory(
-    builder: Builder,
-    category: str,
-    labels: List[str],
-    instance_uuids=List[str],
-    confidences: Union[List[float], None] = None,
-) -> int:
-    """
-    Adds generates a list of labels with instances and adds it to a category.
-
-    Args:
-        builder: A flatbuffers Builder
-        category: A category
-        labels: A list of labels
-        instance_uuids: A list of instance UUIDs
-        confidences: A list of confidence values corresponding to the labels on the same index
-
-    Returns:
-        A pointer to the constructed\
-        [LabelWithCategoryWithInstance](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/labels_with_instance_with_category.fbs)\
-        object
-    """
-    cat_string = builder.CreateString(category)
-    list_labels_w_instance = createLabelsWithInstance(builder, labels, instance_uuids, confidences)
-
-    LabelsWithInstanceWithCategory.StartLabelsWithInstanceVector(builder, len(list_labels_w_instance))
-    for label_with_instance in reversed(list_labels_w_instance):
-        builder.PrependUOffsetTRelative(label_with_instance)
-    labels_offset = builder.EndVector()
-
-    LabelsWithInstanceWithCategory.Start(builder)
-    LabelsWithInstanceWithCategory.AddCategory(builder, cat_string)
-    LabelsWithInstanceWithCategory.AddLabelsWithInstance(builder, labels_offset)
-
-    return LabelsWithInstanceWithCategory.End(builder)
-
-
-def createLabelsWithInstanceWithCategory(
-    builder: Builder,
-    categories: List[str],
-    cat_labels: List[List[str]],
-    cat_instance_uuids: List[List[str]],
-    cat_confidences: Union[List[List[float]], None] = None,
-) -> List[int]:
-    """
-    Adds the same list of labels to each category of a list of categories.
-
-    Args:
-        builder: A flatbuffers Builder
-        categories: A list with categories
-        cat_labels: A inner list of labels for each category the outer list corresponding to the categories
-        cat_instance_uuids: A inner list of instance UUIDs for each category with the outer\
-            list corresponding to the categories
-        cat_confidences: A inner list of confidence values for each category with the outer\
-            list corresponding to the categories
-
-    Returns:
-        A list containing pointers to\
-        [LabelWithCategoryWithInstance](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/labels_with_instance_with_category.fbs)\
-        objects
-    """
-
-    assert len(categories) == len(cat_labels) == len(cat_instance_uuids)
-
-    labels = []
-
-    for quad in (
-        zip(categories, cat_labels, cat_instance_uuids, cat_confidences)
-        if cat_confidences
-        else zip(categories, cat_labels, cat_instance_uuids)
-    ):
-        if len(quad) > 3:
-            labels_w_instance_categories = createLabelWithInstanceWithCategory(
-                builder, quad[0], quad[1], quad[2], quad[3]
-            )
-        else:
-            labels_w_instance_categories = createLabelWithInstanceWithCategory(builder, quad[0], quad[1], quad[2])
-
-        labels.append(labels_w_instance_categories)
-
-    return labels
-
-
-def createLabelsWithInstance(
-    builder: Builder,
-    labels: List[str],
-    instanceUuids: List[str],
-    confidences: Union[List[float], None] = None,
-) -> List[int]:
-    """
-    Creates multiple general labels mapped to instances.
-
-    Args:
-        builder: A flatbuffers Builder
-        labels: A list of label strings
-        confidences: A list of confidence values corresponding to the label on the same index
-        instanceUuids: A list of instance UUIDs corresponding to the label on the same index
-
-    Returns:
-        A list of pointers to the constructed\
-        [LabelWithInstance](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label_with_instance.fbs)\
-        objects
-    """
-    assert len(labels) == len(instanceUuids)
-    labelsGeneral = []
-    if confidences:
-        for label, confidence, uuid in zip(labels, confidences, instanceUuids):
-            labelsGeneral.append(createLabelWithInstance(builder, label, uuid, confidence))
-    else:
-        for label, uuid in zip(labels, confidences, instanceUuids):
-            labelsGeneral.append(createLabelWithInstance(builder, label, uuid))
-    return labelsGeneral
-
-
 def createPoint2d(builder: Builder, x: float, y: float) -> int:
     """
     Creates a 2D point in flatbuffers.
@@ -712,180 +440,10 @@ def createPoint2d(builder: Builder, x: float, y: float) -> int:
     Returns:
         A pointer to the constructed point object
     """
-    Point2D.Start(builder)
-    Point2D.AddX(builder, x)
-    Point2D.AddY(builder, y)
+    Point.Start(builder)
+    Point.AddX(builder, x)
+    Point.AddY(builder, y)
     return Point.End(builder)
-
-
-def createBoundingBox2d(builder: Builder, centerPoint: int, spatialExtent: int, rotation: float = 0) -> int:
-    """
-    Creates a [Boundingbox2D](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d.fbs)
-    in flatbuffers.
-
-    Args:
-        builder: A flatbuffers Builder
-        centerPoint: The pointer to the Point2D object of the center point of the bounding box
-        spatialExtent: The pointer to the Point2D object representing the spatial extent in x and y direction
-        rotation: The rotation of the bounding box
-
-    Returns:
-        A pointer to the constructed bounding box object
-    """
-    Boundingbox2D.Start(builder)
-    Boundingbox2D.AddCenterPoint(builder, centerPoint)
-    Boundingbox2D.AddSpatialExtent(builder, spatialExtent)
-    Boundingbox2D.AddRotation(builder, rotation)
-    return Boundingbox2D.End(builder)
-
-
-def createBoundingBox2dLabeled(builder: Builder, instance: int, boundingBox: int) -> int:
-    """
-    Creates a\
-    [BoundingBox2DLabeled](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d_labeled.fbs)\
-    in flatbuffers.
-
-    Args:
-        builder: A flatbuffers Builder
-        instance: A pointer to the\
-            [LabelWithInstance](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label_with_instance.fbs)\
-            object of the bounding box
-        boundingBox: The pointer to a\
-            [Boundingbox2D](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d.fbs) object
-
-    Returns:
-        A pointer to the constructed bounding box object
-    """
-
-    BoundingBox2DLabeled.Start(builder)
-    BoundingBox2DLabeled.AddLabelWithInstance(builder, instance)
-    BoundingBox2DLabeled.AddBoundingBox(builder, boundingBox)
-    return BoundingBox2DLabeled.End(builder)
-
-
-def createBoundingBoxes2d(builder: Builder, centerPoints: List[int], spatialExtents: List[int]) -> List[int]:
-    """
-    Creates multiple 2D bounding boxes in flatbuffers.
-
-    Args:
-        builder: A flatbuffers Builder
-        centerPoints: A list of pointers to the Point2D objects of the center points of the bounding boxes
-        spatialExtents: A list of pointers to the Point2D objects representing the spatial extents in x and y direction
-
-    Returns:
-        A list of pointers to the constructed\
-            [Boundingbox2D](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d.fbs)\
-            objects
-    """
-    assert len(centerPoints) == len(spatialExtents)
-    boundingBoxes = []
-    for centerPoint, spatialExtent in zip(centerPoints, spatialExtents):
-        boundingBoxes.append(createBoundingBox2d(builder, centerPoint, spatialExtent))
-    return boundingBoxes
-
-
-def createBoundingBoxes2dLabeled(builder: Builder, instances: List[int], boundingBoxes: List[int]) -> List[int]:
-    """
-    Creates a list of pointers to\
-    [BoundingBox2DLabeled](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d_labeled.fbs)\
-    object to flatbuffers.
-
-    Args:
-        builder: A flatbuffers Builder
-        instances: A list of pointers to the\
-            [LabelWithInstance](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label_with_instance.fbs)\
-            objects of the bounding boxes corresponding to the bounding boxes by the same index
-        boundingBoxes: A list of pointers to\
-            [Boundingbox2D](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d.fbs) objects
-
-    Returns:
-        A list of pointers to the constructed bounding box objects
-    """
-    assert len(instances) == len(boundingBoxes)
-    boundingBoxes2dLabeled = []
-    for instance, boundingBox in zip(instances, boundingBoxes):
-        boundingBoxes2dLabeled.append(createBoundingBox2dLabeled(builder, instance, boundingBox))
-    return boundingBoxes2dLabeled
-
-
-def createBoundingBox2dLabeledStamped(builder: Builder, header: int, labelsBb: List[int]) -> int:
-    """
-    Creates a\
-    [BoundingBoxes2DLabeledStamped](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingboxes2d_labeled_stamped.fbs)\
-    object in flatbuffers and returns it's pointer.
-
-    Args:
-        builder: A flatbuffers Builder
-        header: The pointer to the header object of the bounding boxes
-        labelsBb: A list of pointers to\
-            [BoundingBox2DLabeledWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d_labeled_with_category.fbs)\
-            objects
-
-    Returns:
-        A pointer to the constructed bounding boxes object
-    """
-    BoundingBoxes2DLabeledStamped.StartLabelsBbVector(builder, len(labelsBb))
-    for labelBb in reversed(labelsBb):
-        builder.PrependUOffsetTRelative(labelBb)
-    labelsBbVector = builder.EndVector()
-
-    BoundingBoxes2DLabeledStamped.Start(builder)
-    BoundingBoxes2DLabeledStamped.AddHeader(builder, header)
-    BoundingBoxes2DLabeledStamped.AddLabelsBb(builder, labelsBbVector)
-    return BoundingBoxes2DLabeledStamped.End(builder)
-
-
-def createBoundingBoxLabeledStamped(builder: Builder, header: int, labelsBb: List[int]) -> int:
-    """
-    Constructs a [BoundingBoxesLabeledStamped](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingboxes_labeled_stamped.fbs)\
-    object in flatbuffers and returns it's pointer.
-
-    Args:
-        builder: A flatbuffers Builder
-        header: The pointer to the header object for the bounding boxes
-        labelsBb: A list of pointers to\
-            [BoundingBoxLabeledWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox_labeled_with_category.fbs)\
-            objects
-
-    Returns:
-        A pointer to the constructed bounding boxes object
-    """
-    BoundingBoxesLabeledStamped.StartLabelsBbVector(builder, len(labelsBb))
-    for labelBb in reversed(labelsBb):
-        builder.PrependUOffsetTRelative(labelBb)
-    labelsBbVector = builder.EndVector()
-
-    BoundingBoxesLabeledStamped.Start(builder)
-    BoundingBoxesLabeledStamped.AddHeader(builder, header)
-    BoundingBoxesLabeledStamped.AddLabelsBb(builder, labelsBbVector)
-    return BoundingBoxesLabeledStamped.End(builder)
-
-
-def createBoundingBox2DLabeledWithCategory(builder: Builder, category: str, bb2dLabeled: List[int]) -> int:
-    """
-    Creates a flatbuffers\
-    [BoundingBox2DLabeledWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d_labeled_with_category.fbs)\
-    object.
-
-    Args:
-        builder: A flatbuffers Builder
-        category: The category of the bounding boxes
-        bb2dLabeled: A list of pointers to\
-            [BoundingBox2DLabeled](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d_labeled.fbs)\
-            objects
-
-    Returns:
-        A pointer to the constructed bounding box object
-    """
-    BoundingBox2DLabeledWithCategory.StartBoundingBox2dLabeledVector(builder, len(bb2dLabeled))
-    for labelBb in reversed(bb2dLabeled):
-        builder.PrependUOffsetTRelative(labelBb)
-    labelsBbVector = builder.EndVector()
-
-    BoundingBox2DLabeledWithCategory.Start(builder)
-    BoundingBox2DLabeledWithCategory.AddCategory(builder, category)
-    BoundingBox2DLabeledWithCategory.AddBoundingBox2dLabeled(builder, labelsBbVector)
-    return BoundingBox2DLabeledWithCategory.End(builder)
 
 
 def createPoint(builder: Builder, x: float, y: float, z: float) -> int:
@@ -983,132 +541,6 @@ def createPolygon2D(builder: Builder, height: float, z: float, vertices: List[in
     return Polygon2D.End(builder)
 
 
-def createBoundingBoxStamped(
-    builder: Builder, header: int, centerPoint: int, spatialExtent: int, rotation: int = None
-) -> int:
-    """
-    Creates a\
-    [BoundingboxStamped](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox_stamped.fbs)\
-    object in flatbuffers.
-
-    Args:
-        builder: A flatbuffers Builder
-        header: The pointer to the header object of the bounding box
-        centerPoint: The pointer to the 3D Point object of the center point of the bounding box
-        spatialExtent: The pointer to the 3D Point object representing the spatial extent in x and y direction
-        rotation: The rotation of the bounding box as a flatbuffers Quaternion
-
-    Returns:
-        A pointer to the constructed bounding box object
-    """
-    boundingBox = createBoundingBox(builder, centerPoint, spatialExtent, rotation)
-    BoundingboxStamped.Start(builder)
-    BoundingboxStamped.AddHeader(builder, header)
-    BoundingboxStamped.AddBoundingbox(builder, boundingBox)
-    return BoundingboxStamped.End(builder)
-
-
-def createBoundingBoxes(
-    builder: Builder, centerPoint: List[int], spatialExtent: List[int], rotation: Union[int, None] = None
-) -> List[int]:
-    """
-    Creates multiple [Boundingbox](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox.fbs)\
-    objects in flatbuffers.
-
-    Args:
-        builder: A flatbuffers Builder
-        centerPoint: A list of pointers to Point3D objects representing the center points of the bounding boxes
-        spatialExtent: A list of pointers to Point3D objects representing the spatial extents in x, y and z direction
-        rotation: A list of rotations for the rounding boxes as flatbuffers Quaternion pointers
-
-    Returns:
-        A list of pointers to the constructed bounding box objects
-    """
-    assert len(centerPoint) == len(spatialExtent)
-    boundingBoxes = []
-    if rotation:
-        for center, extent, rot in zip(centerPoint, spatialExtent, rotation):
-            boundingBoxes.append(createBoundingBox(builder, center, extent, rot))
-    else:
-        for center, extent in zip(centerPoint, spatialExtent):
-            boundingBoxes.append(createBoundingBox(builder, center, extent))
-    return boundingBoxes
-
-
-def createBoundingBoxLabeled(builder: Builder, instance: int, boundingBox: int) -> int:
-    """
-    Creates a\
-    [BoundingBoxLabeled](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox_labeled.fbs)\
-    object in flatbuffers.
-
-    Args:
-        builder: A flatbuffers Builder
-        instance: The pointer to the\
-            [LabelWithInstance](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label_with_instance.fbs)\
-            object of the bounding box
-        boundingBox: The pointer to the\
-            [Boundingbox](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox.fbs)\
-            object of the labeled bounding box
-
-    Returns:
-        A pointer to the constructed bounding box object
-    """
-    BoundingBoxLabeled.Start(builder)
-    BoundingBoxLabeled.AddLabelWithInstance(builder, instance)
-    BoundingBoxLabeled.AddBoundingBox(builder, boundingBox)
-    return BoundingBoxLabeled.End(builder)
-
-
-def createBoundingBoxesLabeled(builder: Builder, instances: List[int], boundingBoxes: List[int]) -> List[int]:
-    """
-    Creates multiple labeled bounding boxes.
-
-    Args:
-        builder: A flatbuffers Builder
-        instances: A list of pointers to\
-            [LabelWithInstance](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label_with_instance.fbs)\
-            objects
-        boundingBoxes: A list of pointers to\
-            [Boundingbox](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox.fbs)
-
-    Returns:
-        A list of pointers to the constructed\
-        [BoundingBoxLabeled](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox_labeled.fbs)\
-        objects
-    """
-    assert len(instances) == len(boundingBoxes)
-    boundingBoxesLabeled = []
-    for instance, boundingBox in zip(instances, boundingBoxes):
-        boundingBoxesLabeled.append(createBoundingBoxLabeled(builder, instance, boundingBox))
-    return boundingBoxesLabeled
-
-
-def createBoundingBoxLabeledWithCategory(builder: Builder, category: str, bbLabeled: List[int]) -> int:
-    """
-    Creates a [BoundingBoxLabeledWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox_labeled_with_category.fbs)\
-    object in flatbuffers.
-
-    Args:
-        builder: A flatbuffers Builder
-        category: The category of the bounding boxes
-        bbLabeled: A list of pointers to\
-            [BoundingBoxLabeled](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox_labeled.fbs)\
-            objects
-
-    Returns:
-        A pointer to the constructed labeled with category bounding box object
-    """
-    BoundingBoxLabeledWithCategory.StartBoundingBoxLabeledVector(builder, len(bbLabeled))
-    for labelBb in reversed(bbLabeled):
-        builder.PrependUOffsetTRelative(labelBb)
-    labelsBbVector = builder.EndVector()
-
-    BoundingBoxLabeledWithCategory.Start(builder)
-    BoundingBoxLabeledWithCategory.AddCategory(builder, category)
-    BoundingBoxLabeledWithCategory.AddBoundingBoxLabeled(builder, labelsBbVector)
-    return BoundingBoxLabeledWithCategory.End(builder)
-
-
 def addToBoundingBoxLabeledVector(builder: Builder, boundingBoxLabeledList: List[int]) -> int:
     """
     Adds list of boudingBoxLabeled into the labelsBbVector of a flatbuffers pointcloud2.
@@ -1122,28 +554,8 @@ def addToBoundingBoxLabeledVector(builder: Builder, boundingBoxLabeledList: List
         A pointer to the constructed vector of bounding box labeled with category objects
     """
     PointCloud2.StartLabelsBbVector(builder, len(boundingBoxLabeledList))
-    # Note: reverse because we prepend
     for bb in reversed(boundingBoxLabeledList):
         builder.PrependUOffsetTRelative(bb)
-    return builder.EndVector()
-
-
-def addToGeneralLabelsVector(builder: Builder, generalLabelList: List[int]) -> int:
-    """
-    Adds list of generalLabels into the labelsGeneralVector of a flatbuffers pointcloud2.
-
-    Args:
-        builder: A flatbuffers Builder
-        generalLabelList: A list of pointers to\
-            [LabelsWithInstanceWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/labels_with_instance_with_category.fbs)
-
-    Returns:
-        A pointer to the constructed vector of general labels objects
-    """
-    PointCloud2.StartLabelsGeneralVector(builder, len(generalLabelList))
-    # Note: reverse because we prepend
-    for label in reversed(generalLabelList):
-        builder.PrependUOffsetTRelative(label)
     return builder.EndVector()
 
 
@@ -1160,7 +572,6 @@ def addToPointFieldVector(builder: Builder, pointFieldList: List[int]) -> int:
         A pointer to the constructed vector of point fields objects
     """
     PointCloud2.StartFieldsVector(builder, len(pointFieldList))
-    # Note: reverse because we prepend
     for pointField in reversed(pointFieldList):
         builder.PrependUOffsetTRelative(pointField)
     return builder.EndVector()
@@ -1203,7 +614,6 @@ def createQuery(
         A pointer to the constructed query object
     """
 
-    # Note: reverse because we prepend
     if projectUuids:
         Query.StartProjectuuidVector(builder, len(projectUuids))
         for projectUuid in reversed(projectUuids):
@@ -1579,8 +989,9 @@ def createImage(
     image: np.ndarray,
     header: int,
     encoding: str,
-    boundingBox2dLabeledVector: Union[List[int], None] = None,
-    labelsGeneral: Union[List[int], None] = None,
+    is_bigendian: bool,
+    camera_intrinsics_uuid: str,
+    labels: Union[List[int], None] = None,
 ) -> int:
     """
     Create an image in flatbuffers.
@@ -1590,39 +1001,84 @@ def createImage(
         image: The image to be created (can be read from a file using imageio.imread())
         header: The pointer to the header object of the image
         encoding: The encoding of the image, e.g. rgb8
-        boundingBox2dLabeledVector: A list of pointers to\
-            [BoundingBox2DLabeledWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox2d_labeled_with_category.fbs)\
+        is_bigendian: Bool if the data is big endian
+        labelCategory: A list of pointers to\
+            [LabelCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label_category.fbs)\
             objects to attach to the image
-        labelsGeneral: A list to pointers to objects of type\
-            [LabelsWithInstanceWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/labels_with_instance_with_category.fbs)
+        camera_intrinsics_uuid: The uuid of the corresponding camera intrinsic
 
     Returns:
         A pointer to the constructed image object
     """
     encoding = builder.CreateString(encoding)
 
-    if boundingBox2dLabeledVector:
-        Image.StartLabelsBbVector(builder, len(boundingBox2dLabeledVector))
-        for bb in reversed(boundingBox2dLabeledVector):
-            builder.PrependUOffsetTRelative(bb)
-        bbs = builder.EndVector()
-
-    if labelsGeneral:
-        Image.StartLabelsGeneralVector(builder, len(labelsGeneral))
-        for label in reversed(labelsGeneral):
+    if labels:
+        Image.ImageStartLabelsVector(builder, len(labels))
+        for label in reversed(labels):
             builder.PrependUOffsetTRelative(label)
-        labelsGeneralVector = builder.EndVector()
+        label_offset = builder.EndVector()
 
-    imData = builder.CreateByteVector(image.tobytes())
+    camera_intrinsics_uuid_offset = builder.CreateString(camera_intrinsics_uuid)
+    data_offset = builder.CreateByteVector(image.tobytes())
+
     Image.Start(builder)
     Image.AddHeader(builder, header)
     Image.AddHeight(builder, image.shape[0])
     Image.AddWidth(builder, image.shape[1])
     Image.AddEncoding(builder, encoding)
-    Image.AddStep(builder, 3 * image.shape[1])
-    Image.AddData(builder, imData)
-    if boundingBox2dLabeledVector:
-        Image.AddLabelsBb(builder, bbs)
-    if labelsGeneral:
-        Image.AddLabelsGeneral(builder, labelsGeneralVector)
+    Image.AddIsBigendian(builder, is_bigendian)
+    Image.AddStep(builder, image.nbytes // image.shape[0])
+    Image.AddData(builder, data_offset)
+    if labels:
+        Image.AddLabels(builder, label_offset)
+    Image.AddUuidCameraintrinsics(builder, camera_intrinsics_uuid_offset)
     return Image.End(builder)
+
+
+# TODO: find a way to not use to ifs for the optional parameters
+def create_label(builder, label: str, label_id: int, instance_uuid: str = None, instance_id: int = None):
+    label_offset = builder.CreateString(label)
+    if instance_uuid:
+        instance_uuid_offset = builder.CreateString(instance_uuid)
+    Label.Start(builder)
+    Label.AddLabel(builder, label_offset)
+    Label.LabelAddLabelIdDatumaro(builder, label_id)
+    if instance_uuid:
+        Label.AddInstanceUuid(builder, instance_uuid_offset)
+    if instance_id:
+        Label.AddInstanceIdDatumaro(builder, instance_id)
+    return Label.End(builder)
+
+
+def create_label_category(builder, labels: List[Label.Label], datumaro_json: str, category: str = None):
+    if category:
+        category_offset = builder.CreateString(category)
+    datumaro_json_offset = builder.CreateString(datumaro_json)
+
+    LabelCategory.StartLabelsVector(builder, len(labels))
+    for label in labels:
+        builder.PrependUOffsetTRelative(label)
+    vec_offset = builder.EndVector()
+
+    LabelCategory.Start(builder)
+    if category:
+        LabelCategory.AddCategory(builder, category_offset)
+    LabelCategory.AddLabels(builder, vec_offset)
+    LabelCategory.AddDatumaroJson(builder, datumaro_json_offset)
+    return LabelCategory.End(builder)
+
+
+def create_dataset_uuid_label(builder, projectUuid: str, datasetUuid: str, labels: List[LabelCategory.LabelCategory]):
+    DatasetUuidLabel.StartLabelsVector(builder, len(labels))
+    for label in labels:
+        builder.PrependUOffsetTRelative(label)
+    vec_offset = builder.EndVector()
+
+    projectUuidOffset = builder.CreateString(projectUuid)
+    datasetUuidOffset = builder.CreateString(datasetUuid)
+
+    DatasetUuidLabel.Start(builder)
+    DatasetUuidLabel.AddProjectUuid(builder, projectUuidOffset)
+    DatasetUuidLabel.AddDatasetUuid(builder, datasetUuidOffset)
+    DatasetUuidLabel.AddLabels(builder, vec_offset)
+    return DatasetUuidLabel.End(builder)

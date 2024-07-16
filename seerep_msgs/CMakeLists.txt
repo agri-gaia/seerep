@@ -15,123 +15,80 @@ set(Boost_USE_STATIC_RUNTIME OFF)
 find_package(Boost REQUIRED)
 
 set(MY_PROTO_FILES
-    protos/boundingbox_labeled.proto
-    protos/boundingbox_labeled_with_category.proto
-    protos/boundingbox_stamped.proto
     protos/boundingbox.proto
-    protos/boundingbox2d_labeled.proto
-    protos/boundingbox2d_labeled_with_category.proto
-    protos/boundingbox2d_stamped.proto
-    protos/boundingbox2d.proto
     protos/camera_intrinsics.proto
     protos/camera_intrinsics_query.proto
-    protos/categories.proto
     protos/datatype.proto
-    protos/frame_infos.proto
     protos/frame_query.proto
     protos/geodetic_coordinates.proto
     protos/header.proto
     protos/image.proto
-    protos/label_with_instance.proto
+    protos/label_category.proto
     protos/label.proto
-    protos/labels.proto
-    protos/labels_with_category.proto
-    protos/labels_with_instance_with_category.proto
     protos/point_cloud_2.proto
     protos/point_field.proto
     protos/point_stamped.proto
     protos/point.proto
     protos/point2d.proto
-    protos/polygon_stamped.proto
-    protos/polygon.proto
     protos/polygon2d.proto
-    protos/pose_stamped.proto
-    protos/pose.proto
     protos/project_info.proto
     protos/project_infos.proto
     protos/projectCreation.proto
-    protos/quaternion_stamped.proto
     protos/quaternion.proto
     protos/query.proto
     protos/region_of_interest.proto
     protos/server_response.proto
+    protos/string_vector.proto
     protos/time_interval.proto
     protos/timestamp.proto
     protos/transform_stamped.proto
     protos/transform_stamped_query.proto
     protos/transform.proto
-    protos/twist_stamped.proto
-    protos/twist_with_covariance_stamped.proto
-    protos/twist_with_covariance.proto
-    protos/twist.proto
     protos/uuid_datatype_with_category.proto
     protos/uuid_datatype_pair.proto
-    protos/vector3_stamped.proto
     protos/vector3.proto
 )
 
 set(MY_FBS_FILES
     fbs/attributes_stamped.fbs
-    fbs/boundingbox_labeled.fbs
-    fbs/boundingbox_labeled_with_category.fbs
-    fbs/boundingbox_stamped.fbs
     fbs/boundingbox.fbs
-    fbs/boundingbox2d_labeled.fbs
-    fbs/boundingbox2d_labeled_with_category.fbs
-    fbs/boundingbox2d_stamped.fbs
-    fbs/boundingbox2d.fbs
-    fbs/boundingboxes_labeled_stamped.fbs
-    fbs/boundingboxes2d_labeled_stamped.fbs
     fbs/camera_intrinsics.fbs
     fbs/camera_intrinsics_query.fbs
-    fbs/categories.fbs
+    fbs/dataset_uuid_label.fbs
     fbs/datatype.fbs
     fbs/empty.fbs
-    fbs/frame_infos.fbs
     fbs/frame_query.fbs
     fbs/geodeticCoordinates.fbs
     fbs/header.fbs
     fbs/image.fbs
-    fbs/label_with_instance.fbs
+    fbs/label_category.fbs
     fbs/label.fbs
-    fbs/labels.fbs
-    fbs/labels_with_category.fbs
-    fbs/labels_with_instance_with_category.fbs
     fbs/point_cloud_2.fbs
     fbs/point_field.fbs
     fbs/point_stamped.fbs
     fbs/point.fbs
     fbs/point2d.fbs
-    fbs/polygon_stamped.fbs
-    fbs/polygon.fbs
     fbs/polygon2d.fbs
-    fbs/pose_stamped.fbs
-    fbs/pose.fbs
     fbs/project_info.fbs
     fbs/project_infos.fbs
     fbs/projectCreation.fbs
-    fbs/quaternion_stamped.fbs
     fbs/quaternion.fbs
     fbs/query.fbs
     fbs/query_instance.fbs
     fbs/region_of_interest.fbs
     fbs/server_response.fbs
     fbs/sparql_query.fbs
+    fbs/string_vector.fbs
     fbs/time_interval.fbs
     fbs/timestamp.fbs
     fbs/transform_stamped.fbs
     fbs/transform_stamped_query.fbs
     fbs/transform.fbs
-    fbs/twist_stamped.fbs
-    fbs/twist_with_covariance_stamped.fbs
-    fbs/twist_with_covariance.fbs
-    fbs/twist.fbs
     fbs/union_map_entry.fbs
     fbs/uuids_per_project.fbs
     fbs/uuids_project_pair.fbs
     fbs/uuid_datatype_with_category.fbs
     fbs/uuid_datatype_pair.fbs
-    fbs/vector3_stamped.fbs
     fbs/vector3.fbs
 )
 
@@ -142,7 +99,9 @@ set(MY_CORE_MSGS
     ${CMAKE_CURRENT_SOURCE_DIR}/core/camera_intrinsics_query.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/header.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/datatype.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/label_with_instance.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/label.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/label_category.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/core/label_datumaro.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/project_info.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/polygon2d.h
     ${CMAKE_CURRENT_SOURCE_DIR}/core/query_result_project.h

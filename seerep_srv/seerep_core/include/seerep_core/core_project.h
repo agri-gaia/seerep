@@ -122,12 +122,11 @@ public:
   /**
    * @brief Adds labels to an existing dataset
    * @param datatype the targeted datatype
-   * @param labelWithInstancePerCategory map from category to a vector of labels to be added to the dataset
+   * @param labelOfCategory map from category to a vector of labels to be added to the dataset
    * @param msgUuid the UUID of the targeted dataset
    */
   void addLabels(const seerep_core_msgs::Datatype& datatype,
-                 const std::unordered_map<std::string, std::vector<seerep_core_msgs::LabelWithInstance>>&
-                     labelWithInstancePerCategory,
+                 const std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>& labelPerCategory,
                  const boost::uuids::uuid& msgUuid);
 
   // tf

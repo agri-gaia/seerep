@@ -12,10 +12,7 @@
 // Image - Done
 // Point - Done
 // Quaternion - Done
-// Pose - Done
-// PoseStamped - Done
 // Vector3 -Done
-// Vector3Stamped - Done
 // Transform - Done
 // TransformStamped - Done
 // BoundingBox2DLabeled
@@ -153,34 +150,6 @@ geometry_msgs::Quaternion createQuaternion()
 }
 
 /**
- * @brief creates a ros geometry_msgs pose with arbitrary values
- * @return geometry_msgs::Pose
- * */
-geometry_msgs::Pose createPose()
-{
-  geometry_msgs::Pose pose;
-
-  pose.position = createPoint();
-  pose.orientation = createQuaternion();
-
-  return pose;
-}
-
-/**
- * @brief creates a ros geometry_msgs posestamped with arbitrary values
- * @return geometry_msgs::PoseStamped
- * */
-geometry_msgs::PoseStamped createPoseStamped()
-{
-  geometry_msgs::PoseStamped pose_stamped;
-
-  pose_stamped.header = createHeader();
-  pose_stamped.pose = createPose();
-
-  return pose_stamped;
-}
-
-/**
  * @brief creates a ros geometry_msgs vector3 with arbitrary values
  * @return geometry_msgs::Vector3
  * */
@@ -193,20 +162,6 @@ geometry_msgs::Vector3 createVector3()
   v.z = 3;
 
   return v;
-}
-
-/**
- * @brief creates a ros geometry_msgs vector3stamped with arbitrary values
- * @return geometry_msgs::Vector3Stamped
- * */
-geometry_msgs::Vector3Stamped createVector3Stamped()
-{
-  geometry_msgs::Vector3Stamped v3_stamped;
-
-  v3_stamped.header = createHeader();
-  v3_stamped.vector = createVector3();
-
-  return v3_stamped;
 }
 
 /**
@@ -262,17 +217,8 @@ public:
   geometry_msgs::Quaternion original_q;
   geometry_msgs::Quaternion converted_q;
 
-  geometry_msgs::Pose original_pose;
-  geometry_msgs::Pose converted_pose;
-
-  geometry_msgs::PoseStamped original_pose_stamped;
-  geometry_msgs::PoseStamped converted_pose_stamped;
-
   geometry_msgs::Vector3 original_v;
   geometry_msgs::Vector3 converted_v;
-
-  geometry_msgs::Vector3Stamped original_v3_stamped;
-  geometry_msgs::Vector3Stamped converted_v3_stamped;
 
   geometry_msgs::Transform original_t;
   geometry_msgs::Transform converted_t;
@@ -348,7 +294,7 @@ public:
     // Point End
   }
 
-  void createQauternionObjects()
+  void createQuaternionObjects()
   {
     // Quaternion Start
     original_q = createQuaternion();
@@ -358,30 +304,6 @@ public:
 
     converted_q = seerep_ros_conversions_fb::toROS(*fb_quaternion.GetRoot());
     // Quaternion End
-  }
-
-  void createPoseObjects()
-  {
-    // Pose Start
-    original_pose = createPose();
-
-    flatbuffers::grpc::Message<seerep::fb::Pose> fb_pose;
-    fb_pose = seerep_ros_conversions_fb::toFlat(original_pose);
-
-    converted_pose = seerep_ros_conversions_fb::toROS(*fb_pose.GetRoot());
-    // Pose End
-  }
-
-  void createPointStampedObjects()
-  {
-    // PoseStamped Start
-    original_pose_stamped = createPoseStamped();
-
-    flatbuffers::grpc::Message<seerep::fb::PoseStamped> fb_pose_stamped;
-    fb_pose_stamped = seerep_ros_conversions_fb::toFlat(original_pose_stamped, p_uuid);
-
-    converted_pose_stamped = seerep_ros_conversions_fb::toROS(*fb_pose_stamped.GetRoot());
-    // PoseStamped End
   }
 
   void createVector3Objects()
@@ -394,18 +316,6 @@ public:
 
     converted_v = seerep_ros_conversions_fb::toROS(*fb_vector3.GetRoot());
     // Vector3 End
-  }
-
-  void createVector3StampedObjects()
-  {
-    // Vector3Stamped Start
-    original_v3_stamped = createVector3Stamped();
-
-    flatbuffers::grpc::Message<seerep::fb::Vector3Stamped> fb_vector3_stamped;
-    fb_vector3_stamped = seerep_ros_conversions_fb::toFlat(original_v3_stamped, p_uuid);
-
-    converted_v3_stamped = seerep_ros_conversions_fb::toROS(*fb_vector3_stamped.GetRoot());
-    // Vector3Stamped End
   }
 
   void createTransformObjects()
@@ -450,15 +360,9 @@ public:
 
     createPointObjects();
 
-    createQauternionObjects();
-
-    createPoseObjects();
-
-    createPointStampedObjects();
+    createQuaternionObjects();
 
     createVector3Objects();
-
-    createVector3StampedObjects();
 
     createTransformObjects();
 
@@ -602,28 +506,6 @@ TEST_F(rosToFbConversionTest, testQuaternion)
 }
 
 /**
- * @brief Test Pose for Equality
- * */
-TEST_F(rosToFbConversionTest, testPose)
-{
-  testPoint(original_pose.position, converted_pose.position);
-  testQuaternion(original_pose.orientation, converted_pose.orientation);
-}
-
-/**
- * @brief Test PoseStamped for Equality
- * */
-TEST_F(rosToFbConversionTest, testPoseStamped)
-{
-  // test the header
-  testHeader(original_pose_stamped.header, converted_pose_stamped.header);
-
-  // test the pose
-  testPoint(original_pose_stamped.pose.position, converted_pose_stamped.pose.position);
-  testQuaternion(original_pose_stamped.pose.orientation, converted_pose_stamped.pose.orientation);
-}
-
-/**
  * @brief Given two ROS geometry_msgs::Vector3 instances, this function tests their sub attributes of equality.
  * */
 void testVector3(geometry_msgs::Vector3 original_v, geometry_msgs::Vector3 converted_v)
@@ -639,16 +521,6 @@ void testVector3(geometry_msgs::Vector3 original_v, geometry_msgs::Vector3 conve
 TEST_F(rosToFbConversionTest, testVector3)
 {
   testVector3(original_v, converted_v);
-}
-
-/**
- * @brief Test Vector3Stamped for Equality
- * */
-TEST_F(rosToFbConversionTest, testVector3Stamped)
-{
-  testHeader(original_v3_stamped.header, original_v3_stamped.header);
-
-  testVector3(original_v3_stamped.vector, converted_v3_stamped.vector);
 }
 
 /**

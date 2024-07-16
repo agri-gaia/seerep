@@ -72,48 +72,20 @@ void CoreFbPointCloud::buildIndices(std::vector<std::pair<std::string, boost::uu
   }
 }
 
-void CoreFbPointCloud::addBoundingBoxesLabeled(const seerep::fb::BoundingBoxesLabeledStamped& boundingBoxeslabeled)
+void CoreFbPointCloud::addLabel(const seerep::fb::DatasetUuidLabel& datasetUuidLabel)
 {
   boost::uuids::string_generator gen;
-  boost::uuids::uuid uuidMsg = gen(boundingBoxeslabeled.header()->uuid_msgs()->str());
-  boost::uuids::uuid uuidProject = gen(boundingBoxeslabeled.header()->uuid_project()->str());
+  boost::uuids::uuid uuidMsg = gen(datasetUuidLabel.datasetUuid()->str());
+  boost::uuids::uuid uuidProject = gen(datasetUuidLabel.projectUuid()->str());
 
   auto hdf5io = CoreFbGeneral::getHdf5(uuidProject, m_seerepCore, m_hdf5IoMap);
 
-  hdf5io->writePointCloudBoundingBoxLabeled(boost::lexical_cast<std::string>(uuidMsg), boundingBoxeslabeled.labels_bb());
+  hdf5io->writeLabelsFb(seerep_hdf5_core::Hdf5CorePointCloud::HDF5_GROUP_POINTCLOUD,
+                        datasetUuidLabel.datasetUuid()->str(), datasetUuidLabel.labels());
 
-  std::unordered_map<std::string, std::vector<seerep_core_msgs::LabelWithInstance>> labelWithInstancePerCategory;
-  for (auto bbWithCategory : *boundingBoxeslabeled.labels_bb())
-  {
-    if (bbWithCategory->boundingBoxLabeled())
-    {
-      std::vector<seerep_core_msgs::LabelWithInstance> labelsWithInstances;
-      for (auto bb : *bbWithCategory->boundingBoxLabeled())
-      {
-        seerep_core_msgs::LabelWithInstance labelWithInstance;
-        labelWithInstance.label = bb->labelWithInstance()->label()->label()->str();
-        labelWithInstance.labelConfidence = bb->labelWithInstance()->label()->confidence();
+  auto labelPerCategory = seerep_core_fb::CoreFbGeneral::extractLabelsPerCategory(datasetUuidLabel);
 
-        try
-        {
-          labelWithInstance.uuidInstance = gen(bb->labelWithInstance()->instanceUuid()->str());
-        }
-        catch (std::runtime_error const& e)
-        {
-          labelWithInstance.uuidInstance = boost::uuids::nil_uuid();
-        }
-        labelsWithInstances.push_back(labelWithInstance);
-      }
-      labelWithInstancePerCategory.emplace(bbWithCategory->category()->c_str(), labelsWithInstances);
-    }
-    // this only adds labels to the pointcloud in the core
-    // if there are already bounding box labels for this pointcloud
-    // those labels must be removed separately. The hdfio currently overrides
-    // existing labels. The data is only correct if labels are added and there
-    // weren't any bounding box labels before
-
-    m_seerepCore->addLabels(seerep_core_msgs::Datatype::PointCloud, labelWithInstancePerCategory, uuidMsg, uuidProject);
-  }
+  m_seerepCore->addLabels(seerep_core_msgs::Datatype::PointCloud, labelPerCategory, uuidMsg, uuidProject);
 }
 
 } /* namespace seerep_core_fb */

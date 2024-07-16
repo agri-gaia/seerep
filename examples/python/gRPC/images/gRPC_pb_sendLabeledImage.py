@@ -9,18 +9,11 @@ from typing import List, Optional, Tuple
 import numpy as np
 from google.protobuf import empty_pb2
 from grpc import Channel
-from seerep.pb import boundingbox2d_labeled_pb2 as boundingbox2d_labeled
-from seerep.pb import (
-    boundingbox2d_labeled_with_category_pb2 as boundingbox2d_labeled_with_category,
-)
 from seerep.pb import camera_intrinsics_pb2 as cameraintrinsics
 from seerep.pb import camera_intrinsics_service_pb2_grpc as camintrinsics_service
 from seerep.pb import image_pb2 as image
 from seerep.pb import image_service_pb2_grpc as imageService
-from seerep.pb import label_with_instance_pb2 as labelWithInstance
-from seerep.pb import (
-    labels_with_instance_with_category_pb2 as labels_with_instance_with_category,
-)
+from seerep.pb import label_category_pb2, label_pb2
 from seerep.pb import meta_operations_pb2_grpc as metaOperations
 from seerep.pb import projectCreation_pb2 as projectCreation
 from seerep.pb import tf_service_pb2_grpc as tfService
@@ -131,44 +124,22 @@ def send_labeled_images(
         # Add image data
         theImage.data = bytes(rgb)
 
-        # 5. create categories for bounding boxes
-        for iCategory in range(0, 2):
-            bbCat = boundingbox2d_labeled_with_category.BoundingBox2DLabeledWithCategory()
-            bbCat.category = str(iCategory)
-            # 6. Create bounding boxes with labels with variations in the labels according to their index
-            bb = boundingbox2d_labeled.BoundingBox2DLabeled()
-            for i in range(0, 2):
-                bb.labelWithInstance.label.label = "testlabel" + str(i)
-                if n % 2 == 0:
-                    bb.labelWithInstance.label.label = f"testlabel{i}_"
-                if n % 4 == 0:
-                    bb.labelWithInstance.label.label = "testlabel0"
+        # 5. create label
+        labelStr = ["label1", "label2"]
+        for iCategory in ["category A", "category B"]:
+            labelsCategory = label_category_pb2.LabelCategory()
+            labelsCategory.category = iCategory
+            labelsCategory.datumaroJson = "a very valid datumaro json"
 
-                bb.labelWithInstance.label.confidence = i / 10.0
-                bb.labelWithInstance.instanceUuid = str(uuid.uuid4())
-                bb.boundingBox.center_point.x = 0.01 + i / 10
-                bb.boundingBox.center_point.y = 0.02 + i / 10
-                bb.boundingBox.spatial_extent.x = 0.03 + i / 10
-                bb.boundingBox.spatial_extent.y = 0.04 + i / 10
-                bbCat.boundingBox2DLabeled.append(bb)
-            theImage.labels_bb.append(bbCat)
+            for labelAct in labelStr:
+                label = label_pb2.Label()
+                label.label = labelAct
+                label.labelIdDatumaro = 1
+                label.instanceUuid = str(uuid.uuid4())
+                label.instanceIdDatumaro = 22
+                labelsCategory.labels.append(label)
 
-            # # 7. Add general labels to the image (in the same way as to the bounding boxes)
-            labelsCat = labels_with_instance_with_category.LabelsWithInstanceWithCategory()
-            labelsCat.category = str(iCategory)
-            for i in range(0, 2):
-                label = labelWithInstance.LabelWithInstance()
-                label.label.label = "testlabelgeneral" + str(i)
-                if n == 2:
-                    label.label.label = f"testlabelgeneral{i}_"
-                if n == 3:
-                    label.label.label = f"testlabelgeneral{i}_"
-
-                label.label.confidence = i / 10.0
-                # assuming that that the general labels are not instance related -> no instance uuid
-                # label.instanceUuid = str(uuid.uuid4())
-                labelsCat.labelWithInstance.append(label)
-            theImage.labels_general.append(labelsCat)
+            theImage.labels.append(labelsCategory)
 
         # 8. Send image to the server
         uuidImg = stub.TransferImage(theImage)

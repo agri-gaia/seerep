@@ -10,7 +10,6 @@
 #include <seerep_com/meta_operations.grpc.pb.h>
 #include <seerep_com/point_cloud_service.grpc.pb.h>
 #include <seerep_com/tf_service.grpc.pb.h>
-#include <seerep_com/transfer_sensor_msgs.grpc.pb.h>
 
 // seerep-fb
 #include <seerep_com/image_service.grpc.fb.h>
@@ -48,16 +47,11 @@ enum SEEREP_MESSAGE_TYPE
 std::string MessageTypeNames[] = { SEEREP_MESSAGE_TYPES(M) };
 #undef SEEREP_M
 
-using StubTransferSensorMsgsPbPtr = std::unique_ptr<seerep::pb::TransferSensorMsgs::Stub>;
 using StubMetaPbPtr = std::unique_ptr<seerep::pb::MetaOperations::Stub>;
 using StubImagePbPtr = std::unique_ptr<seerep::pb::ImageService::Stub>;
 using StubPointCloudPbPtr = std::unique_ptr<seerep::pb::PointCloudService::Stub>;
 using StubTfPbPtr = std::unique_ptr<seerep::pb::TfService::Stub>;
 
-template <typename Type>
-void send(StubTransferSensorMsgsPbPtr& stub, grpc::ClientContext* c, seerep::pb::ServerResponse* r, Type msg)
-{
-}
 template <typename Type>
 void send(StubImagePbPtr& stub, grpc::ClientContext* c, seerep::pb::ServerResponse* r, Type msg)
 {

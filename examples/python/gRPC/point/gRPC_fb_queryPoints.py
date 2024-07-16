@@ -7,7 +7,8 @@ from seerep.fb import Datatypes, PointStamped, String
 from seerep.fb import point_service_grpc_fb as pointService
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
-    createLabelsWithCategoryVector,
+    create_label,
+    create_label_category,
     createPoint2d,
     createPolygon2D,
     createQuery,
@@ -41,10 +42,18 @@ def get_points_raw(target_proj_uuid: str = None, grpc_channel=get_gRPC_channel()
     timeInterval = createTimeInterval(builder, timeMin, timeMax)
 
     projectUuids = [builder.CreateString(target_proj_uuid)]
-    category = ["0"]
 
-    labels = [["testlabel0", "testlabelgeneral0"]]
-    labelCategory = createLabelsWithCategoryVector(builder, category, labels)
+    labelStr = ["label1", "label2"]
+    labels = []
+    for labelAct in labelStr:
+        labels.append(create_label(builder=builder, label=labelAct, label_id=1))
+    labelsCategory = []
+    labelsCategory.append(
+        create_label_category(
+            builder=builder, labels=labels, datumaro_json="a very valid datumaro json", category="category P"
+        )
+    )
+
     dataUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
     instanceUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
 
@@ -55,7 +64,7 @@ def get_points_raw(target_proj_uuid: str = None, grpc_channel=get_gRPC_channel()
     query = createQuery(
         builder,
         # timeInterval=timeInterval,
-        # labels=labelCategory,
+        labels=labelsCategory,
         projectUuids=projectUuids,
         # instanceUuids=instanceUuids,
         # dataUuids=dataUuids,
@@ -85,13 +94,10 @@ if __name__ == "__main__":
     p_list = get_points()
     for point in p_list:
         print(f"uuidmsg: {point.Header().UuidMsgs().decode('utf-8')}")
-        for i in range(point.LabelsGeneralLength()):
-            for j in range(point.LabelsGeneral(i).LabelsWithInstanceLength()):
-                print(
-                    f"    instance uuid: {point.LabelsGeneral(i).LabelsWithInstance(j).InstanceUuid().decode('utf-8')}"
-                )
-                print(f"    Label: {point.LabelsGeneral(i).LabelsWithInstance(j).Label().Label().decode('utf-8')}")
-                print(f"    Label confidence: {point.LabelsGeneral(i).LabelsWithInstance(j).Label().Confidence()}")
+        for i in range(point.LabelsLength()):
+            for j in range(point.Labels(i).LabelsLength()):
+                print(f"    instance uuid: {point.Labels(i).Labels(j).InstanceUuid().decode('utf-8')}")
+                print(f"    Label: {point.Labels(i).Labels(j).Label().decode('utf-8')}")
                 print(f"   AttributeLen: {point.AttributeLength()}")
         # check for attribute 0
         if point.Attribute(0).ValueType() == Datatypes.Datatypes().String:
@@ -99,4 +105,4 @@ if __name__ == "__main__":
             union_str.Init(point.Attribute(0).Value().Bytes, point.Attribute(0).Value().Pos)
         print(f"Attribute 0 Key: {point.Attribute(0).Key().decode()}")
         print(f"Attribute 0 Value: {union_str.Data().decode()}\n")
-    print(f"count of queried pictures: {len(p_list)}")
+    print(f"count of queried points: {len(p_list)}")

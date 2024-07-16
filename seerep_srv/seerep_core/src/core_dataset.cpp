@@ -580,33 +580,31 @@ void CoreDataset::addDatasetToIndices(const seerep_core_msgs::Datatype& datatype
                                                                   ((uint64_t)dataset.header.timestamp.nanos)));
   datatypeSpecifics->timetree.insert(std::make_pair(aabbTime, dataset.header.uuidData));
 
-  addLabels(datatype, datatypeSpecifics, dataset.labelsWithInstancesWithCategory, dataset.header.uuidData);
+  addLabels(datatype, datatypeSpecifics, dataset.labelsCategory, dataset.header.uuidData);
 }
 
 void CoreDataset::addLabels(const seerep_core_msgs::Datatype& datatype,
-                            const std::unordered_map<std::string, std::vector<seerep_core_msgs::LabelWithInstance>>&
-                                labelWithInstancePerCategory,
+                            const std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>& labelPerCategory,
                             const boost::uuids::uuid& msgUuid)
 {
-  addLabels(datatype, m_datatypeDatatypeSpecificsMap.at(datatype), labelWithInstancePerCategory, msgUuid);
+  addLabels(datatype, m_datatypeDatatypeSpecificsMap.at(datatype), labelPerCategory, msgUuid);
 }
 
 void CoreDataset::addLabels(const seerep_core_msgs::Datatype& datatype,
                             std::shared_ptr<seerep_core::CoreDataset::DatatypeSpecifics> datatypeSpecifics,
-                            const std::unordered_map<std::string, std::vector<seerep_core_msgs::LabelWithInstance>>&
-                                labelWithInstancePerCategory,
+                            const std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>& labelPerCategory,
                             const boost::uuids::uuid& msgUuid)
 {
   std::vector<boost::uuids::uuid> instanceUuids;
   // loop categories
-  for (auto labelWithInstanceOfCategory : labelWithInstancePerCategory)
+  for (auto labelOfCategory : labelPerCategory)
   {
     // check if label already exists
-    auto categoryMapEntry = datatypeSpecifics->categoryLabelDatasetsMap.find(labelWithInstanceOfCategory.first);
+    auto categoryMapEntry = datatypeSpecifics->categoryLabelDatasetsMap.find(labelOfCategory.first);
     if (categoryMapEntry == datatypeSpecifics->categoryLabelDatasetsMap.end())
     {
       auto emplaceReturn = datatypeSpecifics->categoryLabelDatasetsMap.emplace(
-          labelWithInstanceOfCategory.first, std::unordered_map<std::string, std::vector<boost::uuids::uuid>>());
+          labelOfCategory.first, std::unordered_map<std::string, std::vector<boost::uuids::uuid>>());
       if (!emplaceReturn.second)
       {
         throw std::runtime_error("could not insert label category to datatype specifics.");
@@ -614,7 +612,7 @@ void CoreDataset::addLabels(const seerep_core_msgs::Datatype& datatype,
       categoryMapEntry = emplaceReturn.first;
     }
     // loop labels
-    for (auto labelWithInstance : labelWithInstanceOfCategory.second)
+    for (auto labelWithInstance : labelOfCategory.second.labels)
     {
       // check if label already exists
       auto labelMapEntry = categoryMapEntry->second.find(labelWithInstance.label);

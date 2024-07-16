@@ -24,10 +24,10 @@ public:
   grpc::Status TransferImage(grpc::ServerContext* context,
                              grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::Image>>* reader,
                              flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response) override;
-  grpc::Status AddBoundingBoxes2dLabeled(
-      grpc::ServerContext* context,
-      grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::BoundingBoxes2DLabeledStamped>>* reader,
-      flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response) override;
+
+  grpc::Status AddLabels(grpc::ServerContext* context,
+                         grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::DatasetUuidLabel>>* reader,
+                         flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response) override;
 
 private:
   std::shared_ptr<seerep_core_fb::CoreFbImage> imageFb;

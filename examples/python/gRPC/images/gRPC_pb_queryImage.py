@@ -9,8 +9,7 @@ from google.protobuf import empty_pb2
 from grpc import Channel
 from seerep.pb import image_pb2 as image
 from seerep.pb import image_service_pb2_grpc as imageService
-from seerep.pb import label_pb2
-from seerep.pb import labels_with_category_pb2 as labels_with_category
+from seerep.pb import label_category_pb2, label_pb2
 from seerep.pb import meta_operations_pb2_grpc as metaOperations
 from seerep.pb import point2d_pb2 as point2d
 from seerep.pb import query_pb2 as query
@@ -60,14 +59,12 @@ def query_images(
     theQuery.timeinterval.time_max.nanos = 0
 
     # labels
-    label = labels_with_category.LabelsWithCategory()
-    label.category = "0"
-    labelWithConfidence0 = label_pb2.Label()
-    labelWithConfidence0.label = "testlabel0"
-    labelWithConfidence1 = label_pb2.Label()
-    labelWithConfidence1.label = "testlabel0_"
-    label.labels.extend([labelWithConfidence0, labelWithConfidence1])
-    theQuery.labelsWithCategory.append(label)
+    labelsCategory = label_category_pb2.LabelCategory()
+    labelsCategory.category = "category A"
+    label = label_pb2.Label()
+    label.label = "label1"
+    labelsCategory.labels.append(label)
+    theQuery.labelCategory.append(labelsCategory)
 
     # theQuery.inMapFrame = True
     theQuery.fullyEncapsulated = False
@@ -80,21 +77,4 @@ if __name__ == "__main__":
     queried_imgs = query_images()
     print(f"count of images {len(queried_imgs)}")
     for img in queried_imgs:
-        print(
-            f"uuidmsg: {img.header.uuid_msgs}"
-            + "\n"
-            + f"first label: {img.labels_bb[0].boundingBox2DLabeled[0].labelWithInstance.label.label}"
-            + "\n"
-            + f"first label confidence: {img.labels_bb[0].boundingBox2DLabeled[0].labelWithInstance.label.confidence}"
-            + "\n"
-            + "First bounding box (Xcenter,Ycenter,Xextent,Yextent):"
-            + " "
-            + str(img.labels_bb[0].boundingBox2DLabeled[0].boundingBox.center_point.x)
-            + " "
-            + str(img.labels_bb[0].boundingBox2DLabeled[0].boundingBox.center_point.y)
-            + " "
-            + str(img.labels_bb[0].boundingBox2DLabeled[0].boundingBox.spatial_extent.x)
-            + " "
-            + str(img.labels_bb[0].boundingBox2DLabeled[0].boundingBox.spatial_extent.y)
-            + "\n"
-        )
+        print(f"uuidmsg: {img.header.uuid_msgs}" + "\n" + f"first label: {img.labels[0].labels[0].label}")

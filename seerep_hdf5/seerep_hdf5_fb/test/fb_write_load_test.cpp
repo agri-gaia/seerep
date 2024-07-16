@@ -78,75 +78,36 @@ createImageData(flatbuffers::FlatBufferBuilder& fbb, const unsigned int imageHei
   return fbImageDataOffset;
 }
 
-flatbuffers::Offset<seerep::fb::LabelWithInstance> createLabelWithInstance(flatbuffers::FlatBufferBuilder& fbb)
+flatbuffers::Offset<seerep::fb::Label> createLabel(flatbuffers::FlatBufferBuilder& fbb)
 {
   boost::uuids::uuid instanceUUID = boost::uuids::random_generator()();
   auto instanceUUIDOffset = fbb.CreateString(boost::lexical_cast<std::string>(instanceUUID));
   auto labelStr = fbb.CreateString("testLabelGeneral");
 
-  auto label = seerep::fb::CreateLabel(fbb, labelStr, 0.5);
-
-  auto labelWithInstanceOffset = seerep::fb::CreateLabelWithInstance(fbb, label, instanceUUIDOffset);
-  fbb.Finish(labelWithInstanceOffset);
-  return labelWithInstanceOffset;
+  auto labelOffset = seerep::fb::CreateLabel(fbb, labelStr, 42, instanceUUIDOffset, 43);
+  fbb.Finish(labelOffset);
+  return labelOffset;
 }
 
-flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeledWithCategory>>>
-createBB2DLabeled(flatbuffers::FlatBufferBuilder& fbb)
+flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelCategory>>>
+createLabels(flatbuffers::FlatBufferBuilder& fbb)
 {
-  std::vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeledWithCategory>> bbCategory;
+  std::vector<flatbuffers::Offset<seerep::fb::LabelCategory>> labelsCategories;
   for (size_t iCategory = 0; iCategory < 3; iCategory++)
   {
     auto categoryOffset = fbb.CreateString("category" + std::to_string(iCategory));
 
-    std::vector<flatbuffers::Offset<seerep::fb::BoundingBox2DLabeled>> bbLabeled;
+    std::vector<flatbuffers::Offset<seerep::fb::Label>> labelsWithInstanceVector;
     for (size_t i = 0; i < 10; i++)
     {
-      auto pointMinOffset = createPoint(fbb, 0.01 + i / 10, 0.02 + i / 10);
-      auto pointMaxOffset = createPoint(fbb, 0.03 + i / 10, 0.04 + i / 10);
-
-      auto bb2DOffset = seerep::fb::CreateBoundingbox2D(fbb, pointMinOffset, pointMaxOffset);
-      fbb.Finish(bb2DOffset);
-
-      auto labelWithInstanceOffset = createLabelWithInstance(fbb);
-
-      seerep::fb::BoundingBox2DLabeledBuilder bbLabeledBuilder(fbb);
-      bbLabeledBuilder.add_bounding_box(bb2DOffset);
-      bbLabeledBuilder.add_labelWithInstance(labelWithInstanceOffset);
-      bbLabeled.push_back(bbLabeledBuilder.Finish());
+      labelsWithInstanceVector.push_back(createLabel(fbb));
     }
 
-    auto bb2dLabeledOffset = fbb.CreateVector(bbLabeled);
-    seerep::fb::BoundingBox2DLabeledWithCategoryBuilder bbCategoryBuilder(fbb);
-    bbCategoryBuilder.add_category(categoryOffset);
-    bbCategoryBuilder.add_boundingBox2dLabeled(bb2dLabeledOffset);
-    bbCategory.push_back(bbCategoryBuilder.Finish());
-  }
-  auto labelsBBOffset = fbb.CreateVector(bbCategory);
-  fbb.Finish(labelsBBOffset);
-  return labelsBBOffset;
-}
+    auto labelOffset = fbb.CreateVector(labelsWithInstanceVector);
 
-flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelsWithInstanceWithCategory>>>
-createLabelsGeneral(flatbuffers::FlatBufferBuilder& fbb)
-{
-  std::vector<flatbuffers::Offset<seerep::fb::LabelsWithInstanceWithCategory>> labelsCategories;
-  for (size_t iCategory = 0; iCategory < 3; iCategory++)
-  {
-    auto categoryOffset = fbb.CreateString("category" + std::to_string(iCategory));
+    auto datumaroJsonOffset = fbb.CreateString("random string to test datumaro field");
 
-    std::vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>> labelsWithInstanceVector;
-    for (size_t i = 0; i < 10; i++)
-    {
-      labelsWithInstanceVector.push_back(createLabelWithInstance(fbb));
-    }
-
-    auto labelWithInstanceOffset = fbb.CreateVector(labelsWithInstanceVector);
-
-    seerep::fb::LabelsWithInstanceWithCategoryBuilder labelsCategoriesBuilder(fbb);
-    labelsCategoriesBuilder.add_category(categoryOffset);
-    labelsCategoriesBuilder.add_labelsWithInstance(labelWithInstanceOffset);
-    labelsCategories.push_back(labelsCategoriesBuilder.Finish());
+    labelsCategories.push_back(seerep::fb::CreateLabelCategory(fbb, categoryOffset, labelOffset, datumaroJsonOffset));
   }
   auto labelsCategoriesOffset = fbb.CreateVector(labelsCategories);
   fbb.Finish(labelsCategoriesOffset);
@@ -163,12 +124,11 @@ const seerep::fb::Image* createImageMessage(flatbuffers::FlatBufferBuilder& fbb,
   auto headerOffset = createHeader(fbb, "camera", projectUUID, messageUUID);
   auto imageOffset = createImageData(fbb, 256, 256);
 
-  auto generalLabelsOffset = createLabelsGeneral(fbb);
-  auto bB2DLabeledOffset = createBB2DLabeled(fbb);
+  auto generalLabelsOffset = createLabels(fbb);
 
   auto imgMsgOffset =
       seerep::fb::CreateImage(fbb, headerOffset, imageHeight, imageWidth, encodingOffset, true, 3 * imageHeight,
-                              imageOffset, generalLabelsOffset, bB2DLabeledOffset, camintrinsicsUUIDOffset);
+                              imageOffset, generalLabelsOffset, camintrinsicsUUIDOffset);
   fbb.Finish(imgMsgOffset);
   uint8_t* buf = fbb.GetBufferPointer();
   return flatbuffers::GetRoot<seerep::fb::Image>(buf);
@@ -281,38 +241,38 @@ TEST_F(fbWriteLoadTest, testImageData)
   }
 }
 
-void testLabelWithInstance(const seerep::fb::LabelWithInstance* readInstance,
-                           const seerep::fb::LabelWithInstance* writeInstance)
+void testLabel(const seerep::fb::Label* readInstance, const seerep::fb::Label* writeInstance)
 {
   if (readInstance == nullptr || writeInstance == nullptr)
   {
-    FAIL() << "Error: Can't compare a LabelWithInstance to nullptr";
+    FAIL() << "Error: Can't compare a Label to nullptr";
   }
-  EXPECT_STREQ(readInstance->label()->label()->c_str(), writeInstance->label()->label()->c_str());
-  EXPECT_FLOAT_EQ(readInstance->label()->confidence(), writeInstance->label()->confidence());
+  EXPECT_STREQ(readInstance->label()->c_str(), writeInstance->label()->c_str());
+  EXPECT_EQ(readInstance->labelIdDatumaro(), writeInstance->labelIdDatumaro());
   EXPECT_STREQ(readInstance->instanceUuid()->c_str(), writeInstance->instanceUuid()->c_str());
+  EXPECT_EQ(readInstance->instanceIdDatumaro(), writeInstance->instanceIdDatumaro());
 }
 
-void testLabelWithInstanceCategories(const seerep::fb::LabelsWithInstanceWithCategory* readInstance,
-                                     const seerep::fb::LabelsWithInstanceWithCategory* writeInstance)
+void testLabelCategories(const seerep::fb::LabelCategory* readInstance, const seerep::fb::LabelCategory* writeInstance)
 {
   if (readInstance == nullptr || writeInstance == nullptr)
   {
-    FAIL() << "Error: Can't compare a LabelWithInstance to nullptr";
+    FAIL() << "Error: Can't compare a Label to nullptr";
   }
   EXPECT_STREQ(readInstance->category()->c_str(), writeInstance->category()->c_str());
-  for (size_t i = 0; i < readInstance->labelsWithInstance()->size(); i++)
+  for (size_t i = 0; i < readInstance->labels()->size(); i++)
   {
-    testLabelWithInstance(readInstance->labelsWithInstance()->Get(i), writeInstance->labelsWithInstance()->Get(i));
+    testLabel(readInstance->labels()->Get(i), writeInstance->labels()->Get(i));
   }
+  EXPECT_STREQ(readInstance->datumaroJson()->c_str(), writeInstance->datumaroJson()->c_str());
 }
 
 TEST_F(fbWriteLoadTest, testGeneralLabels)
 {
-  ASSERT_EQ(readImage->labels_general()->size(), writeImage->labels_general()->size());
-  for (size_t i = 0; i < readImage->labels_general()->size(); i++)
+  ASSERT_EQ(readImage->labels()->size(), writeImage->labels()->size());
+  for (size_t i = 0; i < readImage->labels()->size(); i++)
   {
-    testLabelWithInstanceCategories(readImage->labels_general()->Get(i), writeImage->labels_general()->Get(i));
+    testLabelCategories(readImage->labels()->Get(i), writeImage->labels()->Get(i));
   }
 }
 
@@ -324,48 +284,6 @@ void testEqualPoints(const seerep::fb::Point2D* readPoint, const seerep::fb::Poi
   }
   EXPECT_EQ(readPoint->x(), writePoint->x());
   EXPECT_EQ(readPoint->y(), writePoint->y());
-}
-
-void testBB2DWithInstance(const seerep::fb::BoundingBox2DLabeled* readInstance,
-                          const seerep::fb::BoundingBox2DLabeled* writeInstance)
-{
-  if (readInstance == nullptr || writeInstance == nullptr)
-  {
-    FAIL() << "Error: Can't compare a LabelWithInstance to nullptr";
-  }
-  EXPECT_STREQ(readInstance->labelWithInstance()->label()->label()->c_str(),
-               writeInstance->labelWithInstance()->label()->label()->c_str());
-  EXPECT_FLOAT_EQ(readInstance->labelWithInstance()->label()->confidence(),
-                  writeInstance->labelWithInstance()->label()->confidence());
-  EXPECT_STREQ(readInstance->labelWithInstance()->instanceUuid()->c_str(),
-               writeInstance->labelWithInstance()->instanceUuid()->c_str());
-
-  testEqualPoints(readInstance->bounding_box()->center_point(), writeInstance->bounding_box()->center_point());
-  testEqualPoints(readInstance->bounding_box()->spatial_extent(), writeInstance->bounding_box()->spatial_extent());
-  EXPECT_FLOAT_EQ(readInstance->bounding_box()->rotation(), writeInstance->bounding_box()->rotation());
-}
-
-void testBB2DWithInstanceCategories(const seerep::fb::BoundingBox2DLabeledWithCategory* readInstance,
-                                    const seerep::fb::BoundingBox2DLabeledWithCategory* writeInstance)
-{
-  if (readInstance == nullptr || writeInstance == nullptr)
-  {
-    FAIL() << "Error: Can't compare a LabelWithInstance to nullptr";
-  }
-  EXPECT_STREQ(readInstance->category()->c_str(), writeInstance->category()->c_str());
-  for (size_t i = 0; i < readInstance->boundingBox2dLabeled()->size(); i++)
-  {
-    testBB2DWithInstance(readInstance->boundingBox2dLabeled()->Get(i), writeInstance->boundingBox2dLabeled()->Get(i));
-  }
-}
-
-TEST_F(fbWriteLoadTest, testBoundingBox2DLabeled)
-{
-  ASSERT_EQ(readImage->labels_bb()->size(), writeImage->labels_bb()->size());
-  for (size_t i = 0; i < readImage->labels_bb()->size(); i++)
-  {
-    testBB2DWithInstanceCategories(readImage->labels_bb()->Get(i), writeImage->labels_bb()->Get(i));
-  }
 }
 
 int main(int argc, char** argv)

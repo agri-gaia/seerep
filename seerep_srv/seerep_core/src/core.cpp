@@ -170,13 +170,12 @@ void Core::addDataset(const seerep_core_msgs::DatasetIndexable& dataset)
 }
 
 void Core::addLabels(const seerep_core_msgs::Datatype& datatype,
-                     const std::unordered_map<std::string, std::vector<seerep_core_msgs::LabelWithInstance>>&
-                         labelWithInstancePerCategory,
+                     const std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>& labelPerCategory,
                      const boost::uuids::uuid& msgUuid, const boost::uuids::uuid& projectuuid)
 {
   auto project = findProject(projectuuid);
 
-  project->second->addLabels(datatype, labelWithInstancePerCategory, msgUuid);
+  project->second->addLabels(datatype, labelPerCategory, msgUuid);
 }
 
 void Core::addTF(const geometry_msgs::TransformStamped& tf, const boost::uuids::uuid& projectuuid)

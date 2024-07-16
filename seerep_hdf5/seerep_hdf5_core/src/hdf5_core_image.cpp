@@ -42,11 +42,7 @@ std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CoreImage::readDataset(con
     boost::uuids::uuid uuid_generated = gen(uuid);
     data.header.uuidData = uuid_generated;
 
-    readLabelsGeneralAndAddToLabelsWithInstancesWithCategory(HDF5_GROUP_IMAGE, uuid,
-                                                             data.labelsWithInstancesWithCategory);
-
-    readBoundingBoxLabeledAndAddToLabelsWithInstancesWithCategory(HDF5_GROUP_IMAGE, uuid,
-                                                                  data.labelsWithInstancesWithCategory);
+    readLabelsAndAddToLabelsPerCategory(HDF5_GROUP_IMAGE, uuid, data.labelsCategory);
 
     // fetch cam intrinsics uuid from hdf5_core_cameraintrinsics
     camintrinsics_uuid = readAttributeFromHdf5<std::string>(
@@ -64,12 +60,10 @@ std::vector<std::string> Hdf5CoreImage::getDatasetUuids()
   return getGroupDatasets(HDF5_GROUP_IMAGE);
 }
 
-void Hdf5CoreImage::writeLabelsGeneral(
-    const std::string& uuid,
-    const std::vector<seerep_core_msgs::LabelsWithInstanceWithCategory>& labelsWithInstanceWithCategory)
+void Hdf5CoreImage::writeLabels(const std::string& uuid,
+                                const std::vector<seerep_core_msgs::LabelCategory>& labelCategory)
 {
-  Hdf5CoreGeneral::writeLabelsGeneral(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, uuid,
-                                      labelsWithInstanceWithCategory);
+  Hdf5CoreGeneral::writeLabels(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, uuid, labelCategory);
 }
 
 void Hdf5CoreImage::writeImageAttributes(const std::string& id, const ImageAttributes& attributes)

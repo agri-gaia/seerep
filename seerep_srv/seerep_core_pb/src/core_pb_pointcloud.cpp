@@ -75,24 +75,15 @@ boost::uuids::uuid CorePbPointCloud::addData(const seerep::pb::PointCloud2& pc)
   dataForIndices.boundingbox.max_corner().set<2>(bb.at(5));
 
   // semantic
-  int labelSizeAll = 0;
-  if (!pc.labels_general().empty())
-  {
-    labelSizeAll += pc.labels_general().size();
-  }
-  if (!pc.labels_bb().empty())
-  {
-    labelSizeAll += pc.labels_bb().size();
-  }
 
-  if (!pc.labels_general().empty())
+  if (!pc.labels().empty())
   {
-    for (auto labelsCategories : pc.labels_general())
+    for (auto labelsCategories : pc.labels())
     {
-      std::vector<seerep_core_msgs::LabelWithInstance> labelWithInstanceVector;
-      if (!labelsCategories.labelwithinstance().empty())
+      std::vector<seerep_core_msgs::Label> labelVector;
+      if (!labelsCategories.labels().empty())
       {
-        for (auto label : labelsCategories.labelwithinstance())
+        for (auto label : labelsCategories.labels())
         {
           boost::uuids::string_generator gen;
           boost::uuids::uuid uuidInstance;
@@ -105,45 +96,15 @@ boost::uuids::uuid CorePbPointCloud::addData(const seerep::pb::PointCloud2& pc)
             uuidInstance = boost::uuids::nil_uuid();
           }
 
-          labelWithInstanceVector.push_back(
-              seerep_core_msgs::LabelWithInstance{ .label = label.label().label(),
-                                                   .labelConfidence = label.label().confidence(),
-                                                   .uuidInstance = uuidInstance });
+          labelVector.push_back(seerep_core_msgs::Label{ .label = label.label(),
+                                                         .labelIdDatumaro = label.labeliddatumaro(),
+                                                         .uuidInstance = uuidInstance,
+                                                         .instanceIdDatumaro = label.instanceiddatumaro() });
         }
-        dataForIndices.labelsWithInstancesWithCategory.emplace(labelsCategories.category().c_str(),
-                                                               labelWithInstanceVector);
+        dataForIndices.labelsCategory.emplace(
+            labelsCategories.category().c_str(),
+            seerep_core_msgs::LabelDatumaro{ .labels = labelVector, .datumaroJson = labelsCategories.datumarojson() });
       }
-    }
-  }
-
-  if (!pc.labels_bb().empty())
-  {
-    for (auto labelsCategories : pc.labels_bb())
-    {
-      std::vector<seerep_core_msgs::LabelWithInstance> labelWithInstanceVector;
-      if (!labelsCategories.boundingboxlabeled().empty())
-      {
-        for (auto label : labelsCategories.boundingboxlabeled())
-        {
-          boost::uuids::string_generator gen;
-          boost::uuids::uuid uuidInstance;
-          try
-          {
-            uuidInstance = gen(label.labelwithinstance().instanceuuid());
-          }
-          catch (std::runtime_error const& e)
-          {
-            uuidInstance = boost::uuids::nil_uuid();
-          }
-
-          labelWithInstanceVector.push_back(
-              seerep_core_msgs::LabelWithInstance{ .label = label.labelwithinstance().label().label(),
-                                                   .labelConfidence = label.labelwithinstance().label().confidence(),
-                                                   .uuidInstance = uuidInstance });
-        }
-      }
-      dataForIndices.labelsWithInstancesWithCategory.emplace(labelsCategories.category().c_str(),
-                                                             labelWithInstanceVector);
     }
   }
 
