@@ -72,7 +72,9 @@ def rosToNumpyDtype(ros_dtype: int) -> np.dtype:
         raise ValueError("Unknown dtype")
 
 
-def getProject(builder: Builder, channel: Channel, name: str) -> Union[str, None]:
+def getProject(
+    builder: Builder, channel: Channel, name: str
+) -> Union[str, None]:
     """
     Retrieve a project by name.
 
@@ -100,7 +102,9 @@ def getProject(builder: Builder, channel: Channel, name: str) -> Union[str, None
     return None
 
 
-def getProjectInfo(builder: Builder, channel: Channel, name: str) -> Union[Dict[str, str], None]:
+def getProjectInfo(
+    builder: Builder, channel: Channel, name: str
+) -> Union[Dict[str, str], None]:
     """
     Retrieve project infos by name.
 
@@ -129,10 +133,13 @@ def getProjectInfo(builder: Builder, channel: Channel, name: str) -> Union[Dict[
                 "name": project.Name().decode("utf-8"),
                 "uuid": project.Uuid().decode("utf-8"),
                 "frameid": project.Frameid().decode("utf-8"),
-                "geodetic_position": f"lat: {project.GeodeticPosition().Latitude()},\
+                "geodetic_position": f"lat: \
+                    {project.GeodeticPosition().Latitude()},\
                     long: {project.GeodeticPosition().Longitude()},\
                     alt: {project.GeodeticPosition().Altitude()}",
-                "coordinate_system": project.GeodeticPosition().CoordinateSystem().decode("utf-8"),
+                "coordinate_system": project.GeodeticPosition()
+                .CoordinateSystem()
+                .decode("utf-8"),
             }
 
     return None
@@ -156,11 +163,15 @@ def createProjectRaw(
         builder: A flatbuffers Builder
         name: The name of the project
         frameId: The coordinate frame of the project
-        coordSys: The coordinate system type as a [proj ellipsoid](https://proj.org/en/stable/usage/ellipsoids.html#built-in-ellipsoid-definitions)\
+        coordSys: The coordinate system type as a
+        [proj ellipsoid](https://proj.org/en/stable/usage/ellipsoids.html#built-in-ellipsoid-definitions)\
             code
-        altitude: The altitude of the projects position on the globe (according to coordSys)
-        latitude: The latitude of the projects position on the globe (according to coordSys)
-        longitude: The longitude of the project positition on the globe (according to coordSys)
+        altitude: The altitude of the projects position on the globe
+                  (according to coordSys)
+        latitude: The latitude of the projects position on the globe
+                  (according to coordSys)
+        longitude: The longitude of the project positition on the globe
+                  (according to coordSys)
 
     Returns:
         A flatbuffers object of type ProjectInfo representing the project
@@ -213,9 +224,12 @@ def createProject(
         frameId: The coordinate frame of the project
         coordSys: The coordinate system type as a [proj ellipsoid](https://proj.org/en/stable/usage/ellipsoids.html#built-in-ellipsoid-definitions)\
             code
-        altitude: The altitude of the projects position on the globe (according to coordSys)
-        latitude: The latitude of the projects position on the globe (according to coordSys)
-        longitude: The longitude of the project positition on the globe (according to coordSys)
+        altitude: The altitude of the projects position on the globe
+                  (according to coordSys)
+        latitude: The latitude of the projects position on the globe
+                  (according to coordSys)
+        longitude: The longitude of the project positition on the globe
+                  (according to coordSys)
 
     Returns:
         The UUID of the created project
@@ -260,9 +274,12 @@ def getOrCreateProject(
         mapFrameId: The coordinate frame of the project
         coordSys: The coordinate system type as a [proj ellipsoid](https://proj.org/en/stable/usage/ellipsoids.html#built-in-ellipsoid-definitions)\
             code
-        altitude: The altitude of the projects position on the globe (according to coordSys)
-        latitude: The latitude of the project position on the globe (according to coordSys)
-        longitude: The longitude of the project position on the globe (according to coordSys)
+        altitude: The altitude of the projects position on the globe
+                  (according to coordSys)
+        latitude: The latitude of the project position on the globe
+                  (according to coordSys)
+        longitude: The longitude of the project position on the globe
+                  (according to coordSys)
 
     Returns:
         The UUID of the project
@@ -303,7 +320,9 @@ def createEmpty(builder: Builder) -> bytes:
     return bytes(builder.Output())
 
 
-def deleteProject(channel: Channel, builder: Builder, projectName: str, projectUuid: str):
+def deleteProject(
+    channel: Channel, builder: Builder, projectName: str, projectUuid: str
+):
     """
     Delete a project.
 
@@ -319,7 +338,9 @@ def deleteProject(channel: Channel, builder: Builder, projectName: str, projectU
     stub.DeleteProject(bytes(buf))
 
 
-def createTimeStamp(builder: Builder, seconds: int, nanoseconds: int = 0) -> int:
+def createTimeStamp(
+    builder: Builder, seconds: int, nanoseconds: int = 0
+) -> int:
     """
     Create a time stamp in flatbuffers.
 
@@ -338,7 +359,11 @@ def createTimeStamp(builder: Builder, seconds: int, nanoseconds: int = 0) -> int
 
 
 def createHeader(
-    builder: Builder, timeStamp: int = None, frame: str = None, projectUuid: str = None, msgUuid: str = None
+    builder: Builder,
+    timeStamp: int = None,
+    frame: str = None,
+    projectUuid: str = None,
+    msgUuid: str = None,
 ) -> int:
     """
     Creates a message header in flatbuffers.
@@ -348,7 +373,8 @@ def createHeader(
         timeStamp: The pointer to a constructed Timestamp object
         frame: The coordinate frame of the message
         projectUuid: The UUID of the project the message belongs to
-        msgUuid: The UUID of the message (when not provided it will be set by the server)
+        msgUuid: The UUID of the message (when not provided it will be set
+        by the server)
 
     Returns:
         A pointer to the constructed header object
@@ -372,9 +398,12 @@ def createHeader(
 
 
 # Point clouds
-def createPointField(builder: Builder, name: str, offset: int, datatype: int, count: int) -> int:
+def createPointField(
+    builder: Builder, name: str, offset: int, datatype: int, count: int
+) -> int:
     """
-    Creates a point field to describe the structure of a point entry in the Pointcloud2 message.
+    Creates a point field to describe the structure of a point entry in the
+    Pointcloud2 message.
     This esssentially mimicks the ROS\
     [Pointfield](https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/PointField.html)\
     message.
@@ -414,7 +443,8 @@ def createPointFields(
         channels: List of channel names
         datatype: Datatype used for the point entries\
             (see [fbs definition](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/point_field.fbs))
-        dataTypeOffset: Offset from start of the point struct, in this case the offset is used for every channel
+        dataTypeOffset: Offset from start of the point struct, in this case the
+        offset is used for every channel
         count: Number of elements in each point field
 
     Returns:
@@ -423,7 +453,9 @@ def createPointFields(
     pointFieldsList = []
     offset = 0
     for channel in channels:
-        pointFieldsList.append(createPointField(builder, channel, offset, datatype, count))
+        pointFieldsList.append(
+            createPointField(builder, channel, offset, datatype, count)
+        )
         offset += dataTypeOffset
     return pointFieldsList
 
@@ -466,7 +498,9 @@ def createPoint(builder: Builder, x: float, y: float, z: float) -> int:
     return Point.End(builder)
 
 
-def createPointStamped(builder: Builder, point: int, header: int, labelGeneralCategoryVector: int) -> int:
+def createPointStamped(
+    builder: Builder, point: int, header: int, labelGeneralCategoryVector: int
+) -> int:
     """
     Creates a 3D point stamped in flatbuffers.
 
@@ -489,19 +523,26 @@ def createPointStamped(builder: Builder, point: int, header: int, labelGeneralCa
     return PointStamped.End(builder)
 
 
-def createBoundingBox(builder: Builder, centerPoint: int, spatialExtent: int, rotation: Union[int, None] = None) -> int:
+def createBoundingBox(
+    builder: Builder,
+    centerPoint: int,
+    spatialExtent: int,
+    rotation: Union[int, None] = None,
+) -> int:
     """
     Creates a 3D bounding box in flatbuffers.
 
     Args:
         builder: A flatbuffers Builder
-        centerPoint: The pointer to the 3D Point object of the center point of the bounding box
-        spatialExtent: The pointer to the 3D Point object representing the spatial extent in x, y and z direction
-        rotation: The rotation of the bounding box as a flatbuffers Quaternion
+        centerPoint: The pointer to the 3D Point object of the center point of
+        the bounding box spatialExtent: The pointer to the 3D Point object
+        representing the spatial extent in x, y and z direction rotation:
+        The rotation of the bounding box as a flatbuffers Quaternion
 
     Returns:
         A pointer to the constructed\
-        [BoundingBox](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox.fbs) object
+        [BoundingBox](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox.fbs)
+        object
     """
     Boundingbox.Start(builder)
     Boundingbox.AddCenterPoint(builder, centerPoint)
@@ -511,7 +552,9 @@ def createBoundingBox(builder: Builder, centerPoint: int, spatialExtent: int, ro
     return Boundingbox.End(builder)
 
 
-def createPolygon2D(builder: Builder, height: float, z: float, vertices: List[int]) -> int:
+def createPolygon2D(
+    builder: Builder, height: float, z: float, vertices: List[int]
+) -> int:
     """
     Create a 2D Polygon in flatbuffers.
 
@@ -541,9 +584,12 @@ def createPolygon2D(builder: Builder, height: float, z: float, vertices: List[in
     return Polygon2D.End(builder)
 
 
-def addToBoundingBoxLabeledVector(builder: Builder, boundingBoxLabeledList: List[int]) -> int:
+def addToBoundingBoxLabeledVector(
+    builder: Builder, boundingBoxLabeledList: List[int]
+) -> int:
     """
-    Adds list of boudingBoxLabeled into the labelsBbVector of a flatbuffers pointcloud2.
+    Adds list of boudingBoxLabeled into the labelsBbVector
+    of a flatbuffers pointcloud2.
 
     Args:
         builder: A flatbuffers Builder
@@ -551,7 +597,8 @@ def addToBoundingBoxLabeledVector(builder: Builder, boundingBoxLabeledList: List
             [BoundingBoxLabeledWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox_labeled_with_category.fbs)
 
     Returns:
-        A pointer to the constructed vector of bounding box labeled with category objects
+        A pointer to the constructed vector of bounding box labeled
+        with category objects
     """
     PointCloud2.StartLabelsBbVector(builder, len(boundingBoxLabeledList))
     for bb in reversed(boundingBoxLabeledList):
@@ -561,12 +608,14 @@ def addToBoundingBoxLabeledVector(builder: Builder, boundingBoxLabeledList: List
 
 def addToPointFieldVector(builder: Builder, pointFieldList: List[int]) -> int:
     """
-    Adds a list of pointFields into the fieldsVector of a flatbuffers pointcloud2.
+    Adds a list of pointFields into the fieldsVector of a flatbuffers
+    pointcloud2.
 
     Args:
         builder: A flatbuffers Builder
         pointFieldList: A list of pointers to\
-            [PointField](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/point_field.fbs) objects
+            [PointField](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/point_field.fbs)
+            objects
 
     Returns:
         A pointer to the constructed vector of point fields objects
@@ -596,19 +645,25 @@ def createQuery(
 
     Args:
         builder: A flatbuffers Builder
-        timeInterval: The pointer to a TimeInterval object representing the time frame of the returned instances
-        labels: A list of pointers to\
+        timeInterval: The pointer to a TimeInterval object representing the time
+        frame of the returned instances labels: A list of pointers to\
             [LabelsWithInstanceWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/labels_with_instance_with_category.fbs)\
             flatbuffers objects, which the instances should atleast have one of
-        mustHaveAllLabels: A boolean indicating if the returned instances should have all the labels each
+        mustHaveAllLabels: A boolean indicating if the returned instances should
+        have all the labels each
         projectUuids: A list of project UUIDs to execute the query on
         instanceUuids: A list of specific instance UUIDs to query
         dataUuids: A list of specific data UUIDs to query
-        withoutData: A boolean indicating if the query should return instances without their attached data
-        polygon2d: A pointer to a Polygon2D object to retrieve only instances within the polygon
-        fullyEncapsulated: A boolean indicating if the returned instances should be fully encapsulated by the polygon
-        inMapFrame: A boolean indicating if the polygon coordinates are in the map frame or in EPSG world coordinates
-        sortByTime: A boolean indicating if the returned instances should be sorted by time
+        withoutData: A boolean indicating if the query should return instances
+        without their attached data
+        polygon2d: A pointer to a Polygon2D object to retrieve only instances
+        within the polygon
+        fullyEncapsulated: A boolean indicating if the returned instances should
+        be fully encapsulated by the polygon
+        inMapFrame: A boolean indicating if the polygon coordinates are in the
+        map frame or in EPSG world coordinates
+        sortByTime: A boolean indicating if the returned instances should be
+        sorted by time
 
     Returns:
         A pointer to the constructed query object
@@ -687,8 +742,10 @@ def createTimeInterval(builder: Builder, timeMin: int, timeMax: int) -> int:
 
     Args:
         builder: A flatbuffers Builder
-        timeMin: The pointer to a Timestamp object representing the lower bound of the time of the interval
-        timeMax: The pointer to a Timestamp object representing the upper bound of the time of the interval
+        timeMin: The pointer to a Timestamp object representing the lower bound
+        of the time of the interval
+        timeMax: The pointer to a Timestamp object representing the upper bound
+        of the time of the interval
 
     Returns:
         A pointer to the constructed time interval object
@@ -699,7 +756,9 @@ def createTimeInterval(builder: Builder, timeMin: int, timeMax: int) -> int:
     return TimeInterval.End(builder)
 
 
-def createTransformStampedQuery(builder: Builder, header: int, childFrameId: str) -> int:
+def createTransformStampedQuery(
+    builder: Builder, header: int, childFrameId: str
+) -> int:
     """
     Create a transform stamped query in flatbuffers.
 
@@ -718,11 +777,18 @@ def createTransformStampedQuery(builder: Builder, header: int, childFrameId: str
 
 
 def createRegionOfInterest(
-    builder: Builder, x_offset: int, y_offset: int, height: int, width: int, do_rectify: bool
+    builder: Builder,
+    x_offset: int,
+    y_offset: int,
+    height: int,
+    width: int,
+    do_rectify: bool,
 ) -> int:
     """
-    Create a region of interest in flatbuffers. This has the same structure as the ROS message\
-    [RegionOfInterest](https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/RegionOfInterest.html) type.
+    Create a region of interest in flatbuffers. This has the same structure as
+    the ROS message\
+    [RegionOfInterest](https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/RegionOfInterest.html)
+    type.
 
     Args:
         builder: A flatbuffers Builder
@@ -794,12 +860,16 @@ def createCameraIntrinsics(
         builder.PrependFloat64(im)
     IMOffset = builder.EndVector()
 
-    CameraIntrinsics.StartRectificationMatrixVector(builder, len(rectification_matrix))
+    CameraIntrinsics.StartRectificationMatrixVector(
+        builder, len(rectification_matrix)
+    )
     for rm in reversed(rectification_matrix):
         builder.PrependFloat64(rm)
     RMOffset = builder.EndVector()
 
-    CameraIntrinsics.StartProjectionMatrixVector(builder, len(projection_matrix))
+    CameraIntrinsics.StartProjectionMatrixVector(
+        builder, len(projection_matrix)
+    )
     for pm in reversed(projection_matrix):
         builder.PrependFloat64(pm)
     PMOffset = builder.EndVector()
@@ -821,14 +891,17 @@ def createCameraIntrinsics(
     return CameraIntrinsics.End(builder)
 
 
-def createCameraIntrinsicsQuery(builder: Builder, ci_uuid: str, project_uuid: str) -> str:
+def createCameraIntrinsicsQuery(
+    builder: Builder, ci_uuid: str, project_uuid: str
+) -> str:
     """
     Create a query for camera intrinsics objects in flatbuffers.
 
     Args:
         builder: A flatbuffers Builder
         ci_uuid: The UUID of the camera intrinsics
-        project_uuid: The UUID of the project to query the camera intrinsics from
+        project_uuid: The UUID of the project to query the camera intrinsics
+        from
 
     Returns:
         A pointer to the constructed camera intrinsics query object
@@ -863,9 +936,12 @@ def createUuidDatatypePair(builder: Builder, uuid: str, datatype: int) -> int:
     return UuidDatatypePair.End(builder)
 
 
-def createUuidDatatypeWithCategory(builder: Builder, uuid: str, datatype: int, category: str) -> int:
+def createUuidDatatypeWithCategory(
+    builder: Builder, uuid: str, datatype: int, category: str
+) -> int:
     """
-    Create a UUID datatype pair with a category in flatbuffers for meta type services.
+    Create a UUID datatype pair with a category in flatbuffers for meta type
+    services.
 
     Args:
         builder: A flatbuffers Builder
@@ -963,7 +1039,9 @@ def createTransform(builder: Builder, t: int, quat: int) -> int:
     return Transform.End(builder)
 
 
-def createTransformStamped(builder: Builder, childFrame: str, headerTf: int, transform: int) -> int:
+def createTransformStamped(
+    builder: Builder, childFrame: str, headerTf: int, transform: int
+) -> int:
     """
     Create a stamped transform in flatbuffers.
 
@@ -998,7 +1076,8 @@ def createImage(
 
     Args:
         builder: A flatbuffers Builder
-        image: The image to be created (can be read from a file using imageio.imread())
+        image: The image to be created (can be read from a file using
+        imageio.imread())
         header: The pointer to the header object of the image
         encoding: The encoding of the image, e.g. rgb8
         is_bigendian: Bool if the data is big endian
@@ -1036,7 +1115,13 @@ def createImage(
 
 
 # TODO: find a way to not use to ifs for the optional parameters
-def create_label(builder, label: str, label_id: int, instance_uuid: str = None, instance_id: int = None):
+def create_label(
+    builder,
+    label: str,
+    label_id: int,
+    instance_uuid: str = None,
+    instance_id: int = None,
+):
     label_offset = builder.CreateString(label)
     if instance_uuid:
         instance_uuid_offset = builder.CreateString(instance_uuid)
@@ -1050,7 +1135,9 @@ def create_label(builder, label: str, label_id: int, instance_uuid: str = None, 
     return Label.End(builder)
 
 
-def create_label_category(builder, labels: List[Label.Label], datumaro_json: str, category: str = None):
+def create_label_category(
+    builder, labels: List[Label.Label], datumaro_json: str, category: str = None
+):
     if category:
         category_offset = builder.CreateString(category)
     datumaro_json_offset = builder.CreateString(datumaro_json)
@@ -1068,7 +1155,12 @@ def create_label_category(builder, labels: List[Label.Label], datumaro_json: str
     return LabelCategory.End(builder)
 
 
-def create_dataset_uuid_label(builder, projectUuid: str, datasetUuid: str, labels: List[LabelCategory.LabelCategory]):
+def create_dataset_uuid_label(
+    builder,
+    projectUuid: str,
+    datasetUuid: str,
+    labels: List[LabelCategory.LabelCategory],
+):
     DatasetUuidLabel.StartLabelsVector(builder, len(labels))
     for label in labels:
         builder.PrependUOffsetTRelative(label)

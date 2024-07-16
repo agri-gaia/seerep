@@ -25,7 +25,10 @@ def get_metadata(
             if project.name == "LabeledImagesInGrid":
                 target_project_uuid = project.uuid
         if target_project_uuid is None:
-            print("No test project found, create a project with 'gRPC_pb_sendLabeledImageGrid.py' beforehand!")
+            print("""
+                No test project found, create a project with
+                'gRPC_pb_sendLabeledImageGrid.py' beforehand!
+            """)
             sys.exit()
 
     uuiddt = uuid_datatype_pair.UuidDatatypePair()

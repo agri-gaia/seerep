@@ -2,13 +2,16 @@
 
 """
 Two custom commands are added to the packaging process:
-1. GeneratePythonFiles - Generates Python files from the Protobuf and Flatbuffer definitions. Additionally
+1. GeneratePythonFiles - Generates Python files from the Protobuf and Flatbuffer
+definitions. Additionally
    the import paths are changed to `seerep.pb` and `seerep.fbs`.
-2. ChangeUtilPath - Changes the import path for the gRPC util scripts from `examples/python/gRPC/uitl` to `seerep/util`.
+2. ChangeUtilPath - Changes the import path for the gRPC util scripts from
+`examples/python/gRPC/uitl` to `seerep/util`.
 
-Note: The flatc compiler can not be installted via pip (https://github.com/google/flatbuffers/issues/7793) during the
-build process and therefore has to be installed manually. Instructions for that can be found
-here: https://flatbuffers.dev/flatbuffers_guide_building.html
+Note: The flatc compiler can not be installted via pip
+(https://github.com/google/flatbuffers/issues/7793) during the
+build process and therefore has to be installed manually. Instructions for that
+can be found here: https://flatbuffers.dev/flatbuffers_guide_building.html
 """
 
 import os
@@ -23,7 +26,8 @@ from setuptools.command.build import build
 
 
 class GeneratePythonFiles(Command):
-    """A custom command to generate Python files from the .pb and .fbs definitions"""
+    """A custom command to generate Python files from the .pb and .fbs
+    definitions"""
 
     def initialize_options(self) -> None:
         self.proto_msgs_path = Path("seerep_msgs/protos/")
@@ -34,16 +38,21 @@ class GeneratePythonFiles(Command):
 
     def finalize_options(self) -> None:
         with suppress(Exception):
-            self.bdist_dir = Path(self.get_finalized_command("bdist_wheel").bdist_dir)
+            self.bdist_dir = Path(
+                self.get_finalized_command("bdist_wheel").bdist_dir
+            )
 
     def from_pb(self) -> None:
         """
-        The protoc compiler ignores the package directive for Python, since Python modules are organized according
-        to their filesystem path. https://developers.google.com/protocol-buffers/docs/proto3#packages.
-        The correct folder strcuture therefore has to be created manually. Additionally the import path inside the
+        The protoc compiler ignores the package directive for Python, since
+        Python modules are organized according to their filesystem path.
+        https://developers.google.com/protocol-buffers/docs/proto3#packages.
+        The correct folder strcuture therefore has to be created manually.
+        Additionally the import path inside the
         files need to be adjusted to the new structure with sed.
         """
-        # other __init__.py files are automatically created by the flatc compiler
+        # other __init__.py files are automatically created by the flatc
+        # compiler
         pb_dir = Path(self.bdist_dir / "seerep/pb")
         Path(pb_dir / "__init__.py").touch()
 
@@ -76,13 +85,17 @@ class GeneratePythonFiles(Command):
 
     def from_fb(self) -> None:
         """
-        Currently the flatc compiler has a bug when using --python and --grpc, which prevents the use of -I and -o
-        for specifying input and output directories https://github.com/google/flatbuffers/issues/7397.
-        The current workaround is to copy the fbs files to the output directory, then run the flatc compiler in the
-        output dir and remove the .fbs files afterwards.
+        Currently the flatc compiler has a bug when using --python and --grpc,
+        which prevents the use of -I and -o for specifying input and output
+        directories https://github.com/google/flatbuffers/issues/7397.
+        The current workaround is to copy the fbs files to the output directory,
+        then run the flatc compiler in the output dir and remove the .fbs files
+        afterwards.
         """
         shutil.copytree(self.fbs_msgs_path, self.bdist_dir, dirs_exist_ok=True)
-        shutil.copytree(self.fbs_interface_path, self.bdist_dir, dirs_exist_ok=True)
+        shutil.copytree(
+            self.fbs_interface_path, self.bdist_dir, dirs_exist_ok=True
+        )
 
         fbs_files = glob(f"{self.bdist_dir}/*.fbs")
 
@@ -111,7 +124,8 @@ class GeneratePythonFiles(Command):
 
 class ChangeUtilPath(Command):
     """
-    Change the import path for the gRPC util scripts from 'examples/python/gRPC/uitl' to 'seerep/util' by copying
+    Change the import path for the gRPC util scripts from
+    'examples/python/gRPC/uitl' to 'seerep/util' by copying
     into the bdist directory.
     """
 
@@ -122,7 +136,9 @@ class ChangeUtilPath(Command):
 
     def finalize_options(self) -> None:
         with suppress(Exception):
-            self.bdist_dir = Path(self.get_finalized_command("bdist_wheel").bdist_dir)
+            self.bdist_dir = Path(
+                self.get_finalized_command("bdist_wheel").bdist_dir
+            )
 
     def run(self) -> None:
         new_path_in_bdist = Path(self.bdist_dir / self.new_util_path)
@@ -131,10 +147,17 @@ class ChangeUtilPath(Command):
 
 
 class CustomBuild(build):
-    sub_commands = [("build_python", None), ("change_util_path", None)] + build.sub_commands
+    sub_commands = [
+        ("build_python", None),
+        ("change_util_path", None),
+    ] + build.sub_commands
 
 
 setup(
     packages=[],
-    cmdclass={"build": CustomBuild, "build_python": GeneratePythonFiles, "change_util_path": ChangeUtilPath},
+    cmdclass={
+        "build": CustomBuild,
+        "build_python": GeneratePythonFiles,
+        "change_util_path": ChangeUtilPath,
+    },
 )

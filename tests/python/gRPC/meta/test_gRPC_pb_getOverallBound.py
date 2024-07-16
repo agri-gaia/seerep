@@ -19,17 +19,23 @@ def test_gRPC_pb_getOverallBound(grpc_channel, project_setup) -> None:
 
     print(f"Testing project: {proj_name}; {proj_uuid}")
 
-    sent_grid, tf_times, camin = send_grid.send_labeled_image_grid(proj_uuid, grpc_channel)
+    sent_grid, tf_times, camin = send_grid.send_labeled_image_grid(
+        proj_uuid, grpc_channel
+    )
 
     # get send tfs
-    tfs: List[TransformStamped.TransformStamped] = get_tf.get_tfs(tf_times, proj_uuid, grpc_channel)
+    tfs: List[TransformStamped.TransformStamped] = get_tf.get_tfs(
+        tf_times, proj_uuid, grpc_channel
+    )
 
     sorted_tfs = sorted(
         tfs,
-        key=lambda tf: tf.Header().Stamp().Seconds() + tf.Header().Stamp().Nanos() * NANOS_FACTOR,
+        key=lambda tf: tf.Header().Stamp().Seconds()
+        + tf.Header().Stamp().Nanos() * NANOS_FACTOR,
     )
 
-    # get information such as timestamp, boundingbox, category, all labels of images in a specified project
+    # get information such as timestamp, boundingbox, category, all labels of
+    # images in a specified project
     timestamps: Set[Tuple[int, int]] = set()
     categories: Set[str] = set()
     labels: Set[str] = set()
@@ -37,17 +43,25 @@ def test_gRPC_pb_getOverallBound(grpc_channel, project_setup) -> None:
     for inner_lst in sent_grid:
         for img_lst in inner_lst:
             for _, img in img_lst:
-                timestamps.add((img.header.stamp.seconds, img.header.stamp.nanos))
+                timestamps.add(
+                    (img.header.stamp.seconds, img.header.stamp.nanos)
+                )
                 for labelCategory in img.labels:
                     categories.add(labelCategory.category)
                     for label in labelCategory.labels:
                         labels.add(label.label)
 
     # sort imgs by timestamp
-    imgs_flattened = [img for inner_lst in sent_grid for img_lst in inner_lst for _, img in img_lst]
+    imgs_flattened = [
+        img
+        for inner_lst in sent_grid
+        for img_lst in inner_lst
+        for _, img in img_lst
+    ]
     imgs_sorted = sorted(
         imgs_flattened,
-        key=lambda img: img.header.stamp.seconds + img.header.stamp.nanos * NANOS_FACTOR,
+        key=lambda img: img.header.stamp.seconds
+        + img.header.stamp.nanos * NANOS_FACTOR,
     )
 
     img_coords: List[Tuple] = []
@@ -56,13 +70,23 @@ def test_gRPC_pb_getOverallBound(grpc_channel, project_setup) -> None:
     for img in imgs_sorted:
         start = 0
         end = len(sorted_tfs) - 1
-        prev_ts = sorted_tfs[0].Header().Stamp().Seconds() + sorted_tfs[0].Header().Stamp().Nanos() * NANOS_FACTOR
-        curr_ts = sorted_tfs[1].Header().Stamp().Seconds() + sorted_tfs[1].Header().Stamp().Nanos() * NANOS_FACTOR
+        prev_ts = (
+            sorted_tfs[0].Header().Stamp().Seconds()
+            + sorted_tfs[0].Header().Stamp().Nanos() * NANOS_FACTOR
+        )
+        curr_ts = (
+            sorted_tfs[1].Header().Stamp().Seconds()
+            + sorted_tfs[1].Header().Stamp().Nanos() * NANOS_FACTOR
+        )
         curr_idx = 1
         while True:
-            img_time = img.header.stamp.seconds + img.header.stamp.nanos * NANOS_FACTOR
+            img_time = (
+                img.header.stamp.seconds + img.header.stamp.nanos * NANOS_FACTOR
+            )
             if img_time == curr_ts:
-                coordinate_trans = sorted_tfs[curr_idx].Transform().Translation()
+                coordinate_trans = (
+                    sorted_tfs[curr_idx].Transform().Translation()
+                )
                 img_coords.append((img, coordinate_trans))
                 break
 
@@ -72,16 +96,22 @@ def test_gRPC_pb_getOverallBound(grpc_channel, project_setup) -> None:
                 weighted_diff_prev = (img_time - prev_ts) / time_diff
                 weighted_diff_curr = (curr_ts - img_time) / time_diff
                 w_x = (
-                    weighted_diff_curr * sorted_tfs[curr_idx].Transform().Translation().X()
-                    + weighted_diff_prev * sorted_tfs[prev_ts].Transform().Translation().X()
+                    weighted_diff_curr
+                    * sorted_tfs[curr_idx].Transform().Translation().X()
+                    + weighted_diff_prev
+                    * sorted_tfs[prev_ts].Transform().Translation().X()
                 )
                 w_y = (
-                    weighted_diff_curr * sorted_tfs[curr_idx].Transform().Translation().Y()
-                    + weighted_diff_prev * sorted_tfs[prev_ts].Transform().Translation().X()
+                    weighted_diff_curr
+                    * sorted_tfs[curr_idx].Transform().Translation().Y()
+                    + weighted_diff_prev
+                    * sorted_tfs[prev_ts].Transform().Translation().X()
                 )
                 w_z = (
-                    weighted_diff_curr * sorted_tfs[curr_idx].Transform().Translation().Z()
-                    + weighted_diff_prev * sorted_tfs[prev_ts].Transform().Translation().Z()
+                    weighted_diff_curr
+                    * sorted_tfs[curr_idx].Transform().Translation().Z()
+                    + weighted_diff_prev
+                    * sorted_tfs[prev_ts].Transform().Translation().Z()
                 )
 
                 builder = flatbuffers.Builder(1024)
@@ -105,12 +135,14 @@ def test_gRPC_pb_getOverallBound(grpc_channel, project_setup) -> None:
                 curr_idx = (start + end) // 2
                 curr_ts = (
                     sorted_tfs[curr_idx].Header().Stamp().Seconds()
-                    + sorted_tfs[curr_idx].Header().Stamp().Nanos() * NANOS_FACTOR
+                    + sorted_tfs[curr_idx].Header().Stamp().Nanos()
+                    * NANOS_FACTOR
                 )
                 if curr_idx - 1 >= 0:
                     prev_ts = (
                         sorted_tfs[curr_idx - 1].Header().Stamp().Seconds()
-                        + sorted_tfs[curr_idx - 1].Header().Stamp().Nanos() * NANOS_FACTOR
+                        + sorted_tfs[curr_idx - 1].Header().Stamp().Nanos()
+                        * NANOS_FACTOR
                     )
                 else:
                     prev_ts = None
@@ -120,11 +152,13 @@ def test_gRPC_pb_getOverallBound(grpc_channel, project_setup) -> None:
                 curr_idx = (start + end) // 2
                 curr_ts = (
                     sorted_tfs[curr_idx].Header().Stamp().Seconds()
-                    + sorted_tfs[curr_idx].Header().Stamp().Nanos() * NANOS_FACTOR
+                    + sorted_tfs[curr_idx].Header().Stamp().Nanos()
+                    * NANOS_FACTOR
                 )
                 prev_ts = (
                     sorted_tfs[curr_idx - 1].Header().Stamp().Seconds()
-                    + sorted_tfs[curr_idx - 1].Header().Stamp().Nanos() * NANOS_FACTOR
+                    + sorted_tfs[curr_idx - 1].Header().Stamp().Nanos()
+                    * NANOS_FACTOR
                 )
 
     coords = [coord for _, coord in img_coords]
@@ -166,7 +200,8 @@ def test_gRPC_pb_getOverallBound(grpc_channel, project_setup) -> None:
     #     resp_all_categories.add(category)
 
     # check if any of the values of the set contain only zero
-    # cause then the floating point numbers of resp_overall_bb are not exactly zero
+    # cause then the floating point numbers of resp_overall_bb are not exactly
+    # zero
     epsilon = 1e-34
 
     # for the x coordinate

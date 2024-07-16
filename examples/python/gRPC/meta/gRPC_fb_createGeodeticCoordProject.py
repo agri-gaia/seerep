@@ -25,7 +25,9 @@ def create_geo_proj_raw(
     return response
 
 
-def create_geo_proj(grpc_channel: Channel = get_gRPC_channel()) -> ProjectInfo.ProjectInfo:
+def create_geo_proj(
+    grpc_channel: Channel = get_gRPC_channel(),
+) -> ProjectInfo.ProjectInfo:
     return ProjectInfo.ProjectInfo.GetRootAs(create_geo_proj_raw(grpc_channel))
 
 

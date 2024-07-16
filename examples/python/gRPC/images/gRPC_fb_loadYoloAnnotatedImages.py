@@ -33,7 +33,9 @@ class yoloAnnotatedImageLoader:
         self.labelCategory = "ground_truth"
         builder = flatbuffers.Builder(1024)
         self.channel = get_gRPC_channel()
-        self.projectUuid = getOrCreateProject(builder, self.channel, self.PROJECT_NAME)
+        self.projectUuid = getOrCreateProject(
+            builder, self.channel, self.PROJECT_NAME
+        )
 
         self.time = 1680705904
         self.rootFolder = "/seerep/seerep-data/ai-tf-triton-paper-data"
@@ -51,7 +53,9 @@ class yoloAnnotatedImageLoader:
                         labelPath = os.path.join(root, file[:-4] + ".txt")
 
                         builder = flatbuffers.Builder(1024)
-                        imageMsg = self.__createImageMsg(builder, imagePath, labelPath, labelGeneralPath)
+                        imageMsg = self.__createImageMsg(
+                            builder, imagePath, labelPath, labelGeneralPath
+                        )
 
                         builder.Finish(imageMsg)
                         yield bytes(builder.Output())
@@ -71,20 +75,30 @@ class yoloAnnotatedImageLoader:
             labelStrings = []
             for label in labels:
                 labelStrings.append("person")
-                centerPoints.append(createPoint2d(builder, float(label[1]), float(label[2])))
-                spatialExtents.append(createPoint2d(builder, float(label[3]), float(label[4])))
+                centerPoints.append(
+                    createPoint2d(builder, float(label[1]), float(label[2]))
+                )
+                spatialExtents.append(
+                    createPoint2d(builder, float(label[3]), float(label[4]))
+                )
 
-            boundingBoxes = createBoundingBoxes2d(builder, centerPoints, spatialExtents)
+            boundingBoxes = createBoundingBoxes2d(
+                builder, centerPoints, spatialExtents
+            )
             labelWithInstances = createLabelsWithInstance(
                 builder,
                 labelStrings,
                 [str(uuid.uuid4()) for _ in range(len(labelStrings))],
                 [1.0 for _ in range(len(labelStrings))],
             )
-            labelsBb = createBoundingBoxes2dLabeled(builder, labelWithInstances, boundingBoxes)
+            labelsBb = createBoundingBoxes2dLabeled(
+                builder, labelWithInstances, boundingBoxes
+            )
 
-            boundingBox2DLabeledWithCategory = createBoundingBox2DLabeledWithCategory(
-                builder, builder.CreateString(self.labelCategory), labelsBb
+            boundingBox2DLabeledWithCategory = (
+                createBoundingBox2DLabeledWithCategory(
+                    builder, builder.CreateString(self.labelCategory), labelsBb
+                )
             )
 
             Image.StartLabelsBbVector(builder, 1)
@@ -96,7 +110,11 @@ class yoloAnnotatedImageLoader:
         instances = [[str(uuid.uuid4())] for _ in range(len(labelGeneral))]
 
         labelsGeneralCat = createLabelsWithInstanceWithCategory(
-            builder, [self.labelCategory], labels_general, instances, confidences
+            builder,
+            [self.labelCategory],
+            labels_general,
+            instances,
+            confidences,
         )
         Image.StartLabelsGeneralVector(builder, len(labelsGeneralCat))
         for label in reversed(labelsGeneralCat):
@@ -136,7 +154,9 @@ class yoloAnnotatedImageLoader:
         labelGeneral = []
         for key in labelGeneralYamlObject["labels"]:
             if key != "sensor":
-                labelGeneral.append(key + "_" + labelGeneralYamlObject["labels"][key])
+                labelGeneral.append(
+                    key + "_" + labelGeneralYamlObject["labels"][key]
+                )
         return labelGeneral
 
     def __readLabel(self, labelPath):

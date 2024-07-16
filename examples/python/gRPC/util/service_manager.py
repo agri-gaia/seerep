@@ -30,7 +30,9 @@ class ServiceManager:
 
     def get_stub(self, stub_type):
         if not getattr(self, f"_stub_{stub_type.__name__}", False):
-            setattr(self, f"_stub_{stub_type.__name__}", stub_type(self._channel))
+            setattr(
+                self, f"_stub_{stub_type.__name__}", stub_type(self._channel)
+            )
         return getattr(self, f"_stub_{stub_type.__name__}", None)
 
     def call_get_instances_fb(
@@ -38,10 +40,14 @@ class ServiceManager:
     ) -> UuidsPerProject.UuidsPerProject:
         builder.Finish(query_instance)
         buf = builder.Output()
-        response_buf = self.get_stub(instance_srv_fb.InstanceServiceStub).GetInstances(bytes(buf))
+        response_buf = self.get_stub(
+            instance_srv_fb.InstanceServiceStub
+        ).GetInstances(bytes(buf))
         return UuidsPerProject.UuidsPerProject.GetRootAs(response_buf)
 
-    def call_get_project_fb(self, builder: Builder) -> ProjectInfos.ProjectInfos:
+    def call_get_project_fb(
+        self, builder: Builder
+    ) -> ProjectInfos.ProjectInfos:
         Empty.Start(builder)
         empty_msg = Empty.End(builder)
         builder.Finish(empty_msg)
@@ -50,7 +56,9 @@ class ServiceManager:
         response_buf = stub.GetProjects(bytes(buf))
         return ProjectInfos.ProjectInfos.GetRootAs(response_buf)
 
-    def call_get_pointcloud2_fb(self, builder: Builder, query: Query.Query) -> List[PointCloud2.PointCloud2]:
+    def call_get_pointcloud2_fb(
+        self, builder: Builder, query: Query.Query
+    ) -> List[PointCloud2.PointCloud2]:
         builder.Finish(query)
         buf = builder.Output()
         pcl_list = []
@@ -60,7 +68,9 @@ class ServiceManager:
             pcl_list.append(PointCloud2.PointCloud2.GetRootAs(pcl))
         return pcl_list
 
-    def call_get_points_fb(self, builder: Builder, query: Query.Query) -> List[PointStamped.PointStamped]:
+    def call_get_points_fb(
+        self, builder: Builder, query: Query.Query
+    ) -> List[PointStamped.PointStamped]:
         builder.Finish(query)
         buf = builder.Output()
         point_lst: List[PointStamped.PointStamped] = []
@@ -70,7 +80,9 @@ class ServiceManager:
             point_lst.append(PointStamped.PointStamped.GetRootAs(response))
         return point_lst
 
-    def call_get_images_fb(self, builder: Builder, query: Query.Query) -> List[Image.Image]:
+    def call_get_images_fb(
+        self, builder: Builder, query: Query.Query
+    ) -> List[Image.Image]:
         builder.Finish(query)
         buf = builder.Output()
         queried_images = []

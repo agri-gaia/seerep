@@ -5,7 +5,9 @@ from typing import Optional
 from google.protobuf import empty_pb2
 from grpc import Channel
 from seerep.pb import camera_intrinsics_pb2 as cameraintrinsics
-from seerep.pb import camera_intrinsics_service_pb2_grpc as camintrinsics_service
+from seerep.pb import (
+    camera_intrinsics_service_pb2_grpc as camintrinsics_service,
+)
 from seerep.pb import meta_operations_pb2_grpc as metaOperations
 from seerep.util.common import get_gRPC_channel
 
@@ -77,8 +79,9 @@ if __name__ == "__main__":
     sent_intrins = add_camintrins()
     # print the uuids of the project and the camera instrinsics
     print(
-        f"camera instrinsics were saved with the uuid {sent_intrins.header.uuid_msgs} \
-        on the project with the uuid {sent_intrins.header.uuid_project}"
+        f"camera instrinsics were saved with the uuid \
+        {sent_intrins.header.uuid_msgs}"
+        f" on the project with the uuid {sent_intrins.header.uuid_project}"
     )
 
     # do the same for the distortion array

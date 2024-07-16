@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # NOTE: This file is referenced in the following mkdocs files:
 #   writing-python-examples.md
-# If any line changes on this file occur, those files may have to be updated as well
+# If any line changes on this file occur, those files may have to be updated as
+# well
 
 NUM_BB_LABELS = 5
 
@@ -25,7 +26,8 @@ from seerep.util.fb_helper import (
 
 
 def add_label_raw(
-    target_proj_uuid: Optional[str] = None, grpc_channel: Channel = get_gRPC_channel()
+    target_proj_uuid: Optional[str] = None,
+    grpc_channel: Channel = get_gRPC_channel(),
 ) -> List[Tuple[str, bytearray]]:
     stubMeta = meta_ops.MetaOperationsStub(grpc_channel)
 
@@ -43,19 +45,29 @@ def add_label_raw(
                 target_proj_uuid = proj_uuid
 
         if target_proj_uuid is None:
-            print("Please create a project with labeled images using gRPC_pb_sendLabeledImage.py first.")
+            print("""
+                Please create a project with labeled images using
+                gRPC_pb_sendLabeledImage.py first."
+            """)
             sys.exit()
 
     stub = imageService.ImageServiceStub(grpc_channel)
 
     builder = flatbuffers.Builder(1024)
-    query = createQuery(builder, projectUuids=[builder.CreateString(target_proj_uuid)], withoutData=True)
+    query = createQuery(
+        builder,
+        projectUuids=[builder.CreateString(target_proj_uuid)],
+        withoutData=True,
+    )
     builder.Finish(query)
     buf = builder.Output()
 
     response_ls: List = list(stub.GetImage(bytes(buf)))
     if not response_ls:
-        print("No images found. Please create a project with labeled images using gRPC_pb_sendLabeledImage.py first.")
+        print("""
+            No images found. Please create a project with labeled images
+            using gRPC_pb_sendLabeledImage.py first.
+        """)
         sys.exit()
 
     msgToSend = []
@@ -73,18 +85,28 @@ def add_label_raw(
         for labelAct in labelStr:
             labels.append(
                 create_label(
-                    builder=builder, label=labelAct, label_id=1, instance_uuid=str(uuid.uuid4()), instance_id=2
+                    builder=builder,
+                    label=labelAct,
+                    label_id=1,
+                    instance_uuid=str(uuid.uuid4()),
+                    instance_id=2,
                 )
             )
         labelsCategory = []
         labelsCategory.append(
             create_label_category(
-                builder=builder, labels=labels, datumaro_json="a very valid datumaro json", category="laterAddedLabel"
+                builder=builder,
+                labels=labels,
+                datumaro_json="a very valid datumaro json",
+                category="laterAddedLabel",
             )
         )
 
         dataset_uuid_label = create_dataset_uuid_label(
-            builder=builder, projectUuid=projectUuid, datasetUuid=img_uuid, labels=labelsCategory
+            builder=builder,
+            projectUuid=projectUuid,
+            datasetUuid=img_uuid,
+            labels=labelsCategory,
         )
 
         builder.Finish(dataset_uuid_label)
@@ -104,7 +126,8 @@ def add_label_raw(
 
 
 def add_label(
-    target_proj_uuid: Optional[str] = None, grpc_channel: Channel = get_gRPC_channel()
+    target_proj_uuid: Optional[str] = None,
+    grpc_channel: Channel = get_gRPC_channel(),
 ) -> List[Tuple[str, DatasetUuidLabel.DatasetUuidLabel]]:
     return [
         (img_uuid, DatasetUuidLabel.DatasetUuidLabel.GetRootAs(labelbuf))
@@ -114,8 +137,8 @@ def add_label(
 
 if __name__ == "__main__":
     label_list = add_label()
-    for img_uuid, label in label_list:
+    for img_uuid, labelAllCat in label_list:
         print(f"Added label to image with uuid {img_uuid}:")
-        for labelCategory_idx in range(label.LabelsLength()):
-            for label_idx in range(label.Labels(labelCategory_idx).LabelsLength()):
-                print(f"uuid: {label.Labels(labelCategory_idx).Labels(label_idx).Label().decode()}")
+        for labelCategory in labelAllCat.Labels():
+            for label in labelCategory.Labels():
+                print(f"uuid: {label.Label().decode()}")

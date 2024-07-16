@@ -34,7 +34,10 @@ def query_images(
                 target_project_uuid = project.uuid
 
         if target_project_uuid is None:
-            print("No project with name 'testproject' found! Execute gRPC_pb_sendLabeledImage.py beforehand!")
+            print("""
+                No project with name 'testproject' found! Execute
+                gRPC_pb_sendLabeledImage.py beforehand!
+            """)
             sys.exit()
 
     # 4. Create a query with parameters
@@ -48,7 +51,13 @@ def query_images(
 
     scale = 150
     vertices = [
-        point2d.Point2D(x=x, y=y) for x, y in [(-scale, -scale), (-scale, scale), (scale, scale), (scale, -scale)]
+        point2d.Point2D(x=x, y=y)
+        for x, y in [
+            (-scale, -scale),
+            (-scale, scale),
+            (scale, scale),
+            (scale, -scale),
+        ]
     ]
     theQuery.polygon.vertices.extend(vertices)
 
@@ -77,4 +86,8 @@ if __name__ == "__main__":
     queried_imgs = query_images()
     print(f"count of images {len(queried_imgs)}")
     for img in queried_imgs:
-        print(f"uuidmsg: {img.header.uuid_msgs}" + "\n" + f"first label: {img.labels[0].labels[0].label}")
+        print(
+            f"uuidmsg: {img.header.uuid_msgs}"
+            + "\n"
+            + f"first label: {img.labels[0].labels[0].label}"
+        )

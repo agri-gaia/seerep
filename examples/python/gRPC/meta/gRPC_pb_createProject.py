@@ -10,9 +10,15 @@ from seerep.pb import projectCreation_pb2
 from seerep.util.common import get_gRPC_channel
 
 
-def create_project(grpc_channel: Channel = get_gRPC_channel()) -> Tuple[str, str]:
+def create_project(
+    grpc_channel: Channel = get_gRPC_channel(),
+) -> Tuple[str, str]:
     stub = metaOperations.MetaOperationsStub(grpc_channel)
-    response = stub.CreateProject(projectCreation_pb2.ProjectCreation(name="testproject", mapFrameId="map"))
+    response = stub.CreateProject(
+        projectCreation_pb2.ProjectCreation(
+            name="testproject", mapFrameId="map"
+        )
+    )
 
     return response.name, response.uuid
 

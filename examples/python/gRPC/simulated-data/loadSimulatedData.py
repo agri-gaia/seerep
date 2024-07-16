@@ -6,10 +6,15 @@ import imageio.v2 as imageio
 import numpy as np
 import yaml
 from seerep.pb import boundingbox2d_labeled_pb2 as bb
-from seerep.pb import boundingbox2d_labeled_with_category_pb2, labels_with_instance_with_category_pb2
+from seerep.pb import (
+    boundingbox2d_labeled_with_category_pb2 as bb2dlabeledCat,
+)
 from seerep.pb import image_pb2 as image
 from seerep.pb import image_service_pb2_grpc as imageService
 from seerep.pb import label_with_instance_pb2 as labelWithInstance
+from seerep.pb import (
+    labels_with_instance_with_category_pb2 as labelsInstanceCat,
+)
 from seerep.pb import meta_operations_pb2_grpc as metaOperations
 from seerep.pb import point_cloud_2_pb2 as pointcloud
 from seerep.pb import point_cloud_service_pb2_grpc as pointcloudService
@@ -27,15 +32,23 @@ stubTf = tfService.TfServiceStub(channel)
 stubMeta = metaOperations.MetaOperationsStub(channel)
 
 # create new project
-creation = projectCreation.ProjectCreation(name="simulatedCropsGroundTruth", mapFrameId="map")
+creation = projectCreation.ProjectCreation(
+    name="simulatedCropsGroundTruth", mapFrameId="map"
+)
 projectCreated = stubMeta.CreateProject(creation)
 projectname = projectCreated.uuid
 
 # get and save the time
-theTime = [1654688921, 1654713534]  # 08.06.2022 13:49, 08.06.2022 20:39 #int(time.time())
+theTime = [
+    1654688921,
+    1654713534,
+]  # 08.06.2022 13:49, 08.06.2022 20:39 #int(time.time())
 
 
-root = ["/seerep/seerep-data/simulatedData/lighting_01/", "/seerep/seerep-data/simulatedData/lighting_02/"]
+root = [
+    "/seerep/seerep-data/simulatedData/lighting_01/",
+    "/seerep/seerep-data/simulatedData/lighting_02/",
+]
 # seerep-data/simulatedData/Beleuchtung_02/2022_06_07_16_52_48/
 
 labelSwitch = {
@@ -48,8 +61,12 @@ labelSwitch = {
 
 for folderIndex in range(2):
     imagePath = root[folderIndex] + "camera_main_camera/rect/"
-    annotationPath = root[folderIndex] + "camera_main_camera_annotations/bounding_box/"
-    pointcloudPath = root[folderIndex] + "camera_main_camera_annotations/pointcloud/"
+    annotationPath = (
+        root[folderIndex] + "camera_main_camera_annotations/bounding_box/"
+    )
+    pointcloudPath = (
+        root[folderIndex] + "camera_main_camera_annotations/pointcloud/"
+    )
 
     for i in range(16):
         timeThisIteration = theTime[folderIndex] + i
@@ -74,7 +91,7 @@ for folderIndex in range(2):
         annotations = np.genfromtxt(baseAnnotationPath + ".txt", delimiter=" ")
 
         # # write labeled bounding boxes
-        bbCat = boundingbox2d_labeled_with_category_pb2.BoundingBox2DLabeledWithCategory()
+        bbCat = bb2dlabeledCat.BoundingBox2DLabeledWithCategory()
         bbCat.category = "ground_truth"
         bb1 = bb.BoundingBox2DLabeled()
         for a in annotations:
@@ -92,7 +109,8 @@ for folderIndex in range(2):
 
         stubImage.TransferImage(theImage)
 
-        # seerep currently assumes that point cloud coordinates are 32 Bit floats
+        # seerep currently assumes that point cloud coordinates are 32 Bit
+        # floats
         pointcloudData = np.load(basePointcloudPath + ".npy").astype(np.float32)
 
         thePointcloud = pointcloud.PointCloud2()
@@ -129,7 +147,7 @@ for folderIndex in range(2):
         thePointcloud.fields.append(thePointfieldZ)
 
         annotations = np.genfromtxt(baseAnnotationPath + ".txt", delimiter=" ")
-        labelsCat = labels_with_instance_with_category_pb2.LabelsWithInstanceWithCategory()
+        labelsCat = labelsInstanceCat.LabelsWithInstanceWithCategory()
         labelsCat.category = "ground_truth"
         for a in annotations:
             label = labelWithInstance.LabelWithInstance()
@@ -144,8 +162,14 @@ for folderIndex in range(2):
         with open(baseFilePath + ".txt", "r") as stream:
             try:
                 pose = yaml.safe_load(stream)
-                position = np.fromstring(pose.get("camera_pose_translation"), dtype=float, sep=" ")
-                rotation = np.fromstring(pose.get("camera_pose_rotation_quaternion"), dtype=float, sep=" ")
+                position = np.fromstring(
+                    pose.get("camera_pose_translation"), dtype=float, sep=" "
+                )
+                rotation = np.fromstring(
+                    pose.get("camera_pose_rotation_quaternion"),
+                    dtype=float,
+                    sep=" ",
+                )
 
                 # create tf with data valid for all following tfs
                 theTf = tf.TransformStamped()

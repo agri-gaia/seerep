@@ -6,7 +6,14 @@ from typing import List
 import flatbuffers
 import numpy as np
 from grpc import Channel
-from seerep.fb import PointCloud2, Quaternion, Transform, TransformStamped, Vector3, tf_service_grpc_fb
+from seerep.fb import (
+    PointCloud2,
+    Quaternion,
+    Transform,
+    TransformStamped,
+    Vector3,
+    tf_service_grpc_fb,
+)
 from seerep.fb import point_cloud_service_grpc_fb as pointCloudService
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
@@ -36,13 +43,20 @@ def createPointCloud(builder, header, height=960, width=1280):
     for i in range(len(labelsStrings)):
         labels.append(
             create_label(
-                builder=builder, label=labelsStrings[i], label_id=1, instance_uuid=instance_uuids[i], instance_id=5
+                builder=builder,
+                label=labelsStrings[i],
+                label_id=1,
+                instance_uuid=instance_uuids[i],
+                instance_id=5,
             )
         )
     labelsCategory = []
     labelsCategory.append(
         create_label_category(
-            builder=builder, labels=labels, datumaro_json="a very valid datumaro json", category="category Z"
+            builder=builder,
+            labels=labels,
+            datumaro_json="a very valid datumaro json",
+            category="category Z",
         )
     )
 
@@ -83,7 +97,9 @@ def createPointClouds(projectUuid, numOf, theTime):
         builder = flatbuffers.Builder(1024)
 
         timeStamp = createTimeStamp(builder, theTime + i)
-        header = createHeader(builder, timeStamp, "scanner", projectUuid, str(uuid.uuid4()))
+        header = createHeader(
+            builder, timeStamp, "scanner", projectUuid, str(uuid.uuid4())
+        )
 
         pointCloudMsg = createPointCloud(builder, header, 10, 10)
         builder.Finish(pointCloudMsg)
@@ -95,7 +111,9 @@ def createTF(numOf, projectUuid, theTime):
         builderTf = flatbuffers.Builder(1024)
 
         timeStamp = createTimeStamp(builderTf, theTime + i)
-        header = createHeader(builderTf, timeStamp, "map", projectUuid, str(uuid.uuid4()))
+        header = createHeader(
+            builderTf, timeStamp, "map", projectUuid, str(uuid.uuid4())
+        )
 
         Vector3.Start(builderTf)
         Vector3.AddX(builderTf, 10 * i)
@@ -127,15 +145,21 @@ def createTF(numOf, projectUuid, theTime):
         yield bytes(builderTf.Output())
 
 
-def send_pointcloud_raw(target_proj_uuid: str = None, grpc_channel: Channel = get_gRPC_channel()) -> List[bytearray]:
+def send_pointcloud_raw(
+    target_proj_uuid: str = None, grpc_channel: Channel = get_gRPC_channel()
+) -> List[bytearray]:
     builder = flatbuffers.Builder(1024)
     theTime = 1686038855
 
     if target_proj_uuid is None:
-        target_proj_uuid = getOrCreateProject(builder, grpc_channel, "testproject")
+        target_proj_uuid = getOrCreateProject(
+            builder, grpc_channel, "testproject"
+        )
 
     tfStub = tf_service_grpc_fb.TfServiceStub(grpc_channel)
-    tfStub.TransferTransformStamped(createTF(NUM_POINT_CLOUDS, target_proj_uuid, theTime))
+    tfStub.TransferTransformStamped(
+        createTF(NUM_POINT_CLOUDS, target_proj_uuid, theTime)
+    )
 
     stub = pointCloudService.PointCloudServiceStub(grpc_channel)
     pcl = createPointClouds(target_proj_uuid, NUM_POINT_CLOUDS, theTime)
@@ -144,7 +168,8 @@ def send_pointcloud_raw(target_proj_uuid: str = None, grpc_channel: Channel = ge
 
     # one could directly pass the generator, e.g.
     # responseBuf = stub.TransferPointCloud2(pc)
-    # but this would consume the generator and then the pc list cannot be returned, therefore use a iterator
+    # but this would consume the generator and then the pc list cannot be
+    # returned, therefore use a iterator
     stub.TransferPointCloud2(iter(pc_list))
 
     return pc_list
@@ -153,7 +178,10 @@ def send_pointcloud_raw(target_proj_uuid: str = None, grpc_channel: Channel = ge
 def send_pointcloud(
     target_proj_uuid: str = None, grpc_channel: Channel = get_gRPC_channel()
 ) -> List[PointCloud2.PointCloud2]:
-    return [PointCloud2.PointCloud2.GetRootAs(p) for p in send_pointcloud_raw(target_proj_uuid, grpc_channel)]
+    return [
+        PointCloud2.PointCloud2.GetRootAs(p)
+        for p in send_pointcloud_raw(target_proj_uuid, grpc_channel)
+    ]
 
 
 if __name__ == "__main__":
@@ -167,6 +195,8 @@ if __name__ == "__main__":
             for i in range(0, raw_data.shape[0], pc.FieldsLength())
         ]
         # reshape the array according to its dimensions
-        data = np.array(data_flattened).reshape(pc.Height(), pc.Width(), pc.FieldsLength())
+        data = np.array(data_flattened).reshape(
+            pc.Height(), pc.Width(), pc.FieldsLength()
+        )
 
         print(f"Data: {data}")

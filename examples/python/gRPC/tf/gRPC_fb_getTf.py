@@ -17,7 +17,8 @@ from seerep.util.fb_helper import (
 )
 
 
-# where tf_times_list is a list which contains elements of the form Tuple[SECONDS, NANOSECONDS]
+# where tf_times_list is a list which contains elements of the form
+# Tuple[SECONDS, NANOSECONDS]
 def get_tfs_raw(
     tf_times_list: List[Tuple[int, int]],
     target_proj_uuid: str = None,
@@ -36,7 +37,9 @@ def get_tfs_raw(
                 target_proj_uuid = project.uuid
 
         if target_proj_uuid is None:
-            creation = projectCreation.ProjectCreation(name="LabeledImagesInGrid", mapFrameId="map")
+            creation = projectCreation.ProjectCreation(
+                name="LabeledImagesInGrid", mapFrameId="map"
+            )
             projectCreated = stubMeta.CreateProject(creation)
             target_proj_uuid = projectCreated.uuid
 
@@ -83,7 +86,10 @@ def get_tfs(
 if __name__ == "__main__":
     tfs = get_tfs((time, 0) for time in range(1661336507, 161336550, 10))
     for tf in tfs:
-        print(f"\n\ntime: {tf.Header().Stamp().Sec()} Sec. {tf.Header().Stamp().NanoSec()} NanoSec")
+        print(
+            f"\n\ntime: {tf.Header().Stamp().Sec()} Sec. "
+            f"{tf.Header().Stamp().NanoSec()} NanoSec"
+        )
         print("parent frame: " + tf.Header().FrameId().decode("utf-8"))
         print("child frame: " + tf.ChildFrameId().decode("utf-8"))
         print(

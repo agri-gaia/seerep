@@ -22,9 +22,14 @@ def get_camintrins_raw(
         # this finishes the builder and returns the decoded uuid
         target_proj_uuid = getProject(builder, grpc_channel, "testproject")
         if target_proj_uuid is None:
-            print("valid project doesn't exist! Please execute gRPC_fb_addCameraIntrinsics.py beforehand.")
+            print("""
+                valid project doesn't exist! Please execute
+                gRPC_fb_addCameraIntrinsics.py beforehand.
+            """)
             return None
-    camintrins_query = createCameraIntrinsicsQuery(builder, ciuuid, target_proj_uuid)
+    camintrins_query = createCameraIntrinsicsQuery(
+        builder, ciuuid, target_proj_uuid
+    )
     builder.Finish(camintrins_query)
 
     buf = builder.Output()
@@ -41,15 +46,22 @@ def get_camintrins(
     target_proj_uuid: Optional[str] = None,
     grpc_channel: Channel = get_gRPC_channel(),
 ) -> Optional[CameraIntrinsics.CameraIntrinsics]:
-    return CameraIntrinsics.CameraIntrinsics.GetRootAs(get_camintrins_raw(ciuuid, target_proj_uuid, grpc_channel))
+    return CameraIntrinsics.CameraIntrinsics.GetRootAs(
+        get_camintrins_raw(ciuuid, target_proj_uuid, grpc_channel)
+    )
 
 
 if __name__ == "__main__":
     camintrins = get_camintrins()
-    # printing the uuid of the retrieved camera intrinsics to verify the result of the query
+    # printing the uuid of the retrieved camera intrinsics to verify the result
+    # of the query
     print(
-        f"the camera instrinsics with uuid {camintrins.Header().UuidMsgs().decode('utf-8')} \
-        was retrieved from the project with the uuid {camintrins.Header().UuidProject().decode('utf-8')}"
+        f"the camera instrinsics with uuid \
+        {camintrins.Header().UuidMsgs().decode('utf-8')} \
+        was retrieved from the project with the uuid \
+        {camintrins.Header().UuidProject().decode('utf-8')}"
     )
     # print the distortion of the retrieved camera intrinsics
-    print(f"camera instrinsics distortion array: {camintrins.DistortionAsNumpy()}")
+    print(
+        f"camera instrinsics distortion array: {camintrins.DistortionAsNumpy()}"
+    )

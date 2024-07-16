@@ -18,7 +18,9 @@ from seerep.util.fb_helper import (
 )
 
 
-def get_points_raw(target_proj_uuid: str = None, grpc_channel=get_gRPC_channel()) -> List[bytearray]:
+def get_points_raw(
+    target_proj_uuid: str = None, grpc_channel=get_gRPC_channel()
+) -> List[bytearray]:
     builder = flatbuffers.Builder(1024)
 
     # 1. Get all projects from the server
@@ -32,7 +34,8 @@ def get_points_raw(target_proj_uuid: str = None, grpc_channel=get_gRPC_channel()
     # Create all necessary objects for the query
     scale = 200
     vertices = [
-        createPoint2d(builder, x * scale, y * scale) for x, y in [(-1.0, -1.0), (-1.0, 1.0), (1.0, 1.0), (1.0, -1.0)]
+        createPoint2d(builder, x * scale, y * scale)
+        for x, y in [(-1.0, -1.0), (-1.0, 1.0), (1.0, 1.0), (1.0, -1.0)]
     ]
     polygon2d = createPolygon2D(builder, 36, 0, vertices)
 
@@ -50,17 +53,24 @@ def get_points_raw(target_proj_uuid: str = None, grpc_channel=get_gRPC_channel()
     labelsCategory = []
     labelsCategory.append(
         create_label_category(
-            builder=builder, labels=labels, datumaro_json="a very valid datumaro json", category="category P"
+            builder=builder,
+            labels=labels,
+            datumaro_json="a very valid datumaro json",
+            category="category P",
         )
     )
 
     dataUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
-    instanceUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
+    instanceUuids = [
+        builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")
+    ]
 
     # 4. Create a query with parameters
     # all parameters are optional
-    # with all parameters set (especially with the data and instance uuids set) the result of the query will be empty.
-    # Set the query parameters to adequate values or remove them from the query creation
+    # with all parameters set (especially with the data and instance uuids set)
+    # the result of the query will be empty.
+    # Set the query parameters to adequate values or remove them from
+    # the query creation
     query = createQuery(
         builder,
         # timeInterval=timeInterval,
@@ -83,7 +93,9 @@ def get_points_raw(target_proj_uuid: str = None, grpc_channel=get_gRPC_channel()
     return pointsBuf
 
 
-def get_points(target_proj_uuid: str = None, grpc_channel=get_gRPC_channel()) -> List[PointStamped.PointStamped]:
+def get_points(
+    target_proj_uuid: str = None, grpc_channel=get_gRPC_channel()
+) -> List[PointStamped.PointStamped]:
     return [
         PointStamped.PointStamped.GetRootAs(responseBuf)
         for responseBuf in get_points_raw(target_proj_uuid, grpc_channel)
@@ -96,13 +108,21 @@ if __name__ == "__main__":
         print(f"uuidmsg: {point.Header().UuidMsgs().decode('utf-8')}")
         for i in range(point.LabelsLength()):
             for j in range(point.Labels(i).LabelsLength()):
-                print(f"    instance uuid: {point.Labels(i).Labels(j).InstanceUuid().decode('utf-8')}")
-                print(f"    Label: {point.Labels(i).Labels(j).Label().decode('utf-8')}")
+                print(
+                    f"    instance uuid: "
+                    f"{point.Labels(i).Labels(j).InstanceUuid().decode('utf-8')}"
+                )
+                print(
+                    f"    Label: "
+                    f"{point.Labels(i).Labels(j).Label().decode('utf-8')}"
+                )
                 print(f"   AttributeLen: {point.AttributeLength()}")
         # check for attribute 0
         if point.Attribute(0).ValueType() == Datatypes.Datatypes().String:
             union_str = String.String()
-            union_str.Init(point.Attribute(0).Value().Bytes, point.Attribute(0).Value().Pos)
+            union_str.Init(
+                point.Attribute(0).Value().Bytes, point.Attribute(0).Value().Pos
+            )
         print(f"Attribute 0 Key: {point.Attribute(0).Key().decode()}")
         print(f"Attribute 0 Value: {union_str.Data().decode()}\n")
     print(f"count of queried points: {len(p_list)}")

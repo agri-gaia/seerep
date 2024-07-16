@@ -32,7 +32,8 @@ stub = imageService.ImageServiceStub(channel)
 # Create all necessary objects for the query
 scale = 5
 vertices = [
-    createPoint2d(builder, x * scale, y * scale) for x, y in [(-1.0, -1.0), (-1.0, 1.0), (1.0, 1.0), (1.0, -1.0)]
+    createPoint2d(builder, x * scale, y * scale)
+    for x, y in [(-1.0, -1.0), (-1.0, 1.0), (1.0, 1.0), (1.0, -1.0)]
 ]
 polygon2d = createPolygon2D(builder, 200, -100, vertices)
 
@@ -41,12 +42,16 @@ timeMax = createTimeStamp(builder, 1654688940, 0)
 timeInterval = createTimeInterval(builder, timeMin, timeMax)
 
 projectUuids = [builder.CreateString(projectuuid)]
-labels = createLabelsWithCategoryVector(builder, ["ground_truth"], [["Gänseblümchen"]])
+labels = createLabelsWithCategoryVector(
+    builder, ["ground_truth"], [["Gänseblümchen"]]
+)
 
 # 4. Create a query with parameters
 # all parameters are optional
-# with all parameters set (especially with the data and instance uuids set) the result of the query will be empty.
-# Set the query parameters to adequate values or remove them from the query creation
+# with all parameters set (especially with the data and instance uuids set)
+# the result of the query will be empty.
+# Set the query parameters to adequate values or remove them from
+# the query creation
 query = createQuery(
     builder,
     # boundingBox=boundingboxStamped,
@@ -68,15 +73,44 @@ for responseBuf in stub.GetImage(bytes(buf)):
     if response.LabelsBbLength() > 0:
         print("category: " + response.LabelsBb(0).Category().decode("utf-8"))
         print(
-            "first label: " + response.LabelsBb(0).BoundingBox2dLabeled(0).LabelWithInstance().Label().decode("utf-8")
+            "first label: "
+            + response.LabelsBb(0)
+            .BoundingBox2dLabeled(0)
+            .LabelWithInstance()
+            .Label()
+            .decode("utf-8")
         )
         print(
             "first BoundingBox (Xmin,Ymin,Xmax,Ymax): "
-            + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().PointMin().X())
+            + str(
+                response.LabelsBb(0)
+                .BoundingBox2dLabeled(0)
+                .BoundingBox()
+                .PointMin()
+                .X()
+            )
             + " "
-            + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().PointMin().Y())
+            + str(
+                response.LabelsBb(0)
+                .BoundingBox2dLabeled(0)
+                .BoundingBox()
+                .PointMin()
+                .Y()
+            )
             + " "
-            + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().PointMax().X())
+            + str(
+                response.LabelsBb(0)
+                .BoundingBox2dLabeled(0)
+                .BoundingBox()
+                .PointMax()
+                .X()
+            )
             + " "
-            + str(response.LabelsBb(0).BoundingBox2dLabeled(0).BoundingBox().PointMax().Y())
+            + str(
+                response.LabelsBb(0)
+                .BoundingBox2dLabeled(0)
+                .BoundingBox()
+                .PointMax()
+                .Y()
+            )
         )
