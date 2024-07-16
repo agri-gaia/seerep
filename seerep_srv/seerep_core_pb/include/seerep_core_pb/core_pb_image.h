@@ -40,17 +40,22 @@ public:
   CorePbImage(std::shared_ptr<seerep_core::Core> seerepCore);
   ~CorePbImage();
 
-  void getData(const seerep::pb::Query& query, grpc::ServerWriter<seerep::pb::Image>* writer);
+  void getData(const seerep::pb::Query& query,
+               grpc::ServerWriter<seerep::pb::Image>* writer);
   boost::uuids::uuid addData(const seerep::pb::Image& img);
 
 private:
   void getFileAccessorFromCore(boost::uuids::uuid project);
-  std::shared_ptr<seerep_hdf5_pb::Hdf5PbImage> getHdf5(boost::uuids::uuid project);
+  std::shared_ptr<seerep_hdf5_pb::Hdf5PbImage>
+  getHdf5(boost::uuids::uuid project);
   std::shared_ptr<seerep_core::Core> m_seerepCore;
-  std::unordered_map<boost::uuids::uuid, std::shared_ptr<seerep_hdf5_pb::Hdf5PbImage>, boost::hash<boost::uuids::uuid>>
+  std::unordered_map<boost::uuids::uuid,
+                     std::shared_ptr<seerep_hdf5_pb::Hdf5PbImage>,
+                     boost::hash<boost::uuids::uuid>>
       m_hdf5IoMap;
   /** the logger for the logging framework */
-  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level>
+      m_logger;
 };
 
 }  // namespace seerep_core_pb

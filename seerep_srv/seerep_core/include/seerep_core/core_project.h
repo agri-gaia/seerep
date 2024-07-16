@@ -38,12 +38,12 @@ namespace seerep_core
  * @brief This is the class acting as an inteface for a project / HDF5 file
  *
  * pointers to the objects handling a data type each are stored in this object.
- * Also the HDF5 file accessors and the corresponding mutex are stored here and shared with the
- * objects handling the different data types.
+ * Also the HDF5 file accessors and the corresponding mutex are stored here and
+ * shared with the objects handling the different data types.
  *
- * All objects handling the data types only load data from the HDF5 file once on construction.
- * They never write data. The only exception are the instances. For those the write to the HDF5 file
- * is handled by this seerepCore
+ * All objects handling the data types only load data from the HDF5 file once on
+ * construction. They never write data. The only exception are the instances.
+ * For those the write to the HDF5 file is handled by this seerepCore
  *
  * @todo add a check if query has the adequate rights to access this project
  */
@@ -61,11 +61,13 @@ public:
    * @param uuid the UUID of the project. HDF5 file name is UUID + ".h5" extension
    * @param path path to the folder containing the HDF5 files
    * @param projectname a plain name for the project for easier differentiation of the projects
-   * @param mapFrameId the frame id of the map frame which is used to create the spatial indices for this project
+   * @param mapFrameId the frame id of the map frame which is used to create the
+   * spatial indices for this project
    * @param geodetic coordinates for the location of the site of data recording
    */
-  CoreProject(const boost::uuids::uuid& uuid, const std::string path, const std::string projectname,
-              const std::string mapFrameId, const seerep_core_msgs::GeodeticCoordinates geodeticCoords,
+  CoreProject(const boost::uuids::uuid& uuid, const std::string path,
+              const std::string projectname, const std::string mapFrameId,
+              const seerep_core_msgs::GeodeticCoordinates geodeticCoords,
               const std::string version);
   ~CoreProject();
 
@@ -91,21 +93,25 @@ public:
    * @param p polygon
    * @return seerep_core_msgs::Polygon2D polygon
    */
-  seerep_core_msgs::Polygon2D transformToMapFrame(const seerep_core_msgs::Polygon2D polygon);
+  seerep_core_msgs::Polygon2D
+  transformToMapFrame(const seerep_core_msgs::Polygon2D polygon);
 
   /**
-   * @brief Returns a vector of UUIDs of datasets that match the query and the project UUID
+   * @brief Returns a vector of UUIDs of datasets that match the query and the
+   * project UUID
    * @param query the spatio-temporal-semantic query
    * @return vector of UUIDs of images matching the query and the project UUID
    */
-  seerep_core_msgs::QueryResultProject getDataset(seerep_core_msgs::Query& query);
+  seerep_core_msgs::QueryResultProject
+  getDataset(seerep_core_msgs::Query& query);
 
   /**
    * @brief Returns a vector of UUIDs of instances that match the query and the project UUID
    * @param query the spatio-temporal-semantic query
    * @return vector of UUIDs of instances matching the query and the project UUID
    */
-  seerep_core_msgs::QueryResultProject getInstances(const seerep_core_msgs::Query& query);
+  seerep_core_msgs::QueryResultProject
+  getInstances(const seerep_core_msgs::Query& query);
 
   /**
    * @brief Returns the geodetic coordinates of this project
@@ -122,12 +128,15 @@ public:
   /**
    * @brief Adds labels to an existing dataset
    * @param datatype the targeted datatype
-   * @param labelOfCategory map from category to a vector of labels to be added to the dataset
+   * @param labelOfCategory map from category to a vector of labels to be added
+   * to the dataset
    * @param msgUuid the UUID of the targeted dataset
    */
-  void addLabels(const seerep_core_msgs::Datatype& datatype,
-                 const std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>& labelPerCategory,
-                 const boost::uuids::uuid& msgUuid);
+  void addLabels(
+      const seerep_core_msgs::Datatype& datatype,
+      const std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>&
+          labelPerCategory,
+      const boost::uuids::uuid& msgUuid);
 
   // tf
   /**
@@ -136,11 +145,13 @@ public:
    */
   void addTF(const geometry_msgs::TransformStamped& tf);
   /**
-   * @brief Returns the queried transformation between the two given frames at the given point in time
+   * @brief Returns the queried transformation between the two given frames at
+   * the given point in time
    * @param transformQuery the TF query defining the two frames and the point in time
    * @return the queried TF if it exists
    */
-  std::optional<geometry_msgs::TransformStamped> getTF(const seerep_core_msgs::QueryTf& transformQuery);
+  std::optional<geometry_msgs::TransformStamped>
+  getTF(const seerep_core_msgs::QueryTf& transformQuery);
   /**
    * @brief Returns a vector of all frames stored in the TF tree by the TF buffer
    * @return vector of frame names
@@ -148,7 +159,8 @@ public:
 
   // camera intrinsics
   /**
-   * @brief A function for passing camera intrinsics to the camera intrinsics agnostic for for saving
+   * @brief A function for passing camera intrinsics to the camera intrinsics
+   * agnostic for for saving
    *
    * @param ci [in] Camera Intrinsics to be saved
    */
@@ -160,7 +172,8 @@ public:
    * @param camIntrinsicsUuid [in] Uuid of the Camera Intrinsics
    * @return std::optional<seerep_core_msgs::camera_intrinsics>
    */
-  std::optional<seerep_core_msgs::camera_intrinsics> getCameraIntrinsics(boost::uuids::uuid camIntrinsicsUuid);
+  std::optional<seerep_core_msgs::camera_intrinsics>
+  getCameraIntrinsics(boost::uuids::uuid camIntrinsicsUuid);
 
   /**
    * @brief Check if there exists a camera intrinsics against the provided uuid
@@ -190,7 +203,8 @@ public:
    * @param datatypes datatypes across which this is determined
    * @return seerep_core_msgs::AabbTime Time bound object
    */
-  seerep_core_msgs::AabbTime getTimeBounds(std::vector<seerep_core_msgs::Datatype> datatypes);
+  seerep_core_msgs::AabbTime
+  getTimeBounds(std::vector<seerep_core_msgs::Datatype> datatypes);
 
   /**
    * @brief Get the Spatial Bounds of project
@@ -198,7 +212,8 @@ public:
    * @param datatypes datatypes across which this is determined
    * @return seerep_core_msgs::AABB axis aligned bounding box of spatial information
    */
-  seerep_core_msgs::AABB getSpatialBounds(std::vector<seerep_core_msgs::Datatype> datatypes);
+  seerep_core_msgs::AABB
+  getSpatialBounds(std::vector<seerep_core_msgs::Datatype> datatypes);
 
   /**
    * @brief Get the All Categories saved in a project
@@ -206,7 +221,8 @@ public:
    * @param datatypes datatypes across which this is determined
    * @return std::vector<std::string> a vector of all categories
    */
-  std::unordered_set<std::string> getAllCategories(std::vector<seerep_core_msgs::Datatype> datatypes);
+  std::unordered_set<std::string>
+  getAllCategories(std::vector<seerep_core_msgs::Datatype> datatypes);
 
   /**
    * @brief Get the all labels saved in a project
@@ -215,7 +231,9 @@ public:
    * @param category the category across which all labels have to be aggregated
    * @return std::vector<std::string> vector of labels
    */
-  std::unordered_set<std::string> getAllLabels(std::vector<seerep_core_msgs::Datatype> datatypes, std::string category);
+  std::unordered_set<std::string>
+  getAllLabels(std::vector<seerep_core_msgs::Datatype> datatypes,
+               std::string category);
 
 private:
   /**
@@ -226,8 +244,8 @@ private:
    */
   void createHdf5Io(std::string path);
   /**
-   * @brief Create the Objects handling the indices and load the data from the HDF5 file
-   * into the indices
+   * @brief Create the Objects handling the indices and load the data from the
+   * HDF5 file into the indices
    */
   void recreateDatatypes();
 
@@ -240,7 +258,8 @@ private:
   std::string m_projectname;
   /** @brief the frame id for the spatial idices of this project */
   std::string m_frameId;
-  /** @brief the geodetic coordinates of the location where the data was collected in this project */
+  /** @brief the geodetic coordinates of the location where the data was
+   * collected in this project */
   std::optional<seerep_core_msgs::GeodeticCoordinates> m_geodeticCoordinates;
   /** @brief the version of seerep used for this project */
   std::string m_version;
@@ -271,7 +290,8 @@ private:
   /** @brief object handling the dataset indices and dataset related queries */
   std::unique_ptr<seerep_core::CoreDataset> m_coreDatasets;
   /** @brief object handling the logging */
-  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level>
+      m_logger;
 };
 
 } /* namespace seerep_core */

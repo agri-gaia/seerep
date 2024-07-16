@@ -4,12 +4,14 @@
 
 namespace seerep_hdf5_fb
 {
-Hdf5FbPoint::Hdf5FbPoint(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx)
+Hdf5FbPoint::Hdf5FbPoint(std::shared_ptr<HighFive::File>& file,
+                         std::shared_ptr<std::mutex>& write_mtx)
   : Hdf5CoreGeneral(file, write_mtx), Hdf5FbGeneral(file, write_mtx)
 {
 }
 
-void Hdf5FbPoint::writePoint(const std::string& id, const seerep::fb::PointStamped* point)
+void Hdf5FbPoint::writePoint(const std::string& id,
+                             const seerep::fb::PointStamped* point)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
@@ -27,15 +29,18 @@ void Hdf5FbPoint::writePoint(const std::string& id, const seerep::fb::PointStamp
     checkExists(hdf5DatasetRawDataPath);
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
         << "data id " << hdf5DatasetRawDataPath << " already exists!";
-    data_set_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DatasetRawDataPath));
+    data_set_ptr = std::make_shared<HighFive::DataSet>(
+        m_file->getDataSet(hdf5DatasetRawDataPath));
   }
   catch (std::invalid_argument const& e)
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
-        << "data id " << hdf5DatasetRawDataPath << " does not exist! Creat new dataset in hdf5";
+        << "data id " << hdf5DatasetRawDataPath
+        << " does not exist! Creat new dataset in hdf5";
     HighFive::DataSpace data_space(3);
-    data_set_ptr = std::make_shared<HighFive::DataSet>(
-        m_file->createDataSet<double>(hdf5DatasetRawDataPath, HighFive::DataSpace::From(data)));
+    data_set_ptr =
+        std::make_shared<HighFive::DataSet>(m_file->createDataSet<double>(
+            hdf5DatasetRawDataPath, HighFive::DataSpace::From(data)));
   }
 
   data_set_ptr->write(data);
@@ -43,22 +48,26 @@ void Hdf5FbPoint::writePoint(const std::string& id, const seerep::fb::PointStamp
 
   writeAttributeMap(data_set_ptr, point->attribute());
 
-  writeLabelsFb(seerep_hdf5_core::Hdf5CorePoint::HDF5_GROUP_POINT, id, point->labels());
+  writeLabelsFb(seerep_hdf5_core::Hdf5CorePoint::HDF5_GROUP_POINT, id,
+                point->labels());
 
   m_file->flush();
 }
 
-void Hdf5FbPoint::writeAdditionalPointAttributes(const seerep::fb::AttributesStamped& attributeStamped)
+void Hdf5FbPoint::writeAdditionalPointAttributes(
+    const seerep::fb::AttributesStamped& attributeStamped)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
-  std::string hdf5DatasetRawDataPath = getHdf5DatasetRawDataPath(attributeStamped.header()->uuid_msgs()->str());
+  std::string hdf5DatasetRawDataPath =
+      getHdf5DatasetRawDataPath(attributeStamped.header()->uuid_msgs()->str());
   try
   {
     checkExists(hdf5DatasetRawDataPath);
 
     std::shared_ptr<HighFive::DataSet> data_set_ptr =
-        std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DatasetRawDataPath));
+        std::make_shared<HighFive::DataSet>(
+            m_file->getDataSet(hdf5DatasetRawDataPath));
 
     writeAttributeMap(data_set_ptr, attributeStamped.attribute());
   }
@@ -70,7 +79,8 @@ void Hdf5FbPoint::writeAdditionalPointAttributes(const seerep::fb::AttributesSta
   }
 }
 
-std::optional<flatbuffers::grpc::Message<seerep::fb::PointStamped>> Hdf5FbPoint::readPoint(const std::string& id)
+std::optional<flatbuffers::grpc::Message<seerep::fb::PointStamped>>
+Hdf5FbPoint::readPoint(const std::string& id)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
@@ -80,10 +90,12 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::PointStamped>> Hdf5FbPoint:
     return std::nullopt;
   }
 
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info) << "loading " << hdf5DatasetRawDataPath;
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
+      << "loading " << hdf5DatasetRawDataPath;
 
   std::shared_ptr<HighFive::DataSet> data_set_ptr =
-      std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DatasetRawDataPath));
+      std::make_shared<HighFive::DataSet>(
+          m_file->getDataSet(hdf5DatasetRawDataPath));
 
   flatbuffers::grpc::MessageBuilder builder;
 
@@ -99,7 +111,8 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::PointStamped>> Hdf5FbPoint:
 
   auto headerOffset = readHeaderAttributes(builder, *data_set_ptr, id);
 
-  auto labelsOffset = readLabels(seerep_hdf5_core::Hdf5CorePoint::HDF5_GROUP_POINT, id, builder);
+  auto labelsOffset = readLabels(
+      seerep_hdf5_core::Hdf5CorePoint::HDF5_GROUP_POINT, id, builder);
 
   seerep::fb::PointStampedBuilder pointStampedBuilder(builder);
 
@@ -116,7 +129,8 @@ std::optional<flatbuffers::grpc::Message<seerep::fb::PointStamped>> Hdf5FbPoint:
 
 std::string Hdf5FbPoint::getHdf5DatasetRawDataPath(const std::string& id)
 {
-  return seerep_hdf5_core::Hdf5CorePoint::HDF5_GROUP_POINT + "/" + id + "/" + seerep_hdf5_core::Hdf5CorePoint::RAWDATA;
+  return seerep_hdf5_core::Hdf5CorePoint::HDF5_GROUP_POINT + "/" + id + "/" +
+         seerep_hdf5_core::Hdf5CorePoint::RAWDATA;
 }
 
 }  // namespace seerep_hdf5_fb

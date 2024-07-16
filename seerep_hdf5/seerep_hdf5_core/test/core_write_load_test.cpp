@@ -12,8 +12,8 @@
 #include <filesystem>
 
 /*
-This test serves to test that a camera intrinsics core message is the same after saving and
-reading it from an hdf5 file.
+This test serves to test that a camera intrinsics core message is the same after
+saving and reading it from an hdf5 file.
 */
 
 namespace seerep_hdf5_core
@@ -44,7 +44,9 @@ const seerep_core_msgs::Timestamp createTimestamp()
   return ts;
 }
 
-const seerep_core_msgs::Header createHeader(const boost::uuids::uuid& projectUUID, const boost::uuids::uuid& messageUUID)
+const seerep_core_msgs::Header
+createHeader(const boost::uuids::uuid& projectUUID,
+             const boost::uuids::uuid& messageUUID)
 {
   seerep_core_msgs::Header header;
 
@@ -58,8 +60,9 @@ const seerep_core_msgs::Header createHeader(const boost::uuids::uuid& projectUUI
   return header;
 }
 
-seerep_core_msgs::camera_intrinsics createCameraIntrinsicsMessage(const boost::uuids::uuid& projectUUID,
-                                                                  const boost::uuids::uuid& messageUUID)
+seerep_core_msgs::camera_intrinsics
+createCameraIntrinsicsMessage(const boost::uuids::uuid& projectUUID,
+                              const boost::uuids::uuid& messageUUID)
 {
   seerep_core_msgs::camera_intrinsics ci;
 
@@ -71,7 +74,8 @@ seerep_core_msgs::camera_intrinsics createCameraIntrinsicsMessage(const boost::u
   ci.distortion_model = "plumb_bob";
   ci.distortion = { 4, 5, 6, 7, 8 };
 
-  std::vector<double> intrinsics_matrix, rectification_matrix, projection_matrix;
+  std::vector<double> intrinsics_matrix, rectification_matrix,
+      projection_matrix;
 
   for (size_t i = 0; i < 10; i++)
   {
@@ -111,9 +115,11 @@ protected:
 
     hdf5FileMutex = std::make_shared<std::mutex>();
     hdf5FileName = boost::lexical_cast<std::string>(projectUUID) + ".h5";
-    hdf5File = std::make_shared<HighFive::File>(hdf5FileName, HighFive::File::ReadWrite | HighFive::File::Create);
+    hdf5File = std::make_shared<HighFive::File>(
+        hdf5FileName, HighFive::File::ReadWrite | HighFive::File::Create);
 
-    ciIO = std::make_shared<seerep_hdf5_core::Hdf5CoreCameraIntrinsics>(hdf5File, hdf5FileMutex);
+    ciIO = std::make_shared<seerep_hdf5_core::Hdf5CoreCameraIntrinsics>(
+        hdf5File, hdf5FileMutex);
 
     writeCI = createCameraIntrinsicsMessage(projectUUID, messageUUID);
     ciIO->writeCameraIntrinsics(writeCI);
@@ -130,7 +136,8 @@ protected:
 std::shared_ptr<std::mutex> coreWriteLoadTest::hdf5FileMutex;
 std::string coreWriteLoadTest::hdf5FileName;
 std::shared_ptr<HighFive::File> coreWriteLoadTest::hdf5File;
-std::shared_ptr<seerep_hdf5_core::Hdf5CoreCameraIntrinsics> coreWriteLoadTest::ciIO;
+std::shared_ptr<seerep_hdf5_core::Hdf5CoreCameraIntrinsics>
+    coreWriteLoadTest::ciIO;
 
 boost::uuids::uuid coreWriteLoadTest::projectUUID;
 boost::uuids::uuid coreWriteLoadTest::messageUUID;
@@ -139,7 +146,8 @@ std::string coreWriteLoadTest::projectName;
 seerep_core_msgs::camera_intrinsics coreWriteLoadTest::writeCI;
 seerep_core_msgs::camera_intrinsics coreWriteLoadTest::readCI;
 
-void testHeader(const seerep_core_msgs::Header readHeader, const seerep_core_msgs::Header writeHeader)
+void testHeader(const seerep_core_msgs::Header readHeader,
+                const seerep_core_msgs::Header writeHeader)
 {
   EXPECT_EQ(readHeader.timestamp.seconds, writeHeader.timestamp.seconds);
   EXPECT_EQ(readHeader.timestamp.nanos, writeHeader.timestamp.nanos);

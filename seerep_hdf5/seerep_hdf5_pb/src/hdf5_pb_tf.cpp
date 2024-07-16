@@ -6,7 +6,8 @@
 
 namespace seerep_hdf5_pb
 {
-Hdf5PbTf::Hdf5PbTf(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx)
+Hdf5PbTf::Hdf5PbTf(std::shared_ptr<HighFive::File>& file,
+                   std::shared_ptr<std::mutex>& write_mtx)
   : Hdf5CoreGeneral(file, write_mtx), Hdf5PbGeneral(file, write_mtx)
 {
 }
@@ -27,57 +28,73 @@ void Hdf5PbTf::writeTransformStamped(const seerep::pb::TransformStamped& tf)
 
   std::string parentFrame = tf.header().frame_id();
   std::string childFrame = tf.child_frame_id();
-  // replace the '/' of namespaces in the frameIds by '_' to avoid the creation of subgroups in HDF5
+  // replace the '/' of namespaces in the frameIds by '_' to avoid the creation
+  // of subgroups in HDF5
   std::replace(parentFrame.begin(), parentFrame.end(), '/', '_');
   std::replace(childFrame.begin(), childFrame.end(), '/', '_');
-  std::string hdf5DatasetPath = hdf5_group_tf + "/" + parentFrame + "_" + childFrame;
+  std::string hdf5DatasetPath =
+      hdf5_group_tf + "/" + parentFrame + "_" + childFrame;
   std::string hdf5DatasetTimePath = hdf5DatasetPath + "/" + "time";
   std::string hdf5DatasetTransPath = hdf5DatasetPath + "/" + "translation";
   std::string hdf5DatasetRotPath = hdf5DatasetPath + "/" + "rotation";
 
-  std::shared_ptr<HighFive::DataSet> data_set_time_ptr, data_set_trans_ptr, data_set_rot_ptr;
+  std::shared_ptr<HighFive::DataSet> data_set_time_ptr, data_set_trans_ptr,
+      data_set_rot_ptr;
   uint64_t size = 0;
 
   if (!m_file->exist(hdf5DatasetPath))
   {
-    std::cout << "data id " << hdf5DatasetPath << " does not exist! Creat new dataset in hdf5" << std::endl;
+    std::cout << "data id " << hdf5DatasetPath
+              << " does not exist! Creat new dataset in hdf5" << std::endl;
     HighFive::Group group = m_file->createGroup(hdf5DatasetPath);
-    group.createAttribute(seerep_hdf5_core::Hdf5CoreTf::CHILD_FRAME, tf.child_frame_id());
-    group.createAttribute(seerep_hdf5_core::Hdf5CoreTf::PARENT_FRAME, tf.header().frame_id());
+    group.createAttribute(seerep_hdf5_core::Hdf5CoreTf::CHILD_FRAME,
+                          tf.child_frame_id());
+    group.createAttribute(seerep_hdf5_core::Hdf5CoreTf::PARENT_FRAME,
+                          tf.header().frame_id());
 
     // TIME
     // Create a dataspace with initial shape and max shape
-    HighFive::DataSpace data_space_time({ 1, 2 }, { HighFive::DataSpace::UNLIMITED, 2 });
+    HighFive::DataSpace data_space_time({ 1, 2 },
+                                        { HighFive::DataSpace::UNLIMITED, 2 });
     // Use chunking
     HighFive::DataSetCreateProps props_time;
     props_time.add(HighFive::Chunking(std::vector<hsize_t>{ 1, 2 }));
-    data_set_time_ptr = std::make_shared<HighFive::DataSet>(
-        m_file->createDataSet<int64_t>(hdf5DatasetTimePath, data_space_time, props_time));
+    data_set_time_ptr =
+        std::make_shared<HighFive::DataSet>(m_file->createDataSet<int64_t>(
+            hdf5DatasetTimePath, data_space_time, props_time));
 
     // TRANSLATION
     // Create a dataspace with initial shape and max shape
-    HighFive::DataSpace data_space_trans({ 1, 3 }, { HighFive::DataSpace::UNLIMITED, 3 });
+    HighFive::DataSpace data_space_trans({ 1, 3 },
+                                         { HighFive::DataSpace::UNLIMITED, 3 });
     // Use chunking
     HighFive::DataSetCreateProps props_trans;
     props_trans.add(HighFive::Chunking(std::vector<hsize_t>{ 1, 3 }));
-    data_set_trans_ptr = std::make_shared<HighFive::DataSet>(
-        m_file->createDataSet<double>(hdf5DatasetTransPath, data_space_trans, props_trans));
+    data_set_trans_ptr =
+        std::make_shared<HighFive::DataSet>(m_file->createDataSet<double>(
+            hdf5DatasetTransPath, data_space_trans, props_trans));
 
     // ROTATION
     // Create a dataspace with initial shape and max shape
-    HighFive::DataSpace data_space_rot({ 1, 4 }, { HighFive::DataSpace::UNLIMITED, 4 });
+    HighFive::DataSpace data_space_rot({ 1, 4 },
+                                       { HighFive::DataSpace::UNLIMITED, 4 });
     // Use chunking
     HighFive::DataSetCreateProps props_rot;
     props_rot.add(HighFive::Chunking(std::vector<hsize_t>{ 1, 4 }));
-    data_set_rot_ptr = std::make_shared<HighFive::DataSet>(
-        m_file->createDataSet<double>(hdf5DatasetRotPath, data_space_rot, props_rot));
+    data_set_rot_ptr =
+        std::make_shared<HighFive::DataSet>(m_file->createDataSet<double>(
+            hdf5DatasetRotPath, data_space_rot, props_rot));
   }
   else
   {
-    std::cout << "data id " << hdf5DatasetPath << " already exists!" << std::endl;
-    data_set_time_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DatasetTimePath));
-    data_set_trans_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DatasetTransPath));
-    data_set_rot_ptr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DatasetRotPath));
+    std::cout << "data id " << hdf5DatasetPath << " already exists!"
+              << std::endl;
+    data_set_time_ptr = std::make_shared<HighFive::DataSet>(
+        m_file->getDataSet(hdf5DatasetTimePath));
+    data_set_trans_ptr = std::make_shared<HighFive::DataSet>(
+        m_file->getDataSet(hdf5DatasetTransPath));
+    data_set_rot_ptr = std::make_shared<HighFive::DataSet>(
+        m_file->getDataSet(hdf5DatasetRotPath));
 
     HighFive::Group group = m_file->getGroup(hdf5DatasetPath);
     group.getAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE).read(size);
@@ -123,8 +140,8 @@ void Hdf5PbTf::writeTransformStamped(const seerep::pb::TransformStamped& tf)
   m_file->flush();
 }
 
-std::optional<std::vector<seerep::pb::TransformStamped>> Hdf5PbTf::readTransformStamped(const std::string& id,
-                                                                                        const bool isStatic)
+std::optional<std::vector<seerep::pb::TransformStamped>>
+Hdf5PbTf::readTransformStamped(const std::string& id, const bool isStatic)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
@@ -143,7 +160,8 @@ std::optional<std::vector<seerep::pb::TransformStamped>> Hdf5PbTf::readTransform
   std::string hdf5DatasetTransPath = hdf5GroupPath + "/" + "translation";
   std::string hdf5DatasetRotPath = hdf5GroupPath + "/" + "rotation";
 
-  if (!m_file->exist(hdf5GroupPath) || !m_file->exist(hdf5DatasetTimePath) || !m_file->exist(hdf5DatasetTransPath) ||
+  if (!m_file->exist(hdf5GroupPath) || !m_file->exist(hdf5DatasetTimePath) ||
+      !m_file->exist(hdf5DatasetTransPath) ||
       !m_file->exist(hdf5DatasetRotPath))
   {
     return std::nullopt;
@@ -152,7 +170,8 @@ std::optional<std::vector<seerep::pb::TransformStamped>> Hdf5PbTf::readTransform
   std::cout << "loading " << hdf5GroupPath << std::endl;
 
   // read size
-  std::shared_ptr<HighFive::Group> group_ptr = std::make_shared<HighFive::Group>(m_file->getGroup(hdf5GroupPath));
+  std::shared_ptr<HighFive::Group> group_ptr =
+      std::make_shared<HighFive::Group>(m_file->getGroup(hdf5GroupPath));
   long unsigned int size;
   group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE).read(size);
   if (size == 0)
@@ -163,33 +182,40 @@ std::optional<std::vector<seerep::pb::TransformStamped>> Hdf5PbTf::readTransform
 
   // read frames
   std::string parentframe;
-  group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::PARENT_FRAME).read(parentframe);
+  group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::PARENT_FRAME)
+      .read(parentframe);
   std::string childframe;
-  group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::CHILD_FRAME).read(childframe);
+  group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::CHILD_FRAME)
+      .read(childframe);
 
   // read time
   std::shared_ptr<HighFive::DataSet> data_set_time_ptr =
-      std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DatasetTimePath));
+      std::make_shared<HighFive::DataSet>(
+          m_file->getDataSet(hdf5DatasetTimePath));
   std::vector<std::vector<int64_t>> time;
   data_set_time_ptr->read(time);
 
   // read translation
   std::shared_ptr<HighFive::DataSet> data_set_trans_ptr =
-      std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DatasetTransPath));
+      std::make_shared<HighFive::DataSet>(
+          m_file->getDataSet(hdf5DatasetTransPath));
   std::vector<std::vector<double>> trans;
   data_set_trans_ptr->read(trans);
 
   // read rotation
   std::shared_ptr<HighFive::DataSet> data_set_rot_ptr =
-      std::make_shared<HighFive::DataSet>(m_file->getDataSet(hdf5DatasetRotPath));
+      std::make_shared<HighFive::DataSet>(
+          m_file->getDataSet(hdf5DatasetRotPath));
   std::vector<std::vector<double>> rot;
   data_set_rot_ptr->read(rot);
 
   // check if all have the right size
   if (time.size() != size || trans.size() != size || rot.size() != size)
   {
-    std::cout << "sizes of time (" << time.size() << "), translation (" << trans.size() << ") and rotation ("
-              << rot.size() << ") not matching. Size expected by value in metadata (" << size << ")" << std::endl;
+    std::cout << "sizes of time (" << time.size() << "), translation ("
+              << trans.size() << ") and rotation (" << rot.size()
+              << ") not matching. Size expected by value in metadata (" << size
+              << ")" << std::endl;
     return std::nullopt;
   }
 
@@ -221,7 +247,8 @@ std::optional<std::vector<seerep::pb::TransformStamped>> Hdf5PbTf::readTransform
   return tfs;
 }
 
-std::optional<std::vector<std::string>> Hdf5PbTf::readTransformStampedFrames(const std::string& id, const bool isStatic)
+std::optional<std::vector<std::string>>
+Hdf5PbTf::readTransformStampedFrames(const std::string& id, const bool isStatic)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
@@ -242,15 +269,18 @@ std::optional<std::vector<std::string>> Hdf5PbTf::readTransformStampedFrames(con
     return std::nullopt;
   }
 
-  std::shared_ptr<HighFive::Group> group_ptr = std::make_shared<HighFive::Group>(m_file->getGroup(hdf5GroupPath));
+  std::shared_ptr<HighFive::Group> group_ptr =
+      std::make_shared<HighFive::Group>(m_file->getGroup(hdf5GroupPath));
 
   std::cout << "loading parent frame of " << hdf5GroupPath << std::endl;
 
   // read frames
   std::string parentframe;
-  group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::PARENT_FRAME).read(parentframe);
+  group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::PARENT_FRAME)
+      .read(parentframe);
   std::string childframe;
-  group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::CHILD_FRAME).read(childframe);
+  group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::CHILD_FRAME)
+      .read(childframe);
 
   return std::vector<std::string>{ parentframe, childframe };
 }

@@ -32,11 +32,14 @@ public:
 
   std::vector<std::string> getImages();
 
-  void writeImage(const std::string& uuid, const std::string& frameId, int64_t seconds, int32_t nanos,
-                  uint32_t sequence, const py::array& image, const std::vector<GeneralLabel>& generalLabels,
+  void writeImage(const std::string& uuid, const std::string& frameId,
+                  int64_t seconds, int32_t nanos, uint32_t sequence,
+                  const py::array& image,
+                  const std::vector<GeneralLabel>& generalLabels,
                   const std::vector<CategorizedBoundingBoxLabel<2>>& bbLabels);
 
-  std::tuple<py::array, std::vector<GeneralLabel>, std::vector<CategorizedBoundingBoxLabel<2>>>
+  std::tuple<py::array, std::vector<GeneralLabel>,
+             std::vector<CategorizedBoundingBoxLabel<2>>>
   readImage(const std::string& uuid);
 };
 

@@ -4,25 +4,30 @@
 
 namespace seerep_hdf5_core
 {
-Hdf5CoreImage::Hdf5CoreImage(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx)
+Hdf5CoreImage::Hdf5CoreImage(std::shared_ptr<HighFive::File>& file,
+                             std::shared_ptr<std::mutex>& write_mtx)
   : Hdf5CoreGeneral(file, write_mtx)
 {
-  m_ioCI = std::make_shared<seerep_hdf5_core::Hdf5CoreCameraIntrinsics>(file, write_mtx);
+  m_ioCI = std::make_shared<seerep_hdf5_core::Hdf5CoreCameraIntrinsics>(
+      file, write_mtx);
 }
 
-std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CoreImage::readDataset(const boost::uuids::uuid& uuid)
+std::optional<seerep_core_msgs::DatasetIndexable>
+Hdf5CoreImage::readDataset(const boost::uuids::uuid& uuid)
 {
   return readDataset(boost::lexical_cast<std::string>(uuid));
 }
 
-std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CoreImage::readDataset(const std::string& uuid)
+std::optional<seerep_core_msgs::DatasetIndexable>
+Hdf5CoreImage::readDataset(const std::string& uuid)
 {
   seerep_core_msgs::DatasetIndexable data;
   std::string camintrinsics_uuid;
 
   {
-    // perform the read of the dataset in this scope to release the lock as this scope ends
-    // the lock needs to be released to allow for the readout of camera intrinsics
+    // perform the read of the dataset in this scope to release the lock as this
+    // scope ends the lock needs to be released to allow for the readout of
+    // camera intrinsics
     const std::scoped_lock lock(*m_write_mtx);
 
     std::string hdf5DataGroupPath = getHdf5GroupPath(uuid);
@@ -42,11 +47,13 @@ std::optional<seerep_core_msgs::DatasetIndexable> Hdf5CoreImage::readDataset(con
     boost::uuids::uuid uuid_generated = gen(uuid);
     data.header.uuidData = uuid_generated;
 
-    readLabelsAndAddToLabelsPerCategory(HDF5_GROUP_IMAGE, uuid, data.labelsCategory);
+    readLabelsAndAddToLabelsPerCategory(HDF5_GROUP_IMAGE, uuid,
+                                        data.labelsCategory);
 
     // fetch cam intrinsics uuid from hdf5_core_cameraintrinsics
     camintrinsics_uuid = readAttributeFromHdf5<std::string>(
-        *dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::CAMERA_INTRINSICS_UUID, hdf5DataGroupPath);
+        *dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::CAMERA_INTRINSICS_UUID,
+        hdf5DataGroupPath);
   }
   // lock released
 
@@ -60,13 +67,16 @@ std::vector<std::string> Hdf5CoreImage::getDatasetUuids()
   return getGroupDatasets(HDF5_GROUP_IMAGE);
 }
 
-void Hdf5CoreImage::writeLabels(const std::string& uuid,
-                                const std::vector<seerep_core_msgs::LabelCategory>& labelCategory)
+void Hdf5CoreImage::writeLabels(
+    const std::string& uuid,
+    const std::vector<seerep_core_msgs::LabelCategory>& labelCategory)
 {
-  Hdf5CoreGeneral::writeLabels(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, uuid, labelCategory);
+  Hdf5CoreGeneral::writeLabels(
+      seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, uuid, labelCategory);
 }
 
-void Hdf5CoreImage::writeImageAttributes(const std::string& id, const ImageAttributes& attributes)
+void Hdf5CoreImage::writeImageAttributes(const std::string& id,
+                                         const ImageAttributes& attributes)
 {
   std::string hdf5GroupPath = getHdf5GroupPath(id);
   std::string hdf5DatasetPath = getHdf5DataSetPath(id);
@@ -76,13 +86,23 @@ void Hdf5CoreImage::writeImageAttributes(const std::string& id, const ImageAttri
 
   if (dataGroupPtr && dataSetPtr)
   {
-    writeAttributeToHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::HEIGHT, attributes.height);
-    writeAttributeToHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::WIDTH, attributes.width);
-    writeAttributeToHdf5<std::string>(*dataSetPtr, seerep_hdf5_core::Hdf5CoreImage::ENCODING, attributes.encoding);
-    writeAttributeToHdf5<bool>(*dataSetPtr, seerep_hdf5_core::Hdf5CoreImage::IS_BIGENDIAN, attributes.isBigendian);
-    writeAttributeToHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::STEP, attributes.step);
-    writeAttributeToHdf5<std::string>(*dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::CAMERA_INTRINSICS_UUID,
-                                      attributes.cameraIntrinsicsUuid);
+    writeAttributeToHdf5<uint32_t>(*dataGroupPtr,
+                                   seerep_hdf5_core::Hdf5CoreImage::HEIGHT,
+                                   attributes.height);
+    writeAttributeToHdf5<uint32_t>(*dataGroupPtr,
+                                   seerep_hdf5_core::Hdf5CoreImage::WIDTH,
+                                   attributes.width);
+    writeAttributeToHdf5<std::string>(*dataSetPtr,
+                                      seerep_hdf5_core::Hdf5CoreImage::ENCODING,
+                                      attributes.encoding);
+    writeAttributeToHdf5<bool>(*dataSetPtr,
+                               seerep_hdf5_core::Hdf5CoreImage::IS_BIGENDIAN,
+                               attributes.isBigendian);
+    writeAttributeToHdf5<uint32_t>(
+        *dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::STEP, attributes.step);
+    writeAttributeToHdf5<std::string>(
+        *dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::CAMERA_INTRINSICS_UUID,
+        attributes.cameraIntrinsicsUuid);
   }
 }
 
@@ -98,15 +118,19 @@ ImageAttributes Hdf5CoreImage::readImageAttributes(const std::string& id)
 
   if (dataGroupPtr && dataSetPtr)
   {
-    attributes.height = readAttributeFromHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::HEIGHT, id);
-    attributes.width = readAttributeFromHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::WIDTH, id);
-    attributes.encoding =
-        readAttributeFromHdf5<std::string>(*dataSetPtr, seerep_hdf5_core::Hdf5CoreImage::ENCODING, id);
-    attributes.isBigendian =
-        readAttributeFromHdf5<bool>(*dataSetPtr, seerep_hdf5_core::Hdf5CoreImage::IS_BIGENDIAN, id);
-    attributes.step = readAttributeFromHdf5<uint32_t>(*dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::STEP, id);
-    attributes.cameraIntrinsicsUuid =
-        readAttributeFromHdf5<std::string>(*dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::CAMERA_INTRINSICS_UUID, id);
+    attributes.height = readAttributeFromHdf5<uint32_t>(
+        *dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::HEIGHT, id);
+    attributes.width = readAttributeFromHdf5<uint32_t>(
+        *dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::WIDTH, id);
+    attributes.encoding = readAttributeFromHdf5<std::string>(
+        *dataSetPtr, seerep_hdf5_core::Hdf5CoreImage::ENCODING, id);
+    attributes.isBigendian = readAttributeFromHdf5<bool>(
+        *dataSetPtr, seerep_hdf5_core::Hdf5CoreImage::IS_BIGENDIAN, id);
+    attributes.step = readAttributeFromHdf5<uint32_t>(
+        *dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::STEP, id);
+    attributes.cameraIntrinsicsUuid = readAttributeFromHdf5<std::string>(
+        *dataGroupPtr, seerep_hdf5_core::Hdf5CoreImage::CAMERA_INTRINSICS_UUID,
+        id);
   }
   return attributes;
 }
@@ -121,10 +145,11 @@ const std::string Hdf5CoreImage::getHdf5DataSetPath(const std::string& id) const
   return getHdf5GroupPath(id) + "/" + RAWDATA;
 }
 
-void Hdf5CoreImage::computeFrustumBB(const std::string& camintrinsics_uuid, seerep_core_msgs::AABB& bb)
+void Hdf5CoreImage::computeFrustumBB(const std::string& camintrinsics_uuid,
+                                     seerep_core_msgs::AABB& bb)
 {
-  seerep_core_msgs::camera_intrinsics ci =
-      m_ioCI->readCameraIntrinsics(boost::lexical_cast<boost::uuids::uuid>(camintrinsics_uuid));
+  seerep_core_msgs::camera_intrinsics ci = m_ioCI->readCameraIntrinsics(
+      boost::lexical_cast<boost::uuids::uuid>(camintrinsics_uuid));
 
   // compute frustrum
   double object_dist = ci.maximum_viewing_distance;

@@ -3,7 +3,9 @@
 namespace seerep_core_pb
 {
 // constructor when data received and stored to hdf5
-CorePbCameraIntrinsics::CorePbCameraIntrinsics(std::shared_ptr<seerep_core::Core> seerepCore) : m_seerepCore(seerepCore)
+CorePbCameraIntrinsics::CorePbCameraIntrinsics(
+    std::shared_ptr<seerep_core::Core> seerepCore)
+  : m_seerepCore(seerepCore)
 {
 }
 
@@ -36,7 +38,8 @@ CorePbCameraIntrinsics::getData(const seerep::pb::CameraIntrinsicsQuery& query)
   }
 }
 
-boost::uuids::uuid CorePbCameraIntrinsics::addData(const seerep::pb::CameraIntrinsics& camintrinsics)
+boost::uuids::uuid CorePbCameraIntrinsics::addData(
+    const seerep::pb::CameraIntrinsics& camintrinsics)
 {
   boost::uuids::string_generator gen;
   boost::uuids::uuid projectuuid = gen(camintrinsics.header().uuid_project());

@@ -42,7 +42,8 @@ namespace seerep_grpc_ros
 class TransferImagesWithDetection
 {
 public:
-  TransferImagesWithDetection(std::shared_ptr<grpc::Channel> channel_ptr, std::string categoryLabels);
+  TransferImagesWithDetection(std::shared_ptr<grpc::Channel> channel_ptr,
+                              std::string categoryLabels);
   ~TransferImagesWithDetection();
 
   void send(const sensor_msgs::Image::ConstPtr& msg);
@@ -64,7 +65,9 @@ private:
 
   // tf
   StubTfFbPtr stubTf_;
-  std::unique_ptr<::grpc::ClientWriter<flatbuffers::grpc::Message<seerep::fb::TransformStamped>>> writerTf_;
+  std::unique_ptr<::grpc::ClientWriter<
+      flatbuffers::grpc::Message<seerep::fb::TransformStamped>>>
+      writerTf_;
   grpc::ClientContext contextTf_;
   flatbuffers::grpc::Message<seerep::fb::ServerResponse> tfResponse_;
   // tf helper
@@ -72,7 +75,9 @@ private:
 
   // image
   StubImageFbPtr stubImage_;
-  std::unique_ptr<::grpc::ClientWriter<flatbuffers::grpc::Message<seerep::fb::Image>>> writerImage_;
+  std::unique_ptr<
+      ::grpc::ClientWriter<flatbuffers::grpc::Message<seerep::fb::Image>>>
+      writerImage_;
   grpc::ClientContext contextImage_;
   flatbuffers::grpc::Message<seerep::fb::ServerResponse> imageResponse_;
   // image detections

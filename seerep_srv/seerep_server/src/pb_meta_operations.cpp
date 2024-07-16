@@ -4,17 +4,21 @@ extern const char* GIT_TAG;
 
 namespace seerep_server
 {
-PbMetaOperations::PbMetaOperations(std::shared_ptr<seerep_core::Core> seerepCore) : seerepCore(seerepCore)
+PbMetaOperations::PbMetaOperations(std::shared_ptr<seerep_core::Core> seerepCore)
+  : seerepCore(seerepCore)
 {
 }
 
-grpc::Status PbMetaOperations::CreateProject(grpc::ServerContext* context, const seerep::pb::ProjectCreation* request,
-                                             seerep::pb::ProjectInfo* response)
+grpc::Status
+PbMetaOperations::CreateProject(grpc::ServerContext* context,
+                                const seerep::pb::ProjectCreation* request,
+                                seerep::pb::ProjectInfo* response)
 {
   (void)context;  // ignore that variable without causing warnings
   try
   {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "create new project... ";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
+        << "create new project... ";
 
     seerep_core_msgs::ProjectInfo projectInfo;
     projectInfo.frameId = request->mapframeid();
@@ -23,10 +27,14 @@ grpc::Status PbMetaOperations::CreateProject(grpc::ServerContext* context, const
     projectInfo.uuid = boost::uuids::random_generator()();
 
     // assigning geodetic coords attributes individually
-    projectInfo.geodetCoords.coordinateSystem = request->geodeticcoordinates().coordinatesystem();
-    projectInfo.geodetCoords.altitude = request->geodeticcoordinates().altitude();
-    projectInfo.geodetCoords.latitude = request->geodeticcoordinates().latitude();
-    projectInfo.geodetCoords.longitude = request->geodeticcoordinates().longitude();
+    projectInfo.geodetCoords.coordinateSystem =
+        request->geodeticcoordinates().coordinatesystem();
+    projectInfo.geodetCoords.altitude =
+        request->geodeticcoordinates().altitude();
+    projectInfo.geodetCoords.latitude =
+        request->geodeticcoordinates().latitude();
+    projectInfo.geodetCoords.longitude =
+        request->geodeticcoordinates().longitude();
 
     seerepCore->createProject(projectInfo);
 
@@ -35,16 +43,21 @@ grpc::Status PbMetaOperations::CreateProject(grpc::ServerContext* context, const
     response->set_frameid(projectInfo.frameId);
 
     response->set_version(projectInfo.version);
-    response->mutable_geodeticcoordinates()->set_coordinatesystem(projectInfo.geodetCoords.coordinateSystem);
-    response->mutable_geodeticcoordinates()->set_altitude(projectInfo.geodetCoords.altitude);
-    response->mutable_geodeticcoordinates()->set_latitude(projectInfo.geodetCoords.latitude);
-    response->mutable_geodeticcoordinates()->set_longitude(projectInfo.geodetCoords.longitude);
+    response->mutable_geodeticcoordinates()->set_coordinatesystem(
+        projectInfo.geodetCoords.coordinateSystem);
+    response->mutable_geodeticcoordinates()->set_altitude(
+        projectInfo.geodetCoords.altitude);
+    response->mutable_geodeticcoordinates()->set_latitude(
+        projectInfo.geodetCoords.latitude);
+    response->mutable_geodeticcoordinates()->set_longitude(
+        projectInfo.geodetCoords.longitude);
   }
   catch (const std::exception& e)
   {
     // specific handling for all exceptions extending std::exception, except
     // std::runtime_error which is handled explicitly
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+        << e.what();
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
   }
   catch (...)
@@ -57,12 +70,15 @@ grpc::Status PbMetaOperations::CreateProject(grpc::ServerContext* context, const
   return grpc::Status::OK;
 }
 
-grpc::Status PbMetaOperations::GetProjects(grpc::ServerContext* context, const google::protobuf::Empty* request,
-                                           seerep::pb::ProjectInfos* response)
+grpc::Status
+PbMetaOperations::GetProjects(grpc::ServerContext* context,
+                              const google::protobuf::Empty* request,
+                              seerep::pb::ProjectInfos* response)
 {
   (void)context;  // ignore that variable without causing warnings
   (void)request;  // ignore that variable without causing warnings
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "query the project infos... ";
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
+      << "query the project infos... ";
 
   try
   {
@@ -72,23 +88,28 @@ grpc::Status PbMetaOperations::GetProjects(grpc::ServerContext* context, const g
     {
       auto responseProjectInfo = response->add_projects();
       responseProjectInfo->set_name(projectInfo.name);
-      responseProjectInfo->set_uuid(boost::lexical_cast<std::string>(projectInfo.uuid));
+      responseProjectInfo->set_uuid(
+          boost::lexical_cast<std::string>(projectInfo.uuid));
       responseProjectInfo->set_frameid(projectInfo.frameId);
       responseProjectInfo->set_version(projectInfo.version);
 
       // assigning geodetic coords attributes individually
       responseProjectInfo->mutable_geodeticcoordinates()->set_coordinatesystem(
           projectInfo.geodetCoords.coordinateSystem);
-      responseProjectInfo->mutable_geodeticcoordinates()->set_altitude(projectInfo.geodetCoords.altitude);
-      responseProjectInfo->mutable_geodeticcoordinates()->set_latitude(projectInfo.geodetCoords.latitude);
-      responseProjectInfo->mutable_geodeticcoordinates()->set_longitude(projectInfo.geodetCoords.longitude);
+      responseProjectInfo->mutable_geodeticcoordinates()->set_altitude(
+          projectInfo.geodetCoords.altitude);
+      responseProjectInfo->mutable_geodeticcoordinates()->set_latitude(
+          projectInfo.geodetCoords.latitude);
+      responseProjectInfo->mutable_geodeticcoordinates()->set_longitude(
+          projectInfo.geodetCoords.longitude);
     }
   }
   catch (const std::exception& e)
   {
     // specific handling for all exceptions extending std::exception, except
     // std::runtime_error which is handled explicitly
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+        << e.what();
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
   }
   catch (...)
@@ -102,15 +123,17 @@ grpc::Status PbMetaOperations::GetProjects(grpc::ServerContext* context, const g
   return grpc::Status::OK;
 }
 
-grpc::Status PbMetaOperations::GetOverallTimeInterval(grpc::ServerContext* context,
-                                                      const seerep::pb::UuidDatatypePair* request,
-                                                      seerep::pb::TimeInterval* response)
+grpc::Status PbMetaOperations::GetOverallTimeInterval(
+    grpc::ServerContext* context, const seerep::pb::UuidDatatypePair* request,
+    seerep::pb::TimeInterval* response)
 {
   (void)context;  // ignore that variable without causing warnings
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "fetching overall time interval";
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
+      << "fetching overall time interval";
 
   std::vector<seerep_core_msgs::Datatype> dt_vector;
-  seerep_core_pb::CorePbConversion::fromPbDatatypeVector(request->datatype(), dt_vector);
+  seerep_core_pb::CorePbConversion::fromPbDatatypeVector(request->datatype(),
+                                                         dt_vector);
 
   try
   {
@@ -118,7 +141,8 @@ grpc::Status PbMetaOperations::GetOverallTimeInterval(grpc::ServerContext* conte
     boost::uuids::string_generator gen;
     auto uuidFromString = gen(uuid);
 
-    seerep_core_msgs::AabbTime timeinterval = seerepCore->getOverallTimeInterval(uuidFromString, dt_vector);
+    seerep_core_msgs::AabbTime timeinterval =
+        seerepCore->getOverallTimeInterval(uuidFromString, dt_vector);
 
     seerep_core_pb::CorePbConversion::toPb(timeinterval, response);
   }
@@ -126,7 +150,8 @@ grpc::Status PbMetaOperations::GetOverallTimeInterval(grpc::ServerContext* conte
   {
     // specific handling for all exceptions extending std::exception, except
     // std::runtime_error which is handled explicitly
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+        << e.what();
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
   }
   catch (...)
@@ -139,15 +164,17 @@ grpc::Status PbMetaOperations::GetOverallTimeInterval(grpc::ServerContext* conte
 
   return grpc::Status::OK;
 }
-grpc::Status PbMetaOperations::GetOverallBoundingBox(grpc::ServerContext* context,
-                                                     const seerep::pb::UuidDatatypePair* request,
-                                                     seerep::pb::Boundingbox* response)
+grpc::Status PbMetaOperations::GetOverallBoundingBox(
+    grpc::ServerContext* context, const seerep::pb::UuidDatatypePair* request,
+    seerep::pb::Boundingbox* response)
 {
   (void)context;  // ignore that variable without causing warnings
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "fetching overall bounding box";
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
+      << "fetching overall bounding box";
 
   std::vector<seerep_core_msgs::Datatype> dt_vector;
-  seerep_core_pb::CorePbConversion::fromPbDatatypeVector(request->datatype(), dt_vector);
+  seerep_core_pb::CorePbConversion::fromPbDatatypeVector(request->datatype(),
+                                                         dt_vector);
 
   try
   {
@@ -155,7 +182,8 @@ grpc::Status PbMetaOperations::GetOverallBoundingBox(grpc::ServerContext* contex
     boost::uuids::string_generator gen;
     auto uuidFromString = gen(uuid);
 
-    seerep_core_msgs::AABB overallBB = seerepCore->getOverallBound(uuidFromString, dt_vector);
+    seerep_core_msgs::AABB overallBB =
+        seerepCore->getOverallBound(uuidFromString, dt_vector);
 
     seerep_core_pb::CorePbConversion::toPb(overallBB, response);
   }
@@ -163,7 +191,8 @@ grpc::Status PbMetaOperations::GetOverallBoundingBox(grpc::ServerContext* contex
   {
     // specific handling for all exceptions extending std::exception, except
     // std::runtime_error which is handled explicitly
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+        << e.what();
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
   }
   catch (...)
@@ -177,15 +206,18 @@ grpc::Status PbMetaOperations::GetOverallBoundingBox(grpc::ServerContext* contex
   return grpc::Status::OK;
 }
 
-grpc::Status PbMetaOperations::GetAllCategories(grpc::ServerContext* context,
-                                                const seerep::pb::UuidDatatypePair* request,
-                                                seerep::pb::StringVector* response)
+grpc::Status
+PbMetaOperations::GetAllCategories(grpc::ServerContext* context,
+                                   const seerep::pb::UuidDatatypePair* request,
+                                   seerep::pb::StringVector* response)
 {
   (void)context;  // ignore that variable without causing warnings
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "fetching all categories";
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
+      << "fetching all categories";
 
   std::vector<seerep_core_msgs::Datatype> dt_vector;
-  seerep_core_pb::CorePbConversion::fromPbDatatypeVector(request->datatype(), dt_vector);
+  seerep_core_pb::CorePbConversion::fromPbDatatypeVector(request->datatype(),
+                                                         dt_vector);
 
   try
   {
@@ -193,7 +225,8 @@ grpc::Status PbMetaOperations::GetAllCategories(grpc::ServerContext* context,
     boost::uuids::string_generator gen;
     auto uuidFromString = gen(uuid);
 
-    std::unordered_set<std::string> categories = seerepCore->getAllCategories(uuidFromString, dt_vector);
+    std::unordered_set<std::string> categories =
+        seerepCore->getAllCategories(uuidFromString, dt_vector);
 
     for (std::string category : categories)
     {
@@ -204,7 +237,8 @@ grpc::Status PbMetaOperations::GetAllCategories(grpc::ServerContext* context,
   {
     // specific handling for all exceptions extending std::exception, except
     // std::runtime_error which is handled explicitly
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+        << e.what();
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
   }
   catch (...)
@@ -218,15 +252,18 @@ grpc::Status PbMetaOperations::GetAllCategories(grpc::ServerContext* context,
   return grpc::Status::OK;
 }
 
-grpc::Status PbMetaOperations::GetAllLabels(grpc::ServerContext* context,
-                                            const seerep::pb::UuidDatatypeWithCategory* request,
-                                            seerep::pb::StringVector* response)
+grpc::Status PbMetaOperations::GetAllLabels(
+    grpc::ServerContext* context,
+    const seerep::pb::UuidDatatypeWithCategory* request,
+    seerep::pb::StringVector* response)
 {
   (void)context;  // ignore that variable without causing warnings
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug) << "fetching overall bounding box";
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
+      << "fetching overall bounding box";
 
   std::vector<seerep_core_msgs::Datatype> dt_vector;
-  seerep_core_pb::CorePbConversion::fromPbDatatypeVector(request->uuid_with_datatype().datatype(), dt_vector);
+  seerep_core_pb::CorePbConversion::fromPbDatatypeVector(
+      request->uuid_with_datatype().datatype(), dt_vector);
 
   try
   {
@@ -236,7 +273,8 @@ grpc::Status PbMetaOperations::GetAllLabels(grpc::ServerContext* context,
     boost::uuids::string_generator gen;
     auto uuidFromString = gen(uuid);
 
-    std::unordered_set<std::string> allLabels = seerepCore->getAllLabels(uuidFromString, dt_vector, category);
+    std::unordered_set<std::string> allLabels =
+        seerepCore->getAllLabels(uuidFromString, dt_vector, category);
 
     for (std::string label : allLabels)
     {
@@ -247,7 +285,8 @@ grpc::Status PbMetaOperations::GetAllLabels(grpc::ServerContext* context,
   {
     // specific handling for all exceptions extending std::exception, except
     // std::runtime_error which is handled explicitly
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << e.what();
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+        << e.what();
     return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
   }
   catch (...)

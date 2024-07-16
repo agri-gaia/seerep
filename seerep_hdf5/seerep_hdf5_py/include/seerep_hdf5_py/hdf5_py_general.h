@@ -22,7 +22,8 @@ class Hdf5FileWrapper
 {
 public:
   Hdf5FileWrapper(const std::string& filename)
-    : filePtr_(std::make_shared<HighFive::File>(filename, HighFive::File::ReadWrite | HighFive::File::Create))
+    : filePtr_(std::make_shared<HighFive::File>(
+          filename, HighFive::File::ReadWrite | HighFive::File::Create))
     , writeMutex_(std::make_shared<std::mutex>())
   {
   }
@@ -37,9 +38,11 @@ public:
     return writeMutex_;
   }
 
-  void createProject(const std::string& projectName, const std::string& rootFrameId);
+  void createProject(const std::string& projectName,
+                     const std::string& rootFrameId);
 
-  void setProjectGeolocation(const std::string& coordinateSystem, const std::string& ellipsoid, double latitude,
+  void setProjectGeolocation(const std::string& coordinateSystem,
+                             const std::string& ellipsoid, double latitude,
                              double longitude, double altitude);
 
 private:
@@ -50,7 +53,8 @@ private:
 struct InstanceLabel
 {
 public:
-  InstanceLabel(const std::string& label, float confidence, const std::string& instanceUuid)
+  InstanceLabel(const std::string& label, float confidence,
+                const std::string& instanceUuid)
     : label_(label), confidence_(confidence), instanceUuid_(instanceUuid)
   {
   }
@@ -82,9 +86,14 @@ struct BoundingBoxLabel
 public:
   using RotationType = std::array < double, NumDimensions<3 ? 1 : 4>;
 
-  BoundingBoxLabel(InstanceLabel& label, std::array<double, NumDimensions>& bbCenter,
-                   std::array<double, NumDimensions>& bbSpatialExtent, RotationType& bbRotation)
-    : label_(label), bbCenter_(bbCenter), bbSpatialExtent_(bbSpatialExtent), bbRotation_(bbRotation)
+  BoundingBoxLabel(InstanceLabel& label,
+                   std::array<double, NumDimensions>& bbCenter,
+                   std::array<double, NumDimensions>& bbSpatialExtent,
+                   RotationType& bbRotation)
+    : label_(label)
+    , bbCenter_(bbCenter)
+    , bbSpatialExtent_(bbSpatialExtent)
+    , bbRotation_(bbRotation)
   {
   }
 
@@ -120,7 +129,8 @@ public:
   //  Project
   // #########
 
-  void setProjectGeolocation(const std::string& coordinateSystem, const std::string& ellipsoid, double latitude,
+  void setProjectGeolocation(const std::string& coordinateSystem,
+                             const std::string& ellipsoid, double latitude,
                              double longitude, double altitude);
 
 protected:
@@ -129,8 +139,10 @@ protected:
   // ################
 
   template <int NumDimensions>
-  void writeBoundingBoxLabeled(const std::string& dataGroupId,
-                               const std::vector<seerep_hdf5_py::CategorizedBoundingBoxLabel<NumDimensions>>& bbLabels);
+  void writeBoundingBoxLabeled(
+      const std::string& dataGroupId,
+      const std::vector<
+          seerep_hdf5_py::CategorizedBoundingBoxLabel<NumDimensions>>& bbLabels);
 
   template <int NumDimensions>
   std::vector<seerep_hdf5_py::CategorizedBoundingBoxLabel<NumDimensions>>
@@ -140,10 +152,12 @@ protected:
   //  Labels General
   // ################
 
-  void writeLabelsGeneral(const std::string& dataGroupId,
-                          const std::vector<seerep_hdf5_py::GeneralLabel>& generalLabels);
+  void writeLabelsGeneral(
+      const std::string& dataGroupId,
+      const std::vector<seerep_hdf5_py::GeneralLabel>& generalLabels);
 
-  std::vector<seerep_hdf5_py::GeneralLabel> readLabelsGeneral(const std::string& dataGroupId);
+  std::vector<seerep_hdf5_py::GeneralLabel>
+  readLabelsGeneral(const std::string& dataGroupId);
 };
 
 }  // namespace seerep_hdf5_py

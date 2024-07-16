@@ -34,11 +34,13 @@ typedef CGAL::Exact_predicates_exact_constructions_kernel Kernel;
 namespace seerep_core
 {
 /**
- * @brief This is the class handling the spatio-temporal-semantic indexing of a dataset
+ * @brief This is the class handling the spatio-temporal-semantic indexing of a
+ * dataset
  *
- * a dataset can be added to the indices and spatio-temporal-semantic queries can be executed
- * to get the UUIDs of the datasets matching the query. On startup all datasets are loaded from the HDF5 file
- * Datasets added during runtime must be added to the indices via the corresponding public method
+ * a dataset can be added to the indices and spatio-temporal-semantic queries
+ * can be executed to get the UUIDs of the datasets matching the query. On
+ * startup all datasets are loaded from the HDF5 file Datasets added during
+ * runtime must be added to the indices via the corresponding public method
  */
 class CoreDataset
 {
@@ -48,21 +50,31 @@ private:
   {
     /** @brief shared pointer to the object handling the HDF5 io for the datatype */
     std::shared_ptr<seerep_hdf5_core::Hdf5CoreDatatypeInterface> hdf5io;
-    /** @brief vector of the datasets which couldn't be added to the spatial index yet due to missing tf*/
-    std::vector<std::shared_ptr<seerep_core_msgs::DatasetIndexable>> dataWithMissingTF =
-        std::vector<std::shared_ptr<seerep_core_msgs::DatasetIndexable>>();
+    /** @brief vector of the datasets which couldn't be added to the spatial
+     * index yet due to missing tf*/
+    std::vector<std::shared_ptr<seerep_core_msgs::DatasetIndexable>>
+        dataWithMissingTF =
+            std::vector<std::shared_ptr<seerep_core_msgs::DatasetIndexable>>();
     /** @brief the spatial r-tree for the spatial index*/
     seerep_core_msgs::rtree rt = seerep_core_msgs::rtree();
     /** @brief the temporal r-tree for the temporal index*/
     seerep_core_msgs::timetree timetree = seerep_core_msgs::timetree();
-    /** @brief map from the category of labels to the map from label to the UUIDs of the datasets annotated with this label*/
-    std::unordered_map<std::string, std::unordered_map<std::string, std::vector<boost::uuids::uuid>>>
-        categoryLabelDatasetsMap =
-            std::unordered_map<std::string, std::unordered_map<std::string, std::vector<boost::uuids::uuid>>>();
-    /** @brief map from the UUID of the dataset a vector of UUID of instances the dataset is showing */
-    std::unordered_map<boost::uuids::uuid, std::vector<boost::uuids::uuid>, boost::hash<boost::uuids::uuid>>
+    /** @brief map from the category of labels to the map from label to the
+     * UUIDs of the datasets annotated with this label*/
+    std::unordered_map<
+        std::string,
+        std::unordered_map<std::string, std::vector<boost::uuids::uuid>>>
+        categoryLabelDatasetsMap = std::unordered_map<
+            std::string,
+            std::unordered_map<std::string, std::vector<boost::uuids::uuid>>>();
+    /** @brief map from the UUID of the dataset a vector of UUID of instances
+     * the dataset is showing */
+    std::unordered_map<boost::uuids::uuid, std::vector<boost::uuids::uuid>,
+                       boost::hash<boost::uuids::uuid>>
         datasetInstancesMap =
-            std::unordered_map<boost::uuids::uuid, std::vector<boost::uuids::uuid>, boost::hash<boost::uuids::uuid>>();
+            std::unordered_map<boost::uuids::uuid,
+                               std::vector<boost::uuids::uuid>,
+                               boost::hash<boost::uuids::uuid>>();
   };
 
 public:
@@ -73,16 +85,19 @@ public:
    * @param frameId the common frame id of the project used for the spatial index
    */
   CoreDataset(std::shared_ptr<seerep_core::CoreTf> tfOverview,
-              std::shared_ptr<seerep_core::CoreInstances> coreInstances, const std::string& frameId);
+              std::shared_ptr<seerep_core::CoreInstances> coreInstances,
+              const std::string& frameId);
   ~CoreDataset();
 
   /**
-   * @brief Adds a datatype to the core, loads the needed information from the HDF5 file and creates the indices
+   * @brief Adds a datatype to the core, loads the needed information from the
+   * HDF5 file and creates the indices
    * @param datatype the datatype to be added
    * @param hdf5Io pointer to the object handling HDF5 io for this datatype
    */
-  void addDatatype(const seerep_core_msgs::Datatype& datatype,
-                   std::shared_ptr<seerep_hdf5_core::Hdf5CoreDatatypeInterface> hdf5Io);
+  void addDatatype(
+      const seerep_core_msgs::Datatype& datatype,
+      std::shared_ptr<seerep_hdf5_core::Hdf5CoreDatatypeInterface> hdf5Io);
 
   /**
    * @brief Returns a vector of UUIDs of datasets that match the query
@@ -96,7 +111,8 @@ public:
    * @param query the spatio-temporal-semantic query
    * @return vector of UUIDs of instances matching the query
    */
-  std::vector<boost::uuids::uuid> getInstances(const seerep_core_msgs::Query& query);
+  std::vector<boost::uuids::uuid>
+  getInstances(const seerep_core_msgs::Query& query);
 
   /**
    * @brief Adds an image to the spatial, temporal and semantic indices
@@ -106,37 +122,47 @@ public:
   /**
    * @brief Adds labels to an existing dataset
    * @param datatype the datatype to consider
-   * @param labelPerCategory map from category to a vector of labels to be added to the dataset
+   * @param labelPerCategory map from category to a vector of labels to be added
+   * to the dataset
    * @param msgUuid the UUID of the targeted dataset
    */
-  void addLabels(const seerep_core_msgs::Datatype& datatype,
-                 const std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>& labelPerCategory,
-                 const boost::uuids::uuid& msgUuid);
+  void addLabels(
+      const seerep_core_msgs::Datatype& datatype,
+      const std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>&
+          labelPerCategory,
+      const boost::uuids::uuid& msgUuid);
   /**
    * @brief Adds labels to an existing dataset
    * @param datatype the datatype to consider
    * @param datatypeSpecifics the datatypeSpecifics
-   * @param labelPerCategory map from category to a vector of labels to be added to the dataset
+   * @param labelPerCategory map from category to a vector of labels to be added
+   * to the dataset
    * @param msgUuid the UUID of the targeted dataset
    */
-  void addLabels(const seerep_core_msgs::Datatype& datatype,
-                 std::shared_ptr<seerep_core::CoreDataset::DatatypeSpecifics> datatypeSpecifics,
-                 const std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>& labelPerCategory,
-                 const boost::uuids::uuid& msgUuid);
+  void addLabels(
+      const seerep_core_msgs::Datatype& datatype,
+      std::shared_ptr<seerep_core::CoreDataset::DatatypeSpecifics>
+          datatypeSpecifics,
+      const std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>&
+          labelPerCategory,
+      const boost::uuids::uuid& msgUuid);
 
   /**
    * @brief Get the minimum and maximum time interval for a dataset
    * @param datatypes A vector of datatypes for which the time bound has to be computed
    * @return seerep_core_msgs::AabbTime
    */
-  seerep_core_msgs::AabbTime getTimeBounds(std::vector<seerep_core_msgs::Datatype> datatypes);
+  seerep_core_msgs::AabbTime
+  getTimeBounds(std::vector<seerep_core_msgs::Datatype> datatypes);
 
   /**
    * @brief Get the minimum and maximum spatial bound for a dataset
-   * @param datatypes A vector of datatypes for which the spatial bound has to be computed
+   * @param datatypes A vector of datatypes for which the spatial bound has to
+   * be computed
    * @return seerep_core_msgs::AABB
    */
-  seerep_core_msgs::AABB getSpatialBounds(std::vector<seerep_core_msgs::Datatype> datatypes);
+  seerep_core_msgs::AABB
+  getSpatialBounds(std::vector<seerep_core_msgs::Datatype> datatypes);
 
   /**
    * @brief Get the all categories saved in a project
@@ -144,7 +170,8 @@ public:
    * @param datatypes A vector of datatypes for which the categories have to be fetched
    * @return std::vector<std::string> vector of categories
    */
-  std::unordered_set<std::string> getAllCategories(std::vector<seerep_core_msgs::Datatype> datatypes);
+  std::unordered_set<std::string>
+  getAllCategories(std::vector<seerep_core_msgs::Datatype> datatypes);
 
   /**
    * @brief Get the all labels saved in a project
@@ -153,7 +180,9 @@ public:
    * @param category the category across which all labels have to be aggregated
    * @return std::vector<std::string> vector of labels
    */
-  std::unordered_set<std::string> getAllLabels(std::vector<seerep_core_msgs::Datatype> datatypes, std::string category);
+  std::unordered_set<std::string>
+  getAllLabels(std::vector<seerep_core_msgs::Datatype> datatypes,
+               std::string category);
 
 private:
   /**
@@ -161,8 +190,9 @@ private:
    * @param datatype the datatype to consider
    * @param hdf5io the HDF5io object handling the HDF5 io
    */
-  void recreateDatasets(const seerep_core_msgs::Datatype& datatype,
-                        std::shared_ptr<seerep_hdf5_core::Hdf5CoreDatatypeInterface> hdf5Io);
+  void recreateDatasets(
+      const seerep_core_msgs::Datatype& datatype,
+      std::shared_ptr<seerep_hdf5_core::Hdf5CoreDatatypeInterface> hdf5Io);
   /**
    * @brief adds the dataset to the spatio-temporal-semantic indices
    * @param datatype the datatype to consider
@@ -172,16 +202,17 @@ private:
                            const seerep_core_msgs::DatasetIndexable& dataset);
 
   /**
-   * @brief tries to add the dataset which couldn't be added to the spatial index due
-   * to a missing transformtion into the frame of the index. If the transformation is now
-   * available the data is added to the spatial index
+   * @brief tries to add the dataset which couldn't be added to the spatial
+   * index due to a missing transformtion into the frame of the index. If the
+   * transformation is now available the data is added to the spatial index
    * @param datatype the datatype to consider
    */
   void tryAddingDataWithMissingTF(const seerep_core_msgs::Datatype& datatype);
 
   /**
-   * @brief Check if the created CGAL polygon follows the requirements. It should be simple (no more than two vertices
-   * on an edge), convex (no inward egdes), the vertices should be in a counter clockwise order.
+   * @brief Check if the created CGAL polygon follows the requirements. It
+   * should be simple (no more than two vertices on an edge), convex (no inward
+   * egdes), the vertices should be in a counter clockwise order.
    *
    * @param polygon_cgal a polygon defined with CGAL
    * @return true The polygon abides by CGAL requirements
@@ -195,7 +226,8 @@ private:
    * @param polygon core msg polygon
    * @return CGAL::Polygon_2<Kernel> cgal polygon
    */
-  CGAL::Polygon_2<Kernel> toCGALPolygon(const seerep_core_msgs::Polygon2D& polygon);
+  CGAL::Polygon_2<Kernel>
+  toCGALPolygon(const seerep_core_msgs::Polygon2D& polygon);
 
   /**
    * @brief convert core msg aabb to CGAL aabb
@@ -206,19 +238,25 @@ private:
   CGAL::Polygon_2<Kernel> toCGALPolygon(const seerep_core_msgs::AABB& aabb);
 
   /**
-   * @brief determine if the axis aligned bounding box is fully or paritally inside the oriented bounding box
+   * @brief determine if the axis aligned bounding box is fully or paritally
+   * inside the oriented bounding box
    *
    * @param aabb axis aligned bounding box
    * @param polygon polygon
-   * @param fullEncapsulation boolean variable to denote if the aabb fully inside the obb
-   * @param partialEncapsulation boolean variable to denote if the aabb partially inside the obb
+   * @param fullEncapsulation boolean variable to denote if the aabb fully
+   * inside the obb
+   * @param partialEncapsulation boolean variable to denote if the aabb
+   * partially inside the obb
    */
-  void intersectionDegree(const seerep_core_msgs::AABB& aabb, const seerep_core_msgs::Polygon2D& polygon,
+  void intersectionDegree(const seerep_core_msgs::AABB& aabb,
+                          const seerep_core_msgs::Polygon2D& polygon,
                           bool& fullEncapsulation, bool& partialEncapsulation);
 
-  void getUuidsFromMap(std::unordered_map<boost::uuids::uuid, std::vector<boost::uuids::uuid>,
-                                          boost::hash<boost::uuids::uuid>>& datasetInstancesMap,
-                       std::vector<boost::uuids::uuid>& datasets, std::vector<boost::uuids::uuid>& result);
+  void getUuidsFromMap(
+      std::unordered_map<boost::uuids::uuid, std::vector<boost::uuids::uuid>,
+                         boost::hash<boost::uuids::uuid>>& datasetInstancesMap,
+      std::vector<boost::uuids::uuid>& datasets,
+      std::vector<boost::uuids::uuid>& result);
 
   /**
    * @brief Convert polygon to a smallest possible encapsulating AABB
@@ -226,32 +264,40 @@ private:
    * @param polygon core msg polygon
    * @return seerep_core_msg::AABB core msg aabb
    */
-  seerep_core_msgs::AABB polygonToAABB(const seerep_core_msgs::Polygon2D& polygon);
+  seerep_core_msgs::AABB
+  polygonToAABB(const seerep_core_msgs::Polygon2D& polygon);
 
   /**
-   * @brief queries the spatial index and returns a vector of bounding box / UUID pairs matching the query
+   * @brief queries the spatial index and returns a vector of bounding box / UUID
+   * pairs matching the query
    * @param datatypeSpecifics the datatype specific information to be used in the query
    * @param query the query parameters
    * @return vector of bounding box / UUID pairs matching the query
    */
   std::optional<std::vector<seerep_core_msgs::AabbIdPair>>
-  querySpatial(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics, const seerep_core_msgs::Query& query);
+  querySpatial(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
+               const seerep_core_msgs::Query& query);
   /**
-   * @brief queries the temporal index and returns a vector of temporal bounding box / UUID pairs matching the query
+   * @brief queries the temporal index and returns a vector of temporal bounding
+   * box / UUID pairs matching the query
    * @param datatypeSpecifics the datatype specific information to be used in the query
    * @param query the query parameters
    * @return vector of temporal bounding box / UUID pairs matching the query
    */
   std::optional<std::vector<seerep_core_msgs::AabbTimeIdPair>>
-  queryTemporal(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics, const seerep_core_msgs::Query& query);
+  queryTemporal(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
+                const seerep_core_msgs::Query& query);
   /**
-   * @brief queries the semantic index and returns the UUIDs of the images matching the query
-   * @param datatypeSpecifics the datatype specific information to be used in the query
+   * @brief queries the semantic index and returns the UUIDs of the images
+   * matching the query
+   * @param datatypeSpecifics the datatype specific information to be used in
+   * the query
    * @param query the query parameters
    * @return set of UUIDs of the images matching the query
    */
-  std::optional<std::set<boost::uuids::uuid>> querySemantic(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
-                                                            const seerep_core_msgs::Query& query);
+  std::optional<std::set<boost::uuids::uuid>>
+  querySemantic(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
+                const seerep_core_msgs::Query& query);
 
   /**
    * @brief queries the semantic index where the dataset contains any of the labels
@@ -259,9 +305,9 @@ private:
    * @param query the query parameters
    * @return set of UUIDs of the images matching the query
    */
-  std::optional<std::set<boost::uuids::uuid>>
-  querySemanticWithAnyOfLabels(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
-                               const seerep_core_msgs::Query& query);
+  std::optional<std::set<boost::uuids::uuid>> querySemanticWithAnyOfLabels(
+      std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
+      const seerep_core_msgs::Query& query);
 
   /**
    * @brief queries the semantic index where the dataset contains all of the labels
@@ -269,13 +315,13 @@ private:
    * @param query the query parameters
    * @return set of UUIDs of the images matching the query
    */
-  std::optional<std::set<boost::uuids::uuid>>
-  querySemanticWithAllTheLabels(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
-                                const seerep_core_msgs::Query& query);
+  std::optional<std::set<boost::uuids::uuid>> querySemanticWithAllTheLabels(
+      std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
+      const seerep_core_msgs::Query& query);
 
   /**
-   * @brief intersects the results of the spatial, temporal and semantic query and returns the UUIDs
-   * of the images matching the query in all three modalities
+   * @brief intersects the results of the spatial, temporal and semantic query
+   * and returns the UUIDs of the images matching the query in all three modalities
    * @param rt_result the result of the spatial query
    * @param timetree_result the result of the temporal query
    * @param semanticResult the result of the semantic query
@@ -283,38 +329,49 @@ private:
    * @param dataUuids the uuids of the dataset specified in the query
    * @return vector of UUIDs of the images matching the query in all three modalities
    */
-  std::vector<boost::uuids::uuid>
-  intersectQueryResults(std::optional<std::vector<seerep_core_msgs::AabbIdPair>>& rt_result,
-                        std::optional<std::vector<seerep_core_msgs::AabbTimeIdPair>>& timetree_result,
-                        std::optional<std::set<boost::uuids::uuid>>& semanticResult,
-                        std::optional<std::vector<boost::uuids::uuid>>& instanceResult,
-                        const std::optional<std::vector<boost::uuids::uuid>>& dataUuids, bool sortByTime = false);
+  std::vector<boost::uuids::uuid> intersectQueryResults(
+      std::optional<std::vector<seerep_core_msgs::AabbIdPair>>& rt_result,
+      std::optional<std::vector<seerep_core_msgs::AabbTimeIdPair>>&
+          timetree_result,
+      std::optional<std::set<boost::uuids::uuid>>& semanticResult,
+      std::optional<std::vector<boost::uuids::uuid>>& instanceResult,
+      const std::optional<std::vector<boost::uuids::uuid>>& dataUuids,
+      bool sortByTime = false);
   /**
    * @brief sorts the uuids of the result set based on their timestamp
    *
-   * @param timetree_result the result from the timetree query. Contains uuids and the corresponding timestamp
+   * @param timetree_result the result from the timetree query. Contains uuids
+   * and the corresponding timestamp
    * @param intersectedResult the intersected uuids of all parts of the query
    * @return std::vector<boost::uuids::uuid> uuids of the result set sorted by timestamp
    */
-  std::vector<boost::uuids::uuid>
-  sortResultByTime(std::optional<std::vector<seerep_core_msgs::AabbTimeIdPair>>& timetree_result,
-                   std::optional<std::set<boost::uuids::uuid>> intersectionResult = std::nullopt);
+  std::vector<boost::uuids::uuid> sortResultByTime(
+      std::optional<std::vector<seerep_core_msgs::AabbTimeIdPair>>&
+          timetree_result,
+      std::optional<std::set<boost::uuids::uuid>> intersectionResult =
+          std::nullopt);
 
   /**
-   * @brief intersects a vector of sets pairwise recursively until one intersection set remains
+   * @brief intersects a vector of sets pairwise recursively until one
+   * intersection set remains
    * @param vectorOfSets the vector of sets to be intersected
    * @return set of UUIDs of the intersection result
    */
-  std::set<boost::uuids::uuid> intersectVectorOfSets(std::vector<std::set<boost::uuids::uuid>>& vectorOfSets);
+  std::set<boost::uuids::uuid>
+  intersectVectorOfSets(std::vector<std::set<boost::uuids::uuid>>& vectorOfSets);
 
   /**
-   * @brief return the UUIDs of all stored datasets. Uses the timeTree, because all datasets are in there
+   * @brief return the UUIDs of all stored datasets. Uses the timeTree, because
+   * all datasets are in there
    * @param datatypeSpecifics the datatype specifics of the targeted data type
-   * @param sortByTime flag if the result set should be sorted by the timestamp of the data
+   * @param sortByTime flag if the result set should be sorted by the timestamp
+   * of the data
    * @return vector of UUIDs of all data sets
    */
   std::vector<boost::uuids::uuid>
-  getAllDatasetUuids(std::shared_ptr<seerep_core::CoreDataset::DatatypeSpecifics> datatypeSpecifics, bool sortByTime);
+  getAllDatasetUuids(std::shared_ptr<seerep_core::CoreDataset::DatatypeSpecifics>
+                         datatypeSpecifics,
+                     bool sortByTime);
 
   /** @brief the frame id of the spatial index*/
   std::string m_frameId;
@@ -323,9 +380,12 @@ private:
   /** @brief shared pointer to the object handling the instances */
   std::shared_ptr<seerep_core::CoreInstances> m_coreInstances;
   /** @brief map from the datatype to the struct with the specific objects for that datatype*/
-  std::unordered_map<seerep_core_msgs::Datatype, std::shared_ptr<DatatypeSpecifics>> m_datatypeDatatypeSpecificsMap;
+  std::unordered_map<seerep_core_msgs::Datatype,
+                     std::shared_ptr<DatatypeSpecifics>>
+      m_datatypeDatatypeSpecificsMap;
   /** @brief object handling the logging */
-  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level>
+      m_logger;
 };
 
 } /* namespace seerep_core */

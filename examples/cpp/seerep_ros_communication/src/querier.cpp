@@ -8,7 +8,8 @@ QueryData::QueryData(std::shared_ptr<grpc::Channel> channel_ptr)
 {
 }
 
-void QueryData::queryPointcloud(const seerep::pb::Query& query, ros::Publisher& pc2_pub) const
+void QueryData::queryPointcloud(const seerep::pb::Query& query,
+                                ros::Publisher& pc2_pub) const
 {
   grpc::ClientContext context;
   seerep::pb::PointCloud2 response;
@@ -28,11 +29,13 @@ void QueryData::queryPointcloud(const seerep::pb::Query& query, ros::Publisher& 
   grpc::Status status = reader->Finish();
 }
 
-void QueryData::queryImage(const seerep::pb::Query& query, ros::Publisher& img_pub) const
+void QueryData::queryImage(const seerep::pb::Query& query,
+                           ros::Publisher& img_pub) const
 {
   grpc::ClientContext context;
   seerep::pb::Image response;
-  std::unique_ptr<grpc::ClientReader<seerep::pb::Image>> reader = stubImage_->GetImage(&context, query);
+  std::unique_ptr<grpc::ClientReader<seerep::pb::Image>> reader =
+      stubImage_->GetImage(&context, query);
 
   while (reader->Read(&response))
   {
@@ -44,8 +47,10 @@ void QueryData::queryImage(const seerep::pb::Query& query, ros::Publisher& img_p
       std::cout << "category: " << labelCat.category() << std::endl;
       for (auto label : labelCat.labels())
       {
-        std::cout << "label: " << label.label() << "label id datumaro: " << label.labeliddatumaro()
-                  << "instance: " << label.instanceuuid() << "instance id datumaro: " << label.instanceiddatumaro()
+        std::cout << "label: " << label.label()
+                  << "label id datumaro: " << label.labeliddatumaro()
+                  << "instance: " << label.instanceuuid()
+                  << "instance id datumaro: " << label.instanceiddatumaro()
                   << std::endl;
       }
       std::cout << "datumaro json: " << labelCat.datumarojson() << std::endl;
@@ -68,26 +73,34 @@ int main(int argc, char** argv)
 
   // grpc server
   std::string server_address;
-  private_nh.param<std::string>("server_address", server_address, "localhost:9090");
-  seerep_grpc_ros::QueryData query_data(grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()));
+  private_nh.param<std::string>("server_address", server_address,
+                                "localhost:9090");
+  seerep_grpc_ros::QueryData query_data(
+      grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()));
 
   // publish topic PC
   std::string topicqueriedpc;
   private_nh.param<std::string>("topicqueriedpc", topicqueriedpc, "queried_pc");
-  ros::Publisher pc2_pub = nh.advertise<sensor_msgs::PointCloud2>(topicqueriedpc, 1000);
+  ros::Publisher pc2_pub =
+      nh.advertise<sensor_msgs::PointCloud2>(topicqueriedpc, 1000);
 
   // publish topic img
   std::string topicqueriedimg;
-  private_nh.param<std::string>("topicqueriedimg", topicqueriedimg, "queried_img");
-  ros::Publisher img_pub = nh.advertise<sensor_msgs::Image>(topicqueriedimg, 1000);
+  private_nh.param<std::string>("topicqueriedimg", topicqueriedimg,
+                                "queried_img");
+  ros::Publisher img_pub =
+      nh.advertise<sensor_msgs::Image>(topicqueriedimg, 1000);
 
   seerep::pb::Query query;
 
   // spatial
   double minx, miny, minz, maxx, maxy, maxz;
-  if (private_nh.param<double>("point_min_x", minx, 0.0) && private_nh.param<double>("point_min_y", miny, 0.0) &&
-      private_nh.param<double>("point_min_z", minz, 0.0) && private_nh.param<double>("point_max_x", maxx, 0.0) &&
-      private_nh.param<double>("point_max_y", maxy, 0.0) && private_nh.param<double>("point_max_z", maxz, 0.0))
+  if (private_nh.param<double>("point_min_x", minx, 0.0) &&
+      private_nh.param<double>("point_min_y", miny, 0.0) &&
+      private_nh.param<double>("point_min_z", minz, 0.0) &&
+      private_nh.param<double>("point_max_x", maxx, 0.0) &&
+      private_nh.param<double>("point_max_y", maxy, 0.0) &&
+      private_nh.param<double>("point_max_z", maxz, 0.0))
   {
     query.mutable_polygon()->set_z(minz);
     query.mutable_polygon()->set_height(maxz - minz);
@@ -114,7 +127,8 @@ int main(int argc, char** argv)
   }
   // temporal
   int mintime, maxtime;
-  if (private_nh.param<int>("time_min", mintime, 0) && private_nh.param<int>("time_max", maxtime, 0))
+  if (private_nh.param<int>("time_min", mintime, 0) &&
+      private_nh.param<int>("time_max", maxtime, 0))
   {
     query.mutable_timeinterval()->mutable_time_min()->set_seconds(mintime);
     query.mutable_timeinterval()->mutable_time_max()->set_seconds(maxtime);
@@ -122,7 +136,8 @@ int main(int argc, char** argv)
   // semantic
   std::string category;
   std::vector<std::string> labels;
-  if (private_nh.param<std::vector<std::string>>("labels", labels, std::vector<std::string>()) &&
+  if (private_nh.param<std::vector<std::string>>("labels", labels,
+                                                 std::vector<std::string>()) &&
       private_nh.param<std::string>("category", category, std::string()))
   {
     auto labelWithCategory = query.add_labelcategory();

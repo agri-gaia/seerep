@@ -28,7 +28,8 @@ namespace seerep_hdf5_fb
 typedef flatbuffers::Vector<uint8_t> ByteArrayFb;
 
 /**
- * @brief The class Hdf5FbImage is used to write and read flatbuffers image messages to/from hdf5 files
+ * @brief The class Hdf5FbImage is used to write and read flatbuffers image
+ * messages to/from hdf5 files
  *
  */
 class Hdf5FbImage : public Hdf5FbGeneral, public seerep_hdf5_core::Hdf5CoreImage
@@ -40,7 +41,8 @@ public:
    * @param file shared pointer to the hdf5 file, to write the images to
    * @param write_mtx mutex to ensure thread safety
    */
-  Hdf5FbImage(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
+  Hdf5FbImage(std::shared_ptr<HighFive::File>& file,
+              std::shared_ptr<std::mutex>& write_mtx);
 
   /**
    * @brief Write a flatbuffers image message to hdf5
@@ -55,11 +57,11 @@ public:
    *
    * @param id the uuid of the image data group
    * @param withoutData should the image data be excluded from the message?
-   * @return std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> the flatbuffers image message, can be empty if
-   * an error occurred
+   * @return std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> the
+   * flatbuffers image message, can be empty if an error occurred
    */
-  std::optional<flatbuffers::grpc::Message<seerep::fb::Image>> readImage(const std::string& id,
-                                                                         const bool withoutData = false);
+  std::optional<flatbuffers::grpc::Message<seerep::fb::Image>>
+  readImage(const std::string& id, const bool withoutData = false);
 };
 
 }  // namespace seerep_hdf5_fb

@@ -2,8 +2,10 @@
 
 namespace seerep_grpc_ros
 {
-JsonPointDumper::JsonPointDumper(const std::string& filePath, const std::string& hdf5FilePath,
-                                 const std::string& dataSource, const std::string& classesMappingPath)
+JsonPointDumper::JsonPointDumper(const std::string& filePath,
+                                 const std::string& hdf5FilePath,
+                                 const std::string& dataSource,
+                                 const std::string& classesMappingPath)
 {
   if (!std::filesystem::exists(filePath))
   {
@@ -15,9 +17,10 @@ JsonPointDumper::JsonPointDumper(const std::string& filePath, const std::string&
   }
 
   auto writeMtx = std::make_shared<std::mutex>();
-  std::shared_ptr<HighFive::File> hdf5File =
-      std::make_shared<HighFive::File>(hdf5FilePath, HighFive::File::OpenOrCreate);
-  ioCoreGeneral = std::make_shared<seerep_hdf5_core::Hdf5CoreGeneral>(hdf5File, writeMtx);
+  std::shared_ptr<HighFive::File> hdf5File = std::make_shared<HighFive::File>(
+      hdf5FilePath, HighFive::File::OpenOrCreate);
+  ioCoreGeneral =
+      std::make_shared<seerep_hdf5_core::Hdf5CoreGeneral>(hdf5File, writeMtx);
   ioPoint = std::make_shared<seerep_hdf5_fb::Hdf5FbPoint>(hdf5File, writeMtx);
 
   ioCoreGeneral->writeProjectname(std::filesystem::path(filePath).filename());
@@ -62,15 +65,21 @@ void JsonPointDumper::readAndDumpJsonUos(const std::string& jsonFilePath)
 
   for (auto detection : completeJsonData["features"])
   {
-    double x = (detection["properties"]["maxx"].asDouble() - detection["properties"]["minx"].asDouble()) / 2.0 +
+    double x = (detection["properties"]["maxx"].asDouble() -
+                detection["properties"]["minx"].asDouble()) /
+                   2.0 +
                detection["properties"]["minx"].asDouble();
-    double y = (detection["properties"]["maxy"].asDouble() - detection["properties"]["miny"].asDouble()) / 2.0 +
+    double y = (detection["properties"]["maxy"].asDouble() -
+                detection["properties"]["miny"].asDouble()) /
+                   2.0 +
                detection["properties"]["miny"].asDouble();
     double z = 0.0;
 
     double diameter =
-        std::max(std::abs(detection["properties"]["minx"].asDouble() - detection["properties"]["maxx"].asDouble()),
-                 std::abs(detection["properties"]["miny"].asDouble() - detection["properties"]["maxy"].asDouble()));
+        std::max(std::abs(detection["properties"]["minx"].asDouble() -
+                          detection["properties"]["maxx"].asDouble()),
+                 std::abs(detection["properties"]["miny"].asDouble() -
+                          detection["properties"]["maxy"].asDouble()));
 
     std::string trivialName;
     if (detection["properties"]["botanical"].asString() == "-")
@@ -83,15 +92,19 @@ void JsonPointDumper::readAndDumpJsonUos(const std::string& jsonFilePath)
     }
     std::string concept = translateNameToAgrovocConcept(trivialName);
 
-    std::string instanceUUID = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+    std::string instanceUUID =
+        boost::lexical_cast<std::string>(boost::uuids::random_generator()());
 
     ioPoint->writePoint(
         boost::lexical_cast<std::string>(boost::uuids::random_generator()()),
-        createPointForDetection(0, 0, frame, concept, trivialName, instanceUUID, x, y, z, diameter).GetRoot());
+        createPointForDetection(0, 0, frame, concept, trivialName, instanceUUID,
+                                x, y, z, diameter)
+            .GetRoot());
   }
 }
 
-void JsonPointDumper::readAndDumpJsonFr(const std::string& jsonFilePath, const std::string& classesMappingPath)
+void JsonPointDumper::readAndDumpJsonFr(const std::string& jsonFilePath,
+                                        const std::string& classesMappingPath)
 {
   const std::string frame = "map";
   ioCoreGeneral->writeProjectFrameId(frame);
@@ -104,13 +117,16 @@ void JsonPointDumper::readAndDumpJsonFr(const std::string& jsonFilePath, const s
   reader.parse(file, completeJsonData);
 
   seerep_core_msgs::GeodeticCoordinates geoCoordinates;
-  geoCoordinates.latitude = completeJsonData["anchor_lla"]["latitude"].asDouble();
-  geoCoordinates.longitude = completeJsonData["anchor_lla"]["longitude"].asDouble();
+  geoCoordinates.latitude =
+      completeJsonData["anchor_lla"]["latitude"].asDouble();
+  geoCoordinates.longitude =
+      completeJsonData["anchor_lla"]["longitude"].asDouble();
   geoCoordinates.altitude = 0.0;
   geoCoordinates.coordinateSystem = "EPSG:4326";
   ioCoreGeneral->writeGeodeticLocation(geoCoordinates);
 
-  std::unordered_map<int64_t, std::string> classesMapping = readClassesMapping(classesMappingPath);
+  std::unordered_map<int64_t, std::string> classesMapping =
+      readClassesMapping(classesMappingPath);
 
   for (auto detection : completeJsonData["plants"])
   {
@@ -120,24 +136,29 @@ void JsonPointDumper::readAndDumpJsonFr(const std::string& jsonFilePath, const s
 
     double diameter = detection["areas"][0].asDouble();
 
-    std::string trivialName = classesMapping.at(detection["class_ids"][0].asInt());
+    std::string trivialName =
+        classesMapping.at(detection["class_ids"][0].asInt());
     std::string concept = translateNameToAgrovocConcept(trivialName);
     double confidence = detection["confidences"][0].asDouble();
 
-    std::string instanceUUID = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+    std::string instanceUUID =
+        boost::lexical_cast<std::string>(boost::uuids::random_generator()());
 
-    ioPoint->writePoint(boost::lexical_cast<std::string>(boost::uuids::random_generator()()),
-                        createPointForDetection(0, 0, frame, concept, trivialName, instanceUUID, x, y, z, diameter,
-                                                confidence)
-                            .GetRoot());
+    ioPoint->writePoint(
+        boost::lexical_cast<std::string>(boost::uuids::random_generator()()),
+        createPointForDetection(0, 0, frame, concept, trivialName, instanceUUID,
+                                x, y, z, diameter, confidence)
+            .GetRoot());
   }
 }
 
-std::unordered_map<int64_t, std::string> JsonPointDumper::readClassesMapping(const std::string& classesMappingPath)
+std::unordered_map<int64_t, std::string>
+JsonPointDumper::readClassesMapping(const std::string& classesMappingPath)
 {
   if (classesMappingPath == "")
   {
-    throw(std::invalid_argument("classesMappingPath must be set when using fr data source"));
+    throw(std::invalid_argument(
+        "classesMappingPath must be set when using fr data source"));
   }
   std::unordered_map<int64_t, std::string> classesMapping;
 
@@ -146,9 +167,11 @@ std::unordered_map<int64_t, std::string> JsonPointDumper::readClassesMapping(con
   classesFile >> classes;
   for (auto& root : classes)
   {
-    for (Json::Value::const_iterator itr = root.begin(); itr != root.end(); itr++)
+    for (Json::Value::const_iterator itr = root.begin(); itr != root.end();
+         itr++)
     {
-      ROS_INFO_STREAM(std::stoi(itr.key().asCString()) << " ; " << itr->asCString());
+      ROS_INFO_STREAM(std::stoi(itr.key().asCString())
+                      << " ; " << itr->asCString());
       classesMapping.emplace(std::stoi(itr.key().asCString()), itr->asCString());
     }
   }
@@ -156,53 +179,64 @@ std::unordered_map<int64_t, std::string> JsonPointDumper::readClassesMapping(con
 }
 
 flatbuffers::grpc::Message<seerep::fb::PointStamped>
-JsonPointDumper::createPointForDetection(int32_t stampSecs, uint32_t stampNanos, const std::string& frameId,
-                                         const std::string& labelAgrovoc, const std::string& labelTrivial,
-                                         const std::string& instanceUUID, const double x, const double y,
-                                         const double z, const double diameter, const double confidence)
+JsonPointDumper::createPointForDetection(
+    int32_t stampSecs, uint32_t stampNanos, const std::string& frameId,
+    const std::string& labelAgrovoc, const std::string& labelTrivial,
+    const std::string& instanceUUID, const double x, const double y,
+    const double z, const double diameter, const double confidence)
 {
   std::string projectuuiddummy = "";
   flatbuffers::grpc::MessageBuilder builder;
   auto header = seerep::fb::CreateHeader(
-      builder, 0, seerep::fb::CreateTimestamp(builder, stampSecs, stampNanos), builder.CreateString(frameId),
-      builder.CreateString(projectuuiddummy),
-      builder.CreateString(boost::lexical_cast<std::string>(boost::uuids::random_generator()())));
+      builder, 0, seerep::fb::CreateTimestamp(builder, stampSecs, stampNanos),
+      builder.CreateString(frameId), builder.CreateString(projectuuiddummy),
+      builder.CreateString(boost::lexical_cast<std::string>(
+          boost::uuids::random_generator()())));
 
   auto point = seerep::fb::CreatePoint(builder, x, y, z);
 
   std::vector<flatbuffers::Offset<seerep::fb::Label>> labelAgrovocVector;
   labelAgrovocVector.push_back(
-      seerep::fb::CreateLabel(builder, builder.CreateString(labelAgrovoc), -1, builder.CreateString(instanceUUID), -1));
+      seerep::fb::CreateLabel(builder, builder.CreateString(labelAgrovoc), -1,
+                              builder.CreateString(instanceUUID), -1));
 
   std::vector<flatbuffers::Offset<seerep::fb::Label>> labelTrivialVector;
   labelTrivialVector.push_back(
-      seerep::fb::CreateLabel(builder, builder.CreateString(labelTrivial), -1, builder.CreateString(instanceUUID), -1));
+      seerep::fb::CreateLabel(builder, builder.CreateString(labelTrivial), -1,
+                              builder.CreateString(instanceUUID), -1));
 
   // TODO create datumaro json based on the labels
   std::string datumaroJson;
 
-  std::vector<flatbuffers::Offset<seerep::fb::LabelCategory>> labelsCategoryVector;
-  labelsCategoryVector.push_back(seerep::fb::CreateLabelCategory(builder, builder.CreateString("agrovoc"),
-                                                                 builder.CreateVector(labelAgrovocVector),
-                                                                 builder.CreateString(datumaroJson)));
-  labelsCategoryVector.push_back(seerep::fb::CreateLabelCategory(builder, builder.CreateString("trivial"),
-                                                                 builder.CreateVector(labelTrivialVector),
-                                                                 builder.CreateString(datumaroJson)));
+  std::vector<flatbuffers::Offset<seerep::fb::LabelCategory>>
+      labelsCategoryVector;
+  labelsCategoryVector.push_back(
+      seerep::fb::CreateLabelCategory(builder, builder.CreateString("agrovoc"),
+                                      builder.CreateVector(labelAgrovocVector),
+                                      builder.CreateString(datumaroJson)));
+  labelsCategoryVector.push_back(
+      seerep::fb::CreateLabelCategory(builder, builder.CreateString("trivial"),
+                                      builder.CreateVector(labelTrivialVector),
+                                      builder.CreateString(datumaroJson)));
 
   std::vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>> attributes;
-  attributes.push_back(seerep::fb::CreateUnionMapEntry(builder, builder.CreateString("plant_diameter"),
-                                                       seerep::fb::Datatypes_Double,
-                                                       seerep::fb::CreateDouble(builder, diameter).Union()));
+  attributes.push_back(seerep::fb::CreateUnionMapEntry(
+      builder, builder.CreateString("plant_diameter"),
+      seerep::fb::Datatypes_Double,
+      seerep::fb::CreateDouble(builder, diameter).Union()));
 
-  auto pointStamped = seerep::fb::CreatePointStamped(builder, header, point, builder.CreateVector(labelsCategoryVector),
-                                                     builder.CreateVector(attributes));
+  auto pointStamped =
+      seerep::fb::CreatePointStamped(builder, header, point,
+                                     builder.CreateVector(labelsCategoryVector),
+                                     builder.CreateVector(attributes));
 
   builder.Finish(pointStamped);
 
   return builder.ReleaseMessage<seerep::fb::PointStamped>();
 }
 
-size_t writeCallback(void* contents, size_t size, size_t nmemb, std::string* output)
+size_t writeCallback(void* contents, size_t size, size_t nmemb,
+                     std::string* output)
 {
   size_t totalSize = size * nmemb;
   output->append((char*)contents, totalSize);
@@ -224,23 +258,27 @@ std::string JsonPointDumper::translateNameToAgrovocConcept(std::string name)
 
     if (curl)
     {
-      std::string sparqlQuery = std::string("PREFIX so: <http://schema.org/>\nPREFIX skos: "
-                                            "<http://www.w3.org/2004/02/skos/core#>\n\nSELECT ?c ?l\nWHERE "
-                                            "{\n  {\n    ?c skos:prefLabel \"") +
-                                name +
-                                std::string("\"@en.\n  }\n  UNION {\n    ?c skos:altLabel ?l FILTER (str(?l) = \"") +
-                                name + std::string("\").\n  }\n}");
+      std::string sparqlQuery =
+          std::string(
+              "PREFIX so: <http://schema.org/>\nPREFIX skos: "
+              "<http://www.w3.org/2004/02/skos/core#>\n\nSELECT ?c ?l\nWHERE "
+              "{\n  {\n    ?c skos:prefLabel \"") +
+          name +
+          std::string("\"@en.\n  }\n  UNION {\n    ?c skos:altLabel ?l FILTER "
+                      "(str(?l) = \"") +
+          name + std::string("\").\n  }\n}");
 
       // Set the Fuseki server URL and the dataset name
       std::string fusekiURL = "http://agrigaia-ur.ni.dfki:3030/plants/query";
 
       // Set the request parameters
-      std::string postData =
-          std::string("query=").append(curl_easy_escape(curl, sparqlQuery.c_str(), sparqlQuery.length()));
+      std::string postData = std::string("query=").append(
+          curl_easy_escape(curl, sparqlQuery.c_str(), sparqlQuery.length()));
 
       // Set the HTTP POST headers
       struct curl_slist* headers = nullptr;
-      headers = curl_slist_append(headers, "Accept: application/sparql-results+json");
+      headers =
+          curl_slist_append(headers, "Accept: application/sparql-results+json");
 
       // Set the request options
       curl_easy_setopt(curl, CURLOPT_URL, fusekiURL.c_str());
@@ -258,7 +296,8 @@ std::string JsonPointDumper::translateNameToAgrovocConcept(std::string name)
       // Check for errors
       if (res != CURLE_OK)
       {
-        throw std::runtime_error("curl_easy_perform() failed: " + std::string(curl_easy_strerror(res)));
+        throw std::runtime_error("curl_easy_perform() failed: " +
+                                 std::string(curl_easy_strerror(res)));
       }
       else
       {
@@ -268,7 +307,11 @@ std::string JsonPointDumper::translateNameToAgrovocConcept(std::string name)
 
         if (parsingSuccessful)
         {
-          concept = root.get("results", name).get("bindings", name)[0].get("c", name).get("value", name).asString();
+          concept = root.get("results", name)
+                        .get("bindings", name)[0]
+                        .get("c", name)
+                        .get("value", name)
+                        .asString();
           name2Concept.emplace(name, concept);
         }
       }
@@ -288,7 +331,8 @@ std::string getHDF5FilePath(ros::NodeHandle privateNh)
   std::string hdf5FolderPath;
   if (!privateNh.getParam("hdf5FolderPath", hdf5FolderPath))
   {
-    ROS_WARN_STREAM("Use the \"hdf5FolderPath\" parameter to specify the HDF5 file!");
+    ROS_WARN_STREAM(
+        "Use the \"hdf5FolderPath\" parameter to specify the HDF5 file!");
     return "";
   }
 
@@ -305,14 +349,19 @@ std::string getHDF5FilePath(ros::NodeHandle privateNh)
     {
       // mainly catching "invalid uuid string"
       ROS_ERROR_STREAM(e.what());
-      projectUuid = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
-      ROS_WARN_STREAM("The provided UUID is invalid! Generating a a new one. (" + projectUuid + ".h5)");
+      projectUuid =
+          boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+      ROS_WARN_STREAM(
+          "The provided UUID is invalid! Generating a a new one. (" +
+          projectUuid + ".h5)");
     }
   }
   else
   {
-    projectUuid = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
-    ROS_WARN_STREAM("Use the \"projectUuid\" parameter to specify the HDF5 file! Generating a a new one. (" +
+    projectUuid =
+        boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+    ROS_WARN_STREAM("Use the \"projectUuid\" parameter to specify the HDF5 "
+                    "file! Generating a a new one. (" +
                     projectUuid + ".h5)");
   }
 
@@ -328,7 +377,8 @@ int main(int argc, char** argv)
 
   const std::string hdf5FilePath = getHDF5FilePath(privateNh);
 
-  if (privateNh.getParam("jsonFilePath", jsonFilePath), privateNh.getParam("dataSource", dataSource),
+  if (privateNh.getParam("jsonFilePath", jsonFilePath),
+      privateNh.getParam("dataSource", dataSource),
       privateNh.getParam("classesMappingPath", classesMappingPath))
   {
     {
@@ -337,7 +387,8 @@ int main(int argc, char** argv)
       ROS_INFO_STREAM("dataSource: " << dataSource);
       ROS_INFO_STREAM("classesMappingPath: " << classesMappingPath);
 
-      seerep_grpc_ros::JsonPointDumper JsonPointDumper(jsonFilePath, hdf5FilePath, dataSource, classesMappingPath);
+      seerep_grpc_ros::JsonPointDumper JsonPointDumper(
+          jsonFilePath, hdf5FilePath, dataSource, classesMappingPath);
     }
   }
   else

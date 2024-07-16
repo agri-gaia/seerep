@@ -14,9 +14,9 @@
 This test serves more as an integration test rather than a unit test. We want
 to make sure that a Protobuf image message is the same after saving and
 reading it from a hdf5 file. Because the underlying components like the
-seerep-hdf5-core and seerep-hdf5-pb are not (fully) tested, we don't use mocks and
-propagate the data through all components. This should be changed in the future
-to improve the quality of the tests.
+seerep-hdf5-core and seerep-hdf5-pb are not (fully) tested, we don't use mocks
+and propagate the data through all components. This should be changed in the
+future to improve the quality of the tests.
 */
 
 /**
@@ -25,7 +25,8 @@ to improve the quality of the tests.
  * @param[in] messageUUId the UUID of the message
  * @param[in,out] header reference to the header which will hold the fields
  **/
-void createHeader(const std::string projectUUID, const std::string messageUUID, seerep::pb::Header& header)
+void createHeader(const std::string projectUUID, const std::string messageUUID,
+                  seerep::pb::Header& header)
 {
   header.set_seq(5);
   header.set_frame_id("arbitrary_id");
@@ -41,7 +42,8 @@ void createHeader(const std::string projectUUID, const std::string messageUUID, 
  * @param[in] imageWidth the width of the image
  * @param[in,out] image reference to the image object
  * */
-void createImageData(const unsigned int imageHeight, const unsigned int imageWidth, seerep::pb::Image& image)
+void createImageData(const unsigned int imageHeight,
+                     const unsigned int imageWidth, seerep::pb::Image& image)
 {
   std::vector<uint8_t> data;
   data.reserve(imageHeight * imageWidth * 3);
@@ -98,15 +100,18 @@ void createLabelsGeneral(seerep::pb::Image& image)
 }
 
 /**
- * @brief give image height and width, and project and message uuid, build and return an image
+ * @brief give image height and width, and project and message uuid, build and
+ * return an image
  * @param[in] imageHeight the height of the image
  * @param[in] imageWidth the width of the image
  * @param[in] projectUUID the uuid of the project
  * @param[in] messageUUID the uuid of the message
  * @return seerep:Image object
  * */
-seerep::pb::Image createImageMessage(const unsigned int imageHeight, const unsigned imageWidth,
-                                     const std::string& projectUUID, const std::string& messageUUID,
+seerep::pb::Image createImageMessage(const unsigned int imageHeight,
+                                     const unsigned imageWidth,
+                                     const std::string& projectUUID,
+                                     const std::string& messageUUID,
                                      const std::string& cameraintrinsicsUUID)
 {
   std::string encoding = "rgb8";
@@ -151,7 +156,8 @@ protected:
   // Because the tests only compare the written and read data, we create the
   // resources only once and share them between the tests
   /**
-   * @brief This function initializes the data structures to be tested and populates them with arbitrary values.
+   * @brief This function initializes the data structures to be tested and
+   * populates them with arbitrary values.
    * */
   static void SetUpTestSuite()
   {
@@ -162,21 +168,27 @@ protected:
 
     hdf5FileMutex = std::make_shared<std::mutex>();
     hdf5FileName = boost::lexical_cast<std::string>(projectUUID) + ".h5";
-    hdf5File = std::make_shared<HighFive::File>(hdf5FileName, HighFive::File::ReadWrite | HighFive::File::Create);
+    hdf5File = std::make_shared<HighFive::File>(
+        hdf5FileName, HighFive::File::ReadWrite | HighFive::File::Create);
 
-    imageIO = std::make_shared<seerep_hdf5_pb::Hdf5PbImage>(hdf5File, hdf5FileMutex);
+    imageIO =
+        std::make_shared<seerep_hdf5_pb::Hdf5PbImage>(hdf5File, hdf5FileMutex);
     if (imageIO == nullptr)
     {
-      GTEST_FATAL_FAILURE_("Error: Can't create HDF5Image object for writing images");
+      GTEST_FATAL_FAILURE_(
+          "Error: Can't create HDF5Image object for writing images");
     }
 
-    writeImage = createImageMessage(256, 256, boost::lexical_cast<std::string>(projectUUID),
-                                    boost::lexical_cast<std::string>(messageUUID),
-                                    boost::lexical_cast<std::string>(cameraintrinsicsUUID));
+    writeImage = createImageMessage(
+        256, 256, boost::lexical_cast<std::string>(projectUUID),
+        boost::lexical_cast<std::string>(messageUUID),
+        boost::lexical_cast<std::string>(cameraintrinsicsUUID));
 
-    imageIO->writeImage(boost::lexical_cast<std::string>(messageUUID), writeImage);
+    imageIO->writeImage(boost::lexical_cast<std::string>(messageUUID),
+                        writeImage);
 
-    auto gRPCImage = imageIO->readImage(boost::lexical_cast<std::string>(messageUUID));
+    auto gRPCImage =
+        imageIO->readImage(boost::lexical_cast<std::string>(messageUUID));
 
     if (!gRPCImage.has_value())
     {
@@ -216,15 +228,21 @@ seerep::pb::Image pbWriteLoadTest::readImage;
  * */
 TEST_F(pbWriteLoadTest, testImageHeader)
 {
-  EXPECT_EQ(readImage.header().stamp().seconds(), writeImage.header().stamp().seconds());
-  EXPECT_EQ(readImage.header().stamp().nanos(), writeImage.header().stamp().nanos());
-  EXPECT_STREQ(readImage.header().frame_id().c_str(), writeImage.header().frame_id().c_str());
-  EXPECT_STREQ(readImage.header().uuid_project().c_str(), writeImage.header().uuid_project().c_str());
-  EXPECT_STREQ(readImage.header().uuid_msgs().c_str(), writeImage.header().uuid_msgs().c_str());
+  EXPECT_EQ(readImage.header().stamp().seconds(),
+            writeImage.header().stamp().seconds());
+  EXPECT_EQ(readImage.header().stamp().nanos(),
+            writeImage.header().stamp().nanos());
+  EXPECT_STREQ(readImage.header().frame_id().c_str(),
+               writeImage.header().frame_id().c_str());
+  EXPECT_STREQ(readImage.header().uuid_project().c_str(),
+               writeImage.header().uuid_project().c_str());
+  EXPECT_STREQ(readImage.header().uuid_msgs().c_str(),
+               writeImage.header().uuid_msgs().c_str());
 }
 
 /**
- * @brief test original image base fields and converted image base fields read from hdf5 file for equality.
+ * @brief test original image base fields and converted image base fields read
+ * from hdf5 file for equality.
  * @param[in] pbWriteLoadTest test suite class
  * @param testImageBaseFields name of test
  * */
@@ -236,11 +254,13 @@ TEST_F(pbWriteLoadTest, testImageBaseFields)
   EXPECT_EQ(readImage.is_bigendian(), writeImage.is_bigendian());
   EXPECT_EQ(readImage.step(), writeImage.step());
   EXPECT_EQ(readImage.row_step(), writeImage.row_step());
-  EXPECT_EQ(readImage.uuid_camera_intrinsics(), writeImage.uuid_camera_intrinsics());
+  EXPECT_EQ(readImage.uuid_camera_intrinsics(),
+            writeImage.uuid_camera_intrinsics());
 }
 
 /**
- * @brief test original image data and converted image data read from hdf5 file for equality.
+ * @brief test original image data and converted image data read from hdf5 file
+ * for equality.
  * @param[in] pbWriteLoadTest test suite class
  * @param testImageData name of test
  * */
@@ -254,30 +274,38 @@ TEST_F(pbWriteLoadTest, testImageData)
 }
 
 /**
- * @brief test original label with instance and converted label with instance read from hdf5 file for equality.
+ * @brief test original label with instance and converted label with instance
+ * read from hdf5 file for equality.
  * @param[in] readInstance the Label which was read
  * @param[in] writeInstance the Label which was written
  * */
-void testLabelWithInstance(const seerep::pb::Label& readInstance, const seerep::pb::Label& writeInstance)
+void testLabelWithInstance(const seerep::pb::Label& readInstance,
+                           const seerep::pb::Label& writeInstance)
 {
   EXPECT_STREQ(readInstance.label().c_str(), writeInstance.label().c_str());
   EXPECT_EQ(readInstance.labeliddatumaro(), writeInstance.labeliddatumaro());
-  EXPECT_STREQ(readInstance.instanceuuid().c_str(), writeInstance.instanceuuid().c_str());
-  EXPECT_EQ(readInstance.instanceiddatumaro(), writeInstance.instanceiddatumaro());
+  EXPECT_STREQ(readInstance.instanceuuid().c_str(),
+               writeInstance.instanceuuid().c_str());
+  EXPECT_EQ(readInstance.instanceiddatumaro(),
+            writeInstance.instanceiddatumaro());
 }
 
-void testLabelsWithInstanceWithCategory(const seerep::pb::LabelCategory& readInstance,
-                                        const seerep::pb::LabelCategory& writeInstance)
+void testLabelsWithInstanceWithCategory(
+    const seerep::pb::LabelCategory& readInstance,
+    const seerep::pb::LabelCategory& writeInstance)
 {
-  EXPECT_STREQ(readInstance.category().c_str(), writeInstance.category().c_str());
+  EXPECT_STREQ(readInstance.category().c_str(),
+               writeInstance.category().c_str());
   for (int i = 0; i < readInstance.labels_size(); i++)
   {
-    testLabelWithInstance(readInstance.labels().Get(i), writeInstance.labels().Get(i));
+    testLabelWithInstance(readInstance.labels().Get(i),
+                          writeInstance.labels().Get(i));
   }
 }
 
 /**
- * @brief test original general labels and converted general label read from hdf5 file for equality.
+ * @brief test original general labels and converted general label read from
+ * hdf5 file for equality.
  * @param[in] pbWriteLoadTest test suite class
  * @param testGeneralLabels name of test
  * */
@@ -286,7 +314,8 @@ TEST_F(pbWriteLoadTest, testGeneralLabels)
   ASSERT_EQ(readImage.labels().size(), writeImage.labels().size());
   for (int i = 0; i < readImage.labels().size(); i++)
   {
-    testLabelsWithInstanceWithCategory(readImage.labels().Get(i), writeImage.labels().Get(i));
+    testLabelsWithInstanceWithCategory(readImage.labels().Get(i),
+                                       writeImage.labels().Get(i));
   }
 }
 

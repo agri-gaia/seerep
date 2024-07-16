@@ -19,20 +19,27 @@ namespace seerep_hdf5_core
 class Hdf5CoreTf : public Hdf5CoreGeneral
 {
 public:
-  Hdf5CoreTf(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
-
-  std::optional<std::vector<geometry_msgs::TransformStamped>> readTransformStamped(const std::string& id,
-                                                                                   const bool isStatic);
-  std::optional<std::vector<std::string>> readTransformStampedFrames(const std::string& id, const bool isStatic);
-
-private:
-  std::vector<std::vector<int64_t>> readTime(const std::string& hdf5DatasetTimePath) const;
-  std::vector<std::vector<double>> readTranslation(const std::string& hdf5DatasetTransPath) const;
-  std::vector<std::vector<double>> readRotation(const std::string& hdf5DatasetRotPath) const;
+  Hdf5CoreTf(std::shared_ptr<HighFive::File>& file,
+             std::shared_ptr<std::mutex>& write_mtx);
 
   std::optional<std::vector<geometry_msgs::TransformStamped>>
-  convertToTfs(const long unsigned int& size, const std::string& parentframe, const std::string& childframe,
-               const std::vector<std::vector<int64_t>>& time, const std::vector<std::vector<double>>& trans,
+  readTransformStamped(const std::string& id, const bool isStatic);
+  std::optional<std::vector<std::string>>
+  readTransformStampedFrames(const std::string& id, const bool isStatic);
+
+private:
+  std::vector<std::vector<int64_t>>
+  readTime(const std::string& hdf5DatasetTimePath) const;
+  std::vector<std::vector<double>>
+  readTranslation(const std::string& hdf5DatasetTransPath) const;
+  std::vector<std::vector<double>>
+  readRotation(const std::string& hdf5DatasetRotPath) const;
+
+  std::optional<std::vector<geometry_msgs::TransformStamped>>
+  convertToTfs(const long unsigned int& size, const std::string& parentframe,
+               const std::string& childframe,
+               const std::vector<std::vector<int64_t>>& time,
+               const std::vector<std::vector<double>>& trans,
                const std::vector<std::vector<double>>& rot);
 
 public:

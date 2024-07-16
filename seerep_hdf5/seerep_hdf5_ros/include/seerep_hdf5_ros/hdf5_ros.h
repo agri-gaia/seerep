@@ -27,11 +27,12 @@ class Hdf5Ros
 {
 public:
   Hdf5Ros() = delete;
-  Hdf5Ros(const std::string& path, const std::string& filename, const std::string& projectFrameId,
-          const std::string& projectName);
+  Hdf5Ros(const std::string& path, const std::string& filename,
+          const std::string& projectFrameId, const std::string& projectName);
 
   bool dumpImage(const sensor_msgs::Image& image) const;
-  bool dumpHeader(const std_msgs::Header& header, const std::string& datasetPath) const;
+  bool dumpHeader(const std_msgs::Header& header,
+                  const std::string& datasetPath) const;
 
 private:
   std::string path_;

@@ -19,13 +19,15 @@ namespace seerep_hdf5_pb
 class Hdf5PbTf : public Hdf5PbGeneral
 {
 public:
-  Hdf5PbTf(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
+  Hdf5PbTf(std::shared_ptr<HighFive::File>& file,
+           std::shared_ptr<std::mutex>& write_mtx);
 
   void writeTransformStamped(const seerep::pb::TransformStamped& tf);
 
-  std::optional<std::vector<seerep::pb::TransformStamped>> readTransformStamped(const std::string& id,
-                                                                                const bool isStatic);
-  std::optional<std::vector<std::string>> readTransformStampedFrames(const std::string& id, const bool isStatic);
+  std::optional<std::vector<seerep::pb::TransformStamped>>
+  readTransformStamped(const std::string& id, const bool isStatic);
+  std::optional<std::vector<std::string>>
+  readTransformStampedFrames(const std::string& id, const bool isStatic);
 };
 
 } /* namespace seerep_hdf5_pb */

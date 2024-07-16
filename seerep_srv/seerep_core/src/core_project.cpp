@@ -2,7 +2,8 @@
 
 namespace seerep_core
 {
-CoreProject::CoreProject(const boost::uuids::uuid& uuid, const std::string path) : m_uuid(uuid), m_path(path)
+CoreProject::CoreProject(const boost::uuids::uuid& uuid, const std::string path)
+  : m_uuid(uuid), m_path(path)
 {
   createHdf5Io(m_path);
 
@@ -25,9 +26,11 @@ CoreProject::CoreProject(const boost::uuids::uuid& uuid, const std::string path)
   recreateDatatypes();
 }
 
-CoreProject::CoreProject(const boost::uuids::uuid& uuid, const std::string path, const std::string projectname,
-                         const std::string mapFrameId, const seerep_core_msgs::GeodeticCoordinates geodeticCoords,
-                         const std::string version)
+CoreProject::CoreProject(
+    const boost::uuids::uuid& uuid, const std::string path,
+    const std::string projectname, const std::string mapFrameId,
+    const seerep_core_msgs::GeodeticCoordinates geodeticCoords,
+    const std::string version)
   : m_uuid(uuid)
   , m_path(path)
   , m_projectname(projectname)
@@ -59,16 +62,20 @@ const std::string CoreProject::getVersion()
   return m_version;
 }
 
-seerep_core_msgs::Polygon2D CoreProject::transformToMapFrame(const seerep_core_msgs::Polygon2D polygon)
+seerep_core_msgs::Polygon2D
+CoreProject::transformToMapFrame(const seerep_core_msgs::Polygon2D polygon)
 {
   seerep_core_msgs::GeodeticCoordinates g = m_geodeticCoordinates.value();
 
   // https://proj.org/en/9.2/operations/conversions/topocentric.html
   // the proj pipeline has two steps, convert geodesic to cartesian coordinates
   // then project to topocentric coordinates
-  std::string proj_pipeline = "step +proj=cartesian +ellps=" + g.coordinateSystem + " \nstep +proj=topocentric +ellps" +
-                              g.coordinateSystem + "+lon_0=" + std::to_string(g.longitude) +
-                              "lat_0=" + std::to_string(g.latitude) + "h_0=" + std::to_string(g.altitude);
+  std::string proj_pipeline =
+      "step +proj=cartesian +ellps=" + g.coordinateSystem +
+      " \nstep +proj=topocentric +ellps" + g.coordinateSystem +
+      "+lon_0=" + std::to_string(g.longitude) +
+      "lat_0=" + std::to_string(g.latitude) +
+      "h_0=" + std::to_string(g.altitude);
 
   // PJ_FWD: forward, PJ_IDENT: identity, PJ_INV: inverse
   PJ_DIRECTION direction = PJ_FWD;
@@ -97,7 +104,8 @@ seerep_core_msgs::Polygon2D CoreProject::transformToMapFrame(const seerep_core_m
   return transformed_polygon;
 }
 
-seerep_core_msgs::QueryResultProject CoreProject::getDataset(seerep_core_msgs::Query& query)
+seerep_core_msgs::QueryResultProject
+CoreProject::getDataset(seerep_core_msgs::Query& query)
 {
   seerep_core_msgs::QueryResultProject result;
   result.projectUuid = m_uuid;
@@ -112,7 +120,8 @@ seerep_core_msgs::QueryResultProject CoreProject::getDataset(seerep_core_msgs::Q
   return result;
 }
 
-seerep_core_msgs::QueryResultProject CoreProject::getInstances(const seerep_core_msgs::Query& query)
+seerep_core_msgs::QueryResultProject
+CoreProject::getInstances(const seerep_core_msgs::Query& query)
 {
   seerep_core_msgs::QueryResultProject result;
   result.projectUuid = m_uuid;
@@ -138,9 +147,11 @@ void CoreProject::addDataset(const seerep_core_msgs::DatasetIndexable& dataset)
   m_coreDatasets->addDataset(dataset);
 }
 
-void CoreProject::addLabels(const seerep_core_msgs::Datatype& datatype,
-                            const std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>& labelPerCategory,
-                            const boost::uuids::uuid& msgUuid)
+void CoreProject::addLabels(
+    const seerep_core_msgs::Datatype& datatype,
+    const std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>&
+        labelPerCategory,
+    const boost::uuids::uuid& msgUuid)
 {
   m_coreDatasets->addLabels(datatype, labelPerCategory, msgUuid);
 }
@@ -149,22 +160,27 @@ void CoreProject::addTF(const geometry_msgs::TransformStamped& tf)
 {
   m_coreTfs->addDataset(tf);
 }
-std::optional<geometry_msgs::TransformStamped> CoreProject::getTF(const seerep_core_msgs::QueryTf& transformQuery)
+std::optional<geometry_msgs::TransformStamped>
+CoreProject::getTF(const seerep_core_msgs::QueryTf& transformQuery)
 {
-  return m_coreTfs->getData(transformQuery.timestamp.seconds, transformQuery.timestamp.nanos,
-                            transformQuery.parentFrameId, transformQuery.childFrameId);
+  return m_coreTfs->getData(transformQuery.timestamp.seconds,
+                            transformQuery.timestamp.nanos,
+                            transformQuery.parentFrameId,
+                            transformQuery.childFrameId);
 }
 std::vector<std::string> CoreProject::getFrames()
 {
   return m_coreTfs->getFrames();
 }
 
-void CoreProject::addCameraIntrinsics(const seerep_core_msgs::camera_intrinsics& ci)
+void CoreProject::addCameraIntrinsics(
+    const seerep_core_msgs::camera_intrinsics& ci)
 {
   m_coreCameraIntrinsics->addData(ci);
 }
 
-std::optional<seerep_core_msgs::camera_intrinsics> CoreProject::getCameraIntrinsics(boost::uuids::uuid camIntrinsicsUuid)
+std::optional<seerep_core_msgs::camera_intrinsics>
+CoreProject::getCameraIntrinsics(boost::uuids::uuid camIntrinsicsUuid)
 {
   return m_coreCameraIntrinsics->getData(camIntrinsicsUuid);
 }
@@ -186,25 +202,35 @@ std::shared_ptr<HighFive::File> CoreProject::getHdf5File()
 void CoreProject::createHdf5Io(std::string path)
 {
   m_write_mtx = std::make_shared<std::mutex>();
-  m_hdf5_file = std::make_shared<HighFive::File>(path, HighFive::File::ReadWrite | HighFive::File::Create);
+  m_hdf5_file = std::make_shared<HighFive::File>(
+      path, HighFive::File::ReadWrite | HighFive::File::Create);
 
-  m_ioGeneral = std::make_shared<seerep_hdf5_core::Hdf5CoreGeneral>(m_hdf5_file, m_write_mtx);
-  m_ioTf = std::make_shared<seerep_hdf5_core::Hdf5CoreTf>(m_hdf5_file, m_write_mtx);
-  m_ioInstance = std::make_shared<seerep_hdf5_core::Hdf5CoreInstance>(m_hdf5_file, m_write_mtx);
+  m_ioGeneral = std::make_shared<seerep_hdf5_core::Hdf5CoreGeneral>(
+      m_hdf5_file, m_write_mtx);
+  m_ioTf =
+      std::make_shared<seerep_hdf5_core::Hdf5CoreTf>(m_hdf5_file, m_write_mtx);
+  m_ioInstance = std::make_shared<seerep_hdf5_core::Hdf5CoreInstance>(
+      m_hdf5_file, m_write_mtx);
 
-  m_ioPointCloud = std::make_shared<seerep_hdf5_core::Hdf5CorePointCloud>(m_hdf5_file, m_write_mtx);
-  m_ioPoint = std::make_shared<seerep_hdf5_core::Hdf5CorePoint>(m_hdf5_file, m_write_mtx);
-  m_ioImage = std::make_shared<seerep_hdf5_core::Hdf5CoreImage>(m_hdf5_file, m_write_mtx);
+  m_ioPointCloud = std::make_shared<seerep_hdf5_core::Hdf5CorePointCloud>(
+      m_hdf5_file, m_write_mtx);
+  m_ioPoint = std::make_shared<seerep_hdf5_core::Hdf5CorePoint>(m_hdf5_file,
+                                                                m_write_mtx);
+  m_ioImage = std::make_shared<seerep_hdf5_core::Hdf5CoreImage>(m_hdf5_file,
+                                                                m_write_mtx);
 }
 void CoreProject::recreateDatatypes()
 {
   m_coreTfs = std::make_shared<seerep_core::CoreTf>(m_ioTf);
-  m_coreCameraIntrinsics = std::make_shared<seerep_core::CoreCameraIntrinsics>(m_hdf5_file, m_write_mtx);
+  m_coreCameraIntrinsics = std::make_shared<seerep_core::CoreCameraIntrinsics>(
+      m_hdf5_file, m_write_mtx);
   m_coreInstances = std::make_shared<seerep_core::CoreInstances>(m_ioInstance);
-  m_coreDatasets = std::make_unique<seerep_core::CoreDataset>(m_coreTfs, m_coreInstances, m_frameId);
+  m_coreDatasets = std::make_unique<seerep_core::CoreDataset>(
+      m_coreTfs, m_coreInstances, m_frameId);
 
   m_coreDatasets->addDatatype(seerep_core_msgs::Datatype::Image, m_ioImage);
-  m_coreDatasets->addDatatype(seerep_core_msgs::Datatype::PointCloud, m_ioPointCloud);
+  m_coreDatasets->addDatatype(seerep_core_msgs::Datatype::PointCloud,
+                              m_ioPointCloud);
   m_coreDatasets->addDatatype(seerep_core_msgs::Datatype::Point, m_ioPoint);
 
   std::vector<std::string> datatypeNames = m_ioGeneral->getGroupDatasets("");
@@ -215,23 +241,27 @@ void CoreProject::recreateDatatypes()
   }
 }
 
-seerep_core_msgs::AabbTime CoreProject::getTimeBounds(std::vector<seerep_core_msgs::Datatype> datatypes)
+seerep_core_msgs::AabbTime
+CoreProject::getTimeBounds(std::vector<seerep_core_msgs::Datatype> datatypes)
 {
   return m_coreDatasets->getTimeBounds(datatypes);
 }
 
-seerep_core_msgs::AABB CoreProject::getSpatialBounds(std::vector<seerep_core_msgs::Datatype> datatypes)
+seerep_core_msgs::AABB
+CoreProject::getSpatialBounds(std::vector<seerep_core_msgs::Datatype> datatypes)
 {
   return m_coreDatasets->getSpatialBounds(datatypes);
 }
 
-std::unordered_set<std::string> CoreProject::getAllCategories(std::vector<seerep_core_msgs::Datatype> datatypes)
+std::unordered_set<std::string>
+CoreProject::getAllCategories(std::vector<seerep_core_msgs::Datatype> datatypes)
 {
   return m_coreDatasets->getAllCategories(datatypes);
 }
 
-std::unordered_set<std::string> CoreProject::getAllLabels(std::vector<seerep_core_msgs::Datatype> datatypes,
-                                                          std::string category)
+std::unordered_set<std::string>
+CoreProject::getAllLabels(std::vector<seerep_core_msgs::Datatype> datatypes,
+                          std::string category)
 {
   return m_coreDatasets->getAllLabels(datatypes, category);
 }

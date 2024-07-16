@@ -10,11 +10,13 @@
 
 std::shared_ptr<grpc::Channel> getChannel()
 {
-  return grpc::CreateChannel("localhost:9090", grpc::InsecureChannelCredentials());
+  return grpc::CreateChannel("localhost:9090",
+                             grpc::InsecureChannelCredentials());
 }
 
-std::optional<std::string> extractProject(flatbuffers::grpc::Message<seerep::fb::ProjectInfos>& response_msg,
-                                          std::string projectName)
+std::optional<std::string> extractProject(
+    flatbuffers::grpc::Message<seerep::fb::ProjectInfos>& response_msg,
+    std::string projectName)
 {
   const seerep::fb::ProjectInfos* response = response_msg.GetRoot();
 
@@ -22,14 +24,16 @@ std::optional<std::string> extractProject(flatbuffers::grpc::Message<seerep::fb:
   {
     if (project->name()->str() == projectName)
     {
-      std::cout << project->name()->str() << " " << project->uuid()->str() << std::endl;
+      std::cout << project->name()->str() << " " << project->uuid()->str()
+                << std::endl;
       return project->uuid()->str();
     }
   }
   return std::nullopt;
 }
 
-std::optional<std::string> getProjectUUID(std::string projectName, std::shared_ptr<grpc::Channel> channel)
+std::optional<std::string>
+getProjectUUID(std::string projectName, std::shared_ptr<grpc::Channel> channel)
 {
   auto stub = seerep::fb::MetaOperations::NewStub(channel);
 
@@ -48,13 +52,15 @@ std::optional<std::string> getProjectUUID(std::string projectName, std::shared_p
   }
   else
   {
-    std::cerr << status.error_code() << ": " << status.error_message() << std::endl;
+    std::cerr << status.error_code() << ": " << status.error_message()
+              << std::endl;
   }
   return std::nullopt;
 }
 
-flatbuffers::Offset<seerep::fb::Header> createHeaderMsg(flatbuffers::grpc::MessageBuilder& mb,
-                                                        const seerep::fb::Header* imageHeader)
+flatbuffers::Offset<seerep::fb::Header>
+createHeaderMsg(flatbuffers::grpc::MessageBuilder& mb,
+                const seerep::fb::Header* imageHeader)
 {
   auto uuidProject = mb.CreateString(imageHeader->uuid_project()->str());
   auto frameIdMsg = mb.CreateString(imageHeader->frame_id()->str());
@@ -72,7 +78,8 @@ flatbuffers::Offset<seerep::fb::Header> createHeaderMsg(flatbuffers::grpc::Messa
   return headerBuilder.Finish();
 }
 
-flatbuffers::Offset<seerep::fb::Point> createPoint(flatbuffers::grpc::MessageBuilder& mb)
+flatbuffers::Offset<seerep::fb::Point>
+createPoint(flatbuffers::grpc::MessageBuilder& mb)
 {
   seerep::fb::PointBuilder pointBuilder(mb);
   pointBuilder.add_x(0.1);
@@ -81,16 +88,22 @@ flatbuffers::Offset<seerep::fb::Point> createPoint(flatbuffers::grpc::MessageBui
   return pointBuilder.Finish();
 }
 
-flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelCategory>>>
-createLabelWithInstance(flatbuffers::grpc::MessageBuilder& mb, const seerep::fb::BoundingBox2DLabeled* bb,
+flatbuffers::Offset<
+    flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelCategory>>>
+createLabelWithInstance(flatbuffers::grpc::MessageBuilder& mb,
+                        const seerep::fb::BoundingBox2DLabeled* bb,
                         const flatbuffers::String* category)
 {
-  auto instanceUuidMsg = mb.CreateString(bb->labelWithInstance()->instanceUuid()->str());
-  auto labelStr = mb.CreateString(bb->labelWithInstance()->label()->label()->str());
+  auto instanceUuidMsg =
+      mb.CreateString(bb->labelWithInstance()->instanceUuid()->str());
+  auto labelStr =
+      mb.CreateString(bb->labelWithInstance()->label()->label()->str());
   auto labelConfidence = bb->labelWithInstance()->label()->confidence();
 
-  std::vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>> labelWithInstanceVector;
-  std::vector<flatbuffers::Offset<seerep::fb::LabelsWithInstanceWithCategory>> labelsWithInstanceWithCategoryVector;
+  std::vector<flatbuffers::Offset<seerep::fb::LabelWithInstance>>
+      labelWithInstanceVector;
+  std::vector<flatbuffers::Offset<seerep::fb::LabelsWithInstanceWithCategory>>
+      labelsWithInstanceWithCategoryVector;
 
   seerep::fb::LabelBuilder labelBuilder(mb);
   labelBuilder.add_label(labelStr);
@@ -104,15 +117,19 @@ createLabelWithInstance(flatbuffers::grpc::MessageBuilder& mb, const seerep::fb:
   auto labelsWithInstance = mb.CreateVector(labelWithInstanceVector);
 
   auto categoryOffset = mb.CreateString(category);
-  seerep::fb::LabelsWithInstanceWithCategoryBuilder labelsWithInstanceWithCategoryBuilder(mb);
+  seerep::fb::LabelsWithInstanceWithCategoryBuilder
+      labelsWithInstanceWithCategoryBuilder(mb);
   labelsWithInstanceWithCategoryBuilder.add_category(categoryOffset);
-  labelsWithInstanceWithCategoryBuilder.add_labelsWithInstance(labelsWithInstance);
-  labelsWithInstanceWithCategoryVector.push_back(labelsWithInstanceWithCategoryBuilder.Finish());
+  labelsWithInstanceWithCategoryBuilder.add_labelsWithInstance(
+      labelsWithInstance);
+  labelsWithInstanceWithCategoryVector.push_back(
+      labelsWithInstanceWithCategoryBuilder.Finish());
 
   return mb.CreateVector(labelsWithInstanceWithCategoryVector);
 }
 
-flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>>>
+flatbuffers::Offset<
+    flatbuffers::Vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>>>
 createAttributes(flatbuffers::grpc::MessageBuilder& mb)
 {
   std::vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>> unionMapEntryVector;
@@ -138,8 +155,10 @@ createAttributes(flatbuffers::grpc::MessageBuilder& mb)
 }
 
 flatbuffers::grpc::Message<seerep::fb::PointStamped>
-createPointAndAddToVector(flatbuffers::grpc::MessageBuilder& mb, const seerep::fb::Header* imageHeader,
-                          const seerep::fb::BoundingBox2DLabeled* bb, const flatbuffers::String* category)
+createPointAndAddToVector(flatbuffers::grpc::MessageBuilder& mb,
+                          const seerep::fb::Header* imageHeader,
+                          const seerep::fb::BoundingBox2DLabeled* bb,
+                          const flatbuffers::String* category)
 {
   auto headerMsg = createHeaderMsg(mb, imageHeader);
   auto pointMsg = createPoint(mb);
@@ -157,7 +176,8 @@ createPointAndAddToVector(flatbuffers::grpc::MessageBuilder& mb, const seerep::f
   return mb.ReleaseMessage<seerep::fb::PointStamped>();
 }
 
-flatbuffers::grpc::Message<seerep::fb::Query> createQuery(flatbuffers::grpc::MessageBuilder& mb, std::string projectUUID)
+flatbuffers::grpc::Message<seerep::fb::Query>
+createQuery(flatbuffers::grpc::MessageBuilder& mb, std::string projectUUID)
 {
   std::vector<flatbuffers::Offset<flatbuffers::String>> projectUUIDs;
   projectUUIDs.push_back(mb.CreateString(projectUUID));
@@ -170,15 +190,17 @@ flatbuffers::grpc::Message<seerep::fb::Query> createQuery(flatbuffers::grpc::Mes
   return mb.ReleaseMessage<seerep::fb::Query>();
 }
 
-void getImagesAndCreatePoints(std::shared_ptr<grpc::Channel> channel, std::string projectUUID)
+void getImagesAndCreatePoints(std::shared_ptr<grpc::Channel> channel,
+                              std::string projectUUID)
 {
   flatbuffers::grpc::MessageBuilder mb;
 
   auto stub = seerep::fb::ImageService::NewStub(channel);
   grpc::ClientContext contextImage;
 
-  std::unique_ptr<grpc::ClientReader<flatbuffers::grpc::Message<seerep::fb::Image>>> reader(
-      stub->GetImage(&contextImage, createQuery(mb, projectUUID)));
+  std::unique_ptr<
+      grpc::ClientReader<flatbuffers::grpc::Message<seerep::fb::Image>>>
+      reader(stub->GetImage(&contextImage, createQuery(mb, projectUUID)));
 
   std::vector<flatbuffers::grpc::Message<seerep::fb::PointStamped>> points;
   flatbuffers::grpc::Message<seerep::fb::Image> imageMsg;
@@ -190,14 +212,16 @@ void getImagesAndCreatePoints(std::shared_ptr<grpc::Channel> channel, std::strin
 
   while (reader->Read(&imageMsg))
   {
-    std::cout << "image uuid: " << imageMsg.GetRoot()->header()->uuid_msgs()->str() << std::endl;
+    std::cout << "image uuid: "
+              << imageMsg.GetRoot()->header()->uuid_msgs()->str() << std::endl;
 
     for (auto bbCat : *imageMsg.GetRoot()->labels_bb())
     {
       auto category = bbCat->category();
       for (auto bb : *bbCat->boundingBox2dLabeled())
       {
-        writer->Write(createPointAndAddToVector(mb, imageMsg.GetRoot()->header(), bb, category));
+        writer->Write(createPointAndAddToVector(
+            mb, imageMsg.GetRoot()->header(), bb, category));
       }
     }
   }
@@ -207,12 +231,13 @@ void getImagesAndCreatePoints(std::shared_ptr<grpc::Channel> channel, std::strin
 
   if (status.ok())
   {
-    std::cout << "send all points successfully. msg: " << response.GetRoot()->message()->str() << std::endl;
+    std::cout << "send all points successfully. msg: "
+              << response.GetRoot()->message()->str() << std::endl;
   }
   else
   {
-    std::cout << "there was an error when transferring the points. msg: " << response.GetRoot()->message()->str()
-              << std::endl;
+    std::cout << "there was an error when transferring the points. msg: "
+              << response.GetRoot()->message()->str() << std::endl;
   }
 }
 

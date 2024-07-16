@@ -10,7 +10,8 @@
 
 int main(void)
 {
-  auto channel = grpc::CreateChannel("localhost:9090", grpc::InsecureChannelCredentials());
+  auto channel =
+      grpc::CreateChannel("localhost:9090", grpc::InsecureChannelCredentials());
 
   auto stub = seerep::fb::MetaOperations::NewStub(channel);
 
@@ -31,14 +32,16 @@ int main(void)
 
     for (auto project : *response->projects())
     {
-      std::cout << project->name()->str() << " " << project->uuid()->str() << std::endl;
+      std::cout << project->name()->str() << " " << project->uuid()->str()
+                << std::endl;
     }
 
     return EXIT_SUCCESS;
   }
   else
   {
-    std::cerr << status.error_code() << ": " << status.error_message() << std::endl;
+    std::cerr << status.error_code() << ": " << status.error_message()
+              << std::endl;
     return EXIT_FAILURE;
   }
 }

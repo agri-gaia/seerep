@@ -9,9 +9,10 @@ bool Hdf5PyPointCloud::checkType(const py::dtype& type)
 }
 
 template <typename T>
-bool Hdf5PyPointCloud::getFieldData(const std::vector<std::string>& fieldNames,
-                                    const std::map<std::string, py::array>& fields,
-                                    std::vector<std::vector<std::vector<T>>>& fieldData)
+bool Hdf5PyPointCloud::getFieldData(
+    const std::vector<std::string>& fieldNames,
+    const std::map<std::string, py::array>& fields,
+    std::vector<std::vector<std::vector<T>>>& fieldData)
 {
   // make sure that all fields exist
   for (const auto& fieldName : fieldNames)
@@ -73,8 +74,9 @@ bool Hdf5PyPointCloud::getFieldData(const std::vector<std::string>& fieldNames,
 }
 
 template <typename T, int Nfields>
-void Hdf5PyPointCloud::getMinMax(const std::vector<std::vector<std::vector<T>>>& fieldData, std::array<T, Nfields>& min,
-                                 std::array<T, Nfields>& max)
+void Hdf5PyPointCloud::getMinMax(
+    const std::vector<std::vector<std::vector<T>>>& fieldData,
+    std::array<T, Nfields>& min, std::array<T, Nfields>& max)
 {
   for (std::size_t i = 0; i < Nfields; i++)
   {
@@ -90,8 +92,9 @@ void Hdf5PyPointCloud::getMinMax(const std::vector<std::vector<std::vector<T>>>&
 }
 
 template <typename T, int Nfields>
-bool Hdf5PyPointCloud::writeBoundingBox(const std::string& cloudGroupId, const std::vector<std::string>& fieldNames,
-                                        const std::map<std::string, py::array>& fields)
+bool Hdf5PyPointCloud::writeBoundingBox(
+    const std::string& cloudGroupId, const std::vector<std::string>& fieldNames,
+    const std::map<std::string, py::array>& fields)
 {
   std::vector<std::vector<std::vector<T>>> fieldData(0);
 
@@ -107,7 +110,8 @@ bool Hdf5PyPointCloud::writeBoundingBox(const std::string& cloudGroupId, const s
   std::array<T, Nfields> min, max;
   getMinMax<T, Nfields>(fieldData, min, max);
 
-  std::shared_ptr<HighFive::Group> cloudGroupPtr = std::make_shared<HighFive::Group>(m_file->getGroup(cloudGroupId));
+  std::shared_ptr<HighFive::Group> cloudGroupPtr =
+      std::make_shared<HighFive::Group>(m_file->getGroup(cloudGroupId));
 
   // write bounding box as attribute to dataset
   std::vector<T> boundingbox(2 * Nfields);
@@ -118,14 +122,17 @@ bool Hdf5PyPointCloud::writeBoundingBox(const std::string& cloudGroupId, const s
   }
 
   seerep_hdf5_core::Hdf5CoreGeneral::writeAttributeToHdf5(
-      *cloudGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX, boundingbox);
+      *cloudGroupPtr, seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX,
+      boundingbox);
 
   return true;
 }
 
 template <typename T>
-bool Hdf5PyPointCloud::writeFieldTyped(const std::string& cloudGroupId, const std::string& fieldDatasetId,
-                                       const std::string& fieldName, const std::map<std::string, py::array>& fields)
+bool Hdf5PyPointCloud::writeFieldTyped(
+    const std::string& cloudGroupId, const std::string& fieldDatasetId,
+    const std::string& fieldName,
+    const std::map<std::string, py::array>& fields)
 {
   std::vector<std::vector<std::vector<T>>> fieldData(0);
 
@@ -140,16 +147,19 @@ bool Hdf5PyPointCloud::writeFieldTyped(const std::string& cloudGroupId, const st
 
   // create dataset
   const std::string datasetId = cloudGroupId + "/" + fieldDatasetId;
-  HighFive::DataSpace dataSpace({ fieldData.size(), fieldData[0].size(), fieldData[0][0].size() });
+  HighFive::DataSpace dataSpace(
+      { fieldData.size(), fieldData[0].size(), fieldData[0][0].size() });
 
   std::shared_ptr<HighFive::DataSet> datasetPtr;
   if (!m_file->exist(datasetId))
   {
-    datasetPtr = std::make_shared<HighFive::DataSet>(m_file->createDataSet<T>(datasetId, dataSpace));
+    datasetPtr = std::make_shared<HighFive::DataSet>(
+        m_file->createDataSet<T>(datasetId, dataSpace));
   }
   else
   {
-    datasetPtr = std::make_shared<HighFive::DataSet>(m_file->getDataSet(datasetId));
+    datasetPtr =
+        std::make_shared<HighFive::DataSet>(m_file->getDataSet(datasetId));
   }
 
   // write data
@@ -159,25 +169,32 @@ bool Hdf5PyPointCloud::writeFieldTyped(const std::string& cloudGroupId, const st
 }
 
 template <typename T, typename Second, typename... Other>
-bool Hdf5PyPointCloud::writeFieldTyped(const std::string& cloudGroupId, const std::string& fieldDatasetId,
-                                       const std::string& fieldName, const std::map<std::string, py::array>& fields)
+bool Hdf5PyPointCloud::writeFieldTyped(
+    const std::string& cloudGroupId, const std::string& fieldDatasetId,
+    const std::string& fieldName,
+    const std::map<std::string, py::array>& fields)
 {
   if (writeFieldTyped<T>(cloudGroupId, fieldDatasetId, fieldName, fields))
   {
     return true;
   }
 
-  return writeFieldTyped<Second, Other...>(cloudGroupId, fieldDatasetId, fieldName, fields);
+  return writeFieldTyped<Second, Other...>(cloudGroupId, fieldDatasetId,
+                                           fieldName, fields);
 }
 
 template <typename T>
-py::array Hdf5PyPointCloud::readField(std::shared_ptr<HighFive::DataSet> fieldDatasetPtr)
+py::array
+Hdf5PyPointCloud::readField(std::shared_ptr<HighFive::DataSet> fieldDatasetPtr)
 {
-  std::vector<std::size_t> datasetDimensions = fieldDatasetPtr->getSpace().getDimensions();
-  std::cout << datasetDimensions[0] << " " << datasetDimensions[1] << " " << datasetDimensions[2] << std::endl;
+  std::vector<std::size_t> datasetDimensions =
+      fieldDatasetPtr->getSpace().getDimensions();
+  std::cout << datasetDimensions[0] << " " << datasetDimensions[1] << " "
+            << datasetDimensions[2] << std::endl;
 
   // ignore hight for now -> organized pointclouds unsupported
-  py::array field = py::array_t<T>({ datasetDimensions[0] * datasetDimensions[1], datasetDimensions[2] });
+  py::array field = py::array_t<T>(
+      { datasetDimensions[0] * datasetDimensions[1], datasetDimensions[2] });
 
   std::vector<std::vector<std::vector<T>>> hdf5Data;
   fieldDatasetPtr->read(hdf5Data);
@@ -191,7 +208,8 @@ py::array Hdf5PyPointCloud::readField(std::shared_ptr<HighFive::DataSet> fieldDa
     {
       for (std::size_t k = 0; k < datasetDimensions[2]; k++)
       {
-        fieldBuffData[k + datasetDimensions[2] * (j + datasetDimensions[1] * i)] = hdf5Data[i][j][k];
+        fieldBuffData[k + datasetDimensions[2] * (j + datasetDimensions[1] * i)] =
+            hdf5Data[i][j][k];
       }
     }
   }

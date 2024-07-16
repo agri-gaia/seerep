@@ -53,7 +53,8 @@ public:
    * @param query the protobuf query message
    * @return the query message in seerep core format
    */
-  static seerep_core_msgs::Query fromPb(const seerep::pb::Query& query, seerep_core_msgs::Datatype datatype);
+  static seerep_core_msgs::Query fromPb(const seerep::pb::Query& query,
+                                        seerep_core_msgs::Datatype datatype);
   /**
    * @brief converts the protobuf image message to seerep core specific message
    * @param img the protobuf image message
@@ -66,28 +67,37 @@ public:
    * @param query the protobuf tf query message
    * @return the tf query message in seerep core format
    */
-  static seerep_core_msgs::QueryTf fromPb(const seerep::pb::TransformStampedQuery& query);
+  static seerep_core_msgs::QueryTf
+  fromPb(const seerep::pb::TransformStampedQuery& query);
 
-  static seerep_core_msgs::region_of_interest fromPb(const seerep::pb::RegionOfInterest& roi);
-  static seerep::pb::RegionOfInterest toPb(const seerep_core_msgs::region_of_interest& roi);
+  static seerep_core_msgs::region_of_interest
+  fromPb(const seerep::pb::RegionOfInterest& roi);
+  static seerep::pb::RegionOfInterest
+  toPb(const seerep_core_msgs::region_of_interest& roi);
 
   static seerep_core_msgs::Header fromPb(const seerep::pb::Header& header);
   static seerep::pb::Header toPb(const seerep_core_msgs::Header& header);
 
-  static seerep_core_msgs::Timestamp fromPb(const seerep::pb::Timestamp& timestamp);
-  static seerep::pb::Timestamp toPb(const seerep_core_msgs::Timestamp& timestamp);
+  static seerep_core_msgs::Timestamp
+  fromPb(const seerep::pb::Timestamp& timestamp);
+  static seerep::pb::Timestamp
+  toPb(const seerep_core_msgs::Timestamp& timestamp);
 
-  static seerep_core_msgs::camera_intrinsics fromPb(const seerep::pb::CameraIntrinsics& camintrinsics);
-  static seerep::pb::CameraIntrinsics toPb(const seerep_core_msgs::camera_intrinsics& camintrinsics);
+  static seerep_core_msgs::camera_intrinsics
+  fromPb(const seerep::pb::CameraIntrinsics& camintrinsics);
+  static seerep::pb::CameraIntrinsics
+  toPb(const seerep_core_msgs::camera_intrinsics& camintrinsics);
 
-  static seerep_core_msgs::camera_intrinsics_query fromPb(const seerep::pb::CameraIntrinsicsQuery& camintrinsics_query);
+  static seerep_core_msgs::camera_intrinsics_query
+  fromPb(const seerep::pb::CameraIntrinsicsQuery& camintrinsics_query);
   /**
    * @brief converts a seerep core msg AabbbTime to protobuf time inverval
    *
    * @param timeinterval core msg AabbTime
    * @param ti_bb pointer to protobuf time interval
    */
-  static void toPb(const seerep_core_msgs::AabbTime& timeinterval, seerep::pb::TimeInterval* ti_pb);
+  static void toPb(const seerep_core_msgs::AabbTime& timeinterval,
+                   seerep::pb::TimeInterval* ti_pb);
 
   /**
    * @brief converts a seerep core msg aabb to protobuf aabb
@@ -95,7 +105,8 @@ public:
    * @param aabb core msg aabb
    * @param bb_bb pointer to protobuf aabb
    */
-  static void toPb(const seerep_core_msgs::AABB& aabb, seerep::pb::Boundingbox* bb_pb);
+  static void toPb(const seerep_core_msgs::AABB& aabb,
+                   seerep::pb::Boundingbox* bb_pb);
 
   /**
    * @brief Convert Pb datatype to a vector containing core message datatypes
@@ -103,77 +114,99 @@ public:
    * @param datatype protobuf datatype
    * @param dtCore std::vector<seerep_core_msgs::Datatype> vector of core msg datatype
    */
-  static void fromPbDatatypeVector(const seerep::datatype& datatype, std::vector<seerep_core_msgs::Datatype>& dtCore);
+  static void
+  fromPbDatatypeVector(const seerep::datatype& datatype,
+                       std::vector<seerep_core_msgs::Datatype>& dtCore);
 
 private:
   /**
-   * @brief converts the project part of the protobuf query message to seerep core specific message
+   * @brief converts the project part of the protobuf query message to seerep
+   * core specific message
    * @param query the protobuf query message
    * @param queryCore query message in seerep core format
    */
-  static void fromPbProject(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore);
+  static void fromPbProject(const seerep::pb::Query& query,
+                            seerep_core_msgs::Query& queryCore);
   /**
-   * @brief converts the label part of the protobuf query message to seerep core specific message
+   * @brief converts the label part of the protobuf query message to seerep core
+   * specific message
    * @param query the protobuf query message
    * @param queryCore query message in seerep core format
    */
-  static void fromPbLabel(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore);
+  static void fromPbLabel(const seerep::pb::Query& query,
+                          seerep_core_msgs::Query& queryCore);
   /**
-   * @brief converts the temporal part of the protobuf query message to seerep core specific message
+   * @brief converts the temporal part of the protobuf query message to seerep
+   * core specific message
    * @param query the protobuf query message
    * @param queryCore query message in seerep core format
    */
-  static void fromPbTime(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore);
+  static void fromPbTime(const seerep::pb::Query& query,
+                         seerep_core_msgs::Query& queryCore);
   /**
    * @brief converts seerep probotbuf point2d to core msg point2d
    *
    * @param point protobuf point2d msg
    * @return seerep_core_msgs::Point2D core point2d msg
    */
-  static seerep_core_msgs::Point2D fromPbPoint2D(const seerep::pb::Point2D& point);
+  static seerep_core_msgs::Point2D
+  fromPbPoint2D(const seerep::pb::Point2D& point);
   /**
    * @brief
    *
    * @param query
    * @param queryCore
    */
-  static void fromPbPolygon(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore);
+  static void fromPbPolygon(const seerep::pb::Query& query,
+                            seerep_core_msgs::Query& queryCore);
   /**
-   * @brief converts the mustHaveAllLabels flag of the protobuf query message to seerep core specific message
+   * @brief converts the mustHaveAllLabels flag of the protobuf query message to
+   * seerep core specific message
    * @param query the protobuf query message
    * @param queryCore query message in seerep core format
    */
-  static void fromPbMustHaveAllLabels(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore);
+  static void fromPbMustHaveAllLabels(const seerep::pb::Query& query,
+                                      seerep_core_msgs::Query& queryCore);
   /**
-   * @brief converts the inMapFrame flag of the protobuf query message to seerep core specific message
+   * @brief converts the inMapFrame flag of the protobuf query message to seerep
+   * core specific message
    * @param query the protobuf query message
    * @param queryCore query message in seerep core format
    */
-  static void fromPbInMapFrame(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore);
+  static void fromPbInMapFrame(const seerep::pb::Query& query,
+                               seerep_core_msgs::Query& queryCore);
   /**
-   * @brief converts the fullyEncapsulated flag of the protobuf query message to seerep core specific message
+   * @brief converts the fullyEncapsulated flag of the protobuf query message to
+   * seerep core specific message
    * @param query the protobuf query message
    * @param queryCore query message in seerep core format
    */
-  static void fromPbFullyEncapsulated(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore);
+  static void fromPbFullyEncapsulated(const seerep::pb::Query& query,
+                                      seerep_core_msgs::Query& queryCore);
   /**
-   * @brief converts the instance uuids of the protobuf query message to seerep core specific message
+   * @brief converts the instance uuids of the protobuf query message to seerep
+   * core specific message
    * @param query the protobuf query message
    * @param queryCore query message in seerep core format
    */
-  static void fromPbInstance(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore);
+  static void fromPbInstance(const seerep::pb::Query& query,
+                             seerep_core_msgs::Query& queryCore);
   /**
-   * @brief converts the data uuids of the protobuf query message to seerep core specific message
+   * @brief converts the data uuids of the protobuf query message to seerep core
+   * specific message
    * @param query the protobuf query message
    * @param queryCore query message in seerep core format
    */
-  static void fromPbDataUuids(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore);
+  static void fromPbDataUuids(const seerep::pb::Query& query,
+                              seerep_core_msgs::Query& queryCore);
   /**
-   * @brief converts the withoutData flag of the protobuf query message to seerep core specific message
+   * @brief converts the withoutData flag of the protobuf query message to
+   * seerep core specific message
    * @param query the protobuf query message
    * @param queryCore query message in seerep core format
    */
-  static void fromPbWithOutData(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore);
+  static void fromPbWithOutData(const seerep::pb::Query& query,
+                                seerep_core_msgs::Query& queryCore);
 
   /**
    * @brief extracts the maxNumData of the flatbuffer query message
@@ -181,7 +214,8 @@ private:
    * @param query the protobuf query message
    * @param queryCore query message in seerep core format
    */
-  static void fromFbQueryMaxNumData(const seerep::pb::Query& query, seerep_core_msgs::Query& queryCore);
+  static void fromFbQueryMaxNumData(const seerep::pb::Query& query,
+                                    seerep_core_msgs::Query& queryCore);
 };
 
 }  // namespace seerep_core_pb

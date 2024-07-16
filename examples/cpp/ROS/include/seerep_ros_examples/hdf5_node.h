@@ -23,7 +23,8 @@ class Hdf5Node
 {
 public:
   Hdf5Node() = delete;
-  Hdf5Node(const ros::NodeHandle& nodeHandle, const ros::NodeHandle& privateNodeHandle);
+  Hdf5Node(const ros::NodeHandle& nodeHandle,
+           const ros::NodeHandle& privateNodeHandle);
 
 private:
   static constexpr unsigned int pollingIntervalInSeconds = 5;
@@ -38,7 +39,8 @@ private:
   bool isValidUUID(const std::string& uuid) const;
   bool topicAvailable(const std::string& topic, ros::master::TopicInfo& info);
 
-  std::optional<ros::Subscriber> getSubscriber(const std::string& messageType, const std::string& topic);
+  std::optional<ros::Subscriber> getSubscriber(const std::string& messageType,
+                                               const std::string& topic);
 
   void dumpMessage(const sensor_msgs::Image::ConstPtr& image);
 };

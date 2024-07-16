@@ -25,22 +25,27 @@ namespace seerep_hdf5_pb
 class Hdf5PbGeneral : public virtual seerep_hdf5_core::Hdf5CoreGeneral
 {
 protected:
-  Hdf5PbGeneral(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
+  Hdf5PbGeneral(std::shared_ptr<HighFive::File>& file,
+                std::shared_ptr<std::mutex>& write_mtx);
 
   // ################
   //  Attributes
   // ################
   template <class T>
-  void writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, const seerep::pb::Header& header);
+  void writeHeaderAttributes(HighFive::AnnotateTraits<T>& object,
+                             const seerep::pb::Header& header);
 
   template <class T>
-  seerep::pb::Header readHeaderAttributes(HighFive::AnnotateTraits<T>& object, const std::string& id);
+  seerep::pb::Header readHeaderAttributes(HighFive::AnnotateTraits<T>& object,
+                                          const std::string& id);
 
   // ################
   //  Labels
   // ################
-  void writeLabels(const std::string& datatypeGroup, const std::string& uuid,
-                   const google::protobuf::RepeatedPtrField<seerep::pb::LabelCategory>& labels);
+  void writeLabels(
+      const std::string& datatypeGroup, const std::string& uuid,
+      const google::protobuf::RepeatedPtrField<seerep::pb::LabelCategory>&
+          labels);
 
   std::optional<google::protobuf::RepeatedPtrField<seerep::pb::LabelCategory>>
   readLabels(const std::string& datatypeGroup, const std::string& uuid);

@@ -15,20 +15,25 @@
 
 namespace seerep_server
 {
-class PbCameraIntrinsicsService final : public seerep::pb::CameraIntrinsicsService::Service
+class PbCameraIntrinsicsService final
+  : public seerep::pb::CameraIntrinsicsService::Service
 {
 public:
   PbCameraIntrinsicsService(std::shared_ptr<seerep_core::Core> seerepCore);
 
-  grpc::Status TransferCameraIntrinsics(grpc::ServerContext* context, const seerep::pb::CameraIntrinsics* camintrinsics,
-                                        seerep::pb::ServerResponse* response) override;
-  grpc::Status GetCameraIntrinsics(grpc::ServerContext* context,
-                                   const seerep::pb::CameraIntrinsicsQuery* camintrinsicsQuery,
-                                   seerep::pb::CameraIntrinsics* response) override;
+  grpc::Status
+  TransferCameraIntrinsics(grpc::ServerContext* context,
+                           const seerep::pb::CameraIntrinsics* camintrinsics,
+                           seerep::pb::ServerResponse* response) override;
+  grpc::Status GetCameraIntrinsics(
+      grpc::ServerContext* context,
+      const seerep::pb::CameraIntrinsicsQuery* camintrinsicsQuery,
+      seerep::pb::CameraIntrinsics* response) override;
 
 private:
   std::shared_ptr<seerep_core_pb::CorePbCameraIntrinsics> camIntrinsicsPb;
-  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level>
+      m_logger;
 };
 
 } /* namespace seerep_server */

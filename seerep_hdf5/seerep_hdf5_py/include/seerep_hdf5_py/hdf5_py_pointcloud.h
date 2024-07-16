@@ -33,12 +33,15 @@ public:
 
   std::vector<std::string> getPointClouds();
 
-  void writePointCloud(const std::string& uuid, const std::string& frameId, int64_t seconds, int32_t nanos,
-                       uint32_t sequence, const std::map<std::string, py::array> fields,
-                       const std::vector<GeneralLabel>& generalLabels,
-                       const std::vector<CategorizedBoundingBoxLabel<3>>& bbLabels);
+  void
+  writePointCloud(const std::string& uuid, const std::string& frameId,
+                  int64_t seconds, int32_t nanos, uint32_t sequence,
+                  const std::map<std::string, py::array> fields,
+                  const std::vector<GeneralLabel>& generalLabels,
+                  const std::vector<CategorizedBoundingBoxLabel<3>>& bbLabels);
 
-  std::tuple<std::map<std::string, py::array>, std::vector<GeneralLabel>, std::vector<CategorizedBoundingBoxLabel<3>>>
+  std::tuple<std::map<std::string, py::array>, std::vector<GeneralLabel>,
+             std::vector<CategorizedBoundingBoxLabel<3>>>
   readPointCloud(const std::string& uuid);
 
 private:
@@ -46,26 +49,32 @@ private:
   bool checkType(const py::dtype& type);
 
   template <typename T>
-  bool getFieldData(const std::vector<std::string>& fieldNames, const std::map<std::string, py::array>& fields,
+  bool getFieldData(const std::vector<std::string>& fieldNames,
+                    const std::map<std::string, py::array>& fields,
                     std::vector<std::vector<std::vector<T>>>& fieldData);
 
   template <typename T, int Nfields>
-  void getMinMax(const std::vector<std::vector<std::vector<T>>>& fieldData, std::array<T, Nfields>& min,
-                 std::array<T, Nfields>& max);
+  void getMinMax(const std::vector<std::vector<std::vector<T>>>& fieldData,
+                 std::array<T, Nfields>& min, std::array<T, Nfields>& max);
 
   template <typename T, int Nfields>
-  bool writeBoundingBox(const std::string& cloudGroupId, const std::vector<std::string>& fieldNames,
+  bool writeBoundingBox(const std::string& cloudGroupId,
+                        const std::vector<std::string>& fieldNames,
                         const std::map<std::string, py::array>& fields);
 
   void writeField(const std::string& cloudGroupId, const std::string& fieldName,
                   const std::map<std::string, py::array>& fields);
 
   template <typename T>
-  bool writeFieldTyped(const std::string& cloudGroupId, const std::string& fieldDatasetId, const std::string& fieldName,
+  bool writeFieldTyped(const std::string& cloudGroupId,
+                       const std::string& fieldDatasetId,
+                       const std::string& fieldName,
                        const std::map<std::string, py::array>& fields);
 
   template <typename T, typename Second, typename... Other>
-  bool writeFieldTyped(const std::string& cloudGroupId, const std::string& fieldDatasetId, const std::string& fieldName,
+  bool writeFieldTyped(const std::string& cloudGroupId,
+                       const std::string& fieldDatasetId,
+                       const std::string& fieldName,
                        const std::map<std::string, py::array>& fields);
 
   template <typename T>

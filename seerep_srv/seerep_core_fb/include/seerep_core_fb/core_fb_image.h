@@ -37,12 +37,14 @@
 namespace seerep_core_fb
 {
 /**
- * @brief This class is the center piece between the gRPC interface, the core and the hdf5-io for images
+ * @brief This class is the center piece between the gRPC interface, the core
+ * and the hdf5-io for images
  *
- * The functions of this class are called by the corresponding gRPC services. The data storing and loading is done
- * directly via the hdf5-io-fb. When adding new data the needed information for the indices are disclosed to the core.
- * When data is queried the core is consulted to get the UUIDs of the data answering the query. The data is then loaded
- * from this class via the hdf5-io.
+ * The functions of this class are called by the corresponding gRPC services.
+ * The data storing and loading is done directly via the hdf5-io-fb. When adding
+ * new data the needed information for the indices are disclosed to the core.
+ * When data is queried the core is consulted to get the UUIDs of the data
+ * answering the query. The data is then loaded from this class via the hdf5-io.
  */
 class CoreFbImage
 {
@@ -57,13 +59,17 @@ public:
   /**
    * @brief Function to query images
    * @param query the flatbuffer query
-   * @param writer the writer object used to send the images matching the query directly via gRPC
+   * @param writer the writer object used to send the images matching the query
+   * directly via gRPC
    *
-   * Based on the query the indices are used to get the uuids of the images matching the query. Then the images are
-   * loaded by the hdf5-fb-io and send via gRPC directly using the writer
+   * Based on the query the indices are used to get the uuids of the images
+   * matching the query. Then the images are loaded by the hdf5-fb-io and send
+   * via gRPC directly using the writer
    */
-  void getData(const seerep::fb::Query* query,
-               grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::Image>>* const writer);
+  void getData(
+      const seerep::fb::Query* query,
+      grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::Image>>* const
+          writer);
   /**
    * @brief Write image data to hdf5
    * @param img the flatbuffer message containing the image
@@ -78,15 +84,18 @@ public:
    * @brief Extract image data from hdf5 and build the indices.
    *
    * This method complements @ref addDataToHdf5 and should be called after
-   * the data has been added to hdf5. The data for the indices is retrieved from hdf5 and added to the indices to the
-   * core.
+   * the data has been added to hdf5. The data for the indices is retrieved from
+   * hdf5 and added to the indices to the core.
    *
-   * @param projectImgUuids a vector containing image uuids mapped to the projects where they reside.
-   * The first slot contains the project uuid and the second slot the image uuid.
+   * @param projectImgUuids a vector containing image uuids mapped to the
+   * projects where they reside. The first slot contains the project uuid and
+   * the second slot the image uuid.
    *
    * @see seerep_core_fb::CoreFbImage::addDataToHdf5
    */
-  void buildIndices(const std::vector<std::pair<std::string, boost::uuids::uuid>>& projectImgUuids);
+  void
+  buildIndices(const std::vector<std::pair<std::string, boost::uuids::uuid>>&
+                   projectImgUuids);
 
   /**
    * @brief Adds labels to an existing image
@@ -98,10 +107,13 @@ private:
   /** @brief a shared pointer to the general core */
   std::shared_ptr<seerep_core::Core> m_seerepCore;
   /** a map from the uuids of the projects to the hdf5-io objects handling the io for the object */
-  std::unordered_map<boost::uuids::uuid, std::shared_ptr<seerep_hdf5_fb::Hdf5FbImage>, boost::hash<boost::uuids::uuid>>
+  std::unordered_map<boost::uuids::uuid,
+                     std::shared_ptr<seerep_hdf5_fb::Hdf5FbImage>,
+                     boost::hash<boost::uuids::uuid>>
       m_hdf5IoMap;
   /** the logger for the logging framework */
-  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level>
+      m_logger;
 };
 
 }  // namespace seerep_core_fb

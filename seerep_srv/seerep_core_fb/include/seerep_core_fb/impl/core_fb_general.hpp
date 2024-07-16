@@ -3,18 +3,21 @@ namespace seerep_core_fb
 template <class C>
 void CoreFbGeneral::getAllFileAccessorFromCore(
     std::shared_ptr<seerep_core::Core>& seerepCore,
-    std::unordered_map<boost::uuids::uuid, std::shared_ptr<C>, boost::hash<boost::uuids::uuid>>& hdf5IoMap)
+    std::unordered_map<boost::uuids::uuid, std::shared_ptr<C>,
+                       boost::hash<boost::uuids::uuid>>& hdf5IoMap)
 {
   for (seerep_core_msgs::ProjectInfo projectInfo : seerepCore->getProjects())
   {
-    CoreFbGeneral::getFileAccessorFromCore(projectInfo.uuid, seerepCore, hdf5IoMap);
+    CoreFbGeneral::getFileAccessorFromCore(projectInfo.uuid, seerepCore,
+                                           hdf5IoMap);
   }
 }
 
 template <class C>
 void CoreFbGeneral::getFileAccessorFromCore(
     const std::string& project, std::shared_ptr<seerep_core::Core>& seerepCore,
-    std::unordered_map<boost::uuids::uuid, std::shared_ptr<C>, boost::hash<boost::uuids::uuid>>& hdf5IoMap)
+    std::unordered_map<boost::uuids::uuid, std::shared_ptr<C>,
+                       boost::hash<boost::uuids::uuid>>& hdf5IoMap)
 {
   boost::uuids::string_generator gen;
   boost::uuids::uuid projectUuid = gen(project);
@@ -23,8 +26,10 @@ void CoreFbGeneral::getFileAccessorFromCore(
 
 template <class C>
 void CoreFbGeneral::getFileAccessorFromCore(
-    const boost::uuids::uuid& project, std::shared_ptr<seerep_core::Core>& seerepCore,
-    std::unordered_map<boost::uuids::uuid, std::shared_ptr<C>, boost::hash<boost::uuids::uuid>>& hdf5IoMap)
+    const boost::uuids::uuid& project,
+    std::shared_ptr<seerep_core::Core>& seerepCore,
+    std::unordered_map<boost::uuids::uuid, std::shared_ptr<C>,
+                       boost::hash<boost::uuids::uuid>>& hdf5IoMap)
 {
   auto hdf5file = seerepCore->getHdf5File(project);
   auto hdf5fileMutex = seerepCore->getHdf5FileMutex(project);
@@ -35,7 +40,8 @@ void CoreFbGeneral::getFileAccessorFromCore(
 template <class C>
 std::shared_ptr<C> CoreFbGeneral::getHdf5(
     const std::string& project, std::shared_ptr<seerep_core::Core>& seerepCore,
-    std::unordered_map<boost::uuids::uuid, std::shared_ptr<C>, boost::hash<boost::uuids::uuid>>& hdf5IoMap)
+    std::unordered_map<boost::uuids::uuid, std::shared_ptr<C>,
+                       boost::hash<boost::uuids::uuid>>& hdf5IoMap)
 {
   boost::uuids::string_generator gen;
   boost::uuids::uuid projectUuid = gen(project);
@@ -44,8 +50,10 @@ std::shared_ptr<C> CoreFbGeneral::getHdf5(
 
 template <class C>
 std::shared_ptr<C> CoreFbGeneral::getHdf5(
-    const boost::uuids::uuid& project, std::shared_ptr<seerep_core::Core>& seerepCore,
-    std::unordered_map<boost::uuids::uuid, std::shared_ptr<C>, boost::hash<boost::uuids::uuid>>& hdf5IoMap)
+    const boost::uuids::uuid& project,
+    std::shared_ptr<seerep_core::Core>& seerepCore,
+    std::unordered_map<boost::uuids::uuid, std::shared_ptr<C>,
+                       boost::hash<boost::uuids::uuid>>& hdf5IoMap)
 {
   // find the project based on its uuid
   auto hdf5io = hdf5IoMap.find(project);

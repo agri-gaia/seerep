@@ -31,7 +31,8 @@ public:
    * @param file shared pointer to the hdf5 file of the point cloud
    * @param write_mtx shared pointer to a mutex
    */
-  Hdf5FbPointCloud(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
+  Hdf5FbPointCloud(std::shared_ptr<HighFive::File>& file,
+                   std::shared_ptr<std::mutex>& write_mtx);
 
   /**
    * @brief Writes a Flatbuffers PointCloud2 message to HDF5.
@@ -39,7 +40,8 @@ public:
    * @param uuid The UUID of the PCL.
    * @param pcl The PCL message to write.
    */
-  void writePointCloud2(const std::string& uuid, const seerep::fb::PointCloud2& pcl);
+  void writePointCloud2(const std::string& uuid,
+                        const seerep::fb::PointCloud2& pcl);
 
   /**
    * Computes the axis-aligned bounding box (AABB) of a PCL.
@@ -49,7 +51,8 @@ public:
    *
    * @note We assume that the x,y and z channel are in float32.
    */
-  std::pair<seerep_core_msgs::Point, seerep_core_msgs::Point> computeBoundingBox(const seerep::fb::PointCloud2& pcl);
+  std::pair<seerep_core_msgs::Point, seerep_core_msgs::Point>
+  computeBoundingBox(const seerep::fb::PointCloud2& pcl);
 
   /**
    * @brief Writes the axis aliged bounding box (AABB) to the PCL group.
@@ -58,7 +61,8 @@ public:
    * @param min_corner The minimum corner of the AABB
    * @param max_corner The maximum corner of the AABB.
    */
-  void writeBoundingBox(const std::string& uuid, const seerep_core_msgs::Point& min_corner,
+  void writeBoundingBox(const std::string& uuid,
+                        const seerep_core_msgs::Point& min_corner,
                         const seerep_core_msgs::Point& max_corner);
 
   /**
@@ -66,10 +70,11 @@ public:
    *
    * @param uuid the uuid of the point cloud
    * @param withoutData omit the data field
-   * @return std::optional<flatbuffers::grpc::Message<seerep::fb::PointCloud2>> returns the
+   * @return std::optional<flatbuffers::grpc::Message<seerep::fb::PointCloud2>>
+   * returns the
    */
-  std::optional<flatbuffers::grpc::Message<seerep::fb::PointCloud2>> readPointCloud2(const std::string& uuid,
-                                                                                     const bool withoutData = false);
+  std::optional<flatbuffers::grpc::Message<seerep::fb::PointCloud2>>
+  readPointCloud2(const std::string& uuid, const bool withoutData = false);
 
 private:
   /**
@@ -80,8 +85,10 @@ private:
    * @param pointFields The vector of point fields to write.
    */
   template <typename T>
-  void writePointFieldAttributes(HighFive::AnnotateTraits<T>& object,
-                                 const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::PointField>>* pointFields);
+  void writePointFieldAttributes(
+      HighFive::AnnotateTraits<T>& object,
+      const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::PointField>>*
+          pointFields);
 
   /**
    * @brief Write general attributes of the point cloud to the hdf5 group
@@ -89,7 +96,8 @@ private:
    * @param dataGroupPtr shared point to the data group
    * @param cloud the point cloud to store information from
    */
-  void writeGeneralAttributes(std::shared_ptr<HighFive::Group>& dataGroupPtr, const seerep::fb::PointCloud2& cloud);
+  void writeGeneralAttributes(std::shared_ptr<HighFive::Group>& dataGroupPtr,
+                              const seerep::fb::PointCloud2& cloud);
 
   /**
    * @brief Reads general attributes from hdf5
@@ -103,8 +111,11 @@ private:
    * @param isBigendian reference to which isBigendian is written
    * @param isDense reference to which isDense is written
    */
-  void readGeneralAttributes(const std::string& id, std::shared_ptr<HighFive::Group> dataGroupPtr, uint32_t& height,
-                             uint32_t& width, uint32_t& pointStep, uint32_t& rowStep, bool& isBigendian, bool& isDense);
+  void readGeneralAttributes(const std::string& id,
+                             std::shared_ptr<HighFive::Group> dataGroupPtr,
+                             uint32_t& height, uint32_t& width,
+                             uint32_t& pointStep, uint32_t& rowStep,
+                             bool& isBigendian, bool& isDense);
   /**
    * @brief Reads point field information from hdf5
    *
@@ -115,8 +126,11 @@ private:
    * @param counts reference to a vector to which the count are written
    * @param datatypes reference to a vector to which the datatypes are written
    */
-  void readPointFields(const std::string& id, std::shared_ptr<HighFive::Group> dataGroupPtr,
-                       std::vector<std::string>& names, std::vector<uint32_t>& offsets, std::vector<uint32_t>& counts,
+  void readPointFields(const std::string& id,
+                       std::shared_ptr<HighFive::Group> dataGroupPtr,
+                       std::vector<std::string>& names,
+                       std::vector<uint32_t>& offsets,
+                       std::vector<uint32_t>& counts,
                        std::vector<uint8_t>& datatypes);
 
   /**
@@ -127,12 +141,17 @@ private:
    * @param offsets vector of pointField offsets
    * @param counts vector of pointField counts
    * @param datatypes vector of pointField datatypes
-   * @return flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::PointField>>>
+   * @return
+   * flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::PointField>>>
    *         flatbuffers vector of pointFields
    */
-  flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<seerep::fb::PointField>>>
-  readPointFieldsOffset(flatbuffers::grpc::MessageBuilder& builder, std::vector<std::string>& names,
-                        std::vector<uint32_t>& offsets, std::vector<uint32_t>& counts, std::vector<uint8_t>& datatypes);
+  flatbuffers::Offset<
+      flatbuffers::Vector<flatbuffers::Offset<seerep::fb::PointField>>>
+  readPointFieldsOffset(flatbuffers::grpc::MessageBuilder& builder,
+                        std::vector<std::string>& names,
+                        std::vector<uint32_t>& offsets,
+                        std::vector<uint32_t>& counts,
+                        std::vector<uint8_t>& datatypes);
 
   /**
    * @brief Returns the offset of a channel relative to the start of a point.
@@ -142,7 +161,8 @@ private:
    * @return The offset of the channel.
    * @throws runtime_error when the requested channel is not present in the pcl.
    */
-  uint32_t getChannelOffset(const seerep::fb::PointCloud2& pcl, const std::string& channel_name) const;
+  uint32_t getChannelOffset(const seerep::fb::PointCloud2& pcl,
+                            const std::string& channel_name) const;
 
   /**
    * @brief Returns the offset for a rgb(a) channel.
@@ -156,7 +176,8 @@ private:
    * @return The offset of the specified channel.
    * @throws runtime_error when the channel_name is not "r", "g", "b" or "a".
    */
-  uint32_t getRgbaOffset(const std::string& channel_name, uint32_t base_offset, bool is_big_endian) const;
+  uint32_t getRgbaOffset(const std::string& channel_name, uint32_t base_offset,
+                         bool is_big_endian) const;
 };
 
 }  // namespace seerep_hdf5_fb

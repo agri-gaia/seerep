@@ -16,7 +16,8 @@
 
 namespace seerep_server
 {
-class FbCameraIntrinsicsService final : public seerep::fb::CameraIntrinsicsService::Service
+class FbCameraIntrinsicsService final
+  : public seerep::fb::CameraIntrinsicsService::Service
 {
 public:
   /**
@@ -34,9 +35,11 @@ public:
    * @param writer object used to stream the camera intrinsics
    * @return grpc::Status status of the request. holds success status
    */
-  grpc::Status GetCameraIntrinsics(grpc::ServerContext* context,
-                                   const flatbuffers::grpc::Message<seerep::fb::CameraIntrinsicsQuery>* request,
-                                   flatbuffers::grpc::Message<seerep::fb::CameraIntrinsics>*) override;
+  grpc::Status GetCameraIntrinsics(
+      grpc::ServerContext* context,
+      const flatbuffers::grpc::Message<seerep::fb::CameraIntrinsicsQuery>*
+          request,
+      flatbuffers::grpc::Message<seerep::fb::CameraIntrinsics>*) override;
   /**
    * @brief Save the Camera Intrinsics object
    *
@@ -45,15 +48,17 @@ public:
    * @param response gRPC message to describe the transmission state of the point clouds
    * @return grpc::Status status of the request. holds success status
    */
-  grpc::Status TransferCameraIntrinsics(grpc::ServerContext* context,
-                                        const flatbuffers::grpc::Message<seerep::fb::CameraIntrinsics>* request,
-                                        flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response) override;
+  grpc::Status TransferCameraIntrinsics(
+      grpc::ServerContext* context,
+      const flatbuffers::grpc::Message<seerep::fb::CameraIntrinsics>* request,
+      flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response) override;
 
 private:
   /** @brief a shared pointer to the camera intrinsics fb core */
   std::shared_ptr<seerep_core_fb::CoreFbCameraIntrinsics> ciFbCore;
   /** @brief the logger for the logging framework */
-  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level>
+      m_logger;
 };
 
 } /* namespace seerep_server */

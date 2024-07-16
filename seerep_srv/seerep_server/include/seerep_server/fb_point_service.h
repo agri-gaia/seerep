@@ -19,21 +19,30 @@ class FbPointService final : public seerep::fb::PointService::Service
 public:
   FbPointService(std::shared_ptr<seerep_core::Core> seerepCore);
 
-  grpc::Status GetPoint(grpc::ServerContext* context, const flatbuffers::grpc::Message<seerep::fb::Query>* request,
-                        grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::PointStamped>>* writer) override;
-  grpc::Status TransferPoint(grpc::ServerContext* context,
-                             grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::PointStamped>>* reader,
-                             flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response) override;
-  grpc::Status AddAttribute(grpc::ServerContext* context,
-                            grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::AttributesStamped>>* reader,
-                            flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response) override;
+  grpc::Status GetPoint(
+      grpc::ServerContext* context,
+      const flatbuffers::grpc::Message<seerep::fb::Query>* request,
+      grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::PointStamped>>*
+          writer) override;
+  grpc::Status TransferPoint(
+      grpc::ServerContext* context,
+      grpc::ServerReader<flatbuffers::grpc::Message<seerep::fb::PointStamped>>*
+          reader,
+      flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response) override;
+  grpc::Status AddAttribute(
+      grpc::ServerContext* context,
+      grpc::ServerReader<
+          flatbuffers::grpc::Message<seerep::fb::AttributesStamped>>* reader,
+      flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response) override;
 
 private:
-  void createResponse(std::string msg, seerep::fb::TRANSMISSION_STATE state,
-                      flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response);
+  void createResponse(
+      std::string msg, seerep::fb::TRANSMISSION_STATE state,
+      flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response);
 
   std::shared_ptr<seerep_core_fb::CoreFbPoint> pointFb;
-  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level>
+      m_logger;
 };
 
 } /* namespace seerep_server */

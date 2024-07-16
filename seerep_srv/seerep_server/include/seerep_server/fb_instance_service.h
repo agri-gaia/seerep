@@ -17,13 +17,15 @@ class FbInstanceService final : public seerep::fb::InstanceService::Service
 public:
   FbInstanceService(std::shared_ptr<seerep_core::Core> seerepCore);
 
-  grpc::Status GetInstances(grpc::ServerContext* context,
-                            const flatbuffers::grpc::Message<seerep::fb::QueryInstance>* request,
-                            flatbuffers::grpc::Message<seerep::fb::UuidsPerProject>* response);
+  grpc::Status GetInstances(
+      grpc::ServerContext* context,
+      const flatbuffers::grpc::Message<seerep::fb::QueryInstance>* request,
+      flatbuffers::grpc::Message<seerep::fb::UuidsPerProject>* response);
 
 private:
   std::shared_ptr<seerep_core_fb::CoreFbInstance> m_instanceFb;
-  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level>
+      m_logger;
 };
 
 } /* namespace seerep_server */

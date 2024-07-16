@@ -50,16 +50,19 @@
  *   seerep::PointCloud2 cloud_msg;
  *   // Fill some internals of the PoinCloud2 like the header/width/height ...
  *   cloud_msgs.height = 1;  cloud_msgs.width = 4;
- *   // Set the point fields to xyzrgb and resize the vector with the following command
- *   // 4 is for the number of added fields. Each come in triplet: the name of the PointField,
- *   // the number of occurrences of the type in the PointField, the type of the PointField
- *   seerep::PointCloud2Modifier modifier(cloud_msg);
- *   modifier.setPointCloud2Fields(4, "x", 1, seerep::PointField::FLOAT32,
- *                                            "y", 1, seerep::PointField::FLOAT32,
- *                                            "z", 1, seerep::PointField::FLOAT32,
- *                                            "rgb", 1, seerep::PointField::FLOAT32);
- *   // For convenience and the xyz, rgb, rgba fields, you can also use the following overloaded function.
- *   // You have to be aware that the following function does add extra padding for backward compatibility though
+ *   // Set the point fields to xyzrgb and resize the vector with the following
+ * command
+ *   // 4 is for the number of added fields. Each come in triplet: the name of
+ * the PointField,
+ *   // the number of occurrences of the type in the PointField, the type of the
+ * PointField seerep::PointCloud2Modifier modifier(cloud_msg);
+ * modifier.setPointCloud2Fields(4, "x", 1, seerep::PointField::FLOAT32, "y", 1,
+ * seerep::PointField::FLOAT32, "z", 1, seerep::PointField::FLOAT32, "rgb", 1,
+ * seerep::PointField::FLOAT32);
+ *   // For convenience and the xyz, rgb, rgba fields, you can also use the
+ * following overloaded function.
+ *   // You have to be aware that the following function does add extra padding
+ * for backward compatibility though
  *   // so it is definitely the solution of choice for PointXYZ and PointXYZRGB
  *   // 2 is for the number of fields to add
  *   modifier.setPointCloud2FieldsByString(2, "xyz", "rgb");
@@ -71,22 +74,28 @@
  *
  * @verbatim
  *   // Define some raw data we'll put in the PointCloud2
- *   float point_data[] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0};
- *   uint8_t color_data[] = {40, 80, 120, 160, 200, 240, 20, 40, 60, 80, 100, 120};
- *   // Define the iterators. When doing so, you define the Field you would like to iterate upon and
- *   // the type of you would like returned: it is not necessary the type of the PointField as sometimes
- *   // you pack data in another type (e.g. 3 uchar + 1 uchar for RGB are packed in a float)
- *   sensor_msgs::PointCloud2Iterator<float> iter_x(cloud_msg, "x");
+ *   float point_data[] =
+ * {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0}; uint8_t
+ * color_data[] = {40, 80, 120, 160, 200, 240, 20, 40, 60, 80, 100, 120};
+ *   // Define the iterators. When doing so, you define the Field you would like
+ * to iterate upon and
+ *   // the type of you would like returned: it is not necessary the type of the
+ * PointField as sometimes
+ *   // you pack data in another type (e.g. 3 uchar + 1 uchar for RGB are packed
+ * in a float) sensor_msgs::PointCloud2Iterator<float> iter_x(cloud_msg, "x");
  *   sensor_msgs::PointCloud2Iterator<float> iter_y(cloud_msg, "y");
  *   sensor_msgs::PointCloud2Iterator<float> iter_z(cloud_msg, "z");
- *   // Even though the r,g,b,a fields do not exist (it's usually rgb, rgba), you can create iterators for
- *   // those: they will handle data packing for you (in little endian RGB is packed as \*,R,G,B in a float
+ *   // Even though the r,g,b,a fields do not exist (it's usually rgb, rgba),
+ * you can create iterators for
+ *   // those: they will handle data packing for you (in little endian RGB is
+ * packed as \*,R,G,B in a float
  *   // and RGBA as A,R,G,B)
  *   sensor_msgs::PointCloud2Iterator<uint8_t> iter_r(cloud_msg, "r");
  *   sensor_msgs::PointCloud2Iterator<uint8_t> iter_g(cloud_msg, "g");
  *   sensor_msgs::PointCloud2Iterator<uint8_t> iter_b(cloud_msg, "b");
  *   // Fill the PointCloud2
- *   for(size_t i=0; i<n_points; ++i, ++iter_x, ++iter_y, ++iter_z, ++iter_r, ++iter_g, ++iter_b) {
+ *   for(size_t i=0; i<n_points; ++i, ++iter_x, ++iter_y, ++iter_z, ++iter_r,
+ * ++iter_g, ++iter_b) {
  *     \*iter_x = point_data[3*i+0];
  *     \*iter_y = point_data[3*i+1];
  *     \*iter_z = point_data[3*i+2];
@@ -122,7 +131,8 @@ public:
   void reserve(size_t size);
 
   /**
-   * @param size The number of T's to change the size of the original seerep::PointCloud2 by
+   * @param size The number of T's to change the size of the original
+   * seerep::PointCloud2 by
    */
   void resize(size_t size);
 
@@ -134,19 +144,20 @@ public:
   /**
    * @brief Function setting some fields in a PointCloud and adjusting the
    *        internals of the PointCloud2
-   * @param n_fields the number of fields to add. The fields are given as triplets: name of the
-   *  field as char*, number of elements in the field, the datatype of the field, the datatype
-   *  of the elements in the field
+   * @param n_fields the number of fields to add. The fields are given as
+   * triplets: name of the field as char*, number of elements in the field, the
+   * datatype of the field, the datatype of the elements in the field
    *
    * E.g, you create your PointCloud2 message with XYZ/RGB as follows:
    * @verbatim
    *   setPointCloud2Fields(cloud_msg, 4, "x", 1, seerep::PointField::FLOAT32,
-   *                                              "y", 1, seerep::PointField::FLOAT32,
-   *                                              "z", 1, seerep::PointField::FLOAT32,
-   *                                              "rgb", 1, seerep::PointField::FLOAT32);
+   *                                              "y", 1,
+   * seerep::PointField::FLOAT32, "z", 1, seerep::PointField::FLOAT32, "rgb", 1,
+   * seerep::PointField::FLOAT32);
    * @endverbatim
    * WARNING: THIS DOES NOT TAKE INTO ACCOUNT ANY PADDING
-   * For simple usual cases, the overloaded setPointCloud2FieldsByString is what you want.
+   * For simple usual cases, the overloaded setPointCloud2FieldsByString is what
+   * you want.
    */
   void setPointCloud2Fields(int n_fields, ...);
 
@@ -172,11 +183,12 @@ namespace impl
 /** Private base class for PointCloud2Iterator and PointCloud2ConstIterator
  * T is the type of the value on which the child class will be templated
  * TT is the type of the value to be retrieved (same as T except for constness)
- * U is the type of the raw data in PointCloud2 (only uchar and const uchar are supported)
- * C is the type of the pointcloud to intialize from (const or not)
+ * U is the type of the raw data in PointCloud2 (only uchar and const uchar are
+ * supported) C is the type of the pointcloud to intialize from (const or not)
  * V is the derived class (yop, curiously recurring template pattern)
  */
-template <typename T, typename TT, typename U, typename C, template <typename> class V>
+template <typename T, typename TT, typename U, typename C,
+          template <typename> class V>
 class PointCloud2IteratorBase
 {
 public:
@@ -196,8 +208,8 @@ public:
    */
   V<T>& operator=(const V<T>& iter);
 
-  /** Access the i th element starting at the current pointer (useful when a field has several elements of the same
-   * type)
+  /** Access the i th element starting at the current pointer (useful when a
+   * field has several elements of the same type)
    * @param i
    * @return a reference to the i^th value from the current position
    */
@@ -225,7 +237,8 @@ public:
   V<T>& operator+=(int i);
 
   /** Compare to another iterator
-   * @return whether the current iterator points to a different address than the other one
+   * @return whether the current iterator points to a different address than the
+   * other one
    */
   bool operator!=(const V<T>& iter) const;
 
@@ -239,7 +252,8 @@ public:
    * @param field_name the name of the field to iterate upon
    * @return the offset at which the field is found
    */
-  int set_field(const seerep::pb::PointCloud2& cloud_msg, const std::string& field_name);
+  int set_field(const seerep::pb::PointCloud2& cloud_msg,
+                const std::string& field_name);
 
   /** The "point_step" of the original cloud */
   int point_step_;
@@ -279,7 +293,8 @@ public:
  */
 template <typename T>
 class PointCloud2Iterator
-  : public impl::PointCloud2IteratorBase<T, T, unsigned char, seerep::pb::PointCloud2, PointCloud2Iterator>
+  : public impl::PointCloud2IteratorBase<
+        T, T, unsigned char, seerep::pb::PointCloud2, PointCloud2Iterator>
 {
 public:
   /**
@@ -288,14 +303,18 @@ public:
    * @param cloud_msg the cloud message to use
    * @param field_name the field to iterate over
    */
-  PointCloud2Iterator(seerep::pb::PointCloud2& cloud_msg, const std::string& field_name)
+  PointCloud2Iterator(seerep::pb::PointCloud2& cloud_msg,
+                      const std::string& field_name)
     : impl::PointCloud2IteratorBase<T, T, unsigned char, seerep::pb::PointCloud2,
-                                    seerep_hdf5_pb::PointCloud2Iterator>::PointCloud2IteratorBase(cloud_msg, field_name)
+                                    seerep_hdf5_pb::PointCloud2Iterator>::
+          PointCloud2IteratorBase(cloud_msg, field_name)
   {
     int offset = this->set_field(cloud_msg, field_name);
-    this->data_char_ = reinterpret_cast<unsigned char*>(cloud_msg.mutable_data()->data() + offset);
+    this->data_char_ = reinterpret_cast<unsigned char*>(
+        cloud_msg.mutable_data()->data() + offset);
     this->data_ = reinterpret_cast<T*>(this->data_char_);
-    this->data_end_ = reinterpret_cast<T*>(cloud_msg.mutable_data()->data() + cloud_msg.data().size() + offset);
+    this->data_end_ = reinterpret_cast<T*>(cloud_msg.mutable_data()->data() +
+                                           cloud_msg.data().size() + offset);
   }
 };
 
@@ -304,7 +323,8 @@ public:
  */
 template <typename T>
 class PointCloud2ConstIterator
-  : public impl::PointCloud2IteratorBase<T, const T, const unsigned char, const seerep::pb::PointCloud2,
+  : public impl::PointCloud2IteratorBase<T, const T, const unsigned char,
+                                         const seerep::pb::PointCloud2,
                                          PointCloud2ConstIterator>
 {
 public:
@@ -314,15 +334,19 @@ public:
    * @param cloud_msg the cloud message to use
    * @param field_name the field to iterate over
    */
-  PointCloud2ConstIterator(const seerep::pb::PointCloud2& cloud_msg, const std::string& field_name)
-    : impl::PointCloud2IteratorBase<T, const T, const unsigned char, const seerep::pb::PointCloud2,
-                                    seerep_hdf5_pb::PointCloud2ConstIterator>::PointCloud2IteratorBase(cloud_msg,
-                                                                                                       field_name)
+  PointCloud2ConstIterator(const seerep::pb::PointCloud2& cloud_msg,
+                           const std::string& field_name)
+    : impl::PointCloud2IteratorBase<T, const T, const unsigned char,
+                                    const seerep::pb::PointCloud2,
+                                    seerep_hdf5_pb::PointCloud2ConstIterator>::
+          PointCloud2IteratorBase(cloud_msg, field_name)
   {
     int offset = this->set_field(cloud_msg, field_name);
-    this->data_char_ = reinterpret_cast<const unsigned char*>(cloud_msg.data().data() + offset);
+    this->data_char_ = reinterpret_cast<const unsigned char*>(
+        cloud_msg.data().data() + offset);
     this->data_ = reinterpret_cast<const T*>(this->data_char_);
-    this->data_end_ = reinterpret_cast<const T*>(cloud_msg.data().data() + cloud_msg.data().size() + offset);
+    this->data_end_ = reinterpret_cast<const T*>(
+        cloud_msg.data().data() + cloud_msg.data().size() + offset);
   }
 };
 }  // namespace seerep_hdf5_pb

@@ -29,11 +29,14 @@ namespace seerep_hdf5_fb
 {
 // make nested flatbuffers readable
 typedef flatbuffers::Vector<flatbuffers::Offset<seerep::fb::Label>> LabelsFb;
-typedef flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelCategory>> LabelsCategoryFb;
-typedef flatbuffers::Vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>> AttributeMapsFb;
+typedef flatbuffers::Vector<flatbuffers::Offset<seerep::fb::LabelCategory>>
+    LabelsCategoryFb;
+typedef flatbuffers::Vector<flatbuffers::Offset<seerep::fb::UnionMapEntry>>
+    AttributeMapsFb;
 
 /**
- * @brief This class encompasses all read and write operations for the hdf5-fb-io which can be used by different data types
+ * @brief This class encompasses all read and write operations for the
+ * hdf5-fb-io which can be used by different data types
  *
  */
 class Hdf5FbGeneral : public virtual seerep_hdf5_core::Hdf5CoreGeneral
@@ -42,11 +45,13 @@ public:
   /**
    * @brief Write a flatbuffers general labels message to hdf5
    *
-   * @param datatypeGroup the data type the general labels should be written to e.g point cloud, image
+   * @param datatypeGroup the data type the general labels should be written to
+   * e.g point cloud, image
    * @param uuid the uuid of the data group, the general labels should be written to
    * @param labels the flatbuffers general labels message
    */
-  void writeLabelsFb(const std::string& datatypeGroup, const std::string& uuid, const LabelsCategoryFb* labels);
+  void writeLabelsFb(const std::string& datatypeGroup, const std::string& uuid,
+                     const LabelsCategoryFb* labels);
 
 protected:
   /**
@@ -55,26 +60,31 @@ protected:
    * @param file shared pointer to the hdf5 file
    * @param write_mtx mutex to ensure thread safety
    */
-  Hdf5FbGeneral(std::shared_ptr<HighFive::File>& file, std::shared_ptr<std::mutex>& write_mtx);
+  Hdf5FbGeneral(std::shared_ptr<HighFive::File>& file,
+                std::shared_ptr<std::mutex>& write_mtx);
 
   /**
    * @brief Write a flatbuffers attribute map message to a dataset
    *
-   * @param dataSetPtr shared pointer to the dataset, where the attributes should be written to
+   * @param dataSetPtr shared pointer to the dataset, where the attributes
+   * should be written to
    * @param attributes pointer to the flatbuffers attribute map message
    */
-  void writeAttributeMap(const std::shared_ptr<HighFive::DataSet> dataSetPtr, const AttributeMapsFb* attributes);
+  void writeAttributeMap(const std::shared_ptr<HighFive::DataSet> dataSetPtr,
+                         const AttributeMapsFb* attributes);
 
   /**
-   * @brief Read a attribute map from a data set or data group and receive it as a flatbuffers message
+   * @brief Read a attribute map from a data set or data group and receive it as
+   * a flatbuffers message
    *
    * @param object the HighFive data set ot data group to read from
    * @param builder the flatbuffers message builder
    * @return flatbuffers::Offset<AttributeMapsFb> the flatbuffers attribute map message
    */
   template <class T>
-  flatbuffers::Offset<AttributeMapsFb> readAttributeMap(HighFive::AnnotateTraits<T>& object,
-                                                        flatbuffers::grpc::MessageBuilder& builder);
+  flatbuffers::Offset<AttributeMapsFb>
+  readAttributeMap(HighFive::AnnotateTraits<T>& object,
+                   flatbuffers::grpc::MessageBuilder& builder);
   /**
    * @brief Write a flatbuffers header message to a data set or data group
    *
@@ -82,32 +92,40 @@ protected:
    * @param header pointer to the flatbuffers header message
    */
   template <class T>
-  void writeHeaderAttributes(HighFive::AnnotateTraits<T>& object, const seerep::fb::Header* header);
+  void writeHeaderAttributes(HighFive::AnnotateTraits<T>& object,
+                             const seerep::fb::Header* header);
 
   /**
-   * @brief Read a header from a data set or data group and receive it as a flatbuffers message
+   * @brief Read a header from a data set or data group and receive it as a
+   * flatbuffers message
    *
    * @param builder the flatbuffers message builder
    * @param object the HighFive data set ot data group to read from
-   * @param uuidMsg the uuid of the message, the header belongs to (for logging purposes)
-   * @return flatbuffers::Offset<seerep::fb::Header> the flatbuffers header message
+   * @param uuidMsg the uuid of the message, the header belongs to (for logging
+   * purposes)
+   * @return flatbuffers::Offset<seerep::fb::Header> the flatbuffers header
+   * message
    */
   template <class T>
-  flatbuffers::Offset<seerep::fb::Header> readHeaderAttributes(flatbuffers::grpc::MessageBuilder& builder,
-                                                               HighFive::AnnotateTraits<T>& object,
-                                                               std::string uuidMsg);
+  flatbuffers::Offset<seerep::fb::Header>
+  readHeaderAttributes(flatbuffers::grpc::MessageBuilder& builder,
+                       HighFive::AnnotateTraits<T>& object,
+                       std::string uuidMsg);
 
   /**
-   * @brief Read general labels (with instances and of all categories) from hdf5 and receive it as a flatbuffers message
+   * @brief Read general labels (with instances and of all categories) from hdf5
+   * and receive it as a flatbuffers message
    *
-   * @param datatypeGroup the data type the general labels should be written to e.g point cloud, image
+   * @param datatypeGroup the data type the general labels should be written to
+   * e.g point cloud, image
    * @param uuid the id of the data group, the general labels should be written to
    * @param builder the flatbuffers message builder
-   * @return flatbuffers::Offset<GeneralLabelsWithCategoryFb> the flatbuffers general labels message (with instances and
-   * of all categories)
+   * @return flatbuffers::Offset<GeneralLabelsWithCategoryFb> the flatbuffers general
+   * labels message (with instances and of all categories)
    */
-  flatbuffers::Offset<LabelsCategoryFb> readLabels(const std::string& datatypeGroup, const std::string& uuid,
-                                                   flatbuffers::grpc::MessageBuilder& builder);
+  flatbuffers::Offset<LabelsCategoryFb>
+  readLabels(const std::string& datatypeGroup, const std::string& uuid,
+             flatbuffers::grpc::MessageBuilder& builder);
 };
 
 }  // namespace seerep_hdf5_fb

@@ -19,22 +19,30 @@ class PbMetaOperations final : public seerep::pb::MetaOperations::Service
 public:
   PbMetaOperations(std::shared_ptr<seerep_core::Core> seerepCore);
 
-  grpc::Status CreateProject(grpc::ServerContext* context, const seerep::pb::ProjectCreation* request,
+  grpc::Status CreateProject(grpc::ServerContext* context,
+                             const seerep::pb::ProjectCreation* request,
                              seerep::pb::ProjectInfo* response);
-  grpc::Status GetProjects(grpc::ServerContext* context, const google::protobuf::Empty* request,
+  grpc::Status GetProjects(grpc::ServerContext* context,
+                           const google::protobuf::Empty* request,
                            seerep::pb::ProjectInfos* response);
-  grpc::Status GetOverallTimeInterval(grpc::ServerContext* context, const seerep::pb::UuidDatatypePair* request,
-                                      seerep::pb::TimeInterval* response);
-  grpc::Status GetOverallBoundingBox(grpc::ServerContext* context, const seerep::pb::UuidDatatypePair* request,
+  grpc::Status
+  GetOverallTimeInterval(grpc::ServerContext* context,
+                         const seerep::pb::UuidDatatypePair* request,
+                         seerep::pb::TimeInterval* response);
+  grpc::Status GetOverallBoundingBox(grpc::ServerContext* context,
+                                     const seerep::pb::UuidDatatypePair* request,
                                      seerep::pb::Boundingbox* response);
-  grpc::Status GetAllCategories(grpc::ServerContext* context, const seerep::pb::UuidDatatypePair* request,
+  grpc::Status GetAllCategories(grpc::ServerContext* context,
+                                const seerep::pb::UuidDatatypePair* request,
                                 seerep::pb::StringVector* response) override;
-  grpc::Status GetAllLabels(grpc::ServerContext* context, const seerep::pb::UuidDatatypeWithCategory* request,
+  grpc::Status GetAllLabels(grpc::ServerContext* context,
+                            const seerep::pb::UuidDatatypeWithCategory* request,
                             seerep::pb::StringVector* response);
 
 private:
   std::shared_ptr<seerep_core::Core> seerepCore;
-  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level>
+      m_logger;
 };
 
 } /* namespace seerep_server */

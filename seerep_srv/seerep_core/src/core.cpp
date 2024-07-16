@@ -2,7 +2,8 @@
 
 namespace seerep_core
 {
-Core::Core(std::string dataFolder, bool loadHdf5Files) : m_dataFolder(dataFolder)
+Core::Core(std::string dataFolder, bool loadHdf5Files)
+  : m_dataFolder(dataFolder)
 {
   if (loadHdf5Files)
   {
@@ -20,15 +21,18 @@ seerep_core_msgs::QueryResult Core::getDataset(seerep_core_msgs::Query& query)
   {
     if (query.label)
     {
-      throw std::invalid_argument("label and sparqlQuery are both set in the query. Only use one at a time!");
+      throw std::invalid_argument("label and sparqlQuery are both set in the "
+                                  "query. Only use one at a time!");
     }
     else if (!query.ontologyURI)
     {
-      throw std::invalid_argument("The ontology URI is not set but it is needed to perform a sparqlQuery!");
+      throw std::invalid_argument("The ontology URI is not set but it is "
+                                  "needed to perform a sparqlQuery!");
     }
     else
     {
-      getConceptsViaSparqlQuery(query.sparqlQuery.value(), query.ontologyURI.value(), query.label);
+      getConceptsViaSparqlQuery(query.sparqlQuery.value(),
+                                query.ontologyURI.value(), query.label);
     }
   }
 
@@ -49,7 +53,8 @@ seerep_core_msgs::QueryResult Core::getDataset(seerep_core_msgs::Query& query)
   }
 }
 
-seerep_core_msgs::QueryResult Core::getInstances(const seerep_core_msgs::Query& query)
+seerep_core_msgs::QueryResult
+Core::getInstances(const seerep_core_msgs::Query& query)
 {
   seerep_core_msgs::QueryResult result;
 
@@ -98,12 +103,15 @@ std::vector<seerep_core_msgs::ProjectInfo> Core::loadProjectsInFolder()
 
         if (m_projects.find(projectUUID) == m_projects.end())
         {
-          auto project = std::make_shared<CoreProject>(projectUUID, entry.path().string());
+          auto project =
+              std::make_shared<CoreProject>(projectUUID, entry.path().string());
           m_projects.insert(std::make_pair(projectUUID, project));
 
           // add project to the list of newly indexed projects
-          seerep_core_msgs::ProjectInfo projectinfo{ project->getName(), projectUUID, project->getFrameId(),
-                                                     project->getGeodeticCoordinates(), project->getVersion() };
+          seerep_core_msgs::ProjectInfo projectinfo{
+            project->getName(), projectUUID, project->getFrameId(),
+            project->getGeodeticCoordinates(), project->getVersion()
+          };
 
           projectInfos.push_back(projectinfo);
         }
@@ -139,8 +147,9 @@ void Core::createProject(const seerep_core_msgs::ProjectInfo& projectInfo)
   std::string filename = boost::lexical_cast<std::string>(projectInfo.uuid);
   std::string path = m_dataFolder + "/" + filename + ".h5";
 
-  auto project = std::make_shared<CoreProject>(projectInfo.uuid, path, projectInfo.name, projectInfo.frameId,
-                                               projectInfo.geodetCoords, projectInfo.version);
+  auto project = std::make_shared<CoreProject>(
+      projectInfo.uuid, path, projectInfo.name, projectInfo.frameId,
+      projectInfo.geodetCoords, projectInfo.version);
   m_projects.insert(std::make_pair(projectInfo.uuid, project));
 }
 
@@ -169,29 +178,33 @@ void Core::addDataset(const seerep_core_msgs::DatasetIndexable& dataset)
   project->second->addDataset(dataset);
 }
 
-void Core::addLabels(const seerep_core_msgs::Datatype& datatype,
-                     const std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>& labelPerCategory,
-                     const boost::uuids::uuid& msgUuid, const boost::uuids::uuid& projectuuid)
+void Core::addLabels(
+    const seerep_core_msgs::Datatype& datatype,
+    const std::unordered_map<std::string, seerep_core_msgs::LabelDatumaro>&
+        labelPerCategory,
+    const boost::uuids::uuid& msgUuid, const boost::uuids::uuid& projectuuid)
 {
   auto project = findProject(projectuuid);
 
   project->second->addLabels(datatype, labelPerCategory, msgUuid);
 }
 
-void Core::addTF(const geometry_msgs::TransformStamped& tf, const boost::uuids::uuid& projectuuid)
+void Core::addTF(const geometry_msgs::TransformStamped& tf,
+                 const boost::uuids::uuid& projectuuid)
 {
   auto project = findProject(projectuuid);
   project->second->addTF(tf);
 }
 
-void Core::addCameraIntrinsics(const seerep_core_msgs::camera_intrinsics& ci, const boost::uuids::uuid& projectuuid)
+void Core::addCameraIntrinsics(const seerep_core_msgs::camera_intrinsics& ci,
+                               const boost::uuids::uuid& projectuuid)
 {
   auto project = findProject(projectuuid);
   project->second->addCameraIntrinsics(ci);
 }
 
-std::optional<seerep_core_msgs::camera_intrinsics>
-Core::getCameraIntrinsics(const seerep_core_msgs::camera_intrinsics_query& ci_query)
+std::optional<seerep_core_msgs::camera_intrinsics> Core::getCameraIntrinsics(
+    const seerep_core_msgs::camera_intrinsics_query& ci_query)
 {
   try
   {
@@ -204,7 +217,8 @@ Core::getCameraIntrinsics(const seerep_core_msgs::camera_intrinsics_query& ci_qu
   }
 }
 
-bool Core::cameraIntrinsicExists(const seerep_core_msgs::camera_intrinsics_query& ci_query)
+bool Core::cameraIntrinsicExists(
+    const seerep_core_msgs::camera_intrinsics_query& ci_query)
 {
   try
   {
@@ -217,7 +231,8 @@ bool Core::cameraIntrinsicExists(const seerep_core_msgs::camera_intrinsics_query
   }
 }
 
-std::optional<geometry_msgs::TransformStamped> Core::getTF(const seerep_core_msgs::QueryTf& transformQuery)
+std::optional<geometry_msgs::TransformStamped>
+Core::getTF(const seerep_core_msgs::QueryTf& transformQuery)
 {
   try
   {
@@ -243,7 +258,8 @@ std::vector<std::string> Core::getFrames(const boost::uuids::uuid& projectuuid)
   };
 }
 
-std::shared_ptr<std::mutex> Core::getHdf5FileMutex(const boost::uuids::uuid& projectuuid)
+std::shared_ptr<std::mutex>
+Core::getHdf5FileMutex(const boost::uuids::uuid& projectuuid)
 {
   try
   {
@@ -255,7 +271,8 @@ std::shared_ptr<std::mutex> Core::getHdf5FileMutex(const boost::uuids::uuid& pro
     return nullptr;
   }
 }
-std::shared_ptr<HighFive::File> Core::getHdf5File(const boost::uuids::uuid& projectuuid)
+std::shared_ptr<HighFive::File>
+Core::getHdf5File(const boost::uuids::uuid& projectuuid)
 {
   try
   {
@@ -268,7 +285,8 @@ std::shared_ptr<HighFive::File> Core::getHdf5File(const boost::uuids::uuid& proj
   }
 }
 
-std::unordered_map<boost::uuids::uuid, std::shared_ptr<seerep_core::CoreProject>, boost::hash<boost::uuids::uuid>>::iterator
+std::unordered_map<boost::uuids::uuid, std::shared_ptr<seerep_core::CoreProject>,
+                   boost::hash<boost::uuids::uuid>>::iterator
 Core::findProject(const boost::uuids::uuid& projectuuid)
 {
   auto project = m_projects.find(projectuuid);
@@ -278,11 +296,14 @@ Core::findProject(const boost::uuids::uuid& projectuuid)
   }
   else
   {
-    throw std::runtime_error("project " + boost::lexical_cast<std::string>(projectuuid) + "does not exist!");
+    throw std::runtime_error("project " +
+                             boost::lexical_cast<std::string>(projectuuid) +
+                             "does not exist!");
   }
 }
 
-seerep_core_msgs::QueryResult Core::getDatasetFromAllProjects(seerep_core_msgs::Query& query)
+seerep_core_msgs::QueryResult
+Core::getDatasetFromAllProjects(seerep_core_msgs::Query& query)
 {
   seerep_core_msgs::QueryResult result;
   for (auto& it : m_projects)
@@ -292,7 +313,8 @@ seerep_core_msgs::QueryResult Core::getDatasetFromAllProjects(seerep_core_msgs::
   }
   return checkSize(result, query.maxNumData);
 }
-seerep_core_msgs::QueryResult Core::getDatasetFromSpecificProjects(seerep_core_msgs::Query& query)
+seerep_core_msgs::QueryResult
+Core::getDatasetFromSpecificProjects(seerep_core_msgs::Query& query)
 {
   seerep_core_msgs::QueryResult result;
   for (auto projectuuid : query.projects.value())
@@ -305,7 +327,8 @@ seerep_core_msgs::QueryResult Core::getDatasetFromSpecificProjects(seerep_core_m
   return checkSize(result, query.maxNumData);
 }
 
-seerep_core_msgs::QueryResult Core::checkSize(const seerep_core_msgs::QueryResult& queryResult, uint maxNum)
+seerep_core_msgs::QueryResult
+Core::checkSize(const seerep_core_msgs::QueryResult& queryResult, uint maxNum)
 {
   seerep_core_msgs::QueryResult queryResultFiltered(queryResult);
 
@@ -320,16 +343,18 @@ seerep_core_msgs::QueryResult Core::checkSize(const seerep_core_msgs::QueryResul
     float factor = maxNum / (float)overallResultSize;
     for (auto& queryResultProject : queryResultFiltered.queryResultProjects)
     {
-      queryResultProject.dataOrInstanceUuids =
-          std::vector<boost::uuids::uuid>(queryResultProject.dataOrInstanceUuids.begin(),
-                                          queryResultProject.dataOrInstanceUuids.begin() +
-                                              (int)std::round(queryResultProject.dataOrInstanceUuids.size() * factor));
+      queryResultProject.dataOrInstanceUuids = std::vector<boost::uuids::uuid>(
+          queryResultProject.dataOrInstanceUuids.begin(),
+          queryResultProject.dataOrInstanceUuids.begin() +
+              (int)std::round(queryResultProject.dataOrInstanceUuids.size() *
+                              factor));
     }
   }
   return queryResultFiltered;
 }
 
-void Core::addDatasetToResult(seerep_core_msgs::QueryResultProject& dataset, seerep_core_msgs::QueryResult& result)
+void Core::addDatasetToResult(seerep_core_msgs::QueryResultProject& dataset,
+                              seerep_core_msgs::QueryResult& result)
 {
   if (!dataset.dataOrInstanceUuids.empty())
   {
@@ -337,28 +362,34 @@ void Core::addDatasetToResult(seerep_core_msgs::QueryResultProject& dataset, see
   }
 }
 
-seerep_core_msgs::AabbTime Core::getOverallTimeInterval(boost::uuids::uuid uuid,
-                                                        std::vector<seerep_core_msgs::Datatype> datatypes)
+seerep_core_msgs::AabbTime
+Core::getOverallTimeInterval(boost::uuids::uuid uuid,
+                             std::vector<seerep_core_msgs::Datatype> datatypes)
 {
   auto project = findProject(uuid);
   return project->second->getTimeBounds(datatypes);
 }
 
-seerep_core_msgs::AABB Core::getOverallBound(boost::uuids::uuid uuid, std::vector<seerep_core_msgs::Datatype> datatypes)
+seerep_core_msgs::AABB
+Core::getOverallBound(boost::uuids::uuid uuid,
+                      std::vector<seerep_core_msgs::Datatype> datatypes)
 {
   auto project = findProject(uuid);
   return project->second->getSpatialBounds(datatypes);
 }
 
-std::unordered_set<std::string> Core::getAllCategories(boost::uuids::uuid uuid,
-                                                       std::vector<seerep_core_msgs::Datatype> datatypes)
+std::unordered_set<std::string>
+Core::getAllCategories(boost::uuids::uuid uuid,
+                       std::vector<seerep_core_msgs::Datatype> datatypes)
 {
   auto project = findProject(uuid);
   return project->second->getAllCategories(datatypes);
 }
 
 std::unordered_set<std::string>
-Core::getAllLabels(boost::uuids::uuid uuid, std::vector<seerep_core_msgs::Datatype> datatypes, std::string category)
+Core::getAllLabels(boost::uuids::uuid uuid,
+                   std::vector<seerep_core_msgs::Datatype> datatypes,
+                   std::string category)
 {
   auto project = findProject(uuid);
   return project->second->getAllLabels(datatypes, category);
@@ -378,8 +409,9 @@ void Core::checkForOntologyConcepts(seerep_core_msgs::Query& query)
       {
         std::string& label = category.second.at(i);
         // check if label is NOT URL (ontology concept)
-        if (!std::regex_match(label,
-                              std::regex("^(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([\\/\\w \\.-]*)*\\/?$")))
+        if (!std::regex_match(label, std::regex("^(https?:\\/\\/"
+                                                ")?([\\da-z\\.-]+)\\.([a-z\\.]{"
+                                                "2,6})([\\/\\w \\.-]*)*\\/?$")))
         {
           auto conceptCached = label2ConceptCache.find(label);
           if (conceptCached != label2ConceptCache.end())
@@ -388,10 +420,12 @@ void Core::checkForOntologyConcepts(seerep_core_msgs::Query& query)
           }
           else
           {
-            concept = translateLabelToOntologyConcept(label, query.ontologyURI.value());
+            concept = translateLabelToOntologyConcept(
+                label, query.ontologyURI.value());
             label2ConceptCache.emplace(label, concept);
           }
-          // add the concept to the vector so that the query will check for the initial label and also for the found concept
+          // add the concept to the vector so that the query will check for the
+          // initial label and also for the found concept
           category.second.push_back(concept);
         }
       }
@@ -399,23 +433,28 @@ void Core::checkForOntologyConcepts(seerep_core_msgs::Query& query)
   }
 }
 
-size_t Core::writeCallback(void* contents, size_t size, size_t nmemb, std::string* output)
+size_t Core::writeCallback(void* contents, size_t size, size_t nmemb,
+                           std::string* output)
 {
   size_t totalSize = size * nmemb;
   output->append((char*)contents, totalSize);
   return totalSize;
 }
 
-std::string Core::translateLabelToOntologyConcept(const std::string& label, const std::string& ontologyURI)
+std::string Core::translateLabelToOntologyConcept(const std::string& label,
+                                                  const std::string& ontologyURI)
 {
   std::string concept = label;
 
-  std::string sparqlQuery = std::string("PREFIX so: <http://schema.org/>\nPREFIX skos: "
-                                        "<http://www.w3.org/2004/02/skos/core#>\n\nSELECT ?c ?l\nWHERE "
-                                        "{\n  {\n    ?c skos:prefLabel \"") +
-                            label +
-                            std::string("\"@en.\n  }\n  UNION {\n    ?c skos:altLabel ?l FILTER (str(?l) = \"") +
-                            label + std::string("\").\n  }\n}");
+  std::string sparqlQuery =
+      std::string(
+          "PREFIX so: <http://schema.org/>\nPREFIX skos: "
+          "<http://www.w3.org/2004/02/skos/core#>\n\nSELECT ?c ?l\nWHERE "
+          "{\n  {\n    ?c skos:prefLabel \"") +
+      label +
+      std::string("\"@en.\n  }\n  UNION {\n    ?c skos:altLabel ?l FILTER "
+                  "(str(?l) = \"") +
+      label + std::string("\").\n  }\n}");
 
   auto response = performCurl(sparqlQuery, ontologyURI);
 
@@ -438,11 +477,13 @@ std::optional<std::string> Core::performCurl(std::string query, std::string url)
   if (curl)
   {
     // Set the request parameters
-    std::string postData = std::string("query=").append(curl_easy_escape(curl, query.c_str(), query.length()));
+    std::string postData = std::string("query=").append(
+        curl_easy_escape(curl, query.c_str(), query.length()));
 
     // Set the HTTP POST headers
     struct curl_slist* headers = nullptr;
-    headers = curl_slist_append(headers, "Accept: application/sparql-results+json");
+    headers =
+        curl_slist_append(headers, "Accept: application/sparql-results+json");
 
     // Set the request options
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
@@ -460,7 +501,8 @@ std::optional<std::string> Core::performCurl(std::string query, std::string url)
     // Check for errors
     if (res != CURLE_OK)
     {
-      BOOST_LOG_SEV(m_logger, boost::log::trivial::error) << "curl failed: " << curl_easy_strerror(res) << std::endl;
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::error)
+          << "curl failed: " << curl_easy_strerror(res) << std::endl;
       return std::nullopt;
     }
 
@@ -474,7 +516,8 @@ std::optional<std::string> Core::performCurl(std::string query, std::string url)
   return std::nullopt;
 }
 
-std::optional<std::vector<std::string>> Core::extractConceptsFromJson(std::string json, std::string conceptVariableName)
+std::optional<std::vector<std::string>>
+Core::extractConceptsFromJson(std::string json, std::string conceptVariableName)
 {
   Json::Value root;
   Json::Reader reader;
@@ -487,12 +530,14 @@ std::optional<std::vector<std::string>> Core::extractConceptsFromJson(std::strin
     {
       for (auto binding : root.get("results", "").get("bindings", ""))
       {
-        concepts.push_back(binding.get(conceptVariableName, "").get("value", "").asString());
+        concepts.push_back(
+            binding.get(conceptVariableName, "").get("value", "").asString());
       }
     }
     catch (...)
     {
-      BOOST_LOG_SEV(m_logger, boost::log::trivial::error) << "Couldn't extract concept from json.";
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::error)
+          << "Couldn't extract concept from json.";
       return std::nullopt;
     }
   }
@@ -506,15 +551,19 @@ std::optional<std::vector<std::string>> Core::extractConceptsFromJson(std::strin
   }
 }
 
-void Core::getConceptsViaSparqlQuery(const seerep_core_msgs::SparqlQuery& sparqlQuery, const std::string& ontologyURI,
-                                     std::optional<std::unordered_map<std::string, std::vector<std::string>>> label)
+void Core::getConceptsViaSparqlQuery(
+    const seerep_core_msgs::SparqlQuery& sparqlQuery,
+    const std::string& ontologyURI,
+    std::optional<std::unordered_map<std::string, std::vector<std::string>>>
+        label)
 {
-  std::optional<std::string> sparqlResult = performCurl(sparqlQuery.sparql, ontologyURI);
+  std::optional<std::string> sparqlResult =
+      performCurl(sparqlQuery.sparql, ontologyURI);
 
   if (sparqlResult)
   {
-    std::optional<std::vector<std::string>> concepts =
-        extractConceptsFromJson(sparqlResult.value(), sparqlQuery.variableNameOfConcept);
+    std::optional<std::vector<std::string>> concepts = extractConceptsFromJson(
+        sparqlResult.value(), sparqlQuery.variableNameOfConcept);
 
     if (concepts)
     {

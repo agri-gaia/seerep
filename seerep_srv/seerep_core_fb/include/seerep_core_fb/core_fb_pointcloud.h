@@ -30,12 +30,14 @@
 namespace seerep_core_fb
 {
 /**
- * @brief This class is the center piece between the gRPC interface, the core and the hdf5-io for point clouds
+ * @brief This class is the center piece between the gRPC interface, the core
+ * and the hdf5-io for point clouds
  *
- * The functions of this class are called by the corresponding gRPC services. The data storing and loading is done
- * directly via the hdf5-io-fb. When adding new data the needed information for the indices are disclosed to the core.
- * When data is queried the core is consulted to get the UUIDs of the data answering the query. The data is then
- * loaded from this class via the hdf5-io.
+ * The functions of this class are called by the corresponding gRPC services.
+ * The data storing and loading is done directly via the hdf5-io-fb. When adding
+ * new data the needed information for the indices are disclosed to the core.
+ * When data is queried the core is consulted to get the UUIDs of the data
+ * answering the query. The data is then loaded from this class via the hdf5-io.
  */
 class CoreFbPointCloud
 {
@@ -51,13 +53,17 @@ public:
    * @brief Function to query point clouds
    *
    * @param query the flatbuffer query
-   * @param writer the writer object used to send the point clouds matching the query directly via gRPC
+   * @param writer the writer object used to send the point clouds matching the
+   * query directly via gRPC
    *
-   * Based on the query the indices are used to get the uuids of the point clouds matching the query. Then the point
-   * clouds are loaded by the hdf5-fb-io and send via gRPC directly using the writer
+   * Based on the query the indices are used to get the uuids of the point
+   * clouds matching the query. Then the point clouds are loaded by the
+   * hdf5-fb-io and send via gRPC directly using the writer
    */
-  void getData(const seerep::fb::Query* query,
-               grpc::ServerWriter<flatbuffers::grpc::Message<seerep::fb::PointCloud2>>* const writer);
+  void getData(
+      const seerep::fb::Query* query,
+      grpc::ServerWriter<
+          flatbuffers::grpc::Message<seerep::fb::PointCloud2>>* const writer);
   /**
    * @brief Write the pointcloud data to hdf5
    *
@@ -70,15 +76,16 @@ public:
    * @brief Extract pointcloud data from hdf5 and build the indices.
    *
    * This method complements @ref addDataToHdf5 and should be called after
-   * the data has been added to hdf5. The data for the indices is retrieved from hdf5 and added to the indices to the
-   * core.
+   * the data has been added to hdf5. The data for the indices is retrieved from
+   * hdf5 and added to the indices to the core.
    *
-   * @param projectPclUuids a vector of pairs of first project uuids and second pointcloud uuids, where the pointcloud
-   * belongs to the specified project
+   * @param projectPclUuids a vector of pairs of first project uuids and second
+   * pointcloud uuids, where the pointcloud belongs to the specified project
    *
    * @see seerep_core_fb::CoreFbPointCloud::addDataToHdf5
    */
-  void buildIndices(std::vector<std::pair<std::string, boost::uuids::uuid>>& projectPclUuids);
+  void buildIndices(
+      std::vector<std::pair<std::string, boost::uuids::uuid>>& projectPclUuids);
 
   /**
    * @brief Adds labels to an existing pointcloud
@@ -89,12 +96,15 @@ public:
 private:
   /** @brief a shared pointer to the general core */
   std::shared_ptr<seerep_core::Core> m_seerepCore;
-  /** @brief a map from the uuids of the project to the hdf5-io objects handling the io for the object*/
-  std::unordered_map<boost::uuids::uuid, std::shared_ptr<seerep_hdf5_fb::Hdf5FbPointCloud>,
+  /** @brief a map from the uuids of the project to the hdf5-io objects handling
+   * the io for the object*/
+  std::unordered_map<boost::uuids::uuid,
+                     std::shared_ptr<seerep_hdf5_fb::Hdf5FbPointCloud>,
                      boost::hash<boost::uuids::uuid>>
       m_hdf5IoMap;
   /** @brief the logger for the logging framework*/
-  boost::log::sources::severity_logger<boost::log::trivial::severity_level> m_logger;
+  boost::log::sources::severity_logger<boost::log::trivial::severity_level>
+      m_logger;
 };
 
 }  // namespace seerep_core_fb

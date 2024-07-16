@@ -6,8 +6,9 @@
 
 namespace seerep_server_util
 {
-inline void createResponseFb(std::string msg, seerep::fb::TRANSMISSION_STATE state,
-                             flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response)
+inline void createResponseFb(
+    std::string msg, seerep::fb::TRANSMISSION_STATE state,
+    flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response)
 {
   flatbuffers::grpc::MessageBuilder builder;
   auto msgFb = builder.CreateString(msg);
@@ -20,8 +21,10 @@ inline void createResponseFb(std::string msg, seerep::fb::TRANSMISSION_STATE sta
   assert(response->Verify());
 }
 
-inline void createResponsePb(std::string msg, seerep::pb::ServerResponse::TRANSMISSION_STATE state,
-                             seerep::pb::ServerResponse* response)
+inline void
+createResponsePb(std::string msg,
+                 seerep::pb::ServerResponse::TRANSMISSION_STATE state,
+                 seerep::pb::ServerResponse* response)
 {
   response->set_message(msg);
   response->set_transmission_state(state);

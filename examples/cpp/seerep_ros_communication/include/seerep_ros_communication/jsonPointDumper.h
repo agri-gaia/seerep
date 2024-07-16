@@ -35,19 +35,22 @@ namespace seerep_grpc_ros
 class JsonPointDumper
 {
 public:
-  JsonPointDumper(const std::string& filePath, const std::string& hdf5FilePath, const std::string& dataSource,
+  JsonPointDumper(const std::string& filePath, const std::string& hdf5FilePath,
+                  const std::string& dataSource,
                   const std::string& classesMappingPath);
   ~JsonPointDumper();
 
 private:
   void readAndDumpJsonUos(const std::string& jsonFilePath);
-  void readAndDumpJsonFr(const std::string& jsonFilePath, const std::string& classesMappingPath);
-  flatbuffers::grpc::Message<seerep::fb::PointStamped>
-  createPointForDetection(int32_t stampSecs, uint32_t stampNanos, const std::string& frameId,
-                          const std::string& labelAgrovoc, const std::string& labelTrivial,
-                          const std::string& instanceUUID, const double x, const double y, const double z,
-                          const double diameter, const double confidence = 0.0);
-  std::unordered_map<int64_t, std::string> readClassesMapping(const std::string& classesMappingPath);
+  void readAndDumpJsonFr(const std::string& jsonFilePath,
+                         const std::string& classesMappingPath);
+  flatbuffers::grpc::Message<seerep::fb::PointStamped> createPointForDetection(
+      int32_t stampSecs, uint32_t stampNanos, const std::string& frameId,
+      const std::string& labelAgrovoc, const std::string& labelTrivial,
+      const std::string& instanceUUID, const double x, const double y,
+      const double z, const double diameter, const double confidence = 0.0);
+  std::unordered_map<int64_t, std::string>
+  readClassesMapping(const std::string& classesMappingPath);
 
   std::string translateNameToAgrovocConcept(std::string name);
   std::unordered_map<std::string, std::string> name2Concept;
