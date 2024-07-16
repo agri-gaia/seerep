@@ -22,10 +22,12 @@ Vs-Code, select `seerep server` and press run. Now a terminal should open and
 print the following info messages:
 
 ```bash
-Starting seerep server
-[2022-08-01 13:50:35.765427]<info>: The used logging folder is: /seerep/seerep-data/log/
-[2022-08-01 13:50:35.765575]<info>: The used data folder is: /seerep/seerep-data/
-[2022-08-01 13:50:35.765801]<info>: add the protobuf gRPC services...
-[2022-08-01 13:50:35.765860]<info>: add the flatbuffer gRPC services...
-[2022-08-01 13:50:35.767787]<info>: serving gRPC Server on "[::]:9090"...
+[2024-07-16 14:41:27.416289]<info>: Initialized logging
+[2024-07-16 14:41:27.416806]<info>: The used logging folder is: /seerep/seerep-data/debug/log/
+[2024-07-16 14:41:27.416847]<info>: Current timezone: CET
+[2024-07-16 14:41:27.416879]<info>: SEEREP version: v0.2.7-25-g48531131
+[2024-07-16 14:41:27.416918]<info>: The used data folder is: /seerep/seerep-data/debug/
+[2024-07-16 14:41:27.417739]<info>: Addded Protocol Buffers gRPC services
+[2024-07-16 14:41:27.418177]<info>: Added Flatbuffers gRPC services
+[2024-07-16 14:41:27.423797]<info>: Serving gRPC Server on "[::]:9090"
 ```

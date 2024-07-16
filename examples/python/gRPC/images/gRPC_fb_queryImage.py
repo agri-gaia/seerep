@@ -125,7 +125,7 @@ if __name__ == "__main__":
             "------------------------------------------------------------------"
         )
         print(f"uuidmsg: {img.Header().UuidMsgs().decode('utf-8')}")
-        print(f"count of bounding box labels: {img.LabelsLength()}")
+        print(f"count of labels: {img.LabelsLength()}")
         if img.LabelsLength() > 0:
             print(
                 "first label: "

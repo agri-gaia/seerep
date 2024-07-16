@@ -37,14 +37,14 @@ definition can be found
 [here](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/query.fbs).
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/tests/python/gRPC/util/msg_abs/msgs.py:24:40"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/tests/python/gRPC/util/msg_abs/msgs.py:27:41"
 ```
 
 Then `FbQuery` inherits from `MsgsFb`, which itself is a template type defined in
 [msgs_base.py](https://github.com/agri-gaia/seerep/blob/main/tests/python/gRPC/util/msg_abs/msgs_base.py).
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/tests/python/gRPC/util/msg_abs/msgs.py:48:103"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/tests/python/gRPC/util/msg_abs/msgs.py:49:138"
 ```
 
 In `MsgsFb` `_set_enum_func_mapping()` is a abstractmethod which return type is
@@ -72,7 +72,7 @@ the components at this point are set.
 ## Using message abstractions for testing
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/tests/python/gRPC/instances/test_gRPC_fb_getInstances.py:83:113"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/tests/python/gRPC/instances/test_gRPC_fb_getInstances.py:82:122"
 ```
 
 In this function all the possible datatypes with attached instances are tested
@@ -111,7 +111,7 @@ Another snippet to highlight is the following where one of the components of the
 datatype itself is inheriting from `MsgsFb`.
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/tests/python/gRPC/instances/test_gRPC_fb_getInstances.py:201:261"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/tests/python/gRPC/instances/test_gRPC_fb_getInstances.py:234:310"
 ```
 
 Here `query_builder` is used to build the `Query.Query` datatype in order to
