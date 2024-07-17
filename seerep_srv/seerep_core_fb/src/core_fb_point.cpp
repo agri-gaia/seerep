@@ -30,23 +30,24 @@ void CoreFbPoint::getData(
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
         << "sending images from project"
         << boost::lexical_cast<std::string>(project.projectUuid);
-    for (auto uuidImg : project.dataOrInstanceUuids)
+    for (auto uuidPoint : project.dataOrInstanceUuids)
     {
       auto point =
           CoreFbGeneral::getHdf5(project.projectUuid, m_seerepCore, m_hdf5IoMap)
-              ->readPoint(boost::lexical_cast<std::string>(uuidImg));
+              ->readPoint(boost::lexical_cast<std::string>(uuidPoint));
 
       if (point)
       {
         BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
-            << "sending point " << boost::lexical_cast<std::string>(uuidImg);
+            << "sending point " << boost::lexical_cast<std::string>(uuidPoint);
         writer->Write(point.value());
       }
     }
   }
 }
 
-boost::uuids::uuid CoreFbPoint::addData(const seerep::fb::PointStamped* point)
+boost::uuids::uuid
+CoreFbPoint::addDataToHdf5(const seerep::fb::PointStamped* point)
 {
   seerep_core_msgs::DatasetIndexable dataForIndices =
       CoreFbConversion::fromFb(point);
@@ -56,9 +57,27 @@ boost::uuids::uuid CoreFbPoint::addData(const seerep::fb::PointStamped* point)
   hdf5io->writePoint(
       boost::lexical_cast<std::string>(dataForIndices.header.uuidData), point);
 
-  m_seerepCore->addDataset(dataForIndices);
-
   return dataForIndices.header.uuidData;
+}
+
+void CoreFbPoint::buildIndices(
+    const std::vector<std::pair<std::string, boost::uuids::uuid>>&
+        projectPointUuids)
+{
+  for (auto [projectUuid, pointUuid] : projectPointUuids)
+  {
+    auto point = CoreFbGeneral::getHdf5(projectUuid, m_seerepCore, m_hdf5IoMap)
+                     ->readPoint(boost::lexical_cast<std::string>(pointUuid));
+
+    if (!point.has_value())
+    {
+      throw std::runtime_error("points couldn't be retrieved correctly!");
+    }
+    seerep_core_msgs::DatasetIndexable dataForIndices =
+        CoreFbConversion::fromFb(point.value().GetRoot());
+
+    m_seerepCore->addDataset(dataForIndices);
+  }
 }
 
 void CoreFbPoint::addAttributes(

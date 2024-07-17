@@ -110,6 +110,9 @@ grpc::Status FbPointService::TransferPoint(
   std::string answer = "everything stored!";
 
   flatbuffers::grpc::Message<seerep::fb::PointStamped> pointMsg;
+  std::vector<std::pair<std::string, boost::uuids::uuid>> projectPointUuids;
+
+  // write the point data to hdf5
   while (reader->Read(&pointMsg))
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
@@ -121,7 +124,8 @@ grpc::Status FbPointService::TransferPoint(
     {
       try
       {
-        pointFb->addData(point);
+        projectPointUuids.push_back(
+            { uuidProject, pointFb->addDataToHdf5(point) });
       }
       catch (std::runtime_error const& e)
       {
@@ -164,6 +168,46 @@ grpc::Status FbPointService::TransferPoint(
     {
       answer = "a msg had no project uuid!";
     }
+  }
+
+  // build the indices from the written data
+  try
+  {
+    pointFb->buildIndices(projectPointUuids);
+  }
+  catch (std::runtime_error const& e)
+  {
+    // mainly catching "invalid uuid string" when transforming uuid_project
+    // from string to uuid also catching core doesn't have project with uuid
+    // error
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+        << e.what();
+
+    seerep_server_util::createResponseFb(std::string(e.what()),
+                                         seerep::fb::TRANSMISSION_STATE_FAILURE,
+                                         response);
+
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (const std::exception& e)
+  {
+    // specific handling for all exceptions extending std::exception, except
+    // std::runtime_error which is handled explicitly
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+        << e.what();
+    seerep_server_util::createResponseFb(std::string(e.what()),
+                                         seerep::fb::TRANSMISSION_STATE_FAILURE,
+                                         response);
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (...)
+  {
+    // catch any other errors (that we have no information about)
+    std::string msg = "Unknown failure occurred. Possible memory corruption";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+    seerep_server_util::createResponseFb(
+        msg, seerep::fb::TRANSMISSION_STATE_FAILURE, response);
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
   }
 
   seerep_server_util::createResponseFb(
