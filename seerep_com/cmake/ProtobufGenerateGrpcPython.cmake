@@ -21,7 +21,21 @@ function(GRPC_GENERATE_PYTHON SRCS)
     ERROR_VARIABLE _pygrpc_output
   )
 
-  if(NOT (${_pygrpc_output} STREQUAL "Missing input file.\n"))
+  string(
+    REPLACE "\n"
+            ";"
+            _pygrpc_output
+            ${_pygrpc_output}
+  )
+
+  list(
+    GET
+    _pygrpc_output
+    0
+    _pygrpc_output
+  )
+
+  if(NOT (${_pygrpc_output} STREQUAL "Missing input file."))
     message(
       SEND_ERROR
         "Error: grpcio_tools not installed\ntry: sudo pip install grpcio_tools"

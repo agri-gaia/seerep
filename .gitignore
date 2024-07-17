@@ -65,3 +65,6 @@ MANIFEST
 
 # mkdocs-material privacy plugin
 .cache
+
+# logs
+*.log
