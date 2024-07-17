@@ -2,8 +2,7 @@
 
 ## Sending images
 
-In this example we will send images with labeled bounding boxes as well as
-general labels to SEEREP.
+In this example we will send images with labels to SEEREP.
 
 In order to save images, we need to mandatorily provide the intrinsics of the
 camera used to capture them. After the successfully saving the camera intrinsics,

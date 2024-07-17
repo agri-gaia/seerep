@@ -43,20 +43,20 @@ using SEEREP server calls. Implementations of both fixtures can be found
 [here](https://github.com/agri-gaia/seerep/blob/main/tests/conftest.py).
 
 After that the `project_uuid` of the created project is retrieved and used for
-the different calls to the example functions. To attach new BoundingBoxes to
+the different calls to the example functions. To attach new Labels to
 images, it has to be ensured that images are present. This is done by utilizing
 the [gRPC_pb_sendLabeledImage](https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/images/gRPC_pb_sendLabeledImage.py)
-example. Then the BoundingBoxes example can be used to add BoundingBoxes to
+example. Then the Labels example can be used to add Labels to
 those images.
 
-Following on the BoundingBoxes returned by `add_bb_raw()` are tested and
+Following on the Labels returned by `add_label_raw()` are tested and
 compared against those now persisting on the server. `get_imgs` retrieves all
-the images from the server, each mapping of image `uuid` to BoundingBoxes is
+the images from the server, each mapping of image `uuid` to Labels is
 iterated and in the list of all images the image, which matches the image `uuid`
-of the mapping, is inspected further. Only the BoundingBoxes with the category
-`laterAddedBB` are relevant and therefore filtered. Lastly the sent BoundingBoxes
+of the mapping, is inspected further. Only the Labels with the category
+`laterAddedBB` are relevant and therefore filtered. Lastly the sent Labels
 are converted to python dictionaries and compared for matching with the filtered
-image attached BoundingBoxes.
+image attached Labels.
 
 ## Tips to ease development
 
