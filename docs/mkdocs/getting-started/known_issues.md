@@ -46,9 +46,12 @@ For more details, refer to the
 
 ## [MacOS] False Positives by Check-Executables-Have-Shebangs
 
-Due to a bug in Docker for MacOS non-executables get falsely reported as executables see
-[pre-commit/pre-commit-hooks#528](https://github.com/pre-commit/pre-commit-hooks/issues/528) and the
-corresponding upstream bug [docker/for-mac#5029](https://github.com/docker/for-mac/issues/5029).
-The current workaround is to change the file system implementation to the noticably slower `osxfs`in the Docker Desktop
-settings (both `VirtioFS` and `gRPC FUSE` have the bug in version `4.31.0`). If there are no other pre-commit violations
-, commit without checks using `git commmit --no-verify -m "message"`.
+Due to a bug in Docker for MacOS non-executables get falsely reported as
+executables see
+[pre-commit/pre-commit-hooks#528](https://github.com/pre-commit/pre-commit-hooks/issues/528)
+and the corresponding upstream bug
+[docker/for-mac#5029](https://github.com/docker/for-mac/issues/5029).
+The current workaround is to change the file system implementation to the
+noticably slower `osxfs`in the Docker Desktop settings (both `VirtioFS` and
+`gRPC FUSE` have the bug in version `4.31.0`). If there are no other pre-commit
+violations, commit without checks using `git commmit --no-verify -m "message"`.
