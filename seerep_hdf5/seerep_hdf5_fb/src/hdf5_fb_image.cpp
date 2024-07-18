@@ -59,58 +59,61 @@ Hdf5FbImage::readImage(const std::string& id, const bool withoutData)
   const std::scoped_lock lock(*m_write_mtx);
   flatbuffers::grpc::MessageBuilder builder;
 
-  std::string hdf5GroupPath = getHdf5GroupPath(id);
-  std::string hdf5DatasetPath = getHdf5DataSetPath(id);
-
-  if (!exists(hdf5DatasetPath))
+  const std::string hdf5GroupPath = getHdf5GroupPath(id);
+  if (!exists(hdf5GroupPath))
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
-        << "DataSet: " << id << " does not exist";
-    return std::nullopt;
-  }
-  else if (!exists(hdf5GroupPath))
-  {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
-        << "DataGroup: " << id << " does not exist";
+        << "[seerep_hdf5_fb] Requested image '" << id << "'  does not exist";
     return std::nullopt;
   }
 
-  // read all data from hdf5 and if possible convert into flatbuffers objects
+  std::shared_ptr<HighFive::Group> dataGroup = getHdf5Group(hdf5GroupPath);
 
-  auto imageAttributes = readImageAttributes(id);
-
-  auto dataSetPtr = getHdf5DataSet(hdf5DatasetPath);
-  auto dataGroupPtr = getHdf5Group(hdf5GroupPath);
-
-  auto headerOffset = readHeaderAttributes(builder, *dataGroupPtr, id);
+  auto imageAttributes = readImageAttributes(*dataGroup);
+  auto headerOffset = readHeaderAttributes(builder, *dataGroup, id);
   auto labelsOffset = readLabels(
       seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id, builder);
-  auto encodingStringOffset = builder.CreateString(imageAttributes.encoding);
 
-  std::vector<uint8_t> data;
   flatbuffers::Offset<ByteArrayFb> imageDataOffset;
-  if (!withoutData)
+  const std::string datasetPath = getHdf5DataSetPath(id);
+
+  if (!withoutData && exists(datasetPath))
   {
+    std::shared_ptr<HighFive::DataSet> dataSetPtr = getHdf5DataSet(datasetPath);
+    std::vector<uint8_t> data;
     data.resize(imageAttributes.height * imageAttributes.width);
     dataSetPtr->read(data);
+    imageDataOffset = builder.CreateVector(data);
   }
-  imageDataOffset = builder.CreateVector(data);
 
-  // construct flatbuffers image message
+  std::string dataUri = "";
+  flatbuffers::Offset<flatbuffers::String> dataUriOffset;
+  if (dataGroup->hasAttribute(seerep_hdf5_core::Hdf5CoreGeneral::DATA_URI))
+  {
+    dataUri = readAttributeFromHdf5<std::string>(
+        *dataGroup, seerep_hdf5_core::Hdf5CoreGeneral::DATA_URI, hdf5GroupPath);
+    dataUriOffset = builder.CreateString(dataUri);
+  }
 
-  flatbuffers::Offset<flatbuffers::String> camintrinsics_offset =
+  auto camintrinsics_offset =
       builder.CreateString(imageAttributes.cameraIntrinsicsUuid);
+
+  auto imageEncodingOffset = builder.CreateString(imageAttributes.encoding);
 
   seerep::fb::ImageBuilder imageBuilder(builder);
   imageBuilder.add_height(imageAttributes.height);
   imageBuilder.add_width(imageAttributes.width);
-  imageBuilder.add_encoding(encodingStringOffset);
+  imageBuilder.add_encoding(imageEncodingOffset);
   imageBuilder.add_is_bigendian(imageAttributes.isBigendian);
   imageBuilder.add_uuid_cameraintrinsics(camintrinsics_offset);
   imageBuilder.add_step(imageAttributes.step);
   if (!withoutData)
   {
     imageBuilder.add_data(imageDataOffset);
+  }
+  if (!dataUri.empty())
+  {
+    imageBuilder.add_uri(dataUriOffset);
   }
   imageBuilder.add_header(headerOffset);
   imageBuilder.add_labels(labelsOffset);

@@ -67,7 +67,7 @@ std::optional<seerep::pb::Image> Hdf5PbImage::readImage(const std::string& id)
 
   auto header = readHeaderAttributes(*dataGroupPtr, id);
 
-  auto ImageAttributes = readImageAttributes(id);
+  auto ImageAttributes = readImageAttributes(*dataGroupPtr);
 
   auto labels =
       readLabels(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id);
