@@ -15,7 +15,7 @@ Output:
 
 ``` bash
 The new project on the server is (name/uuid):
-        testproject eff47bc9-c39e-430e-8153-88e0eab65768
+        testproject ff739be8-cf0c-4657-bff0-f66f3e7f578d
 ```
 
 ## Retrieving projects
@@ -39,8 +39,8 @@ have to be unique.
 
     ```
     The server has the following projects (name/uuid):
-        testproject 5c1ed18e-9180-40e1-a79b-594f8266d898
-        testproject 9fc3011f-4a3c-400e-9170-06973a6fb395
+        testproject 842de425-2d50-4adf-8aa3-6df257a7c76c
+        testproject ff739be8-cf0c-4657-bff0-f66f3e7f578d
     ```
 
 === "Protocol Buffers"
@@ -55,7 +55,7 @@ have to be unique.
     Output:
 
     ```
-    The Server has the following projects (name/uuid):
-        testproject 5c1ed18e-9180-40e1-a79b-594f8266d898
-        testproject 9fc3011f-4a3c-400e-9170-06973a6fb395
+    The server has the following projects (name/uuid):
+        testproject 842de425-2d50-4adf-8aa3-6df257a7c76c
+        testproject ff739be8-cf0c-4657-bff0-f66f3e7f578d
     ```

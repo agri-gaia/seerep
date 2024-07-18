@@ -2,8 +2,7 @@
 
 ## Sending images
 
-In this example we will send images with labeled bounding boxes as well as
-general labels to SEEREP.
+In this example we will send images with labels to SEEREP.
 
 In order to save images, we need to mandatorily provide the intrinsics of the
 camera used to capture them. After the successfully saving the camera intrinsics,
@@ -22,20 +21,20 @@ Source:
 Output:
 
 ```txt
-testproject 28600b43-6385-4693-b617-c6209d9bde87
-testproject 2292aa91-c369-4cb2-9de8-6987218fe268
+testproject 842de425-2d50-4adf-8aa3-6df257a7c76c
+testproject ff739be8-cf0c-4657-bff0-f66f3e7f578d
 
-camera intrinsics will be saved against the uuid(s): {'085a41c6-b81c-4a8e-a16c-fb71d99b0ffe'}
-the uuid of the sent image number 0 is: 6821ea73-c9ca-45b3-97da-727ebe46cde5
-the uuid of the sent image number 1 is: 1d5d2714-f9d3-45a5-b0fd-a45483057bd1
-the uuid of the sent image number 2 is: 11251495-64d2-48be-8b3b-7ad06d360f02
-the uuid of the sent image number 3 is: 2a2d8b62-3eb5-4bd8-aeeb-e8a4eab64322
-the uuid of the sent image number 4 is: baadd923-b2ea-484c-9794-58788ce79980
-the uuid of the sent image number 5 is: bdc82995-d827-41b3-9fd8-433e79dbced6
-the uuid of the sent image number 6 is: 7678649c-39c9-4553-952e-cd93ed8ed675
-the uuid of the sent image number 7 is: 1e5ff01d-ef2a-44e1-9af8-99496d9ecc2a
-the uuid of the sent image number 8 is: c42b98ad-d92c-4b0c-9ea5-d6e6d4cff6e8
-the uuid of the sent image number 9 is: b9619d15-5421-47db-a08b-ffb9f5cc8f3e
+camera intrinsics will be saved against the uuid(s): {'909c8439-36b6-44ff-9561-f7921de5d8e8'}
+the uuid of the sent image number 0 is: 261a7b2c-297b-42db-93da-770e5f7f53cf
+the uuid of the sent image number 1 is: feddb62d-fdfa-494a-8e4a-e1b2209134a6
+the uuid of the sent image number 2 is: 6956ea01-b834-461f-85cf-5621e04f02fb
+the uuid of the sent image number 3 is: 111e62dd-9aba-4fde-ae3d-ed3e3b6041f8
+the uuid of the sent image number 4 is: 67138174-08a9-4943-848a-736bddd755b9
+the uuid of the sent image number 5 is: 5e139007-9eea-4e71-9c5a-44f08c93027e
+the uuid of the sent image number 6 is: c10eff49-4412-425d-99ef-d8b3f95c3806
+the uuid of the sent image number 7 is: 708be3d8-7ddb-4ef5-9b00-37021b7b83ff
+the uuid of the sent image number 8 is: 4ce47c5c-60d2-4f78-810f-ac730136f462
+the uuid of the sent image number 9 is: 6c9ca46b-84fb-40d2-8523-2ad07284a43c
 ```
 
 ## Query images
@@ -93,38 +92,48 @@ geodesic coordinates of the project into the map frame beforehand.
     After sending the images, executing the query script results in the following output:
 
     ```txt
-    count of images: 6
-    --------------------------------------------------------------------------------------------
-    uuidmsg: 680128d1-5a86-457e-bd7f-be1d81371a30
-    count of bounding box labels: 2
-    first label: testlabel0 ; confidence: 0.0
-    first bounding box (Xcenter,Ycenter,Xextent,Yextent, rotation): 0.01 0.02 0.03 0.04 0.0
-    --------------------------------------------------------------------------------------------
-    uuidmsg: 6d6a9c09-3781-4e3e-a5df-948ab821b149
-    count of bounding box labels: 2
-    first label: testlabel0 ; confidence: 0.0
-    first bounding box (Xcenter,Ycenter,Xextent,Yextent, rotation): 0.01 0.02 0.03 0.04 0.0
-    --------------------------------------------------------------------------------------------
-    uuidmsg: 914273f7-96d3-453e-9a30-b4b411a81afe
-    count of bounding box labels: 2
-    first label: testlabel0 ; confidence: 0.0
-    first bounding box (Xcenter,Ycenter,Xextent,Yextent, rotation): 0.01 0.02 0.03 0.04 0.0
-    --------------------------------------------------------------------------------------------
-    uuidmsg: ad0db9ee-d0d8-46c2-9c13-518e29d3cc2b
-    count of bounding box labels: 2
-    first label: testlabel0_ ; confidence: 0.0
-    first bounding box (Xcenter,Ycenter,Xextent,Yextent, rotation): 0.01 0.02 0.03 0.04 0.0
-    --------------------------------------------------------------------------------------------
-    uuidmsg: b371b172-08d2-47c7-a750-db77149af897
-    count of bounding box labels: 2
-    first label: testlabel0 ; confidence: 0.0
-    first bounding box (Xcenter,Ycenter,Xextent,Yextent, rotation): 0.01 0.02 0.03 0.04 0.0
-    --------------------------------------------------------------------------------------------
-    uuidmsg: f1e755b2-fa6b-4cf0-a0f5-fc928be84850
-    count of bounding box labels: 2
-    first label: testlabel0 ; confidence: 0.0
-    first bounding box (Xcenter,Ycenter,Xextent,Yextent, rotation): 0.01 0.02 0.03 0.04 0.0
-    --------------------------------------------------------------------------------------------
+    count of images: 10
+    ------------------------------------------------------------------
+    uuidmsg: 111e62dd-9aba-4fde-ae3d-ed3e3b6041f8
+    count of labels: 2
+    first label: label1
+    ------------------------------------------------------------------
+    uuidmsg: 261a7b2c-297b-42db-93da-770e5f7f53cf
+    count of labels: 2
+    first label: label1
+    ------------------------------------------------------------------
+    uuidmsg: 4ce47c5c-60d2-4f78-810f-ac730136f462
+    count of labels: 2
+    first label: label1
+    ------------------------------------------------------------------
+    uuidmsg: 5e139007-9eea-4e71-9c5a-44f08c93027e
+    count of labels: 2
+    first label: label1
+    ------------------------------------------------------------------
+    uuidmsg: 67138174-08a9-4943-848a-736bddd755b9
+    count of labels: 2
+    first label: label1
+    ------------------------------------------------------------------
+    uuidmsg: 6956ea01-b834-461f-85cf-5621e04f02fb
+    count of labels: 2
+    first label: label1
+    ------------------------------------------------------------------
+    uuidmsg: 6c9ca46b-84fb-40d2-8523-2ad07284a43c
+    count of labels: 2
+    first label: label1
+    ------------------------------------------------------------------
+    uuidmsg: 708be3d8-7ddb-4ef5-9b00-37021b7b83ff
+    count of labels: 2
+    first label: label1
+    ------------------------------------------------------------------
+    uuidmsg: c10eff49-4412-425d-99ef-d8b3f95c3806
+    count of labels: 2
+    first label: label1
+    ------------------------------------------------------------------
+    uuidmsg: feddb62d-fdfa-494a-8e4a-e1b2209134a6
+    count of labels: 2
+    first label: label1
+    ------------------------------------------------------------------
     ```
 
 === "Protocol Buffers"
@@ -141,43 +150,20 @@ geodesic coordinates of the project into the map frame beforehand.
 
     ```txt
     count of images 8
-    uuidmsg: 680128d1-5a86-457e-bd7f-be1d81371a30
-    first label: testlabel0
-    first label confidence: 0.0
-    First bounding box (Xcenter,Ycenter,Xextent,Yextent): 0.01 0.02 0.03 0.04
-
-    uuidmsg: 6d6a9c09-3781-4e3e-a5df-948ab821b149
-    first label: testlabel0
-    first label confidence: 0.0
-    First bounding box (Xcenter,Ycenter,Xextent,Yextent): 0.01 0.02 0.03 0.04
-
-    uuidmsg: 914273f7-96d3-453e-9a30-b4b411a81afe
-    first label: testlabel0
-    first label confidence: 0.0
-    First bounding box (Xcenter,Ycenter,Xextent,Yextent): 0.01 0.02 0.03 0.04
-
-    uuidmsg: ad0db9ee-d0d8-46c2-9c13-518e29d3cc2b
-    first label: testlabel0_
-    first label confidence: 0.0
-    First bounding box (Xcenter,Ycenter,Xextent,Yextent): 0.01 0.02 0.03 0.04
-
-    uuidmsg: b371b172-08d2-47c7-a750-db77149af897
-    first label: testlabel0
-    first label confidence: 0.0
-    First bounding box (Xcenter,Ycenter,Xextent,Yextent): 0.01 0.02 0.03 0.04
-
-    uuidmsg: b6abe511-ba53-4782-82d3-53fb80887754
-    first label: testlabel0
-    first label confidence: 0.0
-    First bounding box (Xcenter,Ycenter,Xextent,Yextent): 0.01 0.02 0.03 0.04
-
-    uuidmsg: cf1d977f-5356-4edc-a02b-e4b454547f63
-    first label: testlabel0_
-    first label confidence: 0.0
-    First bounding box (Xcenter,Ycenter,Xextent,Yextent): 0.01 0.02 0.03 0.04
-
-    uuidmsg: f1e755b2-fa6b-4cf0-a0f5-fc928be84850
-    first label: testlabel0
-    first label confidence: 0.0
-    First bounding box (Xcenter,Ycenter,Xextent,Yextent): 0.01 0.02 0.03 0.04
+    uuidmsg: 111e62dd-9aba-4fde-ae3d-ed3e3b6041f8
+    first label: label1
+    uuidmsg: 261a7b2c-297b-42db-93da-770e5f7f53cf
+    first label: label1
+    uuidmsg: 5e139007-9eea-4e71-9c5a-44f08c93027e
+    first label: label1
+    uuidmsg: 67138174-08a9-4943-848a-736bddd755b9
+    first label: label1
+    uuidmsg: 6956ea01-b834-461f-85cf-5621e04f02fb
+    first label: label1
+    uuidmsg: 708be3d8-7ddb-4ef5-9b00-37021b7b83ff
+    first label: label1
+    uuidmsg: c10eff49-4412-425d-99ef-d8b3f95c3806
+    first label: label1
+    uuidmsg: feddb62d-fdfa-494a-8e4a-e1b2209134a6
+    first label: label1
     ```

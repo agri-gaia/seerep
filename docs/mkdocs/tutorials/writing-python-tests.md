@@ -3,8 +3,8 @@
 Before a test is written it makes sense to understand how a example is structured.
 For this see [writing-examples.md](writing-python-examples.md) as a introduction.
 How tests can be structured will be demonstrated on the already created
-`test_gRPC_fb_addBoundingBox` test found
-[here](https://github.com/agri-gaia/seerep/blob/main/tests/python/gRPC/images/test_gRPC_fb_addBoundingBox.py).
+`test_ gRPC_fb_addLabels` test found
+[here](https://github.com/agri-gaia/seerep/blob/main/tests/python/gRPC/images/test_gRPC_fb_addLabels.py).
 
 As the testing framework for python [pytest](https://github.com/pytest-dev/pytest/)
 is used.
@@ -12,7 +12,7 @@ is used.
 ## The code
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/tests/python/gRPC/images/test_gRPC_fb_addBoundingBox.py:9:17"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/tests/python/gRPC/images/test_gRPC_fb_addLabels.py:10:18"
 ```
 
 For the imported modules, note that the examples themselves are imported to be
@@ -20,7 +20,7 @@ used in the tests. Furthermore helper functions from `seerep.util.fb_helper`,
 as well as `fb_flatc_dict` are imported.
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/tests/python/gRPC/images/test_gRPC_fb_addBoundingBox.py:20:28"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/tests/python/gRPC/images/test_gRPC_fb_addLabels.py:21:33"
 ```
 
 This is a helper function to retrieve all images the targeted project on the
@@ -32,7 +32,7 @@ the SEEREP flatbuffers types, this is required for the `flatc` compiler to know
 how to decode the object.
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/tests/python/gRPC/images/test_gRPC_fb_addBoundingBox.py:31:55"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/tests/python/gRPC/images/test_gRPC_fb_addLabels.py:36:75"
 ```
 
 Next up the test function is defined and uses the fixture `grpc_channel`, which
@@ -43,20 +43,20 @@ using SEEREP server calls. Implementations of both fixtures can be found
 [here](https://github.com/agri-gaia/seerep/blob/main/tests/conftest.py).
 
 After that the `project_uuid` of the created project is retrieved and used for
-the different calls to the example functions. To attach new BoundingBoxes to
+the different calls to the example functions. To attach new Labels to
 images, it has to be ensured that images are present. This is done by utilizing
 the [gRPC_pb_sendLabeledImage](https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/images/gRPC_pb_sendLabeledImage.py)
-example. Then the BoundingBoxes example can be used to add BoundingBoxes to
+example. Then the Labels example can be used to add Labels to
 those images.
 
-Following on the BoundingBoxes returned by `add_bb_raw()` are tested and
+Following on the Labels returned by `add_label_raw()` are tested and
 compared against those now persisting on the server. `get_imgs` retrieves all
-the images from the server, each mapping of image `uuid` to BoundingBoxes is
+the images from the server, each mapping of image `uuid` to Labels is
 iterated and in the list of all images the image, which matches the image `uuid`
-of the mapping, is inspected further. Only the BoundingBoxes with the category
-`laterAddedBB` are relevant and therefore filtered. Lastly the sent BoundingBoxes
+of the mapping, is inspected further. Only the Labels with the category
+`laterAddedBB` are relevant and therefore filtered. Lastly the sent Labels
 are converted to python dictionaries and compared for matching with the filtered
-image attached BoundingBoxes.
+image attached Labels.
 
 ## Tips to ease development
 

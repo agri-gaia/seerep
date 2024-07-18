@@ -31,7 +31,7 @@ the `ServiceManager` methods. Example usage can be found in
 , e.g.:
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/tests/python/gRPC/util/msg_abs/msgs.py:197:219"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/tests/python/gRPC/util/msg_abs/msgs.py:274:309"
 ```
 
 The source is located
@@ -49,7 +49,7 @@ objects to a python dictionary. More information can be found by looking at the
 docstring:
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/util/fb_to_dict.py:113:126"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/util/fb_to_dict.py:105:119"
 ```
 
 ### catkin_find_schema_dir()
@@ -57,7 +57,7 @@ docstring:
 Looking at the docstring should reveal everything to know about this function:
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/util/fb_to_dict.py:82:93"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/util/fb_to_dict.py:63:77"
 ```
 
 ### SchemaFileNames

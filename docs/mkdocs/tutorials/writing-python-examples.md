@@ -6,7 +6,7 @@ deprecation of protobuf in the project. All protobuf functionality can be
 replicated using flatbuffers, and flatbuffers should be used instead.
 
 In this case the example
-[gRPC_fb_addBoundingBox.py](https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py)
+[gRPC_fb_addLabel.py](https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/images/gRPC_fb_addLabel.py)
 will be reviewed. Service type definitions for all available flatbuffers type
 services can be found
 [here](https://github.com/agri-gaia/seerep/tree/main/seerep_com/fbs).
@@ -16,7 +16,7 @@ Type definitions of all flatbuffers types can be found
 ## The code
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:8:30"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addLabel.py:9:25"
 ```
 
 First some of the modules to interact with the servers services will be highlighted.
@@ -28,7 +28,7 @@ message type directly.
 ### Interaction with SEEREP services and handling the data
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:32:34"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addLabel.py:28:31"
 ```
 
 The interaction functionality is contained within this function. With the
@@ -39,7 +39,7 @@ Both options are useful for testing later. More parameters can be added
 optionally, if needed for the test cases.
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:35:53"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addLabel.py:32:52"
 ```
 
 At first, if `target_proj_uuid` is not set, the `MetaOperationsStub` utilizing
@@ -50,7 +50,7 @@ of all available projects of that server (specifically in the form of
 `testproject` on that list.
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:54:64"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addLabel.py:54:71"
 ```
 
 Following on the code requests all images from the project with the `uuid` of
@@ -69,31 +69,39 @@ serialized form and returns data of type
 from the server.
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:66:111"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addLabel.py:73:122"
 ```
 
-This code builds a list of BoundingBoxes adding some sample data into the
-components of each BoundingBox. At the beginning two lists are defined `msgToSend`
-is a list containing the serialized BoundingBoxes and `bb_list` is a list
-containing mappings where each image uuid is mapped to it's added BoundingBoxes.
+This code builds a list of DatasetUuidLabel adding some sample data into the
+components of each Label Category. At the beginning two lists are defined `msgToSend`
+is a list containing the serialized labels and `label_list` is a list
+containing mappings where each image uuid is mapped to it's added labels.
 After that the returned images from the query before are iterated. Next
-BoundingBoxes are created and their joint `header` uuids are set to the
+Label are created and their joint `header` uuids are set to the
 appropriate `project_uuid` and `msg_uuid` to match that specific image. At the
-end the BoundingBoxes are serialized and added to the lists.
+end the Labels are serialized and added to the lists.
 
 The type definition of
-[BoundingBoxes2DLabeledStamped](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingboxes2d_labeled_stamped.fbs)
+[LabelCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label_category.fbs)
 looks as follows:
 
 ```fbs
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/seerep_msgs/fbs/boundingboxes2d_labeled_stamped.fbs"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/seerep_msgs/fbs/label_category.fbs"
+```
+
+And the type definition of
+[Label](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label.fbs)
+looks as follows:
+
+```fbs
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/seerep_msgs/fbs/label.fbs"
 ```
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:113:114"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addLabel.py:113:114"
 ```
 
-Lastly the service is called, the BoundingBoxes are send to the SEEREP server
+Lastly the service is called, the LabelCategory are send to the SEEREP server
 and the list with the mappings is returned for further use. Note that the
 flatbuffers objects are not returned in their deserialized state as the function
 `fb_flatc_dict` defined in
@@ -103,18 +111,18 @@ makes use of that state.
 ### Wrapping the raw function
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:116:123"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addLabel.py:128:135"
 ```
 
 This function is essentially just a wrapper for `add_bb_raw()` to return the
 deserialized objects to be accessed through their regular flatbuffers interfaces
 (in this case of type
-`BoundingBoxes2DLabeledStamped.BoundingBoxes2DLabeledStamped`).
+`DatasetUuidLabel.DatasetUuidLabel`).
 
 ### Allow for independent execution of the script
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py:126:141"
+--8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addLabel.py:138:144"
 ```
 
 The last part can execute the script independently and targets the server at the
