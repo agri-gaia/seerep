@@ -71,15 +71,31 @@ public:
       grpc::ServerWriter<
           flatbuffers::grpc::Message<seerep::fb::PointStamped>>* const writer);
   /**
-   * @brief Add an point to the indices and write the data to hdf5
-   * @param img the flatbuffer message containing the point
+   * @brief write the point data to hdf5
+   * @param point the flatbuffer message containing the point
    * @return the uuid of the stored point
    *
-   * The point is stored in the hdf5 file via hdf5-io-fb. The data needed for
-   * the indices is extracted and added to the core. If the uuid of point is not
-   * defined yet, a uuid is generated and returned.
+   * The point is stored in the hdf5 file via hdf5-io-fb. If the uuid of point
+   * is not defined yet, a uuid is generated and returned.
    */
-  boost::uuids::uuid addData(const seerep::fb::PointStamped* point);
+  boost::uuids::uuid addDataToHdf5(const seerep::fb::PointStamped* point);
+
+  /**
+   * @brief Extract point data from hdf5 and build the indices.
+   *
+   * This method complements @ref addDataToHdf5 and should be called after
+   * the data has been added to hdf5. The data for the indices is retrieved from
+   * hdf5 and added to the indices to the core.
+   *
+   * @param projectPointUuids a vector of pairs of first project uuids and
+   * second point uuids, where the point belongs to the specified project
+   *
+   * @see seerep_core_fb::CoreFbPoint::addDataToHdf5
+   */
+  void
+  buildIndices(const std::vector<std::pair<std::string, boost::uuids::uuid>>&
+                   projectPointUuids);
+
   /**
    * @brief Adds attributes to an existing point
    * @param uuidAttributePair a pair of the uuid of the targeted point and the attributes
