@@ -1,103 +1,99 @@
-# SEEREP
+#
 
-![logo](logo/Seerep%20Logo.svg)
+<div align="center">
+  <img alt="Redoc logo" src="docs/logo/Seerep_Logo.svg" width="300px" />
 
-![unstable](https://img.shields.io/badge/stability-unstable-orange)
-[![License](https://img.shields.io/badge/license-BSD_3-brightgreen)](./LICENSE)
-[![catkin build workflow](https://github.com/agri-gaia/seerep/actions/workflows/main.yml/badge.svg)](https://github.com/agri-gaia/seerep/actions)
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](./.pre-commit-config.yaml)
-[![Docker](https://img.shields.io/badge/Docker-enabled-blue?logo=docker)](./docker)
-[![PyPI](https://img.shields.io/pypi/v/seerep-grpc?label=pypi%20seerep-gRPC)](https://pypi.org/project/seerep-grpc/)
- <!-- ![Architecture](https://img.shields.io/badge/Architecture-x86-blue) -->
+<h3> Spatio-Temporal-Semantic Sensor Data Management <br>
+for Agricultural Robotics </h3>
+
+  [![catkin build workflow](https://github.com/agri-gaia/seerep/actions/workflows/main.yml/badge.svg)](https://github.com/agri-gaia/seerep/actions)
+  ![unstable](https://img.shields.io/badge/Stability-experimental-orange)
+  [![License](https://img.shields.io/badge/License-BSD_3-brightgreen)](./LICENSE)
+
+  <b><a href="https://agri-gaia.github.io/seerep/mkdocs/home/index.html">
+  Documentation</a></b>
+  |
+  <b><a href="https://github.com/agri-gaia/seerep/tree/main/examples/python/gRPC">
+  Examples</a></b>
+</div>
 
 ## Table of Contents
 
-- [Maintainer](#maintainer)
-- [General](#general)
-- [Quick Start](#quick-start)
-- [Documentation](#documentation)
-- [Related Publications](#related-publications)
+- [Features](#-features)
+- [Motivation](#muscle-motivation)
+- [Getting Started](#-getting-started)
+- [Maintainer](#wrench-maintainer)
+- [Related Publications](#memo-related-publications)
+- [License](#-license)
 
-<!-- - [Related Publications](#related-publications) -->
+## 🎯 Features
 
-## Maintainer
+- Robotic sensor data management integrated with [ROS](https://www.ros.org/).
+- Creation of sub-datasets based on sub-symbolic information (positions,
+timestamps) and their corresponding symbolic (semantic) information.
+- Automated generation and evaluation (e.g neural network predictions) of
+datasets.
+- GDPR filtering of datasets (e.g excluding public roads) based on spatial
+polygon queries.
 
-[Mark Niemeyer](https://github.com/Mark-Niemeyer)<br>
+## :muscle: Motivation
+
+A key transition in robotics involves the adoption of data-driven approaches.
+As a result, increasing amounts of data are being captured by high-resolution
+sensors such as cameras and LiDAR.
+With ROS, the typical workflow involves recording rosbags during missions and
+uploading the resulting files to network or blob storage, organized according to
+use-case specific hierarchies.
+Later retrieval of data with specific properties, such as particular weather
+conditions or a specific area of interest, is non-trivial. The relevant data
+must be downloaded to open the rosbag where access to the data is only provided
+through the time modality.
+
+In contrast, SEEREP offers an integrated solution for managing robotic sensor
+data and generating sub-datasets based on spatial, temporal, or semantic
+queries. Simplifying the workflow to uploading the sensor data post-mission and
+offering a gRPC-based query interface for subsequent applications.
+
+## 🚀 Getting Started
+
+The simplest way to start SEEREP is by using `docker compose` with the
+configuration provided in the `docker/server` directory:
+
+```bash
+git clone https://github.com/agri-gaia/seerep.git
+cd seerep/docker/server
+docker compose up
+```
+
+Which should produce an output like this:
+
+```bash
+seerep_server | [2024-07-11 13:40:00.853800]<info>: Initialized logging
+seerep_server | [2024-07-11 13:40:00.860308]<info>: The used logging folder is: /mnt/seerep_data/log/
+seerep_server | [2024-07-11 13:40:00.860730]<info>: Current timezone: CET
+seerep_server | [2024-07-11 13:40:00.861233]<info>: SEEREP version: N/A
+seerep_server | [2024-07-11 13:40:00.861567]<info>: The used data folder is: /mnt/seerep_data/
+seerep_server | [2024-07-11 13:40:00.865541]<info>: Addded Protocol Buffers gRPC-services
+seerep_server | [2024-07-11 13:40:00.867241]<info>: Added Flatbuffers gRPC services
+seerep_server | [2024-07-11 13:40:00.903333]<info>: Serving gRPC Server on "[::]:9090"
+```
+
+For other ways to deploy SEEREP, check the
+[documentation](https://agri-gaia.github.io/seerep/mkdocs/getting-started/server_deployment/).
+
+Refer to the [examples section](https://github.com/agri-gaia/seerep/tree/update-readme/examples/python/gRPC)
+for instructions on uploading data.
+
+## :wrench: Maintainer
+
+[Mark Niemeyer](https://github.com/Mark-Niemeyer) <br>
 [mark.niemeyer@dfki.de](mailto:mark.niemeyer@dfki.de)
 
 [German Research Center for Artificial Intelligence](https://www.dfki.de/en/web)<br>
 [DFKI Niedersachsen](https://www.dfki.de/en/web/about-us/locations-contact/osnabrueck-oldenburg)<br>
 [Plan-Based Robot Control](https://www.dfki.de/en/web/research/research-departments/plan-based-robot-control)<br>
 
-## General
-
-The large amount of temporally and spatially high resolution sensor data of
-autonomous mobile robots that have to be collected in today’s systems require a
-structured and, above all, efficient management and storage already during the
-robot mission. We present SEEREP: A _Spatio-Temporal-Semantic Environment
-Representation for Autonomous Mobile Robots_. SEEREP deals with spatial,
-temporal and semantic linked data at once and provides an efficient query
-interface for all three modalities that can be combined for high-level analyses.
-It supports the most popular robotic sensor data such as images and point clouds,
-as well as sensor and robot coordinate frames changing over time. Furthermore,
-SEEREP provides an efficient HDF5-based storage system running on the robot
-during operation compatible with ROS and the corresponding sensor message
-definitions. The compressed HDF5 data backend can be transferred efficiently to
-an application server with a running SEEREP query server providing gRPC interfaces
-with Protobuf and Flattbuffer message types. Partially unstructured environments
-that change over time, as for example agricultural environments, can be understood
-based on high-level planning and reasoning systems using the SEEREP query server.
-
-## Quick Start
-
-To deploy the server locally the following `docker run` command or the following
-`docker-compose.yml` can be used.
-
-```bash
-docker run \
-  --volume=seerep-data:/mnt/seerep-data \
-  --publish=9090:9090 \
-  --name=seerep_server \
-  --tty \
-  ghcr.io/agri-gaia/seerep_server:latest \
-  --data-folder=/mnt/seerep-data
-```
-
-Example docker-compose.yml:
-
-```bash
-version: "3.9"
-services:
-  seerep:
-    image: ghcr.io/agri-gaia/seerep_server:latest
-    tty: true
-    container_name: seerep_server
-    ports:
-      # the gRPC port
-      - 9090:9090
-    volumes:
-      # persist the data folder
-      - seerep-data:/mnt/seerep-data
-    environment:
-      - TZ=Europe/Berlin
-      - SEEREP_DATA_FOLDER=/mnt/seerep-data
-      - SEEREP_LOG_PATH=/mnt/seerep-data/log
-      - SEEREP_LOG_LEVEL=info
-volumes:
-  seerep-data:
-```
-
-## Documentation
-
-The general [MkDocs](https://www.mkdocs.org/) based documentation of this project
-is available [here](https://agri-gaia.github.io/seerep/mkdocs/home/). There the
-general architecture is described, installation instructions and basic tutorials
-are given.
-
-The [Doxygen](https://doxygen.nl/) based code documentation can be found
-[here](https://agri-gaia.github.io/seerep/doxygen).
-
-## Related Publications
+## :memo: Related Publications
 
 ```bibtex
 @inproceedings{Niemeyer2024,
@@ -129,3 +125,7 @@ The [Doxygen](https://doxygen.nl/) based code documentation can be found
   publisher = {IEEE}
 }
 ```
+
+## 📄 License
+
+This project is open-sourced software licensed under the [BSD 3-Clause license](./LICENSE).

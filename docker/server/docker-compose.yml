@@ -8,6 +8,7 @@ services:
     command: chown -R ${USER_ID}:${GROUP_ID} ${SEEREP_DATA_FOLDER} ${SEEREP_LOG_PATH}
   seerep:
     image: ghcr.io/agri-gaia/seerep_server:latest
+    platform: linux/x86_64
     user: "${USER_ID}:${GROUP_ID}"
     tty: true
     container_name: seerep_server
