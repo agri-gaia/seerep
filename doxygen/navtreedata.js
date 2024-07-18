@@ -25,14 +25,15 @@
 var NAVTREE =
 [
   [ "SEEREP", "index.html", [
-    [ "Table of Contents", "index.html#autotoc_md1", null ],
-    [ "Maintainer", "index.html#autotoc_md2", null ],
-    [ "General", "index.html#autotoc_md3", null ],
-    [ "Quick Start", "index.html#autotoc_md4", null ],
-    [ "Documentation", "index.html#autotoc_md5", null ],
-    [ "Related Publications", "index.html#autotoc_md6", null ],
     [ "Deprecated List", "deprecated.html", null ],
     [ "Namespaces", "namespaces.html", [
+      [ "Table of Contents", "index.html#autotoc_md0", null ],
+      [ "🎯 Features", "index.html#autotoc_md1", null ],
+      [ ":muscle: Motivation", "index.html#autotoc_md2", null ],
+      [ "🚀 Getting Started", "index.html#autotoc_md3", null ],
+      [ ":wrench: Maintainer", "index.html#autotoc_md4", null ],
+      [ ":memo: Related Publications", "index.html#autotoc_md5", null ],
+      [ "📄 License", "index.html#autotoc_md6", null ],
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
         [ "All", "namespacemembers.html", null ],
@@ -74,9 +75,9 @@ var NAVTREEINDEX =
 "classseerep__hdf5__py_1_1Hdf5PyPointCloud.html#aa98d365209629e7a3407f9b0870c1fe6",
 "classseerep__server_1_1server.html#a972f16d6fabf2f56586af919e53bfa27",
 "functions_q.html",
-"namespaceseerep__ros__conversions__pb.html#a182579813b5f4520bdb4d5afaa31b402",
-"sparql__query_8h.html",
-"structseerep__hdf5__py_1_1BoundingBoxLabel.html#ab7b8f836c6803983621f0e21acee8a25"
+"namespaceseerep__ros__conversions__pb.html#a1760bdbb1930fa7018551793c03f4073",
+"sparql__query_8fbs.html",
+"structseerep__hdf5__py_1_1BoundingBoxLabel.html#a9ab796153755d97f1d0e8b77958818f9"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
