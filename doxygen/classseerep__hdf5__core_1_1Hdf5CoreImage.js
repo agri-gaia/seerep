@@ -9,6 +9,6 @@ var classseerep__hdf5__core_1_1Hdf5CoreImage =
     [ "readDataset", "classseerep__hdf5__core_1_1Hdf5CoreImage.html#ac0cb20dba45d4e339c32f1b95706ba9a", null ],
     [ "readImageAttributes", "classseerep__hdf5__core_1_1Hdf5CoreImage.html#a6755c255f439f530f08ce05509d5a771", null ],
     [ "writeImageAttributes", "classseerep__hdf5__core_1_1Hdf5CoreImage.html#ae324d0518860e517849886877a49912e", null ],
-    [ "writeLabelsGeneral", "classseerep__hdf5__core_1_1Hdf5CoreImage.html#a5cf4e5e0847808a61c6fcf0f969151bb", null ],
+    [ "writeLabels", "classseerep__hdf5__core_1_1Hdf5CoreImage.html#a9e0d226824a76ac05633ad3dbaddb8f4", null ],
     [ "m_ioCI", "classseerep__hdf5__core_1_1Hdf5CoreImage.html#a671a249d0aad59e68a81f36efa2259b3", null ]
 ];

@@ -11,6 +11,5 @@ var classseerep__hdf5__fb_1_1Hdf5FbPointCloud =
     [ "writeBoundingBox", "classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a0d0bea7c1dcb54dfea576b926962b141", null ],
     [ "writeGeneralAttributes", "classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#af5cd20e102f1d9707490ba29f03173e4", null ],
     [ "writePointCloud2", "classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a72cabef0bcdcab221417564eff4d7b62", null ],
-    [ "writePointCloudBoundingBoxLabeled", "classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#a7f740f99b08314e9dd0969b43fe2a1a6", null ],
     [ "writePointFieldAttributes", "classseerep__hdf5__fb_1_1Hdf5FbPointCloud.html#aa6d6d1b918d634b1e896878cff586eca", null ]
 ];

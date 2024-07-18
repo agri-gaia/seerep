@@ -11,7 +11,6 @@ var dir_d58ee4fe4f3694ec45b6e2fdcd62a8d1 =
     [ "pb_image_service.cpp", "pb__image__service_8cpp.html", null ],
     [ "pb_meta_operations.cpp", "pb__meta__operations_8cpp.html", "pb__meta__operations_8cpp" ],
     [ "pb_point_cloud_service.cpp", "pb__point__cloud__service_8cpp.html", null ],
-    [ "pb_receive_sensor_msgs.cpp", "pb__receive__sensor__msgs_8cpp.html", null ],
     [ "pb_tf_service.cpp", "pb__tf__service_8cpp.html", null ],
     [ "server.cpp", "server_8cpp.html", "server_8cpp" ]
 ];

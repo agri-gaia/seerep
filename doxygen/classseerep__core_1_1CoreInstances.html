@@ -150,9 +150,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab21e739b4caca97874a5cdcdea49ca8e"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classseerep__core_1_1CoreInstance.html">seerep_core::CoreInstance</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreInstances.html#ab21e739b4caca97874a5cdcdea49ca8e">createNewInstance</a> (const std::string &amp;label)</td></tr>
 <tr class="memdesc:ab21e739b4caca97874a5cdcdea49ca8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new instance with a random UUID.  <a href="classseerep__core_1_1CoreInstances.html#ab21e739b4caca97874a5cdcdea49ca8e">More...</a><br /></td></tr>
 <tr class="separator:ab21e739b4caca97874a5cdcdea49ca8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa2d3116a1a21eee97444ec3d4356b1b8"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classseerep__core_1_1CoreInstance.html">seerep_core::CoreInstance</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreInstances.html#aa2d3116a1a21eee97444ec3d4356b1b8">createNewInstance</a> (const <a class="el" href="structseerep__core__msgs_1_1LabelWithInstance.html">seerep_core_msgs::LabelWithInstance</a> &amp;labelWithInstance)</td></tr>
-<tr class="memdesc:aa2d3116a1a21eee97444ec3d4356b1b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new instance with a given UUID and label.  <a href="classseerep__core_1_1CoreInstances.html#aa2d3116a1a21eee97444ec3d4356b1b8">More...</a><br /></td></tr>
-<tr class="separator:aa2d3116a1a21eee97444ec3d4356b1b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71b4d1e80aef8d63d53b89beddc66545"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classseerep__core_1_1CoreInstance.html">seerep_core::CoreInstance</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreInstances.html#a71b4d1e80aef8d63d53b89beddc66545">createNewInstance</a> (const <a class="el" href="structseerep__core__msgs_1_1Label.html">seerep_core_msgs::Label</a> &amp;label)</td></tr>
+<tr class="memdesc:a71b4d1e80aef8d63d53b89beddc66545"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new instance with a given UUID and label.  <a href="classseerep__core_1_1CoreInstances.html#a71b4d1e80aef8d63d53b89beddc66545">More...</a><br /></td></tr>
+<tr class="separator:a71b4d1e80aef8d63d53b89beddc66545"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a17c5aa8a37c69f65f9122cd78e652e44"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreInstances.html#a17c5aa8a37c69f65f9122cd78e652e44">getAttribute</a> (const boost::uuids::uuid &amp;uuidInstance, const std::string &amp;key) const</td></tr>
 <tr class="memdesc:a17c5aa8a37c69f65f9122cd78e652e44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the value of the attribute of the instance with the defined UUID defined by the key.  <a href="classseerep__core_1_1CoreInstances.html#a17c5aa8a37c69f65f9122cd78e652e44">More...</a><br /></td></tr>
 <tr class="separator:a17c5aa8a37c69f65f9122cd78e652e44"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -162,9 +162,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad207c5cb12a65527ad3ab64dc0151fec"><td class="memItemLeft" align="right" valign="top">std::vector&lt; boost::uuids::uuid &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreInstances.html#ad207c5cb12a65527ad3ab64dc0151fec">getDatasets</a> (const std::vector&lt; boost::uuids::uuid &gt; &amp;instanceIds, const <a class="el" href="namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0">seerep_core_msgs::Datatype</a> &amp;datatype) const</td></tr>
 <tr class="memdesc:ad207c5cb12a65527ad3ab64dc0151fec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the UUIDs of the datasets showing these instances.  <a href="classseerep__core_1_1CoreInstances.html#ad207c5cb12a65527ad3ab64dc0151fec">More...</a><br /></td></tr>
 <tr class="separator:ad207c5cb12a65527ad3ab64dc0151fec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5cd3a04925aca893fe57adddcd2fb448"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreInstances.html#a5cd3a04925aca893fe57adddcd2fb448">addDataset</a> (const <a class="el" href="structseerep__core__msgs_1_1LabelWithInstance.html">seerep_core_msgs::LabelWithInstance</a> &amp;labelWithInstance, const boost::uuids::uuid &amp;uuidDataset, const <a class="el" href="namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0">seerep_core_msgs::Datatype</a> &amp;datatype)</td></tr>
-<tr class="memdesc:a5cd3a04925aca893fe57adddcd2fb448"><td class="mdescLeft">&#160;</td><td class="mdescRight">adds an image to this instance  <a href="classseerep__core_1_1CoreInstances.html#a5cd3a04925aca893fe57adddcd2fb448">More...</a><br /></td></tr>
-<tr class="separator:a5cd3a04925aca893fe57adddcd2fb448"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd47be15bdfa9972ebc38c726f193aba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreInstances.html#afd47be15bdfa9972ebc38c726f193aba">addDataset</a> (const <a class="el" href="structseerep__core__msgs_1_1Label.html">seerep_core_msgs::Label</a> &amp;label, const boost::uuids::uuid &amp;uuidDataset, const <a class="el" href="namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0">seerep_core_msgs::Datatype</a> &amp;datatype)</td></tr>
+<tr class="memdesc:afd47be15bdfa9972ebc38c726f193aba"><td class="mdescLeft">&#160;</td><td class="mdescRight">adds an image to this instance  <a href="classseerep__core_1_1CoreInstances.html#afd47be15bdfa9972ebc38c726f193aba">More...</a><br /></td></tr>
+<tr class="separator:afd47be15bdfa9972ebc38c726f193aba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -237,8 +237,8 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a5cd3a04925aca893fe57adddcd2fb448" name="a5cd3a04925aca893fe57adddcd2fb448"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5cd3a04925aca893fe57adddcd2fb448">&#9670;&nbsp;</a></span>addDataset()</h2>
+<a id="afd47be15bdfa9972ebc38c726f193aba" name="afd47be15bdfa9972ebc38c726f193aba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd47be15bdfa9972ebc38c726f193aba">&#9670;&nbsp;</a></span>addDataset()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -246,8 +246,8 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">void seerep_core::CoreInstances::addDataset </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="structseerep__core__msgs_1_1LabelWithInstance.html">seerep_core_msgs::LabelWithInstance</a> &amp;&#160;</td>
-          <td class="paramname"><em>labelWithInstance</em>, </td>
+          <td class="paramtype">const <a class="el" href="structseerep__core__msgs_1_1Label.html">seerep_core_msgs::Label</a> &amp;&#160;</td>
+          <td class="paramname"><em>label</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -272,7 +272,7 @@ Private Attributes</h2></td></tr>
 <p>adds an image to this instance </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">labelWithInstance</td><td>the UUID of the targeted instance and the assigned label </td></tr>
+    <tr><td class="paramname">label</td><td>the UUID of the targeted instance and the assigned label </td></tr>
     <tr><td class="paramname">uuidDataset</td><td>the UUID of the image </td></tr>
     <tr><td class="paramname">dataset</td><td>the type of the dataset </td></tr>
   </table>
@@ -283,8 +283,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="aa2d3116a1a21eee97444ec3d4356b1b8" name="aa2d3116a1a21eee97444ec3d4356b1b8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa2d3116a1a21eee97444ec3d4356b1b8">&#9670;&nbsp;</a></span>createNewInstance() <span class="overload">[1/2]</span></h2>
+<a id="a71b4d1e80aef8d63d53b89beddc66545" name="a71b4d1e80aef8d63d53b89beddc66545"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71b4d1e80aef8d63d53b89beddc66545">&#9670;&nbsp;</a></span>createNewInstance() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -292,8 +292,8 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">std::shared_ptr&lt; <a class="el" href="classseerep__core_1_1CoreInstance.html">seerep_core::CoreInstance</a> &gt; seerep_core::CoreInstances::createNewInstance </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="structseerep__core__msgs_1_1LabelWithInstance.html">seerep_core_msgs::LabelWithInstance</a> &amp;&#160;</td>
-          <td class="paramname"><em>labelWithInstance</em></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="structseerep__core__msgs_1_1Label.html">seerep_core_msgs::Label</a> &amp;&#160;</td>
+          <td class="paramname"><em>label</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -302,7 +302,7 @@ Private Attributes</h2></td></tr>
 <p>Create a new instance with a given UUID and label. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">labelWithInstance</td><td>the label and the UUID of the new instance </td></tr>
+    <tr><td class="paramname">label</td><td>the label and the UUID of the new instance </td></tr>
   </table>
   </dd>
 </dl>

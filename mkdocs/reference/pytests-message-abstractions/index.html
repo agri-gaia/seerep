@@ -983,26 +983,33 @@
 
 
 <h1 id="flatbuffers-message-abstractions">Flatbuffers Message Abstractions<a class="headerlink" href="#flatbuffers-message-abstractions" title="Permanent link">&para;</a></h1>
-<p>The message abstractions are a rather experimental way to more easily create test variations.</p>
-<p><strong>Note</strong>: This API is subject to change in the future, as some functionality should get decoupled in a more elegant way.</p>
+<p>The message abstractions are a rather experimental way to more easily create test
+variations.</p>
+<p><strong>Note</strong>: This API is subject to change in the future, as some functionality
+should get decoupled in a more elegant way.</p>
 <p>It is currently used to create variations for tests of <code>gRPC_fb_getInstances.py</code>.
-The tests can be found under <a href="https://github.com/agri-gaia/seerep/blob/main/tests/python/gRPC/instances/test_gRPC_fb_getInstances.py">test_gRPC_fb_getInstances.py</a>.</p>
-<p>The idea is to provide default implementations for common datatypes,
-but still allow for modification of parts of that datatype.
-In some <code>flatbuffers</code> implementations there exists a API for mutability for that
-but unfortunately not for python and even when it would, it would still impose other problems.</p>
-<p>To tackle the problem, a wrapper is used where a set of enums, which corresponds to a datatype's components,
-can be given in order to assemble a datatype with those components "activated".
-Function pointers are used to define what should happen if a component is inactive (often just <code>None</code> is returned)
-and what should happen if a component is active.</p>
-<p>Datatype implementations for <code>Query</code> and <code>QueryInstance</code> and their abstraction model can be found
+The tests can be found under
+<a href="https://github.com/agri-gaia/seerep/blob/main/tests/python/gRPC/instances/test_gRPC_fb_getInstances.py">test_gRPC_fb_getInstances.py</a>.</p>
+<p>The idea is to provide default implementations for common datatypes, but still
+allow for modification of parts of that datatype. In some <code>flatbuffers</code>
+implementations there exists a API for mutability for that but unfortunately not
+for python and even when it would, it would still impose other problems.</p>
+<p>To tackle the problem, a wrapper is used where a set of enums, which corresponds
+to a datatype's components, can be given in order to assemble a datatype with
+those components "activated". Function pointers are used to define what should
+happen if a component is inactive (often just <code>None</code> is returned) and what
+should happen if a component is active.</p>
+<p>Datatype implementations for <code>Query</code> and <code>QueryInstance</code> and their abstraction
+model can be found
 <a href="https://github.com/agri-gaia/seerep/blob/main/tests/python/gRPC/util/msg_abs/msgs.py">here</a>.</p>
 <h2 id="defining-new-datatypes-for-variation-testing">Defining new datatypes for variation testing<a class="headerlink" href="#defining-new-datatypes-for-variation-testing" title="Permanent link">&para;</a></h2>
-<p>First the datatype has to be defined as a class inheriting from
-FrozenEnum provided through <a href="https://github.com/agri-gaia/seerep/blob/main/tests/python/gRPC/util/datastructures.py">datastructures.py</a>,
+<p>First the datatype has to be defined as a class inheriting from FrozenEnum
+provided through
+<a href="https://github.com/agri-gaia/seerep/blob/main/tests/python/gRPC/util/datastructures.py">datastructures.py</a>,
 which is essentially a unmodifiable enum.</p>
-<p>This is done for the <code>FbQuery</code> datatype, which corresponding
-<code>flatbuffers</code> definition can be found <a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/query.fbs">here</a>.</p>
+<p>This is done for the <code>FbQuery</code> datatype, which corresponding <code>flatbuffers</code>
+definition can be found
+<a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/query.fbs">here</a>.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">class</span> <span class="nc">EnumFbQuery</span><span class="p">(</span><span class="n">FrozenEnum</span><span class="p">):</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">POLYGON</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># def: None</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">FULLY_ENCAPSULATED</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># def: False</span>
@@ -1019,132 +1026,187 @@ which is essentially a unmodifiable enum.</p>
 <a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    <span class="n">MAX_NUM_DATA</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># def: None</span>
 <a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    <span class="n">SORT_BY_TIME</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># def: False</span>
 </code></pre></div>
-<p>Then <code>FbQuery</code> inherits from <code>MsgsFb</code>, which itself is a template type defined in <a href="https://github.com/agri-gaia/seerep/blob/main/tests/python/gRPC/util/msg_abs/msgs_base.py">msgs_base.py</a>.</p>
+<p>Then <code>FbQuery</code> inherits from <code>MsgsFb</code>, which itself is a template type defined in
+<a href="https://github.com/agri-gaia/seerep/blob/main/tests/python/gRPC/util/msg_abs/msgs_base.py">msgs_base.py</a>.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">class</span> <span class="nc">FbQuery</span><span class="p">(</span><span class="n">MsgsFb</span><span class="p">[</span><span class="n">Query</span><span class="o">.</span><span class="n">Query</span><span class="p">]):</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="k">def</span> <span class="nf">_set_enum_func_mapping</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">EnumFbQuery</span><span class="p">,</span> <span class="n">MsgsFunctions</span><span class="p">]:</span>
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>        <span class="k">return</span> <span class="p">{</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>            <span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">POLYGON</span><span class="p">:</span> <span class="n">MsgsFunctions</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">Dtypes</span><span class="o">.</span><span class="n">Fb</span><span class="o">.</span><span class="n">polygon2D</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="p">)),</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>            <span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">FULLY_ENCAPSULATED</span><span class="p">:</span> <span class="n">MsgsFunctions</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">True</span><span class="p">),</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>            <span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">IN_MAP_FRAME</span><span class="p">:</span> <span class="n">MsgsFunctions</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">False</span><span class="p">),</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>            <span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">TIMEINTERVAL</span><span class="p">:</span> <span class="n">MsgsFunctions</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">Dtypes</span><span class="o">.</span><span class="n">Fb</span><span class="o">.</span><span class="n">time_interval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="p">)),</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>            <span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">LABEL</span><span class="p">:</span> <span class="n">MsgsFunctions</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">Dtypes</span><span class="o">.</span><span class="n">Fb</span><span class="o">.</span><span class="n">label_with_category</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="p">)),</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>            <span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">SPARQL_QUERY</span><span class="p">:</span> <span class="n">MsgsFunctions</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">Dtypes</span><span class="o">.</span><span class="n">Fb</span><span class="o">.</span><span class="n">sparql_query</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="p">)),</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>            <span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">ONTOLOGY_URI</span><span class="p">:</span> <span class="n">MsgsFunctions</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">Dtypes</span><span class="o">.</span><span class="n">Fb</span><span class="o">.</span><span class="n">ontology_uri</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="p">)),</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>            <span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">MUST_HAVE_ALL_LABELS</span><span class="p">:</span> <span class="n">MsgsFunctions</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">True</span><span class="p">),</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>            <span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">PROJECTUUID</span><span class="p">:</span> <span class="n">MsgsFunctions</span><span class="p">(</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>                <span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">Dtypes</span><span class="o">.</span><span class="n">Fb</span><span class="o">.</span><span class="n">projectuuid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel</span><span class="p">)</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>            <span class="p">),</span>
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>            <span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">INSTANCEUUID</span><span class="p">:</span> <span class="n">MsgsFunctions</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">instanceuuid</span><span class="p">()),</span>
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>            <span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">DATAUUID</span><span class="p">:</span> <span class="n">MsgsFunctions</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">Dtypes</span><span class="o">.</span><span class="n">Fb</span><span class="o">.</span><span class="n">datauuid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel</span><span class="p">)),</span>
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>            <span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">WITHOUTDATA</span><span class="p">:</span> <span class="n">MsgsFunctions</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">True</span><span class="p">),</span>
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>            <span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">MAX_NUM_DATA</span><span class="p">:</span> <span class="n">MsgsFunctions</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">Dtypes</span><span class="o">.</span><span class="n">Fb</span><span class="o">.</span><span class="n">max_num_data</span><span class="p">()),</span>
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>            <span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">SORT_BY_TIME</span><span class="p">:</span> <span class="n">MsgsFunctions</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">True</span><span class="p">),</span>
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>        <span class="p">}</span>
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>    <span class="nd">@expect_component</span><span class="p">(</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">PROJECTUUID</span><span class="p">)</span>
-<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>    <span class="k">def</span> <span class="nf">instanceuuid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>        <span class="k">return</span> <span class="n">Dtypes</span><span class="o">.</span><span class="n">Fb</span><span class="o">.</span><span class="n">intanceuuid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">PROJECTUUID</span><span class="p">))</span>
-<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>
-<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>    <span class="nd">@expect_component</span><span class="p">(</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">PROJECTUUID</span><span class="p">)</span>
-<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>    <span class="k">def</span> <span class="nf">datauuid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>        <span class="k">return</span> <span class="n">Dtypes</span><span class="o">.</span><span class="n">Fb</span><span class="o">.</span><span class="n">datauuid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">DATAUUID</span><span class="p">))</span>
-<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>
-<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>    <span class="k">def</span> <span class="nf">_assemble_datatype_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>        <span class="n">polygon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">POLYGON</span><span class="p">)</span>
-<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>        <span class="n">fully_encapsulated</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">FULLY_ENCAPSULATED</span><span class="p">)</span>
-<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>        <span class="n">in_map_frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">IN_MAP_FRAME</span><span class="p">)</span>
-<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>        <span class="n">timeinterval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">TIMEINTERVAL</span><span class="p">)</span>
-<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>        <span class="n">label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">LABEL</span><span class="p">)</span>
-<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>        <span class="n">must_have_all_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">MUST_HAVE_ALL_LABELS</span><span class="p">)</span>
-<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>        <span class="n">projectuuid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">PROJECTUUID</span><span class="p">)</span>
-<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>        <span class="n">instanceuuid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">INSTANCEUUID</span><span class="p">)</span>
-<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a>        <span class="n">datauuid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">DATAUUID</span><span class="p">)</span>
-<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>        <span class="n">withoutdata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">WITHOUTDATA</span><span class="p">)</span>
-<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a>        <span class="n">sort_by_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">SORT_BY_TIME</span><span class="p">)</span>
-<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a>
-<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a>        <span class="k">return</span> <span class="n">fbh</span><span class="o">.</span><span class="n">createQuery</span><span class="p">(</span>
-<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="p">,</span>
-<a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a>            <span class="n">timeinterval</span><span class="p">,</span>
-<a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a>            <span class="n">label</span><span class="p">,</span>
-<a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a>            <span class="n">must_have_all_labels</span><span class="p">,</span>
-<a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a>            <span class="n">projectuuid</span><span class="p">,</span>
-<a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a>            <span class="n">instanceuuid</span><span class="p">,</span>
-<a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a>            <span class="n">datauuid</span><span class="p">,</span>
-<a id="__codelineno-1-51" name="__codelineno-1-51" href="#__codelineno-1-51"></a>            <span class="n">withoutdata</span><span class="p">,</span>
-<a id="__codelineno-1-52" name="__codelineno-1-52" href="#__codelineno-1-52"></a>            <span class="n">polygon</span><span class="p">,</span>
-<a id="__codelineno-1-53" name="__codelineno-1-53" href="#__codelineno-1-53"></a>            <span class="n">fully_encapsulated</span><span class="p">,</span>
-<a id="__codelineno-1-54" name="__codelineno-1-54" href="#__codelineno-1-54"></a>            <span class="n">in_map_frame</span><span class="p">,</span>
-<a id="__codelineno-1-55" name="__codelineno-1-55" href="#__codelineno-1-55"></a>            <span class="n">sort_by_time</span><span class="p">,</span>
-<a id="__codelineno-1-56" name="__codelineno-1-56" href="#__codelineno-1-56"></a>        <span class="p">)</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>            <span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">POLYGON</span><span class="p">:</span> <span class="n">MsgsFunctions</span><span class="p">(</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>                <span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">Dtypes</span><span class="o">.</span><span class="n">Fb</span><span class="o">.</span><span class="n">polygon2D</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="p">)</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>            <span class="p">),</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>            <span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">FULLY_ENCAPSULATED</span><span class="p">:</span> <span class="n">MsgsFunctions</span><span class="p">(</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>                <span class="k">lambda</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">True</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>            <span class="p">),</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>            <span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">IN_MAP_FRAME</span><span class="p">:</span> <span class="n">MsgsFunctions</span><span class="p">(</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>                <span class="k">lambda</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">False</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>            <span class="p">),</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>            <span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">TIMEINTERVAL</span><span class="p">:</span> <span class="n">MsgsFunctions</span><span class="p">(</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>                <span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">Dtypes</span><span class="o">.</span><span class="n">Fb</span><span class="o">.</span><span class="n">time_interval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="p">)</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>            <span class="p">),</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>            <span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">LABEL</span><span class="p">:</span> <span class="n">MsgsFunctions</span><span class="p">(</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>                <span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">Dtypes</span><span class="o">.</span><span class="n">Fb</span><span class="o">.</span><span class="n">label_category</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="p">)</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>            <span class="p">),</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>            <span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">SPARQL_QUERY</span><span class="p">:</span> <span class="n">MsgsFunctions</span><span class="p">(</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>                <span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">Dtypes</span><span class="o">.</span><span class="n">Fb</span><span class="o">.</span><span class="n">sparql_query</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="p">)</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>            <span class="p">),</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>            <span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">ONTOLOGY_URI</span><span class="p">:</span> <span class="n">MsgsFunctions</span><span class="p">(</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>                <span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">Dtypes</span><span class="o">.</span><span class="n">Fb</span><span class="o">.</span><span class="n">ontology_uri</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="p">)</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>            <span class="p">),</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>            <span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">MUST_HAVE_ALL_LABELS</span><span class="p">:</span> <span class="n">MsgsFunctions</span><span class="p">(</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>                <span class="k">lambda</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">True</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>            <span class="p">),</span>
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>            <span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">PROJECTUUID</span><span class="p">:</span> <span class="n">MsgsFunctions</span><span class="p">(</span>
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>                <span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>                <span class="k">lambda</span><span class="p">:</span> <span class="n">Dtypes</span><span class="o">.</span><span class="n">Fb</span><span class="o">.</span><span class="n">projectuuid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel</span><span class="p">),</span>
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>            <span class="p">),</span>
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>            <span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">INSTANCEUUID</span><span class="p">:</span> <span class="n">MsgsFunctions</span><span class="p">(</span>
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>                <span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">instanceuuid</span><span class="p">()</span>
+<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>            <span class="p">),</span>
+<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>            <span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">DATAUUID</span><span class="p">:</span> <span class="n">MsgsFunctions</span><span class="p">(</span>
+<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>                <span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>                <span class="k">lambda</span><span class="p">:</span> <span class="n">Dtypes</span><span class="o">.</span><span class="n">Fb</span><span class="o">.</span><span class="n">datauuid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel</span><span class="p">),</span>
+<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>            <span class="p">),</span>
+<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a>            <span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">WITHOUTDATA</span><span class="p">:</span> <span class="n">MsgsFunctions</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">True</span><span class="p">),</span>
+<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>            <span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">MAX_NUM_DATA</span><span class="p">:</span> <span class="n">MsgsFunctions</span><span class="p">(</span>
+<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a>                <span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">Dtypes</span><span class="o">.</span><span class="n">Fb</span><span class="o">.</span><span class="n">max_num_data</span><span class="p">()</span>
+<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a>            <span class="p">),</span>
+<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a>            <span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">SORT_BY_TIME</span><span class="p">:</span> <span class="n">MsgsFunctions</span><span class="p">(</span>
+<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a>                <span class="k">lambda</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">True</span>
+<a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a>            <span class="p">),</span>
+<a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a>        <span class="p">}</span>
+<a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a>
+<a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a>    <span class="nd">@expect_component</span><span class="p">(</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">PROJECTUUID</span><span class="p">)</span>
+<a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a>    <span class="k">def</span> <span class="nf">instanceuuid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a>        <span class="k">return</span> <span class="n">Dtypes</span><span class="o">.</span><span class="n">Fb</span><span class="o">.</span><span class="n">intanceuuid</span><span class="p">(</span>
+<a id="__codelineno-1-51" name="__codelineno-1-51" href="#__codelineno-1-51"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="p">,</span>
+<a id="__codelineno-1-52" name="__codelineno-1-52" href="#__codelineno-1-52"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">channel</span><span class="p">,</span>
+<a id="__codelineno-1-53" name="__codelineno-1-53" href="#__codelineno-1-53"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">PROJECTUUID</span><span class="p">),</span>
+<a id="__codelineno-1-54" name="__codelineno-1-54" href="#__codelineno-1-54"></a>        <span class="p">)</span>
+<a id="__codelineno-1-55" name="__codelineno-1-55" href="#__codelineno-1-55"></a>
+<a id="__codelineno-1-56" name="__codelineno-1-56" href="#__codelineno-1-56"></a>    <span class="nd">@expect_component</span><span class="p">(</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">PROJECTUUID</span><span class="p">)</span>
+<a id="__codelineno-1-57" name="__codelineno-1-57" href="#__codelineno-1-57"></a>    <span class="k">def</span> <span class="nf">datauuid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<a id="__codelineno-1-58" name="__codelineno-1-58" href="#__codelineno-1-58"></a>        <span class="k">return</span> <span class="n">Dtypes</span><span class="o">.</span><span class="n">Fb</span><span class="o">.</span><span class="n">datauuid</span><span class="p">(</span>
+<a id="__codelineno-1-59" name="__codelineno-1-59" href="#__codelineno-1-59"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">DATAUUID</span><span class="p">)</span>
+<a id="__codelineno-1-60" name="__codelineno-1-60" href="#__codelineno-1-60"></a>        <span class="p">)</span>
+<a id="__codelineno-1-61" name="__codelineno-1-61" href="#__codelineno-1-61"></a>
+<a id="__codelineno-1-62" name="__codelineno-1-62" href="#__codelineno-1-62"></a>    <span class="k">def</span> <span class="nf">_assemble_datatype_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-1-63" name="__codelineno-1-63" href="#__codelineno-1-63"></a>        <span class="n">polygon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">POLYGON</span><span class="p">)</span>
+<a id="__codelineno-1-64" name="__codelineno-1-64" href="#__codelineno-1-64"></a>        <span class="n">fully_encapsulated</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">FULLY_ENCAPSULATED</span><span class="p">)</span>
+<a id="__codelineno-1-65" name="__codelineno-1-65" href="#__codelineno-1-65"></a>        <span class="n">in_map_frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">IN_MAP_FRAME</span><span class="p">)</span>
+<a id="__codelineno-1-66" name="__codelineno-1-66" href="#__codelineno-1-66"></a>        <span class="n">timeinterval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">TIMEINTERVAL</span><span class="p">)</span>
+<a id="__codelineno-1-67" name="__codelineno-1-67" href="#__codelineno-1-67"></a>        <span class="n">label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">LABEL</span><span class="p">)</span>
+<a id="__codelineno-1-68" name="__codelineno-1-68" href="#__codelineno-1-68"></a>        <span class="n">must_have_all_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span>
+<a id="__codelineno-1-69" name="__codelineno-1-69" href="#__codelineno-1-69"></a>            <span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">MUST_HAVE_ALL_LABELS</span>
+<a id="__codelineno-1-70" name="__codelineno-1-70" href="#__codelineno-1-70"></a>        <span class="p">)</span>
+<a id="__codelineno-1-71" name="__codelineno-1-71" href="#__codelineno-1-71"></a>        <span class="n">projectuuid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">PROJECTUUID</span><span class="p">)</span>
+<a id="__codelineno-1-72" name="__codelineno-1-72" href="#__codelineno-1-72"></a>        <span class="n">instanceuuid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">INSTANCEUUID</span><span class="p">)</span>
+<a id="__codelineno-1-73" name="__codelineno-1-73" href="#__codelineno-1-73"></a>        <span class="n">datauuid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">DATAUUID</span><span class="p">)</span>
+<a id="__codelineno-1-74" name="__codelineno-1-74" href="#__codelineno-1-74"></a>        <span class="n">withoutdata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">WITHOUTDATA</span><span class="p">)</span>
+<a id="__codelineno-1-75" name="__codelineno-1-75" href="#__codelineno-1-75"></a>        <span class="n">sort_by_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">SORT_BY_TIME</span><span class="p">)</span>
+<a id="__codelineno-1-76" name="__codelineno-1-76" href="#__codelineno-1-76"></a>
+<a id="__codelineno-1-77" name="__codelineno-1-77" href="#__codelineno-1-77"></a>        <span class="k">return</span> <span class="n">fbh</span><span class="o">.</span><span class="n">createQuery</span><span class="p">(</span>
+<a id="__codelineno-1-78" name="__codelineno-1-78" href="#__codelineno-1-78"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="p">,</span>
+<a id="__codelineno-1-79" name="__codelineno-1-79" href="#__codelineno-1-79"></a>            <span class="n">timeinterval</span><span class="p">,</span>
+<a id="__codelineno-1-80" name="__codelineno-1-80" href="#__codelineno-1-80"></a>            <span class="n">label</span><span class="p">,</span>
+<a id="__codelineno-1-81" name="__codelineno-1-81" href="#__codelineno-1-81"></a>            <span class="n">must_have_all_labels</span><span class="p">,</span>
+<a id="__codelineno-1-82" name="__codelineno-1-82" href="#__codelineno-1-82"></a>            <span class="n">projectuuid</span><span class="p">,</span>
+<a id="__codelineno-1-83" name="__codelineno-1-83" href="#__codelineno-1-83"></a>            <span class="n">instanceuuid</span><span class="p">,</span>
+<a id="__codelineno-1-84" name="__codelineno-1-84" href="#__codelineno-1-84"></a>            <span class="n">datauuid</span><span class="p">,</span>
+<a id="__codelineno-1-85" name="__codelineno-1-85" href="#__codelineno-1-85"></a>            <span class="n">withoutdata</span><span class="p">,</span>
+<a id="__codelineno-1-86" name="__codelineno-1-86" href="#__codelineno-1-86"></a>            <span class="n">polygon</span><span class="p">,</span>
+<a id="__codelineno-1-87" name="__codelineno-1-87" href="#__codelineno-1-87"></a>            <span class="n">fully_encapsulated</span><span class="p">,</span>
+<a id="__codelineno-1-88" name="__codelineno-1-88" href="#__codelineno-1-88"></a>            <span class="n">in_map_frame</span><span class="p">,</span>
+<a id="__codelineno-1-89" name="__codelineno-1-89" href="#__codelineno-1-89"></a>            <span class="n">sort_by_time</span><span class="p">,</span>
+<a id="__codelineno-1-90" name="__codelineno-1-90" href="#__codelineno-1-90"></a>        <span class="p">)</span>
 </code></pre></div>
-<p>In <code>MsgsFb</code> <code>_set_enum_func_mapping()</code> is a abstractmethod which return type is a dictionary,
-which maps the enum types to <code>MsgsFunctions</code>.
-<code>MsgsFunction</code> itself is just a structure to wrap two function pointers.
-The first function pointer should be a pointer to the <code>default_function</code>, which gets called,
-if the component is not set to be active.
-The second function pointer is the one that gets called when the component is set active.</p>
-<p>On runtime it is checked if all elements of the enum are mapped.
-The functions are mostly mapped to default implementations for that specific component datatype.
-The default functions implementations can be inspected <a href="https://github.com/agri-gaia/seerep/blob/main/tests/python/gRPC/util/msg_abs/msgs.py">here</a>
+<p>In <code>MsgsFb</code> <code>_set_enum_func_mapping()</code> is a abstractmethod which return type is
+a dictionary, which maps the enum types to <code>MsgsFunctions</code>. <code>MsgsFunction</code>
+itself is just a structure to wrap two function pointers. The first function
+pointer should be a pointer to the <code>default_function</code>, which gets called, if the
+component is not set to be active. The second function pointer is the one that
+gets called when the component is set active.</p>
+<p>On runtime it is checked if all elements of the enum are mapped. The functions
+are mostly mapped to default implementations for that specific component datatype.
+The default functions implementations can be inspected
+<a href="https://github.com/agri-gaia/seerep/blob/main/tests/python/gRPC/util/msg_abs/msgs.py">here</a>
 at the bottom.</p>
-<p>The <code>@expect_component</code> decorator can be used to define dependencies between the component datatypes, e.g. for the <code>instanceuuid()</code>
-function to work, the <code>EnumFbQuery.PROJECTUUID</code> component must be set to active.</p>
+<p>The <code>@expect_component</code> decorator can be used to define dependencies between the
+component datatypes, e.g. for the <code>instanceuuid()</code> function to work, the
+<code>EnumFbQuery.PROJECTUUID</code> component must be set to active.</p>
 <p>Lastly the abstractmethod <code>_assemble_datatype_instance()</code> has to be implemented,
-in the function all of the wrapper managed components should be retrieved
-and the datatype should be built and returned.
-The base class makes sure that all the components at this point are set.</p>
+in the function all of the wrapper managed components should be retrieved and
+the datatype should be built and returned. The base class makes sure that all
+the components at this point are set.</p>
 <h2 id="using-message-abstractions-for-testing">Using message abstractions for testing<a class="headerlink" href="#using-message-abstractions-for-testing" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">def</span> <span class="nf">test_gRPC_getInstanceTypes</span><span class="p">(</span><span class="n">grpc_channel</span><span class="p">,</span> <span class="n">project_setup</span><span class="p">):</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="n">_</span><span class="p">,</span> <span class="n">proj_uuid</span> <span class="o">=</span> <span class="n">project_setup</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="c1">### check for instances on images</span>
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    <span class="n">images_uuids</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">send_imgs</span><span class="o">.</span><span class="n">send_labeled_images</span><span class="p">(</span><span class="n">proj_uuid</span><span class="p">,</span> <span class="n">grpc_channel</span><span class="p">)</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="n">pcl_lst</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PointCloud2</span><span class="o">.</span><span class="n">PointCloud2</span><span class="p">]</span> <span class="o">=</span> <span class="n">send_pcl</span><span class="o">.</span><span class="n">send_pointcloud</span><span class="p">(</span><span class="n">proj_uuid</span><span class="p">,</span> <span class="n">grpc_channel</span><span class="p">)</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    <span class="n">img_uuid2point_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">PointStamped</span><span class="o">.</span><span class="n">PointStamped</span><span class="p">]</span> <span class="o">=</span> <span class="n">send_points</span><span class="o">.</span><span class="n">send_points</span><span class="p">(</span><span class="n">proj_uuid</span><span class="p">,</span> <span class="n">grpc_channel</span><span class="p">)</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    <span class="c1"># extract images ignore image uuids</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    <span class="n">images</span> <span class="o">=</span> <span class="p">[</span><span class="n">img</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">images_uuids</span><span class="p">]</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    <span class="c1"># retrieve the labelinstances of the bounding boxes</span>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>    <span class="n">bbs_instances</span> <span class="o">=</span> <span class="p">[]</span>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>    <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">images</span><span class="p">:</span>
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>        <span class="k">for</span> <span class="n">bb_cat</span> <span class="ow">in</span> <span class="n">image</span><span class="o">.</span><span class="n">labels_bb</span><span class="p">:</span>
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>            <span class="k">for</span> <span class="n">instance</span> <span class="ow">in</span> <span class="n">bb_cat</span><span class="o">.</span><span class="n">boundingBox2DLabeled</span><span class="p">:</span>
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>                <span class="n">bbs_instances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="n">labelWithInstance</span><span class="o">.</span><span class="n">instanceUuid</span><span class="p">)</span>
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>    <span class="n">serv_man</span> <span class="o">=</span> <span class="n">ServiceManager</span><span class="p">(</span><span class="n">grpc_channel</span><span class="p">)</span>
-<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>
-<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>    <span class="n">queryinst_builder</span> <span class="o">=</span> <span class="n">FbQueryInstance</span><span class="p">(</span><span class="n">grpc_channel</span><span class="p">,</span> <span class="n">enum_types</span><span class="o">=</span><span class="p">{</span><span class="n">EnumFbQueryInstance</span><span class="o">.</span><span class="n">DATATYPE</span><span class="p">})</span>
-<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>    <span class="n">queryinst_builder</span><span class="o">.</span><span class="n">set_active_function</span><span class="p">(</span><span class="n">EnumFbQueryInstance</span><span class="o">.</span><span class="n">DATATYPE</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">Datatype</span><span class="o">.</span><span class="n">Datatype</span><span class="o">.</span><span class="n">Image</span><span class="p">)</span>
-<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>    <span class="n">queryinst_builder</span><span class="o">.</span><span class="n">assemble_datatype_instance</span><span class="p">()</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="n">pcl_lst</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PointCloud2</span><span class="o">.</span><span class="n">PointCloud2</span><span class="p">]</span> <span class="o">=</span> <span class="n">send_pcl</span><span class="o">.</span><span class="n">send_pointcloud</span><span class="p">(</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>        <span class="n">proj_uuid</span><span class="p">,</span> <span class="n">grpc_channel</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="p">)</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    <span class="n">img_uuid2point_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">PointStamped</span><span class="o">.</span><span class="n">PointStamped</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>        <span class="n">send_points</span><span class="o">.</span><span class="n">send_points</span><span class="p">(</span><span class="n">proj_uuid</span><span class="p">,</span> <span class="n">grpc_channel</span><span class="p">)</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    <span class="p">)</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>    <span class="c1"># extract images ignore image uuids</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>    <span class="n">images</span> <span class="o">=</span> <span class="p">[</span><span class="n">img</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">images_uuids</span><span class="p">]</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>    <span class="c1"># retrieve the labelinstances of the bounding boxes</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>    <span class="n">label_instances</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>    <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">images</span><span class="p">:</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>        <span class="k">for</span> <span class="n">label_cat</span> <span class="ow">in</span> <span class="n">image</span><span class="o">.</span><span class="n">labels</span><span class="p">:</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>            <span class="k">for</span> <span class="n">instance</span> <span class="ow">in</span> <span class="n">label_cat</span><span class="o">.</span><span class="n">labels</span><span class="p">:</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>                <span class="n">label_instances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="n">instanceUuid</span><span class="p">)</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>    <span class="n">serv_man</span> <span class="o">=</span> <span class="n">ServiceManager</span><span class="p">(</span><span class="n">grpc_channel</span><span class="p">)</span>
 <a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>
-<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>    <span class="n">instance_uuidspp</span> <span class="o">=</span> <span class="n">serv_man</span><span class="o">.</span><span class="n">call_get_instances_fb</span><span class="p">(</span><span class="n">queryinst_builder</span><span class="o">.</span><span class="n">builder</span><span class="p">,</span> <span class="n">queryinst_builder</span><span class="o">.</span><span class="n">datatype_instance</span><span class="p">)</span>
-<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>
-<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>    <span class="n">bbs_instances</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">bbs_instances</span><span class="p">)</span>
-<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>
-<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>    <span class="n">instance_uuids</span> <span class="o">=</span> <span class="n">get_sorted_uuids_per_proj</span><span class="p">(</span><span class="n">instance_uuidspp</span><span class="p">)</span>
-<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>
-<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a>    <span class="k">assert</span> <span class="n">instance_uuids</span> <span class="o">==</span> <span class="n">bbs_instances</span>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>    <span class="n">queryinst_builder</span> <span class="o">=</span> <span class="n">FbQueryInstance</span><span class="p">(</span>
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>        <span class="n">grpc_channel</span><span class="p">,</span> <span class="n">enum_types</span><span class="o">=</span><span class="p">{</span><span class="n">EnumFbQueryInstance</span><span class="o">.</span><span class="n">DATATYPE</span><span class="p">}</span>
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>    <span class="p">)</span>
+<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>    <span class="n">queryinst_builder</span><span class="o">.</span><span class="n">set_active_function</span><span class="p">(</span>
+<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>        <span class="n">EnumFbQueryInstance</span><span class="o">.</span><span class="n">DATATYPE</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">Datatype</span><span class="o">.</span><span class="n">Datatype</span><span class="o">.</span><span class="n">Image</span>
+<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>    <span class="p">)</span>
+<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a>    <span class="n">queryinst_builder</span><span class="o">.</span><span class="n">assemble_datatype_instance</span><span class="p">()</span>
+<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a>
+<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a>    <span class="n">instance_uuidspp</span> <span class="o">=</span> <span class="n">serv_man</span><span class="o">.</span><span class="n">call_get_instances_fb</span><span class="p">(</span>
+<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a>        <span class="n">queryinst_builder</span><span class="o">.</span><span class="n">builder</span><span class="p">,</span> <span class="n">queryinst_builder</span><span class="o">.</span><span class="n">datatype_instance</span>
+<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a>    <span class="p">)</span>
+<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a>
+<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a>    <span class="n">label_instances</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">label_instances</span><span class="p">)</span>
+<a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a>
+<a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a>    <span class="n">instance_uuids</span> <span class="o">=</span> <span class="n">get_sorted_uuids_per_proj</span><span class="p">(</span><span class="n">instance_uuidspp</span><span class="p">)</span>
+<a id="__codelineno-2-40" name="__codelineno-2-40" href="#__codelineno-2-40"></a>
+<a id="__codelineno-2-41" name="__codelineno-2-41" href="#__codelineno-2-41"></a>    <span class="k">assert</span> <span class="n">instance_uuids</span> <span class="o">==</span> <span class="n">label_instances</span>
 </code></pre></div>
 <p>In this function all the possible datatypes with attached instances are tested
 (this is just a snippet of that particular function).</p>
-<p>The message abstractions are used by creating a object of <code>FbQueryInstance</code> first and
-setting the only active enum to <code>EnumFbQueryInstance.DATATYPE</code> using the <code>enum_types</code> variable on initialization,
-as this is the only relevant component to be modified for the test.
-In this case it would be relatively easy to test different sets of components together
-e.g. testing for interference when specific datatypes are set and while a polygon is used to restrict the relevant area.</p>
-<p>After that <code>set_active_function()</code> is used to set a different function pointer to the active component's function pointer.
-This essentially sets the second component of a <code>MsgsFunction</code> type in the dictionary returned by
+<p>The message abstractions are used by creating a object of <code>FbQueryInstance</code> first
+and setting the only active enum to <code>EnumFbQueryInstance.DATATYPE</code> using the
+<code>enum_types</code> variable on initialization, as this is the only relevant component
+to be modified for the test. In this case it would be relatively easy to test
+different sets of components together e.g. testing for interference when specific
+datatypes are set and while a polygon is used to restrict the relevant area.</p>
+<p>After that <code>set_active_function()</code> is used to set a different function pointer
+to the active component's function pointer. This essentially sets the second
+component of a <code>MsgsFunction</code> type in the dictionary returned by
 <code>_set_enum_func_mapping()</code>, which is discussed in the previous section.</p>
-<p>Lastly if a change to the dictionary has been done using <code>set_active_function()</code> or <code>set_mapped_functions()</code>, the <code>assemble_datatype_instance()</code>
-has to be called to reassemble the underlying datatype.</p>
-<p><strong>Note</strong>: On creation of the instance the datatype is assembled automatically in it's constructor.</p>
-<p>Now the assembled datatype can be accessed using the property <code>queryinst_builder.datatype_instance</code> and
-the underlying flatbuffers builder can be accessed by using <code>queryinst_builder.builder</code> for further use,
-e.g. like in this case calling the service function <code>call_get_instances_fb()</code> using the <a href="../python-helpers/#service_managerpy">ServiceManager</a>.</p>
-<p><strong>Note</strong>: The <code>MsgsBase</code> class provides it's own <code>ServiceManager</code> property for building components,
-but that one shouldn't be used as it could change in the future.</p>
-<p>Another snippet to highlight is the following where one of the components of the datatype itself is inheriting from <code>MsgsFb</code>.</p>
+<p>Lastly if a change to the dictionary has been done using <code>set_active_function()</code>
+or <code>set_mapped_functions()</code>, the <code>assemble_datatype_instance()</code> has to be called
+to reassemble the underlying datatype.</p>
+<p><strong>Note</strong>: On creation of the instance the datatype is assembled automatically in
+it's constructor.</p>
+<p>Now the assembled datatype can be accessed using the property
+<code>queryinst_builder.datatype_instance</code> and the underlying flatbuffers builder can
+be accessed by using <code>queryinst_builder.builder</code> for further use, e.g. like in
+this case calling the service function <code>call_get_instances_fb()</code> using the
+<a href="../python-helpers/#service_managerpy">ServiceManager</a>.</p>
+<p><strong>Note</strong>: The <code>MsgsBase</code> class provides it's own <code>ServiceManager</code> property for
+building components, but that one shouldn't be used as it could change in the
+future.</p>
+<p>Another snippet to highlight is the following where one of the components of the
+datatype itself is inheriting from <code>MsgsFb</code>.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">def</span> <span class="nf">test_gRPC_getInstanceQueryTimeinterval</span><span class="p">(</span><span class="n">grpc_channel</span><span class="p">,</span> <span class="n">project_setup</span><span class="p">):</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="n">_</span><span class="p">,</span> <span class="n">proj_uuid</span> <span class="o">=</span> <span class="n">project_setup</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
@@ -1164,87 +1226,113 @@ but that one shouldn't be used as it could change in the future.</p>
 <a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>    <span class="n">max_time_</span> <span class="o">=</span> <span class="n">cur_time</span> <span class="o">+</span> <span class="n">time_offset</span>
 <a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>
 <a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>    <span class="n">query_builder</span> <span class="o">=</span> <span class="n">FbQuery</span><span class="p">(</span><span class="n">grpc_channel</span><span class="p">,</span> <span class="n">enum_types</span><span class="o">=</span><span class="p">{</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">TIMEINTERVAL</span><span class="p">})</span>
-<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>    <span class="n">queryinst_builder</span> <span class="o">=</span> <span class="n">FbQueryInstance</span><span class="p">(</span><span class="n">grpc_channel</span><span class="p">,</span> <span class="n">enum_types</span><span class="o">=</span><span class="p">{</span><span class="n">EnumFbQueryInstance</span><span class="o">.</span><span class="n">QUERY</span><span class="p">})</span>
-<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>
-<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a>    <span class="c1"># test for time interval</span>
-<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a>    <span class="n">min_timestamp</span> <span class="o">=</span> <span class="n">fbh</span><span class="o">.</span><span class="n">createTimeStamp</span><span class="p">(</span><span class="n">queryinst_builder</span><span class="o">.</span><span class="n">builder</span><span class="p">,</span> <span class="n">min_time_</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a>    <span class="n">max_timestamp</span> <span class="o">=</span> <span class="n">fbh</span><span class="o">.</span><span class="n">createTimeStamp</span><span class="p">(</span><span class="n">queryinst_builder</span><span class="o">.</span><span class="n">builder</span><span class="p">,</span> <span class="n">max_time_</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-<a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a>
-<a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a>    <span class="n">img_time_interval</span> <span class="o">=</span> <span class="n">fbh</span><span class="o">.</span><span class="n">createTimeInterval</span><span class="p">(</span><span class="n">queryinst_builder</span><span class="o">.</span><span class="n">builder</span><span class="p">,</span> <span class="n">min_timestamp</span><span class="p">,</span> <span class="n">max_timestamp</span><span class="p">)</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>    <span class="n">queryinst_builder</span> <span class="o">=</span> <span class="n">FbQueryInstance</span><span class="p">(</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>        <span class="n">grpc_channel</span><span class="p">,</span> <span class="n">enum_types</span><span class="o">=</span><span class="p">{</span><span class="n">EnumFbQueryInstance</span><span class="o">.</span><span class="n">QUERY</span><span class="p">}</span>
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a>    <span class="p">)</span>
+<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a>
+<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a>    <span class="c1"># test for time interval</span>
+<a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a>    <span class="n">min_timestamp</span> <span class="o">=</span> <span class="n">fbh</span><span class="o">.</span><span class="n">createTimeStamp</span><span class="p">(</span><span class="n">queryinst_builder</span><span class="o">.</span><span class="n">builder</span><span class="p">,</span> <span class="n">min_time_</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a>    <span class="n">max_timestamp</span> <span class="o">=</span> <span class="n">fbh</span><span class="o">.</span><span class="n">createTimeStamp</span><span class="p">(</span><span class="n">queryinst_builder</span><span class="o">.</span><span class="n">builder</span><span class="p">,</span> <span class="n">max_time_</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a>
-<a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a>    <span class="n">query_builder</span><span class="o">.</span><span class="n">set_active_function</span><span class="p">(</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">TIMEINTERVAL</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">img_time_interval</span><span class="p">)</span>
-<a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a>
-<a id="__codelineno-3-30" name="__codelineno-3-30" href="#__codelineno-3-30"></a>    <span class="n">queryinst_builder</span><span class="o">.</span><span class="n">set_active_function</span><span class="p">(</span><span class="n">EnumFbQueryInstance</span><span class="o">.</span><span class="n">QUERY</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">query_builder</span><span class="o">.</span><span class="n">datatype_instance</span><span class="p">)</span>
+<a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a>    <span class="n">img_time_interval</span> <span class="o">=</span> <span class="n">fbh</span><span class="o">.</span><span class="n">createTimeInterval</span><span class="p">(</span>
+<a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a>        <span class="n">queryinst_builder</span><span class="o">.</span><span class="n">builder</span><span class="p">,</span> <span class="n">min_timestamp</span><span class="p">,</span> <span class="n">max_timestamp</span>
+<a id="__codelineno-3-30" name="__codelineno-3-30" href="#__codelineno-3-30"></a>    <span class="p">)</span>
 <a id="__codelineno-3-31" name="__codelineno-3-31" href="#__codelineno-3-31"></a>
-<a id="__codelineno-3-32" name="__codelineno-3-32" href="#__codelineno-3-32"></a>    <span class="n">query_builder</span><span class="o">.</span><span class="n">assemble_datatype_instance</span><span class="p">()</span>
-<a id="__codelineno-3-33" name="__codelineno-3-33" href="#__codelineno-3-33"></a>
-<a id="__codelineno-3-34" name="__codelineno-3-34" href="#__codelineno-3-34"></a>    <span class="n">queryinst_builder</span><span class="o">.</span><span class="n">assemble_datatype_instance</span><span class="p">()</span>
+<a id="__codelineno-3-32" name="__codelineno-3-32" href="#__codelineno-3-32"></a>    <span class="n">query_builder</span><span class="o">.</span><span class="n">set_active_function</span><span class="p">(</span>
+<a id="__codelineno-3-33" name="__codelineno-3-33" href="#__codelineno-3-33"></a>        <span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">TIMEINTERVAL</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">img_time_interval</span>
+<a id="__codelineno-3-34" name="__codelineno-3-34" href="#__codelineno-3-34"></a>    <span class="p">)</span>
 <a id="__codelineno-3-35" name="__codelineno-3-35" href="#__codelineno-3-35"></a>
-<a id="__codelineno-3-36" name="__codelineno-3-36" href="#__codelineno-3-36"></a>    <span class="n">instance_uuids_intimeinterval</span> <span class="o">=</span> <span class="n">get_sorted_uuids_per_proj</span><span class="p">(</span>
-<a id="__codelineno-3-37" name="__codelineno-3-37" href="#__codelineno-3-37"></a>        <span class="n">serv_man</span><span class="o">.</span><span class="n">call_get_instances_fb</span><span class="p">(</span><span class="n">queryinst_builder</span><span class="o">.</span><span class="n">builder</span><span class="p">,</span> <span class="n">queryinst_builder</span><span class="o">.</span><span class="n">datatype_instance</span><span class="p">)</span>
+<a id="__codelineno-3-36" name="__codelineno-3-36" href="#__codelineno-3-36"></a>    <span class="n">queryinst_builder</span><span class="o">.</span><span class="n">set_active_function</span><span class="p">(</span>
+<a id="__codelineno-3-37" name="__codelineno-3-37" href="#__codelineno-3-37"></a>        <span class="n">EnumFbQueryInstance</span><span class="o">.</span><span class="n">QUERY</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">query_builder</span><span class="o">.</span><span class="n">datatype_instance</span>
 <a id="__codelineno-3-38" name="__codelineno-3-38" href="#__codelineno-3-38"></a>    <span class="p">)</span>
 <a id="__codelineno-3-39" name="__codelineno-3-39" href="#__codelineno-3-39"></a>
-<a id="__codelineno-3-40" name="__codelineno-3-40" href="#__codelineno-3-40"></a>    <span class="n">min_time_</span> <span class="o">=</span> <span class="n">cur_time</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">time_offset</span>
-<a id="__codelineno-3-41" name="__codelineno-3-41" href="#__codelineno-3-41"></a>    <span class="n">max_time_</span> <span class="o">=</span> <span class="n">cur_time</span> <span class="o">-</span> <span class="n">time_offset</span>
-<a id="__codelineno-3-42" name="__codelineno-3-42" href="#__codelineno-3-42"></a>
-<a id="__codelineno-3-43" name="__codelineno-3-43" href="#__codelineno-3-43"></a>    <span class="n">min_timestamp</span> <span class="o">=</span> <span class="n">fbh</span><span class="o">.</span><span class="n">createTimeStamp</span><span class="p">(</span><span class="n">queryinst_builder</span><span class="o">.</span><span class="n">builder</span><span class="p">,</span> <span class="n">min_time_</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-<a id="__codelineno-3-44" name="__codelineno-3-44" href="#__codelineno-3-44"></a>    <span class="n">max_timestamp</span> <span class="o">=</span> <span class="n">fbh</span><span class="o">.</span><span class="n">createTimeStamp</span><span class="p">(</span><span class="n">queryinst_builder</span><span class="o">.</span><span class="n">builder</span><span class="p">,</span> <span class="n">max_time_</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-<a id="__codelineno-3-45" name="__codelineno-3-45" href="#__codelineno-3-45"></a>
-<a id="__codelineno-3-46" name="__codelineno-3-46" href="#__codelineno-3-46"></a>    <span class="n">img_time_interval</span> <span class="o">=</span> <span class="n">fbh</span><span class="o">.</span><span class="n">createTimeInterval</span><span class="p">(</span><span class="n">queryinst_builder</span><span class="o">.</span><span class="n">builder</span><span class="p">,</span> <span class="n">min_timestamp</span><span class="p">,</span> <span class="n">max_timestamp</span><span class="p">)</span>
-<a id="__codelineno-3-47" name="__codelineno-3-47" href="#__codelineno-3-47"></a>
-<a id="__codelineno-3-48" name="__codelineno-3-48" href="#__codelineno-3-48"></a>    <span class="n">query_builder</span><span class="o">.</span><span class="n">set_active_function</span><span class="p">(</span><span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">TIMEINTERVAL</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">img_time_interval</span><span class="p">)</span>
+<a id="__codelineno-3-40" name="__codelineno-3-40" href="#__codelineno-3-40"></a>    <span class="n">query_builder</span><span class="o">.</span><span class="n">assemble_datatype_instance</span><span class="p">()</span>
+<a id="__codelineno-3-41" name="__codelineno-3-41" href="#__codelineno-3-41"></a>
+<a id="__codelineno-3-42" name="__codelineno-3-42" href="#__codelineno-3-42"></a>    <span class="n">queryinst_builder</span><span class="o">.</span><span class="n">assemble_datatype_instance</span><span class="p">()</span>
+<a id="__codelineno-3-43" name="__codelineno-3-43" href="#__codelineno-3-43"></a>
+<a id="__codelineno-3-44" name="__codelineno-3-44" href="#__codelineno-3-44"></a>    <span class="n">instance_uuids_intimeinterval</span> <span class="o">=</span> <span class="n">get_sorted_uuids_per_proj</span><span class="p">(</span>
+<a id="__codelineno-3-45" name="__codelineno-3-45" href="#__codelineno-3-45"></a>        <span class="n">serv_man</span><span class="o">.</span><span class="n">call_get_instances_fb</span><span class="p">(</span>
+<a id="__codelineno-3-46" name="__codelineno-3-46" href="#__codelineno-3-46"></a>            <span class="n">queryinst_builder</span><span class="o">.</span><span class="n">builder</span><span class="p">,</span> <span class="n">queryinst_builder</span><span class="o">.</span><span class="n">datatype_instance</span>
+<a id="__codelineno-3-47" name="__codelineno-3-47" href="#__codelineno-3-47"></a>        <span class="p">)</span>
+<a id="__codelineno-3-48" name="__codelineno-3-48" href="#__codelineno-3-48"></a>    <span class="p">)</span>
 <a id="__codelineno-3-49" name="__codelineno-3-49" href="#__codelineno-3-49"></a>
-<a id="__codelineno-3-50" name="__codelineno-3-50" href="#__codelineno-3-50"></a>    <span class="n">query_builder</span><span class="o">.</span><span class="n">assemble_datatype_instance</span><span class="p">()</span>
-<a id="__codelineno-3-51" name="__codelineno-3-51" href="#__codelineno-3-51"></a>
-<a id="__codelineno-3-52" name="__codelineno-3-52" href="#__codelineno-3-52"></a>    <span class="n">queryinst_builder</span><span class="o">.</span><span class="n">assemble_datatype_instance</span><span class="p">()</span>
-<a id="__codelineno-3-53" name="__codelineno-3-53" href="#__codelineno-3-53"></a>
-<a id="__codelineno-3-54" name="__codelineno-3-54" href="#__codelineno-3-54"></a>    <span class="n">instance_uuids_outtimeinterval</span> <span class="o">=</span> <span class="n">get_sorted_uuids_per_proj</span><span class="p">(</span>
-<a id="__codelineno-3-55" name="__codelineno-3-55" href="#__codelineno-3-55"></a>        <span class="n">serv_man</span><span class="o">.</span><span class="n">call_get_instances_fb</span><span class="p">(</span><span class="n">queryinst_builder</span><span class="o">.</span><span class="n">builder</span><span class="p">,</span> <span class="n">queryinst_builder</span><span class="o">.</span><span class="n">datatype_instance</span><span class="p">)</span>
-<a id="__codelineno-3-56" name="__codelineno-3-56" href="#__codelineno-3-56"></a>    <span class="p">)</span>
-<a id="__codelineno-3-57" name="__codelineno-3-57" href="#__codelineno-3-57"></a>
-<a id="__codelineno-3-58" name="__codelineno-3-58" href="#__codelineno-3-58"></a>    <span class="n">bbs_instances</span> <span class="o">=</span> <span class="n">get_instances_from_imgs</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
+<a id="__codelineno-3-50" name="__codelineno-3-50" href="#__codelineno-3-50"></a>    <span class="n">min_time_</span> <span class="o">=</span> <span class="n">cur_time</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">time_offset</span>
+<a id="__codelineno-3-51" name="__codelineno-3-51" href="#__codelineno-3-51"></a>    <span class="n">max_time_</span> <span class="o">=</span> <span class="n">cur_time</span> <span class="o">-</span> <span class="n">time_offset</span>
+<a id="__codelineno-3-52" name="__codelineno-3-52" href="#__codelineno-3-52"></a>
+<a id="__codelineno-3-53" name="__codelineno-3-53" href="#__codelineno-3-53"></a>    <span class="n">min_timestamp</span> <span class="o">=</span> <span class="n">fbh</span><span class="o">.</span><span class="n">createTimeStamp</span><span class="p">(</span><span class="n">queryinst_builder</span><span class="o">.</span><span class="n">builder</span><span class="p">,</span> <span class="n">min_time_</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<a id="__codelineno-3-54" name="__codelineno-3-54" href="#__codelineno-3-54"></a>    <span class="n">max_timestamp</span> <span class="o">=</span> <span class="n">fbh</span><span class="o">.</span><span class="n">createTimeStamp</span><span class="p">(</span><span class="n">queryinst_builder</span><span class="o">.</span><span class="n">builder</span><span class="p">,</span> <span class="n">max_time_</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<a id="__codelineno-3-55" name="__codelineno-3-55" href="#__codelineno-3-55"></a>
+<a id="__codelineno-3-56" name="__codelineno-3-56" href="#__codelineno-3-56"></a>    <span class="n">img_time_interval</span> <span class="o">=</span> <span class="n">fbh</span><span class="o">.</span><span class="n">createTimeInterval</span><span class="p">(</span>
+<a id="__codelineno-3-57" name="__codelineno-3-57" href="#__codelineno-3-57"></a>        <span class="n">queryinst_builder</span><span class="o">.</span><span class="n">builder</span><span class="p">,</span> <span class="n">min_timestamp</span><span class="p">,</span> <span class="n">max_timestamp</span>
+<a id="__codelineno-3-58" name="__codelineno-3-58" href="#__codelineno-3-58"></a>    <span class="p">)</span>
 <a id="__codelineno-3-59" name="__codelineno-3-59" href="#__codelineno-3-59"></a>
-<a id="__codelineno-3-60" name="__codelineno-3-60" href="#__codelineno-3-60"></a>    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">instance_uuids_outtimeinterval</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
-<a id="__codelineno-3-61" name="__codelineno-3-61" href="#__codelineno-3-61"></a>    <span class="k">assert</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">bbs_instances</span><span class="p">)</span> <span class="o">==</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">instance_uuids_intimeinterval</span><span class="p">)</span>
+<a id="__codelineno-3-60" name="__codelineno-3-60" href="#__codelineno-3-60"></a>    <span class="n">query_builder</span><span class="o">.</span><span class="n">set_active_function</span><span class="p">(</span>
+<a id="__codelineno-3-61" name="__codelineno-3-61" href="#__codelineno-3-61"></a>        <span class="n">EnumFbQuery</span><span class="o">.</span><span class="n">TIMEINTERVAL</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">img_time_interval</span>
+<a id="__codelineno-3-62" name="__codelineno-3-62" href="#__codelineno-3-62"></a>    <span class="p">)</span>
+<a id="__codelineno-3-63" name="__codelineno-3-63" href="#__codelineno-3-63"></a>
+<a id="__codelineno-3-64" name="__codelineno-3-64" href="#__codelineno-3-64"></a>    <span class="n">query_builder</span><span class="o">.</span><span class="n">assemble_datatype_instance</span><span class="p">()</span>
+<a id="__codelineno-3-65" name="__codelineno-3-65" href="#__codelineno-3-65"></a>
+<a id="__codelineno-3-66" name="__codelineno-3-66" href="#__codelineno-3-66"></a>    <span class="n">queryinst_builder</span><span class="o">.</span><span class="n">assemble_datatype_instance</span><span class="p">()</span>
+<a id="__codelineno-3-67" name="__codelineno-3-67" href="#__codelineno-3-67"></a>
+<a id="__codelineno-3-68" name="__codelineno-3-68" href="#__codelineno-3-68"></a>    <span class="n">instance_uuids_outtimeinterval</span> <span class="o">=</span> <span class="n">get_sorted_uuids_per_proj</span><span class="p">(</span>
+<a id="__codelineno-3-69" name="__codelineno-3-69" href="#__codelineno-3-69"></a>        <span class="n">serv_man</span><span class="o">.</span><span class="n">call_get_instances_fb</span><span class="p">(</span>
+<a id="__codelineno-3-70" name="__codelineno-3-70" href="#__codelineno-3-70"></a>            <span class="n">queryinst_builder</span><span class="o">.</span><span class="n">builder</span><span class="p">,</span> <span class="n">queryinst_builder</span><span class="o">.</span><span class="n">datatype_instance</span>
+<a id="__codelineno-3-71" name="__codelineno-3-71" href="#__codelineno-3-71"></a>        <span class="p">)</span>
+<a id="__codelineno-3-72" name="__codelineno-3-72" href="#__codelineno-3-72"></a>    <span class="p">)</span>
+<a id="__codelineno-3-73" name="__codelineno-3-73" href="#__codelineno-3-73"></a>
+<a id="__codelineno-3-74" name="__codelineno-3-74" href="#__codelineno-3-74"></a>    <span class="n">label_instances</span> <span class="o">=</span> <span class="n">get_instances_from_imgs</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
+<a id="__codelineno-3-75" name="__codelineno-3-75" href="#__codelineno-3-75"></a>
+<a id="__codelineno-3-76" name="__codelineno-3-76" href="#__codelineno-3-76"></a>    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">instance_uuids_outtimeinterval</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+<a id="__codelineno-3-77" name="__codelineno-3-77" href="#__codelineno-3-77"></a>    <span class="k">assert</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">label_instances</span><span class="p">)</span> <span class="o">==</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">instance_uuids_intimeinterval</span><span class="p">)</span>
 </code></pre></div>
 <p>Here <code>query_builder</code> is used to build the <code>Query.Query</code> datatype in order to
-supply that one to the <code>queryinst_builder</code> query component.
-It is important that <code>query_builder.assemble_datatype_instance()</code> is called before <code>queryinst_builder.assemble_datatype_instance()</code>,
-otherwise the changes by setting the active function on <code>query_builder</code> are not reflected in the <code>queryinst_builder.datatype_instance</code>.</p>
+supply that one to the <code>queryinst_builder</code> query component. It is important that
+<code>query_builder.assemble_datatype_instance()</code> is called before
+<code>queryinst_builder.assemble_datatype_instance()</code>, otherwise the changes by setting
+the active function on <code>query_builder</code> are not reflected in the
+<code>queryinst_builder.datatype_instance</code>.</p>
 <h2 id="inner-workings-of-the-msgsfb-and-msgsbase-classes">Inner workings of the <code>MsgsFb</code> and <code>MsgsBase</code> classes<a class="headerlink" href="#inner-workings-of-the-msgsfb-and-msgsbase-classes" title="Permanent link">&para;</a></h2>
 <p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="message-abstractions" src="../../imgs/message-abstractions.svg" width="900px" /></a></p>
 <p><strong>Meaning of Symbols and Notations in this diagram</strong>:</p>
 <ul>
 <li>Rectangular boxes: instance methods</li>
 <li>Ellipsis: instance variables</li>
-<li>Line arrows (with text): calls to methods or setting variables (with the help of those variables specified by the text)</li>
+<li>Line arrows (with text): calls to methods or setting variables (with the help
+  of those variables specified by the text)</li>
 <li>Line arrows with numbers: show the order in which things are done</li>
 <li>dotted arrows outgoing: Getter methods/properties</li>
 <li>dotted arrows incoming: Setter methods/properties</li>
 <li>red colored text: already used functionality in the examples above</li>
 <li>purple colored text: <code>@abstractmethod</code> also used above</li>
-<li>blue colored text: has a special meaning, is not mirrored exactly by the implementation</li>
+<li>blue colored text: has a special meaning, is not mirrored exactly by the
+  implementation</li>
 </ul>
-<p><strong>Note</strong>: Some details are not shown like the validation methods for the given enum type.
-But they are not neccessary to understand the structure.</p>
-<p>First in the initialization phase variables (<code>_builder</code>, <code>_service_manager</code>, <code>_channel</code>, <code>_active_enums</code>) are set and
-managed by the <code>MsgsFb</code> instance, those are needed for the assembly of the datatype instance later.
-<code>_builder</code> is a simply a flatbuffers builder. <code>channel</code> is used to create <code>ServiceManager</code> instance
-and manage a <code>grpc_channel</code> type variable. At last <code>_active_enums</code> is a set of enum elements, which will be used to specify
-which component of the datatype is "active"
-(i.e. which component is set by the <code>active_function</code> of the <code>MsgsFunctions</code> class).</p>
-<p>After that the <code>_enum_func_mapping</code> variable is set by the <code>_set_enum_func_mapping()</code> function. This variable can also get
-manipulated by <code>set_active_function()</code> or <code>set_mapped_functions()</code>.
-Then <code>_assemble_components()</code> is called, which makes sure that the <code>_components</code> are set, i.e. the functions in the
-<code>_enum_func_mapping</code> are called
-and the components are set by those <code>default_functions</code> or those <code>active_functions</code>,
+<p><strong>Note</strong>: Some details are not shown like the validation methods for the given
+enum type. But they are not neccessary to understand the structure.</p>
+<p>First in the initialization phase variables (<code>_builder</code>, <code>_service_manager</code>,
+<code>_channel</code>, <code>_active_enums</code>) are set and managed by the <code>MsgsFb</code> instance, those
+are needed for the assembly of the datatype instance later. <code>_builder</code> is a
+simply a flatbuffers builder. <code>channel</code> is used to create <code>ServiceManager</code>
+instance and manage a <code>grpc_channel</code> type variable. At last <code>_active_enums</code> is a
+set of enum elements, which will be used to specify which component of the datatype
+is "active" (i.e. which component is set by the <code>active_function</code> of the
+<code>MsgsFunctions</code> class).</p>
+<p>After that the <code>_enum_func_mapping</code> variable is set by the
+<code>_set_enum_func_mapping()</code> function. This variable can also get manipulated by
+<code>set_active_function()</code> or <code>set_mapped_functions()</code>. Then
+<code>_assemble_components()</code> is called, which makes sure that the <code>_components</code> are
+set, i.e. the functions in the <code>_enum_func_mapping</code> are called and the components
+are set by those <code>default_functions</code> or those <code>active_functions</code>,
 if their corresponding enum is in the <code>_active_enums</code> set.</p>
-<p><strong>Note</strong>: <code>_components</code> are implemented as multiple dynamically at runtime created instance variables with the name of
-the component specified by the enum element name.</p>
-<p>Finally the on the instance callable <code>assemble_datatype_instance()</code> method triggers a rebuild of the <code>_assembled_datatype_instance</code>,
-by first refreshing the components and then calling the <code>_assemble_datatype_instance()</code> method.
-The <code>assemble_datatype_instance()</code> method gets also called in the <code>__init__()</code> method,
-such that the message abstractions always try to guarantee a set <code>datatype_instance</code> variable.</p>
+<p><strong>Note</strong>: <code>_components</code> are implemented as multiple dynamically at runtime
+created instance variables with the name of the component specified by the enum
+element name.</p>
+<p>Finally the on the instance callable <code>assemble_datatype_instance()</code> method
+triggers a rebuild of the <code>_assembled_datatype_instance</code>, by first refreshing
+the components and then calling the <code>_assemble_datatype_instance()</code> method.
+The <code>assemble_datatype_instance()</code> method gets also called in the <code>__init__()</code>
+method, such that the message abstractions always try to guarantee a set
+<code>datatype_instance</code> variable.</p>
 
 
 

@@ -8,5 +8,5 @@ var namespaceseerep__core__fb =
     [ "CoreFbPoint", "classseerep__core__fb_1_1CoreFbPoint.html", "classseerep__core__fb_1_1CoreFbPoint" ],
     [ "CoreFbPointCloud", "classseerep__core__fb_1_1CoreFbPointCloud.html", "classseerep__core__fb_1_1CoreFbPointCloud" ],
     [ "CoreFbTf", "classseerep__core__fb_1_1CoreFbTf.html", "classseerep__core__fb_1_1CoreFbTf" ],
-    [ "LabelWithInstanceVec", "namespaceseerep__core__fb.html#a443faf3a64cef77a98b5587fa788c43a", null ]
+    [ "LabelVec", "namespaceseerep__core__fb.html#af9b017e1a39b9c9b709ecffbd3acdf0e", null ]
 ];

@@ -1124,19 +1124,25 @@ using the corresponding file in the <code>docker/server</code> directory:</p>
 <div class="admonition info">
 <p class="admonition-title">Use of named Docker volumes</p>
 <p><!-- markdownlint-disable-next-line -->
-Compared to the Dev-Container, the production setup uses <a href="https://docs.docker.com/storage/volumes/">named Docker volumes</a>.
-Which do not require any specific directory on the host system. The volumes also keeps the data between restarts.
-For an empty server delete the volumes with <code>docker volume rm seerep_log seerep_data</code>.</p>
+Compared to the Dev-Container, the production setup uses
+<a href="https://docs.docker.com/storage/volumes/">named Docker volumes</a>. Which do
+not require any specific directory on the host system. The volumes also keeps
+the data between restarts.     For an empty server delete the volumes with
+<code>docker volume rm seerep_log seerep_data</code>.</p>
 </div>
-<p>Configuration of the compose setup is done through the <code>.env</code> file located in the same directory.
-For details on the individual options, refer to the <a href="#configuration">configuration</a> section.</p>
-<p>A closer look at the Docker compose file might lead to questions about
-the extra service, that adjusts the owner of the log and data directories. The main reason for this is that
-named volumes are created with root permissions when the mount location does not exist. However since the container is
-run as non-root for security reasons (as should ever other container), we are not able to change the permissions
-without hard-coding the mount locations in the Dockerfile. To change the permissions, a very small container mounts the
-volumes and changes the permission to the specified <code>uid</code> and <code>guid</code> after which SEEREP is started with the same user.
-Additional information can be found in the <a href="https://github.com/agri-gaia/seerep/pull/376">PR#376</a> discussion.</p>
+<p>Configuration of the compose setup is done through the <code>.env</code> file located in
+the same directory. For details on the individual options, refer to the
+<a href="#configuration">configuration</a> section.</p>
+<p>A closer look at the Docker compose file might lead to questions about the extra
+service, that adjusts the owner of the log and data directories. The main reason
+for this is that named volumes are created with root permissions when the mount
+location does not exist. However since the container is run as non-root for
+security reasons (as should ever other container), we are not able to change the
+permissions without hard-coding the mount locations in the Dockerfile. To change
+the permissions, a very small container mounts the volumes and changes the
+permission to the specified <code>uid</code> and <code>guid</code> after which SEEREP is started with
+the same user. Additional information can be found in the
+<a href="https://github.com/agri-gaia/seerep/pull/376">PR#376</a> discussion.</p>
 <h2 id="kubernetes">Kubernetes<a class="headerlink" href="#kubernetes" title="Permanent link">&para;</a></h2>
 <div class="admonition warning">
 <p class="admonition-title">Not actively maintained!</p>
@@ -1144,8 +1150,8 @@ Additional information can be found in the <a href="https://github.com/agri-gaia
 The deployment of SEEREP using Kubernetes is currently not actively maintained.</p>
 </div>
 <h3 id="relevant-files">Relevant files<a class="headerlink" href="#relevant-files" title="Permanent link">&para;</a></h3>
-<p>Seerep can either be installed with the latest development state or the latest stable version. The relevant files can
-be found under:</p>
+<p>Seerep can either be installed with the latest development state or the latest
+stable version. The relevant files can be found under:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>/docker/kustomize/base<span class="w"> </span>--&gt;<span class="w"> </span>development
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>/docker/kustomize/overlays/production<span class="w"> </span>--&gt;<span class="w"> </span>latest<span class="w"> </span>stable<span class="w"> </span>release
 </code></pre></div>
@@ -1157,12 +1163,15 @@ be found under:</p>
 <li>Ingress</li>
 <li>Configuration</li>
 </ul>
-<p>The yaml-file for the cluster is create via <a href="https://kubectl.docs.kubernetes.io/references/kustomize/">Kustomize</a>, hence
+<p>The yaml-file for the cluster is create via
+<a href="https://kubectl.docs.kubernetes.io/references/kustomize/">Kustomize</a>, hence
 this folder also contains a kustomization.yaml which puts everything together.</p>
-<p>The <code>/overlay/production</code> directory contains a second <code>kustomization.yaml</code>. Within this file everything needed to
-install a production system is overridden. This means, that the sealed secret is replaced with a new one, while the
-base secret is deleted. Further, the labels and the names of PV and PVC are changed to create new storage explicitly
-for the production system. Finally, the used image is replaced with the latest stable release.</p>
+<p>The <code>/overlay/production</code> directory contains a second <code>kustomization.yaml</code>.
+Within this file everything needed to install a production system is overridden.
+This means, that the sealed secret is replaced with a new one, while the base
+secret is deleted. Further, the labels and the names of PV and PVC are changed
+to create new storage explicitly for the production system. Finally, the used
+image is replaced with the latest stable release.</p>
 <p>The usage of an overlay, thereby, follows the principles of Kustomize.</p>
 <h3 id="building-with-kustomize">Building with Kustomize<a class="headerlink" href="#building-with-kustomize" title="Permanent link">&para;</a></h3>
 <p>Kustomize needs to be installed before building the Kubernetes manifest
@@ -1181,15 +1190,18 @@ The easiest way to do that is to download the latest binary from the
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-k<span class="w"> </span>overlays/production/
 </code></pre></div>
-<p>If a <a href="https://argo-cd.readthedocs.io/en/stable/">ArgoCD</a> instance is available, SEEREP can also be added as a project.</p>
+<p>If a <a href="https://argo-cd.readthedocs.io/en/stable/">ArgoCD</a> instance is available,
+SEEREP can also be added as a project.</p>
 <h3 id="sealed-secrets">Sealed Secrets<a class="headerlink" href="#sealed-secrets" title="Permanent link">&para;</a></h3>
 <p>The certificates used for the secured ingress are created as a
 <a href="https://github.com/bitnami-labs/sealed-secrets">sealed-secret</a>.
-Hence, the secret can safely be stored in a repository. The sealed secret controller installed
-within the cluster will take care of unsealing the secret and make it usable. To combine Kustomize and
-sealed secrets this blogs-post was followed <a href="https://faun.pub/sealing-secrets-with-kustomize-51d1b79105d8">faun.pub</a>.</p>
+Hence, the secret can safely be stored in a repository. The sealed secret
+controller installed within the cluster will take care of unsealing the secret
+and make it usable. To combine Kustomize and sealed secrets this blogs-post was
+followed <a href="https://faun.pub/sealing-secrets-with-kustomize-51d1b79105d8">faun.pub</a>.</p>
 <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
-<p>SEEREP can be configured in three different ways: via command line arguments, a config file, or environment variables.</p>
+<p>SEEREP can be configured in three different ways: via command line arguments, a
+config file, or environment variables.</p>
 <h3 id="command-line">Command line<a class="headerlink" href="#command-line" title="Permanent link">&para;</a></h3>
 <p>To get a full list of all arguments use <code>--help</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Allowed<span class="w"> </span>options:

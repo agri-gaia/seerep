@@ -173,9 +173,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aab94ca56f0bf26c8f7e48e853c677a1f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#aab94ca56f0bf26c8f7e48e853c677a1f">addDataset</a> (const <a class="el" href="structseerep__core__msgs_1_1DatasetIndexable.html">seerep_core_msgs::DatasetIndexable</a> &amp;dataset)</td></tr>
 <tr class="memdesc:aab94ca56f0bf26c8f7e48e853c677a1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a dataset to the spatial, temporal and semantic indices.  <a href="classseerep__core_1_1CoreProject.html#aab94ca56f0bf26c8f7e48e853c677a1f">More...</a><br /></td></tr>
 <tr class="separator:aab94ca56f0bf26c8f7e48e853c677a1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae06cb07b888895bf109ed745401c9ff5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#ae06cb07b888895bf109ed745401c9ff5">addLabels</a> (const <a class="el" href="namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0">seerep_core_msgs::Datatype</a> &amp;datatype, const std::unordered_map&lt; std::string, std::vector&lt; <a class="el" href="structseerep__core__msgs_1_1LabelWithInstance.html">seerep_core_msgs::LabelWithInstance</a> &gt; &gt; &amp;labelWithInstancePerCategory, const boost::uuids::uuid &amp;msgUuid)</td></tr>
-<tr class="memdesc:ae06cb07b888895bf109ed745401c9ff5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds labels to an existing dataset.  <a href="classseerep__core_1_1CoreProject.html#ae06cb07b888895bf109ed745401c9ff5">More...</a><br /></td></tr>
-<tr class="separator:ae06cb07b888895bf109ed745401c9ff5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaeedcd228f29df355c6f0dd61a950881"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#aaeedcd228f29df355c6f0dd61a950881">addLabels</a> (const <a class="el" href="namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0">seerep_core_msgs::Datatype</a> &amp;datatype, const std::unordered_map&lt; std::string, <a class="el" href="structseerep__core__msgs_1_1LabelDatumaro.html">seerep_core_msgs::LabelDatumaro</a> &gt; &amp;labelPerCategory, const boost::uuids::uuid &amp;msgUuid)</td></tr>
+<tr class="memdesc:aaeedcd228f29df355c6f0dd61a950881"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds labels to an existing dataset.  <a href="classseerep__core_1_1CoreProject.html#aaeedcd228f29df355c6f0dd61a950881">More...</a><br /></td></tr>
+<tr class="separator:aaeedcd228f29df355c6f0dd61a950881"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a73b3383f57e6a9ee0b0e5d309eb750cc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#a73b3383f57e6a9ee0b0e5d309eb750cc">addTF</a> (const geometry_msgs::TransformStamped &amp;tf)</td></tr>
 <tr class="memdesc:a73b3383f57e6a9ee0b0e5d309eb750cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a tf to the tf buffer.  <a href="classseerep__core_1_1CoreProject.html#a73b3383f57e6a9ee0b0e5d309eb750cc">More...</a><br /></td></tr>
 <tr class="separator:a73b3383f57e6a9ee0b0e5d309eb750cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -459,8 +459,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ae06cb07b888895bf109ed745401c9ff5" name="ae06cb07b888895bf109ed745401c9ff5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae06cb07b888895bf109ed745401c9ff5">&#9670;&nbsp;</a></span>addLabels()</h2>
+<a id="aaeedcd228f29df355c6f0dd61a950881" name="aaeedcd228f29df355c6f0dd61a950881"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaeedcd228f29df355c6f0dd61a950881">&#9670;&nbsp;</a></span>addLabels()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -474,8 +474,8 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::unordered_map&lt; std::string, std::vector&lt; <a class="el" href="structseerep__core__msgs_1_1LabelWithInstance.html">seerep_core_msgs::LabelWithInstance</a> &gt; &gt; &amp;&#160;</td>
-          <td class="paramname"><em>labelWithInstancePerCategory</em>, </td>
+          <td class="paramtype">const std::unordered_map&lt; std::string, <a class="el" href="structseerep__core__msgs_1_1LabelDatumaro.html">seerep_core_msgs::LabelDatumaro</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>labelPerCategory</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -495,7 +495,7 @@ Private Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">datatype</td><td>the targeted datatype </td></tr>
-    <tr><td class="paramname">labelWithInstancePerCategory</td><td>map from category to a vector of labels to be added to the dataset </td></tr>
+    <tr><td class="paramname">labelOfCategory</td><td>map from category to a vector of labels to be added to the dataset </td></tr>
     <tr><td class="paramname">msgUuid</td><td>the UUID of the targeted dataset </td></tr>
   </table>
   </dd>

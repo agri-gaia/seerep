@@ -1043,10 +1043,11 @@
 
 
 <h1 id="tests">Tests<a class="headerlink" href="#tests" title="Permanent link">&para;</a></h1>
-<p>SEEREP uses <a href="https://github.com/google/googletest">GoogleTest</a> for C++ Unit Tests and
-<a href="https://github.com/pytest-dev/pytest">pytest</a> for integration tests.
-unit tests are placed into the individual ROS packages while the intregation tests are setup in the <code>/test</code> directory.
-The tests run automatically as a GitHub Action with every push.</p>
+<p>SEEREP uses <a href="https://github.com/google/googletest">GoogleTest</a> for C++ Unit Tests
+and <a href="https://github.com/pytest-dev/pytest">pytest</a> for integration tests. Unit
+tests are placed into the individual ROS packages while the intregation tests
+are setup in the <code>/test</code> directory. The tests run automatically as a GitHub
+Action with every push.</p>
 <h2 id="c-unit-tests">C++ Unit Tests<a class="headerlink" href="#c-unit-tests" title="Permanent link">&para;</a></h2>
 <p>Currently unit tests are set up for:</p>
 <ul>
@@ -1083,14 +1084,17 @@ cover most of the send and receive operations of SEEREP.</p>
 <a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>pytest<span class="w"> </span>tests/python/gRPC/meta/test_gRPC_pb_projectCreation.py
 </code></pre></div>
 <h2 id="testing-through-vscode">Testing through VSCode<a class="headerlink" href="#testing-through-vscode" title="Permanent link">&para;</a></h2>
-<p>Another way to run the tests is through the VSCode Testing Tab (<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 8.807V3.5h-.563a.75.75 0 0 1 0-1.5h9.125a.75.75 0 0 1 0 1.5H16v5.307l5.125 9.301c.964 1.75-.302 3.892-2.299 3.892H5.174c-1.998 0-3.263-2.142-2.3-3.892ZM4.189 18.832a1.123 1.123 0 0 0 .985 1.668h13.652a1.123 1.123 0 0 0 .985-1.668L17.7 15H6.3ZM14.5 3.5h-5V9a.75.75 0 0 1-.093.362L7.127 13.5h9.746l-2.28-4.138A.75.75 0 0 1 14.5 9Z"/></svg></span> icon)</p>
+<p>Another way to run the tests is through the VSCode Testing Tab
+(<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 8.807V3.5h-.563a.75.75 0 0 1 0-1.5h9.125a.75.75 0 0 1 0 1.5H16v5.307l5.125 9.301c.964 1.75-.302 3.892-2.299 3.892H5.174c-1.998 0-3.263-2.142-2.3-3.892ZM4.189 18.832a1.123 1.123 0 0 0 .985 1.668h13.652a1.123 1.123 0 0 0 .985-1.668L17.7 15H6.3ZM14.5 3.5h-5V9a.75.75 0 0 1-.093.362L7.127 13.5h9.746l-2.28-4.138A.75.75 0 0 1 14.5 9Z"/></svg></span> icon)</p>
 <div class="admonition info">
 <p class="admonition-title">Info</p>
 <p><!-- markdownlint-disable-next-line -->
-With a fresh installation of the project, the test cases might not be recognized.
-To resolve this, use the <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z"/></svg></span> button in the top menu to refresh.</p>
+With a fresh installation of the project, the test cases might not be
+recognized. To resolve this, use the <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z"/></svg></span> button in the top
+menu to refresh.</p>
 </div>
-<p>To run the tests use the <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.5 8.64 13.77 12 8.5 15.36V8.64M6.5 5v14l11-7"/></svg></span> button at the top or select individual test cases to run.</p>
+<p>To run the tests use the <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.5 8.64 13.77 12 8.5 15.36V8.64M6.5 5v14l11-7"/></svg></span> button at the top or select
+individual test cases to run.</p>
 <figure>
 <p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="VS-Code Test Explorer" src="../../imgs/VS_Code_Testing.png" width="450" /></a>
   </p>

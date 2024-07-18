@@ -1002,13 +1002,16 @@
 
 <h1 id="documentation-setup">Documentation Setup<a class="headerlink" href="#documentation-setup" title="Permanent link">&para;</a></h1>
 <p>The documentation is divided into two main parts:
-<a href="https://agri-gaia.github.io/seerep/mkdocs/home/index.html">MkDocs</a> is used for general documentation
-and <a href="https://agri-gaia.github.io/seerep/doxygen/index.html">Doxygen</a> is used for C++ code documentation.</p>
+<a href="https://agri-gaia.github.io/seerep/mkdocs/home/index.html">MkDocs</a> is used for
+general documentation and
+<a href="https://agri-gaia.github.io/seerep/doxygen/index.html">Doxygen</a> is used for C++
+code documentation.</p>
 <h2 id="dependencies">Dependencies<a class="headerlink" href="#dependencies" title="Permanent link">&para;</a></h2>
-<p>Installing the dependencies in the following sections is only ncessaary if you are <strong>not</strong> using the
-VS-Code Development Container.</p>
+<p>Installing the dependencies in the following sections is only ncessaary if you
+are <strong>not</strong> using the VS-Code Development Container.</p>
 <h2 id="mkdocs">MkDocs<a class="headerlink" href="#mkdocs" title="Permanent link">&para;</a></h2>
-<p>To install the Python dependencies, navigate to the repository's main folder and run:</p>
+<p>To install the Python dependencies, navigate to the repository's main folder and
+run:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip3<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>docker/base/requirements.docs.txt
 </code></pre></div>
 <p>To build and deploy MkDocs locally use:</p>
@@ -1019,20 +1022,21 @@ VS-Code Development Container.</p>
 Live reloading is enabled, saved changes are automatically updated.</p>
 <h2 id="doxygen">Doxygen<a class="headerlink" href="#doxygen" title="Permanent link">&para;</a></h2>
 <p>To install a recent version of Doxygen, it is necessary to build it from source:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>flex<span class="w"> </span>bison<span class="w"> </span>make<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">DOX_VER</span><span class="o">=</span><span class="s2">&quot;Release_1_9_3&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="o">&amp;&amp;</span><span class="w"> </span>wget<span class="w"> </span>https://github.com/doxygen/doxygen/archive/refs/tags/<span class="si">${</span><span class="nv">DOX_VER</span><span class="si">}</span>.tar.gz<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="o">&amp;&amp;</span><span class="w"> </span>tar<span class="w"> </span>-xf<span class="w"> </span><span class="si">${</span><span class="nv">DOX_VER</span><span class="si">}</span>.tar.gz<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="o">&amp;&amp;</span><span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>doxygen-<span class="si">${</span><span class="nv">DOX_VER</span><span class="si">}</span>/build<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>doxygen-<span class="si">${</span><span class="nv">DOX_VER</span><span class="si">}</span>/build<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="o">&amp;&amp;</span><span class="w"> </span>cmake<span class="w"> </span>-G<span class="w"> </span><span class="s2">&quot;Unix Makefiles&quot;</span><span class="w"> </span>..<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="o">&amp;&amp;</span><span class="w"> </span>make<span class="w"> </span>-j<span class="s2">&quot;</span><span class="k">$(</span>nproc<span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>make<span class="w"> </span>install<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>../..<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">    </span><span class="o">&amp;&amp;</span><span class="w"> </span>rm<span class="w"> </span>-rf<span class="w"> </span>doxygen-<span class="si">${</span><span class="nv">DOX_VER</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">DOX_VER</span><span class="si">}</span>.tar.gz<span class="w"> </span><span class="se">\</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>flex<span class="w"> </span>bison<span class="w"> </span>make<span class="se">\</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">DOX_VER</span><span class="o">=</span><span class="s2">&quot;Release_1_9_3&quot;</span><span class="se">\</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="o">&amp;&amp;</span><span class="w"> </span>wget<span class="w"> </span>https://github.com/doxygen/doxygen/archive/refs/tags/<span class="si">${</span><span class="nv">DOX_VER</span><span class="si">}</span>.tar.gz<span class="se">\</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="o">&amp;&amp;</span><span class="w"> </span>tar<span class="w"> </span>-xf<span class="w"> </span><span class="si">${</span><span class="nv">DOX_VER</span><span class="si">}</span>.tar.gz<span class="se">\</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="o">&amp;&amp;</span><span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>doxygen-<span class="si">${</span><span class="nv">DOX_VER</span><span class="si">}</span>/build<span class="se">\</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>doxygen-<span class="si">${</span><span class="nv">DOX_VER</span><span class="si">}</span>/build<span class="se">\</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="o">&amp;&amp;</span><span class="w"> </span>cmake<span class="w"> </span>-G<span class="w"> </span><span class="s2">&quot;Unix Makefiles&quot;</span><span class="w"> </span>..<span class="se">\</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="o">&amp;&amp;</span><span class="w"> </span>make<span class="w"> </span>-j<span class="s2">&quot;</span><span class="k">$(</span>nproc<span class="k">)</span><span class="s2">&quot;</span><span class="se">\</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>make<span class="w"> </span>install<span class="se">\</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>../..<span class="se">\</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">    </span><span class="o">&amp;&amp;</span><span class="w"> </span>rm<span class="w"> </span>-rf<span class="w"> </span>doxygen-<span class="si">${</span><span class="nv">DOX_VER</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">DOX_VER</span><span class="si">}</span>.tar.gz<span class="se">\</span>
 <a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">    </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">unset</span><span class="w"> </span>DOX_VER
 </code></pre></div>
-<p>To generate the Doxygen documentation, run the following command in the repository's main directory:</p>
+<p>To generate the Doxygen documentation, run the following command in the
+repository's main directory:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>doxygen<span class="w"> </span>Doxyfile
 </code></pre></div>
 <p>To start a local web server to serve the content use:</p>
@@ -1048,8 +1052,9 @@ different port to the HTTP server for Doxygen, for example by using:</p>
 <p>Both documentation pages are automatically deployed to GitHub Pages through a
 <a href="https://github.com/agri-gaia/seerep/blob/mkdocs-update-getting-started/.github/workflows/build-docs.yml">workflow</a>.
 A new version is released after a pull request to the main branch.
-Publishing both documentations requires a workaround, as a repository typically only supports one URL.
-The main page is a simple HTML document that links to the individual pages:</p>
+Publishing both documentations requires a workaround, as a repository typically
+only supports one URL. The main page is a simple HTML document that links to the
+individual pages:</p>
 <div class="highlight"><span class="filename">index.html</span><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
 <a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>

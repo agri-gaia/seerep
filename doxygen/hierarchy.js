@@ -67,8 +67,9 @@ var hierarchy =
     [ "seerep_core_msgs::Header", "structseerep__core__msgs_1_1Header.html", null ],
     [ "seerep_hdf5_core::ImageAttributes", "structseerep__hdf5__core_1_1ImageAttributes.html", null ],
     [ "seerep_hdf5_py::InstanceLabel", "structseerep__hdf5__py_1_1InstanceLabel.html", null ],
-    [ "seerep_core_msgs::LabelsWithInstanceWithCategory", "structseerep__core__msgs_1_1LabelsWithInstanceWithCategory.html", null ],
-    [ "seerep_core_msgs::LabelWithInstance", "structseerep__core__msgs_1_1LabelWithInstance.html", null ],
+    [ "seerep_core_msgs::Label", "structseerep__core__msgs_1_1Label.html", null ],
+    [ "seerep_core_msgs::LabelCategory", "structseerep__core__msgs_1_1LabelCategory.html", null ],
+    [ "seerep_core_msgs::LabelDatumaro", "structseerep__core__msgs_1_1LabelDatumaro.html", null ],
     [ "seerep_hdf5_pb::impl::PointCloud2IteratorBase< T, TT, U, C, V >", "classseerep__hdf5__pb_1_1impl_1_1PointCloud2IteratorBase.html", null ],
     [ "seerep_hdf5_pb::impl::PointCloud2IteratorBase< T, const T, const unsigned char, const seerep::pb::PointCloud2, PointCloud2ConstIterator >", "classseerep__hdf5__pb_1_1impl_1_1PointCloud2IteratorBase.html", [
       [ "seerep_hdf5_pb::PointCloud2ConstIterator< T >", "classseerep__hdf5__pb_1_1PointCloud2ConstIterator.html", null ]
@@ -120,9 +121,6 @@ var hierarchy =
     ] ],
     [ "seerep::pb::TfService::Service", null, [
       [ "seerep_server::PbTfService", "classseerep__server_1_1PbTfService.html", null ]
-    ] ],
-    [ "seerep::pb::TransferSensorMsgs::Service", null, [
-      [ "seerep_server::PbReceiveSensorMsgs", "classseerep__server_1_1PbReceiveSensorMsgs.html", null ]
     ] ],
     [ "seerep_core_msgs::SparqlQuery", "structseerep__core__msgs_1_1SparqlQuery.html", null ],
     [ "testing::Test", null, [

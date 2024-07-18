@@ -17,11 +17,14 @@ var dir_959f151234a2b102d8844609d68e04f3 =
     [ "header.h", "header_8h.html", [
       [ "seerep_core_msgs::Header", "structseerep__core__msgs_1_1Header.html", "structseerep__core__msgs_1_1Header" ]
     ] ],
-    [ "label_with_instance.h", "label__with__instance_8h.html", [
-      [ "seerep_core_msgs::LabelWithInstance", "structseerep__core__msgs_1_1LabelWithInstance.html", "structseerep__core__msgs_1_1LabelWithInstance" ]
+    [ "label.h", "label_8h.html", [
+      [ "seerep_core_msgs::Label", "structseerep__core__msgs_1_1Label.html", "structseerep__core__msgs_1_1Label" ]
     ] ],
-    [ "labels_with_instance_with_category.h", "labels__with__instance__with__category_8h.html", [
-      [ "seerep_core_msgs::LabelsWithInstanceWithCategory", "structseerep__core__msgs_1_1LabelsWithInstanceWithCategory.html", "structseerep__core__msgs_1_1LabelsWithInstanceWithCategory" ]
+    [ "label_category.h", "label__category_8h.html", [
+      [ "seerep_core_msgs::LabelCategory", "structseerep__core__msgs_1_1LabelCategory.html", "structseerep__core__msgs_1_1LabelCategory" ]
+    ] ],
+    [ "label_datumaro.h", "label__datumaro_8h.html", [
+      [ "seerep_core_msgs::LabelDatumaro", "structseerep__core__msgs_1_1LabelDatumaro.html", "structseerep__core__msgs_1_1LabelDatumaro" ]
     ] ],
     [ "polygon2d.h", "polygon2d_8h.html", [
       [ "seerep_core_msgs::Polygon2D", "structseerep__core__msgs_1_1Polygon2D.html", "structseerep__core__msgs_1_1Polygon2D" ]

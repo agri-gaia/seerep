@@ -1068,20 +1068,26 @@
 
 <h1 id="available-modules">Available Modules<a class="headerlink" href="#available-modules" title="Permanent link">&para;</a></h1>
 <h2 id="commonpy">common.py<a class="headerlink" href="#commonpy" title="Permanent link">&para;</a></h2>
-<p>Contains common functions like <code>get_grpc_channel()</code> and some functions for passing into <code>boltons.iterutils.remap</code>.</p>
-<p>The source is located <a href="https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/util/common.py">here</a>.</p>
+<p>Contains common functions like <code>get_grpc_channel()</code> and some functions for
+passing into <code>boltons.iterutils.remap</code>.</p>
+<p>The source is located
+<a href="https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/util/common.py">here</a>.</p>
 <h2 id="fb_helperpy">fb_helper.py<a class="headerlink" href="#fb_helperpy" title="Permanent link">&para;</a></h2>
-<p>This is a module provided through the <a href="https://pypi.org/project/seerep-grpc/">seerep_grpc</a> package.
-It provides functions to construct a subset of the SEEREP flatbuffers message in one function call.
-Most of the functions only return the component for further composition into another datatype.
-If the component itself should be serialized <code>builder.Finish()</code> as well as <code>builder.Output()</code> need to
-be called, on the from the function retrieved value.</p>
-<p>The source is located <a href="https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/util/fb_helper.py">here</a>.</p>
+<p>This is a module provided through the
+<a href="https://pypi.org/project/seerep-grpc/">seerep_grpc</a> package. It provides
+functions to construct a subset of the SEEREP flatbuffers message in one
+function call. Most of the functions only return the component for further
+composition into another datatype. If the component itself should be serialized
+<code>builder.Finish()</code> as well as <code>builder.Output()</code> need to be called, on the from
+the function retrieved value.</p>
+<p>The source is located
+<a href="https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/util/fb_helper.py">here</a>.</p>
 <h2 id="service_managerpy">service_manager.py<a class="headerlink" href="#service_managerpy" title="Permanent link">&para;</a></h2>
-<p>Contains a class <code>ServiceManager</code> which when instantiated can be used to instantly call the services with
-the return values of the <code>fb_helper.py</code> functions,
-i.e. the <code>builder.Finish()</code> and <code>builder.Output()</code> calls are done in the <code>ServiceManager</code> methods.
-Example usage can be found in <a href="https://github.com/agri-gaia/seerep/blob/main/tests/python/gRPC/util/msg_abs/msgs.py">msg_abs/msgs.py</a>
+<p>Contains a class <code>ServiceManager</code> which when instantiated can be used to
+instantly call the services with the return values of the <code>fb_helper.py</code>
+functions, i.e. the <code>builder.Finish()</code> and <code>builder.Output()</code> calls are done in
+the <code>ServiceManager</code> methods. Example usage can be found in
+<a href="https://github.com/agri-gaia/seerep/blob/main/tests/python/gRPC/util/msg_abs/msgs.py">msg_abs/msgs.py</a>
 , e.g.:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>        <span class="nd">@classmethod</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>        <span class="k">def</span> <span class="nf">datauuid</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">builder</span><span class="p">:</span> <span class="n">Builder</span><span class="p">,</span> <span class="n">channel</span><span class="p">:</span> <span class="n">Channel</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
@@ -1091,55 +1097,77 @@ Example usage can be found in <a href="https://github.com/agri-gaia/seerep/blob/
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>            <span class="n">points</span> <span class="o">=</span> <span class="n">serv_man</span><span class="o">.</span><span class="n">call_get_points_fb</span><span class="p">(</span><span class="n">builder</span><span class="p">,</span> <span class="n">query_fb</span><span class="p">)</span>
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>            <span class="n">pcl2s</span> <span class="o">=</span> <span class="n">serv_man</span><span class="o">.</span><span class="n">call_get_pointcloud2_fb</span><span class="p">(</span><span class="n">builder</span><span class="p">,</span> <span class="n">query_fb</span><span class="p">)</span>
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>            <span class="n">image_uuids</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span><span class="n">image</span><span class="o">.</span><span class="n">Header</span><span class="p">()</span><span class="o">.</span><span class="n">UuidMsgs</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span> <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">images</span><span class="p">])</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>            <span class="n">point_uuids</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span><span class="n">point</span><span class="o">.</span><span class="n">Header</span><span class="p">()</span><span class="o">.</span><span class="n">UuidMsgs</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">points</span><span class="p">])</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>            <span class="n">pcl2_uuids</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span><span class="n">pcl</span><span class="o">.</span><span class="n">Header</span><span class="p">()</span><span class="o">.</span><span class="n">UuidMsgs</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span> <span class="k">for</span> <span class="n">pcl</span> <span class="ow">in</span> <span class="n">pcl2s</span><span class="p">])</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>            <span class="c1"># debugging</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>            <span class="c1"># print(&quot;images: &quot; + str(image_uuids))</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>            <span class="c1"># print(&quot;points: &quot; + str(point_uuids))</span>
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>            <span class="c1"># print(&quot;pcls: &quot; + str(pcl2_uuids))</span>
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>            <span class="c1"># fill up return list with every second uuid</span>
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>            <span class="n">ret_lst</span> <span class="o">=</span> <span class="p">[</span><span class="n">builder</span><span class="o">.</span><span class="n">CreateString</span><span class="p">(</span><span class="n">image_uuids</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">image_uuids</span><span class="p">),</span> <span class="mi">2</span><span class="p">)]</span>
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>            <span class="n">ret_lst</span> <span class="o">+=</span> <span class="p">[</span><span class="n">builder</span><span class="o">.</span><span class="n">CreateString</span><span class="p">(</span><span class="n">point_uuids</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">point_uuids</span><span class="p">),</span> <span class="mi">2</span><span class="p">)]</span>
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>            <span class="n">ret_lst</span> <span class="o">+=</span> <span class="p">[</span><span class="n">builder</span><span class="o">.</span><span class="n">CreateString</span><span class="p">(</span><span class="n">pcl2_uuids</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">pcl2_uuids</span><span class="p">),</span> <span class="mi">2</span><span class="p">)]</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>            <span class="n">image_uuids</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>                <span class="p">[</span><span class="n">image</span><span class="o">.</span><span class="n">Header</span><span class="p">()</span><span class="o">.</span><span class="n">UuidMsgs</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span> <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">images</span><span class="p">]</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>            <span class="p">)</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>            <span class="n">point_uuids</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>                <span class="p">[</span><span class="n">point</span><span class="o">.</span><span class="n">Header</span><span class="p">()</span><span class="o">.</span><span class="n">UuidMsgs</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">points</span><span class="p">]</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>            <span class="p">)</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>            <span class="n">pcl2_uuids</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>                <span class="p">[</span><span class="n">pcl</span><span class="o">.</span><span class="n">Header</span><span class="p">()</span><span class="o">.</span><span class="n">UuidMsgs</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span> <span class="k">for</span> <span class="n">pcl</span> <span class="ow">in</span> <span class="n">pcl2s</span><span class="p">]</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>            <span class="p">)</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>            <span class="c1"># debugging</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>            <span class="c1"># print(&quot;images: &quot; + str(image_uuids))</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>            <span class="c1"># print(&quot;points: &quot; + str(point_uuids))</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>            <span class="c1"># print(&quot;pcls: &quot; + str(pcl2_uuids))</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>            <span class="c1"># fill up return list with every second uuid</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>            <span class="n">ret_lst</span> <span class="o">=</span> <span class="p">[</span>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>                <span class="n">builder</span><span class="o">.</span><span class="n">CreateString</span><span class="p">(</span><span class="n">image_uuids</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">image_uuids</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>            <span class="p">]</span>
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>            <span class="n">ret_lst</span> <span class="o">+=</span> <span class="p">[</span>
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>                <span class="n">builder</span><span class="o">.</span><span class="n">CreateString</span><span class="p">(</span><span class="n">point_uuids</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">point_uuids</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>            <span class="p">]</span>
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>            <span class="n">ret_lst</span> <span class="o">+=</span> <span class="p">[</span>
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>                <span class="n">builder</span><span class="o">.</span><span class="n">CreateString</span><span class="p">(</span><span class="n">pcl2_uuids</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">pcl2_uuids</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>            <span class="p">]</span>
 </code></pre></div>
-<p>The source is located <a href="https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/util/service_manager.py">here</a>.</p>
-<p><strong>Note</strong>: This module is currently incomplete and contains only a subset of the available service calls.</p>
+<p>The source is located
+<a href="https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/util/service_manager.py">here</a>.</p>
+<p><strong>Note</strong>: This module is currently incomplete and contains only a subset of the
+available service calls.</p>
 <h2 id="fb_to_dictpy">fb_to_dict.py<a class="headerlink" href="#fb_to_dictpy" title="Permanent link">&para;</a></h2>
 <h3 id="fb_flatc_dict">fb_flatc_dict()<a class="headerlink" href="#fb_flatc_dict" title="Permanent link">&para;</a></h3>
-<p>The <code>fb_flatc_dict</code> function can be used to convert serialized <code>flatbuffers</code> objects to a python dictionary.
-More information can be found by looking at the docstring:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>    <span class="s2">&quot;&quot;&quot;</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="s2">    Converts a binary flatbuffers object to a python dictionary using it&#39;s IDL file.</span>
+<p>The <code>fb_flatc_dict</code> function can be used to convert serialized <code>flatbuffers</code>
+objects to a python dictionary. More information can be found by looking at the
+docstring:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>    <span class="n">Converts</span> <span class="n">a</span> <span class="n">binary</span> <span class="n">flatbuffers</span> <span class="nb">object</span> <span class="n">to</span> <span class="n">a</span> <span class="n">python</span> <span class="n">dictionary</span> <span class="n">using</span> <span class="n">it</span><span class="s1">&#39;s IDL</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="n">file</span><span class="o">.</span>
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="s2">    This function should only be used for debugging or testing purposes, as it alleviates the advantage of flatbuffers</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="s2">    lessening the amount of copied data.</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="n">This</span> <span class="n">function</span> <span class="n">should</span> <span class="n">only</span> <span class="n">be</span> <span class="n">used</span> <span class="k">for</span> <span class="n">debugging</span> <span class="ow">or</span> <span class="n">testing</span> <span class="n">purposes</span><span class="p">,</span> <span class="k">as</span> <span class="n">it</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="n">alleviates</span> <span class="n">the</span> <span class="n">advantage</span> <span class="n">of</span> <span class="n">flatbuffers</span> <span class="n">lessening</span> <span class="n">the</span> <span class="n">amount</span> <span class="n">of</span> <span class="n">copied</span> <span class="n">data</span><span class="o">.</span>
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="s2">    This implementation uses temporary files in /tmp for conversion.</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="n">This</span> <span class="n">implementation</span> <span class="n">uses</span> <span class="n">temporary</span> <span class="n">files</span> <span class="ow">in</span> <span class="o">/</span><span class="n">tmp</span> <span class="k">for</span> <span class="n">conversion</span><span class="o">.</span>
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="s2">    Args:</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="s2">        fb_obj: The bytearray object as returned by builder.Output().</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="s2">        schema_file_name: The to `fb_obj` corresponding datatype in the `SchemaFileNames` format</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="s2">    Returns:</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="s2">        A python dictionary containing the objects attribute information.</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="n">Args</span><span class="p">:</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>        <span class="n">fb_obj</span><span class="p">:</span> <span class="n">The</span> <span class="nb">bytearray</span> <span class="nb">object</span> <span class="k">as</span> <span class="n">returned</span> <span class="n">by</span> <span class="n">builder</span><span class="o">.</span><span class="n">Output</span><span class="p">()</span><span class="o">.</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>        <span class="n">schema_file_name</span><span class="p">:</span> <span class="n">The</span> <span class="n">to</span> <span class="err">`</span><span class="n">fb_obj</span><span class="err">`</span> <span class="n">corresponding</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="n">the</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>        <span class="err">`</span><span class="n">SchemaFileNames</span><span class="err">`</span> <span class="nb">format</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>    <span class="n">Returns</span><span class="p">:</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>        <span class="n">A</span> <span class="n">python</span> <span class="n">dictionary</span> <span class="n">containing</span> <span class="n">the</span> <span class="n">objects</span> <span class="n">attribute</span> <span class="n">information</span><span class="o">.</span>
 </code></pre></div>
 <h3 id="catkin_find_schema_dir">catkin_find_schema_dir()<a class="headerlink" href="#catkin_find_schema_dir" title="Permanent link">&para;</a></h3>
 <p>Looking at the docstring should reveal everything to know about this function:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>    <span class="s2">&quot;&quot;&quot;</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="s2">    Tries to find the schema directory on the system using `catkin locate`.</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="s2">    Args:</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s2">        ros_pkg_name: The name of the ros package containing the relevant schema files</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s2">        sub_dir: The name of the subdir of the package dir containing the relevant schema files</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s2">    Returns:</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s2">        The schema directory on the system if found.</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="s2">    Raises:</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="s2">        FileNotFoundError: If the path on the system is not present.</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>    <span class="n">Tries</span> <span class="n">to</span> <span class="n">find</span> <span class="n">the</span> <span class="n">schema</span> <span class="n">directory</span> <span class="n">on</span> <span class="n">the</span> <span class="n">system</span> <span class="n">using</span> <span class="err">`</span><span class="n">catkin</span> <span class="n">locate</span><span class="err">`</span><span class="o">.</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="n">Args</span><span class="p">:</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>        <span class="n">ros_pkg_name</span><span class="p">:</span> <span class="n">The</span> <span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">ros</span> <span class="n">package</span> <span class="n">containing</span> <span class="n">the</span> <span class="n">relevant</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>        <span class="n">schema</span> <span class="n">files</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>        <span class="n">sub_dir</span><span class="p">:</span> <span class="n">The</span> <span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">subdir</span> <span class="n">of</span> <span class="n">the</span> <span class="n">package</span> <span class="nb">dir</span> <span class="n">containing</span> <span class="n">the</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>        <span class="n">relevant</span> <span class="n">schema</span> <span class="n">files</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    <span class="n">Returns</span><span class="p">:</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>        <span class="n">The</span> <span class="n">schema</span> <span class="n">directory</span> <span class="n">on</span> <span class="n">the</span> <span class="n">system</span> <span class="k">if</span> <span class="n">found</span><span class="o">.</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    <span class="n">Raises</span><span class="p">:</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>        <span class="ne">FileNotFoundError</span><span class="p">:</span> <span class="n">If</span> <span class="n">the</span> <span class="n">path</span> <span class="n">on</span> <span class="n">the</span> <span class="n">system</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">present</span><span class="o">.</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>        <span class="ne">ChildProcessError</span><span class="p">:</span> <span class="n">If</span> <span class="err">`</span><span class="n">catkin</span> <span class="n">locate</span><span class="err">`</span> <span class="n">returns</span> <span class="n">something</span> <span class="n">on</span> <span class="n">stderr</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>        <span class="ow">or</span> <span class="n">failed</span> <span class="n">otherwise</span>
 </code></pre></div>
 <h3 id="schemafilenames">SchemaFileNames<a class="headerlink" href="#schemafilenames" title="Permanent link">&para;</a></h3>
 <p>A enum type class, to map the available flatbuffers type schema file names.

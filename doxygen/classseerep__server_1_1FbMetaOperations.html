@@ -163,10 +163,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a46c48189f2f8e5d64b5dc1c482f05c01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa150da36142671d7bb1351f6fb5ae600"><td class="memItemLeft" align="right" valign="top">grpc::Status&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__server_1_1FbMetaOperations.html#aa150da36142671d7bb1351f6fb5ae600">GetOverallBoundingBox</a> (grpc::ServerContext *context, const flatbuffers::grpc::Message&lt; seerep::fb::UuidDatatypePair &gt; *request, flatbuffers::grpc::Message&lt; seerep::fb::Boundingbox &gt; *response) override</td></tr>
 <tr class="separator:aa150da36142671d7bb1351f6fb5ae600"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa64d601ddd480c59b2b9d3068bc07b9"><td class="memItemLeft" align="right" valign="top">grpc::Status&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__server_1_1FbMetaOperations.html#aaa64d601ddd480c59b2b9d3068bc07b9">GetAllCategories</a> (grpc::ServerContext *context, const flatbuffers::grpc::Message&lt; seerep::fb::UuidDatatypePair &gt; *request, flatbuffers::grpc::Message&lt; seerep::fb::Categories &gt; *response) override</td></tr>
-<tr class="separator:aaa64d601ddd480c59b2b9d3068bc07b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5f9d55d4e85defab45fefccb3c7ec5aa"><td class="memItemLeft" align="right" valign="top">grpc::Status&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__server_1_1FbMetaOperations.html#a5f9d55d4e85defab45fefccb3c7ec5aa">GetAllLabels</a> (grpc::ServerContext *context, const flatbuffers::grpc::Message&lt; seerep::fb::UuidDatatypeWithCategory &gt; *request, flatbuffers::grpc::Message&lt; seerep::fb::Labels &gt; *response) override</td></tr>
-<tr class="separator:a5f9d55d4e85defab45fefccb3c7ec5aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adef80aabfe74070e7b42842b6b5fc2a2"><td class="memItemLeft" align="right" valign="top">grpc::Status&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__server_1_1FbMetaOperations.html#adef80aabfe74070e7b42842b6b5fc2a2">GetAllCategories</a> (grpc::ServerContext *context, const flatbuffers::grpc::Message&lt; seerep::fb::UuidDatatypePair &gt; *request, flatbuffers::grpc::Message&lt; seerep::fb::StringVector &gt; *response) override</td></tr>
+<tr class="separator:adef80aabfe74070e7b42842b6b5fc2a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ffff3ccc62bb4fe7ef5e71828dca8f1"><td class="memItemLeft" align="right" valign="top">grpc::Status&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__server_1_1FbMetaOperations.html#a4ffff3ccc62bb4fe7ef5e71828dca8f1">GetAllLabels</a> (grpc::ServerContext *context, const flatbuffers::grpc::Message&lt; seerep::fb::UuidDatatypeWithCategory &gt; *request, flatbuffers::grpc::Message&lt; seerep::fb::StringVector &gt; *response) override</td></tr>
+<tr class="separator:a4ffff3ccc62bb4fe7ef5e71828dca8f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -279,8 +279,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="aaa64d601ddd480c59b2b9d3068bc07b9" name="aaa64d601ddd480c59b2b9d3068bc07b9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaa64d601ddd480c59b2b9d3068bc07b9">&#9670;&nbsp;</a></span>GetAllCategories()</h2>
+<a id="adef80aabfe74070e7b42842b6b5fc2a2" name="adef80aabfe74070e7b42842b6b5fc2a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adef80aabfe74070e7b42842b6b5fc2a2">&#9670;&nbsp;</a></span>GetAllCategories()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -303,7 +303,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">flatbuffers::grpc::Message&lt; seerep::fb::Categories &gt; *&#160;</td>
+          <td class="paramtype">flatbuffers::grpc::Message&lt; seerep::fb::StringVector &gt; *&#160;</td>
           <td class="paramname"><em>response</em>&#160;</td>
         </tr>
         <tr>
@@ -321,8 +321,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a5f9d55d4e85defab45fefccb3c7ec5aa" name="a5f9d55d4e85defab45fefccb3c7ec5aa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5f9d55d4e85defab45fefccb3c7ec5aa">&#9670;&nbsp;</a></span>GetAllLabels()</h2>
+<a id="a4ffff3ccc62bb4fe7ef5e71828dca8f1" name="a4ffff3ccc62bb4fe7ef5e71828dca8f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ffff3ccc62bb4fe7ef5e71828dca8f1">&#9670;&nbsp;</a></span>GetAllLabels()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -345,7 +345,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">flatbuffers::grpc::Message&lt; seerep::fb::Labels &gt; *&#160;</td>
+          <td class="paramtype">flatbuffers::grpc::Message&lt; seerep::fb::StringVector &gt; *&#160;</td>
           <td class="paramname"><em>response</em>&#160;</td>
         </tr>
         <tr>

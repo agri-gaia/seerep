@@ -965,11 +965,12 @@
 
 
 <h1 id="known-issues">Known Issues<a class="headerlink" href="#known-issues" title="Permanent link">&para;</a></h1>
-<p>This page serves as a list of fixes or workarounds for common errors encountered while developing SEEREP.
-If you find a fix that isn't included, please consider adding it.</p>
+<p>This page serves as a list of fixes or workarounds for common errors encountered
+while developing SEEREP. If you find a fix that isn't included, please consider
+adding it.</p>
 <h2 id="starting-the-dev-container-fails">Starting the Dev-Container Fails<a class="headerlink" href="#starting-the-dev-container-fails" title="Permanent link">&para;</a></h2>
-<p>If the automatic contianer setup or the <code>Remote-Containers: Reopen Folder in Container</code> fails,
-one of the following steps may resolve it:</p>
+<p>If the automatic contianer setup or the <code>Remote-Containers: Reopen Folder in Container</code>
+fails, one of the following steps may resolve it:</p>
 <ol>
 <li>
 <p>Make sure that the container is not running in the backgound:</p>
@@ -977,7 +978,8 @@ one of the following steps may resolve it:</p>
 </code></pre></div>
 </li>
 <li>
-<p>Often, a fresh install can fix problems. Use the following commands to delete everything regarding SEEREP from Docker:</p>
+<p>Often, a fresh install can fix problems. Use the following commands to delete
+everything regarding SEEREP from Docker:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># remove container</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>docker<span class="w"> </span>rm<span class="w"> </span><span class="k">$(</span>docker<span class="w"> </span>container<span class="w"> </span>ls<span class="w"> </span>-a<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>seerep<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $1}&#39;</span><span class="k">)</span>
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1"># remove images</span>
@@ -988,8 +990,9 @@ one of the following steps may resolve it:</p>
 </li>
 </ol>
 <h2 id="running-out-of-ram-when-compiling">Running out of RAM when Compiling<a class="headerlink" href="#running-out-of-ram-when-compiling" title="Permanent link">&para;</a></h2>
-<p>When compiling and linking the server executable (especially when using <a href="https://ubuntu.com/desktop/wsl">WSL</a>) catkin may
-allocate more than 13 GB of system memory. To restrict the memory usage of <code>catkin</code> use:</p>
+<p>When compiling and linking the server executable (especially when using
+<a href="https://ubuntu.com/desktop/wsl">WSL</a>) catkin may allocate more than 13 GB of
+system memory. To restrict the memory usage of <code>catkin</code> use:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>pip3<span class="w"> </span>install<span class="w"> </span>psutil
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1"># relative to the full system memory</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>catkin<span class="w"> </span>build<span class="w"> </span>--mem-limit<span class="w"> </span><span class="m">40</span>%

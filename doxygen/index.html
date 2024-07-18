@@ -141,15 +141,15 @@ Table of Contents</h1>
 </ul>
 <h1><a class="anchor" id="autotoc_md2"></a>
 Maintainer</h1>
-<p ><a href="https://github.com/Mark-Niemeyer">Mark Niemeyer</a> <br  />
+<p ><a href="https://github.com/Mark-Niemeyer">Mark Niemeyer</a><br  />
  <a href="#" onclick="location.href='mai'+'lto:'+'mar'+'k.'+'nie'+'me'+'yer'+'@d'+'fki'+'.d'+'e'; return false;">mark.niemeyer@dfki.de</a></p>
-<p ><a href="https://www.dfki.de/en/web">German Research Center for Artificial Intelligence</a> <br  />
- <a href="https://www.dfki.de/en/web/about-us/locations-contact/osnabrueck-oldenburg">DFKI Niedersachsen</a> <br  />
- <a href="https://www.dfki.de/en/web/research/research-departments/plan-based-robot-control">Plan-Based Robot Control</a> <br  />
+<p ><a href="https://www.dfki.de/en/web">German Research Center for Artificial Intelligence</a><br  />
+ <a href="https://www.dfki.de/en/web/about-us/locations-contact/osnabrueck-oldenburg">DFKI Niedersachsen</a><br  />
+ <a href="https://www.dfki.de/en/web/research/research-departments/plan-based-robot-control">Plan-Based Robot Control</a><br  />
 </p>
 <h1><a class="anchor" id="autotoc_md3"></a>
 General</h1>
-<p >The large amount of temporally and spatially high resolution sensor data of autonomous mobile robots that have to be collected in today’s systems require a structured and, above all, efficient management and storage already during the robot mission. We present SEEREP: A <em>Spatio-TemporalSemantic Environment Representation for Autonomous Mobile Robots</em>. SEEREP deals with spatial, temporal and semantic linked data at once and provides an efficient query interface for all three modalities that can be combined for high-level analyses. It supports the most popular robotic sensor data such as images and point clouds, as well as sensor and robot coordinate frames changing over time. Furthermore, SEEREP provides an efficient HDF5-based storage system running on the robot during operation compatible with ROS and the corresponding sensor message definitions. The compressed HDF5 data backend can be transferred efficiently to an application server with a running SEEREP query server providing gRPC interfaces with Protobuf and Flattbuffer message types. Partially unstructured environments that changes over time, as for example agricultural environments, can be understood based on high-level planning and reasoning systems using the SEEREP query server.</p>
+<p >The large amount of temporally and spatially high resolution sensor data of autonomous mobile robots that have to be collected in today’s systems require a structured and, above all, efficient management and storage already during the robot mission. We present SEEREP: A <em>Spatio-Temporal-Semantic Environment Representation for Autonomous Mobile Robots</em>. SEEREP deals with spatial, temporal and semantic linked data at once and provides an efficient query interface for all three modalities that can be combined for high-level analyses. It supports the most popular robotic sensor data such as images and point clouds, as well as sensor and robot coordinate frames changing over time. Furthermore, SEEREP provides an efficient HDF5-based storage system running on the robot during operation compatible with ROS and the corresponding sensor message definitions. The compressed HDF5 data backend can be transferred efficiently to an application server with a running SEEREP query server providing gRPC interfaces with Protobuf and Flattbuffer message types. Partially unstructured environments that change over time, as for example agricultural environments, can be understood based on high-level planning and reasoning systems using the SEEREP query server.</p>
 <h1><a class="anchor" id="autotoc_md4"></a>
 Quick Start</h1>
 <p >To deploy the server locally the following <code>docker run</code> command or the following <code>docker-compose.yml</code> can be used.</p>
@@ -182,35 +182,37 @@ Quick Start</h1>
 <div class="line">  seerep-data:</div>
 </div><!-- fragment --><h1><a class="anchor" id="autotoc_md5"></a>
 Documentation</h1>
-<p >The general <a href="https://www.mkdocs.org/">MkDocs</a> based documentation of this project is available <a href="https://agri-gaia.github.io/seerep/mkdocs/home/">here</a>. There the general architecture is described, installation instructions are given and basic tutorials are given.</p>
+<p >The general <a href="https://www.mkdocs.org/">MkDocs</a> based documentation of this project is available <a href="https://agri-gaia.github.io/seerep/mkdocs/home/">here</a>. There the general architecture is described, installation instructions and basic tutorials are given.</p>
 <p >The <a href="https://doxygen.nl/">Doxygen</a> based code documentation can be found <a href="https://agri-gaia.github.io/seerep/doxygen">here</a>.</p>
 <h1><a class="anchor" id="autotoc_md6"></a>
 Related Publications</h1>
-<div class="fragment"><div class="line">@inproceedings{hoellmann2021seerep,</div>
-<div class="line">  author = {Höllmann, Mark and Hertzberg, Joachim},</div>
-<div class="line">  title = {SEEREP: towards a spatio-temporal-SEmantic Environment REPresentation for robots in an agricultural context},</div>
-<div class="line">  booktitle = {Perception and Navigation for Autonomous Robotics in Unstructured and Dynamic Environments Workshop on</div>
-<div class="line">  2021 IEEE/RSJ International Conference on Intelligent Robots and Systems},</div>
-<div class="line">  year = {2021},</div>
-<div class="line">  month = {10}</div>
-<div class="line">}</div>
-<div class="line"> </div>
-<div class="line">@inproceedings{niemeyer2022seerep,</div>
-<div class="line">  author = {Niemeyer, Mark and Pütz, Sebastian and Hertzberg, Joachim},</div>
-<div class="line">  title = {A Spatio-Temporal-Semantic Environment Representation for Autonomous Mobile Robots equipped with</div>
-<div class="line">  various Sensor Systems},</div>
-<div class="line">  booktitle = {2022 IEEE International Conference on Multisensor Fusion and Integration for Intelligent Systems},</div>
-<div class="line">  year = {2022},</div>
-<div class="line">  month = {9},</div>
+<div class="fragment"><div class="line">@inproceedings{Niemeyer2024,</div>
+<div class="line">  author = {Niemeyer, Mark and Arkenau, Julian and Pütz, Sebastian and</div>
+<div class="line">  Hertzberg, Joachim},</div>
+<div class="line">  title = {Streamlined Acquisition of Large Sensor Data for Autonomous Mobile</div>
+<div class="line">  Robots to   Enable Efficient Creation and Analysis of Datasets },</div>
+<div class="line">  booktitle = {2024 IEEE International Conference on Robotics and Automation (ICRA)},</div>
+<div class="line">  year = {2024},</div>
 <div class="line">  publisher = {IEEE}</div>
 <div class="line">}</div>
 <div class="line"> </div>
-<div class="line">@inproceedings{Niemeyer2023Anchoring,</div>
+<div class="line">@inproceedings{Niemeyer2023,</div>
 <div class="line">  author = {Niemeyer, Mark and Renz, Marian and Hertzberg, Joachim},</div>
-<div class="line">  title = {Object Anchoring for Autonomous Robots using the Spatio-Temporal-Semantic Environment Representation SEEREP},</div>
-<div class="line">  booktitle = {KI 2023. German Conference on Artificial Intelligence (KI-2023), 46th, September 27-29, Berlin, Germany},</div>
+<div class="line">  title = {Object Anchoring for Autonomous Robots using the Spatio-Temporal-Semantic</div>
+<div class="line">  Environment Representation SEEREP},</div>
+<div class="line">  booktitle = {KI 2023. German Conference on Artificial Intelligence (KI-2023)},</div>
 <div class="line">  year = {2023},</div>
 <div class="line">  publisher = {Springer}</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line">@inproceedings{Niemeyer2022,</div>
+<div class="line">  author = {Niemeyer, Mark and Pütz, Sebastian and Hertzberg, Joachim},</div>
+<div class="line">  title = {A Spatio-Temporal-Semantic Environment Representation for Autonomous</div>
+<div class="line">  Mobile Robots   equipped with   various Sensor Systems},</div>
+<div class="line">  booktitle = {2022 IEEE International Conference on Multisensor Fusion and</div>
+<div class="line">  Integration for Intelligent Systems (MFI)},</div>
+<div class="line">  year = {2022},</div>
+<div class="line">  publisher = {IEEE}</div>
 <div class="line">}</div>
 </div><!-- fragment --> </div></div><!-- PageDoc -->
 </div><!-- contents -->

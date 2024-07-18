@@ -5,5 +5,5 @@ var namespaceseerep__core__pb =
     [ "CorePbImage", "classseerep__core__pb_1_1CorePbImage.html", "classseerep__core__pb_1_1CorePbImage" ],
     [ "CorePbPointCloud", "classseerep__core__pb_1_1CorePbPointCloud.html", "classseerep__core__pb_1_1CorePbPointCloud" ],
     [ "CorePbTf", "classseerep__core__pb_1_1CorePbTf.html", "classseerep__core__pb_1_1CorePbTf" ],
-    [ "LabelWithInstanceVec", "namespaceseerep__core__pb.html#aa200fb98a568a86a47e62a5387da297d", null ]
+    [ "LabelVec", "namespaceseerep__core__pb.html#a080c63a6f00e0618adc95144bb0f308f", null ]
 ];

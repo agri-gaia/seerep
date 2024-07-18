@@ -2,8 +2,8 @@ var classseerep__core_1_1CoreInstances =
 [
     [ "CoreInstances", "classseerep__core_1_1CoreInstances.html#aae2cb4919f36125c97ebc35e0cadfce6", null ],
     [ "~CoreInstances", "classseerep__core_1_1CoreInstances.html#a1c1998542709bdb202a85928fc4809da", null ],
-    [ "addDataset", "classseerep__core_1_1CoreInstances.html#a5cd3a04925aca893fe57adddcd2fb448", null ],
-    [ "createNewInstance", "classseerep__core_1_1CoreInstances.html#aa2d3116a1a21eee97444ec3d4356b1b8", null ],
+    [ "addDataset", "classseerep__core_1_1CoreInstances.html#afd47be15bdfa9972ebc38c726f193aba", null ],
+    [ "createNewInstance", "classseerep__core_1_1CoreInstances.html#a71b4d1e80aef8d63d53b89beddc66545", null ],
     [ "createNewInstance", "classseerep__core_1_1CoreInstances.html#ab21e739b4caca97874a5cdcdea49ca8e", null ],
     [ "getAttribute", "classseerep__core_1_1CoreInstances.html#a17c5aa8a37c69f65f9122cd78e652e44", null ],
     [ "getDatasets", "classseerep__core_1_1CoreInstances.html#ad207c5cb12a65527ad3ab64dc0151fec", null ],

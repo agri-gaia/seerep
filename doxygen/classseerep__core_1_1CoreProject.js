@@ -5,7 +5,7 @@ var classseerep__core_1_1CoreProject =
     [ "~CoreProject", "classseerep__core_1_1CoreProject.html#a63190ba14676bacaa18385bad66a2f6c", null ],
     [ "addCameraIntrinsics", "classseerep__core_1_1CoreProject.html#ad8b183725b68d4094cd42f8295f4651e", null ],
     [ "addDataset", "classseerep__core_1_1CoreProject.html#aab94ca56f0bf26c8f7e48e853c677a1f", null ],
-    [ "addLabels", "classseerep__core_1_1CoreProject.html#ae06cb07b888895bf109ed745401c9ff5", null ],
+    [ "addLabels", "classseerep__core_1_1CoreProject.html#aaeedcd228f29df355c6f0dd61a950881", null ],
     [ "addTF", "classseerep__core_1_1CoreProject.html#a73b3383f57e6a9ee0b0e5d309eb750cc", null ],
     [ "cameraIntrinsicExists", "classseerep__core_1_1CoreProject.html#a0ae7af68df3506ffd583511e16d52842", null ],
     [ "createHdf5Io", "classseerep__core_1_1CoreProject.html#ae43a56558c2b24bd4aebae35df4f2599", null ],

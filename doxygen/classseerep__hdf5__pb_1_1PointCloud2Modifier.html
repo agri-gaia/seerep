@@ -303,9 +303,9 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 <p>E.g, you create your PointCloud2 message with XYZ/RGB as follows: </p><pre class="fragment">*   setPointCloud2Fields(cloud_msg, 4, "x", 1, seerep::PointField::FLOAT32,
-*                                              "y", 1, seerep::PointField::FLOAT32,
-*                                              "z", 1, seerep::PointField::FLOAT32,
-*                                              "rgb", 1, seerep::PointField::FLOAT32);
+*                                              "y", 1,
+* seerep::PointField::FLOAT32, "z", 1, seerep::PointField::FLOAT32, "rgb", 1,
+* seerep::PointField::FLOAT32);
 * </pre><p> WARNING: THIS DOES NOT TAKE INTO ACCOUNT ANY PADDING For simple usual cases, the overloaded setPointCloud2FieldsByString is what you want. </p>
 
 </div>

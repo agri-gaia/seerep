@@ -148,12 +148,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af754165e12fd288550ef78713923177d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbImage.html#af754165e12fd288550ef78713923177d">getData</a> (const seerep::fb::Query *query, grpc::ServerWriter&lt; flatbuffers::grpc::Message&lt; seerep::fb::Image &gt; &gt; *const writer)</td></tr>
 <tr class="memdesc:af754165e12fd288550ef78713923177d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to query images.  <a href="classseerep__core__fb_1_1CoreFbImage.html#af754165e12fd288550ef78713923177d">More...</a><br /></td></tr>
 <tr class="separator:af754165e12fd288550ef78713923177d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa8fa4e2e8612ef4b3b9287d81572f300"><td class="memItemLeft" align="right" valign="top">boost::uuids::uuid&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbImage.html#aa8fa4e2e8612ef4b3b9287d81572f300">addData</a> (const seerep::fb::Image &amp;img)</td></tr>
-<tr class="memdesc:aa8fa4e2e8612ef4b3b9287d81572f300"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add an image to the indices and write the data to hdf5.  <a href="classseerep__core__fb_1_1CoreFbImage.html#aa8fa4e2e8612ef4b3b9287d81572f300">More...</a><br /></td></tr>
-<tr class="separator:aa8fa4e2e8612ef4b3b9287d81572f300"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac56dae2828a99b38d149cf9e886b4fc3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbImage.html#ac56dae2828a99b38d149cf9e886b4fc3">addBoundingBoxesLabeled</a> (const seerep::fb::BoundingBoxes2DLabeledStamped &amp;boundingBoxes2dlabeled)</td></tr>
-<tr class="memdesc:ac56dae2828a99b38d149cf9e886b4fc3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds bounding box based labels to an existing image.  <a href="classseerep__core__fb_1_1CoreFbImage.html#ac56dae2828a99b38d149cf9e886b4fc3">More...</a><br /></td></tr>
-<tr class="separator:ac56dae2828a99b38d149cf9e886b4fc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add883bc6d2f4e7d9fc193dafceabf539"><td class="memItemLeft" align="right" valign="top">boost::uuids::uuid&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbImage.html#add883bc6d2f4e7d9fc193dafceabf539">addDataToHdf5</a> (const seerep::fb::Image &amp;img)</td></tr>
+<tr class="memdesc:add883bc6d2f4e7d9fc193dafceabf539"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write image data to hdf5.  <a href="classseerep__core__fb_1_1CoreFbImage.html#add883bc6d2f4e7d9fc193dafceabf539">More...</a><br /></td></tr>
+<tr class="separator:add883bc6d2f4e7d9fc193dafceabf539"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acabf3487463a816fdb426603ecb100fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbImage.html#acabf3487463a816fdb426603ecb100fe">buildIndices</a> (const std::vector&lt; std::pair&lt; std::string, boost::uuids::uuid &gt; &gt; &amp;projectImgUuids)</td></tr>
+<tr class="memdesc:acabf3487463a816fdb426603ecb100fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extract image data from hdf5 and build the indices.  <a href="classseerep__core__fb_1_1CoreFbImage.html#acabf3487463a816fdb426603ecb100fe">More...</a><br /></td></tr>
+<tr class="separator:acabf3487463a816fdb426603ecb100fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9066a65f50fc3fc1d9af86a15e1fdf0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbImage.html#ae9066a65f50fc3fc1d9af86a15e1fdf0">addLabel</a> (const seerep::fb::DatasetUuidLabel &amp;datasetUuidLabel)</td></tr>
+<tr class="memdesc:ae9066a65f50fc3fc1d9af86a15e1fdf0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds labels to an existing image.  <a href="classseerep__core__fb_1_1CoreFbImage.html#ae9066a65f50fc3fc1d9af86a15e1fdf0">More...</a><br /></td></tr>
+<tr class="separator:ae9066a65f50fc3fc1d9af86a15e1fdf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -213,40 +216,14 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ac56dae2828a99b38d149cf9e886b4fc3" name="ac56dae2828a99b38d149cf9e886b4fc3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac56dae2828a99b38d149cf9e886b4fc3">&#9670;&nbsp;</a></span>addBoundingBoxesLabeled()</h2>
+<a id="add883bc6d2f4e7d9fc193dafceabf539" name="add883bc6d2f4e7d9fc193dafceabf539"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add883bc6d2f4e7d9fc193dafceabf539">&#9670;&nbsp;</a></span>addDataToHdf5()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void seerep_core_fb::CoreFbImage::addBoundingBoxesLabeled </td>
-          <td>(</td>
-          <td class="paramtype">const seerep::fb::BoundingBoxes2DLabeledStamped &amp;&#160;</td>
-          <td class="paramname"><em>boundingBoxes2dlabeled</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Adds bounding box based labels to an existing image. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">bbs2dlabeled</td><td>the flatbuffer message containing bounding box based labels </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="aa8fa4e2e8612ef4b3b9287d81572f300" name="aa8fa4e2e8612ef4b3b9287d81572f300"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa8fa4e2e8612ef4b3b9287d81572f300">&#9670;&nbsp;</a></span>addData()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">boost::uuids::uuid seerep_core_fb::CoreFbImage::addData </td>
+          <td class="memname">boost::uuids::uuid seerep_core_fb::CoreFbImage::addDataToHdf5 </td>
           <td>(</td>
           <td class="paramtype">const seerep::fb::Image &amp;&#160;</td>
           <td class="paramname"><em>img</em></td><td>)</td>
@@ -255,7 +232,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Add an image to the indices and write the data to hdf5. </p>
+<p>Write image data to hdf5. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">img</td><td>the flatbuffer message containing the image </td></tr>
@@ -263,7 +240,61 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the uuid of the stored image</dd></dl>
-<p>The image is stored in the hdf5 file via hdf5-io-fb. The data needed for the indices is extracted and added to the core. If the uuid of image is not defined yet, a uuid is generated and returned. </p>
+<p>The image is stored in the hdf5 file via hdf5-io-fb. If the uuid of image is not defined yet, a uuid is generated and returned. </p>
+
+</div>
+</div>
+<a id="ae9066a65f50fc3fc1d9af86a15e1fdf0" name="ae9066a65f50fc3fc1d9af86a15e1fdf0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9066a65f50fc3fc1d9af86a15e1fdf0">&#9670;&nbsp;</a></span>addLabel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_core_fb::CoreFbImage::addLabel </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::fb::DatasetUuidLabel &amp;&#160;</td>
+          <td class="paramname"><em>datasetUuidLabel</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Adds labels to an existing image. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">datasetUuidLabel</td><td>the flatbuffer message containing labels </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="acabf3487463a816fdb426603ecb100fe" name="acabf3487463a816fdb426603ecb100fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acabf3487463a816fdb426603ecb100fe">&#9670;&nbsp;</a></span>buildIndices()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_core_fb::CoreFbImage::buildIndices </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; std::pair&lt; std::string, boost::uuids::uuid &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>projectImgUuids</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Extract image data from hdf5 and build the indices. </p>
+<p >This method complements <a class="el" href="classseerep__core__fb_1_1CoreFbImage.html#add883bc6d2f4e7d9fc193dafceabf539">addDataToHdf5</a> and should be called after the data has been added to hdf5. The data for the indices is retrieved from hdf5 and added to the indices to the core.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">projectImgUuids</td><td>a vector containing image uuids mapped to the projects where they reside. The first slot contains the project uuid and the second slot the image uuid.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classseerep__core__fb_1_1CoreFbImage.html#add883bc6d2f4e7d9fc193dafceabf539" title="Write image data to hdf5.">seerep_core_fb::CoreFbImage::addDataToHdf5</a> </dd></dl>
 
 </div>
 </div>

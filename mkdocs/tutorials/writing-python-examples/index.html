@@ -1029,52 +1029,53 @@
 
 
 <h1 id="writing-examples-for-the-seerep-api">Writing examples for the SEEREP API<a class="headerlink" href="#writing-examples-for-the-seerep-api" title="Permanent link">&para;</a></h1>
-<p>To write a example it is a good idea to refer to already written ones.
-The focus in this documentation lies on flatbuffers type messages, because of the potential deprecation of protobuf in
-the project.
-All protobuf functionality can be replicated using flatbuffers, and flatbuffers should be used instead.</p>
-<p>In this case the example <a href="https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/images/gRPC_fb_addBoundingBox.py">gRPC_fb_addBoundingBox.py</a>
-will be reviewed.
-Service type definitions for all available flatbuffers type services can be found <a href="https://github.com/agri-gaia/seerep/tree/main/seerep_com/fbs">here</a>.
-Type definitions of all flatbuffers types can be found <a href="https://github.com/agri-gaia/seerep/tree/main/seerep_msgs/fbs">here</a>.</p>
+<p>To write a example it is a good idea to refer to already written ones. The focus
+in this documentation lies on flatbuffers type messages, because of the potential
+deprecation of protobuf in the project. All protobuf functionality can be
+replicated using flatbuffers, and flatbuffers should be used instead.</p>
+<p>In this case the example
+<a href="https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/images/gRPC_fb_addLabel.py">gRPC_fb_addLabel.py</a>
+will be reviewed. Service type definitions for all available flatbuffers type
+services can be found
+<a href="https://github.com/agri-gaia/seerep/tree/main/seerep_com/fbs">here</a>.
+Type definitions of all flatbuffers types can be found
+<a href="https://github.com/agri-gaia/seerep/tree/main/seerep_msgs/fbs">here</a>.</p>
 <h2 id="the-code">The code<a class="headerlink" href="#the-code" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span> <span class="nn">sys</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">import</span> <span class="nn">uuid</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="kn">import</span> <span class="nn">flatbuffers</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="kn">from</span> <span class="nn">grpc</span> <span class="kn">import</span> <span class="n">Channel</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="kn">from</span> <span class="nn">seerep.fb</span> <span class="kn">import</span> <span class="n">BoundingBoxes2DLabeledStamped</span><span class="p">,</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ProjectInfos</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="kn">from</span> <span class="nn">seerep.fb</span> <span class="kn">import</span> <span class="n">image_service_grpc_fb</span> <span class="k">as</span> <span class="n">imageService</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="kn">from</span> <span class="nn">seerep.fb</span> <span class="kn">import</span> <span class="n">meta_operations_grpc_fb</span> <span class="k">as</span> <span class="n">meta_ops</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="kn">from</span> <span class="nn">seerep.util.common</span> <span class="kn">import</span> <span class="n">get_gRPC_channel</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="kn">from</span> <span class="nn">seerep.util.fb_helper</span> <span class="kn">import</span> <span class="p">(</span>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    <span class="n">createBoundingBox2dLabeledStamped</span><span class="p">,</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    <span class="n">createBoundingBox2DLabeledWithCategory</span><span class="p">,</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    <span class="n">createBoundingBoxes2d</span><span class="p">,</span>
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    <span class="n">createBoundingBoxes2dLabeled</span><span class="p">,</span>
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    <span class="n">createEmpty</span><span class="p">,</span>
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    <span class="n">createHeader</span><span class="p">,</span>
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>    <span class="n">createLabelsWithInstance</span><span class="p">,</span>
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    <span class="n">createPoint2d</span><span class="p">,</span>
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    <span class="n">createQuery</span><span class="p">,</span>
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="p">)</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="kn">from</span> <span class="nn">grpc</span> <span class="kn">import</span> <span class="n">Channel</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="kn">from</span> <span class="nn">seerep.fb</span> <span class="kn">import</span> <span class="n">DatasetUuidLabel</span><span class="p">,</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ProjectInfos</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="kn">from</span> <span class="nn">seerep.fb</span> <span class="kn">import</span> <span class="n">image_service_grpc_fb</span> <span class="k">as</span> <span class="n">imageService</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="kn">from</span> <span class="nn">seerep.fb</span> <span class="kn">import</span> <span class="n">meta_operations_grpc_fb</span> <span class="k">as</span> <span class="n">meta_ops</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="kn">from</span> <span class="nn">seerep.util.common</span> <span class="kn">import</span> <span class="n">get_gRPC_channel</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="kn">from</span> <span class="nn">seerep.util.fb_helper</span> <span class="kn">import</span> <span class="p">(</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    <span class="n">create_dataset_uuid_label</span><span class="p">,</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    <span class="n">create_label</span><span class="p">,</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    <span class="n">create_label_category</span><span class="p">,</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    <span class="n">createEmpty</span><span class="p">,</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    <span class="n">createQuery</span><span class="p">,</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="p">)</span>
 </code></pre></div>
 <p>First some of the modules to interact with the servers services will be highlighted.
-<code>seerep.fb</code> contains all python interfaces for the SEEREP services as well as the Message types.
-<a href="../../reference/python-helpers/">sereep.util.fb_helper</a> contains helper functions related to flatbuffers,
-for instance functions to create a message type directly.</p>
+<code>seerep.fb</code> contains all python interfaces for the SEEREP services as well as the
+Message types. <a href="../../reference/python-helpers/">sereep.util.fb_helper</a> contains
+helper functions related to flatbuffers, for instance functions to create a
+message type directly.</p>
 <h3 id="interaction-with-seerep-services-and-handling-the-data">Interaction with SEEREP services and handling the data<a class="headerlink" href="#interaction-with-seerep-services-and-handling-the-data" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">def</span> <span class="nf">add_bb_raw</span><span class="p">(</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="n">target_proj_uuid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">grpc_channel</span><span class="p">:</span> <span class="n">Channel</span> <span class="o">=</span> <span class="n">get_gRPC_channel</span><span class="p">()</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytearray</span><span class="p">]]:</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">def</span> <span class="nf">add_label_raw</span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="n">target_proj_uuid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="n">grpc_channel</span><span class="p">:</span> <span class="n">Channel</span> <span class="o">=</span> <span class="n">get_gRPC_channel</span><span class="p">(),</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytearray</span><span class="p">]]:</span>
 </code></pre></div>
-<p>The interaction functionality is contained within this function.
-With the function definition, an option should be given to specify a target project, if
-the message type allows setting it.
-Additionally the <code>grpc_channel</code> should be a parameter in order to be able to target servers other than <code>localhost:9090</code>.
-Both options are useful for testing later. More parameters can be added optionally, if needed for the test cases.</p>
+<p>The interaction functionality is contained within this function. With the
+function definition, an option should be given to specify a target project, if
+the message type allows setting it. Additionally the <code>grpc_channel</code> should be a
+parameter in order to be able to target servers other than <code>localhost:9090</code>.
+Both options are useful for testing later. More parameters can be added
+optionally, if needed for the test cases.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>    <span class="n">stubMeta</span> <span class="o">=</span> <span class="n">meta_ops</span><span class="o">.</span><span class="n">MetaOperationsStub</span><span class="p">(</span><span class="n">grpc_channel</span><span class="p">)</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="c1"># 3. Check if we have an existing test project, if not, one is created.</span>
@@ -1091,159 +1092,192 @@ Both options are useful for testing later. More parameters can be added optional
 <a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>                <span class="n">target_proj_uuid</span> <span class="o">=</span> <span class="n">proj_uuid</span>
 <a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>
 <a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>        <span class="k">if</span> <span class="n">target_proj_uuid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Please create a project with labeled images using gRPC_pb_sendLabeledImage.py first.&quot;</span><span class="p">)</span>
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="s2">                Please create a project with labeled images using</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="s2">                gRPC_pb_sendLabeledImage.py first.&quot;</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="s2">            &quot;&quot;&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
 </code></pre></div>
-<p>At first, if <code>target_proj_uuid</code> is not set, the <code>MetaOperationsStub</code> utilizing flatbuffers gRPC communication
-with the SEEREP server is used to retrieve a list of all available projects of that server (specifically in the form of
+<p>At first, if <code>target_proj_uuid</code> is not set, the <code>MetaOperationsStub</code> utilizing
+flatbuffers gRPC communication with the SEEREP server is used to retrieve a list
+of all available projects of that server (specifically in the form of
 <a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/project_infos.fbs">project_infos.fbs</a>
-) and <code>target_proj_uuid</code> is set to the uuid of the first project with the name <code>testproject</code> on that list.</p>
+) and <code>target_proj_uuid</code> is set to the uuid of the first project with the name
+<code>testproject</code> on that list.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>    <span class="n">stub</span> <span class="o">=</span> <span class="n">imageService</span><span class="o">.</span><span class="n">ImageServiceStub</span><span class="p">(</span><span class="n">grpc_channel</span><span class="p">)</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="n">builder</span> <span class="o">=</span> <span class="n">flatbuffers</span><span class="o">.</span><span class="n">Builder</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="n">query</span> <span class="o">=</span> <span class="n">createQuery</span><span class="p">(</span><span class="n">builder</span><span class="p">,</span> <span class="n">projectUuids</span><span class="o">=</span><span class="p">[</span><span class="n">builder</span><span class="o">.</span><span class="n">CreateString</span><span class="p">(</span><span class="n">target_proj_uuid</span><span class="p">)],</span> <span class="n">withoutData</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="n">builder</span><span class="o">.</span><span class="n">Finish</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="n">buf</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">Output</span><span class="p">()</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    <span class="n">response_ls</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">stub</span><span class="o">.</span><span class="n">GetImage</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">buf</span><span class="p">)))</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">response_ls</span><span class="p">:</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No images found. Please create a project with labeled images using gRPC_pb_sendLabeledImage.py first.&quot;</span><span class="p">)</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="n">query</span> <span class="o">=</span> <span class="n">createQuery</span><span class="p">(</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>        <span class="n">builder</span><span class="p">,</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>        <span class="n">projectUuids</span><span class="o">=</span><span class="p">[</span><span class="n">builder</span><span class="o">.</span><span class="n">CreateString</span><span class="p">(</span><span class="n">target_proj_uuid</span><span class="p">)],</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>        <span class="n">withoutData</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    <span class="p">)</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    <span class="n">builder</span><span class="o">.</span><span class="n">Finish</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>    <span class="n">buf</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">Output</span><span class="p">()</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    <span class="n">response_ls</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">stub</span><span class="o">.</span><span class="n">GetImage</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">buf</span><span class="p">)))</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">response_ls</span><span class="p">:</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="s2">            No images found. Please create a project with labeled images</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="s2">            using gRPC_pb_sendLabeledImage.py first.</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
 </code></pre></div>
-<p>Following on the code requests all images from the project with the <code>uuid</code> of <code>target_proj_uuid</code> using the
-<code>ImageServiceStub</code>. The service definition looks as follows:</p>
+<p>Following on the code requests all images from the project with the <code>uuid</code> of
+<code>target_proj_uuid</code> using the <code>ImageServiceStub</code>. The service definition looks as
+follows:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>include &quot;image.fbs&quot;;
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>include &quot;query.fbs&quot;;
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>include &quot;boundingboxes2d_labeled_stamped.fbs&quot;;
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>include &quot;server_response.fbs&quot;;
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>namespace seerep.fb;
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>rpc_service ImageService {
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>  GetImage(seerep.fb.Query):seerep.fb.Image (streaming: &quot;server&quot;);
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>  TransferImage(seerep.fb.Image):seerep.fb.ServerResponse  (streaming: &quot;client&quot;);
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>  AddBoundingBoxes2dLabeled(seerep.fb.BoundingBoxes2DLabeledStamped):seerep.fb.ServerResponse   (streaming: &quot;client&quot;);
-<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>}
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>include &quot;label_category.fbs&quot;;
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>include &quot;dataset_uuid_label.fbs&quot;;
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>include &quot;server_response.fbs&quot;;
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>namespace seerep.fb;
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>rpc_service ImageService {
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>  GetImage(seerep.fb.Query):seerep.fb.Image (streaming: &quot;server&quot;);
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>  TransferImage(seerep.fb.Image):seerep.fb.ServerResponse  (streaming: &quot;client&quot;);
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>  AddLabels(seerep.fb.DatasetUuidLabel):seerep.fb.ServerResponse   (streaming: &quot;client&quot;);
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>}
 </code></pre></div>
-<p><code>GetImage()</code> takes a argument of type <a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/query.fbs">seerep.fb.Query</a>,
-a more generic build query type for use in various services in SEEREP, in it's serialized form and returns data of type
-<a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/image.fbs">seerep.fb.Image</a> from the server.</p>
+<p><code>GetImage()</code> takes a argument of type
+<a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/query.fbs">seerep.fb.Query</a>,
+a more generic build query type for use in various services in SEEREP, in it's
+serialized form and returns data of type
+<a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/image.fbs">seerep.fb.Image</a>
+from the server.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>    <span class="n">msgToSend</span> <span class="o">=</span> <span class="p">[]</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    <span class="n">bb_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytearray</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    <span class="n">label_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytearray</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="k">for</span> <span class="n">responseBuf</span> <span class="ow">in</span> <span class="n">response_ls</span><span class="p">:</span>
 <a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>        <span class="n">response</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">GetRootAs</span><span class="p">(</span><span class="n">responseBuf</span><span class="p">)</span>
 <a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
 <a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>        <span class="n">img_uuid</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">Header</span><span class="p">()</span><span class="o">.</span><span class="n">UuidMsgs</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>        <span class="n">header</span> <span class="o">=</span> <span class="n">createHeader</span><span class="p">(</span>
-<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>            <span class="n">builder</span><span class="p">,</span>
-<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>            <span class="n">projectUuid</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">Header</span><span class="p">()</span><span class="o">.</span><span class="n">UuidProject</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">),</span>
-<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>            <span class="n">msgUuid</span><span class="o">=</span><span class="n">img_uuid</span><span class="p">,</span>
-<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>        <span class="p">)</span>
-<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>
-<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>        <span class="c1"># create bounding box labels</span>
-<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>        <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(),</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span>
-<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>        <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(),</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span>
-<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>
-<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>        <span class="n">boundingBoxes</span> <span class="o">=</span> <span class="n">createBoundingBoxes2d</span><span class="p">(</span>
-<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>            <span class="n">builder</span><span class="p">,</span>
-<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a>            <span class="p">[</span><span class="n">createPoint2d</span><span class="p">(</span><span class="n">builder</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NUM_BB_LABELS</span><span class="p">)],</span>
-<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>            <span class="p">[</span><span class="n">createPoint2d</span><span class="p">(</span><span class="n">builder</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NUM_BB_LABELS</span><span class="p">)],</span>
-<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a>        <span class="p">)</span>
-<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a>        <span class="n">labelWithInstances</span> <span class="o">=</span> <span class="n">createLabelsWithInstance</span><span class="p">(</span>
-<a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a>            <span class="n">builder</span><span class="p">,</span>
-<a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a>            <span class="p">[</span><span class="s2">&quot;BoundingBoxLabel&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NUM_BB_LABELS</span><span class="p">)],</span>
-<a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a>            <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NUM_BB_LABELS</span><span class="p">)],</span>
-<a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a>            <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mf">0.1</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NUM_BB_LABELS</span><span class="p">)],</span>
-<a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a>        <span class="p">)</span>
-<a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a>        <span class="n">labelsBb</span> <span class="o">=</span> <span class="n">createBoundingBoxes2dLabeled</span><span class="p">(</span><span class="n">builder</span><span class="p">,</span> <span class="n">labelWithInstances</span><span class="p">,</span> <span class="n">boundingBoxes</span><span class="p">)</span>
-<a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a>
-<a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a>        <span class="n">boundingBox2DLabeledWithCategory</span> <span class="o">=</span> <span class="n">createBoundingBox2DLabeledWithCategory</span><span class="p">(</span>
-<a id="__codelineno-5-32" name="__codelineno-5-32" href="#__codelineno-5-32"></a>            <span class="n">builder</span><span class="p">,</span> <span class="n">builder</span><span class="o">.</span><span class="n">CreateString</span><span class="p">(</span><span class="s2">&quot;laterAddedBB&quot;</span><span class="p">),</span> <span class="n">labelsBb</span>
-<a id="__codelineno-5-33" name="__codelineno-5-33" href="#__codelineno-5-33"></a>        <span class="p">)</span>
-<a id="__codelineno-5-34" name="__codelineno-5-34" href="#__codelineno-5-34"></a>
-<a id="__codelineno-5-35" name="__codelineno-5-35" href="#__codelineno-5-35"></a>        <span class="n">labelsBbVector</span> <span class="o">=</span> <span class="n">createBoundingBox2dLabeledStamped</span><span class="p">(</span><span class="n">builder</span><span class="p">,</span> <span class="n">header</span><span class="p">,</span> <span class="p">[</span><span class="n">boundingBox2DLabeledWithCategory</span><span class="p">])</span>
-<a id="__codelineno-5-36" name="__codelineno-5-36" href="#__codelineno-5-36"></a>        <span class="n">builder</span><span class="o">.</span><span class="n">Finish</span><span class="p">(</span><span class="n">labelsBbVector</span><span class="p">)</span>
-<a id="__codelineno-5-37" name="__codelineno-5-37" href="#__codelineno-5-37"></a>        <span class="n">buf</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">Output</span><span class="p">()</span>
-<a id="__codelineno-5-38" name="__codelineno-5-38" href="#__codelineno-5-38"></a>
-<a id="__codelineno-5-39" name="__codelineno-5-39" href="#__codelineno-5-39"></a>        <span class="n">bb_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-<a id="__codelineno-5-40" name="__codelineno-5-40" href="#__codelineno-5-40"></a>            <span class="p">(</span>
-<a id="__codelineno-5-41" name="__codelineno-5-41" href="#__codelineno-5-41"></a>                <span class="n">img_uuid</span><span class="p">,</span>
-<a id="__codelineno-5-42" name="__codelineno-5-42" href="#__codelineno-5-42"></a>                <span class="n">buf</span><span class="p">,</span>
-<a id="__codelineno-5-43" name="__codelineno-5-43" href="#__codelineno-5-43"></a>            <span class="p">)</span>
-<a id="__codelineno-5-44" name="__codelineno-5-44" href="#__codelineno-5-44"></a>        <span class="p">)</span>
-<a id="__codelineno-5-45" name="__codelineno-5-45" href="#__codelineno-5-45"></a>
-<a id="__codelineno-5-46" name="__codelineno-5-46" href="#__codelineno-5-46"></a>        <span class="n">msgToSend</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">buf</span><span class="p">))</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>        <span class="n">projectUuid</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">Header</span><span class="p">()</span><span class="o">.</span><span class="n">UuidProject</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>        <span class="n">labelStr</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;label1&quot;</span><span class="p">,</span> <span class="s2">&quot;label2&quot;</span><span class="p">]</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>        <span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>        <span class="k">for</span> <span class="n">labelAct</span> <span class="ow">in</span> <span class="n">labelStr</span><span class="p">:</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>            <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>                <span class="n">create_label</span><span class="p">(</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>                    <span class="n">builder</span><span class="o">=</span><span class="n">builder</span><span class="p">,</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>                    <span class="n">label</span><span class="o">=</span><span class="n">labelAct</span><span class="p">,</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>                    <span class="n">label_id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>                    <span class="n">instance_uuid</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()),</span>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a>                    <span class="n">instance_id</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>                <span class="p">)</span>
+<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a>            <span class="p">)</span>
+<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a>        <span class="n">labelsCategory</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a>        <span class="n">labelsCategory</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+<a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a>            <span class="n">create_label_category</span><span class="p">(</span>
+<a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a>                <span class="n">builder</span><span class="o">=</span><span class="n">builder</span><span class="p">,</span>
+<a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a>                <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span>
+<a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a>                <span class="n">datumaro_json</span><span class="o">=</span><span class="s2">&quot;a very valid datumaro json&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a>                <span class="n">category</span><span class="o">=</span><span class="s2">&quot;laterAddedLabel&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a>            <span class="p">)</span>
+<a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a>        <span class="p">)</span>
+<a id="__codelineno-5-32" name="__codelineno-5-32" href="#__codelineno-5-32"></a>
+<a id="__codelineno-5-33" name="__codelineno-5-33" href="#__codelineno-5-33"></a>        <span class="n">dataset_uuid_label</span> <span class="o">=</span> <span class="n">create_dataset_uuid_label</span><span class="p">(</span>
+<a id="__codelineno-5-34" name="__codelineno-5-34" href="#__codelineno-5-34"></a>            <span class="n">builder</span><span class="o">=</span><span class="n">builder</span><span class="p">,</span>
+<a id="__codelineno-5-35" name="__codelineno-5-35" href="#__codelineno-5-35"></a>            <span class="n">projectUuid</span><span class="o">=</span><span class="n">projectUuid</span><span class="p">,</span>
+<a id="__codelineno-5-36" name="__codelineno-5-36" href="#__codelineno-5-36"></a>            <span class="n">datasetUuid</span><span class="o">=</span><span class="n">img_uuid</span><span class="p">,</span>
+<a id="__codelineno-5-37" name="__codelineno-5-37" href="#__codelineno-5-37"></a>            <span class="n">labels</span><span class="o">=</span><span class="n">labelsCategory</span><span class="p">,</span>
+<a id="__codelineno-5-38" name="__codelineno-5-38" href="#__codelineno-5-38"></a>        <span class="p">)</span>
+<a id="__codelineno-5-39" name="__codelineno-5-39" href="#__codelineno-5-39"></a>
+<a id="__codelineno-5-40" name="__codelineno-5-40" href="#__codelineno-5-40"></a>        <span class="n">builder</span><span class="o">.</span><span class="n">Finish</span><span class="p">(</span><span class="n">dataset_uuid_label</span><span class="p">)</span>
+<a id="__codelineno-5-41" name="__codelineno-5-41" href="#__codelineno-5-41"></a>        <span class="n">buf</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">Output</span><span class="p">()</span>
+<a id="__codelineno-5-42" name="__codelineno-5-42" href="#__codelineno-5-42"></a>
+<a id="__codelineno-5-43" name="__codelineno-5-43" href="#__codelineno-5-43"></a>        <span class="n">label_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+<a id="__codelineno-5-44" name="__codelineno-5-44" href="#__codelineno-5-44"></a>            <span class="p">(</span>
+<a id="__codelineno-5-45" name="__codelineno-5-45" href="#__codelineno-5-45"></a>                <span class="n">img_uuid</span><span class="p">,</span>
+<a id="__codelineno-5-46" name="__codelineno-5-46" href="#__codelineno-5-46"></a>                <span class="n">buf</span><span class="p">,</span>
+<a id="__codelineno-5-47" name="__codelineno-5-47" href="#__codelineno-5-47"></a>            <span class="p">)</span>
+<a id="__codelineno-5-48" name="__codelineno-5-48" href="#__codelineno-5-48"></a>        <span class="p">)</span>
+<a id="__codelineno-5-49" name="__codelineno-5-49" href="#__codelineno-5-49"></a>
+<a id="__codelineno-5-50" name="__codelineno-5-50" href="#__codelineno-5-50"></a>        <span class="n">msgToSend</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">buf</span><span class="p">))</span>
 </code></pre></div>
-<p>This code builds a list of BoundingBoxes adding some sample data into the components of each BoundingBox.
-At the beginning two lists are defined <code>msgToSend</code> is a list containing the serialized BoundingBoxes and
-<code>bb_list</code> is a list containing mappings where each image uuid is mapped to it's added BoundingBoxes.
-After that the returned images from the query before are iterated.
-Next BoundingBoxes are created and their joint <code>header</code> uuids are set to the appropriate <code>project_uuid</code> and <code>msg_uuid</code> to
-match that specific image.
-At the end the BoundingBoxes are serialized and added to the lists.</p>
-<p>The type definition of <a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingboxes2d_labeled_stamped.fbs">BoundingBoxes2DLabeledStamped</a>
+<p>This code builds a list of DatasetUuidLabel adding some sample data into the
+components of each Label Category. At the beginning two lists are defined <code>msgToSend</code>
+is a list containing the serialized labels and <code>label_list</code> is a list
+containing mappings where each image uuid is mapped to it's added labels.
+After that the returned images from the query before are iterated. Next
+Label are created and their joint <code>header</code> uuids are set to the
+appropriate <code>project_uuid</code> and <code>msg_uuid</code> to match that specific image. At the
+end the Labels are serialized and added to the lists.</p>
+<p>The type definition of
+<a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label_category.fbs">LabelCategory</a>
 looks as follows:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>include &quot;header.fbs&quot;;
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>include &quot;boundingbox2d_labeled_with_category.fbs&quot;;
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>namespace seerep.fb;
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>table BoundingBoxes2DLabeledStamped {
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>  header:seerep.fb.Header;
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>  labels_bb:[seerep.fb.BoundingBox2DLabeledWithCategory];
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>include &quot;label.fbs&quot;;
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>namespace seerep.fb;
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>table LabelCategory {
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>  category:string;
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>  labels:[Label];
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>  datumaroJson:string;
 <a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>}
 <a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>
-<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>root_type BoundingBoxes2DLabeledStamped;
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>root_type LabelCategory;
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>    <span class="n">stub</span><span class="o">.</span><span class="n">AddBoundingBoxes2dLabeled</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">msgToSend</span><span class="p">))</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    <span class="k">return</span> <span class="n">bb_list</span>
+<p>And the type definition of
+<a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label.fbs">Label</a>
+looks as follows:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>namespace seerep.fb;
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>table Label {
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>  label:string;
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>  labelIdDatumaro:int;
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>  instanceUuid:string;
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>  instanceIdDatumaro:int;
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>}
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>root_type Label;
 </code></pre></div>
-<p>Lastly the service is called, the BoundingBoxes are send to the SEEREP server and the list with the mappings is returned
-for further use.
-Note that the flatbuffers objects are not returned in their deserialized state as the function <code>fb_flatc_dict</code> defined in
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>        <span class="n">buf</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">Output</span><span class="p">()</span>
+</code></pre></div>
+<p>Lastly the service is called, the LabelCategory are send to the SEEREP server
+and the list with the mappings is returned for further use. Note that the
+flatbuffers objects are not returned in their deserialized state as the function
+<code>fb_flatc_dict</code> defined in
 <a href="https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/util/fb_to_dict.py">here</a>
 makes use of that state.</p>
 <h3 id="wrapping-the-raw-function">Wrapping the raw function<a class="headerlink" href="#wrapping-the-raw-function" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">def</span> <span class="nf">add_bb</span><span class="p">(</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>    <span class="n">target_proj_uuid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">grpc_channel</span><span class="p">:</span> <span class="n">Channel</span> <span class="o">=</span> <span class="n">get_gRPC_channel</span><span class="p">()</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">BoundingBoxes2DLabeledStamped</span><span class="o">.</span><span class="n">BoundingBoxes2DLabeledStamped</span><span class="p">]]:</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>    <span class="k">return</span> <span class="p">[</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>        <span class="p">(</span><span class="n">img_uuid</span><span class="p">,</span> <span class="n">BoundingBoxes2DLabeledStamped</span><span class="o">.</span><span class="n">BoundingBoxes2DLabeledStamped</span><span class="o">.</span><span class="n">GetRootAs</span><span class="p">(</span><span class="n">bbbuf</span><span class="p">))</span>
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>        <span class="k">for</span> <span class="n">img_uuid</span><span class="p">,</span> <span class="n">bbbuf</span> <span class="ow">in</span> <span class="n">add_bb_raw</span><span class="p">(</span><span class="n">target_proj_uuid</span><span class="p">,</span> <span class="n">grpc_channel</span><span class="p">)</span>
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>    <span class="p">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">def</span> <span class="nf">add_label</span><span class="p">(</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>    <span class="n">target_proj_uuid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>    <span class="n">grpc_channel</span><span class="p">:</span> <span class="n">Channel</span> <span class="o">=</span> <span class="n">get_gRPC_channel</span><span class="p">(),</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">DatasetUuidLabel</span><span class="o">.</span><span class="n">DatasetUuidLabel</span><span class="p">]]:</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>    <span class="k">return</span> <span class="p">[</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>        <span class="p">(</span><span class="n">img_uuid</span><span class="p">,</span> <span class="n">DatasetUuidLabel</span><span class="o">.</span><span class="n">DatasetUuidLabel</span><span class="o">.</span><span class="n">GetRootAs</span><span class="p">(</span><span class="n">labelbuf</span><span class="p">))</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>        <span class="k">for</span> <span class="n">img_uuid</span><span class="p">,</span> <span class="n">labelbuf</span> <span class="ow">in</span> <span class="n">add_label_raw</span><span class="p">(</span><span class="n">target_proj_uuid</span><span class="p">,</span> <span class="n">grpc_channel</span><span class="p">)</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>    <span class="p">]</span>
 </code></pre></div>
-<p>This function is essentially just a wrapper for <code>add_bb_raw()</code> to return the deserialized objects to be accessed through
-their regular flatbuffers interfaces (in this case of type <code>BoundingBoxes2DLabeledStamped.BoundingBoxes2DLabeledStamped</code>).</p>
+<p>This function is essentially just a wrapper for <code>add_bb_raw()</code> to return the
+deserialized objects to be accessed through their regular flatbuffers interfaces
+(in this case of type
+<code>DatasetUuidLabel.DatasetUuidLabel</code>).</p>
 <h3 id="allow-for-independent-execution-of-the-script">Allow for independent execution of the script<a class="headerlink" href="#allow-for-independent-execution-of-the-script" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>    <span class="n">bb_list</span> <span class="o">=</span> <span class="n">add_bb</span><span class="p">()</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>    <span class="k">for</span> <span class="n">img_uuid</span><span class="p">,</span> <span class="n">bbs_img</span> <span class="ow">in</span> <span class="n">bb_list</span><span class="p">:</span>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>        <span class="nb">print</span><span class="p">(</span>
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>            <span class="sa">f</span><span class="s2">&quot;Added bounding boxes to image with uuid </span><span class="si">{</span><span class="n">img_uuid</span><span class="si">}</span><span class="s2">, with the following center points and spatial extents:&quot;</span>
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>        <span class="p">)</span>
-<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[center_point(x, y) | spatial_extent(x, y)]&quot;</span><span class="p">)</span>
-<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>        <span class="k">for</span> <span class="n">bbs_wcat</span> <span class="ow">in</span> <span class="p">[</span><span class="n">bbs_img</span><span class="o">.</span><span class="n">LabelsBb</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">bbs_img</span><span class="o">.</span><span class="n">LabelsBbLength</span><span class="p">())]:</span>
-<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>            <span class="k">for</span> <span class="n">bb</span> <span class="ow">in</span> <span class="p">[</span>
-<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>                <span class="n">bbs_wcat</span><span class="o">.</span><span class="n">BoundingBox2dLabeled</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="o">.</span><span class="n">BoundingBox</span><span class="p">()</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">bbs_wcat</span><span class="o">.</span><span class="n">BoundingBox2dLabeledLength</span><span class="p">())</span>
-<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>            <span class="p">]:</span>
-<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>                <span class="nb">print</span><span class="p">(</span>
-<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>                    <span class="sa">f</span><span class="s2">&quot;[(</span><span class="si">{</span><span class="n">bb</span><span class="o">.</span><span class="n">CenterPoint</span><span class="p">()</span><span class="o">.</span><span class="n">X</span><span class="p">()</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">bb</span><span class="o">.</span><span class="n">CenterPoint</span><span class="p">()</span><span class="o">.</span><span class="n">Y</span><span class="p">()</span><span class="si">}</span><span class="s2">) | </span><span class="se">\</span>
-<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a><span class="s2">                    (</span><span class="si">{</span><span class="n">bb</span><span class="o">.</span><span class="n">SpatialExtent</span><span class="p">()</span><span class="o">.</span><span class="n">X</span><span class="p">()</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">bb</span><span class="o">.</span><span class="n">SpatialExtent</span><span class="p">()</span><span class="o">.</span><span class="n">Y</span><span class="p">()</span><span class="si">}</span><span class="s2">)]&quot;</span>
-<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>                <span class="p">)</span>
-<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>        <span class="nb">print</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>    <span class="n">label_list</span> <span class="o">=</span> <span class="n">add_label</span><span class="p">()</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>    <span class="k">for</span> <span class="n">img_uuid</span><span class="p">,</span> <span class="n">labelAllCat</span> <span class="ow">in</span> <span class="n">label_list</span><span class="p">:</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added label to image with uuid </span><span class="si">{</span><span class="n">img_uuid</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>        <span class="k">for</span> <span class="n">labelCategory</span> <span class="ow">in</span> <span class="n">labelAllCat</span><span class="o">.</span><span class="n">Labels</span><span class="p">():</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>            <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">labelCategory</span><span class="o">.</span><span class="n">Labels</span><span class="p">():</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;uuid: </span><span class="si">{</span><span class="n">label</span><span class="o">.</span><span class="n">Label</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
-<p>The last part can execute the script independently and targets the server at the default address, which is <code>localhost:9090</code>.
-On successful execution a subset of the sent data based on the returned mapping is printed.</p>
+<p>The last part can execute the script independently and targets the server at the
+default address, which is <code>localhost:9090</code>. On successful execution a subset of
+the sent data based on the returned mapping is printed.</p>
 <h2 id="some-important-considerations">Some important considerations<a class="headerlink" href="#some-important-considerations" title="Permanent link">&para;</a></h2>
-<p>To conclude for most of the examples it is best practice to follow this structure, namely first having a function which
-returns the serialized data,
-then wrapping that function to return the deserialized variant and at the end the <code>if __name__ == "__main__"</code> part of
-the script, such that the script can be executed independently.
-Of course functionality can be outsourced into other functions, when it makes sense.
-This structure eases the process of writing tests later on (see <a href="../writing-python-tests/">writing-tests.md</a>),
-especially when <code>fb_flatc_dict</code> should be utilized.</p>
+<p>To conclude for most of the examples it is best practice to follow this structure,
+namely first having a function which returns the serialized data, then wrapping
+that function to return the deserialized variant and at the end the
+<code>if __name__ == "__main__"</code> part of the script, such that the script can be
+executed independently. Of course functionality can be outsourced into other
+functions, when it makes sense. This structure eases the process of writing
+tests later on (see <a href="../writing-python-tests/">writing-tests.md</a>), especially
+when <code>fb_flatc_dict</code> should be utilized.</p>
 
 
 

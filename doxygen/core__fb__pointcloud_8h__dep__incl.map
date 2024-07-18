@@ -1,8 +1,9 @@
 <map id="seerep_srv/seerep_core_fb/include/seerep_core_fb/core_fb_pointcloud.h" name="seerep_srv/seerep_core_fb/include/seerep_core_fb/core_fb_pointcloud.h">
-<area shape="rect" id="node1" title=" " alt="" coords="137,5,319,61"/>
-<area shape="rect" id="node2" href="$core__fb__pointcloud_8cpp.html" title=" " alt="" coords="5,117,224,158"/>
-<area shape="rect" id="node3" href="$fb__point__cloud__service_8h.html" title=" " alt="" coords="248,109,437,165"/>
-<area shape="rect" id="node4" href="$server_8h.html" title=" " alt="" coords="132,213,321,269"/>
-<area shape="rect" id="node6" href="$fb__point__cloud__service_8cpp.html" title=" " alt="" coords="346,221,571,262"/>
-<area shape="rect" id="node5" href="$server_8cpp.html" title=" " alt="" coords="132,317,321,359"/>
+<area shape="rect" id="node1" title=" " alt="" coords="248,5,429,61"/>
+<area shape="rect" id="node2" href="$core__fb__general_8cpp.html" title=" " alt="" coords="5,117,205,158"/>
+<area shape="rect" id="node3" href="$core__fb__pointcloud_8cpp.html" title=" " alt="" coords="229,117,448,158"/>
+<area shape="rect" id="node4" href="$fb__point__cloud__service_8h.html" title=" " alt="" coords="472,109,661,165"/>
+<area shape="rect" id="node5" href="$server_8h.html" title=" " alt="" coords="356,213,545,269"/>
+<area shape="rect" id="node7" href="$fb__point__cloud__service_8cpp.html" title=" " alt="" coords="570,221,795,262"/>
+<area shape="rect" id="node6" href="$server_8cpp.html" title=" " alt="" coords="356,317,545,359"/>
 </map>

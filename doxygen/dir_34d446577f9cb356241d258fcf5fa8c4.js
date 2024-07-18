@@ -33,9 +33,6 @@ var dir_34d446577f9cb356241d258fcf5fa8c4 =
     [ "pb_point_cloud_service.h", "pb__point__cloud__service_8h.html", [
       [ "seerep_server::PbPointCloudService", "classseerep__server_1_1PbPointCloudService.html", "classseerep__server_1_1PbPointCloudService" ]
     ] ],
-    [ "pb_receive_sensor_msgs.h", "pb__receive__sensor__msgs_8h.html", [
-      [ "seerep_server::PbReceiveSensorMsgs", "classseerep__server_1_1PbReceiveSensorMsgs.html", "classseerep__server_1_1PbReceiveSensorMsgs" ]
-    ] ],
     [ "pb_tf_service.h", "pb__tf__service_8h.html", [
       [ "seerep_server::PbTfService", "classseerep__server_1_1PbTfService.html", "classseerep__server_1_1PbTfService" ]
     ] ],

@@ -188,18 +188,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a86a634af97640d57137929dc6b70bbcb"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a86a634af97640d57137929dc6b70bbcb">readHeader</a> (const std::string &amp;id, HighFive::AnnotateTraits&lt; T &gt; &amp;object, <a class="el" href="structseerep__core__msgs_1_1Header.html">seerep_core_msgs::Header</a> &amp;header)</td></tr>
 <tr class="memdesc:a86a634af97640d57137929dc6b70bbcb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read header from a group within an hd5f file.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a86a634af97640d57137929dc6b70bbcb">More...</a><br /></td></tr>
 <tr class="separator:a86a634af97640d57137929dc6b70bbcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63b11f13f8d49ffd348c904453b956b8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a63b11f13f8d49ffd348c904453b956b8">readBoundingBoxLabeledAndAddToLabelsWithInstancesWithCategory</a> (const std::string &amp;datatypeGroup, const std::string &amp;uuid, std::unordered_map&lt; std::string, std::vector&lt; <a class="el" href="structseerep__core__msgs_1_1LabelWithInstance.html">seerep_core_msgs::LabelWithInstance</a> &gt; &gt; &amp;labelsWithInstancesWithCategory)</td></tr>
-<tr class="memdesc:a63b11f13f8d49ffd348c904453b956b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">read the labels and instances of a dataset of all categories and add them to the category-labels/instances map  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a63b11f13f8d49ffd348c904453b956b8">More...</a><br /></td></tr>
-<tr class="separator:a63b11f13f8d49ffd348c904453b956b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4cb8522b6c34e9c2fa3fe1cabfce93b9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a4cb8522b6c34e9c2fa3fe1cabfce93b9">readBoundingBoxLabeled</a> (const std::string &amp;datatypeGroup, const std::string &amp;uuid, std::vector&lt; std::string &gt; &amp;labelCategories, std::vector&lt; std::vector&lt; std::string &gt; &gt; &amp;labelsPerCategory, std::vector&lt; std::vector&lt; float &gt; &gt; &amp;labelConfidencesPerCategory, std::vector&lt; std::vector&lt; std::vector&lt; double &gt; &gt; &gt; &amp;boundingBoxesPerCategory, std::vector&lt; std::vector&lt; std::string &gt; &gt; &amp;instancesPerCategory, bool loadBoxes=true)</td></tr>
-<tr class="separator:a4cb8522b6c34e9c2fa3fe1cabfce93b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6f1b7926a60f427157fc21fb3b11f38a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a6f1b7926a60f427157fc21fb3b11f38a">readLabelsGeneralAndAddToLabelsWithInstancesWithCategory</a> (const std::string &amp;datatypeGroup, const std::string &amp;uuid, std::unordered_map&lt; std::string, std::vector&lt; <a class="el" href="structseerep__core__msgs_1_1LabelWithInstance.html">seerep_core_msgs::LabelWithInstance</a> &gt; &gt; &amp;labelsWithInstancesWithCategory)</td></tr>
-<tr class="memdesc:a6f1b7926a60f427157fc21fb3b11f38a"><td class="mdescLeft">&#160;</td><td class="mdescRight">read the labels general and instances of a dataset of all categories and add them to the category-labels/instances map  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a6f1b7926a60f427157fc21fb3b11f38a">More...</a><br /></td></tr>
-<tr class="separator:a6f1b7926a60f427157fc21fb3b11f38a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b2572a754f97cca9cf43b484c48e8a6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a8b2572a754f97cca9cf43b484c48e8a6">readLabelsGeneral</a> (const std::string &amp;datatypeGroup, const std::string &amp;uuid, std::vector&lt; std::string &gt; &amp;labelCategories, std::vector&lt; std::vector&lt; <a class="el" href="structseerep__core__msgs_1_1LabelWithInstance.html">seerep_core_msgs::LabelWithInstance</a> &gt; &gt; &amp;labelsWithInstancesGeneralPerCategory)</td></tr>
-<tr class="separator:a8b2572a754f97cca9cf43b484c48e8a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1dbffbf204c9c193d7db15983965766c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a1dbffbf204c9c193d7db15983965766c">writeLabelsGeneral</a> (const std::string &amp;datatypeGroup, const std::string &amp;uuid, const std::vector&lt; <a class="el" href="structseerep__core__msgs_1_1LabelsWithInstanceWithCategory.html">seerep_core_msgs::LabelsWithInstanceWithCategory</a> &gt; &amp;labelsWithInstanceWithCategory)</td></tr>
-<tr class="separator:a1dbffbf204c9c193d7db15983965766c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4a9840a6247ac4d606186d7541d9e71"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#af4a9840a6247ac4d606186d7541d9e71">readLabelsAndAddToLabelsPerCategory</a> (const std::string &amp;datatypeGroup, const std::string &amp;uuid, std::unordered_map&lt; std::string, <a class="el" href="structseerep__core__msgs_1_1LabelDatumaro.html">seerep_core_msgs::LabelDatumaro</a> &gt; &amp;labelsCategoryMap)</td></tr>
+<tr class="memdesc:af4a9840a6247ac4d606186d7541d9e71"><td class="mdescLeft">&#160;</td><td class="mdescRight">read the labels general and instances of a dataset of all categories and add them to the category-labels/instances map  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#af4a9840a6247ac4d606186d7541d9e71">More...</a><br /></td></tr>
+<tr class="separator:af4a9840a6247ac4d606186d7541d9e71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc293be835c18657ec06d816ddfacddc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#abc293be835c18657ec06d816ddfacddc">readLabels</a> (const std::string &amp;datatypeGroup, const std::string &amp;uuid, std::vector&lt; std::string &gt; &amp;labelCategories, std::vector&lt; std::vector&lt; <a class="el" href="structseerep__core__msgs_1_1Label.html">seerep_core_msgs::Label</a> &gt; &gt; &amp;labelsPerCategory, std::vector&lt; std::string &gt; &amp;datumaroJsonPerCategory)</td></tr>
+<tr class="separator:abc293be835c18657ec06d816ddfacddc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc6cddd8f9601b395b6c97285505b6bc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#acc6cddd8f9601b395b6c97285505b6bc">writeLabels</a> (const std::string &amp;datatypeGroup, const std::string &amp;uuid, const std::vector&lt; <a class="el" href="structseerep__core__msgs_1_1LabelCategory.html">seerep_core_msgs::LabelCategory</a> &gt; &amp;LabelsCategory)</td></tr>
+<tr class="separator:acc6cddd8f9601b395b6c97285505b6bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a95033cb2048076b5d3b2dd98eb7cac26"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a95033cb2048076b5d3b2dd98eb7cac26">writeProjectname</a> (const std::string &amp;projectname)</td></tr>
 <tr class="separator:a95033cb2048076b5d3b2dd98eb7cac26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a169525769c17cafc12e7f93be2702218"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a169525769c17cafc12e7f93be2702218">readProjectname</a> ()</td></tr>
@@ -260,32 +255,28 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:a414320881a6f84f3959e0684daa4f20d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa37ba5e93c4176529faea14ff8641d96"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#aa37ba5e93c4176529faea14ff8641d96">VERSION</a> = &quot;version&quot;</td></tr>
 <tr class="separator:aa37ba5e93c4176529faea14ff8641d96"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc829c6ab139695a61f94e2850fd68f1"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#abc829c6ab139695a61f94e2850fd68f1">GEODETICLOCATION_COORDINATESYSTEM</a> = &quot;geoloc_coordinatesystem&quot;</td></tr>
+<tr class="memitem:abc829c6ab139695a61f94e2850fd68f1"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#abc829c6ab139695a61f94e2850fd68f1">GEODETICLOCATION_COORDINATESYSTEM</a></td></tr>
 <tr class="separator:abc829c6ab139695a61f94e2850fd68f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa686a66fb2a52b883783d78489f0226b"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#aa686a66fb2a52b883783d78489f0226b">GEODETICLOCATION_ELLIPSOID</a> = &quot;geoloc_ellipsoid&quot;</td></tr>
+<tr class="memitem:aa686a66fb2a52b883783d78489f0226b"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#aa686a66fb2a52b883783d78489f0226b">GEODETICLOCATION_ELLIPSOID</a></td></tr>
 <tr class="separator:aa686a66fb2a52b883783d78489f0226b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad57e97a415e1673958bedadf45f56ca7"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ad57e97a415e1673958bedadf45f56ca7">GEODETICLOCATION_ALTITUDE</a> = &quot;geoloc_altitude&quot;</td></tr>
 <tr class="separator:ad57e97a415e1673958bedadf45f56ca7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:addf9147e43d5dcf2ae71973e93dd1fa5"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#addf9147e43d5dcf2ae71973e93dd1fa5">GEODETICLOCATION_LATITUDE</a> = &quot;geoloc_latitude&quot;</td></tr>
 <tr class="separator:addf9147e43d5dcf2ae71973e93dd1fa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a130465c7fbf8eff4e78f4d32fd68b3f9"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a130465c7fbf8eff4e78f4d32fd68b3f9">GEODETICLOCATION_LONGITUDE</a> = &quot;geoloc_longitude&quot;</td></tr>
+<tr class="memitem:a130465c7fbf8eff4e78f4d32fd68b3f9"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a130465c7fbf8eff4e78f4d32fd68b3f9">GEODETICLOCATION_LONGITUDE</a></td></tr>
 <tr class="separator:a130465c7fbf8eff4e78f4d32fd68b3f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53b8de0c69698ba803f4052ef66bda00"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a53b8de0c69698ba803f4052ef66bda00">RAWDATA</a> = &quot;rawdata&quot;</td></tr>
 <tr class="separator:a53b8de0c69698ba803f4052ef66bda00"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac621f66d2e9dab8025b42b0b39c8e924"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ac621f66d2e9dab8025b42b0b39c8e924">LABELGENERAL</a> = &quot;labelGeneral&quot;</td></tr>
-<tr class="separator:ac621f66d2e9dab8025b42b0b39c8e924"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abbefe86be5f50843d789eda9eedefb77"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#abbefe86be5f50843d789eda9eedefb77">LABELGENERALCONFIDENCES</a> = &quot;labelGeneralConfidences&quot;</td></tr>
-<tr class="separator:abbefe86be5f50843d789eda9eedefb77"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a19b4fe044e996991f97a0f9780a2b7fa"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a19b4fe044e996991f97a0f9780a2b7fa">LABELGENERALINSTANCES</a> = &quot;labelGeneralInstances&quot;</td></tr>
-<tr class="separator:a19b4fe044e996991f97a0f9780a2b7fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac3bc18459b28fbf568ce5ddc6629abb9"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ac3bc18459b28fbf568ce5ddc6629abb9">LABELBB</a> = &quot;labelBB&quot;</td></tr>
-<tr class="separator:ac3bc18459b28fbf568ce5ddc6629abb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aea70d38a5a6c66d69f5ba5e46e167be2"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#aea70d38a5a6c66d69f5ba5e46e167be2">LABELBBCONFIDENCES</a> = &quot;labelBBConfidences&quot;</td></tr>
-<tr class="separator:aea70d38a5a6c66d69f5ba5e46e167be2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7232dfcef303e5dfa6348696851bbd66"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a7232dfcef303e5dfa6348696851bbd66">LABELBBBOXESWITHROTATION</a> = &quot;labelBBBoxesWithRotation&quot;</td></tr>
-<tr class="separator:a7232dfcef303e5dfa6348696851bbd66"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a982821eb1b6284a7eb396d1d65af671c"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a982821eb1b6284a7eb396d1d65af671c">LABELBBINSTANCES</a> = &quot;labelBBInstances&quot;</td></tr>
-<tr class="separator:a982821eb1b6284a7eb396d1d65af671c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b452b4e2c91b4cbad0df3efd1779a95"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a7b452b4e2c91b4cbad0df3efd1779a95">LABEL</a> = &quot;label&quot;</td></tr>
+<tr class="separator:a7b452b4e2c91b4cbad0df3efd1779a95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a892c2c75c3794268c0cce567cc8f53f6"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a892c2c75c3794268c0cce567cc8f53f6">LABEL_ID_DATUMARO</a> = &quot;labelIdDatumaro&quot;</td></tr>
+<tr class="separator:a892c2c75c3794268c0cce567cc8f53f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb23bebcca4ad856bb5d0146c535f3d7"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#acb23bebcca4ad856bb5d0146c535f3d7">LABELINSTANCES</a> = &quot;labelInstances&quot;</td></tr>
+<tr class="separator:acb23bebcca4ad856bb5d0146c535f3d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3fd6ae727c96a5d4fbc85c16edc717d"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#af3fd6ae727c96a5d4fbc85c16edc717d">LABELINSTANCES_ID_DATUMARO</a></td></tr>
+<tr class="separator:af3fd6ae727c96a5d4fbc85c16edc717d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23e131bce6b8ed6326a358672c594a8b"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a23e131bce6b8ed6326a358672c594a8b">DATUMARO_JSON</a> = &quot;datumaroJson&quot;</td></tr>
+<tr class="separator:a23e131bce6b8ed6326a358672c594a8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae7dea947feb1b7d8b330d9689fb04e51"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#ae7dea947feb1b7d8b330d9689fb04e51">POINTS</a> = &quot;points&quot;</td></tr>
 <tr class="separator:ae7dea947feb1b7d8b330d9689fb04e51"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -300,14 +291,14 @@ Protected Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a60a548f65c96a165261494a1eef36589"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a60a548f65c96a165261494a1eef36589">readLabel</a> (const std::string &amp;id, const std::string labelType, std::vector&lt; std::string &gt; &amp;labels)</td></tr>
-<tr class="separator:a60a548f65c96a165261494a1eef36589"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a610e1c57b87ddfc3c0b606cc13b36048"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a610e1c57b87ddfc3c0b606cc13b36048">readlabelConfidences</a> (const std::string &amp;id, const std::string labelType, std::vector&lt; float &gt; &amp;labelConfidences)</td></tr>
-<tr class="separator:a610e1c57b87ddfc3c0b606cc13b36048"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c7f0c44869ec6eaa330d0d6c4b2feee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a9c7f0c44869ec6eaa330d0d6c4b2feee">readBoundingBoxes</a> (const std::string &amp;id, const std::string boundingBoxType, std::vector&lt; std::vector&lt; double &gt; &gt; &amp;boundingBoxes)</td></tr>
-<tr class="separator:a9c7f0c44869ec6eaa330d0d6c4b2feee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a33fb6e3e8696e0cc8ad6509627db0a13"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a33fb6e3e8696e0cc8ad6509627db0a13">readInstances</a> (const std::string &amp;id, const std::string InstanceType, std::vector&lt; std::string &gt; &amp;instances)</td></tr>
-<tr class="separator:a33fb6e3e8696e0cc8ad6509627db0a13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:accf63474a9e5a48e0d758b9dacbdf658"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:accf63474a9e5a48e0d758b9dacbdf658"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#accf63474a9e5a48e0d758b9dacbdf658">readDataset</a> (const std::string &amp;path) const</td></tr>
+<tr class="memdesc:accf63474a9e5a48e0d758b9dacbdf658"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads a dataset from the specified HDF5 path.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#accf63474a9e5a48e0d758b9dacbdf658">More...</a><br /></td></tr>
+<tr class="separator:accf63474a9e5a48e0d758b9dacbdf658"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c3a2e4d20830a276a21d02d32deb369"><td class="memTemplParams" colspan="2">template&lt;typename T0 , typename... TN&gt; </td></tr>
+<tr class="memitem:a9c3a2e4d20830a276a21d02d32deb369"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a9c3a2e4d20830a276a21d02d32deb369">hasEqualSize</a> (const std::vector&lt; T0 &gt; &amp;first, const std::vector&lt; TN &gt; &amp;... rest) const</td></tr>
+<tr class="memdesc:a9c3a2e4d20830a276a21d02d32deb369"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if multiple vectors have equal size.  <a href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a9c3a2e4d20830a276a21d02d32deb369">More...</a><br /></td></tr>
+<tr class="separator:a9c3a2e4d20830a276a21d02d32deb369"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a8742137ed1324de30bb6e106a9efafd5" name="a8742137ed1324de30bb6e106a9efafd5"></a>
@@ -651,6 +642,62 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
+<a id="a9c3a2e4d20830a276a21d02d32deb369" name="a9c3a2e4d20830a276a21d02d32deb369"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c3a2e4d20830a276a21d02d32deb369">&#9670;&nbsp;</a></span>hasEqualSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T0 , typename... TN&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool seerep_hdf5_core::Hdf5CoreGeneral::hasEqualSize </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; T0 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; TN &gt; &amp;...&#160;</td>
+          <td class="paramname"><em>rest</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Checks if multiple vectors have equal size. </p>
+<p >TODO: Allow for every container type, not just vectors.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T0</td><td>The type of the first vector. </td></tr>
+    <tr><td class="paramname">TN</td><td>The types of the remaining vectors. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">first</td><td>The first vector. </td></tr>
+    <tr><td class="paramname">rest</td><td>The remaining vectors. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if all vectors have equal size, false otherwise. </dd></dl>
+
+</div>
+</div>
 <a id="ae0946dec4040af5f37c7268087c9ba98" name="ae0946dec4040af5f37c7268087c9ba98"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae0946dec4040af5f37c7268087c9ba98">&#9670;&nbsp;</a></span>readAABB()</h2>
 
@@ -739,37 +786,23 @@ template&lt;typename T , class C &gt; </div>
 
 </div>
 </div>
-<a id="a9c7f0c44869ec6eaa330d0d6c4b2feee" name="a9c7f0c44869ec6eaa330d0d6c4b2feee"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9c7f0c44869ec6eaa330d0d6c4b2feee">&#9670;&nbsp;</a></span>readBoundingBoxes()</h2>
+<a id="accf63474a9e5a48e0d758b9dacbdf658" name="accf63474a9e5a48e0d758b9dacbdf658"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#accf63474a9e5a48e0d758b9dacbdf658">&#9670;&nbsp;</a></span>readDataset()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void seerep_hdf5_core::Hdf5CoreGeneral::readBoundingBoxes </td>
+          <td class="memname">T seerep_hdf5_core::Hdf5CoreGeneral::readDataset </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>id</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string&#160;</td>
-          <td class="paramname"><em>boundingBoxType</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; std::vector&lt; double &gt; &gt; &amp;&#160;</td>
-          <td class="paramname"><em>boundingBoxes</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
   </td>
@@ -779,110 +812,23 @@ template&lt;typename T , class C &gt; </div>
 </table>
 </div><div class="memdoc">
 
-</div>
-</div>
-<a id="a4cb8522b6c34e9c2fa3fe1cabfce93b9" name="a4cb8522b6c34e9c2fa3fe1cabfce93b9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4cb8522b6c34e9c2fa3fe1cabfce93b9">&#9670;&nbsp;</a></span>readBoundingBoxLabeled()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void seerep_hdf5_core::Hdf5CoreGeneral::readBoundingBoxLabeled </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>datatypeGroup</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>uuid</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; std::string &gt; &amp;&#160;</td>
-          <td class="paramname"><em>labelCategories</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; std::vector&lt; std::string &gt; &gt; &amp;&#160;</td>
-          <td class="paramname"><em>labelsPerCategory</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; std::vector&lt; float &gt; &gt; &amp;&#160;</td>
-          <td class="paramname"><em>labelConfidencesPerCategory</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; std::vector&lt; std::vector&lt; double &gt; &gt; &gt; &amp;&#160;</td>
-          <td class="paramname"><em>boundingBoxesPerCategory</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; std::vector&lt; std::string &gt; &gt; &amp;&#160;</td>
-          <td class="paramname"><em>instancesPerCategory</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>loadBoxes</em> = <code>true</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a63b11f13f8d49ffd348c904453b956b8" name="a63b11f13f8d49ffd348c904453b956b8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a63b11f13f8d49ffd348c904453b956b8">&#9670;&nbsp;</a></span>readBoundingBoxLabeledAndAddToLabelsWithInstancesWithCategory()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void seerep_hdf5_core::Hdf5CoreGeneral::readBoundingBoxLabeledAndAddToLabelsWithInstancesWithCategory </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>datatypeGroup</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>uuid</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::unordered_map&lt; std::string, std::vector&lt; <a class="el" href="structseerep__core__msgs_1_1LabelWithInstance.html">seerep_core_msgs::LabelWithInstance</a> &gt; &gt; &amp;&#160;</td>
-          <td class="paramname"><em>labelsWithInstancesWithCategory</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>read the labels and instances of a dataset of all categories and add them to the category-labels/instances map </p>
+<p>Reads a dataset from the specified HDF5 path. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>The type of data to read. </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">datatypeGroup</td><td>the data type </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">uuid</td><td>the uuid of the dataset </td></tr>
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">labelsWithInstancesWithCategory</td><td>the map from category to the instances of the category </td></tr>
+    <tr><td class="paramname">path</td><td>The path of the dataset to read. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The read dataset of type T. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">HighFive::DataSetException</td><td>if there is an error opening or reading the dataset. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1015,140 +961,14 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a id="a33fb6e3e8696e0cc8ad6509627db0a13" name="a33fb6e3e8696e0cc8ad6509627db0a13"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a33fb6e3e8696e0cc8ad6509627db0a13">&#9670;&nbsp;</a></span>readInstances()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void seerep_hdf5_core::Hdf5CoreGeneral::readInstances </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>id</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string&#160;</td>
-          <td class="paramname"><em>InstanceType</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; std::string &gt; &amp;&#160;</td>
-          <td class="paramname"><em>instances</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a60a548f65c96a165261494a1eef36589" name="a60a548f65c96a165261494a1eef36589"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a60a548f65c96a165261494a1eef36589">&#9670;&nbsp;</a></span>readLabel()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void seerep_hdf5_core::Hdf5CoreGeneral::readLabel </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>id</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string&#160;</td>
-          <td class="paramname"><em>labelType</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; std::string &gt; &amp;&#160;</td>
-          <td class="paramname"><em>labels</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a610e1c57b87ddfc3c0b606cc13b36048" name="a610e1c57b87ddfc3c0b606cc13b36048"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a610e1c57b87ddfc3c0b606cc13b36048">&#9670;&nbsp;</a></span>readlabelConfidences()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void seerep_hdf5_core::Hdf5CoreGeneral::readlabelConfidences </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>id</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string&#160;</td>
-          <td class="paramname"><em>labelType</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; float &gt; &amp;&#160;</td>
-          <td class="paramname"><em>labelConfidences</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a8b2572a754f97cca9cf43b484c48e8a6" name="a8b2572a754f97cca9cf43b484c48e8a6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8b2572a754f97cca9cf43b484c48e8a6">&#9670;&nbsp;</a></span>readLabelsGeneral()</h2>
+<a id="abc293be835c18657ec06d816ddfacddc" name="abc293be835c18657ec06d816ddfacddc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc293be835c18657ec06d816ddfacddc">&#9670;&nbsp;</a></span>readLabels()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void seerep_hdf5_core::Hdf5CoreGeneral::readLabelsGeneral </td>
+          <td class="memname">void seerep_hdf5_core::Hdf5CoreGeneral::readLabels </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>datatypeGroup</em>, </td>
@@ -1168,8 +988,14 @@ template&lt;class T &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::vector&lt; std::vector&lt; <a class="el" href="structseerep__core__msgs_1_1LabelWithInstance.html">seerep_core_msgs::LabelWithInstance</a> &gt; &gt; &amp;&#160;</td>
-          <td class="paramname"><em>labelsWithInstancesGeneralPerCategory</em>&#160;</td>
+          <td class="paramtype">std::vector&lt; std::vector&lt; <a class="el" href="structseerep__core__msgs_1_1Label.html">seerep_core_msgs::Label</a> &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>labelsPerCategory</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>datumaroJsonPerCategory</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1181,14 +1007,14 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a id="a6f1b7926a60f427157fc21fb3b11f38a" name="a6f1b7926a60f427157fc21fb3b11f38a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6f1b7926a60f427157fc21fb3b11f38a">&#9670;&nbsp;</a></span>readLabelsGeneralAndAddToLabelsWithInstancesWithCategory()</h2>
+<a id="af4a9840a6247ac4d606186d7541d9e71" name="af4a9840a6247ac4d606186d7541d9e71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af4a9840a6247ac4d606186d7541d9e71">&#9670;&nbsp;</a></span>readLabelsAndAddToLabelsPerCategory()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void seerep_hdf5_core::Hdf5CoreGeneral::readLabelsGeneralAndAddToLabelsWithInstancesWithCategory </td>
+          <td class="memname">void seerep_hdf5_core::Hdf5CoreGeneral::readLabelsAndAddToLabelsPerCategory </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>datatypeGroup</em>, </td>
@@ -1202,8 +1028,8 @@ template&lt;class T &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::unordered_map&lt; std::string, std::vector&lt; <a class="el" href="structseerep__core__msgs_1_1LabelWithInstance.html">seerep_core_msgs::LabelWithInstance</a> &gt; &gt; &amp;&#160;</td>
-          <td class="paramname"><em>labelsWithInstancesWithCategory</em>&#160;</td>
+          <td class="paramtype">std::unordered_map&lt; std::string, <a class="el" href="structseerep__core__msgs_1_1LabelDatumaro.html">seerep_core_msgs::LabelDatumaro</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>labelsCategoryMap</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1514,14 +1340,14 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a id="a1dbffbf204c9c193d7db15983965766c" name="a1dbffbf204c9c193d7db15983965766c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1dbffbf204c9c193d7db15983965766c">&#9670;&nbsp;</a></span>writeLabelsGeneral()</h2>
+<a id="acc6cddd8f9601b395b6c97285505b6bc" name="acc6cddd8f9601b395b6c97285505b6bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc6cddd8f9601b395b6c97285505b6bc">&#9670;&nbsp;</a></span>writeLabels()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void seerep_hdf5_core::Hdf5CoreGeneral::writeLabelsGeneral </td>
+          <td class="memname">void seerep_hdf5_core::Hdf5CoreGeneral::writeLabels </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>datatypeGroup</em>, </td>
@@ -1535,8 +1361,8 @@ template&lt;class T &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="structseerep__core__msgs_1_1LabelsWithInstanceWithCategory.html">seerep_core_msgs::LabelsWithInstanceWithCategory</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>labelsWithInstanceWithCategory</em>&#160;</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="structseerep__core__msgs_1_1LabelCategory.html">seerep_core_msgs::LabelCategory</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>LabelsCategory</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1625,6 +1451,28 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
+<a id="a23e131bce6b8ed6326a358672c594a8b" name="a23e131bce6b8ed6326a358672c594a8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23e131bce6b8ed6326a358672c594a8b">&#9670;&nbsp;</a></span>DATUMARO_JSON</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::string seerep_hdf5_core::Hdf5CoreGeneral::DATUMARO_JSON = &quot;datumaroJson&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ad57e97a415e1673958bedadf45f56ca7" name="ad57e97a415e1673958bedadf45f56ca7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad57e97a415e1673958bedadf45f56ca7">&#9670;&nbsp;</a></span>GEODETICLOCATION_ALTITUDE</h2>
 
@@ -1657,7 +1505,7 @@ template&lt;class T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const std::string seerep_hdf5_core::Hdf5CoreGeneral::GEODETICLOCATION_COORDINATESYSTEM = &quot;geoloc_coordinatesystem&quot;</td>
+          <td class="memname">const std::string seerep_hdf5_core::Hdf5CoreGeneral::GEODETICLOCATION_COORDINATESYSTEM</td>
         </tr>
       </table>
   </td>
@@ -1666,7 +1514,9 @@ template&lt;class T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">      <span class="stringliteral">&quot;geoloc_coordinatesystem&quot;</span></div>
+</div><!-- fragment -->
 </div>
 </div>
 <a id="aa686a66fb2a52b883783d78489f0226b" name="aa686a66fb2a52b883783d78489f0226b"></a>
@@ -1679,7 +1529,7 @@ template&lt;class T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const std::string seerep_hdf5_core::Hdf5CoreGeneral::GEODETICLOCATION_ELLIPSOID = &quot;geoloc_ellipsoid&quot;</td>
+          <td class="memname">const std::string seerep_hdf5_core::Hdf5CoreGeneral::GEODETICLOCATION_ELLIPSOID</td>
         </tr>
       </table>
   </td>
@@ -1688,7 +1538,9 @@ template&lt;class T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">      <span class="stringliteral">&quot;geoloc_ellipsoid&quot;</span></div>
+</div><!-- fragment -->
 </div>
 </div>
 <a id="addf9147e43d5dcf2ae71973e93dd1fa5" name="addf9147e43d5dcf2ae71973e93dd1fa5"></a>
@@ -1723,7 +1575,7 @@ template&lt;class T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const std::string seerep_hdf5_core::Hdf5CoreGeneral::GEODETICLOCATION_LONGITUDE = &quot;geoloc_longitude&quot;</td>
+          <td class="memname">const std::string seerep_hdf5_core::Hdf5CoreGeneral::GEODETICLOCATION_LONGITUDE</td>
         </tr>
       </table>
   </td>
@@ -1732,7 +1584,9 @@ template&lt;class T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">      <span class="stringliteral">&quot;geoloc_longitude&quot;</span></div>
+</div><!-- fragment -->
 </div>
 </div>
 <a id="a293c540dd71f38ae71ba7ce25a22b8a4" name="a293c540dd71f38ae71ba7ce25a22b8a4"></a>
@@ -1889,8 +1743,8 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a id="ac3bc18459b28fbf568ce5ddc6629abb9" name="ac3bc18459b28fbf568ce5ddc6629abb9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac3bc18459b28fbf568ce5ddc6629abb9">&#9670;&nbsp;</a></span>LABELBB</h2>
+<a id="a7b452b4e2c91b4cbad0df3efd1779a95" name="a7b452b4e2c91b4cbad0df3efd1779a95"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b452b4e2c91b4cbad0df3efd1779a95">&#9670;&nbsp;</a></span>LABEL</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1899,7 +1753,7 @@ template&lt;class T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const std::string seerep_hdf5_core::Hdf5CoreGeneral::LABELBB = &quot;labelBB&quot;</td>
+          <td class="memname">const std::string seerep_hdf5_core::Hdf5CoreGeneral::LABEL = &quot;label&quot;</td>
         </tr>
       </table>
   </td>
@@ -1911,8 +1765,8 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a id="a7232dfcef303e5dfa6348696851bbd66" name="a7232dfcef303e5dfa6348696851bbd66"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7232dfcef303e5dfa6348696851bbd66">&#9670;&nbsp;</a></span>LABELBBBOXESWITHROTATION</h2>
+<a id="a892c2c75c3794268c0cce567cc8f53f6" name="a892c2c75c3794268c0cce567cc8f53f6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a892c2c75c3794268c0cce567cc8f53f6">&#9670;&nbsp;</a></span>LABEL_ID_DATUMARO</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1921,7 +1775,7 @@ template&lt;class T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const std::string seerep_hdf5_core::Hdf5CoreGeneral::LABELBBBOXESWITHROTATION = &quot;labelBBBoxesWithRotation&quot;</td>
+          <td class="memname">const std::string seerep_hdf5_core::Hdf5CoreGeneral::LABEL_ID_DATUMARO = &quot;labelIdDatumaro&quot;</td>
         </tr>
       </table>
   </td>
@@ -1933,8 +1787,8 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a id="aea70d38a5a6c66d69f5ba5e46e167be2" name="aea70d38a5a6c66d69f5ba5e46e167be2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aea70d38a5a6c66d69f5ba5e46e167be2">&#9670;&nbsp;</a></span>LABELBBCONFIDENCES</h2>
+<a id="acb23bebcca4ad856bb5d0146c535f3d7" name="acb23bebcca4ad856bb5d0146c535f3d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb23bebcca4ad856bb5d0146c535f3d7">&#9670;&nbsp;</a></span>LABELINSTANCES</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1943,7 +1797,7 @@ template&lt;class T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const std::string seerep_hdf5_core::Hdf5CoreGeneral::LABELBBCONFIDENCES = &quot;labelBBConfidences&quot;</td>
+          <td class="memname">const std::string seerep_hdf5_core::Hdf5CoreGeneral::LABELINSTANCES = &quot;labelInstances&quot;</td>
         </tr>
       </table>
   </td>
@@ -1955,8 +1809,8 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a id="a982821eb1b6284a7eb396d1d65af671c" name="a982821eb1b6284a7eb396d1d65af671c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a982821eb1b6284a7eb396d1d65af671c">&#9670;&nbsp;</a></span>LABELBBINSTANCES</h2>
+<a id="af3fd6ae727c96a5d4fbc85c16edc717d" name="af3fd6ae727c96a5d4fbc85c16edc717d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3fd6ae727c96a5d4fbc85c16edc717d">&#9670;&nbsp;</a></span>LABELINSTANCES_ID_DATUMARO</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1965,7 +1819,7 @@ template&lt;class T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const std::string seerep_hdf5_core::Hdf5CoreGeneral::LABELBBINSTANCES = &quot;labelBBInstances&quot;</td>
+          <td class="memname">const std::string seerep_hdf5_core::Hdf5CoreGeneral::LABELINSTANCES_ID_DATUMARO</td>
         </tr>
       </table>
   </td>
@@ -1974,73 +1828,9 @@ template&lt;class T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a id="ac621f66d2e9dab8025b42b0b39c8e924" name="ac621f66d2e9dab8025b42b0b39c8e924"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac621f66d2e9dab8025b42b0b39c8e924">&#9670;&nbsp;</a></span>LABELGENERAL</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const std::string seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERAL = &quot;labelGeneral&quot;</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="abbefe86be5f50843d789eda9eedefb77" name="abbefe86be5f50843d789eda9eedefb77"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abbefe86be5f50843d789eda9eedefb77">&#9670;&nbsp;</a></span>LABELGENERALCONFIDENCES</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const std::string seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERALCONFIDENCES = &quot;labelGeneralConfidences&quot;</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a19b4fe044e996991f97a0f9780a2b7fa" name="a19b4fe044e996991f97a0f9780a2b7fa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a19b4fe044e996991f97a0f9780a2b7fa">&#9670;&nbsp;</a></span>LABELGENERALINSTANCES</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const std::string seerep_hdf5_core::Hdf5CoreGeneral::LABELGENERALINSTANCES = &quot;labelGeneralInstances&quot;</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">      <span class="stringliteral">&quot;labelInstancesIdDatumaro&quot;</span></div>
+</div><!-- fragment -->
 </div>
 </div>
 <a id="a5cc0b9aa14cb5d7a4c33524aec2809d0" name="a5cc0b9aa14cb5d7a4c33524aec2809d0"></a>

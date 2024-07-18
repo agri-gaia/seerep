@@ -967,7 +967,8 @@
 <h1 id="creating-retrieving-projects">Creating &amp; Retrieving Projects<a class="headerlink" href="#creating-retrieving-projects" title="Permanent link">&para;</a></h1>
 <h2 id="creating-new-projects">Creating new projects<a class="headerlink" href="#creating-new-projects" title="Permanent link">&para;</a></h2>
 <p>New projects for new data can be created in the following way:</p>
-<p>Source: <a href="https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/meta/gRPC_pb_createProject.py">examples/gRPC/meta/gRPC_pb_createProject.py</a></p>
+<p>Source:
+<a href="https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/meta/gRPC_pb_createProject.py">examples/gRPC/meta/gRPC_pb_createProject.py</a></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="ch">#!/usr/bin/env python3</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># NOTE: This file is referenced in the following mkdocs files:</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1">#   projects.md</span>
@@ -980,30 +981,38 @@
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="kn">from</span> <span class="nn">seerep.util.common</span> <span class="kn">import</span> <span class="n">get_gRPC_channel</span>
 <a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
 <a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="k">def</span> <span class="nf">create_project</span><span class="p">(</span><span class="n">grpc_channel</span><span class="p">:</span> <span class="n">Channel</span> <span class="o">=</span> <span class="n">get_gRPC_channel</span><span class="p">())</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    <span class="n">stub</span> <span class="o">=</span> <span class="n">metaOperations</span><span class="o">.</span><span class="n">MetaOperationsStub</span><span class="p">(</span><span class="n">grpc_channel</span><span class="p">)</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    <span class="n">response</span> <span class="o">=</span> <span class="n">stub</span><span class="o">.</span><span class="n">CreateProject</span><span class="p">(</span><span class="n">projectCreation_pb2</span><span class="o">.</span><span class="n">ProjectCreation</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;testproject&quot;</span><span class="p">,</span> <span class="n">mapFrameId</span><span class="o">=</span><span class="s2">&quot;map&quot;</span><span class="p">))</span>
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">uuid</span>
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    <span class="n">ret</span> <span class="o">=</span> <span class="n">create_project</span><span class="p">()</span>
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The new project on the server is (name/uuid):&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">ret</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">ret</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="k">def</span> <span class="nf">create_project</span><span class="p">(</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    <span class="n">grpc_channel</span><span class="p">:</span> <span class="n">Channel</span> <span class="o">=</span> <span class="n">get_gRPC_channel</span><span class="p">(),</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    <span class="n">stub</span> <span class="o">=</span> <span class="n">metaOperations</span><span class="o">.</span><span class="n">MetaOperationsStub</span><span class="p">(</span><span class="n">grpc_channel</span><span class="p">)</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    <span class="n">response</span> <span class="o">=</span> <span class="n">stub</span><span class="o">.</span><span class="n">CreateProject</span><span class="p">(</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>        <span class="n">projectCreation_pb2</span><span class="o">.</span><span class="n">ProjectCreation</span><span class="p">(</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;testproject&quot;</span><span class="p">,</span> <span class="n">mapFrameId</span><span class="o">=</span><span class="s2">&quot;map&quot;</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>        <span class="p">)</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    <span class="p">)</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">uuid</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    <span class="n">ret</span> <span class="o">=</span> <span class="n">create_project</span><span class="p">()</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The new project on the server is (name/uuid):&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">ret</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">ret</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 </code></pre></div>
 <p>Output:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>The<span class="w"> </span>new<span class="w"> </span>project<span class="w"> </span>on<span class="w"> </span>the<span class="w"> </span>server<span class="w"> </span>is<span class="w"> </span><span class="o">(</span>name/uuid<span class="o">)</span>:
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">        </span>testproject<span class="w"> </span>eff47bc9-c39e-430e-8153-88e0eab65768
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">        </span>testproject<span class="w"> </span>ff739be8-cf0c-4657-bff0-f66f3e7f578d
 </code></pre></div>
 <h2 id="retrieving-projects">Retrieving projects<a class="headerlink" href="#retrieving-projects" title="Permanent link">&para;</a></h2>
-<p>After we created two projects, we can query them. Currently the name doesn't have to be unique.</p>
+<p>After we created two projects, we can query them. Currently the name doesn't
+have to be unique.</p>
 <!-- markdownlint-disable -->
 
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Flatbuffers</label><label for="__tabbed_1_2">Protocol Buffers</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<p>Source: <a href="https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/meta/gRPC_fb_getProjects.py">examples/gRPC/meta/gRPC_fb_getProjects.py</a></p>
+<p>Source:
+<a href="https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/meta/gRPC_fb_getProjects.py">examples/gRPC/meta/gRPC_fb_getProjects.py</a></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="ch">#!/usr/bin/env python3</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1"># NOTE: This file is referenced in the following mkdocs files:</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1">#   projects.md</span>
@@ -1051,16 +1060,22 @@
 <a id="__codelineno-2-45" name="__codelineno-2-45" href="#__codelineno-2-45"></a>
 <a id="__codelineno-2-46" name="__codelineno-2-46" href="#__codelineno-2-46"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The server has the following projects (name/uuid):&quot;</span><span class="p">)</span>
 <a id="__codelineno-2-47" name="__codelineno-2-47" href="#__codelineno-2-47"></a>    <span class="k">for</span> <span class="n">project</span> <span class="ow">in</span> <span class="n">projects_list</span><span class="p">:</span>
-<a id="__codelineno-2-48" name="__codelineno-2-48" href="#__codelineno-2-48"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">project</span><span class="o">.</span><span class="n">Name</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">project</span><span class="o">.</span><span class="n">Uuid</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span>
+<a id="__codelineno-2-48" name="__codelineno-2-48" href="#__codelineno-2-48"></a>        <span class="nb">print</span><span class="p">(</span>
+<a id="__codelineno-2-49" name="__codelineno-2-49" href="#__codelineno-2-49"></a>            <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span>
+<a id="__codelineno-2-50" name="__codelineno-2-50" href="#__codelineno-2-50"></a>            <span class="o">+</span> <span class="n">project</span><span class="o">.</span><span class="n">Name</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-51" name="__codelineno-2-51" href="#__codelineno-2-51"></a>            <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+<a id="__codelineno-2-52" name="__codelineno-2-52" href="#__codelineno-2-52"></a>            <span class="o">+</span> <span class="n">project</span><span class="o">.</span><span class="n">Uuid</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-53" name="__codelineno-2-53" href="#__codelineno-2-53"></a>        <span class="p">)</span>
 </code></pre></div>
 <p>Output:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>The server has the following projects (name/uuid):
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    testproject 5c1ed18e-9180-40e1-a79b-594f8266d898
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    testproject 9fc3011f-4a3c-400e-9170-06973a6fb395
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    testproject 842de425-2d50-4adf-8aa3-6df257a7c76c
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    testproject ff739be8-cf0c-4657-bff0-f66f3e7f578d
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<p>Source: <a href="https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/meta/gRPC_pb_getProjects.py">examples/gRPC/meta/gRPC_pb_getProjects.py</a></p>
+<p>Source:
+<a href="https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/meta/gRPC_pb_getProjects.py">examples/gRPC/meta/gRPC_pb_getProjects.py</a></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="ch">#!/usr/bin/env python3</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="c1"># NOTE: This file is referenced in the following mkdocs files:</span>
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1">#   projects.md</span>
@@ -1073,29 +1088,31 @@
 <a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="kn">from</span> <span class="nn">seerep.util.common</span> <span class="kn">import</span> <span class="n">get_gRPC_channel</span>
 <a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>
 <a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>
-<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="k">def</span> <span class="nf">get_projects</span><span class="p">(</span><span class="n">grpc_channel</span><span class="p">:</span> <span class="n">Channel</span> <span class="o">=</span> <span class="n">get_gRPC_channel</span><span class="p">())</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
-<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>    <span class="n">stub</span> <span class="o">=</span> <span class="n">metaOperations</span><span class="o">.</span><span class="n">MetaOperationsStub</span><span class="p">(</span><span class="n">grpc_channel</span><span class="p">)</span>
-<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>
-<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>    <span class="n">response</span> <span class="o">=</span> <span class="n">stub</span><span class="o">.</span><span class="n">GetProjects</span><span class="p">(</span><span class="n">empty_pb2</span><span class="o">.</span><span class="n">Empty</span><span class="p">())</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="k">def</span> <span class="nf">get_projects</span><span class="p">(</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>    <span class="n">grpc_channel</span><span class="p">:</span> <span class="n">Channel</span> <span class="o">=</span> <span class="n">get_gRPC_channel</span><span class="p">(),</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>    <span class="n">stub</span> <span class="o">=</span> <span class="n">metaOperations</span><span class="o">.</span><span class="n">MetaOperationsStub</span><span class="p">(</span><span class="n">grpc_channel</span><span class="p">)</span>
 <a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>
-<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>    <span class="n">projects_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
-<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The server has the following projects (name/uuid):&quot;</span><span class="p">)</span>
-<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>
-<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a>    <span class="k">for</span> <span class="n">projectinfo</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">projects</span><span class="p">:</span>
-<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a>        <span class="n">projects_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">projectinfo</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">projectinfo</span><span class="o">.</span><span class="n">uuid</span><span class="p">))</span>
-<a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a>
-<a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a>    <span class="k">return</span> <span class="n">projects_list</span>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>    <span class="n">response</span> <span class="o">=</span> <span class="n">stub</span><span class="o">.</span><span class="n">GetProjects</span><span class="p">(</span><span class="n">empty_pb2</span><span class="o">.</span><span class="n">Empty</span><span class="p">())</span>
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>    <span class="n">projects_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The server has the following projects (name/uuid):&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a>
+<a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a>    <span class="k">for</span> <span class="n">projectinfo</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">projects</span><span class="p">:</span>
+<a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a>        <span class="n">projects_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">projectinfo</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">projectinfo</span><span class="o">.</span><span class="n">uuid</span><span class="p">))</span>
 <a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a>
-<a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a>
-<a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-<a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a>    <span class="n">project_list</span> <span class="o">=</span> <span class="n">get_projects</span><span class="p">()</span>
-<a id="__codelineno-4-29" name="__codelineno-4-29" href="#__codelineno-4-29"></a>    <span class="k">for</span> <span class="n">proj</span> <span class="ow">in</span> <span class="n">project_list</span><span class="p">:</span>
-<a id="__codelineno-4-30" name="__codelineno-4-30" href="#__codelineno-4-30"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">proj</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">proj</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a>    <span class="k">return</span> <span class="n">projects_list</span>
+<a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a>
+<a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a>
+<a id="__codelineno-4-29" name="__codelineno-4-29" href="#__codelineno-4-29"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<a id="__codelineno-4-30" name="__codelineno-4-30" href="#__codelineno-4-30"></a>    <span class="n">project_list</span> <span class="o">=</span> <span class="n">get_projects</span><span class="p">()</span>
+<a id="__codelineno-4-31" name="__codelineno-4-31" href="#__codelineno-4-31"></a>    <span class="k">for</span> <span class="n">proj</span> <span class="ow">in</span> <span class="n">project_list</span><span class="p">:</span>
+<a id="__codelineno-4-32" name="__codelineno-4-32" href="#__codelineno-4-32"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">proj</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">proj</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 </code></pre></div>
 <p>Output:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>The Server has the following projects (name/uuid):
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    testproject 5c1ed18e-9180-40e1-a79b-594f8266d898
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    testproject 9fc3011f-4a3c-400e-9170-06973a6fb395
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>The server has the following projects (name/uuid):
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    testproject 842de425-2d50-4adf-8aa3-6df257a7c76c
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    testproject ff739be8-cf0c-4657-bff0-f66f3e7f578d
 </code></pre></div>
 </div>
 </div>

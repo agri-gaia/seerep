@@ -1,25 +1,26 @@
 <map id="seerep_hdf5/seerep_hdf5_ros/include/seerep_hdf5_ros/hdf5_ros.h" name="seerep_hdf5/seerep_hdf5_ros/include/seerep_hdf5_ros/hdf5_ros.h">
-<area shape="rect" id="node1" title=" " alt="" coords="825,5,1009,61"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,213,69,240"/>
-<area shape="rect" id="node3" title=" " alt="" coords="1176,117,1235,143"/>
-<area shape="rect" id="node4" title=" " alt="" coords="1259,117,1413,143"/>
-<area shape="rect" id="node5" title=" " alt="" coords="93,213,240,240"/>
-<area shape="rect" id="node6" title=" " alt="" coords="265,213,431,240"/>
-<area shape="rect" id="node7" title=" " alt="" coords="456,213,683,240"/>
-<area shape="rect" id="node8" title=" " alt="" coords="707,213,877,240"/>
-<area shape="rect" id="node9" title=" " alt="" coords="1437,117,1601,143"/>
-<area shape="rect" id="node10" title=" " alt="" coords="1625,117,1772,143"/>
-<area shape="rect" id="node11" href="$hdf5__core__general_8h.html" title=" " alt="" coords="981,109,1152,151"/>
-<area shape="rect" id="node12" title=" " alt="" coords="2483,213,2639,240"/>
-<area shape="rect" id="node13" title=" " alt="" coords="2663,206,2825,247"/>
-<area shape="rect" id="node14" title=" " alt="" coords="2849,206,3017,247"/>
-<area shape="rect" id="node15" title=" " alt="" coords="901,199,1056,255"/>
-<area shape="rect" id="node16" title=" " alt="" coords="1081,213,1231,240"/>
-<area shape="rect" id="node17" title=" " alt="" coords="1256,213,1331,240"/>
-<area shape="rect" id="node18" title=" " alt="" coords="1355,213,1447,240"/>
-<area shape="rect" id="node19" title=" " alt="" coords="1471,206,1665,247"/>
-<area shape="rect" id="node20" title=" " alt="" coords="1689,213,1841,240"/>
-<area shape="rect" id="node21" title=" " alt="" coords="1866,213,2057,240"/>
-<area shape="rect" id="node22" title=" " alt="" coords="2081,213,2231,240"/>
-<area shape="rect" id="node23" title=" " alt="" coords="2256,213,2459,240"/>
+<area shape="rect" id="node1" title=" " alt="" coords="984,5,1168,61"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,206,69,233"/>
+<area shape="rect" id="node3" title=" " alt="" coords="1281,117,1340,143"/>
+<area shape="rect" id="node4" title=" " alt="" coords="1365,117,1518,143"/>
+<area shape="rect" id="node5" title=" " alt="" coords="93,206,240,233"/>
+<area shape="rect" id="node6" title=" " alt="" coords="265,206,431,233"/>
+<area shape="rect" id="node7" title=" " alt="" coords="456,206,683,233"/>
+<area shape="rect" id="node8" title=" " alt="" coords="707,206,877,233"/>
+<area shape="rect" id="node9" title=" " alt="" coords="1542,117,1706,143"/>
+<area shape="rect" id="node10" title=" " alt="" coords="1731,117,1877,143"/>
+<area shape="rect" id="node11" href="$hdf5__core__general_8h.html" title=" " alt="" coords="1087,109,1257,151"/>
+<area shape="rect" id="node12" title=" " alt="" coords="2921,206,3077,233"/>
+<area shape="rect" id="node13" title=" " alt="" coords="3101,199,3262,240"/>
+<area shape="rect" id="node14" title=" " alt="" coords="901,199,1069,240"/>
+<area shape="rect" id="node15" title=" " alt="" coords="1094,206,1250,233"/>
+<area shape="rect" id="node16" title=" " alt="" coords="1275,206,1493,233"/>
+<area shape="rect" id="node17" title=" " alt="" coords="1518,206,1669,233"/>
+<area shape="rect" id="node18" title=" " alt="" coords="1693,206,1768,233"/>
+<area shape="rect" id="node19" title=" " alt="" coords="1793,206,1885,233"/>
+<area shape="rect" id="node20" title=" " alt="" coords="1909,199,2102,240"/>
+<area shape="rect" id="node21" title=" " alt="" coords="2127,206,2279,233"/>
+<area shape="rect" id="node22" title=" " alt="" coords="2303,206,2494,233"/>
+<area shape="rect" id="node23" title=" " alt="" coords="2518,206,2669,233"/>
+<area shape="rect" id="node24" title=" " alt="" coords="2693,206,2896,233"/>
 </map>

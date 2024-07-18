@@ -1001,9 +1001,11 @@
 
 
 <h1 id="development-setup">Development Setup<a class="headerlink" href="#development-setup" title="Permanent link">&para;</a></h1>
-<p>For the development of SEEREP, a <a href="https://code.visualstudio.com/docs&#10;/devcontainers/containers">Visual Studio Code Dev Container</a> is used. This enables the use of a Docker container as a development environment,
-handling dependencies in a unified manner and abstracting different operating systems.
-For the system requirements, please refer to the
+<p>For the development of SEEREP, a
+<a href="https://code.visualstudio.com/docs/devcontainers/containers">Visual Studio Code Dev Container</a>
+is used. This enables the use of a Docker container as a development environment,
+handling dependencies in a unified manner and abstracting different operating
+systems. For the system requirements, please refer to the
 <a href="https://code.visualstudio.com/docs/devcontainers/containers#_system-requirements">Visual Studio Code Docs</a>.</p>
 <h2 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h2>
 <p>Clone the repository with:</p>
@@ -1020,15 +1022,16 @@ For the system requirements, please refer to the
 </div>
 </div>
 </div>
-<p>For the development, it is assumed that the directory designated for SEEREP's data storage is a sibling folder named
-<code>seerep-data</code>, located next to the repository. <strong>Make sure it exists</strong>!</p>
+<p>For the development, it is assumed that the directory designated for SEEREP's
+data storage is a sibling folder named <code>seerep-data</code>, located next to the
+repository. <strong>Make sure it exists</strong>!</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>mkdir<span class="w"> </span>seerep-data
 </code></pre></div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Since a Docker bind mount is used to mount the data storage directory inside the container, providing an
-incorrect or non-existent path for the host directory will result in an unclear error message when
-starting the container.</p>
+<p>Since a Docker bind mount is used to mount the data storage directory inside
+the container, providing an incorrect or non-existent path for the host
+directory will result in an unclear error message when starting the container.</p>
 </div>
 <!-- markdownlint-enable MD046 -->
 
@@ -1039,8 +1042,9 @@ starting the container.</p>
 <p>Launch Visual Studio Code within the repository:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>code<span class="w"> </span>seerep
 </code></pre></div>
-<p>The presence of a <code>.devcontainer</code> folder should automatically trigger the detection of a Dev-Container environment.
-To reopen the repository folder in the container, a prompt will appear on the lower right corner:</p>
+<p>The presence of a <code>.devcontainer</code> folder should automatically trigger the
+detection of a Dev-Container environment. To reopen the repository folder in the
+container, a prompt will appear on the lower right corner:</p>
 <figure>
 <p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Vs Code reopen in container notice" src="../../imgs/VS_Code_Reopen_In_Container.png" /></a>
   </p>
@@ -1048,15 +1052,18 @@ To reopen the repository folder in the container, a prompt will appear on the lo
 </figure>
 <p>Or in case this window doesn't open, use either <span class="keys"><kbd class="key-f1">F1</kbd></span> or <span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-shift">Shift</kbd><span>+</span><kbd class="key-p">P</kbd></span> and input
 <code>Remote-Containers: Reopen Folder in Container</code>. Confirm by pressing <span class="keys"><kbd class="key-enter">Enter</kbd></span>.</p>
-<p>Starting the Dev-Container the first time may take a while as it involves downloading the required
-<a href="https://github.com/agri-gaia/seerep/pkgs/container/seerep_base">SEEREP Docker image</a> (around 4 GB).
-Additionally Visual Studio Code extensions, Intellisense, and pre-commit checks are setup in the container.</p>
+<p>Starting the Dev-Container the first time may take a while as it involves
+downloading the required
+<a href="https://github.com/agri-gaia/seerep/pkgs/container/seerep_base">SEEREP Docker image</a>
+(around 4 GB). Additionally Visual Studio Code extensions, Intellisense, and
+pre-commit checks are setup in the container.</p>
 <h2 id="container-credentials">Container Credentials<a class="headerlink" href="#container-credentials" title="Permanent link">&para;</a></h2>
 <p>The default credentials have both the username and password set to <code>docker</code>.</p>
 <h2 id="pre-commit-checks">Pre Commit Checks<a class="headerlink" href="#pre-commit-checks" title="Permanent link">&para;</a></h2>
-<p>The repository uses pre-commit hooks to verify compliance with established coding guidelines and,
-if necessary, to format the code in a consistent way. The checks are automatically run before each commit and
-as part of the GitHub CI. To manually run the checks use:</p>
+<p>The repository uses pre-commit hooks to verify compliance with established coding
+guidelines and, if necessary, to format the code in a consistent way. The checks
+are automatically run before each commit and as part of the GitHub CI. To
+manually run the checks use:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>pre-commit<span class="w"> </span>run<span class="w"> </span>-a
 </code></pre></div>
 <p>The main hooks are:</p>
@@ -1068,10 +1075,11 @@ as part of the GitHub CI. To manually run the checks use:</p>
 <p>Along with other checks for Dockerfiles and YAML, see the complete list in the
 <a href="https://github.com/agri-gaia/seerep/blob/main/.pre-commit-config.yaml">configuration</a>.</p>
 <h2 id="debugging-with-vs-code">Debugging with VS-Code<a class="headerlink" href="#debugging-with-vs-code" title="Permanent link">&para;</a></h2>
-<p>Inside the Dev-Container, <code>catkin</code> builds the server executable in debug mode by default.
-To start debugging with VS-Code support, the provided launch configurations can be used.
-For that switch into the <code>Run and Debug</code> window (<span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-shift">Shift</kbd><span>+</span><kbd class="key-d">D</kbd></span> ) and select <code>seerep_server</code>from the dropdown.
-To finally launch the server, click the <img alt="▶" class="twemoji" src="../../assets/external/cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/25b6.svg" title=":arrow_forward:"> button.</p>
+<p>Inside the Dev-Container, <code>catkin</code> builds the server executable in debug mode by
+default. To start debugging with VS-Code support, the provided launch
+configurations can be used. For that switch into the <code>Run and Debug</code> window
+(<span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-shift">Shift</kbd><span>+</span><kbd class="key-d">D</kbd></span> ) and select <code>seerep_server</code>from the dropdown. To finally
+launch the server, click the <img alt="▶" class="twemoji" src="../../assets/external/cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/25b6.svg" title=":arrow_forward:"> button.</p>
 <figure>
 <p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="SEEREP start in D" src="../../imgs/Seerep_Debug_Start.png" /></a>
   </p>

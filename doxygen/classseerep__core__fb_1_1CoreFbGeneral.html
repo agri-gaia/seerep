@@ -160,6 +160,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:adac2700c68795cd74bb688becb91f789"><td class="memTemplItemLeft" align="right" valign="top">static void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbGeneral.html#adac2700c68795cd74bb688becb91f789">getAllFileAccessorFromCore</a> (std::shared_ptr&lt; <a class="el" href="classseerep__core_1_1Core.html">seerep_core::Core</a> &gt; &amp;seerepCore, std::unordered_map&lt; boost::uuids::uuid, std::shared_ptr&lt; C &gt;, boost::hash&lt; boost::uuids::uuid &gt; &gt; &amp;hdf5IoMap)</td></tr>
 <tr class="memdesc:adac2700c68795cd74bb688becb91f789"><td class="mdescLeft">&#160;</td><td class="mdescRight">gets the file accessors (the hdf5 file object itself, the mutex, the io object) for all the hdf5 files  <a href="classseerep__core__fb_1_1CoreFbGeneral.html#adac2700c68795cd74bb688becb91f789">More...</a><br /></td></tr>
 <tr class="separator:adac2700c68795cd74bb688becb91f789"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73b4d0ba37a7ff46d65db9692a15a5d8"><td class="memItemLeft" align="right" valign="top">static std::unordered_map&lt; std::string, <a class="el" href="structseerep__core__msgs_1_1LabelDatumaro.html">seerep_core_msgs::LabelDatumaro</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbGeneral.html#a73b4d0ba37a7ff46d65db9692a15a5d8">extractLabelsPerCategory</a> (const seerep::fb::DatasetUuidLabel &amp;datasetUuidLabel)</td></tr>
+<tr class="separator:a73b4d0ba37a7ff46d65db9692a15a5d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
@@ -169,6 +171,32 @@ Static Private Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >General functions for the other core-fb classes. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a73b4d0ba37a7ff46d65db9692a15a5d8" name="a73b4d0ba37a7ff46d65db9692a15a5d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73b4d0ba37a7ff46d65db9692a15a5d8">&#9670;&nbsp;</a></span>extractLabelsPerCategory()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_map&lt; std::string, <a class="el" href="structseerep__core__msgs_1_1LabelDatumaro.html">seerep_core_msgs::LabelDatumaro</a> &gt; seerep_core_fb::CoreFbGeneral::extractLabelsPerCategory </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::fb::DatasetUuidLabel &amp;&#160;</td>
+          <td class="paramname"><em>datasetUuidLabel</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="adac2700c68795cd74bb688becb91f789" name="adac2700c68795cd74bb688becb91f789"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#adac2700c68795cd74bb688becb91f789">&#9670;&nbsp;</a></span>getAllFileAccessorFromCore()</h2>
 
@@ -456,8 +484,9 @@ template&lt;class C &gt; </div>
 
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following file:<ul>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>seerep_srv/seerep_core_fb/include/seerep_core_fb/<a class="el" href="core__fb__general_8h_source.html">core_fb_general.h</a></li>
+<li>seerep_srv/seerep_core_fb/src/<a class="el" href="core__fb__general_8cpp.html">core_fb_general.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

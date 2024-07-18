@@ -134,12 +134,8 @@ $(document).ready(function(){initNavTree('hdf5__fb__general_8h.html',''); initRe
 <div class="contents">
 <div class="textblock"><code>#include &lt;highfive/H5File.hpp&gt;</code><br />
 <code>#include &lt;<a class="el" href="hdf5__core__general_8h_source.html">seerep_hdf5_core/hdf5_core_general.h</a>&gt;</code><br />
-<code>#include &lt;seerep_msgs/boundingbox2d_labeled_generated.h&gt;</code><br />
-<code>#include &lt;seerep_msgs/boundingbox2d_labeled_with_category_generated.h&gt;</code><br />
-<code>#include &lt;seerep_msgs/boundingbox_labeled_generated.h&gt;</code><br />
-<code>#include &lt;seerep_msgs/boundingbox_labeled_with_category_generated.h&gt;</code><br />
 <code>#include &lt;seerep_msgs/header_generated.h&gt;</code><br />
-<code>#include &lt;seerep_msgs/labels_with_instance_with_category_generated.h&gt;</code><br />
+<code>#include &lt;seerep_msgs/label_category_generated.h&gt;</code><br />
 <code>#include &lt;seerep_msgs/union_map_entry_generated.h&gt;</code><br />
 <code>#include &lt;flatbuffers/grpc.h&gt;</code><br />
 <code>#include &lt;grpcpp/grpcpp.h&gt;</code><br />
@@ -153,13 +149,13 @@ $(document).ready(function(){initNavTree('hdf5__fb__general_8h.html',''); initRe
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for hdf5_fb_general.h:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="hdf5__fb__general_8h__incl.svg" width="3586" height="275"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="hdf5__fb__general_8h__incl.svg" width="3267" height="246"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="hdf5__fb__general_8h__dep__incl.svg" width="1878" height="572"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="hdf5__fb__general_8h__dep__incl.svg" width="2076" height="572"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </div>
@@ -178,18 +174,10 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:ad9c6cb1caf1d2971ca346f36dee0006c"><td class="memItemLeft" align="right" valign="top">typedef flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::BoundingBoxLabeled &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__hdf5__fb.html#ad9c6cb1caf1d2971ca346f36dee0006c">seerep_hdf5_fb::BoundingBoxesLabeledFb</a></td></tr>
-<tr class="separator:ad9c6cb1caf1d2971ca346f36dee0006c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a148742fbbf4b6aa26d74b59bc04c8d11"><td class="memItemLeft" align="right" valign="top">typedef flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::BoundingBoxLabeledWithCategory &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__hdf5__fb.html#a148742fbbf4b6aa26d74b59bc04c8d11">seerep_hdf5_fb::BoundingBoxesLabeledWithCategoryFb</a></td></tr>
-<tr class="separator:a148742fbbf4b6aa26d74b59bc04c8d11"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a852a1a3a589e8dad6b8c1c8b51dd5800"><td class="memItemLeft" align="right" valign="top">typedef flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::BoundingBox2DLabeled &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__hdf5__fb.html#a852a1a3a589e8dad6b8c1c8b51dd5800">seerep_hdf5_fb::BoundingBoxes2dLabeledFb</a></td></tr>
-<tr class="separator:a852a1a3a589e8dad6b8c1c8b51dd5800"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a41f3fbfa548690a2dc67567db0366eeb"><td class="memItemLeft" align="right" valign="top">typedef flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::BoundingBox2DLabeledWithCategory &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__hdf5__fb.html#a41f3fbfa548690a2dc67567db0366eeb">seerep_hdf5_fb::BoundingBoxes2dLabeledWithCategoryFb</a></td></tr>
-<tr class="separator:a41f3fbfa548690a2dc67567db0366eeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad278710e09d34a79c3938335567b3c24"><td class="memItemLeft" align="right" valign="top">typedef flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::LabelWithInstance &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__hdf5__fb.html#ad278710e09d34a79c3938335567b3c24">seerep_hdf5_fb::GeneralLabelsFb</a></td></tr>
-<tr class="separator:ad278710e09d34a79c3938335567b3c24"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1cc82dd04a07f782c3f035b499e7bae1"><td class="memItemLeft" align="right" valign="top">typedef flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::LabelsWithInstanceWithCategory &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__hdf5__fb.html#a1cc82dd04a07f782c3f035b499e7bae1">seerep_hdf5_fb::GeneralLabelsWithCategoryFb</a></td></tr>
-<tr class="separator:a1cc82dd04a07f782c3f035b499e7bae1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a854d81c0b0ba292dc1fe1a0958bf030f"><td class="memItemLeft" align="right" valign="top">typedef flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::Label &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__hdf5__fb.html#a854d81c0b0ba292dc1fe1a0958bf030f">seerep_hdf5_fb::LabelsFb</a></td></tr>
+<tr class="separator:a854d81c0b0ba292dc1fe1a0958bf030f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a055423b431bcd19237647c4b4c7ebf0d"><td class="memItemLeft" align="right" valign="top">typedef flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::LabelCategory &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__hdf5__fb.html#a055423b431bcd19237647c4b4c7ebf0d">seerep_hdf5_fb::LabelsCategoryFb</a></td></tr>
+<tr class="separator:a055423b431bcd19237647c4b4c7ebf0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc0d43c315fa0a04fd4ece8ae3a28460"><td class="memItemLeft" align="right" valign="top">typedef flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::UnionMapEntry &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__hdf5__fb.html#abc0d43c315fa0a04fd4ece8ae3a28460">seerep_hdf5_fb::AttributeMapsFb</a></td></tr>
 <tr class="separator:abc0d43c315fa0a04fd4ece8ae3a28460"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>

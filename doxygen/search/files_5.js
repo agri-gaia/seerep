@@ -15,8 +15,6 @@ var searchData=
   ['fb_5ftf_5fservice_2ecpp_12',['fb_tf_service.cpp',['../fb__tf__service_8cpp.html',1,'']]],
   ['fb_5ftf_5fservice_2eh_13',['fb_tf_service.h',['../fb__tf__service_8h.html',1,'']]],
   ['fb_5fwrite_5fload_5ftest_2ecpp_14',['fb_write_load_test.cpp',['../fb__write__load__test_8cpp.html',1,'']]],
-  ['frame_5finfos_2efbs_15',['frame_infos.fbs',['../frame__infos_8fbs.html',1,'']]],
-  ['frame_5finfos_2eproto_16',['frame_infos.proto',['../frame__infos_8proto.html',1,'']]],
-  ['frame_5fquery_2efbs_17',['frame_query.fbs',['../frame__query_8fbs.html',1,'']]],
-  ['frame_5fquery_2eproto_18',['frame_query.proto',['../frame__query_8proto.html',1,'']]]
+  ['frame_5fquery_2efbs_15',['frame_query.fbs',['../frame__query_8fbs.html',1,'']]],
+  ['frame_5fquery_2eproto_16',['frame_query.proto',['../frame__query_8proto.html',1,'']]]
 ];

@@ -243,15 +243,9 @@ Static Private Member Functions</h2></td></tr>
 <tr class="memitem:a517932af3955e2194cabc28bfb2a368e"><td class="memItemLeft" align="right" valign="top">static boost::uuids::uuid&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbConversion.html#a517932af3955e2194cabc28bfb2a368e">fromFbDataHeaderUuid</a> (const std::string &amp;uuidMsg)</td></tr>
 <tr class="memdesc:a517932af3955e2194cabc28bfb2a368e"><td class="mdescLeft">&#160;</td><td class="mdescRight">converts (or generates if not set) the msg uuid of the flatbuffer data message to seerep core specific message  <a href="classseerep__core__fb_1_1CoreFbConversion.html#a517932af3955e2194cabc28bfb2a368e">More...</a><br /></td></tr>
 <tr class="separator:a517932af3955e2194cabc28bfb2a368e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abbe4680fabe8be6cd9f2f0e762d68772"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbConversion.html#abbe4680fabe8be6cd9f2f0e762d68772">fromFbDataLabelsGeneral</a> (const flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::LabelsWithInstanceWithCategory &gt; &gt; *labelsGeneral, std::unordered_map&lt; std::string, std::vector&lt; <a class="el" href="structseerep__core__msgs_1_1LabelWithInstance.html">seerep_core_msgs::LabelWithInstance</a> &gt; &gt; &amp;labelsWithInstancesWithCategory)</td></tr>
-<tr class="memdesc:abbe4680fabe8be6cd9f2f0e762d68772"><td class="mdescLeft">&#160;</td><td class="mdescRight">converts the labels_general with instances of the flatbuffer data message to seerep core specific message  <a href="classseerep__core__fb_1_1CoreFbConversion.html#abbe4680fabe8be6cd9f2f0e762d68772">More...</a><br /></td></tr>
-<tr class="separator:abbe4680fabe8be6cd9f2f0e762d68772"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac288b76a58194ebe5d5ae9a62d524f9b"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbConversion.html#ac288b76a58194ebe5d5ae9a62d524f9b">fromFbDataLabelsBb2d</a> (const flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::BoundingBox2DLabeledWithCategory &gt; &gt; *labelsBB2d, std::unordered_map&lt; std::string, std::vector&lt; <a class="el" href="structseerep__core__msgs_1_1LabelWithInstance.html">seerep_core_msgs::LabelWithInstance</a> &gt; &gt; &amp;labelsWithInstancesWithCategory)</td></tr>
-<tr class="memdesc:ac288b76a58194ebe5d5ae9a62d524f9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">converts the BoundingBox2DLabeled with instances of the flatbuffer data message to seerep core specific message  <a href="classseerep__core__fb_1_1CoreFbConversion.html#ac288b76a58194ebe5d5ae9a62d524f9b">More...</a><br /></td></tr>
-<tr class="separator:ac288b76a58194ebe5d5ae9a62d524f9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a824a107e8821c2a89f4b623313ce4dcd"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbConversion.html#a824a107e8821c2a89f4b623313ce4dcd">fromFbDataLabelsBb</a> (const flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::BoundingBoxLabeledWithCategory &gt; &gt; *labelsBB, std::unordered_map&lt; std::string, std::vector&lt; <a class="el" href="structseerep__core__msgs_1_1LabelWithInstance.html">seerep_core_msgs::LabelWithInstance</a> &gt; &gt; &amp;labelsWithInstancesWithCategory)</td></tr>
-<tr class="memdesc:a824a107e8821c2a89f4b623313ce4dcd"><td class="mdescLeft">&#160;</td><td class="mdescRight">converts the BoundingBoxLabeled with instances of the flatbuffer data message to seerep core specific message  <a href="classseerep__core__fb_1_1CoreFbConversion.html#a824a107e8821c2a89f4b623313ce4dcd">More...</a><br /></td></tr>
-<tr class="separator:a824a107e8821c2a89f4b623313ce4dcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa90a84c56184d4ba4eda6931a5739654"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbConversion.html#aa90a84c56184d4ba4eda6931a5739654">fromFbDataLabels</a> (const flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::LabelCategory &gt; &gt; *labelFb, std::unordered_map&lt; std::string, <a class="el" href="structseerep__core__msgs_1_1LabelDatumaro.html">seerep_core_msgs::LabelDatumaro</a> &gt; &amp;label)</td></tr>
+<tr class="memdesc:aa90a84c56184d4ba4eda6931a5739654"><td class="mdescLeft">&#160;</td><td class="mdescRight">converts the label of the flatbuffer data message to seerep core specific message  <a href="classseerep__core__fb_1_1CoreFbConversion.html#aa90a84c56184d4ba4eda6931a5739654">More...</a><br /></td></tr>
+<tr class="separator:aa90a84c56184d4ba4eda6931a5739654"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >This class converts between flatbuffer messages and seerep core specific messages. </p>
@@ -703,8 +697,8 @@ Static Private Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a824a107e8821c2a89f4b623313ce4dcd" name="a824a107e8821c2a89f4b623313ce4dcd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a824a107e8821c2a89f4b623313ce4dcd">&#9670;&nbsp;</a></span>fromFbDataLabelsBb()</h2>
+<a id="aa90a84c56184d4ba4eda6931a5739654" name="aa90a84c56184d4ba4eda6931a5739654"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa90a84c56184d4ba4eda6931a5739654">&#9670;&nbsp;</a></span>fromFbDataLabels()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -713,16 +707,16 @@ Static Private Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void seerep_core_fb::CoreFbConversion::fromFbDataLabelsBb </td>
+          <td class="memname">void seerep_core_fb::CoreFbConversion::fromFbDataLabels </td>
           <td>(</td>
-          <td class="paramtype">const flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::BoundingBoxLabeledWithCategory &gt; &gt; *&#160;</td>
-          <td class="paramname"><em>labelsBB</em>, </td>
+          <td class="paramtype">const flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::LabelCategory &gt; &gt; *&#160;</td>
+          <td class="paramname"><em>labelFb</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::unordered_map&lt; std::string, std::vector&lt; <a class="el" href="structseerep__core__msgs_1_1LabelWithInstance.html">seerep_core_msgs::LabelWithInstance</a> &gt; &gt; &amp;&#160;</td>
-          <td class="paramname"><em>labelsWithInstancesWithCategory</em>&#160;</td>
+          <td class="paramtype">std::unordered_map&lt; std::string, <a class="el" href="structseerep__core__msgs_1_1LabelDatumaro.html">seerep_core_msgs::LabelDatumaro</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>label</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -737,101 +731,11 @@ Static Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>converts the BoundingBoxLabeled with instances of the flatbuffer data message to seerep core specific message </p>
+<p>converts the label of the flatbuffer data message to seerep core specific message </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">labelsBB</td><td>the BoundingBoxLabeled with instances in the flatbuffer data message </td></tr>
-    <tr><td class="paramname">labelWithInstance</td><td>the BoundingBoxLabeled with instances in the data message in seerep core format </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="ac288b76a58194ebe5d5ae9a62d524f9b" name="ac288b76a58194ebe5d5ae9a62d524f9b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac288b76a58194ebe5d5ae9a62d524f9b">&#9670;&nbsp;</a></span>fromFbDataLabelsBb2d()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void seerep_core_fb::CoreFbConversion::fromFbDataLabelsBb2d </td>
-          <td>(</td>
-          <td class="paramtype">const flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::BoundingBox2DLabeledWithCategory &gt; &gt; *&#160;</td>
-          <td class="paramname"><em>labelsBB2d</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::unordered_map&lt; std::string, std::vector&lt; <a class="el" href="structseerep__core__msgs_1_1LabelWithInstance.html">seerep_core_msgs::LabelWithInstance</a> &gt; &gt; &amp;&#160;</td>
-          <td class="paramname"><em>labelsWithInstancesWithCategory</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>converts the BoundingBox2DLabeled with instances of the flatbuffer data message to seerep core specific message </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">labelsGeneral</td><td>the BoundingBox2DLabeled with instances in the flatbuffer data message </td></tr>
-    <tr><td class="paramname">labelWithInstance</td><td>the BoundingBox2DLabeled with instances in the data message in seerep core format </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="abbe4680fabe8be6cd9f2f0e762d68772" name="abbe4680fabe8be6cd9f2f0e762d68772"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abbe4680fabe8be6cd9f2f0e762d68772">&#9670;&nbsp;</a></span>fromFbDataLabelsGeneral()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void seerep_core_fb::CoreFbConversion::fromFbDataLabelsGeneral </td>
-          <td>(</td>
-          <td class="paramtype">const flatbuffers::Vector&lt; flatbuffers::Offset&lt; seerep::fb::LabelsWithInstanceWithCategory &gt; &gt; *&#160;</td>
-          <td class="paramname"><em>labelsGeneral</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::unordered_map&lt; std::string, std::vector&lt; <a class="el" href="structseerep__core__msgs_1_1LabelWithInstance.html">seerep_core_msgs::LabelWithInstance</a> &gt; &gt; &amp;&#160;</td>
-          <td class="paramname"><em>labelsWithInstancesWithCategory</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>converts the labels_general with instances of the flatbuffer data message to seerep core specific message </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">labelsGeneral</td><td>the labels_general with instances in the flatbuffer data message </td></tr>
-    <tr><td class="paramname">labelsWithInstancesWithCategory</td><td>the labels_general with instances (per category) in the data message in seerep core format </td></tr>
+    <tr><td class="paramname">labelFb</td><td>the label in the flatbuffer data message </td></tr>
+    <tr><td class="paramname">label</td><td>the llabel (per category) in the data message in seerep core format </td></tr>
   </table>
   </dd>
 </dl>
