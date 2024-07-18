@@ -31,7 +31,7 @@ void Hdf5PbImage::writeImage(const std::string& id,
     image.encoding(), image.is_bigendian(), image.uuid_camera_intrinsics()
   };
 
-  writeImageAttributes(id, imageAttributes);
+  writeImageAttributes(*dataGroupPtr, imageAttributes);
 
   const uint8_t* arrayStartPtr =
       reinterpret_cast<const uint8_t*>(image.data().c_str());

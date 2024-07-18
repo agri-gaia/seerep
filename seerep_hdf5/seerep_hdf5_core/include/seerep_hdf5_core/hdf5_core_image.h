@@ -106,7 +106,7 @@ public:
    * @param id uuid of the image data group
    * @param attributes struct with the general attributes
    */
-  void writeImageAttributes(const std::string& id,
+  void writeImageAttributes(HighFive::Group& group,
                             const ImageAttributes& attributes);
 
   /**

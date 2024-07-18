@@ -16,27 +16,35 @@ void Hdf5FbImage::writeImage(const std::string& id,
                              const seerep::fb::Image& image)
 {
   const std::scoped_lock lock(*m_write_mtx);
-
-  std::string hdf5GroupPath = getHdf5GroupPath(id);
-  std::string hdf5DatasetRawDataPath = getHdf5DataSetPath(id);
+  const std::string hdf5GroupPath = getHdf5GroupPath(id);
 
   HighFive::DataSpace dataSpace(image.height() * image.step());
-  auto dataGroupPtr = getHdf5Group(hdf5GroupPath, true);
-  auto dataSetPtr = getHdf5DataSet<uint8_t>(hdf5DatasetRawDataPath, dataSpace);
+  std::shared_ptr<HighFive::Group> dataGroup =
+      getHdf5Group(hdf5GroupPath, true);
 
-  writeHeaderAttributes(*dataGroupPtr, image.header());
+  writeHeaderAttributes(*dataGroup, image.header());
 
   seerep_hdf5_core::ImageAttributes imageAttributes = {
     image.height(),       image.width(),
     image.step(),         image.encoding()->str(),
     image.is_bigendian(), image.uuid_cameraintrinsics()->str()
   };
-  writeImageAttributes(id, imageAttributes);
+  writeImageAttributes(*dataGroup, imageAttributes);
 
-  const uint8_t* arrayStartPtr = image.data()->Data();
-  // use pointers from start and end of the array as iterators
-  dataSetPtr->write(std::vector<uint8_t>(arrayStartPtr,
-                                         arrayStartPtr + image.data()->size()));
+  if (image.data() != nullptr)
+  {
+    const std::string rawDataPath = getHdf5DataSetPath(id);
+    getHdf5DataSet<uint8_t>(rawDataPath, dataSpace)
+        ->write(
+            std::vector<uint8_t>(image.data()->begin(), image.data()->end()));
+  }
+
+  if (image.uri() != nullptr)
+  {
+    writeAttributeToHdf5<std::string>(
+        *dataGroup, seerep_hdf5_core::Hdf5CoreGeneral::DATA_URI,
+        image.uri()->str());
+  }
 
   // name is currently ambiguous, use fully qualified name
   seerep_hdf5_fb::Hdf5FbGeneral::writeLabelsFb(
