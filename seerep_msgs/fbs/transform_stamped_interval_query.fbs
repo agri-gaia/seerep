@@ -1,0 +1,12 @@
+include "transform_stamped_query.fbs";
+include "time_interval.fbs";
+
+namespace seerep.fb;
+
+table TransformStampedIntervalQuery
+{
+    transform_stamped_query: seerep.fb.TransformStampedQuery;
+    time_interval: seerep.fb.TimeInterval;
+}
+
+root_type TransformStampedIntervalQuery;

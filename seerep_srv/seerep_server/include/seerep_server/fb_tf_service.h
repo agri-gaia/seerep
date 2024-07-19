@@ -24,6 +24,13 @@ public:
       grpc::ServerReader<
           flatbuffers::grpc::Message<seerep::fb::TransformStamped>>* reader,
       flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response);
+
+  grpc::Status DeleteTransformStamped(
+      grpc::ServerContext* context,
+      grpc::ServerReader<flatbuffers::grpc::Message<
+          seerep::fb::TransformStampedIntervalQuery>>* reader,
+      flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response);
+
   grpc::Status
   GetFrames(grpc::ServerContext* context,
             const flatbuffers::grpc::Message<seerep::fb::FrameQuery>* request,

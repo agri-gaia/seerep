@@ -26,6 +26,11 @@ public:
 
   void writeTransformStamped(const seerep::fb::TransformStamped& tf);
 
+  bool delTransformStamped(std::string parentFrameId, std::string childFrameId,
+                           const bool isStatic,
+                           const seerep::fb::Timestamp& timeMin,
+                           const seerep::fb::Timestamp& timeMax) const;
+
   std::optional<std::vector<flatbuffers::Offset<seerep::fb::TransformStamped>>>
   readTransformStamped(const std::string& id, const bool isStatic);
   std::optional<std::vector<std::string>>

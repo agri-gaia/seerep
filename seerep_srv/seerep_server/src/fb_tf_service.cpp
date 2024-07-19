@@ -78,6 +78,49 @@ grpc::Status FbTfService::TransferTransformStamped(
   return grpc::Status::OK;
 }
 
+grpc::Status FbTfService::DeleteTransformStamped(
+    grpc::ServerContext* context,
+    grpc::ServerReader<
+        flatbuffers::grpc::Message<seerep::fb::TransformStampedIntervalQuery>>*
+        reader,
+    flatbuffers::grpc::Message<seerep::fb::ServerResponse>* response)
+{
+  (void)context;  // ignore that variable without causing warnings
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
+      << "received transform deletion request... ";
+
+  boost::uuids::uuid projectUuid;
+
+  try
+  {
+  }
+  catch (std::runtime_error const& e)
+  {
+    // mainly catching "invalid uuid string" when transforming uuid_project from
+    // string to uuid also catching core doesn't have project with uuid error
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+        << e.what();
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (const std::exception& e)
+  {
+    // specific handling for all exceptions extending std::exception, except
+    // std::runtime_error which is handled explicitly
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+        << e.what();
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+  }
+  catch (...)
+  {
+    // catch any other errors (that we have no information about)
+    std::string msg = "Unknown failure occurred. Possible memory corruption";
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
+    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
+  }
+
+  return grpc::Status::OK;
+}
+
 grpc::Status FbTfService::GetFrames(
     grpc::ServerContext* context,
     const flatbuffers::grpc::Message<seerep::fb::FrameQuery>* request,
