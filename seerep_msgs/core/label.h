@@ -4,15 +4,16 @@
 #include <string.h>
 
 #include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
 
 namespace seerep_core_msgs
 {
 struct Label
 {
-  std::string label;
-  int labelIdDatumaro;
-  boost::uuids::uuid uuidInstance;
-  int instanceIdDatumaro;
+  std::string label = "";
+  int labelIdDatumaro = -1;
+  boost::uuids::uuid uuidInstance = boost::uuids::nil_uuid();
+  int instanceIdDatumaro = -1;
 };
 
 } /* namespace seerep_core_msgs */
