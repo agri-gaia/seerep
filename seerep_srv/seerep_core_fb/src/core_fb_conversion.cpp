@@ -704,7 +704,7 @@ void CoreFbConversion::fromFbDataLabels(
               .label = label->label()->str(),
               .labelIdDatumaro = label->labelIdDatumaro(),
               .uuidInstance = uuidInstance,
-              .instanceIdDatumaro = label->labelIdDatumaro() });
+              .instanceIdDatumaro = label->instanceIdDatumaro() });
         }
         labelDatumaroPtr->datumaroJson =
             labelsCategories->datumaroJson()->str();
