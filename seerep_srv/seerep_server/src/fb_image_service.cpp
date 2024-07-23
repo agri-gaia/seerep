@@ -110,15 +110,20 @@ grpc::Status FbImageService::TransferImage(
   flatbuffers::grpc::Message<seerep::fb::Image> imageMsg;
   std::vector<std::pair<std::string, boost::uuids::uuid>> projectImgUuids;
 
-  // add incoming image data to hdf5
   while (reader->Read(&imageMsg))
   {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
-        << "received image... ";
-    auto image = imageMsg.GetRoot();
-    std::string uuidProject = image->header()->uuid_project()->str();
+    const seerep::fb::Image* image = imageMsg.GetRoot();
 
-    if (!uuidProject.empty())
+    if ((image->uri() == nullptr || image->uri()->str().empty()) &&
+        image->data() == nullptr)
+    {
+      answer = "Image message must contain an uri or payload";
+      return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, answer);
+    }
+
+    const std::string projectUuid = image->header()->uuid_project()->str();
+
+    if (!projectUuid.empty())
     {
       try
       {

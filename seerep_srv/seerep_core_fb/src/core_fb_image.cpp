@@ -70,8 +70,7 @@ boost::uuids::uuid CoreFbImage::addDataToHdf5(const seerep::fb::Image& img)
   }
   else
   {
-    throw std::invalid_argument(
-        "Invalid uuid for camera intrinsics or project recieved");
+    throw std::invalid_argument("Camera instrinsic UUID does not exist");
   }
 }
 
