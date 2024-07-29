@@ -89,34 +89,89 @@ grpc::Status FbTfService::DeleteTransformStamped(
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
       << "received transform deletion request... ";
 
-  boost::uuids::uuid projectUuid;
+  std::string answer = "selected tfs deleted!";
 
-  try
+  flatbuffers::grpc::Message<seerep::fb::TransformStampedIntervalQuery>
+      tfIntervalQueryMsg;
+  std::unordered_set<boost::uuids::uuid, boost::hash<boost::uuids::uuid>>
+      projectUuids;
+  while (reader->Read(&tfIntervalQueryMsg))
   {
+    auto tfIntervalQuery = tfIntervalQueryMsg.GetRoot();
+    auto projectUuidStr = tfIntervalQuery->transform_stamped_query()
+                              ->header()
+                              ->uuid_project()
+                              ->str();
+    if (!projectUuidStr.empty())
+    {
+      try
+      {
+        projectUuids.insert(tfFb->deleteHdf5(*tfIntervalQuery));
+      }
+      catch (std::runtime_error const& e)
+      {
+        // mainly catching "invalid uuid string" when transforming uuid_project from
+        // string to uuid also catching core doesn't have project with uuid error
+        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+            << e.what();
+        return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+      }
+      catch (const std::exception& e)
+      {
+        // specific handling for all exceptions extending std::exception, except
+        // std::runtime_error which is handled explicitly
+        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+            << e.what();
+        return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+      }
+      catch (...)
+      {
+        // catch any other errors (that we have no information about)
+        std::string msg =
+            "Unknown failure occurred. Possible memory corruption";
+        BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+            << msg;
+        return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
+      }
+    }
+    else
+    {
+      answer = "one msg had no project uuid!";
+    }
   }
-  catch (std::runtime_error const& e)
+  for (auto projectUuid : projectUuids)
   {
-    // mainly catching "invalid uuid string" when transforming uuid_project from
-    // string to uuid also catching core doesn't have project with uuid error
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
-        << e.what();
-    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+    try
+    {
+      tfFb->reinitializeTFs(projectUuid);
+    }
+    catch (std::runtime_error const& e)
+    {
+      // mainly catching core doesn't have project with uuid error
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+          << e.what();
+      return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+    }
+    catch (const std::exception& e)
+    {
+      // specific handling for all exceptions extending std::exception, except
+      // std::runtime_error which is handled explicitly
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+          << e.what();
+      return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
+    }
+    catch (...)
+    {
+      // catch any other errors (that we have no information about)
+      std::string msg = "Unknown failure occurred. Possible memory corruption";
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+          << msg;
+      return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
+    }
   }
-  catch (const std::exception& e)
-  {
-    // specific handling for all exceptions extending std::exception, except
-    // std::runtime_error which is handled explicitly
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
-        << e.what();
-    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, e.what());
-  }
-  catch (...)
-  {
-    // catch any other errors (that we have no information about)
-    std::string msg = "Unknown failure occurred. Possible memory corruption";
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error) << msg;
-    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg);
-  }
+
+  seerep_server_util::createResponseFb(
+      answer, seerep::fb::TRANSMISSION_STATE_SUCCESS, response);
 
   return grpc::Status::OK;
 }

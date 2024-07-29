@@ -173,6 +173,11 @@ std::vector<std::string> CoreProject::getFrames()
   return m_coreTfs->getFrames();
 }
 
+void CoreProject::reinitializeTFs()
+{
+  m_coreTfs->recreateBufferAndDatasets();
+}
+
 void CoreProject::addCameraIntrinsics(
     const seerep_core_msgs::camera_intrinsics& ci)
 {

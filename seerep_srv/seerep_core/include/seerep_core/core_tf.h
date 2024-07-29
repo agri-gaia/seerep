@@ -97,6 +97,12 @@ public:
    */
   std::vector<std::string> getFrames();
 
+  /**
+   * @brief cleans the current tf buffer and loads the TFs into the buffer from
+   * the HDF5 file
+   */
+  void recreateBufferAndDatasets();
+
 private:
   /**
    * @brief loads the TFs into the buffer from the HDF5 file
