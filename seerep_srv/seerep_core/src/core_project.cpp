@@ -176,6 +176,12 @@ std::vector<std::string> CoreProject::getFrames()
 void CoreProject::reinitializeTFs()
 {
   m_coreTfs->recreateBufferAndDatasets();
+  m_coreDatasets->recreateSpatialRt(seerep_core_msgs::Datatype::Image,
+                                    m_ioImage);
+  m_coreDatasets->recreateSpatialRt(seerep_core_msgs::Datatype::PointCloud,
+                                    m_ioPointCloud);
+  m_coreDatasets->recreateSpatialRt(seerep_core_msgs::Datatype::Point,
+                                    m_ioPoint);
 }
 
 void CoreProject::addCameraIntrinsics(

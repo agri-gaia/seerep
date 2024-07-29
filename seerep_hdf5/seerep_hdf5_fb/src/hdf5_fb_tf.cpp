@@ -261,18 +261,20 @@ bool Hdf5FbTf::delTransformStamped(std::string parentFrameId,
   std::vector<std::vector<double>> reduced_trans;
   std::vector<std::vector<double>> reduced_rot;
 
-  for (size_t i = 0; i < idx.size();)
+  for (size_t i = 0; i < idx.size(); ++i)
   {
-    reduced_time.push_back(time[idx[i]]);
-    reduced_trans.push_back(trans[idx[i]]);
-    reduced_rot.push_back(rot[idx[i]]);
-
-    ++i;
     // ignore all elements in the timeinterval
     if (i == (size_t)firstDelIdx)
     {
+      if (endDelIdx == idx.size())
+      {
+        break;
+      }
       i = endDelIdx;
     }
+    reduced_time.push_back(time[idx[i]]);
+    reduced_trans.push_back(trans[idx[i]]);
+    reduced_rot.push_back(rot[idx[i]]);
   }
 
   auto reduced_size = reduced_time.size();
