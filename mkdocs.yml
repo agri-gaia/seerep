@@ -74,6 +74,7 @@ nav:
     - Test Setup: 'getting-started/tests.md'
     - Kown Issues: 'getting-started/known_issues.md'
   - Reference:
+    - gRPC API: reference/api.md
     - Package Overview: 'reference/packages.md'
     - Flatbuffers Abstractions: 'reference/pytests-message-abstractions.md'
     - Python Helpers: 'reference/python-helpers.md'
