@@ -53,10 +53,10 @@ def add_images(
     timestamp = createTimeStamp(
         fbb, *list(map(int, str(time.time()).split(".")))
     )
-    header = createHeader(fbb, timestamp, "map", project_uuid)
 
     fb_msgs = []
     for image in image_payloads:
+        header = createHeader(fbb, timestamp, "map", project_uuid, str(uuid4()))
         fb_image = createImage(
             fbb,
             header,
