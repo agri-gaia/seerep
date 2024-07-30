@@ -12,6 +12,7 @@
 #include <seerep_hdf5_fb/hdf5_fb_tf.h>
 #include <seerep_ros_conversions_fb/conversions.h>
 
+
 #include <filesystem>
 #include <fstream>
 
@@ -32,6 +33,10 @@
 #include <sensor_msgs/NavSatFix.h>
 #include <tf2_msgs/TFMessage.h>
 #include <vision_msgs/Detection2DArray.h>
+#include <sensor_msgs/CompressedImage.h>
+
+#include <cv_bridge/cv_bridge.h>
+#include <opencv2/opencv.hpp>
 
 // uuid
 #include <boost/functional/hash.hpp>
@@ -48,17 +53,12 @@ namespace seerep_grpc_ros
 class RosbagDumper
 {
 public:
-  RosbagDumper(const std::string& bagPath,
-               const std::string& classesMappingPath,
-               const std::string& hdf5FilePath,
-               const std::string& projectFrameId,
-               const std::string& projectName, const std::string& projectUuid,
-               const std::string& topicImage,
-               const std::string& topicCameraIntrinsics,
-               const std::string& topicDetection, const std::string& topicTf,
-               const std::string& topicTfStatic,
-               const std::string& topicGeoAnchor, float distanceCameraGround,
-               double maxViewingDistance, bool storeImages = true);
+  RosbagDumper(const std::string& bagPath, const std::string& classesMappingPath, const std::string& hdf5FilePath,
+               const std::string& projectFrameId, const std::string& projectName, const std::string& projectUuid,
+               const std::string& topicImage, const std::string& topicCameraIntrinsics,
+               const std::string& topicDetection, const std::string& topicTf, const std::string& topicTfStatic,
+               const std::string& topicGeoAnchor, float distanceCameraGround, double maxViewingDistance,
+               bool storeImages = true);
   ~RosbagDumper();
 
 private:
@@ -66,21 +66,20 @@ private:
   void getGeoAnchor();
   void getCameraIntrinsic();
   void iterateAndDumpImages();
+  void iterateAndDumpImagesCompressed();
   void iterateAndDumpDetections(bool storeImages);
   void iterateAndDumpTf();
   void iterateAndDumpTf(const std::string& topicTf, const bool isStatic);
+  sensor_msgs::Image::ConstPtr convertCompressedImageToImage(const sensor_msgs::CompressedImage::ConstPtr& msg);
 
   std::string translateNameToAgrovocConcept(std::string name);
   std::unordered_map<std::string, std::string> name2Concept;
 
   flatbuffers::grpc::Message<seerep::fb::PointStamped>
-  createPointForDetection(vision_msgs::Detection2D detection, int32_t stampSecs,
-                          uint32_t stampNanos, const std::string& frameId,
-                          const std::string& labelAgrovoc,
-                          const std::string& labelTrivial,
+  createPointForDetection(vision_msgs::Detection2D detection, int32_t stampSecs, uint32_t stampNanos,
+                          const std::string& frameId, const std::string& labelAgrovoc, const std::string& labelTrivial,
                           const std::string& instanceUUID);
-  void projectPixel(const float u, const float v, const float d, float& X,
-                    float& Y, float& Z);
+  void projectPixel(const float u, const float v, const float d, float& X, float& Y, float& Z);
   float calcDiameter(vision_msgs::Detection2D detection);
 
   std::shared_ptr<seerep_hdf5_core::Hdf5CoreGeneral> ioCoreGeneral;
