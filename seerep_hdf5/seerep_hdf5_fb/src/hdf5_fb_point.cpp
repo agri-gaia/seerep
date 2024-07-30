@@ -118,7 +118,10 @@ Hdf5FbPoint::readPoint(const std::string& id)
 
   pointStampedBuilder.add_attribute(attributeMapOffset);
   pointStampedBuilder.add_header(headerOffset);
-  pointStampedBuilder.add_labels(labelsOffset);
+  if (labelsOffset.has_value())
+  {
+    pointStampedBuilder.add_labels(labelsOffset.value());
+  }
   pointStampedBuilder.add_point(pointOffset);
 
   auto pointStampedOffset = pointStampedBuilder.Finish();

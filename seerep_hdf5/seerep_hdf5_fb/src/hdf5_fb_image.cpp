@@ -116,7 +116,10 @@ Hdf5FbImage::readImage(const std::string& id, const bool withoutData)
     imageBuilder.add_uri(dataUriOffset);
   }
   imageBuilder.add_header(headerOffset);
-  imageBuilder.add_labels(labelsOffset);
+  if (labelsOffset.has_value())
+  {
+    imageBuilder.add_labels(labelsOffset.value());
+  }
 
   auto imageOffset = imageBuilder.Finish();
   builder.Finish(imageOffset);
