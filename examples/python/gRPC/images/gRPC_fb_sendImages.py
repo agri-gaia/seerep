@@ -6,7 +6,6 @@ from uuid import uuid4
 import flatbuffers
 import numpy as np
 from grpc import Channel
-from seerep.fb import Image
 from seerep.fb import (
     camera_intrinsics_service_grpc_fb as camera_intrinsic_service,
 )
@@ -17,20 +16,19 @@ from seerep.util.fb_helper import (
     createHeader,
     createImage,
     createProject,
-    createQuery,
     createRegionOfInterest,
     createTimeStamp,
 )
 
 
-def add_images(
+def send_images(
     grpc_channel: Channel,
     project_uuid: str,
     camera_intrinsic_uuid: str,
     image_payloads: List[Union[np.ndarray, str]],
 ) -> List[bytes]:
     """
-    Adds images to a SEEREP project
+    Send images to a SEEREP project
 
     Args:
         grpc_channel (Channel): The gRPC channel.
@@ -75,46 +73,23 @@ def add_images(
     return fb_msgs
 
 
-def generate_image_storage(num_images: int) -> List[Union[np.ndarray, str]]:
+def generate_image_ressources(num_images: int) -> List[Union[np.ndarray, str]]:
     """
-    Generate payload data for a number of images.
+    Generate an image ressource which can either be a URI or random image data.
 
     Args:
         num_images (int): The number of payloads to generate.
 
     Returns:
-        List[Union[np.ndarray, str]]: A list of image payloads.
-        Each payload can be either a URI string or a numpy array
-        representing the actual image data.
+        List[Union[np.ndarray, str]]: A list of image ressources.
     """
-    payloads = []
+    ressources = []
     for i in range(num_images):
         if random.choice([True, False]):
-            payloads.append(f"https://example.com/image{i}.jpg")
+            ressources.append(f"https://example.com/image{i}.jpg")
         else:
-            payloads.append(np.random.rand(640, 480, 3).astype(np.uint8))
-    return payloads
-
-
-def get_image(grpc_channel: Channel, project_uuid: str) -> List[bytearray]:
-    """
-    Get all images from a SEEREP project.
-
-    Args:
-        grpc_channel (Channel): The gRPC channel to communicate with the server.
-        project_uuid (str): The UUID of the project.
-
-    Returns:
-        List[bytearray]: A list of bytearrays representing the images.
-    """
-    fbb = flatbuffers.Builder()
-    image_service_stub = image_service.ImageServiceStub(grpc_channel)
-    query = createQuery(
-        fbb,
-        projectUuids=[fbb.CreateString(project_uuid)],
-    )
-    fbb.Finish(query)
-    return image_service_stub.GetImage(bytes(fbb.Output()))
+            ressources.append(np.random.rand(640, 480, 3).astype(np.uint8))
+    return ressources
 
 
 def create_project(grpc_channel: Channel, project_name: str) -> str:
@@ -184,12 +159,9 @@ if __name__ == "__main__":
     project_uuid = create_project(channel, "testproject")
     camera_uuid = send_cameraintrinsics(channel, project_uuid)
 
-    add_images(channel, project_uuid, camera_uuid, generate_image_storage(10))
+    img_bufs = send_images(
+        channel, project_uuid, camera_uuid, generate_image_ressources(10)
+    )
 
-    received_image = get_image(channel, project_uuid)
-    if received_image:
-        for img_buf in received_image:
-            img = Image.Image.GetRootAs(img_buf)
-            print(
-                f"Received image with UUID: {img.Header().UuidMsgs().decode()}"
-            )
+    if img_bufs is not None and len(img_bufs) > 0:
+        print("Images sent successfully")
