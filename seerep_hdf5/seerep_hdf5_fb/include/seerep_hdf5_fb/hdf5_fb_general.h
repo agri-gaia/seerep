@@ -113,17 +113,16 @@ protected:
                        std::string uuidMsg);
 
   /**
-   * @brief Read general labels (with instances and of all categories) from hdf5
-   * and receive it as a flatbuffers message
+   * @brief Read all general labels from a datatype into a Flatbuffers message
    *
-   * @param datatypeGroup the data type the general labels should be written to
+   * @param datatypeGroup dat type the labels should be read from
    * e.g point cloud, image
-   * @param uuid the id of the data group, the general labels should be written to
-   * @param builder the flatbuffers message builder
-   * @return flatbuffers::Offset<GeneralLabelsWithCategoryFb> the flatbuffers general
-   * labels message (with instances and of all categories)
+   * @param uuid uuid of the HDF5 group the labels should be read from
+   * @param builder a flatbuffers message builder object
+   * @return std::optional<flatbuffers::Offset<LabelsCategoryFb>> all labels as
+   * a Flatbuffers message, if labels are present
    */
-  flatbuffers::Offset<LabelsCategoryFb>
+  std::optional<flatbuffers::Offset<LabelsCategoryFb>>
   readLabels(const std::string& datatypeGroup, const std::string& uuid,
              flatbuffers::grpc::MessageBuilder& builder);
 };

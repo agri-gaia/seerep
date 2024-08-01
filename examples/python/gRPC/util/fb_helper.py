@@ -1064,11 +1064,14 @@ def createTransformStamped(
 
 def createImage(
     builder: Builder,
-    image: np.ndarray,
     header: int,
     encoding: str,
     is_bigendian: bool,
     camera_intrinsics_uuid: str,
+    image: np.ndarray = None,
+    height: int = None,
+    width: int = None,
+    uri: str = None,
     labels: Union[List[int], None] = None,
 ) -> int:
     """
@@ -1098,16 +1101,22 @@ def createImage(
         label_offset = builder.EndVector()
 
     camera_intrinsics_uuid_offset = builder.CreateString(camera_intrinsics_uuid)
-    data_offset = builder.CreateByteVector(image.tobytes())
+    if image is not None:
+        data_offset = builder.CreateByteVector(image.tobytes())
+    if uri:
+        uri_offset = builder.CreateString(uri)
 
     Image.Start(builder)
     Image.AddHeader(builder, header)
-    Image.AddHeight(builder, image.shape[0])
-    Image.AddWidth(builder, image.shape[1])
+    Image.AddHeight(builder, height)
+    Image.AddWidth(builder, width)
     Image.AddEncoding(builder, encoding)
     Image.AddIsBigendian(builder, is_bigendian)
-    Image.AddStep(builder, image.nbytes // image.shape[0])
-    Image.AddData(builder, data_offset)
+    if image is not None:
+        Image.AddStep(builder, image.nbytes // image.shape[0])
+        Image.AddData(builder, data_offset)
+    if uri:
+        Image.AddUri(builder, uri_offset)
     if labels:
         Image.AddLabels(builder, label_offset)
     Image.AddUuidCameraintrinsics(builder, camera_intrinsics_uuid_offset)

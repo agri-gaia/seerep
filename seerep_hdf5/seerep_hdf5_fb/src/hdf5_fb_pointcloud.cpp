@@ -200,7 +200,10 @@ Hdf5FbPointCloud::readPointCloud2(const std::string& id, const bool withoutData)
     pointCloudBuilder.add_data(dataOffset);
   }
   pointCloudBuilder.add_is_dense(isDense);
-  pointCloudBuilder.add_labels(labelsOffset);
+  if (labelsOffset.has_value())
+  {
+    pointCloudBuilder.add_labels(labelsOffset.value());
+  }
   auto pointCloudOffset = pointCloudBuilder.Finish();
   builder.Finish(pointCloudOffset);
 

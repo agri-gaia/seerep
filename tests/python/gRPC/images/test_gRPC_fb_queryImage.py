@@ -1,14 +1,19 @@
 # test file for
 #   gRPC_fb_queryImage.py
 #   gRPC_pb_sendLabeledImage.py
-from typing import List
 
+import flatbuffers
 from boltons.iterutils import remap
 from google.protobuf import json_format
-from gRPC.images import gRPC_fb_queryImage as query_img
+from gRPC.images import gRPC_fb_queryImages
 from gRPC.images import gRPC_pb_sendLabeledImage as send_img
-from seerep.fb import Image
 from seerep.util.common import remap_keys, remap_to_snake_case, trunc_floats
+from seerep.util.fb_helper import (
+    create_label,
+    create_label_category,
+    createPoint2d,
+    createPolygon2D,
+)
 from seerep.util.fb_to_dict import SchemaFileNames, fb_flatc_dict
 
 
@@ -28,6 +33,7 @@ def _image_dict_pipeline(p, k, v):
 # test sending and querying the images
 def test_gRPC_fb_queryImages(grpc_channel, project_setup):
     proj_name, proj_uuid = project_setup
+    fbb = flatbuffers.Builder()
 
     sent_images = []
 
@@ -40,8 +46,38 @@ def test_gRPC_fb_queryImages(grpc_channel, project_setup):
 
     print(f"Sending images to project: {proj_name}; {proj_uuid}")
 
-    queried_image_list: List[Image.Image] = query_img.query_images_raw(
-        proj_uuid, grpc_channel
+    # create the data for the query
+    scale = 100
+    vertices = [
+        createPoint2d(fbb, x * scale, y * scale)
+        for x, y in [(-1.0, -1.0), (-1.0, 1.0), (1.0, 1.0), (1.0, -1.0)]
+    ]
+
+    polygon_2d = createPolygon2D(fbb, 700, -100, vertices)
+
+    labels = [
+        create_label(builder=fbb, label=label_str, label_id=1)
+        for label_str in ["label1", "label2"]
+    ]
+
+    labelsCategory = [
+        create_label_category(
+            builder=fbb,
+            labels=labels,
+            datumaro_json="a very valid datumaro json",
+            category="category A",
+        )
+    ]
+
+    matching_images = gRPC_fb_queryImages.query_images_raw(
+        fbb,
+        grpc_channel,
+        proj_uuid,
+        polygon2d=polygon_2d,
+        labels=labelsCategory,
+        withoutData=True,
+        fullyEncapsulated=False,
+        inMapFrame=True,
     )
 
     queried_image_dicts = [
@@ -49,7 +85,7 @@ def test_gRPC_fb_queryImages(grpc_channel, project_setup):
             fb_flatc_dict(img, SchemaFileNames.IMAGE),
             visit=_image_dict_pipeline,
         )
-        for img in queried_image_list
+        for img in matching_images
     ]
     sent_image_dicts = [
         remap(json_format.MessageToDict(img), visit=_image_dict_pipeline)
