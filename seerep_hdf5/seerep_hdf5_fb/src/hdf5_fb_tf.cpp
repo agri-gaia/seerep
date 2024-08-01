@@ -240,7 +240,8 @@ bool Hdf5FbTf::delTransformStamped(std::string parentFrameId,
   auto timeMaxIt =
       std::find_if(idx.begin(), idx.end(), [&time, &timeMax](size_t i) {
         return time[i][0] > timeMax.seconds() ||
-               (time[i][0] == timeMax.seconds() && time[i][1] > timeMax.nanos());
+               (time[i][0] == timeMax.seconds() &&
+                time[i][1] >= timeMax.nanos());
       });
 
   // first inclusive index
@@ -249,11 +250,11 @@ bool Hdf5FbTf::delTransformStamped(std::string parentFrameId,
   auto endDelIdx = std::distance(idx.begin(), timeMaxIt);
 
   // early abort if no transform is between the provided time interval
-  if (timeMinIt == idx.end() || firstDelIdx >= endDelIdx - 1)
+  if (timeMinIt == idx.end() || firstDelIdx >= endDelIdx)
   {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning)
         << "No tf was found in the timeinterval between " << timeMin.seconds()
-        << "s / " << timeMin.nanos() << "ns to " << timeMax.seconds() << "s / "
+        << "s / " << timeMin.nanos() << "ns and " << timeMax.seconds() << "s / "
         << timeMax.nanos() << "ns!";
     return true;
   }
@@ -261,12 +262,17 @@ bool Hdf5FbTf::delTransformStamped(std::string parentFrameId,
   std::vector<std::vector<double>> reduced_trans;
   std::vector<std::vector<double>> reduced_rot;
 
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
+      << "Deleting tfs from" << timeMin.seconds() << "s / " << timeMin.nanos()
+      << "ns (inclusive) up to " << timeMax.seconds() << "s / "
+      << timeMax.nanos() << "ns (exclusive)...";
+
   for (size_t i = 0; i < idx.size(); ++i)
   {
     // ignore all elements in the timeinterval
     if (i == (size_t)firstDelIdx)
     {
-      if (endDelIdx == idx.size())
+      if ((size_t)endDelIdx == idx.size())
       {
         break;
       }
