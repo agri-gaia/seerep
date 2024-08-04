@@ -181,6 +181,32 @@ class DatatypeImplementations:
             return fbh.createPolygon2D(builder, 100, 0, polygon_vertices)
 
         @classmethod
+        def mod_polygon2D(
+            cls, builder: Builder, quad_extent: float, height: float
+        ) -> Polygon2D.Polygon2D:
+            """
+            Creates a polygon with a quadratic extent with the
+            edge points being at (0, 0), (0, quad_extent),
+            (quad_extent, 0), (quad_extent, quad_extent).
+            Also the polygon starts at -100 offset height.
+
+            Args:
+                builder: The flatbuffers builder
+                quad_extent: The quad_extent on which the other three points
+                    are placed
+
+            Returns: The created Polygon2D type type
+            """
+            polygon_vertices = []
+            polygon_vertices.append(fbh.createPoint2d(builder, 0, 0))
+            polygon_vertices.append(fbh.createPoint2d(builder, 0, quad_extent))
+            polygon_vertices.append(
+                fbh.createPoint2d(builder, quad_extent, quad_extent)
+            )
+            polygon_vertices.append(fbh.createPoint2d(builder, quad_extent, 0))
+            return fbh.createPolygon2D(builder, height, -100, polygon_vertices)
+
+        @classmethod
         def time_interval(cls, builder: Builder) -> TimeInterval.TimeInterval:
             timeMin = fbh.createTimeStamp(builder, 1610549273, 0)
             timeMax = fbh.createTimeStamp(builder, 1938549273, 0)
@@ -217,12 +243,8 @@ class DatatypeImplementations:
             return None
 
         @classmethod
-        def projectuuid(cls, builder: Builder, channel: Channel) -> List[int]:
-            return [
-                builder.CreateString(
-                    fbh.getProject(builder, channel, "testproject")
-                )
-            ]
+        def projectuuid(cls, builder: Builder, channel: Channel) -> List[str]:
+            return [fbh.getProject(builder, channel, "testproject")]
 
         @classmethod
         # returns list of flatbuffered string, those are registered as ints
@@ -263,11 +285,7 @@ class DatatypeImplementations:
                         for i in range(0, uuids_by_proj[0].UuidsLength())
                     ]
                 )
-                # serialize the uuid strings
-                uuids = [
-                    builder.CreateString(uuids[i])
-                    for i in range(0, len(uuids), 2)
-                ]
+                uuids = [uuids[i] for i in range(0, len(uuids), 2)]
 
             return uuids
 
@@ -295,18 +313,9 @@ class DatatypeImplementations:
             # print("pcls: " + str(pcl2_uuids))
 
             # fill up return list with every second uuid
-            ret_lst = [
-                builder.CreateString(image_uuids[i])
-                for i in range(0, len(image_uuids), 2)
-            ]
-            ret_lst += [
-                builder.CreateString(point_uuids[i])
-                for i in range(0, len(point_uuids), 2)
-            ]
-            ret_lst += [
-                builder.CreateString(pcl2_uuids[i])
-                for i in range(0, len(pcl2_uuids), 2)
-            ]
+            ret_lst = [image_uuids[i] for i in range(0, len(image_uuids), 2)]
+            ret_lst += [point_uuids[i] for i in range(0, len(point_uuids), 2)]
+            ret_lst += [pcl2_uuids[i] for i in range(0, len(pcl2_uuids), 2)]
 
             return ret_lst
 

@@ -671,20 +671,32 @@ def createQuery(
     """
 
     if projectUuids:
-        Query.StartProjectuuidVector(builder, len(projectUuids))
-        for projectUuid in reversed(projectUuids):
+        # serialize strings
+        projectUuidsSerialized = [
+            builder.CreateString(projectUuid) for projectUuid in projectUuids
+        ]
+        Query.StartProjectuuidVector(builder, len(projectUuidsSerialized))
+        for projectUuid in reversed(projectUuidsSerialized):
             builder.PrependUOffsetTRelative(projectUuid)
         projectUuidsOffset = builder.EndVector()
 
     if instanceUuids:
-        Query.StartInstanceuuidVector(builder, len(instanceUuids))
-        for instance in reversed(instanceUuids):
+        # serialize strings
+        instanceUuidsSerialized = [
+            builder.CreateString(instanceUuid) for instanceUuid in instanceUuids
+        ]
+        Query.StartInstanceuuidVector(builder, len(instanceUuidsSerialized))
+        for instance in reversed(instanceUuidsSerialized):
             builder.PrependUOffsetTRelative(instance)
         instanceOffset = builder.EndVector()
 
     if dataUuids:
-        Query.StartDatauuidVector(builder, len(dataUuids))
-        for dataUuid in reversed(dataUuids):
+        # serialize strings
+        dataUuidsSerialized = [
+            builder.CreateString(dataUuid) for dataUuid in dataUuids
+        ]
+        Query.StartDatauuidVector(builder, len(dataUuidsSerialized))
+        for dataUuid in reversed(dataUuidsSerialized):
             builder.PrependUOffsetTRelative(dataUuid)
         dataUuidOffset = builder.EndVector()
 

@@ -143,6 +143,7 @@ grpc::Status FbTfService::DeleteTransformStamped(
   {
     try
     {
+      // TODO dont reinitialize if nothing was deleted
       tfFb->reinitializeTFs(projectUuid);
     }
     catch (std::runtime_error const& e)

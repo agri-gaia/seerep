@@ -182,10 +182,10 @@ if __name__ == "__main__":
         print("There is no project on the server or server is not reachable")
         sys.exit()
 
-    sent_tfs = send_artificial_tfs(
-        grpc_channel, proj_uuid, timestamps[:-1], "map", "camera"
-    )
+    # sent_tfs = send_artificial_tfs(
+    #     grpc_channel, proj_uuid, timestamps[:-2], "map", "camera"
+    # )
     del_tfs = delete_tfs(
-        timestamps[0], timestamps[7], "map", "camera", proj_uuid, grpc_channel
+        timestamps[2], timestamps[3], "map", "camera", proj_uuid, grpc_channel
     )
     print("deleted tfs")

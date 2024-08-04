@@ -254,8 +254,8 @@ bool Hdf5FbTf::delTransformStamped(std::string parentFrameId,
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning)
         << "No tf was found in the timeinterval between " << timeMin.seconds()
-        << "s / " << timeMin.nanos() << "ns and " << timeMax.seconds() << "s / "
-        << timeMax.nanos() << "ns!";
+        << "s / " << timeMin.nanos() << "ns (inclusive) and "
+        << timeMax.seconds() << "s / " << timeMax.nanos() << "ns (exclusive)!";
     return true;
   }
   std::vector<std::vector<int64_t>> reduced_time;

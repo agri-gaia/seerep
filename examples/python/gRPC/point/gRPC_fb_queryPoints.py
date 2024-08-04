@@ -44,7 +44,7 @@ def get_points_raw(
     timeMax = createTimeStamp(builder, 1938549273, 0)
     timeInterval = createTimeInterval(builder, timeMin, timeMax)
 
-    projectUuids = [builder.CreateString(target_proj_uuid)]
+    projectUuids = [target_proj_uuid]
 
     labelStr = ["label1", "label2"]
     labels = []
@@ -60,10 +60,8 @@ def get_points_raw(
         )
     )
 
-    dataUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
-    instanceUuids = [
-        builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")
-    ]
+    dataUuids = ["3e12e18d-2d53-40bc-a8af-c5cca3c3b248"]
+    instanceUuids = ["3e12e18d-2d53-40bc-a8af-c5cca3c3b248"]
 
     # 4. Create a query with parameters
     # all parameters are optional

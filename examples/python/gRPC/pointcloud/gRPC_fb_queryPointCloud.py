@@ -101,14 +101,10 @@ def query_pcs_raw(
     )
 
     # filter for specific data
-    data_uuids = [
-        fb_builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")
-    ]
-    instance_uuids = [
-        fb_builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")
-    ]
+    data_uuids = ["3e12e18d-2d53-40bc-a8af-c5cca3c3b248"]
+    instance_uuids = ["3e12e18d-2d53-40bc-a8af-c5cca3c3b248"]
 
-    project_uuids = [fb_builder.CreateString(target_proj_uuid)]
+    project_uuids = [target_proj_uuid]
 
     # set the query parameters according to your needs
     query = createQuery(
