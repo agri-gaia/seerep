@@ -83,10 +83,10 @@ geodesic coordinates of the project into the map frame beforehand.
 
 === "Flatbuffers"
 
-    Source: [examples/python/gRPC/images/gRPC_fb_queryImage.py](https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/images/gRPC_fb_queryImage.py)
+    Source: [examples/python/gRPC/images/gRPC_fb_queryImage.py](https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/images/gRPC_fb_queryImages.py)
 
     ```python
-    --8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_queryImage.py"
+    --8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_queryImages.py"
     ```
 
     After sending the images, executing the query script results in the following output:
