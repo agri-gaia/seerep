@@ -13,10 +13,10 @@
       
       
       
-        <link rel="prev" href="../pytests-message-abstractions/">
+        <link rel="prev" href="../../getting-started/known_issues/">
       
       
-        <link rel="next" href="../../tutorials/overview/">
+        <link rel="next" href="../packages/">
       
       
       <link rel="icon" href="../../imgs/Seerep_Favicon.png">
@@ -24,7 +24,7 @@
     
     
       
-        <title>Python Helpers - SEEREP Documentation</title>
+        <title>gRPC API - SEEREP Documentation</title>
       
     
     
@@ -87,7 +87,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#available-modules" class="md-skip">
+        <a href="#grpc-api" class="md-skip">
           Skip to content
         </a>
       
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Python Helpers
+              gRPC API
             
           </span>
         </div>
@@ -270,7 +270,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="../api/" class="md-tabs__link">
+        <a href="./" class="md-tabs__link">
           
   
     
@@ -611,10 +611,30 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../api/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    gRPC API
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -623,6 +643,155 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#flatbuffers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Flatbuffers
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Flatbuffers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#metaoperations" class="md-nav__link">
+    <span class="md-ellipsis">
+      MetaOperations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#imageservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      ImageService
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cameraintrinsicsservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      CameraIntrinsicsService
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pointcloudservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      PointCloudService
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tfservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      TfService
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pointservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      PointService
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protocol-buffers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Protocol Buffers
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Protocol Buffers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#metaoperations_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      MetaOperations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#imageservice_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      ImageService
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cameraintrinsicsservice_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      CameraIntrinsicsService
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pointcloudservice_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      PointCloudService
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tfservice_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      TfService
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -674,30 +843,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Python Helpers
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../python-helpers/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -706,95 +855,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#commonpy" class="md-nav__link">
-    <span class="md-ellipsis">
-      common.py
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#fb_helperpy" class="md-nav__link">
-    <span class="md-ellipsis">
-      fb_helper.py
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#service_managerpy" class="md-nav__link">
-    <span class="md-ellipsis">
-      service_manager.py
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#fb_to_dictpy" class="md-nav__link">
-    <span class="md-ellipsis">
-      fb_to_dict.py
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="fb_to_dict.py">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#fb_flatc_dict" class="md-nav__link">
-    <span class="md-ellipsis">
-      fb_flatc_dict()
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#catkin_find_schema_dir" class="md-nav__link">
-    <span class="md-ellipsis">
-      catkin_find_schema_dir()
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#schemafilenames" class="md-nav__link">
-    <span class="md-ellipsis">
-      SchemaFileNames
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -998,64 +1058,124 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#commonpy" class="md-nav__link">
+  <a href="#flatbuffers" class="md-nav__link">
     <span class="md-ellipsis">
-      common.py
+      Flatbuffers
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#fb_helperpy" class="md-nav__link">
-    <span class="md-ellipsis">
-      fb_helper.py
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#service_managerpy" class="md-nav__link">
-    <span class="md-ellipsis">
-      service_manager.py
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#fb_to_dictpy" class="md-nav__link">
-    <span class="md-ellipsis">
-      fb_to_dict.py
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="fb_to_dict.py">
+    <nav class="md-nav" aria-label="Flatbuffers">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#fb_flatc_dict" class="md-nav__link">
+  <a href="#metaoperations" class="md-nav__link">
     <span class="md-ellipsis">
-      fb_flatc_dict()
+      MetaOperations
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#catkin_find_schema_dir" class="md-nav__link">
+  <a href="#imageservice" class="md-nav__link">
     <span class="md-ellipsis">
-      catkin_find_schema_dir()
+      ImageService
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#schemafilenames" class="md-nav__link">
+  <a href="#cameraintrinsicsservice" class="md-nav__link">
     <span class="md-ellipsis">
-      SchemaFileNames
+      CameraIntrinsicsService
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pointcloudservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      PointCloudService
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tfservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      TfService
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pointservice" class="md-nav__link">
+    <span class="md-ellipsis">
+      PointService
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protocol-buffers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Protocol Buffers
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Protocol Buffers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#metaoperations_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      MetaOperations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#imageservice_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      ImageService
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cameraintrinsicsservice_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      CameraIntrinsicsService
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pointcloudservice_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      PointCloudService
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tfservice_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      TfService
     </span>
   </a>
   
@@ -1081,7 +1201,7 @@
                   
 
   
-    <a href="https://github.com/agri-gaia/seerep/edit/main/docs/mkdocs/reference/python-helpers.md" title="Edit this page" class="md-content__button md-icon">
+    <a href="https://github.com/agri-gaia/seerep/edit/main/docs/mkdocs/reference/api.md" title="Edit this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
     </a>
@@ -1089,112 +1209,435 @@
   
 
 
-<h1 id="available-modules">Available Modules<a class="headerlink" href="#available-modules" title="Permanent link">&para;</a></h1>
-<h2 id="commonpy">common.py<a class="headerlink" href="#commonpy" title="Permanent link">&para;</a></h2>
-<p>Contains common functions like <code>get_grpc_channel()</code> and some functions for
-passing into <code>boltons.iterutils.remap</code>.</p>
-<p>The source is located
-<a href="https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/util/common.py">here</a>.</p>
-<h2 id="fb_helperpy">fb_helper.py<a class="headerlink" href="#fb_helperpy" title="Permanent link">&para;</a></h2>
-<p>This is a module provided through the
-<a href="https://pypi.org/project/seerep-grpc/">seerep_grpc</a> package. It provides
-functions to construct a subset of the SEEREP flatbuffers message in one
-function call. Most of the functions only return the component for further
-composition into another datatype. If the component itself should be serialized
-<code>builder.Finish()</code> as well as <code>builder.Output()</code> need to be called, on the from
-the function retrieved value.</p>
-<p>The source is located
-<a href="https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/util/fb_helper.py">here</a>.</p>
-<h2 id="service_managerpy">service_manager.py<a class="headerlink" href="#service_managerpy" title="Permanent link">&para;</a></h2>
-<p>Contains a class <code>ServiceManager</code> which when instantiated can be used to
-instantly call the services with the return values of the <code>fb_helper.py</code>
-functions, i.e. the <code>builder.Finish()</code> and <code>builder.Output()</code> calls are done in
-the <code>ServiceManager</code> methods. Example usage can be found in
-<a href="https://github.com/agri-gaia/seerep/blob/main/tests/python/gRPC/util/msg_abs/msgs.py">msg_abs/msgs.py</a>
-, e.g.:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>        <span class="nd">@classmethod</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>        <span class="k">def</span> <span class="nf">datauuid</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">builder</span><span class="p">:</span> <span class="n">Builder</span><span class="p">,</span> <span class="n">channel</span><span class="p">:</span> <span class="n">Channel</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>            <span class="n">query_fb</span> <span class="o">=</span> <span class="n">FbQuery</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span><span class="o">.</span><span class="n">datatype_instance</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>            <span class="n">serv_man</span> <span class="o">=</span> <span class="n">ServiceManager</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>            <span class="n">images</span> <span class="o">=</span> <span class="n">serv_man</span><span class="o">.</span><span class="n">call_get_images_fb</span><span class="p">(</span><span class="n">builder</span><span class="p">,</span> <span class="n">query_fb</span><span class="p">)</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>            <span class="n">points</span> <span class="o">=</span> <span class="n">serv_man</span><span class="o">.</span><span class="n">call_get_points_fb</span><span class="p">(</span><span class="n">builder</span><span class="p">,</span> <span class="n">query_fb</span><span class="p">)</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>            <span class="n">pcl2s</span> <span class="o">=</span> <span class="n">serv_man</span><span class="o">.</span><span class="n">call_get_pointcloud2_fb</span><span class="p">(</span><span class="n">builder</span><span class="p">,</span> <span class="n">query_fb</span><span class="p">)</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>            <span class="n">image_uuids</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>                <span class="p">[</span><span class="n">image</span><span class="o">.</span><span class="n">Header</span><span class="p">()</span><span class="o">.</span><span class="n">UuidMsgs</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span> <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">images</span><span class="p">]</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>            <span class="p">)</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>            <span class="n">point_uuids</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>                <span class="p">[</span><span class="n">point</span><span class="o">.</span><span class="n">Header</span><span class="p">()</span><span class="o">.</span><span class="n">UuidMsgs</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">points</span><span class="p">]</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>            <span class="p">)</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>            <span class="n">pcl2_uuids</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>                <span class="p">[</span><span class="n">pcl</span><span class="o">.</span><span class="n">Header</span><span class="p">()</span><span class="o">.</span><span class="n">UuidMsgs</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span> <span class="k">for</span> <span class="n">pcl</span> <span class="ow">in</span> <span class="n">pcl2s</span><span class="p">]</span>
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>            <span class="p">)</span>
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>            <span class="c1"># debugging</span>
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>            <span class="c1"># print(&quot;images: &quot; + str(image_uuids))</span>
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>            <span class="c1"># print(&quot;points: &quot; + str(point_uuids))</span>
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>            <span class="c1"># print(&quot;pcls: &quot; + str(pcl2_uuids))</span>
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>            <span class="c1"># fill up return list with every second uuid</span>
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>            <span class="n">ret_lst</span> <span class="o">=</span> <span class="p">[</span>
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>                <span class="n">builder</span><span class="o">.</span><span class="n">CreateString</span><span class="p">(</span><span class="n">image_uuids</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">image_uuids</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>            <span class="p">]</span>
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>            <span class="n">ret_lst</span> <span class="o">+=</span> <span class="p">[</span>
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>                <span class="n">builder</span><span class="o">.</span><span class="n">CreateString</span><span class="p">(</span><span class="n">point_uuids</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">point_uuids</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
-<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>            <span class="p">]</span>
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>            <span class="n">ret_lst</span> <span class="o">+=</span> <span class="p">[</span>
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>                <span class="n">builder</span><span class="o">.</span><span class="n">CreateString</span><span class="p">(</span><span class="n">pcl2_uuids</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">pcl2_uuids</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
-<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>            <span class="p">]</span>
-</code></pre></div>
-<p>The source is located
-<a href="https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/util/service_manager.py">here</a>.</p>
-<p><strong>Note</strong>: This module is currently incomplete and contains only a subset of the
-available service calls.</p>
-<h2 id="fb_to_dictpy">fb_to_dict.py<a class="headerlink" href="#fb_to_dictpy" title="Permanent link">&para;</a></h2>
-<h3 id="fb_flatc_dict">fb_flatc_dict()<a class="headerlink" href="#fb_flatc_dict" title="Permanent link">&para;</a></h3>
-<p>The <code>fb_flatc_dict</code> function can be used to convert serialized <code>flatbuffers</code>
-objects to a python dictionary. More information can be found by looking at the
-docstring:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>    <span class="n">Converts</span> <span class="n">a</span> <span class="n">binary</span> <span class="n">flatbuffers</span> <span class="nb">object</span> <span class="n">to</span> <span class="n">a</span> <span class="n">python</span> <span class="n">dictionary</span> <span class="n">using</span> <span class="n">it</span><span class="s1">&#39;s IDL</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="n">file</span><span class="o">.</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="n">This</span> <span class="n">function</span> <span class="n">should</span> <span class="n">only</span> <span class="n">be</span> <span class="n">used</span> <span class="k">for</span> <span class="n">debugging</span> <span class="ow">or</span> <span class="n">testing</span> <span class="n">purposes</span><span class="p">,</span> <span class="k">as</span> <span class="n">it</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="n">alleviates</span> <span class="n">the</span> <span class="n">advantage</span> <span class="n">of</span> <span class="n">flatbuffers</span> <span class="n">lessening</span> <span class="n">the</span> <span class="n">amount</span> <span class="n">of</span> <span class="n">copied</span> <span class="n">data</span><span class="o">.</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="n">This</span> <span class="n">implementation</span> <span class="n">uses</span> <span class="n">temporary</span> <span class="n">files</span> <span class="ow">in</span> <span class="o">/</span><span class="n">tmp</span> <span class="k">for</span> <span class="n">conversion</span><span class="o">.</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="n">Args</span><span class="p">:</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>        <span class="n">fb_obj</span><span class="p">:</span> <span class="n">The</span> <span class="nb">bytearray</span> <span class="nb">object</span> <span class="k">as</span> <span class="n">returned</span> <span class="n">by</span> <span class="n">builder</span><span class="o">.</span><span class="n">Output</span><span class="p">()</span><span class="o">.</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>        <span class="n">schema_file_name</span><span class="p">:</span> <span class="n">The</span> <span class="n">to</span> <span class="err">`</span><span class="n">fb_obj</span><span class="err">`</span> <span class="n">corresponding</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="n">the</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>        <span class="err">`</span><span class="n">SchemaFileNames</span><span class="err">`</span> <span class="nb">format</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>    <span class="n">Returns</span><span class="p">:</span>
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>        <span class="n">A</span> <span class="n">python</span> <span class="n">dictionary</span> <span class="n">containing</span> <span class="n">the</span> <span class="n">objects</span> <span class="n">attribute</span> <span class="n">information</span><span class="o">.</span>
-</code></pre></div>
-<h3 id="catkin_find_schema_dir">catkin_find_schema_dir()<a class="headerlink" href="#catkin_find_schema_dir" title="Permanent link">&para;</a></h3>
-<p>Looking at the docstring should reveal everything to know about this function:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>    <span class="n">Tries</span> <span class="n">to</span> <span class="n">find</span> <span class="n">the</span> <span class="n">schema</span> <span class="n">directory</span> <span class="n">on</span> <span class="n">the</span> <span class="n">system</span> <span class="n">using</span> <span class="err">`</span><span class="n">catkin</span> <span class="n">locate</span><span class="err">`</span><span class="o">.</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="n">Args</span><span class="p">:</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>        <span class="n">ros_pkg_name</span><span class="p">:</span> <span class="n">The</span> <span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">ros</span> <span class="n">package</span> <span class="n">containing</span> <span class="n">the</span> <span class="n">relevant</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>        <span class="n">schema</span> <span class="n">files</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>        <span class="n">sub_dir</span><span class="p">:</span> <span class="n">The</span> <span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">subdir</span> <span class="n">of</span> <span class="n">the</span> <span class="n">package</span> <span class="nb">dir</span> <span class="n">containing</span> <span class="n">the</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>        <span class="n">relevant</span> <span class="n">schema</span> <span class="n">files</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    <span class="n">Returns</span><span class="p">:</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>        <span class="n">The</span> <span class="n">schema</span> <span class="n">directory</span> <span class="n">on</span> <span class="n">the</span> <span class="n">system</span> <span class="k">if</span> <span class="n">found</span><span class="o">.</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    <span class="n">Raises</span><span class="p">:</span>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>        <span class="ne">FileNotFoundError</span><span class="p">:</span> <span class="n">If</span> <span class="n">the</span> <span class="n">path</span> <span class="n">on</span> <span class="n">the</span> <span class="n">system</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">present</span><span class="o">.</span>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>        <span class="ne">ChildProcessError</span><span class="p">:</span> <span class="n">If</span> <span class="err">`</span><span class="n">catkin</span> <span class="n">locate</span><span class="err">`</span> <span class="n">returns</span> <span class="n">something</span> <span class="n">on</span> <span class="n">stderr</span>
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>        <span class="ow">or</span> <span class="n">failed</span> <span class="n">otherwise</span>
-</code></pre></div>
-<h3 id="schemafilenames">SchemaFileNames<a class="headerlink" href="#schemafilenames" title="Permanent link">&para;</a></h3>
-<p>A enum type class, to map the available flatbuffers type schema file names.
-Only used as a type specifier for <code>fb_flatc_dict</code>.</p>
+<!-- markdownlint-disable-file -->
+
+<!-- markdownlint-disable-file MD024 -->
+<h1 id="grpc-api">gRPC API<a class="headerlink" href="#grpc-api" title="Permanent link">&para;</a></h1>
+<p>This page provides a summary of the available gRPC services offered by SEEREP.
+It is <strong>recommended to use FlatBuffers for serialization</strong>, as the latest
+updates and features utilize it.
+Protocol Buffers might lack certain features and could potentially be
+discontinued in the future, as indicated by
+<a href="https://github.com/agri-gaia/seerep/issues/372">issue#372</a>.
+The services are implemented in the <a href="https://github.com/agri-gaia/seerep/tree/main/seerep_srv/seerep_server/src">seerep_server</a>
+package.</p>
+<p>The <em>streaming</em> column in the following tables indicates whether the client or
+server can send <code>1 ... N</code> messages during the service call.</p>
+<h2 id="flatbuffers">Flatbuffers<a class="headerlink" href="#flatbuffers" title="Permanent link">&para;</a></h2>
+<h3 id="metaoperations">MetaOperations<a class="headerlink" href="#metaoperations" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Description</th>
+<th>Request Message</th>
+<th>Response Message</th>
+<th>Streaming</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/fbs/meta_operations.fbs">CreateProject</a></td>
+<td>Create a new SEEREP project</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/projectCreation.fbs">ProjectCreation</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/project_info.fbs">ProjetInfo</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/fbs/meta_operations.fbs">GetProjects</a></td>
+<td>Get all current projects</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/empty.fbs">Empty</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/project_infos.fbs">ProjetInfos</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/fbs/meta_operations.fbs">LoadProjects</a></td>
+<td>Load all unindexed projects</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/empty.fbs">Empty</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/project_infos.fbs">ProjetInfos</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/fbs/meta_operations.fbs">DeleteProject</a></td>
+<td>Delete a project</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/project_info.fbs">ProjectInfo</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/empty.fbs">Empty</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/fbs/meta_operations.fbs">GetOverallTimeInterval</a></td>
+<td>Get the total timespan of a data type</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/uuid_datatype_pair.fbs">UuidDatatypePair</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/time_interval.fbs">TimeInterval</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/fbs/meta_operations.fbs">GetOverallBoundingBox</a></td>
+<td>Get the full extent of a data type</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/uuid_datatype_pair.fbs">UuidDatatypePair</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox.fbs">Boundingbox</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/fbs/meta_operations.fbs">GetAllCategories</a></td>
+<td>Get all categories of a data type</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/uuid_datatype_pair.fbs">UuidDatatypePair</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/string_vector.fbs">StringVector</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/fbs/meta_operations.fbs">GetAllLabels</a></td>
+<td>Get all labels in a category of a data type</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/uuid_datatype_with_category.fbs">UuidDatatypeWithCategory</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/string_vector.fbs">StringVector</a></td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<h3 id="imageservice">ImageService<a class="headerlink" href="#imageservice" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Description</th>
+<th>Request Message</th>
+<th>Response Message</th>
+<th>Streaming</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/fbs/image_service.fbs">GetImage</a></td>
+<td>Get images based on a query</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/query.fbs">Query</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/image.fbs">Image</a></td>
+<td>Server</td>
+</tr>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/fbs/image_service.fbs">TransferImage</a></td>
+<td>Transfer images to SEEREP</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/image.fbs">Image</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/server_response.fbs">ServerResponse</a></td>
+<td>Client</td>
+</tr>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/fbs/image_service.fbs">AddLabels</a></td>
+<td>Add labels to existing images</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/dataset_uuid_label.fbs">DatasetUuidLabel</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/server_response.fbs">ServerResponse</a></td>
+<td>Client</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cameraintrinsicsservice">CameraIntrinsicsService<a class="headerlink" href="#cameraintrinsicsservice" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Description</th>
+<th>Request Message</th>
+<th>Response Message</th>
+<th>Streaming</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/fbs/camera_intrinsics_service.fbs">GetCameraIntrinsics</a></td>
+<td>Get a specific camera instrinic</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/camera_intrinsics_query.fbs">CameraIntrinsicsQuery</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/camera_intrinsics.fbs">CameraIntrinsics</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/fbs/camera_intrinsics_service.fbs">TransferCameraIntrinsics</a></td>
+<td>Transfer camera intrinsics to SEEREP</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/camera_intrinsics.fbs">CameraIntrinsics</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/server_response.fbs">ServerResponse</a></td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<h3 id="pointcloudservice">PointCloudService<a class="headerlink" href="#pointcloudservice" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Description</th>
+<th>Request Message</th>
+<th>Response Message</th>
+<th>Streaming</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/fbs/point_cloud_service.fbs">GetPointCloud2</a></td>
+<td>Get point clouds based on a query</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/query.fbs">Query</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/point_cloud_2.fbs">PointCloud2</a></td>
+<td>Server</td>
+</tr>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/fbs/point_cloud_service.fbs">TransferPointCloud2</a></td>
+<td>Transfer point clouds to SEEREP</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/point_cloud_2.fbs">PointCloud2</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/server_response.fbs">ServerResponse</a></td>
+<td>Client</td>
+</tr>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/fbs/point_cloud_service.fbs">AddLabels</a></td>
+<td>Add labels to existing point clouds</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/dataset_uuid_label.fbs">DatasetUuidLabel</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/server_response.fbs">ServerResponse</a></td>
+<td>Client</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tfservice">TfService<a class="headerlink" href="#tfservice" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Description</th>
+<th>Request Message</th>
+<th>Response Message</th>
+<th>Streaming</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/fbs/tf_service.fbs">TransferTransformStamped</a></td>
+<td>Add a transformation to SEEREP</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/transform_stamped.fbs">TransformStamped</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/server_response.fbs">ServerResponse</a></td>
+<td>Client</td>
+</tr>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/fbs/tf_service.fbs">GetFrames</a></td>
+<td>Get all frames of a project</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/frame_query.fbs">FrameQuery</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/string_vector.fbs">StringVector</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/fbs/tf_service.fbs">GetTransformStamped</a></td>
+<td>Get a transformation from SEEREP</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/transform_stamped_query.fbs">TransformStampedQuery</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/transform_stamped.fbs">TransformStamped</a></td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<h3 id="pointservice">PointService<a class="headerlink" href="#pointservice" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Description</th>
+<th>Request Message</th>
+<th>Response Message</th>
+<th>Streaming</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/fbs/point_service.fbs">GetPoint</a></td>
+<td>Get points based on a query</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/query.fbs">Query</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/point_stamped.fbs">PointStamped</a></td>
+<td>Server</td>
+</tr>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/fbs/point_service.fbs">TransferPoint</a></td>
+<td>Transfer points to SEEREP</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/point_stamped.fbs">PointStamped</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/server_response.fbs">ServerResponse</a></td>
+<td>Client</td>
+</tr>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/fbs/point_service.fbs">AddAttribute</a></td>
+<td>Add attribute to existing points</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/attributes_stamped.fbs">AttributesStamped</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/server_response.fbs">ServerResponse</a></td>
+<td>Client</td>
+</tr>
+</tbody>
+</table>
+<h2 id="protocol-buffers">Protocol Buffers<a class="headerlink" href="#protocol-buffers" title="Permanent link">&para;</a></h2>
+<h3 id="metaoperations_1">MetaOperations<a class="headerlink" href="#metaoperations_1" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Description</th>
+<th>Request Message</th>
+<th>Response Message</th>
+<th>Streaming</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/protos/meta_operations.proto">CreateProject</a></td>
+<td>Create a new SEEREP project</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/protos/projectCreation.proto">ProjectCreation</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/protos/project_info.proto">ProjetInfo</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/protos/meta_operations.proto">GetProjects</a></td>
+<td>Get all current projects</td>
+<td><a href="https://protobuf.dev/reference/protobuf/google.protobuf/#empty">Empty</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/protos/project_infos.proto">ProjetInfos</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/protos/meta_operations.proto">GetOverallTimeInterval</a></td>
+<td>Get the total timespan of a data type</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/protos/uuid_datatype_pair.proto">UuidDatatypePair</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/protos/time_interval.proto">TimeInterval</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/protos/meta_operations.proto">GetOverallBoundingBox</a></td>
+<td>Get the full extent of a data type</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/protos/uuid_datatype_pair.proto">UuidDatatypePair</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/protos/boundingbox.proto">Boundingbox</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/protos/meta_operations.proto">GetAllCategories</a></td>
+<td>Get all categories of a data type</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/protos/uuid_datatype_pair.proto">UuidDatatypePair</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/protos/string_vector.proto">StringVector</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/protos/meta_operations.proto">GetAllLabels</a></td>
+<td>Get all labels in a category of a data type</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/protos/uuid_datatype_with_category.proto">UuidDatatypeWithCategory</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/protos/string_vector.proto">StringVector</a></td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<h3 id="imageservice_1">ImageService<a class="headerlink" href="#imageservice_1" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Description</th>
+<th>Request Message</th>
+<th>Response Message</th>
+<th>Streaming</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/protos/image_service.proto">GetImage</a></td>
+<td>Get images based on a query</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/protos/query.proto">Query</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/protos/image.proto">Image</a></td>
+<td>Server</td>
+</tr>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/protos/image_service.proto">TransferImage</a></td>
+<td>Transfer images to SEEREP</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/protos/image.proto">Image</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/protos/server_response.proto">ServerResponse</a></td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cameraintrinsicsservice_1">CameraIntrinsicsService<a class="headerlink" href="#cameraintrinsicsservice_1" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Description</th>
+<th>Request Message</th>
+<th>Response Message</th>
+<th>Streaming</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/protos/camera_intrinsics_service.proto">GetCameraIntrinsics</a></td>
+<td>Get a specific camera instrinic</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/protos/camera_intrinsics_query.proto">CameraIntrinsicsQuery</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/protos/camera_intrinsics.proto">CameraIntrinsics</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/protos/camera_intrinsics_service.proto">TransferCameraIntrinsics</a></td>
+<td>Transfer camera intrinsics to SEEREP</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/protos/camera_intrinsics.proto">CameraIntrinsics</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/protos/server_response.proto">ServerResponse</a></td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<h3 id="pointcloudservice_1">PointCloudService<a class="headerlink" href="#pointcloudservice_1" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Description</th>
+<th>Request Message</th>
+<th>Response Message</th>
+<th>Streaming</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/protos/point_cloud_service.proto">GetPointCloud2</a></td>
+<td>Get point clouds based on a query</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/protos/query.proto">Query</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/protos/point_cloud_2.proto">PointCloud2</a></td>
+<td>Server</td>
+</tr>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/protos/point_cloud_service.proto">TransferPointCloud2</a></td>
+<td>Transfer point clouds to SEEREP</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/protos/point_cloud_2.proto">PointCloud2</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/protos/server_response.proto">ServerResponse</a></td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tfservice_1">TfService<a class="headerlink" href="#tfservice_1" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Description</th>
+<th>Request Message</th>
+<th>Response Message</th>
+<th>Streaming</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/protos/tf_service.proto">TransferTransformStamped</a></td>
+<td>Add a transformation to SEEREP</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/protos/transform_stamped.proto">TransformStamped</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/protos/server_response.proto">ServerResponse</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/protos/tf_service.proto">GetFrames</a></td>
+<td>Get all frames of a project</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/protos/frame_query.proto">FrameQuery</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/protos/string_vector.proto">StringVector</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_com/protos/tf_service.proto">GetTransformStamped</a></td>
+<td>Get a transformation from SEEREP</td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/protos/transform_stamped_query.proto">TransformStampedQuery</a></td>
+<td><a href="https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/protos/transform_stamped.proto">TransformStamped</a></td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
 
 
 

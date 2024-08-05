@@ -262,9 +262,9 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a0117d489638b82691f33d61160dba6a4"><td class="memTemplItemLeft" align="right" valign="top">flatbuffers::Offset&lt; seerep::fb::Header &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbGeneral.html#a0117d489638b82691f33d61160dba6a4">readHeaderAttributes</a> (flatbuffers::grpc::MessageBuilder &amp;builder, HighFive::AnnotateTraits&lt; T &gt; &amp;object, std::string uuidMsg)</td></tr>
 <tr class="memdesc:a0117d489638b82691f33d61160dba6a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read a header from a data set or data group and receive it as a flatbuffers message.  <a href="classseerep__hdf5__fb_1_1Hdf5FbGeneral.html#a0117d489638b82691f33d61160dba6a4">More...</a><br /></td></tr>
 <tr class="separator:a0117d489638b82691f33d61160dba6a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1fc43bec91e2fff0ffa7c63222ebb73f"><td class="memItemLeft" align="right" valign="top">flatbuffers::Offset&lt; <a class="el" href="namespaceseerep__hdf5__fb.html#a055423b431bcd19237647c4b4c7ebf0d">LabelsCategoryFb</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbGeneral.html#a1fc43bec91e2fff0ffa7c63222ebb73f">readLabels</a> (const std::string &amp;datatypeGroup, const std::string &amp;uuid, flatbuffers::grpc::MessageBuilder &amp;builder)</td></tr>
-<tr class="memdesc:a1fc43bec91e2fff0ffa7c63222ebb73f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read general labels (with instances and of all categories) from hdf5 and receive it as a flatbuffers message.  <a href="classseerep__hdf5__fb_1_1Hdf5FbGeneral.html#a1fc43bec91e2fff0ffa7c63222ebb73f">More...</a><br /></td></tr>
-<tr class="separator:a1fc43bec91e2fff0ffa7c63222ebb73f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad14b9b94f0350eb672ff2f8f85e279c4"><td class="memItemLeft" align="right" valign="top">std::optional&lt; flatbuffers::Offset&lt; <a class="el" href="namespaceseerep__hdf5__fb.html#a055423b431bcd19237647c4b4c7ebf0d">LabelsCategoryFb</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbGeneral.html#ad14b9b94f0350eb672ff2f8f85e279c4">readLabels</a> (const std::string &amp;datatypeGroup, const std::string &amp;uuid, flatbuffers::grpc::MessageBuilder &amp;builder)</td></tr>
+<tr class="memdesc:ad14b9b94f0350eb672ff2f8f85e279c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read all general labels from a datatype into a Flatbuffers message.  <a href="classseerep__hdf5__fb_1_1Hdf5FbGeneral.html#ad14b9b94f0350eb672ff2f8f85e279c4">More...</a><br /></td></tr>
+<tr class="separator:ad14b9b94f0350eb672ff2f8f85e279c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -301,6 +301,8 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:addf9147e43d5dcf2ae71973e93dd1fa5 inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a130465c7fbf8eff4e78f4d32fd68b3f9 inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a130465c7fbf8eff4e78f4d32fd68b3f9">GEODETICLOCATION_LONGITUDE</a></td></tr>
 <tr class="separator:a130465c7fbf8eff4e78f4d32fd68b3f9 inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeecbb7c113c8f44e2e561ca660ab34d5 inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#aeecbb7c113c8f44e2e561ca660ab34d5">DATA_URI</a> = &quot;data_uri&quot;</td></tr>
+<tr class="separator:aeecbb7c113c8f44e2e561ca660ab34d5 inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53b8de0c69698ba803f4052ef66bda00 inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a53b8de0c69698ba803f4052ef66bda00">RAWDATA</a> = &quot;rawdata&quot;</td></tr>
 <tr class="separator:a53b8de0c69698ba803f4052ef66bda00 inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7b452b4e2c91b4cbad0df3efd1779a95 inherit pub_static_attribs_classseerep__hdf5__core_1_1Hdf5CoreGeneral"><td class="memItemLeft" align="right" valign="top">static const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a7b452b4e2c91b4cbad0df3efd1779a95">LABEL</a> = &quot;label&quot;</td></tr>
@@ -475,8 +477,8 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a id="a1fc43bec91e2fff0ffa7c63222ebb73f" name="a1fc43bec91e2fff0ffa7c63222ebb73f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1fc43bec91e2fff0ffa7c63222ebb73f">&#9670;&nbsp;</a></span>readLabels()</h2>
+<a id="ad14b9b94f0350eb672ff2f8f85e279c4" name="ad14b9b94f0350eb672ff2f8f85e279c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad14b9b94f0350eb672ff2f8f85e279c4">&#9670;&nbsp;</a></span>readLabels()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -485,7 +487,7 @@ template&lt;class T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">flatbuffers::Offset&lt; <a class="el" href="namespaceseerep__hdf5__fb.html#a055423b431bcd19237647c4b4c7ebf0d">LabelsCategoryFb</a> &gt; seerep_hdf5_fb::Hdf5FbGeneral::readLabels </td>
+          <td class="memname">std::optional&lt; flatbuffers::Offset&lt; <a class="el" href="namespaceseerep__hdf5__fb.html#a055423b431bcd19237647c4b4c7ebf0d">LabelsCategoryFb</a> &gt; &gt; seerep_hdf5_fb::Hdf5FbGeneral::readLabels </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>datatypeGroup</em>, </td>
@@ -515,16 +517,16 @@ template&lt;class T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Read general labels (with instances and of all categories) from hdf5 and receive it as a flatbuffers message. </p>
+<p>Read all general labels from a datatype into a Flatbuffers message. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">datatypeGroup</td><td>the data type the general labels should be written to e.g point cloud, image </td></tr>
-    <tr><td class="paramname">uuid</td><td>the id of the data group, the general labels should be written to </td></tr>
-    <tr><td class="paramname">builder</td><td>the flatbuffers message builder </td></tr>
+    <tr><td class="paramname">datatypeGroup</td><td>dat type the labels should be read from e.g point cloud, image </td></tr>
+    <tr><td class="paramname">uuid</td><td>uuid of the HDF5 group the labels should be read from </td></tr>
+    <tr><td class="paramname">builder</td><td>a flatbuffers message builder object </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>flatbuffers::Offset&lt;GeneralLabelsWithCategoryFb&gt; the flatbuffers general labels message (with instances and of all categories) </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>std::optional&lt;flatbuffers::Offset&lt;LabelsCategoryFb&gt;&gt; all labels as a Flatbuffers message, if labels are present </dd></dl>
 
 </div>
 </div>

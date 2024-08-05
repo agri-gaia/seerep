@@ -148,9 +148,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5a5969f6c5d77473cb6013dfbd09c959"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbPoint.html#a5a5969f6c5d77473cb6013dfbd09c959">getData</a> (const seerep::fb::Query *query, grpc::ServerWriter&lt; flatbuffers::grpc::Message&lt; seerep::fb::PointStamped &gt; &gt; *const writer)</td></tr>
 <tr class="memdesc:a5a5969f6c5d77473cb6013dfbd09c959"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to query points.  <a href="classseerep__core__fb_1_1CoreFbPoint.html#a5a5969f6c5d77473cb6013dfbd09c959">More...</a><br /></td></tr>
 <tr class="separator:a5a5969f6c5d77473cb6013dfbd09c959"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d61cd98e652fb1e3c828d2c020c9007"><td class="memItemLeft" align="right" valign="top">boost::uuids::uuid&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbPoint.html#a7d61cd98e652fb1e3c828d2c020c9007">addData</a> (const seerep::fb::PointStamped *point)</td></tr>
-<tr class="memdesc:a7d61cd98e652fb1e3c828d2c020c9007"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add an point to the indices and write the data to hdf5.  <a href="classseerep__core__fb_1_1CoreFbPoint.html#a7d61cd98e652fb1e3c828d2c020c9007">More...</a><br /></td></tr>
-<tr class="separator:a7d61cd98e652fb1e3c828d2c020c9007"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a811d52652d834a87f71a0b19af6169d7"><td class="memItemLeft" align="right" valign="top">boost::uuids::uuid&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbPoint.html#a811d52652d834a87f71a0b19af6169d7">addDataToHdf5</a> (const seerep::fb::PointStamped *point)</td></tr>
+<tr class="memdesc:a811d52652d834a87f71a0b19af6169d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">write the point data to hdf5  <a href="classseerep__core__fb_1_1CoreFbPoint.html#a811d52652d834a87f71a0b19af6169d7">More...</a><br /></td></tr>
+<tr class="separator:a811d52652d834a87f71a0b19af6169d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b3cdccf6efdaf1ccac95dfaaa92917a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbPoint.html#a7b3cdccf6efdaf1ccac95dfaaa92917a">buildIndices</a> (const std::vector&lt; std::pair&lt; std::string, boost::uuids::uuid &gt; &gt; &amp;projectPointUuids)</td></tr>
+<tr class="memdesc:a7b3cdccf6efdaf1ccac95dfaaa92917a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extract point data from hdf5 and build the indices.  <a href="classseerep__core__fb_1_1CoreFbPoint.html#a7b3cdccf6efdaf1ccac95dfaaa92917a">More...</a><br /></td></tr>
+<tr class="separator:a7b3cdccf6efdaf1ccac95dfaaa92917a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed98324875869bc9baf0e783bb812005"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbPoint.html#aed98324875869bc9baf0e783bb812005">addAttributes</a> (const seerep::fb::AttributesStamped &amp;attributesStamped)</td></tr>
 <tr class="memdesc:aed98324875869bc9baf0e783bb812005"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds attributes to an existing point.  <a href="classseerep__core__fb_1_1CoreFbPoint.html#aed98324875869bc9baf0e783bb812005">More...</a><br /></td></tr>
 <tr class="separator:aed98324875869bc9baf0e783bb812005"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -239,14 +242,14 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a7d61cd98e652fb1e3c828d2c020c9007" name="a7d61cd98e652fb1e3c828d2c020c9007"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7d61cd98e652fb1e3c828d2c020c9007">&#9670;&nbsp;</a></span>addData()</h2>
+<a id="a811d52652d834a87f71a0b19af6169d7" name="a811d52652d834a87f71a0b19af6169d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a811d52652d834a87f71a0b19af6169d7">&#9670;&nbsp;</a></span>addDataToHdf5()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">boost::uuids::uuid seerep_core_fb::CoreFbPoint::addData </td>
+          <td class="memname">boost::uuids::uuid seerep_core_fb::CoreFbPoint::addDataToHdf5 </td>
           <td>(</td>
           <td class="paramtype">const seerep::fb::PointStamped *&#160;</td>
           <td class="paramname"><em>point</em></td><td>)</td>
@@ -255,15 +258,43 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Add an point to the indices and write the data to hdf5. </p>
+<p>write the point data to hdf5 </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">img</td><td>the flatbuffer message containing the point </td></tr>
+    <tr><td class="paramname">point</td><td>the flatbuffer message containing the point </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the uuid of the stored point</dd></dl>
-<p>The point is stored in the hdf5 file via hdf5-io-fb. The data needed for the indices is extracted and added to the core. If the uuid of point is not defined yet, a uuid is generated and returned. </p>
+<p>The point is stored in the hdf5 file via hdf5-io-fb. If the uuid of point is not defined yet, a uuid is generated and returned. </p>
+
+</div>
+</div>
+<a id="a7b3cdccf6efdaf1ccac95dfaaa92917a" name="a7b3cdccf6efdaf1ccac95dfaaa92917a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b3cdccf6efdaf1ccac95dfaaa92917a">&#9670;&nbsp;</a></span>buildIndices()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_core_fb::CoreFbPoint::buildIndices </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; std::pair&lt; std::string, boost::uuids::uuid &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>projectPointUuids</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Extract point data from hdf5 and build the indices. </p>
+<p >This method complements <a class="el" href="classseerep__core__fb_1_1CoreFbPoint.html#a811d52652d834a87f71a0b19af6169d7">addDataToHdf5</a> and should be called after the data has been added to hdf5. The data for the indices is retrieved from hdf5 and added to the indices to the core.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">projectPointUuids</td><td>a vector of pairs of first project uuids and second point uuids, where the point belongs to the specified project</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classseerep__core__fb_1_1CoreFbPoint.html#a811d52652d834a87f71a0b19af6169d7" title="write the point data to hdf5">seerep_core_fb::CoreFbPoint::addDataToHdf5</a> </dd></dl>
 
 </div>
 </div>
