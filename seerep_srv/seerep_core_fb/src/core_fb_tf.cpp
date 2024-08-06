@@ -62,15 +62,16 @@ CoreFbTf::deleteHdf5(const seerep::fb::TransformStampedIntervalQuery& tfInterval
 
   // delete from hdf5 files
   auto hdf5io = CoreFbGeneral::getHdf5(projectuuid, m_seerepCore, m_hdf5IoMap);
+
   // non static frames
-  hdf5io->delTransformStamped(
+  hdf5io->deleteTransformStamped(
       tfInterval.transform_stamped_query()->header()->frame_id()->str(),
       tfInterval.transform_stamped_query()->child_frame_id()->str(), false,
       *tfInterval.time_interval()->time_min(),
       *tfInterval.time_interval()->time_max());
 
   // static frames
-  hdf5io->delTransformStamped(
+  hdf5io->deleteTransformStamped(
       tfInterval.transform_stamped_query()->header()->frame_id()->str(),
       tfInterval.transform_stamped_query()->child_frame_id()->str(), true,
       *tfInterval.time_interval()->time_min(),

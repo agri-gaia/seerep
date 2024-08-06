@@ -50,7 +50,7 @@ class FbQuery(MsgsFb[Query.Query]):
     def _set_enum_func_mapping(self) -> Dict[EnumFbQuery, MsgsFunctions]:
         return {
             EnumFbQuery.POLYGON: MsgsFunctions(
-                lambda: None, lambda: Dtypes.Fb.polygon2D(self.builder)
+                lambda: None, lambda: Dtypes.Fb.polygon2d(self.builder)
             ),
             EnumFbQuery.FULLY_ENCAPSULATED: MsgsFunctions(
                 lambda: False, lambda: True
@@ -172,7 +172,7 @@ class FbQueryInstance(MsgsFb[QueryInstance.QueryInstance]):
 class DatatypeImplementations:
     class Fb:
         @classmethod
-        def polygon2D(cls, builder: Builder) -> Polygon2D.Polygon2D:
+        def polygon2d(cls, builder: Builder) -> Polygon2D.Polygon2D:
             polygon_vertices = []
             polygon_vertices.append(fbh.createPoint2d(builder, 0, 0))
             polygon_vertices.append(fbh.createPoint2d(builder, 0, 100))
@@ -181,7 +181,7 @@ class DatatypeImplementations:
             return fbh.createPolygon2D(builder, 100, 0, polygon_vertices)
 
         @classmethod
-        def mod_polygon2D(
+        def parameterized_polygon2d(
             cls, builder: Builder, quad_extent: float, height: float
         ) -> Polygon2D.Polygon2D:
             """

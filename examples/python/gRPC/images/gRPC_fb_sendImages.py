@@ -1,13 +1,14 @@
 import random
 import time
-from typing import List, Union, Tuple, Iterator
+import uuid
+from typing import Iterator, List, Tuple, Union
 from uuid import uuid4
 
 import flatbuffers
 import numpy as np
-from quaternion import quaternion
-import uuid
 from grpc import Channel
+from quaternion import quaternion
+from seerep.fb import ServerResponse
 from seerep.fb import (
     camera_intrinsics_service_grpc_fb as camera_intrinsic_service,
 )
@@ -24,7 +25,7 @@ from seerep.util.fb_helper import (
     createTimeStamp,
     createTransform,
     createTransformStamped,
-    createVector3
+    createVector3,
 )
 
 
@@ -34,7 +35,7 @@ def send_images(
     camera_intrinsic_uuid: str,
     image_payloads: List[Union[np.ndarray, str]],
     timestamps: Union[List[Tuple[int, int]], None] = None,
-    frame_id: str = "map"
+    frame_id: str = "map",
 ) -> List[bytes]:
     """
     Send images to a SEEREP project
@@ -56,7 +57,10 @@ def send_images(
 
     """
     if timestamps and len(timestamps) != len(image_payloads):
-        print("Couldn't send images, due to len(image_payloads) != len(timestamps)")
+        print(
+            "Couldn't send images, "
+            "due to len(image_payloads) != len(timestamps)"
+        )
         return []
 
     fbb = flatbuffers.Builder()
@@ -70,11 +74,14 @@ def send_images(
     fb_msgs = []
     for idx, image in enumerate(image_payloads):
         if timestamps is None:
-            header = createHeader(fbb, timestamp, frame_id, project_uuid, str(uuid4()))
+            header = createHeader(
+                fbb, timestamp, frame_id, project_uuid, str(uuid4())
+            )
         else:
-            timestamp = createTimeStamp(
-                fbb, *timestamps[idx])
-            header = createHeader(fbb, timestamp, frame_id, project_uuid, str(uuid4()))
+            timestamp = createTimeStamp(fbb, *timestamps[idx])
+            header = createHeader(
+                fbb, timestamp, frame_id, project_uuid, str(uuid4())
+            )
 
         fb_image = createImage(
             fbb,
@@ -130,7 +137,9 @@ def create_project(grpc_channel: Channel, project_name: str) -> str:
     )
 
 
-def send_cameraintrinsics(grpc_channel: Channel, project_uuid: str, frame_id: str = "map") -> str:
+def send_cameraintrinsics(
+    grpc_channel: Channel, project_uuid: str, frame_id: str = "map"
+) -> str:
     """
     Create and send a camera intrinsics object to SEEREP.
 
@@ -174,28 +183,43 @@ def send_cameraintrinsics(grpc_channel: Channel, project_uuid: str, frame_id: st
     camera_intrinsic_service_stub.TransferCameraIntrinsics(bytes(fbb.Output()))
     return ci_uuid
 
+
 def send_tfs(
     grpc_channel: Channel,
     project_uuid: str,
     timestamps: List[Tuple[int, int]],
     frame_id: str = "map",
     child_frame_id: str = "camera",
-):
+) -> bytes:
+    """
+    Stream len(timestamps) transforms with the form frame_id -> child_frame_id
+    to SEEREP.
+
+    Args:
+        grpc_channel (Channel): The grpc_channel to a SEEREP server.
+        project_uuid (str): The project target for the transformations.
+        timestamps (List[Tuple[int, int]]): The timestamps of
+        the transformation.
+        frame_id (str): The parent frame for the transformations.
+        child_frame_id (str): The child frame for the transformations.
+    """
+
     def tfs_gen() -> Iterator[bytes]:
-        builder = flatbuffers.Builder(1024) 
+        builder = flatbuffers.Builder(1024)
         quat = createQuaternion(builder, quaternion(1, 0, 0, 0))
+
         for idx, (seconds, nanos) in enumerate(timestamps):
             timestamp = createTimeStamp(builder, seconds, nanos)
 
-            # when not giving a uuid the corresponding retrieved tf from server has
-            # no uuid msg
             header = createHeader(
                 builder, timestamp, frame_id, project_uuid, str(uuid.uuid4())
             )
 
             translation = createVector3(
                 builder,
-                np.array([100 * idx**2, 100 * idx**2, 30 * idx], dtype=np.float64),
+                np.array(
+                    [100 * idx**2, 100 * idx**2, 30 * idx], dtype=np.float64
+                ),
             )
 
             tf = createTransform(builder, translation, quat)
@@ -204,7 +228,10 @@ def send_tfs(
             builder.Finish(tfs)
             yield bytes(builder.Output())
 
-    tf_service.TfServiceStub(grpc_channel).TransferTransformStamped(tfs_gen())
+    return tf_service.TfServiceStub(grpc_channel).TransferTransformStamped(
+        tfs_gen()
+    )
+
 
 if __name__ == "__main__":
     channel = get_gRPC_channel()
@@ -215,14 +242,24 @@ if __name__ == "__main__":
     nanos_factor = 1e-9
 
     timestamps = [
-        (t, timestamp_nanos) for t in range(1661336507, 1661336558, 10)
+        (t, timestamp_nanos) for t in range(1661336507, 1661336608, 10)
     ]
 
     img_bufs = send_images(
-        channel, project_uuid, camera_uuid, generate_image_ressources(10), timestamps
+        channel,
+        project_uuid,
+        camera_uuid,
+        generate_image_ressources(10),
+        timestamps,
     )
 
-    send_tfs(channel, project_uuid, timestamps)
+    tf_resp = send_tfs(channel, project_uuid, timestamps)
 
     if img_bufs is not None and len(img_bufs) > 0:
         print("Images sent successfully")
+
+    if (
+        ServerResponse.ServerResponse.GetRootAs(tf_resp).Message().decode()
+        == "everything stored!"
+    ):
+        print("Transforms sent successfully")

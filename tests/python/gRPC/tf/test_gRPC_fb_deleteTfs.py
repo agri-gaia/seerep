@@ -27,7 +27,7 @@ def change_assemble_call(
 ) -> List[Dict]:
     query.set_active_function(
         EnumFbQuery.POLYGON,
-        lambda: DatatypeImplementations.Fb.mod_polygon2D(
+        lambda: DatatypeImplementations.Fb.parameterized_polygon2d(
             query.builder, extent, 500
         ),
     )
@@ -49,7 +49,11 @@ def test_gRPC_fb_deleteTfs(grpc_channel, project_setup):
     # per timestamp the tf is increased by 100 times according
     # to the index of the timestamp
     send_img.send_images(
-        grpc_channel, project_uuid, camera_uuid, send_img.generate_image_ressources(10), timestamps
+        grpc_channel,
+        project_uuid,
+        camera_uuid,
+        send_img.generate_image_ressources(10),
+        timestamps,
     )
 
     send_img.send_tfs(grpc_channel, project_uuid, timestamps)

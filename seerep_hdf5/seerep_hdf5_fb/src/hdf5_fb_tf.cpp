@@ -140,11 +140,11 @@ void Hdf5FbTf::writeTransformStamped(const seerep::fb::TransformStamped& tf)
   m_file->flush();
 }
 
-bool Hdf5FbTf::delTransformStamped(std::string parentFrameId,
-                                   std::string childFrameId,
-                                   const bool isStatic,
-                                   const seerep::fb::Timestamp& timeMin,
-                                   const seerep::fb::Timestamp& timeMax) const
+bool Hdf5FbTf::deleteTransformStamped(std::string parentFrameId,
+                                      std::string childFrameId,
+                                      const bool isStatic,
+                                      const seerep::fb::Timestamp& timeMin,
+                                      const seerep::fb::Timestamp& timeMax) const
 {
   const std::scoped_lock lock(*m_write_mtx);
 

@@ -26,10 +26,22 @@ public:
 
   void writeTransformStamped(const seerep::fb::TransformStamped& tf);
 
-  bool delTransformStamped(std::string parentFrameId, std::string childFrameId,
-                           const bool isStatic,
-                           const seerep::fb::Timestamp& timeMin,
-                           const seerep::fb::Timestamp& timeMax) const;
+  /**
+   * @brief Deletes tf entries (time, translation, rotation) from hdf5.
+   *
+   * @param parentFrameId The parent frame of the the tf target.
+   * @param childFrameId The child frame of the the tf target.
+   * @param isStatic Whether the target tf is static or not.
+   * @param timeMin The inclusive timestamp to start the deletion from.
+   * @param timeMax The exclusive timestamp to end the deletion on.
+   *
+   * @return true when the deletion was successful
+   * @return false when something went wrong during the deletion
+   */
+  bool deleteTransformStamped(std::string parentFrameId,
+                              std::string childFrameId, const bool isStatic,
+                              const seerep::fb::Timestamp& timeMin,
+                              const seerep::fb::Timestamp& timeMax) const;
 
   std::optional<std::vector<flatbuffers::Offset<seerep::fb::TransformStamped>>>
   readTransformStamped(const std::string& id, const bool isStatic);
