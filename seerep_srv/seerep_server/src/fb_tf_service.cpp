@@ -106,7 +106,10 @@ grpc::Status FbTfService::DeleteTransformStamped(
     {
       try
       {
-        projectUuids.insert(tfFb->deleteHdf5(*tfIntervalQuery));
+        if (auto deletedInProjectUuid = tfFb->deleteHdf5(*tfIntervalQuery))
+        {
+          projectUuids.insert(deletedInProjectUuid.value());
+        }
       }
       catch (std::runtime_error const& e)
       {
@@ -143,7 +146,6 @@ grpc::Status FbTfService::DeleteTransformStamped(
   {
     try
     {
-      // TODO dont reinitialize if nothing was deleted
       tfFb->reinitializeTFs(projectUuid);
     }
     catch (std::runtime_error const& e)

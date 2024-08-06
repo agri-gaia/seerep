@@ -6,13 +6,10 @@ from typing import Dict, List, Tuple, Union
 
 import flatbuffers
 import numpy as np
-from google.protobuf import empty_pb2
 from grpc import Channel
 from quaternion import quaternion
 from seerep.fb import TransformStampedIntervalQuery
 from seerep.fb import tf_service_grpc_fb as tf_srv
-from seerep.pb import meta_operations_pb2_grpc as meta_operations
-from seerep.pb import projectCreation_pb2 as project_creation
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
     createHeader,
@@ -22,6 +19,7 @@ from seerep.util.fb_helper import (
     createTransformStamped,
     createTransformStampedQueryInterval,
     createVector3,
+    getOrCreateProject,
 )
 from seerep.util.fb_to_dict import SchemaFileNames, fb_flatc_dict
 
@@ -39,22 +37,10 @@ def delete_tfs_raw(
 ) -> bytearray:
     builder = flatbuffers.Builder(1024)
 
-    stubMeta = meta_operations.MetaOperationsStub(grpc_channel)
-
     if target_proj_uuid is None:
-        # 2. Get all projects from the server
-        response = stubMeta.GetProjects(empty_pb2.Empty())
-        for project in response.projects:
-            print(project.name + " " + project.uuid)
-            if project.name == "LabeledImagesInGrid":
-                target_proj_uuid = project.uuid
-
-        if target_proj_uuid is None:
-            creation = project_creation.ProjectCreation(
-                name="LabeledImagesInGrid", mapFrameId="map"
-            )
-            projectCreated = stubMeta.CreateProject(creation)
-            target_proj_uuid = projectCreated.uuid
+        target_proj_uuid = getOrCreateProject(
+            flatbuffers.Builder(), grpc_channel, "testproject"
+        )
 
     stubTf = tf_srv.TfServiceStub(grpc_channel)
 
@@ -147,27 +133,6 @@ def send_artificial_tfs(
     return sent_tfs_base
 
 
-def get_grcp_and_project() -> Tuple[Channel, str]:
-    grpc_channel = get_gRPC_channel()
-    stubMeta = meta_operations.MetaOperationsStub(grpc_channel)
-    target_proj_uuid = None
-    # 2. Get all projects from the server
-    response = stubMeta.GetProjects(empty_pb2.Empty())
-    for project in response.projects:
-        print(project.name + " " + project.uuid)
-        if project.name == "testproject":
-            target_proj_uuid = project.uuid
-
-    if target_proj_uuid is None:
-        creation = project_creation.ProjectCreation(
-            name="testproject", mapFrameId="map"
-        )
-        projectCreated = stubMeta.CreateProject(creation)
-        target_proj_uuid = projectCreated.uuid
-
-    return grpc_channel, target_proj_uuid
-
-
 if __name__ == "__main__":
     timestamp_nanos = 1245
     nanos_factor = 1e-9
@@ -176,7 +141,11 @@ if __name__ == "__main__":
         (t, timestamp_nanos) for t in range(1661336507, 1661336558, 10)
     ]
 
-    grpc_channel, proj_uuid = get_grcp_and_project()
+    grpc_channel = get_gRPC_channel()
+
+    proj_uuid = getOrCreateProject(
+        flatbuffers.Builder(), grpc_channel, "testproject"
+    )
 
     if grpc_channel is None or proj_uuid is None:
         print("There is no project on the server or server is not reachable")

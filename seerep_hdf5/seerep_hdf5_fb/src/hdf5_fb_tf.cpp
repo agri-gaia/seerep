@@ -171,11 +171,25 @@ bool Hdf5FbTf::deleteTransformStamped(std::string parentFrameId,
       !m_file->exist(hdf5DatasetTransPath) ||
       !m_file->exist(hdf5DatasetRotPath))
   {
+    auto str_static = isStatic ? "static" : "non-static";
+
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning)
+        << "No " << str_static << " tfs matching the frames (" << parentFrameId
+        << " -> " << childFrameId << ") were found!";
     return false;
   }
-  // read size
+
   std::shared_ptr<HighFive::Group> group_ptr =
       std::make_shared<HighFive::Group>(m_file->getGroup(hdf5GroupPath));
+
+  // read size
+  if (!group_ptr->hasAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE))
+  {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+        << "Could not access size attribute of the tf group " << parentFrameId
+        << "_" << childFrameId << "!";
+    return false;
+  }
 
   long unsigned int size;
   group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE).read(size);
@@ -256,14 +270,14 @@ bool Hdf5FbTf::deleteTransformStamped(std::string parentFrameId,
         << "No tf was found in the timeinterval between " << timeMin.seconds()
         << "s / " << timeMin.nanos() << "ns (inclusive) and "
         << timeMax.seconds() << "s / " << timeMax.nanos() << "ns (exclusive)!";
-    return true;
+    return false;
   }
   std::vector<std::vector<int64_t>> reduced_time;
   std::vector<std::vector<double>> reduced_trans;
   std::vector<std::vector<double>> reduced_rot;
 
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
-      << "Deleting tfs from" << timeMin.seconds() << "s / " << timeMin.nanos()
+      << "Deleting tfs from " << timeMin.seconds() << "s / " << timeMin.nanos()
       << "ns (inclusive) up to " << timeMax.seconds() << "s / "
       << timeMax.nanos() << "ns (exclusive)...";
 
@@ -295,15 +309,7 @@ bool Hdf5FbTf::deleteTransformStamped(std::string parentFrameId,
   data_set_rot_ptr->select({ 0, 0 }, { reduced_size, 4 }).write(reduced_rot);
 
   // write the size as group attribute
-  HighFive::Group group = m_file->getGroup(hdf5GroupPath);
-  if (!group.hasAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE))
-  {
-    group.createAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE, reduced_size);
-  }
-  else
-  {
-    group.getAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE).write(reduced_size);
-  }
+  group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE).write(reduced_size);
 
   m_file->flush();
   return true;

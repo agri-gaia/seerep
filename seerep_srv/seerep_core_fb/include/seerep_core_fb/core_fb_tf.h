@@ -62,14 +62,15 @@ public:
   void addData(const seerep::fb::TransformStamped& tf);
 
   /**
-   * @brief Delete a range of tfs based on specified time interval from hdf5
-   * @param tfInterval types of tfs to delete in a given time
+   * @brief Delete a range of tfs based on specified time interval from hdf5.
+   * @param tfInterval types of tfs to delete in a given time.
    *
    * The tfs are deleted from hdf5 in the specified project.
    *
-   * @return the project uuid which the tfs are deleted from
+   * @return std::nullopt if no deletions were done.
+   * @return the projectuuid when atleast one deletion was executed.
    */
-  boost::uuids::uuid
+  std::optional<boost::uuids::uuid>
   deleteHdf5(const seerep::fb::TransformStampedIntervalQuery& tfInterval);
 
   /**

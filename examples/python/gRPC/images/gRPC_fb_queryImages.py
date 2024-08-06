@@ -43,9 +43,7 @@ def query_images_raw(
     """
     image_service_stub = imageService.ImageServiceStub(grpc_channel)
 
-    query = createQuery(
-        fbb, *args, projectUuids=[target_proj_uuid], **kwargs
-    )
+    query = createQuery(fbb, *args, projectUuids=[target_proj_uuid], **kwargs)
 
     fbb.Finish(query)
     query_buf = fbb.Output()

@@ -35,8 +35,9 @@ public:
    * @param timeMin The inclusive timestamp to start the deletion from.
    * @param timeMax The exclusive timestamp to end the deletion on.
    *
-   * @return true when the deletion was successful
-   * @return false when something went wrong during the deletion
+   * @return true when atleast one deletion took place.
+   * @return false when something went wrong during deletion,
+   *   or no tf matched the parameters.
    */
   bool deleteTransformStamped(std::string parentFrameId,
                               std::string childFrameId, const bool isStatic,

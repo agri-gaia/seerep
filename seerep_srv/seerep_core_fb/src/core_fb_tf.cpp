@@ -54,7 +54,7 @@ CoreFbTf::getFrames(const boost::uuids::uuid& projectuuid)
   return m_seerepCore->getFrames(projectuuid);
 }
 
-boost::uuids::uuid
+std::optional<boost::uuids::uuid>
 CoreFbTf::deleteHdf5(const seerep::fb::TransformStampedIntervalQuery& tfInterval)
 {
   auto projectuuid = boost::lexical_cast<boost::uuids::uuid>(
@@ -64,21 +64,30 @@ CoreFbTf::deleteHdf5(const seerep::fb::TransformStampedIntervalQuery& tfInterval
   auto hdf5io = CoreFbGeneral::getHdf5(projectuuid, m_seerepCore, m_hdf5IoMap);
 
   // non static frames
-  hdf5io->deleteTransformStamped(
+  bool wasDeleted = hdf5io->deleteTransformStamped(
       tfInterval.transform_stamped_query()->header()->frame_id()->str(),
       tfInterval.transform_stamped_query()->child_frame_id()->str(), false,
       *tfInterval.time_interval()->time_min(),
       *tfInterval.time_interval()->time_max());
 
   // static frames
-  hdf5io->deleteTransformStamped(
-      tfInterval.transform_stamped_query()->header()->frame_id()->str(),
-      tfInterval.transform_stamped_query()->child_frame_id()->str(), true,
-      *tfInterval.time_interval()->time_min(),
-      *tfInterval.time_interval()->time_max());
+  if (hdf5io->deleteTransformStamped(
+          tfInterval.transform_stamped_query()->header()->frame_id()->str(),
+          tfInterval.transform_stamped_query()->child_frame_id()->str(), true,
+          *tfInterval.time_interval()->time_min(),
+          *tfInterval.time_interval()->time_max()))
+  {
+    wasDeleted = true;
+  };
 
-  return projectuuid;
+  if (wasDeleted)
+  {
+    return projectuuid;
+  }
+
+  return std::nullopt;
 }
+
 void CoreFbTf::reinitializeTFs(const boost::uuids::uuid& projectuuid)
 {
   // recreate the tf buffer
