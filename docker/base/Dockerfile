@@ -20,33 +20,33 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 #Install general required tools
 RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
-        software-properties-common=0.99.9.12 \
-        bash-completion=1:2.10-1ubuntu1 \
-        autoconf=2.69-11.1 \
-        automake=1:1.16.1-4ubuntu6 \
-        wget=1.20.3-1ubuntu2.1 \
-        curl=7.68.0-1ubuntu2.22 \
-        cmake=3.16.3-1ubuntu1.20.04.1 \
-        make=4.2.1-1.2 \
-        unzip=6.0-25ubuntu1.2 \
-        git=1:2.25.1-1ubuntu3.13 \
-        gdb=9.2-0ubuntu1~20.04.2 \
-        libcgal-dev=5.0.2-3 \
-        sudo=1.8.31-1ubuntu1.5 \
-        ssh=1:8.2p1-4ubuntu0.11 \
-        vim=2:8.1.2269-1ubuntu5.23 \
-        build-essential=12.8ubuntu1.1 \
-        pkg-config=0.29.1-0ubuntu4 \
-        libproj-dev=6.3.1-1 \
-        python3-catkin-tools=0.9.2-1 \
-        python3-osrf-pycommon=2.0.2-1 \
-        ros-noetic-vision-msgs=0.0.2-1focal.20230620.191644 \
-        ros-noetic-geographic-msgs=0.5.6-1focal.20230620.183241 \
-        python3-pip=20.0.2-5ubuntu1.10 \
-        flex=2.6.4-6.2 \
-        bison=2:3.5.1+dfsg-1 \
-        libjsoncpp-dev=1.7.4-3.1ubuntu2 \
-        libcurl4-openssl-dev=7.68.0-1ubuntu2.22 \
+        software-properties-common \
+        bash-completion \
+        autoconf \
+        automake \
+        wget \
+        curl \
+        cmake \
+        make \
+        unzip \
+        git \
+        gdb  \
+        libcgal-dev \
+        sudo \
+        ssh \
+        vim \
+        build-essential \
+        pkg-config \
+        libproj-dev \
+        python3-catkin-tools \
+        python3-osrf-pycommon \
+        ros-noetic-vision-msgs \
+        ros-noetic-geographic-msgs \
+        python3-pip \
+        flex \
+        bison \
+        libjsoncpp-dev \
+        libcurl4-openssl-dev \
         && rm -rf /var/lib/apt/lists/*
 
 
@@ -70,20 +70,20 @@ RUN pip3 install --no-cache-dir --upgrade pip==${PIP3_VER} \
 
 #Install seerep dependencies from apt
 RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
-        ros-noetic-tf=1.13.2-1focal.20231013.190129 \
-        ros-noetic-vision-msgs=0.0.2-1focal.20230620.191644 \
-        ros-noetic-pybind11-catkin=2.10.3-2focal.20230213.204608 \
-        libgeographic-dev=1.50.1-1build1 \
+        ros-noetic-tf \
+        ros-noetic-vision-msgs \
+        ros-noetic-pybind11-catkin \
+        libgeographic-dev \
         && rm -rf /var/lib/apt/lists/*
 
 #Install pre-commit hooks to /root/.cache/pre-commit/
 RUN wget --progress=dot:giga -O - https://apt.llvm.org/llvm-snapshot.gpg.key| apt-key add -
 RUN add-apt-repository "deb http://apt.llvm.org/focal/ llvm-toolchain-focal-15 main"
 RUN apt-get update -qq && apt-get -qq install -y --no-install-recommends \
-                ruby=1:2.7+1 \
-                shellcheck=0.7.0-2build2 \
-                clang-format-15=1:15.0.7~++20231019083450+8dfdcc7b7bf6-1~exp1~20231019203526.112 \
-                python3-catkin-lint=1.6.22-1~20.04 \
+                ruby \
+                shellcheck\
+                clang-format-15 \
+                python3-catkin-lint \
                 && rm -rf /var/lib/apt/lists/*
 
 #Install hadolint for pre-commit checks of Dockerfiles
@@ -109,8 +109,8 @@ RUN ln -sf "$(which ccache)" /usr/local/bin/c++ && ln -sf "$(which ccache)" /usr
 #Install HighFive
 ####################################################
 RUN apt-get -qq update && apt-get -qq install --no-install-recommends -y -o=Dpkg::Use-Pty=0 \
-        libhdf5-dev=1.10.4+repack-11ubuntu1 \
-        libboost-all-dev=1.71.0.0ubuntu2 \
+        libhdf5-dev \
+        libboost-all-dev\
         && rm -rf /var/lib/apt/lists/*
 
 RUN git clone --depth 1 -b v${HIGHFIVE_VER} $HDF5_REL.git \
