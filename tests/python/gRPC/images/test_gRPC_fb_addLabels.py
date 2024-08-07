@@ -23,7 +23,7 @@ def get_imgs(target_proj_uuid: str, grpc_channel: Channel) -> List:
     stub = imageService.ImageServiceStub(grpc_channel)
     query = createQuery(
         builder,
-        projectUuids=[builder.CreateString(target_proj_uuid)],
+        projectUuids=[target_proj_uuid],
         withoutData=True,
     )
     builder.Finish(query)

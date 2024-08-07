@@ -41,7 +41,7 @@ timeMin = createTimeStamp(builder, 1654688920, 0)
 timeMax = createTimeStamp(builder, 1654688940, 0)
 timeInterval = createTimeInterval(builder, timeMin, timeMax)
 
-projectUuids = [builder.CreateString(projectuuid)]
+projectUuids = [projectuuid]
 labels = createLabelsWithCategoryVector(
     builder, ["ground_truth"], [["Gänseblümchen"]]
 )

@@ -1,6 +1,7 @@
 
 include "transform_stamped.fbs";
 include "transform_stamped_query.fbs";
+include "transform_stamped_interval_query.fbs";
 
 include "server_response.fbs";
 include "string_vector.fbs";
@@ -10,6 +11,7 @@ namespace seerep.fb;
 
 rpc_service TfService {
   TransferTransformStamped(seerep.fb.TransformStamped):seerep.fb.ServerResponse (streaming: "client");
+  DeleteTransformStamped(seerep.fb.TransformStampedIntervalQuery):seerep.fb.ServerResponse (streaming: "client");
   GetFrames(seerep.fb.FrameQuery):seerep.fb.StringVector;
   GetTransformStamped(seerep.fb.TransformStampedQuery):seerep.fb.TransformStamped;
 }

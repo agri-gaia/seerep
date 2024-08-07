@@ -31,6 +31,7 @@ from seerep.fb import (
     Timestamp,
     Transform,
     TransformStamped,
+    TransformStampedIntervalQuery,
     TransformStampedQuery,
     UuidDatatypePair,
     UuidDatatypeWithCategory,
@@ -670,20 +671,32 @@ def createQuery(
     """
 
     if projectUuids:
-        Query.StartProjectuuidVector(builder, len(projectUuids))
-        for projectUuid in reversed(projectUuids):
+        # serialize strings
+        projectUuidsSerialized = [
+            builder.CreateString(projectUuid) for projectUuid in projectUuids
+        ]
+        Query.StartProjectuuidVector(builder, len(projectUuidsSerialized))
+        for projectUuid in reversed(projectUuidsSerialized):
             builder.PrependUOffsetTRelative(projectUuid)
         projectUuidsOffset = builder.EndVector()
 
     if instanceUuids:
-        Query.StartInstanceuuidVector(builder, len(instanceUuids))
-        for instance in reversed(instanceUuids):
+        # serialize strings
+        instanceUuidsSerialized = [
+            builder.CreateString(instanceUuid) for instanceUuid in instanceUuids
+        ]
+        Query.StartInstanceuuidVector(builder, len(instanceUuidsSerialized))
+        for instance in reversed(instanceUuidsSerialized):
             builder.PrependUOffsetTRelative(instance)
         instanceOffset = builder.EndVector()
 
     if dataUuids:
-        Query.StartDatauuidVector(builder, len(dataUuids))
-        for dataUuid in reversed(dataUuids):
+        # serialize strings
+        dataUuidsSerialized = [
+            builder.CreateString(dataUuid) for dataUuid in dataUuids
+        ]
+        Query.StartDatauuidVector(builder, len(dataUuidsSerialized))
+        for dataUuid in reversed(dataUuidsSerialized):
             builder.PrependUOffsetTRelative(dataUuid)
         dataUuidOffset = builder.EndVector()
 
@@ -742,10 +755,10 @@ def createTimeInterval(builder: Builder, timeMin: int, timeMax: int) -> int:
 
     Args:
         builder: A flatbuffers Builder
-        timeMin: The pointer to a Timestamp object representing the lower bound
-        of the time of the interval
-        timeMax: The pointer to a Timestamp object representing the upper bound
-        of the time of the interval
+        timeMin: The pointer to a Timestamp object representing
+            the lower bound of the time of the interval
+        timeMax: The pointer to a Timestamp object representing
+            the upper bound of the time of the interval
 
     Returns:
         A pointer to the constructed time interval object
@@ -770,10 +783,47 @@ def createTransformStampedQuery(
     Returns:
         A pointer to the constructed transform stamped query object
     """
+    child_frame_obj = builder.CreateString(childFrameId)
     TransformStampedQuery.Start(builder)
     TransformStampedQuery.AddHeader(builder, header)
-    TransformStampedQuery.AddChildFrameId(builder, childFrameId)
+    TransformStampedQuery.AddChildFrameId(builder, child_frame_obj)
     return TransformStampedQuery.End(builder)
+
+
+def createTransformStampedQueryInterval(
+    builder: Builder,
+    header: int,
+    childFrameId: str,
+    time_min: int,
+    time_max: int,
+) -> int:
+    """
+    Create a transform stamped query interval object in flatbuffers.
+
+    Args:
+        builder: A flatbuffers Builder
+        header: The pointer to a header object including the parent frame id
+        childFrameId: The child frame id
+        time_min: the pointer to the earliest inclusive time stamp
+            flatbuffers object to span the time_interval
+        time_max: the pointer to the latest exclusive time stamp
+            flatbuffers object to span the time_interval
+
+    Returns:
+        A pointer to the constructed transform stamped query interval object
+    """
+    tf_stamped_query: int = createTransformStampedQuery(
+        builder, header, childFrameId
+    )
+    time_interval: int = createTimeInterval(builder, time_min, time_max)
+
+    TransformStampedIntervalQuery.Start(builder)
+    TransformStampedIntervalQuery.AddTransformStampedQuery(
+        builder, tf_stamped_query
+    )
+    TransformStampedIntervalQuery.AddTimeInterval(builder, time_interval)
+
+    return TransformStampedIntervalQuery.End(builder)
 
 
 def createRegionOfInterest(

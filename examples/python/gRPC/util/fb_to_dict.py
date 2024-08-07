@@ -132,6 +132,8 @@ def fb_flatc_dict(fb_obj: bytearray, schema_file_name: SchemaFileNames) -> Dict:
             f"The schema file at {schema_path} does not exist!"
         )
 
+    tmp_file = None
+    tmp_json = None
     try:
         with tempfile.NamedTemporaryFile(delete=False) as f:
             f.write(fb_obj)
@@ -164,7 +166,9 @@ def fb_flatc_dict(fb_obj: bytearray, schema_file_name: SchemaFileNames) -> Dict:
         with open(tmp_json, "r") as tmp_f:
             json_dict = json.loads(tmp_f.read())
     finally:
-        tmp_file.unlink(missing_ok=True)
-        tmp_json.unlink(missing_ok=True)
+        if tmp_file is not None:
+            tmp_file.unlink(missing_ok=True)
+        if tmp_json is not None:
+            tmp_json.unlink(missing_ok=True)
 
     return json_dict

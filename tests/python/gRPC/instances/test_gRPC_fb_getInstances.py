@@ -423,7 +423,7 @@ def test_gRPC_getInstanceQueryInstanceUuid(grpc_channel, project_setup):
     )
     query_builder.set_active_function(
         EnumFbQuery.PROJECTUUID,
-        lambda: [query_builder.builder.CreateString(proj_uuid)],
+        lambda: [proj_uuid],
     )
     query_builder.assemble_datatype_instance()
 
@@ -479,7 +479,7 @@ def test_gRPC_getInstanceQueryInstanceUuid(grpc_channel, project_setup):
     )
     query_builder.set_active_function(
         EnumFbQuery.PROJECTUUID,
-        lambda: [query_builder.builder.CreateString(proj_uuid)],
+        lambda: [proj_uuid],
     )
     query_builder.assemble_datatype_instance()
 
@@ -530,7 +530,7 @@ def test_gRPC_getInstanceQueryDatauuid(grpc_channel, project_setup):
     )
     query_builder.set_active_function(
         EnumFbQuery.PROJECTUUID,
-        lambda: [query_builder.builder.CreateString(proj_uuid)],
+        lambda: [proj_uuid],
     )
     query_builder.assemble_datatype_instance()
 
