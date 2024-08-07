@@ -324,6 +324,13 @@ toFlat(const sensor_msgs::CameraInfo& ci, std::string& projectuuid,
 
        flatbuffers::grpc::MessageBuilder& builder);
 /**
+ * @brief Converts a Flatbuffer CameraIntrinsics message to the corresponding
+ * ROS sensor_msgs::CameraInfo message
+ * @param ci Flatbuffer CameraIntrinsics message
+ * @return ROS sensor_msgs::CameraInfo
+ */
+sensor_msgs::CameraInfo toROS(const seerep::fb::CameraIntrinsics& ci);
+/**
  * @brief Converts a ROS sensor_msgs::RegionOfInterest message to the
  * corresponding gRPC Flatbuffer RegionOfInterest message
  * @param roi sensor_msgs::RegionOfInterest
@@ -334,7 +341,13 @@ flatbuffers::Offset<seerep::fb::RegionOfInterest>
 toFlat(const sensor_msgs::RegionOfInterest& roi,
 
        flatbuffers::grpc::MessageBuilder& builder);
-
+/**
+ * @brief Converts a Flatbuffer CameraIntrinsics message to the corresponding
+ * ROS sensor_msgs::CameraInfo message
+ * @param roi Flatbuffer RegionOfInterest message
+ * @return ROS sensor_msgs::RegionOfInterest
+ */
+sensor_msgs::RegionOfInterest toROS(const seerep::fb::RegionOfInterest& roi);
 } /* namespace seerep_ros_conversions_fb */
 
 #endif /* SEEREP_ROS_CONVERSIONS_FB */
