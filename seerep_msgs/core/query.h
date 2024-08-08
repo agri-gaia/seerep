@@ -18,6 +18,9 @@ struct Query
       projects;  ///< search all projects if not set
   std::optional<Polygon2D>
       polygon;  // query dataset in the region defined by this polygon
+  std::optional<Polygon2D>
+      polygonSensorPos;  // query dataset with the sensor position in the region
+                         // defined by this polygon
   bool fullyEncapsulated;  // if true, only return results fully inside the
                            // polygon defined above
   bool inMapFrame;  // if false the query polygon is in geodetic coordinates,

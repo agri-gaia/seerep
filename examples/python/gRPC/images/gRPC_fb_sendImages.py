@@ -16,6 +16,8 @@ from seerep.fb import image_service_grpc_fb as image_service
 from seerep.fb import tf_service_grpc_fb as tf_service
 from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
+    create_label,
+    create_label_category,
     createCameraIntrinsics,
     createHeader,
     createImage,
@@ -35,7 +37,7 @@ def send_images(
     camera_intrinsic_uuid: str,
     image_payloads: List[Union[np.ndarray, str]],
     timestamps: Union[List[Tuple[int, int]], None] = None,
-    frame_id: str = "map",
+    frame_id: str = "camera",
 ) -> List[bytes]:
     """
     Send images to a SEEREP project
@@ -71,6 +73,26 @@ def send_images(
         fbb, *list(map(int, str(time.time()).split(".")))
     )
 
+    labels = [
+        create_label(
+            builder=fbb,
+            label=label_str,
+            label_id=i,
+            instance_uuid=str(uuid4()),
+            instance_id=i + 100,
+        )
+        for i, label_str in enumerate(["label1", "label2"])
+    ]
+
+    labelsCategory = [
+        create_label_category(
+            builder=fbb,
+            labels=labels,
+            datumaro_json="a very valid datumaro json",
+            category="category A",
+        )
+    ]
+
     fb_msgs = []
     for idx, image in enumerate(image_payloads):
         if timestamps is None:
@@ -93,6 +115,7 @@ def send_images(
             width=image.shape[1] if type(image) is np.ndarray else 640,
             image=image if type(image) is np.ndarray else None,
             uri=None if type(image) is np.ndarray else image,
+            labels=labelsCategory,
         )
         fbb.Finish(fb_image)
         fb_msgs.append(bytes(fbb.Output()))
@@ -242,7 +265,7 @@ if __name__ == "__main__":
     nanos_factor = 1e-9
 
     timestamps = [
-        (t, timestamp_nanos) for t in range(1661336507, 1661336608, 10)
+        (t, timestamp_nanos) for t in range(1661336507, 1661336606, 10)
     ]
 
     img_bufs = send_images(

@@ -7,6 +7,7 @@ namespace seerep.fb;
 
 table Query {
   polygon:Polygon2D;
+  polygonSensorPosition:Polygon2D;
   fullyEncapsulated:bool;
   inMapFrame:bool;
   timeinterval:TimeInterval;
