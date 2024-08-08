@@ -10,6 +10,7 @@
 
 // seerep-msgs
 #include <seerep_msgs/transform_stamped_generated.h>
+#include <seerep_msgs/transform_stamped_interval_query_generated.h>
 #include <seerep_msgs/transform_stamped_query_generated.h>
 
 // seerep_core_msgs
@@ -61,11 +62,31 @@ public:
   void addData(const seerep::fb::TransformStamped& tf);
 
   /**
-   * @brief gets all the frames which are in the tf tree of the project of interest
+   * @brief Delete a range of tfs based on specified time interval from hdf5.
+   * @param tfInterval types of tfs to delete in a given time.
+   *
+   * The tfs are deleted from hdf5 in the specified project.
+   *
+   * @return std::nullopt if no deletions were done.
+   * @return the projectuuid when atleast one deletion was executed.
+   */
+  std::optional<boost::uuids::uuid>
+  deleteHdf5(const seerep::fb::TransformStampedIntervalQuery& tfInterval);
+
+  /**
+   * @brief Recreate the tfBuffer from hdf5 for the specified project
+   * @param projectuuid uuid of the project to recreate the tfBuffer in
+   */
+  void reinitializeTFs(const boost::uuids::uuid& projectuuid);
+
+  /**
+   * @brief gets all the frames which are in the tf tree of the project of
+   * interest
    * @param projectuuid the uuid of the project of interest
    * @return a vector of all the frames in the tf tree of the project
    *
-   * The tf is stored in the hdf5 file via hdf5-io-fb. The tf is also added to the tf buffer.
+   * The tf is stored in the hdf5 file via hdf5-io-fb. The tf is also added
+   * to the tf buffer.
    */
   std::vector<std::string> getFrames(const boost::uuids::uuid& projectuuid);
 

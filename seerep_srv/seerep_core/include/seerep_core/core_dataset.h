@@ -100,6 +100,16 @@ public:
       std::shared_ptr<seerep_hdf5_core::Hdf5CoreDatatypeInterface> hdf5Io);
 
   /**
+   * @brief Recreate the spatial rtree
+   *
+   * @param datatype the datatype for which to recreate the spatial rtree
+   * @param hdf5Io pointer to the object handling HDF5 io for this datatype
+   */
+  void recreateSpatialRt(
+      const seerep_core_msgs::Datatype& datatype,
+      std::shared_ptr<seerep_hdf5_core::Hdf5CoreDatatypeInterface> hdf5Io);
+
+  /**
    * @brief Returns a vector of UUIDs of datasets that match the query
    * @param query the spatio-temporal-semantic query
    * @return vector of UUIDs of datasets matching the query
@@ -210,15 +220,35 @@ private:
   void tryAddingDataWithMissingTF(const seerep_core_msgs::Datatype& datatype);
 
   /**
+   * @brief Checks the canTransform on the tf buffer for the indexable
+   *
+   * @param indexable the abstract indexable
+   * @return true when a transform for the indexable dataset is in the tf buffer
+   * @return false else
+   */
+  bool
+  isSpatiallyTransformable(const seerep_core_msgs::DatasetIndexable& indexable);
+
+  /**
    * @brief Check if the created CGAL polygon follows the requirements. It
-   * should be simple (no more than two vertices on an edge), convex (no inward
-   * egdes), the vertices should be in a counter clockwise order.
+   * should be simple (no more than two vertices on an edge), convex (no
+   * inward egdes), the vertices should be in a counter clockwise order.
    *
    * @param polygon_cgal a polygon defined with CGAL
    * @return true The polygon abides by CGAL requirements
    * @return false The polygon does not abide by CGAL requirements
    */
   bool verifyPolygonIntegrity(CGAL::Polygon_2<Kernel>& polygon_cgal);
+
+  /**
+   * @brief transforms the bounding box to the datasets frameId (mostly the map
+   * frame)
+   *
+   * @param indexable the indexable to transform
+   * @return The transformed AABB
+   */
+  seerep_core_msgs::AABB
+  transformIndexableAABB(const seerep_core_msgs::DatasetIndexable& indexable);
 
   /**
    * @brief convert core msg polygon to CGAL polygon

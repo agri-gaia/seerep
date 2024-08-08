@@ -140,6 +140,181 @@ void Hdf5FbTf::writeTransformStamped(const seerep::fb::TransformStamped& tf)
   m_file->flush();
 }
 
+bool Hdf5FbTf::deleteTransformStamped(std::string parentFrameId,
+                                      std::string childFrameId,
+                                      const bool isStatic,
+                                      const seerep::fb::Timestamp& timeMin,
+                                      const seerep::fb::Timestamp& timeMax) const
+{
+  const std::scoped_lock lock(*m_write_mtx);
+
+  std::string hdf5_group_tf;
+  if (isStatic)
+  {
+    hdf5_group_tf = seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF_STATIC;
+  }
+  else
+  {
+    hdf5_group_tf = seerep_hdf5_core::Hdf5CoreTf::HDF5_GROUP_TF;
+  }
+
+  std::replace(parentFrameId.begin(), parentFrameId.end(), '/', '_');
+  std::replace(childFrameId.begin(), childFrameId.end(), '/', '_');
+
+  std::string hdf5GroupPath =
+      hdf5_group_tf + "/" + parentFrameId + "_" + childFrameId;
+  std::string hdf5DatasetTimePath = hdf5GroupPath + "/" + "time";
+  std::string hdf5DatasetTransPath = hdf5GroupPath + "/" + "translation";
+  std::string hdf5DatasetRotPath = hdf5GroupPath + "/" + "rotation";
+
+  if (!m_file->exist(hdf5GroupPath) || !m_file->exist(hdf5DatasetTimePath) ||
+      !m_file->exist(hdf5DatasetTransPath) ||
+      !m_file->exist(hdf5DatasetRotPath))
+  {
+    auto str_static = isStatic ? "static" : "non-static";
+
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning)
+        << "No " << str_static << " tfs matching the frames (" << parentFrameId
+        << " -> " << childFrameId << ") were found!";
+    return false;
+  }
+
+  std::shared_ptr<HighFive::Group> group_ptr =
+      std::make_shared<HighFive::Group>(m_file->getGroup(hdf5GroupPath));
+
+  // read size
+  if (!group_ptr->hasAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE))
+  {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+        << "Could not access size attribute of the tf group " << parentFrameId
+        << "_" << childFrameId << "!";
+    return false;
+  }
+
+  long unsigned int size;
+  group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE).read(size);
+
+  if (size == 0)
+  {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning)
+        << "tf data has size 0.";
+    return false;
+  }
+
+  auto data_set_time_ptr = std::make_shared<HighFive::DataSet>(
+      m_file->getDataSet(hdf5DatasetTimePath));
+  auto data_set_trans_ptr = std::make_shared<HighFive::DataSet>(
+      m_file->getDataSet(hdf5DatasetTransPath));
+  auto data_set_rot_ptr = std::make_shared<HighFive::DataSet>(
+      m_file->getDataSet(hdf5DatasetRotPath));
+
+  std::vector<std::vector<int64_t>> time;
+  data_set_time_ptr->read(time);
+
+  std::vector<std::vector<double>> trans;
+  data_set_trans_ptr->read(trans);
+
+  std::vector<std::vector<double>> rot;
+  data_set_rot_ptr->read(rot);
+
+  // check if all have the right size
+  if (time.size() != size || trans.size() != size || rot.size() != size)
+  {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning)
+        << "sizes of time (" << time.size() << "), translation ("
+        << trans.size() << ") and rotation (" << rot.size()
+        << ") not matching. Size expected by value in metadata (" << size
+        << ")";
+    return false;
+  }
+
+  // sort indices by time
+  // initialize original index locations
+  std::vector<size_t> idx(time.size());
+  iota(idx.begin(), idx.end(), 0);
+
+  // sort indexes based on comparing values in window
+  // using std::stable_sort instead of std::sort
+  // to avoid unnecessary index re-orderings
+  // when window contains elements of equal values
+  stable_sort(idx.begin(), idx.end(), [&time](size_t i1, size_t i2) {
+    return time[i1][0] < time[i2][0] ||
+           (time[i1][0] == time[i2][0] && time[i1][1] < time[i2][1]);
+  });
+
+  // inclusive first index search
+  auto timeMinIt =
+      std::find_if(idx.begin(), idx.end(), [&time, &timeMin](size_t i) {
+        return time[i][0] > timeMin.seconds() ||
+               (time[i][0] == timeMin.seconds() &&
+                time[i][1] >= timeMin.nanos());
+      });
+
+  // exclusive last index search
+  auto timeMaxIt =
+      std::find_if(idx.begin(), idx.end(), [&time, &timeMax](size_t i) {
+        return time[i][0] > timeMax.seconds() ||
+               (time[i][0] == timeMax.seconds() &&
+                time[i][1] >= timeMax.nanos());
+      });
+
+  // first inclusive index
+  auto firstDelIdx = std::distance(idx.begin(), timeMinIt);
+  // last exclusive index
+  auto endDelIdx = std::distance(idx.begin(), timeMaxIt);
+
+  // early abort if no transform is between the provided time interval
+  if (timeMinIt == idx.end() || firstDelIdx >= endDelIdx)
+  {
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::warning)
+        << "No tf was found in the timeinterval between " << timeMin.seconds()
+        << "s / " << timeMin.nanos() << "ns (inclusive) and "
+        << timeMax.seconds() << "s / " << timeMax.nanos() << "ns (exclusive)!";
+    return false;
+  }
+  std::vector<std::vector<int64_t>> reduced_time;
+  std::vector<std::vector<double>> reduced_trans;
+  std::vector<std::vector<double>> reduced_rot;
+
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
+      << "Deleting tfs from " << timeMin.seconds() << "s / " << timeMin.nanos()
+      << "ns (inclusive) up to " << timeMax.seconds() << "s / "
+      << timeMax.nanos() << "ns (exclusive)...";
+
+  for (size_t i = 0; i < idx.size(); ++i)
+  {
+    // ignore all elements in the timeinterval
+    if (i == (size_t)firstDelIdx)
+    {
+      if ((size_t)endDelIdx == idx.size())
+      {
+        break;
+      }
+      i = endDelIdx;
+    }
+    reduced_time.push_back(time[idx[i]]);
+    reduced_trans.push_back(trans[idx[i]]);
+    reduced_rot.push_back(rot[idx[i]]);
+  }
+
+  auto reduced_size = reduced_time.size();
+
+  data_set_time_ptr->resize({ reduced_size, 2 });
+  data_set_time_ptr->select({ 0, 0 }, { reduced_size, 2 }).write(reduced_time);
+
+  data_set_trans_ptr->resize({ reduced_size, 3 });
+  data_set_trans_ptr->select({ 0, 0 }, { reduced_size, 3 }).write(reduced_trans);
+
+  data_set_rot_ptr->resize({ reduced_size, 4 });
+  data_set_rot_ptr->select({ 0, 0 }, { reduced_size, 4 }).write(reduced_rot);
+
+  // write the size as group attribute
+  group_ptr->getAttribute(seerep_hdf5_core::Hdf5CoreTf::SIZE).write(reduced_size);
+
+  m_file->flush();
+  return true;
+}
+
 std::optional<std::vector<flatbuffers::Offset<seerep::fb::TransformStamped>>>
 Hdf5FbTf::readTransformStamped(const std::string& id, const bool isStatic)
 {

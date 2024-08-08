@@ -63,6 +63,48 @@ void CoreDataset::recreateDatasets(
   }
 }
 
+void CoreDataset::recreateSpatialRt(
+    const seerep_core_msgs::Datatype& datatype,
+    std::shared_ptr<seerep_hdf5_core::Hdf5CoreDatatypeInterface> hdf5Io)
+{
+  std::vector<std::string> datasets = hdf5Io->getDatasetUuids();
+  auto datatypeSpecifics = m_datatypeDatatypeSpecificsMap.at(datatype);
+  std::vector<seerep_core_msgs::AabbIdPair> insertableData;
+
+  for (auto uuid : datasets)
+  {
+    try
+    {
+      std::optional<seerep_core_msgs::DatasetIndexable> dataset =
+          hdf5Io->readDataset(uuid);
+
+      if (dataset)
+      {
+        if (isSpatiallyTransformable(dataset.value()))
+        {
+          insertableData.push_back(
+              { transformIndexableAABB(dataset.value()),
+                boost::lexical_cast<boost::uuids::uuid>(uuid) });
+        }
+        else
+        {
+          datatypeSpecifics->dataWithMissingTF.push_back(
+              std::make_shared<seerep_core_msgs::DatasetIndexable>(
+                  dataset.value()));
+        }
+      }
+    }
+    catch (const std::runtime_error& e)
+    {
+      BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
+          << e.what();
+    }
+  }
+  // recreate spatial rtree
+  datatypeSpecifics->rt =
+      seerep_core_msgs::rtree{ insertableData.begin(), insertableData.end() };
+}
+
 std::vector<boost::uuids::uuid>
 CoreDataset::getData(const seerep_core_msgs::Query& query)
 {
@@ -221,19 +263,20 @@ CoreDataset::querySpatial(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
     // traverse query results and confirm if they are contained inside the polygon
     for (it = rt_result.value().begin(); it != rt_result.value().end();)
     {
-      // check if query result is not fully distant to the oriented bb box provided in the query
+      // check if query result is not fully distant to the oriented bb box
+      // provided in the query
       intersectionDegree(it->first, query.polygon.value(), fullyEncapsulated,
                          partiallyEncapsulated);
 
-      // if there is no intersection between the result and the user's request,
-      // remove it from the iterator
+      // if there is no intersection between the result and the user's
+      // request, remove it from the iterator
       if (!partiallyEncapsulated && !fullyEncapsulated)
       {
         it = rt_result.value().erase(it);
       }
 
-      // does the user want only results fully encapsulated by the requested bb
-      // and is this query result not fully encapsulated
+      // does the user want only results fully encapsulated by the requested
+      // bb and is this query result not fully encapsulated
       else if (query.fullyEncapsulated && !fullyEncapsulated)
       {
         // if yes, then delete partially encapsulated query results from the result set
@@ -595,15 +638,10 @@ void CoreDataset::tryAddingDataWithMissingTF(
        it != datatypeSpecifics->dataWithMissingTF.end();
        /*it++*/ /*<-- increment in loop itself!*/)
   {
-    if (m_tfOverview->canTransform((*it)->header.frameId, m_frameId,
-                                   (*it)->header.timestamp.seconds,
-                                   (*it)->header.timestamp.nanos))
+    if (isSpatiallyTransformable(**it))
     {
-      datatypeSpecifics->rt.insert(std::make_pair(
-          m_tfOverview->transformAABB(
-              (*it)->boundingbox, (*it)->header.frameId, m_frameId,
-              (*it)->header.timestamp.seconds, (*it)->header.timestamp.nanos),
-          (*it)->header.uuidData));
+      datatypeSpecifics->rt.insert(
+          std::make_pair(transformIndexableAABB(**it), (*it)->header.uuidData));
       it = datatypeSpecifics->dataWithMissingTF.erase(it);
     }
     else
@@ -619,15 +657,10 @@ void CoreDataset::addDatasetToIndices(
 {
   auto datatypeSpecifics = m_datatypeDatatypeSpecificsMap.at(datatype);
 
-  if (m_tfOverview->canTransform(dataset.header.frameId, m_frameId,
-                                 dataset.header.timestamp.seconds,
-                                 dataset.header.timestamp.nanos))
+  if (isSpatiallyTransformable(dataset))
   {
-    datatypeSpecifics->rt.insert(std::make_pair(
-        m_tfOverview->transformAABB(dataset.boundingbox, dataset.header.frameId,
-                                    m_frameId, dataset.header.timestamp.seconds,
-                                    dataset.header.timestamp.nanos),
-        dataset.header.uuidData));
+    datatypeSpecifics->rt.insert(std::make_pair(transformIndexableAABB(dataset),
+                                                dataset.header.uuidData));
   }
   else
   {
@@ -796,8 +829,8 @@ void CoreDataset::intersectionDegree(const seerep_core_msgs::AABB& aabb,
   // convert seerep core polygon to cgal polygon
   CGAL::Polygon_2<Kernel> polygon_cgal = toCGALPolygon(polygon);
 
-  // a cgal polyon needs to be simple, convex and the points should be added in
-  // a counter clockwise order
+  // a cgal polyon needs to be simple, convex and the points should be added
+  // in a counter clockwise order
   if (!verifyPolygonIntegrity(polygon_cgal) ||
       !verifyPolygonIntegrity(aabb_cgal))
   {
@@ -972,4 +1005,20 @@ CoreDataset::getAllLabels(std::vector<seerep_core_msgs::Datatype> datatypes,
   return labels;
 }
 
+bool CoreDataset::isSpatiallyTransformable(
+    const seerep_core_msgs::DatasetIndexable& dataset)
+{
+  return m_tfOverview->canTransform(dataset.header.frameId, m_frameId,
+                                    dataset.header.timestamp.seconds,
+                                    dataset.header.timestamp.nanos);
+}
+
+seerep_core_msgs::AABB CoreDataset::transformIndexableAABB(
+    const seerep_core_msgs::DatasetIndexable& indexable)
+{
+  return m_tfOverview->transformAABB(indexable.boundingbox,
+                                     indexable.header.frameId, m_frameId,
+                                     indexable.header.timestamp.seconds,
+                                     indexable.header.timestamp.nanos);
+}
 } /* namespace seerep_core */

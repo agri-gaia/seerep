@@ -23,6 +23,7 @@ def add_camintrins_raw(
     ciuuid: Optional[str] = "fa2f27e3-7484-48b0-9f21-ec362075baca",
     target_proj_uuid: Optional[str] = None,
     grpc_channel: Channel = get_gRPC_channel(),
+    frame_id: str = "map",
 ) -> Optional[bytearray]:
     """
     Creates a example cameraintrinsics object and sends it to a SEEREP server
@@ -71,7 +72,7 @@ def add_camintrins_raw(
 
     # Create all necessary objects for the query
     ts = createTimeStamp(builder, 1, 2)
-    header = createHeader(builder, ts, "map", target_proj_uuid, ciuuid)
+    header = createHeader(builder, ts, frame_id, target_proj_uuid, ciuuid)
     roi = createRegionOfInterest(builder, 3, 5, 6, 7, True)
 
     distortion_matrix = [4, 5, 6, 7, 8, 9, 10, 11, 12]
@@ -106,9 +107,10 @@ def add_camintrins(
     ciuuid: Optional[str] = "fa2f27e3-7484-48b0-9f21-ec362075baca",
     target_proj_uuid: Optional[str] = None,
     grpc_channel: Channel = get_gRPC_channel(),
+    frame_id: str = "map",
 ) -> Optional[CameraIntrinsics.CameraIntrinsics]:
     return CameraIntrinsics.CameraIntrinsics.GetRootAs(
-        add_camintrins_raw(ciuuid, target_proj_uuid, grpc_channel)
+        add_camintrins_raw(ciuuid, target_proj_uuid, grpc_channel, frame_id)
     )
 
 

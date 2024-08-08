@@ -43,11 +43,7 @@ def query_images_raw(
     """
     image_service_stub = imageService.ImageServiceStub(grpc_channel)
 
-    project_uuid_buffer = fbb.CreateString(target_proj_uuid)
-
-    query = createQuery(
-        fbb, *args, projectUuids=[project_uuid_buffer], **kwargs
-    )
+    query = createQuery(fbb, *args, projectUuids=[target_proj_uuid], **kwargs)
 
     fbb.Finish(query)
     query_buf = fbb.Output()
@@ -100,7 +96,7 @@ if __name__ == "__main__":
     time_max = createTimeStamp(fbb, 1938549273, 0)
     time_interval = createTimeInterval(fbb, time_min, time_max)
 
-    project_uuids = [fbb.CreateString(project_uuid)]
+    project_uuids = [project_uuid]
 
     labels = [
         create_label(builder=fbb, label=label_str, label_id=i)

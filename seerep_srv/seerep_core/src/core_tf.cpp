@@ -23,6 +23,13 @@ void CoreTf::recreateDatasets()
   loadTfs(tfs_static, true);
 }
 
+void CoreTf::recreateBufferAndDatasets()
+{
+  // cannot recreate the tf buffer object, because its protected by a mutex
+  m_tfBuffer.clear();
+  this->recreateDatasets();
+}
+
 void CoreTf::loadTfs(std::vector<std::string> tfs, const bool isStatic)
 {
   for (auto const& name : tfs)

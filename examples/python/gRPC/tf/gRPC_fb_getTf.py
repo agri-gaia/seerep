@@ -56,9 +56,7 @@ def get_tfs_raw(
         timestamp = createTimeStamp(builder, time_sec, time_nano)
         header = createHeader(builder, timestamp, frame, target_proj_uuid)
 
-        child_frame_id = builder.CreateString("camera")
-
-        tf_query = createTransformStampedQuery(builder, header, child_frame_id)
+        tf_query = createTransformStampedQuery(builder, header, "camera")
         builder.Finish(tf_query)
 
         tf_buf: bytearray = stubTf.GetTransformStamped(bytes(builder.Output()))

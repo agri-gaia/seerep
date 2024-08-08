@@ -3,7 +3,7 @@
 import math
 import time
 import uuid
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 import flatbuffers
 import numpy as np
@@ -33,7 +33,8 @@ from seerep.util.fb_helper import (
 
 
 def send_labeled_image_grid(
-    target_proj_uuid: str = None, grpc_channel: Channel = get_gRPC_channel()
+    target_proj_uuid: Union[str, None] = None,
+    grpc_channel: Channel = get_gRPC_channel(),
 ) -> Tuple[
     List[List[image.Image]],
     List[Tuple[int, int]],
