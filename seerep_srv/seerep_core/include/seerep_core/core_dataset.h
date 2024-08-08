@@ -55,8 +55,11 @@ private:
     std::vector<std::shared_ptr<seerep_core_msgs::DatasetIndexable>>
         dataWithMissingTF =
             std::vector<std::shared_ptr<seerep_core_msgs::DatasetIndexable>>();
-    /** @brief the spatial r-tree for the spatial index*/
+    /** @brief the spatial r-tree of the spatial extent of the sensor data for
+     * the spatial index*/
     seerep_core_msgs::rtree rt = seerep_core_msgs::rtree();
+    /** @brief the spatial r-tree of the sensor position for the spatial index*/
+    seerep_core_msgs::rtree rtSensorPos = seerep_core_msgs::rtree();
     /** @brief the temporal r-tree for the temporal index*/
     seerep_core_msgs::timetree timetree = seerep_core_msgs::timetree();
     /** @brief map from the category of labels to the map from label to the
@@ -230,6 +233,15 @@ private:
   isSpatiallyTransformable(const seerep_core_msgs::DatasetIndexable& indexable);
 
   /**
+   * @brief Get the Sensor Position As A A B B object
+   *
+   * @param indexable
+   * @return seerep_core_msgs::AABB
+   */
+  seerep_core_msgs::AABB
+  getSensorPositionAsAABB(const seerep_core_msgs::DatasetIndexable& indexable);
+
+  /**
    * @brief Check if the created CGAL polygon follows the requirements. It
    * should be simple (no more than two vertices on an edge), convex (no
    * inward egdes), the vertices should be in a counter clockwise order.
@@ -307,6 +319,31 @@ private:
   std::optional<std::vector<seerep_core_msgs::AabbIdPair>>
   querySpatial(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
                const seerep_core_msgs::Query& query);
+
+  /**
+   * @brief queries the spatial index of the sensor position and returns a vector
+   * of bounding box / UUID pairs matching the query
+   * @param datatypeSpecifics the datatype specific information to be used in the query
+   * @param query the query parameters
+   * @return vector of bounding box / UUID pairs matching the query
+   */
+  std::optional<std::vector<seerep_core_msgs::AabbIdPair>>
+  querySpatialSensorPos(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
+                        const seerep_core_msgs::Query& query);
+
+  /**
+   * @brief queries the
+   *
+   * @param rt
+   * @param polygon
+   * @param queryFullyEncapsulated
+   * @return std::optional<std::vector<seerep_core_msgs::AabbIdPair>>
+   */
+  std::optional<std::vector<seerep_core_msgs::AabbIdPair>>
+  queryRtree(const seerep_core_msgs::rtree& rt,
+             const seerep_core_msgs::Polygon2D& polygon,
+             const bool queryFullyEncapsulated);
+
   /**
    * @brief queries the temporal index and returns a vector of temporal bounding
    * box / UUID pairs matching the query
@@ -353,6 +390,7 @@ private:
    * @brief intersects the results of the spatial, temporal and semantic query
    * and returns the UUIDs of the images matching the query in all three modalities
    * @param rt_result the result of the spatial query
+   * @param rt_resultSensorPos the result of the spatial query of the sensor position
    * @param timetree_result the result of the temporal query
    * @param semanticResult the result of the semantic query
    * @param instanceResult the result of the instance based query
@@ -361,6 +399,8 @@ private:
    */
   std::vector<boost::uuids::uuid> intersectQueryResults(
       std::optional<std::vector<seerep_core_msgs::AabbIdPair>>& rt_result,
+      std::optional<std::vector<seerep_core_msgs::AabbIdPair>>&
+          rt_resultSensorPos,
       std::optional<std::vector<seerep_core_msgs::AabbTimeIdPair>>&
           timetree_result,
       std::optional<std::set<boost::uuids::uuid>>& semanticResult,
