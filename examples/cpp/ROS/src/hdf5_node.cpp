@@ -2,90 +2,8 @@
 
 namespace seerep_ros_examples
 {
-Hdf5Node::Hdf5Node(const ros::NodeHandle& nodeHandle,
-                   const ros::NodeHandle& privateNodeHandle)
-  : nodeHandle_{ nodeHandle }, privateNodeHandle_{ privateNodeHandle }
-{
-  std::string path;
-  if (!privateNodeHandle_.getParam("path", path))
-  {
-    throw std::runtime_error("No path specified");
-  }
 
-  // if a filename is not present or not a valid UUID, a proper UUID will be generated
-  std::string filename;
-  if (!privateNodeHandle_.getParam("filename", filename))
-  {
-    filename =
-        boost::lexical_cast<std::string>(boost::uuids::random_generator()());
-    ROS_WARN_STREAM("No filename provided, using generated UUID instead");
-  }
-
-  if (!isValidUUID(filename))
-  {
-    filename =
-        boost::lexical_cast<std::string>(boost::uuids::random_generator()());
-    ROS_WARN_STREAM(
-        "Filename is an invalid UUID, using generated UUID instead");
-  }
-
-  std::string projectName;
-  if (!privateNodeHandle_.getParam("project_name", projectName))
-  {
-    throw std::runtime_error("No project name specified");
-  }
-
-  std::string rootFrameId;
-  if (!privateNodeHandle_.getParam("project_root_frame", rootFrameId))
-  {
-    throw std::runtime_error("No root frame specified");
-  }
-
-  hdf5Access_ = std::make_unique<seerep_hdf5_ros::Hdf5Ros>(
-      path, filename, rootFrameId, projectName);
-
-  std::vector<std::string> topics;
-  if (!privateNodeHandle_.getParam("topics", topics))
-  {
-    throw std::runtime_error("No topics specified to dump");
-  }
-
-  for (std::string& topic : topics)
-  {
-    ros::master::TopicInfo topicInfo;
-    ROS_INFO_STREAM("Trying to subscribe to topic: " << topic);
-    while (!topicAvailable(topic, topicInfo))
-    {
-      ROS_INFO_STREAM("Waiting on topic: " << topic);
-      std::this_thread::sleep_for(
-          std::chrono::seconds(pollingIntervalInSeconds));
-    }
-    std::optional<ros::Subscriber> sub =
-        getSubscriber(topicInfo.datatype, topicInfo.name);
-    if (sub)
-    {
-      subscribers_[topicInfo.name] = *sub;
-      ROS_INFO_STREAM("Subscribed to topic: " << topicInfo.name << " of type: "
-                                              << topicInfo.datatype);
-    }
-  }
-}
-
-bool Hdf5Node::isValidUUID(const std::string& uuid) const
-{
-  try
-  {
-    boost::uuids::uuid result = boost::uuids::string_generator()(uuid);
-    return result.version() != boost::uuids::uuid::version_unknown;
-  }
-  catch (...)
-  {
-    return false;
-  }
-}
-
-bool Hdf5Node::topicAvailable(const std::string& topic,
-                              ros::master::TopicInfo& info)
+bool topicAvailable(const std::string& topic, ros::master::TopicInfo& info)
 {
   ros::master::V_TopicInfo topicInfo;
   ros::master::getTopics(topicInfo);
@@ -102,41 +20,105 @@ bool Hdf5Node::topicAvailable(const std::string& topic,
   return false;
 }
 
-std::optional<ros::Subscriber>
-Hdf5Node::getSubscriber(const std::string& message_type,
-                        const std::string& topic)
+std::string getCameraInfoTopic(const std::string& imageTopic)
 {
-  if (message_type == "sensor_msgs/Image")
+  std::string cameraInfoTopic;
+  size_t pos = imageTopic.rfind("/");
+  if (pos != std::string::npos)
   {
-    return nodeHandle_.subscribe<sensor_msgs::Image>(
-        topic, 0, &Hdf5Node::dumpMessage, this);
-    ROS_INFO_STREAM("Subscribed to topic: " << topic << " with message type: "
-                                            << message_type);
+    cameraInfoTopic = imageTopic.substr(0, pos) + "/camera_info";
   }
-  else
+  return cameraInfoTopic;
+}
+
+Hdf5Node::Hdf5Node(const ros::NodeHandle& nh, const ros::NodeHandle& pnh)
+  : nh_{ nh }, pnh_{ pnh }
+{
+  const std::string path = getParameter<std::string>("path");
+  const std::string projectName = getParameter<std::string>("project_name");
+  const std::string rootFrameId =
+      getParameter<std::string>("project_root_frame");
+  topics_ = getParameter<std::vector<std::string>>("topics");
+  const std::string filename =
+      boost::lexical_cast<std::string>(boost::uuids::random_generator()()) +
+      ".h5";
+  hdf5Ros_ = std::make_unique<seerep_hdf5_ros::Hdf5Ros>(
+      path + "/" + filename, rootFrameId, projectName);
+}
+
+void Hdf5Node::subscribe()
+{
+  for (const std::string& topic : topics_)
   {
-    ROS_ERROR_STREAM("Type" << message_type << " not supported");
-    return std::nullopt;
+    ros::master::TopicInfo info;
+    if (!topicAvailable(topic, info))
+    {
+      ROS_WARN_STREAM("Topic " << topic << " not available");
+    }
+
+    ROS_INFO_STREAM("Subscribing to topic " << topic);
+    ROS_INFO_STREAM("Topic datatype: " << info.datatype);
+
+    if (info.datatype == "sensor_msgs/Image")
+    {
+      /*
+       * Current workaround is to store the first camera info message and use it
+       * for all following images. If the camera info is  subject to change, the
+       * camera and camera info topic should be time synchronized.
+       * This could be achieved by using message filters.
+       * http://wiki.ros.org/message_filters
+       */
+      auto firstCameraInfo =
+          ros::topic::waitForMessage<sensor_msgs::CameraInfo>(
+              getCameraInfoTopic(topic), nh_, ros::Duration(3.0));
+
+      cameraInfoUuid_ = hdf5Ros_->dump(
+          *firstCameraInfo, getParameter<float>("max_viewing_distance"));
+
+      ros::Subscriber subImage = nh_.subscribe<sensor_msgs::Image>(
+          topic, 0, &Hdf5Node::callback, this);
+      subscribers_[topic] = subImage;
+    }
+    else if (info.datatype == "sensor_msgs/PointCloud2")
+    {
+      ros::Subscriber sub = nh_.subscribe<sensor_msgs::PointCloud2>(
+          topic, 0, &Hdf5Node::callback, this);
+      subscribers_[topic] = sub;
+    }
+    else
+    {
+      ROS_WARN_STREAM("Type " << info.datatype << " not supported");
+    }
   }
 }
 
-void Hdf5Node::dumpMessage(const sensor_msgs::Image::ConstPtr& image)
+void Hdf5Node::callback(const sensor_msgs::ImageConstPtr& image)
 {
-  hdf5Access_->dumpImage(*image);
-  ROS_INFO("Saved Image");
+  hdf5Ros_->dump(*image, cameraInfoUuid_);
 }
 
-} /* namespace seerep_ros_examples */
+void Hdf5Node::callback(const sensor_msgs::PointCloud2ConstPtr& pointCloud)
+{
+  hdf5Ros_->dump(*pointCloud);
+}
+
+void Hdf5Node::callback(const tf2_msgs::TFMessageConstPtr& tfMessage)
+{
+  hdf5Ros_->dump(*tfMessage);
+}
+
+} /* Namespace seerep_ros_examples */
 
 int main(int argc, char** argv)
 {
   const std::string& node_name = "hdf5-node";
   ros::init(argc, argv, node_name);
 
-  ros::NodeHandle nodeHandle("");
-  ros::NodeHandle privateNodeHandle("~");
+  ros::NodeHandle nh;
+  ros::NodeHandle pnh("~");
 
-  seerep_ros_examples::Hdf5Node node(nodeHandle, privateNodeHandle);
+  seerep_ros_examples::Hdf5Node node(nh, pnh);
+  node.subscribe();
 
   ros::spin();
 }

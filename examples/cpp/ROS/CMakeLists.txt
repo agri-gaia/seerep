@@ -14,6 +14,7 @@ find_package(
              geometry_msgs
              sensor_msgs
              roscpp
+             message_filters
 )
 
 catkin_package(
