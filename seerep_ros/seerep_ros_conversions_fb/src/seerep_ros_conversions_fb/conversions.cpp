@@ -440,12 +440,9 @@ sensor_msgs::CameraInfo toROS(const seerep::fb::CameraIntrinsics& ci)
   ret.binning_y = ci.binning_y();
   std::copy_n(ci.distortion()->Data(), ci.distortion()->size(),
               std::back_inserter(ret.D));
-  std::memcpy(&ret.K[0], ci.intrinsic_matrix()->Data(),
-              ci.intrinsic_matrix()->size());
-  std::memcpy(&ret.R[0], ci.rectification_matrix()->Data(),
-              ci.rectification_matrix()->size());
-  std::memcpy(&ret.P[0], ci.projection_matrix()->Data(),
-              ci.projection_matrix()->size());
+  std::memcpy(&ret.K, ci.intrinsic_matrix()->Data(), sizeof(ret.K));
+  std::memcpy(&ret.R, ci.rectification_matrix()->Data(), sizeof(ret.R));
+  std::memcpy(&ret.P, ci.projection_matrix()->Data(), sizeof(ret.P));
   ret.roi = toROS(*ci.region_of_interest());
   return ret;
 }
