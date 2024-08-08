@@ -74,7 +74,13 @@ def send_images(
     )
 
     labels = [
-        create_label(builder=fbb, label=label_str, label_id=i)
+        create_label(
+            builder=fbb,
+            label=label_str,
+            label_id=i,
+            instance_uuid=str(uuid4()),
+            instance_id=i + 100,
+        )
         for i, label_str in enumerate(["label1", "label2"])
     ]
 
