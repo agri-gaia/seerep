@@ -48,6 +48,7 @@ CoreFbConversion::fromFb(const seerep::fb::Query* query,
   queryCore.withoutData = fromFbQueryWithoutData(query);
   queryCore.maxNumData = fromFbQueryMaxNumData(query);
   queryCore.polygon = fromFbQueryPolygon(query);
+  queryCore.polygonSensorPos = fromFbQueryPolygonSensorPosition(query);
   queryCore.fullyEncapsulated = fromFbQueryFullyEncapsulated(query);
   queryCore.inMapFrame = fromFbQueryInMapFrame(query);
   queryCore.sortByTime = query->sortByTime();
@@ -719,22 +720,46 @@ CoreFbConversion::fromFbQueryPolygon(const seerep::fb::Query* query)
 {
   if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_POLYGON))
   {
-    seerep_core_msgs::Polygon2D polygon;
-    for (auto point : *query->polygon()->vertices())
-    {
-      seerep_core_msgs::Point2D temp(point->x(), point->y());
-      polygon.vertices.push_back(temp);
-    }
-
-    polygon.height = query->polygon()->height();
-    polygon.z = query->polygon()->z();
-
-    return polygon;
+    return extractPolygon(query->polygon()->vertices(),
+                          query->polygon()->height(), query->polygon()->z());
   }
   else
   {
     return std::nullopt;
   }
+}
+
+std::optional<seerep_core_msgs::Polygon2D>
+CoreFbConversion::fromFbQueryPolygonSensorPosition(const seerep::fb::Query* query)
+{
+  if (flatbuffers::IsFieldPresent(query,
+                                  seerep::fb::Query::VT_POLYGONSENSORPOSITION))
+  {
+    return extractPolygon(query->polygonSensorPosition()->vertices(),
+                          query->polygonSensorPosition()->height(),
+                          query->polygonSensorPosition()->z());
+  }
+  else
+  {
+    return std::nullopt;
+  }
+}
+
+seerep_core_msgs::Polygon2D CoreFbConversion::extractPolygon(
+    const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::Point2D>>* vertices,
+    double height, double z)
+{
+  seerep_core_msgs::Polygon2D polygon;
+  for (auto point : *vertices)
+  {
+    seerep_core_msgs::Point2D temp(point->x(), point->y());
+    polygon.vertices.push_back(temp);
+  }
+
+  polygon.height = height;
+  polygon.z = z;
+
+  return polygon;
 }
 
 std::vector<seerep_core_msgs::Datatype>
