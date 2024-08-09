@@ -85,6 +85,12 @@ void Hdf5Node::subscribe()
           topic, 0, &Hdf5Node::callback, this);
       subscribers_[topic] = sub;
     }
+    else if (info.datatype == "tf2_msgs/TFMessage")
+    {
+      ros::Subscriber sub = nh_.subscribe<tf2_msgs::TFMessage>(
+          topic, 0, &Hdf5Node::callback, this);
+      subscribers_[topic] = sub;
+    }
     else
     {
       ROS_WARN_STREAM("Type " << info.datatype << " not supported");

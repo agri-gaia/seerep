@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <launch>
-    <arg name="topics" default="['/mobipick/eef_main_cam/depth/image_raw', '/mobipick/eef_main_cam/depth/points_reduced']"/>
+    <arg name="topics" default="['/camera_r/depth/image_rect_raw', '/tf']"/>
     <arg name="path" default="/seerep/seerep-data/"/>
     <arg name="project_root_frame" default="map"/>
     <arg name="project_name" default="testproject"/>
