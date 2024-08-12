@@ -1,6 +1,6 @@
-#include "seerep_ros_comm/jsonPointDumper.h"
+#include "seerep_ros_comm/point_dumper.h"
 
-namespace seerep_grpc_ros
+namespace seerep_ros_comm
 {
 JsonPointDumper::JsonPointDumper(const std::string& filePath,
                                  const std::string& hdf5FilePath,
@@ -324,7 +324,7 @@ std::string JsonPointDumper::translateNameToAgrovocConcept(std::string name)
   return concept;
 }
 
-}  // namespace seerep_grpc_ros
+}  // namespace seerep_ros_comm
 
 std::string getHDF5FilePath(ros::NodeHandle privateNh)
 {
@@ -387,7 +387,7 @@ int main(int argc, char** argv)
       ROS_INFO_STREAM("dataSource: " << dataSource);
       ROS_INFO_STREAM("classesMappingPath: " << classesMappingPath);
 
-      seerep_grpc_ros::JsonPointDumper JsonPointDumper(
+      seerep_ros_comm::JsonPointDumper JsonPointDumper(
           jsonFilePath, hdf5FilePath, dataSource, classesMappingPath);
     }
   }
