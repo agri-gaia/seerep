@@ -1,4 +1,4 @@
-#include "seerep_ros_communication/jsonPointDumper.h"
+#include "seerep_ros_comm/jsonPointDumper.h"
 
 namespace seerep_grpc_ros
 {

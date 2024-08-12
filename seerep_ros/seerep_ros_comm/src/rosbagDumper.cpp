@@ -1,4 +1,4 @@
-#include "seerep_ros_communication/rosbagDumper.h"
+#include "seerep_ros_comm/rosbagDumper.h"
 
 namespace seerep_grpc_ros
 {

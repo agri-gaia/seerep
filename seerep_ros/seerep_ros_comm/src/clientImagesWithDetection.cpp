@@ -1,4 +1,4 @@
-#include "seerep_ros_communication/clientImagesWithDetection.h"
+#include "seerep_ros_comm/clientImagesWithDetection.h"
 
 namespace seerep_grpc_ros
 {

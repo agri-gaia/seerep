@@ -1,4 +1,4 @@
-#include "seerep_ros_communication/hdf5dump.h"
+#include "seerep_ros_comm/hdf5dump.h"
 
 namespace seerep_grpc_ros
 {

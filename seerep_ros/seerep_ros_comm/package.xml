@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>seerep_ros_communication</name>
+  <name>seerep_ros_comm</name>
   <version>0.0.1</version>
   <description>
     Converts incoming ROS messages to ProtoBuf messages. It use grpc to transfer the data to a configured server or to dump it directly to a HDF5 file

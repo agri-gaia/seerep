@@ -1,4 +1,4 @@
-#include "seerep_ros_communication/querier.h"
+#include "seerep_ros_comm/querier.h"
 
 namespace seerep_grpc_ros
 {
