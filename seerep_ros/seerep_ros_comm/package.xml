@@ -18,6 +18,7 @@
   <depend>seerep_core_fb</depend>
   <depend>seerep_hdf5_pb</depend>
   <depend>seerep_hdf5_fb</depend>
+  <depend>seerep_hdf5_ros</depend>
   <depend>seerep_hdf5_core</depend>
   <depend>seerep_ros_conversions_fb</depend>
   <depend>seerep_ros_conversions_pb</depend>
