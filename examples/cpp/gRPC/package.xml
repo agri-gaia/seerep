@@ -1,10 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>examples_cpp</name>
+  <name>seerep_cpp_examples</name>
   <version>0.0.1</version>
-  <description>
-    Example gRPC clients in C++
-  </description>
+  <description>Example gRPC clients in C++ </description>
 
   <maintainer email="mark.niemeyer@dfki.de">Mark Niemeyer</maintainer>
 
@@ -14,6 +12,7 @@
 
   <depend>seerep_msgs</depend>
   <depend>seerep_com</depend>
+
   <buildtool_depend>cmake</buildtool_depend>
 
   <export>
