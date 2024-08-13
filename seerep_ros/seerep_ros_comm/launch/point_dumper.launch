@@ -5,7 +5,7 @@
     <arg name="classesMappingPath" default="/seerep/seerep-data/cognitiveWeeding/fr/label_seerep_fr.json"/>
     <arg name="dataSource" default="fr"/> <!-- fr or uos -->
 
-    <node name="seerep_ros_communication_jsonPointDumper" pkg="seerep_ros_communication" type="seerep_ros_communication_jsonPointDumper" output="screen">
+    <node name="seerep_ros_comm_point_dumper" pkg="seerep_ros_comm" type="point_dumper" output="screen">
         <rosparam param="hdf5FolderPath" subst_value="True">$(arg hdf5FolderPath)</rosparam>
         <rosparam param="jsonFilePath" subst_value="True">$(arg jsonFilePath)</rosparam>
         <rosparam param="classesMappingPath" subst_value="True">$(arg classesMappingPath)</rosparam>

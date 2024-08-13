@@ -1,5 +1,5 @@
-#ifndef SEEREP_GRPC_ROS_JSON_POINT_DUMPER
-#define SEEREP_GRPC_ROS_JSON_POINT_DUMPER
+#ifndef SEEREP_ROS_COMM_POINT_DUMPER_H_
+#define SEEREP_ROS_COMM_POINT_DUMPER_H_
 
 #include <curl/curl.h>
 #include <jsoncpp/json/json.h>
@@ -30,8 +30,9 @@
 // geographic lib
 #include <GeographicLib/LocalCartesian.hpp>
 
-namespace seerep_grpc_ros
+namespace seerep_ros_comm
 {
+
 class JsonPointDumper
 {
 public:
@@ -61,5 +62,6 @@ private:
   std::string detectionCategory;
 };
 
-}  // namespace seerep_grpc_ros
-#endif  // SEEREP_GRPC_ROS_JSON_POINT_DUMPER
+}  // namespace seerep_ros_comm
+
+#endif  // SEEREP_ROS_COMM_POINT_DUMPER_H_

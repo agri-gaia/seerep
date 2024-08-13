@@ -1,5 +1,5 @@
-#ifndef SEEREP_GRPC_ROS_TYPES_H_
-#define SEEREP_GRPC_ROS_TYPES_H_
+#ifndef SEEREP_ROS_COMM_TYPES_H_
+#define SEEREP_ROS_COMM_TYPES_H_
 
 // std
 #include <algorithm>
@@ -26,8 +26,9 @@
       SEEREP_M(geometry_msgs, Quaternion), SEEREP_M(geometry_msgs, Pose),      \
       SEEREP_M(geometry_msgs, PoseStamped), SEEREP_M(tf2_msgs, TFMessage)
 
-namespace seerep_grpc_ros
+namespace seerep_ros_comm
 {
+
 // Create enum types
 #define SEEREP_M(p, t) p##_##t
 enum SEEREP_MESSAGE_TYPE
@@ -108,6 +109,6 @@ std::string name(SEEREP_MESSAGE_TYPE type)
   return (type < NumTypes) ? MessageTypeNames[type] : "";
 }
 
-}  // namespace seerep_grpc_ros
+}  // namespace seerep_ros_comm
 
-#endif  // SEEREP_GRPC_ROS_TYPES_H_
+#endif  // SEEREP_ROS_COMM_TYPES_H_

@@ -1,5 +1,5 @@
-#ifndef SEEREP_GRPC_ROS_ROSBAG_DUMPER
-#define SEEREP_GRPC_ROS_ROSBAG_DUMPER
+#ifndef SEEREP_ROS_COMM_ROSBAG_DUMPER_H_
+#define SEEREP_ROS_COMM_ROSBAG_DUMPER_H_
 
 #include <curl/curl.h>
 #include <jsoncpp/json/json.h>
@@ -43,7 +43,7 @@
 // geographic lib
 #include <GeographicLib/LocalCartesian.hpp>
 
-namespace seerep_grpc_ros
+namespace seerep_ros_comm
 {
 class RosbagDumper
 {
@@ -113,5 +113,6 @@ private:
   double maxViewingDistance;
 };
 
-}  // namespace seerep_grpc_ros
-#endif  // SEEREP_GRPC_ROS_ROSBAG_DUMPER
+}  // namespace seerep_ros_comm
+
+#endif  // SEEREP_ROS_COMM_ROSBAG_DUMPER_H_

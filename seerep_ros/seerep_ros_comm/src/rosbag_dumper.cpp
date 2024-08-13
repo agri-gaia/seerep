@@ -1,6 +1,6 @@
-#include "seerep_ros_communication/rosbagDumper.h"
+#include "seerep_ros_comm/rosbag_dumper.h"
 
-namespace seerep_grpc_ros
+namespace seerep_ros_comm
 {
 RosbagDumper::RosbagDumper(
     const std::string& bagPath, const std::string& classesMappingPath,
@@ -432,7 +432,7 @@ std::string RosbagDumper::translateNameToAgrovocConcept(std::string name)
   return concept;
 }
 
-}  // namespace seerep_grpc_ros
+}  // namespace seerep_ros_comm
 
 std::string getHDF5FilePath(ros::NodeHandle privateNh, std::string& projectUuid)
 {
@@ -522,7 +522,7 @@ int main(int argc, char** argv)
     ROS_INFO_STREAM("maxViewingDistance: " << maxViewingDistance);
     ROS_INFO_STREAM("storeImages: " << storeImages);
 
-    seerep_grpc_ros::RosbagDumper rosbagDumper(
+    seerep_ros_comm::RosbagDumper rosbagDumper(
         bagPath, classesMappingPath, hdf5FilePath, projectFrameId, projectName,
         projectUuid, topicImage, topicCameraIntrinsics, topicDetection, topicTf,
         topicTfStatic, topicGeoAnchor, distanceCameraGround, maxViewingDistance,

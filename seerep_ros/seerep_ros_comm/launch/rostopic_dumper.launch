@@ -4,7 +4,7 @@
     <arg name="hdf5FolderPath" default="/seerep/seerep-data/"/>
     <arg name="project_frame_id" default="map"/>
     <arg name="project_name" default="testproject"/>
-    <node name="seerep_ros_communication_hdf5dump" pkg="seerep_ros_communication" type="seerep_ros_communication_hdf5dump" output="screen">
+    <node name="seerep_ros_communication_rostopic_dumper" pkg="seerep_ros_comm" type="rostopic_dumper" output="screen">
         <rosparam param="topics" subst_value="True">$(arg topics)</rosparam>
         <rosparam param="hdf5FolderPath" subst_value="True">$(arg hdf5FolderPath)</rosparam>
         <rosparam param="project_frame_id" subst_value="True">$(arg project_frame_id)</rosparam>
