@@ -139,10 +139,13 @@ const seerep::fb::Image* createImageMessage(
 
   auto generalLabelsOffset = createLabels(fbb);
 
+  auto uriOffset =
+      fbb.CreateString("https://cloud-provider/project-name/test.jpg");
+
   auto imgMsgOffset =
       seerep::fb::CreateImage(fbb, headerOffset, imageHeight, imageWidth,
                               encodingOffset, true, 3 * imageHeight,
-                              imageOffset, generalLabelsOffset,
+                              imageOffset, uriOffset, generalLabelsOffset,
                               camintrinsicsUUIDOffset);
   fbb.Finish(imgMsgOffset);
   uint8_t* buf = fbb.GetBufferPointer();
@@ -266,6 +269,7 @@ TEST_F(fbWriteLoadTest, testImageData)
   {
     EXPECT_EQ(readImage->data()->Get(i), writeImage->data()->Get(i));
   }
+  EXPECT_STREQ(readImage->uri()->c_str(), writeImage->uri()->c_str());
 }
 
 void testLabel(const seerep::fb::Label* readInstance,

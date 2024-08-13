@@ -95,7 +95,7 @@ void Hdf5FbGeneral::writeLabelsFb(const std::string& datatypeGroup,
   }
 }
 
-flatbuffers::Offset<LabelsCategoryFb>
+std::optional<flatbuffers::Offset<LabelsCategoryFb>>
 Hdf5FbGeneral::readLabels(const std::string& datatypeGroup,
                           const std::string& uuid,
                           flatbuffers::grpc::MessageBuilder& builder)
@@ -106,6 +106,11 @@ Hdf5FbGeneral::readLabels(const std::string& datatypeGroup,
   seerep_hdf5_core::Hdf5CoreGeneral::readLabels(datatypeGroup, uuid,
                                                 labelCategories, labelsCategory,
                                                 datumaroJsonPerCategory);
+
+  if (labelsCategory.empty())
+  {
+    return std::nullopt;
+  }
 
   std::vector<flatbuffers::Offset<seerep::fb::LabelCategory>> labelCategory;
   labelCategory.reserve(labelCategories.size());
@@ -152,7 +157,8 @@ Hdf5FbGeneral::readLabels(const std::string& datatypeGroup,
     labelCategory.push_back(labelsOfCategory);
   }
 
-  return builder.CreateVector<flatbuffers::Offset<seerep::fb::LabelCategory>>(
-      labelCategory);
+  return std::optional<flatbuffers::Offset<LabelsCategoryFb>>(
+      builder.CreateVector<flatbuffers::Offset<seerep::fb::LabelCategory>>(
+          labelCategory));
 }
 }  // namespace seerep_hdf5_fb

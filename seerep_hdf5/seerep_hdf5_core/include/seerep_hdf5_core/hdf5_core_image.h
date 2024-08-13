@@ -106,7 +106,7 @@ public:
    * @param id uuid of the image data group
    * @param attributes struct with the general attributes
    */
-  void writeImageAttributes(const std::string& id,
+  void writeImageAttributes(HighFive::Group& group,
                             const ImageAttributes& attributes);
 
   /**
@@ -115,7 +115,7 @@ public:
    * @param id uuid of the image data group
    * @return ImageAttributes struct with the general attributes
    */
-  ImageAttributes readImageAttributes(const std::string& id);
+  ImageAttributes readImageAttributes(HighFive::Group& group);
 
   /**
    * @brief Get the path to the hdf5 group of an image

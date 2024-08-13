@@ -16,7 +16,7 @@
     <arg name="storeImages" default="false"/>
     <!-- <arg name="projectUuid" default=""/> -->
 
-    <node name="seerep_ros_communication_rosbagDumper" pkg="seerep_ros_communication" type="seerep_ros_communication_rosbagDumper" output="screen">
+    <node name="seerep_ros_communication_rosbag_dumper" pkg="seerep_ros_comm" type="rosbag_dumper" output="screen">
         <rosparam param="bagPath" subst_value="True">$(arg bagPath)</rosparam>
         <rosparam param="classesMappingPath" subst_value="True">$(arg classesMappingPath)</rosparam>
         <rosparam param="hdf5FolderPath" subst_value="True">$(arg hdf5FolderPath)</rosparam>

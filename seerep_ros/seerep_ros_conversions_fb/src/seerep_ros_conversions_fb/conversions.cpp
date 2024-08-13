@@ -427,6 +427,26 @@ toFlat(const sensor_msgs::CameraInfo& ci, std::string& projectuuid,
   cibuilder.add_height(ci.height);
   return cibuilder.Finish();
 }
+
+sensor_msgs::CameraInfo toROS(const seerep::fb::CameraIntrinsics& ci)
+{
+  sensor_msgs::CameraInfo ret;
+  ret.header = toROS(*ci.header());
+  ret.height = ci.height();
+  ret.width = ci.width();
+
+  ret.distortion_model = ci.distortion_model()->str();
+  ret.binning_x = ci.binning_x();
+  ret.binning_y = ci.binning_y();
+  std::copy_n(ci.distortion()->Data(), ci.distortion()->size(),
+              std::back_inserter(ret.D));
+  std::memcpy(&ret.K, ci.intrinsic_matrix()->Data(), sizeof(ret.K));
+  std::memcpy(&ret.R, ci.rectification_matrix()->Data(), sizeof(ret.R));
+  std::memcpy(&ret.P, ci.projection_matrix()->Data(), sizeof(ret.P));
+  ret.roi = toROS(*ci.region_of_interest());
+  return ret;
+}
+
 flatbuffers::Offset<seerep::fb::RegionOfInterest>
 toFlat(const sensor_msgs::RegionOfInterest& roi,
 
@@ -439,5 +459,16 @@ toFlat(const sensor_msgs::RegionOfInterest& roi,
   roiBuilder.add_x_offset(roi.x_offset);
   roiBuilder.add_y_offset(roi.y_offset);
   return roiBuilder.Finish();
+}
+
+sensor_msgs::RegionOfInterest toROS(const seerep::fb::RegionOfInterest& roi)
+{
+  sensor_msgs::RegionOfInterest ret;
+  ret.x_offset = roi.x_offset();
+  ret.y_offset = roi.y_offset();
+  ret.height = roi.height();
+  ret.width = roi.width();
+  ret.do_rectify = roi.do_rectify();
+  return ret;
 }
 }  // namespace seerep_ros_conversions_fb

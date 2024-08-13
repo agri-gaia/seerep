@@ -82,6 +82,7 @@ set(MY_FBS_FILES
     fbs/time_interval.fbs
     fbs/timestamp.fbs
     fbs/transform_stamped.fbs
+    fbs/transform_stamped_interval_query.fbs
     fbs/transform_stamped_query.fbs
     fbs/transform.fbs
     fbs/union_map_entry.fbs

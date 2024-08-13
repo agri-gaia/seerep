@@ -1,5 +1,5 @@
-#ifndef SEEREP_GRPC_ROS_ROSBAG_DUMPER
-#define SEEREP_GRPC_ROS_ROSBAG_DUMPER
+#ifndef SEEREP_ROS_COMM_ROSBAG_DUMPER_H_
+#define SEEREP_ROS_COMM_ROSBAG_DUMPER_H_
 
 #include <curl/curl.h>
 #include <jsoncpp/json/json.h>
@@ -12,7 +12,6 @@
 #include <seerep_hdf5_fb/hdf5_fb_tf.h>
 #include <seerep_ros_conversions_fb/conversions.h>
 
-
 #include <filesystem>
 #include <fstream>
 
@@ -23,6 +22,7 @@
 #include <flatbuffers/grpc.h>
 
 // ros
+#include <cv_bridge/cv_bridge.h>
 #include <geographic_msgs/GeoPointStamped.h>
 #include <ros/console.h>
 #include <ros/master.h>
@@ -30,12 +30,11 @@
 #include <rosbag/bag.h>
 #include <rosbag/view.h>
 #include <sensor_msgs/CameraInfo.h>
+#include <sensor_msgs/CompressedImage.h>
 #include <sensor_msgs/NavSatFix.h>
 #include <tf2_msgs/TFMessage.h>
 #include <vision_msgs/Detection2DArray.h>
-#include <sensor_msgs/CompressedImage.h>
 
-#include <cv_bridge/cv_bridge.h>
 #include <opencv2/opencv.hpp>
 
 // uuid
@@ -48,17 +47,22 @@
 // geographic lib
 #include <GeographicLib/LocalCartesian.hpp>
 
-namespace seerep_grpc_ros
+namespace seerep_ros_comm
 {
 class RosbagDumper
 {
 public:
-  RosbagDumper(const std::string& bagPath, const std::string& classesMappingPath, const std::string& hdf5FilePath,
-               const std::string& projectFrameId, const std::string& projectName, const std::string& projectUuid,
-               const std::string& topicImage, const std::string& topicCameraIntrinsics,
-               const std::string& topicDetection, const std::string& topicTf, const std::string& topicTfStatic,
-               const std::string& topicGeoAnchor, float distanceCameraGround, double maxViewingDistance,
-               bool storeImages = true);
+  RosbagDumper(const std::string& bagPath,
+               const std::string& classesMappingPath,
+               const std::string& hdf5FilePath,
+               const std::string& projectFrameId,
+               const std::string& projectName, const std::string& projectUuid,
+               const std::string& topicImage,
+               const std::string& topicCameraIntrinsics,
+               const std::string& topicDetection, const std::string& topicTf,
+               const std::string& topicTfStatic,
+               const std::string& topicGeoAnchor, float distanceCameraGround,
+               double maxViewingDistance, bool storeImages = true);
   ~RosbagDumper();
 
 private:
@@ -70,16 +74,20 @@ private:
   void iterateAndDumpDetections(bool storeImages);
   void iterateAndDumpTf();
   void iterateAndDumpTf(const std::string& topicTf, const bool isStatic);
-  sensor_msgs::Image::ConstPtr convertCompressedImageToImage(const sensor_msgs::CompressedImage::ConstPtr& msg);
+  sensor_msgs::Image::ConstPtr convertCompressedImageToImage(
+      const sensor_msgs::CompressedImage::ConstPtr& msg);
 
   std::string translateNameToAgrovocConcept(std::string name);
   std::unordered_map<std::string, std::string> name2Concept;
 
   flatbuffers::grpc::Message<seerep::fb::PointStamped>
-  createPointForDetection(vision_msgs::Detection2D detection, int32_t stampSecs, uint32_t stampNanos,
-                          const std::string& frameId, const std::string& labelAgrovoc, const std::string& labelTrivial,
+  createPointForDetection(vision_msgs::Detection2D detection, int32_t stampSecs,
+                          uint32_t stampNanos, const std::string& frameId,
+                          const std::string& labelAgrovoc,
+                          const std::string& labelTrivial,
                           const std::string& instanceUUID);
-  void projectPixel(const float u, const float v, const float d, float& X, float& Y, float& Z);
+  void projectPixel(const float u, const float v, const float d, float& X,
+                    float& Y, float& Z);
   float calcDiameter(vision_msgs::Detection2D detection);
 
   std::shared_ptr<seerep_hdf5_core::Hdf5CoreGeneral> ioCoreGeneral;
@@ -112,5 +120,6 @@ private:
   double maxViewingDistance;
 };
 
-}  // namespace seerep_grpc_ros
-#endif  // SEEREP_GRPC_ROS_ROSBAG_DUMPER
+}  // namespace seerep_ros_comm
+
+#endif  // SEEREP_ROS_COMM_ROSBAG_DUMPER_H_

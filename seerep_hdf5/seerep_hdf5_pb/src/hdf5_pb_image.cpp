@@ -31,7 +31,7 @@ void Hdf5PbImage::writeImage(const std::string& id,
     image.encoding(), image.is_bigendian(), image.uuid_camera_intrinsics()
   };
 
-  writeImageAttributes(id, imageAttributes);
+  writeImageAttributes(*dataGroupPtr, imageAttributes);
 
   const uint8_t* arrayStartPtr =
       reinterpret_cast<const uint8_t*>(image.data().c_str());
@@ -67,7 +67,7 @@ std::optional<seerep::pb::Image> Hdf5PbImage::readImage(const std::string& id)
 
   auto header = readHeaderAttributes(*dataGroupPtr, id);
 
-  auto ImageAttributes = readImageAttributes(id);
+  auto ImageAttributes = readImageAttributes(*dataGroupPtr);
 
   auto labels =
       readLabels(seerep_hdf5_core::Hdf5CoreImage::HDF5_GROUP_IMAGE, id);

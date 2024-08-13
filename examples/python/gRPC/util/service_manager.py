@@ -1,4 +1,4 @@
-from typing import List
+from typing import Dict, List
 
 from flatbuffers import Builder
 from grpc import Channel
@@ -18,6 +18,7 @@ from seerep.fb import meta_operations_grpc_fb as meta_ops_srv_fb
 from seerep.fb import point_cloud_service_grpc_fb as pcl2_srv_fb
 from seerep.fb import point_service_grpc_fb as point_srv_fb
 from seerep.util.common import get_gRPC_channel
+from seerep.util.fb_to_dict import SchemaFileNames, fb_flatc_dict
 
 
 class ServiceManager:
@@ -80,14 +81,27 @@ class ServiceManager:
             point_lst.append(PointStamped.PointStamped.GetRootAs(response))
         return point_lst
 
+    def call_get_images_fb_raw(
+        self, builder: Builder, query: Query.Query
+    ) -> List[bytes]:
+        builder.Finish(query)
+        buf = builder.Output()
+        stub = self.get_stub(image_srv_fb.ImageServiceStub)
+
+        return stub.GetImage(bytes(buf))
+
+    def call_get_images_fb_dict(
+        self, builder: Builder, query: Query.Query
+    ) -> List[Dict]:
+        return [
+            fb_flatc_dict(img, SchemaFileNames.IMAGE)
+            for img in self.call_get_images_fb_raw(builder, query)
+        ]
+
     def call_get_images_fb(
         self, builder: Builder, query: Query.Query
     ) -> List[Image.Image]:
-        builder.Finish(query)
-        buf = builder.Output()
         queried_images = []
-        stub = self.get_stub(image_srv_fb.ImageServiceStub)
-
-        for response in stub.GetImage(bytes(buf)):
+        for response in self.call_get_images_fb_raw(builder, query):
             queried_images.append(Image.Image.GetRootAs(response))
         return queried_images

@@ -156,6 +156,12 @@ public:
    * @brief Returns a vector of all frames stored in the TF tree by the TF buffer
    * @return vector of frame names
    */
+  std::vector<std::string> getFrames();
+
+  /**
+   * @brief reinitializes the tf buffer from hdf5
+   */
+  void reinitializeTFs();
 
   // camera intrinsics
   /**
@@ -183,8 +189,6 @@ public:
    * @return false If Camera Intrinsics Exists
    */
   bool cameraIntrinsicExists(boost::uuids::uuid camIntrinsicsUuid);
-
-  std::vector<std::string> getFrames();
 
   /**
    * @brief Returns a shared pointer to the file mutex of the HDF5 file of this project

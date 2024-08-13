@@ -47,7 +47,7 @@ timeMax = createTimeStamp(builder, 1938549273, 0)
 timeInterval = createTimeInterval(builder, timeMin, timeMax)
 
 
-projectUuids = [builder.CreateString(projectuuid)]
+projectUuids = [projectuuid]
 
 labelStr = ["label1", "label2"]
 labels = []
@@ -63,8 +63,8 @@ labelsCategory.append(
     )
 )
 
-dataUuids = [builder.CreateString("5a0438b8-37cf-412e-8331-a95ef95c1016")]
-instanceUuids = [builder.CreateString("3e12e18d-2d53-40bc-a8af-c5cca3c3b248")]
+dataUuids = ["5a0438b8-37cf-412e-8331-a95ef95c1016"]
+instanceUuids = ["3e12e18d-2d53-40bc-a8af-c5cca3c3b248"]
 
 # 4. Create a query with parameters
 # All parameters are optional

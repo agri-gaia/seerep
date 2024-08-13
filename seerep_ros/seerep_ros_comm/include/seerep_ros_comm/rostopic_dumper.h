@@ -1,33 +1,27 @@
-#ifndef SEEREP_ROS_HDF5_DUMP_H_
-#define SEEREP_ROS_HDF5_DUMP_H_
+#ifndef SEEREP_ROS_ROSTOPIC_DUMPER_H_
+#define SEEREP_ROS_ROSTOPIC_DUMPER_H_
 
-#include <functional>
-#include <optional>
-
-// seerep
+#include <ros/master.h>
+#include <ros/ros.h>
 #include <seerep_hdf5_core/hdf5_core_general.h>
 #include <seerep_hdf5_core/hdf5_core_image.h>
 #include <seerep_hdf5_pb/hdf5_pb_image.h>
 #include <seerep_hdf5_pb/hdf5_pb_pointcloud.h>
 #include <seerep_hdf5_pb/hdf5_pb_tf.h>
 #include <seerep_ros_conversions_pb/conversions.h>
-
-// uuid
-#include <boost/functional/hash.hpp>
-#include <boost/lexical_cast.hpp>
-#include <boost/uuid/uuid.hpp>             // uuid class
-#include <boost/uuid/uuid_generators.hpp>  // generators
-#include <boost/uuid/uuid_io.hpp>          // streaming operators etc.
-
-// ros
-#include <ros/master.h>
-#include <ros/ros.h>
 #include <tf2_msgs/TFMessage.h>
 
-// pkg
+#include <boost/functional/hash.hpp>
+#include <boost/lexical_cast.hpp>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
+#include <functional>
+#include <optional>
+
 #include "types.h"
 
-namespace seerep_grpc_ros
+namespace seerep_ros_comm
 {
 class DumpSensorMsgs
 {
@@ -60,6 +54,6 @@ private:
   ros::NodeHandle nh;
 };
 
-}  // namespace seerep_grpc_ros
+}  // namespace seerep_ros_comm
 
-#endif  // SEEREP_ROS_HDF5_DUMP_H_
+#endif  // SEEREP_ROS_ROSTOPIC_DUMPER_H_

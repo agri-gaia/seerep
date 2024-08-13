@@ -11,6 +11,7 @@ table Image {
   is_bigendian:bool;
   step:uint;
   data:[ubyte];
+  uri:string;
   labels:[LabelCategory];
   uuid_cameraintrinsics:string;
 }

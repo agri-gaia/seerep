@@ -110,6 +110,12 @@ public:
   std::vector<std::string> getFrames(const boost::uuids::uuid& projectuuid);
 
   /**
+   * @brief Recreates the TF buffer from hdf5
+   * @param projectuuid the UUID of the targeted project
+   */
+  void reinitializeTFs(const boost::uuids::uuid& projectuuid);
+
+  /**
    * @brief Adds a ci to the project
    * @param ci the Camera Intrinsics to be added
    * @param projectuuid the UUID of the targeted project

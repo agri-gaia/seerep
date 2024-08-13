@@ -35,7 +35,7 @@ def add_pc_label_raw(
 
     query = createQuery(
         builder,
-        projectUuids=[builder.CreateString(target_proj_uuid)],
+        projectUuids=[target_proj_uuid],
         withoutData=True,
     )
     builder.Finish(query)

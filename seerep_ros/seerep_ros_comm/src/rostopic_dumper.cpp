@@ -1,6 +1,6 @@
-#include "seerep_ros_communication/hdf5dump.h"
+#include "seerep_ros_comm/rostopic_dumper.h"
 
-namespace seerep_grpc_ros
+namespace seerep_ros_comm
 {
 DumpSensorMsgs::DumpSensorMsgs(std::string hdf5FilePath,
                                std::string project_frame_id,
@@ -143,7 +143,7 @@ DumpSensorMsgs::getSubscriber(const std::string& message_type,
       return std::nullopt;
   }
 }
-}  // namespace seerep_grpc_ros
+}  // namespace seerep_ros_comm
 
 int main(int argc, char** argv)
 {
@@ -207,8 +207,8 @@ int main(int argc, char** argv)
                     "\"project_name\" parameter should be a string.");
   }
 
-  seerep_grpc_ros::DumpSensorMsgs dumpSensorMsgs =
-      seerep_grpc_ros::DumpSensorMsgs(hdf5FilePath, project_frame_id,
+  seerep_ros_comm::DumpSensorMsgs dumpSensorMsgs =
+      seerep_ros_comm::DumpSensorMsgs(hdf5FilePath, project_frame_id,
                                       project_name);
 
   ros::master::V_TopicInfo topic_info;
@@ -221,7 +221,7 @@ int main(int argc, char** argv)
                     "\"topics\" parameter should be a list of strings.");
   }
 
-  ROS_INFO_STREAM("Type names: " << seerep_grpc_ros::names());
+  ROS_INFO_STREAM("Type names: " << seerep_ros_comm::names());
 
   for (auto topic : topics)
   {

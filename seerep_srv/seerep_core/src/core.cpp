@@ -196,6 +196,12 @@ void Core::addTF(const geometry_msgs::TransformStamped& tf,
   project->second->addTF(tf);
 }
 
+void Core::reinitializeTFs(const boost::uuids::uuid& projectuuid)
+{
+  auto project = findProject(projectuuid);
+  project->second->reinitializeTFs();
+}
+
 void Core::addCameraIntrinsics(const seerep_core_msgs::camera_intrinsics& ci,
                                const boost::uuids::uuid& projectuuid)
 {

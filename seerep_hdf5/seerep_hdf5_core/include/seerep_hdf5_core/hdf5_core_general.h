@@ -334,6 +334,8 @@ public:
   inline static const std::string GEODETICLOCATION_LONGITUDE =
       "geoloc_longitude";
 
+  inline static const std::string DATA_URI = "data_uri";
+
   // dataset names
   inline static const std::string RAWDATA = "rawdata";
   inline static const std::string LABEL = "label";

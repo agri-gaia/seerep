@@ -56,7 +56,7 @@ def add_label_raw(
     builder = flatbuffers.Builder(1024)
     query = createQuery(
         builder,
-        projectUuids=[builder.CreateString(target_proj_uuid)],
+        projectUuids=[target_proj_uuid],
         withoutData=True,
     )
     builder.Finish(query)
