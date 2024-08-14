@@ -7,7 +7,13 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -fPIC")
 
-find_package(catkin REQUIRED COMPONENTS std_msgs geometry_msgs sensor_msgs)
+find_package(
+  catkin REQUIRED
+  COMPONENTS std_msgs
+             geometry_msgs
+             sensor_msgs
+             tf2_msgs
+)
 
 find_package(SeerepHdf5Core REQUIRED)
 
@@ -27,6 +33,7 @@ catkin_package(
   CATKIN_DEPENDS
   std_msgs
   geometry_msgs
+  tf2_msgs
   sensor_msgs
   DEPENDS
   HighFive

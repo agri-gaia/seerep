@@ -11,6 +11,7 @@ find_package(SeerepCom REQUIRED)
 
 find_package(SeerepHdf5Pb REQUIRED)
 find_package(SeerepHdf5Fb REQUIRED)
+find_package(seerep_hdf5_ros REQUIRED)
 find_package(SeerepHdf5Core REQUIRED)
 find_package(SeerepCoreFb REQUIRED)
 find_package(SeerepCore REQUIRED)
@@ -58,6 +59,7 @@ catkin_package(
   roscpp
   seerep_ros_conversions_pb
   seerep_ros_conversions_fb
+  seerep_hdf5_ros
   roscpp
   topic_tools
   tf
@@ -71,6 +73,7 @@ include_directories(
   ${SeerepCom_INCLUDE_DIRS}
   ${SeerepHdf5Pb_INCLUDE_DIRS}
   ${SeerepHdf5Fb_INCLUDE_DIRS}
+  ${seerep_hdf5_ros_INCLUDE_DIRS}
   ${SeerepHdf5Core_INCLUDE_DIRS}
   ${SeerepCoreFb_INCLUDE_DIRS}
   ${seerep_ros_conversions_pb_INCLUDE_DIRS}
@@ -102,6 +105,7 @@ target_link_libraries(
   ${SeerepCom_LIBRARIES}
   ${seerep_ros_conversions_pb_LIBRARIES}
   ${SeerepHdf5Pb_LIBRARIES}
+  ${seerep_hdf5_ros_LIBRARIES}
   ${SeerepHdf5Core_LIBRARIES}
   ${catkin_LIBRARIES}
   ${Boost_LIBRARIES}
