@@ -18,14 +18,23 @@ include_directories(
 )
 
 add_executable(image_query src/image_query.cpp)
+add_executable(tf_query src/tf_query.cpp)
 
 set(link_libs ${SeerepCom_LIBRARIES} ${catkin_LIBRARIES}
               gRPC::grpc++_reflection
 )
 target_link_libraries(image_query ${link_libs})
+target_link_libraries(tf_query ${link_libs})
 
 install(
   TARGETS image_query
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
+)
+
+install(
+  TARGETS tf_query
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
