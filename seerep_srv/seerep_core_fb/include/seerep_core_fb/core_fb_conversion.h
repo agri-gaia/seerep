@@ -330,6 +330,20 @@ private:
   fromFbQueryPolygon(const seerep::fb::Query* query);
 
   /**
+   * @brief extracts and converts a polygon for the sensor position from a fb query
+   *
+   * @param query fb query message
+   * @return seerep_core_msgs::Polygon2D polygon2d as a core msg
+   */
+  static std::optional<seerep_core_msgs::Polygon2D>
+  fromFbQueryPolygonSensorPosition(const seerep::fb::Query* query);
+
+  static seerep_core_msgs::Polygon2D extractPolygon(
+      const flatbuffers::Vector<flatbuffers::Offset<seerep::fb::Point2D>>*
+          vertices,
+      double height, double z);
+
+  /**
    * @brief converts the header of the flatbuffer data message to seerep core
    * specific message
    * @param header the header in the flatbuffer data message

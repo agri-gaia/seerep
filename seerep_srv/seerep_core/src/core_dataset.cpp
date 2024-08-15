@@ -22,6 +22,7 @@ void CoreDataset::addDatatype(
     .dataWithMissingTF =
         std::vector<std::shared_ptr<seerep_core_msgs::DatasetIndexable>>(),
     .rt = seerep_core_msgs::rtree(),
+    .rtSensorPos = seerep_core_msgs::rtree(),
     .timetree = seerep_core_msgs::timetree(),
     .categoryLabelDatasetsMap = std::unordered_map<
         std::string,
@@ -70,6 +71,7 @@ void CoreDataset::recreateSpatialRt(
   std::vector<std::string> datasets = hdf5Io->getDatasetUuids();
   auto datatypeSpecifics = m_datatypeDatatypeSpecificsMap.at(datatype);
   std::vector<seerep_core_msgs::AabbIdPair> insertableData;
+  std::vector<seerep_core_msgs::AabbIdPair> insertableDataSensorPos;
 
   for (auto uuid : datasets)
   {
@@ -84,6 +86,9 @@ void CoreDataset::recreateSpatialRt(
         {
           insertableData.push_back(
               { transformIndexableAABB(dataset.value()),
+                boost::lexical_cast<boost::uuids::uuid>(uuid) });
+          insertableDataSensorPos.push_back(
+              { getSensorPositionAsAABB(dataset.value()),
                 boost::lexical_cast<boost::uuids::uuid>(uuid) });
         }
         else
@@ -103,6 +108,9 @@ void CoreDataset::recreateSpatialRt(
   // recreate spatial rtree
   datatypeSpecifics->rt =
       seerep_core_msgs::rtree{ insertableData.begin(), insertableData.end() };
+  datatypeSpecifics->rtSensorPos =
+      seerep_core_msgs::rtree{ insertableDataSensorPos.begin(),
+                               insertableDataSensorPos.end() };
 }
 
 std::vector<boost::uuids::uuid>
@@ -117,6 +125,7 @@ CoreDataset::getData(const seerep_core_msgs::Query& query)
       m_datatypeDatatypeSpecificsMap.at(query.header.datatype);
   // space
   auto resultRt = querySpatial(datatypeSpecifics, query);
+  auto resultRtSensorPos = querySpatialSensorPos(datatypeSpecifics, query);
   // time
   auto resultTime = queryTemporal(datatypeSpecifics, query);
   // semantic
@@ -140,8 +149,8 @@ CoreDataset::getData(const seerep_core_msgs::Query& query)
     return getAllDatasetUuids(datatypeSpecifics, query.sortByTime);
   }
 
-  return intersectQueryResults(resultRt, resultTime, resultSemantic,
-                               instanceResult, query.dataUuids,
+  return intersectQueryResults(resultRt, resultRtSensorPos, resultTime,
+                               resultSemantic, instanceResult, query.dataUuids,
                                query.sortByTime);
 }
 
@@ -246,55 +255,80 @@ CoreDataset::querySpatial(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
 {
   if (query.polygon)
   {
-    // generate rtree result container
-    std::optional<std::vector<seerep_core_msgs::AabbIdPair>> rt_result =
-        std::vector<seerep_core_msgs::AabbIdPair>();
-
-    seerep_core_msgs::AABB aabb = polygonToAABB(query.polygon.value());
-
-    // perform the query on the r tree using the aabb
-    datatypeSpecifics->rt.query(boost::geometry::index::intersects(aabb),
-                                std::back_inserter(rt_result.value()));
-
-    bool fullyEncapsulated = false;
-    bool partiallyEncapsulated = false;
-    std::vector<seerep_core_msgs::AabbIdPair>::iterator it;
-
-    // traverse query results and confirm if they are contained inside the polygon
-    for (it = rt_result.value().begin(); it != rt_result.value().end();)
-    {
-      // check if query result is not fully distant to the oriented bb box
-      // provided in the query
-      intersectionDegree(it->first, query.polygon.value(), fullyEncapsulated,
-                         partiallyEncapsulated);
-
-      // if there is no intersection between the result and the user's
-      // request, remove it from the iterator
-      if (!partiallyEncapsulated && !fullyEncapsulated)
-      {
-        it = rt_result.value().erase(it);
-      }
-
-      // does the user want only results fully encapsulated by the requested
-      // bb and is this query result not fully encapsulated
-      else if (query.fullyEncapsulated && !fullyEncapsulated)
-      {
-        // if yes, then delete partially encapsulated query results from the result set
-        it = rt_result.value().erase(it);
-      }
-      else
-      {
-        ++it;
-      }
-    }
-
-    // return the result after deletion of undesired elements has been performed
-    return rt_result;
+    return queryRtree(datatypeSpecifics->rt, query.polygon.value(),
+                      query.fullyEncapsulated);
   }
   else
   {
     return std::nullopt;
   }
+}
+
+std::optional<std::vector<seerep_core_msgs::AabbIdPair>>
+CoreDataset::querySpatialSensorPos(
+    std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
+    const seerep_core_msgs::Query& query)
+{
+  if (query.polygonSensorPos)
+  {
+    return queryRtree(datatypeSpecifics->rtSensorPos,
+                      query.polygonSensorPos.value(), query.fullyEncapsulated);
+  }
+  else
+  {
+    return std::nullopt;
+  }
+}
+
+std::optional<std::vector<seerep_core_msgs::AabbIdPair>>
+CoreDataset::queryRtree(const seerep_core_msgs::rtree& rt,
+                        const seerep_core_msgs::Polygon2D& polygon,
+                        const bool queryFullyEncapsulated)
+{
+  // generate rtree result container
+  std::optional<std::vector<seerep_core_msgs::AabbIdPair>> rt_result =
+      std::vector<seerep_core_msgs::AabbIdPair>();
+
+  seerep_core_msgs::AABB aabb = polygonToAABB(polygon);
+
+  // perform the query on the r tree using the aabb
+  rt.query(boost::geometry::index::intersects(aabb),
+           std::back_inserter(rt_result.value()));
+
+  bool fullyEncapsulated = false;
+  bool partiallyEncapsulated = false;
+  std::vector<seerep_core_msgs::AabbIdPair>::iterator it;
+
+  // traverse query results and confirm if they are contained inside the polygon
+  for (it = rt_result.value().begin(); it != rt_result.value().end();)
+  {
+    // check if query result is not fully distant to the oriented bb box
+    // provided in the query
+    intersectionDegree(it->first, polygon, fullyEncapsulated,
+                       partiallyEncapsulated);
+
+    // if there is no intersection between the result and the user's
+    // request, remove it from the iterator
+    if (!partiallyEncapsulated && !fullyEncapsulated)
+    {
+      it = rt_result.value().erase(it);
+    }
+
+    // does the user want only results fully encapsulated by the requested
+    // bb and is this query result not fully encapsulated
+    else if (queryFullyEncapsulated && !fullyEncapsulated)
+    {
+      // if yes, then delete partially encapsulated query results from the result set
+      it = rt_result.value().erase(it);
+    }
+    else
+    {
+      ++it;
+    }
+  }
+
+  // return the result after deletion of undesired elements has been performed
+  return rt_result;
 }
 
 std::optional<std::vector<seerep_core_msgs::AabbTimeIdPair>>
@@ -438,6 +472,7 @@ CoreDataset::querySemanticWithAllTheLabels(
 
 std::vector<boost::uuids::uuid> CoreDataset::intersectQueryResults(
     std::optional<std::vector<seerep_core_msgs::AabbIdPair>>& rt_result,
+    std::optional<std::vector<seerep_core_msgs::AabbIdPair>>& rt_resultSensorPos,
     std::optional<std::vector<seerep_core_msgs::AabbTimeIdPair>>& timetree_result,
     std::optional<std::set<boost::uuids::uuid>>& semanticResult,
     std::optional<std::vector<boost::uuids::uuid>>& instanceResult,
@@ -456,6 +491,18 @@ std::vector<boost::uuids::uuid> CoreDataset::intersectQueryResults(
       idsSpatial.insert(std::move(it->second));
     }
     idsPerSingleModality.push_back(std::move(idsSpatial));
+  }
+
+  if (rt_resultSensorPos)
+  {
+    std::set<boost::uuids::uuid> idsSpatialSensorPos;
+    for (auto it = std::make_move_iterator(rt_resultSensorPos.value().begin()),
+              end = std::make_move_iterator(rt_resultSensorPos.value().end());
+         it != end; ++it)
+    {
+      idsSpatialSensorPos.insert(std::move(it->second));
+    }
+    idsPerSingleModality.push_back(std::move(idsSpatialSensorPos));
   }
 
   if (timetree_result)
@@ -642,6 +689,8 @@ void CoreDataset::tryAddingDataWithMissingTF(
     {
       datatypeSpecifics->rt.insert(
           std::make_pair(transformIndexableAABB(**it), (*it)->header.uuidData));
+      datatypeSpecifics->rtSensorPos.insert(std::make_pair(
+          getSensorPositionAsAABB(**it), (*it)->header.uuidData));
       it = datatypeSpecifics->dataWithMissingTF.erase(it);
     }
     else
@@ -661,6 +710,8 @@ void CoreDataset::addDatasetToIndices(
   {
     datatypeSpecifics->rt.insert(std::make_pair(transformIndexableAABB(dataset),
                                                 dataset.header.uuidData));
+    datatypeSpecifics->rtSensorPos.insert(std::make_pair(
+        getSensorPositionAsAABB(dataset), dataset.header.uuidData));
   }
   else
   {
@@ -920,40 +971,55 @@ CoreDataset::getSpatialBounds(std::vector<seerep_core_msgs::Datatype> datatypes)
     seerep_core_msgs::AABB rtree_bounds =
         m_datatypeDatatypeSpecificsMap.at(dt)->rt.bounds();
 
+    seerep_core_msgs::AABB rtreeSensorPos_bounds =
+        m_datatypeDatatypeSpecificsMap.at(dt)->rtSensorPos.bounds();
+
     // update the min if needed for dimension 0
-    if (rtree_bounds.min_corner().get<0>() < overallbb.min_corner().get<0>())
+    auto min0 = std::min(rtree_bounds.min_corner().get<0>(),
+                         rtreeSensorPos_bounds.min_corner().get<0>());
+    if (min0 < overallbb.min_corner().get<0>())
     {
-      overallbb.min_corner().set<0>(rtree_bounds.min_corner().get<0>());
+      overallbb.min_corner().set<0>(min0);
     }
 
     // update the min if needed for dimension 1
-    if (rtree_bounds.min_corner().get<1>() < overallbb.min_corner().get<1>())
+    auto min1 = std::min(rtree_bounds.min_corner().get<1>(),
+                         rtreeSensorPos_bounds.min_corner().get<1>());
+    if (min1 < overallbb.min_corner().get<1>())
     {
-      overallbb.min_corner().set<1>(rtree_bounds.min_corner().get<1>());
+      overallbb.min_corner().set<1>(min1);
     }
 
     // update the min if needed for dimension 2
-    if (rtree_bounds.min_corner().get<2>() < overallbb.min_corner().get<2>())
+    auto min2 = std::min(rtree_bounds.min_corner().get<2>(),
+                         rtreeSensorPos_bounds.min_corner().get<2>());
+    if (min2 < overallbb.min_corner().get<2>())
     {
-      overallbb.min_corner().set<2>(rtree_bounds.min_corner().get<2>());
+      overallbb.min_corner().set<2>(min2);
     }
 
     // update the max if needed for dimension 0
-    if (rtree_bounds.max_corner().get<0>() > overallbb.max_corner().get<0>())
+    auto max0 = std::max(rtree_bounds.max_corner().get<0>(),
+                         rtreeSensorPos_bounds.max_corner().get<0>());
+    if (max0 > overallbb.max_corner().get<0>())
     {
-      overallbb.max_corner().set<0>(rtree_bounds.max_corner().get<0>());
+      overallbb.max_corner().set<0>(max0);
     }
 
     // update the max if needed for dimension 1
-    if (rtree_bounds.max_corner().get<1>() > overallbb.max_corner().get<1>())
+    auto max1 = std::max(rtree_bounds.max_corner().get<1>(),
+                         rtreeSensorPos_bounds.max_corner().get<1>());
+    if (max1 > overallbb.max_corner().get<1>())
     {
-      overallbb.max_corner().set<1>(rtree_bounds.max_corner().get<1>());
+      overallbb.max_corner().set<1>(max1);
     }
 
     // update the max if needed for dimension 2
-    if (rtree_bounds.max_corner().get<2>() > overallbb.max_corner().get<2>())
+    auto max2 = std::max(rtree_bounds.max_corner().get<2>(),
+                         rtreeSensorPos_bounds.max_corner().get<2>());
+    if (max2 > overallbb.max_corner().get<2>())
     {
-      overallbb.max_corner().set<2>(rtree_bounds.max_corner().get<2>());
+      overallbb.max_corner().set<2>(max2);
     }
   }
   return overallbb;
@@ -1021,4 +1087,24 @@ seerep_core_msgs::AABB CoreDataset::transformIndexableAABB(
                                      indexable.header.timestamp.seconds,
                                      indexable.header.timestamp.nanos);
 }
+
+seerep_core_msgs::AABB CoreDataset::getSensorPositionAsAABB(
+    const seerep_core_msgs::DatasetIndexable& indexable)
+{
+  auto tf = m_tfOverview->getData(indexable.header.timestamp.seconds,
+                                  indexable.header.timestamp.nanos, m_frameId,
+                                  indexable.header.frameId);
+
+  seerep_core_msgs::AABB sensorPosAABB;
+  bg::set<bg::min_corner, 0>(sensorPosAABB, tf.value().transform.translation.x);
+  bg::set<bg::min_corner, 1>(sensorPosAABB, tf.value().transform.translation.y);
+  bg::set<bg::min_corner, 2>(sensorPosAABB, tf.value().transform.translation.z);
+
+  bg::set<bg::max_corner, 0>(sensorPosAABB, tf.value().transform.translation.x);
+  bg::set<bg::max_corner, 1>(sensorPosAABB, tf.value().transform.translation.y);
+  bg::set<bg::max_corner, 2>(sensorPosAABB, tf.value().transform.translation.z);
+
+  return sensorPosAABB;
+}
+
 } /* namespace seerep_core */

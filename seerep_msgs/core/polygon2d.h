@@ -8,8 +8,8 @@ namespace seerep_core_msgs
 struct Polygon2D
 {
   std::vector<Point2D> vertices;
-  int z;
-  int height;
+  double z;
+  double height;
 };
 }  // namespace seerep_core_msgs
 
