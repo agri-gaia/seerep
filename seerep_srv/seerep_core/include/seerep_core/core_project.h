@@ -10,7 +10,7 @@
 #include <optional>
 
 // seerep-msgs
-#include <proj.h>
+#include <seerep_msgs/aabb.h>
 #include <seerep_msgs/camera_intrinsics.h>
 #include <seerep_msgs/dataset_indexable.h>
 #include <seerep_msgs/geodetic_coordinates.h>
@@ -96,7 +96,8 @@ public:
    * @return seerep_core_msgs::Polygon2D polygon
    */
   seerep_core_msgs::Polygon2D
-  transformToMapFrame(const seerep_core_msgs::Polygon2D polygon);
+  transformToMapFrame(const seerep_core_msgs::Polygon2D& polygon,
+                      const std::string& query_crs);
 
   /**
    * @brief Returns a vector of UUIDs of datasets that match the query and the
@@ -254,6 +255,17 @@ private:
    * HDF5 file into the indices
    */
   void recreateDatatypes();
+
+  /**
+   * @brief transform a point utilizing proj's c lib transformations
+   *
+   * @param p the 3D point to apply the transform on
+   * @param proj_tf_rawptr the raw pointer to the PJ object describing the
+   *  transformation
+   * @return seerep_core_msgs::Point the transformed point
+   */
+  seerep_core_msgs::Point transformPointFwd(const seerep_core_msgs::Point& p,
+                                            PJ* proj_tf_rawptr);
 
   /** @brief the UUID of this project */
   boost::uuids::uuid m_uuid;
