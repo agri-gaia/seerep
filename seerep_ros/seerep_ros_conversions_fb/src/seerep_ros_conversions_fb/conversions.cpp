@@ -188,10 +188,14 @@ sensor_msgs::Image toROS(const seerep::fb::Image& image)
   ret.encoding = image.encoding()->str();
   ret.is_bigendian = image.is_bigendian();
   ret.step = image.step();
-  ret.data.reserve(image.data()->size());
 
-  std::copy_n(image.data()->Data(), image.data()->size(),
-              std::back_inserter(ret.data));
+  // check if data is included (cf. query "withoutData")
+  if (image.data() != 0)
+  {
+    ret.data.reserve(image.data()->size());
+    std::copy_n(image.data()->Data(), image.data()->size(),
+                std::back_inserter(ret.data));
+  }
   return ret;
 }
 
