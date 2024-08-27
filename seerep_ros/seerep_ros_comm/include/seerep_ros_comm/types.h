@@ -22,13 +22,13 @@
 // Supported ROS message types
 #define SEEREP_MESSAGE_TYPES(M)                                                \
   SEEREP_M(std_msgs, Header), SEEREP_M(sensor_msgs, PointCloud2),              \
-      SEEREP_M(sensor_msgs, Image), SEEREP_M(geometry_msgs, Point),            \
-      SEEREP_M(geometry_msgs, Quaternion), SEEREP_M(geometry_msgs, Pose),      \
-      SEEREP_M(geometry_msgs, PoseStamped), SEEREP_M(tf2_msgs, TFMessage)
+      SEEREP_M(sensor_msgs, Image), SEEREP_M(sensor_msgs, ImageCompressed),    \
+      SEEREP_M(geometry_msgs, Point), SEEREP_M(geometry_msgs, Quaternion),     \
+      SEEREP_M(geometry_msgs, Pose), SEEREP_M(geometry_msgs, PoseStamped),     \
+      SEEREP_M(tf2_msgs, TFMessage)
 
 namespace seerep_ros_comm
 {
-
 // Create enum types
 #define SEEREP_M(p, t) p##_##t
 enum SEEREP_MESSAGE_TYPE
