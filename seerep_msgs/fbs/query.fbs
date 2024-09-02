@@ -9,7 +9,7 @@ table Query {
   polygon:Polygon2D;
   polygonSensorPosition:Polygon2D;
   fullyEncapsulated:bool;
-  coordinateSystem:string;
+  crsString:string;
   inMapFrame:bool;
   timeinterval:TimeInterval;
   label:[LabelCategory];

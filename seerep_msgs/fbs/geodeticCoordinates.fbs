@@ -3,7 +3,7 @@ namespace seerep.fb;
 // source: https://en.wikipedia.org/wiki/Geodetic_coordinates
 
 table GeodeticCoordinates {
-    coordinateSystem:string; // e.g EPSG::4326
+    crsString:string; // e.g EPSG::4326
 
     longitude:double; // longitude measured in radians
     latitude:double; // latitude measured in radians

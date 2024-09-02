@@ -48,6 +48,7 @@ def query_images(
     theQuery.polygon.height = 800
 
     theQuery.inMapFrame = True
+    theQuery.crsString = "EPSG:4326"
 
     scale = 150
     vertices = [

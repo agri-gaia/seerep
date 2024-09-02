@@ -4,7 +4,7 @@ package seerep;
 
 message GeodeticCoordinates
 {
-  string coordinateSystem = 1;
+  string crsString = 1;
 
   double altitude = 2;
   double latitude = 3;

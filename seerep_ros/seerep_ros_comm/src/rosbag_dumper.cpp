@@ -89,7 +89,7 @@ void RosbagDumper::getGeoAnchor()
       geoCoordinates.latitude = msg->position.latitude;
       geoCoordinates.longitude = msg->position.longitude;
       geoCoordinates.altitude = msg->position.altitude;
-      geoCoordinates.coordinateSystem = "EPSG:4326";
+      geoCoordinates.crsString = "EPSG:4326";
       ioCoreGeneral->writeGeodeticLocation(geoCoordinates);
     }
   }

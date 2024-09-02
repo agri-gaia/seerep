@@ -87,7 +87,7 @@ CoreProject::transformToMapFrame(const seerep_core_msgs::Polygon2D& polygon,
   seerep_core_msgs::GeodeticCoordinates g = m_geodeticCoordinates.value();
 
   // check if a coordinate system on the project is not set
-  if (g.coordinateSystem == "")
+  if (g.crsString == "")
   {
     throw std::invalid_argument(
         "Could not transform to the projects map frame, "
@@ -108,8 +108,8 @@ CoreProject::transformToMapFrame(const seerep_core_msgs::Polygon2D& polygon,
   // when the query was made in a seperate coordinate reference system
   if (query_crs != "")
   {
-    PJ* to_project_crs_rawptr = proj_create_crs_to_crs(
-        ctx, query_crs.c_str(), g.coordinateSystem.c_str(), 0);
+    PJ* to_project_crs_rawptr =
+        proj_create_crs_to_crs(ctx, query_crs.c_str(), g.crsString.c_str(), 0);
 
     // check whether an error occured
     if (to_project_crs_rawptr == nullptr)
@@ -147,15 +147,51 @@ CoreProject::transformToMapFrame(const seerep_core_msgs::Polygon2D& polygon,
 
     proj_destroy(to_project_crs_rawptr);
   }
+
+  PJ* crs_rawptr = proj_create(ctx, g.crsString.c_str());
+
+  if (crs_rawptr == nullptr)
+  {
+    int errnum = proj_context_errno(ctx);
+    if (errnum == 0)
+    {
+      proj_context_destroy(ctx);
+      throw std::runtime_error("An error occured, retrieving the ellipsoid of "
+                               "the projects coordinate reference system, "
+                               "couldn't identify the error code!");
+    }
+    std::string err_info(proj_errno_string(errnum));
+    proj_context_destroy(ctx);
+
+    throw std::invalid_argument(
+        "Could not retrieve the ellipsoid of the projects"
+        "projects coordinate reference system: " +
+        err_info);
+  }
+
+  // get the ellipsoid used in the projects crs
+  // TODO: handling errors
+  PJ* ellps_rawptr = proj_get_ellipsoid(ctx, crs_rawptr);
+
+  proj_destroy(crs_rawptr);
+  if (ellps_rawptr == nullptr)
+  {
+    proj_context_destroy(ctx);
+    throw std::runtime_error(
+        "Could not retrieve the ellipsoid from the PJ object "
+        "created from the epsg code");
+  }
+
   // https://proj.org/en/6.3/operations/conversions/topocentric.html
-  // the proj pipeline has two steps, convert geodesic to cartesian coordinates
-  // then project to topocentric coordinates
-  std::string proj_pipeline = "step +proj=cart +ellps=" + g.coordinateSystem +
-                              " \nstep +proj=topocentric +ellps" +
-                              g.coordinateSystem +
-                              "+lon_0=" + std::to_string(g.longitude) +
-                              "lat_0=" + std::to_string(g.latitude) +
-                              "h_0=" + std::to_string(g.altitude);
+  // the proj pipeline has two steps, convert geodesic to cartesian
+  // coordinates then project to topocentric coordinates
+  // TODO: get ellps from proj using
+  std::string proj_pipeline =
+      "+proj=pipeline +step +init=" + g.crsString +
+      " +step +proj=cart +ellps=WGS84 +step +proj=topocentric" +
+      " +ellps=WGS84 +lat_0=" + std::to_string(g.latitude) +
+      " +lon_0=" + std::to_string(g.longitude) +
+      " +h_0=" + std::to_string(g.altitude);
 
   // perform an affine transform to transpose the query polygon to map frame
   // the first argument is the thread context, the second is the pipeline
@@ -214,7 +250,7 @@ CoreProject::getDataset(seerep_core_msgs::Query& query)
   if (query.polygon && !query.inMapFrame)
   {
     query.polygon.value() =
-        transformToMapFrame(query.polygon.value(), query.coordinateSystem);
+        transformToMapFrame(query.polygon.value(), query.crsString);
   }
 
   result.dataOrInstanceUuids = m_coreDatasets->getData(query);

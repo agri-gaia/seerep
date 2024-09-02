@@ -156,7 +156,7 @@ def create_project(grpc_channel: Channel, project_name: str) -> str:
     """
     fbb = flatbuffers.Builder()
     return createProject(
-        grpc_channel, fbb, project_name, "map", "WGS84", 0.0, 85.0, 23.0
+        grpc_channel, fbb, project_name, "map", "EPSG:4326", 0.0, 85.0, 23.0
     )
 
 

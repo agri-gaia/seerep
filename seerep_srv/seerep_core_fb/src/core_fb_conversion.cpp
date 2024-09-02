@@ -50,7 +50,7 @@ CoreFbConversion::fromFb(const seerep::fb::Query* query,
   queryCore.polygon = fromFbQueryPolygon(query);
   queryCore.polygonSensorPos = fromFbQueryPolygonSensorPosition(query);
   queryCore.fullyEncapsulated = fromFbQueryFullyEncapsulated(query);
-  queryCore.coordinateSystem = fromFbQueryCoordinateSystem(query);
+  queryCore.crsString = fromFbQueryCrsString(query);
   queryCore.inMapFrame = fromFbQueryInMapFrame(query);
   queryCore.sortByTime = query->sortByTime();
 
@@ -430,7 +430,7 @@ CoreFbConversion::toFb(flatbuffers::grpc::MessageBuilder& fbb,
                        const seerep_core_msgs::ProjectInfo& prjInfo)
 {
   auto geoCordsOffset = seerep::fb::CreateGeodeticCoordinatesDirect(
-      fbb, prjInfo.geodetCoords.coordinateSystem.c_str(),
+      fbb, prjInfo.geodetCoords.crsString.c_str(),
       prjInfo.geodetCoords.longitude, prjInfo.geodetCoords.latitude,
       prjInfo.geodetCoords.altitude);
 
@@ -563,11 +563,12 @@ CoreFbConversion::fromFbSparqlQuery(const seerep::fb::Query* query)
   return std::nullopt;
 }
 
-std::string CoreFbConversion::fromFbQueryCoordinateSystem(const seerep::fb::Query* query)
+std::string
+CoreFbConversion::fromFbQueryCrsString(const seerep::fb::Query* query)
 {
-  if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_COORDINATESYSTEM))
+  if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_CRSSTRING))
   {
-    return query->coordinateSystem()->str();
+    return query->crsString()->str();
   }
 
   return "";

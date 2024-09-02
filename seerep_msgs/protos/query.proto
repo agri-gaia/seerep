@@ -20,5 +20,5 @@ message Query
   bool withoutdata = 10;
   uint32 maxNumData = 11;
   bool sortByTime = 12;
-  string coordinateSystem = 13;
+  string crsString = 13;
 }

@@ -304,7 +304,13 @@ private:
    */
   static bool fromFbQueryInMapFrame(const seerep::fb::Query* query);
 
-  static std::string fromFbQueryCoordinateSystem(const seerep::fb::Query* query);
+  /**
+   * @brief get the coordinate reference system string from the flatbuffers
+   * query object
+   * @param query the flatbuffers query object
+   * @return std::string the crs string
+   */
+  static std::string fromFbQueryCrsString(const seerep::fb::Query* query);
 
   /**
    * @brief extracts the fullyEncapsulated flag of the flatbuffer query message

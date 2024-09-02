@@ -138,8 +138,8 @@ def getProjectInfo(
                     {project.GeodeticPosition().Latitude()},\
                     long: {project.GeodeticPosition().Longitude()},\
                     alt: {project.GeodeticPosition().Altitude()}",
-                "coordinate_system": project.GeodeticPosition()
-                .CoordinateSystem()
+                "crs_string": project.GeodeticPosition()
+                .CrsString()
                 .decode("utf-8"),
             }
 
@@ -151,7 +151,7 @@ def createProjectRaw(
     builder: Builder,
     name: str,
     frameId: str,
-    coordSys: str,
+    crsStr: str,
     altitude: float,
     latitude: float,
     longitude: float,
@@ -164,15 +164,14 @@ def createProjectRaw(
         builder: A flatbuffers Builder
         name: The name of the project
         frameId: The coordinate frame of the project
-        coordSys: The coordinate system type as a
-        [proj ellipsoid](https://proj.org/en/stable/usage/ellipsoids.html#built-in-ellipsoid-definitions)\
-            code
+        crsStr: The coordinate system type as a
+            [crs string](https://spatialreference.org/)
         altitude: The altitude of the projects position on the globe
-                  (according to coordSys)
+                  (according to crsStr)
         latitude: The latitude of the projects position on the globe
-                  (according to coordSys)
+                  (according to crsStr)
         longitude: The longitude of the project positition on the globe
-                  (according to coordSys)
+                  (according to crsStr)
 
     Returns:
         A flatbuffers object of type ProjectInfo representing the project
@@ -183,10 +182,10 @@ def createProjectRaw(
     nameBuf = builder.CreateString(name)
 
     # create a geodetic coordinates object
-    coordSysBuf = builder.CreateString(coordSys)
+    crsBuf = builder.CreateString(crsStr)
 
     GeodeticCoordinates.Start(builder)
-    GeodeticCoordinates.AddCoordinateSystem(builder, coordSysBuf)
+    GeodeticCoordinates.AddCrsString(builder, crsBuf)
     GeodeticCoordinates.AddAltitude(builder, altitude)
     GeodeticCoordinates.AddLatitude(builder, latitude)
     GeodeticCoordinates.AddLongitude(builder, longitude)
@@ -210,7 +209,7 @@ def createProject(
     builder: Builder,
     name: str,
     frameId: str,
-    coordSys: str,
+    crsStr: str,
     altitude: float,
     latitude: float,
     longitude: float,
@@ -223,14 +222,14 @@ def createProject(
         builder: A flatbuffers Builder
         name: The name of the project
         frameId: The coordinate frame of the project
-        coordSys: The coordinate system type as a [proj ellipsoid](https://proj.org/en/stable/usage/ellipsoids.html#built-in-ellipsoid-definitions)\
-            code
+        crsStr: The coordinate system type as a
+            [crs string](https://spatialreference.org/)
         altitude: The altitude of the projects position on the globe
-                  (according to coordSys)
+                  (according to crsStr)
         latitude: The latitude of the projects position on the globe
-                  (according to coordSys)
+                  (according to crsStr)
         longitude: The longitude of the project positition on the globe
-                  (according to coordSys)
+                  (according to crsStr)
 
     Returns:
         The UUID of the created project
@@ -242,7 +241,7 @@ def createProject(
                 builder,
                 name,
                 frameId,
-                coordSys,
+                crsStr,
                 altitude,
                 latitude,
                 longitude,
@@ -259,7 +258,7 @@ def getOrCreateProject(
     name: str,
     create: bool = True,
     mapFrameId: str = "map",
-    coordSys: str = "",
+    crsStr: str = "",
     altitude: float = 0.0,
     latitude: float = 0.0,
     longitude: float = 0.0,
@@ -273,14 +272,14 @@ def getOrCreateProject(
         name: The name of the project
         create: Whether to create the project if it does not exist
         mapFrameId: The coordinate frame of the project
-        coordSys: The coordinate system type as a [proj ellipsoid](https://proj.org/en/stable/usage/ellipsoids.html#built-in-ellipsoid-definitions)\
-            code
+        crsStr: The coordinate system type as a
+            [crs string](https://spatialreference.org/)
         altitude: The altitude of the projects position on the globe
-                  (according to coordSys)
+                  (according to )
         latitude: The latitude of the project position on the globe
-                  (according to coordSys)
+                  (according to crsStr)
         longitude: The longitude of the project position on the globe
-                  (according to coordSys)
+                  (according to crsStr)
 
     Returns:
         The UUID of the project
@@ -294,7 +293,7 @@ def getOrCreateProject(
                 builder,
                 name,
                 mapFrameId,
-                coordSys,
+                crsStr,
                 altitude,
                 latitude,
                 longitude,

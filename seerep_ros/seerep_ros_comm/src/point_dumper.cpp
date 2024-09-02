@@ -53,7 +53,7 @@ void JsonPointDumper::readAndDumpJsonUos(const std::string& jsonFilePath)
   geoCoordinates.latitude = 0.0;
   geoCoordinates.longitude = 0.0;
   geoCoordinates.altitude = 0.0;
-  geoCoordinates.coordinateSystem = "EPSG:32632";
+  geoCoordinates.crsString = "EPSG:32632";
   ioCoreGeneral->writeGeodeticLocation(geoCoordinates);
 
   std::ifstream file(jsonFilePath, std::ifstream::binary);
@@ -122,7 +122,7 @@ void JsonPointDumper::readAndDumpJsonFr(const std::string& jsonFilePath,
   geoCoordinates.longitude =
       completeJsonData["anchor_lla"]["longitude"].asDouble();
   geoCoordinates.altitude = 0.0;
-  geoCoordinates.coordinateSystem = "EPSG:4326";
+  geoCoordinates.crsString = "EPSG:4326";
   ioCoreGeneral->writeGeodeticLocation(geoCoordinates);
 
   std::unordered_map<int64_t, std::string> classesMapping =
