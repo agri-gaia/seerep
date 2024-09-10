@@ -26,6 +26,7 @@ C_MAX_INTEGER: int = 2147483647
 
 class EnumFbQuery(FrozenEnum):
     POLYGON = auto()  # def: None
+    POLYGONSENSORPOSITION = auto()  # def: None
     FULLY_ENCAPSULATED = auto()  # def: False
     IN_MAP_FRAME = auto()  # def: True
     TIMEINTERVAL = auto()  # def: None
@@ -51,6 +52,11 @@ class FbQuery(MsgsFb[Query.Query]):
         return {
             EnumFbQuery.POLYGON: MsgsFunctions(
                 lambda: None, lambda: Dtypes.Fb.polygon2d(self.builder)
+            ),
+            EnumFbQuery.POLYGONSENSORPOSITION: MsgsFunctions(
+                # TODO provide a example polygon, differing from POLYGON
+                lambda: None,
+                lambda: Dtypes.Fb.polygon2d(self.builder),
             ),
             EnumFbQuery.FULLY_ENCAPSULATED: MsgsFunctions(
                 lambda: False, lambda: True
@@ -109,6 +115,9 @@ class FbQuery(MsgsFb[Query.Query]):
 
     def _assemble_datatype_instance(self):
         polygon = self.get_component(EnumFbQuery.POLYGON)
+        polygon_sensor_position = self.get_component(
+            EnumFbQuery.POLYGONSENSORPOSITION
+        )
         fully_encapsulated = self.get_component(EnumFbQuery.FULLY_ENCAPSULATED)
         in_map_frame = self.get_component(EnumFbQuery.IN_MAP_FRAME)
         timeinterval = self.get_component(EnumFbQuery.TIMEINTERVAL)
@@ -124,17 +133,18 @@ class FbQuery(MsgsFb[Query.Query]):
 
         return fbh.createQuery(
             self.builder,
-            timeinterval,
-            label,
-            must_have_all_labels,
-            projectuuid,
-            instanceuuid,
-            datauuid,
-            withoutdata,
-            polygon,
-            fully_encapsulated,
-            in_map_frame,
-            sort_by_time,
+            timeInterval=timeinterval,
+            labels=label,
+            mustHaveAllLabels=must_have_all_labels,
+            projectUuids=projectuuid,
+            instanceUuids=instanceuuid,
+            dataUuids=datauuid,
+            withoutData=withoutdata,
+            polygon2d=polygon,
+            polygon2dSensorPos=polygon_sensor_position,
+            fullyEncapsulated=fully_encapsulated,
+            inMapFrame=in_map_frame,
+            sortByTime=sort_by_time,
         )
 
 
@@ -163,10 +173,9 @@ class FbQueryInstance(MsgsFb[QueryInstance.QueryInstance]):
         datatype = self.get_component(EnumFbQueryInstance.DATATYPE)
         query = self.get_component(EnumFbQueryInstance.QUERY)
 
-        QueryInstance.Start(self.builder)
-        QueryInstance.AddDatatype(self.builder, datatype)
-        QueryInstance.AddQuery(self.builder, query)
-        return QueryInstance.End(self.builder)
+        return fbh.createQueryInstance(
+            self.builder, datatype=datatype, query=query
+        )
 
 
 class DatatypeImplementations:
