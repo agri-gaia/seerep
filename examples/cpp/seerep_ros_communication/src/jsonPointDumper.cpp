@@ -5,6 +5,10 @@ namespace seerep_grpc_ros
 JsonPointDumper::JsonPointDumper(const std::string& filePath, const std::string& hdf5FilePath,
                                  const std::string& classesMappingPath)
 {
+  boost::log::add_common_attributes();
+  boost::log::register_simple_formatter_factory<boost::log::trivial::severity_level, char>("Severity");
+  boost::log::core::get()->set_filter(boost::log::trivial::severity >= boost::log::trivial::error);
+
   if (!std::filesystem::exists(filePath))
   {
     throw std::invalid_argument(filePath + " does not exist.");
@@ -266,8 +270,16 @@ std::string JsonPointDumper::translateNameToAgrovocConcept(std::string name)
 
         if (parsingSuccessful)
         {
-          concept = root.get("results", name).get("bindings", name)[0].get("c", name).get("value", name).asString();
-          name2Concept.emplace(name, concept);
+          try
+          {
+            concept = root.get("results", name).get("bindings", name)[0].get("c", name).get("value", name).asString();
+            name2Concept.emplace(name, concept);
+          }
+          catch (...)
+          {
+            std::cout << "unknown label: " << name << std::endl;
+            concept = "unknown";
+          }
         }
       }
 

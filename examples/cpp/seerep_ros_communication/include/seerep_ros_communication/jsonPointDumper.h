@@ -30,6 +30,14 @@
 // geographic lib
 #include <GeographicLib/LocalCartesian.hpp>
 
+// logging
+#include <boost/log/core.hpp>
+#include <boost/log/sources/severity_logger.hpp>
+#include <boost/log/trivial.hpp>
+#include <boost/log/utility/setup/common_attributes.hpp>
+#include <boost/log/utility/setup/console.hpp>
+#include <boost/log/utility/setup/file.hpp>
+
 namespace seerep_grpc_ros
 {
 class JsonPointDumper
