@@ -637,6 +637,7 @@ def createQuery(
     dataUuids: List[str] = None,
     withoutData: bool = False,
     polygon2d: Union[int, None] = None,
+    polygon2dSensorPos: Union[int, None] = None,
     fullyEncapsulated: bool = False,
     inMapFrame: bool = True,
     sortByTime: bool = False,
@@ -659,6 +660,8 @@ def createQuery(
         without their attached data
         polygon2d: A pointer to a Polygon2D object to retrieve only instances
         within the polygon
+        polygon2dSensorPos: A pointer to a Polygon2D object to retrieve only
+        instances captured by sensors within the polygon
         fullyEncapsulated: A boolean indicating if the returned instances should
         be fully encapsulated by the polygon
         inMapFrame: A boolean indicating if the polygon coordinates are in the
@@ -709,6 +712,8 @@ def createQuery(
     Query.Start(builder)
     if polygon2d:
         Query.AddPolygon(builder, polygon2d)
+    if polygon2dSensorPos:
+        Query.AddPolygonSensorPosition(builder, polygon2dSensorPos)
     if timeInterval:
         Query.AddTimeinterval(builder, timeInterval)
     if labels:
