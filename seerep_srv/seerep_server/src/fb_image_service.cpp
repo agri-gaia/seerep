@@ -28,6 +28,18 @@ grpc::Status FbImageService::GetImage(
     debuginfo << "bounding box height " << requestRoot->polygon()->height()
               << " /";
   }
+  if (requestRoot->polygonSensorPosition() != NULL)
+  {
+    for (auto point : *(requestRoot->polygonSensorPosition()->vertices()))
+    {
+      debuginfo << "bounding box vertex (" << point->x() << ", " << point->y()
+                << ") /";
+    }
+    debuginfo << "bounding box z " << requestRoot->polygonSensorPosition()->z()
+              << " /";
+    debuginfo << "bounding box height "
+              << requestRoot->polygonSensorPosition()->height() << " /";
+  }
   if (requestRoot->timeinterval() != NULL)
   {
     debuginfo << "\n time interval ("
@@ -50,24 +62,6 @@ grpc::Status FbImageService::GetImage(
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
       << debuginfo.rdbuf();
 
-  if (requestRoot->polygon() != NULL)
-  {
-    for (auto point : *(requestRoot->polygon()->vertices()))
-    {
-      debuginfo << "bounding box vertex (" << point->x() << ", " << point->y()
-                << ") /";
-    }
-    debuginfo << "bounding box z " << requestRoot->polygon()->z() << " /";
-    debuginfo << "bounding box height " << requestRoot->polygon()->height()
-              << " /";
-  }
-  if (requestRoot->timeinterval() != NULL)
-  {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
-        << "in time interval ("
-        << requestRoot->timeinterval()->time_min()->seconds() << "/"
-        << requestRoot->timeinterval()->time_max()->seconds() << ")";
-  }
   try
   {
     imageFb->getData(requestRoot, writer);

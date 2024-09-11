@@ -29,6 +29,18 @@ grpc::Status FbPointService::GetPoint(
     debuginfo << "\n bounding box height " << requestRoot->polygon()->height()
               << " /";
   }
+  if (requestRoot->polygonSensorPosition() != NULL)
+  {
+    for (auto point : *(requestRoot->polygonSensorPosition()->vertices()))
+    {
+      debuginfo << "bounding box vertex (" << point->x() << ", " << point->y()
+                << ") /";
+    }
+    debuginfo << "bounding box z " << requestRoot->polygonSensorPosition()->z()
+              << " /";
+    debuginfo << "bounding box height "
+              << requestRoot->polygonSensorPosition()->height() << " /";
+  }
   if (requestRoot->timeinterval() != NULL)
   {
     debuginfo << "\n time interval ("
