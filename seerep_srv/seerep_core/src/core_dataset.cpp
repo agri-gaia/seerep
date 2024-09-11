@@ -143,8 +143,8 @@ CoreDataset::getData(const seerep_core_msgs::Query& query)
     }
   }
 
-  if (!query.polygon && !query.timeinterval && !query.label &&
-      !query.instances && !query.dataUuids)
+  if (!query.polygon && !query.polygonSensorPos && !query.timeinterval &&
+      !query.label && !query.instances && !query.dataUuids)
   {
     return getAllDatasetUuids(datatypeSpecifics, query.sortByTime);
   }
