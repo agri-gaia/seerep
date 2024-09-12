@@ -1,6 +1,7 @@
 #ifndef SEEREP_CORE_CORE_PROJECT_H_
 #define SEEREP_CORE_CORE_PROJECT_H_
 
+// miscellaneous
 #include <proj.h>
 
 #include <boost/uuid/uuid.hpp>             // uuid class
@@ -257,15 +258,13 @@ private:
   void recreateDatatypes();
 
   /**
-   * @brief transform a point utilizing proj's c lib transformations
+   * @brief transform a point in-place utilizing proj's c lib transformations
    *
    * @param p the 3D point to apply the transform on
    * @param proj_tf_rawptr the raw pointer to the PJ object describing the
    *  transformation
-   * @return seerep_core_msgs::Point the transformed point
    */
-  seerep_core_msgs::Point transformPointFwd(const seerep_core_msgs::Point& p,
-                                            PJ* proj_tf_rawptr);
+  void transformPointFwd(seerep_core_msgs::Point& p, PJ* proj_tf_rawptr);
 
   /** @brief the UUID of this project */
   boost::uuids::uuid m_uuid;
