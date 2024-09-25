@@ -23,8 +23,6 @@ struct Query
                          // defined by this polygon
   bool fullyEncapsulated;  // if true, only return results fully inside the
                            // polygon defined above
-  bool inMapFrame;  // if false the query polygon is in geodetic coordinates,
-                    // otherwise in map frame
   std::string
       crsString;  // the coordinate reference system in which the polygon is defined
   std::optional<Timeinterval> timeinterval;  ///< only do temporal query if set

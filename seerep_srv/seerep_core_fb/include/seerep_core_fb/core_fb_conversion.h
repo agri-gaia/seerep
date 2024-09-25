@@ -296,15 +296,6 @@ private:
   static bool fromFbQueryMustHaveAllLabels(const seerep::fb::Query* query);
 
   /**
-   * @brief
-   *
-   * @param query extracts the inMapFrame flag of the flatbuffer query message
-   * @return true the polygon in the query is in map frame
-   * @return false the polygon in the query is in geodetic coordinates
-   */
-  static bool fromFbQueryInMapFrame(const seerep::fb::Query* query);
-
-  /**
    * @brief get the coordinate reference system string from the flatbuffers
    * query object
    * @param query the flatbuffers query object

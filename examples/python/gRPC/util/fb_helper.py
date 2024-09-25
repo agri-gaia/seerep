@@ -626,6 +626,7 @@ def addToPointFieldVector(builder: Builder, pointFieldList: List[int]) -> int:
     return builder.EndVector()
 
 
+# TODO docs for crsString
 def createQuery(
     builder: Builder,
     timeInterval: Union[int, None] = None,
@@ -638,7 +639,7 @@ def createQuery(
     polygon2d: Union[int, None] = None,
     polygon2dSensorPos: Union[int, None] = None,
     fullyEncapsulated: bool = False,
-    inMapFrame: bool = True,
+    crsString: str = "map",
     sortByTime: bool = False,
 ) -> int:
     """
@@ -663,14 +664,16 @@ def createQuery(
         instances captured by sensors within the polygon
         fullyEncapsulated: A boolean indicating if the returned instances should
         be fully encapsulated by the polygon
-        inMapFrame: A boolean indicating if the polygon coordinates are in the
-        map frame or in EPSG world coordinates
+        crsString: A string containing either a proj transformable code (EPSG, )
+        'map' or a empty string are valid values as well.
         sortByTime: A boolean indicating if the returned instances should be
         sorted by time
 
     Returns:
         A pointer to the constructed query object
     """
+
+    crsString = builder.CreateString(crsString)
 
     if projectUuids:
         # serialize strings
@@ -728,7 +731,7 @@ def createQuery(
     # no if; has default value
     Query.AddWithoutdata(builder, withoutData)
     Query.AddFullyEncapsulated(builder, fullyEncapsulated)
-    Query.AddInMapFrame(builder, inMapFrame)
+    Query.AddCrsString(builder, crsString)
     Query.AddSortByTime(builder, sortByTime)
 
     return Query.End(builder)

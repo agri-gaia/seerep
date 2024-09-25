@@ -121,7 +121,6 @@ if __name__ == "__main__":
         labels=labelsCategory,
         withoutData=True,
         fullyEncapsulated=False,
-        inMapFrame=True,
     )
 
     if matching_images is None or len(matching_images) == 0:

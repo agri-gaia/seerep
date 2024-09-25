@@ -28,7 +28,7 @@ class EnumFbQuery(FrozenEnum):
     POLYGON = auto()  # def: None
     POLYGONSENSORPOSITION = auto()  # def: None
     FULLY_ENCAPSULATED = auto()  # def: False
-    IN_MAP_FRAME = auto()  # def: True
+    CRS_STRING = auto()  # def: True
     TIMEINTERVAL = auto()  # def: None
     LABEL = auto()  # def: None
     SPARQL_QUERY = auto()  # def: None
@@ -61,8 +61,8 @@ class FbQuery(MsgsFb[Query.Query]):
             EnumFbQuery.FULLY_ENCAPSULATED: MsgsFunctions(
                 lambda: False, lambda: True
             ),
-            EnumFbQuery.IN_MAP_FRAME: MsgsFunctions(
-                lambda: True, lambda: False
+            EnumFbQuery.CRS_STRING: MsgsFunctions(
+                lambda: "map", lambda: "project"
             ),
             EnumFbQuery.TIMEINTERVAL: MsgsFunctions(
                 lambda: None, lambda: Dtypes.Fb.time_interval(self.builder)
@@ -119,7 +119,7 @@ class FbQuery(MsgsFb[Query.Query]):
             EnumFbQuery.POLYGONSENSORPOSITION
         )
         fully_encapsulated = self.get_component(EnumFbQuery.FULLY_ENCAPSULATED)
-        in_map_frame = self.get_component(EnumFbQuery.IN_MAP_FRAME)
+        in_map_frame = self.get_component(EnumFbQuery.CRS_STRING)
         timeinterval = self.get_component(EnumFbQuery.TIMEINTERVAL)
         label = self.get_component(EnumFbQuery.LABEL)
         must_have_all_labels = self.get_component(
@@ -162,11 +162,7 @@ class FbQueryInstance(MsgsFb[QueryInstance.QueryInstance]):
         }
 
     def query(self):
-        features = {
-            EnumFbQuery.WITHOUTDATA,
-            EnumFbQuery.IN_MAP_FRAME,
-            EnumFbQuery.PROJECTUUID,
-        }
+        features = {EnumFbQuery.WITHOUTDATA, EnumFbQuery.PROJECTUUID}
         return FbQuery(self.channel, self.builder, features).datatype_instance
 
     def _assemble_datatype_instance(self):

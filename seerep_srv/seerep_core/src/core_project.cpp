@@ -101,7 +101,7 @@ CoreProject::transformToMapFrame(const seerep_core_msgs::Polygon2D& polygon,
   transformed_polygon.height = polygon.height;
 
   // when the query was made in a seperate coordinate reference system
-  if (query_crs != "")
+  if (query_crs != "project")
   {
     PJ* to_project_crs_rawptr = proj_create_crs_to_crs(
         ctx, query_crs.c_str(), g.crsString.c_str(), nullptr);
@@ -200,18 +200,8 @@ CoreProject::transformToMapFrame(const seerep_core_msgs::Polygon2D& polygon,
   std::string ellps = ellps_string.substr(ellps_idx);
 
   // https://proj.org/en/6.3/operations/conversions/topocentric.html
-  // the proj pipeline has two steps, convert geodesic to cartesian
+  // the proj pipeline has two steps, convert geographic to cartesian
   // coordinates then project to topocentric coordinates
-  // TODO: get ellps from proj using
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
-      << "crs string: " << g.crsString;
-
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
-      << "ellps: " << ellps;
-
-  // perform an affine transform to transpose the query polygon to map frame
-  // the first argument is the thread context, the second is the pipeline
-  // string created above
   std::string to_topographic_projstr =
       "+proj=pipeline +step +proj=cart +ellps=" + ellps +
       " +step +proj=topocentric" + " +ellps=" + ellps +
@@ -275,8 +265,11 @@ CoreProject::getDataset(seerep_core_msgs::Query& query)
   seerep_core_msgs::QueryResultProject result;
   result.projectUuid = m_uuid;
 
-  // is the query not in map frame?
-  if (query.polygon && !query.inMapFrame)
+  // is the query not in map frame? Then transform the polygon into it
+  // query.crsString == "project" means the polygon is in the project frame
+  // if query.crsString == "map" that means the query is done in the map
+  // frame
+  if (query.polygon && query.crsString != "map")
   {
     query.polygon.value() =
         transformToMapFrame(query.polygon.value(), query.crsString);

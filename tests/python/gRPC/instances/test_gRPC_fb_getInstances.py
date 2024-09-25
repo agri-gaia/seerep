@@ -649,7 +649,6 @@ def _test_gRPC_getInstanceQuerySortByTime(grpc_channel, project_setup):
     assert uuids_by_time == label_instances
 
 
-# this does not work currently
 def _test_gRPC_getInstanceQueryInMapFrame(grpc_channel, project_setup):
     _, proj_uuid = project_setup
 
@@ -673,7 +672,6 @@ def _test_gRPC_getInstanceQueryInMapFrame(grpc_channel, project_setup):
         grpc_channel,
         enum_types=set(
             EnumFbQuery.POLYGON,
-            EnumFbQuery.IN_MAP_FRAME,
             EnumFbQuery.FULLY_ENCAPSULATED,
         ),
     )
