@@ -49,8 +49,8 @@ def test_gRPC_fb_createGeoProjectAndGetProjects(grpc_channel):
 
     assert created_project["geodetic_position"]["crs_string"] == "EPSG::4326"
     assert created_project["geodetic_position"]["altitude"] == 4.0
-    assert created_project["geodetic_position"]["latitude"] == 6.0
-    assert created_project["geodetic_position"]["longitude"] == 7.0
+    assert created_project["geodetic_position"]["latitude"] == 52.35_81_99
+    assert created_project["geodetic_position"]["longitude"] == 8.27_96_79
     assert created_project["version"] is not None
 
     assert created_project in projects_list

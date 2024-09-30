@@ -11,6 +11,8 @@ def create_geo_proj_raw(
 ) -> bytearray:
     builder = flatbuffers.Builder(1024)
 
+    # in the area around Gut Arenshorst
+    # lat and long in decimal degree
     response = createProjectRaw(
         grpc_channel,
         builder,
@@ -18,8 +20,8 @@ def create_geo_proj_raw(
         "2",
         "EPSG::4326",
         4,
-        6,
-        7,
+        52.35_81_99,
+        8.27_96_79,
     )
 
     return response
