@@ -22,6 +22,42 @@ from seerep.util.fb_helper import (
 )
 
 
+def create_polygon_rect(
+    builder: flatbuffers.Builder,
+    x: float,
+    y: float,
+    extent_x: float,
+    extent_y: float,
+    z: float,
+    height: float,
+) -> int:
+    """
+    Creates a rectangular shaped polygon.
+
+    Args:
+        builder (Builder): The flatbuffers builder.
+        x (float): The left bottom origin x coordinate.
+        y (float): The left bottom origin y coordinate.
+        extent_x (float): The extend of the rectangle in x direction.
+        extent_y (float): The extend of the rectangle in y direction.
+        z (float): The z-coordinate to start the polygon off.
+        height (float): The extent to which to expand the valid 3D region of the
+          polygon starting from z.
+
+    Returns: The created polygon2D type
+    """
+    polygon_vertices = []
+    (polygon_vertices.append(createPoint2d(builder, x, y)),)
+    (polygon_vertices.append(createPoint2d(builder, x + extent_x, y)),)
+    (
+        polygon_vertices.append(
+            createPoint2d(builder, x + extent_x, y + extent_y)
+        ),
+    )
+    polygon_vertices.append(createPoint2d(builder, x, y + extent_y))
+    return createPolygon2D(builder, height, z, polygon_vertices)
+
+
 def query_images_raw(
     fbb: flatbuffers.Builder,
     grpc_channel: Channel,
@@ -78,25 +114,26 @@ def query_images(
     ]
 
 
-if __name__ == "__main__":
+def query_example():
     fbb = flatbuffers.Builder()
     grpc_channel = get_gRPC_channel()
     project_uuid = getOrCreateProject(fbb, grpc_channel, "testproject")
 
-    # create the data for the query
-    scale = 100
-    vertices = [
-        createPoint2d(fbb, x * scale, y * scale)
-        for x, y in [(-1.0, -1.0), (-1.0, 1.0), (1.0, 1.0), (1.0, -1.0)]
-    ]
-
-    polygon_2d = createPolygon2D(fbb, 700, -100, vertices)
+    polygon_2d = create_polygon_rect(
+        fbb,
+        x=-100,
+        extent_x=200,
+        extent_y=200,
+        y=-100,
+        z=-100,
+        height=700,
+    )
 
     time_min = createTimeStamp(fbb, 1610549273, 0)
     time_max = createTimeStamp(fbb, 1938549273, 0)
-    time_interval = createTimeInterval(fbb, time_min, time_max)
+    time_interval = createTimeInterval(fbb, time_min, time_max)  # noqa: F841
 
-    project_uuids = [project_uuid]
+    project_uuids = [project_uuid]  # noqa: F841
 
     labels = [
         create_label(builder=fbb, label=label_str, label_id=i)
@@ -141,3 +178,53 @@ if __name__ == "__main__":
                 + img.Labels(0).Labels(0).Label().decode("utf-8")
             )
     print("------------------------------------------------------------------")
+
+
+def query_geodetic_example():
+    fbb = flatbuffers.Builder()
+    grpc_channel = get_gRPC_channel()
+    project_uuid = getOrCreateProject(fbb, grpc_channel, "geodeticProject")
+
+    polygon_epsg3857 = create_polygon_rect(
+        fbb,
+        x=921689.630348,
+        y=6865153.476919,
+        extent_x=655,
+        extent_y=655,
+        z=0,
+        height=100,
+    )
+
+    matching_images = query_images(
+        fbb,
+        grpc_channel,
+        project_uuid,
+        polygon2d=polygon_epsg3857,
+        withoutData=True,
+        fullyEncapsulated=False,
+        crsString="EPSG:3857",
+    )
+
+    if matching_images is None or len(matching_images) == 0:
+        print("No images matched the query.")
+        sys.exit()
+
+    print(f"Number of images matching the query: {len(matching_images)}")
+
+    for img in matching_images:
+        print(
+            "------------------------------------------------------------------"
+        )
+        print(f"Msg UUID: {img.Header().UuidMsgs().decode('utf-8')}")
+        print(f"Number of labels: {img.LabelsLength()}")
+        if img.LabelsLength() > 0:
+            print(
+                "First label: "
+                + img.Labels(0).Labels(0).Label().decode("utf-8")
+            )
+    print("------------------------------------------------------------------")
+
+
+if __name__ == "__main__":
+    query_example()
+    # query_geodetic_example()

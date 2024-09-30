@@ -73,28 +73,28 @@ def send_images(
         fbb, *list(map(int, str(time.time()).split(".")))
     )
 
-    labels = [
-        create_label(
-            builder=fbb,
-            label=label_str,
-            label_id=i,
-            instance_uuid=str(uuid4()),
-            instance_id=i + 100,
-        )
-        for i, label_str in enumerate(["label1", "label2"])
-    ]
-
-    labelsCategory = [
-        create_label_category(
-            builder=fbb,
-            labels=labels,
-            datumaro_json="a very valid datumaro json",
-            category="category A",
-        )
-    ]
-
     fb_msgs = []
     for idx, image in enumerate(image_payloads):
+        labels = [
+            create_label(
+                builder=fbb,
+                label=label_str,
+                label_id=i,
+                instance_uuid=str(uuid4()),
+                instance_id=i + 100,
+            )
+            for i, label_str in enumerate(["label1", "label2"])
+        ]
+
+        labelsCategory = [
+            create_label_category(
+                builder=fbb,
+                labels=labels,
+                datumaro_json="a very valid datumaro json",
+                category="category A",
+            )
+        ]
+
         if timestamps is None:
             header = createHeader(
                 fbb, timestamp, frame_id, project_uuid, str(uuid4())
@@ -256,13 +256,13 @@ def send_tfs(
     )
 
 
-if __name__ == "__main__":
+def send_examples():
     channel = get_gRPC_channel()
     project_uuid = create_project(channel, "testproject")
     camera_uuid = send_cameraintrinsics(channel, project_uuid)
 
     timestamp_nanos = 1245
-    nanos_factor = 1e-9
+    nanos_factor = 1e-9  # noqa: F841
 
     timestamps = [
         (t, timestamp_nanos) for t in range(1661336507, 1661336606, 10)
@@ -286,3 +286,53 @@ if __name__ == "__main__":
         == "everything stored!"
     ):
         print("Transforms sent successfully")
+
+
+def send_examples_to_geodetic_project():
+    channel = get_gRPC_channel()
+    fb_builder = flatbuffers.Builder()
+
+    # lat, long, alt in decimal degree
+    project_uuid = createProject(
+        channel,
+        fb_builder,
+        "geodeticProject",
+        "map",
+        "EPSG:4326",
+        0,
+        52.35_81_99,
+        8.27_96_79,
+    )
+
+    camera_uuid = send_cameraintrinsics(channel, project_uuid)
+
+    timestamp_nanos = 1245
+    nanos_factor = 1e-9  # noqa: F841
+
+    timestamps = [
+        (t, timestamp_nanos) for t in range(1661336507, 1661336606, 10)
+    ]
+
+    img_bufs = send_images(
+        channel,
+        project_uuid,
+        camera_uuid,
+        generate_image_ressources(10),
+        timestamps,
+    )
+
+    tf_resp = send_tfs(channel, project_uuid, timestamps)
+
+    if img_bufs is not None and len(img_bufs) > 0:
+        print("Images sent successfully")
+
+    if (
+        ServerResponse.ServerResponse.GetRootAs(tf_resp).Message().decode()
+        == "everything stored!"
+    ):
+        print("Transforms sent successfully")
+
+
+if __name__ == "__main__":
+    send_examples()
+    # send_examples_to_geodetic_project()
