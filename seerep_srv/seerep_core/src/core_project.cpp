@@ -248,11 +248,19 @@ CoreProject::transformToMapFrame(const seerep_core_msgs::Polygon2D& polygon,
 
     transformed_polygon.vertices.emplace_back(t_coord.enu.e, t_coord.enu.n);
     transformed_z_coords.push_back(t_coord.enu.u);
+
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
+        << "Querying with polygon coordinate (in map frame): "
+        << " (" << t_coord.enu.e << ", " << t_coord.enu.n << ")";
   }
 
   // the new z is the smallest z of all transformed points
   transformed_polygon.z = *std::min_element(transformed_z_coords.begin(),
                                             transformed_z_coords.end());
+
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
+      << "Querying with polygons z coordinate (in map frame): "
+      << transformed_polygon.z;
 
   proj_destroy(to_topographic_rawptr);
   proj_context_destroy(ctx);
@@ -265,10 +273,9 @@ CoreProject::getDataset(seerep_core_msgs::Query& query)
   seerep_core_msgs::QueryResultProject result;
   result.projectUuid = m_uuid;
 
-  // is the query not in map frame? Then transform the polygon into it
   // query.crsString == "project" means the polygon is in the project frame
-  // if query.crsString == "map" that means the query is done in the map
-  // frame
+  // if query.crsString == "map" that means the query is in the map frame
+  // else do crs transformations
   if (query.polygon && query.crsString != "map")
   {
     query.polygon.value() =
@@ -281,10 +288,20 @@ CoreProject::getDataset(seerep_core_msgs::Query& query)
 }
 
 seerep_core_msgs::QueryResultProject
-CoreProject::getInstances(const seerep_core_msgs::Query& query)
+CoreProject::getInstances(seerep_core_msgs::Query& query)
 {
   seerep_core_msgs::QueryResultProject result;
   result.projectUuid = m_uuid;
+
+  // query.crsString == "project" means the polygon is in the project frame
+  // if query.crsString == "map" that means the query is done in the map
+  // else do crs transformations
+  if (query.polygon && query.crsString != "map")
+  {
+    query.polygon.value() =
+        transformToMapFrame(query.polygon.value(), query.crsString);
+  }
+
   result.dataOrInstanceUuids = m_coreDatasets->getInstances(query);
 
   return result;

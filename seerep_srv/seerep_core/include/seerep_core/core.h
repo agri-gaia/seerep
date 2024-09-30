@@ -70,8 +70,7 @@ public:
    * @param query the spatio-temporal-semantic query
    * @return vector of UUIDs of instances matching the query and the project UUID
    */
-  seerep_core_msgs::QueryResult
-  getInstances(const seerep_core_msgs::Query& query);
+  seerep_core_msgs::QueryResult getInstances(seerep_core_msgs::Query& query);
 
   /**
    * @brief Adds labels to an existing dataset

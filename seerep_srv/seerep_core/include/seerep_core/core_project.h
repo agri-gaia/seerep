@@ -115,7 +115,7 @@ public:
    * @return vector of UUIDs of instances matching the query and the project UUID
    */
   seerep_core_msgs::QueryResultProject
-  getInstances(const seerep_core_msgs::Query& query);
+  getInstances(seerep_core_msgs::Query& query);
 
   /**
    * @brief Returns the geodetic coordinates of this project
