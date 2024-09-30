@@ -10,18 +10,26 @@
 #   gRPC_fb_sendPointsBasedOnImageInstances.py
 #   gRPC_fb_sendPointCloud.py
 import time
-from typing import Dict, List, Set
+from typing import Any, Callable, Dict, Generator, List, Set
 
-from gRPC.images import gRPC_pb_sendLabeledImage as send_imgs
+from gRPC.images import gRPC_fb_sendImages as send_imgs_fb
+from gRPC.images import gRPC_pb_sendLabeledImage as send_imgs_pb
 from gRPC.point import gRPC_fb_sendPointsBasedOnImageInstances as send_points
 from gRPC.pointcloud import gRPC_fb_sendPointCloud as send_pcl
 from gRPC.util.msg_abs.msgs import (
+    Dtypes,
     EnumFbQuery,
     EnumFbQueryInstance,
     FbQuery,
     FbQueryInstance,
 )
-from seerep.fb import Datatype, PointCloud2, PointStamped, UuidsPerProject
+from seerep.fb import (
+    Datatype,
+    Image,
+    PointCloud2,
+    PointStamped,
+    UuidsPerProject,
+)
 from seerep.util import fb_helper as fbh
 from seerep.util.service_manager import ServiceManager
 
@@ -39,16 +47,37 @@ def get_sorted_uuids_per_proj(
     )
 
 
-def combine_stamps_nanos(pb_obj):
+def combine_stamps_nanos_pb(pb_obj):
     return pb_obj.header.stamp.seconds * 10**9 + pb_obj.header.stamp.nanos
 
 
-def get_instances_from_imgs(img_lst: List):
+def combine_stamps_nanos_fb(fb_obj: Image.Image):
+    return (
+        fb_obj.Header().Stamp().Seconds() * 10**9
+        + fb_obj.Header().Stamp().Nanos()
+    )
+
+
+def get_instances_from_imgs_pb(img_lst: List):
     label_instances = []
     for image in img_lst:
         for label_cat in image.labels:
             for instance in label_cat.labels:
                 label_instances.append(instance.instanceUuid)
+    return label_instances
+
+
+def fb_it(accessor_func: Callable, length: int) -> Generator[Any, None, None]:
+    for idx in range(length):
+        yield accessor_func(idx)
+
+
+def get_instances_from_imgs_fb(img_lst: List[Image.Image]):
+    label_instances = []
+    for image in img_lst:
+        for label_cat in fb_it(image.Labels, image.LabelsLength()):
+            for instance in fb_it(label_cat.Labels, label_cat.LabelsLength()):
+                label_instances.append(instance.InstanceUuid().decode())
     return label_instances
 
 
@@ -83,7 +112,9 @@ def test_gRPC_getInstanceTypes(grpc_channel, project_setup):
     _, proj_uuid = project_setup
 
     ### check for instances on images
-    images_uuids, _, _ = send_imgs.send_labeled_images(proj_uuid, grpc_channel)
+    images_uuids, _, _ = send_imgs_pb.send_labeled_images(
+        proj_uuid, grpc_channel
+    )
     pcl_lst: List[PointCloud2.PointCloud2] = send_pcl.send_pointcloud(
         proj_uuid, grpc_channel
     )
@@ -183,12 +214,12 @@ def test_gRPC_getInstanceTypes(grpc_channel, project_setup):
     instance_uuids = get_sorted_uuids_per_proj(instance_uuidspp)
 
     # because uuid duplicates are received
-    instance_uuids = sorted(set(instance_uuids))
+    instance_uuids = set(instance_uuids)
 
     points_instance_uuids.extend(pcl_instance_uuids)
     points_instance_uuids.extend(label_instances)
 
-    instance_uuids_all = sorted(set(points_instance_uuids))
+    instance_uuids_all = set(points_instance_uuids)
 
     assert instance_uuids == instance_uuids_all
 
@@ -199,18 +230,20 @@ def test_gRPC_getInstanceQueryPolygon(grpc_channel, project_setup):
     serv_man = ServiceManager(grpc_channel)
 
     # only send pictures to ease the testing process
-    images_uuids, _, _ = send_imgs.send_labeled_images(proj_uuid, grpc_channel)
+    images_uuids, _, _ = send_imgs_pb.send_labeled_images(
+        proj_uuid, grpc_channel
+    )
 
     # extract images ignore image uuids
     images = [img[1] for img in images_uuids]
 
     timestamp_sorted_imgs = sorted(
-        images, key=lambda img: combine_stamps_nanos(img)
+        images, key=lambda img: combine_stamps_nanos_pb(img)
     )
     timestamp_thresh_imgs = timestamp_sorted_imgs[:4]
 
     # retrieve the labelinstances of the bounding boxes
-    label_instances = get_instances_from_imgs(timestamp_thresh_imgs)
+    label_instances = get_instances_from_imgs_pb(timestamp_thresh_imgs)
 
     query_builder = FbQuery(grpc_channel, enum_types={EnumFbQuery.POLYGON})
     queryinst_builder = FbQueryInstance(
@@ -237,7 +270,9 @@ def test_gRPC_getInstanceQueryTimeinterval(grpc_channel, project_setup):
     serv_man = ServiceManager(grpc_channel)
 
     # only send pictures to ease the testing process
-    images_uuids, _, _ = send_imgs.send_labeled_images(proj_uuid, grpc_channel)
+    images_uuids, _, _ = send_imgs_pb.send_labeled_images(
+        proj_uuid, grpc_channel
+    )
 
     # extract images ignore image uuids
     images = [img[1] for img in images_uuids]
@@ -304,7 +339,7 @@ def test_gRPC_getInstanceQueryTimeinterval(grpc_channel, project_setup):
         )
     )
 
-    label_instances = get_instances_from_imgs(images)
+    label_instances = get_instances_from_imgs_pb(images)
 
     assert len(instance_uuids_outtimeinterval) == 0
     assert sorted(label_instances) == sorted(instance_uuids_intimeinterval)
@@ -318,14 +353,16 @@ def test_gRPC_getInstanceQueryLabel(grpc_channel, project_setup):
     serv_man = ServiceManager(grpc_channel)
 
     # only send pictures to ease the testing process
-    images_uuids, _, _ = send_imgs.send_labeled_images(proj_uuid, grpc_channel)
+    images_uuids, _, _ = send_imgs_pb.send_labeled_images(
+        proj_uuid, grpc_channel
+    )
 
     # extract images ignore image uuids
     images = [img[1] for img in images_uuids]
 
     # this is not a and with all labels attached to a bb
-    # query_builder = FbQuery(grpc_channel, enum_types=set([EnumFbQuery.LABEL,
-    # EnumFbQuery.MUST_HAVE_ALL_LABELS]))
+    # query_builder = FbQuery(grpc_channel, enum_types={EnumFbQuery.LABEL,
+    # EnumFbQuery.MUST_HAVE_ALL_LABELS})
 
     query_builder = FbQuery(grpc_channel, enum_types={EnumFbQuery.LABEL})
 
@@ -363,14 +400,16 @@ def test_gRPC_getInstanceQueryMustHaveAllLabels(grpc_channel, project_setup):
     serv_man = ServiceManager(grpc_channel)
 
     # only send pictures to ease the testing process
-    images_uuids, _, _ = send_imgs.send_labeled_images(proj_uuid, grpc_channel)
+    images_uuids, _, _ = send_imgs_pb.send_labeled_images(
+        proj_uuid, grpc_channel
+    )
 
     # extract images ignore image uuids
     images = [img[1] for img in images_uuids]
 
     # this is not a and with all labels attached to a bb
-    # query_builder = FbQuery(grpc_channel, enum_types=set([EnumFbQuery.LABEL,
-    # EnumFbQuery.MUST_HAVE_ALL_LABELS]))
+    # query_builder = FbQuery(grpc_channel, enum_types={EnumFbQuery.LABEL,
+    # EnumFbQuery.MUST_HAVE_ALL_LABELS})
 
     query_builder = FbQuery(
         grpc_channel,
@@ -409,17 +448,19 @@ def test_gRPC_getInstanceQueryInstanceUuid(grpc_channel, project_setup):
     serv_man = ServiceManager(grpc_channel)
 
     # only send pictures to ease the testing process
-    images_uuids, _, _ = send_imgs.send_labeled_images(proj_uuid, grpc_channel)
+    images_uuids, _, _ = send_imgs_pb.send_labeled_images(
+        proj_uuid, grpc_channel
+    )
 
     # extract images ignore image uuids
     images = [img[1] for img in images_uuids]
 
     # retrieve the labelinstances of the bounding boxes
-    all_label_instances = sorted(get_instances_from_imgs(images))
+    all_label_instances = sorted(get_instances_from_imgs_pb(images))
 
     query_builder = FbQuery(
         grpc_channel,
-        enum_types=set(EnumFbQuery.PROJECTUUID, EnumFbQuery.INSTANCEUUID),
+        enum_types={EnumFbQuery.PROJECTUUID, EnumFbQuery.INSTANCEUUID},
     )
     query_builder.set_active_function(
         EnumFbQuery.PROJECTUUID,
@@ -428,7 +469,7 @@ def test_gRPC_getInstanceQueryInstanceUuid(grpc_channel, project_setup):
     query_builder.assemble_datatype_instance()
 
     queryinst_builder = FbQueryInstance(
-        grpc_channel, enum_types=set(EnumFbQueryInstance.QUERY)
+        grpc_channel, enum_types={EnumFbQueryInstance.QUERY}
     )
     queryinst_builder.set_active_function(
         EnumFbQueryInstance.QUERY, lambda: query_builder.datatype_instance
@@ -465,13 +506,15 @@ def test_gRPC_getInstanceQueryInstanceUuid(grpc_channel, project_setup):
     serv_man = ServiceManager(grpc_channel)
 
     # only send pictures to ease the testing process
-    images_uuids, _, _ = send_imgs.send_labeled_images(proj_uuid, grpc_channel)
+    images_uuids, _, _ = send_imgs_pb.send_labeled_images(
+        proj_uuid, grpc_channel
+    )
 
     # extract images ignore image uuids
     images = [img[1] for img in images_uuids]
 
     # retrieve the labelinstances of the bounding boxes
-    all_labelss_instances = sorted(get_instances_from_imgs(images))
+    all_labelss_instances = sorted(get_instances_from_imgs_pb(images))
 
     query_builder = FbQuery(
         grpc_channel,
@@ -520,7 +563,9 @@ def test_gRPC_getInstanceQueryDatauuid(grpc_channel, project_setup):
     serv_man = ServiceManager(grpc_channel)
 
     # only send pictures to ease the testing process
-    images_uuids, _, _ = send_imgs.send_labeled_images(proj_uuid, grpc_channel)
+    images_uuids, _, _ = send_imgs_pb.send_labeled_images(
+        proj_uuid, grpc_channel
+    )
 
     # extract images ignore image uuids
 
@@ -555,7 +600,7 @@ def test_gRPC_getInstanceQueryDatauuid(grpc_channel, project_setup):
     ]
 
     # retrieve the labelinstances of the bounding boxes
-    label_instances = sorted(get_instances_from_imgs(sorted_imgs_halved))
+    label_instances = sorted(get_instances_from_imgs_pb(sorted_imgs_halved))
 
     assert instance_uuids == label_instances
 
@@ -566,18 +611,20 @@ def test_gRPC_getInstanceQueryFullyEncapsulated(grpc_channel, project_setup):
     serv_man = ServiceManager(grpc_channel)
 
     # only send pictures to ease the testing process
-    images_uuids, _, _ = send_imgs.send_labeled_images(proj_uuid, grpc_channel)
+    images_uuids, _, _ = send_imgs_pb.send_labeled_images(
+        proj_uuid, grpc_channel
+    )
 
     # extract images ignore image uuids
     images = [img[1] for img in images_uuids]
 
     timestamp_sorted_imgs = sorted(
-        images, key=lambda img: combine_stamps_nanos(img)
+        images, key=lambda img: combine_stamps_nanos_pb(img)
     )
     timestamp_thresh_imgs = timestamp_sorted_imgs[1:4]
 
     # retrieve the labelinstances of the bounding boxes
-    label_instances = get_instances_from_imgs(timestamp_thresh_imgs)
+    label_instances = get_instances_from_imgs_pb(timestamp_thresh_imgs)
 
     query_builder = FbQuery(
         grpc_channel,
@@ -608,21 +655,21 @@ def _test_gRPC_getInstanceQuerySortByTime(grpc_channel, project_setup):
     serv_man = ServiceManager(grpc_channel)
 
     # only send pictures to ease the testing process
-    images_uuids, _, _ = send_imgs.send_labeled_images(proj_uuid, grpc_channel)
+    images_uuids, _, _ = send_imgs_pb.send_labeled_images(
+        proj_uuid, grpc_channel
+    )
 
     # extract images ignore image uuids
     images = [img[1] for img in images_uuids]
 
     timestamp_sorted_imgs = sorted(
-        images, key=lambda img: combine_stamps_nanos(img)
+        images, key=lambda img: combine_stamps_nanos_pb(img)
     )
 
-    query_builder = FbQuery(
-        grpc_channel, enum_types=set(EnumFbQuery.SORT_BY_TIME)
-    )
+    query_builder = FbQuery(grpc_channel, enum_types={EnumFbQuery.SORT_BY_TIME})
 
     queryinst_builder = FbQueryInstance(
-        grpc_channel, enum_types=set(EnumFbQueryInstance.QUERY)
+        grpc_channel, enum_types={EnumFbQueryInstance.QUERY}
     )
 
     queryinst_builder.set_active_function(
@@ -644,40 +691,71 @@ def _test_gRPC_getInstanceQuerySortByTime(grpc_channel, project_setup):
             for i in range(uuidspp.UuidsPerProject(0).UuidsLength())
         ]
 
-    label_instances = get_instances_from_imgs(timestamp_sorted_imgs)
+    label_instances = get_instances_from_imgs_pb(timestamp_sorted_imgs)
 
     assert uuids_by_time == label_instances
 
 
-def _test_gRPC_getInstanceQueryInMapFrame(grpc_channel, project_setup):
-    _, proj_uuid = project_setup
-
+# test for query in another CRS, in this case EPSG:3857
+def test_gRPC_getInstanceQueryCrsStringEPSG3857(
+    grpc_channel, epsg4326_project_setup
+):
+    proj_uuid = epsg4326_project_setup
     serv_man = ServiceManager(grpc_channel)
 
-    # only send pictures to ease the testing process
-    images_uuids, _, _ = send_imgs.send_labeled_images(proj_uuid, grpc_channel)
+    camera_uuid = send_imgs_fb.send_cameraintrinsics(grpc_channel, proj_uuid)
 
-    # extract images ignore image uuids
-    images = [img[1] for img in images_uuids]
+    timestamp_nanos = 1245
+    timestamps = [
+        (t, timestamp_nanos) for t in range(1661336507, 1661336606, 10)
+    ]
+
+    img_bufs = send_imgs_fb.send_images(
+        grpc_channel,
+        proj_uuid,
+        camera_uuid,
+        send_imgs_fb.generate_image_ressources(10),
+        timestamps,
+    )
+
+    send_imgs_fb.send_tfs(grpc_channel, proj_uuid, timestamps)
+
+    # extract the sent images
+    images = [Image.Image.GetRootAs(img) for img in img_bufs]
 
     timestamp_sorted_imgs = sorted(
-        images, key=lambda img: combine_stamps_nanos(img)
+        images, key=lambda img: combine_stamps_nanos_fb(img)
     )
-    timestamp_thresh_imgs = timestamp_sorted_imgs[1:4]
+    timestamp_thresh_imgs = [timestamp_sorted_imgs[1]]
 
     # retrieve the labelinstances of the bounding boxes
-    label_instances = get_instances_from_imgs(timestamp_thresh_imgs)
+    label_instances = get_instances_from_imgs_fb(timestamp_thresh_imgs)
 
     query_builder = FbQuery(
         grpc_channel,
-        enum_types=set(
+        enum_types={
             EnumFbQuery.POLYGON,
+            EnumFbQuery.CRS_STRING,
             EnumFbQuery.FULLY_ENCAPSULATED,
-        ),
+            EnumFbQuery.WITHOUTDATA,
+        },
     )
+
+    query_builder.set_active_function(
+        EnumFbQuery.CRS_STRING, lambda: "EPSG:3857"
+    )
+
+    query_builder.set_active_function(
+        EnumFbQuery.POLYGON,
+        lambda: Dtypes.Fb.polgon_epsg3857(query_builder.builder),
+    )
+
+    query_builder.assemble_datatype_instance()
+
     queryinst_builder = FbQueryInstance(
-        grpc_channel, enum_types=set(EnumFbQueryInstance.QUERY)
+        grpc_channel, enum_types={EnumFbQueryInstance.QUERY}
     )
+
     queryinst_builder.set_active_function(
         EnumFbQueryInstance.QUERY, lambda: query_builder.datatype_instance
     )
