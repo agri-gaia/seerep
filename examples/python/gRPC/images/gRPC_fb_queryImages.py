@@ -13,49 +13,12 @@ from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
     create_label,
     create_label_category,
-    createPoint2d,
-    createPolygon2D,
     createQuery,
+    createRectangularPolygon2D,
     createTimeInterval,
     createTimeStamp,
     getOrCreateProject,
 )
-
-
-def create_polygon_rect(
-    builder: flatbuffers.Builder,
-    x: float,
-    y: float,
-    extent_x: float,
-    extent_y: float,
-    z: float,
-    height: float,
-) -> int:
-    """
-    Creates a rectangular shaped polygon.
-
-    Args:
-        builder (Builder): The flatbuffers builder.
-        x (float): The left bottom origin x coordinate.
-        y (float): The left bottom origin y coordinate.
-        extent_x (float): The extend of the rectangle in x direction.
-        extent_y (float): The extend of the rectangle in y direction.
-        z (float): The z-coordinate to start the polygon off.
-        height (float): The extent to which to expand the valid 3D region of the
-          polygon starting from z.
-
-    Returns: The created polygon2D type
-    """
-    polygon_vertices = []
-    (polygon_vertices.append(createPoint2d(builder, x, y)),)
-    (polygon_vertices.append(createPoint2d(builder, x + extent_x, y)),)
-    (
-        polygon_vertices.append(
-            createPoint2d(builder, x + extent_x, y + extent_y)
-        ),
-    )
-    polygon_vertices.append(createPoint2d(builder, x, y + extent_y))
-    return createPolygon2D(builder, height, z, polygon_vertices)
 
 
 def query_images_raw(
@@ -119,7 +82,7 @@ def query_example():
     grpc_channel = get_gRPC_channel()
     project_uuid = getOrCreateProject(fbb, grpc_channel, "testproject")
 
-    polygon_2d = create_polygon_rect(
+    polygon_2d = createRectangularPolygon2D(
         fbb,
         x=-100,
         extent_x=200,
@@ -185,7 +148,7 @@ def query_geodetic_example():
     grpc_channel = get_gRPC_channel()
     project_uuid = getOrCreateProject(fbb, grpc_channel, "geodeticProject")
 
-    polygon_epsg3857 = create_polygon_rect(
+    polygon_epsg3857 = createRectangularPolygon2D(
         fbb,
         x=921689.630348,
         y=6865153.476919,

@@ -584,6 +584,42 @@ def createPolygon2D(
     return Polygon2D.End(builder)
 
 
+def createRectangularPolygon2D(
+    builder: Builder,
+    x: float,
+    y: float,
+    extent_x: float,
+    extent_y: float,
+    z: float,
+    height: float,
+) -> int:
+    """
+    Creates a rectangular shaped polygon.
+
+    Args:
+        builder (Builder): The flatbuffers builder.
+        x (float): The left bottom origin x coordinate.
+        y (float): The left bottom origin y coordinate.
+        extent_x (float): The extend of the rectangle in x direction.
+        extent_y (float): The extend of the rectangle in y direction.
+        z (float): The z-coordinate to start the polygon off.
+        height (float): The extent to which to expand the valid 3D region of the
+          polygon starting from z.
+
+    Returns: The created polygon2D type
+    """
+    polygon_vertices = []
+    (polygon_vertices.append(createPoint2d(builder, x, y)),)
+    (polygon_vertices.append(createPoint2d(builder, x + extent_x, y)),)
+    (
+        polygon_vertices.append(
+            createPoint2d(builder, x + extent_x, y + extent_y)
+        ),
+    )
+    polygon_vertices.append(createPoint2d(builder, x, y + extent_y))
+    return createPolygon2D(builder, height, z, polygon_vertices)
+
+
 def addToBoundingBoxLabeledVector(
     builder: Builder, boundingBoxLabeledList: List[int]
 ) -> int:
