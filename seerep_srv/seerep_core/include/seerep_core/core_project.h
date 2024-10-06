@@ -91,10 +91,15 @@ public:
   const std::string getVersion();
 
   /**
-   * @brief transfrom provided polygon to map frame from geodetic coords
+   * @brief Transfrom provided polygon to map frame from geodetic coords
    *
-   * @param p polygon
-   * @return seerep_core_msgs::Polygon2D polygon
+   * First the polygon is transformed to the projects frame and then to the
+   * topocentric coordinates of the map frame. The
+   * coordinates of the Spatial Reference System Identifier
+   * for the project must be latitude first and longitude second.
+   *
+   * @param p the polygon to transform
+   * @return the transformed polygon
    */
   seerep_core_msgs::Polygon2D
   transformToMapFrame(const seerep_core_msgs::Polygon2D& polygon,
