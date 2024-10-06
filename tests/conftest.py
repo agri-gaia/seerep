@@ -67,7 +67,6 @@ def project_setup(grpc_channel) -> Generator[Tuple[str, str], None, None]:
 
 
 # NOTE: This fixture depends on working project creation and deletion
-# this uses some example coordinates
 @pytest.fixture
 def epsg4326_project_setup(grpc_channel) -> Generator[str, None, None]:
     fb_builder = flatbuffers.Builder()
@@ -81,6 +80,29 @@ def epsg4326_project_setup(grpc_channel) -> Generator[str, None, None]:
         altitude=0,
         latitude=52.35_81_99,
         longitude=8.27_96_79,
+    )
+
+    yield project_uuid
+
+    fb_helper.deleteProject(
+        grpc_channel, flatbuffers.Builder(), project_name, project_uuid
+    )
+
+
+# NOTE: This fixture depends on working project creation and deletion
+@pytest.fixture
+def epsg4314_project_setup(grpc_channel) -> Generator[str, None, None]:
+    fb_builder = flatbuffers.Builder()
+    project_name = "geodeticProject"
+    project_uuid = fb_helper.createProject(
+        grpc_channel,
+        fb_builder,
+        project_name,
+        "map",
+        "EPSG:4314",
+        altitude=0,
+        latitude=52.35_96_109,
+        longitude=8.28_06_335,
     )
 
     yield project_uuid

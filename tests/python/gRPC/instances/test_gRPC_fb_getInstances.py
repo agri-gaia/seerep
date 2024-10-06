@@ -769,3 +769,78 @@ def test_gRPC_getInstanceQueryCrsStringEPSG3857(
     )
 
     assert instance_uuids_polygon == sorted(label_instances)
+
+
+def test_gRPC_getInstanceQueryProjectEPSG4314(
+    grpc_channel, epsg4314_project_setup
+):
+    proj_uuid = epsg4314_project_setup
+    serv_man = ServiceManager(grpc_channel)
+
+    camera_uuid = send_imgs_fb.send_cameraintrinsics(grpc_channel, proj_uuid)
+
+    timestamp_nanos = 1245
+    timestamps = [
+        (t, timestamp_nanos) for t in range(1661336507, 1661336606, 10)
+    ]
+
+    img_bufs = send_imgs_fb.send_images(
+        grpc_channel,
+        proj_uuid,
+        camera_uuid,
+        send_imgs_fb.generate_image_ressources(10),
+        timestamps,
+    )
+
+    send_imgs_fb.send_tfs(grpc_channel, proj_uuid, timestamps)
+
+    # extract the sent images
+    images = [Image.Image.GetRootAs(img) for img in img_bufs]
+
+    timestamp_sorted_imgs = sorted(
+        images, key=lambda img: combine_stamps_nanos_fb(img)
+    )
+    timestamp_thresh_imgs = [timestamp_sorted_imgs[1]]
+
+    # retrieve the labelinstances of the bounding boxes
+    label_instances = get_instances_from_imgs_fb(timestamp_thresh_imgs)
+
+    query_builder = FbQuery(
+        grpc_channel,
+        enum_types={
+            EnumFbQuery.POLYGON,
+            EnumFbQuery.CRS_STRING,
+            EnumFbQuery.FULLY_ENCAPSULATED,
+            EnumFbQuery.WITHOUTDATA,
+        },
+    )
+
+    query_builder.set_active_function(
+        EnumFbQuery.CRS_STRING, lambda: "EPSG:3857"
+    )
+
+    query_builder.set_active_function(
+        EnumFbQuery.POLYGON,
+        lambda: Dtypes.Fb.polgon_epsg3857(query_builder.builder),
+    )
+
+    query_builder.assemble_datatype_instance()
+
+    queryinst_builder = FbQueryInstance(
+        grpc_channel, enum_types={EnumFbQueryInstance.QUERY}
+    )
+
+    queryinst_builder.set_active_function(
+        EnumFbQueryInstance.QUERY, lambda: query_builder.datatype_instance
+    )
+
+    queryinst_builder.assemble_datatype_instance()
+
+    instance_uuids_polygon = get_sorted_uuids_per_proj(
+        serv_man.call_get_instances_fb(
+            queryinst_builder.builder, queryinst_builder.datatype_instance
+        )
+    )
+
+    print(instance_uuids_polygon)
+    assert instance_uuids_polygon == sorted(label_instances)
