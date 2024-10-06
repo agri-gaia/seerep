@@ -708,8 +708,26 @@ void CoreDataset::addDatasetToIndices(
 
   if (isSpatiallyTransformable(dataset))
   {
-    datatypeSpecifics->rt.insert(std::make_pair(transformIndexableAABB(dataset),
-                                                dataset.header.uuidData));
+    auto transformedAABB = transformIndexableAABB(dataset);
+    std::vector<float> x{ bg::get<bg::min_corner, 0>(transformedAABB),
+                          bg::get<bg::max_corner, 0>(transformedAABB) };
+    std::vector<float> y{ bg::get<bg::min_corner, 1>(transformedAABB),
+                          bg::get<bg::max_corner, 1>(transformedAABB) };
+    std::vector<float> z{ bg::get<bg::min_corner, 2>(transformedAABB),
+                          bg::get<bg::max_corner, 2>(transformedAABB) };
+
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
+        << "bounding box based on frustum\n"
+        << dataset.header.uuidData << " :\n"
+        << "xmin: " << bg::get<bg::min_corner, 0>(transformedAABB) << "\n"
+        << "xmax: " << bg::get<bg::max_corner, 0>(transformedAABB) << "\n"
+        << "ymin: " << bg::get<bg::min_corner, 1>(transformedAABB) << "\n"
+        << "ymax: " << bg::get<bg::max_corner, 1>(transformedAABB) << "\n"
+        << "zmin: " << bg::get<bg::min_corner, 2>(transformedAABB) << "\n"
+        << "zmax: " << bg::get<bg::max_corner, 2>(transformedAABB);
+
+    datatypeSpecifics->rt.insert(
+        std::make_pair(transformedAABB, dataset.header.uuidData));
     datatypeSpecifics->rtSensorPos.insert(std::make_pair(
         getSensorPositionAsAABB(dataset), dataset.header.uuidData));
   }
@@ -888,35 +906,94 @@ void CoreDataset::intersectionDegree(const seerep_core_msgs::AABB& aabb,
     return;
   }
 
-  fullEncapsulation = true;
-  partialEncapsulation = false;
+  intersectionDegreeAABBinPolygon(aabb, polygon, aabb_cgal, polygon_cgal,
+                                  fullEncapsulation, partialEncapsulation);
+}
 
-  bool xy_bounded, z_bounded;
-
-  // are the corners of the aabb inside the polygon on the z axis
-  z_bounded =
-      polygon.z <= bg::get<bg::min_corner, 2>(aabb) &&
-      (polygon.z + polygon.height) >= bg::get<bg::min_corner, 2>(aabb) &&
-      polygon.z <= bg::get<bg::max_corner, 2>(aabb) &&
-      (polygon.z + polygon.height) >= bg::get<bg::max_corner, 2>(aabb);
-
-  // traverse the axis aligned bounding box
-  for (CGAL::Polygon_2<Kernel>::Vertex_iterator vi = aabb_cgal.vertices_begin();
-       vi != aabb_cgal.vertices_end(); ++vi)
+void CoreDataset::intersectionDegreeCgalPolygons(CGAL::Polygon_2<Kernel> cgal1,
+                                                 CGAL::Polygon_2<Kernel> cgal2,
+                                                 bool z_partially,
+                                                 bool checkIfFullyEncapsulated,
+                                                 bool& fullEncapsulation,
+                                                 bool& partialEncapsulation)
+{
+  for (CGAL::Polygon_2<Kernel>::Vertex_iterator vi = cgal1.vertices_begin();
+       vi != cgal1.vertices_end(); ++vi)
   {
-    // is the vertex of the aabb inside the polygon on the x and y axis
-    xy_bounded = !(polygon_cgal.bounded_side(*vi) == CGAL::ON_UNBOUNDED_SIDE);
+    // is the vertex of the aabb inside or on the boundary (not outside) the
+    // polygon on the x and y axis
+    bool xy_bounded = !(cgal2.bounded_side(*vi) == CGAL::ON_UNBOUNDED_SIDE);
 
-    // check if this point is not inside the obb
-    if (!xy_bounded || !z_bounded)
+    if (!xy_bounded && checkIfFullyEncapsulated)
     {
       fullEncapsulation = false;
     }
-    else
+
+    if (xy_bounded && z_partially)
     {
       partialEncapsulation = true;
     }
   }
+}
+
+void CoreDataset::intersectionDegreeAABBinPolygon(
+    const seerep_core_msgs::AABB& aabb,
+    const seerep_core_msgs::Polygon2D& polygon,
+    CGAL::Polygon_2<Kernel> aabb_cgal, CGAL::Polygon_2<Kernel> polygon_cgal,
+    bool& fullEncapsulation, bool& partialEncapsulation)
+{
+  fullEncapsulation = true;
+  partialEncapsulation = false;
+
+  // are the corners of the aabb inside the polygon on the z axis
+  bool z_aabb_fully_in_polygon =
+      bg::get<bg::min_corner, 2>(aabb) >= polygon.z &&
+      bg::get<bg::min_corner, 2>(aabb) <= (polygon.z + polygon.height) &&
+      bg::get<bg::max_corner, 2>(aabb) >= polygon.z &&
+      bg::get<bg::max_corner, 2>(aabb) <= (polygon.z + polygon.height);
+  bool z_aabb_partially_in_polygon =
+      (bg::get<bg::min_corner, 2>(aabb) >= polygon.z &&
+       bg::get<bg::min_corner, 2>(aabb) <= (polygon.z + polygon.height)) ||
+      (bg::get<bg::max_corner, 2>(aabb) >= polygon.z &&
+       bg::get<bg::max_corner, 2>(aabb) <= (polygon.z + polygon.height));
+  // are the corners of the polygon inside the aabb on the z axis
+  /*bool z_polygon_fully_in_aabb =
+      polygon.z >= bg::get<bg::min_corner, 2>(aabb) &&
+      polygon.z <= bg::get<bg::max_corner, 2>(aabb) &&
+      (polygon.z + polygon.height) >= bg::get<bg::min_corner, 2>(aabb) &&
+      (polygon.z + polygon.height) <= bg::get<bg::max_corner, 2>(aabb);*/
+  bool z_polygon_partially_in_aabb =
+      (polygon.z >= bg::get<bg::min_corner, 2>(aabb) &&
+       polygon.z <= bg::get<bg::max_corner, 2>(aabb)) ||
+      ((polygon.z + polygon.height) >= bg::get<bg::min_corner, 2>(aabb) &&
+       (polygon.z + polygon.height) <= bg::get<bg::max_corner, 2>(aabb));
+
+  bool z_fully = z_aabb_fully_in_polygon;
+  bool z_partially = z_aabb_partially_in_polygon || z_polygon_partially_in_aabb;
+
+  // if not fully in z direction then for sure not fully
+  if (!z_fully)
+  {
+    fullEncapsulation = false;
+  }
+
+  // if not fully nor partially skip following checks
+  if (!z_fully && !z_partially)
+  {
+    return;
+  }
+
+  // traverse the axis aligned bounding box and check if AABB is in polygon
+  intersectionDegreeCgalPolygons(aabb_cgal, polygon_cgal, z_partially, true,
+                                 fullEncapsulation, partialEncapsulation);
+
+  // traverse polygon and check if it is fully in AABB
+  // if this is the check for AABB in polygon fail as all corners off AABB are
+  // outside of polygon
+  // we want to handle this as partially encapsulated because inner parts of the
+  // AABB are inside the polygon
+  intersectionDegreeCgalPolygons(polygon_cgal, aabb_cgal, z_partially, false,
+                                 fullEncapsulation, partialEncapsulation);
 }
 
 seerep_core_msgs::AabbTime
@@ -1094,6 +1171,11 @@ seerep_core_msgs::AABB CoreDataset::getSensorPositionAsAABB(
   auto tf = m_tfOverview->getData(indexable.header.timestamp.seconds,
                                   indexable.header.timestamp.nanos, m_frameId,
                                   indexable.header.frameId);
+
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
+      << "sensor position\n"
+      << indexable.header.uuidData << " :\n"
+      << tf.value().transform.translation;
 
   seerep_core_msgs::AABB sensorPosAABB;
   bg::set<bg::min_corner, 0>(sensorPosAABB, tf.value().transform.translation.x);
