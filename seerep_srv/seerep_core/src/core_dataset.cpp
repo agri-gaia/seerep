@@ -807,7 +807,7 @@ bool CoreDataset::verifyPolygonIntegrity(CGAL::Polygon_2<Kernel>& polygon_cgal)
   if (!polygon_cgal.is_simple())
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::error)
-        << "Two or more points in the polygon are the same.";
+        << "The polygon is not simple. Are two or more points the same?";
     return false;
   }
   if (!polygon_cgal.is_convex())

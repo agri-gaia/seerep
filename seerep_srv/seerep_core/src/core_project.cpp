@@ -249,7 +249,7 @@ CoreProject::transformToMapFrame(const seerep_core_msgs::Polygon2D& polygon,
     transformed_polygon.vertices.emplace_back(t_coord.enu.e, t_coord.enu.n);
     transformed_z_coords.push_back(t_coord.enu.u);
 
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
         << "Querying with polygon coordinate (in map frame): "
         << " (" << t_coord.enu.e << ", " << t_coord.enu.n << ")";
   }
@@ -258,7 +258,7 @@ CoreProject::transformToMapFrame(const seerep_core_msgs::Polygon2D& polygon,
   transformed_polygon.z = *std::min_element(transformed_z_coords.begin(),
                                             transformed_z_coords.end());
 
-  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
       << "Querying with polygons z coordinate (in map frame): "
       << transformed_polygon.z;
 
