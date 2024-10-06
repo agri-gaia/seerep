@@ -232,16 +232,10 @@ class DatatypeImplementations:
             # area around Osnabrueck
             # points are expected to be (E, N)
             polygon_vertices = []
-            (polygon_vertices.append(fbh.createPoint2d(builder, X, Y)),)
-            (
-                polygon_vertices.append(
-                    fbh.createPoint2d(builder, X + extent, Y)
-                ),
-            )
-            (
-                polygon_vertices.append(
-                    fbh.createPoint2d(builder, X + extent, Y + extent)
-                ),
+            polygon_vertices.append(fbh.createPoint2d(builder, X, Y))
+            polygon_vertices.append(fbh.createPoint2d(builder, X + extent, Y))
+            polygon_vertices.append(
+                fbh.createPoint2d(builder, X + extent, Y + extent)
             )
             polygon_vertices.append(fbh.createPoint2d(builder, X, Y + extent))
             return fbh.createPolygon2D(builder, height, z, polygon_vertices)
