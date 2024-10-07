@@ -51,7 +51,7 @@ z-coordinate point and a height value. Queries are performed by forming an
 encompassing axis aligned bounding box from the polygon. This can lead to an
 AABB larger than the polygon and poses the potential problem of returning results
 to the user which are not fully inside the query polygon. That problem is
-resolved by providing a boolean variable called fullyEncapsulated`. If false,
+resolved by providing a boolean variable called `fullyEncapsulated`. If false,
 resultant polygons, which are partially inside the query polygon are also returned.
 
 ### A time interval (temporal query)
@@ -71,11 +71,18 @@ Only performs the query in these included projects specified by their uuids.
 
 If the pixel data of the image should not be returned in order to save bandwith.
 
-### InMapFrame
+### CrsString
 
-Whether the query is done in the map frame.
-If not, the provided polygon for the spatial query will be transformed from the
-geodesic coordinates of the project into the map frame beforehand.
+Specifies where the query is done.
+Valid values are `map`, `project` or any SRID from
+[https://spatialreference.org/ref/](https://spatialreference.org/ref/).
+
+If the query should be done from the origin of project (the map frame),
+use `map` (default).
+When querying in the same spatial reference system as specified in the project
+use `project`.
+
+Using the last option is explained in more detail [here](geodetic-projects-and-queries.md).
 
 ### Example code for querying images
 
