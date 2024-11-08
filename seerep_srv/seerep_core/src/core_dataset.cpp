@@ -987,9 +987,7 @@ void CoreDataset::intersectionDegreeAABBinPolygon(
   intersectionDegreeCgalPolygons(aabb_cgal, polygon_cgal, z_partially, true,
                                  fullEncapsulation, partialEncapsulation);
 
-  // traverse polygon and check if it is fully in AABB
-  // if this is the check for AABB in polygon fail as all corners off AABB are
-  // outside of polygon
+  // traverse polygon and check if at least one vertex is in the AABB
   // we want to handle this as partially encapsulated because inner parts of the
   // AABB are inside the polygon
   intersectionDegreeCgalPolygons(polygon_cgal, aabb_cgal, z_partially, false,
