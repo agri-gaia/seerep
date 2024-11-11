@@ -32,12 +32,12 @@ Importing from the modules can be done like this:
 
 ```python
 from seerep.pb import image_pb2 as image
-from seerep.pb import image_service_pb2_grpc as image_service_fb
+from seerep.pb import image_service_pb2_grpc as image_service_pb
 ```
 
 ```python
 from seerep.fb import Image
-from seerep.fb import image_service_grpc_fb as image_service_pb
+from seerep.fb import image_service_grpc_fb as image_service_fb
 ```
 
 For more advanced examples have a look at the
