@@ -10,6 +10,7 @@ var structseerep__core__msgs_1_1Query =
     [ "mustHaveAllLabels", "structseerep__core__msgs_1_1Query.html#a4c62cd55e1de65f16916febb6ab6972c", null ],
     [ "ontologyURI", "structseerep__core__msgs_1_1Query.html#a6d0ec208e1655113db286822bb8f6da8", null ],
     [ "polygon", "structseerep__core__msgs_1_1Query.html#a1744153b850c20031f9d17c277523f17", null ],
+    [ "polygonSensorPos", "structseerep__core__msgs_1_1Query.html#adc23655023ba973224a2f7578f350784", null ],
     [ "projects", "structseerep__core__msgs_1_1Query.html#a073b640df62a295d6c1ac75d456ab75b", null ],
     [ "sortByTime", "structseerep__core__msgs_1_1Query.html#a82c2bba2f609aeb1b5c08788a9b8ae98", null ],
     [ "sparqlQuery", "structseerep__core__msgs_1_1Query.html#ab2b815ed82001ac55ec98f20a50fea7a", null ],

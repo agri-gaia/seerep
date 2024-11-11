@@ -31,6 +31,7 @@ var classseerep__core_1_1Core =
     [ "getTF", "classseerep__core_1_1Core.html#a2eef12975acd4e7030611194689794fa", null ],
     [ "loadProjectsInFolder", "classseerep__core_1_1Core.html#acd5d6fdcce79469a0d4edb2fec0333f9", null ],
     [ "performCurl", "classseerep__core_1_1Core.html#a603b9eaa20a73c2e2d26d5cdfb9744c8", null ],
+    [ "reinitializeTFs", "classseerep__core_1_1Core.html#ad841b79958f045d6d11e69b484050c03", null ],
     [ "translateLabelToOntologyConcept", "classseerep__core_1_1Core.html#aaf8693db5084087c86b499e77d321b49", null ],
     [ "m_dataFolder", "classseerep__core_1_1Core.html#ae8b1bb8866d912cb8f3f0c7307a55ad7", null ],
     [ "m_logger", "classseerep__core_1_1Core.html#a889939160e0030e69c26e43e9ee01f20", null ],

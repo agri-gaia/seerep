@@ -156,6 +156,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aaf45bdb21875bf2ca5cf3dd803f3762d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#aaf45bdb21875bf2ca5cf3dd803f3762d">addDatatype</a> (const <a class="el" href="namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0">seerep_core_msgs::Datatype</a> &amp;datatype, std::shared_ptr&lt; <a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreDatatypeInterface.html">seerep_hdf5_core::Hdf5CoreDatatypeInterface</a> &gt; hdf5Io)</td></tr>
 <tr class="memdesc:aaf45bdb21875bf2ca5cf3dd803f3762d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a datatype to the core, loads the needed information from the HDF5 file and creates the indices.  <a href="classseerep__core_1_1CoreDataset.html#aaf45bdb21875bf2ca5cf3dd803f3762d">More...</a><br /></td></tr>
 <tr class="separator:aaf45bdb21875bf2ca5cf3dd803f3762d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad388be44a0cb31676ca2f839113e15fa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#ad388be44a0cb31676ca2f839113e15fa">recreateSpatialRt</a> (const <a class="el" href="namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0">seerep_core_msgs::Datatype</a> &amp;datatype, std::shared_ptr&lt; <a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreDatatypeInterface.html">seerep_hdf5_core::Hdf5CoreDatatypeInterface</a> &gt; hdf5Io)</td></tr>
+<tr class="memdesc:ad388be44a0cb31676ca2f839113e15fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Recreate the spatial rtree.  <a href="classseerep__core_1_1CoreDataset.html#ad388be44a0cb31676ca2f839113e15fa">More...</a><br /></td></tr>
+<tr class="separator:ad388be44a0cb31676ca2f839113e15fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad305677e6e4016bfb787b0fe88b86c19"><td class="memItemLeft" align="right" valign="top">std::vector&lt; boost::uuids::uuid &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#ad305677e6e4016bfb787b0fe88b86c19">getData</a> (const <a class="el" href="structseerep__core__msgs_1_1Query.html">seerep_core_msgs::Query</a> &amp;query)</td></tr>
 <tr class="memdesc:ad305677e6e4016bfb787b0fe88b86c19"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a vector of UUIDs of datasets that match the query.  <a href="classseerep__core_1_1CoreDataset.html#ad305677e6e4016bfb787b0fe88b86c19">More...</a><br /></td></tr>
 <tr class="separator:ad305677e6e4016bfb787b0fe88b86c19"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -195,9 +198,18 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a33c6e6d12f57748b74e2742ba96f116d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#a33c6e6d12f57748b74e2742ba96f116d">tryAddingDataWithMissingTF</a> (const <a class="el" href="namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0">seerep_core_msgs::Datatype</a> &amp;datatype)</td></tr>
 <tr class="memdesc:a33c6e6d12f57748b74e2742ba96f116d"><td class="mdescLeft">&#160;</td><td class="mdescRight">tries to add the dataset which couldn't be added to the spatial index due to a missing transformtion into the frame of the index. If the transformation is now available the data is added to the spatial index  <a href="classseerep__core_1_1CoreDataset.html#a33c6e6d12f57748b74e2742ba96f116d">More...</a><br /></td></tr>
 <tr class="separator:a33c6e6d12f57748b74e2742ba96f116d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25bbe595bc02a33fef7ee51ca97d6a83"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#a25bbe595bc02a33fef7ee51ca97d6a83">isSpatiallyTransformable</a> (const <a class="el" href="structseerep__core__msgs_1_1DatasetIndexable.html">seerep_core_msgs::DatasetIndexable</a> &amp;indexable)</td></tr>
+<tr class="memdesc:a25bbe595bc02a33fef7ee51ca97d6a83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks the canTransform on the tf buffer for the indexable.  <a href="classseerep__core_1_1CoreDataset.html#a25bbe595bc02a33fef7ee51ca97d6a83">More...</a><br /></td></tr>
+<tr class="separator:a25bbe595bc02a33fef7ee51ca97d6a83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a463a691ad28c3fafea9c11fe99f03fc2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceseerep__core__msgs.html#a51f23338981d650d0d2ffb8cb403adc0">seerep_core_msgs::AABB</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#a463a691ad28c3fafea9c11fe99f03fc2">getSensorPositionAsAABB</a> (const <a class="el" href="structseerep__core__msgs_1_1DatasetIndexable.html">seerep_core_msgs::DatasetIndexable</a> &amp;indexable)</td></tr>
+<tr class="memdesc:a463a691ad28c3fafea9c11fe99f03fc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the Sensor Position As A A B B object.  <a href="classseerep__core_1_1CoreDataset.html#a463a691ad28c3fafea9c11fe99f03fc2">More...</a><br /></td></tr>
+<tr class="separator:a463a691ad28c3fafea9c11fe99f03fc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af740e342d999d692bd2df5a3e5998bba"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#af740e342d999d692bd2df5a3e5998bba">verifyPolygonIntegrity</a> (CGAL::Polygon_2&lt; <a class="el" href="core__dataset_8h.html#a31087db2e68310d772698c0f24b08c9a">Kernel</a> &gt; &amp;polygon_cgal)</td></tr>
 <tr class="memdesc:af740e342d999d692bd2df5a3e5998bba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the created CGAL polygon follows the requirements. It should be simple (no more than two vertices on an edge), convex (no inward egdes), the vertices should be in a counter clockwise order.  <a href="classseerep__core_1_1CoreDataset.html#af740e342d999d692bd2df5a3e5998bba">More...</a><br /></td></tr>
 <tr class="separator:af740e342d999d692bd2df5a3e5998bba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e0c6bcdb486710151bacb318880c037"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceseerep__core__msgs.html#a51f23338981d650d0d2ffb8cb403adc0">seerep_core_msgs::AABB</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#a8e0c6bcdb486710151bacb318880c037">transformIndexableAABB</a> (const <a class="el" href="structseerep__core__msgs_1_1DatasetIndexable.html">seerep_core_msgs::DatasetIndexable</a> &amp;indexable)</td></tr>
+<tr class="memdesc:a8e0c6bcdb486710151bacb318880c037"><td class="mdescLeft">&#160;</td><td class="mdescRight">transforms the bounding box to the datasets frameId (mostly the map frame)  <a href="classseerep__core_1_1CoreDataset.html#a8e0c6bcdb486710151bacb318880c037">More...</a><br /></td></tr>
+<tr class="separator:a8e0c6bcdb486710151bacb318880c037"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5b14e22e880a0c9f792745299d4cb79"><td class="memItemLeft" align="right" valign="top">CGAL::Polygon_2&lt; <a class="el" href="core__dataset_8h.html#a31087db2e68310d772698c0f24b08c9a">Kernel</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#aa5b14e22e880a0c9f792745299d4cb79">toCGALPolygon</a> (const <a class="el" href="structseerep__core__msgs_1_1Polygon2D.html">seerep_core_msgs::Polygon2D</a> &amp;polygon)</td></tr>
 <tr class="memdesc:aa5b14e22e880a0c9f792745299d4cb79"><td class="mdescLeft">&#160;</td><td class="mdescRight">convert core msg polygon to CGAL polygon  <a href="classseerep__core_1_1CoreDataset.html#aa5b14e22e880a0c9f792745299d4cb79">More...</a><br /></td></tr>
 <tr class="separator:aa5b14e22e880a0c9f792745299d4cb79"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -215,6 +227,12 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:ac2f683ba88051cf11892f8a8e82e36c6"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::vector&lt; <a class="el" href="namespaceseerep__core__msgs.html#a640f042e3954e22bedec9e6ad857c28e">seerep_core_msgs::AabbIdPair</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#ac2f683ba88051cf11892f8a8e82e36c6">querySpatial</a> (std::shared_ptr&lt; <a class="el" href="structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html">DatatypeSpecifics</a> &gt; datatypeSpecifics, const <a class="el" href="structseerep__core__msgs_1_1Query.html">seerep_core_msgs::Query</a> &amp;query)</td></tr>
 <tr class="memdesc:ac2f683ba88051cf11892f8a8e82e36c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">queries the spatial index and returns a vector of bounding box / UUID pairs matching the query  <a href="classseerep__core_1_1CoreDataset.html#ac2f683ba88051cf11892f8a8e82e36c6">More...</a><br /></td></tr>
 <tr class="separator:ac2f683ba88051cf11892f8a8e82e36c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c062dfc447ead1d9ff02e214f6185d6"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::vector&lt; <a class="el" href="namespaceseerep__core__msgs.html#a640f042e3954e22bedec9e6ad857c28e">seerep_core_msgs::AabbIdPair</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#a4c062dfc447ead1d9ff02e214f6185d6">querySpatialSensorPos</a> (std::shared_ptr&lt; <a class="el" href="structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html">DatatypeSpecifics</a> &gt; datatypeSpecifics, const <a class="el" href="structseerep__core__msgs_1_1Query.html">seerep_core_msgs::Query</a> &amp;query)</td></tr>
+<tr class="memdesc:a4c062dfc447ead1d9ff02e214f6185d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">queries the spatial index of the sensor position and returns a vector of bounding box / UUID pairs matching the query  <a href="classseerep__core_1_1CoreDataset.html#a4c062dfc447ead1d9ff02e214f6185d6">More...</a><br /></td></tr>
+<tr class="separator:a4c062dfc447ead1d9ff02e214f6185d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78941b91540a5cb38383b6b533cc5731"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::vector&lt; <a class="el" href="namespaceseerep__core__msgs.html#a640f042e3954e22bedec9e6ad857c28e">seerep_core_msgs::AabbIdPair</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#a78941b91540a5cb38383b6b533cc5731">queryRtree</a> (const <a class="el" href="namespaceseerep__core__msgs.html#a436d34bbff9d6912777d99436d77888d">seerep_core_msgs::rtree</a> &amp;rt, const <a class="el" href="structseerep__core__msgs_1_1Polygon2D.html">seerep_core_msgs::Polygon2D</a> &amp;polygon, const bool queryFullyEncapsulated)</td></tr>
+<tr class="memdesc:a78941b91540a5cb38383b6b533cc5731"><td class="mdescLeft">&#160;</td><td class="mdescRight">queries the  <a href="classseerep__core_1_1CoreDataset.html#a78941b91540a5cb38383b6b533cc5731">More...</a><br /></td></tr>
+<tr class="separator:a78941b91540a5cb38383b6b533cc5731"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb909c4bfa84ed198bc9b70d2043c8d8"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::vector&lt; <a class="el" href="namespaceseerep__core__msgs.html#a0792652716be4144a5e6acb95087b451">seerep_core_msgs::AabbTimeIdPair</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#abb909c4bfa84ed198bc9b70d2043c8d8">queryTemporal</a> (std::shared_ptr&lt; <a class="el" href="structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html">DatatypeSpecifics</a> &gt; datatypeSpecifics, const <a class="el" href="structseerep__core__msgs_1_1Query.html">seerep_core_msgs::Query</a> &amp;query)</td></tr>
 <tr class="memdesc:abb909c4bfa84ed198bc9b70d2043c8d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">queries the temporal index and returns a vector of temporal bounding box / UUID pairs matching the query  <a href="classseerep__core_1_1CoreDataset.html#abb909c4bfa84ed198bc9b70d2043c8d8">More...</a><br /></td></tr>
 <tr class="separator:abb909c4bfa84ed198bc9b70d2043c8d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -227,9 +245,9 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:ac0cc1aa2e309151feb0af864fd4be9c9"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::set&lt; boost::uuids::uuid &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#ac0cc1aa2e309151feb0af864fd4be9c9">querySemanticWithAllTheLabels</a> (std::shared_ptr&lt; <a class="el" href="structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html">DatatypeSpecifics</a> &gt; datatypeSpecifics, const <a class="el" href="structseerep__core__msgs_1_1Query.html">seerep_core_msgs::Query</a> &amp;query)</td></tr>
 <tr class="memdesc:ac0cc1aa2e309151feb0af864fd4be9c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">queries the semantic index where the dataset contains all of the labels  <a href="classseerep__core_1_1CoreDataset.html#ac0cc1aa2e309151feb0af864fd4be9c9">More...</a><br /></td></tr>
 <tr class="separator:ac0cc1aa2e309151feb0af864fd4be9c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c0f8a06e8f69afbfa8d6f8bf7b02927"><td class="memItemLeft" align="right" valign="top">std::vector&lt; boost::uuids::uuid &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#a8c0f8a06e8f69afbfa8d6f8bf7b02927">intersectQueryResults</a> (std::optional&lt; std::vector&lt; <a class="el" href="namespaceseerep__core__msgs.html#a640f042e3954e22bedec9e6ad857c28e">seerep_core_msgs::AabbIdPair</a> &gt; &gt; &amp;rt_result, std::optional&lt; std::vector&lt; <a class="el" href="namespaceseerep__core__msgs.html#a0792652716be4144a5e6acb95087b451">seerep_core_msgs::AabbTimeIdPair</a> &gt; &gt; &amp;timetree_result, std::optional&lt; std::set&lt; boost::uuids::uuid &gt; &gt; &amp;semanticResult, std::optional&lt; std::vector&lt; boost::uuids::uuid &gt; &gt; &amp;instanceResult, const std::optional&lt; std::vector&lt; boost::uuids::uuid &gt; &gt; &amp;dataUuids, bool sortByTime=false)</td></tr>
-<tr class="memdesc:a8c0f8a06e8f69afbfa8d6f8bf7b02927"><td class="mdescLeft">&#160;</td><td class="mdescRight">intersects the results of the spatial, temporal and semantic query and returns the UUIDs of the images matching the query in all three modalities  <a href="classseerep__core_1_1CoreDataset.html#a8c0f8a06e8f69afbfa8d6f8bf7b02927">More...</a><br /></td></tr>
-<tr class="separator:a8c0f8a06e8f69afbfa8d6f8bf7b02927"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31985c2afcc23f28b77e741ac7d922d8"><td class="memItemLeft" align="right" valign="top">std::vector&lt; boost::uuids::uuid &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#a31985c2afcc23f28b77e741ac7d922d8">intersectQueryResults</a> (std::optional&lt; std::vector&lt; <a class="el" href="namespaceseerep__core__msgs.html#a640f042e3954e22bedec9e6ad857c28e">seerep_core_msgs::AabbIdPair</a> &gt; &gt; &amp;rt_result, std::optional&lt; std::vector&lt; <a class="el" href="namespaceseerep__core__msgs.html#a640f042e3954e22bedec9e6ad857c28e">seerep_core_msgs::AabbIdPair</a> &gt; &gt; &amp;rt_resultSensorPos, std::optional&lt; std::vector&lt; <a class="el" href="namespaceseerep__core__msgs.html#a0792652716be4144a5e6acb95087b451">seerep_core_msgs::AabbTimeIdPair</a> &gt; &gt; &amp;timetree_result, std::optional&lt; std::set&lt; boost::uuids::uuid &gt; &gt; &amp;semanticResult, std::optional&lt; std::vector&lt; boost::uuids::uuid &gt; &gt; &amp;instanceResult, const std::optional&lt; std::vector&lt; boost::uuids::uuid &gt; &gt; &amp;dataUuids, bool sortByTime=false)</td></tr>
+<tr class="memdesc:a31985c2afcc23f28b77e741ac7d922d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">intersects the results of the spatial, temporal and semantic query and returns the UUIDs of the images matching the query in all three modalities  <a href="classseerep__core_1_1CoreDataset.html#a31985c2afcc23f28b77e741ac7d922d8">More...</a><br /></td></tr>
+<tr class="separator:a31985c2afcc23f28b77e741ac7d922d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6317b5494947f1e7a34920d50fa84a5a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; boost::uuids::uuid &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreDataset.html#a6317b5494947f1e7a34920d50fa84a5a">sortResultByTime</a> (std::optional&lt; std::vector&lt; <a class="el" href="namespaceseerep__core__msgs.html#a0792652716be4144a5e6acb95087b451">seerep_core_msgs::AabbTimeIdPair</a> &gt; &gt; &amp;timetree_result, std::optional&lt; std::set&lt; boost::uuids::uuid &gt; &gt; intersectionResult=std::nullopt)</td></tr>
 <tr class="memdesc:a6317b5494947f1e7a34920d50fa84a5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">sorts the uuids of the result set based on their timestamp  <a href="classseerep__core_1_1CoreDataset.html#a6317b5494947f1e7a34920d50fa84a5a">More...</a><br /></td></tr>
 <tr class="separator:a6317b5494947f1e7a34920d50fa84a5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -692,6 +710,41 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a463a691ad28c3fafea9c11fe99f03fc2" name="a463a691ad28c3fafea9c11fe99f03fc2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a463a691ad28c3fafea9c11fe99f03fc2">&#9670;&nbsp;</a></span>getSensorPositionAsAABB()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceseerep__core__msgs.html#a51f23338981d650d0d2ffb8cb403adc0">seerep_core_msgs::AABB</a> seerep_core::CoreDataset::getSensorPositionAsAABB </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structseerep__core__msgs_1_1DatasetIndexable.html">seerep_core_msgs::DatasetIndexable</a> &amp;&#160;</td>
+          <td class="paramname"><em>indexable</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the Sensor Position As A A B B object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">indexable</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="namespaceseerep__core__msgs.html#a51f23338981d650d0d2ffb8cb403adc0">seerep_core_msgs::AABB</a> </dd></dl>
+
+</div>
+</div>
 <a id="aef68697d8c54d7b89d95313e0d5b47bd" name="aef68697d8c54d7b89d95313e0d5b47bd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aef68697d8c54d7b89d95313e0d5b47bd">&#9670;&nbsp;</a></span>getSpatialBounds()</h2>
 
@@ -847,8 +900,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a8c0f8a06e8f69afbfa8d6f8bf7b02927" name="a8c0f8a06e8f69afbfa8d6f8bf7b02927"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8c0f8a06e8f69afbfa8d6f8bf7b02927">&#9670;&nbsp;</a></span>intersectQueryResults()</h2>
+<a id="a31985c2afcc23f28b77e741ac7d922d8" name="a31985c2afcc23f28b77e741ac7d922d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31985c2afcc23f28b77e741ac7d922d8">&#9670;&nbsp;</a></span>intersectQueryResults()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -861,6 +914,12 @@ Private Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramtype">std::optional&lt; std::vector&lt; <a class="el" href="namespaceseerep__core__msgs.html#a640f042e3954e22bedec9e6ad857c28e">seerep_core_msgs::AabbIdPair</a> &gt; &gt; &amp;&#160;</td>
           <td class="paramname"><em>rt_result</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::optional&lt; std::vector&lt; <a class="el" href="namespaceseerep__core__msgs.html#a640f042e3954e22bedec9e6ad857c28e">seerep_core_msgs::AabbIdPair</a> &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rt_resultSensorPos</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -909,6 +968,7 @@ Private Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">rt_result</td><td>the result of the spatial query </td></tr>
+    <tr><td class="paramname">rt_resultSensorPos</td><td>the result of the spatial query of the sensor position </td></tr>
     <tr><td class="paramname">timetree_result</td><td>the result of the temporal query </td></tr>
     <tr><td class="paramname">semanticResult</td><td>the result of the semantic query </td></tr>
     <tr><td class="paramname">instanceResult</td><td>the result of the instance based query </td></tr>
@@ -955,6 +1015,43 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a25bbe595bc02a33fef7ee51ca97d6a83" name="a25bbe595bc02a33fef7ee51ca97d6a83"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25bbe595bc02a33fef7ee51ca97d6a83">&#9670;&nbsp;</a></span>isSpatiallyTransformable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool seerep_core::CoreDataset::isSpatiallyTransformable </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structseerep__core__msgs_1_1DatasetIndexable.html">seerep_core_msgs::DatasetIndexable</a> &amp;&#160;</td>
+          <td class="paramname"><em>indexable</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Checks the canTransform on the tf buffer for the indexable. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">indexable</td><td>the abstract indexable </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true when a transform for the indexable dataset is in the tf buffer </dd>
+<dd>
+false else </dd></dl>
+
+</div>
+</div>
 <a id="acab4b563d04eecc770aa2e671887b5db" name="acab4b563d04eecc770aa2e671887b5db"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acab4b563d04eecc770aa2e671887b5db">&#9670;&nbsp;</a></span>polygonToAABB()</h2>
 
@@ -987,6 +1084,59 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>seerep_core_msg::AABB core msg aabb </dd></dl>
+
+</div>
+</div>
+<a id="a78941b91540a5cb38383b6b533cc5731" name="a78941b91540a5cb38383b6b533cc5731"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a78941b91540a5cb38383b6b533cc5731">&#9670;&nbsp;</a></span>queryRtree()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; std::vector&lt; <a class="el" href="namespaceseerep__core__msgs.html#a640f042e3954e22bedec9e6ad857c28e">seerep_core_msgs::AabbIdPair</a> &gt; &gt; seerep_core::CoreDataset::queryRtree </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespaceseerep__core__msgs.html#a436d34bbff9d6912777d99436d77888d">seerep_core_msgs::rtree</a> &amp;&#160;</td>
+          <td class="paramname"><em>rt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structseerep__core__msgs_1_1Polygon2D.html">seerep_core_msgs::Polygon2D</a> &amp;&#160;</td>
+          <td class="paramname"><em>polygon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>queryFullyEncapsulated</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>queries the </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rt</td><td></td></tr>
+    <tr><td class="paramname">polygon</td><td></td></tr>
+    <tr><td class="paramname">queryFullyEncapsulated</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::optional&lt;std::vector&lt;seerep_core_msgs::AabbIdPair&gt;&gt; </dd></dl>
 
 </div>
 </div>
@@ -1174,6 +1324,52 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a4c062dfc447ead1d9ff02e214f6185d6" name="a4c062dfc447ead1d9ff02e214f6185d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c062dfc447ead1d9ff02e214f6185d6">&#9670;&nbsp;</a></span>querySpatialSensorPos()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; std::vector&lt; <a class="el" href="namespaceseerep__core__msgs.html#a640f042e3954e22bedec9e6ad857c28e">seerep_core_msgs::AabbIdPair</a> &gt; &gt; seerep_core::CoreDataset::querySpatialSensorPos </td>
+          <td>(</td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html">DatatypeSpecifics</a> &gt;&#160;</td>
+          <td class="paramname"><em>datatypeSpecifics</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structseerep__core__msgs_1_1Query.html">seerep_core_msgs::Query</a> &amp;&#160;</td>
+          <td class="paramname"><em>query</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>queries the spatial index of the sensor position and returns a vector of bounding box / UUID pairs matching the query </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">datatypeSpecifics</td><td>the datatype specific information to be used in the query </td></tr>
+    <tr><td class="paramname">query</td><td>the query parameters </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>vector of bounding box / UUID pairs matching the query </dd></dl>
+
+</div>
+</div>
 <a id="abb909c4bfa84ed198bc9b70d2043c8d8" name="abb909c4bfa84ed198bc9b70d2043c8d8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abb909c4bfa84ed198bc9b70d2043c8d8">&#9670;&nbsp;</a></span>queryTemporal()</h2>
 
@@ -1259,6 +1455,43 @@ Private Attributes</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">datatype</td><td>the datatype to consider </td></tr>
     <tr><td class="paramname">hdf5io</td><td>the HDF5io object handling the HDF5 io </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ad388be44a0cb31676ca2f839113e15fa" name="ad388be44a0cb31676ca2f839113e15fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad388be44a0cb31676ca2f839113e15fa">&#9670;&nbsp;</a></span>recreateSpatialRt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_core::CoreDataset::recreateSpatialRt </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespaceseerep__core__msgs.html#a69e28de5290c526f6296d87436a788b0">seerep_core_msgs::Datatype</a> &amp;&#160;</td>
+          <td class="paramname"><em>datatype</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreDatatypeInterface.html">seerep_hdf5_core::Hdf5CoreDatatypeInterface</a> &gt;&#160;</td>
+          <td class="paramname"><em>hdf5Io</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Recreate the spatial rtree. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">datatype</td><td>the datatype for which to recreate the spatial rtree </td></tr>
+    <tr><td class="paramname">hdf5Io</td><td>pointer to the object handling HDF5 io for this datatype </td></tr>
   </table>
   </dd>
 </dl>
@@ -1378,6 +1611,41 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>CGAL::Polygon_2&lt;Kernel&gt; cgal polygon </dd></dl>
+
+</div>
+</div>
+<a id="a8e0c6bcdb486710151bacb318880c037" name="a8e0c6bcdb486710151bacb318880c037"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e0c6bcdb486710151bacb318880c037">&#9670;&nbsp;</a></span>transformIndexableAABB()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceseerep__core__msgs.html#a51f23338981d650d0d2ffb8cb403adc0">seerep_core_msgs::AABB</a> seerep_core::CoreDataset::transformIndexableAABB </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structseerep__core__msgs_1_1DatasetIndexable.html">seerep_core_msgs::DatasetIndexable</a> &amp;&#160;</td>
+          <td class="paramname"><em>indexable</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>transforms the bounding box to the datasets frameId (mostly the map frame) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">indexable</td><td>the indexable to transform </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The transformed AABB </dd></dl>
 
 </div>
 </div>

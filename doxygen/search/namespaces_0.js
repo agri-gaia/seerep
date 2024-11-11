@@ -10,9 +10,11 @@ var searchData=
   ['seerep_5fhdf5_5fpb_7',['seerep_hdf5_pb',['../namespaceseerep__hdf5__pb.html',1,'']]],
   ['seerep_5fhdf5_5fpy_8',['seerep_hdf5_py',['../namespaceseerep__hdf5__py.html',1,'']]],
   ['seerep_5fhdf5_5fros_9',['seerep_hdf5_ros',['../namespaceseerep__hdf5__ros.html',1,'']]],
-  ['seerep_5fros_5fconversions_5ffb_10',['seerep_ros_conversions_fb',['../namespaceseerep__ros__conversions__fb.html',1,'']]],
-  ['seerep_5fros_5fconversions_5fpb_11',['seerep_ros_conversions_pb',['../namespaceseerep__ros__conversions__pb.html',1,'']]],
-  ['seerep_5fserver_12',['seerep_server',['../namespaceseerep__server.html',1,'']]],
-  ['seerep_5fserver_5fconstants_13',['seerep_server_constants',['../namespaceseerep__server__constants.html',1,'']]],
-  ['tests_14',['tests',['../namespaceseerep__hdf5__core_1_1tests.html',1,'seerep_hdf5_core::tests'],['../namespaceseerep__hdf5__fb_1_1tests.html',1,'seerep_hdf5_fb::tests']]]
+  ['seerep_5fros_5fcomm_10',['seerep_ros_comm',['../namespaceseerep__ros__comm.html',1,'']]],
+  ['seerep_5fros_5fconversions_5ffb_11',['seerep_ros_conversions_fb',['../namespaceseerep__ros__conversions__fb.html',1,'']]],
+  ['seerep_5fros_5fconversions_5fpb_12',['seerep_ros_conversions_pb',['../namespaceseerep__ros__conversions__pb.html',1,'']]],
+  ['seerep_5fros_5fexamples_13',['seerep_ros_examples',['../namespaceseerep__ros__examples.html',1,'']]],
+  ['seerep_5fserver_14',['seerep_server',['../namespaceseerep__server.html',1,'']]],
+  ['seerep_5fserver_5fconstants_15',['seerep_server_constants',['../namespaceseerep__server__constants.html',1,'']]],
+  ['tests_16',['tests',['../namespaceseerep__hdf5__core_1_1tests.html',1,'seerep_hdf5_core::tests'],['../namespaceseerep__hdf5__fb_1_1tests.html',1,'seerep_hdf5_fb::tests']]]
 ];

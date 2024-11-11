@@ -97,6 +97,13 @@ var annotated_dup =
     [ "seerep_hdf5_ros", "namespaceseerep__hdf5__ros.html", [
       [ "Hdf5Ros", "classseerep__hdf5__ros_1_1Hdf5Ros.html", "classseerep__hdf5__ros_1_1Hdf5Ros" ]
     ] ],
+    [ "seerep_ros_comm", "namespaceseerep__ros__comm.html", [
+      [ "JsonPointDumper", "classseerep__ros__comm_1_1JsonPointDumper.html", "classseerep__ros__comm_1_1JsonPointDumper" ],
+      [ "RosbagDumper", "classseerep__ros__comm_1_1RosbagDumper.html", "classseerep__ros__comm_1_1RosbagDumper" ]
+    ] ],
+    [ "seerep_ros_examples", "namespaceseerep__ros__examples.html", [
+      [ "Hdf5Node", "classseerep__ros__examples_1_1Hdf5Node.html", "classseerep__ros__examples_1_1Hdf5Node" ]
+    ] ],
     [ "seerep_server", "namespaceseerep__server.html", [
       [ "FbCameraIntrinsicsService", "classseerep__server_1_1FbCameraIntrinsicsService.html", "classseerep__server_1_1FbCameraIntrinsicsService" ],
       [ "FbImageService", "classseerep__server_1_1FbImageService.html", "classseerep__server_1_1FbImageService" ],

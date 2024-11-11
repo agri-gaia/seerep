@@ -13,5 +13,6 @@ var searchData=
   ['region_5fof_5finterest_5fy_5foffset_10',['REGION_OF_INTEREST_Y_OFFSET',['../classseerep__hdf5__core_1_1Hdf5CoreCameraIntrinsics.html#a8455b50b6d08045dd743af7553e0f202',1,'seerep_hdf5_core::Hdf5CoreCameraIntrinsics']]],
   ['rotation_5f_11',['rotation_',['../structseerep__hdf5__py_1_1TfTransform.html#a2eef1c77a783ea7010326e5a2d0b378a',1,'seerep_hdf5_py::TfTransform']]],
   ['row_5fstep_12',['ROW_STEP',['../classseerep__hdf5__core_1_1Hdf5CorePointCloud.html#ae31996f73893a9dc3c86228705d17295',1,'seerep_hdf5_core::Hdf5CorePointCloud']]],
-  ['rt_13',['rt',['../structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html#ae0aee2a105a3c0c37d56c8af6c90d6c4',1,'seerep_core::CoreDataset::DatatypeSpecifics']]]
+  ['rt_13',['rt',['../structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html#ae0aee2a105a3c0c37d56c8af6c90d6c4',1,'seerep_core::CoreDataset::DatatypeSpecifics']]],
+  ['rtsensorpos_14',['rtSensorPos',['../structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html#a601feade26d67829050983101e030c09',1,'seerep_core::CoreDataset::DatatypeSpecifics']]]
 ];

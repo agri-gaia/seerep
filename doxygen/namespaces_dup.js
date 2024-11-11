@@ -9,6 +9,7 @@ var namespaces_dup =
     [ "seerep_hdf5_pb", "namespaceseerep__hdf5__pb.html", "namespaceseerep__hdf5__pb" ],
     [ "seerep_hdf5_py", "namespaceseerep__hdf5__py.html", "namespaceseerep__hdf5__py" ],
     [ "seerep_hdf5_ros", "namespaceseerep__hdf5__ros.html", "namespaceseerep__hdf5__ros" ],
+    [ "seerep_ros_comm", "namespaceseerep__ros__comm.html", "namespaceseerep__ros__comm" ],
     [ "seerep_ros_conversions_fb", "namespaceseerep__ros__conversions__fb.html", [
       [ "toFlat", "namespaceseerep__ros__conversions__fb.html#ac1a04f0ec517824326f5cc08d92f692e", null ],
       [ "toFlat", "namespaceseerep__ros__conversions__fb.html#a4385d8dfd0da60fcdf9fec33692eb7ee", null ],
@@ -31,12 +32,14 @@ var namespaces_dup =
       [ "toFlat", "namespaceseerep__ros__conversions__fb.html#a14d3c2ca5c47c1210648397ae6129e8c", null ],
       [ "toFlat", "namespaceseerep__ros__conversions__fb.html#a43b4b32db3efe8ead38b96a5c2be0cf8", null ],
       [ "toFlat", "namespaceseerep__ros__conversions__fb.html#a6a079368a8b2d89e42d74d5bb563b832", null ],
+      [ "toROS", "namespaceseerep__ros__conversions__fb.html#a3155cdd7785c91e2b3da610c70ea8b7b", null ],
       [ "toROS", "namespaceseerep__ros__conversions__fb.html#a5a4b200412e1eaa30ca2b6fa83a6596f", null ],
       [ "toROS", "namespaceseerep__ros__conversions__fb.html#a1fe4d0011713b78163811192ca5348a0", null ],
       [ "toROS", "namespaceseerep__ros__conversions__fb.html#ab92ad98186195d366cbd4417d957acc9", null ],
       [ "toROS", "namespaceseerep__ros__conversions__fb.html#a794b8629ac23c38a7347a64cd9067052", null ],
       [ "toROS", "namespaceseerep__ros__conversions__fb.html#ac8ac4e2fca249431b03546806b03f328", null ],
       [ "toROS", "namespaceseerep__ros__conversions__fb.html#adfdc4e282324d5da33b1e7cf3d158724", null ],
+      [ "toROS", "namespaceseerep__ros__conversions__fb.html#aab08b0faf8479eea34c0ae4f5e4ae9da", null ],
       [ "toROS", "namespaceseerep__ros__conversions__fb.html#ac01824ea6d5848e212b15f5345cba639", null ],
       [ "toROS", "namespaceseerep__ros__conversions__fb.html#ae21e4433a25ab7fbbb0a2a9df5d47af7", null ],
       [ "toROS", "namespaceseerep__ros__conversions__fb.html#ad7504df6dc260e32f7dcf26a4d0cb842", null ]
@@ -61,6 +64,7 @@ var namespaces_dup =
       [ "toROS", "namespaceseerep__ros__conversions__pb.html#a1d176cf821f7985f182b9f9abd4e6699", null ],
       [ "toROS", "namespaceseerep__ros__conversions__pb.html#aece07205724cf02c4c05dd0b9639b5af", null ]
     ] ],
+    [ "seerep_ros_examples", "namespaceseerep__ros__examples.html", "namespaceseerep__ros__examples" ],
     [ "seerep_server", "namespaceseerep__server.html", "namespaceseerep__server" ],
     [ "seerep_server_constants", "namespaceseerep__server__constants.html", [
       [ "kCameraDistortionModels", "namespaceseerep__server__constants.html#a72102a939bef8f78365799461f9b2eda", null ]

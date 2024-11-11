@@ -25,6 +25,7 @@ var classseerep__core_1_1CoreProject =
     [ "getTimeBounds", "classseerep__core_1_1CoreProject.html#a6e3dce9b3da48154c5856468f0009312", null ],
     [ "getVersion", "classseerep__core_1_1CoreProject.html#a74e908edbc2577733e1dce44ecd9eac1", null ],
     [ "recreateDatatypes", "classseerep__core_1_1CoreProject.html#a80e6ec7f57ca3e80bda7a53b6a5beb1b", null ],
+    [ "reinitializeTFs", "classseerep__core_1_1CoreProject.html#a7b68f3d4ed95fb5c704ca0a11c5f9e4d", null ],
     [ "transformToMapFrame", "classseerep__core_1_1CoreProject.html#ab7a9e2f78eca5aa547717b80bb4aa5b4", null ],
     [ "m_coreCameraIntrinsics", "classseerep__core_1_1CoreProject.html#aab5cdf2690f4bb3f1111febaa54fb485", null ],
     [ "m_coreDatasets", "classseerep__core_1_1CoreProject.html#ab5e1261f974eaf254abd816f8bdb89d8", null ],

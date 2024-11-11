@@ -220,9 +220,15 @@ Functions</h2></td></tr>
 <tr class="memitem:ae3c51e99b6e5b20a58a2cdf8bf755db1"><td class="memItemLeft" align="right" valign="top">flatbuffers::Offset&lt; seerep::fb::CameraIntrinsics &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#ae3c51e99b6e5b20a58a2cdf8bf755db1">toFlat</a> (const sensor_msgs::CameraInfo &amp;ci, std::string &amp;projectuuid, std::string &amp;msgUuid, double maxViewingDistance, flatbuffers::grpc::MessageBuilder &amp;builder)</td></tr>
 <tr class="memdesc:ae3c51e99b6e5b20a58a2cdf8bf755db1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS sensor_msgs::CameraInfo message to the corresponding gRPC Flatbuffer CameraIntrinsics message.  <a href="namespaceseerep__ros__conversions__fb.html#ae3c51e99b6e5b20a58a2cdf8bf755db1">More...</a><br /></td></tr>
 <tr class="separator:ae3c51e99b6e5b20a58a2cdf8bf755db1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3155cdd7785c91e2b3da610c70ea8b7b"><td class="memItemLeft" align="right" valign="top">sensor_msgs::CameraInfo&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a3155cdd7785c91e2b3da610c70ea8b7b">toROS</a> (const seerep::fb::CameraIntrinsics &amp;ci)</td></tr>
+<tr class="memdesc:a3155cdd7785c91e2b3da610c70ea8b7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a Flatbuffer CameraIntrinsics message to the corresponding ROS sensor_msgs::CameraInfo message.  <a href="namespaceseerep__ros__conversions__fb.html#a3155cdd7785c91e2b3da610c70ea8b7b">More...</a><br /></td></tr>
+<tr class="separator:a3155cdd7785c91e2b3da610c70ea8b7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a14d3c2ca5c47c1210648397ae6129e8c"><td class="memItemLeft" align="right" valign="top">flatbuffers::Offset&lt; seerep::fb::RegionOfInterest &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#a14d3c2ca5c47c1210648397ae6129e8c">toFlat</a> (const sensor_msgs::RegionOfInterest &amp;roi, flatbuffers::grpc::MessageBuilder &amp;builder)</td></tr>
 <tr class="memdesc:a14d3c2ca5c47c1210648397ae6129e8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a ROS sensor_msgs::RegionOfInterest message to the corresponding gRPC Flatbuffer RegionOfInterest message.  <a href="namespaceseerep__ros__conversions__fb.html#a14d3c2ca5c47c1210648397ae6129e8c">More...</a><br /></td></tr>
 <tr class="separator:a14d3c2ca5c47c1210648397ae6129e8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab08b0faf8479eea34c0ae4f5e4ae9da"><td class="memItemLeft" align="right" valign="top">sensor_msgs::RegionOfInterest&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceseerep__ros__conversions__fb.html#aab08b0faf8479eea34c0ae4f5e4ae9da">toROS</a> (const seerep::fb::RegionOfInterest &amp;roi)</td></tr>
+<tr class="memdesc:aab08b0faf8479eea34c0ae4f5e4ae9da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a Flatbuffer CameraIntrinsics message to the corresponding ROS sensor_msgs::CameraInfo message.  <a href="namespaceseerep__ros__conversions__fb.html#aab08b0faf8479eea34c0ae4f5e4ae9da">More...</a><br /></td></tr>
+<tr class="separator:aab08b0faf8479eea34c0ae4f5e4ae9da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="ac1a04f0ec517824326f5cc08d92f692e" name="ac1a04f0ec517824326f5cc08d92f692e"></a>
@@ -1091,8 +1097,35 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a3155cdd7785c91e2b3da610c70ea8b7b" name="a3155cdd7785c91e2b3da610c70ea8b7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3155cdd7785c91e2b3da610c70ea8b7b">&#9670;&nbsp;</a></span>toROS() <span class="overload">[1/11]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sensor_msgs::CameraInfo seerep_ros_conversions_fb::toROS </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::fb::CameraIntrinsics &amp;&#160;</td>
+          <td class="paramname"><em>ci</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a Flatbuffer CameraIntrinsics message to the corresponding ROS sensor_msgs::CameraInfo message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ci</td><td>Flatbuffer CameraIntrinsics message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ROS sensor_msgs::CameraInfo </dd></dl>
+
+</div>
+</div>
 <a id="a5a4b200412e1eaa30ca2b6fa83a6596f" name="a5a4b200412e1eaa30ca2b6fa83a6596f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5a4b200412e1eaa30ca2b6fa83a6596f">&#9670;&nbsp;</a></span>toROS() <span class="overload">[1/9]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a4b200412e1eaa30ca2b6fa83a6596f">&#9670;&nbsp;</a></span>toROS() <span class="overload">[2/11]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1119,7 +1152,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="a1fe4d0011713b78163811192ca5348a0" name="a1fe4d0011713b78163811192ca5348a0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1fe4d0011713b78163811192ca5348a0">&#9670;&nbsp;</a></span>toROS() <span class="overload">[2/9]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a1fe4d0011713b78163811192ca5348a0">&#9670;&nbsp;</a></span>toROS() <span class="overload">[3/11]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1146,7 +1179,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="ab92ad98186195d366cbd4417d957acc9" name="ab92ad98186195d366cbd4417d957acc9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab92ad98186195d366cbd4417d957acc9">&#9670;&nbsp;</a></span>toROS() <span class="overload">[3/9]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ab92ad98186195d366cbd4417d957acc9">&#9670;&nbsp;</a></span>toROS() <span class="overload">[4/11]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1173,7 +1206,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="a794b8629ac23c38a7347a64cd9067052" name="a794b8629ac23c38a7347a64cd9067052"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a794b8629ac23c38a7347a64cd9067052">&#9670;&nbsp;</a></span>toROS() <span class="overload">[4/9]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a794b8629ac23c38a7347a64cd9067052">&#9670;&nbsp;</a></span>toROS() <span class="overload">[5/11]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1200,7 +1233,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="ac8ac4e2fca249431b03546806b03f328" name="ac8ac4e2fca249431b03546806b03f328"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac8ac4e2fca249431b03546806b03f328">&#9670;&nbsp;</a></span>toROS() <span class="overload">[5/9]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8ac4e2fca249431b03546806b03f328">&#9670;&nbsp;</a></span>toROS() <span class="overload">[6/11]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1227,7 +1260,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="adfdc4e282324d5da33b1e7cf3d158724" name="adfdc4e282324d5da33b1e7cf3d158724"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adfdc4e282324d5da33b1e7cf3d158724">&#9670;&nbsp;</a></span>toROS() <span class="overload">[6/9]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#adfdc4e282324d5da33b1e7cf3d158724">&#9670;&nbsp;</a></span>toROS() <span class="overload">[7/11]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1253,8 +1286,35 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="aab08b0faf8479eea34c0ae4f5e4ae9da" name="aab08b0faf8479eea34c0ae4f5e4ae9da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab08b0faf8479eea34c0ae4f5e4ae9da">&#9670;&nbsp;</a></span>toROS() <span class="overload">[8/11]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sensor_msgs::RegionOfInterest seerep_ros_conversions_fb::toROS </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::fb::RegionOfInterest &amp;&#160;</td>
+          <td class="paramname"><em>roi</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a Flatbuffer CameraIntrinsics message to the corresponding ROS sensor_msgs::CameraInfo message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">roi</td><td>Flatbuffer RegionOfInterest message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ROS sensor_msgs::RegionOfInterest </dd></dl>
+
+</div>
+</div>
 <a id="ac01824ea6d5848e212b15f5345cba639" name="ac01824ea6d5848e212b15f5345cba639"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac01824ea6d5848e212b15f5345cba639">&#9670;&nbsp;</a></span>toROS() <span class="overload">[7/9]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ac01824ea6d5848e212b15f5345cba639">&#9670;&nbsp;</a></span>toROS() <span class="overload">[9/11]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1281,7 +1341,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="ae21e4433a25ab7fbbb0a2a9df5d47af7" name="ae21e4433a25ab7fbbb0a2a9df5d47af7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae21e4433a25ab7fbbb0a2a9df5d47af7">&#9670;&nbsp;</a></span>toROS() <span class="overload">[8/9]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ae21e4433a25ab7fbbb0a2a9df5d47af7">&#9670;&nbsp;</a></span>toROS() <span class="overload">[10/11]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1308,7 +1368,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="ad7504df6dc260e32f7dcf26a4d0cb842" name="ad7504df6dc260e32f7dcf26a4d0cb842"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad7504df6dc260e32f7dcf26a4d0cb842">&#9670;&nbsp;</a></span>toROS() <span class="overload">[9/9]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7504df6dc260e32f7dcf26a4d0cb842">&#9670;&nbsp;</a></span>toROS() <span class="overload">[11/11]</span></h2>
 
 <div class="memitem">
 <div class="memproto">

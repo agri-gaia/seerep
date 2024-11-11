@@ -1,6 +1,7 @@
 var classseerep__server_1_1FbTfService =
 [
     [ "FbTfService", "classseerep__server_1_1FbTfService.html#a16f2a64b06ffb297bf5c5431757cf632", null ],
+    [ "DeleteTransformStamped", "classseerep__server_1_1FbTfService.html#a7def85594a1bf7c21cdcafccb0d492e3", null ],
     [ "GetFrames", "classseerep__server_1_1FbTfService.html#a1efde56671806cd944899f801613c5d9", null ],
     [ "GetTransformStamped", "classseerep__server_1_1FbTfService.html#aca618a29e229574c42369d1953cea00a", null ],
     [ "TransferTransformStamped", "classseerep__server_1_1FbTfService.html#a8a692fe7f5ca079c89586007ec1d32ee", null ],

@@ -243,14 +243,15 @@ $(document).ready(function(){initNavTree('seerep__ros__conversions__fb_2include_
 <div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span>       std::string&amp; msgUuid, <span class="keywordtype">double</span> maxViewingDistance,</div>
 <div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span> </div>
 <div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>       flatbuffers::grpc::MessageBuilder&amp; builder);</div>
-<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span>flatbuffers::Offset&lt;seerep::fb::RegionOfInterest&gt;</div>
-<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span><a class="code hl_function" href="namespaceseerep__ros__conversions__fb.html#a6a079368a8b2d89e42d74d5bb563b832">toFlat</a>(<span class="keyword">const</span> sensor_msgs::RegionOfInterest&amp; roi,</div>
-<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span> </div>
-<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span>       flatbuffers::grpc::MessageBuilder&amp; builder);</div>
-<div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span> </div>
-<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span>} <span class="comment">/* namespace seerep_ros_conversions_fb */</span></div>
-<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span> </div>
-<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span><span class="preprocessor">#endif </span><span class="comment">/* SEEREP_ROS_CONVERSIONS_FB */</span><span class="preprocessor"></span></div>
+<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span>sensor_msgs::CameraInfo <a class="code hl_function" href="namespaceseerep__ros__conversions__fb.html#a5a4b200412e1eaa30ca2b6fa83a6596f">toROS</a>(<span class="keyword">const</span> seerep::fb::CameraIntrinsics&amp; ci);</div>
+<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span>flatbuffers::Offset&lt;seerep::fb::RegionOfInterest&gt;</div>
+<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span><a class="code hl_function" href="namespaceseerep__ros__conversions__fb.html#a6a079368a8b2d89e42d74d5bb563b832">toFlat</a>(<span class="keyword">const</span> sensor_msgs::RegionOfInterest&amp; roi,</div>
+<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span> </div>
+<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span>       flatbuffers::grpc::MessageBuilder&amp; builder);</div>
+<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span>sensor_msgs::RegionOfInterest <a class="code hl_function" href="namespaceseerep__ros__conversions__fb.html#a5a4b200412e1eaa30ca2b6fa83a6596f">toROS</a>(<span class="keyword">const</span> seerep::fb::RegionOfInterest&amp; roi);</div>
+<div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span>} <span class="comment">/* namespace seerep_ros_conversions_fb */</span></div>
+<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span> </div>
+<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span><span class="preprocessor">#endif </span><span class="comment">/* SEEREP_ROS_CONVERSIONS_FB */</span><span class="preprocessor"></span></div>
 <div class="ttc" id="anamespaceseerep__core__msgs_html_a36db670001fd669b64b2e0ae61e43e12"><div class="ttname"><a href="namespaceseerep__core__msgs.html#a36db670001fd669b64b2e0ae61e43e12">seerep_core_msgs::Point</a></div><div class="ttdeci">bgm::point&lt; PointDatatype, 3, bg::cs::cartesian &gt; Point</div><div class="ttdef"><b>Definition:</b> aabb.h:18</div></div>
 <div class="ttc" id="anamespaceseerep__ros__conversions__fb_html"><div class="ttname"><a href="namespaceseerep__ros__conversions__fb.html">seerep_ros_conversions_fb</a></div><div class="ttdef"><b>Definition:</b> conversions.h:28</div></div>
 <div class="ttc" id="anamespaceseerep__ros__conversions__fb_html_a5a4b200412e1eaa30ca2b6fa83a6596f"><div class="ttname"><a href="namespaceseerep__ros__conversions__fb.html#a5a4b200412e1eaa30ca2b6fa83a6596f">seerep_ros_conversions_fb::toROS</a></div><div class="ttdeci">std_msgs::Header toROS(const seerep::fb::Header &amp;header)</div><div class="ttdoc">Converts a Flatbuffer Header message to the corresponding ROS std_msgs/Header message.</div><div class="ttdef"><b>Definition:</b> conversions.cpp:39</div></div>

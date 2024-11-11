@@ -1,10 +1,14 @@
 <map id="seerep_hdf5/seerep_hdf5_fb/include/seerep_hdf5_fb/hdf5_fb_tf.h" name="seerep_hdf5/seerep_hdf5_fb/include/seerep_hdf5_fb/hdf5_fb_tf.h">
-<area shape="rect" id="node1" title=" " alt="" coords="89,5,266,61"/>
+<area shape="rect" id="node1" title=" " alt="" coords="313,5,490,61"/>
 <area shape="rect" id="node2" href="$hdf5__fb__tf_8cpp.html" title=" " alt="" coords="5,109,160,165"/>
-<area shape="rect" id="node3" href="$core__fb__tf_8h.html" title=" " alt="" coords="184,109,360,165"/>
-<area shape="rect" id="node4" href="$core__fb__tf_8cpp.html" title=" " alt="" coords="80,221,256,262"/>
-<area shape="rect" id="node5" href="$fb__tf__service_8h.html" title=" " alt="" coords="280,213,469,269"/>
-<area shape="rect" id="node6" href="$server_8h.html" title=" " alt="" coords="173,317,363,373"/>
-<area shape="rect" id="node8" href="$fb__tf__service_8cpp.html" title=" " alt="" coords="387,325,576,366"/>
-<area shape="rect" id="node7" href="$server_8cpp.html" title=" " alt="" coords="173,421,363,463"/>
+<area shape="rect" id="node3" href="$point__dumper_8h.html" title=" " alt="" coords="184,109,387,165"/>
+<area shape="rect" id="node5" href="$rosbag__dumper_8h.html" title=" " alt="" coords="411,109,624,165"/>
+<area shape="rect" id="node7" href="$core__fb__tf_8h.html" title=" " alt="" coords="653,109,829,165"/>
+<area shape="rect" id="node4" href="$point__dumper_8cpp.html" title=" " alt="" coords="168,221,381,262"/>
+<area shape="rect" id="node6" href="$rosbag__dumper_8cpp.html" title=" " alt="" coords="405,221,629,262"/>
+<area shape="rect" id="node8" href="$core__fb__tf_8cpp.html" title=" " alt="" coords="653,221,829,262"/>
+<area shape="rect" id="node9" href="$fb__tf__service_8h.html" title=" " alt="" coords="853,213,1043,269"/>
+<area shape="rect" id="node10" href="$server_8h.html" title=" " alt="" coords="747,317,936,373"/>
+<area shape="rect" id="node12" href="$fb__tf__service_8cpp.html" title=" " alt="" coords="960,325,1149,366"/>
+<area shape="rect" id="node11" href="$server_8cpp.html" title=" " alt="" coords="747,421,936,463"/>
 </map>

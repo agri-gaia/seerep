@@ -11,9 +11,11 @@ var searchData=
   ['datawithmissingtf_8',['dataWithMissingTF',['../structseerep__core_1_1CoreDataset_1_1DatatypeSpecifics.html#a8e66acd9d52071255df52a8c97ee6f2c',1,'seerep_core::CoreDataset::DatatypeSpecifics']]],
   ['datumaro_5fjson_9',['DATUMARO_JSON',['../classseerep__hdf5__core_1_1Hdf5CoreGeneral.html#a23e131bce6b8ed6326a358672c594a8b',1,'seerep_hdf5_core::Hdf5CoreGeneral']]],
   ['datumarojson_10',['datumaroJson',['../structseerep__core__msgs_1_1LabelCategory.html#a291346b274d727d3e859b60a99b4af65',1,'seerep_core_msgs::LabelCategory::datumaroJson()'],['../structseerep__core__msgs_1_1LabelDatumaro.html#ae2e822e178fd93877e005d652d4b5a59',1,'seerep_core_msgs::LabelDatumaro::datumaroJson()']]],
-  ['distortion_11',['DISTORTION',['../classseerep__hdf5__core_1_1Hdf5CoreCameraIntrinsics.html#ad2786ba0f0f221cc5dde91ae64278b9b',1,'seerep_hdf5_core::Hdf5CoreCameraIntrinsics']]],
-  ['distortion_12',['distortion',['../structseerep__core__msgs_1_1camera__intrinsics.html#a7e72b5227ba09733ddb87ba70b427a8b',1,'seerep_core_msgs::camera_intrinsics']]],
-  ['distortion_5fmodel_13',['distortion_model',['../structseerep__core__msgs_1_1camera__intrinsics.html#a00db8b5a9e80ab574d908b5c0585ce35',1,'seerep_core_msgs::camera_intrinsics']]],
-  ['distortion_5fmodel_14',['DISTORTION_MODEL',['../classseerep__hdf5__core_1_1Hdf5CoreCameraIntrinsics.html#aeeecc934e8a74ad143d7b750c1d69af7',1,'seerep_hdf5_core::Hdf5CoreCameraIntrinsics']]],
-  ['do_5frectify_15',['do_rectify',['../structseerep__core__msgs_1_1region__of__interest.html#ac425b639204167053b0667e76d96dbd4',1,'seerep_core_msgs::region_of_interest']]]
+  ['detectioncategory_11',['detectionCategory',['../classseerep__ros__comm_1_1JsonPointDumper.html#a818d35a5b6f14f94235648570efeedf6',1,'seerep_ros_comm::JsonPointDumper']]],
+  ['distancecameraground_12',['distanceCameraGround',['../classseerep__ros__comm_1_1RosbagDumper.html#a8b9ca390aa7a3bad611159f8b70476be',1,'seerep_ros_comm::RosbagDumper']]],
+  ['distortion_13',['distortion',['../structseerep__core__msgs_1_1camera__intrinsics.html#a7e72b5227ba09733ddb87ba70b427a8b',1,'seerep_core_msgs::camera_intrinsics']]],
+  ['distortion_14',['DISTORTION',['../classseerep__hdf5__core_1_1Hdf5CoreCameraIntrinsics.html#ad2786ba0f0f221cc5dde91ae64278b9b',1,'seerep_hdf5_core::Hdf5CoreCameraIntrinsics']]],
+  ['distortion_5fmodel_15',['distortion_model',['../structseerep__core__msgs_1_1camera__intrinsics.html#a00db8b5a9e80ab574d908b5c0585ce35',1,'seerep_core_msgs::camera_intrinsics']]],
+  ['distortion_5fmodel_16',['DISTORTION_MODEL',['../classseerep__hdf5__core_1_1Hdf5CoreCameraIntrinsics.html#aeeecc934e8a74ad143d7b750c1d69af7',1,'seerep_hdf5_core::Hdf5CoreCameraIntrinsics']]],
+  ['do_5frectify_17',['do_rectify',['../structseerep__core__msgs_1_1region__of__interest.html#ac425b639204167053b0667e76d96dbd4',1,'seerep_core_msgs::region_of_interest']]]
 ];

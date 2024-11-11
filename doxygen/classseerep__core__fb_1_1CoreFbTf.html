@@ -150,6 +150,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6cd00f910c3c70aa442e64889ab01964"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbTf.html#a6cd00f910c3c70aa442e64889ab01964">addData</a> (const seerep::fb::TransformStamped &amp;tf)</td></tr>
 <tr class="memdesc:a6cd00f910c3c70aa442e64889ab01964"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a tf to the tf buffer and write it to hdf5.  <a href="classseerep__core__fb_1_1CoreFbTf.html#a6cd00f910c3c70aa442e64889ab01964">More...</a><br /></td></tr>
 <tr class="separator:a6cd00f910c3c70aa442e64889ab01964"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a621159cde3f707b5931f0bfb3acb4404"><td class="memItemLeft" align="right" valign="top">std::optional&lt; boost::uuids::uuid &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbTf.html#a621159cde3f707b5931f0bfb3acb4404">deleteHdf5</a> (const seerep::fb::TransformStampedIntervalQuery &amp;tfInterval)</td></tr>
+<tr class="memdesc:a621159cde3f707b5931f0bfb3acb4404"><td class="mdescLeft">&#160;</td><td class="mdescRight">Delete a range of tfs based on specified time interval from hdf5.  <a href="classseerep__core__fb_1_1CoreFbTf.html#a621159cde3f707b5931f0bfb3acb4404">More...</a><br /></td></tr>
+<tr class="separator:a621159cde3f707b5931f0bfb3acb4404"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a6ea07f923ce56742006b1f8d997d7e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbTf.html#a1a6ea07f923ce56742006b1f8d997d7e">reinitializeTFs</a> (const boost::uuids::uuid &amp;projectuuid)</td></tr>
+<tr class="memdesc:a1a6ea07f923ce56742006b1f8d997d7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Recreate the tfBuffer from hdf5 for the specified project.  <a href="classseerep__core__fb_1_1CoreFbTf.html#a1a6ea07f923ce56742006b1f8d997d7e">More...</a><br /></td></tr>
+<tr class="separator:a1a6ea07f923ce56742006b1f8d997d7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a519e7a34a0dd1ff8c9de6e1841e43efc"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core__fb_1_1CoreFbTf.html#a519e7a34a0dd1ff8c9de6e1841e43efc">getFrames</a> (const boost::uuids::uuid &amp;projectuuid)</td></tr>
 <tr class="memdesc:a519e7a34a0dd1ff8c9de6e1841e43efc"><td class="mdescLeft">&#160;</td><td class="mdescRight">gets all the frames which are in the tf tree of the project of interest  <a href="classseerep__core__fb_1_1CoreFbTf.html#a519e7a34a0dd1ff8c9de6e1841e43efc">More...</a><br /></td></tr>
 <tr class="separator:a519e7a34a0dd1ff8c9de6e1841e43efc"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -230,6 +236,36 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a621159cde3f707b5931f0bfb3acb4404" name="a621159cde3f707b5931f0bfb3acb4404"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a621159cde3f707b5931f0bfb3acb4404">&#9670;&nbsp;</a></span>deleteHdf5()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; boost::uuids::uuid &gt; seerep_core_fb::CoreFbTf::deleteHdf5 </td>
+          <td>(</td>
+          <td class="paramtype">const seerep::fb::TransformStampedIntervalQuery &amp;&#160;</td>
+          <td class="paramname"><em>tfInterval</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Delete a range of tfs based on specified time interval from hdf5. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tfInterval</td><td>types of tfs to delete in a given time.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>The tfs are deleted from hdf5 in the specified project.</p>
+<dl class="section return"><dt>Returns</dt><dd>std::nullopt if no deletions were done. </dd>
+<dd>
+the projectuuid when atleast one deletion was executed. </dd></dl>
+
+</div>
+</div>
 <a id="a96688308b08996aec3ba880dc84ea0ee" name="a96688308b08996aec3ba880dc84ea0ee"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a96688308b08996aec3ba880dc84ea0ee">&#9670;&nbsp;</a></span>getData()</h2>
 
@@ -292,6 +328,32 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a vector of all the frames in the tf tree of the project</dd></dl>
 <p>The tf is stored in the hdf5 file via hdf5-io-fb. The tf is also added to the tf buffer. </p>
+
+</div>
+</div>
+<a id="a1a6ea07f923ce56742006b1f8d997d7e" name="a1a6ea07f923ce56742006b1f8d997d7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a6ea07f923ce56742006b1f8d997d7e">&#9670;&nbsp;</a></span>reinitializeTFs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_core_fb::CoreFbTf::reinitializeTFs </td>
+          <td>(</td>
+          <td class="paramtype">const boost::uuids::uuid &amp;&#160;</td>
+          <td class="paramname"><em>projectuuid</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Recreate the tfBuffer from hdf5 for the specified project. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">projectuuid</td><td>uuid of the project to recreate the tfBuffer in </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

@@ -127,6 +127,7 @@ $(document).ready(function(){initNavTree('classseerep__hdf5__ros_1_1Hdf5Ros.html
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classseerep__hdf5__ros_1_1Hdf5Ros-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">seerep_hdf5_ros::Hdf5Ros Class Reference</div></div>
@@ -139,21 +140,48 @@ $(document).ready(function(){initNavTree('classseerep__hdf5__ros_1_1Hdf5Ros.html
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ae2234548d1624b389493ae70b53660d3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__ros_1_1Hdf5Ros.html#ae2234548d1624b389493ae70b53660d3">Hdf5Ros</a> ()=delete</td></tr>
 <tr class="separator:ae2234548d1624b389493ae70b53660d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad6fb96f756725b5032f0fdc4a8f2190c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__ros_1_1Hdf5Ros.html#ad6fb96f756725b5032f0fdc4a8f2190c">Hdf5Ros</a> (const std::string &amp;path, const std::string &amp;filename, const std::string &amp;projectFrameId, const std::string &amp;projectName)</td></tr>
-<tr class="separator:ad6fb96f756725b5032f0fdc4a8f2190c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a44dd89f0c116472f9211e4eddc33e0b7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__ros_1_1Hdf5Ros.html#a44dd89f0c116472f9211e4eddc33e0b7">dumpImage</a> (const sensor_msgs::Image &amp;image) const</td></tr>
-<tr class="separator:a44dd89f0c116472f9211e4eddc33e0b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3daed4f91bd97b8fd4e658c2651b039a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__ros_1_1Hdf5Ros.html#a3daed4f91bd97b8fd4e658c2651b039a">dumpHeader</a> (const std_msgs::Header &amp;header, const std::string &amp;datasetPath) const</td></tr>
-<tr class="separator:a3daed4f91bd97b8fd4e658c2651b039a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab80e6df9164e176414717bcf309237c2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__ros_1_1Hdf5Ros.html#ab80e6df9164e176414717bcf309237c2">Hdf5Ros</a> (const std::string &amp;fileName, const std::string &amp;projectName, const std::string &amp;projectFrameId)</td></tr>
+<tr class="memdesc:ab80e6df9164e176414717bcf309237c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Intialize the hdf5 file with the minimal required information.  <a href="classseerep__hdf5__ros_1_1Hdf5Ros.html#ab80e6df9164e176414717bcf309237c2">More...</a><br /></td></tr>
+<tr class="separator:ab80e6df9164e176414717bcf309237c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a356e7b9ca8e6e462fbf816bbd71632c2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__ros_1_1Hdf5Ros.html#a356e7b9ca8e6e462fbf816bbd71632c2">~Hdf5Ros</a> ()</td></tr>
+<tr class="memdesc:a356e7b9ca8e6e462fbf816bbd71632c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor to flush the file.  <a href="classseerep__hdf5__ros_1_1Hdf5Ros.html#a356e7b9ca8e6e462fbf816bbd71632c2">More...</a><br /></td></tr>
+<tr class="separator:a356e7b9ca8e6e462fbf816bbd71632c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2248636a4de47f35780bc5fd1afe0f5e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__ros_1_1Hdf5Ros.html#a2248636a4de47f35780bc5fd1afe0f5e">dump</a> (const sensor_msgs::Image &amp;image, const std::string &amp;uuid)</td></tr>
+<tr class="memdesc:a2248636a4de47f35780bc5fd1afe0f5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Store an image message to hdf5.  <a href="classseerep__hdf5__ros_1_1Hdf5Ros.html#a2248636a4de47f35780bc5fd1afe0f5e">More...</a><br /></td></tr>
+<tr class="separator:a2248636a4de47f35780bc5fd1afe0f5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a125dae35bec8c596e9ad07d3c1233dba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__ros_1_1Hdf5Ros.html#a125dae35bec8c596e9ad07d3c1233dba">dump</a> (const sensor_msgs::CompressedImage &amp;image)</td></tr>
+<tr class="memdesc:a125dae35bec8c596e9ad07d3c1233dba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Store a compressed image message to hdf5.  <a href="classseerep__hdf5__ros_1_1Hdf5Ros.html#a125dae35bec8c596e9ad07d3c1233dba">More...</a><br /></td></tr>
+<tr class="separator:a125dae35bec8c596e9ad07d3c1233dba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3583470b9364575a7beb3a3ca58312ce"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__ros_1_1Hdf5Ros.html#a3583470b9364575a7beb3a3ca58312ce">dump</a> (const sensor_msgs::CameraInfo &amp;cameraInfo, float maxViewingDistance=0.0)</td></tr>
+<tr class="separator:a3583470b9364575a7beb3a3ca58312ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9a92f00b8b3ecf490f2cfd6e36c0736"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__ros_1_1Hdf5Ros.html#ab9a92f00b8b3ecf490f2cfd6e36c0736">dump</a> (const sensor_msgs::PointCloud2 &amp;pcl)</td></tr>
+<tr class="separator:ab9a92f00b8b3ecf490f2cfd6e36c0736"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75249b8325fc650276a3b47a553f10c4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__ros_1_1Hdf5Ros.html#a75249b8325fc650276a3b47a553f10c4">dump</a> (const tf2_msgs::TFMessage &amp;tfMessage)</td></tr>
+<tr class="memdesc:a75249b8325fc650276a3b47a553f10c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Store a tf message to hdf5.  <a href="classseerep__hdf5__ros_1_1Hdf5Ros.html#a75249b8325fc650276a3b47a553f10c4">More...</a><br /></td></tr>
+<tr class="separator:a75249b8325fc650276a3b47a553f10c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3628ae9b51626353947024f9547bd4dc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__ros_1_1Hdf5Ros.html#a3628ae9b51626353947024f9547bd4dc">dump</a> (const geometry_msgs::TransformStamped &amp;tf)</td></tr>
+<tr class="memdesc:a3628ae9b51626353947024f9547bd4dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Store a transform message to hdf5.  <a href="classseerep__hdf5__ros_1_1Hdf5Ros.html#a3628ae9b51626353947024f9547bd4dc">More...</a><br /></td></tr>
+<tr class="separator:a3628ae9b51626353947024f9547bd4dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a97fe1e6845272c16c38afb6ba9288ee7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__ros_1_1Hdf5Ros.html#a97fe1e6845272c16c38afb6ba9288ee7">dump</a> (const std::string &amp;groupPath, const std_msgs::Header &amp;header)</td></tr>
+<tr class="memdesc:a97fe1e6845272c16c38afb6ba9288ee7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Store a message header to hdf5.  <a href="classseerep__hdf5__ros_1_1Hdf5Ros.html#a97fe1e6845272c16c38afb6ba9288ee7">More...</a><br /></td></tr>
+<tr class="separator:a97fe1e6845272c16c38afb6ba9288ee7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ef26fa9eded64737209a0af0af83b91"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__ros_1_1Hdf5Ros.html#a6ef26fa9eded64737209a0af0af83b91">dump</a> (const std::string &amp;cameraInfoPath, const sensor_msgs::RegionOfInterest &amp;roi)</td></tr>
+<tr class="memdesc:a6ef26fa9eded64737209a0af0af83b91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Store a region of interest message to hdf5.  <a href="classseerep__hdf5__ros_1_1Hdf5Ros.html#a6ef26fa9eded64737209a0af0af83b91">More...</a><br /></td></tr>
+<tr class="separator:a6ef26fa9eded64737209a0af0af83b91"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a3fd883f77df079c8688ceb4ed12acfa3"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__ros_1_1Hdf5Ros.html#a3fd883f77df079c8688ceb4ed12acfa3">path_</a></td></tr>
-<tr class="separator:a3fd883f77df079c8688ceb4ed12acfa3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac4f3720493f3db49aea2e944e9de217b"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__ros_1_1Hdf5Ros.html#ac4f3720493f3db49aea2e944e9de217b">filename_</a></td></tr>
-<tr class="separator:ac4f3720493f3db49aea2e944e9de217b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac6b767cf7ce166b0496d2707808048ee"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; HighFive::File &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__ros_1_1Hdf5Ros.html#ac6b767cf7ce166b0496d2707808048ee">hdf5File_</a></td></tr>
-<tr class="separator:ac6b767cf7ce166b0496d2707808048ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b7bc7086d740c720d26827cd3ba3c32"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; std::mutex &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__ros_1_1Hdf5Ros.html#a8b7bc7086d740c720d26827cd3ba3c32">mutex_</a></td></tr>
+<tr class="separator:a8b7bc7086d740c720d26827cd3ba3c32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9218ae8d86b5f384d65ede294d2e1ba"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; HighFive::File &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__ros_1_1Hdf5Ros.html#aa9218ae8d86b5f384d65ede294d2e1ba">file_</a></td></tr>
+<tr class="separator:aa9218ae8d86b5f384d65ede294d2e1ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ddc64507389bf68ec2fea5b7db3a05c"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html">seerep_hdf5_core::Hdf5CoreGeneral</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__ros_1_1Hdf5Ros.html#a1ddc64507389bf68ec2fea5b7db3a05c">hdf5Core_</a></td></tr>
+<tr class="separator:a1ddc64507389bf68ec2fea5b7db3a05c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a689b0bc2befebbf998aa5b3f4e1bb5c4"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreTf.html">seerep_hdf5_core::Hdf5CoreTf</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__ros_1_1Hdf5Ros.html#a689b0bc2befebbf998aa5b3f4e1bb5c4">hdf5CoreTf_</a></td></tr>
+<tr class="separator:a689b0bc2befebbf998aa5b3f4e1bb5c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ae2234548d1624b389493ae70b53660d3" name="ae2234548d1624b389493ae70b53660d3"></a>
@@ -181,8 +209,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ad6fb96f756725b5032f0fdc4a8f2190c" name="ad6fb96f756725b5032f0fdc4a8f2190c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad6fb96f756725b5032f0fdc4a8f2190c">&#9670;&nbsp;</a></span>Hdf5Ros() <span class="overload">[2/2]</span></h2>
+<a id="ab80e6df9164e176414717bcf309237c2" name="ab80e6df9164e176414717bcf309237c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab80e6df9164e176414717bcf309237c2">&#9670;&nbsp;</a></span>Hdf5Ros() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -191,25 +219,104 @@ Private Attributes</h2></td></tr>
           <td class="memname">seerep_hdf5_ros::Hdf5Ros::Hdf5Ros </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>path</em>, </td>
+          <td class="paramname"><em>fileName</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>filename</em>, </td>
+          <td class="paramname"><em>projectName</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>projectFrameId</em>, </td>
+          <td class="paramname"><em>projectFrameId</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Intialize the hdf5 file with the minimal required information. </p>
+<p >TODO: Add geo-refercing and versioning information.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fileName</td><td>Full path for the hdf5 file. </td></tr>
+    <tr><td class="paramname">projectName</td><td>Name of the seerep project. </td></tr>
+    <tr><td class="paramname">projectFrameId</td><td>Root frame of the project. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a356e7b9ca8e6e462fbf816bbd71632c2" name="a356e7b9ca8e6e462fbf816bbd71632c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a356e7b9ca8e6e462fbf816bbd71632c2">&#9670;&nbsp;</a></span>~Hdf5Ros()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">seerep_hdf5_ros::Hdf5Ros::~Hdf5Ros </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destructor to flush the file. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a3628ae9b51626353947024f9547bd4dc" name="a3628ae9b51626353947024f9547bd4dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3628ae9b51626353947024f9547bd4dc">&#9670;&nbsp;</a></span>dump() <span class="overload">[1/8]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_hdf5_ros::Hdf5Ros::dump </td>
+          <td>(</td>
+          <td class="paramtype">const geometry_msgs::TransformStamped &amp;&#160;</td>
+          <td class="paramname"><em>tf</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Store a transform message to hdf5. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tf</td><td>Transform message to store. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a3583470b9364575a7beb3a3ca58312ce" name="a3583470b9364575a7beb3a3ca58312ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3583470b9364575a7beb3a3ca58312ce">&#9670;&nbsp;</a></span>dump() <span class="overload">[2/8]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string seerep_hdf5_ros::Hdf5Ros::dump </td>
+          <td>(</td>
+          <td class="paramtype">const sensor_msgs::CameraInfo &amp;&#160;</td>
+          <td class="paramname"><em>cameraInfo</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>projectName</em>&#160;</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>maxViewingDistance</em> = <code>0.0</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -221,56 +328,214 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="a3daed4f91bd97b8fd4e658c2651b039a" name="a3daed4f91bd97b8fd4e658c2651b039a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3daed4f91bd97b8fd4e658c2651b039a">&#9670;&nbsp;</a></span>dumpHeader()</h2>
+<a id="a125dae35bec8c596e9ad07d3c1233dba" name="a125dae35bec8c596e9ad07d3c1233dba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a125dae35bec8c596e9ad07d3c1233dba">&#9670;&nbsp;</a></span>dump() <span class="overload">[3/8]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool seerep_hdf5_ros::Hdf5Ros::dumpHeader </td>
+          <td class="memname">void seerep_hdf5_ros::Hdf5Ros::dump </td>
           <td>(</td>
-          <td class="paramtype">const std_msgs::Header &amp;&#160;</td>
-          <td class="paramname"><em>header</em>, </td>
+          <td class="paramtype">const sensor_msgs::CompressedImage &amp;&#160;</td>
+          <td class="paramname"><em>image</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Store a compressed image message to hdf5. </p>
+<p >Note: Currently only used for benchmarking. Seerep currently does not support compressed images.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">image</td><td>Compressed image message to store. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a2248636a4de47f35780bc5fd1afe0f5e" name="a2248636a4de47f35780bc5fd1afe0f5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2248636a4de47f35780bc5fd1afe0f5e">&#9670;&nbsp;</a></span>dump() <span class="overload">[4/8]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_hdf5_ros::Hdf5Ros::dump </td>
+          <td>(</td>
+          <td class="paramtype">const sensor_msgs::Image &amp;&#160;</td>
+          <td class="paramname"><em>image</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>datasetPath</em>&#160;</td>
+          <td class="paramname"><em>uuid</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td> const</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
+<p>Store an image message to hdf5. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">image</td><td>Image message to dump. </td></tr>
+    <tr><td class="paramname">uuid</td><td>UUID of the corresponding camera info message. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
-<a id="a44dd89f0c116472f9211e4eddc33e0b7" name="a44dd89f0c116472f9211e4eddc33e0b7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a44dd89f0c116472f9211e4eddc33e0b7">&#9670;&nbsp;</a></span>dumpImage()</h2>
+<a id="ab9a92f00b8b3ecf490f2cfd6e36c0736" name="ab9a92f00b8b3ecf490f2cfd6e36c0736"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab9a92f00b8b3ecf490f2cfd6e36c0736">&#9670;&nbsp;</a></span>dump() <span class="overload">[5/8]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool seerep_hdf5_ros::Hdf5Ros::dumpImage </td>
+          <td class="memname">void seerep_hdf5_ros::Hdf5Ros::dump </td>
           <td>(</td>
-          <td class="paramtype">const sensor_msgs::Image &amp;&#160;</td>
-          <td class="paramname"><em>image</em></td><td>)</td>
-          <td> const</td>
+          <td class="paramtype">const sensor_msgs::PointCloud2 &amp;&#160;</td>
+          <td class="paramname"><em>pcl</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
+<p >@briefStore a point cloud message to hdf5.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pcl</td><td>Point cloud message to store. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a6ef26fa9eded64737209a0af0af83b91" name="a6ef26fa9eded64737209a0af0af83b91"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ef26fa9eded64737209a0af0af83b91">&#9670;&nbsp;</a></span>dump() <span class="overload">[6/8]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_hdf5_ros::Hdf5Ros::dump </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>cameraInfoPath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const sensor_msgs::RegionOfInterest &amp;&#160;</td>
+          <td class="paramname"><em>roi</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Store a region of interest message to hdf5. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cameraInfoPath</td><td>Path to the camerainfo the roi message should be added. </td></tr>
+    <tr><td class="paramname">roi</td><td>Region of interest message to store. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a97fe1e6845272c16c38afb6ba9288ee7" name="a97fe1e6845272c16c38afb6ba9288ee7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a97fe1e6845272c16c38afb6ba9288ee7">&#9670;&nbsp;</a></span>dump() <span class="overload">[7/8]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_hdf5_ros::Hdf5Ros::dump </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>groupPath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std_msgs::Header &amp;&#160;</td>
+          <td class="paramname"><em>header</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Store a message header to hdf5. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">groupPath</td><td>Path to the hdf5 group, to which the header should be added. </td></tr>
+    <tr><td class="paramname">header</td><td>Header message to store. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a75249b8325fc650276a3b47a553f10c4" name="a75249b8325fc650276a3b47a553f10c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75249b8325fc650276a3b47a553f10c4">&#9670;&nbsp;</a></span>dump() <span class="overload">[8/8]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_hdf5_ros::Hdf5Ros::dump </td>
+          <td>(</td>
+          <td class="paramtype">const tf2_msgs::TFMessage &amp;&#160;</td>
+          <td class="paramname"><em>tfMessage</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Store a tf message to hdf5. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tfMessage</td><td>TF message to store. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="ac4f3720493f3db49aea2e944e9de217b" name="ac4f3720493f3db49aea2e944e9de217b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac4f3720493f3db49aea2e944e9de217b">&#9670;&nbsp;</a></span>filename_</h2>
+<a id="aa9218ae8d86b5f384d65ede294d2e1ba" name="aa9218ae8d86b5f384d65ede294d2e1ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9218ae8d86b5f384d65ede294d2e1ba">&#9670;&nbsp;</a></span>file_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -279,7 +544,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::string seerep_hdf5_ros::Hdf5Ros::filename_</td>
+          <td class="memname">std::shared_ptr&lt;HighFive::File&gt; seerep_hdf5_ros::Hdf5Ros::file_</td>
         </tr>
       </table>
   </td>
@@ -291,8 +556,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ac6b767cf7ce166b0496d2707808048ee" name="ac6b767cf7ce166b0496d2707808048ee"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac6b767cf7ce166b0496d2707808048ee">&#9670;&nbsp;</a></span>hdf5File_</h2>
+<a id="a1ddc64507389bf68ec2fea5b7db3a05c" name="a1ddc64507389bf68ec2fea5b7db3a05c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ddc64507389bf68ec2fea5b7db3a05c">&#9670;&nbsp;</a></span>hdf5Core_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -301,7 +566,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt;HighFive::File&gt; seerep_hdf5_ros::Hdf5Ros::hdf5File_</td>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreGeneral.html">seerep_hdf5_core::Hdf5CoreGeneral</a>&gt; seerep_hdf5_ros::Hdf5Ros::hdf5Core_</td>
         </tr>
       </table>
   </td>
@@ -313,8 +578,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a3fd883f77df079c8688ceb4ed12acfa3" name="a3fd883f77df079c8688ceb4ed12acfa3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3fd883f77df079c8688ceb4ed12acfa3">&#9670;&nbsp;</a></span>path_</h2>
+<a id="a689b0bc2befebbf998aa5b3f4e1bb5c4" name="a689b0bc2befebbf998aa5b3f4e1bb5c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a689b0bc2befebbf998aa5b3f4e1bb5c4">&#9670;&nbsp;</a></span>hdf5CoreTf_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -323,7 +588,29 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::string seerep_hdf5_ros::Hdf5Ros::path_</td>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="classseerep__hdf5__core_1_1Hdf5CoreTf.html">seerep_hdf5_core::Hdf5CoreTf</a>&gt; seerep_hdf5_ros::Hdf5Ros::hdf5CoreTf_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8b7bc7086d740c720d26827cd3ba3c32" name="a8b7bc7086d740c720d26827cd3ba3c32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b7bc7086d740c720d26827cd3ba3c32">&#9670;&nbsp;</a></span>mutex_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt;std::mutex&gt; seerep_hdf5_ros::Hdf5Ros::mutex_</td>
         </tr>
       </table>
   </td>

@@ -182,8 +182,14 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a05b81f1d5d39f82ddc860fe304ab0154"><td class="memItemLeft" align="right" valign="top">std::optional&lt; geometry_msgs::TransformStamped &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#a05b81f1d5d39f82ddc860fe304ab0154">getTF</a> (const <a class="el" href="structseerep__core__msgs_1_1QueryTf.html">seerep_core_msgs::QueryTf</a> &amp;transformQuery)</td></tr>
 <tr class="memdesc:a05b81f1d5d39f82ddc860fe304ab0154"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the queried transformation between the two given frames at the given point in time.  <a href="classseerep__core_1_1CoreProject.html#a05b81f1d5d39f82ddc860fe304ab0154">More...</a><br /></td></tr>
 <tr class="separator:a05b81f1d5d39f82ddc860fe304ab0154"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46225f00ecf2c33e4a1c1f196cf54f4a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#a46225f00ecf2c33e4a1c1f196cf54f4a">getFrames</a> ()</td></tr>
+<tr class="memdesc:a46225f00ecf2c33e4a1c1f196cf54f4a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a vector of all frames stored in the TF tree by the TF buffer.  <a href="classseerep__core_1_1CoreProject.html#a46225f00ecf2c33e4a1c1f196cf54f4a">More...</a><br /></td></tr>
+<tr class="separator:a46225f00ecf2c33e4a1c1f196cf54f4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b68f3d4ed95fb5c704ca0a11c5f9e4d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#a7b68f3d4ed95fb5c704ca0a11c5f9e4d">reinitializeTFs</a> ()</td></tr>
+<tr class="memdesc:a7b68f3d4ed95fb5c704ca0a11c5f9e4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">reinitializes the tf buffer from hdf5  <a href="classseerep__core_1_1CoreProject.html#a7b68f3d4ed95fb5c704ca0a11c5f9e4d">More...</a><br /></td></tr>
+<tr class="separator:a7b68f3d4ed95fb5c704ca0a11c5f9e4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad8b183725b68d4094cd42f8295f4651e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#ad8b183725b68d4094cd42f8295f4651e">addCameraIntrinsics</a> (const <a class="el" href="structseerep__core__msgs_1_1camera__intrinsics.html">seerep_core_msgs::camera_intrinsics</a> &amp;ci)</td></tr>
-<tr class="memdesc:ad8b183725b68d4094cd42f8295f4651e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a vector of all frames stored in the TF tree by the TF buffer.  <a href="classseerep__core_1_1CoreProject.html#ad8b183725b68d4094cd42f8295f4651e">More...</a><br /></td></tr>
+<tr class="memdesc:ad8b183725b68d4094cd42f8295f4651e"><td class="mdescLeft">&#160;</td><td class="mdescRight">A function for passing camera intrinsics to the camera intrinsics agnostic for for saving.  <a href="classseerep__core_1_1CoreProject.html#ad8b183725b68d4094cd42f8295f4651e">More...</a><br /></td></tr>
 <tr class="separator:ad8b183725b68d4094cd42f8295f4651e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b8f06bc8f709e0c8d5bd1fcdb6c7e6a"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="structseerep__core__msgs_1_1camera__intrinsics.html">seerep_core_msgs::camera_intrinsics</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#a5b8f06bc8f709e0c8d5bd1fcdb6c7e6a">getCameraIntrinsics</a> (boost::uuids::uuid camIntrinsicsUuid)</td></tr>
 <tr class="memdesc:a5b8f06bc8f709e0c8d5bd1fcdb6c7e6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the Camera Intrinsics object.  <a href="classseerep__core_1_1CoreProject.html#a5b8f06bc8f709e0c8d5bd1fcdb6c7e6a">More...</a><br /></td></tr>
@@ -191,8 +197,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0ae7af68df3506ffd583511e16d52842"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#a0ae7af68df3506ffd583511e16d52842">cameraIntrinsicExists</a> (boost::uuids::uuid camIntrinsicsUuid)</td></tr>
 <tr class="memdesc:a0ae7af68df3506ffd583511e16d52842"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if there exists a camera intrinsics against the provided uuid.  <a href="classseerep__core_1_1CoreProject.html#a0ae7af68df3506ffd583511e16d52842">More...</a><br /></td></tr>
 <tr class="separator:a0ae7af68df3506ffd583511e16d52842"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46225f00ecf2c33e4a1c1f196cf54f4a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#a46225f00ecf2c33e4a1c1f196cf54f4a">getFrames</a> ()</td></tr>
-<tr class="separator:a46225f00ecf2c33e4a1c1f196cf54f4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afff09d948d662bd3dde5166e0eaf018a"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; std::mutex &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__core_1_1CoreProject.html#afff09d948d662bd3dde5166e0eaf018a">getHdf5FileMutex</a> ()</td></tr>
 <tr class="memdesc:afff09d948d662bd3dde5166e0eaf018a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a shared pointer to the file mutex of the HDF5 file of this project.  <a href="classseerep__core_1_1CoreProject.html#afff09d948d662bd3dde5166e0eaf018a">More...</a><br /></td></tr>
 <tr class="separator:afff09d948d662bd3dde5166e0eaf018a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -421,9 +425,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Returns a vector of all frames stored in the TF tree by the TF buffer. </p>
-<dl class="section return"><dt>Returns</dt><dd>vector of frame names</dd></dl>
-<p>A function for passing camera intrinsics to the camera intrinsics agnostic for for saving</p>
+<p>A function for passing camera intrinsics to the camera intrinsics agnostic for for saving. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">ci</td><td>[in] Camera Intrinsics to be saved </td></tr>
@@ -747,6 +749,9 @@ false If Camera Intrinsics Exists </dd></dl>
       </table>
 </div><div class="memdoc">
 
+<p>Returns a vector of all frames stored in the TF tree by the TF buffer. </p>
+<dl class="section return"><dt>Returns</dt><dd>vector of frame names </dd></dl>
+
 </div>
 </div>
 <a id="a63c98ab16b1685d3f3336c3bc24ac5ff" name="a63c98ab16b1685d3f3336c3bc24ac5ff"></a>
@@ -981,6 +986,25 @@ false If Camera Intrinsics Exists </dd></dl>
 </div><div class="memdoc">
 
 <p>Create the Objects handling the indices and load the data from the HDF5 file into the indices. </p>
+
+</div>
+</div>
+<a id="a7b68f3d4ed95fb5c704ca0a11c5f9e4d" name="a7b68f3d4ed95fb5c704ca0a11c5f9e4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b68f3d4ed95fb5c704ca0a11c5f9e4d">&#9670;&nbsp;</a></span>reinitializeTFs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void seerep_core::CoreProject::reinitializeTFs </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>reinitializes the tf buffer from hdf5 </p>
 
 </div>
 </div>

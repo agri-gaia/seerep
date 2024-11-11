@@ -1,19 +1,4 @@
 var searchData=
 [
-  ['_7ecore_0',['~Core',['../classseerep__core_1_1Core.html#acce948f728afdef5db7e458b4f03eeae',1,'seerep_core::Core']]],
-  ['_7ecorecameraintrinsics_1',['~CoreCameraIntrinsics',['../classseerep__core_1_1CoreCameraIntrinsics.html#a9ff7b16b8dab382b104d8c329825ea09',1,'seerep_core::CoreCameraIntrinsics']]],
-  ['_7ecoredataset_2',['~CoreDataset',['../classseerep__core_1_1CoreDataset.html#a87a03cf30f58e7bdfd682853e92019ab',1,'seerep_core::CoreDataset']]],
-  ['_7ecorefbcameraintrinsics_3',['~CoreFbCameraIntrinsics',['../classseerep__core__fb_1_1CoreFbCameraIntrinsics.html#a37c8344ce157cf978daff9f3cede987e',1,'seerep_core_fb::CoreFbCameraIntrinsics']]],
-  ['_7ecorefbimage_4',['~CoreFbImage',['../classseerep__core__fb_1_1CoreFbImage.html#a58ae10234b9fc5051f4ed53c17e55ac3',1,'seerep_core_fb::CoreFbImage']]],
-  ['_7ecorefbinstance_5',['~CoreFbInstance',['../classseerep__core__fb_1_1CoreFbInstance.html#a398ba1e5db8956f755c39eadea3c66f2',1,'seerep_core_fb::CoreFbInstance']]],
-  ['_7ecorefbpoint_6',['~CoreFbPoint',['../classseerep__core__fb_1_1CoreFbPoint.html#aaf084ea30bff388fe2a1f77046733586',1,'seerep_core_fb::CoreFbPoint']]],
-  ['_7ecorefbtf_7',['~CoreFbTf',['../classseerep__core__fb_1_1CoreFbTf.html#a6e1a1811de48ade64271e667dfb3ca96',1,'seerep_core_fb::CoreFbTf']]],
-  ['_7ecoreinstance_8',['~CoreInstance',['../classseerep__core_1_1CoreInstance.html#a695dec725b1762d4d1dbcc7fac0b61a2',1,'seerep_core::CoreInstance']]],
-  ['_7ecoreinstances_9',['~CoreInstances',['../classseerep__core_1_1CoreInstances.html#a1c1998542709bdb202a85928fc4809da',1,'seerep_core::CoreInstances']]],
-  ['_7ecorepbcameraintrinsics_10',['~CorePbCameraIntrinsics',['../classseerep__core__pb_1_1CorePbCameraIntrinsics.html#a0c427b406ac6af091eb01a895a963232',1,'seerep_core_pb::CorePbCameraIntrinsics']]],
-  ['_7ecorepbimage_11',['~CorePbImage',['../classseerep__core__pb_1_1CorePbImage.html#ab3e63fcbb81e0af28469a981d2f05e28',1,'seerep_core_pb::CorePbImage']]],
-  ['_7ecorepbpointcloud_12',['~CorePbPointCloud',['../classseerep__core__pb_1_1CorePbPointCloud.html#a02f6bcb2f9bb2bb47957df01c25368ee',1,'seerep_core_pb::CorePbPointCloud']]],
-  ['_7ecorepbtf_13',['~CorePbTf',['../classseerep__core__pb_1_1CorePbTf.html#af7abdb5a7c4bd93871813789d1f06e29',1,'seerep_core_pb::CorePbTf']]],
-  ['_7ecoreproject_14',['~CoreProject',['../classseerep__core_1_1CoreProject.html#a63190ba14676bacaa18385bad66a2f6c',1,'seerep_core::CoreProject']]],
-  ['_7ecoretf_15',['~CoreTf',['../classseerep__core_1_1CoreTf.html#a176739c9dbefb3218b6f5a44e2195054',1,'seerep_core::CoreTf']]]
+  ['z_0',['z',['../structseerep__core__msgs_1_1Polygon2D.html#a2d81032d2d7cca8f7f9c95fb89fe1e0d',1,'seerep_core_msgs::Polygon2D']]]
 ];

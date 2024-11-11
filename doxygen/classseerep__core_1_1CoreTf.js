@@ -9,6 +9,7 @@ var classseerep__core_1_1CoreTf =
     [ "getData", "classseerep__core_1_1CoreTf.html#a9463ca41939921a7730ddf1c25eb4f7e", null ],
     [ "getFrames", "classseerep__core_1_1CoreTf.html#aa794e624a811495504d75667c75794cc", null ],
     [ "loadTfs", "classseerep__core_1_1CoreTf.html#a3a776e0219b9768d0e79d25944955064", null ],
+    [ "recreateBufferAndDatasets", "classseerep__core_1_1CoreTf.html#a4ebe78d70691cd16058ae2b8e9a14899", null ],
     [ "recreateDatasets", "classseerep__core_1_1CoreTf.html#aa5aed7f27571d7e8ec78cf8511e12747", null ],
     [ "transformAABB", "classseerep__core_1_1CoreTf.html#a60e0108d838d0f585b5520a3a6b87dbe", null ],
     [ "m_hdf5_io", "classseerep__core_1_1CoreTf.html#ad41c685f0fa873b668493b96e176475b", null ],

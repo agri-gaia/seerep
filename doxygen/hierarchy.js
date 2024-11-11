@@ -63,10 +63,12 @@ var hierarchy =
       ] ]
     ] ],
     [ "seerep_hdf5_py::Hdf5FileWrapper", "classseerep__hdf5__py_1_1Hdf5FileWrapper.html", null ],
+    [ "seerep_ros_examples::Hdf5Node", "classseerep__ros__examples_1_1Hdf5Node.html", null ],
     [ "seerep_hdf5_ros::Hdf5Ros", "classseerep__hdf5__ros_1_1Hdf5Ros.html", null ],
     [ "seerep_core_msgs::Header", "structseerep__core__msgs_1_1Header.html", null ],
     [ "seerep_hdf5_core::ImageAttributes", "structseerep__hdf5__core_1_1ImageAttributes.html", null ],
     [ "seerep_hdf5_py::InstanceLabel", "structseerep__hdf5__py_1_1InstanceLabel.html", null ],
+    [ "seerep_ros_comm::JsonPointDumper", "classseerep__ros__comm_1_1JsonPointDumper.html", null ],
     [ "seerep_core_msgs::Label", "structseerep__core__msgs_1_1Label.html", null ],
     [ "seerep_core_msgs::LabelCategory", "structseerep__core__msgs_1_1LabelCategory.html", null ],
     [ "seerep_core_msgs::LabelDatumaro", "structseerep__core__msgs_1_1LabelDatumaro.html", null ],
@@ -85,6 +87,7 @@ var hierarchy =
     [ "seerep_core_msgs::QueryResultProject", "structseerep__core__msgs_1_1QueryResultProject.html", null ],
     [ "seerep_core_msgs::QueryTf", "structseerep__core__msgs_1_1QueryTf.html", null ],
     [ "seerep_core_msgs::region_of_interest", "structseerep__core__msgs_1_1region__of__interest.html", null ],
+    [ "seerep_ros_comm::RosbagDumper", "classseerep__ros__comm_1_1RosbagDumper.html", null ],
     [ "seerep_server::server", "classseerep__server_1_1server.html", null ],
     [ "seerep::fb::CameraIntrinsicsService::Service", null, [
       [ "seerep_server::FbCameraIntrinsicsService", "classseerep__server_1_1FbCameraIntrinsicsService.html", null ]

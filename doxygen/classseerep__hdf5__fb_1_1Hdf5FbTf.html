@@ -152,6 +152,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:acb20945586445c386e258899ea92fe87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3919b08ee2e66cdf4742f992a0eddc23"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbTf.html#a3919b08ee2e66cdf4742f992a0eddc23">writeTransformStamped</a> (const seerep::fb::TransformStamped &amp;tf)</td></tr>
 <tr class="separator:a3919b08ee2e66cdf4742f992a0eddc23"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4fd39ba1a3a4da9ca2894a1ce2ddcae"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbTf.html#ab4fd39ba1a3a4da9ca2894a1ce2ddcae">deleteTransformStamped</a> (std::string parentFrameId, std::string childFrameId, const bool isStatic, const seerep::fb::Timestamp &amp;timeMin, const seerep::fb::Timestamp &amp;timeMax) const</td></tr>
+<tr class="memdesc:ab4fd39ba1a3a4da9ca2894a1ce2ddcae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deletes tf entries (time, translation, rotation) from hdf5.  <a href="classseerep__hdf5__fb_1_1Hdf5FbTf.html#ab4fd39ba1a3a4da9ca2894a1ce2ddcae">More...</a><br /></td></tr>
+<tr class="separator:ab4fd39ba1a3a4da9ca2894a1ce2ddcae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa7eee18e3b10597778f0c428b219d4cb"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::vector&lt; flatbuffers::Offset&lt; seerep::fb::TransformStamped &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbTf.html#aa7eee18e3b10597778f0c428b219d4cb">readTransformStamped</a> (const std::string &amp;id, const bool isStatic)</td></tr>
 <tr class="separator:aa7eee18e3b10597778f0c428b219d4cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7cfee9e48a660c416e8de5d1f1504c44"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::vector&lt; std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classseerep__hdf5__fb_1_1Hdf5FbTf.html#a7cfee9e48a660c416e8de5d1f1504c44">readTransformStampedFrames</a> (const std::string &amp;id, const bool isStatic)</td></tr>
@@ -358,6 +361,67 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="ab4fd39ba1a3a4da9ca2894a1ce2ddcae" name="ab4fd39ba1a3a4da9ca2894a1ce2ddcae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4fd39ba1a3a4da9ca2894a1ce2ddcae">&#9670;&nbsp;</a></span>deleteTransformStamped()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool seerep_hdf5_fb::Hdf5FbTf::deleteTransformStamped </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>parentFrameId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>childFrameId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>isStatic</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const seerep::fb::Timestamp &amp;&#160;</td>
+          <td class="paramname"><em>timeMin</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const seerep::fb::Timestamp &amp;&#160;</td>
+          <td class="paramname"><em>timeMax</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Deletes tf entries (time, translation, rotation) from hdf5. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parentFrameId</td><td>The parent frame of the the tf target. </td></tr>
+    <tr><td class="paramname">childFrameId</td><td>The child frame of the the tf target. </td></tr>
+    <tr><td class="paramname">isStatic</td><td>Whether the target tf is static or not. </td></tr>
+    <tr><td class="paramname">timeMin</td><td>The inclusive timestamp to start the deletion from. </td></tr>
+    <tr><td class="paramname">timeMax</td><td>The exclusive timestamp to end the deletion on.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true when atleast one deletion took place. </dd>
+<dd>
+false when something went wrong during deletion, or no tf matched the parameters. </dd></dl>
+
+</div>
+</div>
 <a id="aa7eee18e3b10597778f0c428b219d4cb" name="aa7eee18e3b10597778f0c428b219d4cb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa7eee18e3b10597778f0c428b219d4cb">&#9670;&nbsp;</a></span>readTransformStamped()</h2>
 
