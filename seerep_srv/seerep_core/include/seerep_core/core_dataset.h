@@ -294,6 +294,19 @@ private:
                           const seerep_core_msgs::Polygon2D& polygon,
                           bool& fullEncapsulation, bool& partialEncapsulation);
 
+  void intersectionDegreeCgalPolygons(CGAL::Polygon_2<Kernel> cgal1,
+                                      CGAL::Polygon_2<Kernel> cgal2,
+                                      bool z_partially,
+                                      bool checkIfFullyEncapsulated,
+                                      bool& fullEncapsulation,
+                                      bool& partialEncapsulation);
+
+  void intersectionDegreeAABBinPolygon(
+      const seerep_core_msgs::AABB& aabb,
+      const seerep_core_msgs::Polygon2D& polygon,
+      CGAL::Polygon_2<Kernel> aabb_cgal, CGAL::Polygon_2<Kernel> polygon_cgal,
+      bool& fullEncapsulation, bool& partialEncapsulation);
+
   void getUuidsFromMap(
       std::unordered_map<boost::uuids::uuid, std::vector<boost::uuids::uuid>,
                          boost::hash<boost::uuids::uuid>>& datasetInstancesMap,
