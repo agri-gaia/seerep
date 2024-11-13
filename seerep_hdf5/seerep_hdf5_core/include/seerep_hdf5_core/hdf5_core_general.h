@@ -325,8 +325,8 @@ public:
   inline static const std::string PROJECTFRAMEID = "projectframeid";
   inline static const std::string VERSION = "version";
 
-  inline static const std::string GEODETICLOCATION_COORDINATESYSTEM =
-      "geoloc_coordinatesystem";
+  inline static const std::string GEODETICLOCATION_CRSSTRING =
+      "geoloc_crsstring";
   inline static const std::string GEODETICLOCATION_ELLIPSOID =
       "geoloc_ellipsoid";
   inline static const std::string GEODETICLOCATION_ALTITUDE = "geoloc_altitude";

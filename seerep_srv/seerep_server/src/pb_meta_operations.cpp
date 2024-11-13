@@ -27,8 +27,8 @@ PbMetaOperations::CreateProject(grpc::ServerContext* context,
     projectInfo.uuid = boost::uuids::random_generator()();
 
     // assigning geodetic coords attributes individually
-    projectInfo.geodetCoords.coordinateSystem =
-        request->geodeticcoordinates().coordinatesystem();
+    projectInfo.geodetCoords.crsString =
+        request->geodeticcoordinates().crsstring();
     projectInfo.geodetCoords.altitude =
         request->geodeticcoordinates().altitude();
     projectInfo.geodetCoords.latitude =
@@ -43,8 +43,8 @@ PbMetaOperations::CreateProject(grpc::ServerContext* context,
     response->set_frameid(projectInfo.frameId);
 
     response->set_version(projectInfo.version);
-    response->mutable_geodeticcoordinates()->set_coordinatesystem(
-        projectInfo.geodetCoords.coordinateSystem);
+    response->mutable_geodeticcoordinates()->set_crsstring(
+        projectInfo.geodetCoords.crsString);
     response->mutable_geodeticcoordinates()->set_altitude(
         projectInfo.geodetCoords.altitude);
     response->mutable_geodeticcoordinates()->set_latitude(
@@ -94,8 +94,8 @@ PbMetaOperations::GetProjects(grpc::ServerContext* context,
       responseProjectInfo->set_version(projectInfo.version);
 
       // assigning geodetic coords attributes individually
-      responseProjectInfo->mutable_geodeticcoordinates()->set_coordinatesystem(
-          projectInfo.geodetCoords.coordinateSystem);
+      responseProjectInfo->mutable_geodeticcoordinates()->set_crsstring(
+          projectInfo.geodetCoords.crsString);
       responseProjectInfo->mutable_geodeticcoordinates()->set_altitude(
           projectInfo.geodetCoords.altitude);
       responseProjectInfo->mutable_geodeticcoordinates()->set_latitude(

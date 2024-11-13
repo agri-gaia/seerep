@@ -77,7 +77,7 @@ def test_gRPC_fb_queryImages(grpc_channel, project_setup):
         labels=labelsCategory,
         withoutData=True,
         fullyEncapsulated=False,
-        inMapFrame=True,
+        crsString="map",
     )
 
     queried_image_dicts = [

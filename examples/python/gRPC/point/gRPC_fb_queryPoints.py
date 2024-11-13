@@ -79,7 +79,6 @@ def get_points_raw(
         polygon2d=polygon2d,
         # withoutData=True,
         fullyEncapsulated=False,
-        inMapFrame=True,
     )
 
     builder.Finish(query)

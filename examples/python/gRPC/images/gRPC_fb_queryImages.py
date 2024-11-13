@@ -13,9 +13,8 @@ from seerep.util.common import get_gRPC_channel
 from seerep.util.fb_helper import (
     create_label,
     create_label_category,
-    createPoint2d,
-    createPolygon2D,
     createQuery,
+    createRectangularPolygon2D,
     createTimeInterval,
     createTimeStamp,
     getOrCreateProject,
@@ -78,25 +77,26 @@ def query_images(
     ]
 
 
-if __name__ == "__main__":
+def query_example():
     fbb = flatbuffers.Builder()
     grpc_channel = get_gRPC_channel()
     project_uuid = getOrCreateProject(fbb, grpc_channel, "testproject")
 
-    # create the data for the query
-    scale = 100
-    vertices = [
-        createPoint2d(fbb, x * scale, y * scale)
-        for x, y in [(-1.0, -1.0), (-1.0, 1.0), (1.0, 1.0), (1.0, -1.0)]
-    ]
-
-    polygon_2d = createPolygon2D(fbb, 700, -100, vertices)
+    polygon_2d = createRectangularPolygon2D(
+        fbb,
+        x=-100,
+        extent_x=200,
+        extent_y=200,
+        y=-100,
+        z=-100,
+        height=700,
+    )
 
     time_min = createTimeStamp(fbb, 1610549273, 0)
     time_max = createTimeStamp(fbb, 1938549273, 0)
-    time_interval = createTimeInterval(fbb, time_min, time_max)
+    time_interval = createTimeInterval(fbb, time_min, time_max)  # noqa: F841
 
-    project_uuids = [project_uuid]
+    project_uuids = [project_uuid]  # noqa: F841
 
     labels = [
         create_label(builder=fbb, label=label_str, label_id=i)
@@ -121,7 +121,6 @@ if __name__ == "__main__":
         labels=labelsCategory,
         withoutData=True,
         fullyEncapsulated=False,
-        inMapFrame=True,
     )
 
     if matching_images is None or len(matching_images) == 0:
@@ -142,3 +141,53 @@ if __name__ == "__main__":
                 + img.Labels(0).Labels(0).Label().decode("utf-8")
             )
     print("------------------------------------------------------------------")
+
+
+def query_geodetic_example():
+    fbb = flatbuffers.Builder()
+    grpc_channel = get_gRPC_channel()
+    project_uuid = getOrCreateProject(fbb, grpc_channel, "geodeticProject")
+
+    polygon_epsg3857 = createRectangularPolygon2D(
+        fbb,
+        x=921689.630348,
+        y=6865153.476919,
+        extent_x=655,
+        extent_y=655,
+        z=0,
+        height=100,
+    )
+
+    matching_images = query_images(
+        fbb,
+        grpc_channel,
+        project_uuid,
+        polygon2d=polygon_epsg3857,
+        withoutData=True,
+        fullyEncapsulated=False,
+        crsString="EPSG:3857",
+    )
+
+    if matching_images is None or len(matching_images) == 0:
+        print("No images matched the query.")
+        sys.exit()
+
+    print(f"Number of images matching the query: {len(matching_images)}")
+
+    for img in matching_images:
+        print(
+            "------------------------------------------------------------------"
+        )
+        print(f"Msg UUID: {img.Header().UuidMsgs().decode('utf-8')}")
+        print(f"Number of labels: {img.LabelsLength()}")
+        if img.LabelsLength() > 0:
+            print(
+                "First label: "
+                + img.Labels(0).Labels(0).Label().decode("utf-8")
+            )
+    print("------------------------------------------------------------------")
+
+
+if __name__ == "__main__":
+    query_example()
+    # query_geodetic_example()

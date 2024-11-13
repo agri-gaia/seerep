@@ -10,7 +10,7 @@ message Query
 {
   Polygon2D polygon = 1;
   bool fullyEncapsulated = 2;
-  bool inMapFrame = 3;
+  string crsString = 3;
   TimeInterval timeinterval = 4;
   repeated LabelCategory labelCategory = 5;
   bool mustHaveAllLabels = 6;
