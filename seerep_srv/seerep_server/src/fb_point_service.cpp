@@ -20,7 +20,7 @@ grpc::Status FbPointService::GetPoint(
   debuginfo << "sending images with this query parameters:";
   if (requestRoot->polygon() != NULL)
   {
-    for (auto point : *requestRoot->polygon()->vertices())
+    for (auto&& point : *requestRoot->polygon()->vertices())
     {
       debuginfo << "bounding box vertex (" << point->x() << ", " << point->y()
                 << ") \n";
@@ -31,7 +31,7 @@ grpc::Status FbPointService::GetPoint(
   }
   if (requestRoot->polygonSensorPosition() != NULL)
   {
-    for (auto point : *(requestRoot->polygonSensorPosition()->vertices()))
+    for (auto&& point : *(requestRoot->polygonSensorPosition()->vertices()))
     {
       debuginfo << "bounding box vertex (" << point->x() << ", " << point->y()
                 << ") /";
@@ -41,19 +41,21 @@ grpc::Status FbPointService::GetPoint(
     debuginfo << "bounding box height "
               << requestRoot->polygonSensorPosition()->height() << " /";
   }
-  if (requestRoot->timeinterval() != NULL)
+  if (requestRoot->timeintervals() != NULL)
   {
-    debuginfo << "\n time interval ("
-              << requestRoot->timeinterval()->time_min()->seconds() << "/"
-              << requestRoot->timeinterval()->time_max()->seconds() << ")";
+    for (auto&& timeinterval : *requestRoot->timeintervals())
+    {
+      debuginfo << "\n time interval (" << timeinterval->time_min()->seconds()
+                << "/" << timeinterval->time_max()->seconds() << ")";
+    }
   }
   if (requestRoot->label() != NULL)
   {
     debuginfo << "\n labels general";
-    for (auto labelCategory : *requestRoot->label())
+    for (auto&& labelCategory : *requestRoot->label())
     {
       debuginfo << "category: " << labelCategory->category()->c_str() << "; ";
-      for (auto label : *labelCategory->labels())
+      for (auto&& label : *labelCategory->labels())
       {
         debuginfo << "'" << label->label()->str() << "' ";
       }
@@ -63,24 +65,6 @@ grpc::Status FbPointService::GetPoint(
   BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::info)
       << debuginfo.rdbuf();
 
-  if (requestRoot->polygon() != NULL)
-  {
-    for (auto point : *(requestRoot->polygon()->vertices()))
-    {
-      debuginfo << "bounding box vertex (" << point->x() << ", " << point->y()
-                << ") /";
-    }
-    debuginfo << "bounding box z " << requestRoot->polygon()->z() << " /";
-    debuginfo << "bounding box height " << requestRoot->polygon()->height()
-              << " /";
-  }
-  if (requestRoot->timeinterval() != NULL)
-  {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::trace)
-        << "in time interval ("
-        << requestRoot->timeinterval()->time_min()->seconds() << "/"
-        << requestRoot->timeinterval()->time_max()->seconds() << ")";
-  }
   try
   {
     pointFb->getData(requestRoot, writer);

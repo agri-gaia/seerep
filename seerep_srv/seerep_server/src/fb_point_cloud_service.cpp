@@ -24,7 +24,7 @@ grpc::Status FbPointCloudService::GetPointCloud2(
   debuginfo << "sending point clouds with this query parameters: ";
   if (requestRoot->polygon() != NULL)
   {
-    for (auto point : *requestRoot->polygon()->vertices())
+    for (auto&& point : *requestRoot->polygon()->vertices())
     {
       debuginfo << "bounding box vertex (" << point->x() << ", " << point->y()
                 << ") /";
@@ -35,7 +35,7 @@ grpc::Status FbPointCloudService::GetPointCloud2(
   }
   if (requestRoot->polygonSensorPosition() != NULL)
   {
-    for (auto point : *(requestRoot->polygonSensorPosition()->vertices()))
+    for (auto&& point : *(requestRoot->polygonSensorPosition()->vertices()))
     {
       debuginfo << "bounding box vertex (" << point->x() << ", " << point->y()
                 << ") /";
@@ -45,20 +45,21 @@ grpc::Status FbPointCloudService::GetPointCloud2(
     debuginfo << "bounding box height "
               << requestRoot->polygonSensorPosition()->height() << " /";
   }
-  if (requestRoot->timeinterval() != NULL)
+  if (requestRoot->timeintervals() != NULL)
   {
-    debuginfo << "\n time interval (seconds since epoch: "
-              << requestRoot->timeinterval()->time_min()->seconds()
-              << ", nanoseconds since epoch:"
-              << requestRoot->timeinterval()->time_max()->seconds() << ")";
+    for (auto&& timeinterval : *requestRoot->timeintervals())
+    {
+      debuginfo << "\n time interval (" << timeinterval->time_min()->seconds()
+                << "/" << timeinterval->time_max()->seconds() << ")";
+    }
   }
   if (requestRoot->label() != NULL)
   {
     debuginfo << "\n labels general";
-    for (auto labelCategory : *requestRoot->label())
+    for (auto&& labelCategory : *requestRoot->label())
     {
       debuginfo << "category: " << labelCategory->category()->c_str() << "; ";
-      for (auto label : *labelCategory->labels())
+      for (auto&& label : *labelCategory->labels())
       {
         debuginfo << "'" << label->label()->str() << "' ";
       }
