@@ -262,9 +262,9 @@ private:
    * @param query the flatbuffer query message
    * @param queryCoreTime the time in the query message in seerep core format
    */
-  static void
-  fromFbQueryTime(const seerep::fb::Query* query,
-                  std::optional<seerep_core_msgs::Timeinterval>& queryCoreTime);
+  static void fromFbQueryTime(
+      const seerep::fb::Query* query,
+      std::optional<std::vector<seerep_core_msgs::Timeinterval>>& queryCoreTime);
   /**
    * @brief extracts the WithoutData Flag of the flatbuffer query message
    * @param query the flatbuffer query message
