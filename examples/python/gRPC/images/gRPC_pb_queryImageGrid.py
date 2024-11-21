@@ -11,6 +11,7 @@ from seerep.pb import label_category_pb2, label_pb2
 from seerep.pb import meta_operations_pb2_grpc as metaOperations
 from seerep.pb import point2d_pb2 as point2d
 from seerep.pb import query_pb2 as query
+from seerep.pb import time_interval_pb2 as timeInterval
 from seerep.util.common import get_gRPC_channel
 
 OFFSET = 0.5
@@ -42,10 +43,12 @@ def query_image_grid(
     theQuery.projectuuid.append(target_project_uuid)
 
     # since epoche
-    theQuery.timeinterval.time_min.seconds = 1638549273
-    theQuery.timeinterval.time_min.nanos = 0
-    theQuery.timeinterval.time_max.seconds = 1938549273
-    theQuery.timeinterval.time_max.nanos = 0
+    time = timeInterval.TimeInterval()
+    time.time_min.seconds = 1638549273
+    time.time_min.nanos = 0
+    time.time_max.seconds = 1938549273
+    time.time_max.nanos = 0
+    theQuery.timeintervals.append(time)
 
     theQuery.polygon.z = -1
     theQuery.polygon.height = 7

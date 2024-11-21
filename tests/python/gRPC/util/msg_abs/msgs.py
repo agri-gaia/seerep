@@ -29,7 +29,7 @@ class EnumFbQuery(FrozenEnum):
     POLYGONSENSORPOSITION = auto()  # def: None
     FULLY_ENCAPSULATED = auto()  # def: False
     IN_MAP_FRAME = auto()  # def: True
-    TIMEINTERVAL = auto()  # def: None
+    TIMEINTERVALVECTOR = auto()  # def: None
     LABEL = auto()  # def: None
     SPARQL_QUERY = auto()  # def: None
     ONTOLOGY_URI = auto()  # def: None
@@ -64,8 +64,9 @@ class FbQuery(MsgsFb[Query.Query]):
             EnumFbQuery.IN_MAP_FRAME: MsgsFunctions(
                 lambda: True, lambda: False
             ),
-            EnumFbQuery.TIMEINTERVAL: MsgsFunctions(
-                lambda: None, lambda: Dtypes.Fb.time_interval(self.builder)
+            EnumFbQuery.TIMEINTERVALVECTOR: MsgsFunctions(
+                lambda: None,
+                lambda: Dtypes.Fb.time_interval_vector(self.builder),
             ),
             EnumFbQuery.LABEL: MsgsFunctions(
                 lambda: None, lambda: Dtypes.Fb.label_category(self.builder)
@@ -120,7 +121,7 @@ class FbQuery(MsgsFb[Query.Query]):
         )
         fully_encapsulated = self.get_component(EnumFbQuery.FULLY_ENCAPSULATED)
         in_map_frame = self.get_component(EnumFbQuery.IN_MAP_FRAME)
-        timeinterval = self.get_component(EnumFbQuery.TIMEINTERVAL)
+        timeIntervalVector = self.get_component(EnumFbQuery.TIMEINTERVALVECTOR)
         label = self.get_component(EnumFbQuery.LABEL)
         must_have_all_labels = self.get_component(
             EnumFbQuery.MUST_HAVE_ALL_LABELS
@@ -133,7 +134,7 @@ class FbQuery(MsgsFb[Query.Query]):
 
         return fbh.createQuery(
             self.builder,
-            timeInterval=timeinterval,
+            timeIntervalVector=timeIntervalVector,
             labels=label,
             mustHaveAllLabels=must_have_all_labels,
             projectUuids=projectuuid,
@@ -214,6 +215,16 @@ class DatatypeImplementations:
             )
             polygon_vertices.append(fbh.createPoint2d(builder, quad_extent, 0))
             return fbh.createPolygon2D(builder, height, -100, polygon_vertices)
+
+        @classmethod
+        def time_interval_vector(cls, builder: Builder):
+            timeMin = []
+            timeMax = []
+            timeMin.append(fbh.createTimeStamp(builder, 1610549273, 0))
+            timeMin.append(fbh.createTimeStamp(builder, 1010549273, 0))
+            timeMax.append(fbh.createTimeStamp(builder, 1938549273, 0))
+            timeMax.append(fbh.createTimeStamp(builder, 1138549273, 0))
+            return fbh.createTimeIntervalVector(builder, timeMin, timeMax)
 
         @classmethod
         def time_interval(cls, builder: Builder) -> TimeInterval.TimeInterval:

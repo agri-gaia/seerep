@@ -631,7 +631,7 @@ def addToPointFieldVector(builder: Builder, pointFieldList: List[int]) -> int:
 
 def createQuery(
     builder: Builder,
-    timeInterval: Union[int, None] = None,
+    timeIntervalVector: Union[int, None] = None,
     labels: Union[List[int], None] = None,
     mustHaveAllLabels: bool = False,
     projectUuids: List[str] = None,
@@ -649,8 +649,9 @@ def createQuery(
 
     Args:
         builder: A flatbuffers Builder
-        timeInterval: The pointer to a TimeInterval object representing the time
-        frame of the returned instances labels: A list of pointers to\
+        timeIntervalVector: The pointer to vector of TimeInterval objects
+        representing the time frames
+        labels: A list of pointers to\
             [LabelsWithInstanceWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/labels_with_instance_with_category.fbs)\
             flatbuffers objects, which the instances should at least have one of
         mustHaveAllLabels: A boolean indicating if the returned instances should
@@ -716,8 +717,8 @@ def createQuery(
         Query.AddPolygon(builder, polygon2d)
     if polygon2dSensorPos:
         Query.AddPolygonSensorPosition(builder, polygon2dSensorPos)
-    if timeInterval:
-        Query.AddTimeinterval(builder, timeInterval)
+    if timeIntervalVector:
+        Query.AddTimeintervals(builder, timeIntervalVector)
     if labels:
         Query.AddLabel(builder, labelOffset)
     # no if; has default value
@@ -754,6 +755,33 @@ def createQueryInstance(builder: Builder, query: int, datatype: int) -> int:
     QueryInstance.AddDatatype(builder, datatype)
     QueryInstance.AddQuery(builder, query)
     return QueryInstance.End(builder)
+
+
+def createTimeIntervalVector(
+    builder: Builder, timeMinList: List[int], timeMaxList: List[int]
+) -> int:
+    """
+    Create a vector of closed time intervals in flatbuffers.
+
+    Args:
+        builder: A flatbuffers Builder
+        timeMinList: The list of pointers to the Timestamp objects representing
+            the lower bound of the time of the intervals
+        timeMaxList: The list of pointers to the Timestamp objects representing
+            the upper bound of the time of the intervals
+
+    Returns:
+        A pointer to the constructed time interval vector object
+    """
+    intervals = []
+    for timeMin, timeMax in zip(timeMinList, timeMaxList):
+        intervals.append(createTimeInterval(builder, timeMin, timeMax))
+
+    Query.StartTimeintervalsVector(builder, len(intervals))
+    for interval in intervals:
+        builder.PrependUOffsetTRelative(interval)
+
+    return builder.EndVector()
 
 
 def createTimeInterval(builder: Builder, timeMin: int, timeMax: int) -> int:
