@@ -16,7 +16,7 @@ from seerep.util.fb_helper import (
     createPoint2d,
     createPolygon2D,
     createQuery,
-    createTimeInterval,
+    createTimeIntervalVector,
     createTimeStamp,
     getOrCreateProject,
 )
@@ -92,13 +92,16 @@ if __name__ == "__main__":
 
     polygon_2d = createPolygon2D(fbb, 700, -100, vertices)
 
-    time_intervals = []
-    time_min = createTimeStamp(fbb, 1661336500, 0)
-    time_max = createTimeStamp(fbb, 1661336550, 0)
-    time_intervals.append(createTimeInterval(fbb, time_min, time_max))
-    time_min = createTimeStamp(fbb, 1661336560, 0)
-    time_max = createTimeStamp(fbb, 1661336600, 0)
-    time_intervals.append(createTimeInterval(fbb, time_min, time_max))
+    time_min = []
+    time_max = []
+
+    time_min.append(createTimeStamp(fbb, 1661336500, 0))
+    time_min.append(createTimeStamp(fbb, 1661336560, 0))
+
+    time_max.append(createTimeStamp(fbb, 1661336550, 0))
+    time_max.append(createTimeStamp(fbb, 1661336600, 0))
+
+    time_intervals = createTimeIntervalVector(fbb, time_min, time_max)
 
     project_uuids = [project_uuid]
 
@@ -120,7 +123,7 @@ if __name__ == "__main__":
         fbb,
         grpc_channel,
         project_uuid,
-        timeIntervals=time_intervals,
+        timeIntervalVector=time_intervals,
         # polygon2d=polygon_2d,
         polygon2dSensorPos=polygon_2d,
         labels=labelsCategory,
