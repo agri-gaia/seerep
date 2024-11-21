@@ -11,7 +11,7 @@ message Query
   Polygon2D polygon = 1;
   bool fullyEncapsulated = 2;
   bool inMapFrame = 3;
-  repeated TimeInterval timeintervals = 4;
+  TimeInterval timeinterval = 4;
   repeated LabelCategory labelCategory = 5;
   bool mustHaveAllLabels = 6;
   repeated string projectuuid = 7;

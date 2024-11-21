@@ -84,7 +84,7 @@ PbMetaOperations::GetProjects(grpc::ServerContext* context,
   {
     auto projectInfos = seerepCore->getProjects();
 
-    for (auto&& projectInfo : projectInfos)
+    for (auto projectInfo : projectInfos)
     {
       auto responseProjectInfo = response->add_projects();
       responseProjectInfo->set_name(projectInfo.name);

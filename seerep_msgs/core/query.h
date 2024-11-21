@@ -25,8 +25,7 @@ struct Query
                            // polygon defined above
   bool inMapFrame;  // if false the query polygon is in geodetic coordinates,
                     // otherwise in map frame
-  std::optional<std::vector<Timeinterval>>
-      timeintervals;  ///< only do temporal query if set
+  std::optional<Timeinterval> timeinterval;  ///< only do temporal query if set
   std::optional<std::unordered_map<std::string, std::vector<std::string>>>
       label;  ///< only do semantic query if set
   std::optional<SparqlQuery>

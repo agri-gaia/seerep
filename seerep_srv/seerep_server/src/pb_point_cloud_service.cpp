@@ -14,15 +14,12 @@ grpc::Status PbPointCloudService::GetPointCloud2(
 {
   (void)context;  // ignore that variable without causing warnings
   // print time bound to debug log
-  for (auto&& timeinterval : request->timeintervals())
-  {
-    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
-        << "sending point cloud in time interval ("
-        << timeinterval.time_min().seconds() << "/"
-        << timeinterval.time_max().seconds() << ")";
-  }
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
+      << "sending point cloud in time interval ("
+      << request->timeinterval().time_min().seconds() << "/"
+      << request->timeinterval().time_max().seconds() << ")";
   // print polygon vertices to debug log
-  for (auto&& point : request->polygon().vertices())
+  for (auto point : request->polygon().vertices())
   {
     BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
         << "bounding box vertex (" << point.x() << ", " << point.y() << ") /";

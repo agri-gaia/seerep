@@ -143,7 +143,7 @@ CoreDataset::getData(const seerep_core_msgs::Query& query)
     }
   }
 
-  if (!query.polygon && !query.polygonSensorPos && !query.timeintervals &&
+  if (!query.polygon && !query.polygonSensorPos && !query.timeinterval &&
       !query.label && !query.instances && !query.dataUuids)
   {
     return getAllDatasetUuids(datatypeSpecifics, query.sortByTime);
@@ -335,24 +335,21 @@ std::optional<std::vector<seerep_core_msgs::AabbTimeIdPair>>
 CoreDataset::queryTemporal(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
                            const seerep_core_msgs::Query& query)
 {
-  if (query.timeintervals)
+  if (query.timeinterval)
   {
     std::optional<std::vector<seerep_core_msgs::AabbTimeIdPair>> timetree_result =
         std::vector<seerep_core_msgs::AabbTimeIdPair>();
-    for (auto timeinterval : query.timeintervals.value())
-    {
-      seerep_core_msgs::AabbTime aabbtime(
-          seerep_core_msgs::TimePoint(((int64_t)timeinterval.timeMin.seconds)
-                                          << 32 |
-                                      ((uint64_t)timeinterval.timeMin.nanos)),
-          seerep_core_msgs::TimePoint(((int64_t)timeinterval.timeMax.seconds)
-                                          << 32 |
-                                      ((uint64_t)timeinterval.timeMax.nanos)));
+    seerep_core_msgs::AabbTime aabbtime(
+        seerep_core_msgs::TimePoint(
+            ((int64_t)query.timeinterval.value().timeMin.seconds) << 32 |
+            ((uint64_t)query.timeinterval.value().timeMin.nanos)),
+        seerep_core_msgs::TimePoint(
+            ((int64_t)query.timeinterval.value().timeMax.seconds) << 32 |
+            ((uint64_t)query.timeinterval.value().timeMax.nanos)));
 
-      datatypeSpecifics->timetree.query(
-          boost::geometry::index::intersects(aabbtime),
-          std::back_inserter(timetree_result.value()));
-    }
+    datatypeSpecifics->timetree.query(
+        boost::geometry::index::intersects(aabbtime),
+        std::back_inserter(timetree_result.value()));
     return timetree_result;
   }
   else
