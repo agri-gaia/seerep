@@ -1095,7 +1095,11 @@ def createTransform(builder: Builder, t: int, quat: int) -> int:
 
 
 def createTransformStamped(
-    builder: Builder, childFrame: str, headerTf: int, transform: int
+    builder: Builder,
+    childFrame: str,
+    headerTf: int,
+    transform: int,
+    isStatic=False,
 ) -> int:
     """
     Create a stamped transform in flatbuffers.
@@ -1105,6 +1109,7 @@ def createTransformStamped(
         childFrame: The child frame of the transform
         headerTf: The pointer to the flatbuffers header of the transform
         transform: The pointer to the flatbuffers transform
+        isStatic: Flag if it is a static tf
 
     Returns:
         A pointer to the constructed stamped transform object
@@ -1114,6 +1119,7 @@ def createTransformStamped(
     TransformStamped.AddChildFrameId(builder, childFrame)
     TransformStamped.AddHeader(builder, headerTf)
     TransformStamped.AddTransform(builder, transform)
+    TransformStamped.AddIsStatic(builder, isStatic)
     return TransformStamped.End(builder)
 
 
