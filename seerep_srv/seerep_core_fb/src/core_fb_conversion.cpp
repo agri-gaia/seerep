@@ -37,7 +37,7 @@ CoreFbConversion::fromFb(const seerep::fb::Query* query,
   seerep_core_msgs::Query queryCore;
   queryCore.header.datatype = datatype;
 
-  fromFbQueryTime(query, queryCore.timeinterval);
+  fromFbQueryTime(query, queryCore.timeintervals);
   fromFbQueryLabel(query, queryCore.label);
   queryCore.sparqlQuery = fromFbSparqlQuery(query);
   queryCore.ontologyURI = fromFbOntologyURI(query);
@@ -520,19 +520,21 @@ void CoreFbConversion::fromFbQueryLabel(
 
 void CoreFbConversion::fromFbQueryTime(
     const seerep::fb::Query* query,
-    std::optional<seerep_core_msgs::Timeinterval>& queryCoreTime)
+    std::optional<std::vector<seerep_core_msgs::Timeinterval>>& queryCoreTimes)
 {
-  if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_TIMEINTERVAL))
+  if (flatbuffers::IsFieldPresent(query, seerep::fb::Query::VT_TIMEINTERVALS))
   {
-    queryCoreTime = seerep_core_msgs::Timeinterval();
-    queryCoreTime.value().timeMin.seconds =
-        query->timeinterval()->time_min()->seconds();
-    queryCoreTime.value().timeMax.seconds =
-        query->timeinterval()->time_max()->seconds();
-    queryCoreTime.value().timeMin.nanos =
-        query->timeinterval()->time_min()->nanos();
-    queryCoreTime.value().timeMax.nanos =
-        query->timeinterval()->time_max()->nanos();
+    queryCoreTimes = std::vector<seerep_core_msgs::Timeinterval>();
+    for (auto&& timeinterval : *query->timeintervals())
+    {
+      seerep_core_msgs::Timeinterval queryCoreTime =
+          seerep_core_msgs::Timeinterval();
+      queryCoreTime.timeMin.seconds = timeinterval->time_min()->seconds();
+      queryCoreTime.timeMax.seconds = timeinterval->time_max()->seconds();
+      queryCoreTime.timeMin.nanos = timeinterval->time_min()->nanos();
+      queryCoreTime.timeMax.nanos = timeinterval->time_max()->nanos();
+      queryCoreTimes.value().push_back(queryCoreTime);
+    }
   }
 }
 

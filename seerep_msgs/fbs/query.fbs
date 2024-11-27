@@ -10,7 +10,7 @@ table Query {
   polygonSensorPosition:Polygon2D;
   fullyEncapsulated:bool;
   inMapFrame:bool;
-  timeinterval:TimeInterval;
+  timeintervals:[TimeInterval];
   label:[LabelCategory];
   sparqlQuery:SparqlQuery;
   ontologyURI:string;

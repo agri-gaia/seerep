@@ -324,17 +324,23 @@ void CorePbConversion::fromPbLabel(const seerep::pb::Query& query,
 void CorePbConversion::fromPbTime(const seerep::pb::Query& query,
                                   seerep_core_msgs::Query& queryCore)
 {
-  if (query.timeinterval().has_time_min() && query.timeinterval().has_time_max())
+  if (query.timeintervals_size() > 0)
   {
-    queryCore.timeinterval = seerep_core_msgs::Timeinterval();
-    queryCore.timeinterval.value().timeMin.seconds =
-        query.timeinterval().time_min().seconds();
-    queryCore.timeinterval.value().timeMax.seconds =
-        query.timeinterval().time_max().seconds();
-    queryCore.timeinterval.value().timeMin.nanos =
-        query.timeinterval().time_min().nanos();
-    queryCore.timeinterval.value().timeMax.nanos =
-        query.timeinterval().time_max().nanos();
+    queryCore.timeintervals = std::vector<seerep_core_msgs::Timeinterval>();
+    for (auto&& timeinterval : query.timeintervals())
+    {
+      if (timeinterval.has_time_min() && timeinterval.has_time_max())
+      {
+        seerep_core_msgs::Timeinterval queryCoreTime =
+            seerep_core_msgs::Timeinterval();
+        queryCoreTime.timeMin.seconds = timeinterval.time_min().seconds();
+        queryCoreTime.timeMax.seconds = timeinterval.time_max().seconds();
+        queryCoreTime.timeMin.nanos = timeinterval.time_min().nanos();
+        queryCoreTime.timeMax.nanos = timeinterval.time_max().nanos();
+
+        queryCore.timeintervals.value().push_back(queryCoreTime);
+      }
+    }
   }
 }
 
