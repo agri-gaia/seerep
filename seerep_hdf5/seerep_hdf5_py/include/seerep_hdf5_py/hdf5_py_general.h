@@ -41,7 +41,7 @@ public:
   void createProject(const std::string& projectName,
                      const std::string& rootFrameId);
 
-  void setProjectGeolocation(const std::string& coordinateSystem,
+  void setProjectGeolocation(const std::string& crsString,
                              const std::string& ellipsoid, double latitude,
                              double longitude, double altitude);
 
@@ -129,7 +129,7 @@ public:
   //  Project
   // #########
 
-  void setProjectGeolocation(const std::string& coordinateSystem,
+  void setProjectGeolocation(const std::string& crsString,
                              const std::string& ellipsoid, double latitude,
                              double longitude, double altitude);
 

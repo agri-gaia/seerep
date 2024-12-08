@@ -1,6 +1,9 @@
 #ifndef SEEREP_CORE_CORE_PROJECT_H_
 #define SEEREP_CORE_CORE_PROJECT_H_
 
+// miscellaneous
+#include <proj.h>
+
 #include <boost/uuid/uuid.hpp>             // uuid class
 #include <boost/uuid/uuid_generators.hpp>  // generators
 #include <boost/uuid/uuid_io.hpp>          // streaming operators etc.
@@ -8,7 +11,7 @@
 #include <optional>
 
 // seerep-msgs
-#include <proj.h>
+#include <seerep_msgs/aabb.h>
 #include <seerep_msgs/camera_intrinsics.h>
 #include <seerep_msgs/dataset_indexable.h>
 #include <seerep_msgs/geodetic_coordinates.h>
@@ -88,13 +91,19 @@ public:
   const std::string getVersion();
 
   /**
-   * @brief transfrom provided polygon to map frame from geodetic coords
+   * @brief Transfrom provided polygon to map frame from geodetic coords
    *
-   * @param p polygon
-   * @return seerep_core_msgs::Polygon2D polygon
+   * First the polygon is transformed to the projects frame and then to the
+   * topocentric coordinates of the map frame. The
+   * coordinates of the Spatial Reference System Identifier
+   * for the project must be latitude first and longitude second.
+   *
+   * @param p the polygon to transform
+   * @return the transformed polygon
    */
   seerep_core_msgs::Polygon2D
-  transformToMapFrame(const seerep_core_msgs::Polygon2D polygon);
+  transformToMapFrame(const seerep_core_msgs::Polygon2D& polygon,
+                      const std::string& query_crs);
 
   /**
    * @brief Returns a vector of UUIDs of datasets that match the query and the
@@ -111,7 +120,7 @@ public:
    * @return vector of UUIDs of instances matching the query and the project UUID
    */
   seerep_core_msgs::QueryResultProject
-  getInstances(const seerep_core_msgs::Query& query);
+  getInstances(seerep_core_msgs::Query& query);
 
   /**
    * @brief Returns the geodetic coordinates of this project
@@ -252,6 +261,15 @@ private:
    * HDF5 file into the indices
    */
   void recreateDatatypes();
+
+  /**
+   * @brief transform a point in-place utilizing proj's c lib transformations
+   *
+   * @param p the 3D point to apply the transform on
+   * @param proj_tf_rawptr the raw pointer to the PJ object describing the
+   *  transformation
+   */
+  void transformPointFwd(seerep_core_msgs::Point& p, PJ* proj_tf_rawptr);
 
   /** @brief the UUID of this project */
   boost::uuids::uuid m_uuid;

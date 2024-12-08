@@ -82,6 +82,7 @@ nav:
     - Overview: 'tutorials/overview.md'
     - Creating & retrieving projects: 'tutorials/projects.md'
     - Sending & Querying Images: 'tutorials/images.md'
+    - Projects & Queries in other spatial reference systems: 'tutorials/geodetic-projects-and-queries.md'
     - Writing Python Tests: 'tutorials/writing-python-tests.md'
     - Writing Python Examples: 'tutorials/writing-python-examples.md'
 

@@ -13,15 +13,14 @@ void Hdf5FileWrapper::createProject(const std::string& projectName,
   io.writeProjectFrameId(rootFrameId);
 }
 
-void Hdf5FileWrapper::setProjectGeolocation(const std::string& coordinateSystem,
+void Hdf5FileWrapper::setProjectGeolocation(const std::string& crsString,
                                             const std::string& ellipsoid,
                                             double latitude, double longitude,
                                             double altitude)
 {
   Hdf5PyGeneral io(*this);
 
-  io.setProjectGeolocation(coordinateSystem, ellipsoid, latitude, longitude,
-                           altitude);
+  io.setProjectGeolocation(crsString, ellipsoid, latitude, longitude, altitude);
 }
 
 Hdf5PyGeneral::Hdf5PyGeneral(Hdf5FileWrapper& hdf5File)
@@ -29,15 +28,14 @@ Hdf5PyGeneral::Hdf5PyGeneral(Hdf5FileWrapper& hdf5File)
 {
 }
 
-void Hdf5PyGeneral::setProjectGeolocation(const std::string& coordinateSystem,
+void Hdf5PyGeneral::setProjectGeolocation(const std::string& crsString,
                                           const std::string& ellipsoid,
                                           double latitude, double longitude,
                                           double altitude)
 {
   const std::scoped_lock lock(*m_write_mtx);
 
-  writeAttributeToHdf5(*m_file, GEODETICLOCATION_COORDINATESYSTEM,
-                       coordinateSystem);
+  writeAttributeToHdf5(*m_file, GEODETICLOCATION_CRSSTRING, crsString);
   writeAttributeToHdf5(*m_file, GEODETICLOCATION_ELLIPSOID, ellipsoid);
   writeAttributeToHdf5(*m_file, GEODETICLOCATION_LATITUDE, latitude);
   writeAttributeToHdf5(*m_file, GEODETICLOCATION_LONGITUDE, longitude);

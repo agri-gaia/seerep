@@ -9,6 +9,7 @@ ENV FLATBUFFER_VER="2.0.0"
 ENV GRPC_VER="1.35.0"
 ENV PB_REL="https://github.com/protocolbuffers/protobuf/releases"
 ENV PB_VER="21.12"
+ENV PROJ_VER="9.4.0"
 ENV GTEST_VER="1.12.0"
 ENV DOX_REL="https://github.com/doxygen/doxygen/archive/refs/tags"
 ENV DOX_VER="Release_1_9_3"
@@ -16,9 +17,17 @@ ENV CCACHE_VER="4.9.1"
 ENV HADOLINT_VER="2.12.0"
 ENV PIP3_VER="24.1.2"
 
+# make custom installed libraries available to the system
+ENV LD_LIBRARY_PATH="${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}/usr/local/lib"
+
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-#Install general required tools
+# Install general required tools
+
+# PROJ deps:
+ # - curl
+ # - libtiff5-dev
+ # - sqlite3
 RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         software-properties-common \
         bash-completion \
@@ -37,7 +46,6 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         vim \
         build-essential \
         pkg-config \
-        libproj-dev \
         python3-catkin-tools \
         python3-osrf-pycommon \
         ros-noetic-vision-msgs \
@@ -47,6 +55,8 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         bison \
         libjsoncpp-dev \
         libcurl4-openssl-dev \
+        sqlite3 \
+        libtiff5-dev \
         && rm -rf /var/lib/apt/lists/*
 
 
@@ -160,6 +170,20 @@ RUN wget --progress=dot:giga $PB_REL/download/v$PB_VER/protobuf-cpp-3.$PB_VER.zi
         && make install \
         && cd ../.. \
         && rm -rf protobuf-cpp-3.$PB_VER.zip protobuf-3.$PB_VER
+
+####################################################
+#Install PROJ
+####################################################
+RUN wget --progress=dot:giga https://download.osgeo.org/proj/proj-${PROJ_VER}.tar.gz \
+        && tar -xf proj-${PROJ_VER}.tar.gz \
+        && cd proj-${PROJ_VER} \
+        && mkdir build \
+        && cd build \
+        && cmake .. \
+        && cmake --build . \
+        && cmake --build . --target install \
+        && cd ../.. \
+        && rm -r proj-${PROJ_VER}.tar.gz proj-${PROJ_VER}
 
 ####################################################
 #Install GoogleTest

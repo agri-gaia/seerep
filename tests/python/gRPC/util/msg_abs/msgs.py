@@ -4,7 +4,7 @@
 # If any line changes on this file occur, those files may have to be updated as
 # well
 from enum import auto
-from typing import Dict, List
+from typing import Dict, List, Union
 
 from flatbuffers import Builder
 from grpc import Channel
@@ -28,7 +28,7 @@ class EnumFbQuery(FrozenEnum):
     POLYGON = auto()  # def: None
     POLYGONSENSORPOSITION = auto()  # def: None
     FULLY_ENCAPSULATED = auto()  # def: False
-    IN_MAP_FRAME = auto()  # def: True
+    CRS_STRING = auto()  # def: True
     TIMEINTERVAL = auto()  # def: None
     LABEL = auto()  # def: None
     SPARQL_QUERY = auto()  # def: None
@@ -61,8 +61,8 @@ class FbQuery(MsgsFb[Query.Query]):
             EnumFbQuery.FULLY_ENCAPSULATED: MsgsFunctions(
                 lambda: False, lambda: True
             ),
-            EnumFbQuery.IN_MAP_FRAME: MsgsFunctions(
-                lambda: True, lambda: False
+            EnumFbQuery.CRS_STRING: MsgsFunctions(
+                lambda: "map", lambda: "project"
             ),
             EnumFbQuery.TIMEINTERVAL: MsgsFunctions(
                 lambda: None, lambda: Dtypes.Fb.time_interval(self.builder)
@@ -119,7 +119,7 @@ class FbQuery(MsgsFb[Query.Query]):
             EnumFbQuery.POLYGONSENSORPOSITION
         )
         fully_encapsulated = self.get_component(EnumFbQuery.FULLY_ENCAPSULATED)
-        in_map_frame = self.get_component(EnumFbQuery.IN_MAP_FRAME)
+        crs_string = self.get_component(EnumFbQuery.CRS_STRING)
         timeinterval = self.get_component(EnumFbQuery.TIMEINTERVAL)
         label = self.get_component(EnumFbQuery.LABEL)
         must_have_all_labels = self.get_component(
@@ -143,7 +143,7 @@ class FbQuery(MsgsFb[Query.Query]):
             polygon2d=polygon,
             polygon2dSensorPos=polygon_sensor_position,
             fullyEncapsulated=fully_encapsulated,
-            inMapFrame=in_map_frame,
+            crsString=crs_string,
             sortByTime=sort_by_time,
         )
 
@@ -162,20 +162,17 @@ class FbQueryInstance(MsgsFb[QueryInstance.QueryInstance]):
         }
 
     def query(self):
-        features = {
-            EnumFbQuery.WITHOUTDATA,
-            EnumFbQuery.IN_MAP_FRAME,
-            EnumFbQuery.PROJECTUUID,
-        }
+        features = {EnumFbQuery.WITHOUTDATA, EnumFbQuery.PROJECTUUID}
         return FbQuery(self.channel, self.builder, features).datatype_instance
 
     def _assemble_datatype_instance(self):
         datatype = self.get_component(EnumFbQueryInstance.DATATYPE)
         query = self.get_component(EnumFbQueryInstance.QUERY)
 
-        return fbh.createQueryInstance(
-            self.builder, datatype=datatype, query=query
-        )
+        QueryInstance.Start(self.builder)
+        QueryInstance.AddDatatype(self.builder, datatype)
+        QueryInstance.AddQuery(self.builder, query)
+        return QueryInstance.End(self.builder)
 
 
 class DatatypeImplementations:
@@ -204,7 +201,7 @@ class DatatypeImplementations:
                 quad_extent: The quad_extent on which the other three points
                     are placed
 
-            Returns: The created Polygon2D type type
+            Returns: The created Polygon2D type
             """
             polygon_vertices = []
             polygon_vertices.append(fbh.createPoint2d(builder, 0, 0))
@@ -214,6 +211,34 @@ class DatatypeImplementations:
             )
             polygon_vertices.append(fbh.createPoint2d(builder, quad_extent, 0))
             return fbh.createPolygon2D(builder, height, -100, polygon_vertices)
+
+        @classmethod
+        def polgon_epsg3857(cls, builder: Builder) -> Polygon2D.Polygon2D:
+            """
+            Creates a default example polygon to transform from epsg3857
+            (web mercator) to epsg4326 (gps) in the area of Gut Arenshorst.
+
+            Args:
+                builder (Builder): The flatbuffers builder
+
+            Returns: The created polygon2D type
+            """
+            X = 921689.630348
+            Y = 6865153.476919
+            height = 100
+            extent = 655
+            z = 0
+            # the polygon query should be on Gut Arenshorst in the
+            # area around Osnabrueck
+            # points are expected to be (E, N)
+            polygon_vertices = []
+            polygon_vertices.append(fbh.createPoint2d(builder, X, Y))
+            polygon_vertices.append(fbh.createPoint2d(builder, X + extent, Y))
+            polygon_vertices.append(
+                fbh.createPoint2d(builder, X + extent, Y + extent)
+            )
+            polygon_vertices.append(fbh.createPoint2d(builder, X, Y + extent))
+            return fbh.createPolygon2D(builder, height, z, polygon_vertices)
 
         @classmethod
         def time_interval(cls, builder: Builder) -> TimeInterval.TimeInterval:
@@ -252,8 +277,13 @@ class DatatypeImplementations:
             return None
 
         @classmethod
-        def projectuuid(cls, builder: Builder, channel: Channel) -> List[str]:
-            return [fbh.getProject(builder, channel, "testproject")]
+        def projectuuid(
+            cls, builder: Builder, channel: Channel
+        ) -> Union[List[str], None]:
+            project = fbh.getProject(builder, channel, "testproject")
+            if project is None:
+                return None
+            return [project]
 
         @classmethod
         # returns list of flatbuffered string, those are registered as ints

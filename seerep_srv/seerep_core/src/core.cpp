@@ -53,8 +53,7 @@ seerep_core_msgs::QueryResult Core::getDataset(seerep_core_msgs::Query& query)
   }
 }
 
-seerep_core_msgs::QueryResult
-Core::getInstances(const seerep_core_msgs::Query& query)
+seerep_core_msgs::QueryResult Core::getInstances(seerep_core_msgs::Query& query)
 {
   seerep_core_msgs::QueryResult result;
 

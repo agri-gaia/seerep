@@ -118,7 +118,7 @@ def query_pcs_raw(
         # withoutData=True,
         # polygon2d=query_polygon,
         # fullyEncapsulated=True
-        inMapFrame=False,
+        # crsString="project",
     )
 
     fb_builder.Finish(query)

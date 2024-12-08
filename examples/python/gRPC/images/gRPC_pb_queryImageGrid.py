@@ -50,7 +50,8 @@ def query_image_grid(
     theQuery.polygon.z = -1
     theQuery.polygon.height = 7
 
-    theQuery.inMapFrame = True
+    # also means the query is done in the map
+    theQuery.crsString = "map"
     theQuery.fullyEncapsulated = False
 
     # labels

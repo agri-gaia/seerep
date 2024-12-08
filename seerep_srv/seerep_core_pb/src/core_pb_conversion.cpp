@@ -20,7 +20,7 @@ CorePbConversion::fromPb(const seerep::pb::Query& query,
   fromPbWithOutData(query, queryCore);
   fromFbQueryMaxNumData(query, queryCore);
   fromPbFullyEncapsulated(query, queryCore);
-  fromPbInMapFrame(query, queryCore);
+  fromPbCrsString(query, queryCore);
   queryCore.sortByTime = query.sortbytime();
 
   return queryCore;
@@ -372,10 +372,10 @@ void CorePbConversion::fromPbMustHaveAllLabels(
   queryCore.mustHaveAllLabels = query.musthavealllabels();
 }
 
-void CorePbConversion::fromPbInMapFrame(const seerep::pb::Query& query,
-                                        seerep_core_msgs::Query& queryCore)
+void CorePbConversion::fromPbCrsString(const seerep::pb::Query& query,
+                                       seerep_core_msgs::Query& queryCore)
 {
-  queryCore.inMapFrame = query.inmapframe();
+  queryCore.crsString = query.crsstring();
 }
 
 void CorePbConversion::fromPbFullyEncapsulated(

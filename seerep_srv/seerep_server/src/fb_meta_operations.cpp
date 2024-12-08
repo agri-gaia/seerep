@@ -26,8 +26,8 @@ grpc::Status FbMetaOperations::CreateProject(
 
   // extracting geodetic coordinates attribute information from flatbuffer and
   // saving in seerep core msg struct
-  projectInfo.geodetCoords.coordinateSystem =
-      requestMsg->geodetic_position()->coordinateSystem()->str();
+  projectInfo.geodetCoords.crsString =
+      requestMsg->geodetic_position()->crsString()->str();
   projectInfo.geodetCoords.longitude =
       requestMsg->geodetic_position()->longitude();
   projectInfo.geodetCoords.latitude =
@@ -43,7 +43,7 @@ grpc::Status FbMetaOperations::CreateProject(
       builder.CreateString(boost::lexical_cast<std::string>(projectInfo.uuid));
   auto frameIdOffset = builder.CreateString(projectInfo.frameId);
   auto geodeticPositionOffset = seerep::fb::CreateGeodeticCoordinates(
-      builder, builder.CreateString(projectInfo.geodetCoords.coordinateSystem),
+      builder, builder.CreateString(projectInfo.geodetCoords.crsString),
       projectInfo.geodetCoords.longitude, projectInfo.geodetCoords.latitude,
       projectInfo.geodetCoords.altitude);
   auto versionOffset = builder.CreateString(projectInfo.version);
