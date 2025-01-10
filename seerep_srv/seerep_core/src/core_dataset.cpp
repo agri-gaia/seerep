@@ -377,13 +377,11 @@ CoreDataset::querySemantic(std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
   return std::nullopt;
 }
 
-std::optional<std::set<boost::uuids::uuid>>
-CoreDataset::querySemanticWithAnyOfLabels(
+std::set<boost::uuids::uuid> CoreDataset::querySemanticWithAnyOfLabels(
     std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
     const seerep_core_msgs::Query& query)
 {
-  std::optional<std::set<boost::uuids::uuid>> result =
-      std::set<boost::uuids::uuid>();
+  std::set<boost::uuids::uuid> result = std::set<boost::uuids::uuid>();
   // find the queried label in the label-imageID-map
   for (auto categorylabelquery : query.label.value())
   {
@@ -400,7 +398,7 @@ CoreDataset::querySemanticWithAnyOfLabels(
           // add all imageIDs to result set
           for (boost::uuids::uuid id : labelPtr->second)
           {
-            result.value().insert(id);
+            result.insert(id);
           }
         }
       }
@@ -409,12 +407,12 @@ CoreDataset::querySemanticWithAnyOfLabels(
   return result;
 }
 
-std::optional<std::set<boost::uuids::uuid>>
-CoreDataset::querySemanticWithAllTheLabels(
+std::set<boost::uuids::uuid> CoreDataset::querySemanticWithAllTheLabels(
     std::shared_ptr<DatatypeSpecifics> datatypeSpecifics,
     const seerep_core_msgs::Query& query)
 {
-  std::set<boost::uuids::uuid> result;
+  std::set<boost::uuids::uuid> result = std::set<boost::uuids::uuid>();
+  ;
   bool firstLabel = true;
   // find the queried label in the label-imageID-map
   for (auto categorylabelquery : query.label.value())
@@ -453,17 +451,17 @@ CoreDataset::querySemanticWithAllTheLabels(
         }
         else
         {
-          return std::nullopt;
+          return std::set<boost::uuids::uuid>();
         }
         firstLabel = false;
         if (result.empty())
         {
-          return std::nullopt;
+          return std::set<boost::uuids::uuid>();
         }
       }
       else
       {
-        return std::nullopt;
+        return std::set<boost::uuids::uuid>();
       }
     }
   }
