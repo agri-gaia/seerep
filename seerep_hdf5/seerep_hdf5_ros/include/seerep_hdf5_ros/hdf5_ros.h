@@ -10,12 +10,14 @@
 
 #include "geometry_msgs/TransformStamped.h"
 #include "seerep_hdf5_core/hdf5_core_general.h"
+#include "seerep_hdf5_core/hdf5_core_point_cloud.h"
 #include "seerep_hdf5_core/hdf5_core_tf.h"
 #include "sensor_msgs/CameraInfo.h"
 #include "sensor_msgs/CompressedImage.h"
 #include "sensor_msgs/Image.h"
 #include "sensor_msgs/PointCloud2.h"
 #include "sensor_msgs/RegionOfInterest.h"
+#include "sensor_msgs/point_cloud2_iterator.h"
 #include "std_msgs/Header.h"
 #include "tf2_msgs/TFMessage.h"
 
@@ -110,6 +112,14 @@ private:
    */
   void dump(const std::string& cameraInfoPath,
             const sensor_msgs::RegionOfInterest& roi);
+
+  /**
+   * @brief Compute BoundingBox of whole pointcloud.
+   *
+   * @param pcl pointcloud2 msg to analyze.
+   */
+  std::pair<seerep_core_msgs::Point, seerep_core_msgs::Point>
+  computeBoundingBox(const sensor_msgs::PointCloud2& pcl);
 };
 
 }  // namespace seerep_hdf5_ros
