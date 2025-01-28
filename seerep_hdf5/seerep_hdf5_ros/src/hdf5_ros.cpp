@@ -154,20 +154,35 @@ void Hdf5Ros::dump(const sensor_msgs::PointCloud2& pcl)
   }
 
   dump(path, pcl.header);
-  hdf5Core_->writeAttributeToHdf5<uint32_t>(group, "height", pcl.height);
-  hdf5Core_->writeAttributeToHdf5<uint32_t>(group, "width", pcl.width);
-  hdf5Core_->writeAttributeToHdf5<bool>(group, "is_bigendian", pcl.is_bigendian);
-  hdf5Core_->writeAttributeToHdf5<uint32_t>(group, "point_step", pcl.point_step);
-  hdf5Core_->writeAttributeToHdf5<uint32_t>(group, "row_step", pcl.row_step);
-  hdf5Core_->writeAttributeToHdf5<bool>(group, "is_dense", pcl.is_dense);
-  hdf5Core_->writeAttributeToHdf5<std::vector<std::string>>(group, "fields",
-                                                            names);
-  hdf5Core_->writeAttributeToHdf5<std::vector<uint32_t>>(group, "offsets",
-                                                         offsets);
-  hdf5Core_->writeAttributeToHdf5<std::vector<uint32_t>>(group, "counts",
-                                                         counts);
-  hdf5Core_->writeAttributeToHdf5<std::vector<uint8_t>>(group, "types", types);
-  hdf5Core_->getHdf5DataSet<uint8_t>(path + "/rawdata", dataspace)
+  hdf5Core_->writeAttributeToHdf5<uint32_t>(
+      group, seerep_hdf5_core::Hdf5CorePointCloud::HEIGHT, pcl.height);
+  hdf5Core_->writeAttributeToHdf5<uint32_t>(
+      group, seerep_hdf5_core::Hdf5CorePointCloud::WIDTH, pcl.width);
+  hdf5Core_->writeAttributeToHdf5<bool>(
+      group, seerep_hdf5_core::Hdf5CorePointCloud::IS_BIGENDIAN,
+      pcl.is_bigendian);
+  hdf5Core_->writeAttributeToHdf5<uint32_t>(
+      group, seerep_hdf5_core::Hdf5CorePointCloud::POINT_STEP, pcl.point_step);
+  hdf5Core_->writeAttributeToHdf5<uint32_t>(
+      group, seerep_hdf5_core::Hdf5CorePointCloud::ROW_STEP, pcl.row_step);
+  hdf5Core_->writeAttributeToHdf5<bool>(
+      group, seerep_hdf5_core::Hdf5CorePointCloud::IS_DENSE, pcl.is_dense);
+  hdf5Core_->writeAttributeToHdf5<std::vector<std::string>>(
+      group, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_NAME, names);
+  hdf5Core_->writeAttributeToHdf5<std::vector<uint32_t>>(
+      group, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_OFFSET, offsets);
+  hdf5Core_->writeAttributeToHdf5<std::vector<uint32_t>>(
+      group, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_COUNT, counts);
+  hdf5Core_->writeAttributeToHdf5<std::vector<uint8_t>>(
+      group, seerep_hdf5_core::Hdf5CorePointCloud::FIELD_DATATYPE, types);
+  auto [min_corner, max_corner] = computeBoundingBox(pcl);
+  std::vector<float> bb{ min_corner.get<0>(), min_corner.get<1>(),
+                         min_corner.get<2>(), max_corner.get<0>(),
+                         max_corner.get<1>(), max_corner.get<2>() };
+  hdf5Core_->writeAttributeToHdf5<std::vector<float>>(
+      group, seerep_hdf5_core::Hdf5CorePointCloud::BOUNDINGBOX, bb);
+
+  hdf5Core_->getHdf5DataSet<uint8_t>(path + "/points", dataspace)
       ->write(std::move(pcl.data.data()));
 }
 
@@ -212,6 +227,33 @@ void Hdf5Ros::dump(const tf2_msgs::TFMessage& tf2_msg)
     hdf5Core_->writeAttributeToHdf5<uint64_t>(
         *group, seerep_hdf5_core::Hdf5CoreTf::SIZE, size + 1);
   }
+}
+
+std::pair<seerep_core_msgs::Point, seerep_core_msgs::Point>
+Hdf5Ros::computeBoundingBox(const sensor_msgs::PointCloud2& pcl)
+{
+  seerep_core_msgs::Point min_corner = { std::numeric_limits<float>::max(),
+                                         std::numeric_limits<float>::max(),
+                                         std::numeric_limits<float>::max() };
+  seerep_core_msgs::Point max_corner = { std::numeric_limits<float>::lowest(),
+                                         std::numeric_limits<float>::lowest(),
+                                         std::numeric_limits<float>::lowest() };
+
+  sensor_msgs::PointCloud2ConstIterator<float> iter_x(pcl, "x");
+  sensor_msgs::PointCloud2ConstIterator<float> iter_y(pcl, "y");
+  sensor_msgs::PointCloud2ConstIterator<float> iter_z(pcl, "z");
+
+  for (; iter_x != iter_x.end(); ++iter_x, ++iter_y, ++iter_z)
+  {
+    min_corner.set<0>(std::min(min_corner.get<0>(), *iter_x));
+    min_corner.set<1>(std::min(min_corner.get<1>(), *iter_y));
+    min_corner.set<2>(std::min(min_corner.get<2>(), *iter_z));
+
+    max_corner.set<0>(std::max(max_corner.get<0>(), *iter_x));
+    max_corner.set<1>(std::max(max_corner.get<1>(), *iter_y));
+    max_corner.set<2>(std::max(max_corner.get<2>(), *iter_z));
+  }
+  return std::make_pair(min_corner, max_corner);
 }
 
 }  // namespace seerep_hdf5_ros
