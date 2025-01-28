@@ -249,21 +249,29 @@ def test_gRPC_getInstanceQueryTimeinterval(grpc_channel, project_setup):
     min_time_ = cur_time - time_offset
     max_time_ = cur_time + time_offset
 
-    query_builder = FbQuery(grpc_channel, enum_types={EnumFbQuery.TIMEINTERVAL})
+    query_builder = FbQuery(
+        grpc_channel, enum_types={EnumFbQuery.TIMEINTERVALVECTOR}
+    )
     queryinst_builder = FbQueryInstance(
         grpc_channel, enum_types={EnumFbQueryInstance.QUERY}
     )
 
     # test for time interval
-    min_timestamp = fbh.createTimeStamp(queryinst_builder.builder, min_time_, 0)
-    max_timestamp = fbh.createTimeStamp(queryinst_builder.builder, max_time_, 0)
+    min_timestamp = []
+    max_timestamp = []
+    min_timestamp.append(
+        fbh.createTimeStamp(queryinst_builder.builder, min_time_, 0)
+    )
+    max_timestamp.append(
+        fbh.createTimeStamp(queryinst_builder.builder, max_time_, 0)
+    )
 
-    img_time_interval = fbh.createTimeInterval(
+    img_time_interval = fbh.createTimeIntervalVector(
         queryinst_builder.builder, min_timestamp, max_timestamp
     )
 
     query_builder.set_active_function(
-        EnumFbQuery.TIMEINTERVAL, lambda: img_time_interval
+        EnumFbQuery.TIMEINTERVALVECTOR, lambda: img_time_interval
     )
 
     queryinst_builder.set_active_function(
@@ -283,15 +291,22 @@ def test_gRPC_getInstanceQueryTimeinterval(grpc_channel, project_setup):
     min_time_ = cur_time - 2 * time_offset
     max_time_ = cur_time - time_offset
 
-    min_timestamp = fbh.createTimeStamp(queryinst_builder.builder, min_time_, 0)
-    max_timestamp = fbh.createTimeStamp(queryinst_builder.builder, max_time_, 0)
+    min_timestamp = []
+    max_timestamp = []
 
-    img_time_interval = fbh.createTimeInterval(
+    min_timestamp.append(
+        fbh.createTimeStamp(queryinst_builder.builder, min_time_, 0)
+    )
+    max_timestamp.append(
+        fbh.createTimeStamp(queryinst_builder.builder, max_time_, 0)
+    )
+
+    img_time_interval = fbh.createTimeIntervalVector(
         queryinst_builder.builder, min_timestamp, max_timestamp
     )
 
     query_builder.set_active_function(
-        EnumFbQuery.TIMEINTERVAL, lambda: img_time_interval
+        EnumFbQuery.TIMEINTERVALVECTOR, lambda: img_time_interval
     )
 
     query_builder.assemble_datatype_instance()
