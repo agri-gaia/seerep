@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# NOTE: This file is referenced in the following mkdocs files:
+#   geodetic-projects-and-queries.md
+# Any changes done in here will be reflected in there
 import flatbuffers
 from grpc import Channel
 from seerep.fb import ProjectInfo
@@ -11,6 +14,8 @@ def create_geo_proj_raw(
 ) -> bytearray:
     builder = flatbuffers.Builder(1024)
 
+    # in the area around Gut Arenshorst
+    # lat and long in decimal degree
     response = createProjectRaw(
         grpc_channel,
         builder,
@@ -18,8 +23,8 @@ def create_geo_proj_raw(
         "2",
         "EPSG::4326",
         4,
-        6,
-        7,
+        52.35_81_99,
+        8.27_96_79,
     )
 
     return response

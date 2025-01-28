@@ -9,7 +9,7 @@ table Query {
   polygon:Polygon2D;
   polygonSensorPosition:Polygon2D;
   fullyEncapsulated:bool;
-  inMapFrame:bool;
+  crsString:string;
   timeinterval:TimeInterval;
   label:[LabelCategory];
   sparqlQuery:SparqlQuery;

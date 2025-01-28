@@ -5,6 +5,7 @@ following topics are covered:
 
 - Creating and retrieving projects
 - Sending and querying images
+- Projects and querying in other spatial reference systems
 - Writing python examples
 - Writing python integration tests
 

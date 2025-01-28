@@ -7,7 +7,7 @@ namespace seerep_core_msgs
 {
 struct GeodeticCoordinates
 {
-  std::string coordinateSystem;
+  std::string crsString;
 
   double altitude;
   double latitude;

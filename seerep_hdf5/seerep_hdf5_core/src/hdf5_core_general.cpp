@@ -348,8 +348,8 @@ Hdf5CoreGeneral::getHdf5Group(const std::string& group_path, bool create)
 void Hdf5CoreGeneral::writeGeodeticLocation(
     const seerep_core_msgs::GeodeticCoordinates& geo_coordinates)
 {
-  writeAttributeToHdf5<std::string>(*m_file, GEODETICLOCATION_COORDINATESYSTEM,
-                                    geo_coordinates.coordinateSystem);
+  writeAttributeToHdf5<std::string>(*m_file, GEODETICLOCATION_CRSSTRING,
+                                    geo_coordinates.crsString);
   writeAttributeToHdf5<double>(*m_file, GEODETICLOCATION_ALTITUDE,
                                geo_coordinates.altitude);
   writeAttributeToHdf5<double>(*m_file, GEODETICLOCATION_LATITUDE,
@@ -365,8 +365,8 @@ Hdf5CoreGeneral::readGeodeticLocation()
   seerep_core_msgs::GeodeticCoordinates geocoords;
   try
   {
-    geocoords.coordinateSystem = readAttributeFromHdf5<std::string>(
-        *m_file, GEODETICLOCATION_COORDINATESYSTEM, m_file->getName());
+    geocoords.crsString = readAttributeFromHdf5<std::string>(
+        *m_file, GEODETICLOCATION_CRSSTRING, m_file->getName());
     geocoords.altitude = readAttributeFromHdf5<double>(
         *m_file, GEODETICLOCATION_ALTITUDE, m_file->getName());
     geocoords.latitude = readAttributeFromHdf5<double>(

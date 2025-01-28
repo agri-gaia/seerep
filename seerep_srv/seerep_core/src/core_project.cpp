@@ -62,45 +62,208 @@ const std::string CoreProject::getVersion()
   return m_version;
 }
 
-seerep_core_msgs::Polygon2D
-CoreProject::transformToMapFrame(const seerep_core_msgs::Polygon2D polygon)
+void CoreProject::transformPointFwd(seerep_core_msgs::Point& p,
+                                    PJ* proj_tf_rawptr)
 {
-  seerep_core_msgs::GeodeticCoordinates g = m_geodeticCoordinates.value();
-
-  // https://proj.org/en/9.2/operations/conversions/topocentric.html
-  // the proj pipeline has two steps, convert geodesic to cartesian coordinates
-  // then project to topocentric coordinates
-  std::string proj_pipeline =
-      "step +proj=cartesian +ellps=" + g.coordinateSystem +
-      " \nstep +proj=topocentric +ellps" + g.coordinateSystem +
-      "+lon_0=" + std::to_string(g.longitude) +
-      "lat_0=" + std::to_string(g.latitude) +
-      "h_0=" + std::to_string(g.altitude);
+  PJ_COORD coord = proj_coord(p.get<0>(), p.get<1>(), p.get<2>(), 0);
 
   // PJ_FWD: forward, PJ_IDENT: identity, PJ_INV: inverse
-  PJ_DIRECTION direction = PJ_FWD;
+  PJ_COORD t_coord = proj_trans(proj_tf_rawptr, PJ_FWD, coord);
 
-  seerep_core_msgs::Polygon2D transformed_polygon;
+  p.set<0>(t_coord.xyz.x);
+  p.set<1>(t_coord.xyz.y);
+  p.set<2>(t_coord.xyz.z);
+}
 
-  // perform an affine transform to transpose the query polygon to map frame
-  // the first argument of 0 is the thread context, the second is the pipeline string created above
-  auto to_topographic = proj_create(0, proj_pipeline.c_str());
+seerep_core_msgs::Polygon2D
+CoreProject::transformToMapFrame(const seerep_core_msgs::Polygon2D& polygon,
+                                 const std::string& query_crs)
+{
+  // get projects coordinates, those are also the origin for the map frame in
+  // the global earth frame
+  seerep_core_msgs::GeodeticCoordinates g = m_geodeticCoordinates.value();
 
-  // we traverse the polygon and apply the transform
-  for (seerep_core_msgs::Point2D p : polygon.vertices)
+  // check if a coordinate system on the project is not set
+  if (g.crsString == "")
   {
-    PJ_COORD c = proj_coord(p.get<0>(), p.get<1>(), 0, 0);
-    PJ_COORD t_coord = proj_trans(to_topographic, direction, c);
-
-    seerep_core_msgs::Point2D transformed_p;
-    p.set<0>(t_coord.xy.x);
-    p.set<1>(t_coord.xy.y);
-    transformed_polygon.vertices.push_back(transformed_p);
+    throw std::invalid_argument(
+        "Could not transform to the projects map frame, "
+        "coordinate system string for project is not set!");
   }
 
-  transformed_polygon.z = polygon.z - g.altitude;
+  PJ_CONTEXT* ctx = proj_context_create();
+
+  std::vector<double> transformed_z_coords;
+  std::vector<seerep_core_msgs::Point> transformed_points3d;
+
+  seerep_core_msgs::Polygon2D transformed_polygon;
+  // set values which will not  change
   transformed_polygon.height = polygon.height;
 
+  // when the query was made in a seperate coordinate reference system
+  if (query_crs != "project")
+  {
+    PJ* to_project_crs_rawptr = proj_create_crs_to_crs(
+        ctx, query_crs.c_str(), g.crsString.c_str(), nullptr);
+
+    // check whether an error occured
+    if (to_project_crs_rawptr == nullptr)
+    {
+      int errnum = proj_context_errno(ctx);
+      if (errnum == 0)
+      {
+        proj_context_destroy(ctx);
+        throw std::runtime_error("An error occured during transform to the "
+                                 "projects coordinate reference system, "
+                                 "couldn't identify the error code!");
+      }
+      std::string err_info(proj_errno_string(errnum));
+      proj_context_destroy(ctx);
+
+      throw std::invalid_argument("Could not transform query polygon to the "
+                                  "projects coordinate reference system: " +
+                                  err_info);
+    }
+
+    for (auto&& p : polygon.vertices)
+    {
+      // as we get the polygon in lat, long and it must be passed as long, lat
+      seerep_core_msgs::Point p3d{ p.get<0>(), p.get<1>(),
+                                   static_cast<float>(polygon.z) };
+
+      // transformed point
+      transformPointFwd(p3d, to_project_crs_rawptr);
+      transformed_points3d.push_back(p3d);
+    }
+
+    proj_destroy(to_project_crs_rawptr);
+  }
+
+  PJ* crs_rawptr = proj_create(ctx, g.crsString.c_str());
+
+  if (crs_rawptr == nullptr)
+  {
+    int errnum = proj_context_errno(ctx);
+    if (errnum == 0)
+    {
+      proj_context_destroy(ctx);
+      throw std::runtime_error("An error occured retrieving the ellipsoid of "
+                               "the projects coordinate reference system, "
+                               "couldn't identify the error code!");
+    }
+    std::string err_info(proj_errno_string(errnum));
+    proj_context_destroy(ctx);
+
+    throw std::invalid_argument(
+        "Could not retrieve the ellipsoid of the projects"
+        "projects coordinate reference system: " +
+        err_info);
+  }
+
+  // get the ellipsoid used in the projects crs
+  PJ* ellps_rawptr = proj_get_ellipsoid(ctx, crs_rawptr);
+
+  proj_destroy(crs_rawptr);
+
+  if (ellps_rawptr == nullptr)
+  {
+    proj_context_destroy(ctx);
+    throw std::runtime_error(
+        "Could not retrieve the ellipsoid from the PJ object "
+        "created from the crs string");
+  }
+
+  const char* ellps_projstring_rawptr =
+      proj_as_proj_string(ctx, ellps_rawptr, PJ_PROJ_4, nullptr);
+
+  proj_destroy(ellps_rawptr);
+  if (ellps_projstring_rawptr == nullptr)
+  {
+    proj_context_destroy(ctx);
+    throw std::runtime_error(
+        "Could not convert ellipsoid PJ object to proj string!");
+  }
+
+  std::string ellps_string(ellps_projstring_rawptr);
+  std::string ellps_specifier("+ellps=");
+
+  size_t ellps_specifier_idx = ellps_string.find(ellps_specifier);
+  size_t ellps_idx = ellps_specifier_idx + ellps_specifier.length();
+
+  if (ellps_idx == ellps_string.npos || ellps_idx >= ellps_string.length())
+  {
+    proj_context_destroy(ctx);
+    throw std::runtime_error(
+        "Couldn't determine the ellipsoid of the project!");
+  }
+
+  std::string ellps = ellps_string.substr(ellps_idx);
+
+  // https://proj.org/en/6.3/operations/conversions/topocentric.html
+  // the proj pipeline has two steps, convert geographic to cartesian
+  // coordinates then project to topocentric coordinates
+  std::string to_topographic_projstr =
+      "+proj=pipeline +step +proj=cart +ellps=" + ellps +
+      " +step +proj=topocentric" + " +ellps=" + ellps +
+      " +lat_0=" + std::to_string(g.latitude) +
+      " +lon_0=" + std::to_string(g.longitude) +
+      " +h_0=" + std::to_string(g.altitude);
+
+  PJ* to_topographic_rawptr = proj_create(ctx, to_topographic_projstr.c_str());
+
+  if (to_topographic_rawptr == nullptr)
+  {
+    int errnum = proj_context_errno(ctx);
+    if (errnum == 0)
+    {
+      proj_context_destroy(ctx);
+      throw std::runtime_error(
+          "An error occured transforming the polygons "
+          "coordinates to the projects topographic coordinate system, "
+          "couldn't identify the error code!");
+    }
+    std::string err_info(proj_errno_string(errnum));
+    proj_context_destroy(ctx);
+
+    throw std::invalid_argument(
+        "Could not get topographic polygon coordinates: " + err_info);
+  }
+
+  // apply the transform to all points in transformed_points3d in-place
+  // add them to the transformed z vector and insert the transformed vertices
+  for (auto&& p : transformed_points3d)
+  {
+    // here first longitude and then latitude is needed, see
+    // https://proj.org/en/stable/development/reference/functions.html#c.proj_create
+    // geographic CRS coords have to be passed as long, lat, alt in degrees
+    PJ_COORD coord = proj_coord(p.get<1>(), p.get<0>(), p.get<2>(), 0);
+
+    // see
+    // https://gis.stackexchange.com/questions/422126/convert-geodetic-to-topocentric-coordinates-in-pyproj
+    coord.lpzt.lam = proj_torad(coord.lpzt.lam);
+    coord.lpzt.phi = proj_torad(coord.lpzt.phi);
+
+    // PJ_FWD: forward, PJ_IDENT: identity, PJ_INV: inverse
+    PJ_COORD t_coord = proj_trans(to_topographic_rawptr, PJ_FWD, coord);
+
+    transformed_polygon.vertices.emplace_back(t_coord.enu.e, t_coord.enu.n);
+    transformed_z_coords.push_back(t_coord.enu.u);
+
+    BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
+        << "Querying with polygon coordinate (in map frame): "
+        << " (" << t_coord.enu.e << ", " << t_coord.enu.n << ")";
+  }
+
+  // the new z is the smallest z of all transformed points
+  transformed_polygon.z = *std::min_element(transformed_z_coords.begin(),
+                                            transformed_z_coords.end());
+
+  BOOST_LOG_SEV(m_logger, boost::log::trivial::severity_level::debug)
+      << "Querying with polygons z coordinate (in map frame): "
+      << transformed_polygon.z;
+
+  proj_destroy(to_topographic_rawptr);
+  proj_context_destroy(ctx);
   return transformed_polygon;
 }
 
@@ -110,21 +273,35 @@ CoreProject::getDataset(seerep_core_msgs::Query& query)
   seerep_core_msgs::QueryResultProject result;
   result.projectUuid = m_uuid;
 
-  // is the query not in map frame?
-  if (query.polygon && !query.inMapFrame)
+  // query.crsString == "project" means the polygon is in the project frame
+  // if query.crsString == "map" that means the query is in the map frame
+  // else do crs transformations
+  if (query.polygon && query.crsString != "map")
   {
-    query.polygon.value() = transformToMapFrame(query.polygon.value());
+    query.polygon.value() =
+        transformToMapFrame(query.polygon.value(), query.crsString);
   }
 
   result.dataOrInstanceUuids = m_coreDatasets->getData(query);
+
   return result;
 }
 
 seerep_core_msgs::QueryResultProject
-CoreProject::getInstances(const seerep_core_msgs::Query& query)
+CoreProject::getInstances(seerep_core_msgs::Query& query)
 {
   seerep_core_msgs::QueryResultProject result;
   result.projectUuid = m_uuid;
+
+  // query.crsString == "project" means the polygon is in the project frame
+  // if query.crsString == "map" that means the query is done in the map
+  // else do crs transformations
+  if (query.polygon && query.crsString != "map")
+  {
+    query.polygon.value() =
+        transformToMapFrame(query.polygon.value(), query.crsString);
+  }
+
   result.dataOrInstanceUuids = m_coreDatasets->getInstances(query);
 
   return result;

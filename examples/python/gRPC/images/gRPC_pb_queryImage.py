@@ -47,7 +47,7 @@ def query_images(
     theQuery.polygon.z = -200
     theQuery.polygon.height = 800
 
-    theQuery.inMapFrame = True
+    theQuery.crsString = "map"
 
     scale = 150
     vertices = [
@@ -75,7 +75,6 @@ def query_images(
     labelsCategory.labels.append(label)
     theQuery.labelCategory.append(labelsCategory)
 
-    # theQuery.inMapFrame = True
     theQuery.fullyEncapsulated = False
 
     # 5. Query the server for images matching the query and return them
