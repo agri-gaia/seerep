@@ -44,7 +44,8 @@ from seerep.fb import meta_operations_grpc_fb as metaOperations
 # TODO: should be moved into a separate module
 def rosToNumpyDtype(ros_dtype: int) -> np.dtype:
     """
-    Converts the numeric represenations of dtypes in ROS to numpy dtype objects.
+    Converts the numeric representations of dtypes in ROS\
+        to numpy dtype objects.
 
     Args:
         ros_dtype: The numeric representation of the dtype in ROS\
@@ -167,12 +168,12 @@ def createProjectRaw(
         coordSys: The coordinate system type as a
         [proj ellipsoid](https://proj.org/en/stable/usage/ellipsoids.html#built-in-ellipsoid-definitions)\
             code
-        altitude: The altitude of the projects position on the globe
-                  (according to coordSys)
-        latitude: The latitude of the projects position on the globe
-                  (according to coordSys)
-        longitude: The longitude of the project positition on the globe
-                  (according to coordSys)
+        altitude: The altitude of the projects coordinate frame origin\
+            position on the globe (according to coordSys)
+        latitude: The latitude of the projects coordinate frame origin\
+            position on the globe (according to coordSys)
+        longitude: The longitude of the projects coordinate frame origin\
+            position on the globe (according to coordSys)
 
     Returns:
         A flatbuffers object of type ProjectInfo representing the project
@@ -225,12 +226,12 @@ def createProject(
         frameId: The coordinate frame of the project
         coordSys: The coordinate system type as a [proj ellipsoid](https://proj.org/en/stable/usage/ellipsoids.html#built-in-ellipsoid-definitions)\
             code
-        altitude: The altitude of the projects position on the globe
-                  (according to coordSys)
-        latitude: The latitude of the projects position on the globe
-                  (according to coordSys)
-        longitude: The longitude of the project positition on the globe
-                  (according to coordSys)
+        altitude: The altitude of the projects coordinate frame origin\
+            position on the globe (according to coordSys)
+        latitude: The latitude of the projects coordinate frame origin\
+            position on the globe (according to coordSys)
+        longitude: The longitude of the projects coordinate frame origin\
+            position on the globe (according to coordSys)
 
     Returns:
         The UUID of the created project
@@ -275,12 +276,12 @@ def getOrCreateProject(
         mapFrameId: The coordinate frame of the project
         coordSys: The coordinate system type as a [proj ellipsoid](https://proj.org/en/stable/usage/ellipsoids.html#built-in-ellipsoid-definitions)\
             code
-        altitude: The altitude of the projects position on the globe
-                  (according to coordSys)
-        latitude: The latitude of the project position on the globe
-                  (according to coordSys)
-        longitude: The longitude of the project position on the globe
-                  (according to coordSys)
+        altitude: The altitude of the projects coordinate frame origin\
+            position on the globe (according to coordSys)
+        latitude: The latitude of the projects coordinate frame origin\
+            position on the globe (according to coordSys)
+        longitude: The longitude of the projects coordinate frame origin\
+            position on the globe (according to coordSys)
 
     Returns:
         The UUID of the project
@@ -561,11 +562,12 @@ def createPolygon2D(
 
     Args:
         builder: A flatbuffers Builder
-        height: The height of the polygon
+        height: The height of the polygon in meter.
         z: The z-coordinate of the polygon from which the height is measured
         vertices: A list of pointers to\
             [Point2D](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/point2d.fbs)\
-            objects as the vertices of the polygon
+            objects as the vertices of the polygon, where the order of the\
+            points in the list is such that the points are arranged in a circle.
 
     Returns:
         A pointer to the constructed\
@@ -650,7 +652,7 @@ def createQuery(
         timeInterval: The pointer to a TimeInterval object representing the time
         frame of the returned instances labels: A list of pointers to\
             [LabelsWithInstanceWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/labels_with_instance_with_category.fbs)\
-            flatbuffers objects, which the instances should atleast have one of
+            flatbuffers objects, which the instances should at least have one of
         mustHaveAllLabels: A boolean indicating if the returned instances should
         have all the labels each
         projectUuids: A list of project UUIDs to execute the query on
