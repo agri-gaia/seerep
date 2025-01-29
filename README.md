@@ -6,14 +6,14 @@
 <h3> Spatio-Temporal-Semantic Sensor Data Management <br>
 for Agricultural Robotics </h3>
 
-  [![catkin build workflow](https://github.com/agri-gaia/seerep/actions/workflows/main.yml/badge.svg)](https://github.com/agri-gaia/seerep/actions)
+  [![catkin build workflow](https://github.com/DFKI-NI/seerep/actions/workflows/main.yml/badge.svg)](https://github.com/DFKI-NI/seerep/actions)
   ![unstable](https://img.shields.io/badge/Stability-experimental-orange)
   [![License](https://img.shields.io/badge/License-BSD_3-brightgreen)](./LICENSE)
 
-  <b><a href="https://agri-gaia.github.io/seerep/mkdocs/home/index.html">
+  <b><a href="https://dfki-ni.github.io/seerep/mkdocs/home/index.html">
   Documentation</a></b>
   |
-  <b><a href="https://github.com/agri-gaia/seerep/tree/main/examples/python/gRPC">
+  <b><a href="https://github.com/DFKI-NI/seerep/tree/main/examples/python/gRPC">
   Examples</a></b>
 </div>
 
@@ -60,7 +60,7 @@ The simplest way to start SEEREP is by using `docker compose` with the
 configuration provided in the `docker/server` directory:
 
 ```bash
-git clone https://github.com/agri-gaia/seerep.git
+git clone https://github.com/DFKI-NI/seerep.git
 cd seerep/docker/server
 docker compose up
 ```
@@ -79,9 +79,9 @@ seerep_server | [2024-07-11 13:40:00.903333]<info>: Serving gRPC Server on "[::]
 ```
 
 For other ways to deploy SEEREP, check the
-[documentation](https://agri-gaia.github.io/seerep/mkdocs/getting-started/server_deployment/).
+[documentation](https://dfki-ni.github.io/seerep/mkdocs/getting-started/server_deployment/).
 
-Refer to the [examples section](https://github.com/agri-gaia/seerep/tree/update-readme/examples/python/gRPC)
+Refer to the [examples section](https://github.com/DFKI-NI/seerep/tree/update-readme/examples/python/gRPC)
 for instructions on uploading data.
 
 ## :wrench: Maintainer

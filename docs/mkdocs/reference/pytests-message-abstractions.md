@@ -8,7 +8,7 @@ should get decoupled in a more elegant way.
 
 It is currently used to create variations for tests of `gRPC_fb_getInstances.py`.
 The tests can be found under
-[test_gRPC_fb_getInstances.py](https://github.com/agri-gaia/seerep/blob/main/tests/python/gRPC/instances/test_gRPC_fb_getInstances.py).
+[test_gRPC_fb_getInstances.py](https://github.com/DFKI-NI/seerep/blob/main/tests/python/gRPC/instances/test_gRPC_fb_getInstances.py).
 
 The idea is to provide default implementations for common datatypes, but still
 allow for modification of parts of that datatype. In some `flatbuffers`
@@ -23,28 +23,28 @@ should happen if a component is active.
 
 Datatype implementations for `Query` and `QueryInstance` and their abstraction
 model can be found
-[here](https://github.com/agri-gaia/seerep/blob/main/tests/python/gRPC/util/msg_abs/msgs.py).
+[here](https://github.com/DFKI-NI/seerep/blob/main/tests/python/gRPC/util/msg_abs/msgs.py).
 
 ## Defining new datatypes for variation testing
 
 First the datatype has to be defined as a class inheriting from FrozenEnum
 provided through
-[datastructures.py](https://github.com/agri-gaia/seerep/blob/main/tests/python/gRPC/util/datastructures.py),
+[datastructures.py](https://github.com/DFKI-NI/seerep/blob/main/tests/python/gRPC/util/datastructures.py),
 which is essentially a unmodifiable enum.
 
 This is done for the `FbQuery` datatype, which corresponding `flatbuffers`
 definition can be found
-[here](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/query.fbs).
+[here](https://github.com/DFKI-NI/seerep/blob/main/seerep_msgs/fbs/query.fbs).
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/tests/python/gRPC/util/msg_abs/msgs.py:27:41"
+--8<-- "https://raw.githubusercontent.com/DFKI-NI/seerep/main/tests/python/gRPC/util/msg_abs/msgs.py:27:41"
 ```
 
 Then `FbQuery` inherits from `MsgsFb`, which itself is a template type defined in
-[msgs_base.py](https://github.com/agri-gaia/seerep/blob/main/tests/python/gRPC/util/msg_abs/msgs_base.py).
+[msgs_base.py](https://github.com/DFKI-NI/seerep/blob/main/tests/python/gRPC/util/msg_abs/msgs_base.py).
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/tests/python/gRPC/util/msg_abs/msgs.py:49:138"
+--8<-- "https://raw.githubusercontent.com/DFKI-NI/seerep/main/tests/python/gRPC/util/msg_abs/msgs.py:49:138"
 ```
 
 In `MsgsFb` `_set_enum_func_mapping()` is a abstractmethod which return type is
@@ -57,7 +57,7 @@ gets called when the component is set active.
 On runtime it is checked if all elements of the enum are mapped. The functions
 are mostly mapped to default implementations for that specific component datatype.
 The default functions implementations can be inspected
-[here](https://github.com/agri-gaia/seerep/blob/main/tests/python/gRPC/util/msg_abs/msgs.py)
+[here](https://github.com/DFKI-NI/seerep/blob/main/tests/python/gRPC/util/msg_abs/msgs.py)
 at the bottom.
 
 The `@expect_component` decorator can be used to define dependencies between the
@@ -72,7 +72,7 @@ the components at this point are set.
 ## Using message abstractions for testing
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/tests/python/gRPC/instances/test_gRPC_fb_getInstances.py:82:122"
+--8<-- "https://raw.githubusercontent.com/DFKI-NI/seerep/main/tests/python/gRPC/instances/test_gRPC_fb_getInstances.py:82:122"
 ```
 
 In this function all the possible datatypes with attached instances are tested
@@ -111,7 +111,7 @@ Another snippet to highlight is the following where one of the components of the
 datatype itself is inheriting from `MsgsFb`.
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/tests/python/gRPC/instances/test_gRPC_fb_getInstances.py:234:310"
+--8<-- "https://raw.githubusercontent.com/DFKI-NI/seerep/main/tests/python/gRPC/instances/test_gRPC_fb_getInstances.py:234:310"
 ```
 
 Here `query_builder` is used to build the `Query.Query` datatype in order to

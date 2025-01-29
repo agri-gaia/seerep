@@ -1,5 +1,5 @@
 {
-    "image": "ghcr.io/agri-gaia/seerep_base:latest",
+    "image": "ghcr.io/DFKI-NI/seerep_base:latest",
     "name": "seerep_dev",
     "customizations": {
         "vscode": {
@@ -36,5 +36,5 @@
     "containerEnv": {
         "TZ": "Europe/Berlin"
     },
-    "postStartCommand": "git -C ./src pull || git clone git@github.com:agri-gaia/seerep.git ./src; ./src/.devcontainer/postCreateCommand.sh"
+    "postStartCommand": "git -C ./src pull || git clone git@github.com:DFKI-NI/seerep.git ./src; ./src/.devcontainer/postCreateCommand.sh"
 }

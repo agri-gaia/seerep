@@ -4,7 +4,7 @@ authors:
 - family-names: "Niemeyer"
   given-names: "Mark"
 title: "SEEREP: a spatio-temporal-SEmantic Environment REPresentation"
-url: "https://github.com/agri-gaia/seerep"
+url: "https://github.com/DFKI-NI/seerep"
 preferred-citation:
   type: conference-paper
   authors:

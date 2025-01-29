@@ -1,9 +1,9 @@
 # Documentation Setup
 
 The documentation is divided into two main parts:
-[MkDocs](https://agri-gaia.github.io/seerep/mkdocs/home/index.html) is used for
+[MkDocs](https://dfki-ni.github.io/seerep/mkdocs/home/index.html) is used for
 general documentation and
-[Doxygen](https://agri-gaia.github.io/seerep/doxygen/index.html) is used for C++
+[Doxygen](https://dfki-ni.github.io/seerep/doxygen/index.html) is used for C++
 code documentation.
 
 ## Dependencies
@@ -74,7 +74,7 @@ python3 -m http.server 9000
 ## GitHub Pages Deployment
 
 Both documentation pages are automatically deployed to GitHub Pages through a
-[workflow](https://github.com/agri-gaia/seerep/blob/mkdocs-update-getting-started/.github/workflows/build-docs.yml).
+[workflow](https://github.com/DFKI-NI/seerep/blob/mkdocs-update-getting-started/.github/workflows/build-docs.yml).
 A new version is released after a pull request to the main branch.
 Publishing both documentations requires a workaround, as a repository typically
 only supports one URL. The main page is a simple HTML document that links to the

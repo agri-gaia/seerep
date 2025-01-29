@@ -5,10 +5,10 @@
 New projects for new data can be created in the following way:
 
 Source:
-[examples/gRPC/meta/gRPC_pb_createProject.py](https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/meta/gRPC_pb_createProject.py)
+[examples/gRPC/meta/gRPC_pb_createProject.py](https://github.com/DFKI-NI/seerep/blob/main/examples/python/gRPC/meta/gRPC_pb_createProject.py)
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/meta/gRPC_pb_createProject.py"
+--8<-- "https://raw.githubusercontent.com/DFKI-NI/seerep/main/examples/python/gRPC/meta/gRPC_pb_createProject.py"
 ```
 
 Output:
@@ -28,11 +28,11 @@ have to be unique.
 === "Flatbuffers"
 
     Source:
-    [examples/gRPC/meta/gRPC_fb_getProjects.py](https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/meta/gRPC_fb_getProjects.py)
+    [examples/gRPC/meta/gRPC_fb_getProjects.py](https://github.com/DFKI-NI/seerep/blob/main/examples/python/gRPC/meta/gRPC_fb_getProjects.py)
 
 
     ```python
-    --8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/meta/gRPC_fb_getProjects.py"
+    --8<-- "https://raw.githubusercontent.com/DFKI-NI/seerep/main/examples/python/gRPC/meta/gRPC_fb_getProjects.py"
     ```
 
     Output:
@@ -46,10 +46,10 @@ have to be unique.
 === "Protocol Buffers"
 
     Source:
-    [examples/gRPC/meta/gRPC_pb_getProjects.py](https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/meta/gRPC_pb_getProjects.py)
+    [examples/gRPC/meta/gRPC_pb_getProjects.py](https://github.com/DFKI-NI/seerep/blob/main/examples/python/gRPC/meta/gRPC_pb_getProjects.py)
 
     ```python
-    --8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/meta/gRPC_pb_getProjects.py"
+    --8<-- "https://raw.githubusercontent.com/DFKI-NI/seerep/main/examples/python/gRPC/meta/gRPC_pb_getProjects.py"
     ```
 
     Output:

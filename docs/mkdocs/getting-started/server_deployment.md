@@ -31,7 +31,7 @@ permissions without hard-coding the mount locations in the Dockerfile. To change
 the permissions, a very small container mounts the volumes and changes the
 permission to the specified `uid` and `guid` after which SEEREP is started with
 the same user. Additional information can be found in the
-[PR#376](https://github.com/agri-gaia/seerep/pull/376) discussion.
+[PR#376](https://github.com/DFKI-NI/seerep/pull/376) discussion.
 
 ## Kubernetes
 
