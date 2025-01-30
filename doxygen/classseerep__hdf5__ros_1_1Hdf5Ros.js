@@ -3,6 +3,7 @@ var classseerep__hdf5__ros_1_1Hdf5Ros =
     [ "Hdf5Ros", "classseerep__hdf5__ros_1_1Hdf5Ros.html#ae2234548d1624b389493ae70b53660d3", null ],
     [ "Hdf5Ros", "classseerep__hdf5__ros_1_1Hdf5Ros.html#ab80e6df9164e176414717bcf309237c2", null ],
     [ "~Hdf5Ros", "classseerep__hdf5__ros_1_1Hdf5Ros.html#a356e7b9ca8e6e462fbf816bbd71632c2", null ],
+    [ "computeBoundingBox", "classseerep__hdf5__ros_1_1Hdf5Ros.html#a699ba12d7dfe88b4acfc19b1c1361aab", null ],
     [ "dump", "classseerep__hdf5__ros_1_1Hdf5Ros.html#a3628ae9b51626353947024f9547bd4dc", null ],
     [ "dump", "classseerep__hdf5__ros_1_1Hdf5Ros.html#a3583470b9364575a7beb3a3ca58312ce", null ],
     [ "dump", "classseerep__hdf5__ros_1_1Hdf5Ros.html#a125dae35bec8c596e9ad07d3c1233dba", null ],

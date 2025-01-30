@@ -1,5 +1,11 @@
 var NAVTREEINDEX10 =
 {
+"structseerep__hdf5__py_1_1BoundingBoxLabel.html#ab7b8f836c6803983621f0e21acee8a25":[1,7,7,0,2],
+"structseerep__hdf5__py_1_1BoundingBoxLabel.html#ad3a0e3234e6baccbaf42c743e79419c7":[2,0,7,0,1],
+"structseerep__hdf5__py_1_1BoundingBoxLabel.html#ad3a0e3234e6baccbaf42c743e79419c7":[1,7,7,0,1],
+"structseerep__hdf5__py_1_1BoundingBoxLabel.html#aed3989e1b7129d79ba9ee3c9ddfff34b":[2,0,7,0,5],
+"structseerep__hdf5__py_1_1BoundingBoxLabel.html#aed3989e1b7129d79ba9ee3c9ddfff34b":[1,7,7,0,5],
+"structseerep__hdf5__py_1_1BoundingBoxLabel.html#aef5a4a50b1c1dc59f5475a1eb86bd95b":[2,0,7,0,3],
 "structseerep__hdf5__py_1_1BoundingBoxLabel.html#aef5a4a50b1c1dc59f5475a1eb86bd95b":[1,7,7,0,3],
 "structseerep__hdf5__py_1_1CategorizedBoundingBoxLabel.html":[2,0,7,1],
 "structseerep__hdf5__py_1_1CategorizedBoundingBoxLabel.html":[1,7,7,1],

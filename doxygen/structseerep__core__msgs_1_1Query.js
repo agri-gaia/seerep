@@ -14,6 +14,6 @@ var structseerep__core__msgs_1_1Query =
     [ "projects", "structseerep__core__msgs_1_1Query.html#a073b640df62a295d6c1ac75d456ab75b", null ],
     [ "sortByTime", "structseerep__core__msgs_1_1Query.html#a82c2bba2f609aeb1b5c08788a9b8ae98", null ],
     [ "sparqlQuery", "structseerep__core__msgs_1_1Query.html#ab2b815ed82001ac55ec98f20a50fea7a", null ],
-    [ "timeinterval", "structseerep__core__msgs_1_1Query.html#a907cc1417881bbbcc31414888137f73d", null ],
+    [ "timeintervals", "structseerep__core__msgs_1_1Query.html#ac47fbd342d8e030505ad44784e222da8", null ],
     [ "withoutData", "structseerep__core__msgs_1_1Query.html#abede7918c18453c663ba69e461250410", null ]
 ];
