@@ -12,10 +12,10 @@ the Camera Intrinsics UUID provided with an image has a UUID stored against it.
 Additionally we add some coordinate transformations at the end.
 
 Source:
-[examples/python/gRPC/images/gRPC_pb_sendLabeledImage.py](https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/images/gRPC_pb_sendLabeledImage.py)
+[examples/python/gRPC/images/gRPC_pb_sendLabeledImage.py](https://github.com/DFKI-NI/seerep/blob/main/examples/python/gRPC/images/gRPC_pb_sendLabeledImage.py)
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_pb_sendLabeledImage.py"
+--8<-- "https://raw.githubusercontent.com/DFKI-NI/seerep/main/examples/python/gRPC/images/gRPC_pb_sendLabeledImage.py"
 ```
 
 Output:
@@ -83,10 +83,10 @@ geodesic coordinates of the project into the map frame beforehand.
 
 === "Flatbuffers"
 
-    Source: [examples/python/gRPC/images/gRPC_fb_queryImage.py](https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/images/gRPC_fb_queryImages.py)
+    Source: [examples/python/gRPC/images/gRPC_fb_queryImage.py](https://github.com/DFKI-NI/seerep/blob/main/examples/python/gRPC/images/gRPC_fb_queryImages.py)
 
     ```python
-    --8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_queryImages.py"
+    --8<-- "https://raw.githubusercontent.com/DFKI-NI/seerep/main/examples/python/gRPC/images/gRPC_fb_queryImages.py"
     ```
 
     After sending the images, executing the query script results in the following output:
@@ -139,10 +139,10 @@ geodesic coordinates of the project into the map frame beforehand.
 === "Protocol Buffers"
 
     Source:
-    [examples/python/gRPC/images/gRPC_pb_queryImage.py](https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/images/gRPC_pb_queryImage.py)
+    [examples/python/gRPC/images/gRPC_pb_queryImage.py](https://github.com/DFKI-NI/seerep/blob/main/examples/python/gRPC/images/gRPC_pb_queryImage.py)
 
     ```python
-    --8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_pb_queryImage.py"
+    --8<-- "https://raw.githubusercontent.com/DFKI-NI/seerep/main/examples/python/gRPC/images/gRPC_pb_queryImage.py"
     ```
 
     After sending the images, executing the query script results in the

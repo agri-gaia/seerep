@@ -415,7 +415,7 @@ def createPointField(
         name: The name of the point field
         offset: Offset from start of the point struct
         datatype: Datatype used for the point entries\
-            (see [fbs definition](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/point_field.fbs))
+            (see [fbs definition](https://github.com/DFKI-NI/seerep/blob/main/seerep_msgs/fbs/point_field.fbs))
         count: Number of elements in the point field
 
     Returns:
@@ -444,7 +444,7 @@ def createPointFields(
         builder: A flatbuffers Builder
         channels: List of channel names
         datatype: Datatype used for the point entries\
-            (see [fbs definition](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/point_field.fbs))
+            (see [fbs definition](https://github.com/DFKI-NI/seerep/blob/main/seerep_msgs/fbs/point_field.fbs))
         dataTypeOffset: Offset from start of the point struct, in this case the
         offset is used for every channel
         count: Number of elements in each point field
@@ -511,7 +511,7 @@ def createPointStamped(
         point: The pointer to a 3D point object
         header: The pointer to the header object of the point
         labelGeneralCategoryVector: The pointer to a vector of\
-            [LabelsWithInstanceWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/labels_with_category.fbs)\
+            [LabelsWithInstanceWithCategory](https://github.com/DFKI-NI/seerep/blob/main/seerep_msgs/fbs/labels_with_category.fbs)\
             objects of the point
 
     Returns:
@@ -543,7 +543,7 @@ def createBoundingBox(
 
     Returns:
         A pointer to the constructed\
-        [BoundingBox](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox.fbs)
+        [BoundingBox](https://github.com/DFKI-NI/seerep/blob/main/seerep_msgs/fbs/boundingbox.fbs)
         object
     """
     Boundingbox.Start(builder)
@@ -565,13 +565,13 @@ def createPolygon2D(
         height: The height of the polygon in meter.
         z: The z-coordinate of the polygon from which the height is measured
         vertices: A list of pointers to\
-            [Point2D](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/point2d.fbs)\
+            [Point2D](https://github.com/DFKI-NI/seerep/blob/main/seerep_msgs/fbs/point2d.fbs)\
             objects as the vertices of the polygon, where the order of the\
             points in the list is such that the points are arranged in a circle.
 
     Returns:
         A pointer to the constructed\
-        [Polygon2D](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/polygon2d.fbs)
+        [Polygon2D](https://github.com/DFKI-NI/seerep/blob/main/seerep_msgs/fbs/polygon2d.fbs)
     """
 
     Polygon2D.StartVerticesVector(builder, len(vertices))
@@ -597,7 +597,7 @@ def addToBoundingBoxLabeledVector(
     Args:
         builder: A flatbuffers Builder
         boundingBoxLabeledList: A list of pointers to\
-            [BoundingBoxLabeledWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/boundingbox_labeled_with_category.fbs)
+            [BoundingBoxLabeledWithCategory](https://github.com/DFKI-NI/seerep/blob/main/seerep_msgs/fbs/boundingbox_labeled_with_category.fbs)
 
     Returns:
         A pointer to the constructed vector of bounding box labeled
@@ -617,7 +617,7 @@ def addToPointFieldVector(builder: Builder, pointFieldList: List[int]) -> int:
     Args:
         builder: A flatbuffers Builder
         pointFieldList: A list of pointers to\
-            [PointField](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/point_field.fbs)
+            [PointField](https://github.com/DFKI-NI/seerep/blob/main/seerep_msgs/fbs/point_field.fbs)
             objects
 
     Returns:
@@ -652,7 +652,7 @@ def createQuery(
         timeIntervalVector: The pointer to vector of TimeInterval objects
         representing the time frames
         labels: A list of pointers to\
-            [LabelsWithInstanceWithCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/labels_with_instance_with_category.fbs)\
+            [LabelsWithInstanceWithCategory](https://github.com/DFKI-NI/seerep/blob/main/seerep_msgs/fbs/labels_with_instance_with_category.fbs)\
             flatbuffers objects, which the instances should at least have one of
         mustHaveAllLabels: A boolean indicating if the returned instances should
         have all the labels each
@@ -745,7 +745,7 @@ def createQueryInstance(builder: Builder, query: int, datatype: int) -> int:
     Args:
         builder: A flatbuffers Builder
         query: The pointer to the query object
-        datatype: The [Datatype](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/datatype.fbs)\
+        datatype: The [Datatype](https://github.com/DFKI-NI/seerep/blob/main/seerep_msgs/fbs/datatype.fbs)\
             of the instances to query
 
     Returns:
@@ -1007,7 +1007,7 @@ def createUuidDatatypePair(builder: Builder, uuid: str, datatype: int) -> int:
     Args:
         builder: A flatbuffers Builder
         uuid: The UUID of a project to retrieve the information from
-        datatype: The [Datatype](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/datatype.fbs)\
+        datatype: The [Datatype](https://github.com/DFKI-NI/seerep/blob/main/seerep_msgs/fbs/datatype.fbs)\
             of the instance to retrieve the information from
 
     Returns:
@@ -1031,7 +1031,7 @@ def createUuidDatatypeWithCategory(
     Args:
         builder: A flatbuffers Builder
         uuid: The UUID of a project to retrieve the information from
-        datatype: The [Datatype](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/datatype.fbs)\
+        datatype: The [Datatype](https://github.com/DFKI-NI/seerep/blob/main/seerep_msgs/fbs/datatype.fbs)\
             of the instance to retrieve the information from
         category: The category to which the instance belongs
 
@@ -1176,7 +1176,7 @@ def createImage(
         encoding: The encoding of the image, e.g. rgb8
         is_bigendian: Bool if the data is big endian
         labelCategory: A list of pointers to\
-            [LabelCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label_category.fbs)\
+            [LabelCategory](https://github.com/DFKI-NI/seerep/blob/main/seerep_msgs/fbs/label_category.fbs)\
             objects to attach to the image
         camera_intrinsics_uuid: The uuid of the corresponding camera intrinsic
 

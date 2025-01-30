@@ -2,8 +2,8 @@ site_name: SEEREP Documentation
 site_description: Documentation for the SEemantic Environment REpresentation (SEEREP)
 site_author: Mark Niemeyer, Julian Arkenau, Marc Meijer
 
-repo_url: https://github.com/agri-gaia/seerep
-repo_name: agri-gaia/seerep
+repo_url: https://github.com/DFKI-NI/seerep
+repo_name: DFKI-NI/seerep
 edit_uri: edit/main/docs/mkdocs
 
 docs_dir: docs/mkdocs

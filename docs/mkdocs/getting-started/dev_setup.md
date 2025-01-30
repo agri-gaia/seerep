@@ -15,13 +15,13 @@ Clone the repository with:
 === "ssh"
 
     ```bash
-    git clone git@github.com:agri-gaia/seerep.git
+    git clone git@github.com:DFKI-NI/seerep.git
     ```
 
 === "https"
 
     ```bash
-    git clone https://github.com/agri-gaia/seerep
+    git clone https://github.com/DFKI-NI/seerep
     ```
 
 For the development, it is assumed that the directory designated for SEEREP's
@@ -69,7 +69,7 @@ Or in case this window doesn't open, use either ++f1++ or ++ctrl+shift+p++ and i
 
 Starting the Dev-Container the first time may take a while as it involves
 downloading the required
-[SEEREP Docker image](https://github.com/agri-gaia/seerep/pkgs/container/seerep_base)
+[SEEREP Docker image](https://github.com/DFKI-NI/seerep/pkgs/container/seerep_base)
 (around 4 GB). Additionally Visual Studio Code extensions, Intellisense, and
 pre-commit checks are setup in the container.
 
@@ -95,7 +95,7 @@ The main hooks are:
 - [Markdownlint](https://github.com/igorshubovych/markdownlint-cli) for Markdown
 
 Along with other checks for Dockerfiles and YAML, see the complete list in the
-[configuration](https://github.com/agri-gaia/seerep/blob/main/.pre-commit-config.yaml).
+[configuration](https://github.com/DFKI-NI/seerep/blob/main/.pre-commit-config.yaml).
 
 ## Debugging with VS-Code
 

@@ -6,17 +6,17 @@ deprecation of protobuf in the project. All protobuf functionality can be
 replicated using flatbuffers, and flatbuffers should be used instead.
 
 In this case the example
-[gRPC_fb_addLabel.py](https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/images/gRPC_fb_addLabel.py)
+[gRPC_fb_addLabel.py](https://github.com/DFKI-NI/seerep/blob/main/examples/python/gRPC/images/gRPC_fb_addLabel.py)
 will be reviewed. Service type definitions for all available flatbuffers type
 services can be found
-[here](https://github.com/agri-gaia/seerep/tree/main/seerep_com/fbs).
+[here](https://github.com/DFKI-NI/seerep/tree/main/seerep_com/fbs).
 Type definitions of all flatbuffers types can be found
-[here](https://github.com/agri-gaia/seerep/tree/main/seerep_msgs/fbs).
+[here](https://github.com/DFKI-NI/seerep/tree/main/seerep_msgs/fbs).
 
 ## The code
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addLabel.py:9:25"
+--8<-- "https://raw.githubusercontent.com/DFKI-NI/seerep/main/examples/python/gRPC/images/gRPC_fb_addLabel.py:9:25"
 ```
 
 First some of the modules to interact with the servers services will be highlighted.
@@ -28,7 +28,7 @@ message type directly.
 ### Interaction with SEEREP services and handling the data
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addLabel.py:28:31"
+--8<-- "https://raw.githubusercontent.com/DFKI-NI/seerep/main/examples/python/gRPC/images/gRPC_fb_addLabel.py:28:31"
 ```
 
 The interaction functionality is contained within this function. With the
@@ -39,18 +39,18 @@ Both options are useful for testing later. More parameters can be added
 optionally, if needed for the test cases.
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addLabel.py:32:52"
+--8<-- "https://raw.githubusercontent.com/DFKI-NI/seerep/main/examples/python/gRPC/images/gRPC_fb_addLabel.py:32:52"
 ```
 
 At first, if `target_proj_uuid` is not set, the `MetaOperationsStub` utilizing
 flatbuffers gRPC communication with the SEEREP server is used to retrieve a list
 of all available projects of that server (specifically in the form of
-[project_infos.fbs](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/project_infos.fbs)
+[project_infos.fbs](https://github.com/DFKI-NI/seerep/blob/main/seerep_msgs/fbs/project_infos.fbs)
 ) and `target_proj_uuid` is set to the uuid of the first project with the name
 `testproject` on that list.
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addLabel.py:54:71"
+--8<-- "https://raw.githubusercontent.com/DFKI-NI/seerep/main/examples/python/gRPC/images/gRPC_fb_addLabel.py:54:71"
 ```
 
 Following on the code requests all images from the project with the `uuid` of
@@ -58,18 +58,18 @@ Following on the code requests all images from the project with the `uuid` of
 follows:
 
 ```fbs
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/seerep_com/fbs/image_service.fbs"
+--8<-- "https://raw.githubusercontent.com/DFKI-NI/seerep/main/seerep_com/fbs/image_service.fbs"
 ```
 
 `GetImage()` takes a argument of type
-[seerep.fb.Query](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/query.fbs),
+[seerep.fb.Query](https://github.com/DFKI-NI/seerep/blob/main/seerep_msgs/fbs/query.fbs),
 a more generic build query type for use in various services in SEEREP, in it's
 serialized form and returns data of type
-[seerep.fb.Image](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/image.fbs)
+[seerep.fb.Image](https://github.com/DFKI-NI/seerep/blob/main/seerep_msgs/fbs/image.fbs)
 from the server.
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addLabel.py:73:122"
+--8<-- "https://raw.githubusercontent.com/DFKI-NI/seerep/main/examples/python/gRPC/images/gRPC_fb_addLabel.py:73:122"
 ```
 
 This code builds a list of DatasetUuidLabel adding some sample data into the
@@ -82,36 +82,36 @@ appropriate `project_uuid` and `msg_uuid` to match that specific image. At the
 end the Labels are serialized and added to the lists.
 
 The type definition of
-[LabelCategory](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label_category.fbs)
+[LabelCategory](https://github.com/DFKI-NI/seerep/blob/main/seerep_msgs/fbs/label_category.fbs)
 looks as follows:
 
 ```fbs
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/seerep_msgs/fbs/label_category.fbs"
+--8<-- "https://raw.githubusercontent.com/DFKI-NI/seerep/main/seerep_msgs/fbs/label_category.fbs"
 ```
 
 And the type definition of
-[Label](https://github.com/agri-gaia/seerep/blob/main/seerep_msgs/fbs/label.fbs)
+[Label](https://github.com/DFKI-NI/seerep/blob/main/seerep_msgs/fbs/label.fbs)
 looks as follows:
 
 ```fbs
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/seerep_msgs/fbs/label.fbs"
+--8<-- "https://raw.githubusercontent.com/DFKI-NI/seerep/main/seerep_msgs/fbs/label.fbs"
 ```
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addLabel.py:113:114"
+--8<-- "https://raw.githubusercontent.com/DFKI-NI/seerep/main/examples/python/gRPC/images/gRPC_fb_addLabel.py:113:114"
 ```
 
 Lastly the service is called, the LabelCategory are send to the SEEREP server
 and the list with the mappings is returned for further use. Note that the
 flatbuffers objects are not returned in their deserialized state as the function
 `fb_flatc_dict` defined in
-[here](https://github.com/agri-gaia/seerep/blob/main/examples/python/gRPC/util/fb_to_dict.py)
+[here](https://github.com/DFKI-NI/seerep/blob/main/examples/python/gRPC/util/fb_to_dict.py)
 makes use of that state.
 
 ### Wrapping the raw function
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addLabel.py:128:135"
+--8<-- "https://raw.githubusercontent.com/DFKI-NI/seerep/main/examples/python/gRPC/images/gRPC_fb_addLabel.py:128:135"
 ```
 
 This function is essentially just a wrapper for `add_bb_raw()` to return the
@@ -122,7 +122,7 @@ deserialized objects to be accessed through their regular flatbuffers interfaces
 ### Allow for independent execution of the script
 
 ```python
---8<-- "https://raw.githubusercontent.com/agri-gaia/seerep/main/examples/python/gRPC/images/gRPC_fb_addLabel.py:138:144"
+--8<-- "https://raw.githubusercontent.com/DFKI-NI/seerep/main/examples/python/gRPC/images/gRPC_fb_addLabel.py:138:144"
 ```
 
 The last part can execute the script independently and targets the server at the

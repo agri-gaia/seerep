@@ -10,11 +10,11 @@ Action with every push.
 
 Currently unit tests are set up for:
 
-- [Flatbuffer ROS Conversions](https://github.com/agri-gaia/seerep/blob/main/seerep_ros/seerep_ros_conversions_fb/test/ros_to_fb_conversion_test.cpp):
+- [Flatbuffer ROS Conversions](https://github.com/DFKI-NI/seerep/blob/main/seerep_ros/seerep_ros_conversions_fb/test/ros_to_fb_conversion_test.cpp):
     Functions for converting ROS message to Flatbuffers message and vice versa.
-- [HDF5 PB Image Interface](https://github.com/agri-gaia/seerep/blob/main/seerep_hdf5/seerep_hdf5_pb/test/pb_write_load_test.cpp)
+- [HDF5 PB Image Interface](https://github.com/DFKI-NI/seerep/blob/main/seerep_hdf5/seerep_hdf5_pb/test/pb_write_load_test.cpp)
     : Reading and writing of Protocol Buffer image messages to HDF5.
-- [HDF5 FB Image Interface](https://github.com/agri-gaia/seerep/blob/main/seerep_hdf5/seerep_hdf5_fb/test/fb_write_load_test.cpp)
+- [HDF5 FB Image Interface](https://github.com/DFKI-NI/seerep/blob/main/seerep_hdf5/seerep_hdf5_fb/test/fb_write_load_test.cpp)
     : Reading and writing of Flatbuffer image messages to HDF5.
 
 ### Using catkin
@@ -29,7 +29,7 @@ catkin test <specific-package> # run all tests from a specific package
 ## Python Integration Tests
 
 The integration tests, based on the
-[Python examples](https://github.com/agri-gaia/seerep/tree/main/examples/python/gRPC),
+[Python examples](https://github.com/DFKI-NI/seerep/tree/main/examples/python/gRPC),
 cover most of the send and receive operations of SEEREP.
 
 ### Using pytest

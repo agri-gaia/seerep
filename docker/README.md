@@ -3,7 +3,7 @@
 The seerep-image is divided into two parts: base and server.
 
 All images are stored in the
-[github-registry](https://github.com/orgs/agri-gaia/packages?repo_name=seerep)
+[github-registry](https://github.com/orgs/DFKI-NI/packages?repo_name=seerep)
 
 ## Base Image
 
@@ -11,7 +11,7 @@ The base image itself is derived from [ros:neotic](http://wiki.ros.org/noetic)
 and installs all neccessary dependencies for ros and seerep. This image is also
 used for the vs-code dev-container.
 
-- source: <https://github.com/agri-gaia/seerep/pkgs/container/seerep_base>
+- source: <https://github.com/DFKI-NI/seerep/pkgs/container/seerep_base>
 - folder: ./base
 
 ## Server Container

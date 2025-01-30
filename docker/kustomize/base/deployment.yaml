@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: seerep-server
-          image: 'ghcr.io/agri-gaia/seerep_server:latest'
+          image: 'ghcr.io/dfki-ni/seerep_server:latest'
           tty: true
           ports:
             - containerPort: 9090

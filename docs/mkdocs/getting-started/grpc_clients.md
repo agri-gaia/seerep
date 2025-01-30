@@ -41,7 +41,7 @@ from seerep.fb import image_service_grpc_fb as image_service_fb
 ```
 
 For more advanced examples have a look at the
-[examples section](https://github.com/agri-gaia/seerep/tree/main/examples/python/gRPC).
+[examples section](https://github.com/DFKI-NI/seerep/tree/main/examples/python/gRPC).
 
 ### Building Locally
 
@@ -69,11 +69,11 @@ is required, to see the changes reflected
 
 A new version of the package is automatically released whenever there is a new
 SEEREP release, using the
-[main workflow](https://github.com/agri-gaia/seerep/blob/88ea59605446caf2d1500f111d6f16bb6a6e2bba/.github/workflows/main.yml#L138-L144).
+[main workflow](https://github.com/DFKI-NI/seerep/blob/88ea59605446caf2d1500f111d6f16bb6a6e2bba/.github/workflows/main.yml#L138-L144).
 
 ## C++ API
 
 The C++ bindings for the interfaces and messages are also generated within the
 Dev-Container and can be included in other packages using standard CMake methods.
 As an example use the `examples_cpp` package from the
-[repository](https://github.com/agri-gaia/seerep/tree/main/examples/cpp/gRPC).
+[repository](https://github.com/DFKI-NI/seerep/tree/main/examples/cpp/gRPC).
