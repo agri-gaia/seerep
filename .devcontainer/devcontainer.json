@@ -1,5 +1,5 @@
 {
-    "image": "ghcr.io/DFKI-NI/seerep_base:latest",
+    "image": "ghcr.io/dfki-ni/seerep_base:latest",
     "name": "seerep_dev",
     "customizations": {
         "vscode": {

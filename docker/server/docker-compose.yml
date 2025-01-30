@@ -7,7 +7,7 @@ services:
       - seerep_log:${SEEREP_LOG_PATH}
     command: chown -R ${USER_ID}:${GROUP_ID} ${SEEREP_DATA_FOLDER} ${SEEREP_LOG_PATH}
   seerep:
-    image: ghcr.io/DFKI-NI/seerep_server:latest
+    image: ghcr.io/dfki-ni/seerep_server:latest
     platform: linux/x86_64
     user: "${USER_ID}:${GROUP_ID}"
     tty: true
